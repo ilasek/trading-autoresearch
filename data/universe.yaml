@@ -1,0 +1,167 @@
+# Curated starter universe: global large-cap stocks + ETFs, daily bars.
+# Fields: id (canonical, used as store filename/column), stooq + yahoo symbols,
+# type: stock|etf, currency of the quote. GBX = GBP pence (loader divides by 100).
+# Scaling this file up is a data task; keep entries liquid and long-history.
+
+fx:
+  # currency -> FX series used to convert quotes to USD.
+  # invert: true means the pair is USD/CCY and the loader takes 1/rate.
+  EUR: {id: FX_EURUSD, stooq: eurusd, yahoo: "EURUSD=X", invert: false}
+  GBP: {id: FX_GBPUSD, stooq: gbpusd, yahoo: "GBPUSD=X", invert: false}
+  JPY: {id: FX_USDJPY, stooq: usdjpy, yahoo: "JPY=X", invert: true}
+  HKD: {id: FX_USDHKD, stooq: usdhkd, yahoo: "HKD=X", invert: true}
+
+instruments:
+  # --- US stocks ---
+  - {id: AAPL,  stooq: aapl.us,  yahoo: AAPL,  name: Apple,              type: stock, region: US, currency: USD}
+  - {id: MSFT,  stooq: msft.us,  yahoo: MSFT,  name: Microsoft,          type: stock, region: US, currency: USD}
+  - {id: NVDA,  stooq: nvda.us,  yahoo: NVDA,  name: NVIDIA,             type: stock, region: US, currency: USD}
+  - {id: GOOGL, stooq: googl.us, yahoo: GOOGL, name: Alphabet,           type: stock, region: US, currency: USD}
+  - {id: AMZN,  stooq: amzn.us,  yahoo: AMZN,  name: Amazon,             type: stock, region: US, currency: USD}
+  - {id: META,  stooq: meta.us,  yahoo: META,  name: Meta Platforms,     type: stock, region: US, currency: USD}
+  - {id: TSLA,  stooq: tsla.us,  yahoo: TSLA,  name: Tesla,              type: stock, region: US, currency: USD}
+  - {id: JPM,   stooq: jpm.us,   yahoo: JPM,   name: JPMorgan Chase,     type: stock, region: US, currency: USD}
+  - {id: V,     stooq: v.us,     yahoo: V,     name: Visa,               type: stock, region: US, currency: USD}
+  - {id: MA,    stooq: ma.us,    yahoo: MA,    name: Mastercard,         type: stock, region: US, currency: USD}
+  - {id: UNH,   stooq: unh.us,   yahoo: UNH,   name: UnitedHealth,       type: stock, region: US, currency: USD}
+  - {id: JNJ,   stooq: jnj.us,   yahoo: JNJ,   name: Johnson & Johnson,  type: stock, region: US, currency: USD}
+  - {id: WMT,   stooq: wmt.us,   yahoo: WMT,   name: Walmart,            type: stock, region: US, currency: USD}
+  - {id: PG,    stooq: pg.us,    yahoo: PG,    name: Procter & Gamble,   type: stock, region: US, currency: USD}
+  - {id: XOM,   stooq: xom.us,   yahoo: XOM,   name: Exxon Mobil,        type: stock, region: US, currency: USD}
+  - {id: CVX,   stooq: cvx.us,   yahoo: CVX,   name: Chevron,            type: stock, region: US, currency: USD}
+  - {id: HD,    stooq: hd.us,    yahoo: HD,    name: Home Depot,         type: stock, region: US, currency: USD}
+  - {id: KO,    stooq: ko.us,    yahoo: KO,    name: Coca-Cola,          type: stock, region: US, currency: USD}
+  - {id: PEP,   stooq: pep.us,   yahoo: PEP,   name: PepsiCo,            type: stock, region: US, currency: USD}
+  - {id: MRK,   stooq: mrk.us,   yahoo: MRK,   name: Merck,              type: stock, region: US, currency: USD}
+  - {id: ABBV,  stooq: abbv.us,  yahoo: ABBV,  name: AbbVie,             type: stock, region: US, currency: USD}
+  - {id: LLY,   stooq: lly.us,   yahoo: LLY,   name: Eli Lilly,          type: stock, region: US, currency: USD}
+  - {id: AVGO,  stooq: avgo.us,  yahoo: AVGO,  name: Broadcom,           type: stock, region: US, currency: USD}
+  - {id: ORCL,  stooq: orcl.us,  yahoo: ORCL,  name: Oracle,             type: stock, region: US, currency: USD}
+  - {id: COST,  stooq: cost.us,  yahoo: COST,  name: Costco,             type: stock, region: US, currency: USD}
+  - {id: BAC,   stooq: bac.us,   yahoo: BAC,   name: Bank of America,    type: stock, region: US, currency: USD}
+  - {id: CRM,   stooq: crm.us,   yahoo: CRM,   name: Salesforce,         type: stock, region: US, currency: USD}
+  - {id: AMD,   stooq: amd.us,   yahoo: AMD,   name: AMD,                type: stock, region: US, currency: USD}
+  - {id: NFLX,  stooq: nflx.us,  yahoo: NFLX,  name: Netflix,            type: stock, region: US, currency: USD}
+  - {id: DIS,   stooq: dis.us,   yahoo: DIS,   name: Disney,             type: stock, region: US, currency: USD}
+  - {id: ADBE,  stooq: adbe.us,  yahoo: ADBE,  name: Adobe,              type: stock, region: US, currency: USD}
+  - {id: TMO,   stooq: tmo.us,   yahoo: TMO,   name: Thermo Fisher,      type: stock, region: US, currency: USD}
+  - {id: CSCO,  stooq: csco.us,  yahoo: CSCO,  name: Cisco,              type: stock, region: US, currency: USD}
+  - {id: ACN,   stooq: acn.us,   yahoo: ACN,   name: Accenture,          type: stock, region: US, currency: USD}
+  - {id: INTC,  stooq: intc.us,  yahoo: INTC,  name: Intel,              type: stock, region: US, currency: USD}
+  - {id: IBM,   stooq: ibm.us,   yahoo: IBM,   name: IBM,                type: stock, region: US, currency: USD}
+  - {id: QCOM,  stooq: qcom.us,  yahoo: QCOM,  name: Qualcomm,           type: stock, region: US, currency: USD}
+  - {id: TXN,   stooq: txn.us,   yahoo: TXN,   name: Texas Instruments,  type: stock, region: US, currency: USD}
+  - {id: NKE,   stooq: nke.us,   yahoo: NKE,   name: Nike,               type: stock, region: US, currency: USD}
+  - {id: MCD,   stooq: mcd.us,   yahoo: MCD,   name: McDonald's,         type: stock, region: US, currency: USD}
+  - {id: CAT,   stooq: cat.us,   yahoo: CAT,   name: Caterpillar,        type: stock, region: US, currency: USD}
+  - {id: GE,    stooq: ge.us,    yahoo: GE,    name: GE Aerospace,       type: stock, region: US, currency: USD}
+  - {id: HON,   stooq: hon.us,   yahoo: HON,   name: Honeywell,          type: stock, region: US, currency: USD}
+  - {id: UPS,   stooq: ups.us,   yahoo: UPS,   name: UPS,                type: stock, region: US, currency: USD}
+  - {id: PFE,   stooq: pfe.us,   yahoo: PFE,   name: Pfizer,             type: stock, region: US, currency: USD}
+  - {id: VZ,    stooq: vz.us,    yahoo: VZ,    name: Verizon,            type: stock, region: US, currency: USD}
+  - {id: GS,    stooq: gs.us,    yahoo: GS,    name: Goldman Sachs,      type: stock, region: US, currency: USD}
+  - {id: MS,    stooq: ms.us,    yahoo: MS,    name: Morgan Stanley,     type: stock, region: US, currency: USD}
+  - {id: BLK,   stooq: blk.us,   yahoo: BLK,   name: BlackRock,          type: stock, region: US, currency: USD}
+  - {id: SPGI,  stooq: spgi.us,  yahoo: SPGI,  name: S&P Global,         type: stock, region: US, currency: USD}
+
+  # --- International, US-listed (ADRs / primary US listings, USD) ---
+  - {id: TSM,   stooq: tsm.us,   yahoo: TSM,   name: TSMC (ADR),         type: stock, region: TW, currency: USD}
+  - {id: ASML,  stooq: asml.us,  yahoo: ASML,  name: ASML (US),          type: stock, region: NL, currency: USD}
+  - {id: NVO,   stooq: nvo.us,   yahoo: NVO,   name: Novo Nordisk (ADR), type: stock, region: DK, currency: USD}
+  - {id: SHEL,  stooq: shel.us,  yahoo: SHEL,  name: Shell (ADR),        type: stock, region: UK, currency: USD}
+  - {id: UL,    stooq: ul.us,    yahoo: UL,    name: Unilever (ADR),     type: stock, region: UK, currency: USD}
+  - {id: TTE,   stooq: tte.us,   yahoo: TTE,   name: TotalEnergies (ADR), type: stock, region: FR, currency: USD}
+  - {id: BABA,  stooq: baba.us,  yahoo: BABA,  name: Alibaba (ADR),      type: stock, region: CN, currency: USD}
+  - {id: BHP,   stooq: bhp.us,   yahoo: BHP,   name: BHP (ADR),          type: stock, region: AU, currency: USD}
+  - {id: RIO,   stooq: rio.us,   yahoo: RIO,   name: Rio Tinto (ADR),    type: stock, region: UK, currency: USD}
+  - {id: INFY,  stooq: infy.us,  yahoo: INFY,  name: Infosys (ADR),      type: stock, region: IN, currency: USD}
+
+  # --- Germany (XETRA, EUR) ---
+  - {id: SAP_DE,  stooq: sap.de,  yahoo: SAP.DE,  name: SAP,             type: stock, region: DE, currency: EUR}
+  - {id: SIE_DE,  stooq: sie.de,  yahoo: SIE.DE,  name: Siemens,         type: stock, region: DE, currency: EUR}
+  - {id: ALV_DE,  stooq: alv.de,  yahoo: ALV.DE,  name: Allianz,         type: stock, region: DE, currency: EUR}
+  - {id: BAS_DE,  stooq: bas.de,  yahoo: BAS.DE,  name: BASF,            type: stock, region: DE, currency: EUR}
+  - {id: BAYN_DE, stooq: bayn.de, yahoo: BAYN.DE, name: Bayer,           type: stock, region: DE, currency: EUR}
+  - {id: BMW_DE,  stooq: bmw.de,  yahoo: BMW.DE,  name: BMW,             type: stock, region: DE, currency: EUR}
+  - {id: DTE_DE,  stooq: dte.de,  yahoo: DTE.DE,  name: Deutsche Telekom, type: stock, region: DE, currency: EUR}
+  - {id: ADS_DE,  stooq: ads.de,  yahoo: ADS.DE,  name: Adidas,          type: stock, region: DE, currency: EUR}
+  - {id: MUV2_DE, stooq: muv2.de, yahoo: MUV2.DE, name: Munich Re,       type: stock, region: DE, currency: EUR}
+  - {id: VOW3_DE, stooq: vow3.de, yahoo: VOW3.DE, name: Volkswagen,      type: stock, region: DE, currency: EUR}
+  - {id: DBK_DE,  stooq: dbk.de,  yahoo: DBK.DE,  name: Deutsche Bank,   type: stock, region: DE, currency: EUR}
+  - {id: IFX_DE,  stooq: ifx.de,  yahoo: IFX.DE,  name: Infineon,        type: stock, region: DE, currency: EUR}
+
+  # --- United Kingdom (LSE, quoted in pence = GBX) ---
+  - {id: AZN_UK,  stooq: azn.uk,  yahoo: AZN.L,  name: AstraZeneca,      type: stock, region: UK, currency: GBX}
+  - {id: HSBA_UK, stooq: hsba.uk, yahoo: HSBA.L, name: HSBC,             type: stock, region: UK, currency: GBX}
+  - {id: GSK_UK,  stooq: gsk.uk,  yahoo: GSK.L,  name: GSK,              type: stock, region: UK, currency: GBX}
+  - {id: BP_UK,   stooq: bp.uk,   yahoo: BP.L,   name: BP,               type: stock, region: UK, currency: GBX}
+  - {id: BATS_UK, stooq: bats.uk, yahoo: BATS.L, name: British American Tobacco, type: stock, region: UK, currency: GBX}
+  - {id: DGE_UK,  stooq: dge.uk,  yahoo: DGE.L,  name: Diageo,           type: stock, region: UK, currency: GBX}
+  - {id: LLOY_UK, stooq: lloy.uk, yahoo: LLOY.L, name: Lloyds,           type: stock, region: UK, currency: GBX}
+  - {id: BARC_UK, stooq: barc.uk, yahoo: BARC.L, name: Barclays,         type: stock, region: UK, currency: GBX}
+  - {id: REL_UK,  stooq: rel.uk,  yahoo: REL.L,  name: RELX,             type: stock, region: UK, currency: GBX}
+  - {id: LSEG_UK, stooq: lseg.uk, yahoo: LSEG.L, name: London Stock Exchange Group, type: stock, region: UK, currency: GBX}
+
+  # --- Japan (TSE, JPY) ---
+  - {id: 7203_JP, stooq: 7203.jp, yahoo: 7203.T, name: Toyota,           type: stock, region: JP, currency: JPY}
+  - {id: 6758_JP, stooq: 6758.jp, yahoo: 6758.T, name: Sony,             type: stock, region: JP, currency: JPY}
+  - {id: 9984_JP, stooq: 9984.jp, yahoo: 9984.T, name: SoftBank Group,   type: stock, region: JP, currency: JPY}
+  - {id: 8306_JP, stooq: 8306.jp, yahoo: 8306.T, name: MUFG,             type: stock, region: JP, currency: JPY}
+  - {id: 6501_JP, stooq: 6501.jp, yahoo: 6501.T, name: Hitachi,          type: stock, region: JP, currency: JPY}
+  - {id: 9432_JP, stooq: 9432.jp, yahoo: 9432.T, name: NTT,              type: stock, region: JP, currency: JPY}
+  - {id: 8035_JP, stooq: 8035.jp, yahoo: 8035.T, name: Tokyo Electron,   type: stock, region: JP, currency: JPY}
+  - {id: 4063_JP, stooq: 4063.jp, yahoo: 4063.T, name: Shin-Etsu Chemical, type: stock, region: JP, currency: JPY}
+  - {id: 6954_JP, stooq: 6954.jp, yahoo: 6954.T, name: Fanuc,            type: stock, region: JP, currency: JPY}
+  - {id: 7974_JP, stooq: 7974.jp, yahoo: 7974.T, name: Nintendo,         type: stock, region: JP, currency: JPY}
+
+  # --- Hong Kong (HKEX, HKD) ---
+  - {id: 0700_HK, stooq: 0700.hk, yahoo: 0700.HK, name: Tencent,         type: stock, region: HK, currency: HKD}
+  - {id: 0941_HK, stooq: 0941.hk, yahoo: 0941.HK, name: China Mobile,    type: stock, region: HK, currency: HKD}
+  - {id: 1299_HK, stooq: 1299.hk, yahoo: 1299.HK, name: AIA,             type: stock, region: HK, currency: HKD}
+  - {id: 3690_HK, stooq: 3690.hk, yahoo: 3690.HK, name: Meituan,         type: stock, region: HK, currency: HKD}
+  - {id: 1398_HK, stooq: 1398.hk, yahoo: 1398.HK, name: ICBC,            type: stock, region: HK, currency: HKD}
+  - {id: 0388_HK, stooq: 0388.hk, yahoo: 0388.HK, name: HKEX,            type: stock, region: HK, currency: HKD}
+
+  # --- ETFs (US-listed, USD) ---
+  - {id: SPY,  stooq: spy.us,  yahoo: SPY,  name: S&P 500,               type: etf, region: US, currency: USD}
+  - {id: QQQ,  stooq: qqq.us,  yahoo: QQQ,  name: Nasdaq 100,            type: etf, region: US, currency: USD}
+  - {id: IWM,  stooq: iwm.us,  yahoo: IWM,  name: Russell 2000,          type: etf, region: US, currency: USD}
+  - {id: DIA,  stooq: dia.us,  yahoo: DIA,  name: Dow Jones,             type: etf, region: US, currency: USD}
+  - {id: VTI,  stooq: vti.us,  yahoo: VTI,  name: US Total Market,       type: etf, region: US, currency: USD}
+  - {id: VEA,  stooq: vea.us,  yahoo: VEA,  name: Developed ex-US,       type: etf, region: GLOBAL, currency: USD}
+  - {id: VWO,  stooq: vwo.us,  yahoo: VWO,  name: Emerging Markets,      type: etf, region: GLOBAL, currency: USD}
+  - {id: EEM,  stooq: eem.us,  yahoo: EEM,  name: Emerging Markets (iShares), type: etf, region: GLOBAL, currency: USD}
+  - {id: EFA,  stooq: efa.us,  yahoo: EFA,  name: EAFE,                  type: etf, region: GLOBAL, currency: USD}
+  - {id: VT,   stooq: vt.us,   yahoo: VT,   name: World Total Market,    type: etf, region: GLOBAL, currency: USD}
+  - {id: ACWI, stooq: acwi.us, yahoo: ACWI, name: MSCI ACWI,             type: etf, region: GLOBAL, currency: USD}
+  - {id: AGG,  stooq: agg.us,  yahoo: AGG,  name: US Aggregate Bond,     type: etf, region: US, currency: USD}
+  - {id: BND,  stooq: bnd.us,  yahoo: BND,  name: Total Bond Market,     type: etf, region: US, currency: USD}
+  - {id: TLT,  stooq: tlt.us,  yahoo: TLT,  name: 20+yr Treasury,        type: etf, region: US, currency: USD}
+  - {id: IEF,  stooq: ief.us,  yahoo: IEF,  name: 7-10yr Treasury,       type: etf, region: US, currency: USD}
+  - {id: SHY,  stooq: shy.us,  yahoo: SHY,  name: 1-3yr Treasury,        type: etf, region: US, currency: USD}
+  - {id: LQD,  stooq: lqd.us,  yahoo: LQD,  name: IG Corporate Bond,     type: etf, region: US, currency: USD}
+  - {id: HYG,  stooq: hyg.us,  yahoo: HYG,  name: High Yield Bond,       type: etf, region: US, currency: USD}
+  - {id: TIP,  stooq: tip.us,  yahoo: TIP,  name: TIPS,                  type: etf, region: US, currency: USD}
+  - {id: GLD,  stooq: gld.us,  yahoo: GLD,  name: Gold,                  type: etf, region: GLOBAL, currency: USD}
+  - {id: SLV,  stooq: slv.us,  yahoo: SLV,  name: Silver,                type: etf, region: GLOBAL, currency: USD}
+  - {id: DBC,  stooq: dbc.us,  yahoo: DBC,  name: Commodities Broad,     type: etf, region: GLOBAL, currency: USD}
+  - {id: VNQ,  stooq: vnq.us,  yahoo: VNQ,  name: US REITs,              type: etf, region: US, currency: USD}
+  - {id: XLE,  stooq: xle.us,  yahoo: XLE,  name: Energy Sector,         type: etf, region: US, currency: USD}
+  - {id: XLF,  stooq: xlf.us,  yahoo: XLF,  name: Financials Sector,     type: etf, region: US, currency: USD}
+  - {id: XLK,  stooq: xlk.us,  yahoo: XLK,  name: Technology Sector,     type: etf, region: US, currency: USD}
+  - {id: XLV,  stooq: xlv.us,  yahoo: XLV,  name: Health Care Sector,    type: etf, region: US, currency: USD}
+  - {id: XLI,  stooq: xli.us,  yahoo: XLI,  name: Industrials Sector,    type: etf, region: US, currency: USD}
+  - {id: XLP,  stooq: xlp.us,  yahoo: XLP,  name: Consumer Staples,      type: etf, region: US, currency: USD}
+  - {id: XLY,  stooq: xly.us,  yahoo: XLY,  name: Consumer Discretionary, type: etf, region: US, currency: USD}
+  - {id: XLU,  stooq: xlu.us,  yahoo: XLU,  name: Utilities Sector,      type: etf, region: US, currency: USD}
+  - {id: XLB,  stooq: xlb.us,  yahoo: XLB,  name: Materials Sector,      type: etf, region: US, currency: USD}
+  - {id: EWJ,  stooq: ewj.us,  yahoo: EWJ,  name: Japan,                 type: etf, region: JP, currency: USD}
+  - {id: EWG,  stooq: ewg.us,  yahoo: EWG,  name: Germany,               type: etf, region: DE, currency: USD}
+  - {id: EWU,  stooq: ewu.us,  yahoo: EWU,  name: United Kingdom,        type: etf, region: UK, currency: USD}
+  - {id: FXI,  stooq: fxi.us,  yahoo: FXI,  name: China Large-Cap,       type: etf, region: CN, currency: USD}
+  - {id: INDA, stooq: inda.us, yahoo: INDA, name: India,                 type: etf, region: IN, currency: USD}
+  - {id: EWZ,  stooq: ewz.us,  yahoo: EWZ,  name: Brazil,                type: etf, region: BR, currency: USD}
+  - {id: EWY,  stooq: ewy.us,  yahoo: EWY,  name: South Korea,           type: etf, region: KR, currency: USD}
+  - {id: EWT,  stooq: ewt.us,  yahoo: EWT,  name: Taiwan,                type: etf, region: TW, currency: USD}
+  - {id: EWA,  stooq: ewa.us,  yahoo: EWA,  name: Australia,             type: etf, region: AU, currency: USD}
+  - {id: MCHI, stooq: mchi.us, yahoo: MCHI, name: MSCI China,            type: etf, region: CN, currency: USD}

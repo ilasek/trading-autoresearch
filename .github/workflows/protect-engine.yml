@@ -1,0 +1,58 @@
+name: protect-engine
+
+# The engine, protocol, and data scripts are frozen: research agents must never
+# change them. Commits touching those paths need "[engine-maintenance]" in the
+# message of the commit that changed them (reserved for human-reviewed changes).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fail if frozen paths changed without [engine-maintenance]
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            RANGE="origin/${{ github.base_ref }}...HEAD"
+            git fetch origin ${{ github.base_ref }} --depth=1
+          else
+            BEFORE="${{ github.event.before }}"
+            if [ "$BEFORE" = "0000000000000000000000000000000000000000" ] || ! git cat-file -e "$BEFORE" 2>/dev/null; then
+              echo "no usable before-commit (new branch/force push) — skipping"
+              exit 0
+            fi
+            RANGE="$BEFORE..HEAD"
+          fi
+          FROZEN='^(engine/|scripts/|tests/|program\.md|CLAUDE\.md|data/universe\.yaml|\.github/)'
+          violations=0
+          for commit in $(git rev-list $RANGE); do
+            files=$(git diff-tree --no-commit-id --name-only -r $commit | grep -E "$FROZEN" || true)
+            if [ -n "$files" ]; then
+              msg=$(git log -1 --format=%B $commit)
+              if ! echo "$msg" | grep -q "\[engine-maintenance\]"; then
+                echo "::error::commit $commit touches frozen paths without [engine-maintenance]:"
+                echo "$files"
+                violations=1
+              fi
+            fi
+          done
+          exit $violations
+
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.txt
+      - run: python -m pytest tests/ -q
