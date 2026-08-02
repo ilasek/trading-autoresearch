@@ -37,3 +37,19 @@ Append-only. Newest entries last.
   champion's 0.86 — the momentum overlay is doing real work. Useful floor: any
   candidate below ~0.5 validation Sharpe is not even beating "buy everything".
 
+## 2026-08-02T19:23:01+00:00 — mom_invvol_target — **REJECT**
+- Candidate: `strategies/candidates/mom_invvol_target.py` (family: cross-sectional momentum, trial #4)
+- Hypothesis: Inverse-volatility basket weighting plus a portfolio-level volatility target (scaling down only) on top of 12-1 momentum reduces the champion's momentum-crash drawdown while keeping validation Sharpe at or above the champion's, net of 15 bps costs.
+- Verdict: REJECT — validation sharpe 0.706 <= champion 0.865
+- Train: sharpe +0.97, ann_ret +12.1%, maxDD -41.6%, turnover 3.7x
+- Validation: sharpe +0.71, ann_ret +10.7%, maxDD -24.3%, turnover 6.1x
+- Deflated Sharpe prob: 0.8739 (bar from 4 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Vol management cut train maxDD (-50.7% -> -41.6%) but cost too much upside
+  (val Sharpe 0.86 -> 0.71, ann_ret 18.2% -> 10.7%): inverse-vol weighting tilts the
+  basket away from the highest-momentum (often highest-vol) names precisely when
+  they're compounding hardest, and the vol-target scale-down clips winning runs, not
+  just crash periods. Refining the momentum crash weakness needs a smarter trigger
+  (e.g. a drawdown or correlation-based signal) rather than blanket vol-scaling —
+  or accept the crash risk as the cost of the return premium.
+
