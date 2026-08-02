@@ -53,3 +53,20 @@ Append-only. Newest entries last.
   (e.g. a drawdown or correlation-based signal) rather than blanket vol-scaling —
   or accept the crash risk as the cost of the return premium.
 
+## 2026-08-02T19:23:42+00:00 — gtaa_trend_diversified — **REJECT**
+- Candidate: `strategies/candidates/gtaa_trend_diversified.py` (family: time-series momentum / trend following, trial #5)
+- Hypothesis: An equal-weight multi-asset-class ETF sleeve that de-risks each asset individually below its 200-day moving average, parking de-risked capital across a diversified bond basket instead of one instrument, beats cross-sectional stock momentum on risk-adjusted terms while satisfying the diversification gate.
+- Verdict: REJECT — validation sharpe 0.505 <= champion 0.865
+- Train: sharpe +0.51, ann_ret +2.1%, maxDD -15.6%, turnover 0.7x
+- Validation: sharpe +0.51, ann_ret +3.5%, maxDD -16.0%, turnover 3.8x
+- Deflated Sharpe prob: 0.7426 (bar from 5 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Spreading the defensive sleeve across 4 bonds fixed the gate failure (avg_pos
+  8.7 in validation, was 3.84) but the underlying idea is still weak: 0.51 Sharpe is
+  right at the "barely beats buy-everything" floor seen with `ew_global_etf` (0.49).
+  Per-asset 200dma trend filtering on this 8-asset sleeve mostly just de-risks bond/gold
+  legs that were already low-vol, while adding whipsaw turnover (3.8x) for little
+  return. ETF-level absolute-momentum/trend filters need a stronger asset set or a
+  slower/confirming signal to earn their turnover cost here — plain 200dma alone is
+  now a refuted knob for this family, not just the single-defensive-asset bug.
+
