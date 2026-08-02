@@ -109,3 +109,23 @@ Append-only. Newest entries last.
   overlay's own turnover/whipsaw cost before combining with momentum, not just its
   crash-period behavior.
 
+## 2026-08-02T19:26:18+00:00 — risk_parity_multi_asset — **REJECT**
+- Candidate: `strategies/candidates/risk_parity_multi_asset.py` (family: volatility targeting / risk parity, trial #8)
+- Hypothesis: Inverse-volatility weighting across a diversified asset-class ETF sleeve, scaled to a 10% annualized vol target, achieves a better net Sharpe than the champion by balancing risk contribution rather than capital across uncorrelated asset classes.
+- Verdict: REJECT — validation sharpe 0.353 <= champion 0.865
+- Train: sharpe +0.52, ann_ret +1.8%, maxDD -23.3%, turnover 0.3x
+- Validation: sharpe +0.35, ann_ret +2.5%, maxDD -18.6%, turnover 1.1x
+- Deflated Sharpe prob: 0.5875 (bar from 8 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Inverse-vol weighting (true risk parity) scored worse than the earlier
+  static equal-weight basket (val Sharpe 0.35 vs 0.49) on essentially the same ETF
+  set. Vol-weighting overweights the lowest-vol legs (short bonds, IG credit),
+  under-allocating to the equity/EM/commodity sleeves that actually carry the return
+  premium; the 10% vol target then scales the whole low-return blend down further.
+  Confirms the `ew_global_etf` floor from a different angle: on this asset set,
+  neither capital-weighting nor risk-weighting alone beats ~0.5 Sharpe — the gap to
+  the champion is a real cross-sectional-momentum edge, not a diversification
+  artifact. Vol targeting/risk parity as tested here (naive inverse-vol, no
+  momentum/carry overlay) is now refuted for this universe; a future attempt should
+  overlay a return signal rather than rely on risk-weighting alone.
+
