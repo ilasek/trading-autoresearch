@@ -129,3 +129,23 @@ Append-only. Newest entries last.
   momentum/carry overlay) is now refuted for this universe; a future attempt should
   overlay a return signal rather than rely on risk-weighting alone.
 
+## 2026-08-02T19:27:12+00:00 — mom_etf_blend — **REJECT**
+- Candidate: `strategies/candidates/mom_etf_blend.py` (family: combinations, trial #9)
+- Hypothesis: An 80/20 capital blend of 12-1 cross-sectional momentum with a static diversified ETF sleeve improves the champion's Sharpe and/or drawdown net of costs, because the low-turnover ETF sleeve is only weakly correlated with momentum's crash periods even though it has a much lower standalone Sharpe.
+- Verdict: REJECT — validation sharpe 0.85 <= champion 0.865
+- Train: sharpe +0.94, ann_ret +14.4%, maxDD -46.8%, turnover 2.6x
+- Validation: sharpe +0.85, ann_ret +15.7%, maxDD -27.8%, turnover 4.7x
+- Deflated Sharpe prob: 0.9124 (bar from 9 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Closest miss of the session — a near-tie with the champion on Sharpe (0.85 vs
+  0.865) while also improving validation maxDD (-27.8% vs -29.9%) and train maxDD
+  (-46.8% vs -50.7%). This is the first evidence in the repo that the ETF sleeve helps
+  when *blended alongside* momentum rather than substituting for it or gating it on/off
+  — consistent with the pattern from the three failed de-risking attempts (they all
+  hurt more than they helped) and the two failed standalone-sleeve attempts (too weak
+  alone to carry a portfolio). Deliberately NOT chasing this by sweeping the 80/20
+  blend ratio this session (that's a knob, not an idea, and every trial raises the
+  DSR bar for everyone). Worth one focused follow-up next session with a distinct
+  rationale for the blend weight (e.g. inverse-vol-weighted blend of the two sleeves'
+  own realized vols, not a fixed 80/20), not a parameter grid.
+
