@@ -149,3 +149,29 @@ Append-only. Newest entries last.
   rationale for the blend weight (e.g. inverse-vol-weighted blend of the two sleeves'
   own realized vols, not a fixed 80/20), not a parameter grid.
 
+
+## Session summary — 2026-08-02 (nightly)
+
+- Experiments run: 6 (mom_invvol_target, gtaa_trend_diversified, lowvol_equity_tilt,
+  mom_regime_filtered, risk_parity_multi_asset, mom_etf_blend). Verdicts: 6 REJECT, 0
+  PROMOTE, 0 GATE_FAIL. Champion unchanged: `mom_12m_baseline` (validation Sharpe 0.865).
+- Best finding: `mom_etf_blend` (80% momentum / 20% static diversified ETF sleeve,
+  always-on blend) — validation Sharpe 0.85 vs champion 0.865, with better train and
+  validation max drawdown than the champion. Closest challenger yet; not promoted
+  because it must strictly beat the champion, but the "blend, don't switch" mechanism
+  is new evidence worth building on.
+- Pattern across the session: every attempt to fix the champion's momentum-crash
+  drawdown by *modifying or gating* the momentum sleeve (vol scaling, ETF trend
+  filter, SPY-regime switch) reduced validation Sharpe more than it reduced drawdown.
+  Every attempt at a *standalone* diversified ETF sleeve (equal-weight, risk parity)
+  topped out around 0.35-0.71 Sharpe. Only an always-on capital *blend* of the two
+  legs came close. Distilled into experiments/learnings.md.
+- Ideas for next session:
+  1. Follow up on `mom_etf_blend` with a principled (non-swept) blend-weighting
+     rule — e.g. inverse-vol-weighted combination of the momentum and ETF sleeves'
+     own trailing realized vols — rather than a fixed 80/20 split.
+  2. Short-term mean reversion (family #4, untested this session) — watch the
+     turnover gate (50x annual cap) closely given the champion's already-high 5.8x.
+  3. A quality/return overlay on top of low-vol stock selection, since low-vol alone
+     is now refuted standalone.
+- No engine issues encountered; `pytest tests/` green (16 passed) before the session.

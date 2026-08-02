@@ -17,4 +17,26 @@ across experiments; prune entries that later evidence contradicts.
 
 ## Strategy learnings (append below)
 
-_(none yet — the journal will feed this section)_
+- **De-risking overlays on momentum reliably backfire out-of-sample.** Three distinct
+  attempts to fix the champion's 2008-09 momentum-crash drawdown — inverse-vol basket
+  weighting + vol targeting, per-asset 200dma trend filtering on an ETF sleeve, and a
+  binary SPY-trend regime switch — all cut the *train-period* drawdown substantially
+  but lost more validation Sharpe than they saved (0.71, 0.51, 0.51 vs champion's
+  0.86), mostly via diluted upside or whipsaw turnover. Any future crash-mitigation
+  idea should be judged on its own out-of-sample turnover/whipsaw cost, not just its
+  in-sample crash-period behavior.
+- **Standalone diversified ETF sleeves cap out well below the champion.** Static
+  equal-weight (0.49 Sharpe) and true inverse-vol risk parity (0.35 Sharpe) on the
+  same ~10-asset global sleeve both underperform — risk-weighting even did *worse*
+  than capital-weighting here, because it overweights low-return bond legs. This is
+  now a fairly well-established floor: pure asset-class diversification without a
+  return/momentum signal is not competitive on this universe.
+- **Blending beats switching.** The one near-miss so far: holding the ETF sleeve
+  *alongside* momentum (80/20 capital blend, always on) came within 0.015 Sharpe of
+  the champion while also improving both train and validation max drawdown — better
+  than any gate/switch/reweight attempt. Combination-family ideas that keep both
+  legs always-on and let low correlation do the work look more promising than
+  regime-timing the allocation.
+- **Low-vol stock tilt alone is refuted.** Bottom-quintile trailing-vol stocks (val
+  Sharpe 0.69) did not beat momentum and barely improved drawdown; likely needs a
+  return/quality overlay to be worth a future trial, not another standalone test.
