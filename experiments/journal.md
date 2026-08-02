@@ -88,3 +88,24 @@ Append-only. Newest entries last.
   standalone signal here; if revisited, it should be combined with a return/quality
   filter rather than used alone.
 
+## 2026-08-02T19:25:26+00:00 — mom_regime_filtered — **REJECT**
+- Candidate: `strategies/candidates/mom_regime_filtered.py` (family: regime switching, trial #7)
+- Hypothesis: Switching fully out of 12-1 cross-sectional momentum into a diversified bond sleeve whenever SPY is below its 200-day moving average reduces the champion's momentum-crash drawdown while keeping validation Sharpe at or above the champion's, net of costs.
+- Verdict: REJECT — validation sharpe 0.511 <= champion 0.865
+- Train: sharpe +0.84, ann_ret +9.7%, maxDD -24.3%, turnover 2.3x
+- Validation: sharpe +0.51, ann_ret +7.7%, maxDD -30.1%, turnover 8.6x
+- Deflated Sharpe prob: 0.7492 (bar from 7 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: The regime filter did what it promised in-sample (train maxDD -50.7% ->
+  -24.3%, the 2008-09 crash largely avoided) but failed out-of-sample: validation
+  maxDD (-30.1%) was actually *worse* than the champion's (-29.9%), and turnover
+  nearly doubled (8.6x vs 5.8x) from whipsawing in/out around the 200dma during
+  choppy 2018-2023 markets (2018 Q4, 2020 COVID V-shape, 2022). A binary SPY-trend
+  switch trades train-period crash protection for validation-period whipsaw cost —
+  third rejected attempt at fixing the momentum-crash weakness (after inverse-vol
+  scaling and ETF-level trend); the pattern across all three is that de-risking
+  overlays reliably cut the *in-sample* 2008 drawdown but reliably lose more Sharpe
+  than they save once applied out-of-sample. Future attempts should backtest the
+  overlay's own turnover/whipsaw cost before combining with momentum, not just its
+  crash-period behavior.
+
