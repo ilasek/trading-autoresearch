@@ -70,3 +70,21 @@ Append-only. Newest entries last.
   slower/confirming signal to earn their turnover cost here — plain 200dma alone is
   now a refuted knob for this family, not just the single-defensive-asset bug.
 
+## 2026-08-02T19:24:35+00:00 — lowvol_equity_tilt — **REJECT**
+- Candidate: `strategies/candidates/lowvol_equity_tilt.py` (family: low-volatility / quality tilts, trial #6)
+- Hypothesis: Stocks with the lowest trailing 126-day realized volatility outperform the champion's high-momentum basket on a risk-adjusted (Sharpe) basis, net of 15 bps costs, because low-vol names carry less drawdown risk per unit of turnover.
+- Verdict: REJECT — validation sharpe 0.685 <= champion 0.865
+- Train: sharpe +0.83, ann_ret +9.5%, maxDD -42.5%, turnover 1.3x
+- Validation: sharpe +0.69, ann_ret +8.7%, maxDD -29.5%, turnover 3.1x
+- Deflated Sharpe prob: 0.8571 (bar from 6 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Low-vol stocks still drew a -42.5% train maxDD (barely better than the
+  champion's -50.7%) and clearly lower validation Sharpe (0.69 vs 0.86) — on this
+  survivorship-biased large-cap universe the "safety" of low realized vol didn't
+  translate into a better risk-adjusted return, likely because low-vol names are
+  concentrated in a handful of sectors (staples/utilities/telecom) rather than truly
+  diversified, and because survivorship bias already strips out the low-vol names
+  that failed (delisted/acquired). Plain low-vol stock selection is now a refuted
+  standalone signal here; if revisited, it should be combined with a return/quality
+  filter rather than used alone.
+
