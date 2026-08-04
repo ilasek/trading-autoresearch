@@ -258,3 +258,30 @@ Append-only. Newest entries last.
   quality filter on this universe — treat the whole low-vol family as closed absent
   a genuinely new mechanism (e.g. sector-neutralized vol, not raw trailing vol).
 
+## 2026-08-04T01:18:28+00:00 — mom_str_reversal_blend — **REJECT**
+- Candidate: `strategies/candidates/mom_str_reversal_blend.py` (family: combinations, trial #14)
+- Hypothesis: An 80/20 capital blend of 12-1 cross-sectional momentum with monthly (21-day) short-term reversal improves the champion's validation Sharpe and/or drawdown net of costs, because the two signals select on disjoint, structurally anti-correlated return horizons of the same stock universe.
+- Verdict: REJECT — deflated sharpe prob 0.9043 < 0.95 (bar set by 14 total trials)
+- Train: sharpe +0.94, ann_ret +16.3%, maxDD -50.5%, turnover 4.7x
+- Validation: sharpe +0.87, ann_ret +17.8%, maxDD -30.7%, turnover 8.3x
+- Deflated Sharpe prob: 0.9043 (bar from 14 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **First candidate in the repo's history to actually beat the champion's raw
+  validation Sharpe** (0.87 vs 0.865), and it also improved train drawdown slightly
+  (-50.5% vs -50.7%) — rejected only on the deflated-Sharpe multiple-testing bar
+  (0.9043 < 0.95 required at 14 accumulated trials), not on the head-to-head
+  comparison. This validates the session's mechanism reasoning: blending momentum
+  with a *structurally* anti-correlated signal (opposite horizon, same universe)
+  beats every prior blend attempt, including the previous-best `mom_etf_blend`
+  (0.85) and the failed inverse-vol sleeve weighting (0.76 in this session). The
+  catch is real, though, not a technicality: this is trial #14, and every rejected
+  trial this session and last has raised the bar the next genuinely good idea must
+  clear — a strategy this close needs either a materially larger raw edge or fewer
+  accumulated trials to ever clear 0.95 DSR probability. This is the strongest lead
+  yet for a future promotion; it should NOT be re-run with swept weights (e.g.
+  70/30, 90/10) since that spends trials cheaply for a knob, but a *replication*
+  attempt with a distinctly different construction of the same "opposite horizon"
+  idea (e.g. composite z-score ranking instead of two separate baskets, which
+  might reduce turnover from 8.3x and improve the Sharpe enough to clear the bar
+  outright) would be a well-motivated next trial.
+
