@@ -237,3 +237,24 @@ Append-only. Newest entries last.
   decorrelation check against momentum's own return stream (not a blend attempt this
   session — that's the next session's call) before writing off the family entirely.
 
+## 2026-08-04T01:17:02+00:00 — mom_lowvol_doublesort — **REJECT**
+- Candidate: `strategies/candidates/mom_lowvol_doublesort.py` (family: low-volatility / quality tilts, trial #13)
+- Hypothesis: Among stocks in the top momentum quintile (12-1 return), those with the lowest trailing 126-day realized volatility produce a better net Sharpe than the champion's plain top-N momentum selection, because low-vol acts as a quality filter that avoids the most crash-prone high-momentum names.
+- Verdict: REJECT — validation sharpe 0.642 <= champion 0.865
+- Train: sharpe +0.91, ann_ret +15.8%, maxDD -50.4%, turnover 3.4x
+- Validation: sharpe +0.64, ann_ret +10.9%, maxDD -28.4%, turnover 6.8x
+- Deflated Sharpe prob: 0.7864 (bar from 13 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Filtering to lowest-vol names *within* the top-momentum quintile scored
+  worse (0.64) than either the plain champion (0.86) or standalone low-vol selection
+  (0.69) — refuting the learnings.md hypothesis that low-vol needed a return overlay
+  to work here, at least via this mechanism. Drawdown barely moved either (train
+  -50.4% vs champion's -50.7%). Likely explanation: within an already-high-momentum
+  pool, the lowest-vol subset is picking the *weakest* momentum names that barely
+  qualified for the quintile (steady, low-vol grinders) rather than the strongest
+  compounders, so the double sort discards exactly the return magnitude that made
+  the pool worth trading in the first place, while inheriting the pool's timing
+  risk anyway. Low-vol is now refuted both standalone and as a within-momentum
+  quality filter on this universe — treat the whole low-vol family as closed absent
+  a genuinely new mechanism (e.g. sector-neutralized vol, not raw trailing vol).
+
