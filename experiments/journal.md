@@ -215,3 +215,25 @@ Append-only. Newest entries last.
   than abandoning the family, since that changes the mechanism (not just a knob) and
   should cut turnover by roughly the same 4x the rebalance frequency dropped.
 
+## 2026-08-04T01:16:01+00:00 — str_reversal_monthly — **REJECT**
+- Candidate: `strategies/candidates/str_reversal_monthly.py` (family: short-term mean reversion, trial #12)
+- Hypothesis: Stocks with the worst trailing 1-month (21-trading-day) return outperform over the next month as the move mean-reverts, producing a better net Sharpe than the champion's 12-1 momentum, net of 15 bps costs, on a monthly-rebalanced long-only basket.
+- Verdict: REJECT — validation sharpe 0.82 <= champion 0.865
+- Train: sharpe +0.75, ann_ret +13.4%, maxDD -62.3%, turnover 11.5x
+- Validation: sharpe +0.82, ann_ret +17.9%, maxDD -35.5%, turnover 19.4x
+- Deflated Sharpe prob: 0.8895 (bar from 12 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Moving to monthly cadence fixed the turnover gate cleanly (83.9x -> 19.4x,
+  well inside the 50x cap) and got closer to the champion than the weekly version
+  (0.82 vs 0.38 validation Sharpe) — second-closest miss in the repo so far after
+  `mom_etf_blend` (0.85). But it came with a materially worse drawdown profile than
+  momentum on both splits (train maxDD -62.3% vs champion's -50.7%, validation -35.5%
+  vs -29.9%): buying last month's biggest losers means concentrating in names that are
+  falling for a real reason often enough (earnings misses, guidance cuts) that the
+  "reversal" is really tail risk, not just overreaction, on a survivorship-biased
+  large-cap universe. Short-term reversal on this universe is a real but second-tier
+  signal — weaker and riskier than 12-1 momentum standalone. Given it's the second
+  reasonably-close standalone family after momentum, it could be worth a future
+  decorrelation check against momentum's own return stream (not a blend attempt this
+  session — that's the next session's call) before writing off the family entirely.
+
