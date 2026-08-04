@@ -309,3 +309,40 @@ Append-only. Newest entries last.
   construction: two consistent, non-clearing results is enough signal without
   spending a third trial's worth of DSR bar on the same underlying edge.
 
+
+
+## Session summary — 2026-08-04 (nightly)
+
+- Housekeeping: session started with local `main` pointed at a stale ref (8 commits
+  behind origin); fetched and fast-forwarded before starting — no lost work, just a
+  stale local branch pointer. Engine tests green (16 passed) before the session; data
+  store fresh through 2026-08-03 (cron working).
+- Experiments run: 6 (mom_etf_volweighted_blend, str_reversal_stocks, str_reversal_monthly,
+  mom_lowvol_doublesort, mom_str_reversal_blend, mom_str_reversal_composite). Verdicts:
+  5 REJECT, 1 GATE_FAIL (str_reversal_stocks, turnover — free retry, didn't cost a trial).
+  Champion unchanged: `mom_12m_baseline` (validation Sharpe 0.865). No promotion.
+- Best finding: `mom_str_reversal_blend` and its composite-ranking variant
+  `mom_str_reversal_composite` — both an 80/20 (or z-score-weighted) combination of
+  12-1 momentum with monthly short-term reversal reached validation Sharpe ~0.87,
+  **the first candidates in this repo's history to beat the champion's raw validation
+  Sharpe**. Both were rejected only on the deflated-Sharpe multiple-testing bar
+  (~0.90 vs 0.95 required), not on the head-to-head comparison — a genuine near-miss,
+  not a refutation. Full reasoning distilled into `experiments/learnings.md`.
+- Other patterns confirmed this session: inverse-vol/risk-weighting between sleeves of
+  unequal diversification always favors the more-diversified leg (now confirmed twice);
+  low-vol stock selection is refuted both standalone and as a within-momentum filter;
+  short-term (1-month) reversal is a real but riskier second-tier standalone signal
+  (val Sharpe 0.82, worse drawdown than momentum).
+- Ideas for next session:
+  1. One more, genuinely different construction of the momentum+reversal combination
+     specifically aimed at cutting turnover (currently 8-9x vs champion's 5.8x) —
+     e.g. a no-trade/hysteresis band on basket membership — since the raw edge is
+     already established twice and turnover reduction could clear the DSR bar outright
+     rather than needing dumb luck on trial count.
+  2. Sector-neutralized (rather than raw trailing) volatility as a genuinely different
+     mechanism, if the low-vol family is ever revisited — raw trailing vol is now
+     closed on this universe.
+  3. Family #3 (vol targeting/risk parity) and #6 (regime switching) are both now
+     refuted in every form tried (naive and momentum-combined); no further standalone
+     attempts recommended without a fundamentally new signal, not a reweighting scheme.
+- No engine issues encountered this session.
