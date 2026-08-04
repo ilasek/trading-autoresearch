@@ -197,3 +197,21 @@ Append-only. Newest entries last.
   future blend attempt should keep momentum's weight close to fixed and only lean
   modestly toward the ETF sleeve, not let vol ratios set the split freely.
 
+## 2026-08-04T01:14:36+00:00 — str_reversal_stocks — **GATE_FAIL**
+- Candidate: `strategies/candidates/str_reversal_stocks.py` (family: short-term mean reversion, trial #0)
+- Hypothesis: Stocks with the worst trailing 5-trading-day return outperform over the next week as the move mean-reverts, producing a better net Sharpe than the champion's 12-1 momentum, net of 15 bps costs, on a weekly-rebalanced long-only basket.
+- Verdict: GATE_FAIL — annual turnover 83.94 > 50.0
+- Train: sharpe +0.92, ann_ret +17.4%, maxDD -53.3%, turnover 51.5x
+- Validation: sharpe +0.38, ann_ret +6.4%, maxDD -39.7%, turnover 83.9x
+- Lesson: A fully-rebalanced bottom-N-by-1-week-return basket is turnover-toxic by
+  construction — a 5-day reversal ranking reshuffles most of its members every week,
+  so weekly full rebalance alone (before even weighing signal quality) blew the 50x
+  gate 1.7x over. Also notable: validation Sharpe (0.38) was far below train (0.92),
+  suggesting a fair amount of the train-period edge is a costs/turnover artifact that
+  the gate is correctly protecting against, not a real anomaly at this frequency. GATE_FAIL
+  doesn't cost a trial (n_trials stayed at #0), so a structurally different version —
+  slower signal (~1-month lookback, matching the literature's dominant short-term
+  reversal horizon) on the champion's monthly cadence — is worth one follow-up rather
+  than abandoning the family, since that changes the mechanism (not just a knob) and
+  should cut turnover by roughly the same 4x the rebalance frequency dropped.
+
