@@ -285,3 +285,27 @@ Append-only. Newest entries last.
   might reduce turnover from 8.3x and improve the Sharpe enough to clear the bar
   outright) would be a well-motivated next trial.
 
+## 2026-08-04T01:19:34+00:00 — mom_str_reversal_composite — **REJECT**
+- Candidate: `strategies/candidates/mom_str_reversal_composite.py` (family: combinations, trial #15)
+- Hypothesis: Ranking stocks on a single composite z-score of 12-1 momentum (80% weight) and negative 1-month return (20% weight) and holding the top 15 achieves a better net validation Sharpe than both the champion and the two-basket `mom_str_reversal_blend`, because a single ranked list has lower name turnover than reconciling two separate baskets.
+- Verdict: REJECT — deflated sharpe prob 0.9004 < 0.95 (bar set by 15 total trials)
+- Train: sharpe +0.95, ann_ret +17.0%, maxDD -51.9%, turnover 5.0x
+- Validation: sharpe +0.87, ann_ret +18.0%, maxDD -28.7%, turnover 9.0x
+- Deflated Sharpe prob: 0.9004 (bar from 15 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: The turnover hypothesis was wrong: a single composite-ranked basket had
+  *higher* validation turnover than the two-basket blend (9.0x vs 8.3x), not lower
+  — ranking 15 names by a blended z-score every month reshuffles membership just as
+  much as running two separate top-15 lists, because the composite score itself is
+  more volatile month-to-month than either raw signal (z-scoring amplifies small
+  cross-sectional differences near the selection boundary). Sharpe and drawdown both
+  landed in the same range as `mom_str_reversal_blend` (0.87 val Sharpe, still short
+  of the DSR bar which is now higher at 15 trials: 0.9004 vs 0.9043). Net effect:
+  two independent constructions of "momentum + short-term reversal" both land at
+  ~0.87 validation Sharpe, which is good evidence the ~0.87 edge is a real property
+  of combining the two signals rather than a construction artifact — but also that
+  neither construction is enough of a jump over the champion to clear a rising
+  multiple-testing bar. Stopping this specific idea here rather than trying a third
+  construction: two consistent, non-clearing results is enough signal without
+  spending a third trial's worth of DSR bar on the same underlying edge.
+
