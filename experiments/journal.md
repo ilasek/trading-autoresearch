@@ -175,3 +175,25 @@ Append-only. Newest entries last.
   3. A quality/return overlay on top of low-vol stock selection, since low-vol alone
      is now refuted standalone.
 - No engine issues encountered; `pytest tests/` green (16 passed) before the session.
+## 2026-08-04T01:13:11+00:00 — mom_etf_volweighted_blend — **REJECT**
+- Candidate: `strategies/candidates/mom_etf_volweighted_blend.py` (family: combinations, trial #10)
+- Hypothesis: Blending 12-1 cross-sectional momentum with a static diversified ETF sleeve, weighted inversely by each sleeve's own trailing 126-day realized volatility rather than a fixed 80/20 split, improves on the champion's validation Sharpe and/or drawdown net of costs, because it organically shifts capital toward the ETF sleeve exactly when momentum is turbulent.
+- Verdict: REJECT — validation sharpe 0.757 <= champion 0.865
+- Train: sharpe +0.64, ann_ret +5.3%, maxDD -39.0%, turnover 1.1x
+- Validation: sharpe +0.76, ann_ret +9.1%, maxDD -21.9%, turnover 2.2x
+- Deflated Sharpe prob: 0.8662 (bar from 10 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Inverse-vol sleeve weighting is a worse mechanism than the fixed 80/20 split
+  (0.76 vs 0.85 validation Sharpe), not better — avg_positions jumped from 14.6 to
+  24.7, meaning the scheme handed the ETF sleeve the majority of capital on average,
+  not just during momentum turbulence. The flaw: a 15-stock momentum basket is
+  structurally higher-vol than a 10-ETF diversified basket almost always, just from
+  differences in diversification, so naive inverse-vol comparison between sleeves of
+  different concentration systematically favors the more-diversified (lower-return)
+  leg — the same failure mode already seen in `risk_parity_multi_asset` overweighting
+  low-vol bond legs. This refutes vol-based *sleeve-level* reweighting as a family for
+  this pairing; the fixed 80/20 (or a rule anchored to a target *momentum* weight with
+  only a small vol-conditioned adjustment band) remains the better mechanism so far. A
+  future blend attempt should keep momentum's weight close to fixed and only lean
+  modestly toward the ETF sleeve, not let vol ratios set the split freely.
+
