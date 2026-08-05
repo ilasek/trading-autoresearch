@@ -56,18 +56,42 @@ across experiments; prune entries that later evidence contradicts.
   regardless of its return quality, so naive inverse-vol comparison between sleeves
   of different concentration is not a sound weighting mechanism here. Fixed-ratio
   blending remains the better mechanism than any vol-based reweighting tried so far.
-- **Momentum + short-term reversal blend is the strongest lead in the repo.** Two
-  independent constructions — an 80/20 two-basket capital blend of 12-1 momentum
-  (skip-month excluded) with monthly (21-day) short-term reversal, and a single
-  composite z-score ranking of the same two signals — both landed at validation
-  Sharpe ~0.87, the first candidates ever to beat the champion's raw validation
-  Sharpe (0.865). Both were still REJECTed on the deflated-Sharpe multiple-testing
-  bar (~0.90 vs the 0.95 required at trial #14-15), not on the head-to-head
-  comparison. The mechanism looks genuine (momentum's SKIP window and the reversal
-  signal trade literally disjoint, opposite-signed return horizons of the same
-  stocks) and replicates across constructions, so it's worth one more genuinely
-  different attempt in a future session — but NOT a sweep of the blend ratio or
-  z-score weights, which would spend trials on a knob. A construction that also cuts
-  turnover (currently 8-9x validation, well up from the champion's 5.8x) is the most
-  promising angle, since it could improve net-of-cost Sharpe enough to clear the bar
-  outright rather than needing a smaller trial-count denominator.
+- **Buffered momentum (hysteresis band on basket membership) is the strongest lead
+  in the repo, superseding the momentum+reversal blend below.** Replacing the
+  champion's hard top-15 monthly cutoff with an asymmetric buffer (hold while
+  ranked in the top 25, enter only in the top 15 — standard practice for cutting
+  momentum-strategy turnover) beat the champion outright on *both* axes at once:
+  validation Sharpe 0.90 vs 0.865, and turnover 4.4x vs the champion's own 5.8x
+  (`mom_12m_buffered`, trial #17). It was still REJECTed only on the deflated-Sharpe
+  bar (0.9019 < 0.95), but by a smaller margin than any prior challenger. Two
+  follow-ups the same night both did *worse* than this standalone version: adding
+  the short-term-reversal leg back (`mom_str_reversal_buffered`, 0.88 val Sharpe)
+  and blending in the diversified ETF sleeve (`mom_buffered_etf_blend`, 0.88 val
+  Sharpe) — both diluted capital away from the buffered leg for a smaller gain than
+  it cost. This reframes the earlier momentum+reversal blend finding below: most of
+  its apparent edge over plain momentum likely came from indirectly absorbing some
+  of momentum's own turnover-inefficiency, not from real diversification benefit —
+  once that inefficiency is fixed directly via buffering, the reversal leg actively
+  subtracts value. Future sessions should treat unblended buffered momentum as the
+  candidate to beat, not a base to blend further; any new idea should be judged
+  against its 0.90 validation Sharpe, not the champion's 0.865.
+- **[Superseded by the finding above, kept for context] Momentum + short-term
+  reversal blend** — two independent constructions (two-basket 80/20 blend and a
+  composite z-score) both landed at validation Sharpe ~0.87, the first candidates
+  to beat the champion's raw validation Sharpe, both REJECTed only on the DSR bar.
+  Do not pursue further variants of this specific blend — the buffered-momentum
+  finding above suggests its edge was mostly a turnover-inefficiency artifact.
+- **The DSR multiple-testing bar effectively requires one large single-step jump,
+  not several trials of incremental gains.** Across trials #14-18, validation Sharpe
+  climbed from 0.865 (champion) to 0.87, 0.87, 0.88, 0.90, 0.88 while DSR probability
+  moved only 0.9043 → 0.9004 → 0.9004 → 0.9019 → 0.8905 — each additional trial's
+  own bar-raising effect roughly cancels a modest Sharpe improvement. A candidate
+  needs to clear the champion by significantly more than ~0.035 Sharpe (the biggest
+  gap achieved so far) to have a real shot at PROMOTE at the current trial count;
+  don't expect a string of small refinements to eventually cross 0.95.
+- **Capital dilution has a roughly constant Sharpe cost regardless of the base
+  leg's quality.** Blending 20% capital into the ~0.5-Sharpe diversified ETF sleeve
+  cost about the same ballpark of Sharpe whether the other 80% was plain momentum
+  (`mom_etf_blend`: 0.865 → 0.85) or buffered momentum (`mom_buffered_etf_blend`:
+  0.90 → 0.88) — the dilution tax doesn't shrink as the diluted leg improves, so
+  blending becomes relatively less attractive the better the core signal gets.

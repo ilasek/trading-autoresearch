@@ -423,3 +423,55 @@ Append-only. Newest entries last.
   capital-diluting addition should be treated as a high bar to clear, not a
   default next step.
 
+## Session summary — 2026-08-05 (nightly)
+
+- Housekeeping: local `main` ref was stale at session start (pointed at the
+  bootstrap commit, 15 commits behind `origin/main`) — a `git fetch` + branch reset
+  fixed it before starting; no lost work, `origin/main` on GitHub already had the
+  full history. Engine tests green (16 passed) before the session; data store fresh
+  through 2026-08-04 (cron working).
+- Experiments run: 3 (mom_str_reversal_buffered, mom_12m_buffered,
+  mom_buffered_etf_blend). Verdicts: 3 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion
+  unchanged: `mom_12m_baseline` (validation Sharpe 0.865). Ran fewer than the 8-trial
+  budget deliberately — the second trial's result was strong and specific enough
+  (see below) that further variants would have been incremental knob-turning rather
+  than new information, and every trial permanently raises the DSR bar.
+- Best finding, and the best in the repo's history: `mom_12m_buffered` — replacing
+  the champion's hard top-15 monthly cutoff with an asymmetric buffer/hysteresis
+  band (hold while ranked in the top 25, enter only in the top 15) beat the champion
+  outright on both Sharpe (0.90 vs 0.865) *and* turnover (4.4x vs 5.8x) at once —
+  the first challenger to ever be strictly better on both axes simultaneously.
+  REJECTed only on the DSR multiple-testing bar (0.9019 < 0.95 at trial #17), by the
+  smallest margin of any rejected trial so far.
+- Two same-night follow-ups both confirmed the buffered leg is best left unblended:
+  adding the short-term-reversal leg back (`mom_str_reversal_buffered`, val Sharpe
+  0.88) and blending in the diversified ETF sleeve (`mom_buffered_etf_blend`, val
+  Sharpe 0.88) each diluted capital away from the buffered momentum leg for a
+  smaller gain than it cost. This reframes last session's "momentum + reversal
+  blend" near-miss (~0.87 val Sharpe) as likely having absorbed some of plain
+  momentum's own turnover-inefficiency rather than reflecting a real
+  diversification benefit — full reasoning in `experiments/learnings.md`, which now
+  treats unblended buffered momentum (0.90 val Sharpe) as the bar for future ideas
+  to clear, not the champion's 0.865.
+- Structural pattern across trials #14-18: validation Sharpe climbed from 0.865 to
+  as high as 0.90, but DSR probability barely moved (0.90-0.90) because each
+  additional trial's own bar-raising effect roughly cancels a modest Sharpe gain.
+  Distilled into learnings.md: clearing 0.95 DSR at this trial count needs one large
+  single-step jump, not a string of incremental refinements.
+- Ideas for next session:
+  1. A genuinely different mechanism to add to buffered momentum that doesn't
+     dilute capital away from it (e.g. a signal that only ever *adds* exposure
+     rather than reallocating from the momentum leg) — every capital-diluting
+     addition tried so far (reversal blend, ETF blend, vol scaling, regime switch)
+     has cost more Sharpe than it bought, on any base leg.
+  2. If revisiting regime/trend switching (now refuted 3x for plain momentum),
+     note the buffer mechanism validated tonight targets whipsaw specifically, but
+     learnings.md's read is that diluted upside during choppy-but-ultimately-up
+     markets — not just whipsaw turnover — was the dominant failure mode, so
+     hysteresis alone may not be a strong enough "specific reason" to retry it;
+     weigh carefully before spending a trial there.
+  3. Family #3 (vol targeting/risk parity) and #6 (regime switching) remain fully
+     refuted; sector-neutralized vol (family #5 follow-up) is not currently
+     testable — `data/universe.yaml` has no sector/industry field.
+- No engine issues encountered this session.
+
