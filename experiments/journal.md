@@ -346,3 +346,27 @@ Append-only. Newest entries last.
      refuted in every form tried (naive and momentum-combined); no further standalone
      attempts recommended without a fundamentally new signal, not a reweighting scheme.
 - No engine issues encountered this session.
+## 2026-08-05T01:08:29+00:00 — mom_str_reversal_buffered — **REJECT**
+- Candidate: `strategies/candidates/mom_str_reversal_buffered.py` (family: combinations, trial #16)
+- Hypothesis: Applying an asymmetric buffer band (hold while ranked in the top/bottom 25, enter only when ranked in the top/bottom 15) to each leg of the 80/20 momentum + monthly-reversal blend cuts turnover well below the ~8-9x seen in the unbuffered blend while keeping validation Sharpe within reach of the champion, net of 15 bps costs.
+- Verdict: REJECT — deflated sharpe prob 0.9004 < 0.95 (bar set by 16 total trials)
+- Train: sharpe +0.92, ann_ret +15.2%, maxDD -51.3%, turnover 2.9x
+- Validation: sharpe +0.88, ann_ret +17.3%, maxDD -30.9%, turnover 6.5x
+- Deflated Sharpe prob: 0.9004 (bar from 16 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: The buffer/hysteresis mechanism did exactly what it was designed to do —
+  turnover fell from 8.3-9.0x (both prior unbuffered constructions) to 6.5x, much
+  closer to the champion's 5.8x — and validation Sharpe ticked up to a new high for
+  the family (0.88 vs 0.87 twice before). But the DSR probability barely moved
+  (0.9004, same as trial #15) because it's now trial #16: the bar-raising effect of
+  one more accumulated trial almost exactly offset the Sharpe gain. This is the
+  clearest evidence yet that this specific momentum+reversal edge is structurally
+  capped a hair below the 0.95 DSR bar as currently implemented — three independent
+  constructions (two-basket blend, composite z-score, buffered blend) have now
+  converged on validation Sharpe 0.87-0.88 while trial count climbs in lockstep.
+  Any further refinement of *this* idea should be assumed to face the same
+  offsetting effect unless it produces a materially larger jump (e.g. +0.03-0.05
+  Sharpe in one step), not another incremental turnover/construction tweak. Treat
+  this family as very likely closed for future sessions absent a fundamentally
+  different signal to add to the blend, not another reweighting of the same two.
+
