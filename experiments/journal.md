@@ -370,3 +370,31 @@ Append-only. Newest entries last.
   this family as very likely closed for future sessions absent a fundamentally
   different signal to add to the blend, not another reweighting of the same two.
 
+## 2026-08-05T01:09:48+00:00 — mom_12m_buffered — **REJECT**
+- Candidate: `strategies/candidates/mom_12m_buffered.py` (family: cross-sectional momentum, trial #17)
+- Hypothesis: Replacing the champion's hard top-15 monthly cutoff with an asymmetric buffer band (hold while ranked in the top 25, enter only when ranked in the top 15) reduces annual turnover below the champion's 5.8x while keeping validation Sharpe at or above the champion's, net of 15 bps costs.
+- Verdict: REJECT — deflated sharpe prob 0.9019 < 0.95 (bar set by 17 total trials)
+- Train: sharpe +0.91, ann_ret +15.3%, maxDD -51.6%, turnover 1.9x
+- Validation: sharpe +0.90, ann_ret +18.3%, maxDD -30.2%, turnover 4.4x
+- Deflated Sharpe prob: 0.9019 (bar from 17 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **Best challenger in the repo's history, by a clear margin.** Applying the
+  buffer mechanism to the champion's own signal in isolation (no reversal leg, no
+  blend) beat the champion outright on both axes at once: validation Sharpe 0.90 vs
+  0.865 (a +0.035 raw edge, larger than any prior challenger's), *and* turnover 4.4x
+  vs the champion's own 5.8x (lower, not just lower-than-other-challengers). This
+  confirms the mechanism-isolation reasoning: the buffer wasn't just riding along
+  with the reversal leg in `mom_str_reversal_buffered` — most of that trial's
+  turnover reduction and Sharpe gain came from the buffer itself. Still REJECTed
+  purely on the DSR bar (0.9019 < 0.95 at 17 trials), and the trial-count pattern
+  from the previous entry repeats: DSR barely moved versus trial #16 (0.9004) despite
+  a much bigger Sharpe jump, because one more accumulated trial ate most of the gain.
+  Structural read for future sessions: this repo's DSR bar effectively requires a
+  large single-step improvement to ever clear 0.95, not several trials of steady
+  incremental gains — each trial's own bar-raising effect roughly cancels a modest
+  improvement. This is the strongest lead ever recorded here; a future session
+  combining this buffered-momentum leg with the already-validated ETF-sleeve blend
+  (drawdown dampening) or another structurally distinct add-on is the natural next
+  step, not another cutoff-threshold tweak on the buffer bands themselves (that
+  would be a swept knob).
+
