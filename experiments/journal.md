@@ -398,3 +398,28 @@ Append-only. Newest entries last.
   step, not another cutoff-threshold tweak on the buffer bands themselves (that
   would be a swept knob).
 
+## 2026-08-05T01:11:04+00:00 — mom_buffered_etf_blend — **REJECT**
+- Candidate: `strategies/candidates/mom_buffered_etf_blend.py` (family: combinations, trial #18)
+- Hypothesis: An 80/20 capital blend of the buffered-momentum leg (top-15 core / top-25 hold band) with the static diversified ETF sleeve improves the champion's validation Sharpe and drawdown simultaneously, net of 15 bps costs, by combining the buffered leg's lower turnover and higher raw Sharpe with the ETF sleeve's drawdown-dampening effect.
+- Verdict: REJECT — deflated sharpe prob 0.8905 < 0.95 (bar set by 18 total trials)
+- Train: sharpe +0.90, ann_ret +13.1%, maxDD -47.9%, turnover 1.5x
+- Validation: sharpe +0.88, ann_ret +15.7%, maxDD -28.1%, turnover 3.5x
+- Deflated Sharpe prob: 0.8905 (bar from 18 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: Stacking the ETF blend on top of the buffered leg gave back most of the
+  standalone buffered momentum's gain: validation Sharpe fell from 0.90
+  (`mom_12m_buffered`) to 0.88, and DSR fell too (0.8905 vs 0.9019) because the
+  Sharpe drop outweighed only a modest drawdown improvement (validation maxDD
+  -28.1% vs buffered-alone's -30.2%, a smaller gain than the ~2pp improvement
+  `mom_etf_blend` got over plain momentum). Same mechanism as the original
+  `mom_etf_blend` finding (20% capital parked in a ~0.5 Sharpe sleeve costs raw
+  Sharpe to buy a drawdown improvement), just applied to a stronger base leg — the
+  dilution tax scales with what's being diluted, so blending doesn't get more
+  attractive as the momentum leg improves; it's roughly a constant cost. Confirms
+  `mom_12m_buffered` (trial #17, standalone, unblended) remains the best finding
+  in the repo. Future attempts to build on it should leave the buffered leg
+  unblended — every regime/switch/blend overlay tried on any momentum leg so far
+  has independently failed for the same reason (whipsaw or diluted upside), so a
+  capital-diluting addition should be treated as a high bar to clear, not a
+  default next step.
+
