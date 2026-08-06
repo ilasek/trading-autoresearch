@@ -606,3 +606,54 @@ Append-only. Newest entries last.
   structurally different idea (not another intensity adjustment on the same
   z-score weighting) if it wants to clear the 0.95 DSR bar.
 
+## Session summary — 2026-08-06 (nightly)
+
+- Housekeeping: local `main` ref was stale at session start (detached HEAD
+  pointed at the latest data-refresh commit, 1 commit ahead of where local
+  `main` and even the cached `origin/main` ref showed) — a `git fetch` +
+  `checkout -B main origin/main` confirmed origin was actually current and
+  fixed the local branch pointer before starting; no lost work. Engine tests
+  green (16 passed) before the session; data store fresh through 2026-08-05
+  (cron working, 1 day behind today).
+- Experiments run: 4 (mom_rankweighted_buffered, mom_zscore_weighted_buffered,
+  mom_multihorizon_zscore_buffered, mom_multihorizon_zscore_damped_buffered).
+  Verdicts: 4 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged:
+  `mom_12m_baseline` (validation Sharpe 0.865). Ran half the 8-trial budget
+  deliberately — three consecutive escalations of the same weighting-scheme
+  lever produced diminishing DSR gains and rising drawdown/turnover, and a
+  fourth trial (dampening) refuted the obvious next tweak; continuing to
+  probe the same lever further would have been knob-sweeping.
+- Best finding, and the best in the repo's history by a wide margin:
+  `mom_multihorizon_zscore_buffered` — same buffered-momentum basket
+  membership as `mom_12m_buffered`, but weighted by the magnitude of a
+  composite 6-1/12-1 momentum z-score instead of equal-weighting. Validation
+  Sharpe 1.03 vs champion 0.865 (+0.165, the largest gap ever recorded) and
+  deflated-Sharpe probability 0.9333 (bar from 21 trials) — the closest any
+  candidate has come to the 0.95 PROMOTE threshold. Still REJECTed only on
+  the DSR bar, not on the head-to-head Sharpe comparison.
+- Key new pattern this session (distilled into `experiments/learnings.md`):
+  within-basket *weighting scheme* is as powerful a lever as basket
+  membership/buffering was last session, and the direction that works is
+  tilting *more* capital toward the strongest-momentum names (opposite of
+  every refuted low-vol/inverse-vol attempt). But it's not a free escalation
+  — validation maxDD widened from -30.2% to -36.0% across the three
+  escalating trials, and a dampening attempt to trade Sharpe for lower
+  variance made DSR worse, not better, confirming the magnitude-weighting
+  edge is closer to real signal than to a concentration/variance artifact.
+- Ideas for next session:
+  1. The DSR bar is now within realistic reach (0.9333 at trial #21) —
+     a structurally different idea layered on undamped magnitude-weighting
+     (not another weighting-intensity tweak, which is now a partially-refuted
+     direction) has a real shot at clearing 0.95 outright.
+  2. Sanity-check `mom_multihorizon_zscore_buffered`'s validation maxDD
+     (-36.0%, still comfortably inside the -45% gate but the closest any
+     promising candidate has come to it) before building further on top of
+     it — a future escalation that also improves or holds drawdown flat
+     would be a stronger candidate than one that only chases Sharpe.
+  3. Everything not yet touched by tonight's weighting-scheme work remains
+     as summarized in prior sessions: vol targeting/risk parity, regime
+     switching, and low-vol tilts are fully refuted; short-term reversal is a
+     real but weaker/riskier standalone signal; capital-diluting blends have
+     a roughly constant Sharpe tax regardless of the base leg's quality.
+- No engine issues encountered this session.
+

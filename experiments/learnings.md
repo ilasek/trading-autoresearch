@@ -95,3 +95,30 @@ across experiments; prune entries that later evidence contradicts.
   (`mom_etf_blend`: 0.865 → 0.85) or buffered momentum (`mom_buffered_etf_blend`:
   0.90 → 0.88) — the dilution tax doesn't shrink as the diluted leg improves, so
   blending becomes relatively less attractive the better the core signal gets.
+- **Within-basket weighting scheme, not just membership/buffering, is a major
+  untapped lever — and the direction matters.** Three trials in one session,
+  each isolating a single change on top of `mom_12m_buffered`'s identical
+  basket membership, climbed validation Sharpe 0.90 → 0.93 → 0.98 → 1.03:
+  equal-weight → linear rank-weight → z-score-magnitude-weight → z-score-
+  magnitude-weight on a 6-1/12-1 composite signal. Each step tilts *more*
+  capital toward the strongest-momentum names in the held basket — the
+  mirror image of the refuted low-vol/inverse-vol findings above, which
+  tilted capital *away* from them. DSR probability climbed alongside it
+  (0.9019 → 0.9083 → 0.9252 → 0.9333, the best-ever DSR in the repo) but the
+  per-trial DSR gain shrank on the last step even as the Sharpe gain didn't,
+  and validation maxDD widened in lockstep with each step (-30.2% → -32.4% →
+  -36.0%, closing in on the -45% gate) — a real risk cost, not a free lunch.
+  A follow-up square-root dampening of the weight spread (same basket, same
+  ranking, only less concentrated) tested whether trading some Sharpe for
+  lower variance would raise DSR further — it did not: Sharpe fell to 0.98
+  and DSR *dropped* to 0.9155, worse than the undamped version. This settles
+  that the magnitude-weighting gain is closer to real signal than to a
+  variance/convexity artifact of concentration, at least in the direction
+  and strengths tested. `mom_multihorizon_zscore_buffered` (val Sharpe 1.03,
+  DSR 0.9333, trial #21, unpromoted) is the strongest challenger ever
+  recorded here. Future sessions should not further escalate concentration
+  on this same signal (a fourth horizon, a steeper transform) without a new
+  rationale — that's now a well-explored, partially-refuted direction
+  (escalation works, dampening doesn't) — but a structurally different idea
+  building on undamped magnitude-weighting, or simply patience for the DSR
+  bar to become clearable, are both reasonable next steps.
