@@ -475,3 +475,37 @@ Append-only. Newest entries last.
      testable — `data/universe.yaml` has no sector/industry field.
 - No engine issues encountered this session.
 
+## 2026-08-06T01:09:43+00:00 — mom_rankweighted_buffered — **REJECT**
+- Candidate: `strategies/candidates/mom_rankweighted_buffered.py` (family: cross-sectional momentum, trial #19)
+- Hypothesis: Within the buffered 12-1 momentum basket (hold top 25, enter top 15), weighting held names linearly by momentum rank (more capital to the strongest-ranked names, less to the weakest-ranked) improves validation Sharpe over equal weighting, net of 15 bps costs, because it concentrates capital in the pool's strongest compounders instead of diluting it equally across the full hold band.
+- Verdict: REJECT — deflated sharpe prob 0.9083 < 0.95 (bar set by 19 total trials)
+- Train: sharpe +0.96, ann_ret +17.8%, maxDD -53.3%, turnover 3.4x
+- Validation: sharpe +0.93, ann_ret +21.1%, maxDD -31.6%, turnover 6.0x
+- Deflated Sharpe prob: 0.9083 (bar from 19 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **New best-yet result in the repo, and confirms the opposite-direction
+  hypothesis cleanly.** Simply rank-weighting the same buffered basket
+  (identical universe, lookback, and hold band as `mom_12m_buffered`) instead
+  of equal-weighting it lifted validation Sharpe from 0.90 to 0.93 — a +0.065
+  edge over the champion, the largest raw gap of any challenger so far — by
+  giving more capital to the strongest-ranked names and less to the marginal
+  ones near the buffer's edge. This is the mirror image of the refuted
+  low-vol/inverse-vol findings: those tilted capital *away* from the
+  strongest (often highest-vol) momentum names and lost Sharpe; tilting
+  *toward* them gains it. Cost: avg_positions rose 15.0 -> 18.1 and turnover
+  6.0x vs 4.4x (rank changes shuffle weights every month even without
+  membership churn), still REJECTed only on the DSR bar (0.9083 < 0.95 at
+  trial #19) — but DSR moved more than in any prior trial (+0.0064 vs the
+  typical near-zero net change), because this is the first challenger whose
+  Sharpe jump was large enough to outpace one more trial's bar-raising
+  effect, not just offset it. This is now the strategy to beat, and the
+  clearest evidence yet that weighting-scheme changes (not just
+  membership/buffer changes) are a fruitful, still-open lever on the
+  momentum leg. A natural, still-isolated follow-up: a milder or steeper
+  rank-weight tilt (e.g. quadratic instead of linear) is a swept knob and
+  should be avoided; a genuinely different rank-weighting *basis* (e.g.
+  weighting by cross-sectional z-score magnitude instead of ordinal rank,
+  which would preserve the info that a runaway winner's momentum lead is
+  much larger than a marginal one's) is a distinct enough mechanism to be
+  worth one focused trial.
+
