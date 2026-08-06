@@ -575,3 +575,34 @@ Append-only. Newest entries last.
   rather than raising raw Sharpe further — a genuinely different lever
   (risk reduction, not conviction escalation) worth a focused trial.
 
+## 2026-08-06T01:13:35+00:00 — mom_multihorizon_zscore_damped_buffered — **REJECT**
+- Candidate: `strategies/candidates/mom_multihorizon_zscore_damped_buffered.py` (family: cross-sectional momentum, trial #22)
+- Hypothesis: Applying a square-root dampening transform to the within-basket weight spread of the two-horizon z-score-weighted buffered momentum basket (same selection and ranking as `mom_multihorizon_zscore_buffered`) achieves a higher deflated-Sharpe probability than the undamped version, net of 15 bps costs, because compressing (not eliminating) the tail of the weighting distribution reduces return variance and month-to-month turnover without discarding the magnitude-weighting benefit.
+- Verdict: REJECT — deflated sharpe prob 0.9155 < 0.95 (bar set by 22 total trials)
+- Train: sharpe +0.94, ann_ret +17.6%, maxDD -52.0%, turnover 3.3x
+- Validation: sharpe +0.98, ann_ret +23.2%, maxDD -33.7%, turnover 6.5x
+- Deflated Sharpe prob: 0.9155 (bar from 22 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **Dampening hypothesis refuted — the raw z-score magnitude is real
+  signal, not just a variance-inflating tail.** Square-root-compressing the
+  weight spread (identical basket membership to
+  `mom_multihorizon_zscore_buffered`) did reduce validation maxDD (-36.0% ->
+  -33.7%) and turnover (7.0x -> 6.5x) as intended, but validation Sharpe
+  fell more than proportionally (1.03 -> 0.98) and DSR probability actually
+  *dropped* (0.9333 -> 0.9155) despite one fewer unit of Sharpe-to-bar
+  tension — the risk reduction wasn't nearly enough to offset the return it
+  gave up. This settles the question raised in the previous entry: the
+  escalating Sharpe gains across tonight's three weighting refinements were
+  not primarily a variance/leverage artifact of extreme concentration —
+  giving the highest-momentum names proportionally more capital is closer
+  to genuine incremental signal than to convexity-driven risk-taking, at
+  least at the strengths tested here. `mom_multihorizon_zscore_buffered`
+  (undamped, val Sharpe 1.03, DSR 0.9333, trial #21) remains the best
+  finding of the night and the bar for future sessions. Do not pursue
+  further dampening/moderation variants of this specific mechanism (that
+  would be sweeping a knob whose direction is now refuted); a future
+  session revisiting this family should either accept the undamped
+  magnitude-weighting result as the new incumbent challenger, or bring a
+  structurally different idea (not another intensity adjustment on the same
+  z-score weighting) if it wants to clear the 0.95 DSR bar.
+
