@@ -509,3 +509,32 @@ Append-only. Newest entries last.
   much larger than a marginal one's) is a distinct enough mechanism to be
   worth one focused trial.
 
+## 2026-08-06T01:10:53+00:00 — mom_zscore_weighted_buffered — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_weighted_buffered.py` (family: cross-sectional momentum, trial #20)
+- Hypothesis: Within the buffered 12-1 momentum basket (hold top 25, enter top 15), weighting held names by cross-sectional momentum z-score magnitude (rather than ordinal rank) improves validation Sharpe over rank-weighting, net of 15 bps costs, because it gives proportionally more capital to names with an unusually large momentum lead instead of treating all rank gaps as equal.
+- Verdict: REJECT — deflated sharpe prob 0.9252 < 0.95 (bar set by 20 total trials)
+- Train: sharpe +0.95, ann_ret +19.8%, maxDD -54.9%, turnover 3.6x
+- Validation: sharpe +0.98, ann_ret +25.4%, maxDD -32.4%, turnover 6.1x
+- Deflated Sharpe prob: 0.9252 (bar from 20 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **New best-yet result again, and DSR moved more than any prior
+  trial.** Swapping the weighting basis from ordinal rank to z-score
+  magnitude (same buffer band, lookback, universe as
+  `mom_rankweighted_buffered`) lifted validation Sharpe again, 0.93 -> 0.98
+  (+0.115 over the champion, by far the largest raw gap recorded here), and
+  DSR probability rose 0.9083 -> 0.9252 (+0.0169) despite one more
+  bar-raising trial — the clearest confirmation yet that magnitude, not just
+  order, carries real information: a name with an outsized momentum lead
+  over its neighbors deserves outsized capital, not just the next rank
+  slot's worth. Cost: validation maxDD widened to -32.4% (vs -30.2% for
+  plain buffered, -29.9% champion) and turnover ticked up to 6.1x — expected
+  trade-offs of concentrating capital into fewer high-conviction names.
+  Extrapolating the last two trials' DSR deltas (+0.0064, then +0.0169) for
+  smaller Sharpe jumps than achieved here suggests one more comparably
+  well-motivated idea could plausibly cross 0.95, but this is not
+  guaranteed — the bar-raising effect could reassert itself as it did at
+  trials #14-18. This weighting mechanism (z-score magnitude, not rank) is
+  now the base to build on. The natural next lever, not yet touched by any
+  weighting-scheme trial, is the *selection* signal itself: everything
+  tonight still ranks/weights on raw single-horizon (12-1) momentum.
+
