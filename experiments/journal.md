@@ -538,3 +538,40 @@ Append-only. Newest entries last.
   weighting-scheme trial, is the *selection* signal itself: everything
   tonight still ranks/weights on raw single-horizon (12-1) momentum.
 
+## 2026-08-06T01:12:19+00:00 — mom_multihorizon_zscore_buffered — **REJECT**
+- Candidate: `strategies/candidates/mom_multihorizon_zscore_buffered.py` (family: cross-sectional momentum, trial #21)
+- Hypothesis: Ranking and weighting the buffered momentum basket (hold top 25, enter top 15) by a composite of 6-1 and 12-1 momentum z-scores, instead of 12-1 momentum alone, improves validation Sharpe over `mom_zscore_weighted_buffered`, net of 15 bps costs, because averaging two independent lookback horizons reduces horizon-specific noise in which names qualify for the basket.
+- Verdict: REJECT — deflated sharpe prob 0.9333 < 0.95 (bar set by 21 total trials)
+- Train: sharpe +0.94, ann_ret +19.5%, maxDD -54.5%, turnover 4.1x
+- Validation: sharpe +1.03, ann_ret +27.3%, maxDD -36.0%, turnover 7.0x
+- Deflated Sharpe prob: 0.9333 (bar from 21 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **Third consecutive best-yet result tonight, but the marginal DSR
+  gain per trial is now shrinking while risk keeps climbing — a sign this
+  specific escalation is nearing its natural limit.** Adding the 6-1 horizon
+  to the composite z-score lifted validation Sharpe again (0.98 -> 1.03,
+  +0.165 over the champion) and DSR rose 0.9252 -> 0.9333, but the DSR delta
+  (+0.0081) was smaller than the previous step's (+0.0169) despite a
+  comparable Sharpe jump — the trial-count bar-raising effect is starting to
+  bite harder again, consistent with the repo's established pattern
+  (learnings.md) that clearing 0.95 needs one big jump, not compounding
+  small ones. More concerning: validation maxDD widened again (-32.4% ->
+  -36.0%, now closing in on the -45% gate) and turnover rose to 7.0x
+  (champion: 5.8x) — each of the three weighting/signal refinements tonight
+  has traded some downside risk for the Sharpe gain, and the pattern of
+  rising drawdown alongside rising Sharpe suggests the z-score-magnitude
+  weighting mechanism is working partly *because* it concentrates into a
+  higher-vol, higher-beta tail of the momentum distribution, not purely
+  through better name selection. Stopping the "increase conviction
+  concentration further" line here rather than testing a fourth escalation
+  (e.g. a triple-horizon composite) — that would be sweeping the same knob
+  a third time with a visibly shrinking payoff and a visibly growing
+  drawdown cost. `mom_multihorizon_zscore_buffered` (val Sharpe 1.03, DSR
+  0.9333) is the new bar for future sessions to beat, but the more
+  interesting open question for next time is whether *moderating* this
+  mechanism's concentration (e.g. a soft cap or square-root dampening on
+  the z-score spread, trading a little Sharpe for materially less
+  drawdown/turnover) could net a *higher* DSR by reducing return variance
+  rather than raising raw Sharpe further — a genuinely different lever
+  (risk reduction, not conviction escalation) worth a focused trial.
+
