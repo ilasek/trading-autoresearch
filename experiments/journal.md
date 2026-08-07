@@ -657,3 +657,13 @@ Append-only. Newest entries last.
      a roughly constant Sharpe tax regardless of the base leg's quality.
 - No engine issues encountered this session.
 
+## 2026-08-07T01:09:31+00:00 — mom_multihorizon_zscore_sectorneutral — **REJECT**
+- Candidate: `strategies/candidates/mom_multihorizon_zscore_sectorneutral.py` (family: cross-sectional momentum, trial #23)
+- Hypothesis: Neutralizing the composite 6-1/12-1 momentum z-score within coarse sector/asset-class groups before ranking and weighting the buffered momentum basket (hold top 25, enter top 15) reduces validation maxDD relative to the globally-ranked `mom_multihorizon_zscore_buffered` (val Sharpe 1.03, maxDD -36.0%), because it prevents a handful of correlated sectors from dominating basket exposure even when name-level diversification looks adequate, net of 15 bps costs.
+- Verdict: REJECT — deflated sharpe prob 0.8664 < 0.95 (bar set by 23 total trials)
+- Train: sharpe +0.93, ann_ret +15.9%, maxDD -52.9%, turnover 4.4x
+- Validation: sharpe +0.87, ann_ret +17.8%, maxDD -32.3%, turnover 7.8x
+- Deflated Sharpe prob: 0.8664 (bar from 23 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **Sector-neutralizing the composite z-score is refuted as a risk-reduction lever — it traded away far more Sharpe than the drawdown it saved, and even raised turnover.** Validation maxDD improved only modestly (-36.0% -> -32.3%, well short of eliminating the concentration-driven drawdown growth seen across the weighting-intensity escalation) while Sharpe fell sharply (1.03 -> 0.87, back below the champion) and turnover *rose* (7.0x -> 7.8x) rather than falling — sector rotation at each rebalance apparently churns the basket more than global ranking does, since names now compete only within a shrinking or shifting sector-relative window rather than a stable global ordering. This suggests the drawdown growth in the escalating-weighting trials was not mainly a sector-concentration artifact — global top-momentum names already span multiple sectors more than expected, so forcing sector balance mostly discards genuine cross-sector signal (a stock beating its whole sector matters less than a stock with strong absolute momentum) rather than removing correlated risk. Do not pursue further sector/asset-class-neutral variants of this basket; the maxDD-widening question from last session's learnings should be pursued via a different lever (e.g. basket breadth) rather than sector construction.
+
