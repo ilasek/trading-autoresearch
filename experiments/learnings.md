@@ -122,3 +122,28 @@ across experiments; prune entries that later evidence contradicts.
   (escalation works, dampening doesn't) — but a structurally different idea
   building on undamped magnitude-weighting, or simply patience for the DSR
   bar to become clearable, are both reasonable next steps.
+- **The best challenger's rising validation maxDD is not a diversification
+  problem — it survives both sector-neutral scoring and much wider basket
+  breadth unchanged, closing that whole axis.** Following up on the
+  drawdown-widening concern above, one session tested two structurally
+  distinct diversification fixes on `mom_multihorizon_zscore_buffered`
+  (val Sharpe 1.03, maxDD -36.0%) without touching its weighting mechanism:
+  neutralizing the composite z-score within coarse sector/asset-class groups
+  cost far more Sharpe (1.03 → 0.87) than the drawdown it saved (-36.0% →
+  -32.3%) and even raised turnover (7.0x → 7.8x); separately, widening the
+  basket from hold-25/enter-15 to hold-35/enter-20 left maxDD essentially
+  unchanged (-35.6%) while matching Sharpe (1.03) and cutting turnover
+  (7.0x → 6.5x). Both results point the same direction: the basket's
+  drawdown growth is not caused by too few names or excess sector
+  concentration — global top-momentum names already span sectors reasonably
+  well, and adding more of them doesn't dilute the risk either. The driver
+  is more likely inherent to the magnitude-weighting mechanism itself (or
+  the underlying momentum signal's tail behavior in a crash), not basket
+  composition. Treat the sector/breadth axis as closed for this specific
+  problem; a future attempt at trimming this basket's drawdown should act on
+  the signal or time dimension instead (e.g. a regime-conditional trim that
+  only engages during identifiable extreme periods, distinct from the
+  already-refuted always-on de-risking overlays). Basket breadth (35/20)
+  itself is still a free upgrade over the narrower 25/15 version — same
+  Sharpe, lower turnover — worth adopting as the base for any future variant
+  of this basket even though it didn't solve the drawdown question.

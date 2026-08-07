@@ -677,3 +677,69 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **Basket breadth is a nearly-free lever, not a Sharpe-for-risk tradeoff — it didn't reduce maxDD materially, but it matched Sharpe at lower turnover.** Widening hold/enter from 25/15 to 35/20 landed at essentially the same validation Sharpe (1.03 vs 1.03) and almost the same maxDD (-35.6% vs -36.0%, a rounding-level change) as the narrow basket, contrary to the hypothesis that more names would meaningfully dilute concentration risk — so name-count concentration is not the drawdown driver either (confirming this trial's sector-neutral sibling's finding that the risk isn't coming from insufficient diversification breadth or sector balance). The one genuine improvement was turnover (7.0x -> 6.5x), consistent with wider bands reducing membership churn as expected. DSR came in slightly *below* the narrow version's 0.9333 (0.9277) purely because it's now trial #24 instead of #21 — at equal trial count this basket would likely have scored at least as well. Net: breadth widening is a safe, mildly turnover-reducing substitute for the narrow basket with no Sharpe cost, but not a path to clearing the DSR bar on its own since it doesn't touch the actual drawdown driver. Two consecutive trials tonight (sector-neutral, now breadth) have each targeted "reduce concentration risk" and both found the maxDD growth across the earlier weighting-intensity escalation is *not* explained by insufficient diversification along either sector or name-count axes — it is more likely inherent to the magnitude-weighting mechanism itself (concentrating capital into whichever names have the most extreme z-scores, regardless of which names or sectors those are). Future sessions chasing this basket's drawdown should look at signal-level or time-varying levers (e.g. capping the maximum z-score multiple rather than the position weight, or a turnover/whipsaw-safe way to trim only the worst historical drawdown periods) rather than more diversification-axis attempts, which this session has now closed on two fronts.
 
+
+## Session summary — 2026-08-07 (nightly)
+
+- Housekeeping: local `main` ref was again detached HEAD at session start
+  (pointed at the correct latest commit, just not on a branch) — fixed with
+  `git checkout -B main origin/main` before starting, no lost work. Engine
+  tests green (16 passed). Data store fresh through 2026-08-05 (cron
+  working, 2 trading days behind today, well within the 5-day tolerance).
+- Experiments run: 2 (mom_multihorizon_zscore_sectorneutral,
+  mom_multihorizon_zscore_widebreadth). Verdicts: 2 REJECT, 0 PROMOTE, 0
+  GATE_FAIL. Champion unchanged: `mom_12m_baseline` (validation Sharpe
+  0.865). Ran a quarter of the 8-trial budget deliberately: both trials
+  targeted the specific open question left by last session (is the
+  weighting-escalation basket's growing validation maxDD a diversification
+  problem, fixable by spreading exposure across sectors or more names?) and
+  both answered it cleanly in the negative in one night, closing that
+  question on two independent axes. No third hypothesis available tonight
+  had a rationale strong enough to avoid re-treading refuted ground (a
+  z-score cap/winsorization is a moderation variant of the already-refuted
+  dampening idea; a rebalance-frequency change had no clear mechanism tied
+  to the actual drawdown driver) — stopped rather than force a weaker trial.
+- Best finding remains unchanged from last session:
+  `mom_multihorizon_zscore_buffered` (val Sharpe 1.03, DSR 0.9333 at trial
+  #21, unpromoted) is still the strongest challenger in the repo. Neither of
+  tonight's attempts to reduce its validation maxDD (-36.0%) beat it:
+  sector-neutralizing the composite score cost far more Sharpe (1.03 ->
+  0.87) than the drawdown it saved (-36.0% -> -32.3%) and even raised
+  turnover; widening the basket from 25/15 to 35/20 matched Sharpe (1.03)
+  and cut turnover (7.0x -> 6.5x) but left maxDD essentially unchanged
+  (-35.6%), landing at a lower DSR (0.9277) purely from the extra trial-
+  count tax of running later in the session.
+- Key new pattern this session (distilled into `experiments/learnings.md`):
+  the growing validation maxDD across the weighting-intensity escalation is
+  not a diversification-breadth or sector-concentration artifact — it
+  survived both a sector-neutral score construction and a much wider basket
+  unchanged. That points toward the magnitude-weighting mechanism itself
+  (or the underlying momentum signal's tail behavior) as the actual driver,
+  not "too few names/sectors held." Basket breadth (35/20) is a mild,
+  Sharpe-free upgrade over the narrower basket (25/15) worth using as the
+  base for any future trial on this line, since it holds Sharpe flat while
+  cutting turnover.
+- Ideas for next session:
+  1. The DSR bar (now trial #24) keeps climbing while the best challenger's
+     0.93-ish DSR score is now stale (measured at trial #21) — a future
+     session should treat ~0.90-0.92 as the realistic bar for a similarly-
+     sized Sharpe jump to clear 0.95, given the deflator's growth.
+  2. Diversification-axis levers (sector, name-count breadth) are now
+     closed for reducing this basket's maxDD. A genuinely different lever
+     is needed: something that acts on the *signal* or *time* dimension
+     rather than the *cross-sectional composition* dimension — e.g., a
+     turnover-aware trim that only engages during identifiably extreme
+     drawdown/correlation regimes (distinct from the already-refuted
+     always-on de-risking overlays, which hurt in calm periods too), or
+     revisiting the composite signal construction itself (e.g. a 3rd
+     horizon was explicitly discouraged, but a completely different signal
+     source combined via true diversification, not blending/dilution, has
+     not been tried).
+  3. Everything from prior sessions stands: vol targeting/risk parity,
+     regime switching, low-vol tilts, and weight-spread dampening are fully
+     refuted; short-term reversal is a real but weaker/riskier standalone
+     signal; capital-diluting blends have a roughly constant Sharpe tax
+     regardless of the base leg's quality; sector-neutral and basket-
+     breadth widening are now refuted/neutral respectively for maxDD
+     reduction specifically (breadth remains fine as a turnover-reducing,
+     Sharpe-neutral substitute).
+- No engine issues encountered this session.
