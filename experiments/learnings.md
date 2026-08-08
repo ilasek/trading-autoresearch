@@ -139,11 +139,41 @@ across experiments; prune entries that later evidence contradicts.
   well, and adding more of them doesn't dilute the risk either. The driver
   is more likely inherent to the magnitude-weighting mechanism itself (or
   the underlying momentum signal's tail behavior in a crash), not basket
-  composition. Treat the sector/breadth axis as closed for this specific
-  problem; a future attempt at trimming this basket's drawdown should act on
-  the signal or time dimension instead (e.g. a regime-conditional trim that
-  only engages during identifiable extreme periods, distinct from the
-  already-refuted always-on de-risking overlays). Basket breadth (35/20)
-  itself is still a free upgrade over the narrower 25/15 version — same
-  Sharpe, lower turnover — worth adopting as the base for any future variant
-  of this basket even though it didn't solve the drawdown question.
+  composition. Basket breadth (35/20) itself is still a free upgrade over
+  the narrower 25/15 version — same Sharpe, lower turnover.
+- **[Superseded below] A time-dimension de-risking lever finally solved the
+  maxDD problem the sector/breadth axis couldn't — but only once cadence was
+  fixed.** A basket-own realized-vol-spike trigger (trailing 21d vs 252d
+  realized vol of the basket's own held names, ratio > 1.6 → cut exposure to
+  0.6x) is mechanistically distinct from every previously-refuted de-risking
+  overlay (those all used an *external* trend signal — 200dma, SPY-trend —
+  which whipsawed because trend reversals are frequent in calm markets).
+  Evaluated only at the monthly rebalance, it was a near no-op: it fired in
+  just 19 of 513 months of history and only twice in the whole 2018-2023
+  validation window, leaving maxDD identical to the untrimmed basket
+  (-35.6%) because by month-end most of a fast crash (e.g. 2020-03) had
+  already happened. Re-evaluating the *identical* trigger daily instead —
+  composition/selection/weighting all still monthly, only the exposure
+  scalar reacts faster — fixed this completely: validation Sharpe rose to
+  1.05-1.07 (new best-ever, beating the untrimmed 1.03) *and* maxDD fell to
+  -29.5%/-30.3%, better than the untrimmed basket's -35.6% *and* better than
+  the champion's own -29.9%. This is the first mechanism in the repo to
+  improve Sharpe and drawdown simultaneously, on both the widebreadth
+  (20/35) and narrower (15/25) basket variants — confirming concentration
+  level and the trim are independent, additive levers. **General lesson for
+  any future overlay/regime idea: evaluate whether the trigger needs to
+  react faster than the strategy's own rebalance cadence before concluding
+  a mechanism doesn't work — a monthly-only check can make a genuinely
+  sound crash-detection signal look like a no-op purely from reaction
+  lag, distinct from the whipsaw failure mode of the earlier de-risking
+  attempts.** One follow-up refuted: redirecting the trimmed capital into a
+  fixed 50/50 TLT/GLD hedge instead of leaving it as cash made no
+  improvement (same Sharpe, slightly worse maxDD and turnover) — cash is a
+  cleaner, cost-free ballast for this trigger; bonds/gold were not reliably
+  diversifying during the exact spike windows it fires on (e.g. the
+  liquidity-driven 2020-03 selloff briefly hit most assets at once). The
+  narrow-basket + daily-trim combination
+  (`mom_zscore_narrow_daily_volspike_trim`, val Sharpe 1.07, maxDD -30.3%,
+  DSR 0.9326) is the strongest challenger in the repo's history on every
+  axis — Sharpe, drawdown, and DSR — future sessions should treat it as the
+  new bar, not the champion's 0.865 or the earlier 1.03 escalation line.

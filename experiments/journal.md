@@ -793,3 +793,76 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **Refuted — parking trimmed capital in TLT/GLD is a wash at best, slightly negative in practice.** Validation Sharpe was unchanged (1.07 vs 1.07) and maxDD came out slightly *worse* (-30.7% vs -30.3% leaving it as cash), with turnover ticking up too (7.3x -> 7.7x) from the extra hedge-entry/exit rows. Bonds and gold were not reliably diversifying during exactly the vol-spike windows this trigger fires on (e.g. 2020-03, where a broad liquidity-driven selloff briefly hit most asset classes at once, including an initial leg down in long bonds) — cash is a cleaner, cost-free ballast than any specific hedge asset pair for this particular trigger. Do not pursue further hedge-asset variants (different bond/commodity mix, partial redirect fraction) of this same idea; the mechanism as tested is closed. `mom_zscore_narrow_daily_volspike_trim` (val Sharpe 1.07, maxDD -30.3%, DSR 0.9326 at trial #28) remains the best finding of the night and the strongest challenger in the repo's history.
 
+## Session summary — 2026-08-08 (nightly)
+
+- Housekeeping: local `main` ref was again detached HEAD at session start
+  (pointed at the correct latest commit, just not on a branch) — fixed with
+  `git checkout -B main origin/main` before starting, no lost work. Engine
+  tests green (16 passed). Data store fresh through 2026-08-07 (cron
+  working, 1 trading day behind today).
+- Experiments run: 5 (mom_zscore_volspike_trim, mom_zscore_daily_volspike_trim
+  [bug, corrected same session], mom_zscore_daily_volspike_trim_fixed,
+  mom_zscore_narrow_daily_volspike_trim, mom_zscore_volspike_hedge_redirect).
+  Verdicts: 5 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged:
+  `mom_12m_baseline` (validation Sharpe 0.865). Ran about 5/8 of the budget:
+  stopped once the productive line (daily-cadence vol-spike trim) had been
+  established, generalized to both basket variants, and its one natural
+  follow-up (hedge redirect) cleanly refuted — a further trial along the
+  same mechanism would have been knob-sweeping (threshold/scale tuning).
+- Process note: trial #26 had an implementation bug (sparse weight rows not
+  zero-filled across the full instrument universe, so names dropped from the
+  basket kept a stale forward-filled weight — avg_positions read 132/140, an
+  unambiguous tell). Caught via a post-hoc diagnostic on the weight matrix
+  itself (not a second backtest) before drawing any conclusion, documented
+  honestly in that trial's journal entry, fixed, and re-run immediately as
+  trial #27 under a new slug. The buggy trial's numbers were left in the
+  journal/trials history as recorded (per the never-rewrite-history rule)
+  with a clear note not to read anything into them.
+- Best finding, and the strongest in the repo's history on every axis
+  (Sharpe, drawdown, and DSR): `mom_zscore_narrow_daily_volspike_trim`
+  (trial #28) — the narrower 15/25 buffered composite-z-score momentum
+  basket (identical to `mom_multihorizon_zscore_buffered`) plus a
+  basket-own realized-vol-spike exposure trim (21d/252d vol ratio > 1.6 ->
+  0.6x exposure) re-evaluated on every trading day. Validation Sharpe 1.07
+  (vs champion 0.865, vs the prior best unprotected basket's 1.03) *and*
+  maxDD -30.3% (vs the same unprotected basket's -36.0%, and even better
+  than the champion's own -29.9%) — the first challenger ever recorded here
+  to improve Sharpe and drawdown at the same time. DSR 0.9326, still short
+  of the 0.95 PROMOTE bar but the highest yet recorded, and rising slightly
+  despite one more trial's bar-raising effect (unlike most incremental
+  improvements in this repo's history).
+- Key new pattern this session (distilled into `experiments/learnings.md`):
+  the two-session-old open question — whether the weighting-escalation
+  basket's rising validation maxDD could be fixed via a signal/time lever
+  rather than a diversification one — is answered yes, but only once
+  overlay cadence matches the speed of the thing it's trying to catch. The
+  identical vol-spike trigger was a near no-op at monthly cadence (fired
+  twice in 6 years of validation, no maxDD change) and decisive at daily
+  cadence (new best Sharpe and maxDD both). This is a distinct failure mode
+  from the earlier-refuted external-trend overlays (which failed from
+  whipsaw, not lag) and worth checking for any future regime/overlay idea.
+  Redirecting freed capital into a bond/gold hedge instead of cash was
+  tested once and cleanly refuted.
+- Ideas for next session:
+  1. The DSR bar (0.9326 at trial #28, now stale at trial #29) is the
+     closest the repo has ever come to 0.95 relative to how large the
+     Sharpe/maxDD improvement is — but three consecutive sessions have shown
+     the deflator absorbs most of a moderate single-trial gain. A
+     structurally different idea layered on
+     `mom_zscore_narrow_daily_volspike_trim` (not another trim-mechanism
+     tweak — cadence and redirect are both now closed) has the best odds
+     yet of clearing 0.95 outright.
+  2. The hedge-redirect result suggests the daily-trim's edge is really
+     about *timing* exposure reduction, not about what replaces it — a
+     future idea should treat "when to de-risk" as solved for this basket
+     and look elsewhere (e.g. does the same fast-reacting vol trigger help
+     if applied to the champion's own plain 12-1 basket, isolating whether
+     the benefit is specific to the magnitude-weighted composite basket or
+     general to any concentrated momentum basket).
+  3. Everything from prior sessions stands: vol targeting/risk parity,
+     regime switching, low-vol tilts, weight-spread dampening, sector-
+     neutral scoring, and (as of tonight) monthly-cadence de-risking
+     overlays and hedge-asset redirection are all refuted/closed; basket
+     breadth widening remains a free, Sharpe-neutral turnover reducer.
+- No engine issues encountered this session.
+
