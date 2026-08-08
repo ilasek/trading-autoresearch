@@ -15,12 +15,21 @@ re-evaluated and (sparsely) re-emitted on every trading day the trim state
 actually flips, so a crash-level vol spike can cut exposure within a day or
 two instead of waiting for the next month-end. This isolates cadence as the
 variable under test, not the trigger's sensitivity.
+
+This is a corrected re-run of trial #26 (`mom_zscore_daily_volspike_trim`),
+which had an implementation bug: sparse weight rows were built from the
+held-names-only Series without zero-filling the rest of the universe, so
+names dropped from the basket kept a stale forward-filled weight instead of
+going to zero (validation avg_positions came out at 132 of 140 instruments).
+Fixed here by always emitting a full zero-filled row; logic is otherwise
+identical. See the journal entry for trial #26 for the honest account of
+the bug.
 """
 
 import pandas as pd
 
 STRATEGY = {
-    "name": "mom_zscore_daily_volspike_trim",
+    "name": "mom_zscore_daily_volspike_trim_fixed",
     "family": "cross-sectional momentum",
     "hypothesis": (
         "The same basket-own-vol-spike exposure trim as "
