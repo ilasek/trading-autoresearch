@@ -743,3 +743,13 @@ Append-only. Newest entries last.
      reduction specifically (breadth remains fine as a turnover-reducing,
      Sharpe-neutral substitute).
 - No engine issues encountered this session.
+## 2026-08-08T01:07:27+00:00 — mom_zscore_volspike_trim — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_volspike_trim.py` (family: cross-sectional momentum, trial #25)
+- Hypothesis: Scaling total exposure down (to 0.6x) only when the momentum basket's own trailing 21-day realized volatility exceeds 1.6x its trailing 252-day realized volatility — leaving exposure at 1.0x otherwise — reduces validation maxDD versus the unscaled `mom_multihorizon_zscore_widebreadth` basket without materially hurting validation Sharpe, net of 15 bps costs, because it targets genuine crash-level vol spikes rather than the frequent trend reversals that made every prior external-trend overlay whipsaw.
+- Verdict: REJECT — deflated sharpe prob 0.9174 < 0.95 (bar set by 25 total trials)
+- Train: sharpe +0.94, ann_ret +16.8%, maxDD -50.7%, turnover 3.2x
+- Validation: sharpe +1.01, ann_ret +24.8%, maxDD -35.6%, turnover 6.6x
+- Deflated Sharpe prob: 0.9174 (bar from 25 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **First genuinely different (time-dimension, not composition) risk lever tried, and it didn't move maxDD at all — a diagnostic (not a backtest, just inspecting the weight-generation logic) showed why.** Across the entire 1962-2023 history the trigger (basket's own trailing 21d/252d realized-vol ratio > 1.6) only fired in 19 of 513 months, and only twice inside the whole 2018-2023 validation window: 2018-02 and 2020-03. Validation maxDD came out at -35.6%, identical to the unscaled `mom_multihorizon_zscore_widebreadth` base's -35.6% — the trim simply didn't engage during the drawdown that matters. The mechanism (a basket-own vol-spike trigger, distinct from every prior *external-trend* de-risking overlay) may still be sound, but monthly rebalance cadence makes it structurally too late: by month-end, most of a fast crash (like 2020-03) has already happened, plus the engine's 1-day execution lag. This isolates cadence, not trigger sensitivity, as the likely culprit — worth one direct follow-up (daily re-evaluation of the same trigger, same threshold) before concluding the mechanism itself is refuted.
+
