@@ -177,3 +177,26 @@ across experiments; prune entries that later evidence contradicts.
   DSR 0.9326) is the strongest challenger in the repo's history on every
   axis — Sharpe, drawdown, and DSR — future sessions should treat it as the
   new bar, not the champion's 0.865 or the earlier 1.03 escalation line.
+- **The daily vol-spike trim's benefit is specific to the magnitude-weighted
+  basket, not a general property of concentrated momentum baskets.** Applying
+  the identical daily-reacting trim mechanism to the plain equal-weight
+  buffered 12-1 basket (`mom_12m_daily_volspike_trim`) was a near no-op —
+  Sharpe, maxDD, and turnover all landed within rounding of the untrimmed
+  `mom_12m_buffered` numbers, because that basket's own realized vol rarely
+  crosses the 1.6x spike threshold in the first place. The trim only earns
+  its keep on baskets concentrated enough (via magnitude-weighting) to
+  actually be vol-spiky. Future de-risking-overlay ideas should keep
+  targeting the magnitude-weighted basket specifically.
+- **A structurally different price-based signal (52-week-high proximity)
+  was tried and refuted, closing that specific avenue.** Swapping the
+  composite return-magnitude z-score for a composite z-score of nearness-
+  to-52-week-high (same buffer/weighting mechanism otherwise) collapsed
+  validation Sharpe to 0.35 and more than doubled turnover (7.0x -> 14.6x).
+  The bounded (0,1] ratio clusters many names near 1.0 in bull markets, so
+  small price wiggles flip buffer-band membership far more often than an
+  unbounded z-scored return does — the mechanism that works well for return
+  magnitude does not transfer to this alternative momentum proxy without
+  first fixing the turnover blow-up (not attempted; would need a distinct
+  rationale, e.g. a much wider band, not a parameter sweep). The "genuinely
+  new signal source" direction remains open in principle but this specific
+  naive construction is closed.

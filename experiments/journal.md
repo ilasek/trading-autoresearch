@@ -886,3 +886,57 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **Clearly refuted, and not close — 52-week-high proximity is a much noisier and more turnover-hungry signal than return magnitude on this universe.** Validation Sharpe fell to 0.35 (vs the return-based composite's 1.03, and below the champion's 0.865) while turnover more than doubled (7.0x -> 14.6x). The likely mechanism: nearness-to-high is a bounded, compressed signal (ratio in (0,1]) that clusters many names near 1.0 during broad bull stretches, so small day-to-day price wiggles flip the ranking of near-tied names in and out of the buffer band far more often than a z-scored *return magnitude*, which spreads names out on an unbounded scale and is naturally stickier. The George & Hwang (2004) effect this was based on is typically documented net of much lower transaction costs and/or with less aggressive rebalancing than this repo's monthly-buffered, magnitude-weighted construction — it does not survive being dropped into this specific high-turnover mechanism. This closes the "genuinely new signal source" direction for now, at least via a naive high-proximity composite; do not retry variants of this specific construction (different lookback windows, single- vs dual-horizon) without addressing the turnover root cause first (e.g. a much wider buffer band or an explicit noise floor on the ratio) — that would need a distinct rationale, not a parameter sweep. `mom_zscore_narrow_daily_volspike_trim` (val Sharpe 1.07, DSR 0.9326, trial #28) remains the strongest challenger in the repo.
 
+
+## Session summary — 2026-08-11 (nightly)
+
+- Housekeeping: local `main` was on-branch and up to date with `origin/main`
+  at session start, no fixup needed. Engine tests green (16 passed). Data
+  store fresh through 2026-08-10 (cron working, 1 trading day behind today).
+- Experiments run: 2 (mom_12m_daily_volspike_trim, mom_52wkhigh_zscore_buffered).
+  Verdicts: 2 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged:
+  `mom_12m_baseline` (validation Sharpe 0.865). Ran a quarter of the 8-trial
+  budget deliberately: both trials targeted specific open questions from
+  last session's learnings (does the daily vol-spike trim generalize beyond
+  the magnitude-weighted basket? is there a genuinely different price-based
+  signal worth trying?) and both answered cleanly in the negative. No third
+  hypothesis available tonight had a rationale strong enough to avoid
+  re-treading already-refuted ground (blending reversal back into the
+  buffered basket, further trim-threshold tuning, and portfolio-level regime
+  filtering are all explicitly closed by prior sessions) — stopped rather
+  than force a weaker trial, matching the 2026-08-07 session's precedent.
+- Best finding remains unchanged: `mom_zscore_narrow_daily_volspike_trim`
+  (trial #28, val Sharpe 1.07, maxDD -30.3%, DSR 0.9326) is still the
+  strongest challenger in the repo's history, on every axis (Sharpe,
+  drawdown, DSR) — unpromoted, short of the 0.95 DSR bar.
+- Key new patterns this session (distilled into `experiments/learnings.md`):
+  1. The daily vol-spike trim's Sharpe/maxDD improvement is specific to the
+     magnitude-weighted basket, not general to any concentrated momentum
+     basket — applying it to the plain equal-weight buffered basket was a
+     near no-op because that basket's own realized vol rarely crosses the
+     spike threshold.
+  2. A genuinely different price-based signal (52-week-high proximity,
+     replacing return-magnitude in the same composite/buffer/weighting
+     mechanism) was tried and clearly refuted — validation Sharpe fell to
+     0.35 with turnover more than doubling, because the bounded proximity
+     ratio clusters many names near 1.0 and flips buffer-band membership on
+     small price wiggles far more than an unbounded z-scored return does.
+- Ideas for next session:
+  1. The "genuinely different signal" direction is not fully closed — a
+     future session could revisit 52-week-high proximity with an explicit
+     fix for its turnover blow-up (e.g. a much wider buffer band or a noise
+     floor on the ratio), but that needs its own clear rationale, not a
+     reflexive parameter sweep.
+  2. The DSR bar continues to climb (now trial #31) while the best
+     challenger's 0.9326 score is stale (measured at trial #28) — a
+     structurally different idea layered on
+     `mom_zscore_narrow_daily_volspike_trim` (not another trim/threshold
+     tweak, not another signal source in the same weighting mechanism) is
+     still the most promising path to clearing 0.95, but no such idea with
+     a strong rationale was available tonight.
+  3. Everything from prior sessions stands: vol targeting/risk parity,
+     regime switching, low-vol tilts, weight-spread dampening, sector-
+     neutral scoring, monthly-cadence de-risking overlays, hedge-asset
+     redirection, and (as of tonight) the daily vol-spike trim applied
+     outside the magnitude-weighted basket and naive 52-week-high proximity
+     are all refuted/closed.
+- No engine issues encountered this session.
