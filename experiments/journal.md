@@ -866,3 +866,13 @@ Append-only. Newest entries last.
      breadth widening remains a free, Sharpe-neutral turnover reducer.
 - No engine issues encountered this session.
 
+## 2026-08-11T01:07:26+00:00 — mom_12m_daily_volspike_trim — **REJECT**
+- Candidate: `strategies/candidates/mom_12m_daily_volspike_trim.py` (family: cross-sectional momentum, trial #30)
+- Hypothesis: Applying the same daily-reacting basket-own vol-spike exposure trim (21d/252d realized-vol ratio > 1.6 -> 0.6x exposure) to the plain equal-weight buffered 12-1 basket (the champion's own signal, hold-25/enter-15) improves its validation Sharpe and reduces its maxDD versus the untrimmed champion, net of 15 bps costs, because the trim's benefit comes from reacting to the basket's own vol regime, not from the return-magnitude weighting scheme it was previously tested on.
+- Verdict: REJECT — deflated sharpe prob 0.8568 < 0.95 (bar set by 30 total trials)
+- Train: sharpe +0.92, ann_ret +15.0%, maxDD -51.6%, turnover 2.4x
+- Validation: sharpe +0.90, ann_ret +18.2%, maxDD -30.2%, turnover 4.6x
+- Deflated Sharpe prob: 0.8568 (bar from 30 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **Refuted — on the plain equal-weight basket the trim is a near no-op, isolating the mechanism as specific to the magnitude-weighted basket, not general to any concentrated momentum basket.** Validation Sharpe (0.90 vs 0.90), maxDD (-30.2% vs -30.2%) and turnover (4.6x vs 4.4x) are all essentially identical to `mom_12m_buffered`'s untrimmed trial #17 numbers — the trim mechanism barely engaged. This makes sense in hindsight: the equal-weight basket's own realized vol is already lower and less spiky than the composite z-score-weighted basket's (which concentrates capital into the most extreme-momentum, typically higher-idiosyncratic-vol names), so the 21d/252d vol-ratio trigger rarely crosses 1.6 for this basket. This answers last session's open question #2 cleanly: the daily vol-spike trim's Sharpe/maxDD improvement is not a generic property of "any concentrated momentum basket + fast vol trim" — it specifically depends on the basket being concentrated/volatile enough (via magnitude-weighting) for the trigger to actually fire during stress. Future de-risking-overlay ideas should keep targeting the magnitude-weighted basket, not the plain equal-weight one; `mom_zscore_narrow_daily_volspike_trim` (val Sharpe 1.07, maxDD -30.3%, DSR 0.9326, trial #28) remains the strongest challenger in the repo.
+
