@@ -200,3 +200,74 @@ across experiments; prune entries that later evidence contradicts.
   rationale, e.g. a much wider band, not a parameter sweep). The "genuinely
   new signal source" direction remains open in principle but this specific
   naive construction is closed.
+- **The DSR bar is now quantified: a candidate needs roughly validation
+  Sharpe ≥ 1.17 to reach DSR 0.95 at 35 recorded trials, versus the best
+  challenger's 1.07.** Computed directly from the protocol's own formula
+  (`metrics.deflated_sharpe` + `probabilistic_sharpe`) rather than inferred
+  from past verdicts, holding the validation window at its fixed 1562 days.
+  Two consequences worth carrying permanently. (1) The gap that matters is
+  ~+0.10 Sharpe over the best challenger, not over the champion's 0.865 —
+  and the required level creeps up by roughly +0.01 per additional trial
+  recorded, because each trial's Sharpe widens the dispersion term that
+  sets the expected-maximum benchmark (`sr_max`, currently ≈0.50
+  annualised). Sessions of small refinements make the bar recede about as
+  fast as they approach it, which is exactly what trials #14-#35 show. (2)
+  Higher moments barely matter: sweeping skew from -0.5 to +0.5 and
+  kurtosis from 5 to 8 moves DSR by under 0.01 at these Sharpe levels, so
+  there is no point engineering return-shape (smoother equity curves,
+  positive-skew overlays) to clear the bar — only raw validation Sharpe
+  moves it materially. Any future session should size its ambition against
+  the ~1.17 number before spending a trial.
+- **Everything that tilts capital or ranking away from the highest
+  raw-return, higher-beta names loses on this universe — now five distinct
+  refutations, including beta-residualisation.** Inverse-vol basket
+  weighting, standalone low-vol tilt, the low-vol double sort, square-root
+  dampening of the weight spread, and (newest) replacing total-return
+  momentum with market-residual momentum all reduced validation Sharpe;
+  every mechanism tilting *toward* those names has gained. Residual
+  momentum is the sharpest version of the test because the literature
+  (Blitz/Huij/Martens) predicts the opposite: here it cut validation
+  ann_return 27.0% -> 22.3% while barely moving vol (25.4% -> 25.0%), so
+  Sharpe fell 1.07 -> 0.93 and both validation and train maxDD *worsened*.
+  Two reasons, both universe-specific: on a survivorship-biased set of
+  today's global mega-caps the beta-loading component is a large part of
+  where the realised momentum payoff actually came from, and the "market"
+  proxy available here (equal-weight mean of US/JP/HK single stocks plus
+  bond, gold and EM ETFs) is too heterogeneous to give clean betas. Treat
+  signal-level de-beta / risk-normalisation as closed absent a genuinely
+  better market factor — including the residual-vol-normalised (t-stat)
+  variant, which sits on the same axis.
+- **Monthly selection cadence is a genuine interior optimum, and turnover
+  reduction is not a lever on this strategy.** Moving the rebalance grid
+  faster (weekly) and slower (quarterly), each as a single change to the
+  best challenger, both lost — weekly 0.99 and quarterly 1.01 versus
+  monthly's 1.07 — and the two failed by opposite mechanisms, which is what
+  makes the optimum real rather than a cost artifact. Weekly *selected
+  worse*, not just more expensively: about half its 2.7pp return loss
+  survives after netting out the extra turnover, because at weekly
+  frequency the ranking near the buffer edges is driven by short-horizon
+  price noise that a month-end snapshot averages through. Quarterly did
+  deliver its promised cost saving (turnover 7.3x -> 4.2x, worth ~+0.5pp of
+  annual return) and still lost 1.6pp of return, i.e. the staleness cost of
+  a 3-month-old ranking is about three times the saving — and train maxDD
+  blew out from -54.7% to -65.4% because a stale basket rides straight
+  through the fast momentum crashes in the pre-2018 history. General form:
+  match each mechanism's evaluation cadence to the timescale of the
+  phenomenon it measures (fast for a vol-regime break, monthly for a 6-12
+  month trend), not to the strategy's rebalance grid in either direction.
+  Corollary: the best challenger's ~7.3x turnover costs ~1.1pp of annual
+  return, but no turnover-reduction idea that changes effective holdings
+  has ever paid for itself here — do not pursue more of them.
+- **The exposure-scaling family is capped at about +0.04 Sharpe, whatever
+  its functional form.** Textbook continuous constant-volatility targeting
+  (25% annualised target, daily, quantised, capped at 1.0 since the engine
+  forbids leverage) was finally tested cleanly — the earlier
+  `mom_invvol_target` had confounded it with inverse-name-vol weighting at
+  monthly cadence — and tied the binary vol-spike trim: validation Sharpe
+  1.073 vs 1.066, both up from 1.028 with no overlay at all. They reach the
+  same ratio by different routes (the binary trim dodges drawdowns and
+  leaves vol at 25.4%; continuous targeting grinds vol to 23.4% and gives
+  up return to get there), and continuous costs more turnover (8.1x vs
+  7.3x). Once a vol overlay reacts daily, its shape is second-order: do not
+  spend further trials on functional-form, threshold or target-level
+  variants of exposure scaling.

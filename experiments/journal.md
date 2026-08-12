@@ -980,3 +980,86 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **Essentially a tie with the binary spike trim (val Sharpe 1.073 vs 1.066) — which is itself the finding: once a vol overlay reacts daily, its functional form is second-order, and the exposure-scaling family has hit a ceiling around 1.07 on this basket.** This was the first clean test of textbook constant-volatility scaling here (the earlier `mom_invvol_target`, 0.71, confounded it with inverse-name-vol weighting, applied it to the plain basket, and ran it at monthly cadence). It is marginally the best raw validation Sharpe ever recorded in this repo and the best train numbers of the line (train Sharpe 0.975 vs 0.959, train maxDD -52.9% vs -54.7%), but the margin over trial #28 is well inside noise. The interesting part is that the two overlays reach the same Sharpe by different routes: the binary trim leaves validation vol at 25.4% and buys its improvement by dodging drawdown episodes, whereas continuous targeting grinds validation vol down to 23.4% while also giving up return (27.0% -> 25.0%) — same ratio, less of both. Continuous targeting also costs more turnover (7.3x -> 8.1x) even with the scalar quantised to 0.05 steps, and its no-leverage cap means it can only ever de-risk, so it cannot recover the return it forgoes in calm periods the way the published version does. Practical reading: daily-cadence exposure scaling is worth roughly +0.04 Sharpe over no overlay (1.03 -> ~1.07) and that is all it is worth, by either construction; treat the whole exposure-scaling family as closed at this level and do not spend further trials on functional-form or target-level variants. Note DSR fell to 0.9244 despite the marginally higher Sharpe, purely because seven more trials have been recorded since trial #28 scored 0.9326 — a direct illustration of the bar-raising effect discussed in the session summary below.
 
+
+## Session summary — 2026-08-12 (nightly)
+
+- Housekeeping: session started on branch `claude/keen-einstein-qlglzr` (the
+  designated development branch for this run), working tree clean at the tip of
+  the data-refresh commit. Engine tests green (16 passed). Data store fresh
+  through 2026-08-11, 1 trading day behind today — cron healthy, nothing
+  fetched during the session.
+- Experiments run: 4 of the 8-trial budget (mom_residual_zscore_daily_trim,
+  mom_zscore_weekly_reselect_trim, mom_zscore_quarterly_reselect_trim,
+  mom_zscore_daily_voltarget). Verdicts: 4 REJECT, 0 PROMOTE, 0 GATE_FAIL.
+  Champion unchanged: `mom_12m_baseline` (validation Sharpe 0.865).
+- Methodological finding, and the most useful output of the night: **the
+  promotion bar is now quantified rather than guessed.** Evaluating the
+  protocol's own DSR formula against the recorded trial list (35 trials, 1562
+  validation days) shows a next candidate needs validation Sharpe ≈ **1.17** to
+  reach DSR 0.95 — against a best-ever challenger of 1.07 — and that the
+  required level rises about +0.01 per additional trial recorded, since each
+  trial widens the dispersion term setting the expected-maximum benchmark
+  (`sr_max` ≈ 0.50 annualised now). Higher moments are nearly irrelevant at
+  these levels: skew from -0.5 to +0.5 and kurtosis from 5 to 8 move DSR by
+  under 0.01, so there is no point engineering return shape. This reframes the
+  three-session-old "just needs one more good idea" framing: the gap to close
+  is ~+0.10 Sharpe over the best challenger in a *single* step, and any session
+  of small refinements makes the bar recede roughly as fast as it approaches.
+- Best finding: no improvement on the standing challenger, though
+  `mom_zscore_daily_voltarget` (trial #35) recorded the repo's marginally
+  highest raw validation Sharpe, 1.073 vs `mom_zscore_narrow_daily_volspike_trim`'s
+  1.066 — inside noise, at higher turnover (8.1x vs 7.3x), and with a lower DSR
+  (0.9244 vs 0.9326) purely from the seven extra trials since. Trial #28
+  therefore remains the strongest challenger on the axes that matter.
+- Three axes closed tonight, each by a single-change test on the best
+  challenger (all distilled into `experiments/learnings.md`):
+  1. **Residual (market-neutralised) momentum: refuted**, and it sharpens a
+     pattern now five refutations deep — on this universe every mechanism that
+     tilts ranking or capital away from the highest raw-return, higher-beta
+     names loses. Stripping beta cut validation ann_return 27.0% -> 22.3% while
+     vol barely moved, so Sharpe fell 1.07 -> 0.93 and drawdowns worsened. The
+     literature predicts the opposite; the likely reasons are local
+     (survivorship-biased mega-cap universe where beta loading *is* much of the
+     realised payoff, plus a market proxy too heterogeneous — US/JP/HK stocks
+     mixed with bond, gold and EM ETFs — to yield clean betas).
+  2. **Selection cadence: monthly is a genuine interior optimum.** Weekly
+     (0.99) and quarterly (1.01) both lost versus monthly (1.07), by opposite
+     mechanisms — weekly *selects worse* because a weekly ranking of a 6-12
+     month trend is noise-dominated near the buffer edges (about half its
+     return loss survives netting out the doubled turnover), while quarterly
+     delivered its full promised cost saving (7.3x -> 4.2x turnover) and still
+     lost three times that much to ranking staleness, with train maxDD blowing
+     out to -65.4%. General form: match a mechanism's evaluation cadence to the
+     timescale of the phenomenon it measures, not to the rebalance grid.
+     Corollary: turnover reduction is a dead lever here.
+  3. **Exposure scaling is capped at about +0.04 Sharpe regardless of form.**
+     Textbook continuous constant-vol targeting, tested cleanly for the first
+     time (the old `mom_invvol_target` confounded it with inverse-name-vol
+     weighting at monthly cadence), tied the binary spike trim.
+- Deliberately not run, with reasons, rather than filling the remaining budget:
+  the residual-vol-normalised (t-stat) momentum variant and risk-adjusted
+  momentum scoring both sit on the tilt-away-from-strength axis refuted five
+  times over; intermediate cadences (biweekly, 10-day) and trim
+  threshold/target-level variants are knob sweeps on now-closed dimensions; and
+  an overlapping-tranche (staggered 3-month holding) construction was designed
+  and then dropped once its average ranking staleness was worked out to equal
+  the quarterly grid's — trial #34 had just priced that staleness at three
+  times its turnover saving, so the expected result was already known. Each
+  unrun trial keeps the DSR bar ~0.01 lower for a future session with a real
+  idea.
+- Ideas for next session — honest state of the search: the momentum family as
+  parameterised here looks close to exhausted. Signal source (52-week-high,
+  residual), weighting scheme (rank, equal, damped, inverse-vol,
+  sector-neutral), breadth, cadence, and exposure overlays have all been mapped,
+  and the best of every axis combines to ~1.07 against a ~1.17 bar. What is
+  genuinely untried and could plausibly be worth +0.10 in one step is a new
+  *return source* rather than a new treatment of the same one — every family in
+  `program.md` has now been touched at least once, so this likely needs an input
+  the repo does not yet have (the fundamentals / point-in-time / intraday data
+  listed under "Future upgrades", which require human approval). A human reading
+  this may want to weigh that against the alternative interpretation: that a
+  champion at 0.865 while an unpromotable challenger sits at 1.07 is the
+  multiple-testing protocol working exactly as designed, and the right response
+  is patience rather than more trials. Recommending no engine or threshold
+  change — flagging the tradeoff only.
+- No engine issues encountered this session.
