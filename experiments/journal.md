@@ -940,3 +940,13 @@ Append-only. Newest entries last.
      outside the magnitude-weighted basket and naive 52-week-high proximity
      are all refuted/closed.
 - No engine issues encountered this session.
+## 2026-08-13T01:09:06+00:00 — mom_residual_zscore_daily_volspike_trim — **REJECT**
+- Candidate: `strategies/candidates/mom_residual_zscore_daily_volspike_trim.py` (family: cross-sectional momentum, trial #32)
+- Hypothesis: Scoring the buffered hold-25/enter-15 magnitude-weighted basket by a composite z-score of residual-momentum t-statistics (market-model alpha over 252d and 126d formation windows, skipping the most recent month, divided by residual volatility) instead of raw trailing returns raises validation Sharpe above the 1.07 of the otherwise identical raw-return version, net of 15 bps costs, because removing loaded market beta isolates the stock-specific continuation that drives momentum and drops the factor exposure that drives its crashes.
+- Verdict: REJECT — deflated sharpe prob 0.8793 < 0.95 (bar set by 32 total trials)
+- Train: sharpe +0.96, ann_ret +15.3%, maxDD -50.3%, turnover 4.7x
+- Validation: sharpe +0.96, ann_ret +16.0%, maxDD -24.5%, turnover 7.9x
+- Deflated Sharpe prob: 0.8793 (bar from 32 trials)
+- Champion validation sharpe at the time: +0.86
+- Lesson: **Refuted on the Sharpe axis, but it produced the best validation drawdown ever recorded in this repo — the two halves of the signal clearly pull in opposite directions.** Validation Sharpe fell to 0.96 (vs 1.07 for the otherwise-identical raw-return version) because annualized return collapsed from +27.0% to +16.0%, and turnover rose (7.3x -> 7.9x). But maxDD came in at -24.5%, better than the raw-return version's -30.3%, better than the champion's -29.9%, and the best number of any candidate in the repo's history — exactly the crash-resistance the residual-momentum literature attributes to stripping loaded market beta. The construction bundles two distinct changes (beta removal in the numerator, idiosyncratic-vol normalization in the denominator) and this repo's prior learnings predict they should have opposite signs: magnitude-tilting *toward* the strongest names has repeatedly helped (0.90 -> 0.93 -> 0.98 -> 1.03), while every construction that tilted capital *away* from higher-vol names has hurt (low-vol tilt, double-sort, inverse-vol weighting). The dividing-by-residual-vol half is structurally the latter, so the most likely reading is that beta removal delivered the drawdown gain and vol normalization ate the return. That is a testable split, done in the next trial rather than assumed.
+
