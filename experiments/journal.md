@@ -990,3 +990,81 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **The band did exactly what it was designed to do to turnover and nothing at all to Sharpe — weight churn among held names is information, not jitter, unlike membership churn.** Turnover fell on both splits as predicted (validation 7.3x -> 6.8x, train 4.4x -> 3.9x), and the arithmetic then cancels almost perfectly: ~0.5x of round-trip turnover saved at 15 bps per side is ~0.15%/yr of cost recovered, against annualized return falling +27.0% -> +26.8%. Sharpe 1.06 vs 1.07, maxDD -30.6% vs -30.3% — a wash on every axis. The result is informative precisely because it is a null with a mechanism: the marginal weight adjustments this band suppressed were paying for themselves at current cost levels, so magnitude weighting is *responsive* by design rather than accidentally over-trading. This is the sharpest contrast yet with trial #17, where the structurally identical hysteresis idea applied to *membership* was the single biggest gain in the repo's history (0.865 -> 0.90 with turnover 5.8x -> 4.4x). The two dimensions are not analogous: crossing a rank cutoff is largely noise around an arbitrary threshold, whereas a change in a name's z-score magnitude is the signal itself. Combined with trial #35, both rebalance-mechanics levers tested this session came back near-neutral, which bounds how much of the best challenger's 1.07 is a mechanical artifact: very little. It also means cost drag is not the binding constraint on this strategy — at 15 bps/side there is no meaningful free return left to harvest by trading less.
 
+## Session summary — 2026-08-13 (nightly)
+
+- Housekeeping: `.venv` absent at session start, rebuilt from
+  `requirements.txt`. Engine tests green (16 passed). Data store fresh
+  through 2026-08-12 (cron working, 1 trading day behind today).
+  Working branch this session is `claude/keen-einstein-05sf9e` (the branch
+  this session was assigned); it already carried the two most recent data
+  refresh commits ahead of `main`.
+- Experiments run: 5 (mom_residual_zscore_daily_volspike_trim,
+  mom_residual_raw_zscore_trim, mom_infodiscreteness_zscore_trim,
+  mom_zscore_tranched_trim, mom_zscore_weightband_trim). Verdicts:
+  5 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged: `mom_12m_baseline`
+  (validation Sharpe 0.865). Ran 5 of the 8-trial budget and stopped
+  deliberately: the session covered three structurally distinct axes and
+  every remaining idea on the list was a knob on a mechanism already shown
+  to be neutral or refuted (tranche count, band width, trim threshold,
+  partial vol-normalization blend). Matches the precedent set on 2026-08-07
+  and 2026-08-11.
+- Every candidate this session held `mom_zscore_narrow_daily_volspike_trim`
+  (trial #28, val Sharpe 1.07, maxDD -30.3%) fixed and changed exactly one
+  thing, so all five results are directly comparable to it and to each other.
+- Best finding remains unchanged: `mom_zscore_narrow_daily_volspike_trim` is
+  still the strongest challenger in the repo's history (val Sharpe 1.07,
+  maxDD -30.3%, DSR 0.9326 as measured at trial #28) — unpromoted, short of
+  the 0.95 DSR bar. Nothing tonight beat it; the closest were the two
+  rebalance-mechanics nulls at 1.05 and 1.06.
+- Key new patterns this session (distilled into `experiments/learnings.md`):
+  1. **Signal-definition axis is exhausted.** Four documented alternative or
+     supplementary price-based signals now all lose to plain composite return
+     magnitude: 52-week-high proximity (0.35), residual-momentum t-stat
+     (0.96), residual momentum without risk normalization (1.02), and an
+     information-discreteness continuity term (0.99). Beta removal
+     specifically is mildly negative everywhere and badly negative on train
+     drawdown, consistent with the earlier sector-neutralization refutation —
+     factor-neutralizing the score has never worked on this universe.
+  2. **Idiosyncratic-vol normalization is the repo's best drawdown mechanism**
+     (val maxDD -24.5%, beating both the daily vol-spike trim and the
+     champion) at a return cost too large to be a Sharpe upgrade. Trials
+     #32/#33 disentangled the residual-momentum construction cleanly and the
+     attribution was the reverse of what prior learnings predicted: the vol
+     denominator, not the beta removal, is what bought the drawdown.
+  3. **Both rebalance-mechanics levers are near-neutral**, which bounds how
+     much of the 1.07 is mechanical artifact: very little. Timing-luck
+     averaging over four staggered formation dates and a 2pp no-trade band on
+     weights each landed inside noise of 1.07. The band cut turnover exactly
+     as designed and gained nothing, so hysteresis does *not* generalize from
+     membership (trial #17, the repo's biggest-ever gain) to weights — rank
+     churn is noise, magnitude churn is signal. Cost drag is not the binding
+     constraint at 15 bps/side.
+- Honest read on the DSR bar: it is now set by 36 trials and no candidate has
+  cleared 0.95. Tonight's five results narrowed the space substantially but
+  none moved the frontier, and after this session the two broad axes that
+  remained open (better score, better rebalance mechanics) are both largely
+  closed. The realistic paths left are genuinely new *information* rather than
+  new transformations of the same daily price history, or accepting that the
+  1.07 challenger cannot clear a bar that 36 trials have raised.
+- Ideas for next session:
+  1. Highest-value remaining direction is probably **not another candidate**.
+     Trials #31-#36 have systematically eliminated signal variants and
+     construction variants on the same price data; a sixth transformation of
+     the same inputs has low prior odds. Consider instead writing up the
+     accumulated evidence for the human — specifically whether the program's
+     data constraint (free daily adjusted closes, current-constituent
+     universe) is now the binding limit rather than idea quality. The
+     "Future upgrades" section of `program.md` lists point-in-time and
+     fundamental data behind human approval; this session's results are the
+     strongest argument yet that it is worth approving.
+  2. If a candidate is run, the one unexploited asymmetry on record is that
+     the strategy sits far from the -45% drawdown gate while the vol-
+     normalized score (#32) reaches -24.5% maxDD. There is no Sharpe case for
+     spending risk budget there today, but if a future idea raises return at
+     the cost of drawdown, that lever is a known, measured offset.
+  3. Everything from prior sessions stands as closed: vol targeting/risk
+     parity, regime switching, low-vol tilts, weight-spread dampening,
+     sector-neutral scoring, monthly-cadence de-risking overlays, hedge-asset
+     redirection, the daily vol-spike trim outside the magnitude-weighted
+     basket, and naive 52-week-high proximity.
+- No engine issues encountered this session.

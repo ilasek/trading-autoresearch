@@ -200,3 +200,51 @@ across experiments; prune entries that later evidence contradicts.
   rationale, e.g. a much wider band, not a parameter sweep). The "genuinely
   new signal source" direction remains open in principle but this specific
   naive construction is closed.
+
+- **The "find a better score" axis is now heavily explored and low-yield: four
+  distinct alternative or supplementary price-based signals have all lost to
+  plain composite return magnitude.** 52-week-high proximity (trial #31, val
+  Sharpe 0.35), residual momentum as a t-statistic (#32, 0.96), residual
+  momentum without risk normalization (#33, 1.02), and an information-
+  discreteness / "frog in the pan" continuity term added to the composite
+  (#34, 0.99) all came in below the raw-return version's 1.07, on an otherwise
+  byte-identical mechanism. Two sub-findings are worth keeping:
+  (a) **Removing market beta from the score is mildly negative on every axis
+  and badly negative on train drawdown** (-64.1% vs -54.7%): the beta component
+  of trailing returns is not noise to be stripped here, it is part of what
+  momentum profitably picks up. This rhymes with the earlier sector-
+  neutralization refutation — every "neutralize a common factor out of the
+  score" idea tried on this universe has cost Sharpe.
+  (b) **Dividing the score by idiosyncratic volatility is the single most
+  effective drawdown mechanism found in this repo** — validation maxDD -24.5%,
+  better than the daily vol-spike trim's -30.3% and the champion's -29.9% — but
+  it costs far too much return (+27.0% -> +16.0%) to be a Sharpe upgrade.
+  Trials #32/#33 disentangled this cleanly: the drawdown gain comes from the
+  vol denominator, not the beta removal. Park it as a known risk lever in case
+  the drawdown gate ever becomes the binding constraint; it currently is not.
+  A supplementary term also has to *earn* the composite weight it takes: the
+  continuity term hurt return and drawdown at once, the signature of dilution
+  rather than a risk trade-off. Do not spend further trials on new price-based
+  scoring dimensions without a materially different rationale than "this is a
+  documented anomaly" — three of these four are well-documented in the
+  literature and none survived contact with this universe and cost model.
+- **Both rebalance-mechanics levers are near-neutral, which bounds how much of
+  the best challenger's 1.07 is mechanical artifact: very little.** Two
+  structurally distinct construction changes were tested with the signal held
+  fixed. Rebalance-timing diversification — four weekly-staggered tranches, each
+  with its own buffer state, averaged into one book (#35) — left validation
+  Sharpe at 1.05 while improving maxDD slightly on *both* splits (-30.3% ->
+  -29.6% validation, -54.7% -> -50.9% train). A 2pp no-trade band on the
+  magnitude weights of already-held names (#36) cut turnover as designed
+  (validation 7.3x -> 6.8x, train 4.4x -> 3.9x) for Sharpe 1.06. Three
+  consequences: (1) the repo's headline numbers are not a draw from a wide
+  formation-date luck distribution, which retroactively strengthens confidence
+  in every month-end-formed result in the journal; (2) **hysteresis does not
+  generalize from membership to weights** — trial #17's buffer was the biggest
+  gain in repo history because crossing a rank cutoff is mostly noise around an
+  arbitrary threshold, whereas a change in a name's z-score magnitude is the
+  signal itself, so suppressing it saves cost and loses signal in equal measure;
+  (3) at 15 bps/side, cost drag is not the binding constraint — there is no
+  meaningful free return left to harvest by trading less. Neither lever should
+  be retried with different tranche counts or band widths; both are knobs on
+  mechanisms now shown to be near-neutral.
