@@ -991,3 +991,98 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **The pre-stated alternative outcome is the one that happened, and it retires the concentration lever.** Restoring the old concentration level through a stable convex transform did not recover Sharpe — it fell to 1.070 from trial #35's 1.085 — and it faithfully reproduced every *cost* of the old formula: maxDD went back to -30.1% (from -28.2%) and turnover to 6.3x (from 5.75x), landing almost exactly on the min-shift version's profile (1.080 / -30.3% / 6.97x). Since the exponent was chosen ahead of time to match a concentration target measured on the weight matrix, not tuned against performance, this is a clean read: **at matched concentration the two anchors perform the same, and at matched anchor more concentration is not better.** The repo's equal -> rank -> magnitude ladder (0.90 -> 0.93 -> 0.98 -> 1.03) has been treated for several sessions as its most reliable Sharpe lever; measured this way, concentration per se contributes nothing above ~HHI 0.07, and the drawdown widening that accompanied each rung was the real, unambiguous part of that story. The most likely reading of the ladder now is that its early rungs captured something genuine — moving off equal-weight toward *any* score-proportional sizing — and its later rungs were the min-shift's unstable amplification plus a share of ordinary overfitting to 36 trials' worth of selection. **Practical consequence: stop treating "tilt harder toward the top names" as an available lever on this signal; exponent 1.0 off a fixed floor is the setting to build on, and it is also the cheapest and least drawdown-prone.** Trial #35 `mom_zscore_fixed_anchor` (val Sharpe 1.085, maxDD -28.2%, turnover 5.75x, DSR 0.9233) is the strongest challenger in the repo's history on all three axes simultaneously, and the first one whose edge comes from removing an artifact rather than from adding a signal.
 
+
+## Session summary — 2026-08-14 (nightly)
+
+- Housekeeping: engine tests green (16 passed). Data store fresh through
+  2026-08-13 (cron working, 1 trading day behind today). Work was committed on
+  branch `claude/keen-einstein-xclptt` rather than `main` — see the note at the
+  end of this block.
+- Experiments run: 5 of the 8-trial budget (#32 `mom_zscore_continuous_voltarget`,
+  #33 `mom_residual_zscore_trim`, #34 `mom_zscore_notrade_band`,
+  #35 `mom_zscore_fixed_anchor`, #36 `mom_zscore_convex_anchor`). Verdicts:
+  5 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged: `mom_12m_baseline`
+  (validation Sharpe 0.865). Two further ideas were **killed by weight-matrix
+  diagnostics before spending a trial** — see below; that is why the budget was
+  not exhausted.
+- Best finding, and the strongest challenger in the repo's history on all three
+  axes at once: **`mom_zscore_fixed_anchor` (trial #35) — val Sharpe 1.085,
+  maxDD -28.2%, turnover 5.75x, DSR 0.9233.** Its edge comes from *removing an
+  artifact* rather than adding a signal, which is a first here. Every
+  magnitude-weighted candidate since trial #20 sized positions off
+  `composite - composite[held].min()`, anchoring the entire weight vector to the
+  weakest current basket member — the name the hold-25/enter-15 buffer swaps most
+  often — so every swap rescaled every weight in the book regardless of whether
+  any name's own signal had moved. Replacing that with a fixed floor cut
+  re-sizing turnover from 4.67x to 2.30x per year.
+- The session's method mattered as much as its results. Three separate
+  weight-matrix diagnostics (holdings only, no returns scored — not backtests)
+  did work that would otherwise have cost trials:
+  1. Decomposing turnover into entries/exits (2.63x) versus re-sizing retained
+     names (4.67x) is what located the anchor artifact at all, after a no-trade
+     band underdelivered against its premise.
+  2. Measuring rank correlation (0.89) and top-15 overlap (82.5%) between the
+     total-return and residual-momentum composites killed a score-level ensemble
+     idea that looked compelling on paper — averaging signals that similar buys
+     ~3% noise reduction (~+0.02 Sharpe) against a bar needing ~+0.10.
+  3. Matching HHI across weighting transforms let the convex-transform exponent
+     be fixed *ahead of the trial* against a concentration target rather than
+     tuned against performance, which is what makes trial #36's negative result
+     a clean read instead of a failed sweep.
+- Key new patterns this session (all distilled into `experiments/learnings.md`):
+  1. **The weighting formula's membership-dependent anchor was manufacturing
+     roughly half of the basket's re-sizing turnover.** Check any weighting
+     formula for dependence on a quantity that moves for reasons unrelated to
+     the signal.
+  2. **Concentration per se is retired as a Sharpe lever on this signal.** The
+     min-shift subtracts a usually-*negative* number and so was a hidden, drifting
+     concentration amplifier, not the compressor it appeared to be. At a matched
+     anchor, restoring concentration recovered none of the Sharpe and all of the
+     drawdown and turnover cost. The old equal → rank → magnitude ladder is best
+     read as one real gain (moving off equal-weight) plus amplification plus
+     selection noise.
+  3. **Under `max_leverage = 1.0`, overlays should be inert by default.** The
+     continuous proportional vol-target lost to the binary trim it generalizes,
+     because it de-risks on ~half of all days and adds nothing during crashes;
+     Moreira-Muir's edge lives mostly in levering *up*, which this engine forbids.
+  4. **Residual momentum is a same-quality, highly-correlated alternative** —
+     a dead heat on Sharpe with a tamer return stream, and no use as a diversifier.
+- Why 5 trials and not 8: after trial #36 retired the concentration lever, no
+  remaining hypothesis had a rationale strong enough to justify permanently
+  raising the DSR bar. The obvious candidates were all closed or near-closed —
+  a sqrt/exponent-<1 transform is adjacent to the already-refuted dampening
+  result and would be a sweep; the signal ensemble was pre-empted by diagnostic
+  (2) above; faster selection cadence carries an unfavourable turnover profile
+  given costs. Stopping matches the precedent of the 2026-08-07 and 2026-08-11
+  sessions and the program's explicit "quality over quantity" instruction.
+- Distance to promotion, quantified (arithmetic on `trials.jsonl`, not a
+  backtest): clearing DSR 0.95 at the current trial count needs validation Sharpe
+  of roughly **1.17-1.20**; the best challenger is at 1.085. The gap is real and
+  no longer vague. Note also that `sr_max` scales with the *variance* of recorded
+  trial Sharpes, so weak trials raise the bar twice over.
+- Ideas for next session:
+  1. Build on `mom_zscore_fixed_anchor` (exponent 1.0, fixed floor, no-trade
+     band, daily vol-spike trim), not on the older min-shift line — and do not
+     re-tilt concentration.
+  2. Residual momentum is not refuted, only unhelpful as constructed. A cleaner
+     factor definition (residualize stocks against an equity-only proxy, leave
+     bond/gold/commodity ETFs unresidualized) is a distinct, still-open variant,
+     and the mis-specified proxy is the most likely explanation for its worsened
+     train-period drawdown.
+  3. Given that this session's only real gain came from removing an artifact
+     rather than adding signal, auditing the *rest* of the construction for
+     similar signal-independent instabilities looks higher-yield than another
+     signal idea. The monthly cross-sectional re-standardization of the z-scores
+     is the obvious next suspect.
+  4. Everything from prior sessions stands as refuted/closed: vol targeting/risk
+     parity, regime switching, low-vol tilts, weight-spread dampening,
+     sector-neutral scoring, monthly-cadence de-risking overlays, hedge-asset
+     redirection, the daily vol-spike trim outside the magnitude-weighted basket,
+     naive 52-week-high proximity, and now continuous proportional overlays and
+     concentration escalation.
+- No engine issues encountered this session.
+- **Branch note for the human reviewer**: `CLAUDE.md` and the session prompt both
+  specify `git push origin main`, but this session's operating instructions
+  designate `claude/keen-einstein-xclptt` as the development branch and forbid
+  pushing elsewhere without explicit permission. The work is pushed there instead
+  and needs a merge into `main` to take effect; no commits were made to `main`.

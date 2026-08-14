@@ -95,8 +95,9 @@ across experiments; prune entries that later evidence contradicts.
   (`mom_etf_blend`: 0.865 → 0.85) or buffered momentum (`mom_buffered_etf_blend`:
   0.90 → 0.88) — the dilution tax doesn't shrink as the diluted leg improves, so
   blending becomes relatively less attractive the better the core signal gets.
-- **Within-basket weighting scheme, not just membership/buffering, is a major
-  untapped lever — and the direction matters.** Three trials in one session,
+- **[Substantially revised by the anchor findings below] Within-basket weighting
+  scheme, not just membership/buffering, is a major untapped lever — and the
+  direction matters.** Three trials in one session,
   each isolating a single change on top of `mom_12m_buffered`'s identical
   basket membership, climbed validation Sharpe 0.90 → 0.93 → 0.98 → 1.03:
   equal-weight → linear rank-weight → z-score-magnitude-weight → z-score-
@@ -200,3 +201,81 @@ across experiments; prune entries that later evidence contradicts.
   rationale, e.g. a much wider band, not a parameter sweep). The "genuinely
   new signal source" direction remains open in principle but this specific
   naive construction is closed.
+- **The magnitude-weighting formula contained a turnover-manufacturing artifact,
+  and removing it is the largest clean improvement found since buffering.** Every
+  magnitude-weighted candidate from trial #20 onward sized positions as
+  `raw = composite - composite[held].min() + 0.05`, anchoring the whole weight
+  vector to the score of *the weakest current basket member* — the least stable
+  name in the portfolio, since the hold-25/enter-15 buffer swaps it often. Each
+  swap rescaled every weight in the basket, including names whose own score and
+  rank had not moved. A weight-matrix decomposition (a diagnostic on holdings, not
+  a backtest) sized the damage: of the then-best challenger's 7.30x annual
+  validation turnover, 2.63x was entries/exits and **4.67x was re-sizing names it
+  was keeping anyway**. Replacing the min-shift with a fixed floor
+  (`composite.clip(lower=0.05)`, so a name's weight depends only on its own score)
+  cut re-sizing turnover to 2.30x — very nearly halved — and produced the best
+  risk profile in the repo's history: val Sharpe 1.085, maxDD -28.2%, turnover
+  5.75x (`mom_zscore_fixed_anchor`, trial #35). **Check any weighting formula for
+  dependence on a quantity that changes for reasons unrelated to the signal;
+  cross-sectional re-standardization and min/max shifts over a churning basket are
+  the usual culprits.**
+- **Concentration per se is not a Sharpe lever on this signal — the apparent
+  ladder was the min-shift's unstable amplification.** The min-shift subtracts the
+  weakest *held* member's composite, which is usually **negative** (decayed names
+  linger via the buffer), so it inflated the top-to-bottom weight spread rather
+  than compressing it — a hidden concentration amplifier whose strength drifted
+  month to month with how badly the worst holding had decayed (validation-era mean
+  HHI 0.105 vs 0.094 over all history). Removing it de-concentrated the book
+  (HHI 0.105 -> 0.073) and cost roughly as much Sharpe as the turnover saving paid
+  back. Restoring the *same* concentration through a stable convex transform
+  (`clip(composite, 0.05) ** 1.5`, exponent chosen ahead of time to match HHI, not
+  tuned on performance) did **not** recover Sharpe (1.070 vs 1.085) and faithfully
+  restored every cost: maxDD back to -30.1%, turnover back to 6.3x
+  (`mom_zscore_convex_anchor`, trial #36). So at matched anchor, more
+  concentration buys drawdown and turnover and nothing else. The earlier
+  equal -> rank -> magnitude climb (0.90 -> 0.93 -> 0.98 -> 1.03) is best read as
+  a real gain from moving off equal-weight to *any* score-proportional sizing,
+  plus unstable amplification, plus selection noise over 36 trials. **Exponent 1.0
+  off a fixed floor is the setting to build on; do not tilt harder.**
+- **A no-trade band on position size is a small free gain, and the diagnostic that
+  explains its smallness is worth more than the gain.** Leaving a retained name
+  untouched when its new target is within 25% of the held weight (the classic
+  proportional-cost no-trade region) gave +0.015 Sharpe and slightly lower
+  turnover — keep it, it is free — but caught only 7% of re-sizing turnover,
+  because the re-sizing moves were large (the anchor artifact above), not the
+  small wiggles such a band suppresses. **When a cost-reduction mechanism
+  underdelivers, decompose the cost before tuning the mechanism.**
+- **Under the engine's hard `max_leverage = 1.0`, overlays should be inert by
+  default and act rarely.** Replacing the binary vol-spike trim (21d/252d ratio
+  > 1.6 -> 0.6x) with the continuous proportional scalar `min(1, sigma_252/sigma_21)`
+  — same estimator, same daily cadence, no new constants, passing through the same
+  operating point — *lost* Sharpe (1.007 vs 1.066) and added ~1x turnover while
+  leaving maxDD identical. The proportional rule sits below 1.0 on roughly half of
+  all days, so it is a persistent capital drag in normal markets that adds nothing
+  during actual crashes. Moreira-Muir vol-management earns most of its edge by
+  levering *up* in calm regimes, which this engine forbids; stripped of that half,
+  proportional response is all drag and no boost. **Judge a candidate overlay by
+  what fraction of days it is non-neutral.**
+- **Residual (market-beta-neutralized) momentum is a same-quality alternative
+  signal, not an improvement — and not a diversifier either.** Ranking by
+  cumulative return residual to an equal-weighted cross-sectional market factor
+  (252d/126d, skip 21d) gave val Sharpe 1.068 versus total return's 1.066: a dead
+  heat reached by a visibly different route (ann_ret 24.6% vs 27.0%, ann_vol 23.1%
+  vs 25.4%, maxDD -28.8% vs -30.3%). The crash-mitigation half of the Blitz et al.
+  claim was contradicted — train maxDD worsened to -65.2% from -54.7% — most
+  likely because the market proxy here is roughly a third bond/gold/commodity/
+  sector ETFs and so is not a clean equity factor. A score-level ensemble of the
+  two signals looked like the obvious follow-up and was **killed before spending a
+  trial** by a diagnostic: the two composites have mean rank correlation 0.89 and
+  82.5% top-15 basket overlap, so averaging them would cut signal noise by ~3%
+  (~+0.02 Sharpe) against a bar needing ~+0.10. **Measure signal correlation on the
+  weight/score matrix before spending a trial on any ensemble — it is free and
+  trials are not.**
+- **The DSR bar is now quantifiable, and it is far away.** Arithmetic on
+  `trials.jsonl` (not a backtest): at ~32 trials, clearing DSR 0.95 needs a
+  validation Sharpe of roughly **1.17-1.20**, against a best challenger of 1.085.
+  Return-distribution shape is not a way around it — plausible swings in skew and
+  kurtosis move DSR by only about +/-0.002. Note also that `sr_max` scales with the
+  *variance* of all recorded trial Sharpes, so a badly-performing trial raises the
+  bar for everyone twice over (once through the count, once through the spread) —
+  a concrete reason weak trials are expensive, not merely wasteful.
