@@ -200,3 +200,69 @@ across experiments; prune entries that later evidence contradicts.
   rationale, e.g. a much wider band, not a parameter sweep). The "genuinely
   new signal source" direction remains open in principle but this specific
   naive construction is closed.
+- **Overlapping formation tranches are the largest single improvement ever
+  found here, and they are a pure free lunch.** Reforming only 1/K of capital
+  each month and holding each tranche K months (equivalently: the live book
+  is the average of the K most recent monthly target-weight vectors), with
+  signal, buffer, magnitude weighting and daily vol-spike trim all untouched,
+  moved the best challenger from val Sharpe 1.07 / maxDD -30.3% / turnover
+  7.0x to **1.08 / -28.5% / 4.2x at K=3** and then **1.11 / -29.1% / 3.0x at
+  K=6** (`mom_zscore_overlap6_daily_trim`, trial #35, DSR 0.9311 — the
+  best Sharpe, turnover and DSR in the repo's history). Nothing about what
+  the signal *says* changed; only when capital is committed to it. Two
+  distinct effects stack: a temporal one (only 1/K of the book can turn over
+  per month, so the same idea is expressed for far less friction) and a
+  breadth one (averaging K formation dates genuinely de-concentrates the
+  book). Critically, holding five sixths of capital on signals up to six
+  months stale did **not** cost any return (ann_ret 26.9% at both K=3 and
+  K=6), so on this universe the 12-1 composite's decay is slower than the
+  cost and formation-luck savings a longer holding period buys. This is
+  temporal dilution *into the same signal* and is categorically different
+  from the refuted capital dilution into a weaker second leg — the "dilution
+  tax" learning above does not apply to it. **Do not run a K=12/K=9 trial to
+  locate the optimum** — direction is established over two points and a third
+  would be knob-sweeping; revisit the lever only for a structural reason
+  (e.g. non-equal weighting across formation dates).
+- **Concentration is now fully explored in both directions and is exhausted
+  as a lever; effective *weight* concentration, not name count, is what
+  drives drawdown.** Halving the per-tranche basket under overlap (core 15->8,
+  band 25->14) pulled effective breadth back to ~14 names and gave the
+  drawdown gain straight back (Sharpe 1.08 -> 1.07, maxDD -28.5% -> -32.8%)
+  while raising ann_ret 26.9% -> 30.0% — concentration still adds raw return,
+  it just adds proportionally more tail risk, the same trade the weighting-
+  escalation line hit two sessions ago. The turnover half of overlap's benefit
+  survived the change in full (4.1x vs 4.2x), which cleanly decomposes the
+  mechanism: **overlap's turnover benefit is temporal, its drawdown benefit is
+  breadth-driven.** This also resolves an apparent contradiction with the
+  earlier widebreadth result (25/15 -> 35/20 left maxDD unchanged at -35.6%):
+  under magnitude weighting, nominally-added names enter at the bottom of the
+  ranking with near-zero weights so effective concentration barely moves,
+  whereas overlap's extra names enter at *full tranche weight* from an earlier
+  formation date. Name count is not the quantity that matters.
+- **Judge whether a vol-trigger overlay will fire by the basket's weighting
+  scheme, not its position count — and vol-spikiness is a separate property
+  from weight concentration.** An ablation removing the daily vol-spike trim
+  from the 34-name K=6 overlapping book (`mom_zscore_overlap6_notrim`) was
+  predicted to be a no-op by analogy with trial #30, and was not: Sharpe fell
+  1.11 -> 1.06 and maxDD widened -29.1% -> -30.3% at *identical* return, with
+  turnover falling 3.0x -> 2.6x. The trim buys a pure vol/drawdown reduction
+  for about 0.4x annual turnover and is worth keeping in every candidate on
+  this line. The earlier no-op case was inert because that basket was
+  *equal-weighted*, not because it was small — magnitude-weighted tranches
+  stay vol-spiky no matter how many of them are averaged, because
+  high-momentum names co-crash. Overlap lowers effective weight concentration
+  without lowering vol-spikiness, which is exactly why the two mechanisms
+  stack rather than cancel.
+- **Signal-side changes to this basket are not independent of the trim, and
+  must be checked for whether they suppress it.** Adding a path-continuity
+  ("frog-in-the-pan") z-score as a third equal-weight composite component
+  (`mom_zscore_continuity_daily_trim`) cut Sharpe 1.07 -> 0.99 *and* widened
+  maxDD -30.3% -> -35.5%, giving back the entire drawdown gain. Beyond
+  handing a third of the ranking to a weakly-predictive axis, the diagnostic
+  failure is mechanical: selecting for smooth price paths selects for names
+  with low daily-return dispersion, so the basket's own realised vol is less
+  spiky and the trim trigger fires less often — the signal change partially
+  disarmed the overlay that makes this line good. Continuity is refuted at
+  any weight (sign of effect measured negative on both axes); more generally,
+  evaluate any upstream signal change for trim-suppression before judging it
+  on Sharpe alone.

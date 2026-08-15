@@ -990,3 +990,76 @@ Append-only. Newest entries last.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **Hypothesis refuted, and usefully so — the trim is still live on the wide overlapping book, and this qualifies the trial-#30 learning about when it works.** Removing it cost validation Sharpe 1.11 -> 1.06 and widened maxDD -29.1% -> -30.3%, while annualised return was *identical* to four decimal places of display (26.9% both ways) and turnover fell 3.0x -> 2.6x. That is a clean read on what the trim does: it buys a pure volatility/drawdown reduction at a price of about 0.4x annual turnover, and on this book the trade is clearly worth making. It is not dead weight and should stay in every candidate on this line. The qualification to the earlier learning matters for future overlay reasoning: I predicted the trim would go inert because the book had widened to 34 names, reasoning by analogy with trial #30 where it was a no-op on a 15-name basket. That reasoning was wrong because it used the wrong proxy. **Name count does not determine whether a momentum basket is vol-spiky — the weighting scheme does.** Trial #30's basket was inert to the trigger because it was *equal-weighted*, not because it was small; here every tranche is still magnitude-weighted into the most extreme-momentum names, and averaging six such tranches does not damp the book's own realised-vol spikes because high-momentum names are precisely the ones that co-crash. So effective weight concentration (which trial #34 showed drives maxDD) and vol-spikiness (which drives trim activity) are *distinct* properties of a book: overlap lowered the first without lowering the second, which is exactly why the two mechanisms stack rather than cancel. Restating the rule for future sessions: judge whether a vol-trigger overlay will fire by the basket's weighting scheme, not its position count. `mom_zscore_overlap6_daily_trim` (trial #35, val Sharpe 1.11, maxDD -29.1%, turnover 3.0x, DSR 0.9311) remains the strongest challenger in the repo's history.
 
+
+## Session summary — 2026-08-15 (nightly)
+
+- Housekeeping: session ran on branch `claude/keen-einstein-2j8t6q`, which is
+  the active line of development (it carries the 2026-08-11..14 data refreshes
+  and the previous session's work; `origin/main` is 7 commits behind at
+  `dbbdbf0`). Work was committed and pushed there rather than to `main`, per
+  the branch requirement this session was started under — flagged here because
+  the operating manual's session-end step says `git push origin main`, and a
+  human should reconcile the two at some point. Engine tests green (16 passed).
+  Data store fresh through 2026-08-14 (cron working, 1 calendar day behind).
+- Experiments run: 5 of the 8-trial budget (mom_zscore_continuity_daily_trim,
+  mom_zscore_overlap_daily_trim, mom_zscore_overlap_concentrated,
+  mom_zscore_overlap6_daily_trim, mom_zscore_overlap6_notrim). Verdicts:
+  5 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged: `mom_12m_baseline`
+  (validation Sharpe 0.865). Stopped at 5 deliberately: the session found a
+  major new mechanism and then spent three trials characterising and
+  decomposing it, and no remaining hypothesis had a rationale strong enough to
+  avoid either knob-sweeping the new lever or re-treading refuted ground.
+- Best finding, and the strongest result in the repo's history on Sharpe,
+  turnover and DSR simultaneously: **`mom_zscore_overlap6_daily_trim`
+  (trial #35) — validation Sharpe 1.11, maxDD -29.1%, turnover 3.0x,
+  DSR 0.9311.** Overlapping formation tranches: reform only 1/K of capital
+  each month and hold each tranche K months, so the live book is the average
+  of the K most recent monthly target-weight vectors. Signal, buffer,
+  magnitude weighting and daily vol-spike trim are all completely untouched —
+  only *when* capital is committed to the signal changes. Progression across
+  the night: 1.07 / -30.3% / 7.0x (prior best, no overlap) -> 1.08 / -28.5% /
+  4.2x (K=3) -> 1.11 / -29.1% / 3.0x (K=6). Still short of the 0.95 DSR bar,
+  but DSR *rose* from 0.927 (trial #33) to 0.9311 (trial #35) despite two
+  intervening trials raising the bar — only the second time in this repo a
+  Sharpe gain has outrun the deflator, which is the signature the gate needs.
+- Key new patterns this session (distilled into `experiments/learnings.md`):
+  1. Overlapping tranches are a free lunch, and holding capital on signals up
+     to six months stale cost *zero* return (ann_ret 26.9% at both K=3 and
+     K=6) — the 12-1 composite's decay is slower than the friction and
+     formation-luck savings a longer holding period buys. This is temporal
+     dilution into the same signal and is categorically unlike the refuted
+     capital dilution into a weaker second leg.
+  2. The mechanism decomposes: overlap's turnover benefit is temporal (it
+     survives any basket size), its drawdown benefit is breadth-driven (lost
+     the moment effective breadth shrank). Halving per-tranche size gave the
+     drawdown gain straight back while keeping the turnover gain.
+  3. Effective *weight* concentration, not name count, is what drives
+     drawdown — which resolves why the old nominal-breadth widening was a
+     no-op on maxDD while overlap's breadth increase cut it by 7 points.
+  4. Vol-spikiness is a *separate* property from weight concentration: the
+     trim is still live on the 34-name overlapping book (removing it costs
+     0.05 Sharpe and 1.2pts of maxDD at identical return). Judge whether a
+     vol-trigger will fire by the weighting scheme, not the position count.
+  5. Signal-side changes are not independent of the trim — the continuity
+     axis partially disarmed it by selecting for low-dispersion price paths.
+- Ideas for next session:
+  1. Highest value: a *structural* variation on the tranche mechanism, not a
+     K sweep (K=9/K=12 is explicitly off-limits as knob-tuning). The obvious
+     one: tranches are currently equal-weighted across formation dates —
+     weighting recent formations more heavily, or dropping a tranche whose
+     formation-date signal has since decayed, are distinct ideas with their
+     own rationale.
+  2. The turnover collapse (7.0x -> 3.0x, and 1.6x-2.0x on train) means cost
+     drag is no longer the binding constraint it was for most of this repo's
+     history. Ideas previously dismissed as too turnover-hungry may deserve
+     one revisit *on this base* — most concretely the 52-week-high signal,
+     whose sole failure mode was a turnover blow-up (7.0x -> 14.6x) that a
+     six-tranche structure would cut by roughly a factor of six. That is a
+     genuine new rationale, not a reflexive retry.
+  3. Everything from prior sessions stands as refuted/closed: vol targeting/
+     risk parity, regime switching, low-vol tilts, weight-spread dampening,
+     sector-neutral scoring, monthly-cadence de-risking overlays, hedge-asset
+     redirection, the trim outside magnitude-weighted baskets, capital
+     blending into weaker legs, and (as of tonight) the path-continuity axis
+     and further concentration escalation in either direction.
+- No engine issues encountered this session.
