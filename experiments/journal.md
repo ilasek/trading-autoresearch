@@ -940,3 +940,68 @@ Append-only. Newest entries last.
      outside the magnitude-weighted basket and naive 52-week-high proximity
      are all refuted/closed.
 - No engine issues encountered this session.
+
+
+## Protocol issue — 2026-08-16 — split-brain trial history (off-branch trials)
+
+Recorded by the weekly reporting agent, not by `run_experiment.py`. No trial
+record was added, altered, or removed in writing this entry; `trials.jsonl`
+remains exactly as `run_experiment.py` last wrote it (31 records).
+
+**What happened.** From 2026-08-12 to 2026-08-15 the nightly routine pushed its
+work to per-run branches (`claude/keen-einstein-*`) instead of `main`, due to an
+outcome-branch setting on the scheduled trigger. Each night therefore started
+from `main` at that day's data-refresh commit and could not see any prior
+night's work. Four sessions ran **19 trials** in total, every one of them
+independently numbered from #32 onward. None were merged into `main`.
+
+**Consequence for the DSR gate.** `engine/protocol.py:past_trial_sharpes()`
+derives the deflated-Sharpe benchmark from every `validation.sharpe_daily`
+record in `trials.jsonl`. All four sessions computed their bar from 31 trials
+(annualised sr_max 0.4863) when the true attempted history was 50 trials
+(0.5012). Every DSR recorded in those off-branch sessions is therefore measured
+against too low a benchmark and is **overstated**. The size of the error is not
+recoverable from these files alone: DSR is `probabilistic_sharpe(returns,
+sr_max)` and needs each candidate's daily return series, which only
+`run_experiment.py` can regenerate.
+
+**Consequence for this repo's own trial count.** `main`'s `trials.jsonl` records
+31 trials. The true number of candidate strategies actually evaluated to date is
+**50**. Future challengers evaluated on `main` are consequently judged against a
+bar that is understated. This is a known, deliberate state: importing the 19
+records would have required hand-editing a file that CLAUDE.md freezes to
+`run_experiment.py`, so they were archived instead (below).
+
+**Duplicated work caused by the split.** Residual momentum was tested four times
+across three nights (#32 on 08-12; #32 and #33 on 08-13; #33 on 08-14).
+Volatility targeting was tested twice (08-12 #35, 08-14 #32). Each session
+recorded its result as novel because it could not see the others.
+
+**Unresolved finding worth knowing about.** The 2026-08-14 session (trial #35,
+`mom_zscore_fixed_anchor`) reported that roughly half the re-sizing turnover in
+every magnitude-weighted candidate since trial #20 came from the weight vector
+being anchored to the swapped-out marginal member rather than from any change in
+signal. If that holds, it affects **trial #28**
+(`mom_zscore_narrow_daily_volspike_trim`), which is `main`'s current best
+challenger — in the direction of *understating* it (the anchor-fixed variant
+recorded val Sharpe 1.085, maxDD -28.2%, turnover 5.75x, versus #28's 1.066 /
+-30.3% / 7.31x). This has NOT been verified on `main` and must be re-run through
+`run_experiment.py` before it is treated as established.
+
+**Where the data went.** The four sessions are preserved in full as archive
+branches, not merged and not part of `main`'s history:
+
+  - `archive/nightly-2026-08-12` (4 trials, was `claude/keen-einstein-qlglzr`)
+  - `archive/nightly-2026-08-13` (5 trials, was `claude/keen-einstein-05sf9e`)
+  - `archive/nightly-2026-08-14` (5 trials, was `claude/keen-einstein-xclptt`)
+  - `archive/nightly-2026-08-15` (5 trials, was `claude/keen-einstein-2j8t6q`)
+
+Annotated tags were the intended archive format; the session's git credentials
+reject `refs/tags/*` pushes (HTTP 403), so branch refs under `archive/` were used
+instead. Ref deletion is likewise rejected, so the original
+`claude/keen-einstein-*` branches must be deleted manually via the GitHub UI.
+
+**Do not treat any DSR value from those archive branches as valid, and do not
+promote any strategy on the basis of them.** Any idea from those sessions worth
+pursuing must be re-run through `run_experiment.py` against `main`'s trial
+history so it is scored on an honest bar.
