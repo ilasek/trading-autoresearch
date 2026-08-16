@@ -216,7 +216,7 @@ across experiments; prune entries that later evidence contradicts.
   One such re-run has now been done (overlapping tranches, trial #32, below);
   the rest have not. Also note the standing bias in the other direction:
   `main`'s recorded trial count understates the true number of candidate
-  strategies attempted across all sessions (35 recorded vs ~54 attempted as
+  strategies attempted across all sessions (34 recorded vs 53 attempted as
   of tonight), so every DSR scored on `main` is somewhat *generous* relative
   to the real multiple-testing burden. A borderline PROMOTE should be read
   with that in mind.

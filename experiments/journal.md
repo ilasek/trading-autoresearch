@@ -1149,8 +1149,9 @@ recorded in those sessions without re-running it through `run_experiment.py`.
   challenger is at 1.11 with DSR 0.9341; the 2026-08-14 arithmetic put the
   Sharpe needed to clear 0.95 at roughly 1.17-1.20, and nothing tonight
   closes that gap. Note also the standing bias flagged in the protocol-issue
-  entry: `main` has now recorded 35 trials, but the true number of candidate
-  strategies attempted across all sessions is about 54. Every DSR scored on
+  entry: `main` has now recorded 34 trials, but the true number of candidate
+  strategies attempted across all sessions is 53 (31 + tonight's 3, plus the
+  19 archived). Every DSR scored on
   `main` is therefore *generous* relative to the real multiple-testing
   burden, and a borderline PROMOTE should be read with that in mind. This is
   a known, deliberate state — importing the archived records would mean
