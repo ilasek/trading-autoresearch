@@ -1172,3 +1172,71 @@ recorded in those sessions without re-running it through `run_experiment.py`.
      the challenger's DSR has now risen three times in a row across
      bar-raising trials, which no other line in this repo has done.
 - No engine issues encountered this session.
+
+## 2026-08-16 — Protocol change (human-directed) — **[engine-maintenance]**
+
+Not an experiment. No trial recorded, no candidate run, holdout untouched.
+Two defects in how the deflated-Sharpe gate was applied, found by auditing the
+trial record, fixed on the human's instruction.
+
+**Defect 1 — the incumbent held a seat it never earned.** `run_trial` computed
+the DSR and then the bootstrap branch (`if not CHAMPION_FILE.exists()`) promoted
+regardless. `mom_12m_baseline` was seated at DSR 0.9312, below the 0.95 bar it
+then imposed on all 33 challengers after it, and was never re-deflated as the
+trial count grew. Judged against the pool as it stands it scores 0.8129 raw.
+Meanwhile `mom_zscore_overlap6_daily_trim`, at +28% validation Sharpe (1.107 vs
+0.865), was rejected at 0.9341 — a higher DSR than the champion ever posted.
+
+Fixes: the bootstrap path now enforces the same threshold (no champion is seated
+until one is earned), and every comparison re-deflates the incumbent against
+exactly the bar the challenger faces. A champion that can no longer clear the
+threshold is **provisional**: it can be displaced by a candidate that beats it on
+both validation Sharpe and DSR, even below 0.95. A champion that does clear the
+threshold can only be displaced by another that also clears it. `champion_dsr`
+is now recorded on every trial, and the champion card carries `dsr_at_promotion`
+and a `provisional` flag.
+
+**Defect 2 — near-duplicate trials were deflated as independent ones.** Bailey &
+López de Prado's E[max SR] assumes independent trials. `effective_n_trials` now
+clusters trials by the correlation of their validation returns (single linkage,
+rho >= 0.95) and passes the cluster count to `deflated_sharpe`. Per-trial
+validation returns are stored in `experiments/trial_returns/` under a filename
+derived from the trial's timestamp and name, so `trials.jsonl` is never
+rewritten. `scripts/backfill_trial_returns.py` reconstructed 33 of 34 historical
+trials with zero Sharpe drift; `mom_zscore_daily_volspike_trim`'s candidate file
+was deleted earlier, so it has no returns and keeps counting on its own. Trials
+without stored returns always count independently — the conservative default.
+The dispersion term still uses every recorded trial; only the count is corrected.
+
+**Result: 34 trials are worth 11 effective ones.** 23 of them — the entire ladder
+from `mom_12m_baseline` through `overlap6` — are one cluster. The expected-max
+bar drops from 0.503 to 0.384 annualized. Champion 0.8129 -> 0.8810 (still
+provisional); best challenger 0.9317 -> 0.9626 (clears 0.95 outright).
+
+**Honest caveat.** Within-family tuning is now nearly free in deflation terms:
+the 24th momentum variant joins an existing cluster and barely moves the bar.
+That is the intended correction — redundant trials were never extra shots on
+goal — but it removes deflation as a brake on within-family overfitting. What
+still holds the line is that a challenger must beat the incumbent's raw
+validation Sharpe, and that the validation window is fixed, so a ladder of tweaks
+climbing it is still fitting one sample. The holdout remains the only real check.
+
+**DSR values recorded before this entry are not comparable to those after it.**
+Trials 1-34 were deflated at the raw trial count with no incumbent re-deflation.
+Nothing in `trials.jsonl` was altered.
+
+- Lesson: a multiple-testing correction is only as honest as its independence
+  assumption and its treatment of the incumbent. This repo had 34 trials on
+  paper, 11 real ones, and a champion exempt from its own bar.
+## 2026-08-16T20:32:35+00:00 — mom_zscore_overlap6_daily_trim — **PROMOTE**
+- Candidate: `strategies/candidates/mom_zscore_overlap6_daily_trim.py` (family: cross-sectional momentum, trial #35)
+- Hypothesis: Holding six overlapping monthly formation tranches (portfolio = average of the six most recent monthly target-weight vectors, 1/6 of capital reformed each month), with signal, buffer, magnitude weighting and daily vol-spike trim otherwise identical to trial #28, raises validation Sharpe above that basket's 1.066 and cuts its 7.3x turnover below 4x, net of 15 bps costs, because the turnover and effective-breadth benefits of overlapping formation dates outweigh the decay of a 12-1 momentum signal held six months.
+- Verdict: PROMOTE — beats champion (1.107 > 0.865) with DSR 0.9621 (35 trials, 11 effective after clustering at rho 0.95)
+- Train: sharpe +0.98, ann_ret +19.4%, maxDD -56.5%, turnover 2.0x
+- Validation: sharpe +1.11, ann_ret +26.9%, maxDD -29.1%, turnover 3.0x
+- Holdout: sharpe +1.22, ann_ret +32.7%, maxDD -23.3%, turnover 3.7x
+- Deflated Sharpe prob: 0.9621 (bar from 35 trials, 11 effective)
+- Champion validation sharpe at the time: +0.86
+- Champion re-deflated at the same bar: 0.8798 — **provisional seat**
+- Lesson: _(fill in after reflection)_
+

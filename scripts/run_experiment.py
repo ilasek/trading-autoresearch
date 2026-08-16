@@ -45,9 +45,17 @@ def journal_entry(r: protocol.TrialResult) -> str:
                 f"turnover {m['ann_turnover']:.1f}x"
             )
     if r.dsr is not None:
-        lines.append(f"- Deflated Sharpe prob: {r.dsr} (bar from {r.n_trials} trials)")
+        lines.append(
+            f"- Deflated Sharpe prob: {r.dsr} (bar from {r.n_trials} trials, "
+            f"{r.n_effective_trials:g} effective)"
+        )
     if r.champion_val_sharpe is not None:
         lines.append(f"- Champion validation sharpe at the time: {r.champion_val_sharpe:+.2f}")
+    if r.champion_dsr is not None:
+        lines.append(
+            f"- Champion re-deflated at the same bar: {r.champion_dsr}"
+            + (" — **provisional seat**" if r.champion_dsr < protocol.DSR_THRESHOLD else "")
+        )
     lines.append("- Lesson: _(fill in after reflection)_")
     return "\n".join(lines) + "\n\n"
 
@@ -74,9 +82,15 @@ def main() -> int:
     print(fmt_split("train     ", protocol._public(result.train)))
     print(fmt_split("validation", protocol._public(result.validation)))
     if result.dsr is not None:
-        print(f"  deflated sharpe prob: {result.dsr}  (trial #{result.n_trials})")
+        print(
+            f"  deflated sharpe prob: {result.dsr}  (trial #{result.n_trials}, "
+            f"{result.n_effective_trials:g} effective)"
+        )
     if result.champion_val_sharpe is not None:
         print(f"  champion validation sharpe: {result.champion_val_sharpe:+.2f}")
+    if result.champion_dsr is not None:
+        flag = " [provisional]" if result.champion_dsr < protocol.DSR_THRESHOLD else ""
+        print(f"  champion re-deflated at the same bar: {result.champion_dsr}{flag}")
     if result.holdout:
         print(fmt_split("holdout   ", protocol._public(result.holdout)))
         print("  (holdout evaluated because of promotion — logged)")

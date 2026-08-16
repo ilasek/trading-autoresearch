@@ -92,22 +92,45 @@ def probabilistic_sharpe(returns: pd.Series, sr_benchmark_daily: float) -> float
     return _norm_cdf(z)
 
 
-def deflated_sharpe(returns: pd.Series, trial_sharpes_daily: list[float]) -> float:
+def expected_max_sharpe(var_trial_sharpes: float, n_trials: float) -> float:
+    """E[max Sharpe] under the null, for `n_trials` *independent* trials drawn
+    from a distribution with variance `var_trial_sharpes` (Bailey & López de
+    Prado 2014, eq. 3). Grows like sqrt(2 ln N) — slowly, but without bound."""
+    n = max(2.0, float(n_trials))
+    var = max(float(var_trial_sharpes), 1e-8)
+    gamma = 0.5772156649015329
+    return math.sqrt(var) * (
+        (1 - gamma) * _norm_ppf(1 - 1.0 / n) + gamma * _norm_ppf(1 - 1.0 / (n * math.e))
+    )
+
+
+def deflated_sharpe(
+    returns: pd.Series,
+    trial_sharpes_daily: list[float],
+    n_effective: float | None = None,
+) -> float:
     """DSR: PSR against the expected max Sharpe among all trials ever attempted.
 
     trial_sharpes_daily: daily-frequency Sharpe ratios of every recorded trial
     (including this one). More trials -> higher benchmark -> harder to pass.
+
+    n_effective: the number of *independent* trials the recorded ones are worth.
+    Bailey & López de Prado's E[max SR] assumes independent draws; a search that
+    tests many near-duplicate variants of one idea does not get that many
+    independent shots at a high Sharpe, and scoring it at the raw trial count
+    over-deflates. Pass an effective count (see `protocol.effective_n_trials`)
+    to correct for that. Defaults to the raw count, which is the conservative
+    (harder-to-pass) choice. The dispersion term still uses every recorded
+    trial: a wide search genuinely makes an extreme maximum more likely, and
+    only the count is affected by redundancy.
     """
-    n_trials = max(2, len(trial_sharpes_daily))
-    var = float(np.var(trial_sharpes_daily, ddof=1)) if len(trial_sharpes_daily) > 2 else 0.25 / TRADING_DAYS
-    var = max(var, 1e-8)
-    gamma = 0.5772156649015329
-    e = math.e
-    sr_max = math.sqrt(var) * (
-        (1 - gamma) * _norm_ppf(1 - 1.0 / n_trials)
-        + gamma * _norm_ppf(1 - 1.0 / (n_trials * e))
+    n_trials = len(trial_sharpes_daily) if n_effective is None else n_effective
+    var = (
+        float(np.var(trial_sharpes_daily, ddof=1))
+        if len(trial_sharpes_daily) > 2
+        else 0.25 / TRADING_DAYS
     )
-    return probabilistic_sharpe(returns, sr_max)
+    return probabilistic_sharpe(returns, expected_max_sharpe(var, n_trials))
 
 
 def summary(returns: pd.Series) -> dict:
