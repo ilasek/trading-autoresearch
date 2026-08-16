@@ -1005,3 +1005,34 @@ instead. Ref deletion is likewise rejected, so the original
 promote any strategy on the basis of them.** Any idea from those sessions worth
 pursuing must be re-run through `run_experiment.py` against `main`'s trial
 history so it is scored on an honest bar.
+
+### Correction (2026-08-16, same day) — archives live in TAGS, not branches
+
+The paragraph above ("Where the data went") described the archives as branch
+refs and reported that `refs/tags/*` pushes were rejected. That was true of the
+reporting agent's own credentials but is no longer the state of the repo: the
+repository owner pushed annotated tags from a session with full credentials, and
+subsequently removed the archive branches. Superseding record:
+
+The four off-branch sessions are preserved as **annotated tags**:
+
+  - `archive/nightly-2026-08-12` -> 623dc427 (4 trials, was claude/keen-einstein-qlglzr)
+  - `archive/nightly-2026-08-13` -> 2d3abaa8 (5 trials, was claude/keen-einstein-05sf9e)
+  - `archive/nightly-2026-08-14` -> ea22d7e4 (5 trials, was claude/keen-einstein-xclptt)
+  - `archive/nightly-2026-08-15` -> 0cc89937 (5 trials, was claude/keen-einstein-2j8t6q)
+
+Verified: tag objects are annotated (not lightweight), peeled targets match the
+commits above, and each tag's tree carries its session's full `trials.jsonl`
+(35/36/36/36 records) and `journal.md`. Inspect without checking out, e.g.:
+
+    git show archive/nightly-2026-08-14:experiments/journal.md
+    git show archive/nightly-2026-08-14:experiments/trials.jsonl
+
+Tags are the durable form here: branch-cleanup automation targets branches, and
+a fresh clone fetches tags by default. Nothing on `main` references these
+commits, so this journal entry is the only pointer to them — do not remove it.
+
+Everything else in the protocol issue entry above stands unchanged: those trials
+are NOT part of `main`'s history, `main`'s recorded count of 31 understates the
+true attempted count of 50, and no strategy may be promoted on the DSR values
+recorded in those sessions without re-running it through `run_experiment.py`.
