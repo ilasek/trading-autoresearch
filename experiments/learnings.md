@@ -199,4 +199,92 @@ across experiments; prune entries that later evidence contradicts.
   first fixing the turnover blow-up (not attempted; would need a distinct
   rationale, e.g. a much wider band, not a parameter sweep). The "genuinely
   new signal source" direction remains open in principle but this specific
-  naive construction is closed.
+  naive construction is closed. **Update (2026-08-16): the archived sessions
+  closed this direction much harder — see the off-branch note below. After
+  52-week-high proximity, residual momentum (twice), and information
+  discreteness all landed at or below the base construction, treat "find a
+  better score" as heavily explored and low-yield; the open axes are
+  portfolio construction and rebalance mechanics, not signal definition.**
+
+- **NOTE ON PROVENANCE: several of the strongest results below were first
+  found in the four off-branch sessions of 2026-08-12..15 (see the
+  `## Protocol issue — 2026-08-16` journal entry, and the `archive/nightly-*`
+  annotated tags).** Those sessions' DSR numbers are invalid — each was
+  computed against a 31-trial bar its own session could not know was stale.
+  Their *mechanisms* are still real findings, but no number from them may be
+  quoted as established until re-run through `run_experiment.py` on `main`.
+  One such re-run has now been done (overlapping tranches, trial #32, below);
+  the rest have not. Also note the standing bias in the other direction:
+  `main`'s recorded trial count understates the true number of candidate
+  strategies attempted across all sessions (35 recorded vs ~54 attempted as
+  of tonight), so every DSR scored on `main` is somewhat *generous* relative
+  to the real multiple-testing burden. A borderline PROMOTE should be read
+  with that in mind.
+
+- **Overlapping formation tranches are the strongest mechanism in the repo,
+  and the reason they work is not the one they were found for.** Instead of
+  reforming the whole book each month, hold K = 6 overlapping tranches: the
+  live book is the average of the six most recent monthly target-weight
+  vectors, so only ~1/6 of capital is recommitted per month. Signal, buffer,
+  magnitude weighting and daily vol-spike trim all untouched — only *when*
+  capital commits changes. Verified on `main` (trial #32): validation Sharpe
+  **1.11**, ann_ret 26.9%, maxDD -29.1%, turnover **3.0x** (versus the
+  identical non-overlapping basket's 1.066 / -30.3% / 7.3x), DSR **0.9341** —
+  the highest deflated-Sharpe probability ever recorded on `main`, and rising
+  despite the extra trials in the deflator, which is the signature the gate
+  needs. Higher return at less than half the turnover means **cost drag, not
+  signal decay, was the binding constraint on this whole line.** The original
+  framing — "a cheaper implementation of the same signal" — is now known to be
+  wrong, see the next entry.
+
+- **Holding names the current signal has already rejected is the overlap's
+  active ingredient, not a tolerated side-effect.** A diagnostic on the
+  weight matrix showed 20.6% of average validation book weight (max 55%)
+  sits on names outside the current buffered held-set entirely. Pruning that
+  stranded capital — masking each live tranche to the current held-set and
+  renormalising, so tranche lifetime becomes conditional on the signal still
+  endorsing its picks — cost on every axis at once: Sharpe 1.11 → 1.02,
+  maxDD -29.1% → -30.9%, turnover 3.0x → 4.6x, and average positions
+  collapsed 34.2 → 18.6. Pruning reverts the six tranches onto near-identical
+  name sets, destroying the **temporal breadth** that no contemporaneous
+  selection rule can reproduce, because every contemporaneous rule picks from
+  a single month's ranking. This also explains why six-month-stale signals
+  cost zero return: there is no staleness tax, so a pruning rule had nothing
+  to win. Closes the tranche-lifetime axis in the conditional direction, and
+  closes a loop with two earlier results — nominal breadth widening was a
+  no-op on maxDD, and halving per-tranche size gave the drawdown gain back.
+  **Breadth only pays when it comes from decorrelated formation dates, not
+  from more names chosen at one date.** Do not sweep K; that is knob-tuning.
+
+- **An artifact fix's value is a property of the base, not of the fix.** Every
+  magnitude-weighted candidate since trial #20 sized positions off
+  `composite - composite[held].min() + FLOOR`, anchoring the whole weight
+  vector to the weakest *currently held* name — the one the buffer swaps most
+  often — so every swap rescaled every weight even when no name's own signal
+  moved. On the non-overlapping basket, replacing it with a fixed floor
+  halved re-sizing turnover (4.67x → 2.30x). On the overlapping basket
+  (trial #33) the *same two lines* moved re-sizing turnover only 2.36x →
+  2.12x, because averaging six formations already damps any one formation's
+  spurious rescale ~6:1. What was left was pure de-concentration (mean top
+  weight 0.188 → 0.136, HHI 0.0831 → 0.0579 at identical name count), which
+  bought the repo's best-ever validation maxDD **-26.9%** for ~0.02 of Sharpe
+  (1.11 → 1.09, DSR 0.9341 → 0.9277). Since the gate scores Sharpe and not
+  drawdown, trial #32 remains the challenger to beat — but read #32 and #33
+  as one strategy at two points on a risk/return dial, not as rivals. General
+  lesson: before generalising an artifact-removal result, ask how much of the
+  artifact the rest of the construction has already neutralised.
+
+- **Cheap holdings-only diagnostics keep killing ideas before they cost a
+  trial — use them.** Computing statistics on the weight matrix (top weight,
+  HHI, position counts, entry/exit vs re-sizing turnover decomposition,
+  weight sitting outside the current held-set) or on a trigger's firing dates
+  scores no returns and is not a backtest, so it does not touch the trial
+  count. It has now pre-empted several trials: an inter-signal ensemble
+  (rank correlation 0.89 between candidate scores), a convex-transform
+  exponent fixed against a concentration target rather than tuned against
+  performance, and — tonight — re-specifying the vol-spike trim to measure
+  the *actual book-weighted* basket vol instead of the equal-weighted proxy
+  the code uses. That last looked like a real mis-specification but the two
+  definitions disagree on **1 of 1562 validation days**: the 21d/252d vol
+  *ratio* is largely insensitive to weighting within one correlated basket.
+  Diagnose first; spend the trial only on what survives.

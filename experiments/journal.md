@@ -1066,3 +1066,108 @@ recorded in those sessions without re-running it through `run_experiment.py`.
 - Champion validation sharpe at the time: +0.86
 - Lesson: **Refuted, and the refutation rewrites what the overlap mechanism actually is: the "stranded" capital is not a drag on the strategy, it *is* the strategy.** Pruning decayed names cost on every axis at once — validation Sharpe 1.11 → 1.02, maxDD -29.1% → -30.9%, turnover 3.0x → 4.6x — so the pre-registered falsification condition is met decisively, and the quantity involved (20.6% of average book weight, per the holdings-only diagnostic run before the trial) was far too large for this to be a measurement-scale null. The mechanism is visible in one number that was not part of the hypothesis: **average positions fell 34.2 → 18.6**. Masking each tranche to the current buffered held-set collapses the six tranches back onto near-identical name sets, so the book reverts to roughly the single-formation basket, and the overlap's *effective breadth* — which the archived 2026-08-15 decomposition identified as the source of its drawdown benefit specifically (as opposed to its turnover benefit, which is temporal) — is destroyed. The pruning then charges 1.6x of extra annual turnover for the privilege. **The correct reading of overlapping tranches is therefore not "a cheaper implementation of the same signal", which is how the archived session framed it and how tonight's trial #32 write-up repeated it. Holding names the current signal has already rejected is not a tolerated side-effect of committing capital slowly — it is the mechanism's active ingredient**, supplying temporal breadth that no contemporaneous selection rule can produce, because every contemporaneous rule by construction picks from one month's ranking. This also explains the otherwise-puzzling archived finding that six-month-stale signals cost zero return: there is no staleness tax to recover, so there was never anything for a pruning rule to win. **The staleness/tranche-lifetime axis is now closed in the conditional direction**, and it closes a loop with two prior results that pointed the same way from the other side: nominal basket-breadth widening was a no-op on maxDD (trial #30-era), and halving per-tranche size gave the drawdown gain straight back — breadth only pays when it comes from *decorrelated formation dates*, not from more names chosen at one date. Trial #32 (val Sharpe 1.11, maxDD -29.1%, DSR 0.9341) remains the challenger to beat.
 
+
+
+## Session summary — 2026-08-16 (nightly)
+
+- Housekeeping: the session started on a per-run branch
+  (`claude/epic-mendel-g4bmnj`) with local `main` 12 commits behind
+  `origin/main`. The branch held no commits of its own — it pointed at
+  `origin/main`'s tip — so `git checkout main && git reset --hard
+  origin/main` corrected it with nothing lost, and all of tonight's work was
+  committed and pushed on `main`, per CLAUDE.md and the integrity check.
+  `git branch -r --no-merged origin/main` was clean: no unlanded remote
+  work. Engine tests green (16 passed). Data store fresh through 2026-08-14
+  (cron working, one trading day behind).
+- **Recovering the off-branch sessions was the main event.** The
+  `## Protocol issue — 2026-08-16` entry above records that 19 trials from
+  2026-08-12..15 never reached `main` and that none of their numbers may be
+  treated as established. Those four sessions were read in full from the
+  `archive/nightly-*` tags before any code was written tonight — both to
+  avoid re-testing the 19 ideas they already refuted (which shaped every
+  decision below) and to identify which of their findings were worth the
+  cost of re-establishing honestly.
+- Experiments run: 3 of the 8-trial budget (#32 `mom_zscore_overlap6_daily_trim`,
+  #33 `mom_zscore_overlap6_fixed_anchor`, #34 `mom_zscore_overlap6_live_tranche`).
+  Verdicts: 3 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion unchanged:
+  `mom_12m_baseline` (validation Sharpe 0.865).
+- **Best finding, and the best result ever recorded on `main`:** trial #32,
+  the overlapping-tranche construction, re-run verbatim from the archive —
+  **validation Sharpe 1.11, ann_ret 26.9%, maxDD -29.1%, turnover 3.0x,
+  DSR 0.9341.** It reproduced the archived numbers to the decimal, which
+  confirms nothing in that session's environment was inflating them, and its
+  DSR — the one number that could not transfer, since it depends on trial
+  history — is the highest ever recorded here, beating trial #21's 0.9333 and
+  trial #28's 0.9326 while sitting further into the deflator. Still short of
+  the 0.95 PROMOTE bar.
+- Second finding: trial #33 produced the repo's best-ever validation
+  drawdown, **-26.9%**, for about 0.02 of Sharpe. Since the gate scores
+  Sharpe and not drawdown it is not the challenger to beat, but #32 and #33
+  are best read as one strategy at two points on a risk/return dial.
+- Key new patterns this session (all distilled into `experiments/learnings.md`):
+  1. **The overlap mechanism's explanation was wrong, and the correction is
+     the session's most useful output.** It is not "a cheaper implementation
+     of the same signal". Holding names the current signal has already
+     rejected — 20.6% of average book weight — is the active ingredient.
+     Pruning them cost Sharpe, drawdown *and* turnover at once, and dropped
+     average positions 34.2 → 18.6: the six tranches collapse onto
+     near-identical name sets, destroying temporal breadth that no
+     contemporaneous selection rule can reproduce. Breadth pays only when it
+     comes from decorrelated formation dates, not from more names picked at
+     one date — which closes a loop with two earlier no-op breadth results.
+  2. **An artifact fix's value is a property of the base, not the fix.** The
+     min-shift anchor fix halved re-sizing turnover on the non-overlapping
+     basket but moved it only ~10% here, because averaging six formations
+     already damps a single formation's spurious rescale ~6:1. What remained
+     was pure de-concentration (HHI -30%), which is why it bought drawdown
+     and gave back Sharpe.
+  3. Holdings-only diagnostics remain the cheapest tool in the lab — see
+     below.
+- Why 3 trials and not 8. Two further ideas were **killed without spending a
+  trial**, which is why the budget was not exhausted:
+  (a) Re-specifying the daily vol-spike trim to measure the *actual
+  book-weighted* basket vol rather than the equal-weighted proxy the code
+  uses. This looked like a genuine mis-specification of the kind that paid
+  off in trial #33, but a trigger-firing diagnostic showed the two
+  definitions disagree on **1 of 1562 validation days** — the 21d/252d vol
+  ratio is nearly insensitive to weighting within one correlated basket.
+  (b) Diversifying the month-end formation phase, to test whether the 1.11
+  is timing luck. Reading the archive showed this was already answered
+  (2026-08-13, weekly-staggered formation dates: Sharpe 1.05 vs 1.07, inside
+  noise) — the result is not a timing-luck artifact, and re-running it here
+  would have burned a trial to learn nothing.
+  Beyond those, the well-motivated hypothesis space is genuinely thin: the
+  archived sessions closed signal definition hard (52-week-high proximity,
+  residual momentum twice, information discreteness — all at or below the
+  base), and concentration, trim cadence/threshold/redirect, sector
+  neutrality, capital blending and K-sweeping are all explicitly closed.
+  Forcing a fourth trial would have permanently raised the DSR bar for a
+  hypothesis none of tonight's evidence supports. This matches the
+  2026-08-07, 08-11 and 08-14 precedents and the program's explicit
+  quality-over-quantity instruction.
+- **Distance to promotion, and a caveat that cuts against us.** The best
+  challenger is at 1.11 with DSR 0.9341; the 2026-08-14 arithmetic put the
+  Sharpe needed to clear 0.95 at roughly 1.17-1.20, and nothing tonight
+  closes that gap. Note also the standing bias flagged in the protocol-issue
+  entry: `main` has now recorded 35 trials, but the true number of candidate
+  strategies attempted across all sessions is about 54. Every DSR scored on
+  `main` is therefore *generous* relative to the real multiple-testing
+  burden, and a borderline PROMOTE should be read with that in mind. This is
+  a known, deliberate state — importing the archived records would mean
+  hand-editing a file CLAUDE.md freezes to `run_experiment.py`.
+- Ideas for next session:
+  1. The highest-value direction follows from tonight's correction: if
+     temporal breadth from decorrelated formation dates is the active
+     ingredient, the open question is what else supplies decorrelated
+     formation dates *without* being a K sweep. Formations one month apart
+     share 11/12 of their 12-1 lookback window, so the six tranches are far
+     from independent — a construction that genuinely decorrelates them
+     (rather than spacing them further apart, which is knob-tuning) is a
+     distinct idea with its own rationale.
+  2. Do not build further on the anchor axis (closed on this base tonight),
+     the tranche-lifetime axis (closed tonight), or any signal-definition
+     idea (heavily explored, low-yield, four refutations).
+  3. If no strong hypothesis is available, patience is a legitimate move:
+     the challenger's DSR has now risen three times in a row across
+     bar-raising trials, which no other line in this repo has done.
+- No engine issues encountered this session.
