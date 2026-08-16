@@ -1,0 +1,51 @@
+{
+  "name": "mom_12m_baseline",
+  "family": "cross-sectional momentum",
+  "hypothesis": "Instruments with the highest 12-month return (skipping the most recent month) continue to outperform over the next month, net of 15 bps costs.",
+  "promoted_at": "2026-08-02T19:15:57+00:00",
+  "source_candidate": "strategies/candidates/mom_12m_baseline.py",
+  "n_trials_at_promotion": 1,
+  "train": {
+    "ann_return": 0.169,
+    "ann_vol": 0.182,
+    "sharpe": 0.949,
+    "sortino": 1.161,
+    "max_drawdown": -0.5067,
+    "n_days": 14261,
+    "ann_turnover": 3.29,
+    "avg_positions": 11.96,
+    "active_days": 11370,
+    "sharpe_daily": 0.059805
+  },
+  "validation": {
+    "ann_return": 0.1824,
+    "ann_vol": 0.2224,
+    "sharpe": 0.865,
+    "sortino": 1.096,
+    "max_drawdown": -0.2986,
+    "n_days": 1562,
+    "ann_turnover": 5.81,
+    "avg_positions": 15.0,
+    "active_days": 1562,
+    "sharpe_daily": 0.054504
+  },
+  "holdout": {
+    "ann_return": 0.2823,
+    "ann_vol": 0.2445,
+    "sharpe": 1.14,
+    "sortino": 1.497,
+    "max_drawdown": -0.2412,
+    "n_days": 672,
+    "ann_turnover": 5.45,
+    "avg_positions": 15.0,
+    "active_days": 672,
+    "sharpe_daily": 0.071818
+  },
+  "engine_params": {
+    "cost_bps": 10.0,
+    "slippage_bps": 5.0,
+    "max_weight": 0.25,
+    "max_leverage": 1.0,
+    "allow_short": false
+  }
+}
