@@ -288,3 +288,71 @@ across experiments; prune entries that later evidence contradicts.
   definitions disagree on **1 of 1562 validation days**: the 21d/252d vol
   *ratio* is largely insensitive to weighting within one correlated basket.
   Diagnose first; spend the trial only on what survives.
+
+- **A headline mechanism in this repo was mis-specified, and finding out cost
+  four trials: the champion's daily "vol-spike trim" does not measure its own
+  basket.** The filter is `prices.iloc[:end_pos][names].dropna(axis=1,
+  how="any")`, and since the store starts in 1962 it admits only instruments
+  with a complete ~60-year history — a mean of **3 of 34 held names, 11% of book
+  weight**, zero in some months. The eleven that can ever qualify (JNJ, PG, XOM,
+  CVX, KO, MRK, DIS, IBM, CAT, GE, HON) are old-economy defensives, roughly the
+  opposite style to the momentum book. Bracketing it against every deliberate
+  specification plus the control: held-basket trigger 1.050, whole-market
+  trigger 1.055, **no trim at all 1.062**, whole legacy cohort 1.081, champion's
+  accidental `held ∩ cohort` 1.107. Three consequences. (a) The
+  correctly-specified basket-own trim is *worse than deleting the overlay*, so
+  "the basket's own realized vol" as a mechanism is refuted, not merely
+  mis-measured. (b) What is real is a **defensive-cohort stress overlay**: the
+  cohort trigger reproduces the champion's maxDD exactly (-29.1% vs the control's
+  -30.3%) and the ordering basket < market < none < cohort is monotone in how
+  style-orthogonal the trigger is to a momentum book — a momentum basket's vol
+  rises in melt-ups as readily as in crashes (the champion's trigger fires 44
+  days in 2020, its +132% year, and near-zero in both loss years), so measuring
+  the thing you are de-risking is precisely the wrong signal. Worth about +0.019
+  Sharpe and -1.2pp drawdown. (c) The remaining **0.026 of the champion's Sharpe
+  requires sampling that cohort through basket membership and has no mechanism —
+  treat it as sampling luck.** The champion keeps its seat (it won the gate
+  honestly, and its holdout — 1.22 Sharpe, -23.3% maxDD — is the repo's best
+  number), but its margin over the plain untrimmed six-tranche book is only
+  partly explained. Do not build on the trim without re-reading trials #37-#40.
+  General lesson: **before crediting a component, check what its code actually
+  reads.** This one survived ~20 trials and several write-ups describing it in
+  terms its implementation never matched.
+
+- **Drawdown-state braking is refuted, and the failure mode is the mirror of the
+  cadence lesson.** A hysteresis brake on the book's own equity (cut to 0.6x
+  below -20% from peak, release above -10%) was aimed at the one gap the
+  vol-spike trigger structurally cannot see — both loss years, 2018 and 2022, are
+  slow grinds without a dispersion spike — and it made **2022 worse, -8.9% ->
+  -17.4%**, cost -13.3% in 2019 and -10.7% in 2021, and widened validation maxDD
+  to -33.3% while improving train maxDD (-56.5% -> -46.5%), the same
+  in-sample-crash-fix signature as the three earlier de-risking overlays. The
+  mechanism: it armed in the 2018-10 selloff and, because release requires
+  recovery to within 10% of peak, was still de-risked into the start of a +50%
+  year. Earlier lesson: a trigger must react faster than the strategy's rebalance
+  cadence. **New complement: a release rule slower than the recovery costs more
+  than the trigger ever saves.** Drawdown depth is a lagging state variable — by
+  the time it is deep enough to be outside routine noise (4 of 55 validation
+  episodes reach -20%), it mostly describes what already happened. Closed for any
+  threshold; different thresholds are the only knob and would be tuning a refuted
+  mechanism.
+
+- **Turnover reduction is now a spent lever on the overlapping-tranche base.**
+  At 3.0x annual turnover and 15 bps/side the champion's entire cost drag is
+  0.45%/yr ≈ 0.019 Sharpe, so even eliminating trading altogether could not close
+  the gap to a materially better strategy. This retires a whole class of ideas
+  (no-trade bands, weight-change thresholds, cheaper rebalance mechanics) that
+  were worth testing when the same signal ran at 7.3x. It also reframes the
+  overlap finding once more: at 7.3x -> 3.0x the saving was ~0.65%/yr, but the
+  overlap gained far more than that in return, so cost was never the main story
+  there either — temporal breadth was.
+
+- **The validation window is not a homogeneous sample, and every Sharpe quoted
+  here inherits that.** The champion's validation P&L by year: 2018 -5.9%, 2019
+  +50.3%, 2020 **+132.2%**, 2021 +17.5%, 2022 -8.9%, 2023 +24.5%. One year is
+  most of the result. Combined with the post-2026-08-16 protocol (trial
+  clustering makes within-family tuning nearly free in deflation terms, so DSR no
+  longer brakes a ladder of momentum variants), the practical position is that
+  **the only real check left is the holdout**, and a challenger that beats 1.107
+  by a small margin should be assumed to have beaten it in 2020 until shown
+  otherwise.

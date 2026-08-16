@@ -1238,5 +1238,147 @@ Nothing in `trials.jsonl` was altered.
 - Deflated Sharpe prob: 0.9621 (bar from 35 trials, 11 effective)
 - Champion validation sharpe at the time: +0.86
 - Champion re-deflated at the same bar: 0.8798 — **provisional seat**
-- Lesson: _(fill in after reflection)_
+- Lesson: **The strategy did not change; the bar did — and this is the first champion in this repo to have actually earned its seat.** The code promoted here is byte-identical to trial #32, which was REJECTed nine hours earlier at DSR 0.9341 on the same data. What moved was the protocol: clustering near-duplicate trials before deflating cut 35 recorded trials to 11 effective ones, and re-deflating the incumbent at the challenger's own bar exposed `mom_12m_baseline` as holding a seat it could no longer win (0.8798, provisional). Two things are worth carrying forward. First, the holdout — touched here for the first time since the baseline was seated — is the strongest evidence in the repo that the overlapping-tranche mechanism is not a validation-window artifact: Sharpe 1.22, ann_ret 32.7%, maxDD -23.3% on 2024+, *better* than validation on all three axes, which is the reverse of the usual out-of-sample decay. Second, the caveat in the protocol-change entry binds hard from here on: clustering makes within-family tuning nearly free in deflation terms, so DSR is no longer a brake on a ladder of momentum variants climbing one fixed validation window. The champion's raw validation Sharpe, not its DSR, is now the binding constraint on every challenger, and the holdout is the only remaining real check. _(Filled in by the second 2026-08-16 session; the promoting run left this line blank.)_
 
+## 2026-08-16T23:11:49+00:00 — mom_zscore_overlap6_ddbrake — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_overlap6_ddbrake.py` (family: regime switching, trial #36)
+- Hypothesis: Adding a hysteresis drawdown brake on the book's own equity (cut exposure to 0.6x when the pre-trim book is more than 20% below its running peak, restore when it recovers to within 10%), combined with the existing daily vol-spike trim by min() so peak de-risking is unchanged, raises validation Sharpe above the champion's 1.107 net of 15 bps costs, because the vol-ratio trigger it already carries fires in the strategy's best year and is nearly blind in both years it loses money, where the losses are slow grinds without a dispersion spike.
+- Verdict: REJECT — validation sharpe 0.989 <= champion 1.107
+- Train: sharpe +0.99, ann_ret +17.5%, maxDD -46.5%, turnover 1.9x
+- Validation: sharpe +0.99, ann_ret +21.4%, maxDD -33.3%, turnover 3.4x
+- Deflated Sharpe prob: 0.9313 (bar from 36 trials, 11 effective)
+- Champion validation sharpe at the time: +1.11
+- Champion re-deflated at the same bar: 0.9627
+- Lesson: **Refuted decisively, and in the most informative way available: the brake made the exact regime it was built for worse.** It was motivated by a returns-only diagnostic showing the champion's vol-spike trigger fires on 44 days in 2020 (+132%, its best year) and on 0 days in 2021 and 2023, but only 7 days in 2018 and 13 in 2022 — the two years the book loses money, both slow grinds without a dispersion spike. The brake was aimed squarely at that gap and **2022 went from -8.9% to -17.4%**. The full year decomposition against the champion: 2018 +1.0%, 2019 **-13.3%**, 2020 0.0%, 2021 -10.7%, 2022 **-8.6%**, 2023 0.0% — one small win, three large losses, and validation maxDD *widened* -29.1% -> -33.3% even though train maxDD improved -56.5% -> -46.5%, the exact in-sample-crash-fix-that-does-not-transfer signature `learnings.md` already records for three earlier de-risking overlays. The mechanism of the failure is visible in 2019: the brake armed in the 2018-10 selloff and, because it only releases once the book recovers to within 10% of its peak, was still de-risked through the start of a +50% year. **This is the mirror image of the cadence lesson the daily vol-spike trim taught: that one said a trigger must react faster than the strategy's rebalance; this one says a release rule slower than the recovery costs more than the trigger ever saves.** Drawdown depth is a lagging state variable — by the time it crosses a threshold deep enough to be outside routine noise (only 4 of 55 validation episodes reach -20%), the information is mostly about what already happened. The drawdown-brake axis is closed; do not retry it with different thresholds, which is the only knob left and would be tuning a refuted mechanism.
+
+## 2026-08-16T23:16:35+00:00 — mom_zscore_overlap6_trim_universe — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_overlap6_trim_universe.py` (family: cross-sectional momentum, trial #37)
+- Hypothesis: Computing the daily vol-spike trim's realized-vol trigger over the names actually held — qualifying them on a trailing 283-day window instead of a complete history back to 1962, which currently admits a mean of 3 of 34 held names and 11% of book weight — raises validation Sharpe above the champion's 1.107 net of 15 bps costs, because the trigger then measures the turbulence of the book it de-risks rather than that of an incidental handful of long-listed instruments.
+- Verdict: REJECT — validation sharpe 1.05 <= champion 1.107
+- Train: sharpe +0.97, ann_ret +19.3%, maxDD -57.6%, turnover 2.1x
+- Validation: sharpe +1.05, ann_ret +24.7%, maxDD -30.8%, turnover 4.5x
+- Deflated Sharpe prob: 0.95 (bar from 37 trials, 11 effective)
+- Champion validation sharpe at the time: +1.11
+- Champion re-deflated at the same bar: 0.9629
+- Lesson: **The champion's daily vol-spike trim does not measure its own basket, and never has.** Every candidate in this line since trial #22 computes the trigger as `prices.iloc[:end_pos][names].dropna(axis=1, how='any')` — and because the price store starts in 1962, that filter keeps only instruments with a complete ~60-year history. A holdings-only diagnostic over the champion's own formations (weights only, nothing scored) shows the consequence: across the 72 validation-window formations the book holds a mean of 34.1 names of which a mean of **3.0** survive the filter — **11% of book weight**, and zero in some months, which disables the trim outright. The eleven instruments that can ever qualify are JNJ, PG, XOM, CVX, KO, MRK, DIS, IBM, CAT, GE and HON: old-economy large-cap defensives and industrials, close to the opposite style to a high-momentum growth book. Pointing the trigger at the names actually held (and, in passing, making it strictly causal — the original reads one rebalance into the future to decide the trigger's membership) **lowered** validation Sharpe 1.107 -> 1.050 and cost return in all six validation years: 2018 -2.4%, 2019 -3.2%, 2020 -2.9%, 2021 -1.0%, 2022 -3.7%. Note what this is *not*: `learnings.md` records a prior session killing a trim re-specification by diagnostic, but that one compared book-weighted against equal-weighted vol *of this same 3-name subset* and correctly found the ratio insensitive to weighting. The universe, not the weighting, was the defect — a reminder that a cheap diagnostic only closes the question it actually asked.
+
+## 2026-08-16T23:18:20+00:00 — mom_zscore_overlap6_notrim — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_overlap6_notrim.py` (family: cross-sectional momentum, trial #38)
+- Hypothesis: Removing the daily vol-spike trim from the champion entirely leaves validation Sharpe at or near the 1.050 of the correctly-specified trim (trial #37) rather than materially below it, net of 15 bps costs, because the trim's apparent contribution to the champion's 1.107 comes from a degenerate trigger universe — a mean of 3 of 34 held names — rather than from detecting turbulence in the book.
+- Verdict: REJECT — validation sharpe 1.062 <= champion 1.107
+- Train: sharpe +0.94, ann_ret +19.4%, maxDD -56.1%, turnover 1.6x
+- Validation: sharpe +1.06, ann_ret +26.9%, maxDD -30.3%, turnover 2.6x
+- Deflated Sharpe prob: 0.9527 (bar from 38 trials, 11 effective)
+- Champion validation sharpe at the time: +1.11
+- Champion re-deflated at the same bar: 0.963
+- Lesson: **The control this line never had on `main`, and it reproduces the archived number to the decimal (1.062).** With the trim deleted the book keeps the champion's ann_ret (26.9%, identical) and gives up 0.045 of Sharpe and 1.2pp of drawdown (-30.3% vs -29.1%) while *lowering* turnover 3.0x -> 2.6x. Set against trial #37 this is the uncomfortable result of the session so far: **the correctly-specified basket-own trim (1.050) is worse than no trim at all (1.062)**, so the mechanism as the repo has described it is not merely mis-measured, it is value-destroying when measured properly, and the champion's margin comes from the mis-specification rather than from crash detection. This also re-establishes the honest baseline for the whole overlapping-tranche line: an untrimmed six-tranche book at 1.062 / -30.3% / 2.6x is the simplest thing in the repo that gets most of the way to the champion, and it is fully explained — no accidental universe anywhere in it.
+
+## 2026-08-16T23:20:31+00:00 — mom_zscore_overlap6_market_trim — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_overlap6_market_trim.py` (family: regime switching, trial #39)
+- Hypothesis: Driving the daily exposure trim from a deliberately specified market-wide vol-spike trigger — the equal-weighted 21d/252d realized vol ratio of every instrument with a complete trailing 283-day history, held or not — raises validation Sharpe above the champion's 1.107 net of 15 bps costs, because the champion's trigger already reads a style-orthogonal set of long-listed defensives rather than its own basket, and specifying that on purpose replaces an incidental 3-name sample with the full cross-section of the same signal.
+- Verdict: REJECT — validation sharpe 1.055 <= champion 1.107
+- Train: sharpe +0.97, ann_ret +19.3%, maxDD -56.8%, turnover 2.1x
+- Validation: sharpe +1.05, ann_ret +25.1%, maxDD -30.6%, turnover 3.5x
+- Deflated Sharpe prob: 0.9516 (bar from 39 trials, 11 effective)
+- Champion validation sharpe at the time: +1.11
+- Champion re-deflated at the same bar: 0.9632
+- Lesson: **Not the market either — the deliberate market-wide trigger lands at the no-trim control.** Replacing the incidental legacy sample with the equal-weighted vol ratio of every instrument listed for the trailing 283 days (the whole cross-section, held or not, no tickers hard-coded, strictly causal) gave 1.055 against the 1.062 of deleting the trim entirely, and a slightly worse drawdown (-30.6% vs -30.3%). So the style-orthogonality reading in this candidate's docstring — 'the trigger works because it reads defensives rather than the book' — is *not* confirmed in its general form: diluting those defensives into 140 instruments destroys the effect just as thoroughly as dropping them did in trial #37. After three deliberate specifications (basket 1.050, market 1.055, none 1.062) every intentional version of this overlay sits within 0.012 Sharpe of doing nothing, while the accident is worth 0.045. That narrows the question to a single remaining degree of freedom rather than answering it: the champion conditions on **basket membership ∩ legacy cohort**, and neither term on its own reproduces anything.
+
+## 2026-08-16T23:22:24+00:00 — mom_zscore_overlap6_legacy_trim — **REJECT**
+- Candidate: `strategies/candidates/mom_zscore_overlap6_legacy_trim.py` (family: regime switching, trial #40)
+- Hypothesis: Driving the daily exposure trim from the realized vol of the whole long-listed cohort — every instrument with a complete history from the store's start to the formation date, held or not, rather than only the ~3 of them the momentum screen happens to hold — reproduces or beats the champion's 1.107 validation Sharpe net of 15 bps costs, because the signal doing the work is those defensives' turbulence and not the incidental intersection with basket membership.
+- Verdict: REJECT — validation sharpe 1.081 <= champion 1.107
+- Train: sharpe +0.98, ann_ret +19.4%, maxDD -58.9%, turnover 2.1x
+- Validation: sharpe +1.08, ann_ret +25.7%, maxDD -29.1%, turnover 3.6x
+- Deflated Sharpe prob: 0.9578 (bar from 40 trials, 11 effective)
+- Champion validation sharpe at the time: +1.11
+- Champion re-deflated at the same bar: 0.9632
+- Lesson: **Roughly 40% of the trim's credit is a real, specifiable signal and the rest needs an intersection with no mechanism behind it — and the drawdown benefit is entirely the real half.** Driving the trim from the whole long-listed cohort (the champion's own filter with the basket intersection deleted) gives 1.081, and the five-way comparison now brackets the component completely:
+    | trim trigger universe | val Sharpe | maxDD | turnover |
+    |---|---|---|---|
+    | held ∩ legacy cohort (champion) | 1.107 | -29.1% | 3.0x |
+    | legacy cohort, whole (#40) | 1.081 | -29.1% | 3.6x |
+    | none — control (#38) | 1.062 | -30.3% | 2.6x |
+    | whole market (#39) | 1.055 | -30.6% | 3.5x |
+    | the actual held basket (#37) | 1.050 | -30.8% | 4.5x |
+  Two readings, and both matter. **The mechanistic half:** the cohort trigger reproduces the champion's validation maxDD to the decimal (-29.1%), so the entire 1.2pp drawdown benefit over the untrimmed control is attributable to the long-listed defensives' volatility and needs nothing accidental to explain it. The ordering basket (1.050) < market (1.055) < none (1.062) < cohort (1.081) is monotone in how style-orthogonal the trigger is to a momentum book, which is a coherent mechanism and not a random scatter: a momentum book's own vol rises in melt-ups as readily as in crashes, the market's vol is a blend, and a defensive cohort is turbulent mainly in genuine systemic stress. **The luck half:** the remaining 0.026 of Sharpe requires sampling that cohort *through* month-to-month basket membership — a 3-name subset chosen by which defensives a momentum screen happens to hold — and no mechanism reads that way. The honest conclusion is that the champion's 1.107 contains roughly 0.026 of Sharpe that is sampling luck inside a 6-year window, and that the repo should stop describing the daily vol-spike trim as 'the basket's own realized vol'; it is a defensive-cohort stress overlay worth about +0.019 Sharpe and -1.2pp of drawdown when specified deliberately. The champion keeps its seat — it won the gate honestly and its holdout is the repo's best number — but its margin over the simple untrimmed book is now only partly explained, which is exactly the thing a future session should not build on top of without re-reading this entry.
+
+
+## Session summary — 2026-08-16 (nightly, second session)
+
+- Housekeeping: started on a per-run branch (`claude/epic-mendel-91epxp`) that
+  pointed at `origin/main` with no commits of its own, so `git checkout main &&
+  git reset --hard origin/main` corrected it with nothing lost; all of tonight's
+  work is on `main`. `git branch -r --no-merged origin/main` clean — no unlanded
+  remote work. Engine tests green (16 passed). Data store fresh through
+  2026-08-14. Also filled in the Lesson line for trial #35, which the promoting
+  run left blank.
+- Experiments run: 5 of the 8-trial budget (#36 `..._ddbrake`, #37
+  `..._trim_universe`, #38 `..._notrim`, #39 `..._market_trim`, #40
+  `..._legacy_trim`). Verdicts: 5 REJECT, 0 PROMOTE, 0 GATE_FAIL. Champion
+  unchanged: `mom_zscore_overlap6_daily_trim` (validation Sharpe 1.107).
+- **The session's finding is about the champion itself, and it is not
+  flattering.** The daily vol-spike trim the repo has been citing as one of its
+  strongest mechanisms — "the basket's own realized vol", the first thing here
+  ever to improve Sharpe and drawdown at once — does not measure the basket. Its
+  availability filter runs `dropna(how='any')` over a price prefix that starts in
+  1962, so only instruments with a complete ~60-year history qualify: a mean of
+  **3 of the 34 names held, 11% of book weight**, zero in some months. The eleven
+  instruments that can ever qualify are JNJ, PG, XOM, CVX, KO, MRK, DIS, IBM,
+  CAT, GE, HON — old-economy defensives, close to the opposite style to the
+  momentum book they are trimming.
+- Four trials bracketed what that accident is worth, against every deliberate
+  specification of the overlay plus the control of deleting it:
+
+  | trim trigger universe | val Sharpe | maxDD | turnover |
+  |---|---|---|---|
+  | held ∩ legacy cohort (champion) | 1.107 | -29.1% | 3.0x |
+  | legacy cohort, whole (#40) | 1.081 | -29.1% | 3.6x |
+  | none — control (#38) | 1.062 | -30.3% | 2.6x |
+  | whole market (#39) | 1.055 | -30.6% | 3.5x |
+  | the actual held basket (#37) | 1.050 | -30.8% | 4.5x |
+
+  Reading, in two halves. **Real:** the cohort trigger reproduces the champion's
+  validation maxDD exactly (-29.1%), so the whole drawdown benefit over the
+  untrimmed control is attributable to long-listed defensives' volatility, and
+  the ordering basket < market < none < cohort is monotone in style-orthogonality
+  — a coherent mechanism, worth about +0.019 Sharpe and -1.2pp drawdown when
+  specified on purpose. **Luck:** the remaining 0.026 of Sharpe requires sampling
+  that cohort *through* month-to-month basket membership, and no mechanism reads
+  that way. Also established: the correctly-specified basket-own trim (1.050) is
+  worse than no trim at all (1.062).
+- Second finding: a hysteresis drawdown brake on the book's own equity (#36) was
+  refuted hard, making the exact regime it targeted worse (2022 -8.9% -> -17.4%)
+  and widening validation maxDD to -33.3% while improving train maxDD — the
+  familiar signature of an in-sample crash fix that does not transfer. The
+  mechanism of its failure is the complement of the cadence lesson the vol-spike
+  trim taught: a *release* rule slower than the recovery costs more than the
+  trigger saves (it was still de-risked into the start of a +50% 2019).
+- Two candidate ideas were killed by diagnostic without spending a trial: a
+  no-trade band on weights (arithmetic — at 3.0x turnover the champion's entire
+  cost drag is 0.45%/yr ≈ 0.019 Sharpe, so turnover reduction is now a spent
+  lever on this base, which is also why the archived `mom_zscore_notrade_band`
+  result should not be revisited), and finer-cadence formation dates (the trim
+  loop is O(prefix x periods), and weekly formation would have required changing
+  the trim's implementation, confounding the cadence test with tonight's subject).
+- Why 5 and not 8: after #40 the trim question was answered in both directions
+  and no remaining hypothesis was better motivated than the ones already
+  refuted. Forcing more trials would have been sweeping the trigger definition,
+  which is the knob-tuning the program explicitly warns against.
+- Ideas for next session:
+  1. **The champion's docstring and `learnings.md` now overstate its trim.** A
+     future session that wants a *fully explained* strategy should consider that
+     `mom_zscore_overlap6_notrim` (1.062 / -30.3% / 2.6x) and
+     `mom_zscore_overlap6_legacy_trim` (1.081 / -29.1% / 3.6x) contain no
+     accidental component. Neither can displace the champion under the gate,
+     which scores validation Sharpe only — that is a limitation of the gate, not
+     evidence that they are worse strategies.
+  2. Untouched and still open: what supplies *decorrelated formation dates*
+     without being a K sweep (last session's idea #1, not attempted tonight).
+  3. Closed tonight: drawdown-state braking (any threshold), trim-trigger
+     universe (all four specifications tested).
+  4. Standing caution, unchanged: the validation window's P&L is dominated by
+     2019-2020 (+50%, +132%) with losses in 2018 and 2022, and DSR clustering has
+     removed deflation as a brake on within-family tuning. The holdout is the only
+     real check left.
+- No engine issues encountered this session.
