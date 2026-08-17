@@ -202,6 +202,11 @@ for quick reference. Each links to where the reasoning is spelled out in full.
    2026-08-12..15 split-brain incident; see `## Protocol issue — 2026-08-16` in
    the journal for the full incident report and the archive-tag preservation
    mechanism used to avoid touching the frozen trial ledger even while fixing it.
+   Fixed in two halves: the prompt-level guard (an integrity check that refuses
+   to run trials off `main` or with unmerged remote work) landed 2026-08-16,
+   but the routine's own outcome-branch setting — the original cause — still
+   named a `claude/*` branch until 2026-08-17, when both the strategy and
+   learning routines were pinned to `main` explicitly.
 6. **Deflate against effective (correlation-clustered) trial count, and re-deflate
    the incumbent at the same bar on every comparison** — 2026-08-16,
    [PR #1](https://github.com/ilasek/trading-autoresearch/pull/1), see above.
