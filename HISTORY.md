@@ -207,6 +207,23 @@ for quick reference. Each links to where the reasoning is spelled out in full.
    [PR #1](https://github.com/ilasek/trading-autoresearch/pull/1), see above.
    Introduced the "provisional champion" concept and per-trial return storage
    (`experiments/trial_returns/`).
+7. **External-research learning agent, quarantined in `research/`** — 2026-08-17.
+   A second nightly cloud routine scans public literature (papers, credible
+   practitioner research) and distills findings into `research/notes/` +
+   `research/SUMMARY.md`, which the strategy session now reads as idea input
+   (CLAUDE.md step 1, wired via `[engine-maintenance]`). Its output is kept out
+   of `experiments/learnings.md` so "verified on this repo's data" and "read in
+   the literature" never blur. Source soundness is scored (citations, venue tier,
+   replication status, sample robustness, cost-awareness). Lookahead policy:
+   mechanisms only, no period-specific performance figures, an absolute ban on
+   post-2023 information, and per-source `sample_period` /
+   `validation_overlap` / `published_post_2018` tags so the strategy agent can
+   discount hypotheses implicitly pre-fit to its validation window. Residual
+   risk accepted knowingly: publication selection can still softly contaminate
+   hypothesis *choice* (the causality check only catches code-level peeking, and
+   the trial counter cannot see out-of-band screening) — the holdout remains the
+   backstop. Rules live in `research/README.md`; the agent never backtests and
+   never touches the trial ledger.
 
 ## Current state (as of 2026-08-16)
 
