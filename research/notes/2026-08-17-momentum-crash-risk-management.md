@@ -4,7 +4,7 @@ authors: Daniel, Moskowitz (2016); Barroso, Santa-Clara (2015)
 year: 2016, 2015
 venue: Journal of Financial Economics (both, venue tier 1); Daniel–Moskowitz also NBER WP 20439
 url: https://www.sciencedirect.com/science/article/pii/S0304405X16301490 ; https://www.sciencedirect.com/science/article/abs/pii/S0304405X14002566
-citations: not verified this session — Semantic Scholar, OpenAlex and Google Scholar are all egress-blocked from this sandbox; both are heavily-cited tier-1 papers but no count is recorded rather than guessed
+citations: Daniel–Moskowitz (2016) 919 (OpenAlex, checked 2026-08-17 — not indexed in Semantic Scholar under its DOI); Barroso–Santa-Clara (2015) 623 (Semantic Scholar, same date)
 sample_period: Daniel–Moskowitz 1927–2013; Barroso–Santa-Clara US ~1927–2011 (approximate; full text not retrievable this session)
 markets: Daniel–Moskowitz US equities plus cross-asset momentum checks; Barroso–Santa-Clara US equities (with international checks)
 tier: A

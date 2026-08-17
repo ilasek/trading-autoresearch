@@ -4,7 +4,7 @@ authors: DeMiguel, Garlappi, Uppal (2009); Kritzman, Page, Turkington (2010)
 year: 2009, 2010
 venue: Review of Financial Studies 22(5), 1915–1953 (venue tier 1); Financial Analysts Journal 66(2), 31–39 (venue tier 1 practitioner-academic)
 url: https://academic.oup.com/rfs/article-abstract/22/5/1915/1592901 ; https://doi.org/10.2469/faj.v66.n2.6
-citations: not verified this session (all scholar APIs and publisher domains egress-blocked); both are among the most-cited portfolio-construction papers of their decade, but no count was resolvable
+citations: DeMiguel–Garlappi–Uppal (2009) 3215; Kritzman–Page–Turkington (2010) 153 (Semantic Scholar, checked 2026-08-17)
 sample_period: seven empirical datasets, monthly, mostly US, ending in the mid-2000s (exact spans not verified this session)
 markets: US equity portfolios (industry, size/book-to-market sorts, factor sets) plus international index sets
 tier: A

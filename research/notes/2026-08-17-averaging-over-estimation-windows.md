@@ -4,7 +4,7 @@ authors: Pesaran, Timmermann (2007); Pesaran, Pick, Pranovich (2013)
 year: 2007, 2013
 venue: Journal of Econometrics 137(1), 134–161 (venue tier 1); Journal of Econometrics 177(2) (venue tier 1)
 url: https://www.sciencedirect.com/science/article/abs/pii/S0304407606000418 ; https://www.sciencedirect.com/science/article/abs/pii/S0304407613000687
-citations: not verified this session (Crossref and Semantic Scholar APIs returned 403 at the egress proxy; publisher domains egress-blocked). Both are standard references in the forecasting-under-breaks literature; no count was resolvable.
+citations: Pesaran–Timmermann (2007) 453; Pesaran–Pick–Pranovich (2013) 134 (Semantic Scholar, checked 2026-08-17)
 sample_period: econometric theory plus Monte Carlo; empirical illustrations on macroeconomic and financial series ending well before 2018 (exact spans not verified this session)
 markets: general time-series forecasting; macro and financial applications
 tier: A

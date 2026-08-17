@@ -489,21 +489,25 @@ hypothesis fodder, then anti-candidates.
   axis after family 5, and its requirement is unchanged from last session (a source speaking to
   weighting *within* comparable-diversification sleeves, since between-sleeve inverse-vol is
   refuted twice here).
-- **Tooling limitation, unchanged this session:** `WebFetch` was blocked for *every* domain probed
-  — publishers (Oxford Academic, Taylor & Francis, ScienceDirect), preprint hosts (SSRN, NBER,
-  arXiv), aggregators (ResearchGate, Semantic Scholar, ConnectedPapers), practitioner sites
-  (AlphaArchitect, AQR), university PDF mirrors and even Wikipedia — so web search result
-  summaries were the only literature channel, and no full text was read directly. Session 3
-  additionally confirmed the *cause* and the extent: the environment's egress policy permits
-  only package registries plus Anthropic hosts (`curl "$HTTPS_PROXY/__agentproxy/status"`), and
-  direct citation-API calls to **Crossref and Semantic Scholar both return 403 at the proxy
-  tunnel** — so the README's suggested fallbacks are unavailable here, not merely unreliable.
-  Consequences to keep in mind when using these notes: citation counts are recorded as
-  unverified for *all* sources in this folder; sample periods are recorded as unverified where
-  the abstract did not state them (session 3: Rapach–Strauss–Zhou's exact span, Zakamulin's
-  sample); and one quantitative detail (whether the tranching 1/N factor applies to the
-  timing-luck standard deviation or its variance) is explicitly flagged as unconfirmed in its
-  note. Nothing was estimated from memory to fill these gaps, and per the README no tier was
-  downgraded on citation grounds alone — tiers rest on venue and replication status, both
-  verifiable from abstracts. A session with working full-text access should re-verify those
-  items before any is leaned on.
+- **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
+  environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
+  for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
+  web-search result summaries were the only literature channel — **no full text was ever read
+  directly** for any note written in those sessions. The learning agent's schedule has since been
+  moved to a full-egress environment; scholar APIs (Semantic Scholar, OpenAlex, Crossref), Google
+  Scholar, arXiv PDFs, NBER and AQR are now all reachable, and full text can be read directly.
+  See `research/README.md` → "Network access" for the working lookup recipe and the three
+  remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
+  ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
+  client, **not** an egress block).
+
+  **Citation counts have been backfilled** for all 11 notes as of 2026-08-17 and are no longer
+  the folder-wide gap they were. Two residual gaps from the restricted era remain and still
+  warrant a re-check against full text before anything leans on them: (a) sample periods are
+  recorded as unverified where the abstract did not state them (Rapach–Strauss–Zhou's exact span,
+  Zakamulin's sample, the Hoffstein sample end that drives its `validation_overlap` flag); and
+  (b) one quantitative detail — whether the tranching 1/N factor applies to the timing-luck
+  standard deviation or its variance — is flagged as unconfirmed in its note. Nothing was ever
+  estimated from memory to fill these gaps. The one tier consequence the backfill did surface:
+  the rebalance-timing-luck note is now the weakest-evidenced source here (tier-3 venue, 4
+  citations, JII article unindexed) and is flagged in-note as a candidate for tier C.

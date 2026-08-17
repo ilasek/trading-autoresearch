@@ -4,8 +4,8 @@ authors: Zakamulin
 year: 2015 (working paper), 2017 (Springer monograph)
 venue: SSRN working paper; Springer, New Developments in Quantitative Trading and Investment series (venue tier 2 — substantial working paper subsequently published as an academic monograph; the author has a peer-reviewed track record in this specific area)
 url: https://papers.ssrn.com/sol3/papers.cfm?abstract_id=2585056 ; https://link.springer.com/book/10.1007/978-3-319-60970-6
-citations: not verified this session (Crossref and Semantic Scholar APIs returned 403 at the egress proxy; SSRN and Springer egress-blocked)
-sample_period: long-horizon US market data; exact span not verified this session (full text inaccessible)
+citations: working paper 31; Springer monograph 23 (OpenAlex, checked 2026-08-17). Low for the age — the analytical decomposition is the durable contribution, not a widely-cited empirical result.
+sample_period: long-horizon US market data; exact span not verified when this note was written (full text was unreachable under the then-current egress restriction — re-checkable now, see SUMMARY tooling note)
 markets: US equity indices (market-timing setting)
 tier: B — the analytical result is a mathematical identity and needs no replication; the empirical performance claims around it are single-market and were not verifiable this session
 validation_overlap: false (work predates 2018)

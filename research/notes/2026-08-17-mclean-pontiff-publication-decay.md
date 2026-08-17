@@ -4,7 +4,7 @@ authors: McLean, Pontiff
 year: 2016
 venue: Journal of Finance (venue tier 1)
 url: https://onlinelibrary.wiley.com/doi/abs/10.1111/jofi.12365
-citations: not verified this session — Semantic Scholar, OpenAlex and Google Scholar are all egress-blocked from this sandbox; a heavily-cited tier-1 paper but no count is recorded rather than guessed
+citations: 885 (Semantic Scholar, checked 2026-08-17); 1579 (OpenAlex, same date)
 sample_period: original studies' samples through ~2013 (approximate)
 markets: US cross-section, 97 published predictors
 tier: A

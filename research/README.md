@@ -27,7 +27,7 @@ Score every source and record the evidence in its note. Aggregate to a tier:
 
 | Signal | What to record |
 |---|---|
-| Citations | Count + source + date checked. Prefer high absolute count and healthy citation velocity for the paper's age. Several scholar APIs (Semantic Scholar, OpenAlex, Google Scholar) are often egress-blocked from the cloud sandbox; SciSpace and Crossref are worth trying. **Never estimate a count from memory.** If no source resolves, write `citations: not verified this session` and move on — do *not* downgrade tier on that basis alone; lean on venue and replication status instead, which are verifiable from the paper itself. |
+| Citations | Count + source + date checked. Prefer high absolute count and healthy citation velocity for the paper's age. This environment has full egress, so a count is expected for every source that is indexed at all. Resolve it by DOI — `https://api.semanticscholar.org/graph/v1/paper/DOI:<doi>?fields=title,year,citationCount` first, `https://api.openalex.org/works/doi:<doi>` as fallback. **Never estimate a count from memory.** Only write `citations: not indexed (<APIs tried>, checked YYYY-MM-DD)` when the source genuinely resolves in neither index — typically practitioner-journal articles without a registered DOI — and do *not* downgrade tier on that basis alone; lean on venue and replication status instead. |
 | Venue | Tier 1: top peer-reviewed journals (JF, JFE, RFS, JFQA, Management Science, JPM). Tier 2: NBER/SSRN/arXiv working papers with substantial citations. Tier 3: credible practitioner research (AQR, Research Affiliates, Man, Robeco, Alpha Architect). Tier 4: blogs/posts — only with fully reproducible methodology. |
 | Replication | Has the effect survived independent replication (e.g. Hou–Xue–Zhang *Replicating Anomalies*, Jensen–Kelly–Pedersen *Is There a Replication Crisis in Finance?*)? Is post-publication decay documented (McLean–Pontiff)? |
 | Sample robustness | Multi-decade sample, multi-market / out-of-sample-country evidence, subperiod stability, robustness to construction choices. |
@@ -36,6 +36,23 @@ Score every source and record the evidence in its note. Aggregate to a tier:
 **Tier A** — peer-reviewed or heavily cited, replicated, multi-market, cost-aware.
 **Tier B** — solid but with a gap (unreplicated, single market, costs ignored).
 **Tier C** — interesting practitioner/blog idea; treat as hypothesis fodder only.
+
+### Network access — what works, what doesn't
+
+This environment has **full egress**: scholar APIs (Semantic Scholar, OpenAlex, Crossref),
+Google Scholar, arXiv PDFs, NBER and practitioner sites (AQR) are all reachable, and full
+text can be read directly with `WebFetch` or `curl`. Read the source, don't work from search
+snippets. Three practical limits to plan around:
+
+- **Semantic Scholar** — the DOI endpoint is reliable; the `/paper/search` title endpoint
+  rate-limits aggressively (HTTP 429) after a few unauthenticated calls. Look up by DOI.
+- **OpenAlex** — metered, with a small free daily budget that resets at midnight UTC. A
+  429 whose body reads `Insufficient budget` means the day's allowance is gone, not that you
+  are querying too fast. Use it as fallback, not first resort, and space out calls.
+- **SSRN, ScienceDirect and some publishers** return HTTP 403 with a Cloudflare bot
+  challenge (`cf-mitigated: challenge`). That is the origin refusing an automated client, not
+  an egress block — do not report it as one. Reach those papers via DOI metadata, a preprint
+  mirror, or the publisher's landing page instead.
 
 ## Anti-lookahead policy (hard rules)
 

@@ -4,7 +4,7 @@ authors: Novy-Marx, Velikov
 year: 2016, 2019
 venue: Review of Financial Studies (venue tier 1); Financial Analysts Journal (venue tier 1 practitioner-academic; 2019 Graham & Dodd Scroll Award)
 url: https://academic.oup.com/rfs/article/29/1/104/1844518 ; https://doi.org/10.1080/0015198X.2018.1547057
-citations: not verified this session (all scholar APIs and publisher domains egress-blocked; see SUMMARY tooling note)
+citations: Novy-Marx–Velikov (2016) 529; Novy-Marx–Velikov (2019) 30 (Semantic Scholar, checked 2026-08-17)
 sample_period: 1963-07 – 2012-12 (RFS paper; the FAJ paper uses the same CRSP/Compustat + TAQ machinery, exact end date not verified)
 markets: US equities (CRSP/Compustat universe; TAQ-based effective-spread cost estimates)
 tier: A

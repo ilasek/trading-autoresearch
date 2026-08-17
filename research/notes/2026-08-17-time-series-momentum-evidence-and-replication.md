@@ -4,7 +4,7 @@ authors: Moskowitz, Ooi, Pedersen (2012); Huang, Li, Wang, Zhou (2020); Hurst, O
 year: 2012, 2020, 2017
 venue: Journal of Financial Economics 104(2) (venue tier 1); Journal of Financial Economics 135(3), 774–794 (venue tier 1); Journal of Portfolio Management 44(1) (venue tier 1 practitioner-academic)
 url: https://doi.org/10.1016/j.jfineco.2011.11.003 ; https://doi.org/10.1016/j.jfineco.2019.09.007 ; https://www.aqr.com/Insights/Research/Journal-Article/A-Century-of-Evidence-on-Trend-Following-Investing
-citations: not verified this session (Crossref and Semantic Scholar APIs returned 403 at the egress proxy; publisher and preprint domains egress-blocked). Moskowitz–Ooi–Pedersen is one of the most-cited papers in the trend-following literature; no count was resolvable.
+citations: Moskowitz–Ooi–Pedersen (2012) 1365; Hurst–Ooi–Pedersen (2017) 195 (Semantic Scholar, checked 2026-08-17); Huang–Li–Wang–Zhou (2020) 199 (OpenAlex, same date — not indexed in Semantic Scholar under its DOI)
 sample_period: MOP 1965–2009; HLWZ in-sample 1985:01–2015:12, out-of-sample 2000:01–2015:12; HOP 1880–2016
 markets: MOP — 58 futures/forwards across equity indices, currencies, commodities, sovereign bonds. HLWZ — ~55 futures, same asset-class span. HOP — 67 markets across four asset classes
 tier: A (for the evidence base as a whole, including the challenge; the *effect* is best described as contested — see below)

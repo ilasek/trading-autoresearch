@@ -4,7 +4,7 @@ authors: Timmermann (2006); Smith, Wallis (2009); Rapach, Strauss, Zhou (2010)
 year: 2006, 2009, 2010
 venue: Handbook of Economic Forecasting vol. 1, ch. 4, Elsevier (venue tier 1, survey); Oxford Bulletin of Economics and Statistics 71(3) (venue tier 1); Review of Financial Studies 23(2), 821–862 (venue tier 1)
 url: https://www.sciencedirect.com/science/article/abs/pii/S1574070605010049 ; https://onlinelibrary.wiley.com/doi/abs/10.1111/j.1468-0084.2008.00541.x ; https://academic.oup.com/rfs/article-abstract/23/2/821/1604687
-citations: not verified this session (Crossref and Semantic Scholar APIs returned 403 at the egress proxy; all publisher and preprint domains egress-blocked). Timmermann's chapter is the standard reference for this literature and Rapach–Strauss–Zhou is among the most-cited out-of-sample-predictability papers in finance, but no count was resolvable.
+citations: Timmermann (2006) 745; Smith–Wallis (2009) 363 (Semantic Scholar, checked 2026-08-17); Rapach–Strauss–Zhou (2010) 1701 (OpenAlex, checked 2026-08-17 — not indexed in Semantic Scholar under its DOI)
 sample_period: Timmermann — survey, no single sample. Smith–Wallis — Monte Carlo simulation plus one empirical application. Rapach–Strauss–Zhou — US monthly data ending in the mid-2000s (exact span not verified this session).
 markets: US equity premium (RSZ); general time-series forecasting (Timmermann, Smith–Wallis)
 tier: A

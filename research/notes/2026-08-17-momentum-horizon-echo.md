@@ -4,10 +4,10 @@ authors: Novy-Marx (2012); Goyal, Wahal (2015)
 year: 2012, 2015
 venue: Journal of Financial Economics; Journal of Financial and Quantitative Analysis (both venue tier 1)
 url: https://www.sciencedirect.com/science/article/abs/pii/S0304405X11001152 ; https://econpapers.repec.org/article/cupjfinqa/v_3a50_3ay_3a2015_3ai_3a06_3ap_3a1237-1267_5f00.htm
-citations: not verified this session — Semantic Scholar, OpenAlex and Google Scholar are all egress-blocked from this sandbox; both are well-cited tier-1 papers but no count is recorded rather than guessed
+citations: Novy-Marx (2012) 450; Goyal–Wahal (2015) 90 (Semantic Scholar, checked 2026-08-17)
 sample_period: Novy-Marx US CRSP, ~1927–2010 (approximate; full text not retrievable this session). Goyal–Wahal 37 non-US countries plus the US, ~1980–2011 international (approximate)
 markets: Novy-Marx US only; Goyal–Wahal 38 countries incl. developed and emerging, plus pooled regional portfolios
-tier: A (both peer-reviewed tier-1; downgraded to A− in practice by the unverified citation counts)
+tier: A (both peer-reviewed tier-1; citation counts now verified, so the earlier A− caveat no longer applies)
 validation_overlap: false
 published_post_2018: false
 ---

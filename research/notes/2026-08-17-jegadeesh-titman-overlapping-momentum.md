@@ -4,7 +4,7 @@ authors: Jegadeesh, Titman
 year: 1993
 venue: Journal of Finance (venue tier 1)
 url: https://doi.org/10.1111/j.1540-6261.1993.tb04702.x
-citations: 12208 (SciSpace, checked 2026-08-17)
+citations: 11242 (Semantic Scholar, checked 2026-08-17); 11572 (OpenAlex, same date)
 sample_period: 1965–1989
 markets: US (NYSE + AMEX, CRSP)
 tier: A

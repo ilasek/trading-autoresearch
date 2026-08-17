@@ -4,10 +4,10 @@ authors: Hoffstein, Sibears, Faber (2019); Hoffstein, Faber, Braun (2020)
 year: 2019, 2020
 venue: Journal of Index Investing / Journal of Beta Investment Strategies, 10(1), 27 (venue tier 3, practitioner journal); 2020 companion is an SSRN working paper (venue tier 3)
 url: https://jii.pm-research.com/content/10/1/27.abstract ; https://ssrn.com/abstract=3673910
-citations: not verified this session (all scholar APIs and publisher domains egress-blocked)
+citations: 2020 SSRN companion 4 (OpenAlex, checked 2026-08-17); 2019 JII article not indexed in Semantic Scholar or OpenAlex under its DOI (checked 2026-08-17)
 sample_period: not verified this session — simulated US large-cap factor indices; the 2020 study builds them from the S&P 500 universe with Sharadar fundamental data, so the sample plausibly runs up to its publication year
 markets: US large-cap equity, simulated style indices (value, size, momentum, quality, low volatility)
-tier: B
+tier: B — but now the weakest-evidenced source in this folder and a candidate for C. The citation check (2026-08-17) confirmed what was previously only assumed: tier-3 venue, 4 citations on the companion, the JII article not indexed at all. The mechanism is an arithmetic identity and stands on its own; the empirical magnitudes around it should be treated as hypothesis fodder only.
 validation_overlap: unverified, assume true (sample end not confirmed; a 2020 publication may touch 2018–2019)
 published_post_2018: true
 ---
