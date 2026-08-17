@@ -22,15 +22,19 @@ trading days behind), note it in the journal and continue; do not mass-download.
 | `strategies/candidates/` | **create/edit freely** — this is your workspace |
 | `experiments/journal.md`, `experiments/learnings.md` | append/edit |
 | `reports/` | create weekly reports |
+| `research/` | written by the nightly learning agent (rules in `research/README.md`); strategy sessions read-only |
 | `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md` | **frozen — never edit** (CI enforces `engine/`) |
 | `strategies/champion.py`, `experiments/trials.jsonl` | written only by `run_experiment.py`, never by hand |
 
 ## The experiment loop (repeat up to the budget in program.md)
 
 1. **Read first**: `experiments/learnings.md`, the last ~20 entries of
-   `experiments/journal.md`, and the champion's result card
-   (`strategies/champion_card.json`). Do not re-test ideas already refuted unless you
-   have a specific reason, which you must state.
+   `experiments/journal.md`, the champion's result card
+   (`strategies/champion_card.json`), and `research/SUMMARY.md` (external-research
+   findings, if present). Do not re-test ideas already refuted unless you have a
+   specific reason, which you must state. External findings are literature-derived, not
+   verified here: treat `validation_overlap`/`published_post_2018` flags as a discount
+   on novelty, and never import performance expectations from them into hypotheses.
 2. **Hypothesize**: one sentence, falsifiable, written before you code.
 3. **Implement**: one file in `strategies/candidates/<slug>.py` implementing the strategy
    contract (below). Keep it small and readable.
