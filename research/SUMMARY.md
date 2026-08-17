@@ -81,6 +81,27 @@ the *effect* is best described as contested, most recent peer-reviewed word scep
 `validation_overlap: false` for all three.
 → `notes/2026-08-17-time-series-momentum-evidence-and-replication.md`
 
+**A fifth obstacle, from portfolio accounting rather than from replication statistics, and it
+is the cleanest of the five.** Goyal–Jegadeesh (2018, RFS) show the difference between a
+time-series and a cross-sectional rule is *the benchmark the past return is measured against*:
+CS compares each asset to the **cross-sectional mean** (so the book is zero-net-investment by
+construction), TS compares it to **zero** (so the book carries a time-varying net long
+position). Algebraically `TS ≈ CS + NetLong_t × index return`, and that extra term splits into
+a **risk-premium** piece (being net long on average) and a **market-timing** piece
+(`cov(NetLong_t, index return)`). Empirically, on seven decades of non-micro-cap US stocks,
+**the entire TS-versus-CS performance gap is that term** — give the CS strategy the same net
+long position and the two are about equal across ranking/holding horizons from 1 to 60 months.
+At long ranking horizons virtually all of it is the *static* risk premium; the market-timing
+covariance is the smaller and weaker piece, and is larger only at short horizons. The
+consequence for this repo is direct: a long-only trend overlay ("hold if own trailing return
+positive, else cash") is a TS rule whose net long varies between 0 and 1, so against a
+**fully-invested** cross-sectional book it cannot capture the risk-premium half at all — it can
+only give some of it up — and everything it could add is the weak market-timing term, at the
+horizon where that term is weakest. That is a mechanism-level prediction that long-only trend
+overlays should cost return and add little, which is exactly what the lab measured three times.
+Tier A, `validation_overlap: false`.
+→ `notes/2026-08-17-cross-sectional-vs-time-series-construction.md`
+
 **Most named trend rules are the same object, and there is a closed-form way to prove it before
 spending a trial.** Zakamulin shows every moving-average-based indicator — crossovers,
 price-minus-MA, envelopes, plain momentum — can be rewritten as a **weighted average of past
@@ -95,21 +116,76 @@ on it are single-market and were unverifiable this session). `validation_overlap
 → `notes/2026-08-17-moving-average-rules-anatomy.md`
 
 ### 3. Vol targeting / risk parity
-_Partially covered via the momentum crash-risk note (volatility targeting as applied to a
-momentum book, and why the leverage cap makes it one-sided here). No dedicated source yet on
-risk parity across asset-class ETFs._
+
+**The family's headline result is real in-sample, does not generalise across strategies, and
+its investor-relevant version failed replication — and separately, the leverage cap here
+removes the half of the rule that earns the money.** Moreira–Muir (2017, JF) scale a
+portfolio's exposure by the inverse of its own **previous month's realized variance** (sum of
+squared daily returns within the month, no parameter estimation), with a single constant
+chosen so the managed book has the same unconditional volatility as the unmanaged one. The
+mechanism is an asymmetry between two forecastability facts: variance is highly forecastable
+at short horizons and expected return is not, so the mean-variance weight `μ/σ²` moves with
+`1/σ²`. A corollary worth carrying: **the gain is a bet on the dispersion of the variance
+process** — with constant volatility the managed and unmanaged books are identical and the
+alpha is exactly zero. Cederburg–O'Doherty–Wang–Yan (2020, JFE) extend the test from 9 factors
+to **103 equity strategies** and land three blows, none of which is "the data disagree":
+volatility management *degrades and improves performance at about the same frequency* across
+the 103 (the wins concentrate in the market, momentum and betting-against-beta factors — i.e.
+exactly the ones prior papers had already singled out); the spanning-regression alpha implies a
+combination portfolio whose weights are estimated **over the full sample** and is therefore not
+a real-time strategy; and reasonable expanding-window versions earn **lower** certainty
+equivalents and Sharpe ratios than simply holding the unmanaged portfolio, because the spanning
+parameters are structurally unstable. The decisive implementability fact for this repo is
+distributional, not performance-based: the implied position `c/σ̂²` has a **median near 1× but
+a 99th percentile of roughly 4.5–8.6×** across the nine factors. Gross leverage ≤ 1.0 leaves
+only `min(c/σ̂², 1)` — the de-risking half, which the source itself shows earns less. Tier A,
+`validation_overlap: false`; the replication is `published_post_2018: true`.
+→ `notes/2026-08-17-volatility-timing-managed-portfolios.md`
+
+_Still no dedicated source on risk parity **across asset-class ETFs** with the specific
+property the lab needs (weighting within comparable-diversification sleeves). The two-sided
+volatility-timing literature above is the vol-targeting half of the family, not the
+cross-sectional risk-parity half._
 
 ### 4. Short-term mean reversion
-_No dedicated findings yet, but two sources touch it indirectly: the skip-month convention
-exists because the most recent month carries reversal, and Goyal–Wahal attribute the apparent
-US echo to reversal carryover from month t−2._
+
+**The short-term reversal premium is the market-making spread seen from the other side, which
+closes this family here for a better reason than the turnover gate.** Nagel (2012, RFS) shows
+short-horizon reversal returns are a proxy for the **return to liquidity provision**: an
+uninformed order pushes price away from fundamentals, the market-making sector is paid to
+absorb the inventory, and price reverts as it is worked off. Two consequences. (a) The premium
+is strongly time-varying and **predictable by the VIX**, rising faster than the strategy's own
+volatility so conditional Sharpe ratios rise with stress — a liquidity-*supply* story
+(constrained intermediaries demand more to warehouse risk), not a demand story. (b) It is not
+confined to single stocks: a reversal strategy built from **value-weighted industry
+portfolios**, which earns essentially nothing unconditionally, earns high returns and Sharpe
+ratios when VIX is high — liquidity providers are paid for absorbing common, industry-level
+order imbalances too. Lo–MacKinlay (1990, RFS) supply the necessary correction to the naive
+reading: contrarian profits do **not** require overreaction and are largely driven by
+**cross-autocovariances** (lead-lag relations between stocks), so a contrarian book is partly
+harvesting cross-sectional lead-lag rather than own-stock mean reversion. Lehmann (1990, QJE)
+is the base weekly result. The implementability verdict is a *sign* problem, not a magnitude
+one: **the premium is compensation for supplying liquidity, and any implementation paying 15
+bps/side is demanding it** — taking the losing side of the exact trade that pays. No band, no
+slower cadence and no cost-mitigation technique fixes that. This is fully consistent with the
+lab's two empirical reversal refutations. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`
 
 ### 5. Low-vol / quality tilts
 _No findings yet._
 
 ### 6. Regime switching
-_Partially covered: Daniel–Moskowitz's panic-state indicator is the one literature-grounded
-regime specification reviewed so far. Ranked low — see candidate list._
+_Partially covered, now by two specifications. Daniel–Moskowitz's panic-state indicator (a
+conjunction of long-horizon negative market return and elevated market volatility) remains the
+one literature-grounded regime rule reviewed; ranked low — see candidate list. Added this
+session: **VIX as a predictor of the liquidity-provision premium** (Nagel), which is the one
+regime variable in anything read here that is documented to predict a *strategy's* expected
+return rather than the market's. It is unusable as-is — the strategy whose return it predicts
+is the one this repo structurally cannot trade — but it is the cleanest example of the shape a
+sound regime signal takes: an external state variable predicting a specific premium, not a
+trailing statistic of the book being de-risked.
+→ `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`,
+`notes/2026-08-17-momentum-crash-risk-management.md`_
 
 ### 7. Combinations / ensembles
 
@@ -272,6 +348,43 @@ momentum: its "crisis alpha" payoff requires flipping short as a decline develop
 the rule keeps the whipsaw cost and discards the reason to want it. Treat "which leg generates
 this?" as a mandatory question for every momentum or trend source, asked before implementability.
 
+**Second mandatory question, from the same drawer: which side of the spread does this strategy
+sit on?** Some premia are compensation for *providing* a service to other traders, and a
+cost-paying implementation takes the losing side of exactly the trade that pays. Short-term
+reversal is the clear instance — its return is the market-making margin, so a book that
+crosses the spread to trade it is buying the thing it is trying to sell. This is categorically
+different from an expensive-but-viable strategy: no band, no slower cadence, no
+cost-mitigation technique changes the sign. Ask it of any high-frequency, liquidity-flavoured
+or contrarian source before asking whether the turnover is affordable.
+→ `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`
+
+**A published alpha is not a portfolio — check what the real-time investor would have to
+estimate.** Two of the strongest results reviewed here are reported as regression intercepts
+or as scaled series normalized with a full-sample constant. The volatility-timing case makes
+the gap explicit: the spanning-regression alpha implies a combination of managed and unmanaged
+legs whose weights are the regression coefficients, fitted on the whole sample; estimated from
+past data only, the same strategy underperforms simply holding the unmanaged portfolio, and
+the reason is structural instability in those very coefficients. The general rule: **translate
+any headline result into the position an investor holds at each date, then count which inputs
+of that position were unavailable at the time.** This is the same estimation-error law as the
+weighting and combination results, arriving as a replication failure rather than as theory,
+and it is a reason to prefer mechanisms whose parameters are set by construction over
+mechanisms whose parameters are fitted.
+→ `notes/2026-08-17-volatility-timing-managed-portfolios.md`
+
+**Ask what a signal's benchmark is — zero, or the cross-sectional mean — because the answer is
+worth a market position.** A rule that compares an asset's past return to zero (time-series)
+carries a time-varying net long in risky assets; a rule that compares it to the cross-sectional
+mean (cross-sectional) does not. The gap between the two families' measured performance is
+that position, and at long ranking horizons it is mostly the *static* premium of simply being
+invested rather than any timing skill. A long-only, fully-invested book already holds that
+position permanently, which means (a) it cannot gain the risk-premium half from any
+time-series overlay, only lose it, and (b) any comparison between this repo's cross-sectional
+construction and a published time-series result is apples-to-oranges until the net-long drift
+is decomposed out. The same benchmark choice also determines what the signal can see at all:
+a zero-benchmark rule is blind to short-horizon reversal, which is unambiguously present
+cross-sectionally. → `notes/2026-08-17-cross-sectional-vs-time-series-construction.md`
+
 **Averaging beats selecting, whenever the selection would have to be estimated.** This is the
 same law already recorded for weighting schemes, and it now has three separate instances across
 three literatures: portfolio weights over assets (1/N beats estimated-optimal), combination
@@ -336,7 +449,32 @@ hypothesis fodder, then anti-candidates.
    is built. **Boundary: linear filters only** — says nothing about buffers, hysteresis, caps or
    the vol-spike trim, which is precisely where the champion's edge lives. Tier B, no overlap.
    → `notes/2026-08-17-moving-average-rules-anatomy.md`
-4. **Interpretation rule: a single backtest of a discretely rebalanced strategy is one draw
+4. **Triage rule for any imported result: which side of the spread does it sit on, and what
+   would a real-time investor have to estimate?** Two independent screens that cost no trial.
+   (a) *Spread side*: some premia are payment for providing a service — short-term reversal's
+   return is the market-making margin — so a cost-paying implementation takes the losing side
+   of the very trade that pays. This is a sign problem no band or cadence change fixes, and it
+   is categorically different from "expensive but viable". (b) *Estimated inputs*: translate
+   the published result into the position held at each date and count which inputs were
+   unavailable then. Spanning-regression alphas and full-sample normalising constants both
+   fail this, and the volatility-timing literature is the worked example — the in-sample alpha
+   replicates across 103 strategies, the real-time portfolio built from it underperforms doing
+   nothing. Tier A, no overlap.
+   → `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`,
+   `notes/2026-08-17-volatility-timing-managed-portfolios.md`
+5. **Interpretation rule before comparing anything here to a published time-series result:
+   decompose the net-long drift out first.** A time-series rule benchmarks past returns against
+   *zero* and therefore carries a time-varying net long position; a cross-sectional rule
+   benchmarks against the *cross-sectional mean* and does not. `TS ≈ CS + NetLong × index`, and
+   the whole measured gap between the families is that term — mostly the static premium of
+   being invested, not timing skill, at long ranking horizons. Consequences: this repo's
+   fully-invested long-only book already holds that position permanently, so a time-series
+   overlay can only give it up; and any "TS beats CS" claim from the literature is not evidence
+   about signal quality until the drift is removed. Also settles the standing question about
+   magnitude weighting — MOP's sign-only rule answers a different question against a different
+   benchmark, so it is not grounds to "correct" the champion. Tier A, no overlap.
+   → `notes/2026-08-17-cross-sectional-vs-time-series-construction.md`
+6. **Interpretation rule: a single backtest of a discretely rebalanced strategy is one draw
    from a rebalance-timing-luck distribution.** Timing luck is uncompensated dispersion driven
    by turnover (↑), concentration (↑) and holding count (↓); a tranched book sits near the
    distribution's centre, a single-vintage book does not. Consequence: Sharpe gaps between
@@ -344,7 +482,7 @@ hypothesis fodder, then anti-candidates.
    the overlap result (large, and corroborated by the pruning diagnostic), but should discipline
    how near-ties are read. Tier B, overlap assumed.
    → `notes/2026-08-17-rebalance-timing-luck-tranching.md`
-5. **[The one genuinely new build this session] Average over formation vintages that differ in
+7. **[Still the only genuinely new build on this list — added session 3, untested] Average over formation vintages that differ in
    lookback *length*, not only in end-date.** The champion's six tranches differ in *when* the
    signal was formed, at constant lookback; the AveW method the literature actually describes
    averages a model estimated over *different window lengths*, which brackets the unknown
@@ -356,30 +494,30 @@ hypothesis fodder, then anti-candidates.
    are load-bearing — any "weight recent or better vintages more" refinement is the
    estimated-weight mistake this whole literature warns against. Tier A, no overlap.
    → `notes/2026-08-17-averaging-over-estimation-windows.md`
-6. **Confirmation, not a new candidate — the membership buffer is the literature's
+8. **Confirmation, not a new candidate — the membership buffer is the literature's
    top-ranked construction technique.** A buy/hold spread (stricter bar to enter than to hold)
    beats both slower rebalancing and liquidity screening, because the trades it suppresses are
    the low-information ones near the cutoff. The champion's hold-25/enter-15 band is exactly
    this. Recorded so nobody "simplifies" it back to a hard top-N cutoff. Tier A, no overlap.
    → `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
-7. **Standing caveat on the repo's best mechanism, not a candidate.** 1/N is a hard benchmark
+9. **Standing caveat on the repo's best mechanism, not a candidate.** 1/N is a hard benchmark
    because deviations from it usually pay for themselves in estimation error, so magnitude
    weighting's wide margin over equal weight deserves scrutiny of *how* it wins — the lab's own
    records already flag where to look (maxDD widened monotonically with each concentration
    step; one validation year dominates the P&L). The square-root-dampening test is real evidence
    against the pure-variance-artifact reading, but explored one direction only. Tier A, no
    overlap. → `notes/2026-08-17-naive-vs-optimized-weighting.md`
-8. **Confirmation, not a new candidate — the skip-month is load-bearing.** Both echo-literature
-   sources agree the most recent month carries reversal. The champion's 6-1/12-1 composite
-   already skips it. Recorded so nobody "simplifies" it to 6-0/12-0. Tier A, no overlap.
-   → `notes/2026-08-17-momentum-horizon-echo.md`
-9. **Free diagnostic before any re-scoring trial: rank-correlate the current composite against
-   a 12-7 intermediate-horizon score** on this universe. Costs no backtest, scores no returns,
-   touches no trial count — in the spirit of the learnings entry on cheap holdings-only
-   diagnostics. If correlation is near the 0.89 that killed the earlier inter-signal ensemble,
-   the echo idea dies without a trial. Note the prior is already against it (no echo in global
-   pooled portfolios). Tier A, no overlap. → `notes/2026-08-17-momentum-horizon-echo.md`
-10. **Tranche-depth reasoning, not a sweep.** If tranche count is ever revisited, the argument
+10. **Confirmation, not a new candidate — the skip-month is load-bearing.** Both echo-literature
+    sources agree the most recent month carries reversal. The champion's 6-1/12-1 composite
+    already skips it. Recorded so nobody "simplifies" it to 6-0/12-0. Tier A, no overlap.
+    → `notes/2026-08-17-momentum-horizon-echo.md`
+11. **Free diagnostic before any re-scoring trial: rank-correlate the current composite against
+    a 12-7 intermediate-horizon score** on this universe. Costs no backtest, scores no returns,
+    touches no trial count — in the spirit of the learnings entry on cheap holdings-only
+    diagnostics. If correlation is near the 0.89 that killed the earlier inter-signal ensemble,
+    the echo idea dies without a trial. Note the prior is already against it (no echo in global
+    pooled portfolios). Tier A, no overlap. → `notes/2026-08-17-momentum-horizon-echo.md`
+12. **Tranche-depth reasoning, not a sweep.** If tranche count is ever revisited, the argument
     should run through two bounds and no parameter scan (which `learnings.md` correctly forbids):
     above, the post-first-year reversal bound (signal age past ~12 months holds a *reversing*
     signal — a bias term that grows without limit, unlike ordinary staleness); below, the
@@ -388,7 +526,7 @@ hypothesis fodder, then anti-candidates.
     room; twelve sits at the upper edge. Tier A, no overlap.
     → `notes/2026-08-17-jegadeesh-titman-overlapping-momentum.md`,
     `notes/2026-08-17-averaging-over-estimation-windows.md`
-11. **[Ranked low, listed for completeness] Market-level panic-state scaling.** Daniel–Moskowitz's
+13. **[Ranked low, listed for completeness] Market-level panic-state scaling.** Daniel–Moskowitz's
     indicator is a *conjunction* (long-horizon negative market return AND elevated market
     volatility) driving a *continuous* scale — mechanistically distinct from the three refuted
     single-variable/binary overlays. It is also style-orthogonal and market-level, the one
@@ -399,7 +537,7 @@ hypothesis fodder, then anti-candidates.
     built on this must honor both cadence lessons (trigger faster than rebalance; release no
     slower than recovery) and should state the expected benefit as small. Tier A, no overlap.
     → `notes/2026-08-17-momentum-crash-risk-management.md`
-12. **Anti-candidate — long-only trend-following overlays should carry a *lower* prior after
+14. **Anti-candidate — long-only trend-following overlays should carry a *lower* prior after
     reading family 2's literature, not a higher one.** The temptation is to read
     Moskowitz–Ooi–Pedersen and the century-of-evidence extension as proof the lab's three
     refuted trend overlays were botched implementations. They were not: the lab built the only
@@ -411,22 +549,59 @@ hypothesis fodder, then anti-candidates.
     is refuted here twice; and leverage ≤ 1.0 makes vol targeting one-sided. On top of that, a
     tier-1 replication finds the effect absent asset-by-asset, the pooled t-statistic below
     bootstrap critical values, and the strategy's profits indistinguishable from a
-    no-predictability sample-mean rule. Any family-2 candidate must state which obstacles it
-    escapes. Tier A evidence base, effect contested, no overlap.
-    → `notes/2026-08-17-time-series-momentum-evidence-and-replication.md`
-13. **Anti-candidate — do not revisit basket-own-vol trimming on this basis.** Barroso–Santa-Clara
+    no-predictability sample-mean rule. **A fifth obstacle was added this session and is the
+    cleanest of the five**: a long-only trend overlay is a time-series rule whose net long
+    position varies between 0 and 1, and the measured advantage of time-series over
+    cross-sectional rules *is* that net long position — mostly its static risk-premium
+    component at long ranking horizons, not timing skill. A fully-invested cross-sectional book
+    already holds that position, so the overlay cannot capture the part that earns the money;
+    it can only surrender some of it, keeping only the weak market-timing covariance term.
+    Any family-2 candidate must state which of the five obstacles it escapes.
+    Tier A evidence base, effect contested, no overlap.
+    → `notes/2026-08-17-time-series-momentum-evidence-and-replication.md`,
+    `notes/2026-08-17-cross-sectional-vs-time-series-construction.md`
+15. **Anti-candidate — do not revisit basket-own-vol trimming on this basis.** Barroso–Santa-Clara
     endorse scaling by the strategy's own realized volatility and might look like grounds to
     reopen a mechanism the lab refuted. It is not: their object is a long-short spread whose
     volatility tracks the short leg's convexity, not a long-only basket whose volatility tracks
     market beta. Recorded explicitly so the tension is resolved rather than rediscovered.
     Tier A, no overlap. → `notes/2026-08-17-momentum-crash-risk-management.md`
-14. **Anti-candidate — the cost-mitigation family is exhausted, by enumeration.** The literature
+16. **Anti-candidate — the cost-mitigation family is exhausted, by enumeration.** The literature
     offers three techniques: liquidity screening (this universe already *is* the screen, at its
     limit), reduced/staggered rebalance frequency (applied), and banding (applied). Combined
     with the learnings entry putting total cost drag at ~0.019 Sharpe, there is no remaining
     trial worth spending on cheaper trading. Recorded so a future session does not rediscover
     no-trade bands or weight-change thresholds as if they were new. Tier A, no overlap.
     → `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+17. **Anti-candidate — short-term mean reversion (family 4) is closed here, on mechanism
+    rather than on turnover.** The premium is compensation for **providing** liquidity: an
+    uninformed order pushes price away, the market-making sector is paid to absorb the
+    inventory, and price reverts. A book paying 15 bps/side is demanding liquidity, i.e.
+    taking the losing side of the trade the premium pays for — a sign problem, not a
+    magnitude one, so no wider band and no slower cadence rescues it. Three further blockers:
+    the mechanism lives at a 1–5 day horizon; all the evidence is zero-cost long-short, and
+    long-only keeps only the "buy what fell" leg, which is a market-beta bet; and the one
+    ETF-scale variant (reversal across industry portfolios) earns nothing unconditionally and
+    pays only in high-VIX states, i.e. it is a regime overlay that would also have to clear the
+    lab's two cadence lessons *and* trade when spreads are widest — exactly where a flat 15 bps
+    assumption is least defensible. Consistent with the lab's two empirical reversal
+    refutations; recorded so the family is not reopened as a turnover-tuning problem.
+    Tier A, no overlap.
+    → `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`
+18. **Anti-candidate — volatility-managed / vol-targeting overlays (family 3) do not become a
+    candidate just because the family now has a dedicated source.** Three reasons, in order.
+    (a) The rule's implied position runs to roughly 4.5–8.6× the base book at the 99th
+    percentile with a median near 1×, so gross leverage ≤ 1.0 leaves only the de-risking half —
+    the half the source itself shows earns less. (b) Extended from 9 factors to 103 equity
+    strategies, volatility management helps and hurts at about the same rate, and the wins
+    concentrate in the very factors earlier papers had already selected on. (c) The large
+    in-sample gains come from spanning regressions whose implied portfolio needs full-sample
+    coefficients; real-time versions underperform simply holding the unmanaged book, because
+    those coefficients are structurally unstable. What *is* worth keeping is the mechanism-level
+    precondition, usable as a free screen: **volatility timing pays only where conditional
+    expected return does not rise with conditional variance**, and the 103-strategy split is
+    evidence that for most equity strategies it does. Tier A, `published_post_2018: true` on
+    the replication. → `notes/2026-08-17-volatility-timing-managed-portfolios.md`
 
 ## Coverage log
 
@@ -435,6 +610,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-17 | Cross-sectional momentum: construction mechanics, signal horizon, crash risk; plus cross-cutting publication decay | Jegadeesh–Titman 1993 (`2026-08-17-jegadeesh-titman-overlapping-momentum.md`); Novy-Marx 2012 + Goyal–Wahal 2015 (`2026-08-17-momentum-horizon-echo.md`); Daniel–Moskowitz 2016 + Barroso–Santa-Clara 2015 (`2026-08-17-momentum-crash-risk-management.md`); McLean–Pontiff 2016 (`2026-08-17-mclean-pontiff-publication-decay.md`) |
 | 2026-08-17 (session 2) | Portfolio construction & rebalance mechanics as its own literature — the gap flagged highest-value last session: which trades to skip, when to trade, how much to hold | Novy-Marx–Velikov 2016 (RFS) + 2019 (FAJ) (`2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`); Hoffstein–Sibears–Faber 2019 + Hoffstein–Faber–Braun 2020 (`2026-08-17-rebalance-timing-luck-tranching.md`); DeMiguel–Garlappi–Uppal 2009 + Kritzman–Page–Turkington 2010 (`2026-08-17-naive-vs-optimized-weighting.md`) |
 | 2026-08-17 (session 3) | The two zero-coverage families: 7 (ensembles) — chased specifically to find the missing economic mechanism for the lab's temporal-breadth result — and 2 (time-series momentum / trend following), including its replication status | Timmermann 2006 (Handbook ch. 4) + Smith–Wallis 2009 (OBES) + Rapach–Strauss–Zhou 2010 (RFS) (`2026-08-17-forecast-combination-why-averaging-beats-selecting.md`); Pesaran–Timmermann 2007 + Pesaran–Pick–Pranovich 2013 (J. Econometrics) (`2026-08-17-averaging-over-estimation-windows.md`); Moskowitz–Ooi–Pedersen 2012 (JFE) + Huang–Li–Wang–Zhou 2020 (JFE, replication challenge) + Hurst–Ooi–Pedersen 2017 (JPM) (`2026-08-17-time-series-momentum-evidence-and-replication.md`); Zakamulin 2015/2017 (`2026-08-17-moving-average-rules-anatomy.md`) |
+| 2026-08-17 (session 4) | The two remaining under-covered *strategy* families — 3 (vol targeting) and 4 (short-term mean reversion) — plus the open question flagged last session on cross-sectional vs time-series signal construction. First session with full text read directly for every source. | Moreira–Muir 2017 (JF) + Cederburg–O'Doherty–Wang–Yan 2020 (JFE, replication challenge) (`2026-08-17-volatility-timing-managed-portfolios.md`); Nagel 2012 (RFS) + Lehmann 1990 (QJE) + Lo–MacKinlay 1990 (RFS) (`2026-08-17-short-term-reversal-as-liquidity-provision.md`); Goyal–Jegadeesh 2018 (RFS) (`2026-08-17-cross-sectional-vs-time-series-construction.md`) |
 
 ### Open questions for future sessions
 
@@ -444,9 +620,14 @@ hypothesis fodder, then anti-candidates.
   genuinely different volatility construction (e.g. sector-neutralized rather than raw trailing),
   which is the specific gap named there. That is the narrowest remaining gap, not the most
   valuable one.
-- Family 3 needs a dedicated risk-parity source; the lab has refuted inverse-vol weighting
-  *between sleeves of unequal diversification* twice, so a useful source must speak to
-  weighting within comparable-diversification sleeves.
+- ~~Family 3 needs a dedicated risk-parity source~~ — **half done** (2026-08-17 session 4). The
+  *vol-targeting* half of family 3 now has a dedicated source pair (Moreira–Muir plus its
+  tier-1 replication challenge), and the verdict is negative for this repo on three independent
+  grounds — leverage cap, non-generality across 103 strategies, real-time failure. The **risk-
+  parity half remains genuinely uncovered**, and its requirement is unchanged: the lab has
+  refuted inverse-vol weighting *between sleeves of unequal diversification* twice, so a useful
+  source must speak to weighting **within comparable-diversification sleeves**. Nothing read so
+  far does. This is now the largest uncovered strategy axis.
 - ~~Nothing yet on portfolio construction as its own literature~~ — **first pass done**
   (2026-08-17 session 2): cost mitigation / banding, rebalance timing luck / tranching, and
   naive-vs-optimised weighting. The axis is now covered at the level of *grading the lab's
@@ -477,18 +658,37 @@ hypothesis fodder, then anti-candidates.
   does not, is unresolved in the sources read and is the one live build in the candidate list
   (#5). It is also the standing journal question — *what supplies decorrelated formation dates
   without being a K sweep* — in its most tractable form yet.
-- **New open question raised by this session, unresolved:** the time-series-momentum literature's
-  canonical construction deliberately **discards signal magnitude** (sign of the trailing return
-  only), while the lab's largest single Sharpe gain came from magnitude weighting. The likely
-  reconciliation is that magnitudes are incomparable *across heterogeneous assets in a
-  time-series setting* but comparable *cross-sectionally within one universe* — but no source
-  read this session states that, and it is currently the lab's inference. Worth a targeted look
-  if a future session covers cross-sectional-vs-time-series signal construction, and worth
-  flagging so nobody "corrects" magnitude weighting by citing MOP.
-- Family 3 (vol targeting / risk parity) remains the largest genuinely uncovered *strategy*
-  axis after family 5, and its requirement is unchanged from last session (a source speaking to
-  weighting *within* comparable-diversification sleeves, since between-sleeve inverse-vol is
-  refuted twice here).
+- ~~**New open question raised by session 3:** the time-series-momentum literature's canonical
+  construction deliberately discards signal magnitude, while the lab's largest single Sharpe
+  gain came from magnitude weighting~~ — **largely resolved** (2026-08-17 session 4), and the
+  resolution is more structural than the guess was. Goyal–Jegadeesh show the two families
+  differ in the *benchmark* the past return is measured against — zero for time-series, the
+  cross-sectional mean for cross-sectional — and that the benchmark choice is worth a market
+  position, not a signal refinement. So MOP's sign-only rule is not a verdict on magnitude at
+  all; it is answering a different question. On heterogeneous multi-asset sets, like-for-like
+  scaled **cross-sectional** strategies significantly outperform scaled time-series ones, which
+  is the direction session 3 guessed. **The residual, still the lab's own inference:** the paper
+  attributes that outperformance to asset-class composition and to better bond selection, *not*
+  to magnitude comparability. So the ranking is now sourced; the stated reason is not. Do not
+  cite Goyal–Jegadeesh as proof of the magnitude-comparability story.
+- **New open question raised by this session:** the volatility-timing literature's precondition
+  — *timing pays only where conditional expected return does not rise with conditional variance*
+  — is a testable property of a book, and Cederburg et al. establish that for most equity
+  strategies it fails. Nothing read here says which side of that line a **concentrated,
+  magnitude-weighted long-only momentum basket** falls on, and the lab's own trials give an
+  ambiguous answer (basket-own-vol trimming lost; a style-orthogonal defensive-cohort trigger
+  won by a small margin). A source characterising the conditional risk-return trade-off of
+  concentrated momentum baskets specifically would sharpen the lab's one surviving overlay from
+  "measured to work by ~0.019 Sharpe" to something with a mechanism. Low priority — the prize is
+  small — but it is the only remaining thread in families 3 and 6 that is not already closed.
+- **Family 5 (low-vol / quality) and the risk-parity half of family 3 are now the only
+  uncovered axes**, and both are narrow: family 5 is flagged closed in `learnings.md` absent a
+  genuinely different volatility construction (e.g. sector-neutralized rather than raw
+  trailing), and risk parity needs a source on weighting *within* comparable-diversification
+  sleeves. Families 1, 2, 4, 6 and 7 are covered, and the honest summary across all of them is
+  that the literature has been far better at **closing** directions than at supplying new ones —
+  which is itself the most useful thing it has done, given that every trial permanently raises
+  the deflated-Sharpe bar.
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -501,7 +701,14 @@ hypothesis fodder, then anti-candidates.
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
 
-  **Citation counts have been backfilled** for all 11 notes as of 2026-08-17 and are no longer
+  **Session 4 (2026-08-17) is the first session in which full text was read directly for every
+  source**, via NBER/author-hosted PDFs, and the three limits above all behaved as documented
+  (SSRN and the Arizona repository returned 403 bot challenges; Semantic Scholar's DOI endpoint
+  and OpenAlex both worked). One session-4 source, Lehmann (1990), resolved only as a scanned
+  image PDF with no extractable text; its claims in that note are attributed to its published
+  abstract and flagged in-note as second-hand rather than silently upgraded.
+
+  **Citation counts have been backfilled** for all notes as of 2026-08-17 and are no longer
   the folder-wide gap they were. Two residual gaps from the restricted era remain and still
   warrant a re-check against full text before anything leans on them: (a) sample periods are
   recorded as unverified where the abstract did not state them (Rapach–Strauss–Zhou's exact span,
