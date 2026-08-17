@@ -356,3 +356,65 @@ across experiments; prune entries that later evidence contradicts.
   **the only real check left is the holdout**, and a challenger that beats 1.107
   by a small margin should be assumed to have beaten it in 2020 until shown
   otherwise.
+
+- **Lookback *length* is a second axis of vintage diversity, roughly independent
+  of formation *date*, and it is the answer to the standing "what supplies
+  decorrelated vintages without being a K sweep" question.** The champion had
+  been collapsing its two lookbacks into one score (`z(12-1) + z(6-1)`) before
+  selecting anything, which discards the fact that the two windows disagree about
+  *which names to hold* and keeps only their agreement about ranking. Giving each
+  window its own buffer chain, held-set and magnitude-weighted target and
+  averaging the resulting *portfolios* at equal weight moved the whole profile:
+  two windows (#41) then four quarterly windows 12-1/9-1/6-1/3-1 (#42) gave
+  validation Sharpe 1.107 -> 1.112 -> 1.120, validation maxDD -29.1% -> -28.5% ->
+  -27.8%, holdout Sharpe 1.22 -> 1.32 -> 1.38, holdout maxDD -23.3% -> -22.1% ->
+  -20.1%, turnover 3.0x -> 3.2x -> 3.1x, positions 34 -> 47 -> 63. Monotone on
+  every axis, with the largest moves on the axes the gate does not score. Two
+  things this settles. (a) The **concentration price is not a law of
+  de-concentration** — every previous step down that dial cost ~0.02 of Sharpe,
+  but breadth arriving from a decorrelated vintage costs nothing, which is the
+  pruning result one axis over. (b) The pre-trial diagnostic gate worked as
+  intended: the two legs rank-correlate 0.66 (0.69 in validation) and their
+  portfolios share only 0.60 of weight (0.47 in validation), well clear of the
+  0.89 that killed the earlier inter-signal ensemble for free. **Equal weights
+  between legs are load-bearing** — "weight the better window more" is the
+  estimated-weight mistake three separate literatures warn against. Do not
+  compare further brackets: the interval is bounded on both ends (skip-month
+  below, post-formation reversal above) and scanning it is the sweep the manual
+  forbids. What remains genuinely open, for a session with its own rationale, is
+  whether the windows should fill that interval *evenly*.
+
+- **The validation split and the holdout can disagree about the sign of a
+  mechanism, and the gate only reads the one that was wrong. Treat a large
+  validation jump inside this family as evidence of overfitting until the holdout
+  agrees.** Trial #43 switched the six-tranche date overlap off while keeping the
+  four-horizon averaging, and produced the biggest validation jump ever recorded
+  here — **1.120 -> 1.187**, DSR 0.9747, a clean PROMOTE — while the holdout
+  **collapsed 1.38 -> 0.88** (ann_ret 34.9% -> 22.6%, maxDD -20.1% -> -27.4%).
+  Costs do not explain it: turnover 2.8x -> 8.0x is worth ~1.5pp/yr at 15 bps
+  against a 12.3pp gap in annual return. So the decomposition is answered, just
+  not on the gate's axis: **date-vintage and length-vintage diversity are
+  complements, not substitutes** — length alone (holdout 0.88) is worse than date
+  alone (holdout 1.22), and the two together (holdout 1.38) beat both. The
+  general rule to carry: within this heavily-explored family the validation
+  window is a *weak* discriminator, and its failure mode is legible — it rewards
+  concentrated, fast-rotating books (35 positions at 7.4x turnover beat 63 at
+  3.1x) in a six-year sample whose P&L is dominated by 2019-2020. **Corollary for
+  session design: once a session has seen a holdout number, every later candidate
+  it designs is holdout-informed. Stop the session rather than spend the
+  remaining budget.** Corollary for reading tonight's other two promotions: their
+  validation margins (0.005, 0.008) were inside the noise both candidates
+  pre-registered; what corroborates them is the monotone holdout, not the gate.
+
+- **Standing protocol concern, raised 2026-08-17, for human attention.** Promotion
+  scores validation Sharpe only, and the holdout is evaluated *after* the decision
+  is made, so the gate structurally cannot see a validation/holdout disagreement —
+  and on trial #43 it installed as champion a strategy materially worse
+  out-of-sample than the one it displaced, by following `program.md` exactly.
+  Nothing frozen was touched and this is not an engine bug; it is the stated
+  objective working as specified on a case where the specification does not serve
+  the mission. Two aggravating factors, both already on record: DSR clustering
+  removed deflation as a brake on within-family laddering, and every promotion
+  spends one more look at the holdout (three tonight). `mom_zscore_overlap6_hzn_avg4`
+  (#42 — validation 1.120, holdout 1.38, maxDD -20.1%, turnover 2.8x) is the
+  candidate a human would most plausibly reinstate.

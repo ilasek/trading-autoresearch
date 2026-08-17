@@ -1426,3 +1426,101 @@ Nothing in `trials.jsonl` was altered.
 - Champion re-deflated at the same bar: 0.9645
 - Lesson: **The validation split and the holdout disagree about the sign of the date overlap, and the gate scores only the one that is wrong. This is the most important result of the session and it is a warning, not a discovery.** Switching the six-tranche date overlap off — keeping the four-horizon portfolio averaging from #42 and changing nothing else — produced the largest single validation jump ever recorded here, **1.120 -> 1.187** (+0.067, more than ten times the margin of either promotion earlier tonight), the best DSR on record at 0.9747, and the gate duly promoted it. On the holdout the same change is a **collapse: 1.38 -> 0.88 Sharpe, ann_ret 34.9% -> 22.6%, maxDD -20.1% -> -27.4%**. The third outcome enumerated in this candidate's docstring — "the date overlap is redundant once enough horizons are averaged" — is what validation says, and it is wrong. **Costs do not explain it.** Turnover rises 2.8x -> 8.0x on holdout, worth at most ~1.5pp/yr of drag at 15 bps/side, against a 12.3pp gap in annual return. The date overlap earns return out-of-sample, which is exactly what `learnings.md` already concluded from the other direction ("cost drag was never the main story there either — temporal breadth was") and what the pruning diagnostic showed. So the decomposition question this trial was spent on *is* answered, just not on the axis the gate reads: **date-vintage and length-vintage diversity are complements, not substitutes.** Length diversity alone (this trial, holdout 0.88) is worse than date diversity alone (#35, holdout 1.22); the two together (#42, holdout 1.38) beat both. What the validation window sees instead is a concentrated, fast-rotating book — 35 positions at 7.4x turnover against #42's 63 at 3.1x — being rewarded in a six-year sample whose P&L is dominated by 2019-2020, precisely the standing caution in `learnings.md`. **Three consequences, and the third is a request for human attention.** (1) Tonight's earlier promotions are re-read, not retracted: their validation margins were noise (0.005, 0.008) while their holdout gains were large and monotone (1.22 -> 1.32 -> 1.38), and this trial supplies the contrast case that makes that pattern legible — within this family, validation Sharpe is a poor discriminator and the holdout is doing the real work. (2) The session stops here rather than spending its remaining four trials: the holdout numbers above are now known, so any further candidate designed tonight would be holdout-informed, and the one protection the repo has left would be gone. Stopping is the only way to keep it. (3) **The protocol has just installed as champion a strategy that is materially worse out-of-sample than the one it displaced, and it did so by following `program.md` exactly** — the objective is validation Sharpe, the holdout is evaluated only after the decision is made, and nothing in the gate can see the disagreement. That is not an engine bug and nothing frozen was touched; it is the stated objective working as specified, on a case where the specification does not serve the mission. Flagged for human review in the session summary below. `mom_zscore_overlap6_hzn_avg4` (#42, validation 1.120, holdout 1.38, maxDD -20.1%, turnover 2.8x) is on record should a human wish to reinstate it.
 
+
+## Session summary — 2026-08-17 (nightly)
+
+- Housekeeping: the session started on a per-run branch (`main-b713x5`) pointing at
+  `origin/main` with no commits of its own, so `git checkout main && git reset --hard
+  origin/main` corrected it with nothing lost; all of tonight's work is on `main`.
+  `git branch -r --no-merged origin/main` clean — no unlanded remote work, so no
+  repeat of the 2026-08-16 split-brain. Engine tests green (16 passed). Data store
+  fresh through 2026-08-17.
+- Experiments run: **3 of the 8-trial budget** (#41 `..._hzn_avg`, #42 `..._hzn_avg4`,
+  #43 `..._hzn_avg4_k1`). Verdicts: **3 PROMOTE, 0 REJECT, 0 GATE_FAIL** — the first
+  session here to promote at all since the protocol change, and the only one ever to
+  promote three times.
+- One trial was killed by diagnostic before it was written (holdings only, no returns
+  scored, prices truncated at 2023-12-31, no trial count touched): the two horizon
+  legs' rank correlation of 0.66 was checked against the 0.89 that killed an earlier
+  inter-signal ensemble. It *passed*, which is what licensed #41 — the same diagnostic
+  would have killed it for free had it come back near 0.89.
+
+### The finding, and it cuts both ways
+
+**Lookback length is a second axis of vintage diversity, roughly independent of
+formation date.** The champion had been collapsing its two lookbacks into a single
+score before selecting anything, which throws away the two windows' disagreement about
+*which names to hold*. Giving each window its own buffer chain, held-set and
+magnitude-weighted target and averaging the resulting *portfolios* at equal weight:
+
+| # | construction | val Sharpe | val maxDD | turnover | positions | holdout Sharpe | holdout maxDD |
+|---|---|---|---|---|---|---|---|
+| 35 | 1 composite score, 6 date tranches | 1.107 | -29.1% | 3.0x | 34 | 1.22 | -23.3% |
+| 41 | 2 horizon portfolios, 6 date tranches | 1.112 | -28.5% | 3.2x | 47 | 1.32 | -22.1% |
+| 42 | 4 horizon portfolios, 6 date tranches | 1.120 | -27.8% | 3.1x | 63 | **1.38** | **-20.1%** |
+| 43 | 4 horizon portfolios, **no** date tranches | **1.187** | -29.0% | 7.4x | 35 | **0.88** | -27.4% |
+
+Rows 35→41→42 are monotone on every axis, and the axes moving *most* are the ones the
+gate does not score. This also retires a supposed law: every previous de-concentration
+step cost ~0.02 of Sharpe, but breadth arriving from a decorrelated vintage costs
+nothing — the pruning result one axis over. It answers the journal's standing open
+question (*what supplies decorrelated formation vintages without being a K sweep*) and
+matches `research/SUMMARY.md` candidate #7, which predicted exactly this from the
+averaging-over-estimation-windows literature (Pesaran–Timmermann). **Idea provenance:
+#41 and #42 came from `research/SUMMARY.md`; #43 was the lab's own decomposition.**
+
+**Row 43 is the warning, and it is the more important half.** Switching the date
+overlap off produced the largest validation jump ever recorded here (+0.067, ten times
+either promotion above it) and the best DSR on record — and the holdout collapsed from
+1.38 to 0.88. Costs do not explain it (turnover 2.8x → 8.0x is worth ~1.5pp/yr at 15
+bps against a 12.3pp gap in annual return). So the decomposition *is* answered, off the
+gate's axis: **date-vintage and length-vintage diversity are complements, not
+substitutes** — length alone (0.88) is worse than date alone (1.22), and the two
+together (1.38) beat both. What validation rewarded instead is a concentrated,
+fast-rotating book (35 positions at 7.4x against 63 at 3.1x) in a six-year sample whose
+P&L is dominated by 2019–2020.
+
+### Why the session stopped at 3 of 8
+
+The holdout numbers above are now known to this session. Any further candidate designed
+tonight would be holdout-informed, and the repo's only remaining real check would be
+gone. Stopping is the only way to keep it. This is a new stopping rule, distinct from
+the "no well-motivated hypothesis left" reason used on 2026-08-07, 08-11, 08-14 and
+08-16 — and it is now recorded in `learnings.md` as a rule for session design.
+
+### ⚠ Protocol concern — for human review, no frozen file touched
+
+**The gate promoted a strategy that is materially worse out-of-sample than the one it
+displaced, by following `program.md` exactly.** Promotion scores validation Sharpe only;
+the holdout is evaluated *after* the decision, so nothing in the gate can see a
+validation/holdout disagreement. Two aggravating factors already on record: DSR
+clustering removed deflation as a brake on within-family laddering (2026-08-16 protocol
+change, its own "honest caveat"), and **every promotion spends one more look at the
+holdout — three tonight alone**, which is the fastest this repo has ever consumed it.
+This is not an engine bug and no threshold, engine file or trial record was edited; it
+is the stated objective working as specified on a case where the specification does not
+serve the mission in `program.md` ("beat the current champion out-of-sample"). Recorded
+here rather than acted on, per CLAUDE.md. `mom_zscore_overlap6_hzn_avg4` (#42 —
+validation 1.120, holdout 1.38, maxDD -20.1%, turnover 2.8x) is the candidate a human
+would most plausibly reinstate; its file is intact in `strategies/candidates/`.
+
+### Ideas for next session
+
+1. **Do not open with a challenger.** The live champion (#43) is the weakest holdout
+   performer of tonight's four rows, and the strongest one (#42) lost to it on the only
+   axis the gate reads. Until a human rules on the protocol concern above, the useful
+   work is diagnostic, not competitive.
+2. Closed tonight: whether length and date vintage diversity substitute for each other
+   (they do not — complements), and whether horizon averaging's gain belongs to the two
+   inherited windows (it does not — it is horizon diversity as such).
+3. Deliberately *not* attempted, and still open with its own rationale required:
+   whether the averaged windows should fill the 3-1..12-1 interval **evenly**. Comparing
+   further brackets is the sweep the manual forbids; a principled non-uniform spacing
+   argument is not. Both #42's docstring and this entry commit to that boundary.
+4. From `research/SUMMARY.md`, still untouched and still free: the closed-form
+   weight-vector triage for any proposed trend/MA signal (candidate #3), and the
+   noisily-estimated-parameter count as a pre-trial screen on any weighting proposal
+   (candidate #1). Both cost no trial.
+5. Standing caution, now with a worked example: within this family a *large* validation
+   jump is evidence of overfitting, not of progress, until the holdout agrees.
+- No engine issues encountered this session.
