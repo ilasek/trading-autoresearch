@@ -1382,3 +1382,5 @@ Nothing in `trials.jsonl` was altered.
      removed deflation as a brake on within-family tuning. The holdout is the only
      real check left.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-17 (learning agent): 4 notes added, see research/SUMMARY.md
