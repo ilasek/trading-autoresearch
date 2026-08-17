@@ -1386,3 +1386,5 @@ Nothing in `trials.jsonl` was altered.
 ## Research session — 2026-08-17 (learning agent): 4 notes added, see research/SUMMARY.md
 
 ## Research session — 2026-08-17 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Research session — 2026-08-17 (learning agent): 4 notes added, see research/SUMMARY.md
