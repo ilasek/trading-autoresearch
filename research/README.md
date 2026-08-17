@@ -27,7 +27,7 @@ Score every source and record the evidence in its note. Aggregate to a tier:
 
 | Signal | What to record |
 |---|---|
-| Citations | Count + source (Semantic Scholar / Google Scholar) + date checked. Prefer high absolute count and healthy citation velocity for the paper's age. |
+| Citations | Count + source + date checked. Prefer high absolute count and healthy citation velocity for the paper's age. Several scholar APIs (Semantic Scholar, OpenAlex, Google Scholar) are often egress-blocked from the cloud sandbox; SciSpace and Crossref are worth trying. **Never estimate a count from memory.** If no source resolves, write `citations: not verified this session` and move on — do *not* downgrade tier on that basis alone; lean on venue and replication status instead, which are verifiable from the paper itself. |
 | Venue | Tier 1: top peer-reviewed journals (JF, JFE, RFS, JFQA, Management Science, JPM). Tier 2: NBER/SSRN/arXiv working papers with substantial citations. Tier 3: credible practitioner research (AQR, Research Affiliates, Man, Robeco, Alpha Architect). Tier 4: blogs/posts — only with fully reproducible methodology. |
 | Replication | Has the effect survived independent replication (e.g. Hou–Xue–Zhang *Replicating Anomalies*, Jensen–Kelly–Pedersen *Is There a Replication Crisis in Finance?*)? Is post-publication decay documented (McLean–Pontiff)? |
 | Sample robustness | Multi-decade sample, multi-market / out-of-sample-country evidence, subperiod stability, robustness to construction choices. |
