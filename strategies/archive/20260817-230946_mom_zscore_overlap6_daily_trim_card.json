@@ -1,0 +1,54 @@
+{
+  "name": "mom_zscore_overlap6_daily_trim",
+  "family": "cross-sectional momentum",
+  "hypothesis": "Holding six overlapping monthly formation tranches (portfolio = average of the six most recent monthly target-weight vectors, 1/6 of capital reformed each month), with signal, buffer, magnitude weighting and daily vol-spike trim otherwise identical to trial #28, raises validation Sharpe above that basket's 1.066 and cuts its 7.3x turnover below 4x, net of 15 bps costs, because the turnover and effective-breadth benefits of overlapping formation dates outweigh the decay of a 12-1 momentum signal held six months.",
+  "promoted_at": "2026-08-16T20:32:35+00:00",
+  "source_candidate": "strategies/candidates/mom_zscore_overlap6_daily_trim.py",
+  "n_trials_at_promotion": 35,
+  "n_effective_trials_at_promotion": 11.0,
+  "dsr_at_promotion": 0.9621,
+  "provisional": false,
+  "train": {
+    "ann_return": 0.1943,
+    "ann_vol": 0.2027,
+    "sharpe": 0.978,
+    "sortino": 1.237,
+    "max_drawdown": -0.5654,
+    "n_days": 14261,
+    "ann_turnover": 1.99,
+    "avg_positions": 22.02,
+    "active_days": 11370,
+    "sharpe_daily": 0.061578
+  },
+  "validation": {
+    "ann_return": 0.2691,
+    "ann_vol": 0.2419,
+    "sharpe": 1.107,
+    "sortino": 1.502,
+    "max_drawdown": -0.2911,
+    "n_days": 1562,
+    "ann_turnover": 3.01,
+    "avg_positions": 34.17,
+    "active_days": 1562,
+    "sharpe_daily": 0.069712
+  },
+  "holdout": {
+    "ann_return": 0.3272,
+    "ann_vol": 0.2586,
+    "sharpe": 1.224,
+    "sortino": 1.646,
+    "max_drawdown": -0.2327,
+    "n_days": 682,
+    "ann_turnover": 3.69,
+    "avg_positions": 32.49,
+    "active_days": 682,
+    "sharpe_daily": 0.077134
+  },
+  "engine_params": {
+    "cost_bps": 10.0,
+    "slippage_bps": 5.0,
+    "max_weight": 0.25,
+    "max_leverage": 1.0,
+    "allow_short": false
+  }
+}
