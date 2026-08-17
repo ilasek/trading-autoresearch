@@ -75,6 +75,68 @@ regime specification reviewed so far. Ranked low — see candidate list._
 ### 7. Combinations / ensembles
 _No findings yet._
 
+### Portfolio construction & rebalance mechanics (cross-family)
+
+Not a `program.md` family, but the axis `learnings.md` says is the lab's only live one and the
+one `SUMMARY.md` flagged as the highest-value gap. Three legs: which trades to skip, when to
+trade, how much to hold.
+
+**The champion's membership buffer is the technique this literature ranks first among all
+cost-mitigation methods, and for the reason the lab observed.** Novy-Marx–Velikov compare
+three ways to cut cost drag — screen to cheap-to-trade names, rebalance less often (or
+staggered-partially), and "banding" (a buy/hold spread: a stricter bar to enter a position
+than to keep one). All three cut costs; the turnover-reducing ones damage gross performance
+less than the liquidity screen, and **banding beats frequency reduction because it delivers
+similar cost savings while preserving better exposure to the signal** — the trades it
+suppresses are the low-information ones oscillating around the cutoff. The champion's
+hold-25/enter-15 (and wider 35/20) band is exactly a buy/hold spread. Two structural
+consequences for this repo: the liquidity-screen lever is already spent (a ~145-name large-cap
+global universe at a flat 15 bps/side *is* the cheap-to-trade screen at its limit), and with
+the learnings entry that turnover reduction is now worth ~0.019 Sharpe in total, **the
+cost-mitigation literature should be treated as closed for idea supply here — explanatory
+value only.** One tension recorded rather than smoothed over: this source models staggered
+rebalancing as buying cost savings *at the price of signal staleness*, whereas the lab
+measured no staleness tax at all (pruning stale tranche names hurt on every axis). They are
+different objects — the paper's staggering is one book traded less often; the lab's overlap is
+several formation vintages held at once — so the paper's ranking is not evidence against the
+overlap. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+
+**There is literature treating overlapping tranches as a portfolio improvement — but the
+improvement it claims is lower outcome dispersion, not higher expected return.** Hoffstein and
+co-authors define *rebalance timing luck* as the standard deviation of returns across
+identically managed portfolios differing only in rebalance date, show it is an
+uncompensated variance (neither date is better ex ante), and show that splitting capital into
+N differently-dated tranches held in equal weight reduces it by a reported factor of 1/N. Its
+drivers are turnover (↑), concentration (↑), holding count (↓) and rebalance frequency (↓
+timing luck as frequency rises). This partly fills the gap flagged last session — that the
+lab's overlap result had no literature behind its economic claim — but only partly: the lab's
+finding that the six-tranche book *earns more* than a single-vintage book remains beyond this
+source too. Its most useful contribution here is a **measurement caution**: every non-tranched
+backtest is one draw from a timing-luck distribution while the tranched book sits near that
+distribution's centre, so small Sharpe gaps between variants differing in rebalance mechanics
+should be read as noise by default. Tier B (practitioner journal, US-only, self-built indices,
+no independent replication found), `validation_overlap` assumed true, `published_post_2018:
+true`. → `notes/2026-08-17-rebalance-timing-luck-tranching.md`
+
+**Magnitude weighting sits outside the estimation-error trap that kills most "smarter"
+weighting schemes — and that boundary is why it works where inverse-vol weighting failed.**
+DeMiguel–Garlappi–Uppal find that across seven datasets and fourteen optimisation models
+(shrinkage, moment restrictions and other error corrections included) none consistently beats
+naive 1/N on Sharpe, certainty-equivalent return or turnover, because an optimiser amplifies
+estimation error in its inputs: their calibration puts the estimation window needed to beat
+1/N at ~3,000 months for 25 assets and ~6,000 for 50. The Kritzman–Page–Turkington rebuttal
+locates the damage specifically in short-rolling-window estimates of *expected returns*, not in
+optimisation as such. Net principle: **a weighting scheme's out-of-sample cost scales with how
+many noisily-estimated parameters it needs.** The champion's z-score magnitude weighting
+estimates none — it is a monotone transform of an observed cross-sectional score — while
+inverse-vol and risk-parity weighting are in the expensive class, so the lab's two empirical
+refutations of those and this literature's mechanism agree. The same source supplies the
+standing caveat: 1/N is a hard benchmark, so beating it by a wide margin deserves scrutiny of
+*how*, and the lab's own records (maxDD widening monotonically with each concentration step,
+one validation year dominating the P&L) mark where to look. Tier A,
+`validation_overlap: false`. → `notes/2026-08-17-naive-vs-optimized-weighting.md`
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -99,6 +161,29 @@ proximity, residual momentum ×2, information discreteness). Portfolio-construct
 rebalance-mechanics edges are *not* part of the population McLean–Pontiff study and do not
 inherit its decay estimate — a real asymmetry in favor of the axis the lab is already working.
 
+**Separate mean-shifting mechanisms from dispersion-shrinking ones before crediting a
+construction change.** The construction literature contains both, and they look identical in a
+single backtest. Tranching across rebalance dates is claimed by its own literature to shrink
+the *spread* of outcomes around an unchanged mean; banding is claimed to raise the *net* mean
+by suppressing low-information trades. The lab's overlap result is a mean claim, which neither
+source establishes — it stands on the repo's own evidence (higher return at less than half the
+turnover, and pruning stale names hurting on three axes at once). The practical rule: ask of
+any construction change whether it is supposed to move the centre or narrow the distribution,
+and remember that a single backtest of a discretely rebalanced strategy is one draw, so gaps
+smaller than the timing-luck scale are not evidence.
+→ `notes/2026-08-17-rebalance-timing-luck-tranching.md`,
+`notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+
+**Grade a weighting scheme by how many noisily-estimated parameters it needs.** This is the one
+principle that unifies the lab's weighting results with the literature: schemes that estimate
+nothing (equal weight; signal-proportional magnitude weight) carry no estimation error, while
+schemes needing a covariance matrix or a return forecast per asset pay for it out-of-sample,
+worse the more assets there are relative to sample length. It predicts, without any repo data,
+both that magnitude weighting should survive and that inverse-vol/risk-parity weighting should
+not — matching what the lab found twice. Any future weighting proposal should be triaged on
+this axis before it costs a trial.
+→ `notes/2026-08-17-naive-vs-optimized-weighting.md`
+
 **Long-short results do not transfer to a long-only book by default.** Nearly all the momentum
 literature's headline objects are winners-minus-losers spreads. This session found one case
 (crash-risk management) where the entire mechanism lives in the short leg and the long-only
@@ -107,23 +192,54 @@ generates this?" as a standing question for every momentum source.
 
 ## Candidate ideas for the strategy agent
 
-Ranked, mechanism-only. Each links its note; tier and overlap flags shown.
+Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
+free — screening rules and interpretation rules that cost no trial — followed by actual
+hypothesis fodder, then anti-candidates.
 
-1. **Confirmation, not a new candidate — the skip-month is load-bearing.** Both echo-literature
+1. **Triage rule before any weighting-scheme trial: count the noisily-estimated parameters.**
+   Schemes estimating nothing (equal weight, signal-proportional magnitude weight) carry no
+   estimation error; schemes needing a covariance matrix or per-asset return forecast pay for
+   it out-of-sample, and worse as the asset count rises relative to sample length (calibrated
+   requirement: thousands of months of data at this universe's breadth). Applying this rule
+   retrospectively reproduces both of the lab's weighting verdicts. Use it to kill
+   risk-weighted proposals before they cost a trial. Tier A, no overlap.
+   → `notes/2026-08-17-naive-vs-optimized-weighting.md`
+2. **Interpretation rule: a single backtest of a discretely rebalanced strategy is one draw
+   from a rebalance-timing-luck distribution.** Timing luck is uncompensated dispersion driven
+   by turnover (↑), concentration (↑) and holding count (↓); a tranched book sits near the
+   distribution's centre, a single-vintage book does not. Consequence: Sharpe gaps between
+   variants that differ in rebalance mechanics, if small, are not evidence. Does not threaten
+   the overlap result (large, and corroborated by the pruning diagnostic), but should discipline
+   how near-ties are read. Tier B, overlap assumed.
+   → `notes/2026-08-17-rebalance-timing-luck-tranching.md`
+3. **Confirmation, not a new candidate — the membership buffer is the literature's
+   top-ranked construction technique.** A buy/hold spread (stricter bar to enter than to hold)
+   beats both slower rebalancing and liquidity screening, because the trades it suppresses are
+   the low-information ones near the cutoff. The champion's hold-25/enter-15 band is exactly
+   this. Recorded so nobody "simplifies" it back to a hard top-N cutoff. Tier A, no overlap.
+   → `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+4. **Standing caveat on the repo's best mechanism, not a candidate.** 1/N is a hard benchmark
+   because deviations from it usually pay for themselves in estimation error, so magnitude
+   weighting's wide margin over equal weight deserves scrutiny of *how* it wins — the lab's own
+   records already flag where to look (maxDD widened monotonically with each concentration
+   step; one validation year dominates the P&L). The square-root-dampening test is real evidence
+   against the pure-variance-artifact reading, but explored one direction only. Tier A, no
+   overlap. → `notes/2026-08-17-naive-vs-optimized-weighting.md`
+5. **Confirmation, not a new candidate — the skip-month is load-bearing.** Both echo-literature
    sources agree the most recent month carries reversal. The champion's 6-1/12-1 composite
    already skips it. Recorded so nobody "simplifies" it to 6-0/12-0. Tier A, no overlap.
    → `notes/2026-08-17-momentum-horizon-echo.md`
-2. **Free diagnostic before any re-scoring trial: rank-correlate the current composite against
+6. **Free diagnostic before any re-scoring trial: rank-correlate the current composite against
    a 12-7 intermediate-horizon score** on this universe. Costs no backtest, scores no returns,
    touches no trial count — in the spirit of the learnings entry on cheap holdings-only
    diagnostics. If correlation is near the 0.89 that killed the earlier inter-signal ensemble,
    the echo idea dies without a trial. Note the prior is already against it (no echo in global
    pooled portfolios). Tier A, no overlap. → `notes/2026-08-17-momentum-horizon-echo.md`
-3. **Tranche-depth reasoning, not a sweep.** If tranche count is ever revisited, the argument
+7. **Tranche-depth reasoning, not a sweep.** If tranche count is ever revisited, the argument
    should run through the post-first-year reversal bound (signal age past ~12 months holds a
    reversing signal), not through a parameter scan — which `learnings.md` correctly forbids.
    Tier A, no overlap. → `notes/2026-08-17-jegadeesh-titman-overlapping-momentum.md`
-4. **[Ranked low, listed for completeness] Market-level panic-state scaling.** Daniel–Moskowitz's
+8. **[Ranked low, listed for completeness] Market-level panic-state scaling.** Daniel–Moskowitz's
    indicator is a *conjunction* (long-horizon negative market return AND elevated market
    volatility) driving a *continuous* scale — mechanistically distinct from the three refuted
    single-variable/binary overlays. It is also style-orthogonal and market-level, the one
@@ -134,18 +250,26 @@ Ranked, mechanism-only. Each links its note; tier and overlap flags shown.
    built on this must honor both cadence lessons (trigger faster than rebalance; release no
    slower than recovery) and should state the expected benefit as small. Tier A, no overlap.
    → `notes/2026-08-17-momentum-crash-risk-management.md`
-5. **Anti-candidate — do not revisit basket-own-vol trimming on this basis.** Barroso–Santa-Clara
+9. **Anti-candidate — do not revisit basket-own-vol trimming on this basis.** Barroso–Santa-Clara
    endorse scaling by the strategy's own realized volatility and might look like grounds to
    reopen a mechanism the lab refuted. It is not: their object is a long-short spread whose
    volatility tracks the short leg's convexity, not a long-only basket whose volatility tracks
    market beta. Recorded explicitly so the tension is resolved rather than rediscovered.
    Tier A, no overlap. → `notes/2026-08-17-momentum-crash-risk-management.md`
+10. **Anti-candidate — the cost-mitigation family is exhausted, by enumeration.** The literature
+    offers three techniques: liquidity screening (this universe already *is* the screen, at its
+    limit), reduced/staggered rebalance frequency (applied), and banding (applied). Combined
+    with the learnings entry putting total cost drag at ~0.019 Sharpe, there is no remaining
+    trial worth spending on cheaper trading. Recorded so a future session does not rediscover
+    no-trade bands or weight-change thresholds as if they were new. Tier A, no overlap.
+    → `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
 
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
 |---|---|---|
 | 2026-08-17 | Cross-sectional momentum: construction mechanics, signal horizon, crash risk; plus cross-cutting publication decay | Jegadeesh–Titman 1993 (`2026-08-17-jegadeesh-titman-overlapping-momentum.md`); Novy-Marx 2012 + Goyal–Wahal 2015 (`2026-08-17-momentum-horizon-echo.md`); Daniel–Moskowitz 2016 + Barroso–Santa-Clara 2015 (`2026-08-17-momentum-crash-risk-management.md`); McLean–Pontiff 2016 (`2026-08-17-mclean-pontiff-publication-decay.md`) |
+| 2026-08-17 (session 2) | Portfolio construction & rebalance mechanics as its own literature — the gap flagged highest-value last session: which trades to skip, when to trade, how much to hold | Novy-Marx–Velikov 2016 (RFS) + 2019 (FAJ) (`2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`); Hoffstein–Sibears–Faber 2019 + Hoffstein–Faber–Braun 2020 (`2026-08-17-rebalance-timing-luck-tranching.md`); DeMiguel–Garlappi–Uppal 2009 + Kritzman–Page–Turkington 2010 (`2026-08-17-naive-vs-optimized-weighting.md`) |
 
 ### Open questions for future sessions
 
@@ -156,11 +280,34 @@ Ranked, mechanism-only. Each links its note; tier and overlap flags shown.
 - Family 3 needs a dedicated risk-parity source; the lab has refuted inverse-vol weighting
   *between sleeves of unequal diversification* twice, so a useful source must speak to
   weighting within comparable-diversification sleeves.
-- Nothing yet on portfolio construction as its own literature (weighting schemes, rebalance
-  timing, tranching outside the momentum context). Given that this is the lab's one live axis
-  and the axis McLean–Pontiff's decay estimate does *not* cover, it is the highest-value gap.
-- **Tooling limitation to fix or work around:** citation counts could only be verified for one
-  of six papers this session — Semantic Scholar, OpenAlex, Google Scholar, NBER, arXiv, SSRN
-  and publisher domains are all blocked by this sandbox's egress policy, leaving web search as
-  the only literature channel. The rubric's citation-count signal is therefore partly
-  unavailable. Counts are recorded as unverified rather than estimated.
+- ~~Nothing yet on portfolio construction as its own literature~~ — **first pass done**
+  (2026-08-17 session 2): cost mitigation / banding, rebalance timing luck / tranching, and
+  naive-vs-optimised weighting. The axis is now covered at the level of *grading the lab's
+  existing mechanisms*, and the honest summary is that the literature largely **confirms and
+  closes** rather than supplies: banding is endorsed, cost mitigation is exhausted by
+  enumeration, expensive weighting schemes are ruled out on estimation-error grounds. What
+  remains genuinely open, and unaddressed by anything read so far, is the **economic mechanism
+  behind the lab's temporal-breadth result** — that holding several formation vintages raises
+  return rather than merely lowering cost or dispersion. Neither the momentum literature
+  (estimator framing) nor the timing-luck literature (dispersion framing) makes that claim. A
+  future session could look for it under different vocabulary: signal-averaging / ensembling
+  over estimation dates, diversification across parameter or formation choices, or the
+  strategy-ensemble literature (family 7, still uncovered). This is also the literature most
+  likely to speak to the journal's own standing open item — *what supplies decorrelated
+  formation dates without being a K sweep*. The timing-luck sources answer only with offsets
+  inside the rebalance cycle, which the champion already uses; any other source of decorrelation
+  (across parameter choices, across signals) would have to come from the ensemble literature.
+- Families 2 (time-series momentum / trend following) and 7 (ensembles) still have **zero**
+  coverage; family 5 remains flagged closed on this universe. Family 7 is now the more valuable
+  of the two, because ensembling-over-formation-dates is the closest literature analogue to the
+  open question above.
+- **Tooling limitation, worse this session:** `WebFetch` was blocked for *every* domain probed
+  — publishers (Oxford Academic, Taylor & Francis), preprint hosts (SSRN, NBER), aggregators
+  (ResearchGate, Semantic Scholar, ConnectedPapers), practitioner sites and even Wikipedia —
+  so web search result summaries were the only literature channel, and no full text was read
+  directly. Consequences to keep in mind when using these notes: citation counts are recorded
+  as unverified for all sources; sample periods are recorded as unverified where the abstract
+  did not state them; and one quantitative detail (whether the tranching 1/N factor applies to
+  the timing-luck standard deviation or its variance) is explicitly flagged as unconfirmed in
+  its note. Nothing was estimated from memory to fill these gaps. A session with working full-
+  text access should re-verify those three items before any of them is leaned on.
