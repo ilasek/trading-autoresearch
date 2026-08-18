@@ -1,0 +1,54 @@
+{
+  "name": "mom_zscore_hzn_avg4_k1",
+  "family": "cross-sectional momentum",
+  "hypothesis": "Averaging four quarterly lookback-length vintages (12-1, 9-1, 6-1, 3-1) as separate buffered magnitude-weighted portfolios while removing the six-tranche date overlap entirely (whole book reformed monthly), with band, weighting and daily vol-spike trim otherwise identical to trial #42, lands validation Sharpe materially above the 1.066 of the same construction with a single composite score and no overlap (trial #28) net of 15 bps costs, because length-vintage and date-vintage diversity are substitutable routes to one mechanism rather than complements; landing at or below 1.066 falsifies that and shows horizon averaging only works on top of the date overlap.",
+  "promoted_at": "2026-08-17T23:14:02+00:00",
+  "source_candidate": "strategies/candidates/mom_zscore_hzn_avg4_k1.py",
+  "n_trials_at_promotion": 43,
+  "n_effective_trials_at_promotion": 11.0,
+  "dsr_at_promotion": 0.9747,
+  "provisional": false,
+  "train": {
+    "ann_return": 0.1805,
+    "ann_vol": 0.1987,
+    "sharpe": 0.935,
+    "sortino": 1.176,
+    "max_drawdown": -0.5406,
+    "n_days": 14261,
+    "ann_turnover": 4.49,
+    "avg_positions": 23.08,
+    "active_days": 11370,
+    "sharpe_daily": 0.05891
+  },
+  "validation": {
+    "ann_return": 0.2875,
+    "ann_vol": 0.2367,
+    "sharpe": 1.187,
+    "sortino": 1.564,
+    "max_drawdown": -0.2899,
+    "n_days": 1562,
+    "ann_turnover": 7.37,
+    "avg_positions": 35.1,
+    "active_days": 1562,
+    "sharpe_daily": 0.074755
+  },
+  "holdout": {
+    "ann_return": 0.226,
+    "ann_vol": 0.2769,
+    "sharpe": 0.875,
+    "sortino": 1.149,
+    "max_drawdown": -0.274,
+    "n_days": 683,
+    "ann_turnover": 7.98,
+    "avg_positions": 33.72,
+    "active_days": 683,
+    "sharpe_daily": 0.055103
+  },
+  "engine_params": {
+    "cost_bps": 10.0,
+    "slippage_bps": 5.0,
+    "max_weight": 0.25,
+    "max_leverage": 1.0,
+    "allow_short": false
+  }
+}
