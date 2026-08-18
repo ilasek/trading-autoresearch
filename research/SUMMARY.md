@@ -142,10 +142,37 @@ only `min(c/σ̂², 1)` — the de-risking half, which the source itself shows e
 `validation_overlap: false`; the replication is `published_post_2018: true`.
 → `notes/2026-08-17-volatility-timing-managed-portfolios.md`
 
-_Still no dedicated source on risk parity **across asset-class ETFs** with the specific
-property the lab needs (weighting within comparable-diversification sleeves). The two-sided
-volatility-timing literature above is the vol-targeting half of the family, not the
-cross-sectional risk-parity half._
+**The risk-parity half is now covered, and the theory hands the lab a free pre-trial screen
+that reproduces both of its inverse-vol refutations — while correcting the lab's diagnosis of
+why they failed.** Maillard–Roncalli–Teiletche derive the equal-risk-contribution (ERC)
+portfolio — weights such that every component contributes the same share of total risk — in
+closed form for the cases that matter. Four results. (a) For **two components, ERC is exactly
+inverse-volatility and does not depend on their correlation at all**; so the lab's
+`mom_etf_volweighted_blend` was not a crude approximation of risk parity, it *was* risk parity,
+and there is no better-specified version of that trade waiting to be built. (b) With more
+components, inverse-vol equals ERC **only under a constant correlation matrix**; in general
+`x_i ∝ 1/β_i`, where `β_i` is the component's beta *to the portfolio*, so the scheme penalises a
+component for high volatility **or** high correlation with the rest of the book. (c)
+Consequently the honest generalisation of the lab's "unequal diversification" learning is a
+statement about portfolio beta: any risk-balancing scheme overweights whatever is least
+correlated with the book, and a diversified sleeve is least correlated almost by definition
+regardless of what it earns — so moving from naive inverse-vol to *correct* ERC would push
+further in the refuted direction, not back. (d) The decisive one: **ERC is the maximum-Sharpe
+portfolio only under constant correlation AND equal Sharpe ratios across components**, with the
+authors stating the converse explicitly. The lab's two sleeves differ by roughly a factor of two
+in Sharpe, so its own theory predicted the loss. Separately, the ordering `σ_mv ≤ σ_erc ≤ σ_1/N`
+means the family's product is a *lower-volatility* book, whose practitioner appeal depends on
+levering it back up — the same one-sided-scalar truncation that gross leverage ≤ 1.0 already
+imposes on the vol-targeting half. Tier A on the theory (closed-form algebra, cannot decay),
+tier B on the paper's three illustrative backtests, which report ERC beating 1/N and are in
+tension with both DeMiguel–Garlappi–Uppal and the lab's own sleeve result — a tension the
+optimality condition in (d) resolves without anyone having to be wrong about the data.
+`validation_overlap: false`.
+→ `notes/2026-08-18-risk-parity-equal-risk-contribution.md`
+
+_With this, **both halves of family 3 are covered and both verdicts are negative** — the
+vol-targeting half on leverage, non-generality and real-time failure; the risk-parity half on a
+provable optimality condition the lab's sleeves do not meet._
 
 ### 4. Short-term mean reversion
 
@@ -172,7 +199,51 @@ lab's two empirical reversal refutations. Tier A, `validation_overlap: false`.
 → `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`
 
 ### 5. Low-vol / quality tilts
-_No findings yet._
+
+**The gap `learnings.md` named is now filled from both sides, and the family should be treated
+as closed rather than merely uncovered.** `learnings.md` left family 5 open pending "a genuinely
+different vol construction (e.g. sector-neutralized, not raw trailing)". The literature's
+dedicated treatment of exactly that construction is Asness–Frazzini–Pedersen (2014, FAJ), who
+build betting-against-beta (BAB) factors **within each industry** and aggregate across them.
+They find the industry-neutral version beats both the ungrouped BAB and a pure
+across-industry BAB, positive in **every one of 49 US industries** and most of 70 global ones,
+with low or negative value loadings — a real rebuttal of "low-risk is repackaged value". But the
+construction is unavailable here for a reason that is the mechanism itself: **BAB's low-beta leg
+is levered up to beta 1**, and the economic story is that the premium exists *because* harvesting
+it requires the leverage most investors lack. An unlevered long-only low-beta basket is not a
+weakened BAB — it is the asset BAB says the constrained investor already owns and which is
+therefore cheap and low-returning. Worse for the specific gap: the paper's own explanation for
+the industry-neutral variant being the *best* one is that it requires **more** notional per unit
+of risk. Gross leverage ≤ 1.0 removes exactly what the recommended construction depends on.
+Tier A, `validation_overlap: false`.
+→ `notes/2026-08-18-low-risk-investing-industry-neutral.md`
+
+**The skeptical literature then puts the premium in the part of the market this repo does not
+trade, which is why the lab's two low-vol refutations were predictable in advance.** Two
+Novy-Marx papers, one of them a tier-1 published replication challenge, attack from different
+directions and converge. *Understanding Defensive Equity* shows volatility is strongly
+negatively predicted by **operating profitability** (more strongly than by size), so a
+volatility sort is an unintended profitability/size/valuation sort; defensive strategies
+underweight unprofitable small growth, which is precisely the corner standard models misprice.
+The conditional result is the one that decides it here: **defensive performance is concentrated
+in small growth, and in large value the sign reverses — aggressive stocks significantly
+outperform defensive ones.** *Betting Against Betting Against Beta* (Novy-Marx–Velikov, JFE)
+reproduces BAB and then varies one construction choice at a time, finding three non-standard
+procedures do the work: rank weighting is a back door to **equal weighting**, hedging-by-levering
+is a back door to hedging with the **equal-weighted** market, and the FP beta is not a regression
+slope but the identity `β_FP = [(σ_i,1y/σ_i,5y)/(σ_mkt,1y/σ_mkt,5y)] · β_i,5y` — a beta multiplied
+by a short-to-long volatility ratio, whose time-series bias is argued to generate the paper's own
+"beta compression" evidence. The size consequence: **for each dollar invested, BAB commits about
+$1.05 to stocks in the bottom 1% of market capitalisation**, costs run around 60 bps/month, and
+net of costs no significant five-factor alpha survives — what remains is compensation for
+profitability and investment exposures. Both substitute causes are unavailable here: the repo
+holds ~145 large, liquid global names, and has no fundamentals. A direct contradiction is
+recorded rather than smoothed: AFP report the effect present in large caps, Novy-Marx reports it
+reversing in large value. The disagreement is about the only end of the market this repo trades,
+and even AFP's own size split shows large-cap alphas weaker in every column. Tier A;
+`validation_overlap: false` for both (samples 1968–2015 and 1968–2017); `published_post_2018: true`
+for the JFE replication.
+→ `notes/2026-08-18-defensive-equity-replication-and-construction.md`
 
 ### 6. Regime switching
 _Partially covered, now by two specifications. Daniel–Moskowitz's panic-state indicator (a
@@ -372,6 +443,36 @@ and it is a reason to prefer mechanisms whose parameters are set by construction
 mechanisms whose parameters are fitted.
 → `notes/2026-08-17-volatility-timing-managed-portfolios.md`
 
+**A published factor's construction conventions are part of its result, and the lab's hardest-won
+lesson has an independent tier-1 instance.** The lab spent four trials discovering that its
+champion's "basket-own vol-spike trim" was silently reading an eleven-name legacy cohort, and
+distilled it as *before crediting a component, check what its code actually reads*.
+Novy-Marx–Velikov show the same failure at the scale of a famous factor: BAB's rank weighting is
+a back door to equal weighting, its hedging-by-levering is a back door to hedging with the
+equal-weighted market, and its beta estimator is algebraically a five-year regression beta times
+a short-to-long volatility ratio rather than a beta. None of the three is signalled by the
+component's name. The generalised screen is one line of algebra, not a backtest: **write down
+what a construction actually computes in primitive terms, and compare it to what the source says
+it computes.** Two live uses here — the FP-beta identity is a reminder that a
+short-over-long realized-vol ratio is *its own signal* rather than a proxy for a level (the
+champion's 21d/252d trim is the same shape), and any imported factor should be re-derived this
+way before its citation weight is treated as transferring.
+→ `notes/2026-08-18-defensive-equity-replication-and-construction.md`
+
+**Group-neutralise a signal only when the signal is mechanically confounded with the grouping.**
+The literature contains an apparent contradiction with the lab: Asness–Frazzini–Pedersen find
+industry-neutral BAB *beats* ungrouped BAB, while the lab's sector-neutralized momentum z-score
+lost badly (Sharpe 1.03 → 0.87, with turnover up). They are not in conflict, because the two
+neutralisations remove different things. Beta is *mechanically* linked to industry membership —
+utilities are low-beta as a category — so the industry tilt is a confound the raw sort picks up
+for free, and removing it isolates the intended bet. A momentum z-score has no such mechanical
+sector link, and the lab's own records show top-momentum names already span sectors; there the
+group constraint removes information rather than confounding. The rule costs no trial: **before
+neutralising, name the mechanism by which the signal would load on the group even if the effect
+were absent.** If there isn't one, neutralisation is a diversification reflex, and the lab has
+already priced it.
+→ `notes/2026-08-18-low-risk-investing-industry-neutral.md`
+
 **Ask what a signal's benchmark is — zero, or the cross-sectional mean — because the answer is
 worth a market position.** A rule that compares an asset's past return to zero (time-series)
 carries a time-varying net long in risky assets; a rule that compares it to the cross-sectional
@@ -428,6 +529,18 @@ hypothesis fodder, then anti-candidates.
    retrospectively reproduces both of the lab's weighting verdicts. Use it to kill
    risk-weighted proposals before they cost a trial. Tier A, no overlap.
    → `notes/2026-08-17-naive-vs-optimized-weighting.md`
+   **Second half of the same screen, added 2026-08-18 and sharper because it is a theorem
+   rather than a calibration: risk-balancing schemes are optimal only under constant
+   correlation AND equal component Sharpe ratios.** Equal-risk-contribution weighting equals
+   the maximum-Sharpe portfolio under exactly those two conditions and not otherwise. So any
+   proposal to weight sleeves or legs by risk can be checked before it is built by asking
+   whether its components have comparable Sharpe ratios — the lab's do not (≈1.1 momentum
+   basket versus ≈0.5 ETF sleeve), which is why both inverse-vol trials lost. Two corollaries
+   worth carrying: for **two** components ERC *is* inverse-vol regardless of correlation, so
+   the lab's blend was correct risk parity and no better-specified version exists to try; and
+   the general solution `x_i ∝ 1/β_i` (beta to the portfolio) means a *more* correct
+   implementation would tilt further toward the diversified low-return leg, not back.
+   → `notes/2026-08-18-risk-parity-equal-risk-contribution.md`
 2. **Design test before any ensemble trial: are the components estimates of the same quantity,
    or different return streams?** Forecast-combination theory endorses only the first — several
    noisy estimates of one target, equal-weighted — where the variance reduction is free. Mixing
@@ -462,7 +575,27 @@ hypothesis fodder, then anti-candidates.
    nothing. Tier A, no overlap.
    → `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`,
    `notes/2026-08-17-volatility-timing-managed-portfolios.md`
-5. **Interpretation rule before comparing anything here to a published time-series result:
+   **(c) Added 2026-08-18 — *what does the construction actually compute?*** Re-derive an
+   imported factor's construction in primitive terms before granting it its citation weight.
+   Novy-Marx–Velikov's worked example is one line of algebra showing the famous BAB beta is
+   `[(σ_i,1y/σ_i,5y)/(σ_mkt,1y/σ_mkt,5y)] · β_i,5y` — a regression beta multiplied by a
+   short-to-long volatility ratio — and that the factor's rank weighting and
+   hedging-by-levering are undisclosed back doors to equal weighting. This is the lab's own
+   "check what its code actually reads" lesson (which cost four trials) arriving independently
+   at tier 1, and it applies to imported sources as well as to local code.
+   → `notes/2026-08-18-defensive-equity-replication-and-construction.md`
+5. **Design test before any group-neutralisation trial: name the mechanism by which the signal
+   would load on the group even if the effect were absent.** The literature and the lab appear
+   to disagree — Asness–Frazzini–Pedersen find industry-neutral BAB beats ungrouped BAB in
+   every one of 49 US industries, while the lab's sector-neutralized momentum z-score lost 0.16
+   of Sharpe and raised turnover. They are not in conflict: beta is *mechanically* tied to
+   industry membership (utilities are low-beta as a category), so neutralising removes a genuine
+   confound; a momentum z-score has no such mechanical tie, and the lab's own evidence says
+   top-momentum names already span sectors, so the constraint only discards information. The
+   screen costs no trial and rules out group-neutralisation, sector caps and similar
+   "diversification reflex" proposals unless a confounding mechanism can be named first.
+   Tier A, no overlap. → `notes/2026-08-18-low-risk-investing-industry-neutral.md`
+6. **Interpretation rule before comparing anything here to a published time-series result:
    decompose the net-long drift out first.** A time-series rule benchmarks past returns against
    *zero* and therefore carries a time-varying net long position; a cross-sectional rule
    benchmarks against the *cross-sectional mean* and does not. `TS ≈ CS + NetLong × index`, and
@@ -474,7 +607,7 @@ hypothesis fodder, then anti-candidates.
    magnitude weighting — MOP's sign-only rule answers a different question against a different
    benchmark, so it is not grounds to "correct" the champion. Tier A, no overlap.
    → `notes/2026-08-17-cross-sectional-vs-time-series-construction.md`
-6. **Interpretation rule: a single backtest of a discretely rebalanced strategy is one draw
+7. **Interpretation rule: a single backtest of a discretely rebalanced strategy is one draw
    from a rebalance-timing-luck distribution.** Timing luck is uncompensated dispersion driven
    by turnover (↑), concentration (↑) and holding count (↓); a tranched book sits near the
    distribution's centre, a single-vintage book does not. Consequence: Sharpe gaps between
@@ -482,7 +615,7 @@ hypothesis fodder, then anti-candidates.
    the overlap result (large, and corroborated by the pruning diagnostic), but should discipline
    how near-ties are read. Tier B, overlap assumed.
    → `notes/2026-08-17-rebalance-timing-luck-tranching.md`
-7. **[Still the only genuinely new build on this list — added session 3, untested] Average over formation vintages that differ in
+8. **[Still the only genuinely new build on this list — added session 3, untested] Average over formation vintages that differ in
    lookback *length*, not only in end-date.** The champion's six tranches differ in *when* the
    signal was formed, at constant lookback; the AveW method the literature actually describes
    averages a model estimated over *different window lengths*, which brackets the unknown
@@ -494,30 +627,30 @@ hypothesis fodder, then anti-candidates.
    are load-bearing — any "weight recent or better vintages more" refinement is the
    estimated-weight mistake this whole literature warns against. Tier A, no overlap.
    → `notes/2026-08-17-averaging-over-estimation-windows.md`
-8. **Confirmation, not a new candidate — the membership buffer is the literature's
+9. **Confirmation, not a new candidate — the membership buffer is the literature's
    top-ranked construction technique.** A buy/hold spread (stricter bar to enter than to hold)
    beats both slower rebalancing and liquidity screening, because the trades it suppresses are
    the low-information ones near the cutoff. The champion's hold-25/enter-15 band is exactly
    this. Recorded so nobody "simplifies" it back to a hard top-N cutoff. Tier A, no overlap.
    → `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
-9. **Standing caveat on the repo's best mechanism, not a candidate.** 1/N is a hard benchmark
-   because deviations from it usually pay for themselves in estimation error, so magnitude
-   weighting's wide margin over equal weight deserves scrutiny of *how* it wins — the lab's own
-   records already flag where to look (maxDD widened monotonically with each concentration
-   step; one validation year dominates the P&L). The square-root-dampening test is real evidence
-   against the pure-variance-artifact reading, but explored one direction only. Tier A, no
-   overlap. → `notes/2026-08-17-naive-vs-optimized-weighting.md`
-10. **Confirmation, not a new candidate — the skip-month is load-bearing.** Both echo-literature
+10. **Standing caveat on the repo's best mechanism, not a candidate.** 1/N is a hard benchmark
+    because deviations from it usually pay for themselves in estimation error, so magnitude
+    weighting's wide margin over equal weight deserves scrutiny of *how* it wins — the lab's own
+    records already flag where to look (maxDD widened monotonically with each concentration
+    step; one validation year dominates the P&L). The square-root-dampening test is real evidence
+    against the pure-variance-artifact reading, but explored one direction only. Tier A, no
+    overlap. → `notes/2026-08-17-naive-vs-optimized-weighting.md`
+11. **Confirmation, not a new candidate — the skip-month is load-bearing.** Both echo-literature
     sources agree the most recent month carries reversal. The champion's 6-1/12-1 composite
     already skips it. Recorded so nobody "simplifies" it to 6-0/12-0. Tier A, no overlap.
     → `notes/2026-08-17-momentum-horizon-echo.md`
-11. **Free diagnostic before any re-scoring trial: rank-correlate the current composite against
+12. **Free diagnostic before any re-scoring trial: rank-correlate the current composite against
     a 12-7 intermediate-horizon score** on this universe. Costs no backtest, scores no returns,
     touches no trial count — in the spirit of the learnings entry on cheap holdings-only
     diagnostics. If correlation is near the 0.89 that killed the earlier inter-signal ensemble,
     the echo idea dies without a trial. Note the prior is already against it (no echo in global
     pooled portfolios). Tier A, no overlap. → `notes/2026-08-17-momentum-horizon-echo.md`
-12. **Tranche-depth reasoning, not a sweep.** If tranche count is ever revisited, the argument
+13. **Tranche-depth reasoning, not a sweep.** If tranche count is ever revisited, the argument
     should run through two bounds and no parameter scan (which `learnings.md` correctly forbids):
     above, the post-first-year reversal bound (signal age past ~12 months holds a *reversing*
     signal — a bias term that grows without limit, unlike ordinary staleness); below, the
@@ -526,7 +659,7 @@ hypothesis fodder, then anti-candidates.
     room; twelve sits at the upper edge. Tier A, no overlap.
     → `notes/2026-08-17-jegadeesh-titman-overlapping-momentum.md`,
     `notes/2026-08-17-averaging-over-estimation-windows.md`
-13. **[Ranked low, listed for completeness] Market-level panic-state scaling.** Daniel–Moskowitz's
+14. **[Ranked low, listed for completeness] Market-level panic-state scaling.** Daniel–Moskowitz's
     indicator is a *conjunction* (long-horizon negative market return AND elevated market
     volatility) driving a *continuous* scale — mechanistically distinct from the three refuted
     single-variable/binary overlays. It is also style-orthogonal and market-level, the one
@@ -537,7 +670,7 @@ hypothesis fodder, then anti-candidates.
     built on this must honor both cadence lessons (trigger faster than rebalance; release no
     slower than recovery) and should state the expected benefit as small. Tier A, no overlap.
     → `notes/2026-08-17-momentum-crash-risk-management.md`
-14. **Anti-candidate — long-only trend-following overlays should carry a *lower* prior after
+15. **Anti-candidate — long-only trend-following overlays should carry a *lower* prior after
     reading family 2's literature, not a higher one.** The temptation is to read
     Moskowitz–Ooi–Pedersen and the century-of-evidence extension as proof the lab's three
     refuted trend overlays were botched implementations. They were not: the lab built the only
@@ -560,20 +693,20 @@ hypothesis fodder, then anti-candidates.
     Tier A evidence base, effect contested, no overlap.
     → `notes/2026-08-17-time-series-momentum-evidence-and-replication.md`,
     `notes/2026-08-17-cross-sectional-vs-time-series-construction.md`
-15. **Anti-candidate — do not revisit basket-own-vol trimming on this basis.** Barroso–Santa-Clara
+16. **Anti-candidate — do not revisit basket-own-vol trimming on this basis.** Barroso–Santa-Clara
     endorse scaling by the strategy's own realized volatility and might look like grounds to
     reopen a mechanism the lab refuted. It is not: their object is a long-short spread whose
     volatility tracks the short leg's convexity, not a long-only basket whose volatility tracks
     market beta. Recorded explicitly so the tension is resolved rather than rediscovered.
     Tier A, no overlap. → `notes/2026-08-17-momentum-crash-risk-management.md`
-16. **Anti-candidate — the cost-mitigation family is exhausted, by enumeration.** The literature
+17. **Anti-candidate — the cost-mitigation family is exhausted, by enumeration.** The literature
     offers three techniques: liquidity screening (this universe already *is* the screen, at its
     limit), reduced/staggered rebalance frequency (applied), and banding (applied). Combined
     with the learnings entry putting total cost drag at ~0.019 Sharpe, there is no remaining
     trial worth spending on cheaper trading. Recorded so a future session does not rediscover
     no-trade bands or weight-change thresholds as if they were new. Tier A, no overlap.
     → `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
-17. **Anti-candidate — short-term mean reversion (family 4) is closed here, on mechanism
+18. **Anti-candidate — short-term mean reversion (family 4) is closed here, on mechanism
     rather than on turnover.** The premium is compensation for **providing** liquidity: an
     uninformed order pushes price away, the market-making sector is paid to absorb the
     inventory, and price reverts. A book paying 15 bps/side is demanding liquidity, i.e.
@@ -588,7 +721,7 @@ hypothesis fodder, then anti-candidates.
     refutations; recorded so the family is not reopened as a turnover-tuning problem.
     Tier A, no overlap.
     → `notes/2026-08-17-short-term-reversal-as-liquidity-provision.md`
-18. **Anti-candidate — volatility-managed / vol-targeting overlays (family 3) do not become a
+19. **Anti-candidate — volatility-managed / vol-targeting overlays (family 3) do not become a
     candidate just because the family now has a dedicated source.** Three reasons, in order.
     (a) The rule's implied position runs to roughly 4.5–8.6× the base book at the 99th
     percentile with a median near 1×, so gross leverage ≤ 1.0 leaves only the de-risking half —
@@ -602,6 +735,44 @@ hypothesis fodder, then anti-candidates.
     expected return does not rise with conditional variance**, and the 103-strategy split is
     evidence that for most equity strategies it does. Tier A, `published_post_2018: true` on
     the replication. → `notes/2026-08-17-volatility-timing-managed-portfolios.md`
+20. **Anti-candidate — low-vol / quality (family 5) is closed on mechanism, and the
+    sector-neutral escape hatch `learnings.md` left open does not rescue it.** The hatch was
+    "a genuinely different vol construction (e.g. sector-neutralized, not raw trailing)". The
+    literature's version of that construction is industry-neutral BAB, and it fails here for
+    the mechanism's own reason: **BAB's low-beta leg is levered to beta 1**, and the premium is
+    said to exist *because* harvesting it requires leverage most investors lack — so an
+    unlevered long-only low-beta basket is not a weakened BAB, it is the asset BAB says is
+    cheap to hold and therefore low-returning. The industry-neutral variant is the worst fit of
+    all: the paper's own explanation for its superiority is that it needs **more** notional per
+    unit of risk. Independently, the skeptical literature puts the premium where this repo
+    cannot trade — concentrated in small growth with the sign **reversing in large value**, and
+    with BAB committing ~$1.05 per invested dollar to the bottom 1% of market capitalisation at
+    ~60 bps/month of cost — and puts the surviving post-cost return down to **profitability and
+    investment** exposures, which need fundamentals this repo does not have. Both halves of the
+    named gap are now filled and both point the same way; treat the family as closed rather
+    than uncovered. The live disagreement (AFP find the effect in large caps; Novy-Marx finds it
+    reversing in large value) is recorded rather than resolved — but it is a disagreement about
+    the only end of the market this repo trades, and AFP's own size split has large-cap alphas
+    weaker in every column. Tier A; `published_post_2018: true` on the JFE replication.
+    → `notes/2026-08-18-low-risk-investing-industry-neutral.md`,
+    `notes/2026-08-18-defensive-equity-replication-and-construction.md`
+21. **Anti-candidate — risk parity / equal-risk-contribution weighting (family 3's second
+    half) is closed by a theorem, not only by the lab's two trials.** ERC equals the
+    maximum-Sharpe portfolio **only under constant correlation and equal component Sharpe
+    ratios**; the lab's sleeves differ by roughly 2× in Sharpe, so the loss was predictable
+    before either trial ran. Three further facts close the escape routes. (a) For two
+    components ERC *is* inverse-vol, independent of correlation — so
+    `mom_etf_volweighted_blend` was correct risk parity, and no better-specified version of
+    that trade exists to try. (b) The general solution is `x_i ∝ 1/β_i` (beta to the
+    portfolio), so a *more* correct implementation tilts further toward the diversified
+    low-return leg — the refuted direction. (c) `σ_mv ≤ σ_erc ≤ σ_1/N` means the family's
+    output is a lower-volatility book whose appeal depends on levering it back up, which
+    gross leverage ≤ 1.0 forbids — the same one-sided truncation as the vol-targeting half.
+    What survives is a **free diagnostic, not an objective**: the risk-contribution vector
+    `x_i · ∂_{x_i}σ(x)` is a holdings-only statistic that scores no returns and costs no
+    trial, and it answers the standing question the existing top-weight/HHI statistics only
+    proxy — how much of the champion's variance the top name actually explains. Tier A on the
+    theory, no overlap. → `notes/2026-08-18-risk-parity-equal-risk-contribution.md`
 
 ## Coverage log
 
@@ -611,23 +782,41 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-17 (session 2) | Portfolio construction & rebalance mechanics as its own literature — the gap flagged highest-value last session: which trades to skip, when to trade, how much to hold | Novy-Marx–Velikov 2016 (RFS) + 2019 (FAJ) (`2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`); Hoffstein–Sibears–Faber 2019 + Hoffstein–Faber–Braun 2020 (`2026-08-17-rebalance-timing-luck-tranching.md`); DeMiguel–Garlappi–Uppal 2009 + Kritzman–Page–Turkington 2010 (`2026-08-17-naive-vs-optimized-weighting.md`) |
 | 2026-08-17 (session 3) | The two zero-coverage families: 7 (ensembles) — chased specifically to find the missing economic mechanism for the lab's temporal-breadth result — and 2 (time-series momentum / trend following), including its replication status | Timmermann 2006 (Handbook ch. 4) + Smith–Wallis 2009 (OBES) + Rapach–Strauss–Zhou 2010 (RFS) (`2026-08-17-forecast-combination-why-averaging-beats-selecting.md`); Pesaran–Timmermann 2007 + Pesaran–Pick–Pranovich 2013 (J. Econometrics) (`2026-08-17-averaging-over-estimation-windows.md`); Moskowitz–Ooi–Pedersen 2012 (JFE) + Huang–Li–Wang–Zhou 2020 (JFE, replication challenge) + Hurst–Ooi–Pedersen 2017 (JPM) (`2026-08-17-time-series-momentum-evidence-and-replication.md`); Zakamulin 2015/2017 (`2026-08-17-moving-average-rules-anatomy.md`) |
 | 2026-08-17 (session 4) | The two remaining under-covered *strategy* families — 3 (vol targeting) and 4 (short-term mean reversion) — plus the open question flagged last session on cross-sectional vs time-series signal construction. First session with full text read directly for every source. | Moreira–Muir 2017 (JF) + Cederburg–O'Doherty–Wang–Yan 2020 (JFE, replication challenge) (`2026-08-17-volatility-timing-managed-portfolios.md`); Nagel 2012 (RFS) + Lehmann 1990 (QJE) + Lo–MacKinlay 1990 (RFS) (`2026-08-17-short-term-reversal-as-liquidity-provision.md`); Goyal–Jegadeesh 2018 (RFS) (`2026-08-17-cross-sectional-vs-time-series-construction.md`) |
+| 2026-08-18 (session 5) | The last two uncovered axes named as open by session 4: family 5 (low-vol / quality), chased specifically at the *sector-neutralized* construction `learnings.md` named as the only thing that would reopen it, and the **risk-parity half** of family 3 (weighting within comparable-diversification sleeves). Full text read directly for every source. Both axes close negative; no family in `program.md` is now uncovered. | Asness–Frazzini–Pedersen 2014 (FAJ) (`2026-08-18-low-risk-investing-industry-neutral.md`); Novy-Marx 2016 (NBER WP 20591) + Novy-Marx–Velikov 2022 (JFE, replication challenge) (`2026-08-18-defensive-equity-replication-and-construction.md`); Maillard–Roncalli–Teiletche 2010 (JPM) (`2026-08-18-risk-parity-equal-risk-contribution.md`) |
 
 ### Open questions for future sessions
 
-- ~~Families 2, 5 and 7 have no coverage~~ — **2 and 7 covered** (2026-08-17 session 3).
-  **Family 5 (low-vol / quality) is now the only family with zero coverage**, and it is flagged
-  closed in `learnings.md` on this universe — a source is worth adding only if it offers a
-  genuinely different volatility construction (e.g. sector-neutralized rather than raw trailing),
-  which is the specific gap named there. That is the narrowest remaining gap, not the most
-  valuable one.
-- ~~Family 3 needs a dedicated risk-parity source~~ — **half done** (2026-08-17 session 4). The
-  *vol-targeting* half of family 3 now has a dedicated source pair (Moreira–Muir plus its
-  tier-1 replication challenge), and the verdict is negative for this repo on three independent
-  grounds — leverage cap, non-generality across 103 strategies, real-time failure. The **risk-
-  parity half remains genuinely uncovered**, and its requirement is unchanged: the lab has
-  refuted inverse-vol weighting *between sleeves of unequal diversification* twice, so a useful
-  source must speak to weighting **within comparable-diversification sleeves**. Nothing read so
-  far does. This is now the largest uncovered strategy axis.
+- ~~Families 2, 5 and 7 have no coverage~~ — **all covered; family 5 done 2026-08-18 (session
+  5), and the answer closes it.** The gap named in `learnings.md` was a genuinely different
+  volatility construction, "sector-neutralized rather than raw trailing". That construction
+  exists in the literature (industry-neutral BAB) and is reported to beat the ungrouped version
+  in every US industry — but it is unavailable here because BAB's low-beta leg is *levered to
+  beta 1*, and the industry-neutral variant is explicitly the most leverage-hungry of the set.
+  The skeptical literature independently puts the premium in small growth (reversing in large
+  value), in the bottom 1% of market capitalisation, and — post-cost — in profitability and
+  investment exposures requiring fundamentals. Family 5 is now closed on mechanism, not merely
+  on the lab's two empirical refutations.
+- ~~Family 3 needs a dedicated risk-parity source~~ — **fully done 2026-08-18 (session 5).** The
+  *vol-targeting* half was covered in session 4 (negative on leverage cap, non-generality across
+  103 strategies, real-time failure). The **risk-parity half is now covered too**, and the
+  requirement stated here — a source speaking to weighting *within comparable-diversification
+  sleeves* — turned out to be the wrong question, which is the session's most useful correction.
+  Maillard–Roncalli–Teiletche show that for **two** components ERC *is* inverse-volatility
+  independent of correlation, so the lab's blend was correct risk parity with no better-specified
+  version to try; that in general `x_i ∝ 1/β_i`, so a *more* correct implementation tilts further
+  toward the diversified low-return leg; and that ERC is maximum-Sharpe **only under constant
+  correlation and equal component Sharpe ratios**. The binding condition is therefore
+  **comparable Sharpe ratios, not comparable diversification**, and it is checkable before any
+  trial. Both halves of family 3 are negative, for independent reasons.
+- **No `program.md` family is now uncovered** (as of 2026-08-18). Families 1–7 all have at
+  least one dedicated source, and the honest tally across all five sessions is that the
+  literature has **closed six directions and opened one** (candidate #8, lookback-length
+  vintage averaging). That asymmetry is the folder's main product, and it is worth more than it
+  looks given that every trial permanently raises the deflated-Sharpe bar. The implication for
+  future sessions is a change of target: **the marginal value of another strategy-family survey
+  is now low**, and the higher-value directions are (a) the cross-cutting methodological
+  literature that grades the lab's *own* mechanisms, which has been the most productive vein so
+  far, and (b) the specific open threads listed below rather than any family label.
 - ~~Nothing yet on portfolio construction as its own literature~~ — **first pass done**
   (2026-08-17 session 2): cost mitigation / banding, rebalance timing luck / tranching, and
   naive-vs-optimised weighting. The axis is now covered at the level of *grading the lab's
@@ -656,7 +845,7 @@ hypothesis fodder, then anti-candidates.
   while the champion averages over *window end-dates* at constant length. Whether those are
   equivalent in effect, or whether length-diversity supplies decorrelation that date-diversity
   does not, is unresolved in the sources read and is the one live build in the candidate list
-  (#5). It is also the standing journal question — *what supplies decorrelated formation dates
+  (#8). It is also the standing journal question — *what supplies decorrelated formation dates
   without being a K sweep* — in its most tractable form yet.
 - ~~**New open question raised by session 3:** the time-series-momentum literature's canonical
   construction deliberately discards signal magnitude, while the lab's largest single Sharpe
@@ -681,14 +870,27 @@ hypothesis fodder, then anti-candidates.
   concentrated momentum baskets specifically would sharpen the lab's one surviving overlay from
   "measured to work by ~0.019 Sharpe" to something with a mechanism. Low priority — the prize is
   small — but it is the only remaining thread in families 3 and 6 that is not already closed.
-- **Family 5 (low-vol / quality) and the risk-parity half of family 3 are now the only
-  uncovered axes**, and both are narrow: family 5 is flagged closed in `learnings.md` absent a
-  genuinely different volatility construction (e.g. sector-neutralized rather than raw
-  trailing), and risk parity needs a source on weighting *within* comparable-diversification
-  sleeves. Families 1, 2, 4, 6 and 7 are covered, and the honest summary across all of them is
-  that the literature has been far better at **closing** directions than at supplying new ones —
-  which is itself the most useful thing it has done, given that every trial permanently raises
-  the deflated-Sharpe bar.
+- ~~**Family 5 (low-vol / quality) and the risk-parity half of family 3 are now the only
+  uncovered axes**~~ — **both covered and both closed** (2026-08-18 session 5); see the two
+  struck items at the top of this list. The honest summary across all seven families is
+  unchanged and now final: the literature has been far better at **closing** directions than at
+  supplying new ones — which is itself the most useful thing it has done, given that every trial
+  permanently raises the deflated-Sharpe bar.
+- **New open question raised by session 5, and it is the one worth chasing next.** Every
+  candidate in this list above rank 8 is a *screen* — a rule for declining to spend a trial —
+  and the folder now has eleven of them against one live build. That ratio is a signal about
+  where to look, not a complaint: the productive vein has consistently been methodological
+  literature that grades the lab's own mechanisms (estimation error, forecast combination,
+  structural breaks, construction artifacts), not strategy-family surveys. The specific
+  unexploited seam is **the lab's one unexplained mechanism**: temporal breadth now has an
+  accuracy-level account (averaging over estimation windows), but the *portfolio* question —
+  why holding several formation vintages raises return rather than only lowering turnover or
+  dispersion — still rests on the repo's own evidence. Nothing read in five sessions makes that
+  claim. Adjacent literatures not yet touched that might: the bagging / bootstrap-aggregation
+  literature on why averaging unstable predictors improves them (Breiman and successors), and
+  the model-averaging literature in economic forecasting outside the break-detection framing.
+  If either supplies a mean-shifting rather than variance-shrinking argument, it would give the
+  repo's strongest mechanism its first outside justification.
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -700,6 +902,16 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 5 (2026-08-18) also read full text for every source**, and added one practical
+  finding now written into `research/README.md`: `WebFetch` cannot parse PDFs (it returns the
+  binary and says so), and `Read`'s PDF path needs `pdftoppm`, which is absent. The working
+  recipe — `pip install --target` a scratchpad copy of `pypdf`, extract to `.txt`, and decode
+  the literal `/xHH` escapes some LaTeX PDFs produce — is in the README's network section.
+  Author-hosted PDFs (NBER, AQR, `mysimon.rochester.edu`, `thierry-roncalli.com`) all served
+  cleanly; SSRN and ScienceDirect again did not. One citation count (Novy-Marx–Velikov 2022)
+  resolved on OpenAlex but not on Semantic Scholar's DOI endpoint, so both indices remain worth
+  trying before recording a source as unindexed.
 
   **Session 4 (2026-08-17) is the first session in which full text was read directly for every
   source**, via NBER/author-hosted PDFs, and the three limits above all behaved as documented

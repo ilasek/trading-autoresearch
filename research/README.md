@@ -53,6 +53,26 @@ snippets. Three practical limits to plan around:
   challenge (`cf-mitigated: challenge`). That is the origin refusing an automated client, not
   an egress block — do not report it as one. Reach those papers via DOI metadata, a preprint
   mirror, or the publisher's landing page instead.
+- **`WebFetch` cannot read PDFs**, which is most of what you want. It returns the raw binary
+  and reports that it cannot parse it (it does save the file, and names the path). `Read` also
+  needs `pdftoppm`, which is not installed. The working recipe is to extract the text yourself
+  in the scratchpad, without touching the repo's `.venv`:
+
+  ```bash
+  cd "$SCRATCHPAD"
+  /home/user/trading-autoresearch/.venv/bin/pip install --quiet --target ./pylibs pypdf
+  curl -sL -o paper.pdf "<url>"
+  PYTHONPATH=./pylibs /home/user/trading-autoresearch/.venv/bin/python -c "
+  import pypdf, re
+  t = '\n'.join((p.extract_text() or '') for p in pypdf.PdfReader('paper.pdf').pages)
+  # some PDFs (notably LaTeX Type-3 fonts) extract as literal /xHH escapes — decode them:
+  t = re.sub(r'/x([0-9a-fA-F]{2})', lambda m: chr(int(m.group(1), 16)), t)
+  open('paper.txt', 'w').write(t)"
+  ```
+
+  Then `Read`/`Grep` the `.txt`. Author-hosted and institutional PDFs (NBER, AQR, university
+  pages, `thierry-roncalli.com`) work well as sources. Beware silent 404s that still write a
+  file — check `curl -w '%{http_code}'` and `file` the result before parsing.
 
 ## Anti-lookahead policy (hard rules)
 

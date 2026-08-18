@@ -1524,3 +1524,5 @@ would most plausibly reinstate; its file is intact in `strategies/candidates/`.
 5. Standing caution, now with a worked example: within this family a *large* validation
    jump is evidence of overfitting, not of progress, until the holdout agrees.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-18 (learning agent): 3 notes added, see research/SUMMARY.md
