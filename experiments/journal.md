@@ -1549,3 +1549,152 @@ would most plausibly reinstate; its file is intact in `strategies/candidates/`.
 - Champion re-deflated at the same bar: 0.9739
 - Lesson: **The sampling-luck attribution in `learnings.md` is now tested rather than asserted, and it holds — a residual that was worth +0.026 on one book is worth -0.014 on a re-drawn one, which is what luck does under re-draw.** Trials #37-#40 found the champion's daily trim was reading `held ∩ full-history-cohort` rather than its own basket, bracketed every deliberate specification (held basket 1.050 < market 1.055 < no trim 1.062 < whole cohort 1.081 < the accident 1.107), credited the monotone ordering in style-orthogonality as the mechanism, and then wrote off the remaining +0.026 as "sampling luck" in which three defensives the momentum screen happened to hold. That clause was an attribution made on one book over one window. Champion #43 re-drew the held-set from a structurally different selection process — date overlap gone, four independent horizon legs, and per tonight's diagnostic a trigger sample of **6.5 names / 20.7% of book weight** against the 3 names / 11% the accident was characterised on — and on that re-draw the ordering **reverses**: the deliberate whole-cohort trigger comes in at 1.201 against the accident's 1.187. A systematic edge does not change sign when the sample is re-drawn; a lucky one does. The clause stands, and the repo now owns a champion whose overlay is *specified* — the equal-weighted realized vol of every instrument with a complete price history to the formation date, a stated style-orthogonal defensive-cohort stress signal — instead of one that was an artifact of a `dropna` filter nobody had read. That epistemic upgrade is the real product of this trial; the Sharpe move is not. **How the +0.014 was earned, and why it is not a return story.** Validation ann_ret actually *fell* 28.75% → 28.59% while ann_vol fell 0.2367 → 0.2319: the deliberate trigger fires on 99 validation days against the accident's 65 (they disagree on 40 of 1412, asymmetrically — the accident is very nearly a strict subset), so the book is de-risked more often and Sharpe rises through the denominator. That is exactly what a working de-risking overlay is supposed to look like, and it is the first time in this repo one has been observed doing it on the specification it claims to use. The pre-trial diagnostic also called the shape of this in advance: the 37 extra de-risking days land almost entirely in 2018 (22), 2020 (8) and 2022 (8) — the window's two loss years and its +132% year — so the two specifications pull opposite ways and the small net margin is the residue of a large offsetting trade, not a uniform improvement. **The part that should worry a reader more than the promotion pleases them.** Holdout fell 0.875 → 0.813 (ann_ret 22.6% → 20.6%, maxDD identical at -27.4%): the extra trimming bought no drawdown out-of-sample and cost return. Set that beside the last two promotions and the sequence is #42 val 1.120 / holdout 1.38 → #43 val 1.187 / holdout 0.875 → #45 val 1.201 / holdout 0.813. **Validation monotone up, holdout monotone down, three promotions running.** Last session raised the protocol concern on a single case; it is now a trend, and the trend is the textbook signature of a gate optimising a statistic that has stopped tracking the objective `program.md` states ("beat the current champion out-of-sample"). Nothing frozen was touched and this is not an engine bug — see the session summary, where it is escalated. **Session discipline applied:** this trial's holdout number is now known to the session, so per the stopping rule recorded in `learnings.md` on 2026-08-17 the session ends here rather than spending its remaining six trials on candidates that would be holdout-informed. **The trim axis is closed either way** — six trials have now been spent on it, the mechanism is identified, the accident is retired, and the two constants (1.6, 0.6) remain inherited and untuned; any further work on it would be knob-turning on a solved question.
 
+
+## Session summary — 2026-08-18 (nightly)
+
+- Integrity check clean. Session opened on the per-run branch `main-p76jo3` pointing
+  at exactly `origin/main` (`a5daec1`) with no commits of its own, and
+  `git branch -r --no-merged origin/main` returned nothing — every remote branch
+  (`claude/remote-learning-egress-access-33q7fy`, `deflated-sharpe-effective-trials`,
+  `main-b713x5`) is an ancestor of `origin/main`, so there is no unlanded work and no
+  repeat of the 2026-08-16 split-brain. Engine tests green (16 passed). Data store
+  fresh through 2026-08-18.
+- Experiments run: **2 of the 8-trial budget** (#44 `mom_zscore_hzn_geom4_k1`,
+  #45 `mom_hzn_avg4_k1_cohort_trim`). Verdicts: **1 REJECT, 1 PROMOTE, 0 GATE_FAIL**.
+- **Three ideas were resolved without spending a trial**, which is why the budget was
+  not exhausted. All were holdings-only diagnostics — weight matrices and trigger
+  firing dates, prices truncated at 2023-12-31, no returns scored, trial count
+  untouched.
+
+### The two trials
+
+**#44 — interior spacing of the horizon bracket. REJECT, and it closes the axis.**
+The one question #42 and the 2026-08-17 summary both left explicitly open was whether
+the four averaged windows should fill the 3-1..12-1 interval *evenly*; both committed
+that a principled non-uniform argument would be legitimate where another bracket
+comparison would not. The argument: two nested formation windows of length L1 < L2
+share exactly L1/L2 of their data, so redundancy is a **ratio, not a difference**, and
+the uniform 63/126/189/252 bracket has adjacent ratios 2.00/1.50/1.33 — it samples the
+long end twice as densely and leaves the legs non-exchangeable, which is exactly when
+the equal weights the construction already uses stop being the right ones. Geometric
+spacing between the same endpoints (252/159/100/63, all ratios 4^(1/3)) repairs that at
+zero estimated parameters.
+
+The pre-trial diagnostic confirmed the premise and, unusually, the effect size:
+
+| | uniform (champion) | geometric |
+|---|---|---|
+| adjacent-pair weight overlap | 0.641 / 0.580 / 0.469 | 0.557 / 0.543 / 0.546 |
+| dispersion of those | 0.0711 | **0.0060** |
+| mean pairwise weight overlap | 0.4748 | 0.4639 |
+| mean union name count | 35.1 | 35.6 |
+
+Exchangeability essentially restored (12x less dispersion) with breadth untouched — so
+this could not be a de-concentration effect wearing another name, the confound that has
+explained several earlier results here. The premise was true and the conclusion still
+did not follow: validation Sharpe **1.187 → 1.166**, maxDD -29.0% → -29.7%, turnover
+7.4x → 7.8x. All inside the family's noise, all in the same slightly-worse direction.
+**Finding: equal weighting between horizon legs is robust to the legs not being
+exchangeable**, which is a stronger claim than the "equal weights are load-bearing"
+entry it tests, and it means the #41/#42 gain is coarse — it comes from having several
+windows at all, not from where inside the bracket they sit. The bracket is now pinned at
+its ends, its width and its interior. No third spacing will be proposed; there is no
+third non-arbitrary rule.
+
+**#45 — re-testing the repo's own "sampling luck" attribution. PROMOTE.**
+Trials #37-#40 found the champion's daily trim reads `held ∩ full-history-cohort`
+rather than its own basket, credited the cohort's style-orthogonality as the mechanism
+(held basket 1.050 < market 1.055 < no trim 1.062 < whole cohort 1.081 < the accident
+1.107), and wrote the residual +0.026 off as luck in which three defensives the screen
+happened to hold. That was an attribution, never a measurement. Champion #43 re-drew
+the held-set from a different selection process, so it could finally be tested — and
+this is an out-of-sample test of *a claim the repo had already made*, not another
+challenger. Diagnostic first, to avoid the no-op trap that killed the book-weighted-vol
+re-specification last session: the two triggers fire on 65 vs 99 validation days and
+disagree on **40 of 1412**, asymmetrically (the accident is nearly a strict subset),
+with the disagreement concentrated in 2018 (22 days), 2020 (8) and 2022 (8) — the
+window's two loss years and its +132% year, pulling opposite ways.
+
+Result: the ordering **reverses** on the re-drawn book — deliberate whole-cohort
+**1.201** against the accident's 1.187. A systematic edge does not change sign under
+re-draw; a lucky one does. The clause stands, now measured, and the repo's one
+surviving overlay is finally **specified** rather than an artifact of a `dropna` filter
+nobody had read for ~20 trials. Note how it wins: validation ann_ret *fell* (28.75% →
+28.59%) while ann_vol fell more (0.2367 → 0.2319) — Sharpe rose through the
+denominator, which is what a de-risking overlay is supposed to do and the first time
+one has been seen here doing it on the specification it claims to use. **The trim axis
+is closed**: six trials, mechanism identified, accident retired, constants untuned.
+
+### Three trials not spent
+
+1. **Min-shift → fixed weight anchor on the champion's base.** `learnings.md` left this
+   open (closed on the six-tranche base only) and the champion is now non-overlapping,
+   where the same fix once halved re-sizing turnover. Diagnostic: re-sizing turnover
+   -22% (between the -51% on the single-score non-overlapping base and the -10% on the
+   six-tranche one, exactly as ~1/N damping predicts for four legs), worth ~0.014
+   Sharpe in saved cost — against **-27% HHI at unchanged breadth** (35.1 → 35.1
+   positions), which this repo has priced at ~0.02 Sharpe every time the extra flatness
+   did not arrive from a decorrelated vintage. Predicted net negative. Not spent.
+2. **Risk- or variance-weighting between the horizon legs.** Killed by
+   `research/SUMMARY.md` screen #1 (count the noisily-estimated parameters) plus the
+   2026-08-18 ERC theorem note: weighting legs by realized vol estimates something, and
+   ERC is maximum-Sharpe only under constant correlation *and* equal component Sharpes.
+3. **Disjoint rather than nested formation windows** (3-1, 6-4, 9-7, 12-10) as a way to
+   force leg decorrelation. This is a signal-definition change, not a construction one,
+   and it is the intermediate-horizon echo — which `research/SUMMARY.md` records as not
+   surviving outside the US and a low prior on this global universe. Not spent.
+
+### ⚠ Protocol concern — escalated from "a case" to "a trend". For human review.
+
+Last session flagged that the gate cannot see a validation/holdout disagreement. It is
+now three promotions running:
+
+| # | validation Sharpe | holdout Sharpe | holdout ann_ret | holdout maxDD |
+|---|---|---|---|---|
+| 42 | 1.120 | **1.38** | 34.9% | -20.1% |
+| 43 | 1.187 | 0.875 | 22.6% | -27.4% |
+| 45 | 1.201 | 0.813 | 20.6% | -27.4% |
+
+**Validation monotone up, holdout monotone down.** Each step followed `program.md`
+exactly; no frozen file, threshold or trial record was touched, and this is not an
+engine bug. It is the signature of a gate optimising a statistic that has stopped
+tracking the mission it proxies. Aggravating factors, all on record: DSR clustering
+removed deflation as a brake on within-family laddering (11 effective trials against 45
+recorded); `main`'s trial count understates the candidates actually attempted; and
+**every promotion spends one more look at the holdout — four since 2026-08-17.**
+`mom_zscore_overlap6_hzn_avg4` (#42) remains the candidate a human would most plausibly
+reinstate; its file is intact. The two levers that would fix this — scoring something
+other than raw validation Sharpe, or rationing holdout looks — both live in frozen
+files, so this is recorded rather than acted on, per CLAUDE.md.
+
+### Why the session stopped at 2 of 8
+
+The stopping rule recorded in `learnings.md` on 2026-08-17: once a session has seen a
+holdout number, every later candidate it designs is holdout-informed. #45's promotion
+put three holdout numbers in front of this session, including the trend above. Stopping
+is the only way to keep the repo's last real check intact.
+
+### Ideas for next session
+
+1. **Prefer diagnostics to challengers in this family until a human rules on the
+   protocol concern.** Tonight is the argument for it: two diagnostics predicted both
+   trials' magnitudes correctly and the trials supplied only the sign, while a third
+   diagnostic killed an idea outright for free. That is a better yield per unit of
+   permanently-raised DSR bar than any challenger has produced since #42.
+2. Closed tonight and not to be reopened: interior spacing of the horizon bracket
+   (negative), the weight-anchor axis on the non-overlapping base (negative by
+   diagnostic), and the trim axis in full (mechanism identified, accident retired).
+3. Still open, from `research/SUMMARY.md`, and still free: the closed-form weight-vector
+   triage for any proposed trend/MA signal (candidate #3), and the risk-contribution
+   vector `x_i · ∂_i σ(x)` as a holdings-only statistic (candidate #21) — the latter
+   would answer directly how much of the champion's variance its top name explains,
+   which the existing top-weight/HHI statistics only proxy, and it bears on the
+   drawdown story the sector/breadth axis failed to explain. **Idea provenance: both
+   from `research/SUMMARY.md`; #44 and #45 were the lab's own, following up the
+   2026-08-17 session's explicitly-listed open questions.**
+4. `research/SUMMARY.md` reports the literature has now closed six directions and
+   opened one, with eleven screens against a single live build, and says the marginal
+   value of another family survey is low. Read together with point 1, the honest
+   position is that this repo's remaining upside is in **methodology and in the
+   protocol question above**, not in another candidate.
+- No engine issues encountered this session.

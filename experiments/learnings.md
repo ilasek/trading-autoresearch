@@ -406,15 +406,97 @@ across experiments; prune entries that later evidence contradicts.
   validation margins (0.005, 0.008) were inside the noise both candidates
   pre-registered; what corroborates them is the monotone holdout, not the gate.
 
-- **Standing protocol concern, raised 2026-08-17, for human attention.** Promotion
-  scores validation Sharpe only, and the holdout is evaluated *after* the decision
-  is made, so the gate structurally cannot see a validation/holdout disagreement —
-  and on trial #43 it installed as champion a strategy materially worse
-  out-of-sample than the one it displaced, by following `program.md` exactly.
-  Nothing frozen was touched and this is not an engine bug; it is the stated
-  objective working as specified on a case where the specification does not serve
-  the mission. Two aggravating factors, both already on record: DSR clustering
-  removed deflation as a brake on within-family laddering, and every promotion
-  spends one more look at the holdout (three tonight). `mom_zscore_overlap6_hzn_avg4`
-  (#42 — validation 1.120, holdout 1.38, maxDD -20.1%, turnover 2.8x) is the
-  candidate a human would most plausibly reinstate.
+- **The horizon-averaging bracket is finished on all three of its axes, and the last
+  one closed negative.** #42 pinned the *width* (four windows, ends fixed by the
+  skip-month below and post-formation reversal above); trial #44 pinned the
+  *interior*. The argument for interior spacing was sound and its premise was
+  verified before the trial: two nested formation windows of length L1 < L2 share
+  exactly L1/L2 of their data, so redundancy is a **ratio, not a difference**, and
+  the uniform 63/126/189/252 bracket has adjacent ratios 2.00/1.50/1.33 — it samples
+  the long end roughly twice as densely and leaves the legs non-exchangeable, which
+  is precisely the condition under which the equal weights the construction already
+  uses are the wrong ones. Geometric spacing between the *same* endpoints
+  (252/159/100/63, all ratios 4^(1/3)) fixes that for free — a holdings-only
+  diagnostic put the dispersion of adjacent-pair weight overlap down **12x, 0.0711 →
+  0.0060**, with breadth untouched (35.1 → 35.6 names), which rules out the
+  de-concentration confound that has explained several earlier results. And it bought
+  nothing: validation Sharpe 1.187 → 1.166, maxDD -29.0% → -29.7%, turnover 7.4x →
+  7.8x, all inside the family's noise and all in the same slightly-worse direction,
+  so there is no risk/return-dial reading to rescue it. **The substantive finding is
+  the stronger claim about equal weighting:** equal weights between horizon legs are
+  not merely load-bearing against the *estimated*-weight mistake, they are also
+  insensitive to the one deviation from their optimality condition that can be
+  corrected at zero estimated parameters. Which means the #41/#42 gain is **coarse** —
+  it comes from having several windows at all, not from where inside the bracket they
+  sit. Do not propose a third spacing; there is no third non-arbitrary rule, and it
+  would be the sweep the manual forbids.
+
+- **"Sampling luck" is a testable attribution, and the way to test it is to re-draw
+  the sample rather than to argue about it.** Trials #37-#40 found the champion's
+  daily trim was reading `held ∩ full-history-cohort` rather than its own basket,
+  established the mechanism from a monotone ordering in style-orthogonality (held
+  basket 1.050 < market 1.055 < no trim 1.062 < whole cohort 1.081 < the accident
+  1.107), and wrote off the accident's residual +0.026 as luck in which three
+  defensives the momentum screen happened to hold. Trial #45 tested that: champion
+  #43 had re-drawn the held-set from a different selection process (no date overlap,
+  four independent horizon legs; trigger sample 6.5 names / 20.7% of book weight
+  against the 3 / 11% the accident was characterised on), and on the re-draw the
+  ordering **reverses** — deliberate whole-cohort 1.201 against the accident's 1.187.
+  A systematic edge does not change sign under re-draw; a lucky one does. Two
+  consequences. (a) The clause stands, now measured. (b) The repo's one surviving
+  overlay is finally **specified** rather than accidental: the equal-weighted realized
+  vol of every instrument with a complete price history to the formation date, a
+  stated style-orthogonal defensive-cohort stress signal, replacing an artifact of a
+  `dropna` filter nobody had read for ~20 trials. Note *how* it earns its keep —
+  validation ann_ret **fell** (28.75% → 28.59%) while ann_vol fell more (0.2367 →
+  0.2319), because the deliberate trigger fires 99 validation days to the accident's
+  65 and the accident is nearly a strict subset. Sharpe rose through the denominator,
+  which is what a de-risking overlay is supposed to do and the first time one has been
+  observed here doing it on the specification it claims to use. **The trim axis is now
+  closed** — six trials, mechanism identified, accident retired, the two constants
+  (1.6, 0.6) still inherited and untuned. Further work on it is knob-turning.
+
+- **Generalise the pre-trial diagnostic habit into a rule: measure the mechanism's
+  premise first, and pre-register the effect size the measurement implies.** Both of
+  tonight's trials were preceded by a holdings-only diagnostic and both diagnostics
+  were quantitatively right about what followed — the spacing diagnostic said the
+  *level* of redundancy barely moved (-0.011 mean overlap) even as its dispersion
+  collapsed, and the trial duly returned a null; the trim diagnostic said the two
+  specifications disagree on 40 of 1412 validation days concentrated in 2018/2020/2022,
+  and the trial duly returned a small net margin that was the residue of a large
+  offsetting trade. In both cases **the trial supplied only the sign.** A third idea —
+  replacing the min-shift weight anchor with a fixed floor on the champion's base —
+  was killed outright for free: the diagnostic put re-sizing turnover at -22% (between
+  the -51% recorded on the single-score non-overlapping base and the -10% on the
+  six-tranche base, exactly as the ~1/N damping story predicts for four legs) worth
+  ~0.014 Sharpe in saved cost, against a **-27% HHI de-concentration at unchanged
+  breadth** (35.1 → 35.1 positions), which this repo has priced at ~0.02 Sharpe every
+  time the extra flatness did not come from a decorrelated vintage. Predicted net
+  negative, trial not spent. Diagnose first; spend the trial only on the sign, and only
+  when the sign matters.
+
+- **⚠ Standing protocol concern, raised 2026-08-17, now a three-point trend and
+  escalated. For human attention.** Promotion scores validation Sharpe only, and the
+  holdout is evaluated *after* the decision is made, so the gate structurally cannot
+  see a validation/holdout disagreement. What was one case is now a run:
+
+  | # | validation Sharpe | holdout Sharpe | holdout ann_ret | holdout maxDD |
+  |---|---|---|---|---|
+  | 42 | 1.120 | **1.38** | 34.9% | -20.1% |
+  | 43 | 1.187 | 0.875 | 22.6% | -27.4% |
+  | 45 | 1.201 | 0.813 | 20.6% | -27.4% |
+
+  Three consecutive promotions, validation monotone up and holdout monotone down.
+  Each step followed `program.md` exactly; nothing frozen was touched and this is not
+  an engine bug. It is the textbook signature of a gate optimising a statistic that
+  has stopped tracking the mission it was chosen to proxy ("beat the current champion
+  out-of-sample"). Three aggravating factors, all on record: DSR clustering removed
+  deflation as a brake on within-family laddering (11 effective trials against 45
+  recorded); `main`'s recorded trial count understates the true number of candidates
+  attempted; and **every promotion spends one more look at the holdout — four since
+  2026-08-17.** `mom_zscore_overlap6_hzn_avg4` (#42 — validation 1.120, holdout 1.38,
+  maxDD -20.1%, turnover 2.8x) remains the candidate a human would most plausibly
+  reinstate, and its file is intact in `strategies/candidates/`. Until a human rules,
+  sessions should prefer diagnostic work to challengers in this family — the two
+  levers that would fix it (scoring something other than raw validation Sharpe, or
+  rationing holdout looks) both live in frozen files.
