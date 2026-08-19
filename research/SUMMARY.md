@@ -301,6 +301,86 @@ endorsed held-set *is* the short-post-break window, which this literature predic
 Tier A, `validation_overlap: false`.
 → `notes/2026-08-17-averaging-over-estimation-windows.md`
 
+**The lab's temporal-breadth result now has a *third* mechanism, and this one is the
+unconditional accuracy claim the folder has been looking for since session 2 — plus a free
+screen for when averaging can do nothing at all.** Breiman's bagging result is one line of
+algebra: for a predictor `φ(x, L)` built by running a fixed procedure on a training set, the
+aggregated predictor `φ_A(x) = E_L φ(x, L)` satisfies `e_A ≤ e` — **expected squared
+prediction error always falls**, and the size of the fall is exactly the *variance of the
+predictor across training sets*. Not dispersion around an unchanged mean: the centre moves.
+Two conditions decide whether the effect is large or zero, and both are checkable on paper.
+(a) **Instability.** If perturbing the data barely changes the fit, the two sides of the
+inequality are nearly equal and aggregation buys nothing — Breiman's own control is bagging a
+nearest-neighbour classifier, which produced *identical* error rates on six datasets, a literal
+no-op. The unstable procedure he names as the canonical case is **subset selection**, where
+"the variables are competing for inclusion and small changes in the data can cause large
+changes" — structurally the champion's buffered top-N membership rule, where instruments
+compete for slots. (b) **Nonlinearity.** Buja–Stuetzle's independent U-statistic analysis
+adds the sharper version: **bagging leaves additive statistics unchanged**; the entire effect
+lives in interaction terms of order ≥ 2. So averaging over vintages can only move a
+construction to the extent that construction is nonlinear in the data — which is the general
+form of the lab's own `#41`/`#42` finding that collapsing two lookbacks into one score *before*
+selecting throws away the part that pays. Their analysis also supplies the honest counterweight:
+in their framework squared plug-in bias *always* rises and variance only *usually* falls, MSE
+improves only for large enough resamples, and the crossover is real — bagging a stable
+procedure is mildly harmful, not neutral. Practical corollary the lab can use without a trial:
+replicate counts saturate fast (most of Breiman's gain by ~10, nothing after ~25), so any future
+proposal to deepen the tranche stack should pre-register a small effect. The one gap that must
+not be glossed: this is an **MSE claim about a predictor**, not about portfolio return — the
+bridge to realised Sharpe is the lab's inference. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-19-bagging-averaging-unstable-predictors.md`
+
+**The same question answered in portfolio vocabulary, and it says the lab has been naming its
+own mechanism with the wrong noun.** Grinold's fundamental law, `IR ≈ IC · √BR`, has been
+revised three times, each revision relaxing an unrealistic assumption and each time lowering
+the predicted IR. The generalisation that nests them (Ding–Martin, with the derivation readable
+in the author's earlier working paper) is `IR = mean(IC) / sqrt(σ_IC² + φ/N)`, `φ ≥ 1`. Grinold
+is the `σ_IC = 0` case, where breadth compounds without limit; Qian–Hua's **strategy risk**
+limit is the `N → ∞` case, `IR → mean(IC)/σ_IC` — **an absolute ceiling no amount of breadth
+can breach.** The consequence for this repo is a decomposition, not a strategy: adding *names*
+at one date raises `N`, a `√N` lever already saturated on a ~145-instrument universe, whereas
+averaging the same selection procedure across weakly-correlated *formation dates* averages
+several draws of the realised IC and lowers **`σ_IC`** — the term that dominates once `N` is
+moderate. The lab measured exactly that asymmetry (nominal breadth widening was a no-op;
+decorrelated formation dates were the repo's strongest mechanism) and had no account of it;
+here the two are different terms of one identity. It also gives the existing rank-correlation
+gate a target rather than a threshold — `σ_IC` of a `K`-vintage average falls with the average
+*pairwise* correlation of the vintages, and not at all if they are perfectly correlated. Third,
+the long-only constraint acquires a number: Clarke–de Silva–Thorley's **transfer coefficient**,
+`IR ≈ TC · IC · √BR`, with `TC` typically **0.3–0.8** under real constraints and long-only named
+among the culprits — a multiplicative leak, categorically milder than the two cases where a
+mechanism lives entirely in the short leg. Two warnings attach. The framework is
+*benchmark-relative* (residual returns, tracking error), so **no IR figure here is comparable
+to the repo's total-Sharpe gate** and "IR above 1.5 is rare" is not a comment on the champion.
+And measuring an IC **scores returns**, so it is not covered by the lab's free holdings-only
+diagnostic exemption. Mapping vintages to IC draws is the lab's inference; neither source
+discusses tranching. Tier A on the algebra, B on the published paper's unread empirical study;
+`validation_overlap: false`.
+→ `notes/2026-08-19-fundamental-law-breadth-and-strategy-risk.md`
+
+**And the boundary condition on the folder's own top principle: when estimated averaging
+weights are provably right.** Hansen's Mallows model averaging chooses weights by minimising
+an (asymptotically unbiased) estimate of the average squared error, and is asymptotically
+optimal in its class — an apparent counterexample to "averaging beats selecting *because*
+selection would have to be estimated". It is not a counterexample; it is a list of conditions.
+Estimated weights win when there is an unbiased in-sample estimate of the loss actually being
+minimised, the components form a nested ordered ladder, errors are conditionally homoskedastic
+(the author states optimality fails without this), and the sample is large relative to the
+weight count (smoothed-BIC beats MMA at small `n`). This repo fails all four — its loss is a
+deflated Sharpe whose in-sample estimate is upward-biased *by construction*, returns are
+heteroskedastic, its components are not one nested ladder, and the sample is short — so equal
+weights remain correct here **for four stated reasons rather than as a taboo**. Two further
+yields. Averaging beat the *infeasible optimal* single model in many parameterisations, so
+"which vintage/window is best?" is the **wrong question**, not merely an unanswerable one — a
+stronger claim than the folder previously recorded. And averaging over a *nested* ladder is
+algebraically **shrinkage**: with orthogonal regressors the `j`th coefficient is multiplied by
+`Σ_{m≥j} w_m`, monotonically downweighting what only the longest window sees. The lab's four
+lookback windows are nested, so `#42` has a definite weighting shape over past returns — the
+object candidate #3's closed-form triage rule operates on. Offered as a lens, not a result:
+the windows are not orthogonal, and the lab averages *portfolios*, whose selection step is
+nonlinear. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-19-model-averaging-mallows-weights.md`
+
 ### Portfolio construction & rebalance mechanics (cross-family)
 
 Not a `program.md` family, but the axis `learnings.md` says is the lab's only live one and the
@@ -499,9 +579,50 @@ equal weight dominates trying to pick the right one.** Applies to weights, to lo
 formation dates. It is also a warning about the shape of any future refinement — "weight the
 recent tranches more", "weight the better sleeve more", "pick the right lookback" are all the
 same mistake in three costumes.
+**Strengthened and bounded 2026-08-19.** Two amendments, both from tier-1 sources. *Stronger:*
+averaging does not merely beat *feasible* selection — in Hansen's Monte Carlo it beats the
+**infeasible optimal** single model, chosen with oracle knowledge, in many parameterisations.
+So "which vintage / which window is best?" is the wrong question, not just an unanswerable one.
+*Bounded:* estimated weights are provably optimal when four conditions hold — an unbiased
+in-sample estimate of the loss being minimised, a nested ordered ladder of components,
+conditionally homoskedastic errors, and a sample large relative to the weight count. This repo
+fails all four (a deflated-Sharpe objective whose in-sample estimate is upward-biased by
+construction; heteroskedastic returns; components that are not one nested ladder; a short
+sample). Equal weights stay correct here, now for stated and falsifiable reasons rather than as
+a prohibition.
 → `notes/2026-08-17-forecast-combination-why-averaging-beats-selecting.md`,
 `notes/2026-08-17-averaging-over-estimation-windows.md`,
-`notes/2026-08-17-naive-vs-optimized-weighting.md`
+`notes/2026-08-17-naive-vs-optimized-weighting.md`,
+`notes/2026-08-19-model-averaging-mallows-weights.md`
+
+**Averaging can only move what is nonlinear — so ask, before any ensemble or vintage
+proposal, whether the per-component output is a nonlinear function of the data.** Bagging
+leaves additive statistics unchanged: the entire effect of averaging perturbed fits lives in
+interaction terms of order ≥ 2, and the size of the gain is the base procedure's *instability*
+(the variance of the fit across perturbed datasets), which is zero for a stable procedure —
+bagging a nearest-neighbour classifier is a measured, literal no-op. For a linear map from
+score to weight, averaging the portfolios equals the portfolio of the averaged score, and the
+whole idea collapses before it costs a trial; it is the **threshold** — buffer, top-N, cap,
+trim — that makes the two operations different objects. This is the general form of the lab's
+own finding that collapsing lookbacks into one score before selecting discards the part that
+pays, and it is derivable on paper with no data. Corollary with the opposite sign, equally
+useful: the crossover is real, so bagging a *stable* component is mildly harmful rather than
+neutral — "average over more things" is not a free move to apply everywhere.
+→ `notes/2026-08-19-bagging-averaging-unstable-predictors.md`
+
+**Name which term of the risk-adjusted-return identity a design change moves, because they
+have wildly different marginal value.** `IR = mean(IC)/sqrt(σ_IC² + φ/N)`, scaled by a transfer
+coefficient `TC` for constraints. Four levers: better signal (`mean(IC)`, linear, the only
+unbounded one); more independent bets (`N`, `√N` and saturating — worthless once `φ/N ≪
+σ_IC²`); less *strategy risk* (`σ_IC`, the term that dominates once `N` is moderate and the one
+that sets an absolute ceiling `IR ≤ mean(IC)/σ_IC`); and fewer binding constraints (`TC`,
+0.3–0.8 under realistic long-only-style constraints). The repo's ~145-instrument universe has
+already spent the `N` lever, which is why widening the basket was a no-op; averaging
+weakly-correlated formation vintages acts on `σ_IC`, which is why it was not. Ask of any
+proposal which term it touches before asking whether it is implementable. Caveat that must
+travel with it: the framework is benchmark-relative, so **no IR number from it is comparable to
+this repo's total-Sharpe gate**, and measuring an IC scores returns and is therefore not a free
+diagnostic. → `notes/2026-08-19-fundamental-law-breadth-and-strategy-risk.md`
 
 **But ensembling only applies to components that estimate the same quantity — mixing different
 return streams is a different operation with a different sign.** Forecast-combination theory is
@@ -549,6 +670,29 @@ hypothesis fodder, then anti-candidates.
    formation vintages of one signal pass this test; momentum-plus-ETF-sleeve fails it. Costs no
    trial and rules out a whole class of "blend it with something" proposals. Tier A, no overlap.
    → `notes/2026-08-17-forecast-combination-why-averaging-beats-selecting.md`
+   **Two further free screens added 2026-08-19, same rank — both derivable on paper, both
+   applying to vintage/ensemble/averaging proposals generally.**
+   *(i) Is the per-component output nonlinear in the data?* Bagging leaves additive statistics
+   unchanged; the whole effect of averaging perturbed fits lives in interaction terms of order
+   ≥ 2, and its size is the base procedure's instability — zero for a stable procedure (bagging
+   a nearest-neighbour classifier is a measured no-op). For a linear score→weight map,
+   averaging portfolios *is* the portfolio of averaged scores, so the proposal is algebraically
+   a no-op before it is a trial; it is the threshold (buffer, top-N, cap, trim) that makes them
+   different objects. Same statement in reverse: the champion's membership rule is *subset
+   selection*, the canonical unstable procedure, which is why averaging over its formation
+   vintages should and does pay. Also bounds the `K` question without licensing a sweep —
+   replicate counts saturate fast, so pre-register a small effect for any deeper stack.
+   → `notes/2026-08-19-bagging-averaging-unstable-predictors.md`
+   *(ii) Which term of `IR = mean(IC)/sqrt(σ_IC² + φ/N)` does the change move?* More names at
+   one date raises `N` — a `√N` lever already saturated at ~145 instruments. Averaging
+   weakly-correlated formation vintages lowers `σ_IC` (strategy risk), the term that dominates
+   once `N` is moderate and that sets an absolute ceiling `IR ≤ mean(IC)/σ_IC`. Constraints
+   multiply by a transfer coefficient, typically 0.3–0.8 with long-only named among the causes.
+   Reproduces, from one identity, why breadth widening was a no-op and vintage decorrelation was
+   not. Two attached warnings: the framework is benchmark-relative so **no IR figure from it is
+   comparable to this repo's total-Sharpe gate**, and computing an IC scores returns, so it is
+   *not* covered by the free holdings-only diagnostic exemption.
+   → `notes/2026-08-19-fundamental-law-breadth-and-strategy-risk.md`
 3. **Free closed-form triage for any proposed trend/moving-average signal: write it as its
    weight vector over past returns.** Every MA-based indicator — crossover, price-minus-MA,
    envelope, plain momentum — is algebraically a weighted average of past price changes, and its
@@ -615,8 +759,10 @@ hypothesis fodder, then anti-candidates.
    the overlap result (large, and corroborated by the pruning diagnostic), but should discipline
    how near-ties are read. Tier B, overlap assumed.
    → `notes/2026-08-17-rebalance-timing-luck-tranching.md`
-8. **[Still the only genuinely new build on this list — added session 3, untested] Average over formation vintages that differ in
-   lookback *length*, not only in end-date.** The champion's six tranches differ in *when* the
+8. **[BUILT — status updated 2026-08-19. Proposed session 3; the lab has since implemented it
+   and explored its bracket across trials #41–#44, per `experiments/learnings.md`. Retained
+   here for its mechanism, not as a live proposal.] Average over formation vintages that differ
+   in lookback *length*, not only in end-date.** The champion's six tranches differ in *when* the
    signal was formed, at constant lookback; the AveW method the literature actually describes
    averages a model estimated over *different window lengths*, which brackets the unknown
    bias–variance optimum rather than sliding one window along. This is the single variant of the
@@ -627,6 +773,20 @@ hypothesis fodder, then anti-candidates.
    are load-bearing — any "weight recent or better vintages more" refinement is the
    estimated-weight mistake this whole literature warns against. Tier A, no overlap.
    → `notes/2026-08-17-averaging-over-estimation-windows.md`
+   **Post-build reading, added 2026-08-19.** The lab's own conclusion from that bracket —
+   length-vintage and date-vintage diversity are *complements*, and the gain is coarse (it comes
+   from having several windows at all, not from where inside the bracket they sit) — is what
+   three separate literatures now predict jointly. Coarseness follows from the equal-weight
+   optimality argument; complementarity follows from the fact that the two axes perturb
+   different things (which data the fit sees vs. when it was fitted), so their instabilities are
+   weakly correlated and the aggregation gain compounds; and both are bounded above by the
+   post-formation reversal limit and by bagging's crossover, which say the same thing from
+   different directions. **Net: this session opens no new build here and closes the spacing
+   axis harder. What changes is the standing of the equal-weight choice — previously a
+   convention defended by "don't estimate weights", now a positive result with four stated
+   conditions under which it could be overturned, none of which this repo meets.**
+   → `notes/2026-08-19-bagging-averaging-unstable-predictors.md`,
+   `notes/2026-08-19-model-averaging-mallows-weights.md`
 9. **Confirmation, not a new candidate — the membership buffer is the literature's
    top-ranked construction technique.** A buy/hold spread (stricter bar to enter than to hold)
    beats both slower rebalancing and liquidity screening, because the trades it suppresses are
@@ -783,6 +943,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-17 (session 3) | The two zero-coverage families: 7 (ensembles) — chased specifically to find the missing economic mechanism for the lab's temporal-breadth result — and 2 (time-series momentum / trend following), including its replication status | Timmermann 2006 (Handbook ch. 4) + Smith–Wallis 2009 (OBES) + Rapach–Strauss–Zhou 2010 (RFS) (`2026-08-17-forecast-combination-why-averaging-beats-selecting.md`); Pesaran–Timmermann 2007 + Pesaran–Pick–Pranovich 2013 (J. Econometrics) (`2026-08-17-averaging-over-estimation-windows.md`); Moskowitz–Ooi–Pedersen 2012 (JFE) + Huang–Li–Wang–Zhou 2020 (JFE, replication challenge) + Hurst–Ooi–Pedersen 2017 (JPM) (`2026-08-17-time-series-momentum-evidence-and-replication.md`); Zakamulin 2015/2017 (`2026-08-17-moving-average-rules-anatomy.md`) |
 | 2026-08-17 (session 4) | The two remaining under-covered *strategy* families — 3 (vol targeting) and 4 (short-term mean reversion) — plus the open question flagged last session on cross-sectional vs time-series signal construction. First session with full text read directly for every source. | Moreira–Muir 2017 (JF) + Cederburg–O'Doherty–Wang–Yan 2020 (JFE, replication challenge) (`2026-08-17-volatility-timing-managed-portfolios.md`); Nagel 2012 (RFS) + Lehmann 1990 (QJE) + Lo–MacKinlay 1990 (RFS) (`2026-08-17-short-term-reversal-as-liquidity-provision.md`); Goyal–Jegadeesh 2018 (RFS) (`2026-08-17-cross-sectional-vs-time-series-construction.md`) |
 | 2026-08-18 (session 5) | The last two uncovered axes named as open by session 4: family 5 (low-vol / quality), chased specifically at the *sector-neutralized* construction `learnings.md` named as the only thing that would reopen it, and the **risk-parity half** of family 3 (weighting within comparable-diversification sleeves). Full text read directly for every source. Both axes close negative; no family in `program.md` is now uncovered. | Asness–Frazzini–Pedersen 2014 (FAJ) (`2026-08-18-low-risk-investing-industry-neutral.md`); Novy-Marx 2016 (NBER WP 20591) + Novy-Marx–Velikov 2022 (JFE, replication challenge) (`2026-08-18-defensive-equity-replication-and-construction.md`); Maillard–Roncalli–Teiletche 2010 (JPM) (`2026-08-18-risk-parity-equal-risk-contribution.md`) |
+| 2026-08-19 (session 6) | Not a strategy family — the seam session 5 named as the one worth chasing: **why averaging unstable predictors improves them**, hunted in the two literatures it named (bagging / bootstrap aggregation, and model averaging outside the break-detection framing), plus the finance-native version of the same question (breadth and strategy risk). First session to yield a mechanism that is an unconditional accuracy claim about the repo's own strongest mechanism. Full text read directly for Breiman, Buja–Stuetzle, Hansen and the fundamental-law derivation; partial (first two pages) for the published Ding–Martin. | Breiman 1996 (Machine Learning) + Buja–Stuetzle 2006 (Statistica Sinica) (`2026-08-19-bagging-averaging-unstable-predictors.md`); Grinold 1989 (JPM) + Ding–Martin 2017 (J. Empirical Finance) + Ding 2010 WP (`2026-08-19-fundamental-law-breadth-and-strategy-risk.md`); Hansen 2007 (Econometrica) (`2026-08-19-model-averaging-mallows-weights.md`) |
 
 ### Open questions for future sessions
 
@@ -891,6 +1052,44 @@ hypothesis fodder, then anti-candidates.
   the model-averaging literature in economic forecasting outside the break-detection framing.
   If either supplies a mean-shifting rather than variance-shrinking argument, it would give the
   repo's strongest mechanism its first outside justification.
+
+  **— ANSWERED 2026-08-19 (session 6), and the answer is yes, from both literatures plus a
+  third.** Breiman's bagging inequality is exactly a mean-shifting claim: aggregating a
+  procedure over perturbed datasets lowers *expected squared prediction error*, unconditionally,
+  by an amount equal to the procedure's instability — not dispersion around an unchanged mean.
+  It comes with two on-paper preconditions the champion demonstrably meets (its membership rule
+  is subset selection, the canonical unstable procedure; its selection step is nonlinear, and
+  bagging leaves additive statistics unchanged) and one honest gap (it is an MSE claim about a
+  predictor, and the bridge to portfolio return is the lab's inference, not the source's).
+  Independently, the fundamental-law literature supplies the same conclusion in portfolio
+  vocabulary and adds the part the lab was missing: adding *names* raises `N`, a saturated
+  `√N` lever, while averaging weakly-correlated *formation dates* lowers `σ_IC`, the term that
+  dominates once `N` is moderate. And Hansen's model averaging beats even the *infeasible
+  optimal* single model, which upgrades "you can't pick the best one" to "the best one isn't
+  the target". **The repo's strongest mechanism now has three independent outside accounts and
+  one measured precondition; it is no longer the folder's unexplained result.**
+- **New open questions raised by session 6, in priority order.**
+  (a) *The bridge that is still the lab's own.* Every one of the three new accounts is a claim
+  about **forecast accuracy or information ratio**, and the lab's result is about **realised
+  net return and Sharpe on a long-only book after costs**. Nothing read in six sessions makes
+  the crossing explicit. A source that translates a reduction in forecast MSE (or in strategy
+  risk) into a portfolio's realised return under a *constrained, fully-invested, cost-paying*
+  implementation would close the last gap. Candidate vocabulary not yet searched:
+  the "implementation shortfall / alpha decay" literature, and portfolio-choice work that
+  optimises the realised objective directly rather than a predictive loss.
+  (b) *Counting independent bets.* Both the fundamental-law sources concede that determining
+  breadth in practice — how many of `N` nominal bets are independent — is unresolved, and the
+  lab's own standing question about what supplies decorrelated formation dates is the same
+  question. There is a methodological literature on the *effective* dimensionality of a
+  correlation matrix (SVD/eigenvalue counting rules, entropy-based "effective number of bets")
+  that was seen but not evaluated this session; if it holds up to the rubric it would turn the
+  lab's rank-correlation gate into a single scalar computable from holdings alone. Worth one
+  session, no more — the sources sighted so far look tier C.
+  (c) *Deliberately not pursued, recorded so it is not rediscovered as an opportunity.* The
+  natural experiment suggested by (a) — measure the per-vintage IC series and its volatility —
+  **scores returns and is therefore not a free diagnostic**. It should be treated with the same
+  discipline as a backtest, not slipped in under the holdings-only exemption.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -902,6 +1101,23 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 6 (2026-08-19)** read full text directly for Breiman (author-hosted Berkeley tech
+  report), Buja–Stuetzle (author-hosted Wharton PDF), Hansen (author-hosted Wisconsin PDF) and
+  the fundamental-law derivation (an author's working paper mirrored on a university page), and
+  only the first two pages of the published Ding–Martin. Three access notes to add to the
+  README's list: **Project Euclid** serves a bot challenge like SSRN (so Bühlmann–Yu was
+  unreadable and its result is recorded second-hand, flagged in-note); **eScholarship** returns
+  403 to an automated client even for green open-access copies; and a **CC-BY open-access
+  Elsevier article is still unreachable** through ScienceDirect, which 403s the PDF endpoint
+  Unpaywall points at — the workaround that succeeded was a `pdfs.semanticscholar.org` mirror,
+  which carried only the article's first pages. Author-hosted PDFs remain the reliable channel.
+  Both index limits bit in the same session: **OpenAlex's daily budget was exhausted**
+  (`Insufficient budget`, resets midnight UTC) and **Semantic Scholar's title-search endpoint
+  429'd repeatedly** while its DOI endpoint stayed reliable; one source (Ding–Martin) resolves
+  in **neither** index and its count is recorded from Crossref's `is-referenced-by-count`, a
+  third fallback worth adding to the rubric's list. One source (Buja–Stuetzle) has **no
+  registered DOI** and was resolved only by title search.
 
   **Session 5 (2026-08-18) also read full text for every source**, and added one practical
   finding now written into `research/README.md`: `WebFetch` cannot parse PDFs (it returns the

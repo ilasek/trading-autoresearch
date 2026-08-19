@@ -1698,3 +1698,5 @@ is the only way to keep the repo's last real check intact.
    position is that this repo's remaining upside is in **methodology and in the
    protocol question above**, not in another candidate.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-19 (learning agent): 3 notes added, see research/SUMMARY.md
