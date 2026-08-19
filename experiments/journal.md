@@ -1727,3 +1727,150 @@ is the only way to keep the repo's last real check intact.
   **On the gate's own axis the result is a near-miss that closes the axis anyway.** Validation Sharpe 1.180 against 1.201 — 0.021 short, the closest any *structurally new* mechanism has come since the horizon-averaging family, and DSR 0.9732 in absolute terms. Read against the pre-registration, the three arguments stated against it were right in aggregate but small: weight HHI fell 36% (0.0753 → 0.0482) and the repo has priced de-concentration at ~0.02 Sharpe every time it did not arrive from a decorrelated vintage, so **the entire deficit is accounted for by the standard de-concentration tax and nothing is left over for the smaller-pool bias.** That is the informative reading of Breiman's inequality here: the aggregation gain from three genuinely disagreeing folds (pairwise weight overlap 0.43-0.48, core L1 disagreement 0.140 against 0.159 in the whole fringe) was almost exactly large enough to pay for each fold picking its top 15 out of ~93 instruments instead of 140. Buja-Stuetzle's crossover is therefore near, not clearly on one side. The honest verdict: **the subsample-vintage axis is real but not free, and it is a risk/return dial rather than a challenger** — the same relationship #33 has to #32, and the gate reads only the end of the dial it is not on. No fold ladder follows, as committed in the docstring; a partition sweep would be knob-turning on a measured trade-off, and one arbitrary partition draw is anyway a single draw in the timing-luck sense.
   **A third idea killed for free by the same diagnostic.** The 17.2%-weight/30.9%-risk gap invites capping *risk* contribution rather than weight. That proposal dies on screen #1 of `research/SUMMARY.md` without a trial: a risk cap needs a covariance matrix, which puts it in the expensive noisily-estimated class the repo has refuted twice empirically and the ERC theorem closes analytically. The diagnostic that reveals the problem does not license the fix that would create it.
 
+
+## Session summary — 2026-08-19 (nightly)
+
+- **Integrity check — one deviation, corrected before any work.** `git fetch origin
+  --prune` clean; `git branch -r --no-merged origin/main` returned nothing, so every
+  remote branch (`claude/remote-learning-egress-access-33q7fy`,
+  `deflated-sharpe-effective-trials`, `main-b713x5`, `main-p76jo3`) is an ancestor of
+  `origin/main` and there is no unlanded work — no repeat of the 2026-08-16 split-brain.
+  However the session **opened on the per-run branch `main-g5f5r2`**, not on `main`.
+  It pointed at exactly `origin/main` (`b601d80`) with no commits of its own, so nothing
+  was lost, but per the standing instruction never to run trials from a per-run branch it
+  was corrected first (`git checkout main && git reset --hard origin/main`). Both trials
+  and all commits below are on `main`. Engine tests green (16 passed). Store fresh
+  through 2026-08-19.
+- Experiments run: **2 of the 8-trial budget** (#46 `mom_hzn_avg4_k6_cohort_trim`,
+  #47 `mom_hzn_avg4_subsample_bag3`). Verdicts: **2 REJECT, 0 PROMOTE, 0 GATE_FAIL**.
+  No promotion means **no holdout number was exposed this session** — the stopping rule
+  never bound, and the session stopped on judgement rather than on the rule.
+- **Two ideas killed without a trial**, both by holdings-only diagnostics (weight
+  matrices and risk-contribution vectors, prices truncated at 2023-12-31, no returns
+  scored, trial count untouched).
+
+### The two trials
+
+**#46 — un-confounding the repo's biggest result. REJECT, and the finding survives.**
+#42 vs #43 (six-tranche date overlap switched off, four horizon legs fixed, 1.120 →
+1.187) is the largest validation move ever recorded here, and it was not a clean
+comparison: both sides carried the accidental `held ∩ legacy-cohort` trigger, whose
+sample is a function of book breadth (3 names / 11% of weight at 62.7 held names, 6.5 /
+20.7% at 35.1). The champion's whole-cohort trigger is market-level and bit-identical
+across K, so this is the first clean reading of the axis. **The gap does not close, it
+widens: 0.067 → 0.094** (1.201 vs 1.107). Pre-registered direction was wrong, which is
+the trial's yield.
+
+The by-product is worth more than the headline. The four cells:
+
+| | accidental `held ∩ cohort` trim | deliberate whole-cohort trim |
+|---|---|---|
+| K=6 (62.7 names) | 1.120 | 1.107 |
+| K=1 (35.1 names) | 1.187 | **1.201** |
+
+The intersection filter is worth **+0.013 on the wide book and −0.014 on the narrow
+one** — it changes sign with the book it is intersected with. #45 tested the
+sampling-luck clause by re-drawing the held-set along the *horizon* axis and the
+ordering reversed; this re-draws it along the *K* axis and it reverses again, at almost
+the same magnitude, in a trial not designed to ask the question. **Two independent
+re-draws, two sign flips: the clause is established rather than surviving.** Separately,
+K=6 wins or ties every axis the gate does not score (turnover 3.5x vs 7.9x, maxDD -28.5%
+vs -28.7%, positions 62.7 vs 35.1, DSR 0.9611 on its own) and loses purely on 3.4pp of
+annual return against a ~0.66pp/yr cost saving — turnover ruled out for the third time.
+
+**#47 — Breiman's actual perturbation axis. REJECT by 0.021, and it retracts a standing
+learning.** The repo's strongest mechanisms are all averages over vintages of one
+selection procedure, and the newest research note names the mechanism: bagging, whose
+gain equals the base procedure's instability, with **subset selection** as the canonical
+unstable case — literally the champion's buffered top-N rule. The lab had perturbed
+formation *date* and lookback *length*; it had never perturbed **the data the procedure
+is fitted on**. Three deterministic leave-one-third-out instrument folds, champion
+construction run independently in each, three portfolios averaged at equal weight, zero
+estimated parameters.
+
+Result: validation Sharpe **1.180** vs 1.201 (DSR 0.9732), and validation maxDD
+**-26.9%** vs -28.7% — tying the repo's best-ever validation drawdown on a book earning
+25.5%/yr. The deficit is fully explained by the standard de-concentration tax (weight
+HHI -36%, priced here at ~0.02 Sharpe), leaving nothing over for the smaller-pool bias:
+**the aggregation gain from three genuinely disagreeing folds was almost exactly large
+enough to pay for each fold picking its top 15 out of ~93 instruments instead of 140.**
+Buja–Stuetzle's crossover is near, not clearly on one side. Verdict: the
+subsample-vintage axis is real but not free — a risk/return dial like #33 is to #32, not
+a challenger. No fold ladder follows, as the docstring committed in advance.
+
+### The diagnostic that made the night, and a standing learning partly retracted
+
+`research/SUMMARY.md` candidate #21 — the risk-contribution vector `x_i · ∂_i σ(x)`,
+open since 2026-08-18 — was run for the first time. On the champion's own monthly books:
+
+| | weight share | risk share |
+|---|---|---|
+| top name | 0.1717 | **0.3094** |
+| top 5 names | 0.4869 | 0.6316 |
+| effective bets (1/HHI) | 13.3 | **6.0** |
+
+**The book is less than half as diversified as every statistic this repo had been
+using.** That resolves the standing puzzle recorded after sector-neutral scoring and
+basket-breadth widening both failed to move maxDD: both moved *weight* diversification
+and left *risk* diversification untouched. The `learnings.md` entry concluding the
+drawdown was "inherent to the magnitude-weighting mechanism" is marked partly retracted —
+the axis was mis-measured, not closed. Trial #47 moved the risk axis (top-name risk share
+30.9% → 22.5%, effective risk bets 6.0 → 9.9) and maxDD moved with it, as pre-registered
+before the run. First quantitative pre-registration of a drawdown outcome from a
+holdings-only statistic in this repo.
+
+### Two trials not spent
+
+1. **Buffer-band vintage averaging.** Averaging the portfolios formed under 10/18, 15/25
+   and 20/35 as a third vintage axis: overlap with the champion's single band **0.963**
+   (above the 0.89 that killed the earlier inter-signal ensemble), +10.7 names at
+   unchanged HHI (0.0753 → 0.0757) and unchanged turnover. Nested bands off one ranking
+   at one date share their core, so their average is the middle band plus a low-weight
+   fringe — the saturated `N` lever of `IR = mean(IC)/sqrt(σ_IC² + φ/N)`, not `σ_IC`.
+   The 0.963-vs-0.645-vs-0.43 contrast is what justified spending the trial on the
+   subsample axis instead, and it generalises into a screen: **a vintage axis is only a
+   vintage axis if its members disagree about membership in the core, not the fringe.**
+2. **Capping risk contribution instead of weight.** The obvious thing the 17.2%/30.9%
+   gap invites. Dies on screen #1 of `research/SUMMARY.md` without a trial: a risk cap
+   needs a covariance matrix — the noisily-estimated class refuted twice empirically here
+   and closed analytically by the ERC theorem. The diagnostic that reveals the problem
+   does not license the fix that would create a worse one.
+
+### Protocol concern — unchanged at three points, and deliberately so
+
+No promotion tonight means no fourth data point and **no fifth holdout look**; the count
+since 2026-08-17 stands at four. The concern itself is unchanged and still awaiting human
+review: the gate scores validation Sharpe only and evaluates the holdout after deciding,
+so it structurally cannot see a validation/holdout disagreement, and #42 (validation
+1.120, holdout **1.38**, maxDD -20.1%) remains the candidate a human would most plausibly
+reinstate — its file is intact. Tonight adds a second kind of evidence for the same
+concern: **#47 landed 0.021 short on the gate's axis while beating the champion by 1.8pp
+on validation drawdown and tying the repo's best.** The gate discarded it without the
+drawdown entering the decision at all. Recorded, not acted on, per CLAUDE.md — both
+levers that would fix it live in frozen files.
+
+### Ideas for next session
+
+1. **The risk-contribution vector is now a standard diagnostic, and it opens a question
+   rather than closing one.** Every concentration claim in this repo's history was made
+   on weight HHI, which tonight's measurement shows is a poor proxy on a magnitude-
+   weighted momentum book. What has never been asked: does risk concentration *vary over
+   time* in a way that leads drawdowns? That is a holdings-only statistic, costs no
+   trial, and would say whether the champion's bad periods are preceded by the risk
+   axis tightening. **Idea provenance: the diagnostic is `research/SUMMARY.md` candidate
+   #21; the time-variation question is the lab's own.**
+2. Closed or heavily narrowed tonight, not to be reopened: the date-overlap axis on
+   validation (K=6 costs 0.094 with the overlay held fixed), buffer-band vintage
+   averaging (0.963 overlap, free kill), risk-contribution capping (screen #1), and the
+   subsample-vintage axis as a *challenger* (measured trade-off; a fold ladder would be
+   knob-turning). The sampling-luck clause is now established across two independent
+   re-draws and needs no third.
+3. Still open and still free from `research/SUMMARY.md`: the closed-form weight-vector
+   triage for any proposed trend/MA signal (candidate #3) — the one named free screen
+   not yet exercised here. **Idea provenance: `research/SUMMARY.md`.**
+4. The honest position is unchanged from last session and tonight reinforces it: this
+   family's remaining upside is in **methodology and in the protocol question**, not in
+   another challenger. Two well-motivated structural ideas were tried tonight and both
+   landed below the champion on the gate's axis while beating it on axes the gate does
+   not read; that is the fourth and fifth such instance on record.
+- No engine issues encountered this session.

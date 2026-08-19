@@ -122,7 +122,11 @@ across experiments; prune entries that later evidence contradicts.
   (escalation works, dampening doesn't) — but a structurally different idea
   building on undamped magnitude-weighting, or simply patience for the DSR
   bar to become clearable, are both reasonable next steps.
-- **The best challenger's rising validation maxDD is not a diversification
+- **[PARTLY RETRACTED 2026-08-19 — see the risk-contribution entry near the end
+  of this file. The two experiments below moved *weight* diversification and
+  left *risk* diversification untouched, which is why they were no-ops; the
+  axis was not closed, it was mis-measured.]** **The best challenger's rising
+  validation maxDD is not a diversification
   problem — it survives both sector-neutral scoring and much wider basket
   breadth unchanged, closing that whole axis.** Following up on the
   drawdown-widening concern above, one session tested two structurally
@@ -475,6 +479,70 @@ across experiments; prune entries that later evidence contradicts.
   negative, trial not spent. Diagnose first; spend the trial only on the sign, and only
   when the sign matters.
 
+- **Weight concentration is not risk concentration, and every concentration
+  claim in this repo's history was made on the weaker of the two.** The
+  risk-contribution vector `x_i · ∂_i σ(x)` — a holdings-only statistic, no
+  returns scored — puts the champion's top name at **17.2% of capital but 30.9%
+  of variance**, its top five at 48.7% against 63.2%, and its effective bets at
+  **13.3 by weight against 6.0 by risk**. The book is less than half as
+  diversified as top-weight and HHI had been reporting, because magnitude
+  weighting puts the most capital on the names that are simultaneously the most
+  volatile and the most correlated with each other. This resolves the standing
+  puzzle above: sector-neutral scoring and basket-breadth widening both moved
+  weight diversification while leaving risk diversification alone, which is
+  exactly why neither moved maxDD. Subsample bagging (trial #47) moved the risk
+  axis — top-name risk share 30.9% → 22.5%, effective risk bets 6.0 → 9.9 — and
+  validation maxDD moved with it, -28.7% → **-26.9%**, tying the repo's best.
+  First time a candidate's drawdown was predicted quantitatively from a
+  holdings-only statistic *before* the run. **Compute risk contributions
+  alongside HHI for any future concentration or drawdown claim.** The obvious
+  fix it invites — capping risk contribution rather than weight — is killed for
+  free by screen #1 of `research/SUMMARY.md`: a risk cap needs a covariance
+  matrix, the expensive noisily-estimated class refuted twice here and closed
+  analytically by the ERC theorem. The diagnostic that reveals the problem does
+  not license the fix that would create a worse one.
+
+- **A vintage axis is only a vintage axis if its members disagree about
+  *membership*; perturbing a threshold re-draws the fringe, perturbing the data
+  re-draws the core.** Three candidate averaging axes measured on one night by
+  the same holdings-only diagnostic, mean weight overlap against the champion:
+  buffer-band vintages (10/18, 15/25, 20/35) **0.963** — killed for free, it
+  adds 10.7 names at unchanged HHI and unchanged turnover, i.e. the saturated
+  `N` lever, because nested bands off one ranking at one date share their core
+  and their average is the middle band plus a low-weight fringe; formation-date
+  vintages (K=6) **0.645**; instrument-subsample vintages (three
+  leave-one-third-out folds) **0.851** overall but with pairwise fold overlap
+  of only **0.43-0.48** and, decisively, **0.140 of L1 disagreement inside the
+  champion's own top-10 names against 0.159 across the entire rest of the
+  book**. A name absent from a fold cannot be selected in it, so subsampling
+  re-draws the held-set where the weight is. Screen any proposed vintage axis
+  on core-versus-fringe disagreement before spending a trial — and note the
+  measured ordering only says which axes are *live*, not which pay: the 0.645
+  axis costs validation Sharpe (below) and the 0.43-0.48 axis costs a little
+  too. Live is a precondition, not a prediction.
+
+- **The overlap-versus-no-overlap comparison was confounded, and un-confounding
+  it strengthened the finding instead of overturning it — while re-confirming
+  the sampling-luck clause a second time, for free.** #42 vs #43 (six-tranche
+  date overlap off, four horizon legs fixed) produced the repo's biggest
+  validation jump, 1.120 → 1.187, but both sides carried the accidental
+  `held ∩ legacy-cohort` trigger, whose sample is a function of book breadth (3
+  names / 11% of weight at 62.7 held names, 6.5 / 20.7% at 35.1). The champion's
+  whole-cohort trigger is market-level and bit-identical across K, so trial #46
+  is the first clean reading: **the gap widens, 0.067 → 0.094** (1.201 vs 1.107).
+  #43 stands. The by-product is worth more: laying the four cells out —
+  accidental trim K=6 1.120 / K=1 1.187, cohort trim K=6 1.107 / K=1 1.201 — the
+  intersection filter is worth **+0.013 on the wide book and −0.014 on the narrow
+  one**. #45 re-drew the held-set along the horizon axis and the ordering
+  reversed; #46 re-draws it along the K axis and it reverses again, at almost the
+  same magnitude, in a trial not designed to ask. **Two independent re-draws, two
+  sign flips: the sampling-luck attribution is established, not merely
+  surviving.** Note also what the overlap does and does not cost: K=6 wins or
+  ties every unscored axis (turnover 3.5x vs 7.9x, maxDD -28.5% vs -28.7%,
+  positions 62.7 vs 35.1) and carries DSR 0.9611 on its own; the whole deficit is
+  3.4pp of annual return against a cost saving of ~0.66pp/yr, so turnover is
+  ruled out as the explanation for the third time on this base.
+
 - **⚠ Standing protocol concern, raised 2026-08-17, now a three-point trend and
   escalated. For human attention.** Promotion scores validation Sharpe only, and the
   holdout is evaluated *after* the decision is made, so the gate structurally cannot
@@ -500,3 +568,11 @@ across experiments; prune entries that later evidence contradicts.
   sessions should prefer diagnostic work to challengers in this family — the two
   levers that would fix it (scoring something other than raw validation Sharpe, or
   rationing holdout looks) both live in frozen files.
+  **Update 2026-08-19: unchanged at three points — no promotion tonight, so no
+  fourth data point and no fifth holdout look was spent.** Both of tonight's
+  trials rejected, which is the one outcome that leaves the holdout untouched;
+  the count of holdout looks since 2026-08-17 stands at four. Worth recording
+  that trial #47 landed 0.021 short of the champion on the gate's axis while
+  beating it by 1.8pp on validation drawdown and tying the repo's best — a
+  second concrete instance, alongside #32/#33 and #42, of the gate's single axis
+  discarding a candidate a human weighing risk would want to see.
