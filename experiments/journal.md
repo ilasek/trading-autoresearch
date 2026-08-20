@@ -1985,3 +1985,64 @@ levers that would fix it live in frozen files.
   letting drift run *longer* pays more, in the direction that also saves turnover — is
   now motivated by a measurement rather than a hunch, and is trial #50.
 
+## 2026-08-20T23:36:16+00:00 — mom_hzn_avg4_no_resize — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_avg4_no_resize.py` (family: cross-sectional momentum, trial #50)
+- Hypothesis: Never re-scoring an incumbent's weight — the four per-horizon buffer chains update monthly as usual and entrants are sized on the current composite, but a name held last month and still held keeps its drifted relative weight instead of being reset, with signal, membership, transform, cohort trim and both constants otherwise identical — lands validation Sharpe above 1.232 net of 15 bps costs, because trial #49 measured intra-month drift at ~0.09 Sharpe and ~3.7pp of annual return in all six validation years, and the monthly re-size discards that tilt twelve times a year; 1.232 rather than the champion's 1.201 is the bar because the change carries a pre-registered tailwind of ~0.031 Sharpe (HHI +11.5% ~ 0.008, turnover -31.7% ~ 0.023), so landing between 1.201 and 1.232 is a null on the mechanism despite clearing the gate, and landing below 1.201 shows the drift tilt is horizon-limited to about a month rather than compounding.
+- Verdict: REJECT — validation sharpe 0.925 <= champion 1.201
+- Train: sharpe +0.94, ann_ret +17.7%, maxDD -55.6%, turnover 2.2x
+- Validation: sharpe +0.93, ann_ret +19.5%, maxDD -33.0%, turnover 4.5x
+- Deflated Sharpe prob: 0.903 (bar from 50 trials, 12 effective)
+- Champion validation sharpe at the time: +1.20
+- Champion re-deflated at the same bar: 0.9756
+- Lesson: **Together with #49 this brackets a real, previously-unexamined dial and puts
+  the champion at its optimum: the drift tilt is horizon-limited to about one rebalance
+  cycle.** #49 re-sized *more* often (weekly instead of monthly) and lost 0.142; this
+  re-sizes *never* — incumbents keep their drifted relative weight indefinitely — and
+  loses **0.276** against the champion, or 0.307 against the 1.232 bar this file
+  pre-registered from its own tailwinds. Two deviations in opposite directions on one
+  axis, both large, which is far more informative than a one-sided null: the monthly
+  re-size is not throwing the tilt away, it is **harvesting it at roughly the right
+  horizon**. The trailing-month return is continuation when it re-weights an
+  already-selected momentum basket (#49) and stops being so within about a cycle;
+  beyond that the weight vector is reporting how a name did since it entered the book,
+  which may be years ago, and that is not a signal. The champion's monthly cadence,
+  never argued for in this repo, now has a two-sided empirical defence and should not
+  be revisited without one.
+  **Cost ruled out for the fifth time on this base, and this instance is the cleanest.**
+  Turnover fell 7.9x -> 4.5x (-43%) — a saving of ~0.5pp/yr, larger than the entire
+  cost drag the learnings file attributes to the champion — and the book still lost
+  0.276. The whole gap is return: 19.5% vs 28.6% annualised.
+  **A pre-registered falsifier fired, and it bounds the repo's newest diagnostic.** The
+  docstring predicted validation maxDD near the champion's -28.7% because the
+  holdings-only risk-contribution vector was measured *flat* (top-name risk share 0.327
+  -> 0.317, effective risk bets 7.7 -> 7.7) even as weight HHI rose 11.5%, and #47's
+  lesson is that drawdown tracks the risk axis rather than the weight axis. maxDD came
+  in at **-33.0%**, materially worse. So the statistic that correctly predicted #47's
+  improvement and #48's null has now missed once, and the miss has a shape: **risk
+  contributions are computed from a trailing covariance and are blind to weight-vector
+  *staleness*.** A book whose largest positions are its oldest winners carries a
+  drawdown risk that no snapshot of correlations and volatilities reveals, because the
+  danger is not that those names co-move — it is that the weight vector is describing a
+  regime that has ended. Keep the diagnostic; add the boundary.
+  **Where the loss lands, and why it is coherent with #48.** By year, against the
+  champion: 2018 -6.8 vs +0.8, 2019 **+38.7 vs +37.3**, 2020 **+78.3 vs +130.5**, 2021
+  +8.8 vs +17.6, 2022 **-7.6 vs -10.2**, 2023 +30.3 vs +41.0. The book is *better* in
+  the bear year and in 2019 and gives up more than a third of the 2020 melt-up — the
+  signature of a slower, less responsive allocation, which is the same axis #48's
+  rotation-year deficit identified from the other direction. Tonight's three trials
+  therefore agree on one thing across three unrelated mechanisms: **on this universe
+  and window, whatever slows the core allocation's response to the current signal
+  costs return, and nothing the lab has tried buys enough diversification to pay for
+  it.**
+  **A fourth idea killed for free by the same diagnostic run.** The natural way to
+  write "trade only for membership changes" is the exact cash-flow rule — sell the
+  exits, buy the entrants with the proceeds, touch nobody else. Measured on holdings
+  only, that rule *destroys magnitude weighting*: HHI -21.9%, top-name risk share 0.327
+  -> **0.182**, effective risk bets 7.7 -> **13.1**, i.e. the book flattens toward
+  equal weight, because a hold-25/enter-15 buffer frees very little capital in a
+  typical month so entrants can never be sized on their score and a name's weight ends
+  up reflecting the cash available on its entry date. Given the repo's own ladder puts
+  magnitude weighting ~0.13 Sharpe above equal weight, it was a predictable loss for a
+  reason unrelated to the question, and it was not built. Recorded so it is not
+  rediscovered as the obvious implementation.
+
