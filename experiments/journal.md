@@ -1934,3 +1934,54 @@ levers that would fix it live in frozen files.
   champion's 3.5x-vs-7.9x worked only because those two books were compared to each
   other, not because six staggered tranches net their trades.
 
+## 2026-08-20T23:27:20+00:00 — mom_hzn_avg4_weekly_resize — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_avg4_weekly_resize.py` (family: cross-sectional momentum, trial #49)
+- Hypothesis: Recomputing the champion's magnitude weights from the current composite every five trading days instead of letting them drift with prices for twenty-one — membership, buffer chains, lookbacks, skip-month, transform and cohort trim all identical, and the held-set verified identical on 75 of 75 validation month-ends — lands validation Sharpe above the champion's 1.201 net of 15 bps costs, because leaving weights to drift silently tilts the book by each name's trailing 0-21 day return, which is exactly the horizon the signal's skip-month deliberately excludes as carrying reversal rather than continuation, so the champion skips the recent month in selection and then rides it in weighting; the change carries a pre-registered headwind of about 0.035 Sharpe (HHI -9.4% ~ 0.006, turnover +57.6% ~ 0.029), so landing about that far below shows the skip-month lesson does not extend from selection to weighting, and landing materially further below shows intra-month drift is an actively useful component rather than an artifact.
+- Verdict: REJECT — validation sharpe 1.059 <= champion 1.201
+- Train: sharpe +0.93, ann_ret +17.6%, maxDD -52.7%, turnover 9.3x
+- Validation: sharpe +1.06, ann_ret +23.9%, maxDD -28.9%, turnover 14.8x
+- Deflated Sharpe prob: 0.9496 (bar from 49 trials, 11 effective)
+- Champion validation sharpe at the time: +1.20
+- Champion re-deflated at the same bar: 0.9765
+- Lesson: **The largest single unexamined component of every candidate this repo has
+  ever run is the twenty-one days of doing nothing between rebalances, and it is worth
+  roughly 3.7pp of annual return.** Every magnitude-weighted book here sets its weights
+  once a month from a composite that deliberately skips the most recent 21 days, then
+  never touches them, so the realised weight vector on any day is the formation-date
+  vector tilted by each name's trailing 0-21 day return — a momentum tilt over exactly
+  the horizon the signal refuses to use, applied silently, by omission. The
+  pre-registered hypothesis was that deleting it should *pay*, because the skip-month
+  is recorded as load-bearing in both `learnings.md` and `research/SUMMARY.md`
+  (candidate #11) and both echo-literature sources say that month carries reversal.
+  **The result is the third of the three pre-read outcomes and by a wide margin:
+  1.059, a miss of 0.142 against a pre-registered headwind of 0.035.** Netting the
+  measured nuisance terms — turnover 7.9x -> 14.8x, ~1.04pp/yr at the learnings file's
+  0.15%/yr-per-turn rate, ~0.045 Sharpe; HHI -9.4%, ~0.006 Sharpe — leaves **~0.09
+  Sharpe and ~3.7pp/yr of annual return that intra-month drift itself was earning.**
+  **This is a boundary on the skip-month lesson, not a contradiction of it, and the
+  boundary is selection-versus-weighting.** The reversal the skip-month avoids is a
+  cross-sectional effect over the whole universe: last month's biggest risers are
+  disproportionately about to give some back, so ranking on them picks the wrong names.
+  Inside a basket whose membership has *already* been chosen on 3-12 month momentum,
+  the same trailing-month return does the opposite job — it re-weights toward the names
+  whose momentum is still accelerating and away from those rolling over, and it does so
+  at literally zero trading cost, which no other weight tilt in this repo can claim.
+  The champion's skip-month and its drift are therefore not in conflict; they are the
+  same statistic used at two steps where it has opposite signs. **Any future write-up
+  of the skip-month must carry that boundary, and any future proposal to re-size more
+  often now starts 0.09 Sharpe in the hole.**
+  **Broad-based, so not a window artifact.** The free year-by-year decomposition of
+  recorded trial returns shows re-sizing loses in *every* validation year — 2019 30.3
+  vs 37.3, 2020 116.3 vs 130.5, 2021 12.2 vs 17.6, 2022 -11.4 vs -10.2, 2023 34.6 vs
+  41.0 — unlike tonight's vintage-averaging null, whose deficit concentrated in the
+  rotation years. A mechanism that pays in all six years of a window whose P&L is
+  dominated by one of them is the rare finding here that the window's documented
+  failure mode does not explain.
+  **One honest limit.** This trial cannot separate "drift is good" from "re-sizing
+  trades are bad" — they are the same intervention seen from two sides, and the cost
+  term is netted with a rate constant borrowed from `learnings.md` rather than measured
+  here. What it does establish is the sign and the order of magnitude, which is what
+  the diagnose-first rule asks a trial to supply. The obvious next question — whether
+  letting drift run *longer* pays more, in the direction that also saves turnover — is
+  now motivated by a measurement rather than a hunch, and is trial #50.
+
