@@ -2046,3 +2046,183 @@ levers that would fix it live in frozen files.
   reason unrelated to the question, and it was not built. Recorded so it is not
   rediscovered as the obvious implementation.
 
+
+## Session summary — 2026-08-20 (nightly)
+
+- **Integrity check — one deviation, corrected before any work.** `git fetch origin
+  --prune` clean; `git branch -r --no-merged origin/main` returned nothing, so every
+  remote branch (`claude/remote-learning-egress-access-33q7fy`,
+  `deflated-sharpe-effective-trials`, `main-b713x5`, `main-p76jo3`) is an ancestor of
+  `origin/main` and no previous session's work is stranded. As on 2026-08-19, the
+  session **opened on a per-run branch** (`main-ur96od`), which pointed at exactly
+  `origin/main` (`56dbcd0`) with no commits of its own; per the standing instruction
+  never to run trials from a per-run branch it was corrected first (`git checkout main
+  && git reset --hard origin/main`). All three trials and every commit below are on
+  `main`. Engine tests green (16 passed). Store fresh through 2026-08-20.
+- Experiments run: **3 of the 8-trial budget** (#48 `mom_hzn_avg4_phase4`, #49
+  `mom_hzn_avg4_weekly_resize`, #50 `mom_hzn_avg4_no_resize`). Verdicts: **3 REJECT,
+  0 PROMOTE, 0 GATE_FAIL**. No promotion means **no holdout number was exposed**; the
+  count of holdout looks since 2026-08-17 still stands at four. The session stopped on
+  judgement, not on the budget: after #50 the night had a complete two-sided result and
+  the manual's "quality over quantity" rule made a fourth trial worse than no fourth
+  trial.
+- **Two ideas killed without a trial**, both by holdings-only diagnostics (weight
+  matrices, risk-contribution vectors and trade vectors, prices truncated at
+  2023-12-31, no returns scored, trial count untouched). A third free analysis — of
+  the *already recorded* trial return series — produced the night's most consequential
+  correction and also cost no trial.
+
+### The night in one line
+
+Two unrelated questions were asked and both answered cleanly: **adding a fourth kind of
+vintage to the champion does not pay (three-for-three now), and the champion's monthly
+re-size cadence — never argued for in this repo — turns out to sit at the optimum of a
+real dial that nobody had noticed was a dial.**
+
+### #48 — the vintage axis with no excuses left. REJECT, -0.076.
+
+The lab's three live vintage axes had two different alibis: formation-**date**
+vintages (#46, -0.094) lose to *staleness*, instrument-**subsample** folds (#47,
+-0.021) lose to *pool restriction*. Rebalance **phase** has neither — four vintages
+formed on the first trading day on or after the 1st, 8th, 15th and 22nd, each seeing
+all 140 instruments at the champion's own cadence, none ever more than a month old.
+Pre-trial diagnostics put both nuisance terms at ~zero (HHI -5%, ~0.003 Sharpe of
+tax; top-name **risk** share 0.327 -> 0.325; effective risk bets 7.7 -> 7.8; gross
+exposure identical at 0.984) and confirmed the axis was live on the lab's own screens
+(pairwise weight overlap 0.796; core-vs-fringe L1 **0.118** on the champion's top-10
+against 0.165 on the whole rest). It lost 0.076 anyway, with maxDD unchanged at -28.9%
+exactly as the flat risk vector predicted, and with the deficit again entirely in
+return (26.0% vs 28.6%) against a turnover change of +1.8%.
+
+**The common signature across all three axes is the rotation years, not 2020.** Free
+year decomposition: #48's 2020 is 126.4% against the champion's 130.5%, while 2018,
+2019, 2022 and 2023 all give ground. Averaging blurs the core allocation, and a blurred
+core tracks a leadership change more slowly. One mechanism, three nulls, no appeal to
+staleness, pool size or concentration. The family is closed for challengers absent a
+rationale about rotation speed. Note also what this does *not* touch: #32's original
+overlap gain was measured against a much worse base and stands.
+
+### #49 and #50 — the twenty-one days of doing nothing. REJECT -0.142, REJECT -0.276.
+
+Every magnitude-weighted book here sets weights once a month from a composite that
+**skips the most recent 21 days**, then never touches them. So the realised weight
+vector on any day is the formation-date vector tilted by each name's trailing 0-21 day
+return — a momentum tilt over exactly the horizon the signal refuses to use, applied by
+omission, inherited by every candidate the lab has ever run. No trial had examined it.
+
+| | change | val Sharpe | turnover | pre-registered nuisance |
+|---|---|---|---|---|
+| champion | — | 1.201 | 7.9x | — |
+| #49 | re-size **weekly** | 1.059 | 14.8x | -0.035 headwind |
+| #50 | re-size **never** | 0.925 | 4.5x | +0.031 tailwind |
+
+#49 held membership *identical on 75 of 75 month-end snapshots*, so the only change was
+the weights, and it lost 0.142 against a 0.035 headwind — leaving ~0.09 Sharpe and
+~3.7pp of annual return to the drift itself, in **all six validation years**. #50 took
+the mechanism to its structural limit (incumbents never re-scored) and lost 0.276 while
+*saving* 43% of turnover.
+
+Two findings. **(a) A boundary on the skip-month lesson, which had been recorded
+without one.** The trailing-month return is cross-sectional *reversal* when it ranks
+the whole universe — so skipping it in **selection** is right — and *continuation* when
+it re-weights a basket already chosen on 3-12 month momentum, so riding it in
+**weighting** is right too. The same statistic with opposite signs at two steps, and
+the second use costs nothing because it requires no trade. **(b) The tilt's useful life
+is about one rebalance cycle.** Past that a weight reports how a name did since it
+entered the book, possibly years ago. The monthly cadence is bracketed on both sides
+and should not be revisited without a two-sided argument.
+
+Cost was ruled out twice more (#49 pays 2x turnover and #50 saves 43%, both losing on
+return), making it five independent rulings-out on this base.
+
+### The free analysis that mattered most: a standing learning retracted
+
+`learnings.md` has carried, since 2026-08-16, the reading that "one year is most of the
+result" and that a challenger beating the champion by a small margin "should be assumed
+to have beaten it in 2020 until shown otherwise." That was an assumption, and the data
+to test it was already on disk: `experiments/trial_returns/` holds every recorded
+trial's validation return series, so decomposing them by year re-runs nothing, scores
+nothing new and never opens the holdout.
+
+    corr(validation Sharpe, 2020 return)                 +0.892   (47 trials)
+    corr(validation Sharpe, mean of the other five years) +0.891
+    #42 -> #43, the repo's largest validation jump (1.120 -> 1.187):
+        2020  126.9% -> 128.6%   (flat)
+        2018   -5.7% ->  +2.2%
+        2023   28.4% ->  41.0%
+
+**The ladder is not a 2020 artifact.** The clause is retracted. This makes the ⚠
+standing protocol concern *harder* to explain away rather than easier: the
+validation/holdout disagreement #43 opened cannot be attributed to one anomalous year
+either. What the table does supply is a better discriminator — the rotation years,
+2018 and 2023 — which is what let #48's null be read as a mechanism rather than noise.
+
+### Two trials not spent, and one research screen corrected
+
+1. **Score-threshold buffer instead of a rank-threshold buffer.** A rank band is
+   dispersion-blind: it holds the same number of names whether the cross-section has
+   many strong movers or none. Measured, the idea has no non-tuned specification. The
+   normal-quantile equivalents of the champion's own 15/25 band (z >= 1.24 / 0.92) hold
+   14.5 names per leg and raise HHI **+29%**; thresholds calibrated on the train split
+   to match entry counts (z >= 0.514 / 0.128) hold **40.2** and cut HHI **-48%**. Both
+   miss breadth-neutrality badly and in opposite directions, because the *shape* of the
+   momentum z-distribution is not stationary across regimes even though its ranking is.
+   Landing between them would mean fitting the buffer widths — `research/SUMMARY.md`
+   candidate #22's named anti-candidate. **The by-product is worth keeping: the
+   champion's rank band is robust to a non-stationarity that a score band is not.**
+2. **The exact "trade only for membership changes" rule** — sell the exits, buy the
+   entrants with the proceeds, touch nobody else. Measured on holdings only, it
+   *destroys magnitude weighting*: HHI -21.9%, top-name risk share 0.327 -> **0.182**,
+   effective risk bets 7.7 -> **13.1**. With a hold-25/enter-15 buffer very little
+   capital is freed per month, so entrants can never be sized on their score and a
+   name's weight ends up reflecting the cash available on its entry date. Predictable
+   loss for a reason unrelated to the question; #50 used the relative-weight version
+   instead.
+3. **Correction to `research/SUMMARY.md` candidate #2's newest part (added 2026-08-20).**
+   The trading-diversification closed form predicts a K-leg combination's turnover as
+   `sqrt((1+rho(K-1))/K)` in the correlation of the legs' rebalancing *trades*. On #48's
+   four phase legs, rho = 0.083 predicts a ratio of 0.559 — a 44% saving. The realised
+   ratio is **0.961**. The formula assumes **simultaneous** rebalancing; legs that trade
+   on disjoint days cannot net, so the measured correlation is near zero for a reason
+   entirely unrelated to the diversification being priced. **It reads most optimistic
+   exactly where it is least applicable** — and the axis it would most naturally be
+   applied to here, staggered formation vintages, is precisely the case it does not
+   cover. The champion's 3.5x-vs-7.9x retro-prediction worked because those two books
+   were compared to each other, not because six staggered tranches net their trades.
+
+### A diagnostic bounded
+
+`learnings.md`'s newest standing diagnostic — the risk-contribution vector — predicted
+#47's drawdown improvement and #48's non-improvement correctly and then **missed #50**:
+the risk vector was flat while maxDD widened -28.7% -> -33.0%. The miss has a shape and
+the entry now carries it: risk contributions come from a trailing covariance of a
+*snapshot* book, so they are blind to **weight-vector staleness**. When the largest
+positions are the oldest winners the danger is not that they co-move, it is that the
+weight vector describes a regime that has ended.
+
+### Ideas for next session
+
+1. **Nothing in the vintage family.** Three live axes, three losses, one shared
+   mechanism. A fourth proposal needs an argument about rotation speed, not another
+   source of decorrelation — the live/dead screens have now been shown to predict
+   nothing about whether an axis *pays*.
+2. **Do not touch the re-size cadence.** It is bracketed on both sides as of tonight,
+   and any faster-re-sizing proposal starts 0.09 Sharpe in the hole.
+3. **The one thread tonight opened rather than closed.** #49 shows the champion
+   harvests a short-horizon continuation tilt *by accident*, at zero cost, and #50
+   shows its useful life is about a cycle. Whether it should be *deliberate* — a stated
+   term rather than an artifact of not trading — is a real question, but it is a signal
+   proposal in a direction `learnings.md` calls heavily explored and low-yield, and the
+   accidental version already harvests it at the right horizon. Any session taking it
+   up owes a reason why the deliberate version would be more than a re-parameterisation.
+   **Idea provenance: the lab's own, from #49/#50.**
+4. **Still open and still free from `research/SUMMARY.md`:** the closed-form
+   weight-vector triage for a proposed trend/MA signal (candidate #3), the one named
+   free screen never yet exercised here. **Idea provenance: `research/SUMMARY.md`.**
+5. **The honest position, third session running and now with more support.** This
+   family's remaining upside is in methodology and in the protocol question, not in
+   another challenger. Five well-motivated structural ideas across two sessions have
+   now landed below the champion on the gate's axis. What changed tonight is that the
+   most comfortable explanation for the protocol concern — "it is all 2020" — has been
+   measured and is false.
+- No engine issues encountered this session.

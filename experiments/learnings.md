@@ -145,42 +145,23 @@ across experiments; prune entries that later evidence contradicts.
   the underlying momentum signal's tail behavior in a crash), not basket
   composition. Basket breadth (35/20) itself is still a free upgrade over
   the narrower 25/15 version — same Sharpe, lower turnover.
-- **[Superseded below] A time-dimension de-risking lever finally solved the
-  maxDD problem the sector/breadth axis couldn't — but only once cadence was
-  fixed.** A basket-own realized-vol-spike trigger (trailing 21d vs 252d
-  realized vol of the basket's own held names, ratio > 1.6 → cut exposure to
-  0.6x) is mechanistically distinct from every previously-refuted de-risking
-  overlay (those all used an *external* trend signal — 200dma, SPY-trend —
-  which whipsawed because trend reversals are frequent in calm markets).
-  Evaluated only at the monthly rebalance, it was a near no-op: it fired in
-  just 19 of 513 months of history and only twice in the whole 2018-2023
-  validation window, leaving maxDD identical to the untrimmed basket
-  (-35.6%) because by month-end most of a fast crash (e.g. 2020-03) had
-  already happened. Re-evaluating the *identical* trigger daily instead —
-  composition/selection/weighting all still monthly, only the exposure
-  scalar reacts faster — fixed this completely: validation Sharpe rose to
-  1.05-1.07 (new best-ever, beating the untrimmed 1.03) *and* maxDD fell to
-  -29.5%/-30.3%, better than the untrimmed basket's -35.6% *and* better than
-  the champion's own -29.9%. This is the first mechanism in the repo to
-  improve Sharpe and drawdown simultaneously, on both the widebreadth
-  (20/35) and narrower (15/25) basket variants — confirming concentration
-  level and the trim are independent, additive levers. **General lesson for
-  any future overlay/regime idea: evaluate whether the trigger needs to
-  react faster than the strategy's own rebalance cadence before concluding
-  a mechanism doesn't work — a monthly-only check can make a genuinely
-  sound crash-detection signal look like a no-op purely from reaction
-  lag, distinct from the whipsaw failure mode of the earlier de-risking
-  attempts.** One follow-up refuted: redirecting the trimmed capital into a
-  fixed 50/50 TLT/GLD hedge instead of leaving it as cash made no
-  improvement (same Sharpe, slightly worse maxDD and turnover) — cash is a
-  cleaner, cost-free ballast for this trigger; bonds/gold were not reliably
-  diversifying during the exact spike windows it fires on (e.g. the
-  liquidity-driven 2020-03 selloff briefly hit most assets at once). The
-  narrow-basket + daily-trim combination
-  (`mom_zscore_narrow_daily_volspike_trim`, val Sharpe 1.07, maxDD -30.3%,
-  DSR 0.9326) is the strongest challenger in the repo's history on every
-  axis — Sharpe, drawdown, and DSR — future sessions should treat it as the
-  new bar, not the champion's 0.865 or the earlier 1.03 escalation line.
+- **[Pruned 2026-08-20 to its transferable content; the specific numbers below were
+  superseded by the trim-axis entry further down, which found this mechanism was
+  mis-specified.] Cadence is a property of an overlay to check before judging it.** A
+  vol-spike exposure trigger evaluated only at the monthly rebalance looked like a
+  near-no-op (19 firings in 513 months); the *identical* trigger re-evaluated daily,
+  with composition/selection/weighting still monthly and only the exposure scalar
+  reacting faster, moved both Sharpe and drawdown. **General lesson for any future
+  overlay or regime idea: check whether the trigger needs to react faster than the
+  strategy's own rebalance cadence before concluding the mechanism does not work — a
+  monthly-only check can make a sound crash-detection signal look dead purely from
+  reaction lag, which is a different failure mode from the whipsaw that sank the
+  earlier trend-based overlays.** Its complement is recorded further down under the
+  refuted drawdown brake: a release rule slower than the recovery costs more than the
+  trigger ever saves. One follow-up refuted at the time and not worth revisiting:
+  redirecting trimmed capital into a fixed TLT/GLD hedge rather than cash gained
+  nothing, because those legs were not reliably diversifying in the exact windows the
+  trigger fires on.
 - **The daily vol-spike trim's benefit is specific to the magnitude-weighted
   basket, not a general property of concentrated momentum baskets.** Applying
   the identical daily-reacting trim mechanism to the plain equal-weight
@@ -357,9 +338,24 @@ across experiments; prune entries that later evidence contradicts.
   most of the result. Combined with the post-2026-08-16 protocol (trial
   clustering makes within-family tuning nearly free in deflation terms, so DSR no
   longer brakes a ladder of momentum variants), the practical position is that
-  **the only real check left is the holdout**, and a challenger that beats 1.107
-  by a small margin should be assumed to have beaten it in 2020 until shown
-  otherwise.
+  **the only real check left is the holdout**.
+  **The "assume it beat 2020" clause is retracted 2026-08-20, having finally been
+  measured rather than assumed.** A free decomposition of every recorded trial's
+  stored validation return series (`experiments/trial_returns/`, no strategy
+  re-run, no new backtest, trial count untouched) puts `corr(validation Sharpe,
+  2020 return)` at **+0.892** across all recorded trials and `corr(validation
+  Sharpe, mean of the other five years)` at **+0.891** — indistinguishable. And
+  the repo's biggest single validation jump, #42 -> #43 (1.120 -> 1.187), has
+  **2020 essentially unchanged** (126.9% vs 128.6%): its gain is 2018 (-5.7 ->
+  +2.2) and 2023 (28.4 -> 41.0). So the ladder is not a 2020 artifact, and the
+  validation/holdout disagreement #43 opened is not explained by 2020 either —
+  which makes the ⚠ protocol concern at the end of this file *harder* to dismiss,
+  not easier. What the table does show is a sharper pattern: **the years that
+  discriminate inside this family are the rotation years, 2018 and 2023**, and
+  every construction that slows the core allocation's response to the current
+  signal gives ground there specifically. Decompose before attributing any gap in
+  this family to one year; the tooling is `experiments/trial_returns/` and it is
+  free.
 
 - **Lookback *length* is a second axis of vintage diversity, roughly independent
   of formation *date*, and it is the answer to the standing "what supplies
@@ -501,6 +497,16 @@ across experiments; prune entries that later evidence contradicts.
   matrix, the expensive noisily-estimated class refuted twice here and closed
   analytically by the ERC theorem. The diagnostic that reveals the problem does
   not license the fix that would create a worse one.
+  **Boundary added 2026-08-20, after the statistic's first miss.** It predicted
+  #47's drawdown improvement and #48's non-improvement correctly, then missed #50:
+  the risk vector was flat (top-name risk share 0.327 -> 0.317, effective risk bets
+  7.7 -> 7.7) while validation maxDD widened -28.7% -> **-33.0%**. The miss has a
+  shape. Risk contributions come from a *trailing covariance of a snapshot book*, so
+  they are blind to **weight-vector staleness**: when the largest positions are the
+  oldest winners, the danger is not that those names co-move, it is that the weight
+  vector describes a regime that has ended, and no correlation matrix reports that.
+  Keep the diagnostic and the rule — just do not lean on it for a construction whose
+  weights carry information from long before the measurement date.
 
 - **A vintage axis is only a vintage axis if its members disagree about
   *membership*; perturbing a threshold re-draws the fringe, perturbing the data
@@ -543,6 +549,65 @@ across experiments; prune entries that later evidence contradicts.
   3.4pp of annual return against a cost saving of ~0.66pp/yr, so turnover is
   ruled out as the explanation for the third time on this base.
 
+- **The vintage-averaging family is closed for challengers: three live axes, three
+  losses, and the third one removes the excuses the first two had.** The lab's
+  strongest historical mechanism is averaging one selection procedure over vintages,
+  and it now has a complete negative record *on top of the four-horizon single-vintage
+  base*: formation-**date** vintages (#46, -0.094), instrument-**subsample** folds
+  (#47, -0.021) and rebalance-**phase** vintages (#48, -0.076). Buffer-band vintages
+  were killed free earlier (0.963 overlap). The standing account blamed a different
+  nuisance for each of the first two — staleness for the date axis (K=6 holds
+  six-month-old formations) and pool restriction for the subsample axis (each fold
+  picks its top 15 from ~93 instruments, not 140). **Phase has neither**: every
+  vintage sees all 140 instruments, runs the champion's cadence, and no tranche is
+  ever over one month old. Its nuisance terms were measured at essentially zero before
+  the run (HHI -5% ~ 0.003 Sharpe, top-name risk share 0.327 -> 0.325, effective risk
+  bets 7.7 -> 7.8, gross exposure identical) and it still cost 0.076 — the cleanest
+  reading available, and the largest loss of the three relative to its own excuses.
+  **What all three share is a signature, not an excuse: the deficit lands in the
+  rotation years.** By the free year decomposition, 2020 is near-untouched in each
+  (#48: 126.4% vs the champion's 130.5%) while 2018, 2019, 2022 and 2023 give ground.
+  Averaging blurs the core allocation — #48's core-vs-fringe L1 was 0.118 on the
+  champion's top-10 against 0.165 on the whole rest, so the top of the book *is*
+  re-drawn — and a blurred core tracks a leadership change more slowly than a single
+  fresh formation does. That is one mechanism for three nulls and it does not invoke
+  staleness, pool size or concentration. Cost is ruled out in all three (turnover
+  changes of -55%, +1.8% and -43% across the night, all with the deficit landing in
+  return). **Do not propose a fourth vintage axis without a rationale that addresses
+  rotation speed specifically**; the screens (overlap, core-vs-fringe) tell you whether
+  an axis is *live*, and three live axes have now all lost, so live has been shown to
+  be a precondition with no predictive content whatever.
+  *Note on scope: none of this overturns #32's original overlap gain, which was
+  measured against a materially worse base and whose pruning diagnostic still stands.
+  The claim is about marginal value on top of the current four-horizon book.*
+
+- **The champion's biggest unexamined component was the twenty-one days of doing
+  nothing, it is worth ~0.09 Sharpe, and its useful life is about one rebalance
+  cycle — so the monthly re-size cadence, never argued for here, is now bracketed on
+  both sides.** Every magnitude-weighted book in this repo sets weights once a month
+  from a composite that *skips the most recent 21 days*, then leaves them alone, so the
+  realised weight vector is the formation-date vector tilted by each name's trailing
+  0-21 day return: a momentum tilt over exactly the horizon the signal refuses to use,
+  applied by omission, inherited by every candidate ever run here. Two trials measured
+  it from both sides. Re-sizing **more** often (weekly, membership held identical on
+  75/75 month-ends) cost **0.142** against a pre-registered headwind of 0.035, leaving
+  ~0.09 Sharpe and ~3.7pp/yr to the drift itself — and it lost in **all six**
+  validation years, which is the rare result on this window that its documented
+  one-year dominance cannot explain. Re-sizing **never** (incumbents keep their drifted
+  relative weight) cost **0.276**, with turnover down 43%. Two large losses in opposite
+  directions on one axis.
+  **Two things follow.** (a) A boundary on the skip-month lesson, which had been stated
+  without one: the trailing-month return is cross-sectional *reversal* when it ranks
+  the whole universe (so skipping it in **selection** is right) and *continuation* when
+  it re-weights a basket already selected on 3-12 month momentum (so riding it in
+  **weighting** is also right) — the same statistic with opposite signs at two steps,
+  and the second use is free, requiring no trade at all. Any future write-up of the
+  skip-month must carry that boundary. (b) The tilt decays within about a cycle: past
+  that, a weight is reporting how a name did since it entered the book, possibly years
+  ago, which is not a signal. **The monthly cadence is at or near the optimum of a real
+  dial and should not be revisited without a two-sided argument.** Any future proposal
+  to re-size more often starts 0.09 Sharpe in the hole.
+
 - **⚠ Standing protocol concern, raised 2026-08-17, now a three-point trend and
   escalated. For human attention.** Promotion scores validation Sharpe only, and the
   holdout is evaluated *after* the decision is made, so the gate structurally cannot
@@ -576,3 +641,14 @@ across experiments; prune entries that later evidence contradicts.
   beating it by 1.8pp on validation drawdown and tying the repo's best — a
   second concrete instance, alongside #32/#33 and #42, of the gate's single axis
   discarding a candidate a human weighing risk would want to see.
+  **Update 2026-08-20: still three points, no promotion, no fifth holdout look — and
+  one supporting argument has been withdrawn while the concern itself got stronger.**
+  Three trials tonight, three REJECTs, so the holdout stayed shut and the count since
+  2026-08-17 remains four. The withdrawn argument is the "one year is most of the
+  result" reading: measured on the stored trial returns, validation Sharpe tracks the
+  2020 return (+0.892) and the mean of the other five years (+0.891) equally well, and
+  #43's record jump had 2020 flat. **The concern therefore cannot be waved away as a
+  2020 artifact, and it also cannot be explained by one.** What remains is the bare
+  fact in the table above: three consecutive promotions, validation monotone up,
+  holdout monotone down, decided by a gate that reads only the first column. Still
+  awaiting a human; both levers live in frozen files.
