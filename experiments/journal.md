@@ -1874,3 +1874,5 @@ levers that would fix it live in frozen files.
    landed below the champion on the gate's axis while beating it on axes the gate does
    not read; that is the fourth and fifth such instance on record.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-20 (learning agent): 3 notes added, see research/SUMMARY.md

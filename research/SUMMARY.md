@@ -443,6 +443,88 @@ standing caveat: 1/N is a hard benchmark, so beating it by a wide margin deserve
 one validation year dominating the P&L) mark where to look. Tier A,
 `validation_overlap: false`. → `notes/2026-08-17-naive-vs-optimized-weighting.md`
 
+**The bridge session 6 said was missing is now built, and it says the champion's tranche
+averaging is not a trick applied to a cost problem — under one standard cost model it *is* the
+optimal cost-aware policy.** Gârleanu–Pedersen (2013, JF) solve in closed form for a
+mean-variance investor with several return predictors of differing mean-reversion speeds and
+quadratic trading costs. Three results and one corollary. (a) The optimal portfolio is **partial
+adjustment**, `x_t = (1−a/λ)x_{t−1} + (a/λ)aim_t`, with the trading rate a scalar decreasing in
+costs, increasing in risk aversion, and independent of the current book. (b) The target is not
+the frictionless optimum but an **aim portfolio**, an exponentially weighted average of the
+current and all future expected frictionless portfolios — higher costs put more weight on where
+the target is going. (c) Signals are weighted **by persistence**: with diagonal decay the aim is
+the frictionless portfolio with each signal `f^k` divided by `(1 + φ_k a/γ)`, so fast-decaying
+signals are discounted harder, and the discount grows with the cost rate. Absent costs, alpha
+decay plays no role at all — persistence weighting is purely cost-induced. **The corollary is
+the one that answers the folder's standing question**: an investor following the policy holds
+`x_t = Σ_{τ≤t}(a/λ)(1−a/λ)^{t−τ} aim_τ` — the optimal book is an exponentially weighted average
+of *past target portfolios*. Every prior account here of the champion's six formation vintages
+(estimator, dispersion, forecast MSE, information ratio) was a claim about a predictor; this one
+is a claim about a portfolio held by a cost-paying investor, which is the currency the lab
+measures in. Two boundaries travel with it. The policy is unconstrained and needs `B`, `Σ`, `Φ`
+and `λ` estimated — screen #1's expensive class. And the authors state that under **proportional
+or fixed** costs (this repo's flat 15 bps/side) the optimal policy is qualitatively different and
+"exhibits periods of no trading" — i.e. a no-trade band, which is what the champion's hysteresis
+buffer implements. So the two mechanisms the champion runs are the canonical answers to the two
+standard cost specifications, and are complements by construction. Tier A on the theory (B on the
+single-asset-class, admittedly in-sample empirical illustration), `validation_overlap: false`.
+→ `notes/2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`
+
+**The same crossing attempted from the estimation side instead, and it lands on the lab's own
+protocol concern.** Brandt–Santa-Clara–Valkanov (2009, RFS) skip return modelling entirely and
+write the weight itself as a function of cross-sectionally standardised characteristics,
+`w_i = w̄_i + (1/N)θᵀx̂_i`, fitting the short coefficient vector `θ` by maximising the **realised
+sample utility of the portfolio's returns** — the "optimise the realised objective directly"
+literature the folder went looking for. Its stated advantages are real (parameter count
+independent of universe size; the fit implicitly prices variances, covariances and higher moments
+without estimating any of them; any objective admissible, including Sharpe, tracking error or
+drawdown control; long-only handled by truncate-and-renormalise). **The reading that matters here
+is that the champion already *is* a parametric portfolio policy with `θ` hard-coded rather than
+fitted**, which locates exactly the door the lab has kept shut: fitting `θ` to an in-sample
+objective is the failure mode the deflated-Sharpe gate exists to punish, so BSV is not a
+candidate to import but the *name* of a class of proposals to decline. Lamoureux–Zhang (2024,
+RAPS) supply the critique, and its mechanism is the portable part: parsimony in `θ` does **not**
+protect you, because the utility being maximised depends on every property of an unspecified
+return distribution; and **overfitting is positively linked to the variance of the resulting
+portfolio**, so the remedy is to *fit with a more concave loss than the one you care about*
+(estimate at `γ* = γ + λ`, hold as the `γ` investor). That generalises past `θ` to any procedure
+that picks a book by maximising a sample statistic — including selecting candidates on validation
+Sharpe — and it predicts the exact shape `learnings.md` records under its ⚠ standing protocol
+concern: a criterion with too little curvature picks the high-variance member of the candidate
+set. Two further transferable facts: cross-sectional standardisation is load-bearing (it makes
+the score distribution stationary across dates *and* makes weights sum to one), and BSV report
+the long-only constrained version yielding materially smaller gains than the unconstrained one —
+a third independent instance of "long-short results do not transfer by default", this time from
+portfolio construction rather than from a momentum or beta mechanism. BSV tier B+
+(`validation_overlap: false`); Lamoureux–Zhang tier B− (essentially uncited so far, and
+`validation_overlap: true` — its evaluation window runs into 2021, so only its mechanism is
+carried here, never its empirical conclusions).
+→ `notes/2026-08-20-parametric-portfolio-policies.md`
+
+**And a fourth cost-mitigation technique that last year's enumeration missed, with a closed form
+attached.** DeMiguel–Martín-Utrera–Nogales–Uppal (2020, RFS) find transaction costs *increase*
+the number of jointly significant characteristics — six without costs, fifteen with them —
+because of **trading diversification**: legs held simultaneously rebalance by trading the same
+underlying instruments, so a buy from one leg nets against a sell from another and only the
+residual is executed. Proposition 3 gives the ratio of combined turnover to isolated turnover as
+`√(eᵀΩe)/Σ_k√(Ω_kk)`, which for equal variances and equal pairwise trade correlation `ρ` is
+**`√((1+ρ(K−1))/K)`**, and `1/√K` at `ρ = 0`. The free parameter is the correlation of
+*rebalancing trades* — not of scores, not of weights, not of returns — which is computable from
+holdings and prices with no returns scored, making this the folder's first **pre-trial,
+holdings-only prediction of an averaging proposal's turnover**. It retro-predicts the champion:
+the recorded six-vintage/single-vintage pair is 3.5x against 7.9x, ratio 0.44, against `1/√6 =
+0.41`, with the vintages' positive trade correlation being exactly what lifts a ratio above
+`1/√K`. It also carries a real **amendment to the folder's ensemble screen**: components
+estimating *different* quantities still net their trades, so a second leg's contribution is
+`(gross dilution) + (turnover saved) × (cost rate)` and the folder has only ever measured the
+first term. That does not reopen the ETF-sleeve blend — total cost drag here is priced at ~0.019
+Sharpe and the dilution tax at ~0.02 per 20% of capital, so the recoverable term is too small —
+but "every extra leg costs turnover" is now known to be false in general, and the paper reports
+cases where a leg's *marginal* contribution to turnover is negative. Tier A (costs central,
+multiple testing handled by screen-and-clean, multi-decade), `validation_overlap: false`,
+`published_post_2018: true`.
+→ `notes/2026-08-20-trading-diversification-combining-signals.md`
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -635,6 +717,66 @@ test before any ensemble candidate: **are the components estimates of the same t
 they different things?** Six formation vintages of one signal pass. Momentum plus an ETF sleeve
 fails. The literature endorses only the first, and the lab's own record already shows what the
 second costs. → `notes/2026-08-17-forecast-combination-why-averaging-beats-selecting.md`
+**Amended 2026-08-19 and again 2026-08-20.** The test above is right about the **gross** axis and
+incomplete on the **net** one: legs that estimate *different* quantities still cancel each other's
+rebalancing trades, so a second leg's true contribution is `(gross dilution) + (turnover saved by
+trade cancellation) × (cost rate)`, and only the first term has ever been measured here. The
+amendment does not overturn any verdict on this repo — the recoverable term is bounded by a total
+cost drag of ~0.019 Sharpe against a dilution tax of ~0.02 per 20% of capital — but it retires the
+blanket claim that an extra leg costs turnover.
+→ `notes/2026-08-20-trading-diversification-combining-signals.md`
+
+**Which cost model you assume decides which mechanism you get — and this repo's two best
+construction mechanisms are the two canonical answers.** The frictions literature splits on the
+shape of the cost function, and the split is not cosmetic. Under **quadratic** (market-impact)
+costs the optimal policy is *partial adjustment every period* toward a target that is itself a
+forward-looking average — no period of inaction, and the optimal book turns out to be an
+exponentially weighted average of past targets. Under **proportional or fixed** costs the optimal
+policy instead "exhibits periods of no trading" — a no-trade region, i.e. a band. This repo pays a
+flat 15 bps/side, which selects the band branch; the champion's hold-25/enter-15 hysteresis buffer
+is that band, and its six formation tranches are (structurally) the averaging that the other
+branch derives. Two consequences. (a) The two are **complements by construction**, answers to
+different questions, not two versions of one idea — so neither is redundant with the other, and
+"simplify one away" is not a free move. (b) Before importing any friction-aware result, ask which
+cost model produced it, because a partial-adjustment prescription and a no-trade-band prescription
+do not substitute for each other.
+→ `notes/2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`,
+`notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+
+**Under costs, a signal is worth less than its gross alpha in proportion to how fast it decays —
+so ask any proposed leg for its half-life before asking for its Sharpe.** Absent costs, alpha
+decay is irrelevant: the investor re-optimises for free and only current expected returns matter.
+With costs it becomes first-order, because the benefit of a trade must accrue for long enough to
+amortise the trade. The closed form is a per-signal divisor `(1 + φ_k a/γ)` — persistent signals
+shrunk least, fast ones most, and the *relative* penalty on the fast signal **growing with the
+cost rate**. This is a free triage question that costs no trial, and it independently reproduces
+the lab's record: reversal legs (half-life of days) kept subtracting value once turnover was fixed
+directly, while momentum legs (half-life of months) did not. It arrives at the same place as the
+liquidity-provision argument that closed family 4, by a completely different route. Boundary: the
+formula's *prescription* — weight legs by persistence — requires estimating decay rates, a
+covariance matrix and a cost matrix, so it is screen #1's expensive class and is **not** grounds to
+reweight the champion's horizon legs by lookback length. The *question* is free; the answer's
+implementation is not.
+→ `notes/2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`
+
+**Selecting on a sample objective inherits that objective's curvature, and estimation noise
+travels with portfolio variance — so a criterion with too little curvature systematically picks
+the high-variance candidate.** The parametric-portfolio literature reaches this by a route the
+folder has not previously recorded: overfitting in a weight-policy fit is *positively linked to the
+variance of the resulting portfolio*, which makes the natural regularisation not a penalty on
+parameters but **fitting with a more concave loss than the one you actually care about** —
+estimate at risk aversion `γ* = γ + λ`, hold as the `γ` investor. Two uses here, neither of them a
+candidate. First, it is a general warning about any in-sample-maximising selection step, and this
+repo has one in a frozen file: promotion scores raw validation Sharpe, and `learnings.md`'s ⚠
+standing protocol concern records validation rising monotonically while the holdout falls, with
+the winners getting more concentrated and faster-rotating each step — the exact shape this
+mechanism predicts. It is recorded here so the human reviewing that concern has the literature's
+name for it and its stated remedy (*select on a more risk-averse criterion than your target*).
+Second, it is the reason to keep declining "fit the weighting coefficients on the training split":
+the source's own finding is that parsimony in the fitted parameter vector does **not** buy
+protection, because the objective depends on properties of a return distribution that was never
+modelled.
+→ `notes/2026-08-20-parametric-portfolio-policies.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -693,6 +835,21 @@ hypothesis fodder, then anti-candidates.
    comparable to this repo's total-Sharpe gate**, and computing an IC scores returns, so it is
    *not* covered by the free holdings-only diagnostic exemption.
    → `notes/2026-08-19-fundamental-law-breadth-and-strategy-risk.md`
+   **A third free screen added 2026-08-20, and it is the first one that predicts the *cost* side
+   of an averaging proposal rather than its return side.** *What is the correlation of the legs'
+   rebalancing trades?* Legs held together trade the same instruments, so their trades partly
+   cancel and only the residual is executed. Closed form for the turnover of a `K`-leg combination
+   against the same legs traded in isolation: `√(eᵀΩe)/Σ_k√(Ω_kk)`, which under equal variances and
+   equal pairwise trade correlation `ρ` is **`√((1+ρ(K−1))/K)`**, falling to `1/√K` at `ρ = 0`.
+   The input is the correlation of `trade_{i,k} = w_{i,t+1,k} − w_{i,t,k}(1+r_{i,t+1})` — a
+   holdings-and-prices statistic that scores no returns, so it is covered by the free-diagnostic
+   exemption, unlike an IC. Retro-predicts the champion (recorded 3.5x vs 7.9x = 0.44 against
+   `1/√6 = 0.41`, with positive vintage trade correlation being exactly what lifts the ratio).
+   Use it to pre-register a turnover effect size before any vintage/ensemble trial, per
+   `learnings.md`'s diagnose-first rule. Corollary that retires a folder assumption: a leg's
+   marginal contribution to turnover can be **negative**, so "an extra leg costs turnover" is not
+   a general truth. Tier A, no overlap.
+   → `notes/2026-08-20-trading-diversification-combining-signals.md`
 3. **Free closed-form triage for any proposed trend/moving-average signal: write it as its
    weight vector over past returns.** Every MA-based indicator — crossover, price-minus-MA,
    envelope, plain momentum — is algebraically a weighted average of past price changes, and its
@@ -728,6 +885,18 @@ hypothesis fodder, then anti-candidates.
    "check what its code actually reads" lesson (which cost four trials) arriving independently
    at tier 1, and it applies to imported sources as well as to local code.
    → `notes/2026-08-18-defensive-equity-replication-and-construction.md`
+   **(d) Added 2026-08-20 — *what is the signal's half-life, and which cost model produced the
+   result?*** Two more one-line screens from the same drawer. *Alpha decay*: under trading costs a
+   signal is discounted by `(1 + φ·a/γ)` in the optimal book — fast-decaying signals penalised
+   hardest, and the relative penalty **growing with the cost rate** — while absent costs decay is
+   irrelevant entirely. So ask any proposed leg for its half-life relative to the legs already
+   held before asking for its gross Sharpe; this independently reproduces why reversal legs kept
+   subtracting value here once turnover was fixed directly. *Cost model*: a friction-aware result
+   derived under **quadratic** costs prescribes partial adjustment toward a target, while one
+   derived under **proportional or fixed** costs prescribes a no-trade band. This repo's flat 15
+   bps/side is the second; do not import a prescription from the first as if it substituted.
+   Tier A, no overlap.
+   → `notes/2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`
 5. **Design test before any group-neutralisation trial: name the mechanism by which the signal
    would load on the group even if the effect were absent.** The literature and the lab appear
    to disagree — Asness–Frazzini–Pedersen find industry-neutral BAB beats ungrouped BAB in
@@ -933,6 +1102,26 @@ hypothesis fodder, then anti-candidates.
     trial, and it answers the standing question the existing top-weight/HHI statistics only
     proxy — how much of the champion's variance the top name actually explains. Tier A on the
     theory, no overlap. → `notes/2026-08-18-risk-parity-equal-risk-contribution.md`
+22. **Anti-candidate — do not fit the weighting or selection coefficients to an in-sample
+    objective, and know the name of the thing you are declining.** "Parametric portfolio policies"
+    is the published framework for writing weights as `w_i = w̄_i + (1/N)θᵀx̂_i` and choosing `θ`
+    by maximising the realised sample utility of the resulting returns. The champion already *is*
+    such a policy with `θ` hard-coded rather than fitted, so any proposal to "estimate the
+    weighting coefficient on the training split", "fit the buffer widths", or "optimise the trim
+    thresholds against validation Sharpe" is this framework, and the honest prior on it is the
+    critique's: **parsimony in `θ` does not protect you**, because the objective depends on every
+    property of an unspecified return distribution, so the effective dimensionality is not the
+    parameter count. The critique's diagnosis is the reusable part — overfitting is positively
+    linked to the *variance* of the fitted portfolio, so the remedy is to fit with a **more concave
+    loss than the one you care about** (`γ* = γ + λ`), and a selection criterion with too little
+    curvature will systematically pick the high-variance candidate. That generalises to any
+    in-sample-maximising selection step, including this repo's own gate, which is why it is also
+    recorded under cross-cutting principles for the human reviewing the ⚠ standing protocol
+    concern. Note in passing that this framework is not useless here — the same source establishes
+    that cross-sectional standardisation of the score is load-bearing (stationary score
+    distribution, weights summing to one), which the champion already does. BSV tier B+, no
+    overlap; the critique tier B− and `validation_overlap: true`, so only its mechanism is carried.
+    → `notes/2026-08-20-parametric-portfolio-policies.md`
 
 ## Coverage log
 
@@ -944,6 +1133,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-17 (session 4) | The two remaining under-covered *strategy* families — 3 (vol targeting) and 4 (short-term mean reversion) — plus the open question flagged last session on cross-sectional vs time-series signal construction. First session with full text read directly for every source. | Moreira–Muir 2017 (JF) + Cederburg–O'Doherty–Wang–Yan 2020 (JFE, replication challenge) (`2026-08-17-volatility-timing-managed-portfolios.md`); Nagel 2012 (RFS) + Lehmann 1990 (QJE) + Lo–MacKinlay 1990 (RFS) (`2026-08-17-short-term-reversal-as-liquidity-provision.md`); Goyal–Jegadeesh 2018 (RFS) (`2026-08-17-cross-sectional-vs-time-series-construction.md`) |
 | 2026-08-18 (session 5) | The last two uncovered axes named as open by session 4: family 5 (low-vol / quality), chased specifically at the *sector-neutralized* construction `learnings.md` named as the only thing that would reopen it, and the **risk-parity half** of family 3 (weighting within comparable-diversification sleeves). Full text read directly for every source. Both axes close negative; no family in `program.md` is now uncovered. | Asness–Frazzini–Pedersen 2014 (FAJ) (`2026-08-18-low-risk-investing-industry-neutral.md`); Novy-Marx 2016 (NBER WP 20591) + Novy-Marx–Velikov 2022 (JFE, replication challenge) (`2026-08-18-defensive-equity-replication-and-construction.md`); Maillard–Roncalli–Teiletche 2010 (JPM) (`2026-08-18-risk-parity-equal-risk-contribution.md`) |
 | 2026-08-19 (session 6) | Not a strategy family — the seam session 5 named as the one worth chasing: **why averaging unstable predictors improves them**, hunted in the two literatures it named (bagging / bootstrap aggregation, and model averaging outside the break-detection framing), plus the finance-native version of the same question (breadth and strategy risk). First session to yield a mechanism that is an unconditional accuracy claim about the repo's own strongest mechanism. Full text read directly for Breiman, Buja–Stuetzle, Hansen and the fundamental-law derivation; partial (first two pages) for the published Ding–Martin. | Breiman 1996 (Machine Learning) + Buja–Stuetzle 2006 (Statistica Sinica) (`2026-08-19-bagging-averaging-unstable-predictors.md`); Grinold 1989 (JPM) + Ding–Martin 2017 (J. Empirical Finance) + Ding 2010 WP (`2026-08-19-fundamental-law-breadth-and-strategy-risk.md`); Hansen 2007 (Econometrica) (`2026-08-19-model-averaging-mallows-weights.md`) |
+| 2026-08-20 (session 7) | Session 6's top-ranked open question (a): **the bridge from a forecast-accuracy or information-ratio claim to realised net return on a constrained, cost-paying book**, chased in the two vocabularies it named — friction-aware dynamic portfolio choice, and portfolio choice that optimises the realised objective directly rather than a predictive loss. Answered from three directions, with a fourth cost-mitigation mechanism found as a by-product. Full text read directly for all four sources. | Gârleanu–Pedersen 2013 (JF; NBER WP read in full) (`2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`); Brandt–Santa-Clara–Valkanov 2009 (RFS) + Lamoureux–Zhang 2024 (RAPS, critique) (`2026-08-20-parametric-portfolio-policies.md`); DeMiguel–Martín-Utrera–Nogales–Uppal 2020 (RFS) (`2026-08-20-trading-diversification-combining-signals.md`) |
 
 ### Open questions for future sessions
 
@@ -1090,6 +1280,54 @@ hypothesis fodder, then anti-candidates.
   **scores returns and is therefore not a free diagnostic**. It should be treated with the same
   discipline as a backtest, not slipped in under the holdings-only exemption.
 
+  **— (a) ANSWERED 2026-08-20 (session 7), from three directions.** The crossing exists and it is
+  strongest from the friction side. Gârleanu–Pedersen's Proposition 5 states that a cost-paying
+  mean-variance investor's optimal book **is** an exponentially weighted average of past target
+  portfolios — a portfolio-level equality, in the currency the lab measures in, not a claim about
+  a predictor's MSE. The averaging structure is therefore not a variance-reduction device applied
+  to a cost problem; under quadratic costs it is the optimum. Two boundaries came with it and both
+  matter: the derivation is unconstrained and needs `B`, `Σ`, `Φ`, `λ` estimated (screen #1's
+  class), and the authors state that under **proportional** costs — this repo's cost model — the
+  optimal policy is instead a **no-trade band**, which is the champion's buffer. So the repo's two
+  construction mechanisms turn out to be the canonical answers to the two standard cost
+  specifications. From the estimation side, the "optimise the realised objective directly"
+  literature exists (parametric portfolio policies) but resolves the *opposite* way for this lab:
+  its method is precisely the in-sample-objective fitting the DSR gate exists to punish, and its
+  own critique reports that parameter parsimony does not confer protection. And the by-product is
+  the most immediately usable thing the session produced: **trading diversification** supplies a
+  closed-form, holdings-only, pre-trial prediction of what any `K`-leg averaging proposal does to
+  turnover. *The honest residual*: what is now sourced is that the optimal cost-aware book has the
+  averaging *form*; what remains the lab's own is the claim that its particular equal-weight,
+  fixed-`K`, long-only, buffered instance earns more than its single-vintage counterpart. Nobody
+  read here derives a long-only constrained version, and the transfer coefficient (0.3–0.8) is the
+  only quantification of what the constraint costs.
+
+- **New open questions raised by session 7, in priority order.**
+  (a) *The one measurement the folder now recommends and the lab has not made.* Every vintage,
+  horizon and ensemble diagnostic run here so far has measured score rank-correlation or weight
+  overlap; Proposition 3 says the statistic that governs the **cost** axis is the correlation of
+  the legs' *rebalancing trades*, which is a different object and is free to compute. It is not a
+  literature question — it is a note that the next construction proposal should carry a predicted
+  turnover ratio, not just a predicted overlap.
+  (b) *Session 6's question (b) is still untouched and still worth exactly one session*: the
+  effective-number-of-bets / effective-dimensionality literature, which would turn the
+  rank-correlation gate into one scalar computable from holdings. Sources sighted so far look
+  tier C; the `√((1+ρ(K−1))/K)` form found this session is a reminder that the useful version of
+  such a statistic is usually one that falls out of a closed form rather than one proposed as a
+  metric.
+  (c) *What a long-only constraint costs, quantitatively.* Three separate sources now report the
+  constrained version of their result as materially weaker than the unconstrained one, and the
+  only number the folder has is the transfer coefficient's 0.3–0.8 range. A source that
+  characterises the long-only constraint's cost as a function of the signal's cross-sectional
+  dispersion (rather than as a range) would price the single largest structural discount this repo
+  applies to everything it imports. Low-to-medium priority: it would not open a build, but it
+  would make every "this is long-short evidence" verdict quantitative instead of directional.
+  (d) *Recorded as declined, not as an opportunity.* Lamoureux–Zhang's remedy — fit or select on a
+  **more concave** objective than the target — would, applied here, mean changing the promotion
+  criterion. That lives in a frozen file and is a human decision; it is written into the
+  cross-cutting principles for the human reviewing the ⚠ standing protocol concern and must not be
+  read as licence for a session to re-rank candidates on a self-chosen criterion.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -1101,6 +1339,21 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 7 (2026-08-20) read full text directly for every source**, and hit none of the three
+  documented limits. Three channels worked first try and are worth adding to the README's reliable
+  list: **NBER working-paper PDFs** (`nber.org/system/files/working_papers/wNNNNN/wNNNNN.pdf`) for
+  the working-paper versions of two published tier-1 articles; **institutional green-OA
+  repositories** — an LBS Research Online PDF served the full published RFS article that
+  ScienceDirect-style publisher endpoints would have refused, and OpenAlex's `open_access.oa_url`
+  field is the fastest way to find one; and **arXiv PDFs** for a recent working-paper version. One
+  index anomaly to record: for `10.1093/rfs/hhz085`, **Semantic Scholar's DOI endpoint returns 24
+  citations while OpenAlex returns 193 and Crossref 177** — a clear undercount, not a low-impact
+  paper. The rubric's "try both indices" advice should be read as "and disbelieve a lone low count
+  that disagrees with the venue". Separately, a very recently published critique
+  (`10.1093/rapstu/raae006`) resolves in **neither** Semantic Scholar nor, usefully, anywhere but
+  Crossref, whose `is-referenced-by-count` is 0; recorded in-note as provisional weight rather than
+  used to downgrade or inflate the source.
 
   **Session 6 (2026-08-19)** read full text directly for Breiman (author-hosted Berkeley tech
   report), Buja–Stuetzle (author-hosted Wharton PDF), Hansen (author-hosted Wisconsin PDF) and
