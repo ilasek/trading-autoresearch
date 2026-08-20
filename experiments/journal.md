@@ -1876,3 +1876,61 @@ levers that would fix it live in frozen files.
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-20 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-20T23:17:40+00:00 — mom_hzn_avg4_phase4 — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_avg4_phase4.py` (family: combinations, trial #48)
+- Hypothesis: Averaging the champion's entire construction over four rebalance-phase vintages — formed on the first trading day on or after the 1st, 8th, 15th and 22nd of each month, every vintage using the full instrument pool at the champion's own monthly cadence and maximum signal age, with signal, buffers, magnitude weighting, cohort trim and both constants otherwise identical — lands validation Sharpe above the champion's 1.201 net of 15 bps costs, because it is the first vintage axis measured here that supplies genuine membership decorrelation (mean pairwise weight overlap 0.796, composition overlap 0.859 against the champion, core-vs-fringe L1 disagreement 0.118 on its top-10 names against 0.165 on the whole rest) while paying neither of the prices that explain the other two live axes' losses — no staleness, since no tranche is over one month old, and no pool restriction, since no fold is taken — and while barely moving either concentration statistic (HHI -5%, top-name risk share 0.327 -> 0.325), which prices the de-concentration tax at ~0.003 Sharpe; landing at or below 1.201 with those nuisance terms this small shows the concentrated single vintage wins on this window regardless of what supplies the decorrelation.
+- Verdict: REJECT — validation sharpe 1.125 <= champion 1.201
+- Train: sharpe +0.96, ann_ret +18.5%, maxDD -52.8%, turnover 4.6x
+- Validation: sharpe +1.12, ann_ret +26.0%, maxDD -28.9%, turnover 8.0x
+- Deflated Sharpe prob: 0.9637 (bar from 48 trials, 11 effective)
+- Champion validation sharpe at the time: +1.20
+- Champion re-deflated at the same bar: 0.9761
+- Lesson: **Three vintage axes are now live and all three lose on validation, and this
+  one closes the family's escape hatch: it paid neither of the two prices that were
+  supposed to explain the other two losses, and it lost anyway — by more than either.**
+  The standing account was that formation-date vintages (#46, -0.094) lose to
+  *staleness* (K=6 holds formations up to six months old) and instrument-subsample
+  vintages (#47, -0.021) lose to *pool restriction* (each fold picks its top 15 out of
+  ~93 instruments instead of 140). Rebalance **phase** has neither defect: every
+  vintage sees all 140 instruments, runs the champion's own cadence, and no tranche is
+  ever more than one month old. The pre-trial diagnostics also priced the two nuisance
+  terms at essentially zero — HHI 0.0758 -> 0.0720 (-5%, ~0.003 Sharpe of
+  de-concentration tax against the ~0.02 the repo charges per 30%), top-name **risk**
+  share 0.327 -> 0.325, effective risk bets 7.7 -> 7.8, gross exposure identical at
+  0.984 — so this is the cleanest reading of vintage decorrelation the lab can take.
+  It cost **-0.076**. Both pre-registered predictions held: maxDD did not improve
+  (-28.9% vs -28.7%, exactly as the flat risk-contribution vector predicted, and the
+  #47 mechanism is confirmed absent when the risk axis does not move), and the deficit
+  is again pure return (ann_ret 26.0% vs 28.6%, 2.6pp) against a turnover change of
+  +1.8% — **cost ruled out as the explanation on this base for the fourth time.**
+  **The axis is not the story; the window is.** A free by-product analysis (below)
+  decomposes every recorded trial's validation returns by year and finds all three
+  averaging axes share one signature: 2020 is near-untouched (126.4 here vs the
+  champion's 130.5), and the deficit lands in **2018, 2019, 2022 and 2023** — the
+  years in which market leadership rotated. Averaging vintages blurs the core
+  allocation (core-vs-fringe L1 0.118 against 0.165, i.e. the top-10 *is* re-drawn),
+  and a blurred core adapts to a leadership change more slowly than a single fresh
+  formation does. That is a mechanism for all three nulls at once, and it is the first
+  account of them that does not depend on staleness, pool size or concentration.
+  **What this trial does NOT license.** It is not evidence that the champion's own
+  six-tranche ancestry was wrong — #32's overlap gain was measured against a *worse*
+  base and its pruning diagnostic still stands. It says that once the four-horizon,
+  single-vintage book exists, adding a fourth kind of vintage on top has negative
+  marginal value on this window, three times, for a common reason. Treat the vintage
+  family as closed for challengers absent a rationale addressing rotation speed
+  specifically.
+  **Free by-product that corrects tonight's newest research screen.**
+  `research/SUMMARY.md` candidate #2's third part (added 2026-08-20) offers a
+  closed-form holdings-only prediction of a K-leg combination's turnover,
+  `sqrt((1+rho(K-1))/K)` in the correlation of the legs' rebalancing *trades*.
+  Measured on the four phase legs, rho = 0.083, predicting a ratio of 0.559 — a 44%
+  saving. The realised ratio is **0.961**. The screen fails because these legs
+  rebalance on **disjoint days**: trades that never occur on the same day cannot net,
+  so the measured correlation is near zero for a reason unrelated to the
+  diversification the formula prices. **The closed form assumes simultaneous
+  rebalancing and reads most optimistic exactly where it is least applicable** — which
+  matters because the axis it would most naturally be applied to here, formation
+  vintages, is precisely the staggered case it does not cover. Retro-predicting the
+  champion's 3.5x-vs-7.9x worked only because those two books were compared to each
+  other, not because six staggered tranches net their trades.
+
