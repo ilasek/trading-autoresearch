@@ -2226,3 +2226,5 @@ weight vector describes a regime that has ended.
    most comfortable explanation for the protocol concern — "it is all 2020" — has been
    measured and is false.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-21 (learning agent): 3 notes added, see research/SUMMARY.md

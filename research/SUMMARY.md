@@ -525,6 +525,75 @@ multiple testing handled by screen-and-clean, multi-decade), `validation_overlap
 `published_post_2018: true`.
 → `notes/2026-08-20-trading-diversification-combining-signals.md`
 
+**A constraint is not only a leak — it is also an estimator, and the folder had only recorded
+the first half.** Jagannathan–Ma (2003, JF) prove that the constrained global minimum-variance
+portfolio built from an estimated covariance `S` is the *unconstrained* minimum-variance
+portfolio built from `S̃ = S + (δ1′ + 1δ′) − (λ1′ + 1λ′)`, where `λ` and `δ` are the Kuhn–Tucker
+multipliers on the non-negativity and upper-bound constraints. Reading the entries: a binding
+**no-short** constraint on asset `i` *reduces* its covariance with every `j` by `λ_i + λ_j`, and
+a binding **cap** *raises* it by `δ_i + δ_j`. The economics is in where they bind — the no-short
+constraint binds precisely on the assets with the largest estimated covariances (which is why
+they wanted negative weights), and those are the estimates most likely to be upward-biased by
+sampling error; the cap binds on the smallest, most likely downward-biased. Both edits are
+shrinkage toward the mean, applied exactly where estimation error is worst, which is why a
+constraint **false in the population** can still improve out-of-sample risk. Proposition 2
+upgrades this from analogy to identity: `S̃` satisfies the first-order conditions of the
+*constrained maximum-likelihood* problem, so imposing the constraint at the optimisation stage
+and imposing it at the estimation stage are the same act. The empirical half is the part the lab
+can use: once no-short is imposed, the plain monthly sample covariance produces minimum-variance
+books about as good as factor models, Ledoit shrinkage or daily data, and adding a cap on top of
+no-short changes realised variance essentially not at all (caps are for implementability, not
+risk). **What does not transfer** must be said first, though: the theorem is about a
+minimum-variance *optimiser*, and the champion's caps bind on whatever the signal likes, not on
+whatever has the largest covariance — so this is not evidence that the repo's 25% cap improves
+its returns. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
+
+**Diversification has a *return* consequence, not only a risk one, and the lab's concentration
+measurements were already telling it so.** Willenbrock (2011, FAJ), formalising Booth–Fama
+(1992), derives that for a portfolio rebalanced to **constant weights**,
+`g_p ≈ Σ_i w_i [ g_i + ½(σ_i² − σ_ip²) ]`, so the book's geometric return exceeds the weighted
+average of its constituents' geometric returns by `½ Σ_i w_i(σ_i² − σ_ip²)` — the
+**diversification return**. Two clarifications carry the weight. (a) The source is **not**
+variance reduction (necessary but not sufficient) but the **rebalancing itself**: holding
+weights constant forces selling what rose in relative value and buying what fell, and that
+contrarian act monetises fluctuation. Assets each with *zero* geometric return still make a
+rebalanced book gain; unrebalanced it gains nothing. "Volatility return" is the author's own
+alternative name. (b) A buy-and-hold book earns none of it, but has a *different, unrelated*
+incremental return — winners becoming a larger share — bought at the price of a drifting risk
+profile. The consequence here is a cost the folder has never priced: `σ_i² − σ_ip²` is large
+only for positions whose volatility is idiosyncratic *to this book*, so a concentrated,
+magnitude-weighted book that loads capital on the names that are simultaneously the most
+volatile and the most mutually correlated has almost none of the term. The lab's own
+holdings-only measurement (top name 17.2% of capital / 30.9% of variance; ~6 effective risk bets
+against 13.3 by weight) is therefore also a statement that its diversification return is small.
+Tier A on the identity (algebra), B on the applied claims — one worked application, no
+transaction costs modelled anywhere, and the term is second-order in variance while this repo
+pays 15 bps/side. `validation_overlap: false`.
+→ `notes/2026-08-21-diversification-return-and-rebalancing.md`
+
+**And the measurement axis itself: counting positions is not counting bets, with a specific
+correction to a statistic the lab already runs.** Meucci's effective number of bets changes
+basis before counting. Eigendecompose the covariance, `Σ = EΛE′`; the columns of `E` are
+uncorrelated **principal portfolios**; re-express the book as `w̃ = E⁻¹w`; form the
+**diversification distribution** `p_n = w̃_n²λ_n / Var(R_w)`, which is non-negative, sums to one,
+and whose `n`-th entry is provably the **R² of a regression of portfolio return on the `n`-th
+principal portfolio**; then report `N_Ent = exp(−Σ p_n ln p_n)`, which is 1 when all risk comes
+from one direction and `N` when risk is spread evenly. Meucci's explicit criticism is of
+weight-Herfindahl measures *and* of counts built on marginal risk contributions of correlated
+assets — which is what the lab's "6.0 effective risk bets" is. The **conditional** version is
+the one that matters for a fully-invested long-only book: the budget constraint alone pins the
+exposure to the first principal portfolio (≈ the market), so the unconditional index is low for
+a reason no candidate can change; dropping the first `K` masses and renormalising measures the
+part the strategy controls. Polakow–Gebbie make the same point against the fundamental law
+("independence is not separateness"; skill does not scale over breadth) and estimate effective
+dimensionality as the count of correlation eigenvalues `≥ 1`, finding in their market that a
+41-name universe supported no more than eight dimensions and that adding a whole extra asset
+class raised that by about one. Tier C — Meucci's construction is algebra and cannot decay, but
+neither source carries an empirical study meeting this folder's bar, the venues are tier 3, and
+the Meucci article does not resolve in any citation index tried. `validation_overlap: false`.
+→ `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -778,6 +847,45 @@ protection, because the objective depends on properties of a return distribution
 modelled.
 → `notes/2026-08-20-parametric-portfolio-policies.md`
 
+**A binding constraint is a zero-parameter estimator, which is why constraints keep beating
+corrections — and the folder's long-only accounting has been one-sided.** Everything recorded
+here about constraints until now priced them as *leakage*: the transfer coefficient
+(`IR ≈ TC · IC · √BR`, `TC ≈ 0.3–0.8`), and three separate sources reporting their constrained
+variant as materially weaker than the unconstrained one. Every one of those is a claim about
+**signal transfer given a correct alpha**. There is a second, opposite-signed effect on the same
+constraint: it is algebraically identical to shrinking the covariance estimate, in the direction
+estimation error actually goes, at the cost of estimating nothing. Both are real and they run
+against each other; which dominates depends on whether the binding constraint stands between the
+book and a *good* estimate or a *noisy* one. This is the same law as 1/N-beats-optimisation and
+simple-mean-beats-optimal-combination, arriving from a third direction — and it comes with a
+boundary worth carrying: the same source finds that *once no-short is imposed*, the
+sophistication of the covariance estimator largely stops mattering. So for any covariance-based
+**diagnostic** the lab runs on a long-only book (risk contributions, effective bets,
+diversification return), a plain trailing sample covariance is the right input and reaching for
+a factor model or a shrinkage estimator is not warranted. It remains no licence for
+covariance-based *objectives*, which stay closed by the ERC theorem and two trials.
+→ `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
+
+**Separate the return a book earns from its signal from the return it earns from rebalancing —
+they are different mechanisms and they want opposite things.** A rebalanced portfolio earns
+`½ Σ_i w_i(σ_i² − σ_ip²)` over the weighted average of its constituents' geometric returns,
+and it earns it for a *contrarian* act: constant weights force selling what rose in relative
+value and buying what fell. A buy-and-hold book earns none of that, but earns a different
+increment for the *opposite* behaviour — letting winners grow — at the price of a drifting risk
+profile. A cross-sectional momentum book that resets to signal-proportional targets each month
+does neither cleanly: it trims within the held set relative to price drift, then hands the term
+back by chasing the signal with the targets themselves. Three consequences. (a) Concentration
+now costs on two axes, not one: the folder had priced it only through drawdown, and
+`σ_i² − σ_ip²` says a book whose risk collapses onto few directions also forgoes the
+diversification return. (b) Turnover reduction is not free on the *gross* axis, so ask of any
+such proposal whether it throttles **membership churn** (which forgoes little of the term) or
+**weight resets** (which is where the term lives) — the folder's endorsement of banding survives
+that split, but does not extend past it. (c) The term is an accounting decomposition, **not
+alpha**: a book can have a large one and a poor total return, and nothing in the source models
+transaction costs, so it is not a reason to rebalance more often.
+→ `notes/2026-08-21-diversification-return-and-rebalancing.md`,
+`notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -804,6 +912,15 @@ hypothesis fodder, then anti-candidates.
    the general solution `x_i ∝ 1/β_i` (beta to the portfolio) means a *more* correct
    implementation would tilt further toward the diversified low-return leg, not back.
    → `notes/2026-08-18-risk-parity-equal-risk-contribution.md`
+   **Boundary added 2026-08-21, and it cuts the other way for diagnostics only.** The screen
+   grades a scheme by parameters estimated; a **hard constraint estimates none and does part of
+   the same job**, because a binding weight constraint is algebraically a shrinkage of the
+   covariance estimate in the direction estimation error actually goes. Corollary the lab can
+   use: once no-short is imposed, the sophistication of the covariance estimator largely stops
+   mattering, so every covariance-based *diagnostic* run on this long-only book (risk
+   contributions, effective bets, diversification return) should use a plain trailing sample
+   covariance — no factor model, no shrinkage estimator. Objectives built on a covariance stay
+   closed. → `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
 2. **Design test before any ensemble trial: are the components estimates of the same quantity,
    or different return streams?** Forecast-combination theory endorses only the first — several
    noisy estimates of one target, equal-weighted — where the variance reduction is free. Mixing
@@ -835,6 +952,20 @@ hypothesis fodder, then anti-candidates.
    comparable to this repo's total-Sharpe gate**, and computing an IC scores returns, so it is
    *not* covered by the free holdings-only diagnostic exemption.
    → `notes/2026-08-19-fundamental-law-breadth-and-strategy-risk.md`
+   **Sharpened 2026-08-21 — the `N` lever is unreachable rather than exhausted, and there is a
+   free test of that.** The folder's reason for calling `N` saturated was "145 is a large
+   number". The better reason is that what saturates is **effective dimensionality**, not the
+   instrument count: `√N` counts *independent* bets, and the count of correlation eigenvalues
+   `≥ 1` stops rising long before the name count does (in the one market studied, a 41-name
+   universe supported no more than eight dimensions, and adding a whole extra asset class raised
+   that by about one). Screen: if a proposed instrument set does not raise the eigenvalue count
+   of the universe's correlation matrix, breadth widening is a no-op on paper — which
+   retro-predicts both the lab's basket-breadth no-op and the buffer-band vintage axis killed at
+   0.963 overlap. Honest counterweight, recorded rather than smoothed: if effective `N` here is
+   genuinely small, then `φ/N` is **not** negligible against `σ_IC²` and the "saturated" claim
+   is doing more work than the algebra supports. Neither reading opens a build — the instrument
+   list is fixed — but prefer "unreachable" to "exhausted". Tier C sources.
+   → `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`
    **A third free screen added 2026-08-20, and it is the first one that predicts the *cost* side
    of an averaging proposal rather than its return side.** *What is the correlation of the legs'
    rebalancing trades?* Legs held together trade the same instruments, so their trades partly
@@ -1122,6 +1253,36 @@ hypothesis fodder, then anti-candidates.
     distribution, weights summing to one), which the champion already does. BSV tier B+, no
     overlap; the critique tier B− and `validation_overlap: true`, so only its mechanism is carried.
     → `notes/2026-08-20-parametric-portfolio-policies.md`
+23. **Two free holdings-only measurements added 2026-08-21, both in the same class as the
+    existing risk-contribution vector (no returns scored, no trial spent), and both aimed at
+    the axis the lab is actually working.** They belong with the free screens at the top of this
+    list; they are numbered here only to avoid renumbering.
+    *(a) Effective number of bets, computed properly and conditionally.* `learnings.md`'s "6.0
+    effective risk bets" is a Herfindahl-type count over **marginal risk contributions of
+    correlated assets**, which the diversification literature specifically rejects as a count
+    of anything uncorrelated. The measure that counts uncorrelated sources is
+    `N_Ent = exp(−Σ p_n ln p_n)` over the diversification distribution
+    `p_n = w̃_n²λ_n / Var(R_w)`, `w̃ = E⁻¹w` from `Σ = EΛE′` — each `p_n` provably the R² of the
+    portfolio return on the `n`-th principal portfolio. Two practical points: the likely
+    direction of the correction is **downward** (changing basis usually finds fewer independent
+    bets than a contribution count), and for a fully-invested long-only book the **conditional**
+    version (drop the first principal portfolio, renormalise) is the one to report, because the
+    budget constraint alone pins the market exposure and the unconditional index is low for a
+    reason no candidate can change. Decline the source's actual proposal — a
+    *mean-diversification frontier* that optimises `N_Ent` is the most estimation-hungry object
+    in this folder and is closed by screen #1.
+    *(b) The diversification return of the current book,* `½ Σ_i w_i(σ_i² − σ_ip²)`. This is the
+    return-side twin of (a): the term is large only where a position's volatility is
+    idiosyncratic *to this book*, so a concentrated magnitude-weighted book gives most of it
+    away. It puts a number on a cost of concentration the folder had priced only through
+    drawdown, and it supplies the missing question for any turnover-reducing proposal — does it
+    throttle **membership churn** (little of the term at stake) or **weight resets** (where the
+    term lives)? Boundaries travel with it: it is an accounting decomposition and **not alpha**,
+    it holds exactly only for constant weights, and the source models no transaction costs — so
+    it is not a reason to rebalance more often. Tier A on the identity, C/B on the sources'
+    empirical content.
+    → `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`,
+    `notes/2026-08-21-diversification-return-and-rebalancing.md`
 
 ## Coverage log
 
@@ -1134,6 +1295,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-18 (session 5) | The last two uncovered axes named as open by session 4: family 5 (low-vol / quality), chased specifically at the *sector-neutralized* construction `learnings.md` named as the only thing that would reopen it, and the **risk-parity half** of family 3 (weighting within comparable-diversification sleeves). Full text read directly for every source. Both axes close negative; no family in `program.md` is now uncovered. | Asness–Frazzini–Pedersen 2014 (FAJ) (`2026-08-18-low-risk-investing-industry-neutral.md`); Novy-Marx 2016 (NBER WP 20591) + Novy-Marx–Velikov 2022 (JFE, replication challenge) (`2026-08-18-defensive-equity-replication-and-construction.md`); Maillard–Roncalli–Teiletche 2010 (JPM) (`2026-08-18-risk-parity-equal-risk-contribution.md`) |
 | 2026-08-19 (session 6) | Not a strategy family — the seam session 5 named as the one worth chasing: **why averaging unstable predictors improves them**, hunted in the two literatures it named (bagging / bootstrap aggregation, and model averaging outside the break-detection framing), plus the finance-native version of the same question (breadth and strategy risk). First session to yield a mechanism that is an unconditional accuracy claim about the repo's own strongest mechanism. Full text read directly for Breiman, Buja–Stuetzle, Hansen and the fundamental-law derivation; partial (first two pages) for the published Ding–Martin. | Breiman 1996 (Machine Learning) + Buja–Stuetzle 2006 (Statistica Sinica) (`2026-08-19-bagging-averaging-unstable-predictors.md`); Grinold 1989 (JPM) + Ding–Martin 2017 (J. Empirical Finance) + Ding 2010 WP (`2026-08-19-fundamental-law-breadth-and-strategy-risk.md`); Hansen 2007 (Econometrica) (`2026-08-19-model-averaging-mallows-weights.md`) |
 | 2026-08-20 (session 7) | Session 6's top-ranked open question (a): **the bridge from a forecast-accuracy or information-ratio claim to realised net return on a constrained, cost-paying book**, chased in the two vocabularies it named — friction-aware dynamic portfolio choice, and portfolio choice that optimises the realised objective directly rather than a predictive loss. Answered from three directions, with a fourth cost-mitigation mechanism found as a by-product. Full text read directly for all four sources. | Gârleanu–Pedersen 2013 (JF; NBER WP read in full) (`2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`); Brandt–Santa-Clara–Valkanov 2009 (RFS) + Lamoureux–Zhang 2024 (RAPS, critique) (`2026-08-20-parametric-portfolio-policies.md`); DeMiguel–Martín-Utrera–Nogales–Uppal 2020 (RFS) (`2026-08-20-trading-diversification-combining-signals.md`) |
+| 2026-08-21 (session 8) | Session 7's open questions (b) and (c), taken together as one theme: **what constraints actually do to a portfolio, and how to count diversification honestly.** Three sources, full text read directly for all three. The session's shape is one *correction* (constraints are estimators as well as leaks), one *closure* (the effective-number-of-bets axis, worth one session, now spent), and one genuinely uncovered axis found by accident (the diversification return, i.e. the part of a book's geometric return that comes from rebalancing rather than from its signal). | Jagannathan–Ma 2003 (JF; NBER WP 8922 read in full) (`2026-08-21-weight-constraints-as-covariance-shrinkage.md`); Meucci 2009 (Risk) + Polakow–Gebbie 2008 (J. Asset Management; arXiv preprint read in full) (`2026-08-21-effective-number-of-bets-diversification-measurement.md`); Willenbrock 2011 (FAJ; arXiv version read in full) + Booth–Fama 1992 (FAJ, second-hand via Willenbrock) (`2026-08-21-diversification-return-and-rebalancing.md`) |
 
 ### Open questions for future sessions
 
@@ -1328,6 +1490,63 @@ hypothesis fodder, then anti-candidates.
   cross-cutting principles for the human reviewing the ⚠ standing protocol concern and must not be
   read as licence for a session to re-rank candidates on a self-chosen criterion.
 
+  **— (b) ANSWERED AND CLOSED 2026-08-21 (session 8), with a correction and a downgrade.** The
+  effective-number-of-bets literature exists, is exactly as tier-C as session 6 suspected, and
+  yields two things and no more. The *correction*: the statistic the lab already reports
+  ("6.0 effective risk bets") is a Herfindahl count over marginal risk contributions of
+  correlated assets, which is not a count of uncorrelated sources; the measure that is one
+  changes basis first (`N_Ent = exp(−Σ p_n ln p_n)` over the diversification distribution), and
+  for a fully-invested long-only book must be computed **conditionally** on the first principal
+  portfolio, whose exposure the budget constraint alone determines. The *screen*: `√N` counts
+  independent bets, so the right test of whether breadth widening can help is whether it raises
+  the count of correlation eigenvalues `≥ 1`, not the instrument count. Both are free and
+  holdings-only. Two things this did **not** deliver, stated so the axis is not reopened: no
+  closed form fell out of it (session 7's warning that "the useful version of such a statistic is
+  usually one that falls out of a closed form" was right — the entropy index is proposed as a
+  metric), and the sources' empirical content is too thin to support anything beyond direction.
+  The axis is spent.
+
+  **— (c) PARTLY ANSWERED 2026-08-21, from the opposite direction to the one requested.** The
+  question asked for the long-only constraint's cost as a function of signal dispersion. What
+  turned up instead is that the accounting had a **missing term of the opposite sign**:
+  Jagannathan–Ma show a binding weight constraint is algebraically a shrinkage of the covariance
+  estimate, applied where estimation error is worst, at the cost of estimating nothing. So the
+  net effect of long-only is (signal leakage, `TC` 0.3–0.8) *minus* (estimation-error suppression,
+  unquantified), and the folder has only ever counted the first. The originally-requested
+  quantification — leakage as a function of cross-sectional dispersion — remains open, and the
+  natural next place to look is the Grinold–Kahn long-short efficiency literature and
+  Clarke–de Silva–Sapra, which were sighted this session but are closed-access and could not be
+  read in full. Low priority still: it would make imports quantitative, not open a build.
+
+- **New open questions raised by session 8, in priority order.**
+  (a) *The one genuinely uncovered axis this session found, and it was an accident.* Nothing in
+  eight sessions had distinguished the return a book earns from its **signal** from the return it
+  earns from **rebalancing** — `½ Σ_i w_i(σ_i² − σ_ip²)`, paid for the contrarian act of holding
+  weights constant, against the buy-and-hold increment paid for the opposite act of letting
+  winners run. A cross-sectional momentum book that resets to signal-proportional targets is
+  doing some of both and the two work against each other. The source found (Willenbrock, via
+  Booth–Fama) settles the identity but models no transaction costs and does not treat a
+  signal-driven book at all. **What would close it**: work that decomposes a
+  characteristic-sorted portfolio's geometric return into a strategic term, a rebalancing term
+  and a cost term — vocabulary not yet searched includes "rebalancing premium", "volatility
+  return / variance drain", and the geometric-vs-arithmetic literature on portfolio choice.
+  Highest-value remaining thread, because unlike every screen in the candidate list it names a
+  quantity the champion is currently *giving away* and the size of the give-away is computable
+  from holdings.
+  (b) *The counterweight to the folder's own top principle, and it is now overdue.* Eight
+  sessions have produced a strong prior that constraints and equal weights beat estimated
+  corrections. Session 8 found the first source arguing a constraint is doing something
+  *positive* rather than merely avoiding harm. That asymmetry should be probed rather than
+  enjoyed: is there literature in which a **binding** constraint is shown to cost more than the
+  estimation error it suppresses, and does the crossover have a stated condition? Without it the
+  folder risks recording "constraints are good" as a taboo, exactly the failure mode session 6
+  corrected for equal weights.
+  (c) *Deliberately not pursued, recorded so it is not rediscovered as an opportunity.* Meucci's
+  mean-diversification efficient frontier — maximise `N_Ent` subject to a return floor — is a
+  buildable strategy and is declined, not unexamined. It optimises over the eigenstructure of an
+  estimated covariance, which is screen #1's expensive class at its most extreme, and the ERC
+  theorem already closes the milder version of the same idea.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -1339,6 +1558,25 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 8 (2026-08-21) read full text directly for every source**, and hit two of the three
+  documented limits within the same hour. Channels that worked first try: **NBER working-paper
+  PDFs** again (Jagannathan–Ma's w8922 carries the full published argument and both
+  propositions), **arXiv q-fin/physics preprints** of published FAJ and practitioner-journal
+  articles (Willenbrock's arXiv copy carries the FAJ volume/page header; Polakow–Gebbie's
+  preprint predates the *Journal of Asset Management* version), and a **conference-site mirror**
+  (`top1000funds.com`) that served the SSRN version of a *Risk* article whose SSRN and
+  university-hosted copies both returned 403. That mirror channel is new and worth remembering:
+  when SSRN and an institutional PDF both refuse, a practitioner conference or investor-education
+  site has often re-hosted the same file. Limits hit: **OpenAlex's daily budget was already
+  exhausted** at the start of the session (`Insufficient budget`), and **Semantic Scholar's title
+  search returned 429 on every attempt** while its DOI endpoint stayed reliable throughout — so
+  one source (Meucci 2009, a *Risk* magazine article whose only DOI is its SSRN preprint's)
+  resolves in **no index at all** and is recorded as unindexed rather than estimated. Per the
+  rubric that is not on its own grounds to downgrade, but the note is tier C anyway on venue and
+  sample. Two closed-access sources relevant to a standing open question (Grinold–Kahn 2000 FAJ;
+  Clarke–de Silva–Sapra 2004 JPM) could not be read beyond a CFA Digest summary, and are recorded
+  as unread rather than summarised second-hand.
 
   **Session 7 (2026-08-20) read full text directly for every source**, and hit none of the three
   documented limits. Three channels worked first try and are worth adding to the README's reliable
