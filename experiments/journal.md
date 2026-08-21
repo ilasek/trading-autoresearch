@@ -2228,3 +2228,76 @@ weight vector describes a regime that has ended.
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-21 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-21T23:11:47+00:00 — mom_hzn_avg4_nobuffer — **PROMOTE**
+- Candidate: `strategies/candidates/mom_hzn_avg4_nobuffer.py` (family: cross-sectional momentum, trial #51)
+- Hypothesis: Deleting the membership band from the champion — each of the four horizon legs holding exactly its current top 15 rather than entering at 15 and holding to 25, with signal, skip-month, magnitude weighting, single-tranche formation, cohort trim and both trim constants otherwise identical — lands validation Sharpe at or above 1.215 net of 15 bps costs, because a holdings-only diagnostic prices the band's entire documented benefit on this base at 0.47x of annual turnover (~0.003 Sharpe, against the 24% cost saving that justified it on the single-leg base of trial #17, four-leg averaging having since absorbed the churn a band was invented to suppress) while the removal carries a +0.017 Sharpe concentration tailwind (HHI +25.7%) and a rotation-speed benefit measured near zero (core-vs-fringe L1 0.063 on the top-10 against 0.127 on the rest, i.e. the band is a fringe phenomenon here); landing materially below 1.201 shows the buffer does real work on this base through a channel other than cost, whose mechanism the repo would then not know.
+- Verdict: PROMOTE — beats champion (1.229 > 1.201) with DSR 0.979 (51 trials, 12 effective after clustering at rho 0.95)
+- Train: sharpe +0.93, ann_ret +19.1%, maxDD -58.1%, turnover 5.4x
+- Validation: sharpe +1.23, ann_ret +31.0%, maxDD -29.6%, turnover 8.3x
+- Holdout: sharpe +0.69, ann_ret +17.5%, maxDD -30.5%, turnover 8.6x
+- Deflated Sharpe prob: 0.979 (bar from 51 trials, 12 effective)
+- Champion validation sharpe at the time: +1.20
+- Champion re-deflated at the same bar: 0.9752
+- Lesson: **The buffer's marginal value on this base is not zero and not positive on
+  the gate's axis — it is a drawdown brake that the gate cannot see, and deleting it
+  produced the cleanest evidence yet that the gate has stopped tracking the mission.**
+  Both pre-registered numbers were close to right and the *unscored* one was the
+  informative one. Validation landed at **1.229** against a pre-registered 1.215, so
+  the buffer's marginal contribution on the gate's axis is about **-0.014** once its
+  concentration confound is netted out — i.e. essentially the null this file
+  predicted, and certainly not the "active brake worth deleting" reading. Meanwhile
+  the second falsifier fired exactly as written: the holdings-only risk vector
+  (top-name risk share 0.320 -> 0.368, effective risk bets **7.8 -> 6.0**, the
+  largest pre-registered move on that axis here) predicted a materially worse
+  drawdown, and validation maxDD duly widened -28.7% -> **-29.6%** with holdout
+  maxDD -27.4% -> **-30.5%**. That is the risk-contribution diagnostic's second
+  correct call after its one recorded miss (#50), and the miss's stated shape —
+  blindness to weight-vector staleness — correctly did not apply here.
+  **What the band actually buys, now that cost is ruled out.** The diagnostic priced
+  its entire documented benefit at 0.47x of turnover, ~0.003 Sharpe, against the 24%
+  cost saving that justified it on trial #17's single-leg base; four-leg averaging
+  has since absorbed the churn a band was invented to suppress. What is left is
+  **breadth that is not fringe once it is priced in risk rather than weight**: 35.1
+  -> 30.3 names, HHI +25.7%, and 1.8 effective risk bets destroyed. The core-vs-fringe
+  screen said 0.063 of L1 on the top-10 against 0.127 on the rest and I read that as
+  "fringe, so expect nothing" — the screen was right about *where* the change lands
+  and wrong as a proxy for whether it *matters*, because 4.8 low-weight names carry
+  far more of this book's diversification than 4.8/35 of its weight. **Add that to
+  the standing rule that weight concentration is not risk concentration: neither is
+  weight *breadth* the same as risk breadth, and the core-vs-fringe screen is a
+  weight statistic.**
+  **The result the session actually turned on, and it is not about buffers.** This
+  promotion is the **fourth consecutive** one whose validation rose while its holdout
+  fell, and the free decomposition of stored trial returns localises the break to a
+  single structural change rather than to a drift:
+
+      promotion                          val     holdout   hold_ret  hold_maxDD
+      mom_12m_baseline                  0.865     1.140      28.2%     -24.1%
+      mom_zscore_overlap6_daily_trim    1.107     1.224      32.7%     -23.3%
+      mom_zscore_overlap6_hzn_avg       1.112     1.320      34.1%     -22.1%
+      mom_zscore_overlap6_hzn_avg4      1.120     1.377      34.9%     -20.1%   <- K=6 ends
+      mom_zscore_hzn_avg4_k1            1.187     0.875      22.6%     -27.4%
+      mom_hzn_avg4_k1_cohort_trim       1.201     0.813      20.6%     -27.4%
+      mom_hzn_avg4_nobuffer  (this)     1.229     0.691      17.5%     -30.5%
+
+      corr(validation, holdout):  K=6 era +0.822 (n=4)   K=1 era -1.000 (n=3)
+
+  Every promotion up to #42 moved validation and holdout **together**; every
+  promotion since #43 — the trial that switched the six-tranche formation-date
+  overlap off — has moved them in **opposite** directions, monotonically, four
+  times, with holdout annual return now exactly **halved** (34.9% -> 17.5%) and
+  holdout drawdown half again wider. The sign of the validation/holdout relationship
+  flips at one identifiable commit. Note what this does *not* say: #46 measured the
+  K=6-vs-K=1 gap cleanly on validation and it widened, so the gate was not
+  mis-measuring itself — the two splits genuinely disagree about the overlap, and
+  the gate reads only the one that has been wrong four times running.
+  **Where this candidate's own validation gain came from, measured not assumed.** By
+  the free year decomposition, against the outgoing champion: 2018 +0.8 -> +2.3,
+  2019 37.3 -> 41.1, 2020 **130.5 -> 142.9**, 2021 17.6 -> 17.7, 2022 -10.2 -> -10.3,
+  2023 41.0 -> 43.7. Over half the gain is the melt-up year, in a construction whose
+  only measured effect is to concentrate the book — which is precisely the failure
+  mode already on record for this window ("it rewards concentrated, fast-rotating
+  books in a six-year sample whose P&L is dominated by 2019-2020"). The holdout
+  disagreed, as it has every time since #43. **This candidate cleared every rule in
+  `program.md` and I would not recommend a human run it.**
+

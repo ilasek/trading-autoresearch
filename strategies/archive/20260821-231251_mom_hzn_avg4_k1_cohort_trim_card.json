@@ -1,0 +1,54 @@
+{
+  "name": "mom_hzn_avg4_k1_cohort_trim",
+  "family": "regime switching",
+  "hypothesis": "Driving the champion's daily exposure trim from the realized vol of the whole full-history legacy cohort rather than from its accidental intersection with the held basket \u2014 four horizon legs, buffers, magnitude weighting, single-tranche formation, SPIKE_RATIO 1.6 and TRIM_SCALE 0.6 otherwise identical to the champion \u2014 lands validation Sharpe at or above the champion's 1.187 net of 15 bps costs, because trials #37-#40 attributed the intersection's residual +0.026 on the six-tranche base to sampling luck in which three defensives the momentum screen happened to hold, and champion #43 re-draws that held-set from an entirely different selection process (no date overlap, four independent horizon legs), so a genuinely lucky residual should not survive the re-draw; landing materially below 1.187 falsifies the sampling-luck attribution and shows the membership filter is systematic.",
+  "promoted_at": "2026-08-18T23:15:13+00:00",
+  "source_candidate": "strategies/candidates/mom_hzn_avg4_k1_cohort_trim.py",
+  "n_trials_at_promotion": 45,
+  "n_effective_trials_at_promotion": 11.0,
+  "dsr_at_promotion": 0.9762,
+  "provisional": false,
+  "train": {
+    "ann_return": 0.182,
+    "ann_vol": 0.1985,
+    "sharpe": 0.942,
+    "sortino": 1.189,
+    "max_drawdown": -0.5673,
+    "n_days": 14261,
+    "ann_turnover": 4.61,
+    "avg_positions": 23.08,
+    "active_days": 11370,
+    "sharpe_daily": 0.059325
+  },
+  "validation": {
+    "ann_return": 0.2859,
+    "ann_vol": 0.2319,
+    "sharpe": 1.201,
+    "sortino": 1.602,
+    "max_drawdown": -0.2869,
+    "n_days": 1562,
+    "ann_turnover": 7.86,
+    "avg_positions": 35.1,
+    "active_days": 1562,
+    "sharpe_daily": 0.075653
+  },
+  "holdout": {
+    "ann_return": 0.2058,
+    "ann_vol": 0.278,
+    "sharpe": 0.813,
+    "sortino": 1.064,
+    "max_drawdown": -0.274,
+    "n_days": 684,
+    "ann_turnover": 7.96,
+    "avg_positions": 33.71,
+    "active_days": 684,
+    "sharpe_daily": 0.051188
+  },
+  "engine_params": {
+    "cost_bps": 10.0,
+    "slippage_bps": 5.0,
+    "max_weight": 0.25,
+    "max_leverage": 1.0,
+    "allow_short": false
+  }
+}
