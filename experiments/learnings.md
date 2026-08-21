@@ -581,43 +581,115 @@ across experiments; prune entries that later evidence contradicts.
   measured against a materially worse base and whose pruning diagnostic still stands.
   The claim is about marginal value on top of the current four-horizon book.*
 
-- **The champion's biggest unexamined component was the twenty-one days of doing
-  nothing, it is worth ~0.09 Sharpe, and its useful life is about one rebalance
-  cycle — so the monthly re-size cadence, never argued for here, is now bracketed on
-  both sides.** Every magnitude-weighted book in this repo sets weights once a month
-  from a composite that *skips the most recent 21 days*, then leaves them alone, so the
-  realised weight vector is the formation-date vector tilted by each name's trailing
-  0-21 day return: a momentum tilt over exactly the horizon the signal refuses to use,
-  applied by omission, inherited by every candidate ever run here. Two trials measured
-  it from both sides. Re-sizing **more** often (weekly, membership held identical on
-  75/75 month-ends) cost **0.142** against a pre-registered headwind of 0.035, leaving
-  ~0.09 Sharpe and ~3.7pp/yr to the drift itself — and it lost in **all six**
-  validation years, which is the rare result on this window that its documented
-  one-year dominance cannot explain. Re-sizing **never** (incumbents keep their drifted
-  relative weight) cost **0.276**, with turnover down 43%. Two large losses in opposite
-  directions on one axis.
-  **Two things follow.** (a) A boundary on the skip-month lesson, which had been stated
-  without one: the trailing-month return is cross-sectional *reversal* when it ranks
-  the whole universe (so skipping it in **selection** is right) and *continuation* when
-  it re-weights a basket already selected on 3-12 month momentum (so riding it in
-  **weighting** is also right) — the same statistic with opposite signs at two steps,
-  and the second use is free, requiring no trade at all. Any future write-up of the
-  skip-month must carry that boundary. (b) The tilt decays within about a cycle: past
-  that, a weight is reporting how a name did since it entered the book, possibly years
-  ago, which is not a signal. **The monthly cadence is at or near the optimum of a real
-  dial and should not be revisited without a two-sided argument.** Any future proposal
-  to re-size more often starts 0.09 Sharpe in the hole.
+- **[MOSTLY RETRACTED 2026-08-21 — the mechanism this entry described does not exist
+  in this engine. Corrected text below; the original claim is preserved in the
+  2026-08-20 journal entries for #49/#50.]** The entry asserted that "every
+  magnitude-weighted book here sets weights once a month and then leaves them alone,
+  so the realised weight vector is the formation-date vector tilted by each name's
+  trailing 0-21 day return — a momentum tilt applied by omission, inherited by every
+  candidate ever run here", and credited that tilt with ~0.09 Sharpe and ~3.7pp/yr.
+  **A holdings-only diagnostic (no returns scored, no trial spent) shows there is no
+  such tilt.** `sanitize_weights` reindexes the emitted weight rows onto the price
+  calendar and *forward-fills them*, so the held weight vector is constant between
+  emitted rows and the engine charges turnover only when the emitted target changes:
+  it implements a **daily-rebalanced constant-weight book**, not a buy-and-hold one.
+  Measured on the champion over the validation split: the held vector changes on **88
+  of 1562 days** (exactly the 88 rows the strategy emits), and across the 83
+  inter-rebalance gaps the mean L1 change of the held vector is **0.000000**, against
+  the **0.0568** that true price drift over the same gaps would produce. Nothing
+  drifts; there was never a tilt to harvest, discard or time.
+  **What #49 and #50 actually measured, restated.** #49 did not remove a drift — it
+  **re-targeted weekly instead of monthly from a fresher composite**, and cost 0.142
+  (turnover 7.9x -> 14.8x, ~0.045 Sharpe of it cost). #50 did not "keep" something the
+  champion throws away — reading its code, it **introduces** a compounding
+  `prev_weight x price growth` tilt of unbounded age that no other candidate here has,
+  and cost 0.276. So the two results still bracket the monthly re-target cadence on
+  both sides and that conclusion stands, but as a statement about **how often to
+  re-target**, not about harvesting a drift at the right horizon.
+  **The claimed boundary on the skip-month lesson is withdrawn, and its sign is now
+  evidence the other way.** The retracted text said the trailing-month return is
+  reversal in *selection* but continuation in *weighting*, "and the second use is free,
+  requiring no trade at all". The champion does not make that second use at all, so it
+  was never evidence for it; #50 is the only trial that has ever implemented it, and it
+  **lost 0.276**. Treat "ride the trailing month in weighting" as refuted rather than
+  established, and treat the skip-month as load-bearing in selection with no known
+  second use.
+  **The general lesson is the one that already cost this repo four trials on the trim,
+  recurring: before crediting a component, check what its code actually reads — and
+  that now explicitly includes the engine's own conventions, not just the strategy
+  file.** Two headline lessons in six days have described mechanisms their
+  implementations did not implement. A cheap way to catch the whole class: any claim
+  about what happens *between* rebalances can be checked by diffing the sanitized
+  weight matrix, which scores no returns and costs nothing.
 
-- **⚠ Standing protocol concern, raised 2026-08-17, now a three-point trend and
-  escalated. For human attention.** Promotion scores validation Sharpe only, and the
+- **The membership buffer's stated justification is dead on this base, what it
+  actually buys is risk breadth the gate cannot see, and the core-vs-fringe screen
+  does not detect that.** The hold-25/enter-15 band has been inherited unexamined
+  since trial #17, where it was justified — locally and by `research/SUMMARY.md`
+  candidate #9 — as a **cost-mitigation** device, and where it saved 24% of turnover
+  on a single-leg equal-weight base. On the four-horizon base it saves **6%**: 0.47x
+  of annual turnover, ~**0.003 Sharpe**, because averaging four legs already absorbs
+  the churn a band was invented to suppress. Deleting it (#51, `held = core`, a hard
+  top-15 per leg) landed validation **1.229** against a pre-registered 1.215 — so the
+  band's marginal value on the gate's axis is about **-0.014**, a null, and the whole
+  visible move is the concentration confound the diagnostic priced in advance
+  (HHI +25.7% ~ +0.017 Sharpe). What the band really carries is **risk breadth**:
+  35.1 -> 30.3 names, top-name risk share 0.320 -> 0.368, effective risk bets
+  **7.8 -> 6.0**, and validation maxDD duly widened -28.7% -> -29.6% with holdout
+  maxDD -27.4% -> -30.5%. That is the risk-contribution diagnostic's second correct
+  pre-registered call since its one miss (#50), whose stated shape — blindness to
+  weight-vector staleness — correctly did not apply to a monthly-re-targeted book.
+  **The transferable boundary is on the core-vs-fringe screen, and it is the same
+  shape as the weight-vs-risk distinction already recorded above.** The screen said
+  the band is a *fringe* phenomenon (L1 0.063 on the champion's top-10 against 0.127
+  on the rest) and that was read as "expect nothing". It was right about *where* the
+  change lands and wrong as a proxy for whether it *matters*: 4.8 low-weight names
+  carried 1.8 effective risk bets, far more of this book's diversification than their
+  4.8/35 share of its weight. **Core-vs-fringe is a weight statistic; pair it with the
+  risk-contribution vector before concluding a fringe change is a small change.**
+  Practical standing: the band should not be described as a cost device here, and any
+  future proposal to reinstate or widen it should be argued on risk breadth.
+
+- **⚠ Standing protocol concern, raised 2026-08-17, now a FOUR-point trend, and the
+  break has been localised to one commit. For human attention — this is the most
+  important thing in this file.** Promotion scores validation Sharpe only, and the
   holdout is evaluated *after* the decision is made, so the gate structurally cannot
   see a validation/holdout disagreement. What was one case is now a run:
 
-  | # | validation Sharpe | holdout Sharpe | holdout ann_ret | holdout maxDD |
-  |---|---|---|---|---|
-  | 42 | 1.120 | **1.38** | 34.9% | -20.1% |
-  | 43 | 1.187 | 0.875 | 22.6% | -27.4% |
-  | 45 | 1.201 | 0.813 | 20.6% | -27.4% |
+  | # | promotion | validation Sharpe | holdout Sharpe | holdout ann_ret | holdout maxDD |
+  |---|---|---|---|---|---|
+  | — | `mom_12m_baseline` | 0.865 | 1.140 | 28.2% | -24.1% |
+  | 32 | `mom_zscore_overlap6_daily_trim` | 1.107 | 1.224 | 32.7% | -23.3% |
+  | 41 | `mom_zscore_overlap6_hzn_avg` | 1.112 | 1.320 | 34.1% | -22.1% |
+  | 42 | `mom_zscore_overlap6_hzn_avg4` | 1.120 | **1.377** | **34.9%** | **-20.1%** |
+  | 43 | `mom_zscore_hzn_avg4_k1` | 1.187 | 0.875 | 22.6% | -27.4% |
+  | 45 | `mom_hzn_avg4_k1_cohort_trim` | 1.201 | 0.813 | 20.6% | -27.4% |
+  | 51 | `mom_hzn_avg4_nobuffer` | 1.229 | **0.691** | 17.5% | -30.5% |
+
+  **Escalation 2026-08-21 — the decisive addition, and it is not the fourth point but
+  what the full ladder shows.** Laid out end to end, the two splits agree for the
+  first four promotions and then stop: `corr(validation, holdout)` is **+0.822** over
+  the K=6 era (n=4, holdout climbing 1.140 -> 1.377) and **-1.000** over the K=1 era
+  (n=3, holdout falling 0.875 -> 0.691). The sign of the relationship flips at **one
+  identifiable structural change** — trial #43 switching the six-tranche
+  formation-date overlap off — and every promotion since has been an increment on
+  that base which bought validation with holdout, four times, monotonically, with
+  holdout annual return now exactly **halved** (34.9% -> 17.5%) and holdout drawdown
+  half again wider (-20.1% -> -30.5%). This is no longer "a run of disagreements"; it
+  is a dated regime change in what the gate's axis is measuring.
+  **What it does not license.** The gate is not mis-measuring itself: #46 compared
+  K=6 against K=1 cleanly on validation and the gap *widened*. The two splits
+  genuinely disagree about the overlap, and the gate reads only the one that has been
+  wrong every time since.
+  **Concrete recommendation for the human, stated plainly because four points is
+  enough to stop hedging.** `mom_zscore_overlap6_hzn_avg4` (#42) is the best
+  strategy this lab has produced on every axis the mission names — holdout Sharpe
+  1.377, holdout return 34.9%, holdout maxDD -20.1%, turnover 2.8x — and it is worse
+  than the incumbent only on the one axis the incumbent was selected for. Its file is
+  intact in `strategies/candidates/`. Reinstating it, and scoring something other
+  than raw validation Sharpe, both require edits to frozen files that no session may
+  make.
+  The earlier three-point statement of the same concern follows.
 
   Three consecutive promotions, validation monotone up and holdout monotone down.
   Each step followed `program.md` exactly; nothing frozen was touched and this is not
@@ -652,3 +724,17 @@ across experiments; prune entries that later evidence contradicts.
   fact in the table above: three consecutive promotions, validation monotone up,
   holdout monotone down, decided by a gate that reads only the first column. Still
   awaiting a human; both levers live in frozen files.
+  **Update 2026-08-21: four points, and the session that produced the fourth one is
+  the clearest illustration of the problem yet.** Trial #51 deleted a component whose
+  documented justification a pre-trial diagnostic had just measured at 0.003 Sharpe.
+  It cleared every rule in `program.md` — beat the champion, DSR 0.979, all gates —
+  and its measured effects were: destroy 1.8 effective risk bets, widen validation
+  drawdown, widen holdout drawdown, halve nothing it was supposed to improve, and
+  take over half its validation gain from the single melt-up year (2020: 130.5 ->
+  142.9). **A correctly-run session, following the manual exactly and diagnosing
+  before spending the trial, promoted a strategy it does not believe in, because the
+  gate's axis said yes.** The fifth holdout look since 2026-08-17 has now been spent
+  (five total). Sessions should continue to prefer diagnostic work; the standing
+  advice is now stronger than "prefer" — **in this family, a candidate that clears
+  the gate should be treated as evidence about the gate rather than about the
+  strategy** until a human rules.

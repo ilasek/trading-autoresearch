@@ -2301,3 +2301,173 @@ weight vector describes a regime that has ended.
   disagreed, as it has every time since #43. **This candidate cleared every rule in
   `program.md` and I would not recommend a human run it.**
 
+
+## Session summary — 2026-08-21 (nightly)
+
+- **Integrity check — one deviation, corrected before any work.** `git fetch origin
+  --prune` clean; `git branch -r --no-merged origin/main` returned nothing, so every
+  remote branch (`claude/remote-learning-egress-access-33q7fy`,
+  `deflated-sharpe-effective-trials`, `main-b713x5`, `main-p76jo3`) is an ancestor of
+  `origin/main` and no previous session's work is stranded. As on 2026-08-19 and
+  2026-08-20, the session **opened on a per-run branch** (`main-rn990d`), pointing at
+  exactly `origin/main` (`b28ee93`) with no commits of its own; per the standing
+  instruction never to run trials from a per-run branch it was corrected first
+  (`git checkout main && git reset --hard origin/main`). The trial and every commit
+  below are on `main`. This is the third consecutive session to open on a per-run
+  branch — the harness setting that causes it has outlived three corrections and is
+  worth a human fixing at the source. Engine tests green (16 passed). Store fresh
+  through 2026-08-21.
+- Experiments run: **1 of the 8-trial budget** (#51 `mom_hzn_avg4_nobuffer`).
+  Verdict: **1 PROMOTE, 0 REJECT, 0 GATE_FAIL**. The session stopped on the
+  standing rule in `learnings.md` — *"once a session has seen a holdout number,
+  every later candidate it designs is holdout-informed. Stop the session rather than
+  spend the remaining budget."* The promotion exposed the holdout on the first trial,
+  so every subsequent candidate tonight would have been contaminated. One trial was
+  the honest budget, not a shortfall.
+- **Two free analyses, no trial spent by either**: a holdings-only diagnostic of the
+  engine's weight-handling convention (which retracts a headline lesson), and a
+  year/ladder decomposition of *already-recorded* trial return series.
+
+### The night in one line
+
+The trial cleared every rule in `program.md` and produced a strategy this session
+does not believe in — which is now the fourth consecutive promotion to buy validation
+Sharpe with holdout Sharpe, and the ladder shows the disagreement starts at one
+identifiable commit.
+
+### The free diagnostic that mattered most: a headline lesson retracted
+
+Yesterday's entry claimed the champion's realised weight vector drifts with prices
+between monthly rebalances, that this "momentum tilt applied by omission" is
+"inherited by every candidate ever run here", and that it is worth ~0.09 Sharpe and
+~3.7pp/yr. **It does not exist.** `engine/backtest.py:sanitize_weights` reindexes the
+emitted rows onto the price calendar and forward-fills them, and `run_backtest`
+charges turnover as `|Δw|` on that forward-filled matrix — so the engine implements a
+**daily-rebalanced constant-weight book**, not a buy-and-hold one. Measured on the
+champion over validation (holdings only, no returns scored):
+
+    held weight vector changes on            88 of 1562 days
+    ( = exactly the 88 rows the strategy emits )
+    mean L1 change across 83 inter-rebalance gaps, ACTUAL      0.000000
+    mean L1 change true price drift would produce              0.056802
+
+Restating what the two trials actually measured: **#49** did not remove a drift, it
+re-targeted **weekly instead of monthly from a fresher composite** (-0.142, of which
+~0.045 is the 7.9x -> 14.8x turnover); **#50** did not "keep" something the champion
+discards — its code *introduces* a compounding `prev_weight x price growth` tilt of
+unbounded age that no other candidate here has (-0.276). The two-sided bracket on the
+monthly cadence survives, as a claim about **re-targeting frequency**. What does not
+survive is the derived boundary on the skip-month lesson ("reversal in selection,
+continuation in weighting, and the second use is free"): the champion never makes that
+second use, so it was never evidence for it, and #50 is the only trial that ever
+implemented it — it lost 0.276. **Treat "ride the trailing month in weighting" as
+refuted, not established.**
+
+This is the second headline mechanism in six days described in terms its
+implementation did not match (the trim was the first, at a cost of four trials). The
+general rule — check what the code actually reads — now explicitly extends to the
+engine's own conventions, and the check is free: diff the sanitized weight matrix.
+
+### #51 — the buffer's justification is dead, but the buffer is not. PROMOTE, +0.028.
+
+The hold-25/enter-15 band has been inherited unexamined since trial #17, justified
+locally and by `research/SUMMARY.md` candidate #9 as a **cost-mitigation** device (it
+saved 24% of turnover on the single-leg equal-weight base). The pre-trial diagnostic
+priced it on the current four-leg base at **0.47x of turnover — 6%, ~0.003 Sharpe** —
+because averaging four legs already absorbs the churn a band was invented to
+suppress. That retires its stated reason for existing and made the trial worth
+spending.
+
+|  | turnover | positions | HHI | top_w | top_risk | eff_risk_bets |
+|---|---|---|---|---|---|---|
+| champion hold25/enter15 | 7.87x | 35.1 | 0.0701 | 0.163 | 0.320 | 7.8 |
+| #51 hard top-15 | 8.34x | 30.3 | 0.0881 | 0.192 | 0.368 | **6.0** |
+
+Both pre-registered numbers were close to right, and the one the gate does not score
+was the informative one. Validation landed **1.229** against a pre-registered 1.215,
+so the band's marginal value on the gate's axis is about **-0.014** — the null the
+file predicted, with the visible move being the concentration confound (HHI +25.7%,
+~+0.017) rather than the band. The second falsifier fired as written: effective risk
+bets 7.8 -> 6.0 predicted a materially worse drawdown, and validation maxDD widened
+-28.7% -> **-29.6%**, holdout maxDD -27.4% -> **-30.5%**. That is the
+risk-contribution diagnostic's second correct pre-registered call since its one miss
+(#50), whose stated blind spot (weight-vector staleness) correctly did not apply here.
+
+**The transferable finding is a boundary on the core-vs-fringe screen.** It said the
+band is a *fringe* phenomenon (L1 0.063 on the top-10 against 0.127 on the rest) and I
+pre-registered "expect nothing" from it. It was right about *where* the change lands
+and wrong as a proxy for whether it *matters*: 4.8 low-weight names carried 1.8
+effective risk bets — far more of this book's diversification than their 4.8/35 share
+of its weight. Core-vs-fringe is a **weight** statistic, and this is the same shape as
+the standing "weight concentration is not risk concentration" lesson, one axis over.
+
+### The result the session actually turned on
+
+Laying the whole promotion ladder out — free, from stored trial returns and cards:
+
+| # | promotion | val | holdout | hold_ret | hold_maxDD |
+|---|---|---|---|---|---|
+| — | `mom_12m_baseline` | 0.865 | 1.140 | 28.2% | -24.1% |
+| 32 | `mom_zscore_overlap6_daily_trim` | 1.107 | 1.224 | 32.7% | -23.3% |
+| 41 | `mom_zscore_overlap6_hzn_avg` | 1.112 | 1.320 | 34.1% | -22.1% |
+| 42 | `mom_zscore_overlap6_hzn_avg4` | 1.120 | **1.377** | **34.9%** | **-20.1%** |
+| 43 | `mom_zscore_hzn_avg4_k1` | 1.187 | 0.875 | 22.6% | -27.4% |
+| 45 | `mom_hzn_avg4_k1_cohort_trim` | 1.201 | 0.813 | 20.6% | -27.4% |
+| 51 | `mom_hzn_avg4_nobuffer` (tonight) | 1.229 | **0.691** | 17.5% | -30.5% |
+
+    corr(validation, holdout):   K=6 era +0.822 (n=4)    K=1 era -1.000 (n=3)
+
+The two splits agree for the first four promotions and then stop. The sign flips at
+**one identifiable structural change** — #43 switching the six-tranche formation-date
+overlap off — and every promotion since has bought validation with holdout, four
+times, monotonically, with holdout annual return now exactly **halved** and holdout
+drawdown half again wider. This is no longer a run of disagreements; it is a dated
+regime change in what the gate's axis measures. It is *not* the gate mis-measuring
+itself: #46 compared K=6 against K=1 cleanly on validation and the gap widened. The
+two splits genuinely disagree about the overlap and the gate reads only one of them.
+
+Tonight's own contribution to the pattern is the cleanest instance available: over
+half of #51's validation gain is the melt-up year (2020: 130.5 -> **142.9**; 2018
++0.8 -> +2.3, 2019 37.3 -> 41.1, 2021 17.6 -> 17.7, 2022 -10.2 -> -10.3, 2023 41.0 ->
+43.7), from a change whose only measured effect is to concentrate the book — the
+window's documented failure mode, reproduced exactly.
+
+### For the human — recommendation, stated plainly
+
+Four points is enough to stop hedging. `mom_zscore_overlap6_hzn_avg4` (#42) is the
+best strategy this lab has produced on every axis the mission names — holdout Sharpe
+**1.377**, holdout return **34.9%**, holdout maxDD **-20.1%**, turnover 2.8x — and it
+is worse than the incumbent only on the axis the incumbent was selected for. Its file
+is intact in `strategies/candidates/`. Both remedies (reinstating it; scoring
+something other than raw validation Sharpe) require edits to frozen files that no
+session may make. Holdout looks since 2026-08-17: **five**.
+
+### Ideas for next session
+
+1. **Do not run a challenger in this family without reading the ladder above first.**
+   A candidate that clears the gate here is now better evidence about the gate than
+   about the strategy. Tonight's trial is the demonstration.
+2. **The one axis the ladder points at.** Every holdout number above 1.2 belongs to a
+   K=6 book and every one below 0.9 belongs to a K=1 book. `learnings.md` closed the
+   vintage-averaging family for *challengers* on validation evidence; the holdout
+   column says the closure may be an artifact of the axis used to close it. This is a
+   question for a human with the authority to change what is scored, not a candidate.
+   **Idea provenance: the lab's own, from tonight's ladder decomposition.**
+3. **Free and still never exercised:** the closed-form weight-vector triage for a
+   proposed trend/MA signal (`research/SUMMARY.md` candidate #3) — carried over
+   untouched from last session's list. **Idea provenance: `research/SUMMARY.md`.**
+4. **Free, and newly motivated:** `research/SUMMARY.md` candidate #23(b), the
+   diversification return `0.5 * sum_i w_i(sigma_i^2 - sigma_ip^2)`. Now that the
+   engine is known to hold **constant weights** rather than letting them drift, this
+   term is being harvested continuously and for free by every candidate here, which is
+   an engine property nobody had noticed and which may explain part of why
+   magnitude-weighted concentration scores so well on this window.
+   **Idea provenance: `research/SUMMARY.md`, re-motivated by tonight's engine
+   diagnostic.**
+5. **A harness matter for a human, not a research idea.** Three consecutive sessions
+   have opened on a per-run branch and corrected it by hand. The correction has worked
+   every time, but it depends on each session reading the instruction.
+- No engine issues encountered this session. The weight-handling convention documented
+  above is **not** a bug — it is a deliberate, documented design of a constant-weight
+  engine. What was wrong was this repo's description of it, which is a journal matter,
+  not an engine one, and nothing frozen was touched.
