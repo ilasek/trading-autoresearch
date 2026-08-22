@@ -2471,3 +2471,5 @@ session may make. Holdout looks since 2026-08-17: **five**.
   above is **not** a bug — it is a deliberate, documented design of a constant-weight
   engine. What was wrong was this repo's description of it, which is a journal matter,
   not an engine one, and nothing frozen was touched.
+
+## Research session — 2026-08-22 (learning agent): 3 notes added, see research/SUMMARY.md

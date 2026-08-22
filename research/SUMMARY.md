@@ -594,6 +594,82 @@ neither source carries an empirical study meeting this folder's bar, the venues 
 the Meucci article does not resolve in any citation index tried. `validation_overlap: false`.
 → `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`
 
+**The decomposition session 8 asked for exists, is a theorem, applies to a signal-driven book, and
+is computable from holdings with nothing estimated.** Fernholz–Karatzas's survey of stochastic
+portfolio theory states, for *any* weight process — time-varying, path-dependent, signal-driven —
+that `d log V^π = γ*_π dt + Σ_i π_i d log X_i`: a portfolio's log growth is the weighted average of
+its holdings' log growth (the **selection term**) plus an **excess growth rate**
+`γ*_π = ½(Σ_i π_i a_ii − π′aπ) = ½ Σ_i π_i τ^π_ii`, which for a long-only book is always
+non-negative and is strictly positive unless the book holds one name. That is the continuous-time
+generalisation of Willenbrock's identity to exactly the case the session-8 note could not cover, and
+it closes open question 8(a) at the identity level. Two uses. (i) `γ*_π` is a **return-denominated,
+holdings-only diagnostic** — realised covariance of what was held, times the weights actually held,
+no forecasting — so a session can finally price what each concentration step costs on the axis the
+gate reads, rather than only in risk breadth. The lab's documented ladder (equal-weight → rank
+weight → magnitude weight, then the buffer deletion that moved 35.1 → 30.3 names and 7.8 → 6.0
+effective risk bets) has been spending this term monotonically and has never measured it. (ii) For
+the narrower class of **functionally generated** portfolios (weights a fixed function `G` of current
+market weights) the master formula splits relative performance into a bounded positioning term
+`log(G(μ_T)/G(μ_0))` and a cumulative drift `∫g dt` that can be recovered **without estimating any
+covariance at all**. That shortcut does *not* apply to the champion, which is path-dependent, so
+only the general identity transfers. Two hard boundaries: `γ*` is a term in **log growth**, not in
+Sharpe, so the folder's standing accuracy-to-realised-return gap is not closed by it; and the
+diversity-weighted portfolio the theory is famous for needs **market capitalisations**, which this
+repo does not have, and its outperformance theorem carries an explicit long-horizon condition
+(`T ≥ (2/pεδ)·log n`) and no transaction costs. Tier A on the identities (theorems), B on the
+chapter's single uncosted US simulation. `validation_overlap: false`.
+→ `notes/2026-08-22-excess-growth-and-return-decomposition.md`
+
+**But the folder's framing of that term was wrong, and correcting it flips the sign of the
+"give-away" on a momentum book.** `SUMMARY.md` recorded after session 8 that the rebalancing term is
+"a quantity the champion is currently *giving away*". Cuthbertson–Hayley–Motson–Nitzsche show the
+rebalancing literature systematically conflates two things. The **diversification return** — a
+book's growth exceeding the weighted average of its constituents' growth — follows from
+`E[GM] ≈ E[AM] − σ²/2` applied to a basket whose variance is below its constituents' average, and
+they derive in generality that an **unrebalanced** book earns it too; rebalanced and buy-and-hold
+books start with *identical* expected growth rates and diverge only as the buy-and-hold weights
+drift toward being less diversified. The residual genuinely attributable to the rebalancing trades
+is **zero in expectation under IID returns** — each trade swaps into an asset as likely to under- as
+outperform — and is positive only where relative prices **mean-revert**, negative where they
+**trend**. Two further correctives: the classic "buying on downticks" argument is an infinite-horizon
+result (over horizons to 100 years the rebalanced book won under 70% of 100,000 simulated paths),
+and **expected terminal wealth is higher for the unrebalanced book**, because it keeps an
+ever-thinner, ever-longer right tail. Applied here: the part of the term that is real is *not* given
+away — the champion earns it by being diversified at all — and the part specific to re-targeting has
+**negative** expected value on a book that exists to bet on relative-price continuation. This
+supplies the mechanism for the lab's own re-target-cadence bracket (weekly re-targeting lost;
+unbounded weight drift lost worse) and a *new* justification for the membership buffer: a hold-band
+suppresses contrarian trades a continuation signal does not want, which is a different claim from
+the cost claim `learnings.md` retired. **Tension recorded rather than smoothed over:** Willenbrock's
+algebra is not disputed, only its attribution; where the two disagree — whether the term is evidence
+that rebalancing *pays* — this source is the more careful and should govern. Tier B (peer-reviewed
+field journal, decisive algebra, but modest citations and no empirical content).
+`validation_overlap: false`. → `notes/2026-08-22-rebalancing-return-attribution-critique.md`
+
+**The counterweight session 8 asked for on constraints exists, and it dissolves the question rather
+than answering it in either direction.** Brodie–Daubechies–De Mol–Giannone–Loris show that under a
+full-investment constraint an `ℓ1` penalty `τ‖w‖₁` is *algebraically* a penalty on short positions
+(`‖ρ1 − Rw‖² + 2τ Σ_{w_i<0}|w_i| + τ`), so **the long-only constraint is the `τ → ∞` endpoint of a
+continuous shrinkage path**, with a critical `τ₀` above which the penalised solution simply *is* the
+long-only optimum. Two findings follow. First, the crossover is real: on 48 industry portfolios the
+best portfolio anywhere on the path had no short positions (the constraint cost nothing), while on
+100 size × book-to-market portfolios the best portfolios did include shorts and beat both `1/N` and
+the long-only optimum — the same method, the same sample, only the asset set changed. So **yes, a
+binding constraint can cost more than the estimation error it suppresses** — but the paper states
+**no general condition** for which side a universe falls on; `τ` is tuned on training data. The
+standing statement should therefore be neither "constraints are good" nor "constraints leak signal"
+but: *a constraint is a shrinkage intensity; cost and benefit both scale with how binding it is, and
+which dominates is an empirical property of the universe.* Second, and not previously noticed in
+that literature: long-only optima are **automatically sparse** (single-digit name counts on both
+asset sets), so concentration is partly a consequence of the positivity constraint rather than an
+independent stance — which reframes "few names" as the expected shape of a long-only solution here,
+and any proposal to widen the book as a move *away* from where the constraint pushes. A third,
+explanatory: a proportional per-side cost is literally an `ℓ1` penalty on `Δw`, so the repo's cost
+model is itself a regulariser and a no-trade band's shrinkage effect is not separable from its cost
+effect. Tier A (PNAS; multi-decade out-of-sample protocol) — but US-only, on constructed portfolios
+rather than securities, and costs discussed rather than charged. `validation_overlap: false`.
+→ `notes/2026-08-22-long-only-as-l1-regularization.md`
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -885,6 +961,44 @@ alpha**: a book can have a large one and a poor total return, and nothing in the
 transaction costs, so it is not a reason to rebalance more often.
 → `notes/2026-08-21-diversification-return-and-rebalancing.md`,
 `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`
+
+**[AMENDED 2026-08-22 — the attribution above is half wrong, and the correction changes what the
+lab should want.]** The identity survives; the sentence "a buy-and-hold book earns none of that"
+does not. Cuthbertson et al. derive that an **unrebalanced** book also earns growth above the
+weighted average of its constituents' growth, that rebalanced and buy-and-hold books begin with
+**identical** expected growth rates, and that they diverge only as buy-and-hold weights drift toward
+being less diversified. What the rebalancing trades themselves add is **zero in expectation under
+IID returns**, positive only where relative prices mean-revert and **negative where they trend**. So
+the corrected principle is: the return a diversified book earns over its constituents' average is a
+*volatility-drag* effect available to any diversified holder, and the *incremental* effect of
+resetting weights is a bet on relative-price mean reversion. **A cross-sectional momentum book is
+short that bet.** Practical consequences, replacing (b) above rather than adding to it: throttling
+**weight resets** is not forgoing a prize on this book — on a continuation signal it is removing
+trades with negative expected value *and* a 15 bps/side charge, which is the strongest argument the
+folder has yet recorded for a hold-band, and is a different argument from the cost one
+`learnings.md` retired. Consequence (a) stands unchanged and is now doubly sourced: concentration
+forgoes the diversification term, and Fernholz–Karatzas's `γ*_π` makes that forgone amount
+measurable from holdings alone. Consequence (c) stands and is strengthened — the term is accounting,
+not alpha, and this correction removes the last reading under which it looked like free money.
+→ `notes/2026-08-22-rebalancing-return-attribution-critique.md`,
+`notes/2026-08-22-excess-growth-and-return-decomposition.md`
+
+**A constraint is a shrinkage intensity, not a verdict — grade it by how binding it is, not by
+whether it exists.** The folder has accumulated a strong prior that constraints and equal weights
+beat estimated corrections, and session 8 added the argument that a binding weight constraint *is*
+covariance shrinkage. The missing half arrived with the `ℓ1` identity: under full investment,
+long-only is the infinite-penalty endpoint of a continuous path, with a critical `τ₀` marking where
+it starts to bind — and on one of two asset sets in the same study the endpoint was demonstrably
+past the optimum, the constrained book beaten by one allowed a little shorting. Both directions are
+therefore on record, and neither is a general law. The rule to carry: **cost and benefit of a
+constraint both scale with how binding it is, so the question is always "how far past the
+unconstrained optimum does this push, on this universe?" and never "are constraints good?"** This is
+the explicit guard against the taboo risk session 8 flagged. Its corollary for this repo, where
+long-only is not optional: the constraint is doing unpriced regularisation work *and* unpriced
+leakage, the folder has only ever counted one of them at a time, and the one quantity that would
+price the leakage — the transfer coefficient's 0.3–0.8 range — remains the only number available.
+→ `notes/2026-08-22-long-only-as-l1-regularization.md`,
+`notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -1281,8 +1395,53 @@ hypothesis fodder, then anti-candidates.
     it holds exactly only for constant weights, and the source models no transaction costs — so
     it is not a reason to rebalance more often. Tier A on the identity, C/B on the sources'
     empirical content.
+    **[REVISED 2026-08-22 — measure it, but read it differently.]** Two changes. The
+    *constant-weights* restriction is gone: `γ*_π = ½(Σ_i π_i a_ii − π′aπ)` is the same quantity
+    for an arbitrary, path-dependent, signal-driven weight process, so it can be computed on the
+    champion's actual sanitized weight matrix rather than on a constant-weight idealisation of it.
+    The *interpretation* changes more: this term is **not** a prize the champion forgoes by not
+    rebalancing enough — it accrues to any diversified holder, rebalanced or not, and the part
+    genuinely created by re-targeting trades has zero expected value under IID returns and
+    **negative** expected value when relative prices trend, which is the regime a momentum book
+    bets on. So compute it as **the price of concentration** (it falls mechanically as weight
+    collapses onto few correlated names, and it is denominated in growth rate, on the gate's own
+    axis), and do **not** read a small value as an argument to reset weights more often.
     → `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`,
-    `notes/2026-08-21-diversification-return-and-rebalancing.md`
+    `notes/2026-08-21-diversification-return-and-rebalancing.md`,
+    `notes/2026-08-22-excess-growth-and-return-decomposition.md`,
+    `notes/2026-08-22-rebalancing-return-attribution-critique.md`
+24. **[Added 2026-08-22] Design test before crediting any construction change: which sign of
+    relative-price autocorrelation is it implicitly long?** Constant-weight rebalancing is a
+    contrarian overlay — it sells what rose in relative value and buys what fell — and its
+    incremental return over buy-and-hold is positive only where relative prices mean-revert,
+    zero under IID, negative where they trend. Letting weights drift is the opposite bet, and
+    discards the signal. A cross-sectional momentum book that re-targets to signal-proportional
+    weights is running both at once, and they partially cancel. Costs no trial, and it already
+    reproduces the lab's own re-target-cadence bracket (weekly re-targeting lost; unbounded
+    weight drift lost worse) as the predicted shape rather than as two unrelated results. Its
+    live consequence: **the membership buffer's best remaining justification is neither cost nor
+    risk breadth but expectation** — a hold-band suppresses contrarian trades a continuation
+    signal does not want. That is a new argument, distinct from the cost claim `learnings.md`
+    retired and from the risk-breadth claim that replaced it, and it is the one a proposal to
+    reinstate or widen the band should now lead with. Tier B, no overlap.
+    → `notes/2026-08-22-rebalancing-return-attribution-critique.md`
+25. **[Added 2026-08-22] Interpretation rule, replacing a prior the folder was close to
+    hardening into a taboo: grade a constraint by how binding it is, not by whether it exists.**
+    Under full investment, an `ℓ1` penalty is exactly a penalty on short positions, so long-only
+    is the `τ → ∞` endpoint of a continuous shrinkage path with a critical `τ₀` where it starts
+    to bind. On one asset set the endpoint was the best point on the whole path; on another,
+    allowing a little shorting beat both `1/N` and the long-only optimum. Both signs are on
+    record and no general condition separates them — so the question is always *how far past the
+    unconstrained optimum does this push, on this universe*, never *are constraints good*. Two
+    riders specific to this repo. (i) Long-only optima are **automatically sparse** (single-digit
+    name counts in the source's runs), so "few names" is the expected shape of a long-only
+    solution here rather than an aggressive stance needing its own defence — and a proposal to
+    widen the book is a move away from where the constraint pushes, which is a reason to state
+    the mechanism, not a reason to decline. (ii) A proportional per-side cost is literally an
+    `ℓ1` penalty on `Δw`, so the repo's own cost model regularises, and a no-trade band's
+    shrinkage effect is inseparable from its cost effect. Explanatory only — every point on the
+    path except the endpoint needs an estimated covariance and is closed by screen #1.
+    Tier A, no overlap. → `notes/2026-08-22-long-only-as-l1-regularization.md`
 
 ## Coverage log
 
@@ -1296,6 +1455,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-19 (session 6) | Not a strategy family — the seam session 5 named as the one worth chasing: **why averaging unstable predictors improves them**, hunted in the two literatures it named (bagging / bootstrap aggregation, and model averaging outside the break-detection framing), plus the finance-native version of the same question (breadth and strategy risk). First session to yield a mechanism that is an unconditional accuracy claim about the repo's own strongest mechanism. Full text read directly for Breiman, Buja–Stuetzle, Hansen and the fundamental-law derivation; partial (first two pages) for the published Ding–Martin. | Breiman 1996 (Machine Learning) + Buja–Stuetzle 2006 (Statistica Sinica) (`2026-08-19-bagging-averaging-unstable-predictors.md`); Grinold 1989 (JPM) + Ding–Martin 2017 (J. Empirical Finance) + Ding 2010 WP (`2026-08-19-fundamental-law-breadth-and-strategy-risk.md`); Hansen 2007 (Econometrica) (`2026-08-19-model-averaging-mallows-weights.md`) |
 | 2026-08-20 (session 7) | Session 6's top-ranked open question (a): **the bridge from a forecast-accuracy or information-ratio claim to realised net return on a constrained, cost-paying book**, chased in the two vocabularies it named — friction-aware dynamic portfolio choice, and portfolio choice that optimises the realised objective directly rather than a predictive loss. Answered from three directions, with a fourth cost-mitigation mechanism found as a by-product. Full text read directly for all four sources. | Gârleanu–Pedersen 2013 (JF; NBER WP read in full) (`2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`); Brandt–Santa-Clara–Valkanov 2009 (RFS) + Lamoureux–Zhang 2024 (RAPS, critique) (`2026-08-20-parametric-portfolio-policies.md`); DeMiguel–Martín-Utrera–Nogales–Uppal 2020 (RFS) (`2026-08-20-trading-diversification-combining-signals.md`) |
 | 2026-08-21 (session 8) | Session 7's open questions (b) and (c), taken together as one theme: **what constraints actually do to a portfolio, and how to count diversification honestly.** Three sources, full text read directly for all three. The session's shape is one *correction* (constraints are estimators as well as leaks), one *closure* (the effective-number-of-bets axis, worth one session, now spent), and one genuinely uncovered axis found by accident (the diversification return, i.e. the part of a book's geometric return that comes from rebalancing rather than from its signal). | Jagannathan–Ma 2003 (JF; NBER WP 8922 read in full) (`2026-08-21-weight-constraints-as-covariance-shrinkage.md`); Meucci 2009 (Risk) + Polakow–Gebbie 2008 (J. Asset Management; arXiv preprint read in full) (`2026-08-21-effective-number-of-bets-diversification-measurement.md`); Willenbrock 2011 (FAJ; arXiv version read in full) + Booth–Fama 1992 (FAJ, second-hand via Willenbrock) (`2026-08-21-diversification-return-and-rebalancing.md`) |
+| 2026-08-22 (session 9) | Session 8's two named open questions, taken in order: (a) the decomposition of a **signal-driven** book's geometric return into a strategic and a rebalancing term — the axis session 8 called the highest-value remaining thread — and (b) the counterweight to the folder's constraints-are-good prior. Three sources, full text read directly for all three. The session's shape is one *theorem* that closes (a) at the identity level, one *correction* that reverses the sign the folder had assumed for the rebalancing term on a momentum book, and one *dissolution* of (b) into a continuum. | Fernholz–Karatzas 2009 (Handbook of Numerical Analysis Vol. XV; INTECH-hosted PDF read in full), building on Fernholz–Shay 1982 (JF) (`2026-08-22-excess-growth-and-return-decomposition.md`); Cuthbertson–Hayley–Motson–Nitzsche 2016 (IJFE; City Research Online accepted version read in full) (`2026-08-22-rebalancing-return-attribution-critique.md`); Brodie–Daubechies–De Mol–Giannone–Loris 2009 (PNAS; arXiv:0708.0046v3 read in full) (`2026-08-22-long-only-as-l1-regularization.md`) |
 
 ### Open questions for future sessions
 
@@ -1547,6 +1707,66 @@ hypothesis fodder, then anti-candidates.
   estimated covariance, which is screen #1's expensive class at its most extreme, and the ERC
   theorem already closes the milder version of the same idea.
 
+  **— (a) ANSWERED 2026-08-22 (session 9), and the answer arrives with its own premise reversed.**
+  The decomposition exists and is a theorem, not a special case: for *any* weight process,
+  `d log V^π = γ*_π dt + Σ_i π_i d log X_i`, so a signal-driven book's log growth splits exactly
+  into a selection term and a non-negative excess growth rate computable from holdings and realised
+  covariance with nothing forecast. That closes the identity question and hands the lab a
+  return-denominated, holdings-only price for every concentration step it has taken. **But the
+  framing this question was asked in was wrong.** The rebalancing term is not "a quantity the
+  champion is giving away": the part that is real accrues to any diversified holder whether or not
+  it rebalances, and the part specific to re-targeting trades is zero in expectation under IID and
+  **negative when relative prices trend** — the regime a cross-sectional momentum book exists to bet
+  on. So the give-away the question anticipated does not exist, and its nearest real counterpart is
+  the *cost of concentration*, which is measurable. What is still not closed is the same bridge as
+  ever: this is a decomposition of **log growth**, not of Sharpe on a costed, constrained book.
+  **— (b) ANSWERED 2026-08-22 by dissolving it.** There is literature in which a binding constraint
+  costs more than the estimation error it suppresses — the same method, same sample, different asset
+  set, with the long-only endpoint optimal on one and beaten on the other — but there is **no stated
+  general condition** separating the two cases. What the source supplies instead is better than a
+  condition: under full investment the long-only constraint is the infinite-penalty endpoint of a
+  continuous shrinkage path, so "how binding" is a scalar and the question becomes empirical rather
+  than doctrinal. The taboo risk session 8 flagged is now guarded against explicitly in the
+  cross-cutting principles.
+  **— (c) remains declined**, unchanged.
+
+- **New open questions raised by session 9, in priority order.**
+  (a) *The one measurement this session recommends, and it is the folder's first return-denominated
+  free diagnostic.* Compute `γ*_π = ½(Σ_i π_i a_ii − π′aπ)` on the champion's stored weight matrix,
+  and on the weight matrices of the concentration ladder's earlier rungs (equal-weight,
+  rank-weight, magnitude-weight, buffered vs. hard top-15). It scores no returns and forecasts
+  nothing — it is an accounting split of growth already realised — and it would convert the
+  standing "concentration costs drawdown" statement into "concentration costs *this much annualised
+  growth* as well". It is also the only free diagnostic in the folder denominated on the axis the
+  promotion gate actually reads, which matters given the ⚠ standing protocol concern. **Caution
+  that must travel with it:** a large `γ*` is not a good strategy — a book can buy it by holding
+  volatile uncorrelated names and lose more on the selection term — so it is a cost account, never
+  an objective.
+  (b) *The bridge, narrowed once more and still open.* Every account the folder now has of its own
+  strongest mechanisms is a claim about forecast accuracy, information ratio, or **log growth**;
+  the gate reads net Sharpe on a constrained, cost-paying book. Session 7 closed the friction half
+  of this from Gârleanu–Pedersen; session 9 adds a growth-rate identity but not a variance one.
+  The specific unread vocabulary is the geometric-vs-arithmetic literature on portfolio choice and
+  the growth-optimal / Kelly criticism literature, which argues precisely about when maximising log
+  growth diverges from what a finite-horizon, risk-scored investor wants. Medium priority: it would
+  not open a build, but it is the last unpatched seam between what this folder imports and what the
+  lab is scored on.
+  (c) *The quantification that has now been requested twice and refused twice.* What the long-only
+  constraint costs as a function of the signal's cross-sectional dispersion is still unanswered:
+  session 8 got the opposite-signed term instead (constraints as shrinkage), session 9 got the
+  continuum instead (constraints as tunable intensity). Both were more useful than the thing asked
+  for, which is worth noticing before asking a third time. The remaining named targets are unchanged
+  and both closed-access (Grinold–Kahn 2000 FAJ; Clarke–de Silva–Sapra 2004 JPM), plus
+  **DeMiguel–Garlappi–Nogales–Uppal 2009 (Management Science)**, whose entire subject is the
+  constraint-tightness trade-off and which this session could not read in full — recorded as unread,
+  not summarised second-hand. Low priority, unchanged.
+  (d) *Recorded as declined.* Stochastic portfolio theory's actual strategy — diversity weighting,
+  `μ_i^p / Σ_j μ_j^p` — is declined rather than unexamined. It is defined on market-capitalisation
+  weights, which this repo does not have and cannot approximate from adjusted closes without
+  collapsing the construction into equal weighting; its outperformance result carries an explicit
+  long-horizon condition (`T ≥ (2/pεδ)·log n`) far beyond the evaluation splits; and the source's
+  own simulation charges no transaction costs.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -1558,6 +1778,22 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 9 (2026-08-22) read full text directly for every source**, and hit none of the three
+  documented limits — Semantic Scholar's DOI endpoint and Crossref both answered every lookup on
+  first try, and OpenAlex answered the one query it was asked. Two channels worked and are worth
+  adding to the reliable list: an **author's firm-hosted PDF** (`intechinvestments.com`) served a
+  full Elsevier handbook chapter that the publisher endpoint would have refused, and a **university
+  green-OA repository** (`openaccess.city.ac.uk`, found via Semantic Scholar's `openAccessPdf`
+  field) served the accepted version of a Wiley article. `arxiv.org/pdf/<id>` served a preprint
+  carrying the full content of a PNAS article. Limits confirmed as documented: **SSRN returned 403**
+  on its delivery endpoint, and a UC3M author page returned 403 on directory listing. One source
+  could not be obtained by any route tried — DeMiguel–Garlappi–Nogales–Uppal 2009 (Management
+  Science) is `oa_status: closed` in OpenAlex with no repository copy, and Semantic Scholar's
+  `openAccessPdf` for it points back at SSRN — so it is recorded as **unread** in the note that
+  cites it rather than summarised from abstracts. One metadata note: Crossref's
+  `is-referenced-by-count` again ran well below Semantic Scholar's for the same DOIs (389 vs 578;
+  71 vs 220), consistent with session 7's warning to disbelieve a lone low count.
 
   **Session 8 (2026-08-21) read full text directly for every source**, and hit two of the three
   documented limits within the same hour. Channels that worked first try: **NBER working-paper
