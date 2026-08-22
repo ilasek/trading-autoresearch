@@ -2553,3 +2553,210 @@ session may make. Holdout looks since 2026-08-17: **five**.
   Meucci count was proposed for. N_cond predicted no improvement and there was a small
   one, its second miss of the night.
 
+
+## Session summary — 2026-08-22 (nightly)
+
+- **Integrity check — one deviation, corrected before any work.** `git fetch origin
+  --prune` clean; `git branch -r --no-merged origin/main` returned **nothing**, so every
+  remote branch (`claude/remote-learning-egress-access-33q7fy`,
+  `deflated-sharpe-effective-trials`, `main-b713x5`, `main-p76jo3`) is an ancestor of
+  `origin/main` and no previous session's work is stranded. As on 2026-08-19, -20 and
+  -21, the session **opened on a per-run branch** (`main-q89e6c`), pointing at exactly
+  `origin/main` (`1259dfa`) with no commits of its own; per the standing instruction never
+  to run trials from a per-run branch it was corrected first (`git checkout main && git
+  reset --hard origin/main`). Every trial and commit below is on `main`. **This is the
+  fourth consecutive session to open on a per-run branch**; the harness setting that
+  causes it has now outlived four hand corrections and is worth a human fixing at the
+  source. Engine tests green (16 passed). Store fresh through 2026-08-21.
+- Experiments run: **2 of the 8-trial budget** (#52 `mom_hzn_avg4_equalweight`,
+  #53 `mom_hzn_avg4_noagree`). Verdict: **0 PROMOTE, 2 REJECT, 0 GATE_FAIL.**
+  **No holdout look was spent** — the count since 2026-08-17 stands at five.
+- **Four free analyses, no trial spent by any**: the excess growth rate `gamma*` across
+  the promotion ladder; the Meucci conditional effective-bets count against the
+  contribution count this repo uses; a train/validation/holdout comparison over the whole
+  promotion ladder from already-recorded trials; and an eligibility-intersection check
+  that killed a suspected artifact for free.
+- The session stopped at two trials because every remaining idea in this family is a knob
+  or a re-tread. `research/SUMMARY.md`'s candidate list has no live build left (#8 is
+  marked BUILT, the Meucci frontier is explicitly declined), and with tonight's two
+  trials **the champion's component audit is complete** — see below.
+
+### The night in one line
+
+Both trials deleted a component and both lost, which is the boring half; the free work
+found that the *train* split — 14,261 days, used only as a sanity gate — predicts the
+holdout at **+0.887** while the gate's own split predicts it at **-0.498**.
+
+### The free result that matters most: the gate's split is the odd one out of three
+
+Computed from `experiments/trials.jsonl` alone — no strategy re-run, no backtest, no new
+trial — the promotion ladder on all three splits:
+
+| # | promotion | train | validation | holdout |
+|---|---|---|---|---|
+| — | `mom_12m_baseline` | 0.949 | 0.865 | 1.140 |
+| 32 | `mom_zscore_overlap6_daily_trim` | 0.978 | 1.107 | 1.224 |
+| 41 | `mom_zscore_overlap6_hzn_avg` | 0.962 | 1.112 | 1.320 |
+| 42 | `mom_zscore_overlap6_hzn_avg4` | 0.970 | 1.120 | **1.377** |
+| 43 | `mom_zscore_hzn_avg4_k1` | 0.935 | 1.187 | 0.875 |
+| 45 | `mom_hzn_avg4_k1_cohort_trim` | 0.942 | 1.201 | 0.813 |
+| 51 | `mom_hzn_avg4_nobuffer` | 0.931 | 1.229 | **0.691** |
+
+    corr(train,      holdout)  +0.887   (n=7)     magnitude-weighted era only (n=6): +0.908
+    corr(validation, holdout)  -0.498                                                -0.969
+    corr(train,   validation)  -0.297                                                -0.947
+
+Three things make this stronger than the usual small-n caveat allows, and one makes it
+weaker; all four are stated rather than chosen between.
+
+1. **The train series is not monotone in time** (0.949, 0.978, 0.962, 0.970, 0.935,
+   0.942, 0.931 — up, then down), and neither is holdout (up to #42, then down). They
+   share a *shape*, not a trend. Validation is the only monotone column. A spurious
+   correlation driven by ladder order would not reproduce a non-monotone shape.
+2. **The train split is not used for selection.** `program.md` scores validation Sharpe;
+   train enters only as `min_train_sharpe = 0.0`, a sanity floor no candidate has ever
+   come near. So it is an out-of-sample column in the sense that matters, and it is 9x
+   larger than the split the gate reads.
+3. **Tonight's #52 supplies a prospective instance.** It scored the best train Sharpe of
+   the recent era (0.951, above the champion's 0.931) and the repo's best-ever validation
+   drawdown (-24.3%), and the gate rejected it on validation Sharpe.
+4. **The honest weakening.** `corr(train, validation)` is -0.947 in the era, so "train
+   predicts holdout" and "validation anti-predicts holdout" are close to the *same fact
+   stated twice*, not two independent pieces of evidence. And the train split has its own
+   severe problems — survivorship bias is worst there (1962-2017 measured on today's
+   constituents) and its drawdowns run near -55%. This is a reason for a human to look at
+   a second scored quantity, **not** a reason for a session to start selecting on train,
+   which would be the same error one split over and is forbidden by `program.md` anyway.
+
+### #52 — magnitude weighting is worth 2.5x more here than where it was measured
+
+Pre-registered 1.15 on the reasoning that four-leg averaging would have absorbed part of
+the component the way it absorbed the buffer's cost saving. Landed **1.023**: the
+component is worth **+0.206**, against the +0.08 recorded on the single-vintage
+single-score base of trials #18-#21. The absorption analogy was backwards, and the reason
+is structural — a name's weight is (legs holding it)/4 times its within-leg magnitude
+weight, so with four legs the concentration channels **compound**, where on the old base
+only one existed.
+
+The trial's real purpose was the referee, and it settled cleanly. This is the only
+construction found so far on which the repo's two risk-breadth statistics disagree
+maximally:
+
+| | eff risk bets | N_cond (Meucci) | validation maxDD |
+|---|---|---|---|
+| champion | 5.99 | 5.63 | -29.6% |
+| #52 equal-weight | **17.68** (+195%) | **5.49** (-2.6%) | **-24.3%** |
+
+The contribution count was right by a wide margin — -24.3% is the best validation
+drawdown ever recorded here, beating #47's -26.9%. `research/SUMMARY.md` candidate #23(a)
+predicted the Meucci count would be the better measure and would correct downward; it
+*did* correct downward, and its ladder correlation with holdout (+0.632) beats the
+contribution count's (+0.450), but on the one case built to separate them as drawdown
+predictors it failed. **Keep quoting effective risk bets.**
+
+### #53 — the de-concentration constant, and what it implies about #52
+
+Pre-registered 1.13 (scaling #52's calibration) against 1.206 (the standing constant in
+`learnings.md`). Landed **1.186**. Deleting the cross-leg agreement premium — a name all
+four legs pick no longer gets 4x a name one leg picks, membership bit-identical at 30.30
+names — cost **0.043** at -26% of HHI.
+
+- The constant should be restated at **~0.05 Sharpe per 30% of HHI**, ~2.5x the ~0.02 the
+  file quotes, not the 4x #52 alone implied. The three past readings that used it (#50,
+  #51, the free kill of the fixed-anchor idea) were understated in the same direction;
+  none is overturned, and #51's is *strengthened* — its concentration tailwind should
+  have been ~+0.042 rather than +0.017, making the buffer's marginal value on the gate's
+  axis more negative than recorded.
+- **The corollary, pre-registered:** at #53's rate, #52's -55% of HHI should have cost
+  0.090. It cost 0.206. So **~0.116 Sharpe of magnitude weighting is not concentration at
+  all** — the ordering and spacing of scores inside a leg's top-15 carries real
+  cross-sectional information. This re-establishes the square-root-dampening conclusion
+  on the current base by a different method: dampening moved one dial, this decomposes
+  two.
+- **Second falsifier: the contribution count is roughly linear.** Predicted maxDD -28.8%
+  by scaling #52's 5.3pp gain by the ratio of the effective-risk-bets moves (+29% against
+  +195%); landed **-29.1%**. Two trials one night apart, effect sizes a seventh apart,
+  both called in advance. The statistic now has a calibration, not just a sign.
+
+### Two free measurements that returned nulls, recorded so they are not re-run
+
+**`gamma*`, the excess growth rate, does not track anything here.** Last session's idea
+list put `research/SUMMARY.md` candidate #23(b) at the top: measure
+`gamma*_pi = 1/2 (sum_i pi_i a_ii - pi' a pi)` as "the price of concentration", denominated
+in log growth and therefore on the gate's own axis. Measured on every rung of the ladder
+over validation (holdings-only: the sanitized weight matrix and a 252-day trailing
+realized covariance; only the excess-growth term is formed, never a portfolio return
+series):
+
+    baseline 3.92% | #32 5.20% | #41 5.34% | #42 5.42% | #43 5.26% | #45 5.26% | #51 5.51%
+
+It is not monotone, does not break at #43 where everything else does, and its **highest**
+value belongs to the *narrowest* book in the table (#51, 30.3 names). The mechanism is
+visible once measured: `gamma*` is dominated by `sum_i pi_i a_ii`, the weighted average
+variance of what is held, so on a momentum book that concentrates into high-volatility
+winners it *rises* with concentration. It is not a de-concentration statistic on this
+universe, and the folder's framing of it as a quantity concentration gives away is wrong
+here. Confirmed independently by #52's diagnostic: equal weighting cut `gamma*` 5.51% ->
+4.17% while improving every diversification measure.
+
+**The `common` eligibility intersection is a no-op.** All four horizon legs select from
+the intersection of the instruments eligible for *every* lookback, so a 63-day leg cannot
+pick a name that lacks 273 days of history — structurally the same shape as the `dropna`
+artifact that cost four trials on the trim. Measured over the 72 validation month-ends:
+mean `|common|` 139.7 against 139.8 for the 63-day leg alone and 139.9 instruments priced.
+The intersection binds in 9 of 72 months and costs at most **1 instrument**. Killed for
+free; do not spend a trial on it.
+
+### The champion's component audit is now complete
+
+With tonight's two trials every component of the current champion has been examined on
+the base it actually sits on: signal and skip-month (heavily explored, closed), membership
+band (#51), within-leg weighting (#52), cross-leg aggregation (#53), horizon bracket
+(#41/#42/#44), formation vintages (#46/#47/#48), cohort trim (#37-#40, #45), re-target
+cadence (#49/#50), and eligibility (killed free tonight). Nothing in the construction is
+now inherited-but-unexamined, which is the condition that cost this repo four trials on
+the trim and one retracted headline lesson on the engine's weight handling.
+
+### For the human — the recommendation is unchanged and now has a second column
+
+`mom_zscore_overlap6_hzn_avg4` (#42) remains the best strategy this lab has produced on
+every axis the mission names: holdout Sharpe 1.377, holdout return 34.9%, holdout maxDD
+-20.1%, turnover 2.8x. Tonight adds that it is **also** at the top of the train column
+among K=6 books, and that the split the gate reads is the only one of the three that
+disagrees. Both remedies — reinstating #42, or scoring something other than raw
+validation Sharpe — require edits to frozen files no session may make. If a second scored
+quantity is ever added, the train split is already computed for every trial at zero
+marginal cost, and its correlation with the holdout is the highest of anything measured
+here.
+
+### Ideas for next session
+
+1. **The one decomposition tonight opened and did not close.** #53 showed the cross-leg
+   agreement premium is worth 0.043 and #52 showed within-leg magnitude is worth 0.206, of
+   which ~0.116 is information rather than concentration. What is *not* known is whether
+   that 0.116 is the score's **ordering** or its **spacing** — a rank-weighted leg target
+   (ordering only, spacing discarded) sits exactly between #52 and the champion and would
+   split it. Worth a trial only if a session can pre-register both halves; it is a
+   decomposition, not a challenger, and it will not promote.
+   **Idea provenance: the lab's own, from tonight's #52/#53 pair.**
+2. **Do not run a challenger in this family without reading the three-split table above.**
+   Carried over from last session and strengthened: a candidate that clears the gate is
+   better evidence about the gate than about the strategy, and there is now a second,
+   larger, already-computed split that disagrees with it.
+   **Idea provenance: the lab's own.**
+3. **Free and still never exercised** (carried over untouched for the third session):
+   the closed-form weight-vector triage for a proposed trend/MA signal,
+   `research/SUMMARY.md` candidate #3. It needs a proposed trend signal to triage, and no
+   session has had one worth triaging. **Idea provenance: `research/SUMMARY.md`.**
+4. **Retired from the idea list:** `research/SUMMARY.md` candidate #23(b), the
+   diversification-return / excess-growth term, was last session's top idea and was
+   measured tonight. It is a null on this universe for a stated mechanical reason.
+   Candidate #23(a), the Meucci conditional bet count, was also measured and lost its
+   designed referee against the statistic it was proposed to replace. Neither needs
+   re-running. **Idea provenance: `research/SUMMARY.md`, both now closed by measurement.**
+5. **A harness matter for a human, not a research idea.** Four consecutive sessions have
+   opened on a per-run branch and corrected it by hand. The correction has worked every
+   time, but it depends on each session reading the instruction, and the failure mode it
+   guards against (a split trial history) silently corrupts the deflated-Sharpe bar for
+   every later trial.
+- No engine issues encountered this session.

@@ -650,6 +650,78 @@ across experiments; prune entries that later evidence contradicts.
   Practical standing: the band should not be described as a cost device here, and any
   future proposal to reinstate or widen it should be argued on risk breadth.
 
+- **Magnitude weighting decomposes into concentration and information, and more than half
+  of it is information. The de-concentration constant this file quotes is ~2.5x too
+  small.** Two trials one night apart deleted the champion's two concentration channels
+  separately, both with membership held bit-identical at 30.30 names, so each isolates one
+  mechanism exactly. **#52** deleted the within-leg magnitude transform (each leg
+  equal-weighting its top-15): HHI -55%, cost **0.206** of validation Sharpe. **#53**
+  deleted the cross-leg agreement premium (a name all four legs pick no longer receives 4x
+  a name one leg picks): HHI -26%, cost **0.043**. Three results follow.
+  (a) **Restate the constant.** This file has priced de-concentration at ~0.02 Sharpe per
+  30% of HHI; #53 measures **~0.05**. The readings that used the old figure (#50, #51, the
+  free kill of the fixed-anchor idea) were understated in the same direction; none is
+  overturned, and #51's is strengthened — its concentration tailwind should have been
+  ~+0.042 rather than +0.017, making the buffer's marginal value on the gate's axis more
+  negative than recorded, not less.
+  (b) **The corollary is the finding.** At #53's rate, #52's -55% of HHI should have cost
+  0.090; it cost 0.206, so **~0.116 Sharpe of magnitude weighting is not concentration** —
+  the ordering and spacing of scores inside a leg's top-15 carries real cross-sectional
+  information. This re-establishes the square-root-dampening conclusion on the current base
+  by a different method: dampening moved one dial, this decomposes two. What is still open
+  is whether the 0.116 is *ordering* or *spacing*; a rank-weighted leg target sits between
+  #52 and the champion and would split it, but it is a decomposition and will not promote.
+  (c) **"The base has absorbed it" does not generalise across components.** #52 was
+  pre-registered at 1.15 on the analogy to #51, where four-leg averaging had shrunk the
+  buffer's cost saving from 24% to 6%. It landed 1.023 — the component is worth 2.5x what
+  it was worth on the single-leg base of trials #18-#21, not less. The reason is
+  structural: a name's weight is (legs holding it)/4 times its within-leg magnitude weight,
+  so with four legs the two channels **compound**, where on the old base only one existed.
+  #51's absorption was a property of churn damping and has no analogue in a weighting
+  transform. Adding legs can amplify a component instead of damping it.
+
+- **The risk-contribution count beat the Meucci count in a designed referee, and now has a
+  quantitative calibration rather than only a sign.** `research/SUMMARY.md` candidate
+  #23(a) argued that this file's "effective risk bets" — a Herfindahl over *marginal risk
+  contributions of correlated assets* — is not a count of anything uncorrelated, and that
+  `N_Ent` over the diversification distribution (change basis, then count), reported
+  conditionally for a fully-invested long-only book, is the measure that is. #52 is the
+  only construction found so far on which the two disagree maximally: effective risk bets
+  5.99 -> **17.68** (+195%) against N_cond 5.63 -> **5.49** (-2.6%). Validation maxDD moved
+  -29.6% -> **-24.3%**, the best ever recorded here (beating #47's -26.9%). The
+  contribution count was right. N_cond *did* correct downward as predicted, and over the
+  promotion ladder its correlation with holdout Sharpe (+0.632) beats the contribution
+  count's (+0.450) — but on the one case built to separate them as drawdown predictors it
+  failed, and it missed again on #53. **Keep computing effective risk bets; do not replace
+  them.** #53 then calibrated the statistic: at +29% of effective risk bets (a seventh of
+  #52's move) the predicted maxDD was -28.8% by linear scaling and it landed **-29.1%**
+  against the champion's -29.6%. Two pre-registered calls at effect sizes a seventh apart,
+  both right. It is roughly linear in the range this repo works in.
+
+- **`gamma*`, the excess growth rate, is a null on this universe, and the reason is
+  mechanical.** `research/SUMMARY.md` candidate #23(b) proposed measuring
+  `gamma*_pi = 1/2 (sum_i pi_i a_ii - pi' a pi)` as "the price of concentration",
+  denominated in log growth and therefore on the gate's own axis; it was last session's
+  top idea. Measured over validation on every rung of the promotion ladder (holdings-only:
+  sanitized weight matrix, 252-day trailing realized covariance, only the excess-growth
+  term ever formed — never a portfolio return series): baseline 3.92%, #32 5.20%, #41
+  5.34%, #42 5.42%, #43 5.26%, #45 5.26%, #51 5.51%. It is not monotone, does not break at
+  #43 where every other ladder statistic does, and its **highest** value belongs to the
+  **narrowest** book in the table. `gamma*` is dominated by `sum_i pi_i a_ii`, the weighted
+  average variance of what is held, so on a momentum book that concentrates into
+  high-volatility winners it *rises* with concentration — confirmed independently by #52,
+  where equal weighting cut it 5.51% -> 4.17% while improving every diversification
+  measure. **It is not a de-concentration statistic here.** Do not re-run it.
+
+- **A free kill, recorded so it is not rediscovered as an artifact.** All four horizon legs
+  select from `common`, the intersection of the instruments eligible for *every* lookback,
+  so a 63-day leg cannot pick a name lacking 273 days of history — structurally the same
+  shape as the `dropna` artifact that cost four trials on the trim. Over the 72 validation
+  month-ends, mean `|common|` is 139.7 against 139.8 for the 63-day leg alone and 139.9
+  instruments priced; it binds in 9 of 72 months and costs at most **1 instrument**. A
+  no-op. The general habit stands and keeps paying: check what a component's code reads,
+  then measure how much it reads differently, *then* decide whether to spend a trial.
+
 - **⚠ Standing protocol concern, raised 2026-08-17, now a FOUR-point trend, and the
   break has been localised to one commit. For human attention — this is the most
   important thing in this file.** Promotion scores validation Sharpe only, and the
@@ -738,3 +810,49 @@ across experiments; prune entries that later evidence contradicts.
   advice is now stronger than "prefer" — **in this family, a candidate that clears
   the gate should be treated as evidence about the gate rather than about the
   strategy** until a human rules.
+  **Update 2026-08-22: still four points (two REJECTs tonight, no fifth promotion, no
+  sixth holdout look), but the concern acquires the thing it has lacked since it was
+  raised — a second, larger, already-computed split that agrees with the holdout and
+  disagrees with the gate.** Computed from `experiments/trials.jsonl` alone, no strategy
+  re-run and no new trial, the promotion ladder on all three splits:
+
+      #    promotion                          train    validation   holdout
+      -    mom_12m_baseline                   0.949      0.865       1.140
+      32   mom_zscore_overlap6_daily_trim     0.978      1.107       1.224
+      41   mom_zscore_overlap6_hzn_avg        0.962      1.112       1.320
+      42   mom_zscore_overlap6_hzn_avg4       0.970      1.120       1.377
+      43   mom_zscore_hzn_avg4_k1             0.935      1.187       0.875
+      45   mom_hzn_avg4_k1_cohort_trim        0.942      1.201       0.813
+      51   mom_hzn_avg4_nobuffer              0.931      1.229       0.691
+
+      corr(train,      holdout)  +0.887  (n=7)    magnitude-weighted era (n=6): +0.908
+      corr(validation, holdout)  -0.498                                         -0.969
+      corr(train,   validation)  -0.297                                         -0.947
+
+  **Why this is stronger than the small-n caveat usually allows.** (i) The train column is
+  *not monotone in time* (up to #32, down after #42) and neither is holdout; they share a
+  shape, not a trend, and validation is the only monotone column — a correlation driven by
+  ladder order could not reproduce a non-monotone shape. (ii) Train is not a selection
+  split: `program.md` scores validation Sharpe and train enters only as
+  `min_train_sharpe = 0.0`, a floor no candidate has approached, so it is out-of-sample in
+  the sense that matters, at 14,261 days against validation's 1,562. (iii) Tonight's #52
+  is a prospective instance: best train Sharpe of the recent era (0.951 > the champion's
+  0.931), best-ever validation drawdown (-24.3%), rejected by the gate on validation
+  Sharpe.
+  **Two honest weakenings, stated rather than chosen between.** `corr(train, validation)`
+  is -0.947 in the era, so "train predicts holdout" and "validation anti-predicts holdout"
+  are close to the same fact stated twice, not two independent findings. And the train
+  split has its own severe problems — survivorship bias is worst there (1962-2017 scored
+  on today's constituents) and its drawdowns run near -55%, outside the validation gate's
+  own -45% limit.
+  **What this licenses and what it does not.** It does *not* license a session selecting
+  on train, or on any statistic it just discovered correlates with the holdout — that is
+  the same error one split over, it is forbidden by `program.md`, and it is exactly the
+  failure mode `research/SUMMARY.md` candidate #22 names (a criterion with too little
+  curvature picks the high-variance candidate). What it licenses is a sharper
+  recommendation to the human: **if a second scored quantity is ever added, the train
+  Sharpe is already computed for every trial at zero marginal cost, and its correlation
+  with the holdout is the highest of anything measured in this repo.** The standing
+  recommendation is otherwise unchanged — `mom_zscore_overlap6_hzn_avg4` (#42) is the best
+  strategy this lab has produced on every axis the mission names, it is also top of the
+  train column among K=6 books, and its file is intact in `strategies/candidates/`.
