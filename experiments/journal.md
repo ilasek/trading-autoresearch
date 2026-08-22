@@ -2473,3 +2473,83 @@ session may make. Holdout looks since 2026-08-17: **five**.
   not an engine one, and nothing frozen was touched.
 
 ## Research session — 2026-08-22 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-22T23:19:15+00:00 — mom_hzn_avg4_equalweight — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_avg4_equalweight.py` (family: cross-sectional momentum, trial #52)
+- Hypothesis: Deleting magnitude weighting from the champion — each of the four horizon legs equal-weighting its top-15 held set instead of sizing it by shifted composite z-score, with signal, skip-month, membership, single-tranche formation, cohort trim and both trim constants otherwise identical and average positions bit-identical at 30.30 — lands validation Sharpe near 1.15 net of 15 bps costs, because the +0.08 that this step was worth across trials #18-#21 was measured on a base with one formation vintage, one composite score and no horizon legs, and averaging four legs' weight vectors now performs agreement weighting independently of any magnitude transform; landing above 1.19 shows four-leg averaging has absorbed most of the component's value, leaving a concentration device with a small gate-axis benefit and the largest risk cost of anything this book runs. Second, independent falsifier on the unscored axis: the two risk-breadth statistics disagree maximally here — effective risk bets 5.99 -> 17.68 (+195%) predicts validation maxDD materially better than the champion's -29.6%, while the Meucci conditional count 5.63 -> 5.49 (-2.6%) predicts no improvement — so maxDD adjudicates which of the two this repo should be quoting as a diversification number.
+- Verdict: REJECT — validation sharpe 1.023 <= champion 1.229
+- Train: sharpe +0.95, ann_ret +15.6%, maxDD -50.6%, turnover 4.5x
+- Validation: sharpe +1.02, ann_ret +19.1%, maxDD -24.3%, turnover 8.1x
+- Deflated Sharpe prob: 0.9378 (bar from 52 trials, 12 effective)
+- Champion validation sharpe at the time: +1.23
+- Champion re-deflated at the same bar: 0.9794
+- Lesson: **Magnitude weighting is worth +0.206 on this base — 2.5x what it was worth on
+  the base it was measured on — so the absorption result from #51 does not generalise
+  across components; and the risk-contribution diagnostic won a maximally-disagreeing
+  referee against the Meucci count.**
+  The pre-registered number was 1.15 and it landed **1.023**, i.e. the component is worth
+  more than double the +0.08 it was measured at across trials #18-#21, not less. The
+  reasoning that motivated the trial — four-leg averaging absorbed the buffer's cost
+  saving (24% -> 6%), so it should have absorbed this too — was exactly backwards. The
+  mechanism is visible in the construction: a name's final weight is (legs holding it)/4
+  times its within-leg magnitude weight, so with four legs the two channels **compound
+  multiplicatively** where on the single-leg base only one existed. Adding legs amplifies
+  a concentration channel instead of damping it. **Do not extend "the base has absorbed
+  it" from one component to another; #51's absorption was a property of churn damping,
+  which has no analogue here.**
+  **The second falsifier was the point of the trial and it resolved cleanly.** The two
+  risk-breadth statistics disagreed maximally — effective risk bets 5.99 -> **17.68**
+  (+195%) against the Meucci conditional count 5.63 -> **5.49** (-2.6%) — and validation
+  maxDD moved -29.6% -> **-24.3%**, the best ever recorded here, beating #47's -26.9%.
+  The Herfindahl-over-marginal-risk-contributions count that `learnings.md` uses was
+  right; the Meucci count, which `research/SUMMARY.md` candidate #23(a) predicted would
+  be the better measure and would correct *downward*, was wrong. It did correct downward
+  (5.63 vs 5.99 on the champion, and its own ladder correlation with holdout is higher),
+  but as a predictor of what this book's drawdown does it failed the one case designed to
+  separate them. Keep quoting effective risk bets.
+  **A third fact, unasked for and larger than either.** Train Sharpe **0.951 beat the
+  champion's 0.931** while validation lost by 0.206. The two splits disagree about the
+  sign of the single largest component in the book, and the split that prefers equal
+  weighting is the one with 14,261 days against validation's 1,562. That is not an
+  isolated observation — see the session summary, where the same comparison run over the
+  whole promotion ladder from already-recorded trials puts `corr(train, holdout)` at
+  **+0.887** against `corr(validation, holdout)` at **-0.498**.
+
+## 2026-08-22T23:25:23+00:00 — mom_hzn_avg4_noagree — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_avg4_noagree.py` (family: cross-sectional momentum, trial #53)
+- Hypothesis: Deleting the cross-leg agreement premium from the champion — weighting each name by the mean of its leg weights taken over only the legs that hold it, so a name all four horizon legs pick no longer receives four times the base weight of a name one leg picks, with membership (30.30 average positions, bit-identical), signal, skip-month, the within-leg magnitude transform, single-tranche formation, cohort trim and both trim constants otherwise untouched — lands validation Sharpe near 1.13 net of 15 bps costs. That figure is trial #52's calibration of de-concentration on this base (-55% HHI cost 0.206 Sharpe, scaled to this change's -26% HHI) plus a ~0.006 turnover cost; the standing constant in learnings.md (~0.02 Sharpe per 30% HHI) instead predicts 1.206, and the two disagree by a factor of four about the same change, so the trial adjudicates a constant used to net out confounds in the pre-registrations of #50 and #51 and to kill the fixed-anchor idea for free. Landing near 1.21 rather than 1.13 says the constant is right and that #52's loss was therefore not concentration but real signal in the magnitude transform. Second falsifier on the unscored axis: effective risk bets rise 5.99 -> 7.73 (+29%) against the Meucci count's -0.6%, a seventh of the disagreement #52 resolved in the contribution count's favour, so validation maxDD should land near -28.8% if that statistic is roughly linear rather than only directionally right.
+- Verdict: REJECT — validation sharpe 1.186 <= champion 1.229
+- Train: sharpe +0.93, ann_ret +18.4%, maxDD -57.7%, turnover 5.7x
+- Validation: sharpe +1.19, ann_ret +27.5%, maxDD -29.1%, turnover 9.3x
+- Deflated Sharpe prob: 0.9733 (bar from 53 trials, 12 effective)
+- Champion validation sharpe at the time: +1.23
+- Champion re-deflated at the same bar: 0.9792
+- Lesson: **The de-concentration constant is roughly right, which means most of #52's loss
+  was not concentration at all — magnitude weighting carries real cross-sectional signal —
+  and the risk-contribution diagnostic replicated quantitatively at a seventh of the
+  effect size.** Landed **1.186** against a pre-registered 1.13 (from #52's calibration)
+  and 1.206 (from the standing constant). The standing constant wins: deleting the
+  cross-leg agreement premium cost **0.043** at -26% of HHI, i.e. ~0.049 Sharpe per 30% of
+  HHI against the file's quoted ~0.02 — steeper by about 2.5x, but nowhere near the 4x
+  gap the two calibrations implied. `learnings.md`'s constant should be restated at
+  **~0.05 Sharpe per 30% of HHI**; the three past readings that used it (#50, #51, and the
+  free kill of the fixed-anchor idea) were understated but not overturned — #51's
+  concentration tailwind was +0.017 and should have been ~+0.042, which makes the buffer's
+  measured marginal value on the gate's axis *more* negative, not less, strengthening
+  rather than weakening that entry's conclusion.
+  **The corollary is the substantive finding, and it was pre-registered as such.** At
+  #53's measured rate, #52's -55% of HHI should have cost 0.090. It cost **0.206**. So
+  **more than half of magnitude weighting's value — about 0.116 Sharpe — is not
+  concentration.** It is information: the *ordering and spacing* of scores inside a leg's
+  top-15 pays, over and above the fact that sizing by them makes the book narrower. This
+  re-establishes the old square-root-dampening conclusion (magnitude weighting is closer
+  to real signal than to a variance artifact of concentration) on the current base and by
+  an entirely different method — the dampening test moved one dial, this decomposes two.
+  **Second falsifier: the risk-contribution count is roughly linear, not merely
+  directional.** Predicted maxDD -28.8% by scaling #52's 5.3pp gain by the ratio of the
+  effective-risk-bets moves (+29% against +195%); landed **-29.1%** against the champion's
+  -29.6%. A 0.5pp gain predicted at 0.8pp is well inside the noise of a single drawdown
+  statistic. Two trials in one night, effect sizes a seventh apart, both called in advance
+  — the statistic now has a calibration and not just a sign, and it earned the seat the
+  Meucci count was proposed for. N_cond predicted no improvement and there was a small
+  one, its second miss of the night.
+
