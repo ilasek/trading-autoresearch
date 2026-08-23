@@ -670,6 +670,93 @@ effect. Tier A (PNAS; multi-decade out-of-sample protocol) — but US-only, on c
 rather than securities, and costs discussed rather than charged. `validation_overlap: false`.
 → `notes/2026-08-22-long-only-as-l1-regularization.md`
 
+### The objective itself — growth, utility, and the gate's own statistic (cross-family)
+
+Also not a `program.md` family. Session 9 left one thread open above all others: *every account this
+folder imports is denominated in forecast MSE, information ratio or log growth, while the gate reads
+net Sharpe on a six-year window.* Session 10 attacked that seam from both ends — the currency the
+folder imports in, and the currency the lab is scored in. Both ends came back negative, and the
+second one is the more important result.
+
+**Maximising log growth is not an approximation to any risk-scored objective, and the error grows
+with the horizon — which retires the premise under which `γ*` was imported.** Samuelson (1971)
+grants the one true theorem — a max-geometric-mean strategy makes it "virtually certain" that over
+a long enough sequence it ends with higher terminal wealth than any essentially different rule — and
+then kills the corollary everyone draws from it, by noting that the horizon `M(x)` at which
+dominance kicks in is **unbounded in the wealth level `x`**, so "almost certainly" never converts
+into a statement about an expectation. His counterexamples cover the cases in turn: for
+`u(x) = x^γ/γ` with `γ ≠ 0` the optimal uniform strategy differs from the log-optimal one and the
+strict inequality holds **for every `T`, however large**; boundedness (Markowitz's proposed rescue)
+does not help, because for `γ < 0` the log rule is *over*-risky and the near-ruin paths, which occur
+at every `T` with positive probability, carry a prohibitive penalty. Merton–Samuelson (1974) convert
+this into a magnitude: the initial-wealth equivalent of being made to follow the log rule instead of
+one's own optimum is `Π₁₂(T) = λ(γ)^(T/γ)` with `λ > 1`, so **the compensation demanded grows
+without bound in the horizon**, and for sufficiently risk-averse investors (`γ < −1`) the
+log-optimal program is dominated by *holding only the riskless asset*. They then close the obvious
+repair: treating `(mean-log, variance-log)` as an asymptotically sufficient pair and building a
+frontier on it is an improper interchange of limits, and the discrepancy between the true expected
+utility and the lognormal-surrogate one **goes to infinity, not zero, as `T → ∞`**. The one place a
+log-moment frontier is legitimate is the continuous-time limit of a *fixed* horizon subdivided
+finely — and even there the frontier is a different object from the Markowitz mean-variance
+frontier. **Direct consequence for this folder:** session 9 ranked `γ*_π` its top measurement on the
+stated grounds that it is "denominated in log growth and therefore on the gate's own axis." That
+premise is false in general, not just awkward. `learnings.md` has since measured `γ*` on the
+promotion ladder and found it a null; this is the reason it never could have been otherwise. Tier A
+(theorems and counterexamples), `validation_overlap: false`.
+→ `notes/2026-08-23-geometric-mean-maximization-fallacy.md`
+
+**The growth school's own summary agrees on the mathematics, and hands over three things the folder
+can use — including the only exact growth-to-Sharpe bridge in the literature, which turns out to be
+narrower than it looks.** MacLean–Thorp–Ziemba list Samuelson's corollary under *"Fallacy"* and
+state flatly that "the Kelly portfolio does not necessarily lie on the efficient frontier in a
+mean-variance model." What they add is quantitative. (a) **The bridge**: in continuous time
+`g_p = E_p − ½V_p`, and at the growth-optimal exposure `X* = (E_M − r_0)/σ²_M` the growth rate is
+`g* = r_0 + ½·SR²`. Growth and Sharpe are monotone transforms of each other **at the optimum of a
+leverage choice, and only there** — substitute a fixed exposure, as a leverage-capped book must, and
+the two orderings come apart as soon as candidates differ in volatility. So the crossing session 9
+asked for exists and does not transfer. (b) **The shape of the risk dial**: growth is a concave
+parabola in exposure with roots at zero and `2X*`, so betting exactly twice Kelly earns the
+risk-free rate — all the variance, none of the growth — and the penalty for overbetting is quadratic
+while underbetting near the optimum costs only linearly. Their tabulated growth-security trade-off
+makes the same point from the other side: 0.8× Kelly retains 96% of the growth, while full Kelly
+accepts a one-in-three chance of halving before doubling. (c) **The estimation-fragility ordering**,
+which re-weights this folder's screen #1 rather than repeating it: errors in *means* cost roughly
+10× what errors in variances cost and 20× what errors in covariances cost — **and the multiple rises
+as risk aversion falls** (their reproduced table runs 3.22 at risk tolerance 25, 10.98 at 50, 21.42
+at 75 for means-vs-variances). Log utility sits at essentially zero risk aversion, so the
+growth-optimal criterion is the *most* estimation-fragile point on the whole scale, which the
+authors themselves give as the reason to bet less than Kelly. The Kelly rule itself is an
+anti-candidate here for the now-familiar reason — it is a **leverage** prescription, and `X*` for a
+book of this Sharpe is far above 1, so gross leverage ≤ 1.0 collapses it to "be fully invested,"
+which the champion already is. Tier B+ on the survey (its two key tables are reproduced from
+closed-access sources not read here); the propositions it collects are tier A and are theorems.
+`validation_overlap: false`.
+→ `notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`
+
+**And the other end of the seam: the gate's own statistic has a sampling distribution, and on a
+six-year window it is coarse relative to the increments the gate adjudicates.** Lo (2002, FAJ)
+derives it. Under i.i.d. returns `SE(ŜR) ≈ sqrt((1 + ½SR²)/T)`, so higher Sharpe ratios are
+estimated *less* precisely in absolute terms and the proportional error floors at `1/√(2T)`; the
+share of the estimator's variance coming from the mean is `1/(1 + ½SR²)`, which falls from 97% at
+`SR = 0.25` to 58% at `SR = 1.2` and 33% at `SR = 2.0` — on a good book, most of the noise has
+migrated into the **volatility** estimate. Under stationarity alone he gives the GMM/HAC version.
+And the annualisation result the paper is known for: `SR(q) = η(q)·SR` with
+`η(q) = q / sqrt(q + 2Σ_{k=1}^{q−1}(q−k)ρ_k)`, which equals `√q` **only when every autocorrelation
+is zero** — positive serial correlation pushes it below `√q`, negative above, and the gap is large
+(for an AR(1) with monthly `ρ₁ = ±20%` the annual factor is 2.88 or 4.17 against `√12 = 3.46`).
+Applied here with nothing but the formula and the sample length: at a Sharpe near the champion's
+level over 1,562 validation days, `SE ≈ 0.40` (0.54 if estimated from six annual observations),
+against a **total** recorded promotion ladder of 0.865 → 1.229. **The caveat must travel with the
+number, and it is not optional:** that is the precision of one strategy's Sharpe against an unknown
+truth, *not* the precision of the difference between two nearly-identical books measured on the same
+six years, which is far tighter and which Lo does not derive. So this does not show the ladder's
+steps are noise; it shows the gate is comparing point estimates whose individual precision is much
+coarser than the differences being adjudicated. It also gives `learnings.md`'s train-column
+observation a statistical reading: ~14,261 days against ~1,562 is roughly a **3× smaller standard
+error**, which is what one would expect of the column that tracks the holdout better. Tier A,
+`validation_overlap: false`.
+→ `notes/2026-08-23-statistics-of-sharpe-ratios.md`
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -999,6 +1086,60 @@ leakage, the folder has only ever counted one of them at a time, and the one qua
 price the leakage — the transfer coefficient's 0.3–0.8 range — remains the only number available.
 → `notes/2026-08-22-long-only-as-l1-regularization.md`,
 `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
+
+**Check the currency before importing a quantity — and know that for log growth there is no
+exchange rate.** Everything this folder has imported is denominated in one of four units: forecast
+MSE (bagging, model averaging), information ratio (the fundamental law), log growth (stochastic
+portfolio theory), or net Sharpe (the gate). Each crossing between them needs an argument, and the
+folder has been building them one at a time — session 7 crossed the friction gap, session 9 the
+growth-identity gap. **Session 10 establishes that the log-growth crossing does not exist.**
+Maximising `E[log W]` is not an approximation to any other risk-scored objective at any horizon; the
+wealth-equivalent cost of the substitution *grows* exponentially in the horizon rather than
+shrinking; and the natural repair — treating `(mean-log, variance-log)` as a sufficient pair — is
+itself a limit-interchange fallacy whose error also diverges. The one exact bridge on offer,
+`g* = r_0 + ½·SR²`, holds at the growth-optimal *leverage* and nowhere else, so it is unavailable to
+a book capped at gross leverage 1.0. Practical rule, free: **before importing a theoretical quantity
+as a diagnostic, ask whether it is denominated in the unit the gate reads; if it is denominated in
+log growth, it is an accounting split of a realised quantity and never a scoring axis.** This is not
+a retraction of `γ*` as an identity — an accounting decomposition is true regardless of anyone's
+objective — only of its promotion to an axis, which is the reading `learnings.md` then measured and
+found null.
+→ `notes/2026-08-23-geometric-mean-maximization-fallacy.md`,
+`notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`,
+`notes/2026-08-22-excess-growth-and-return-decomposition.md`
+
+**Grade estimated parameters by *type*, not only by count — means are ~10× variances and ~20×
+covariances, and the multiple rises as the book gets more aggressive.** Screen #1 has always counted
+noisily-estimated parameters. The capital-growth literature weights them: the certainty-equivalent
+loss from errors in expected returns runs about an order of magnitude above that from errors in
+variances and two orders above covariances, and the ratio is a **function of risk tolerance** —
+roughly 3× at high risk aversion, 10× at moderate, 20× at low. Two consequences, both free. (a) The
+folder's blanket "covariance-based objectives are the expensive class" is directionally right and
+*understates* the ordering: a scheme that estimates expected returns is much worse than one that
+estimates a covariance, and the champion estimates neither (its score is an observed
+cross-sectional statistic, not a forecast of a mean) — a stronger endorsement than the parameter
+count alone supplied. (b) The multiplier rising as risk aversion falls means **a more concentrated,
+more aggressive book pays more for the same estimation error**, which is a second and independent
+reason — beside drawdown — to read the repo's concentration ladder as raising fragility.
+→ `notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`,
+`notes/2026-08-17-naive-vs-optimized-weighting.md`
+
+**Two literatures, arriving independently, say a six-year window cannot resolve differences of this
+size — and the folder should stop quoting Sharpe gaps without an error bar.** From the estimator
+side: `SE(ŜR) ≈ sqrt((1 + ½SR²)/T)`, which at the champion's Sharpe over 1,562 validation days is
+≈ 0.40, against a total promotion ladder of 0.364. From the capital-growth side: two strategies
+differing by 10pp of annual mean at 10% volatility separate at 95% confidence in five years, but
+**doubling the better one's volatility pushes the requirement to 157 years**, and an edge of 1.0%
+against 1.1% needs two million trials for an 84% chance of the better one dominating. Neither
+statement is about this repo's data; both are computed from parameters and sample lengths. The rule
+to carry: **quote a standard error alongside any Sharpe, and treat "candidate A beat candidate B on
+validation" as a statement about a point estimate rather than about the two strategies.** The honest
+counterweight, which must be stated whenever this is used: these are the precisions of *individual*
+Sharpe ratios, and the difference between two nearly-identical books on the same window is estimated
+far more precisely than `√2·SE` — neither source derives that paired standard error, so this is a
+reason to attach uncertainty to the gate's readings, **not** a proof that its increments are noise.
+→ `notes/2026-08-23-statistics-of-sharpe-ratios.md`,
+`notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -1406,6 +1547,18 @@ hypothesis fodder, then anti-candidates.
     bets on. So compute it as **the price of concentration** (it falls mechanically as weight
     collapses onto few correlated names, and it is denominated in growth rate, on the gate's own
     axis), and do **not** read a small value as an argument to reset weights more often.
+    **[CLOSED 2026-08-23 — measured null, and the premise it rested on was wrong.]** The lab ran it:
+    across the promotion ladder `γ*` is non-monotone, does not break where every other ladder
+    statistic breaks, and is **highest for the narrowest book**, because it is dominated by
+    `Σ_i π_i a_ii`, the weighted average variance of what is held — so on a momentum book that
+    concentrates into high-volatility winners it *rises* with concentration. It is not a
+    de-concentration statistic on this universe and should not be re-run. The clause above calling
+    it "denominated in growth rate, **on the gate's own axis**" is now withdrawn outright: Samuelson
+    and Merton–Samuelson establish that log growth is not an approximation to any risk-scored
+    objective at any horizon, so a growth-denominated quantity was never on the gate's axis and no
+    measurement could have made it so. See the *"check the currency"* principle and candidate #27.
+    The identity stands as accounting; only its promotion to an axis is retracted.
+    → `notes/2026-08-23-geometric-mean-maximization-fallacy.md`, `experiments/learnings.md`
     → `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`,
     `notes/2026-08-21-diversification-return-and-rebalancing.md`,
     `notes/2026-08-22-excess-growth-and-return-decomposition.md`,
@@ -1442,6 +1595,56 @@ hypothesis fodder, then anti-candidates.
     shrinkage effect is inseparable from its cost effect. Explanatory only — every point on the
     path except the endpoint needs an estimated covariance and is closed by screen #1.
     Tier A, no overlap. → `notes/2026-08-22-long-only-as-l1-regularization.md`
+26. **[Added 2026-08-23] The one free measurement this session recommends, and unlike last
+    session's it is a check on the repo's headline statistic rather than a new statistic.**
+    *Is every Sharpe ratio in this repo annualised correctly?* `SR(q) = η(q)·SR` with
+    `η(q) = q / sqrt(q + 2Σ_{k=1}^{q−1}(q−k)ρ_k)`, and the familiar `√252` is the special case
+    `ρ_k ≡ 0`. A book whose weight vector is held **exactly constant between the 88 emitted rows**
+    (`learnings.md`'s own `sanitize_weights` finding: mean L1 change of 0.000000 across the 83
+    inter-rebalance gaps) has every structural reason to produce serially correlated daily returns.
+    Measure `ρ̂_1 … ρ̂_k` on the stored series in `experiments/trial_returns/` and compute `η(252)`:
+    it re-runs no strategy, scores no new returns, touches no trial count, and answers whether the
+    repo's headline number carries a systematic bias **and in which direction** — if `ρ̂_1 > 0`,
+    every annualised Sharpe here is overstated. Pair it with the standard error
+    `SE(ŜR) ≈ sqrt((1 + ½SR²)/T)` so that Sharpe values start being quoted with an error bar.
+    Two boundaries. The i.i.d. formula is the wrong one for this book, so use the GMM/HAC version
+    for the error bar even while the `η(q)` correction uses the sample autocorrelations. And the
+    single-strategy standard error is **not** the standard error of a *difference* between two
+    highly-correlated candidates — which is what the gate decides on, and which the source does not
+    derive. Tier A, no overlap. → `notes/2026-08-23-statistics-of-sharpe-ratios.md`
+27. **[Added 2026-08-23] Import screen, belongs with the free screens at the top and numbered here
+    only to avoid renumbering: check the currency, and know that log growth has no exchange rate.**
+    Before adopting any theoretical quantity as a diagnostic, ask which unit it is denominated in —
+    forecast MSE, information ratio, log growth, or net Sharpe — and whether a crossing to the
+    gate's unit has been established. For log growth it has **not**, and cannot be: maximising
+    `E[log W]` is suboptimal for every non-log preference at every horizon, the wealth-equivalent
+    cost of the substitution is `λ(γ)^(T/γ)` and therefore *grows* with the horizon, and the
+    two-parameter `(mean-log, variance-log)` repair is a limit-interchange fallacy whose error also
+    diverges. The one exact bridge, `g* = r_0 + ½·SR²`, holds at the growth-optimal **leverage** and
+    is unavailable at gross leverage ≤ 1.0. This retires, on principle rather than by measurement,
+    the class of proposals of the form "measure or optimise growth rate because it is a return
+    quantity" — and it is the general form of the `γ*` null `learnings.md` recorded. Growth-rate
+    identities remain valid **accounting**; what is refused is their promotion to a scoring axis.
+    Tier A, no overlap. → `notes/2026-08-23-geometric-mean-maximization-fallacy.md`,
+    `notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`
+28. **[Added 2026-08-23] Anti-candidate — growth-optimal (Kelly) or fractional-Kelly position
+    sizing, closed for the same structural reason as families 2, 3 and 5.** The prescription is a
+    **leverage rule**: hold `X* = (E_M − r_0)/σ²_M` of the risky asset. For a book of this Sharpe
+    `X*` is far above 1, so gross leverage ≤ 1.0 binds essentially always and the rule degenerates
+    to "be fully invested," which the champion already is. This is the fourth mechanism in the
+    folder whose economics live in the leverage the repo cannot use, and here the pattern is
+    starkest — the rule has no de-risking half at all on an attractive book. What survives is the
+    *shape* of the trade-off, usable without locating any optimum: growth is a concave parabola in
+    exposure with roots at 0 and `2X*`, so exactly-double-Kelly earns the risk-free rate, the
+    penalty for overbetting is quadratic while underbetting near the optimum costs only linearly,
+    and security improves fast over the last stretch below the optimum (0.8× Kelly retains 96% of
+    the growth; full Kelly accepts a one-in-three chance of halving before doubling). Any proposal
+    that raises the book's effective risk exposure should be argued as a move along that parabola,
+    with a claim about which side of the vertex the book is on. **What this does not license:**
+    neither "Kelly says be aggressive" nor "Kelly says the book is overbet" can be asserted without
+    estimating the book's expected return — the single most error-prone input on the list, on the
+    shortest sample. Tier B+ survey over tier-A propositions, no overlap.
+    → `notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`
 
 ## Coverage log
 
@@ -1456,6 +1659,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-20 (session 7) | Session 6's top-ranked open question (a): **the bridge from a forecast-accuracy or information-ratio claim to realised net return on a constrained, cost-paying book**, chased in the two vocabularies it named — friction-aware dynamic portfolio choice, and portfolio choice that optimises the realised objective directly rather than a predictive loss. Answered from three directions, with a fourth cost-mitigation mechanism found as a by-product. Full text read directly for all four sources. | Gârleanu–Pedersen 2013 (JF; NBER WP read in full) (`2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`); Brandt–Santa-Clara–Valkanov 2009 (RFS) + Lamoureux–Zhang 2024 (RAPS, critique) (`2026-08-20-parametric-portfolio-policies.md`); DeMiguel–Martín-Utrera–Nogales–Uppal 2020 (RFS) (`2026-08-20-trading-diversification-combining-signals.md`) |
 | 2026-08-21 (session 8) | Session 7's open questions (b) and (c), taken together as one theme: **what constraints actually do to a portfolio, and how to count diversification honestly.** Three sources, full text read directly for all three. The session's shape is one *correction* (constraints are estimators as well as leaks), one *closure* (the effective-number-of-bets axis, worth one session, now spent), and one genuinely uncovered axis found by accident (the diversification return, i.e. the part of a book's geometric return that comes from rebalancing rather than from its signal). | Jagannathan–Ma 2003 (JF; NBER WP 8922 read in full) (`2026-08-21-weight-constraints-as-covariance-shrinkage.md`); Meucci 2009 (Risk) + Polakow–Gebbie 2008 (J. Asset Management; arXiv preprint read in full) (`2026-08-21-effective-number-of-bets-diversification-measurement.md`); Willenbrock 2011 (FAJ; arXiv version read in full) + Booth–Fama 1992 (FAJ, second-hand via Willenbrock) (`2026-08-21-diversification-return-and-rebalancing.md`) |
 | 2026-08-22 (session 9) | Session 8's two named open questions, taken in order: (a) the decomposition of a **signal-driven** book's geometric return into a strategic and a rebalancing term — the axis session 8 called the highest-value remaining thread — and (b) the counterweight to the folder's constraints-are-good prior. Three sources, full text read directly for all three. The session's shape is one *theorem* that closes (a) at the identity level, one *correction* that reverses the sign the folder had assumed for the rebalancing term on a momentum book, and one *dissolution* of (b) into a continuum. | Fernholz–Karatzas 2009 (Handbook of Numerical Analysis Vol. XV; INTECH-hosted PDF read in full), building on Fernholz–Shay 1982 (JF) (`2026-08-22-excess-growth-and-return-decomposition.md`); Cuthbertson–Hayley–Motson–Nitzsche 2016 (IJFE; City Research Online accepted version read in full) (`2026-08-22-rebalancing-return-attribution-critique.md`); Brodie–Daubechies–De Mol–Giannone–Loris 2009 (PNAS; arXiv:0708.0046v3 read in full) (`2026-08-22-long-only-as-l1-regularization.md`) |
+| 2026-08-23 (session 10) | Session 9's open question (b), the last unpatched seam: **what the lab is actually scored on**, attacked from both ends. End one — the currency the folder imports in: the geometric-mean-maximisation / growth-optimal (Kelly) literature and its criticism, chased specifically to settle whether a log-growth quantity can ever be a scoring axis. End two — the currency the lab is scored in: the sampling distribution of the Sharpe ratio itself, which nothing in nine sessions had covered. Three notes, full text read directly for all three primary texts. The session's shape is one *closure* (log growth has no exchange rate to a risk-scored objective, which retires session 9's own top candidate and explains the lab's `gamma*` null), one *anti-candidate plus two re-weighted screens* (Kelly as a leverage rule; means >> variances >> covariances, with the multiple rising as the book gets more aggressive), and one *new free measurement* on the repo's headline statistic (the `eta(q)` annualisation check and a standard error). | Samuelson 1971 (PNAS; EuropePMC copy read in full) + Merton–Samuelson 1974 (JFE; MIT Sloan WP 623-72 read in full from MIT DSpace) (`2026-08-23-geometric-mean-maximization-fallacy.md`); MacLean–Thorp–Ziemba 2010/2011 (Quantitative Finance / World Scientific handbook chapter; authors' dated draft read in full from a Berkeley course page), with MacLean–Ziemba–Blazenko 1992 (Management Science) and Chopra–Ziemba 1993 (JPM) recorded **second-hand and flagged** — both closed-access, their tables reproduced in the text read (`2026-08-23-kelly-criterion-growth-security-tradeoff.md`); Lo 2002 (FAJ; course-page mirror read in full) (`2026-08-23-statistics-of-sharpe-ratios.md`) |
 
 ### Open questions for future sessions
 
@@ -1767,6 +1971,69 @@ hypothesis fodder, then anti-candidates.
   long-horizon condition (`T ≥ (2/pεδ)·log n`) far beyond the evaluation splits; and the source's
   own simulation charges no transaction costs.
 
+  **— (b) ANSWERED AND CLOSED 2026-08-23 (session 10), in the negative, which is the useful
+  direction.** The question was whether the geometric-vs-arithmetic and growth-optimal/Kelly
+  literature would supply the crossing from log growth to the risk-scored quantity the gate reads.
+  It supplies the opposite: **there is no such crossing, and the error of pretending otherwise grows
+  with the horizon.** Samuelson shows the max-geometric-mean rule is suboptimal for every
+  non-logarithmic iso-elastic preference at *every* finite `T`, that boundedness does not rescue it,
+  and that the "almost certainly wins eventually" theorem cannot be converted into a statement about
+  an expectation because the horizon at which dominance begins is unbounded in the wealth level.
+  Merton–Samuelson price the substitution at `Π₁₂(T) = λ(γ)^(T/γ) → ∞`, show that for `γ < −1` the
+  log-optimal program is dominated by holding only the riskless asset, and kill the two-parameter
+  `(mean-log, variance-log)` repair as a limit-interchange fallacy whose own error diverges. The
+  growth school does not dispute any of it and adds the only exact bridge in the literature,
+  `g* = r_0 + ½·SR²` — which holds at the growth-optimal **leverage** and is therefore unavailable
+  under gross leverage ≤ 1.0. **Consequence for the folder, stated plainly because it reverses a
+  session-9 recommendation:** `γ*` was ranked session 9's top measurement on the explicit grounds
+  that log growth is "the gate's own axis." It is not, and `learnings.md` has since measured the
+  null this predicts. The identity survives as accounting; the axis claim is withdrawn. Recorded as
+  the *"check the currency"* principle and candidate #27.
+  **— (c) ANSWERED OBLIQUELY AND NOW RETIRED 2026-08-23.** Asked a third time and answered a third
+  time by something other than what was requested — which, as the question itself noted, is now the
+  pattern. What arrived instead is a re-weighting of the estimation-error side: errors in *means*
+  cost roughly 10× errors in variances and 20× errors in covariances, with the multiple rising as
+  risk aversion falls. That does not price the long-only constraint's leakage, and the transfer
+  coefficient's 0.3–0.8 remains the only number the folder has. Three sessions have now failed to
+  obtain it and the named targets are unchanged and all closed-access. **Stop asking**; if it is ever
+  wanted, it needs a source acquired by a route this folder does not currently have, not another
+  session of searching.
+
+- **New open questions raised by session 10, in priority order.**
+  (a) *The one derivation this session could not obtain, and it is the difference between an
+  interesting caveat and a decisive one.* The standard error of a **single** Sharpe ratio is
+  `sqrt((1 + ½SR²)/T)`, ≈ 0.40 on this repo's validation window — larger than the entire promotion
+  ladder. But the gate does not compare a candidate to an unknown truth; it compares two nearly
+  identical books evaluated on the *same* six years, whose return series correlate near 1, and for
+  which the paired standard error `SE(ŜR_A − ŜR_B)` is far smaller than `√2·SE(ŜR)`. Lo does not
+  derive it. **Until that paired quantity is in hand, the single-strategy standard error must not be
+  quoted as evidence that the ladder's steps are noise** — a discipline this folder should hold
+  itself to, because the number is rhetorically tempting and the inference is invalid. The named
+  vocabulary not yet searched: the Jobson–Korkie / Memmel correction for testing the equality of two
+  Sharpe ratios, and Ledoit–Wolf's robust bootstrap version of the same test. This is the highest
+  value remaining thread in the folder: it would turn `learnings.md`'s ⚠ standing protocol concern
+  from a pattern-in-a-table into a hypothesis test, computable from series the repo already stores.
+  (b) *The deflated Sharpe ratio has never been covered, and the gate uses it.* `program.md` requires
+  `deflated-Sharpe probability ≥ 0.95` and `learnings.md` reasons about DSR clustering, trial-count
+  understatement, and effective-versus-recorded trials — all from local observation, with no note in
+  `research/` on the statistic's own source or its stated assumptions. Its literature
+  (Bailey–López de Prado and successors) would say what the deflator assumes about the *distribution
+  of the candidate set*, which is precisely what "clustering makes within-family tuning nearly free"
+  is an informal claim about. Explanatory only — the engine is frozen — but the folder has an
+  obligation to cover the gate's own machinery, and it is the last uncovered piece of it.
+  (c) *Recorded as declined rather than unexamined.* Fractional-Kelly sizing, drawdown-constrained
+  growth optimisation (Grossman–Zhou and successors), and every other member of the capital-growth
+  family are declined for one reason stated once: they are leverage rules, and this repo's gross
+  leverage cap truncates them to "be fully invested." Grossman–Zhou 1993 (Mathematical Finance,
+  optimal investment under a drawdown constraint, 379 citations on Semantic Scholar) was sighted
+  this session, is closed-access with no repository copy found, and was **not read** — it is
+  recorded as unread, not summarised from abstracts.
+  (d) *A discipline note, not a question.* Session 9's top recommendation was measured and returned a
+  null, and this session found the recommendation's stated premise was false. Both facts were
+  available on paper before the measurement — the premise was a claim about units, checkable by
+  reading. **Before ranking any future measurement first, check that its output is denominated in
+  the unit the gate reads.**
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -1778,6 +2045,27 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 10 (2026-08-23) read full text directly for every primary source**, and the session's
+  access lesson is that **course-page and reading-list mirrors are now the most reliable channel for
+  paywalled journal articles**, ahead of author pages. Concretely: the FAJ article was 404 on the
+  author's own MIT page but served complete, with AIMR pagination and copyright line intact, from a
+  university student-organisation reading list; the World Scientific handbook chapter served from a
+  UC Berkeley course page. Also confirmed working — **EuropePMC's `?pdf=render` endpoint**, which is
+  the fix when a PNAS scan of a pre-1980 article extracts as empty text (the publisher's own
+  `pnas.org/doi/pdf` path returned 403 and the alternative mirror was an image-only scan yielding 4
+  characters); and **MIT DSpace**, which 429s on first request and succeeds on a retry a few seconds
+  later, redirecting to a signed CDN URL. Index behaviour: Semantic Scholar's DOI endpoint answered
+  every lookup on first try, but its record for a 1974 JFE article reports **year 2017** and a
+  citation count of 70, which for a paper of that vintage and venue is a visible undercount — a
+  fourth instance of session 7's "disbelieve a lone low count" warning, this time with a corrupted
+  year field as the tell. One DOI guessed from a journal-name search resolved in neither Semantic
+  Scholar nor Crossref; a Crossref `query.bibliographic` search found the correct DOI immediately and
+  is worth reaching for before concluding a paper is unindexed. Three sources relevant to this
+  session's notes are **closed-access and recorded as unread or second-hand rather than summarised
+  from abstracts**: Chopra–Ziemba 1993 (JPM) and MacLean–Ziemba–Blazenko 1992 (Management Science),
+  whose tables are reproduced verbatim in a text that *was* read and are flagged in-note as
+  second-hand, and Grossman–Zhou 1993 (Mathematical Finance), which is cited nowhere in the notes.
 
   **Session 9 (2026-08-22) read full text directly for every source**, and hit none of the three
   documented limits — Semantic Scholar's DOI endpoint and Crossref both answered every lookup on

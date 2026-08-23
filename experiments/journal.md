@@ -2760,3 +2760,5 @@ here.
    guards against (a split trial history) silently corrupts the deflated-Sharpe bar for
    every later trial.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-23 (learning agent): 3 notes added, see research/SUMMARY.md
