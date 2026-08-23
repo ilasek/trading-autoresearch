@@ -722,6 +722,77 @@ across experiments; prune entries that later evidence contradicts.
   no-op. The general habit stands and keeps paying: check what a component's code reads,
   then measure how much it reads differently, *then* decide whether to spend a trial.
 
+- **Magnitude weighting's information is more ordinal than cardinal on this base, and the
+  split does not transfer across leg counts either.** #52 (equal weight) and #53 (no
+  cross-leg agreement premium) left one quantity unresolved: whether the ~0.116 Sharpe of
+  the within-leg magnitude transform that is *not* concentration is the score's ordering or
+  its spacing. #54 split it with linear rank weighting (ordering kept exactly, spacing
+  discarded entirely), membership bit-identical at 30.2977 names across all three books:
+  equal 1.023 / rank **1.123** / champion 1.229, at HHI 0.0425 / 0.0582 / 0.0918. Netting
+  each step's de-concentration at #53's constant leaves **spacing 0.045 and ordering
+  0.055-0.072** — 55-62% ordinal, against the **37.5%** the single-leg base of trials
+  #18-#21 recorded (equal 0.90 -> rank 0.93 -> magnitude 0.98). The two ordering readings
+  differ by 0.017 because HHI ratios compound rather than add across two steps; the residual
+  is stated, not allocated. **The general point extends #52 rather than repeating it: the
+  old base was borrowed for the *share* this time, not the level, and the share did not
+  transfer either — four-leg averaging changes not only how much a component is worth but
+  what it is worth it for.** Offered mechanism, untested: the cross-leg average already
+  imposes a coarse cardinal spacing (a name's weight is (legs holding it)/4 times its
+  within-leg weight, the channel #53 priced at 0.043), so a second cardinal spacing inside
+  each leg is partly redundant where the ordinal information is not. The within-leg
+  weighting axis is now fully mapped — equal, rank, magnitude, and the refuted square-root
+  dampening — and should not be revisited without a new mechanism. A third pre-registered
+  call for the risk-contribution count also landed here (predicted validation maxDD -27.1%
+  at +92% of effective risk bets, got **-26.7%**), so the statistic is now confirmed at both
+  ends of its observed range and at the midpoint.
+
+- **The steps the gate adjudicates are individually unresolvable, and this is now measured
+  rather than suspected. Compute the paired-bootstrap SE of a candidate's expected effect
+  before spending the trial — it is the cheapest screen in the repo.** Every recorded
+  trial's validation return series is stored on the same 1,562 days, so the standard error
+  of a *difference* — the quantity the gate actually decides on, and the one
+  `research/SUMMARY.md` #26 flags as absent from its source — can be bootstrapped directly
+  (stationary block bootstrap on the **paired** series, so cross-candidate correlation is
+  preserved; robust to expected block lengths of 1 to 63 days). Two facts follow.
+  (a) **The pairing works and the naive objection dies.** A single strategy's own Sharpe
+  carries SE 0.39-0.44 here; a difference between consecutive ladder rungs carries
+  **0.026-0.15**, 3x to 17x tighter, because consecutive rungs correlate 0.909-0.997 daily.
+  "The steps are inside the noise of one Sharpe" was never the right objection.
+  (b) **And the steps are still not resolvable.** On that tightest available error, **none
+  of the six promotions in this repo's history reaches |t| = 2** — the largest is the first
+  (t = 1.62), four of six are below t = 0.55, and `P(step > 0)` for #41 and #42 is 0.58 and
+  0.60, a coin flip. End to end the ladder is +0.364 at t = 2.18, so the *cumulative* climb
+  is (just) distinguishable from zero while its *increments* are not. **The operational
+  rule:** the family's SE floor is ~0.026-0.07 for a near-identical construction
+  (correlation > 0.98) and ~0.13-0.17 for a structurally different one (correlation ~0.9);
+  a pre-registered effect inside that floor buys a point estimate the data cannot resolve
+  while permanently raising the DSR bar for every later candidate. #54 passes the screen
+  retrospectively (effect -0.134 against SE 0.064); **#53 and #47 do not** (t = -0.74 and
+  -0.86) — their conclusions stand as point estimates but their error bars must now travel
+  with them.
+
+- **`eta(q)`, the serial-correlation correction to annualised Sharpe, is not estimable at
+  this sample length — and the question behind it has a small, uniform, order-preserving
+  answer.** `research/SUMMARY.md` candidate #26 recommended measuring
+  `eta(q) = q / sqrt(q + 2*sum_{k=1..q-1}(q-k)*rho_k)`. Computed over all 251 lags on the 52
+  stored series it looks decisive (range 11.35-27.32 against `sqrt(252) = 15.87`) and it is
+  **entirely noise**: under the null the denominator's sampling SD is
+  `2*sqrt(sum_k (q-k)^2 / T) = 116.5` against its own value of 252, and a Monte Carlo on IID
+  normal noise of the same length reproduces the whole observed spread (simulated sd 4.47 vs
+  observed 3.78) with an *upward* bias in the mean. The bounded-lag version is estimable and
+  says: `rho_1` is positive for every book in the magnitude-weighted era (+0.022 to +0.043,
+  null SE 0.025), so **current-family Sharpes are overstated by ~2-4%**, and the correction
+  **re-orders nothing** (Spearman 0.986 across all 51 distinct trials). The one place it
+  bites is the headline — the baseline's `rho_1` is *negative* (-0.043) while the current
+  family's is positive, so the ladder's recorded climb of +0.364 becomes **+0.276** under an
+  L=1 correction, i.e. **~a quarter of the repo's total recorded progress is an annualisation
+  artifact of serial correlation changing sign along the ladder.** Also: Lo's HAC standard
+  error for a single strategy (0.41-0.43) is *tighter* than his IID formula (0.51-0.53) on
+  these series, so quote the HAC one. **General lesson, and it is the same shape as the two
+  headline mis-specifications this repo has already paid for: before adopting an imported
+  statistic, check it is estimable on the sample you have — simulate it under its own null,
+  which costs nothing.**
+
 - **⚠ Standing protocol concern, raised 2026-08-17, now a FOUR-point trend, and the
   break has been localised to one commit. For human attention — this is the most
   important thing in this file.** Promotion scores validation Sharpe only, and the
@@ -856,3 +927,16 @@ across experiments; prune entries that later evidence contradicts.
   recommendation is otherwise unchanged — `mom_zscore_overlap6_hzn_avg4` (#42) is the best
   strategy this lab has produced on every axis the mission names, it is also top of the
   train column among K=6 books, and its file is intact in `strategies/candidates/`.
+  **Update 2026-08-23 — still four points (one REJECT tonight, no fifth promotion, no sixth
+  holdout look), and the concern changes in kind rather than in size.** The paired-bootstrap
+  standard error recorded above was applied to the comparison this whole concern turns on:
+  `mom_zscore_overlap6_hzn_avg4` (#42) against the current champion is **Δ -0.109, SE 0.138,
+  t = -0.79, P(#42 better) = 0.21**. On the gate's own split and its own statistic the two
+  are **statistically indistinguishable**, and the holdout puts #42 ahead by **0.686**. So
+  the claim to a human is no longer only "the gate reads the split that has been wrong every
+  time since #43"; it is the stronger and simpler **"the gate broke a tie, and it broke it
+  the wrong way."** The same measurement shows no promotion in this repo's history cleared
+  |t| = 2 on its own step. If a second scored quantity is ever added, two are now available
+  at zero marginal cost: the train Sharpe, and a paired-bootstrap SE of the
+  candidate-versus-champion difference, which would let the gate decline to promote on an
+  unresolvable margin rather than being obliged to.

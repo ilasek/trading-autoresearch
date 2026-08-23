@@ -2812,3 +2812,207 @@ here.
   selection criterion — selecting on it is forbidden by `program.md` and would be the same
   error one split over.
 
+
+## Session summary — 2026-08-23 (nightly)
+
+- **Integrity check — one deviation, corrected before any work.** `git fetch origin
+  --prune` clean; `git branch -r --no-merged origin/main` returned **nothing**, so no
+  previous session's work is stranded off `main`. As on 2026-08-19, -20, -21 and -22, the
+  session **opened on a per-run branch** (`main-iifvsu`), pointing at exactly `origin/main`
+  (`a16cb21`) with no commits of its own, while local `main` was 24 behind; per the
+  standing instruction never to run trials from a per-run branch both were corrected first
+  (`git checkout main && git reset --hard origin/main`). Every trial and commit below is on
+  `main`. **This is the fifth consecutive session to open on a per-run branch** — the
+  harness setting that causes it has now outlived five hand corrections. Engine tests green
+  (16 passed). Store fresh through 2026-08-21.
+- Experiments run: **1 of the 8-trial budget** (#54 `mom_hzn_avg4_rankweight`).
+  Verdict: **0 PROMOTE, 1 REJECT, 0 GATE_FAIL.** **No holdout look was spent** — the count
+  since 2026-08-17 stands at five.
+- **Two free analyses, no trial spent by either**, both on the stored validation return
+  series in `experiments/trial_returns/`: the `eta(q)` annualisation check
+  (`research/SUMMARY.md` candidate #26) and — the session's main product — the first
+  standard error ever computed here for a *difference* between two candidates.
+- The session stopped at one trial deliberately. Last session completed the champion's
+  component audit; #54 closed the one decomposition that audit left open; and every
+  remaining idea in this family is a knob (a spacing exponent, a band width, a fourth
+  vintage axis) or a re-tread, all of which `learnings.md` forbids. A trial that cannot
+  inform permanently raises the deflated-Sharpe bar for every later candidate, which the
+  manual names as a real cost.
+
+### The night in one line
+
+The trial closed the ordering-versus-spacing decomposition against its only prior, and the
+free work found that **not one of the six promotions in this repo's history was made on a
+margin the data can resolve** — the largest step is t = 1.62 and four of the six are below
+t = 0.55, on the tightest standard error available.
+
+### #54 — the magnitude transform is more ordering than spacing
+
+Pre-registered 1.095 inside a pre-registered interval of [1.051, 1.168], landed **1.123**.
+With membership bit-identical at 30.2977 names across all three books:
+
+| | | val Sharpe | HHI | eff risk bets | val maxDD |
+|---|---|---|---|---|---|
+| #52 | equal weight (neither) | 1.023 | 0.0425 | 17.67 | -24.3% |
+| #54 | rank weight (ordering, no spacing) | **1.123** | 0.0582 | 11.49 | **-26.7%** |
+| — | champion (ordering and spacing) | 1.229 | 0.0918 | 5.99 | -29.6% |
+
+Netting out each step's de-concentration at #53's restated constant (~0.05 Sharpe per 30%
+of HHI): **spacing 0.045, ordering 0.055-0.072** — 55-62% of the information is ordinal,
+against the **37.5%** the single-leg base of trials #18-#21 recorded. The two ordering
+readings differ by 0.017 because HHI ratios compound rather than add across the two steps;
+that residual is stated rather than allocated. So the prior was borrowed for the *share*
+and the share did not transfer either, which extends #52 rather than repeating it: four-leg
+averaging changes not only how much the magnitude transform is worth (2.5x) but **what it
+is worth it for**. Untested mechanism offered for the next session to shoot at: the
+cross-leg average already imposes a coarse cardinal spacing of its own — a name's weight is
+(legs holding it)/4 times its within-leg weight, the channel #53 priced at 0.043 — so a
+second cardinal spacing inside each leg is partly redundant where the ordinal information
+is not.
+
+**Third pre-registered call for the risk-contribution count, and it lands in the middle of
+its range.** Predicted validation maxDD -27.1% by linear scaling of #52's 5.3pp gain by the
+effective-risk-bets move (+92% against #52's +195%); landed **-26.7%**. The statistic has
+now been called correctly at +195% (#52), +92% (#54) and +29% (#53) — both ends and the
+midpoint, which is the shape that would have exposed a non-linearity had there been one.
+
+### Free result 1 — `eta(q)` is not estimable at this sample length, and the answer to the question behind it is "slightly, and it re-orders nothing"
+
+`research/SUMMARY.md` candidate #26 asked whether every Sharpe here is annualised
+correctly, via `SR(q) = eta(q)*SR` with
+`eta(q) = q / sqrt(q + 2*sum_{k=1..q-1}(q-k)*rho_k)`. Computed naively over all 251 lags on
+the 52 stored series it appears to matter enormously — `eta` ranges 11.35 to 27.32 against
+`sqrt(252) = 15.87`, which would move some Sharpes by 70%. **All of that is noise.** Under
+the null `rho_k == 0` the denominator's sampling SD is
+`2*sqrt(sum_k (q-k)^2 / T) = 116.5` against its own null value of 252 — **46%** — and a
+Monte Carlo on IID normal noise of the same length reproduces the entire observed spread
+and then some (simulated `eta`: mean 18.63, sd 4.47, 5-95% [12.5, 26.9]; observed across
+the 52 trials: sd 3.78, range [11.35, 27.32]). The estimator is also **upward biased**, so
+the naive correction would inflate rather than deflate. Candidate #26's `eta(q)` half is
+therefore **killed for free on sample length**: at T = 1562 the full-lag statistic carries
+no information about this repo's returns.
+
+The bounded-lag version *is* estimable (null sd of `eta_L`: 0.40 at L=1, 0.90 at L=5, 1.30
+at L=10) and answers the underlying question:
+
+    rho_1 across the promotion ladder  -0.0433 +0.0219 +0.0278 +0.0319 +0.0341 +0.0431 +0.0419
+    naive (sqrt252) ladder              0.865   1.107   1.112   1.120   1.187   1.201   1.229
+    L=1-corrected ladder                0.905   1.084   1.082   1.086   1.149   1.153   1.181
+    L=5-corrected ladder                0.889   1.101   1.090   1.091   1.162   1.158   1.193
+
+Three readings. (i) The folder's directional guess was right but small: `rho_1` is positive
+for every book in the magnitude-weighted era (+0.022 to +0.043 against a null SE of 0.025),
+so **current-family Sharpes are overstated, by ~2-4%**. (ii) It **re-orders nothing** —
+Spearman between the naive and L=1-corrected Sharpe across all 51 distinct trials is 0.986.
+(iii) The one place it bites is the *headline*: the baseline's `rho_1` is **negative**
+(-0.043) and the current family's is positive, so the ladder's recorded climb of +0.364
+becomes **+0.276** under the L=1 correction — **about a quarter of the repo's total recorded
+progress is an annualisation artifact of the direction of serial correlation changing along
+the ladder.** Also recorded: Lo's HAC standard error of a single strategy's own Sharpe
+(0.41-0.43) is *tighter* than his IID formula (0.51-0.53) on these series, so quoting the
+IID version would overstate the uncertainty.
+
+### Free result 2 — the standard error of a *difference*, and it is the sharpest thing this session found
+
+`research/SUMMARY.md` #26 states the boundary that its source cannot cross: Lo's standard
+error is "the precision of one strategy's Sharpe against an unknown truth, *not* the
+precision of the difference between two nearly-identical books measured on the same six
+years, which is far tighter and which Lo does not derive." That difference **is what the
+gate decides on**, and it can be measured directly here, because every trial's validation
+return series is stored on the same 1,562 days. Stationary block bootstrap
+(Politis-Romano, 4,000 replicates) on the **paired** series, so the cross-candidate
+correlation is preserved inside every replicate:
+
+| promotion step | Δ Sharpe | SE(diff) | t | P(step > 0) |
+|---|---|---|---|---|
+| baseline → `overlap6_daily_trim` | +0.241 | 0.149 | **1.62** | 0.934 |
+| → `overlap6_hzn_avg` | +0.005 | 0.030 | 0.16 | 0.580 |
+| → `overlap6_hzn_avg4` | +0.008 | 0.030 | 0.27 | 0.601 |
+| → `hzn_avg4_k1` | +0.067 | 0.134 | 0.50 | 0.702 |
+| → `hzn_avg4_k1_cohort_trim` | +0.014 | 0.027 | 0.53 | 0.652 |
+| → `hzn_avg4_nobuffer` (champion) | +0.028 | 0.026 | 1.10 | 0.860 |
+| **baseline → champion, end to end** | **+0.364** | **0.167** | **2.18** | **0.986** |
+
+Robust to the bootstrap block length: every SE above moves by less than 0.01 across
+expected block lengths of 1, 5, 21 and 63 days.
+
+Four readings, in increasing order of how much they matter.
+
+1. **The pairing works, and the naive worry is correctly refuted.** SE of a *single*
+   strategy's Sharpe is 0.39-0.44; SE of a *difference* between consecutive rungs is
+   0.026-0.15, **3x to 17x tighter**, because consecutive rungs' daily returns correlate
+   0.909 to 0.997. So "the steps are inside the noise of one Sharpe" was never the right
+   objection, exactly as the folder cautioned.
+2. **And the steps are still not resolvable.** On the tightest standard error available,
+   **not one of the six promotions reaches |t| = 2**; the largest is the very first
+   (t = 1.62) and four of the six are below t = 0.55. `P(step > 0)` for the two horizon
+   promotions #41 and #42 is 0.58 and 0.60 — a coin flip. This is not an argument that the
+   ladder is fake: end to end it is +0.364 at t = 2.18, so the *cumulative* climb is (just)
+   distinguishable from zero. It is an argument that **the increments the gate adjudicates
+   individually are not**, which is a different and more specific claim than anything in
+   `learnings.md` so far.
+3. **It sharpens the standing protocol concern by a lot.** The comparison that concern
+   turns on — `mom_zscore_overlap6_hzn_avg4` (#42) against the current champion — is
+   **Δ -0.109, SE 0.138, t = -0.79, P(#42 better) = 0.21**. On the gate's own split and its
+   own statistic, the two are **statistically indistinguishable**. The gate preferred the
+   champion on a margin it cannot resolve, and the holdout puts #42 ahead by **0.686**. The
+   recommendation to a human is therefore no longer "the gate reads the wrong split"; it is
+   the stronger and simpler **"the gate broke a tie, and it broke it the wrong way."**
+4. **A new free screen, and it is cheap.** The SE of a difference is now measurable before
+   a trial is spent, from the stored series of whatever the candidate is a variant of. The
+   family's floor is ~0.026-0.07 for a near-identical construction (correlation > 0.98) and
+   ~0.13-0.17 for a structurally different one (correlation ~0.9). Tonight's #54 passes its
+   own screen retrospectively — pre-registered effect -0.134 against SE 0.064, t ≈ 2.1 —
+   and so, notably, do **neither** of last session's two trials (#53: Δ -0.043, t = -0.74;
+   and #47 earlier: Δ -0.049, t = -0.86). Both were run to adjudicate a constant, and both
+   adjudicated it on a margin the data does not resolve. Their *conclusions* are not
+   overturned — a point estimate is still the best available estimate — but their error
+   bars should travel with them from now on.
+
+### For the human — unchanged in direction, stronger in kind
+
+`mom_zscore_overlap6_hzn_avg4` (#42) remains the best strategy this lab has produced on
+every axis the mission names (holdout Sharpe 1.377, holdout return 34.9%, holdout maxDD
+-20.1%, turnover 2.8x), it is top of the train column among K=6 books, and tonight adds
+that it is **not distinguishable from the incumbent on the gate's own axis** (t = -0.79).
+Its file is intact in `strategies/candidates/`. Both remedies — reinstating it, or scoring
+something other than raw validation Sharpe — require edits to frozen files no session may
+make. If a second scored quantity is ever added, two are now available at zero marginal
+cost: the train Sharpe (highest holdout correlation measured here) and the paired-bootstrap
+SE of the candidate-versus-champion difference (which would let the gate decline to promote
+on an unresolvable margin rather than being obliged to).
+
+### Ideas for next session
+
+1. **Do not run a challenger in this family without first computing the paired-bootstrap SE
+   of its expected effect.** Carried forward from tonight's free result 2 and now the
+   cheapest screen in the repo: it needs only the stored return series of the construction
+   the candidate varies. If the pre-registered effect is inside ~0.03-0.07 for a
+   near-identical variant, the trial will produce a point estimate the data cannot resolve,
+   and the DSR bar it raises is paid by every later candidate for nothing.
+   **Idea provenance: the lab's own, prompted by `research/SUMMARY.md` candidate #26's
+   stated boundary.**
+2. **The one live mechanism question #54 leaves.** Ordering beats spacing on the four-leg
+   base and lost to it on the single-leg base. The offered mechanism — that cross-leg
+   averaging already supplies a coarse cardinal spacing, so a second one inside each leg is
+   partly redundant — predicts that the ordering/spacing split should move back toward
+   spacing as the leg count falls. That is checkable, but only by re-running a one-leg and a
+   two-leg book, i.e. two trials to confirm an explanation of a component the repo has
+   already fully priced. **Recommended against** unless a session has a use for the answer.
+   **Idea provenance: the lab's own, from tonight's #54.**
+3. **Free and still never exercised** (carried over untouched for the fourth session): the
+   closed-form weight-vector triage for a proposed trend/MA signal, `research/SUMMARY.md`
+   candidate #3. It needs a proposed trend signal to triage, and no session has had one
+   worth triaging. **Idea provenance: `research/SUMMARY.md`.**
+4. **Retired from the idea list:** `research/SUMMARY.md` candidate #26's `eta(q)`
+   annualisation correction — measured tonight and **not estimable** at T = 1562, for a
+   stated and simulated reason. Its companion half (quote Sharpes with a standard error) is
+   adopted, in the *paired-difference* form rather than the single-strategy form, which is
+   the boundary the candidate itself named. **Idea provenance: `research/SUMMARY.md`, the
+   first half closed by measurement, the second half built on and improved.**
+5. **A harness matter for a human, not a research idea.** **Five** consecutive sessions have
+   now opened on a per-run branch and corrected it by hand. Tonight local `main` was also 24
+   commits behind, so a session that skipped the check would have run trials against a stale
+   champion *and* a stale trial count. The correction has worked every time, but it depends
+   on each session reading the instruction.
+- No engine issues encountered this session.
