@@ -2762,3 +2762,53 @@ here.
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-23 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-23T23:10:52+00:00 — mom_hzn_avg4_rankweight — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_avg4_rankweight.py` (family: cross-sectional momentum, trial #54)
+- Hypothesis: Replacing the champion's within-leg magnitude transform with linear rank weighting — each horizon leg's top 15 receiving raw weights 15..1 by composite z-score order, so the ordering of scores is kept exactly and their spacing is discarded entirely, with membership (30.2977 average positions, bit-identical), the four lookbacks, the skip-month, cross-leg equal averaging, single-tranche formation, the cohort trim and both trim constants otherwise untouched — lands validation Sharpe near 1.095 net of 15 bps costs. That is the champion's 1.229 less a 0.061 de-concentration cost priced in advance from a holdings-only diagnostic (HHI -36.6%, at trial #53's restated constant of ~0.05 Sharpe per 30% of HHI) and less 0.073 for spacing, being the 62.5% share of the 0.117 of non-concentration information that the single-leg base of trials #18-#21 attributed to spacing rather than ordering. The endpoints bound the answer: 1.168 says the magnitude transform's information is entirely ordering and its spacing is decoration, 1.051 says it is entirely spacing and ordering alone buys nothing beyond concentration. Second falsifier on the unscored axis: effective risk bets rise 5.99 -> 11.49 (+92%), 47% of #52's move, so linear scaling of #52's drawdown gain predicts validation maxDD -27.1%, a third pre-registered call bracketing the risk-contribution statistic at the midpoint of its observed range.
+- Verdict: REJECT — validation sharpe 1.123 <= champion 1.229
+- Train: sharpe +0.96, ann_ret +17.3%, maxDD -52.6%, turnover 5.1x
+- Validation: sharpe +1.12, ann_ret +23.7%, maxDD -26.7%, turnover 8.3x
+- Deflated Sharpe prob: 0.9624 (bar from 54 trials, 12 effective)
+- Champion validation sharpe at the time: +1.23
+- Champion re-deflated at the same bar: 0.9794
+- Lesson: **The decomposition closes, and it closes against the prior: more than half of
+  the magnitude transform's non-concentration information is *ordering*, not spacing —
+  the reverse of the only base on which the split had ever been measured.** Landed 1.123
+  against a pre-registered 1.095, inside the pre-registered [1.051, 1.168] and 0.028
+  toward the ordering endpoint. Laying the three books out with membership bit-identical
+  at 30.2977 names in all three:
+
+      #52 equal   (neither ordering nor spacing)  1.023   HHI 0.0425   eff risk bets 17.67
+      #54 rank    (ordering, no spacing)          1.123   HHI 0.0582   eff risk bets 11.49
+      champion    (ordering and spacing)          1.229   HHI 0.0918   eff risk bets  5.99
+
+  Netting out the de-concentration each step carries at #53's restated constant (~0.05
+  Sharpe per 30% of HHI): **spacing is worth 0.045** (the 0.106 champion-to-rank gap less
+  its 0.061 concentration component) and **ordering is worth 0.055-0.072** (0.100
+  rank-to-equal less its 0.045, or the 0.117 total less spacing; the two readings differ
+  by 0.017 because HHI ratios compound rather than add across the two steps, and that
+  residual is stated rather than allocated). Either reading puts ordering at **55-62%** of
+  the information against the **37.5%** the single-leg base of trials #18-#21 recorded
+  (equal 0.90 -> rank 0.93 -> magnitude 0.98). So the prior was used for the share and the
+  share did not transfer either — which extends #52's finding rather than repeating it:
+  **on this base four-leg averaging changes not only how much the magnitude transform is
+  worth (2.5x) but what it is worth it for.** A plausible mechanism, not tested here: the
+  cross-leg average already imposes a coarse cardinal spacing of its own (a name's weight
+  is (legs holding it)/4 times its within-leg weight, the channel #53 measured at 0.043),
+  so a second cardinal spacing inside each leg is partly redundant where the ordinal
+  information is not.
+- Second lesson, on the unscored axis: **the risk-contribution count's linearity is now
+  confirmed at the midpoint of its range, three pre-registered calls deep.** Predicted
+  validation maxDD -27.1% by scaling #52's 5.3pp gain by the effective-risk-bets move
+  (+92% against #52's +195%); landed **-26.7%**, a 0.4pp miss, after #52 (+195%, called)
+  and #53 (+29%, called to 0.3pp). The statistic has now been right at both ends and in
+  the middle, which is the shape that would have exposed a non-linearity if there were
+  one. -26.7% is also the second-best validation drawdown ever recorded here, behind #52's
+  -24.3% — the third instance (with #47 and #52) of the gate discarding a candidate a
+  human weighing risk would want to see. Recorded but explicitly not acted on: this
+  candidate's train Sharpe of 0.959 is the best of the magnitude-weighted era (champion
+  0.931, #52 0.951), which is the column `learnings.md` finds most correlated with the
+  holdout. That is an observation about the standing protocol concern, **not** a
+  selection criterion — selecting on it is forbidden by `program.md` and would be the same
+  error one split over.
+
