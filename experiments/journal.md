@@ -3016,3 +3016,5 @@ on an unresolvable margin rather than being obliged to).
    champion *and* a stale trial count. The correction has worked every time, but it depends
    on each session reading the instruction.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-24 (learning agent): 3 notes added, see research/SUMMARY.md

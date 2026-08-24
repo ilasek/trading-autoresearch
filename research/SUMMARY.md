@@ -757,6 +757,93 @@ error**, which is what one would expect of the column that tracks the holdout be
 `validation_overlap: false`.
 → `notes/2026-08-23-statistics-of-sharpe-ratios.md`
 
+**The paired standard error session 10 said must not be quoted until it was derived is now derived,
+in closed form, and it reproduces the lab's bootstrap floor from one number.** Jobson–Korkie (1981)
+gave a delta-method standard error for the *difference* of two Sharpe ratios and Memmel (2003)
+corrected it; the corrected expression is
+`T·Var(Δ̂) = 2(1−ρ) + ½(Sh_a² + Sh_b²) − Sh_a·Sh_b·ρ²`, which for equal Sharpe ratios factorises to
+`(1−ρ)·[2 + Sh²(1+ρ)]`. Against Lo's `T·Var(ŜR) = 1 + ½Sh²` this gives the exact relation
+**`SE(Δ̂) = SE(ŜR)·√( (1−ρ)(2+Sh²(1+ρ)) / (1+½Sh²) ) ≈ SE(ŜR)·√(2(1−ρ))`** whenever `Sh² ≪ 2` in the
+sampling frequency's own units — overwhelming at daily frequency. So the whole of "the paired error
+is far smaller than `√2·SE(ŜR)`" is the factor `√(1−ρ)`, and **the gate's resolving power is set by
+one number: how correlated the candidate is with the champion.** On `T` daily observations the
+annualised paired SE is `≈ √(2·252·(1−ρ)/T)`, i.e. `0.568·√(1−ρ)` on a 1,562-day window: 0.031 at
+`ρ=0.997`, 0.080 at 0.98, 0.172 at 0.909 — which lands on both of the ranges `learnings.md`
+bootstrapped, with no resampling and before any candidate exists. **But Ledoit–Wolf (2008) is the
+reason to treat that as a floor rather than a test**: the closed form assumes i.i.d. bivariate
+normal returns, and their simulation across six data-generating processes shows it is *liberal*
+under fat tails (≈2× the nominal rejection rate), under GARCH, and worse under both (≈3×). HAC
+inference is asymptotically valid and also liberal in finite samples; what is close to nominal
+everywhere is a **studentized circular-block bootstrap on the return pairs**, with a per-resample
+standard error and a calibrated block length. The lab's own paired stationary-block bootstrap is
+that family, and this source names the two free refinements it lacks (studentize inside the
+resample; calibrate `b` rather than reporting a grid). One reframing worth keeping: because power
+*rises* with `ρ` (Opdyke's correction to Jobson–Korkie's third error), consecutive ladder rungs
+correlating 0.909–0.997 are the test's most favourable regime, so failing to separate there is a
+stronger result than it looks; and testing against a *moving benchmark* is structurally lower-powered
+than testing a Sharpe against zero, which is the question the gate asks by construction. Tier A,
+`validation_overlap: false`.
+→ `notes/2026-08-24-testing-differences-of-sharpe-ratios.md`
+
+**The gate's own machinery is now covered, and it says the deflation bar is a property of the
+*search*, not of the candidate — through two channels, one of which the lab had not noticed.**
+Bailey–López de Prado's Deflated Sharpe Ratio is the Probabilistic Sharpe Ratio with its threshold
+set to `E[max{ŜR_n}]` under the null, approximated by extreme-value theory as
+`ŜR₀ = √V[{ŜR_n}]·((1−γ)Z⁻¹[1−1/N] + γ·Z⁻¹[1−1/(N e)])` with `γ` the Euler–Mascheroni constant, and
+`DSR = Z[ (ŜR − ŜR₀)√(T−1) / √(1 − γ̂₃ŜR + ((γ̂₄−1)/4)ŜR²) ]`. Six inputs: the candidate's Sharpe,
+sample length, skewness and kurtosis, plus **`N`, the number of *independent* trials, and
+`V[{ŜR_n}]`, the cross-trial variance of Sharpe ratios** — the last two being properties of the
+research programme rather than of the candidate. Channel one is the lab's own observation given a
+source: the authors interpolate `N̂ = ρ̂ + (1−ρ̂)·M`, so a family of near-identical candidates counts
+as almost one trial, which *is* "DSR clustering makes within-family tuning nearly free". Channel two
+is new here and runs the other way: the threshold scales with **√(cross-trial dispersion)**, so a
+single wild trial raises the bar for every later candidate by more than its increment to the count —
+a reason to prefer well-motivated exploration that is independent of the trial-count argument
+already on record. Two further yields. The paper's holdout critique ("holdout assesses the generality
+of a model as if a single trial had taken place… apply it enough times and false positives are
+expected") lands on this repo's design in a qualified way: the protocol here is *stronger* than the
+criticism's target, because the holdout is never used for selection — and the number of holdout
+evaluations is still a trial count of a second kind that nothing deflates. And the companion's
+**CSCV/PBO** — partition the `T×N` matrix of trial P&L into `S` blocks, run all `C(S,S/2)`
+half-splits, and report the fraction of splits where the in-sample winner lands below the
+out-of-sample median — is computable from series this repo already stores, with the standing caveat
+that it **scores returns** and re-uses the validation split. Tier B+ (tier-1 venue, derivation
+numerically verified, but the operative input `N` is reached by interpolation and no independent
+replication was found), `validation_overlap: false`.
+→ `notes/2026-08-24-deflated-sharpe-ratio.md`
+
+**And the rival correction, which disagrees with the folder's summary of the gate in one specific
+and checkable way, and corrects a sentence this folder has been repeating.** Harvey–Liu build the
+multiple-testing haircut on the identity `t = ŜR·√T`: convert Sharpe to t to p, adjust p for
+multiplicity (Bonferroni, Holm — both FWER; Benjamini–Hochberg–Yekutieli — FDR, valid under
+arbitrary dependence via `c(M)=Σ1/j`), convert back, and report
+`hc = (ŜR − HSR)/ŜR`. Two results. (a) **The haircut is strongly nonlinear**: larger than 50% for
+annualised Sharpe ratios below ~0.4, at most ~25% above 1.0 — so the industry's 50% rule is too
+lenient for weak strategies and too harsh for strong ones, and a book near 1.0 sits where this
+framework says the multiple-testing penalty should be *mild*. Recorded as a difference between two
+published corrections, not as a claim about the repo's thresholds, which are frozen and a human's
+decision. (b) **Under an FDR-controlling procedure the bar does not rise without limit with the trial
+count.** Bonferroni- and Holm-implied thresholds are monotone in the number of discoveries; the
+BHY-implied one fluctuates and then stabilises, because at fixed `α` the law of large numbers pins
+the realised false-discovery rate. So "every trial permanently raises the bar" is a **family-wise-
+error-rate statement, not a law of statistics** — and FDR is what these authors advocate for finance,
+on the argument that an investor cares about the proportion of allocated strategies that are duds.
+The companion (Harvey–Liu–Zhu, 313 published cross-sectional papers, 1967–2012) supplies the
+threshold everyone quotes — a new factor needs `t > 3.0`, explicitly a **lower bound** because
+unpublished failures are invisible — and the caution that it is defined on long–short, gross-of-cost,
+benchmark-free factor tests and does not transfer to a long-only candidate compared against an
+incumbent. The passage most relevant here is neither: their **in-sample-versus-out-of-sample**
+section shows data splitting trades type-I against type-II error, because a shortened in-sample
+window loses true discoveries that never reach the out-of-sample stage — the exact type-II mirror of
+`learnings.md`'s ⚠ standing protocol concern, from an independent direction. Tier A,
+`validation_overlap: false`.
+→ `notes/2026-08-24-multiple-testing-haircut.md`
+
+_With this, **the gate's own machinery is fully covered** — the statistic it reads (Lo), the deflator
+it applies (Bailey–López de Prado), the rival deflator (Harvey–Liu), and the test it does not run
+(Ledoit–Wolf). The folder's obligation to cover the scoring apparatus is discharged; all of it is
+explanatory, since `engine/` is frozen._
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -1138,8 +1225,34 @@ counterweight, which must be stated whenever this is used: these are the precisi
 Sharpe ratios, and the difference between two nearly-identical books on the same window is estimated
 far more precisely than `√2·SE` — neither source derives that paired standard error, so this is a
 reason to attach uncertainty to the gate's readings, **not** a proof that its increments are noise.
+**Amended 2026-08-24: the paired standard error is now derived and the counterweight is quantified.**
+It is `SE(ŜR)·√(2(1−ρ))` to an excellent approximation at daily frequency, exactly
+`SE(ŜR)·√((1−ρ)(2+Sh²(1+ρ))/(1+½Sh²))`, so the discount for pairing is precisely `√(1−ρ)`. The
+discipline stands unchanged in shape and is now sharper in content: **quote the paired error bar,
+computed from the candidate–champion correlation, never the single-strategy one.**
 → `notes/2026-08-23-statistics-of-sharpe-ratios.md`,
-`notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`
+`notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`,
+`notes/2026-08-24-testing-differences-of-sharpe-ratios.md`
+
+**Multiple-testing penalties are not one thing — the error rate being controlled is a *choice*, and
+this folder has been quoting the consequences of one choice as if they were arithmetic.** Two
+families exist. **FWER** procedures (Bonferroni, Holm; and any extreme-value threshold that grows in
+the trial count, which includes the deflated Sharpe ratio's `E[max{ŜR_n}]`) control the probability
+of even one false discovery, and their bar rises monotonically as trials accumulate. **FDR**
+procedures (Benjamini–Hochberg–Yekutieli) control the *proportion* of discoveries that are false,
+and their bar **stabilises** rather than diverging, because at fixed `α` the law of large numbers
+pins the realised rate. The finance-specific recommendation in the literature is FDR, on the ground
+that an investor cares about the share of allocated strategies that are duds, not about never
+allocating to one. Two consequences, both free and both explanatory only. (a) `learnings.md`'s "every
+trial permanently raises the bar" is true of the gate this repo has, and is **not** a general law —
+it is a property of controlling family-wise error. (b) The penalty's dependence on the *level* of the
+Sharpe ratio, not only on the trial count, is a real disagreement between the two published
+corrections: the haircut framework savages Sharpe ratios below ~0.4 and leaves those above 1.0
+roughly intact (≤ ~25%), while a `E[max]`-style deflator is driven by `N` and by the cross-trial
+dispersion. Neither observation licenses anything: `engine/` is frozen and its thresholds are a human
+decision. Both belong in the folder because the gate's machinery is now covered and its assumptions
+should be legible.
+→ `notes/2026-08-24-multiple-testing-haircut.md`, `notes/2026-08-24-deflated-sharpe-ratio.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -1645,6 +1758,39 @@ hypothesis fodder, then anti-candidates.
     estimating the book's expected return — the single most error-prone input on the list, on the
     shortest sample. Tier B+ survey over tier-A propositions, no overlap.
     → `notes/2026-08-23-kelly-criterion-growth-security-tradeoff.md`
+29. **[Added 2026-08-24] Free pre-trial screen, and it belongs with #1 and #2 at the top: write the
+    candidate's error bar down before building it, from one guessed correlation.** Memmel's corrected
+    Jobson–Korkie standard error for a *difference* of Sharpe ratios is
+    `T·Var(Δ̂) = 2(1−ρ) + ½(Sh_a² + Sh_b²) − Sh_a·Sh_b·ρ²`, which at daily frequency reduces to
+    `SE(Δ̂) ≈ √(2(1−ρ)/T)` per period, i.e. **`≈ 0.568·√(1−ρ)` annualised on this repo's 1,562-day
+    validation window** — 0.031 at `ρ=0.997`, 0.057 at 0.99, 0.080 at 0.98, 0.127 at 0.95, 0.172 at
+    0.909. Equivalently `SE(Δ̂) ≈ SE(ŜR)·√(2(1−ρ))`. The screen: *state the effect you expect and the
+    correlation with the champion you expect, and if the effect is inside that bar the trial buys a
+    point estimate the data cannot resolve while permanently raising the DSR bar for every later
+    candidate.* This is `learnings.md`'s own paired-bootstrap screen made closed-form and available
+    **before** the candidate exists — it requires no series, no resampling, and no trial. **Two hard
+    boundaries.** The formula assumes i.i.d. bivariate normal returns and is *liberal* under fat tails
+    and volatility clustering (empirically ≈2–3× the nominal rejection rate), so it is a **floor** on
+    the error bar: an effect inside it is certainly unresolvable, but a `|t| > 2` computed from it is
+    **not** evidence of significance. And it is inference about a difference only — multiple-testing
+    deflation is a separate correction that composes with it, never substitutes. Tier A, no overlap.
+    → `notes/2026-08-24-testing-differences-of-sharpe-ratios.md`
+30. **[Added 2026-08-24] Interpretation rule for the gate's own reading, replacing a sentence the
+    folder has been repeating as if it were arithmetic.** The deflation bar depends on the *search*,
+    not the candidate, through `N` (independent trials, reached by the interpolation
+    `N̂ = ρ̂ + (1−ρ̂)·M`) and `√V[{ŜR_n}]` (cross-trial dispersion of Sharpe ratios), plus the
+    candidate's skewness and kurtosis. Three usable readings. (a) *Clustering is cheap because the
+    trials are nearly one trial* — the lab's local observation, now sourced. (b) *Dispersion is
+    expensive*: a single wild trial raises the bar for every later candidate through `√V[{ŜR_n}]`,
+    by more than its increment to the count — an argument for well-motivated exploration that is
+    independent of the trial-count argument. (c) *"Every trial raises the bar" is a family-wise-error
+    statement*, true of this gate and not of statistics in general; an FDR-controlling procedure's
+    threshold stabilises instead of diverging, and the competing published correction also makes the
+    penalty depend on the Sharpe **level** (>50% below ~0.4, ≤~25% above 1.0). **What this does not
+    license:** nothing. `engine/` and `program.md` are frozen and the thresholds are a human decision;
+    this is here so the gate's assumptions are legible, and so a session stops writing an
+    error-rate-specific consequence as a law. Tier B+ / A, no overlap.
+    → `notes/2026-08-24-deflated-sharpe-ratio.md`, `notes/2026-08-24-multiple-testing-haircut.md`
 
 ## Coverage log
 
@@ -1660,6 +1806,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-21 (session 8) | Session 7's open questions (b) and (c), taken together as one theme: **what constraints actually do to a portfolio, and how to count diversification honestly.** Three sources, full text read directly for all three. The session's shape is one *correction* (constraints are estimators as well as leaks), one *closure* (the effective-number-of-bets axis, worth one session, now spent), and one genuinely uncovered axis found by accident (the diversification return, i.e. the part of a book's geometric return that comes from rebalancing rather than from its signal). | Jagannathan–Ma 2003 (JF; NBER WP 8922 read in full) (`2026-08-21-weight-constraints-as-covariance-shrinkage.md`); Meucci 2009 (Risk) + Polakow–Gebbie 2008 (J. Asset Management; arXiv preprint read in full) (`2026-08-21-effective-number-of-bets-diversification-measurement.md`); Willenbrock 2011 (FAJ; arXiv version read in full) + Booth–Fama 1992 (FAJ, second-hand via Willenbrock) (`2026-08-21-diversification-return-and-rebalancing.md`) |
 | 2026-08-22 (session 9) | Session 8's two named open questions, taken in order: (a) the decomposition of a **signal-driven** book's geometric return into a strategic and a rebalancing term — the axis session 8 called the highest-value remaining thread — and (b) the counterweight to the folder's constraints-are-good prior. Three sources, full text read directly for all three. The session's shape is one *theorem* that closes (a) at the identity level, one *correction* that reverses the sign the folder had assumed for the rebalancing term on a momentum book, and one *dissolution* of (b) into a continuum. | Fernholz–Karatzas 2009 (Handbook of Numerical Analysis Vol. XV; INTECH-hosted PDF read in full), building on Fernholz–Shay 1982 (JF) (`2026-08-22-excess-growth-and-return-decomposition.md`); Cuthbertson–Hayley–Motson–Nitzsche 2016 (IJFE; City Research Online accepted version read in full) (`2026-08-22-rebalancing-return-attribution-critique.md`); Brodie–Daubechies–De Mol–Giannone–Loris 2009 (PNAS; arXiv:0708.0046v3 read in full) (`2026-08-22-long-only-as-l1-regularization.md`) |
 | 2026-08-23 (session 10) | Session 9's open question (b), the last unpatched seam: **what the lab is actually scored on**, attacked from both ends. End one — the currency the folder imports in: the geometric-mean-maximisation / growth-optimal (Kelly) literature and its criticism, chased specifically to settle whether a log-growth quantity can ever be a scoring axis. End two — the currency the lab is scored in: the sampling distribution of the Sharpe ratio itself, which nothing in nine sessions had covered. Three notes, full text read directly for all three primary texts. The session's shape is one *closure* (log growth has no exchange rate to a risk-scored objective, which retires session 9's own top candidate and explains the lab's `gamma*` null), one *anti-candidate plus two re-weighted screens* (Kelly as a leverage rule; means >> variances >> covariances, with the multiple rising as the book gets more aggressive), and one *new free measurement* on the repo's headline statistic (the `eta(q)` annualisation check and a standard error). | Samuelson 1971 (PNAS; EuropePMC copy read in full) + Merton–Samuelson 1974 (JFE; MIT Sloan WP 623-72 read in full from MIT DSpace) (`2026-08-23-geometric-mean-maximization-fallacy.md`); MacLean–Thorp–Ziemba 2010/2011 (Quantitative Finance / World Scientific handbook chapter; authors' dated draft read in full from a Berkeley course page), with MacLean–Ziemba–Blazenko 1992 (Management Science) and Chopra–Ziemba 1993 (JPM) recorded **second-hand and flagged** — both closed-access, their tables reproduced in the text read (`2026-08-23-kelly-criterion-growth-security-tradeoff.md`); Lo 2002 (FAJ; course-page mirror read in full) (`2026-08-23-statistics-of-sharpe-ratios.md`) |
+| 2026-08-24 (session 11) | Session 10's two named open questions, in its own priority order, and both close: (a) **the paired standard error of a difference of Sharpe ratios** — the quantity the gate adjudicates and the one session 10 forbade itself to substitute the single-strategy error for — chased in the vocabulary that session named (Jobson–Korkie / Memmel; Ledoit–Wolf); and (b) **the deflated Sharpe ratio itself**, the last uncovered piece of the gate's own machinery, together with the rival multiple-testing correction the DSR authors call complementary. Three notes; full text read directly for Ledoit–Wolf, Bailey–López de Prado, the Bailey–Borwein–López de Prado–Zhu companion, Harvey–Liu and O'Connor, and in part for Harvey–Liu–Zhu. The session's shape is one *closed form* that reproduces a number the lab had only bootstrapped (and grades the lab's bootstrap as the right method with two free refinements), one *coverage obligation discharged* on the gate's statistic, and one *correction to a sentence the folder repeats* — "every trial raises the bar" is a family-wise-error-rate property, not a law. | Ledoit–Wolf 2008 (JEF; UZH-hosted published PDF read in full), with Jobson–Korkie 1981 (JF) and Memmel 2003 (Finance Letters) recorded **second-hand** from two independent restatements of their formula, and Opdyke 2007 recorded **unread** (`2026-08-24-testing-differences-of-sharpe-ratios.md`); Bailey–López de Prado 2014 (JPM; author-hosted PDF read in full) + Bailey–Borwein–López de Prado–Zhu 2016 (J. Computational Finance; author-hosted PDF read in full), with the Notices-of-the-AMS companion recorded **unread** (`2026-08-24-deflated-sharpe-ratio.md`); Harvey–Liu 2015 (JPM; Duke-hosted PDF read in full) + Harvey–Liu–Zhu 2016 (RFS; Duke-hosted PDF read in part) (`2026-08-24-multiple-testing-haircut.md`) |
 
 ### Open questions for future sessions
 
@@ -2034,6 +2181,76 @@ hypothesis fodder, then anti-candidates.
   reading. **Before ranking any future measurement first, check that its output is denominated in
   the unit the gate reads.**
 
+  **— (a) ANSWERED AND CLOSED 2026-08-24 (session 11), in closed form, and the discipline it demanded
+  is discharged.** The paired standard error exists, was derived in 1981, corrected in 2003, and is
+  `T·Var(Δ̂) = 2(1−ρ) + ½(Sh_a² + Sh_b²) − Sh_a·Sh_b·ρ²`. For equal Sharpe ratios it factorises to
+  `(1−ρ)[2 + Sh²(1+ρ)]`, so against Lo's single-strategy `1 + ½Sh²` the pairing discount is exactly
+  `√((1−ρ)(2+Sh²(1+ρ))/(1+½Sh²))` and, at daily frequency where `Sh² ≪ 2`, simply **`√(2(1−ρ))`**.
+  Annualised on a 1,562-day window that is `0.568·√(1−ρ)`, which reproduces both of the ranges
+  `learnings.md` bootstrapped (0.026–0.07 at `ρ > 0.98`; 0.13–0.17 at `ρ ≈ 0.9`) without resampling
+  anything, and is available *before* a candidate is built. Three riders, all load-bearing. The
+  closed form is **liberal** under fat tails and volatility clustering — Ledoit–Wolf measure ≈2–3×
+  the nominal rejection rate across six data-generating processes — so it is a **floor** on the error
+  bar and never evidence of significance. The method that is close to nominal is a **studentized**
+  circular-block bootstrap on the return *pairs* with a calibrated block length, which is the family
+  the lab already built, missing only the studentization and the calibration. And the power fact
+  reverses the intuitive reading: power *rises* with `ρ`, so the ladder's near-identical rungs are the
+  test's most favourable regime, and comparing against a moving benchmark is structurally
+  lower-powered than testing against zero — the gate asks the low-power question by construction.
+  Recorded as candidate #29.
+  **— (b) ANSWERED AND CLOSED 2026-08-24, and the gate's machinery is now fully covered.** The
+  deflated Sharpe ratio is the Probabilistic Sharpe Ratio with its threshold set to the
+  extreme-value approximation of `E[max{ŜR_n}]`. What it assumes about the candidate set is exactly
+  what `learnings.md` had been inferring locally: the deflation depends on the number of
+  **independent** trials (`N̂ = ρ̂ + (1−ρ̂)M`, so a tight family is nearly one trial) and on the
+  **cross-trial variance of Sharpe ratios** (so dispersion is expensive in a way the trial count alone
+  does not capture — the one genuinely new fact). The rival correction, which the DSR authors
+  themselves call complementary, adds two things a single-threshold framing cannot: the penalty is
+  strongly **nonlinear in the Sharpe level** (>50% below ~0.4, ≤~25% above 1.0), and under an
+  **FDR**-controlling procedure the bar **stabilises** instead of rising without limit — so "every
+  trial raises the bar" is a property of controlling family-wise error, not a law. All of it is
+  explanatory; `engine/` is frozen. Recorded as candidate #30.
+
+- **New open questions raised by session 11, in priority order.**
+  (a) *The one refinement the folder now recommends, and it costs nothing.* The lab's paired
+  bootstrap is the right method but is not studentized: Ledoit–Wolf show that a bootstrap which
+  reuses a single standard error, or does not studentize at all, buys no accuracy over asymptotic
+  inference, and that all of their gain over HAC comes from recomputing a standard error inside each
+  resample and taking the quantile of `|Δ̂* − Δ̂|/SE(Δ̂*)`. Their second refinement is to **calibrate**
+  the block length against a fitted bivariate GARCH rather than report robustness across a grid.
+  Neither is a literature question; both are notes that the next paired-error measurement should be
+  studentized and calibrated. Low cost, and the only reason it is ranked first is that everything
+  else on this list is optional.
+  (b) *The one diagnostic this session found and did not rank first, deliberately.* CSCV/PBO is
+  computable from the `T×N` matrix of stored trial return series and would answer, non-parametrically,
+  whether this lab's **selection procedure** has been overfitting — a question no statistic in the
+  repo asks. It is ranked second and hedged because it fails two of the folder's own tests: it
+  **scores returns**, so it is not covered by the holdings-only exemption (session 6's item (c)), and
+  it is computed on the validation split, so it re-uses the split the gate already reads rather than
+  supplying an independent look. It also assumes its columns are configurations of one search, which
+  this repo's cross-family trial log is not. Worth doing only as a deliberate, journalled
+  measurement on one family's ladder, never as a free diagnostic. Session 10's discipline note (d)
+  applies: check the unit first — PBO is denominated in *rank consistency*, not in Sharpe.
+  (c) *The gap both deflators leave, and it is now the only unpatched seam in the scoring apparatus.*
+  Every multiple-testing correction read here treats the trials as draws to be counted or
+  correlation-discounted. None of them treats a trial that was **motivated by a prior**, and both
+  literatures say in passing that they should: Harvey–Liu–Zhu state that "a factor derived from a
+  theory should have a lower hurdle than a factor discovered from a purely empirical exercise" but
+  offer no machinery for it, and the DSR authors' optimal-stopping aside assumes the candidate set is
+  already restricted to the "theoretically justifiable". A source that formalises a *prior-weighted*
+  or hierarchical multiple-testing correction would be the one thing that could distinguish this
+  lab's hypothesis-first protocol from a parameter sweep of the same length. Named vocabulary not yet
+  searched: Bayesian and hierarchical multiple testing (both sources gesture at it and decline it),
+  and empirical-Bayes / local-FDR treatments of factor discovery. Medium priority, explanatory only —
+  it would not open a build and could not change a frozen gate — but it is the only remaining
+  question about the scoring apparatus that has an answer worth having.
+  (d) *Recorded as declined, so it is not rediscovered as an opportunity.* The obvious use of
+  everything in this session — recomputing the repo's own DSR under a different `N̂`, a different
+  error rate, or the haircut framework, and reporting that the champion "would have passed/failed" —
+  is **declined**. It is reinterpreting the promotion criterion, which lives in a frozen file and is a
+  human decision, and it is the same failure mode session 7's item (d) recorded. The notes state the
+  assumptions; they do not re-score anything.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -2045,6 +2262,29 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 11 (2026-08-24) read full text directly for five of its six sources** and in part for the
+  sixth. Channels that worked first try: **university department PDF mirrors of published journal
+  articles** (`econ.uzh.ch/dam/jcr:…` served the typeset *Journal of Empirical Finance* article
+  complete with volume and page headers, after the author's own `ledoit.net` copy failed to
+  download and the older `wp_iew` working-paper path 404'd), an **author's personal site**
+  (`davidhbailey.com/dhbpapers/`, which serves the SSRN-stamped versions of both López de Prado
+  papers), and a **faculty directory listing** — when a guessed filename 404'd, fetching the parent
+  `Published_Papers/` directory and grepping its `href`s found the correct one immediately, which is
+  a faster route than another search and worth adding to the recipe. Limits hit, all documented:
+  **ams.org returned 403** on the Notices PDF (the paper containing the formal backtest-overfitting
+  proof is therefore recorded as **unread**, with the two claims that depend on it flagged
+  second-hand), and **Semantic Scholar's rate limit bit on the third consecutive call** while its DOI
+  endpoint stayed reliable when calls were spaced by several seconds. Index behaviour: `hhv059`
+  resolves in **neither Semantic Scholar** (the DOI endpoint returns "not found" for a
+  2,000-citation RFS article) nor usefully in OpenAlex's default path, and `10.21314/jcf.2016.322`
+  returns **`cited_by_count: 0`** from OpenAlex against Crossref's 51 — a fifth and sixth instance of
+  session 7's "disbelieve a lone low count", this time with a *zero* and a *not-found* as the tells.
+  Crossref's `query.bibliographic` search again resolved both. One methodological note worth keeping:
+  two sources whose primary text could not be read (Jobson–Korkie, Memmel) were recovered by finding
+  **two independent restatements of their formula** that agree algebraically, which is a better
+  standard than a single second-hand summary and is how the closed form in this session's top
+  candidate was verified before use.
 
   **Session 10 (2026-08-23) read full text directly for every primary source**, and the session's
   access lesson is that **course-page and reading-list mirrors are now the most reliable channel for
