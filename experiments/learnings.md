@@ -940,3 +940,94 @@ across experiments; prune entries that later evidence contradicts.
   at zero marginal cost: the train Sharpe, and a paired-bootstrap SE of the
   candidate-versus-champion difference, which would let the gate decline to promote on an
   unresolvable margin rather than being obliged to.
+
+- **The family's resolution floor is now measured two independent ways, they agree, and
+  every remaining idea in the family sits below it.** (a) *Closed form.* Memmel's correction
+  to Jobson–Korkie (`research/SUMMARY.md` #29) gives the paired SE of a Sharpe difference
+  before any candidate exists: **`SE ≈ 0.568·sqrt(1−rho)`** on this 1,562-day window — 0.031
+  at `rho` = 0.997, 0.057 at 0.99, 0.084 at 0.978, 0.171 at 0.909. Checked against the
+  bootstrap recorded on 2026-08-23 it reproduces it closely everywhere and near-exactly on
+  the two comparisons that matter (#42-vs-champion: 0.140 closed-form against 0.138
+  bootstrapped). **Use it as the pre-trial screen; it needs no series and no resampling, so
+  it applies to an idea before the file is written.** Carry it as a *floor*, never as a
+  significance test — it assumes i.i.d. bivariate normal returns and is liberal under fat
+  tails and volatility clustering. (b) *CSCV/PBO*, the first run here (`research/SUMMARY.md`
+  #30), on the 12-member four-horizon family: **PBO 0.454, mean OOS rank of the in-sample
+  winner 0.537**, averaged over `S` = 8..16. Calibrated on its own null and on a real
+  alternative — 12 series at the family's own vol and `rho`, 40 replicates per point — a true
+  advantage of `delta` = 0 gives PBO 0.506/rank 0.495, `delta` = 0.10 gives 0.317/0.623,
+  `delta` = 0.30 gives 0.023/0.899. **The observed reading sits between `delta` = 0 and 0.05,
+  and the statistic has no power below ~0.10.** Against that, the family's observed validation
+  Sharpe spread is **0.304**. Two unrelated methods, one number: **this family cannot resolve
+  a Sharpe difference below about 0.08–0.10, and selecting its validation-best member is a
+  coin flip on out-of-sample rank.** This is the same conclusion the paired bootstrap reached
+  from promotion steps (no promotion clears `|t| = 2`), reached a third way. *Do not re-run
+  CSCV here* — it will not move without candidates less correlated than 0.978. *One artifact
+  caught and discarded:* the regression of the winner's OOS Sharpe on its IS Sharpe has slope
+  −0.98, which looks damning and is not — the same slope appears in the control with a **real**
+  edge (−1.00) and in pure noise (−0.78), because conditioning on `argmax` induces it
+  mechanically. Simulate under the null before believing any selection-conditional statistic.
+
+- **Averaging pays only when its components disagree, and at `rho` ≈ 0.98 there is nothing
+  left to average — the fourth averaging axis, and the first killed without a trial.**
+  Formation-date (#46), instrument-subsample (#47) and rebalance-phase (#48) vintages all
+  lost on top of the four-horizon base; buffer-band vintages were killed free at 0.963 weight
+  overlap. **Cross-specification model averaging** — combining the *distinct constructions*
+  the lab has already run rather than vintages of one procedure — is the natural response to
+  the PBO finding above (if selection is uninformative, average instead) and it passes
+  `research/SUMMARY.md` #2's design test, since these are estimates of the same quantity, not
+  different return streams, so the capital-dilution tax does not apply. It dies on arithmetic.
+  The average of stored return series *is* the averaged portfolio's return before the cost
+  difference, and the combined book trades less than its legs, so the free number is a lower
+  bound; best subset of each size, cherry-picked ex-post over all `C(13,k)` subsets and
+  therefore an optimistic upper bound on any honest a-priori choice: **2-way 1.216, 3-way
+  1.209, 4-way 1.205, 5-way 1.202, 6-way 1.197, all 13 1.150, against the champion's 1.229** —
+  every one below, monotone decreasing in leg count. At `rho` = 0.978 across four legs the
+  volatility falls ~1% (~0.012 Sharpe) while the pull toward the family mean costs several
+  times that. **General form, and it now covers all four axes: the aggregation gain is bounded
+  by the components' disagreement, so a family that has converged cannot be rescued by
+  combining its members.** Check the correlation before proposing any combination.
+
+- **The skip-month has a second structural consequence, and it is the opposite of the one
+  that was retracted: it makes the monthly re-target sign-neutral.** `research/SUMMARY.md`
+  #24 argued that a constant-weight re-target is a **contrarian** overlay partially cancelling
+  the continuation bet, and named this the membership band's best remaining justification —
+  a third one, distinct from the cost claim retired earlier and the risk-breadth claim that
+  replaced it. Its premise is holdings-only measurable and it fails. Over the champion's 72
+  monthly formation trades in validation (L1 weight units): total trade 0.6508, of which
+  entries 0.1132, exits 0.0895, re-sizing of names held through **0.4481**; within that
+  re-sizing the **pure drift-reset component is 0.0584 — 9.0% of all trade** — and a sign test
+  of the executed re-sizing against the drift it undoes splits **0.2257 with / 0.2224 against,
+  a contrarian share of 0.496**. There is no systematic contrarian trade for a band to
+  suppress. The mechanism is not luck: the composite deliberately skips the most recent month,
+  which is exactly the month whose drift the re-target undoes, so signal and drift are
+  near-orthogonal by construction. **This does not revive the retracted "second use" claim** —
+  that was about *riding* the trailing month in weighting, which #50 refuted at a cost of
+  0.276. The point here is the reverse: the skip-month stops the re-target taking a position
+  on that month in either direction. **The membership band now has no live justification of any
+  kind on this base** — cost measured at 0.003, expectation refuted here, risk breadth the only
+  surviving one and it is not on the gate's axis.
+
+- **[CORRECTION, arithmetic only] "Turnover reduction is a spent lever" was measured on the
+  K=6 base and the current champion is not on it.** That entry prices the drag at "0.45%/yr ≈
+  0.019 Sharpe" from 3.0x annual turnover. Recomputed: `mom_zscore_overlap6_hzn_avg4` 3.11x →
+  0.47%/yr → **0.021** Sharpe, but the champion `mom_hzn_avg4_nobuffer` runs **8.32x → 1.25%/yr
+  → 0.051** Sharpe. The champion trades 2.7x more and pays 2.4x the drag. **The conclusion
+  survives and its reason changes**: 0.051 is still inside the 0.057 floor at `rho` > 0.99, so
+  eliminating trading entirely would buy an unresolvable margin — but the entry should not be
+  quoted as "the drag is negligible" for this book, and 0.019 is the wrong number for it.
+
+- **A session may correctly spend zero trials, and the bar for doing so is now a table rather
+  than a judgement.** Every idea constructible in this family on 2026-08-24 was screened
+  against the closed-form floor before anything was written, and all of them failed: the
+  two-speed fresh-core/overlapped-tail book (−0.09..+0.05 against a 0.11 floor), K=6 on the
+  no-buffer base (−0.09 against 0.14), a log-return score transform (<0.045 against 0.057,
+  since #54 prices all spacing information at 0.045), cross-specification averaging and the
+  band's expectation argument (both killed outright by free measurements), and deleting the
+  skip-month (large but negative by construction, and advised against by
+  `research/SUMMARY.md` #11). **Two rules generalise from that exercise.** (i) The screen is
+  cheapest applied to the *idea*, not the candidate — the closed form needs only a guessed
+  correlation. (ii) **A rationale that would recover a mechanism the journal records as
+  helping the holdout is holdout-informed and must be declined even when it is otherwise the
+  best idea available** — the two-speed book was exactly that, and it is the first time the
+  post-#43 corollary has bound a session prospectively rather than retrospectively.

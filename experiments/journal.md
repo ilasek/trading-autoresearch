@@ -3018,3 +3018,274 @@ on an unresolvable margin rather than being obliged to).
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-24 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Session summary — 2026-08-24 (nightly)
+
+- **Integrity check — one deviation, corrected before any work.** `git fetch origin --prune`
+  clean; `git branch -r --no-merged origin/main` returned **nothing**, so no previous
+  session's work is stranded off `main`. As on 2026-08-19 through -23, the session **opened
+  on a per-run branch** (`main-aufnbz`), pointing at exactly `origin/main` (`5b07e64`) with
+  no commits of its own, while local `main` was 28 behind. Per the standing instruction never
+  to run trials from a per-run branch, both were corrected first (`git checkout main &&
+  git reset --hard origin/main`). Note the session-start hook printed "integrity check OK —
+  on main" while `git status -sb` said `main-aufnbz`; the hook's check does not detect this.
+  **This is the sixth consecutive session to open on a per-run branch.** Engine tests green
+  (16 passed). Store fresh through 2026-08-24.
+- Experiments run: **0 of the 8-trial budget.** Verdicts: none. **No holdout look was
+  spent** — the count since 2026-08-17 stands at five.
+- Five free measurements, no trial spent by any of them. Four are on the stored validation
+  return series in `experiments/trial_returns/`; one is a holdings-only weight-matrix
+  decomposition on prices truncated at 2023-12-31. None re-runs a strategy through the
+  engine, none produces a new backtest, none touches the trial count, none touches holdout.
+
+### The night in one line
+
+The session set out to find a challenger and instead **measured the reason there isn't
+one**: two independent methods now put this family's resolution floor at ~0.08–0.10 of
+validation Sharpe, every remaining idea in the family has a pre-registered effect below it,
+and a CSCV/PBO run says selecting the validation-best candidate from this repo's trial set
+is a coin flip on out-of-sample rank.
+
+### Why zero trials — stated first, because it is the session's main decision
+
+Last session stopped at one trial on the qualitative ground that every remaining idea "is a
+knob or a re-tread". Tonight that judgement acquires a number. The screening rule
+`learnings.md` adopted on 2026-08-23 — compute the paired standard error of a candidate's
+expected effect before spending the trial — was applied to every idea this session could
+construct, using the closed form validated in free result 2:
+
+| proposed candidate | mechanism | pre-registered effect | expected `rho` | floor | verdict |
+|---|---|---|---|---|---|
+| two-speed book (fresh core, K=6 tail) | recover K=6 temporal breadth without the blurred-core rotation cost | −0.09 .. +0.05 | ~0.96 | 0.11 | inside floor **and holdout-informed** — killed twice over |
+| K=6 overlap on the no-buffer base | fill the unrun cell of the K x buffer 2x2 | ~−0.09 | ~0.94 | 0.14 | inside floor |
+| log-return score before z-scoring | changes spacing only; #54 prices all spacing at 0.045 | <0.045 | ~0.99 | 0.057 | inside floor |
+| cross-specification model averaging | PBO says selection is uninformative, so average instead | see free result 3 | ~0.99 | 0.057 | **killed outright, for free** |
+| reinstate/widen the membership band | research candidate #24's expectation argument | see free result 4 | ~0.99 | 0.057 | **premise refuted, for free** |
+| delete the skip-month | never tested locally | large, but negative by construction | ~0.92 | 0.16 | would not promote; folder candidate #11 explicitly advises against |
+
+Every row is inside its own floor or dead on the diagnostic. Two of them were killed by
+measurements run tonight rather than by argument. The two-speed book deserves a specific
+note: it is the only idea that addresses the rotation-speed rationale `learnings.md` demands
+of any fourth vintage axis, and it was **still** declined, because designing a construction
+to recover K=6's benefit is holdout-informed — this session has read the journal, and the
+journal records that K=6 is worth +0.5 of holdout Sharpe. That is precisely the corollary
+`learnings.md` recorded after #43 and it binds here.
+
+### Free result 1 — CSCV / probability of backtest overfitting, the first ever run here
+
+`research/SUMMARY.md` candidate #30 records CSCV/PBO as "computable from series this repo
+already stores". Split the 1,562 validation days into `S` contiguous blocks, take every way
+of choosing `S/2` as in-sample, find the IS-best candidate, and record its out-of-sample
+rank. PBO is the fraction of splits where the IS winner lands below the OOS median.
+
+Restricted to the current four-horizon family (12 candidates, median pairwise daily
+correlation 0.978):
+
+| `S` | splits | PBO | mean OOS rank of the IS winner |
+|---|---|---|---|
+| 8 | 70 | 0.357 | 0.597 |
+| 10 | 252 | 0.433 | 0.553 |
+| 12 | 924 | 0.530 | 0.484 |
+| 14 | 3,432 | 0.390 | 0.584 |
+| 16 | 12,870 | 0.559 | 0.470 |
+| **mean** | | **0.454** | **0.537** |
+
+**The statistic was calibrated before it was believed, on its own null and on a real
+alternative** — the discipline `learnings.md` adopted after the `eta(q)` episode. Simulating
+12 series at the family's own volatility (22.4%) and its own pairwise correlation (0.978),
+40 replicates each, with a true annualised Sharpe advantage `delta` for one column:
+
+    delta      0.00   0.05   0.10   0.15   0.20   0.30   0.40
+    PBO        0.506  0.474  0.317  0.221  0.192  0.023  0.001
+    OOS rank   0.495  0.514  0.623  0.714  0.731  0.899  0.923
+
+The observed reading (PBO 0.454, rank 0.537) sits **between `delta` = 0 and `delta` = 0.05**,
+and the statistic has no power to separate anything below ~0.10. Against this, the family's
+*observed* validation Sharpe spread is **0.304** (0.925 to 1.229). So the gate has been
+adjudicating differences of up to 0.30 that this measurement says are consistent with a true
+best-versus-rest advantage of at most ~0.05.
+
+**One artifact caught and discarded.** The regression of the winner's OOS Sharpe on its IS
+Sharpe has slope −0.98, which looks like a devastating overfitting signature. It is not: the
+same slope appears in the control **with a real edge** (−1.00) and in pure noise (−0.78). It
+is a mechanical consequence of conditioning on `argmax` and carries no information. Recorded
+so it is not rediscovered and reported as a finding.
+
+**Boundaries.** CSCV scores stored returns and re-uses the validation split, so it is free of
+the trial count but not of that split; its blocks are contiguous and it assumes rough
+exchangeability across them, which a six-year window containing 2020 satisfies only loosely;
+and `delta` is modelled as one column with an edge, so it calibrates rather than estimates.
+
+### Free result 2 — the closed-form paired standard error reproduces the repo's bootstrap
+
+`research/SUMMARY.md` candidate #29 (Memmel's correction to Jobson–Korkie) says the paired SE
+is available in closed form before a candidate exists. Checked against the bootstrap
+`learnings.md` recorded on 2026-08-23:
+
+| promotion step | Δ Sharpe | `rho` | SE closed-form | SE bootstrap (recorded) |
+|---|---|---|---|---|
+| baseline → `overlap6_daily_trim` | +0.241 | 0.909 | 0.171 | 0.149 |
+| → `overlap6_hzn_avg` | +0.005 | 0.996 | 0.036 | 0.030 |
+| → `overlap6_hzn_avg4` | +0.008 | 0.997 | 0.031 | 0.030 |
+| → `hzn_avg4_k1` | +0.067 | 0.945 | 0.134 | 0.134 |
+| → `hzn_avg4_k1_cohort_trim` | +0.014 | 0.994 | 0.043 | 0.027 |
+| → `hzn_avg4_nobuffer` (champion) | +0.028 | 0.997 | 0.030 | 0.026 |
+| **#42 vs champion** | **−0.109** | **0.939** | **0.140** | **0.138** |
+
+Agreement is close everywhere and near-exact on the two comparisons that matter most. The
+candidate is adopted: `SE ≈ 0.568·sqrt(1−rho)` on this window — 0.031 at `rho` = 0.997, 0.057
+at 0.99, 0.084 at 0.978, 0.171 at 0.909. It needs no series and no resampling, so the screen
+can now be applied to an idea **before it is written**, which is how tonight's table above was
+produced.
+
+**The convergence is the point.** Free results 1 and 2 are methodologically unrelated — one
+resplits the validation window and ranks candidates, the other is a delta-method formula on a
+pair — and they land on the same number: this family cannot resolve a Sharpe difference below
+about 0.08–0.10. Carry the closed form as a **floor**, never as a significance test: it assumes
+i.i.d. bivariate normal returns and is liberal under fat tails and volatility clustering.
+
+### Free result 3 — cross-specification model averaging is dead, killed without a trial
+
+Free result 1 motivates exactly one constructive idea: if selecting among near-equivalent
+candidates is uninformative, the forecast-combination literature (`research/SUMMARY.md`
+candidate #2) says **average** them instead. It passes that candidate's own design test —
+these are estimates of the same quantity, not different return streams, so the
+capital-dilution tax does not apply.
+
+It can be screened for free, because the average of stored return series is the return of the
+averaged portfolio **before** the cost difference, and the combined book trades *less* than
+its legs, so the free number is a lower bound. Best subset of each size, **cherry-picked
+ex-post over all `C(13,k)` subsets** and therefore an optimistically biased upper bound on
+what an honest a-priori choice would get:
+
+    best 2-way 1.216   best 3-way 1.209   best 4-way 1.205
+    best 5-way 1.202   best 6-way 1.197   all 13     1.150     champion 1.229
+
+Every one is **below the champion**, and the ceiling is monotone decreasing in the number of
+legs. The variance-reduction prize is tiny — at `rho` = 0.978 across four legs the volatility
+falls only ~1%, worth ~0.012 Sharpe — while the pull toward the family mean costs far more.
+Adding back the most generous cost saving (~0.02 Sharpe) leaves the cherry-picked best pair at
+~1.236 against the champion's 1.229, a margin of 0.007 against a floor of 0.057. **This is the
+fourth averaging axis to die and the first killed without spending a trial.** The general
+statement it adds to the three vintage nulls: averaging pays only when its components
+disagree, and at `rho` ≈ 0.98 there is nothing left to average.
+
+### Free result 4 — the membership band's last live argument, refuted on its premise
+
+`research/SUMMARY.md` candidate #24 argues that a constant-weight re-target is a **contrarian**
+overlay that partially cancels a continuation bet, and names this "the one a proposal to
+reinstate or widen the band should now lead with" — a third justification, distinct from the
+cost claim `learnings.md` retired and the risk-breadth claim that replaced it. Its premise is
+holdings-only measurable. Decomposing the champion's 72 monthly formation trades over
+validation (L1 weight units, exposure normalised so the trim scalar does not contaminate it):
+
+    total L1 trade per rebalance          0.6508
+      entries (new names)                 0.1132
+      exits (dropped names)               0.0895
+      re-sizing of names held through     0.4481
+
+    within that re-sizing:
+      pure drift-reset trade              0.0584   (9.0% of total trade)
+      signal-driven trade                 0.4561
+
+    sign test of the executed re-sizing against the drift it undoes:
+      moving WITH the drift               0.2257
+      moving AGAINST the drift            0.2224   -> contrarian share 0.496
+
+**The contrarian overlay is a coin flip, not a tilt.** The pure drift-reset component is 9% of
+trade, and the executed re-sizing splits 49.6/50.4 against the drift — indistinguishable from
+sign-neutral. There is no systematic contrarian trade for a band to suppress, so candidate
+#24's live consequence is dead and the band has no third justification.
+
+**And the mechanism for that is worth keeping, because it is not an accident.** The composite
+deliberately **skips the most recent month**, which is exactly the month whose price drift the
+re-target undoes. The signal and the drift are near-orthogonal by construction. So the
+skip-month, already load-bearing in selection, has a second structural consequence nobody had
+noticed: it makes the monthly re-target sign-neutral with respect to the previous month's
+returns. This does *not* revive the retracted "second use" claim — that claim was about riding
+the trailing month in *weighting*, which #50 refuted at a cost of 0.276. The present point is
+the opposite: the skip-month prevents the re-target from taking a position on that month in
+either direction.
+
+### Free result 5 — a correction to `learnings.md`, arithmetic only
+
+The entry "**Turnover reduction is now a spent lever on the overlapping-tranche base**" prices
+the champion's entire cost drag at "0.45%/yr ≈ 0.019 Sharpe" and retires no-trade bands,
+weight-change thresholds and cheaper rebalance mechanics on that basis. That figure was
+measured on the **K=6** book at 3.0x annual turnover. The entry names the base, but it has
+since been read as a general statement, and **the current champion is not on that base**:
+
+    mom_zscore_overlap6_hzn_avg4 (#42)   turnover 3.11x   drag 0.47%/yr   0.021 Sharpe
+    mom_hzn_avg4_nobuffer (champion)     turnover 8.32x   drag 1.25%/yr   0.051 Sharpe
+
+The champion trades **2.7x more** than the book the claim was measured on, and its cost drag is
+**2.4x larger**. The conclusion survives — 0.051 is still inside the 0.057 floor at `rho` > 0.99,
+so eliminating trading altogether would buy an unresolvable margin — but the *reason* changes
+from "the drag is negligible" to "the drag is real and still smaller than the error bar", and a
+future session should not quote 0.019 for this book.
+
+### For the human — the concern is unchanged at four points, but the diagnosis is now different in kind
+
+No promotion tonight, so no fifth data point and no sixth holdout look; the ⚠ standing protocol
+concern stands exactly as recorded. What tonight adds is underneath it. The concern has always
+been "the gate reads the split that has been wrong every time since #43". Free result 1 says
+something separate and, for the lab's future, heavier:
+
+**Within this family, the gate's axis has no resolving power left at all.** Not "it reads the
+wrong split" — on its own split, selecting the best of these twelve candidates is a coin flip
+on out-of-sample rank, and the whole 0.304 observed spread is consistent with a true advantage
+of ~0.05. That is the same conclusion the paired bootstrap reached from promotion steps (no
+promotion in this repo's history clears `|t| = 2`) and the same one the closed form reaches from
+correlations alone, now reached a third way from resampled sub-windows.
+
+The practical consequence is a research-programme question, not a strategy question, and it is
+the honest thing to put in front of a human. Every family in `program.md` other than
+cross-sectional momentum is closed in `research/SUMMARY.md` on a stated mechanism — trend
+following on five structural obstacles, risk parity by a theorem, short-term reversal on a sign
+problem, low-vol/quality on mechanism, combinations on the dilution tax. Family 1 is mapped to
+its resolution limit. **The agenda as written has been driven to the point where the data can no
+longer distinguish its remaining candidates**, and the two things that would change that —
+a wider or point-in-time universe, and a second scored quantity — both live in files no session
+may edit. `program.md` lists the first under "Future upgrades (do not start without human
+approval)". This is that request.
+
+The standing recommendation is otherwise unchanged: `mom_zscore_overlap6_hzn_avg4` (#42) is the
+best strategy this lab has produced on every axis the mission names (holdout Sharpe 1.377,
+holdout return 34.9%, holdout maxDD −20.1%, turnover 3.1x), is top of the train column among
+K=6 books, and is not distinguishable from the incumbent on the gate's own axis (`t` = −0.78 by
+the closed form tonight, −0.79 by bootstrap). Its file is intact in `strategies/candidates/`.
+
+### Ideas for next session
+
+1. **The screen is now closed-form and should be applied before writing any candidate file.**
+   `SE ≈ 0.568·sqrt(1−rho)`; a pre-registered effect below that buys a point estimate the data
+   cannot resolve. For a variant of the champion (`rho` > 0.99) that bar is 0.057; nothing left
+   in this family clears it. **Idea provenance: `research/SUMMARY.md` candidate #29, validated
+   tonight against the lab's own bootstrap.**
+2. **Do not re-run CSCV/PBO on this family.** It is measured, calibrated against its own null and
+   against a real alternative, and the answer (`delta` between 0 and 0.05) will not move without
+   new candidates that are genuinely less correlated than 0.978. Re-run it only if the family's
+   composition changes materially. **Idea provenance: `research/SUMMARY.md` candidate #30.**
+3. **Retired from the idea list:** cross-specification model averaging (free result 3, killed);
+   research candidate #24's expectation argument for the membership band (free result 4, premise
+   refuted); the two-speed fresh-core/overlapped-tail book (inside the floor *and*
+   holdout-informed — recorded so it is not re-proposed as if it were new).
+4. **Still free and still never exercised** (carried over untouched for the fifth session): the
+   closed-form weight-vector triage for a proposed trend/MA signal, `research/SUMMARY.md`
+   candidate #3. It needs a proposed trend signal to triage and no session has had one worth
+   triaging — and after tonight, a trend signal is one of the few things that could be
+   decorrelated enough from the champion for a trial to resolve anything at all. **Idea
+   provenance: `research/SUMMARY.md`.**
+5. **The one refinement the folder recommends and tonight did not build**: studentize the paired
+   block bootstrap and calibrate its block length rather than reporting a grid
+   (`research/SUMMARY.md` session-11 open question (a)). Tonight's closed form made it
+   unnecessary for the screen, but it remains the accurate test if one is ever needed.
+   **Idea provenance: `research/SUMMARY.md`.**
+6. **A harness matter for a human, not a research idea.** **Six** consecutive sessions have now
+   opened on a per-run branch and corrected it by hand, and tonight the session-start hook
+   *reported the check as passing* while the working branch was `main-aufnbz` and local `main`
+   was 28 commits behind. A session that trusted the hook instead of running `git status -sb`
+   itself would have run trials against a stale champion and a stale trial count. The hook's
+   integrity check should be fixed or removed; a check that reports OK when it is not is worse
+   than no check.
+- No engine issues encountered this session.
