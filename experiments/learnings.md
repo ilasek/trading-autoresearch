@@ -1031,3 +1031,66 @@ across experiments; prune entries that later evidence contradicts.
   helping the holdout is holdout-informed and must be declined even when it is otherwise the
   best idea available** — the two-speed book was exactly that, and it is the first time the
   post-#43 corollary has bound a session prospectively rather than retrospectively.
+
+- **The two splits have opposite resolving power, and the lab measured this only on the split
+  that has none. This is the strongest and narrowest form of the ⚠ concern above; read it
+  before the older statements of that concern, which it partly supersedes.** Three sessions
+  error-barred *validation* comparisons and none had ever error-barred a *holdout* one. Applying
+  the same Memmel/Jobson–Korkie closed form to every predecessor of the current champion — using
+  only holdout Sharpe scalars already recorded in `trials.jsonl`, no 2024+ data loaded, no
+  strategy re-run, no holdout look spent — gives:
+
+      predecessor                          rho     d_val   t_val    d_hold   t_hold
+      mom_12m_baseline                    0.896   -0.364   -1.98    +0.449    +1.60
+      mom_zscore_overlap6_daily_trim #32  0.921   -0.122   -0.76    +0.533    +2.20
+      mom_zscore_overlap6_hzn_avg   #41   0.928   -0.117   -0.76    +0.629    +2.71
+      mom_zscore_overlap6_hzn_avg4  #42   0.939   -0.109   -0.78    +0.686    +3.22
+      mom_zscore_hzn_avg4_k1        #43   0.991   -0.042   -0.77    +0.184    +2.24
+      mom_hzn_avg4_k1_cohort_trim   #45   0.997   -0.028   -0.93    +0.122    +2.67
+
+  **On validation not one of the six is distinguishable from the champion** (largest |t| = 1.98,
+  four below 0.80). **On holdout five of six beat it at |t| > 2**, monotone in date-overlap
+  content. The holdout window is *shorter* (683 days vs 1,562, SE inflated 1.51x), so this is
+  the harder comparison, not the easier one. For #42 the gap clears |t| = 2 at any `rho` > 0.842
+  against a 0.939 anchor, so it does not hinge on the unobservable holdout correlation. Upgrade
+  the 2026-08-23 formulation — "the gate broke a tie and broke it the wrong way" — to: **the gate
+  broke a tie on the one split with no resolving power, and the split that resolves disagrees
+  five times out of six.** Boundaries: holdout `rho` is anchored on the validation value and the
+  break-even is reported rather than relied on; the closed form is a *floor* on the error bar, so
+  every |t| is an **upper** bound on the evidence; and the largest `t` values belong to the most
+  correlated pairs, which is arithmetic, not corroboration.
+
+- **Attenuation is the base case; inversion is the finding — and the split between them is now
+  calibrated at p ≈ 0.01 rather than asserted.** `research/SUMMARY.md` #33 says that under any
+  positive shrinkage `E(alpha|alpha_hat) = kappa*alpha_hat`, a candidate scoring lower on holdout
+  than on validation is *predicted*, so the level drop this repo cited for six sessions carried no
+  evidentiary weight. Correct, and the corollary was never tested: does the **shape** survive its
+  own null? Two independent nulls, both run before the claim was believed — the discipline adopted
+  after the `eta(q)` and CSCV-argmax episodes. (a) *Exchangeable holdout ranks* — validation is
+  monotone by construction because the gate promotes only on a validation gain, while holdout is
+  never selected on; exact enumeration over all 7! = 5,040 orderings, counting **any** split into
+  an increasing prefix ≥3 and a decreasing suffix ≥3 so the post-hoc split point is paid for:
+  **50/5040 = 0.0099**. (b) *Shrinkage plus correlated noise*, increments drawn at the closed-form
+  paired SE between consecutive rungs, 200k sims: **P(shape) = 0.0163 / 0.0159 / 0.0140 / 0.0105 /
+  0.0110 at `kappa` = 0.0 / 0.3 / 0.6 / 0.9 / 1.0.** Two unrelated nulls at p ≈ 0.01, and
+  **P(shape) is nearly flat in `kappa`** — shrinkage moves the level and does essentially nothing
+  to the shape, which is #33's claim turned into a number. **General rule, the third instance of
+  the same habit paying: when an imported interpretation rule tells you half your evidence is the
+  base case, calibrate the other half against that base case rather than simply keeping it.**
+
+- **The bar a future candidate must clear is now a table, and its shape is this family's
+  epitaph.** Composing #29's closed form with `research/SUMMARY.md` #32 (`MBF = exp(−Z²/2)`; at
+  even prior odds a 5% posterior-null target needs `t` = 2.43), the validation Sharpe gain
+  required is:
+
+      rho to champion   0.999  0.997  0.990  0.978  0.950  0.939  0.900
+      gain needed       0.044  0.076  0.138  0.205  0.310  0.342  0.438
+
+  A candidate earns a *small* required gain only by being nearly identical to the champion — and a
+  nearly identical candidate has no mechanism by which to produce even that. Buying a real
+  mechanism means decorrelating, and at `rho` ≈ 0.90 the bar is **+0.438**, i.e. 1.229 → 1.667,
+  half again above anything recorded here on any split. This is the same conclusion the
+  resolution-floor entry above reaches, stated as the quantity a session actually has to
+  pre-register against. **Apply this table, not the bare 0.057 floor, before writing any candidate
+  file: state the expected `rho`, read off the required gain, compare to the pre-registered
+  effect.** Nothing remaining in the four-horizon family clears it at any `rho`.

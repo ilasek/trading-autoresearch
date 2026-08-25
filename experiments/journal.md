@@ -3291,3 +3291,232 @@ the closed form tonight, −0.79 by bootstrap). Its file is intact in `strategie
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-25 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-08-25: the flagged remote branch is benign, and it cannot be cleared from a session
+
+The session-start guard fired: `git branch -r --no-merged origin/main` returns
+`origin/deflated-sharpe-effective-trials`. Per the standing instruction this halts experiments
+until resolved, because a split trial history understates the deflated-Sharpe bar for every
+later trial. **It was investigated before any other work and it is a false positive.** Recorded
+here in full so no future session has to re-derive it.
+
+**Why the guard fires and will keep firing.** The branch has **no merge base with `main` at
+all** (`git merge-base` returns empty) — it is a disjoint/orphan history, not a fork. `--no-merged`
+therefore flags it unconditionally and will do so forever, regardless of content.
+
+**Why nothing is stranded.** Three checks, all negative for loss:
+
+| check | branch | `main` |
+|---|---|---|
+| trials in `experiments/trials.jsonl` | 35 | **54** |
+| branch trial names absent from `main` | **0 of 35** | — |
+| `engine/` tree | — | **byte-identical** (`git diff` empty) |
+
+Every trial on the branch is present on `main` by name; `main` carries 19 more on top. The one
+field that differs is `mom_zscore_overlap6_daily_trim`, recorded `REJECT` on the branch and
+`PROMOTE` on `main` — which is the branch's own history (it was re-run after the
+`[engine-maintenance] deflate against effective trial count` commit), and `main` holds the later
+state. That engine change is on `main` too (`engine/protocol.py:effective_n_trials`,
+`engine/metrics.py:n_effective`). **The deflated-Sharpe bar on `main` is complete and honest;
+experiments were safe to run and this session ran none for unrelated reasons.**
+
+**What could not be done, and why it needs a human.** The repo's convention for retiring a
+superseded branch is an annotated tag, not a branch (`archive/nightly-2026-08-12..15` exist for
+the four off-branch sessions; see the 2026-08-16 protocol issue). The matching tag was created
+locally at `9e4f129` with the verification above in its message, and **the push was refused:
+`error: RPC failed; HTTP 403`, on four attempts with backoff.** The credential relay in this
+environment authorises branch refs only — `git push origin main` works, `git push origin
+refs/tags/...` does not. The branch was therefore **left untouched**: deleting it without the
+archive tag landing first would destroy the only remaining copy of a distinct history, and that
+is not a call a session should make unilaterally.
+
+**Ask for a human (one command, from a workstation with tag-push rights):**
+
+    git tag -a archive/deflated-sharpe-effective-trials 9e4f129 -m 'superseded orphan; content verified on main 2026-08-25'
+    git push origin refs/tags/archive/deflated-sharpe-effective-trials
+    git push origin --delete deflated-sharpe-effective-trials
+
+Until then **every nightly session will halt on this guard and must re-do the verification
+above.** That is the actual cost, and it compounds with the harness matter recorded last
+session (item 6 of the 2026-08-24 summary): seven consecutive sessions have now opened on a
+per-run branch (`main-y85kb9` tonight, pointing at exactly `origin/main`, local `main` 31
+behind), corrected by hand with `git checkout main && git reset --hard origin/main`.
+
+## Session summary — 2026-08-25 (nightly)
+
+- **Integrity check — one blocking flag, investigated and cleared; see the `## Protocol issue`
+  entry immediately above.** `origin/deflated-sharpe-effective-trials` is a disjoint orphan
+  history whose 35 trials are all present among `main`'s 54 and whose `engine/` is
+  byte-identical to `main`'s. Nothing is stranded, the DSR bar is complete, experiments were
+  safe. The branch cannot be retired from a session (tag pushes return HTTP 403) and needs one
+  human command. Session opened on per-run branch `main-y85kb9` (seventh consecutive); corrected
+  to `main` before any work. Engine tests green (16 passed). Store fresh through 2026-08-25.
+- Experiments run: **0 of the 8-trial budget.** Verdicts: none. **No holdout look was spent** —
+  the count since 2026-08-17 stands at five, unchanged.
+- Four free measurements. All operate on (a) the validation return series in
+  `experiments/trial_returns/` and (b) holdout Sharpe *scalars already recorded in
+  `trials.jsonl` since 2026-08-17 and tabulated in this journal since*. **No 2024+ price data
+  was loaded, no strategy was re-run, no backtest was produced, the trial count is untouched.**
+
+### The night in one line
+
+The lab has error-barred its **validation** comparisons for three sessions and never once
+error-barred its **holdout** ones — and when you do, the two splits turn out to have *opposite
+resolving power*: on validation not one of the champion's six predecessors is distinguishable
+from it, while on holdout **five of six beat it at |t| > 2**.
+
+### Why zero trials
+
+Last session's screen table stands and nothing has been added to the idea pool that clears it.
+Free result 4 below restates the bar in the form `research/SUMMARY.md` #32 asks for: against a
+champion variant (`rho` > 0.99) a candidate needs **+0.138** of validation Sharpe for `t` = 2.43,
+and **+0.076** even at `rho` = 0.997. The family's entire observed spread across twelve members
+is 0.304 and every remaining idea in it is pre-registered below 0.06. Spending a trial would buy
+a point estimate the data cannot resolve while permanently raising the bar for every later
+candidate. The one direction tonight's results *suggest* — recovering the K=6 date overlap — is
+exactly the holdout-informed construction the post-#43 corollary forbids, and is declined on
+that ground for the second session running.
+
+### Free result 1 — the closed form reproduces the repo's bootstrap (control)
+
+Memmel's correction to Jobson–Korkie, implemented directly rather than via the `0.568·sqrt(1−rho)`
+shortcut so that `T` can be varied:
+
+    Var(S1 - S2) = (1/T)[ 2(1-rho) + 0.5(s1^2 + s2^2 - 2 s1 s2 rho^2) ]     (s per-period)
+
+| step | `rho` | SE closed-form | SE bootstrap (recorded 2026-08-23) |
+|---|---|---|---|
+| baseline → `overlap6_daily_trim` | 0.909 | 0.171 | 0.149 |
+| → `overlap6_hzn_avg` | 0.996 | 0.036 | 0.030 |
+| → `overlap6_hzn_avg4` | 0.997 | 0.031 | 0.030 |
+| → `hzn_avg4_k1` | 0.945 | 0.134 | 0.134 |
+| → `hzn_avg4_k1_cohort_trim` | 0.994 | 0.043 | 0.027 |
+| → `hzn_avg4_nobuffer` (champion) | 0.997 | 0.030 | 0.026 |
+| **#42 vs champion (validation)** | **0.939** | **0.140**, `t` = **−0.78** | 0.138, `t` = −0.79 |
+
+Reproduces the recorded numbers, including the comparison the ⚠ concern turns on. The machinery
+is validated before it is used on anything new.
+
+### Free result 2 — the same error bar on the holdout, never computed here before
+
+The ⚠ concern's whole case rests on holdout numbers that have never carried an error bar. The
+holdout window is 683 days against validation's 1,562, so the SE is inflated **1.51x** — the
+comparison is *harder*, not easier. Every predecessor against the current champion:
+
+| predecessor | `rho` | Δ validation | `t` val | Δ holdout | `t` hold |
+|---|---|---|---|---|---|
+| `mom_12m_baseline` | 0.896 | −0.364 | −1.98 | +0.449 | +1.60 |
+| `mom_zscore_overlap6_daily_trim` (#32) | 0.921 | −0.122 | −0.76 | +0.533 | **+2.20** |
+| `mom_zscore_overlap6_hzn_avg` (#41) | 0.928 | −0.117 | −0.76 | +0.629 | **+2.71** |
+| `mom_zscore_overlap6_hzn_avg4` (#42) | 0.939 | −0.109 | −0.78 | +0.686 | **+3.22** |
+| `mom_zscore_hzn_avg4_k1` (#43) | 0.991 | −0.042 | −0.77 | +0.184 | **+2.24** |
+| `mom_hzn_avg4_k1_cohort_trim` (#45) | 0.997 | −0.028 | −0.93 | +0.122 | **+2.67** |
+
+**Read the two `t` columns against each other.** On the gate's own split *nothing* here is
+distinguishable from the champion — six comparisons, largest |t| = 1.98, four of six below 0.80.
+On the split the gate cannot see, **five of six beat the champion at |t| > 2**, monotone in how
+much date-overlap the predecessor has. The gate has not merely "broken a tie the wrong way"
+(the 2026-08-23 statement); it broke a tie on the split that has *no resolving power*, and the
+split that does resolve says the opposite, repeatedly and with margin.
+
+For #42 vs champion the gap clears |t| = 2 for **any `rho` > 0.842**, well below the 0.939
+anchor, so the conclusion does not depend on the unobservable holdout correlation.
+
+**Three boundaries, all stated rather than buried.** (i) `rho` on the holdout split is not
+observable without spending a holdout look; the validation-split value is used as the anchor and
+the break-even is reported instead of relying on it. (ii) The closed form assumes i.i.d.
+bivariate normal returns and is a **floor** on the error bar, so every |t| above is an *upper*
+bound on the evidence — the same caution `learnings.md` already carries. (iii) The strongest `t`
+values come from the *most correlated* pairs, which is arithmetic, not a coincidence.
+
+### Free result 3 — the inversion is not the shrinkage base case, and now has a p-value
+
+`research/SUMMARY.md` #33 (added tonight by the learning agent) makes exactly the right
+narrowing: under any positive shrinkage `E(alpha|alpha_hat) = kappa*alpha_hat` with `kappa` < 1,
+holdout scoring *below* validation is the **predicted base case** and carries no evidentiary
+weight. What is not predicted is a sign flip. That had never been calibrated. Two nulls:
+
+**Null A — exchangeable holdout ranks** (validation is monotone *by construction*, since the gate
+promotes only on a validation improvement; holdout is never selected on). Exact enumeration over
+all 7! = 5,040 orderings, counting *any* split into an increasing prefix ≥3 and a decreasing
+suffix ≥3, so the post-hoc choice of split point is paid for:
+
+    P(a shape like the observed one arises by chance) = 50/5040 = 0.0099
+
+**Null B — shrinkage plus correlated noise.** `holdout_i = kappa*val_i + eps_i`, with the
+increment noise set by the closed-form paired SE between consecutive rungs
+(0.259, 0.055, 0.048, 0.202, 0.065, 0.046), 200k sims:
+
+    kappa      0.0     0.3     0.6     0.9     1.0
+    P(shape)   0.0163  0.0159  0.0140  0.0105  0.0110
+
+**The two nulls agree at p ≈ 0.01, and P(shape) is nearly flat in `kappa`** — which is #33's
+point made quantitative: shrinkage is what moves the *level*, and it does essentially nothing to
+the *shape*. So the half of the concern #33 tells the lab to drop was indeed carrying no weight,
+and the half it tells the lab to keep survives calibration at about 1 in 100.
+
+### Free result 4 — the bar for any future candidate, per `research/SUMMARY.md` #32
+
+Composing #29's closed form with #32's `MBF = exp(−Z²/2)`: at even prior odds, a 5%
+posterior-null target needs `t` = 2.43. The validation Sharpe gain that buys it:
+
+    rho to champion    0.999  0.997  0.990  0.978  0.950  0.939  0.900
+    gain needed        0.044  0.076  0.138  0.205  0.310  0.342  0.438
+
+Note the shape, because it is the family's epitaph: a candidate can only get a *small* required
+gain by being nearly identical to the champion, and a nearly identical candidate has no
+mechanism by which to produce even that. Decorrelating to buy a real mechanism (`rho` ≈ 0.90)
+raises the bar to **+0.438** — from 1.229 to 1.667, half again above anything this lab has
+recorded on any split. **This is why the family is finished, stated as arithmetic rather than as
+a judgement.**
+
+### For the human — the concern is unchanged at four points, and its strongest form is now available
+
+No promotion tonight, so no fifth data point and no sixth holdout look. But the ⚠ standing
+concern should now be read in the form free results 2 and 3 give it, which is materially stronger
+and materially *narrower* than the version in `learnings.md`:
+
+1. The level drop from validation to holdout is the **predicted base case** under any shrinkage
+   and should stop being cited as evidence (#33). That half is withdrawn.
+2. What survives is the **shape**, and it survives calibration against two independent nulls at
+   **p ≈ 0.01**.
+3. The decisive addition: **the two splits have opposite resolving power.** Validation cannot
+   distinguish the champion from *any* of its six predecessors (largest |t| = 1.98). Holdout
+   distinguishes it from five of six, at |t| = 2.20 to 3.22, all in the same direction — against
+   the champion.
+
+`mom_zscore_overlap6_hzn_avg4` (#42) remains the strategy this lab would hand over: holdout
+Sharpe 1.377, holdout return 34.9%, holdout maxDD −20.1%, turnover 3.1x, top of the train column
+among K=6 books, statistically **indistinguishable** from the incumbent on the gate's axis
+(`t` = −0.78) and ahead of it by `t` = **+3.22** on the split the gate cannot see. Its file is
+intact in `strategies/candidates/`. Reinstating it, and adding a second scored quantity, both
+require edits to frozen files that no session may make. Two such quantities remain available at
+zero marginal cost: the train Sharpe, and the closed-form paired SE — which would let the gate
+**decline to promote on an unresolvable margin** rather than being obliged to, and which by free
+result 2 would have declined every promotion after #42.
+
+### Ideas for next session
+
+1. **Do not re-run free results 2 and 3.** They are computed, both calibrated against their own
+   nulls, and neither moves without a new promotion. **Idea provenance: `research/SUMMARY.md`
+   #29 (closed form), #32 (MBF composition) and #33 (the shrinkage null), the last two added
+   2026-08-25.**
+2. **The screen to apply before writing any candidate file is now free result 4's table**, not
+   just the 0.057 floor: state the candidate's expected `rho` to the champion, read off the gain
+   required for `t` = 2.43, and compare it to the pre-registered effect. Nothing currently in the
+   family clears it at any `rho`.
+3. **Carried over untouched for the sixth session** — the closed-form weight-vector triage for a
+   proposed trend/MA signal (`research/SUMMARY.md` #3). Free result 4 sharpens why it has never
+   been exercised: a decorrelated signal is the only thing that could carry a large enough
+   effect to resolve, and it also faces the largest bar (+0.438 at `rho` = 0.90). **Idea
+   provenance: `research/SUMMARY.md`.**
+4. **Retired from the idea list** (carried from 2026-08-24, unchanged): cross-specification model
+   averaging; research candidate #24's expectation argument for the membership band; the
+   two-speed fresh-core/overlapped-tail book. Add to it tonight: **any construction motivated by
+   recovering the K=6 overlap's holdout advantage** — free result 2 makes that advantage more
+   visible than ever, which makes the holdout-informed prohibition *more* binding, not less.
+5. **Two harness matters for a human, both now costing every session real time**: the
+   un-retirable orphan branch (see the `## Protocol issue` entry above — needs one tag push and
+   one branch delete from an account with tag-push rights), and the seventh consecutive per-run
+   branch open, which the session-start hook still does not detect.
+- No engine issues encountered this session.
