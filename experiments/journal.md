@@ -3289,3 +3289,5 @@ the closed form tonight, −0.79 by bootstrap). Its file is intact in `strategie
    integrity check should be fixed or removed; a check that reports OK when it is not is worse
    than no check.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-25 (learning agent): 3 notes added, see research/SUMMARY.md

@@ -844,6 +844,111 @@ it applies (Bailey–López de Prado), the rival deflator (Harvey–Liu), and th
 (Ledoit–Wolf). The folder's obligation to cover the scoring apparatus is discharged; all of it is
 explanatory, since `engine/` is frozen._
 
+**The last uncovered seam — a correction that knows *why* a trial was run — turns out to exist, to be
+twenty years old, and to live in statistics rather than in finance. Its shape is not the shape the
+question assumed: a prior discount is real, rigorous, and strictly zero-sum.** Session 11's open
+question (c) asked for a prior-weighted or hierarchical multiple-testing correction, on the grounds
+that both finance literatures gesture at one (Harvey–Liu–Zhu: "a factor derived from a theory should
+have a lower hurdle") and neither supplies machinery. Genovese–Roeder–Wasserman supply it exactly.
+Assign each hypothesis a non-negative weight `W_i` **before** seeing the data, divide its p-value by
+its weight (`Q_i = P_i/W_i`), and run Benjamini–Hochberg on the `Q`'s: a weight above 1 relaxes that
+hypothesis's threshold, below 1 tightens it. Their Theorem 4.1 controls FDR at `α·(1−a)·μ₀`, hence at
+`α` whenever the weights average one, and Roeder–Wasserman give the family-wise analogues. The
+authors state the striking part themselves: **"aside from this budget requirement, any set of
+nonnegative weights is valid."** Validity does not depend on the weights being good, informative, or
+related to the truth at all — only on their being fixed a priori and averaging one. So the answer to
+"can a well-motivated candidate honestly face an easier test?" is *yes, and only by making the
+others face a harder one*, in a budget that sums to zero. There is no version in which a good prior
+buys a discount out of thin air; an unweighted protocol like this repo's is simply the `W ≡ 1` case,
+which is the choice a lab makes when it declines to rank its ideas in advance. Three further yields,
+each independent of the finance question. **(a) The power asymmetry.** Because the alternative's
+p-value distribution is stochastically smaller than uniform, up-weighting a true alternative gains
+more than down-weighting one loses, so informative weights buy a large power gain while wrong ones
+cost very little — "the loss of power is not serious even if the weights are completely wrong". The
+safe regime is *sparse*: few large weights with the minimum weight near 1, i.e. **betting the whole
+prior budget on one pre-named candidate is robust, spreading modest tilts across many is fragile.**
+**(b) The optimal weight is unimodal, not monotone.** `ρ_c(ξ) = (m/α)·Φ̄(ξ/2 + c/ξ)`, peaking at
+`ξ = √(2c)` — down-weight the hopeless *and* the already-obvious, spend the budget on the **marginal**
+hypothesis, formalised as the effect with power ½ at unit weight. That inverts the natural instinct
+to back one's strongest conviction. **(c) The shortcut is closed at the mechanism level.** Splitting
+the sample to *estimate* weights gains over unweighted testing of the held-out half but **does not
+beat simply using the whole sample unweighted** — so no discount can be manufactured from the split
+being scored on. The one estimated scheme that works is deliberately crude and *grouped* (partition
+into clusters of ≥20–30, estimate per cluster, smooth toward the mean, renormalise), which preserves
+error control because a single lucky test cannot up-weight itself — only its whole cluster can. Tier
+A, `validation_overlap: false`. Recorded as candidate #31.
+→ `notes/2026-08-25-prior-weighted-multiple-testing.md`
+
+**The same question asked in a finance venue supplies the exchange rate the statistics answer lacks —
+and finds the prior moves the bar by about one t-unit, in the direction opposite to the one a lab
+would hope.** Harvey's presidential address gives the closed-form map from a prior to a required
+threshold. Posterior odds = prior odds × Bayes factor; the **minimum Bayes factor**
+`MBF = exp(−Z²/2)` is the lower bound over all specifications of the alternative, attained when the
+prior mass sits exactly at the maximum-likelihood estimate — so it is **the most favourable reading
+the evidence can ever receive**. For priors symmetric and descending about the null (the right default
+when there is no directional conviction) `SD-MBF = −e·p·ln(p)`, always larger. The Bayesianized
+p-value is `(MBF × prior odds)/(1 + MBF × prior odds)`, and inverting it gives the required statistic
+as a function of the prior. The decisive number: at **even odds** — the most generous prior anyone
+could claim — and under the MBF, the threshold for a 5% posterior probability of the null is
+**t = 2.43**, rising to 2.94 at 4:1 against and 3.43 at 19:1; under the SD-MBF the even-odds figure is
+2.93. **A prior never buys a bar below the naive frequentist 2.0; it only relocates the bar relative
+to a long-shot default,** and moving from a 19:1 prior to even odds is worth about 1.0 in t-units.
+That is the bound the folder's open question needed. Two further mechanisms travel with it. The
+**base rate declines over time** for three structural reasons — true effects grow scarcer as
+low-hanging fruit is picked, first-principles theories run out, and the security count is finite
+against an unbounded characteristic space — so the same t is worth less later, which applies directly
+to a lab that has worked one family hard. And the **choice space, not the reported result, is the
+denominator**: his demonstration obtains `t = 3.23` with near-zero factor betas by searching ~25,000
+long-short portfolios formed on *the first three letters of ticker symbols*, and he extends the count
+to choices never exercised. He is also explicit that raising a threshold may *increase* data mining
+rather than reduce it. **The counterweight that must travel with the whole idea: his conclusion runs
+against the use a lab would most like to make of him** — the thesis is that finance's priors are long
+shots and its thresholds too low. Tier A, `validation_overlap: false`. Recorded as candidate #32.
+→ `notes/2026-08-25-bayesianized-p-values-prior-odds.md`
+
+**And the empirical realisation of the same idea in finance, which reverses the multiple-testing sign
+under one condition this repo fails — while narrowing the lab's own standing protocol concern to the
+part of it that is real.** Jensen–Kelly–Pedersen model all factor alphas jointly and hierarchically:
+`α_i = α_o + c_j + s_n + w_i` (a dogmatic zero global component, a theme-cluster component, a
+characteristic component shared across regions, an idiosyncratic residual), with the prior `α ~ N(0,
+τ²)` playing the role a frequentist correction plays — imposing conservatism and controlling the FDR.
+Four mechanism-level results, all portable and none requiring their data. **(1) Shrinkage in units of
+time.** `E(α|α̂) = κα̂` with `κ = 1/(1 + σ²/(τ²T))`; the prior is *exactly* equivalent to prepending
+`σ²/τ²` periods of observed zero alpha to the sample, which turns an abstract prior strength into a
+quantity anyone can argue about. **(2) Out-of-sample attenuation is the prediction, not the failure.**
+Since `κ < 1` strictly, a Bayesian *always* expects future alpha below the in-sample estimate, so a
+positive-but-lower out-of-sample result is correct learning rather than evidence of
+non-replication — and the testable corollary (higher in-sample alpha still predicts higher
+out-of-sample alpha cross-sectionally) holds in their data, with attenuation somewhat stronger than
+their model predicts. **This lands directly on `learnings.md`'s ⚠ standing protocol concern and cuts
+partly in the gate's favour:** the *level* drop from validation to holdout is the base case and
+carries no information on its own. What survives, and should now lead every statement of the concern,
+is the part that was always the real evidence — a **sign flip in the relationship** between the two
+splits at an identified structural change, with the series moving monotonically in opposite
+directions across a run of promotions. Attenuation is predicted; inversion is not. **(3)
+Alpha-hacking is punished on two axes**: `E(α|α̂) = −κ₀ + κ_hacking·α̂` with `κ_hacking ≤ κ` because
+search *inflates the variance*, plus a mean-bias intercept — so a searched estimate is discounted
+even by someone who believes no bias was introduced. **(4) Correlated evidence is worth less, with a
+knob**: `κ_g = 1/(1 + (σ²/τ²T)·(1+ρ)/2)` collapses to the single-source `κ` at `ρ = 1`, which is the
+DSR-clustering observation (`learnings.md`'s 11 effective trials against 45 recorded) derived from
+the other side and continuous instead of counted. The headline **reversal** — that under a joint
+hierarchical model a large family of related tests is partly *evidence* rather than only a penalty,
+because the common component is estimated more precisely — is real but conditional: it is borrowed
+strength across **weakly-correlated** units, and their own Proposition 2 says the gain vanishes as
+`ρ → 1`. The repo's ladder of near-identical variants is exactly the `ρ → 1` case, so **the reversal
+is not available here**, and the hierarchical framing would treat this repo's *families* as the unit
+and its within-family variants as one observation — the same conclusion DSR clustering already
+reached. Their taxonomy (algorithmic clustering into a small number of themes with high within- and
+low across-correlation) is the empirical form of the grouped weighting scheme the statistics note
+requires. Tier A, but **`validation_overlap: true` and `published_post_2018: true`** — sample to 2020,
+published 2023, so mechanism only. Recorded as candidate #33.
+→ `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`
+
+_With this, **the scoring apparatus is covered on all four sides**: the statistic, the deflator, the
+paired test, and now the question of whether a trial's motivation may enter the correction. The
+answer to the last is yes in principle, zero-sum in practice, and worth about one t-unit at the
+outside — and all of it is explanatory, since `engine/` is frozen._
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -1253,6 +1358,35 @@ dispersion. Neither observation licenses anything: `engine/` is frozen and its t
 decision. Both belong in the folder because the gate's machinery is now covered and its assumptions
 should be legible.
 → `notes/2026-08-24-multiple-testing-haircut.md`, `notes/2026-08-24-deflated-sharpe-ratio.md`
+
+**A prior may buy a lower bar, and it is strictly zero-sum — which is why "this idea is
+well-motivated" is an argument a session may not make on its own behalf.** Weighted multiple testing
+preserves error control under *any* non-negative a-priori weights whose mean is one; relaxing one
+hypothesis's threshold is paid for, unit for unit, by tightening others. So the intuition the folder
+has repeatedly bumped into — that a theory-derived candidate deserves an easier test than a knob
+sweep — is correct and formal, and it is also a *budget*, not a dispensation. Three disciplines
+follow, and they matter more here than the theorem does. (i) **A prior asserted after the result is
+worth nothing**; the weights must be fixed before the data are seen, which is what makes
+`CLAUDE.md`'s hypothesis-before-code rule load-bearing rather than decorative. (ii) **The size of the
+concession is small**: from a long-shot prior to even odds is about 1.0 in t-units, and even at even
+odds the required threshold is *above* the naive one — so a prior relocates a bar, it never removes
+one. (iii) **A discount cannot be manufactured from the data being scored**: estimating weights by
+splitting the sample does not beat using the whole sample unweighted. The general shape is the same
+one this folder keeps rediscovering in other vocabularies — an estimated correction is only worth
+what its information came from, and information from inside the sample is not new information.
+→ `notes/2026-08-25-prior-weighted-multiple-testing.md`,
+`notes/2026-08-25-bayesianized-p-values-prior-odds.md`
+
+**Distinguish a predicted attenuation from an unpredicted inversion before calling an
+out-of-sample result a failure.** Under any positive shrinkage — i.e. under any prior that the
+effect might partly be luck — the expected out-of-sample estimate is strictly *smaller* than the
+in-sample one. A candidate that scores lower on a later split than on the split it was selected on is
+therefore behaving exactly as correct inference predicts, and the level drop on its own is not
+evidence of anything. What *is* evidence is a change in the **relationship**: the two splits' rank
+correlation flipping sign, or the two series moving monotonically in opposite directions. This is a
+sharpening, not a softening: applied to `learnings.md`'s ⚠ standing protocol concern it removes the
+half that any Bayesian would have predicted and leaves the half that nobody would.
+→ `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -1791,6 +1925,65 @@ hypothesis fodder, then anti-candidates.
     this is here so the gate's assumptions are legible, and so a session stops writing an
     error-rate-specific consequence as a law. Tier B+ / A, no overlap.
     → `notes/2026-08-24-deflated-sharpe-ratio.md`, `notes/2026-08-24-multiple-testing-haircut.md`
+31. **[Added 2026-08-25] Discipline rule, and the answer to the folder's longest-standing question
+    about its own protocol: a prior discount is legitimate, and it is strictly zero-sum.** Weighted
+    multiple testing controls FDR (and family-wise error) under *any* non-negative weights fixed
+    before the data are seen, provided they **average one** — `Q_i = P_i/W_i`, then Benjamini–Hochberg
+    on the `Q`'s. So "a better-motivated candidate deserves an easier test" is formally defensible,
+    but only inside a budget: every unit of relaxation must be paid for by tightening elsewhere. Three
+    consequences a session can use without any engine change. (a) **This does not license a session to
+    treat its own hypothesis as pre-approved.** The lab has no mechanism that could spend such a
+    budget — every trial faces the same bar — so the honest reading is that the protocol is the
+    `W ≡ 1` case, and the part of it that *would* make a weight admissible (hypothesis written before
+    the code, per `CLAUDE.md`) is already in place but is never recorded as a ranking before the run.
+    (b) **If a ranking is ever recorded, back the plausible-but-marginal idea, not the strongest
+    conviction.** The optimal weight function `ρ_c(ξ) = (m/α)·Φ̄(ξ/2 + c/ξ)` is unimodal, peaking at
+    `ξ = √(2c)`: weight is wasted on what is already detectable at unit weight and on what no
+    affordable weight can reach. Concretely, the ideas that deserve a discount are the ones landing
+    *just* short of the bar for a stated mechanical reason. And spend it **sparsely** — one large
+    weight with everything else near 1 is the robust regime; many modest tilts is the fragile one.
+    (c) **The shortcut is closed:** deriving a candidate's "deserved" discount from the validation
+    split itself (a pre-screen, a warm-up window, a first-half fit) is refuted at the mechanism level
+    — estimating weights by data splitting does not beat using the whole sample unweighted — and would
+    in any case score returns, outside the holdings-only exemption. Tier A, no overlap.
+    → `notes/2026-08-25-prior-weighted-multiple-testing.md`
+32. **[Added 2026-08-25] Free pre-trial calculation that composes with #29, plus the exchange rate for
+    #31: what a prior is worth, in t-units.** `MBF = exp(−Z²/2)` (or `SD-MBF = −e·p·ln(p)` with no
+    directional conviction) times stated prior odds gives a Bayesianized p-value; inverted, it gives
+    the statistic required for a target posterior probability of the null. The composition is free and
+    available **before** a candidate exists: #29's closed-form paired standard error turns a *predicted*
+    Sharpe gap and a *predicted* correlation with the champion into a `Z`, and `exp(−Z²/2)` turns that
+    into the strongest evidence the comparison could ever supply. The calibration to carry: at even
+    odds and a 5% posterior-null target the required `t` is **2.43** (MBF) or **2.93** (SD-MBF), rising
+    to 3.43 / 3.86 at 19:1 against — so **a prior never buys a bar below the naive 2.0**, and the whole
+    range from long-shot to even-odds is worth about 1.0 in `t`. Three cautions, all pointing the same
+    way: #29's closed form is a *floor* on the error bar so the `Z` is an upper bound; the MBF is the
+    most favourable Bayes factor that exists; and the prior must be stated in the journal *before* the
+    run or the exercise is circular. Two mechanisms attach that need no arithmetic — the **base rate
+    declines over time** (scarcer true effects, exhausted first-principles theories, a finite security
+    count), so the required `t` for the same confidence is rising in this repo's most-worked family for
+    reasons independent of the trial count; and the honest denominator is the **choice space**, which
+    includes lookback grids not swept and buffer widths chosen by convention, not just recorded trials.
+    **What this does not license:** re-scoring the gate, which is frozen and a human's decision
+    (session 11's item (d), unchanged). Tier A, no overlap.
+    → `notes/2026-08-25-bayesianized-p-values-prior-odds.md`
+33. **[Added 2026-08-25] Interpretation rule that narrows `learnings.md`'s ⚠ standing protocol concern
+    to the half of it that is real — and makes that half harder to dismiss.** Under any positive
+    shrinkage a Bayesian *always* expects out-of-sample alpha below the in-sample estimate
+    (`E(α|α̂) = κα̂`, `κ < 1`), so a candidate scoring lower on holdout than on validation is the
+    **predicted base case**, not evidence of anything. The concern's evidentiary weight therefore does
+    not rest on the level drop and should stop being stated that way. What it does rest on is the
+    shape: a **sign flip** in the validation/holdout relationship at one identified structural change,
+    with the two series moving monotonically in opposite directions across a run of promotions.
+    Attenuation is predicted; inversion is not. Two riders. The same source's `κ_g` formula shows
+    correlated evidence is discounted continuously in `ρ` and is worth nothing at `ρ = 1`, which is the
+    DSR-clustering observation from the other side — so the hierarchical "more related tests can be
+    evidence rather than penalty" reversal is **not available for this repo's near-identical variant
+    ladders**, only across weakly-correlated families. And search is shown to be punished on two axes,
+    variance inflation as well as mean bias, so a heavily-searched estimate is discounted even by
+    someone who believes no bias was introduced. Tier A but `validation_overlap: true` and
+    `published_post_2018: true` — mechanism only, and no figure from it may be imported.
+    → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`
 
 ## Coverage log
 
@@ -1807,6 +2000,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-22 (session 9) | Session 8's two named open questions, taken in order: (a) the decomposition of a **signal-driven** book's geometric return into a strategic and a rebalancing term — the axis session 8 called the highest-value remaining thread — and (b) the counterweight to the folder's constraints-are-good prior. Three sources, full text read directly for all three. The session's shape is one *theorem* that closes (a) at the identity level, one *correction* that reverses the sign the folder had assumed for the rebalancing term on a momentum book, and one *dissolution* of (b) into a continuum. | Fernholz–Karatzas 2009 (Handbook of Numerical Analysis Vol. XV; INTECH-hosted PDF read in full), building on Fernholz–Shay 1982 (JF) (`2026-08-22-excess-growth-and-return-decomposition.md`); Cuthbertson–Hayley–Motson–Nitzsche 2016 (IJFE; City Research Online accepted version read in full) (`2026-08-22-rebalancing-return-attribution-critique.md`); Brodie–Daubechies–De Mol–Giannone–Loris 2009 (PNAS; arXiv:0708.0046v3 read in full) (`2026-08-22-long-only-as-l1-regularization.md`) |
 | 2026-08-23 (session 10) | Session 9's open question (b), the last unpatched seam: **what the lab is actually scored on**, attacked from both ends. End one — the currency the folder imports in: the geometric-mean-maximisation / growth-optimal (Kelly) literature and its criticism, chased specifically to settle whether a log-growth quantity can ever be a scoring axis. End two — the currency the lab is scored in: the sampling distribution of the Sharpe ratio itself, which nothing in nine sessions had covered. Three notes, full text read directly for all three primary texts. The session's shape is one *closure* (log growth has no exchange rate to a risk-scored objective, which retires session 9's own top candidate and explains the lab's `gamma*` null), one *anti-candidate plus two re-weighted screens* (Kelly as a leverage rule; means >> variances >> covariances, with the multiple rising as the book gets more aggressive), and one *new free measurement* on the repo's headline statistic (the `eta(q)` annualisation check and a standard error). | Samuelson 1971 (PNAS; EuropePMC copy read in full) + Merton–Samuelson 1974 (JFE; MIT Sloan WP 623-72 read in full from MIT DSpace) (`2026-08-23-geometric-mean-maximization-fallacy.md`); MacLean–Thorp–Ziemba 2010/2011 (Quantitative Finance / World Scientific handbook chapter; authors' dated draft read in full from a Berkeley course page), with MacLean–Ziemba–Blazenko 1992 (Management Science) and Chopra–Ziemba 1993 (JPM) recorded **second-hand and flagged** — both closed-access, their tables reproduced in the text read (`2026-08-23-kelly-criterion-growth-security-tradeoff.md`); Lo 2002 (FAJ; course-page mirror read in full) (`2026-08-23-statistics-of-sharpe-ratios.md`) |
 | 2026-08-24 (session 11) | Session 10's two named open questions, in its own priority order, and both close: (a) **the paired standard error of a difference of Sharpe ratios** — the quantity the gate adjudicates and the one session 10 forbade itself to substitute the single-strategy error for — chased in the vocabulary that session named (Jobson–Korkie / Memmel; Ledoit–Wolf); and (b) **the deflated Sharpe ratio itself**, the last uncovered piece of the gate's own machinery, together with the rival multiple-testing correction the DSR authors call complementary. Three notes; full text read directly for Ledoit–Wolf, Bailey–López de Prado, the Bailey–Borwein–López de Prado–Zhu companion, Harvey–Liu and O'Connor, and in part for Harvey–Liu–Zhu. The session's shape is one *closed form* that reproduces a number the lab had only bootstrapped (and grades the lab's bootstrap as the right method with two free refinements), one *coverage obligation discharged* on the gate's statistic, and one *correction to a sentence the folder repeats* — "every trial raises the bar" is a family-wise-error-rate property, not a law. | Ledoit–Wolf 2008 (JEF; UZH-hosted published PDF read in full), with Jobson–Korkie 1981 (JF) and Memmel 2003 (Finance Letters) recorded **second-hand** from two independent restatements of their formula, and Opdyke 2007 recorded **unread** (`2026-08-24-testing-differences-of-sharpe-ratios.md`); Bailey–López de Prado 2014 (JPM; author-hosted PDF read in full) + Bailey–Borwein–López de Prado–Zhu 2016 (J. Computational Finance; author-hosted PDF read in full), with the Notices-of-the-AMS companion recorded **unread** (`2026-08-24-deflated-sharpe-ratio.md`); Harvey–Liu 2015 (JPM; Duke-hosted PDF read in full) + Harvey–Liu–Zhu 2016 (RFS; Duke-hosted PDF read in part) (`2026-08-24-multiple-testing-haircut.md`) |
+| 2026-08-25 (session 12) | Session 11's open question (c), the last unpatched seam in the scoring apparatus: **a multiple-testing correction that knows why a trial was run** — chased in the vocabulary session 11 named (prior-weighted, hierarchical and empirical-Bayes multiple testing), and answered from all three directions. Three notes; full text read directly for all four primary texts. The session's shape is one *machinery* that closes the question in statistics and immediately constrains it (a discount is zero-sum), one *exchange rate* in a finance venue that prices the discount at about one t-unit and finds it never falls below the naive bar, and one *narrowing correction* to `learnings.md`'s ⚠ standing protocol concern that removes its weaker half and sharpens the rest. | Genovese–Roeder–Wasserman 2006 (Biometrika; CMU Technical Report 811, the working version, read in full) + Roeder–Wasserman 2009 (Statistical Science; arXiv reprint read in full) (`2026-08-25-prior-weighted-multiple-testing.md`); Harvey 2017 (JF, Presidential Address; Duke-hosted PDF read in full) (`2026-08-25-bayesianized-p-values-prior-odds.md`); Jensen–Kelly–Pedersen 2023 (JF; CBS Research Portal published CC-BY version read in full) (`2026-08-25-hierarchical-bayesian-factor-replication.md`) |
 
 ### Open questions for future sessions
 
@@ -2251,6 +2445,58 @@ hypothesis fodder, then anti-candidates.
   human decision, and it is the same failure mode session 7's item (d) recorded. The notes state the
   assumptions; they do not re-score anything.
 
+  **— (c) ANSWERED AND CLOSED 2026-08-25 (session 12), from all three directions it named, and the
+  answer arrives with a constraint the question did not anticipate.** The machinery exists
+  (Genovese–Roeder–Wasserman's weighted BH), is rigorous, and is indifferent to whether the weights
+  are any good: FDR and family-wise control hold for *any* non-negative weights fixed a priori,
+  provided they **average one**. That budget is the whole finding. **A prior discount is legitimate
+  and strictly zero-sum** — relaxing one candidate's threshold requires tightening others by exactly
+  as much — so an unweighted protocol like this repo's is the `W ≡ 1` case, and nothing here licenses
+  a session to treat its own hypothesis as pre-approved. Three riders make it usable anyway: the
+  optimal weight is **unimodal**, so a recorded ranking should back the plausible-but-marginal idea
+  rather than the strongest conviction, and should be **sparse**; weights estimated by splitting the
+  scored sample **do not beat using the whole sample unweighted**, which closes the tempting shortcut
+  at the mechanism level; and the finance-venue version prices the whole thing — moving from a 19:1
+  long-shot prior to even odds is worth about **1.0 in t-units**, and even at even odds under the most
+  favourable Bayes factor that exists the required `t` is 2.43, *above* the naive 2.0. So the answer
+  to "can this lab's hypothesis-first protocol be distinguished from a parameter sweep of the same
+  length?" is yes, quantitatively, and the honest size of the distinction is far smaller than the
+  rhetorical weight it usually carries. The hierarchical branch adds the one genuine sign reversal in
+  the literature — a large family of *weakly-correlated* related tests is partly evidence rather than
+  only a penalty — and its own formula (`κ_g → κ` as `ρ → 1`) rules the reversal out for this repo's
+  near-identical variant ladders. Recorded as candidates #31, #32, #33.
+
+- **New open questions raised by session 12, in priority order.**
+  (a) *The one thing this session recommends, and it is a journal convention rather than a
+  measurement.* Everything above depends on a ranking or a prior being **recorded before the run**.
+  The lab already writes its hypothesis first (`CLAUDE.md`), but never records where the candidate
+  sits in its own prior ordering, so nothing in `trials.jsonl` or the journal distinguishes a
+  theory-first trial from a post-hoc rationalisation — which is precisely the distinction all three
+  sources say is worth something. The cheap fix is one line per trial: the prior odds the session
+  would have stated, and which mechanical reason supports them. It costs nothing, requires no engine
+  change, and is a precondition for any of #31/#32 ever being more than a lens. Ranked first because
+  it is the only item here with a deadline: a prior recorded after the result is worthless.
+  (b) *The seam the scoring apparatus no longer has, and what that implies for targeting.* With (c)
+  closed, **the gate's machinery is covered on all four sides** — the statistic, the deflator, the
+  paired test, and the motivation question — and the folder has no remaining question about how this
+  lab is scored. Six sessions of methodological work have been the productive vein; that vein is now
+  close to exhausted at the level of *scoring*. The honest implication is that session 13 should look
+  somewhere structurally different rather than for a fifth angle on the same apparatus. Two
+  candidates, both untouched in twelve sessions: the **execution / implementation-shortfall**
+  literature, which is the only cost-side vocabulary the folder has never opened (session 6 named it
+  and session 7 answered from friction-aware portfolio choice instead); and the **statistical
+  properties of the universe itself** — survivorship bias and constituent selection, which
+  `learnings.md` lists as a permanent caveat and which no note here has ever sourced. The second is
+  the better bet: it is the largest unquantified discount this repo applies to every stock-level
+  result, and unlike the long-only leakage question (retired 2026-08-23 after three failures) it has
+  a large, accessible, multi-decade literature.
+  (c) *Recorded as declined, so it is not rediscovered as an opportunity.* Constructing an actual
+  weighted-BH or hierarchical correction over `trials.jsonl` and reporting what it says about the
+  repo's own record is **declined**, for the reason session 11's item (d) already gave and for a
+  second one specific to this session: it would require assigning retrospective priors to trials whose
+  results are known, which is the one thing the weighting theorems forbid. The notes state the
+  machinery; they do not apply it to this repo's history.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -2262,6 +2508,27 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 12 (2026-08-25) read full text directly for every primary source**, and the session's
+  access lesson is that **an author's or department's own technical-report series is the reliable
+  route to a closed-access statistics journal article**. Concretely: the Biometrika paper is
+  `oa_status: closed` in OpenAlex with no repository copy listed, and its authors' own publications
+  page does not link it — but a web search surfaced `stat.cmu.edu/tr/tr811/tr811.html`, whose sole
+  content link (`tr811.pdf`) is the full 31-page working version including both theorems and their
+  proofs. The generalisation worth adding to the recipe: when a paper is closed and the author page
+  fails, **try the department's numbered technical-report series before concluding it is unobtainable**
+  — it is a different host from the author page and is indexed separately. Also confirmed: **arXiv
+  reprints of Institute of Mathematical Statistics journals** carry the full typeset article with
+  volume and page headers (the *Statistical Science* review), a **university green-OA research portal**
+  served the CC-BY published version of a paywalled *Journal of Finance* article complete
+  (`research-api.cbs.dk/ws/portalfiles/…`, the fastest route found so far to a recent JF paper), and
+  the **Duke `Published_Papers/` directory** worked first try again, as it did in session 11. Index
+  behaviour, and it is now a pattern rather than an anomaly: **Semantic Scholar's DOI endpoint failed
+  to resolve both `10.1111/jofi.12530` and `10.1111/jofi.13249`** — two of the most-cited papers in
+  the field, in the field's top journal — while resolving a 2006 Biometrika DOI and a 2009
+  *Statistical Science* DOI on the first try. Combined with session 11's `hhv059` failure, the working
+  rule is now: **for a Journal of Finance DOI, go to Crossref first and do not treat a Semantic
+  Scholar miss as evidence the paper is unindexed.** Crossref answered every lookup this session.
 
   **Session 11 (2026-08-24) read full text directly for five of its six sources** and in part for the
   sixth. Channels that worked first try: **university department PDF mirrors of published journal
