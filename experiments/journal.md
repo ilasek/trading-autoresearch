@@ -3651,3 +3651,5 @@ holdout's role narrow.
 Also unchanged: `research/SUMMARY.md` #32's table of required gains still applies to the
 validation leg, and nothing in the four-horizon family clears it at any rho. The veto makes
 the gate harder to fool; it does not supply a new idea.
+
+## Research session — 2026-08-26 (learning agent): 3 notes added, see research/SUMMARY.md

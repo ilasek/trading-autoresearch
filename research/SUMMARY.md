@@ -949,6 +949,115 @@ paired test, and now the question of whether a trial's motivation may enter the 
 answer to the last is yes in principle, zero-sum in practice, and worth about one t-unit at the
 outside — and all of it is explanatory, since `engine/` is frozen._
 
+### The universe itself — survivorship, constituent selection, and the return distribution (cross-family)
+
+Not a `program.md` family. The axis `learnings.md` has carried as a permanent caveat since day one
+and which no note here had ever sourced — session 12 named it the better of the two remaining
+structurally-different targets, on the grounds that it is the largest unquantified discount this repo
+applies to every stock-level result and has a large accessible literature. It does. The session's
+shape is one **re-aiming** of the lab's caveat, one **magnitude** for the specific data construction
+this repo uses, and one **distribution** that explains why that magnitude is large.
+
+**The lab's permanent caveat is pointed at the smaller of the two problems it should name.**
+`learnings.md` says the universe is today's constituents, so "single-stock alpha will look better
+than it was" — a claim about the **level** of returns. Brown–Goetzmann–Ibbotson–Ross (1992, RFS)
+show the level distortion is the forgiving half: in their calibration, survivorship moves average
+risk-adjusted return by roughly 0.4–0.8% per year across 5–20% annual performance cuts. What
+truncation does badly is corrupt **inference about persistence**. Conditioning a sample on realised
+return reshapes the joint distribution of return and volatility among survivors — a high-residual-
+risk asset needed a lucky draw to clear the bar, a low-risk one did not — which induces a spurious
+volatility/return relation and, through it, apparent predictability where the generating process has
+none. With only a **5%** annual cut, a cross-sectional regression of successive risk-adjusted
+performance measures rejects the true null of no persistence **more than half the time**, mean and
+median `t` above 2. Their own summary: *"even a small degree of truncation by survivorship will
+induce an unacceptably high probability of false inference of persistence in performance."* The
+authors extend the claim explicitly past fund performance to asset-pricing anomalies. **A
+cross-sectional momentum strategy is a persistence claim and nothing else**, so this is the exact
+inference at risk — the caveat's parenthetical "especially momentum" is right for a reason it does
+not state. Two further results keep it honest. The **sign is set by the selection rule**: sequential
+per-period survival review induces persistence, selection on whole-sample cumulative performance
+induces *reversal*, and the authors state the net must be resolved empirically. And the obvious
+correction is wrong in general — Stambaugh (2011, QJF) separates **survival bias** (`E[a|survived] −
+α > 0`, real) from the **correct inference** (`E[α|a]`), and shows that with no commonality across
+assets in prior parameter uncertainty `E[α|a] = a` exactly: once you condition on the survivor's
+return series, the fact of survival adds nothing. The standard adjustment is right only in the
+limiting case where all assets, dead and alive, share one completely unknown expected return. That is
+**not** a licence to ignore survivorship here: this repo's ~145 large-cap global names share a
+dominant market factor and high assumed commonality, which is precisely the regime where the near-full
+adjustment is closest to correct. Brown–Goetzmann–Ross (1995, JF) is the time-series companion —
+conditioning on the market surviving an absorbing barrier can turn an ex-ante premium of zero into a
+large ex-post one — and is recorded **second-hand from its abstract only** (closed access, no
+repository copy). BGIR tier A, Stambaugh tier B, `validation_overlap: false` for all.
+→ `notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`
+
+**The bias with this repo's exact data construction has been measured, it is large, and it is not
+the bias `program.md` names.** Daniel–Sornette–Wöhrmann (2009, JPM) write out the standard recipe
+verbatim — take today's index constituent list, pull each name's history, backtest — and show step
+one leaks the future. This is *not* ordinary survivorship: names that survived the entire window are
+still selected, because a capitalisation-ranked index cannot contain a name that fell far behind over
+the window being scored. Their matched-pair design (for each of eight consecutive decades, the 500
+largest as of the window's **end** against the 500 largest as of its **start**) puts the overstatement
+at **up to 8% per annum** across 1926–2006, with the ex-post book winning in all eight windows. The
+shape matters more than the level and is uniformly flattering: return up, volatility **down**, and
+peak-to-valley **drawdown understated** — three of `program.md`'s own gates, made easier than they
+would be in real time. Three riders travel with it. The standard way of *sizing* such a bias (same
+statistic on clean and biased databases, differenced) is itself biased toward understatement, because
+a selected database has smaller covariance terms — "the bias is worse than one thinks it is when
+reading the literature". The distortion has a **preferred victim**: inflated means and shrunken
+covariances flip the ordering between naive 1/N and sample-based optimisation in the optimiser's
+favour, so the folder's screen #1 is *understated* on this repo's data rather than overstated. And
+their proposed remedy is not a correction but a **null**: benchmark against constrained random
+long-only portfolios run on the same biased universe, matched on leverage, position count, holding
+period and turnover — in their illustration, information-free random books on a look-ahead-selected
+universe reached Sharpe ratios around 2 and beat the index comfortably. Cai–Houge (2008, FAJ) supply
+the channel by which index membership selects on past return: membership is a **threshold on a
+characteristic**, so crossings are large-past-return events, and they measure both signs in one
+sample (names deleted from the top of the Russell 2000 averaged ≈ +69% over the prior year, from the
+bottom ≈ −36%; entrants from the bottom ≈ +53%, from the top ≈ −28%), with top deletions continuing to
+show short-term momentum into the following year. Both tier B (strong venues, single market,
+unreplicated), `validation_overlap: false`. **One extrapolation is the lab's and not the sources':**
+Cai–Houge study a two-sided small-cap index, whereas this repo's universe comes from **large-cap**
+indices bounded from below only — so its additions are names growing *up* through the bar and its
+deletions names shrinking *down* through it, which is the direction that flatters a cross-sectional
+momentum book. That is a second, independent route to BGIR's sign.
+→ `notes/2026-08-26-look-ahead-benchmark-bias-index-constituents.md`
+
+**And why the magnitude is large: the distribution being truncated is extraordinarily skewed, which
+also prices a construction step the lab has taken repeatedly.** Bessembinder (2018, JFE), on all
+25,332 US common stocks 1926–2016: fewer than half of monthly individual stock returns are positive,
+the **modal lifetime return rounded to the nearest 5% is −100%**, median listing life is **seven and a
+half years**, and the top **1,092 firms (4.31%)** account for *all* of the market's net dollar wealth
+creation while the other 96% collectively match Treasury bills. The mechanism is compounding, provable
+on IID normal draws: multi-period buy-and-hold returns are positively skewed even from symmetric
+single-period returns, skewness rising in both horizon and `σ`, so **at unchanged mean the median
+buy-and-hold outcome falls monotonically in `σ`** — at a ten-year horizon, from 81.94% riskless to
+0.14% at `σ = 10%`/month to −85.28% at `σ = 20%`/month. The calibration that makes this bite: monthly
+`σ` is **5.4%** for the value-weighted market, 7.3% equal-weighted, and **18.1%** for pooled individual
+stocks, and concentration is the dial that moves a book from the first number toward the third. His
+bootstraps then measure the consequence directly: annual-horizon skewness falls from 6.99 (one stock)
+to 1.08 (five) to 0.10 (25), but **the fraction of draws beating the cap-weighted market is below 50%
+at every `N`, costlessly** (48.7% / 45.4% / 36.8% at annual / decade / 90-year horizons for 25-name
+books). Three consequences here. It is the folder's **fourth and first distributional** account of what
+concentration costs, and it explains as one phenomenon two things `learnings.md` records separately —
+drawdown widening monotonically along the concentration ladder, and one validation year dominating the
+P&L. It says the **null distribution for a concentrated long-only book is not centred on a broad
+benchmark**, independently of skill or costs. And it is the magnitude behind the other two notes: a
+current-constituents universe is a draw from the right tail of *this* distribution, which is why the
+selection is worth percent-per-year rather than basis points. Tier A, `validation_overlap: false`.
+**Boundary, per the folder's own *check the currency* principle:** every statistic here is a
+probability of beating a cap-weighted benchmark or a median buy-and-hold return, **not net Sharpe on a
+costed constrained book**, and no exchange rate between them exists in the folder. The global
+companion that would supply the multi-market leg (Bessembinder et al., FAJ 2023, ~64,000 stocks) is
+closed access and is recorded **unread**, with the further note that its sample would carry
+`validation_overlap`.
+→ `notes/2026-08-26-skewness-and-concentration-of-stock-returns.md`
+
+_Net: the discount this repo applies to every stock-level result now has a **sourced mechanism and an
+unambiguous direction**, and its **magnitude on this universe remains unmeasurable with the data the
+repo has** — the matched-pair measurement needs point-in-time constituents, which `program.md` lists
+under human-approval-gated future upgrades. That is a better statement than the caveat had, and it is
+not a number._
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -1387,6 +1496,26 @@ correlation flipping sign, or the two series moving monotonically in opposite di
 sharpening, not a softening: applied to `learnings.md`'s ⚠ standing protocol concern it removes the
 half that any Bayesian would have predicted and leaves the half that nobody would.
 → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`
+
+**A data-construction bias is not a level discount — ask which *claim* it corrupts, and by how much
+more than the level.** The reflex on learning a sample is selected is to shade the expected return
+down and carry on. That is usually the smallest of the available errors. Conditioning a cross-section
+on realised return moves average risk-adjusted return by well under a percent a year in the canonical
+calibration, but reshapes the joint distribution of return and volatility enough that a **5%** annual
+truncation makes a test of "no cross-sectional persistence" reject more than half the time. The two
+effects are not the same size and are not even the same kind: one is a bias in a moment, the other is
+a bias in an *inference*. So the question to ask of any selected sample is not "how much should I
+shade the mean?" but "**which of my claims is a claim about the thing this selection reshaped?**" —
+and a strategy family whose entire assertion is that relative past performance predicts relative
+future performance is maximally exposed. Two corollaries travel with it. The **sign is a property of
+the selection rule** and must be derived, not assumed: sequential per-period survival induces
+apparent persistence, selection on whole-sample cumulative performance induces apparent reversal.
+And the correction is **an assumption you state, not a constant you apply** — the standard "subtract
+the survival bias" adjustment is correct only in the limit where all units share one completely
+unknown expected return, and is too severe otherwise. This generalises past survivorship to every
+selected sample the lab reads, its own trial log included.
+→ `notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`,
+`notes/2026-08-26-look-ahead-benchmark-bias-index-constituents.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -1984,6 +2113,57 @@ hypothesis fodder, then anti-candidates.
     someone who believes no bias was introduced. Tier A but `validation_overlap: true` and
     `published_post_2018: true` — mechanism only, and no figure from it may be imported.
     → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`
+34. **[Added 2026-08-26] Interpretation rule that re-aims the lab's oldest permanent caveat, at zero
+    cost.** Survivorship's effect on the **level** of returns is the forgiving half (≈0.4–0.8%/yr in
+    BGIR's calibration, and Stambaugh shows the standard adjustment for it is generally *too severe*).
+    Its effect on **inference about cross-sectional persistence** is the severe half: a 5% annual
+    performance cut is enough to make a test of no-persistence reject more than half the time. A
+    cross-sectional momentum strategy asserts persistence and nothing else, so the champion's own
+    mechanism is the one a current-constituents universe most readily fabricates. Two riders that keep
+    this from being a blanket discount. The **sign follows the selection rule** — sequential
+    (per-review) survival induces persistence, whole-sample cumulative selection induces reversal — and
+    index membership, re-reviewed on a cadence with removal for sustained relative decline, is the
+    first case. And the size of the discount is a **stated assumption about commonality**: maximal if
+    you believe all instruments share one unknown expected return, zero if you believe their expected
+    returns are independent draws. On ~145 large-cap global names sharing a dominant market factor,
+    high commonality is the honest assumption, so the discount stays large — but it should be *stated*,
+    not reflexive. **What this does not license:** any numerical adjustment to a measured Sharpe. No
+    source read here bridges "persistence inference is corrupted" to a magnitude for a strategy's net
+    Sharpe, and none can be taken from them. Tier A / B, no overlap.
+    → `notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`
+35. **[Added 2026-08-26] The one buildable proposal this session found, ranked below the free rules
+    because it is not free: a random-portfolio null on the same biased universe.** Generate many random
+    long-only books on this repo's own universe, **matched to the strategy on gross leverage, position
+    count, average holding period and turnover**, and report the champion's statistic as a quantile of
+    that distribution rather than as a level. It is the correct control for a look-ahead-selected
+    universe precisely because the same contamination applies to both sides, and it answers a question
+    no statistic in this repo asks — how much of the measured edge is available to a book with no
+    information at all. The matching is load-bearing; an unmatched random benchmark measures something
+    else. Three costs put it in session 11's PBO category rather than in the free-diagnostic class: it
+    **scores returns** (outside the holdings-only exemption), it would have to run on the validation
+    split to be comparable to the gate's number (re-using a split, not supplying an independent look),
+    and `CLAUDE.md` requires every strategy run to go through `run_experiment.py`, so **whether a null
+    distribution counts as trials is a human decision, not a session's**. Recorded as a proposal to a
+    human. Tier B, no overlap.
+    → `notes/2026-08-26-look-ahead-benchmark-bias-index-constituents.md`
+36. **[Added 2026-08-26] A distributional price for the concentration ladder, computable from one
+    number the repo already has.** At unchanged mean, the **median** buy-and-hold outcome falls
+    monotonically in a book's `σ`, steeply and non-linearly, and the effect grows with horizon (ten-year
+    horizon: 81.94% at `σ = 0` → 0.14% at `σ = 10%`/month → −85.28% at 20%). The relevant span is
+    calibrated: **5.4%**/month for a value-weighted market book, 7.3% equal-weighted, **18.1%** for
+    pooled individual stocks — and every rung of the lab's concentration ladder moves its `σ` along that
+    span. Independently, a randomly drawn 25-name value-weighted book beats the cap-weighted market in
+    **under half of draws at every horizon, with no costs deducted**, so the null for a concentrated
+    long-only book is not centred on a broad benchmark. This is the folder's fourth account of what
+    concentration costs and its first distributional one; it explains as a single phenomenon two things
+    `learnings.md` records separately (drawdown widening monotonically along the ladder; one validation
+    year dominating the P&L). **Two hard boundaries.** *Check the currency* (#27): these are
+    probabilities of beating a benchmark and medians of buy-and-hold returns, **not Sharpe**, and no
+    exchange rate exists — do not convert them into an expected validation Sharpe. And the bootstrap
+    books are **randomly selected**, so every figure is a property of the null and none is evidence
+    about a signal-selected book. The only free, holdings-only piece is the input: realised monthly `σ`
+    at each rung, which the repo already computes. Tier A, no overlap.
+    → `notes/2026-08-26-skewness-and-concentration-of-stock-returns.md`
 
 ## Coverage log
 
@@ -2001,6 +2181,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-23 (session 10) | Session 9's open question (b), the last unpatched seam: **what the lab is actually scored on**, attacked from both ends. End one — the currency the folder imports in: the geometric-mean-maximisation / growth-optimal (Kelly) literature and its criticism, chased specifically to settle whether a log-growth quantity can ever be a scoring axis. End two — the currency the lab is scored in: the sampling distribution of the Sharpe ratio itself, which nothing in nine sessions had covered. Three notes, full text read directly for all three primary texts. The session's shape is one *closure* (log growth has no exchange rate to a risk-scored objective, which retires session 9's own top candidate and explains the lab's `gamma*` null), one *anti-candidate plus two re-weighted screens* (Kelly as a leverage rule; means >> variances >> covariances, with the multiple rising as the book gets more aggressive), and one *new free measurement* on the repo's headline statistic (the `eta(q)` annualisation check and a standard error). | Samuelson 1971 (PNAS; EuropePMC copy read in full) + Merton–Samuelson 1974 (JFE; MIT Sloan WP 623-72 read in full from MIT DSpace) (`2026-08-23-geometric-mean-maximization-fallacy.md`); MacLean–Thorp–Ziemba 2010/2011 (Quantitative Finance / World Scientific handbook chapter; authors' dated draft read in full from a Berkeley course page), with MacLean–Ziemba–Blazenko 1992 (Management Science) and Chopra–Ziemba 1993 (JPM) recorded **second-hand and flagged** — both closed-access, their tables reproduced in the text read (`2026-08-23-kelly-criterion-growth-security-tradeoff.md`); Lo 2002 (FAJ; course-page mirror read in full) (`2026-08-23-statistics-of-sharpe-ratios.md`) |
 | 2026-08-24 (session 11) | Session 10's two named open questions, in its own priority order, and both close: (a) **the paired standard error of a difference of Sharpe ratios** — the quantity the gate adjudicates and the one session 10 forbade itself to substitute the single-strategy error for — chased in the vocabulary that session named (Jobson–Korkie / Memmel; Ledoit–Wolf); and (b) **the deflated Sharpe ratio itself**, the last uncovered piece of the gate's own machinery, together with the rival multiple-testing correction the DSR authors call complementary. Three notes; full text read directly for Ledoit–Wolf, Bailey–López de Prado, the Bailey–Borwein–López de Prado–Zhu companion, Harvey–Liu and O'Connor, and in part for Harvey–Liu–Zhu. The session's shape is one *closed form* that reproduces a number the lab had only bootstrapped (and grades the lab's bootstrap as the right method with two free refinements), one *coverage obligation discharged* on the gate's statistic, and one *correction to a sentence the folder repeats* — "every trial raises the bar" is a family-wise-error-rate property, not a law. | Ledoit–Wolf 2008 (JEF; UZH-hosted published PDF read in full), with Jobson–Korkie 1981 (JF) and Memmel 2003 (Finance Letters) recorded **second-hand** from two independent restatements of their formula, and Opdyke 2007 recorded **unread** (`2026-08-24-testing-differences-of-sharpe-ratios.md`); Bailey–López de Prado 2014 (JPM; author-hosted PDF read in full) + Bailey–Borwein–López de Prado–Zhu 2016 (J. Computational Finance; author-hosted PDF read in full), with the Notices-of-the-AMS companion recorded **unread** (`2026-08-24-deflated-sharpe-ratio.md`); Harvey–Liu 2015 (JPM; Duke-hosted PDF read in full) + Harvey–Liu–Zhu 2016 (RFS; Duke-hosted PDF read in part) (`2026-08-24-multiple-testing-haircut.md`) |
 | 2026-08-25 (session 12) | Session 11's open question (c), the last unpatched seam in the scoring apparatus: **a multiple-testing correction that knows why a trial was run** — chased in the vocabulary session 11 named (prior-weighted, hierarchical and empirical-Bayes multiple testing), and answered from all three directions. Three notes; full text read directly for all four primary texts. The session's shape is one *machinery* that closes the question in statistics and immediately constrains it (a discount is zero-sum), one *exchange rate* in a finance venue that prices the discount at about one t-unit and finds it never falls below the naive bar, and one *narrowing correction* to `learnings.md`'s ⚠ standing protocol concern that removes its weaker half and sharpens the rest. | Genovese–Roeder–Wasserman 2006 (Biometrika; CMU Technical Report 811, the working version, read in full) + Roeder–Wasserman 2009 (Statistical Science; arXiv reprint read in full) (`2026-08-25-prior-weighted-multiple-testing.md`); Harvey 2017 (JF, Presidential Address; Duke-hosted PDF read in full) (`2026-08-25-bayesianized-p-values-prior-odds.md`); Jensen–Kelly–Pedersen 2023 (JF; CBS Research Portal published CC-BY version read in full) (`2026-08-25-hierarchical-bayesian-factor-replication.md`) |
+| 2026-08-26 (session 13) | Session 12's open question (b), taking the better of the two structurally-different targets it named: **the statistical properties of the universe itself** — survivorship and constituent selection, which `learnings.md` lists as a permanent caveat and which no note here had ever sourced. Three notes, five sources; full text read directly for four, one recorded second-hand from its abstract. The session's shape is one *re-aiming* of the lab's oldest caveat (the level effect is the forgiving half; the persistence inference is the severe half, and a cross-sectional momentum book is a persistence claim), one *magnitude* for this repo's literal data-construction recipe together with the sign of the index-membership channel, and one *distribution* that explains why that magnitude is large — plus the folder's fourth and first distributional account of what concentration costs. | Brown–Goetzmann–Ibbotson–Ross 1992 (RFS; `terpconnect.umd.edu` mirror read in full) + Stambaugh 2011 (Quarterly Journal of Finance; the 2002 working version read in full from a Berkeley Haas upload), with Brown–Goetzmann–Ross 1995 (JF) recorded **second-hand from its published abstract only** — `oa_status: closed`, no repository copy found (`2026-08-26-survivorship-conditioning-and-spurious-persistence.md`); Daniel–Sornette–Wöhrmann 2009 (JPM; arXiv:0810.1922 read in full) + Cai–Houge 2008 (FAJ; author-hosted accepted version at `biz.uiowa.edu` read in full) (`2026-08-26-look-ahead-benchmark-bias-index-constituents.md`); Bessembinder 2018 (JFE; accepted-manuscript PDF read in full), with Bessembinder–Chen–Choi–Wei 2023 (FAJ, global) recorded **unread** (`2026-08-26-skewness-and-concentration-of-stock-returns.md`) |
 
 ### Open questions for future sessions
 
@@ -2497,6 +2678,56 @@ hypothesis fodder, then anti-candidates.
   results are known, which is the one thing the weighting theorems forbid. The notes state the
   machinery; they do not apply it to this repo's history.
 
+  **— (b) ACTED ON 2026-08-26 (session 13), taking the target it recommended, and the recommendation
+  was right.** Session 12 judged the universe's own statistical properties the better of its two
+  candidates because it is the largest unquantified discount the repo applies and has a large
+  accessible literature. Both halves held. The literature is large, tier-1 and directly on point — one
+  of the sources opens by writing out this repo's universe-building recipe step by step before showing
+  it is a bias worth up to 8% per annum. And the yield is not another screen: it is a **correction to
+  the lab's oldest permanent caveat**, which has been aimed at the *level* of single-stock returns
+  (the forgiving half, and the half whose standard correction is provably too severe) rather than at
+  *persistence inference* (the severe half, and precisely what a cross-sectional momentum strategy
+  claims). Two things the session could **not** deliver, stated so they are not expected later. No
+  magnitude for this repo: the matched-pair measurement that would size the bias needs point-in-time
+  constituents, which `program.md` gates behind human approval, so the honest status is "mechanism
+  sourced, direction unambiguous, magnitude unmeasurable with the data the repo has." And no bridge to
+  the gate's currency: every statistic found is a probability of beating a benchmark, a median
+  buy-and-hold return, or a rejection rate for a persistence test — none is net Sharpe on a costed
+  constrained book, which is session 10's *check the currency* discipline biting for the third time.
+  The other candidate session 12 named — the **execution / implementation-shortfall** literature —
+  remains untouched and is now the only one of its two left.
+
+- **New open questions raised by session 13, in priority order.**
+  (a) *The one proposal that would change what the lab knows, and it needs a human.* The
+  random-portfolio null (candidate #35) is the only control in the folder that is valid **on a
+  contaminated universe**, because the contamination applies to both sides of the comparison. It is
+  also the only proposal here that fails all three of the folder's own cheapness tests at once — it
+  scores returns, it re-uses the validation split, and `CLAUDE.md` routes every strategy run through
+  `run_experiment.py`, so whether a null distribution consumes trials is not a session's call. It is
+  therefore ranked first as a **question to the human reviewer**, not as work a session may start.
+  What makes it worth asking: the repo currently has no answer at all to "how much of the champion's
+  edge is available to an information-free book on this universe", and the source's illustration shows
+  that number can be large.
+  (b) *The last untouched vocabulary session 12 named.* **Execution and implementation shortfall** is
+  now the only cost-side literature the folder has never opened — session 6 named it, session 7
+  answered from friction-aware portfolio choice instead, and session 12 ranked it second. The honest
+  prior is that it will close rather than open: `learnings.md` prices total cost drag at ~0.019 Sharpe
+  and the cost-mitigation literature was declared closed for idea supply in session 2. Worth one
+  session at most, and only if nothing better presents itself.
+  (c) *A target that did not exist before this session.* Three of the four sources read here are
+  US-only, and two of the three are single-market with no replication. This repo's universe is
+  **global**, and no note in the folder sources what constituent selection does outside the US, where
+  index construction rules, delisting practice and the size distribution all differ. The one global
+  source sighted (Bessembinder et al. 2023, ~64,000 stocks by its title) is closed access and was
+  not read, and carries `validation_overlap` in any case. Medium priority, and it has a stated failure
+  mode: it would supply robustness for a discount whose magnitude the repo cannot measure anyway.
+  (d) *Recorded as declined, so it is not rediscovered as an opportunity.* Attempting to *correct* the
+  repo's stored results for survivorship — re-scoring the champion under an assumed bias, or applying
+  BGIR's residual-standard-deviation normalisation to the trial log — is **declined**, for session 11's
+  item (d) reason and for a second specific one: BGIR offer that normalisation explicitly as a
+  conjecture, not a result, and every magnitude in these notes belongs to a different universe than
+  this repo's. The notes state the mechanism; they do not adjust anything.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -2508,6 +2739,29 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 13 (2026-08-26) read full text directly for four of its five sources**; the fifth is
+  recorded from its abstract. The session's access lesson is that **a citing paper's reference list is
+  a search channel, not just a bibliography** — the source that turned out to be the session's best
+  counterweight (Stambaugh) was found only because a targeted web search for a *different*, closed
+  paper surfaced a Berkeley Haas-hosted working paper that cites it, and that working paper was itself
+  the source. Channels that worked first try: a **university faculty FTP-style directory**
+  (`terpconnect.umd.edu/~wermers/ftpsite/`) served a 1992 RFS article complete with journal header and
+  pagination; **arXiv q-fin** again carried the full content of a JPM article; an **author's own
+  department page** (`biz.uiowa.edu/faculty/<name>/`) served the accepted version of an FAJ article;
+  and a **plain document-mirror host** served the JFE accepted manuscript when the publisher and SSRN
+  would not. Limits hit, all as documented: **Semantic Scholar's DOI endpoint returned 429 on the
+  fifth consecutive call** and does not resolve `10.1111/j.1540-6261.1995.tb04039.x` (a 300-citation
+  1995 *Journal of Finance* article) — a third consecutive session in which a JF DOI misses in
+  Semantic Scholar, so the session-12 rule stands: **for a Journal of Finance DOI, go to Crossref
+  first**. A **BYU ScholarsArchive** link advertised by Semantic Scholar's own `openAccessPdf` field
+  returned **403** with an HTML body, which is worth remembering — an index's OA link is a claim, not a
+  guarantee, and `file` on the download catches it. One new index anomaly for the "disbelieve a lone
+  low count" list, this time in the opposite direction from the usual: **OpenAlex reports 1 citation**
+  for the 2009 JPM article against Crossref's 19. Two sources are recorded as **not read** rather than
+  summarised from abstracts beyond what is flagged: Bessembinder et al. 2023 (FAJ, global) is
+  `oa_status: closed` with no repository copy, and Brown–Goetzmann–Ross 1995 is likewise closed and is
+  used only at the level of its published abstract, marked as such in both the note and this file.
 
   **Session 12 (2026-08-25) read full text directly for every primary source**, and the session's
   access lesson is that **an author's or department's own technical-report series is the reliable
