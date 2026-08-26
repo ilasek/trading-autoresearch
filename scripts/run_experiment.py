@@ -56,6 +56,13 @@ def journal_entry(r: protocol.TrialResult) -> str:
             f"- Champion re-deflated at the same bar: {r.champion_dsr}"
             + (" — **provisional seat**" if r.champion_dsr < protocol.DSR_THRESHOLD else "")
         )
+    if r.holdout_t is not None:
+        lines.append(
+            f"- Holdout gate: candidate {r.holdout['sharpe']:+.2f} vs champion "
+            f"{r.champion_holdout_sharpe:+.2f}, delta {r.holdout_delta:+.3f}, "
+            f"paired SE {r.holdout_se}, rho {r.holdout_rho}, "
+            f"**t {r.holdout_t:+.2f}** (veto below -{protocol.HOLDOUT_VETO_T})"
+        )
     lines.append("- Lesson: _(fill in after reflection)_")
     return "\n".join(lines) + "\n\n"
 
@@ -93,7 +100,19 @@ def main() -> int:
         print(f"  champion re-deflated at the same bar: {result.champion_dsr}{flag}")
     if result.holdout:
         print(fmt_split("holdout   ", protocol._public(result.holdout)))
-        print("  (holdout evaluated because of promotion — logged)")
+        print("  (holdout read by the holdout gate — logged)")
+    if result.holdout_t is not None:
+        print(
+            f"  holdout gate: champion {result.champion_holdout_sharpe:+.2f}, "
+            f"delta {result.holdout_delta:+.3f}, SE {result.holdout_se}, "
+            f"rho {result.holdout_rho}, t {result.holdout_t:+.2f} "
+            f"(veto below -{protocol.HOLDOUT_VETO_T})"
+        )
+    if result.verdict == "HOLDOUT_VETO":
+        print(
+            "  the champion was NOT replaced. This session has now seen a holdout\n"
+            "  number: stop here — every later candidate would be holdout-informed."
+        )
 
     JOURNAL.parent.mkdir(parents=True, exist_ok=True)
     if not JOURNAL.exists():

@@ -39,15 +39,27 @@ trading days behind), note it in the journal and continue; do not mass-download.
 3. **Implement**: one file in `strategies/candidates/<slug>.py` implementing the strategy
    contract (below). Keep it small and readable.
 4. **Run**: `.venv/bin/python scripts/run_experiment.py strategies/candidates/<slug>.py`
-   The script evaluates train + validation, applies gates, records the trial, appends a
-   journal entry, and on `PROMOTE` updates the champion and evaluates holdout.
+   The script evaluates train + validation, applies gates, records the trial, and appends a
+   journal entry. A candidate that wins validation and clears the deflated-Sharpe bar then
+   faces the **holdout veto** (see `program.md`): the holdout is read, and the seat is
+   refused if the candidate is worse than the incumbent there by more than 2 paired
+   standard errors. On `PROMOTE` the champion is updated.
 5. **Verdict handling**:
    - `PROMOTE` → `git add -A && git commit -m "promote: <slug> (<val_sharpe> vs <old>)"`
+   - `HOLDOUT_VETO` → the candidate won validation but the holdout refused it. Keep the
+     candidate file — it is a result, not a failure — and commit with
+     `git commit -m "trial: <slug> HOLDOUT_VETO"`. Record the gate's `t` in the journal
+     lesson line; a repeated pattern of vetoes in one family is itself a finding.
    - `REJECT`/`GATE_FAIL` → keep the journal/trials changes, delete or keep the candidate
      file as you judge useful, commit with `git commit -m "trial: <slug> REJECT"`.
      Never delete or rewrite journal/trials history.
 6. **Learn**: append one lesson line to the journal entry; when a pattern repeats across
    experiments, distill it into `experiments/learnings.md` (and prune stale learnings).
+
+**Stop the session the moment a trial reaches the holdout gate** — on `PROMOTE` or
+`HOLDOUT_VETO` alike. You have now seen a holdout number, so every later candidate you
+design tonight would be holdout-informed. Write the session summary and stop, even with
+budget left.
 
 At session end: write a short session summary block in the journal (experiments run,
 verdicts, best finding, next ideas) and push: `git push origin main`.
@@ -76,6 +88,9 @@ def generate_weights(prices):
 ## Hard rules
 
 - **Never touch the holdout split.** No manual backtests on 2024+ data, no "just checking".
+  The holdout veto inside `run_experiment.py` is the *only* permitted read, and reaching
+  it ends the session. The veto does not make the split a free resource — it is the one
+  split not yet spent, and it is spent one look at a time.
 - **Never edit the engine, protocol thresholds, or trials.jsonl.** If you believe the
   engine has a bug, write it up in the journal under `## Engine issue` and stop that
   experiment; a human reviews engine changes.

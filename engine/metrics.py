@@ -133,6 +133,61 @@ def deflated_sharpe(
     return probabilistic_sharpe(returns, expected_max_sharpe(var, n_trials))
 
 
+def sharpe_diff_se(
+    returns_a: pd.Series,
+    returns_b: pd.Series,
+    min_overlap: int = 30,
+) -> tuple[float, float]:
+    """SE of the *annualized* Sharpe difference between two strategies, and the
+    correlation of their daily returns. Memmel's (2003) correction to the
+    Jobson-Korkie (1981) test.
+
+    Both series are aligned on the intersection of their dates, so the estimate
+    is *paired*: the two strategies see the same days and their common market
+    exposure cancels. That is what makes it useful here — a single strategy's
+    own Sharpe carries a standard error several times larger than the error on
+    a difference between two highly correlated ones, and the difference is the
+    quantity a promotion decision actually turns on.
+
+        Var(s_a - s_b) = (1/T) [ 2(1 - rho) + 0.5(s_a^2 + s_b^2 - 2 s_a s_b rho^2) ]
+
+    with s_* the *daily* Sharpe ratios; the result is scaled by sqrt(252) to
+    annualize. The (1 - rho) term dominates in practice, so near-identical
+    constructions are resolvable to a much finer margin than distinct ones.
+
+    Assumes i.i.d. bivariate normal returns, so under fat tails and volatility
+    clustering it is liberal: treat it as a *floor* on the error bar, never as
+    a significance test in its own right.
+
+    Returns (se, rho). Degenerate comparisons — too little overlap, or either
+    series flat — return (inf, nan), which makes every t-statistic zero and so
+    decides nothing.
+    """
+    joined = pd.concat([returns_a, returns_b], axis=1, join="inner").dropna()
+    n = len(joined)
+    if n < min_overlap:
+        return float("inf"), float("nan")
+
+    a = joined.iloc[:, 0].to_numpy(dtype=float)
+    b = joined.iloc[:, 1].to_numpy(dtype=float)
+    sd_a, sd_b = a.std(ddof=1), b.std(ddof=1)
+    if sd_a <= 0 or sd_b <= 0:
+        return float("inf"), float("nan")
+
+    rho = float(np.corrcoef(a, b)[0, 1])
+    if not np.isfinite(rho):
+        return float("inf"), float("nan")
+
+    s_a = float(a.mean() / sd_a)  # daily Sharpe
+    s_b = float(b.mean() / sd_b)
+    var = (
+        2.0 * (1.0 - rho)
+        + 0.5 * (s_a**2 + s_b**2 - 2.0 * s_a * s_b * rho**2)
+    ) / n
+    var = max(var, 0.0)
+    return math.sqrt(var) * math.sqrt(TRADING_DAYS), rho
+
+
 def summary(returns: pd.Series) -> dict:
     return {
         "ann_return": round(ann_return(returns), 4),

@@ -3520,3 +3520,134 @@ result 2 would have declined every promotion after #42.
    one branch delete from an account with tag-push rights), and the seventh consecutive per-run
    branch open, which the session-start hook still does not detect.
 - No engine issues encountered this session.
+
+## Protocol issue — 2026-08-26: RESOLVED — the flagged branches were a shallow-clone artifact
+
+Supersedes the diagnosis in `## Protocol issue — 2026-08-25`, which is left in place as
+written. That entry concluded `origin/deflated-sharpe-effective-trials` was a **"disjoint
+orphan history"** with **"no merge base with `main` at all"**, and asked a human to push an
+archive tag before deleting it. Both halves of that reading were wrong, and the reason is
+worth more than the fix.
+
+**Root cause: this environment clones the repo shallow.** Past the shallow boundary git
+cannot compute reachability, so `git merge-base` returns the empty string and
+`git branch -r --no-merged origin/main` reports *every* branch as unmerged no matter how
+thoroughly merged it is. The guard was not detecting a split history; it was reading git's
+"I don't know" as "no".
+
+Reproduced end to end this session, in a fresh `git clone --depth=1 --no-single-branch`:
+
+| | `--no-merged origin/main` | `merge-base main deflated-…` |
+|---|---|---|
+| shallow clone | all four branches listed | `''` (empty) |
+| after `git fetch --unshallow` | **(none)** | `9e4f129` |
+
+And with the full history fetched, all four flagged branches are plain **ancestors of
+`origin/main`** with **0 unique commits** each — `deflated-sharpe-effective-trials`,
+`main-b713x5`, `main-p76jo3`, `claude/remote-learning-egress-access-33q7fy`. Nothing was
+ever stranded, no trial was ever invisible, and no archive tag was ever needed: an ancestor
+cannot hold a distinct history to preserve. The 403 on the tag push was real but irrelevant.
+
+**Fix**, in `.claude/hooks/session-start.sh` (not a frozen path): deepen a shallow clone
+before either reachability check runs, guarded on `git rev-parse --is-shallow-repository`
+and falling through to a NOTE on failure, so the hook still cannot strand a session.
+
+**The general lesson is the one this repo keeps paying for, now at its third instance.**
+The trim mis-specification cost four trials, the weight-drift retraction cost two, and this
+cost seven sessions of blocked or duplicated work: *before crediting a component, check what
+its code actually reads* — and that includes the semantics of the tools the check is built
+from, not only the repo's own code. A guard that cannot distinguish "unmerged" from
+"unknown" will report the first and mean the second.
+
+**Still outstanding for a human, both cosmetic now:** the four dead branches can be deleted
+(`git push origin --delete <branch>` — each is an ancestor of `main`, so nothing is lost and
+each is recoverable); this session's attempt was blocked by a tool-permission classifier.
+
+## Engine change — 2026-08-26: the holdout veto, and a champion rollback to #42
+
+Human-authorized change to frozen files, made at the repo owner's explicit instruction. It
+is the action the ⚠ standing protocol concern has been asking for since 2026-08-17.
+
+### What changed
+
+1. **`engine/metrics.py` — `sharpe_diff_se(a, b)`**, Memmel's correction to Jobson-Korkie:
+   the paired SE of an annualized Sharpe difference, plus the two series' correlation. This
+   is the closed form the lab derived and validated across the 2026-08-23/24/25 sessions,
+   promoted from a session-local calculation to engine code. Its unit test reproduces this
+   repo's own published number — rho 0.939 over 1,562 days gives **SE 0.140**.
+2. **`engine/protocol.py` — `holdout_gate()` and `HOLDOUT_VETO_T = 2.0`.** A candidate that
+   has won validation and cleared DSR is now refused the seat if it is worse than the
+   incumbent on holdout by more than 2 paired standard errors. New verdict `HOLDOUT_VETO`;
+   the trial is still recorded and still raises the bar.
+3. **The champion was rolled back to #42**, `mom_zscore_overlap6_hzn_avg4`.
+
+### Three properties of the design, stated because they are what make it defensible
+
+- **The gate runs last.** It reads holdout only for candidates that would have been promoted
+  outright before it existed, so the number of *candidate* holdout reads is unchanged. The
+  incumbent is re-scored on the same window for the paired comparison, which reveals nothing
+  new — its holdout is already in the card and in `trials.jsonl`.
+- **The veto is one-sided.** Holdout is never scored, ranked or maximized; a tie or a win
+  promotes on the validation case alone. A veto leaks about one bit per trial where an
+  objective would leak the whole ranking. This matters because there is no third split in
+  reserve: the holdout is now a selection set, and it is spent one look at a time.
+- **Reaching the gate ends the session**, on PROMOTE or HOLDOUT_VETO alike — now written
+  into `program.md` and `CLAUDE.md`. This is the post-#43 corollary `learnings.md` already
+  stated but the protocol could not enforce.
+
+### Verification — the replay
+
+Against the reinstated champion, the three promotions the old gate made after #42, scored
+with `evaluate_split` directly (no `run_trial`, no new trial, `trials.jsonl` and the DSR bar
+untouched):
+
+| | candidate | val | beats champ? | holdout | delta | rho | SE | t | new verdict |
+|---|---|---|---|---|---|---|---|---|---|
+| #43 | `mom_zscore_hzn_avg4_k1` | 1.187 | yes | 0.760 | −0.532 | 0.930 | 0.228 | **−2.34** | HOLDOUT_VETO |
+| #45 | `mom_hzn_avg4_k1_cohort_trim` | 1.201 | yes | 0.759 | −0.533 | 0.930 | 0.227 | **−2.34** | HOLDOUT_VETO |
+| #51 | `mom_hzn_avg4_nobuffer` | 1.229 | yes | 0.683 | −0.609 | 0.919 | 0.245 | **−2.49** | HOLDOUT_VETO |
+
+All three won the only contest the old gate held, and all three are refused by the new one.
+The ladder that took holdout Sharpe from 1.377 to 0.691 cannot be climbed again.
+
+Note the margins are not large — t of −2.34 against a −2.00 bar. That is the honest reading
+and it should not be dressed up: the holdout window is 689 days and the SE is correspondingly
+wide. The veto resolves *these* steps because the candidates correlate 0.92-0.93 with the
+incumbent, not because the split is powerful in absolute terms.
+
+### The reinstated champion
+
+`mom_zscore_overlap6_hzn_avg4`, re-scored on the current store (through 2026-08-25):
+
+| split | sharpe | ann_ret | maxDD | turnover | n |
+|---|---|---|---|---|---|
+| train | +0.970 | +18.57% | −57.18% | 2.0x | 14,261 |
+| validation | +1.120 | +25.65% | −27.80% | 3.1x | 1,562 |
+| holdout | **+1.292** | **+32.26%** | **−20.13%** | 2.7x | 689 |
+
+Validation reproduces the recorded 1.120 exactly. Holdout reads 1.292 against the 1.377 in
+the record because the window has grown by ~6 months since #42 was promoted — a longer
+window, not drift.
+
+**Re-deflated at today's bar (54 trials, 12 effective): DSR 0.9626 ≥ 0.95, so the seat is
+NOT provisional.** This was the open risk flagged before the rollback — that #42 at 1.120
+might no longer clear the bar it faced, which would have opened the provisional escape hatch
+at `protocol.py`. It does clear it. The hatch stays shut.
+
+`experiments/trials.jsonl` was **not** touched. The PROMOTE records for #43, #45 and #51
+stand as history; they happened, and the record says so. The rollback lives in the champion
+card's new `reinstated` block and in this entry. The superseded champion is archived at
+`strategies/archive/20260826-192141_mom_hzn_avg4_nobuffer.py`.
+
+### What this does not fix
+
+The gate still scores **validation Sharpe** as its objective; the holdout can only veto. The
+lab's own measurement — `corr(train, holdout)` = +0.908 over the magnitude-weighted era,
+the best free predictor it has — remains unused, and the train Sharpe is still computed
+every trial at zero cost. If a second *scored* quantity is ever wanted, that is the one
+already on the table. It was considered and deliberately left out of this change to keep the
+holdout's role narrow.
+
+Also unchanged: `research/SUMMARY.md` #32's table of required gains still applies to the
+validation leg, and nothing in the four-horizon family clears it at any rho. The veto makes
+the gate harder to fool; it does not supply a new idea.
