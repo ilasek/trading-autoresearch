@@ -56,6 +56,19 @@ git fetch origin --prune --quiet 2>/dev/null || {
   exit 0
 }
 
+# Both checks below ask git about reachability, and a SHALLOW clone cannot answer:
+# past the shallow boundary `git merge-base` returns empty and `--no-merged` reports
+# every branch as unmerged, however thoroughly merged it actually is. This
+# environment clones shallow, so the stray-branch check fired on four fully-merged
+# branches for seven consecutive sessions, and the 2026-08-25 session spent itself
+# diagnosing one of them as a "disjoint orphan history" that had no unique commits
+# at all. Deepen first, then the answers mean something.
+if [ "$(git rev-parse --is-shallow-repository 2>/dev/null)" = "true" ]; then
+  git fetch origin --unshallow --quiet 2>/dev/null \
+    || git fetch origin --deepen=1000 --quiet 2>/dev/null \
+    || echo "[session-start] NOTE: could not deepen a shallow clone; branch check may over-report"
+fi
+
 WARN=""
 
 HEAD_SHA="$(git rev-parse HEAD 2>/dev/null)"
