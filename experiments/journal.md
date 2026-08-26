@@ -3653,3 +3653,39 @@ validation leg, and nothing in the four-horizon family clears it at any rho. The
 the gate harder to fool; it does not supply a new idea.
 
 ## Research session — 2026-08-26 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-26T23:16:15+00:00 — mom_hzn_disjoint4_overlap6 — **REJECT**
+- Candidate: `strategies/candidates/mom_hzn_disjoint4_overlap6.py` (family: cross-sectional momentum, trial #55)
+- Hypothesis: Replacing the champion's four nested formation windows (252/189/126/63 days, all ending at the skip-month) with four adjacent disjoint quarters spanning the same 12-month bracket — everything else, including the buffer chain, magnitude weighting, equal leg weighting, six-tranche date overlap and the daily vol-spike trim, identical to trial #42 — raises validation Sharpe above 1.120 net of 15 bps costs, because the gain from portfolio-level horizon averaging is bounded by how much the legs disagree and disjoint windows raise measured pairwise leg weight overlap disagreement from 0.475 to 0.141, the largest on any averaging axis recorded here; it is falsified if the -46% book HHI that disagreement brings with it costs more than the disagreement buys, which the lab's de-concentration constant prices at about -0.077 Sharpe.
+- Verdict: REJECT — validation sharpe 1.083 <= champion 1.12
+- Train: sharpe +0.96, ann_ret +17.1%, maxDD -57.6%, turnover 1.5x
+- Validation: sharpe +1.08, ann_ret +21.4%, maxDD -27.4%, turnover 2.5x
+- Deflated Sharpe prob: 0.9551 (bar from 55 trials, 12 effective)
+- Champion validation sharpe at the time: +1.12
+- Champion re-deflated at the same bar: 0.963
+- Lesson: **Breadth bought with leg disagreement is half-price — not free, and not full
+  price.** The trial was designed to put two of the lab's own calibrated constants in direct
+  conflict for the first time, and neither won. Constant (a), "breadth arriving from a
+  decorrelated vintage costs nothing" (#41 → #42, 47 → 63 names at rising Sharpe and improving
+  drawdown), predicted ≈ 0; constant (b), de-concentration at ≈ 0.05 Sharpe per 30% of HHI
+  (#53), predicted **−0.077** on this candidate's measured −46% HHI. Observed: **−0.037**,
+  almost exactly halfway, and inside the pre-registered 1.04–1.13 band. So the concentration
+  price is real on this axis but runs at roughly **half rate** when the extra names arrive from
+  legs that disagree; #41/#42's "free" reading was the same effect with a smaller
+  de-concentration (−46% here against far less there) and a gain on the other side that
+  happened to cover it. **Restate constant (a) as a discount, not an exemption.**
+  Three secondary readings, all recorded against pre-registration. (i) The disagreement premise
+  was verified before the run and was the largest ever measured here — mean pairwise leg weight
+  overlap **0.475 → 0.141**, against 0.645 for formation-date vintages, 0.43–0.48 for subsample
+  folds and 0.963 for the buffer bands killed for free — and it *still* bought nothing. This is
+  the **fifth** live averaging axis to lose, and it pushes the standing "live is a precondition
+  with no predictive content whatever" from three axes to five, now including the extreme point
+  of the axis. (ii) The move is a de-risking one, not a dilution: ann_ret −4.2pp (25.7% → 21.4%)
+  against ann_vol −2.9pp (22.7% → 19.8%), with validation maxDD **improving** −27.8% → −27.4%.
+  (iii) **The turnover pre-registration was wrong and the error is worth keeping**: I predicted
+  turnover would *rise* because each leg re-forms from a window sharing no data with its
+  neighbours, and it **fell**, 3.11x → 2.5x. Leg disagreement damps book-level churn rather than
+  adding to it — the same 1/N damping the lab measured across tranches, now observed across
+  lengths. Do not reason about a book's turnover from its legs' turnover.
+  Method note: the premise diagnostic (leg overlap, HHI, breadth, core-vs-fringe L1) was
+  holdings-only and cost no trial; the trial supplied only the sign, as `learnings.md` requires.
+
