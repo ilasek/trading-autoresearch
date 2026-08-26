@@ -475,6 +475,28 @@ across experiments; prune entries that later evidence contradicts.
   negative, trial not spent. Diagnose first; spend the trial only on the sign, and only
   when the sign matters.
 
+- **[NUMBERS RE-BASELINED 2026-08-26. The champion changed today — the human's
+  `## Engine change` journal entry rolled the seat back to #42
+  `mom_zscore_overlap6_hzn_avg4`, validation 1.120, K=6. Every concentration and
+  risk figure in the entry below, and in every entry between 2026-08-21 and
+  2026-08-24 phrased as "on this base", describes the **retired** K=1 champion
+  `mom_hzn_avg4_nobuffer`. The mechanisms stand; the levels do not.]** Recomputed
+  holdings-only on the reinstated champion (75 sampled validation dates, 252-day
+  trailing sample covariance):
+
+      statistic              retired #51   reinstated #42   trial #55 (disjoint)
+      positions                 30.3            62.7             80.8
+      HHI                      0.0918          0.0612           0.0337
+      top weight                0.172           0.156            0.103
+      top-name RISK share       0.368           0.323            0.239
+      effective WEIGHT bets     13.3*           18.35            31.98
+      effective RISK bets        6.0             8.54            13.84
+
+  (*the 13.3/6.0 pair below is quoted for the champion of 2026-08-19.) The
+  reinstated book is materially more diversified than six sessions of notes
+  describe. The turnover-drag figure for it is already correct in the arithmetic
+  correction near the end of this file (3.11x → 0.47%/yr → 0.021 Sharpe).
+
 - **Weight concentration is not risk concentration, and every concentration
   claim in this repo's history was made on the weaker of the two.** The
   risk-contribution vector `x_i · ∂_i σ(x)` — a holdings-only statistic, no
@@ -1094,3 +1116,95 @@ across experiments; prune entries that later evidence contradicts.
   pre-register against. **Apply this table, not the bare 0.057 floor, before writing any candidate
   file: state the expected `rho`, read off the required gain, compare to the pre-registered
   effect.** Nothing remaining in the four-horizon family clears it at any `rho`.
+
+- **Breadth bought with leg disagreement is half-price — not free, and not full price — and
+  the trial that measured it is the first to put two of this file's own calibrated constants
+  in direct conflict.** The four horizon legs had always *nested*: every window ends at the
+  skip-month, so the 63-day leg's data is a subset of every other leg's. #44 had moved the
+  redundancy's *dispersion* (12x) and found a null; the *level* had never been moved. Trial
+  #55 moved it to the extreme — four adjacent **disjoint** quarters over the same 12-month
+  span, everything else bit-identical to the champion — and the premise was verified first,
+  holdings-only: mean pairwise leg weight overlap **0.475 → 0.141**, the largest leg
+  disagreement ever measured here (formation-date vintages 0.645, subsample folds 0.43–0.48,
+  buffer bands 0.963). Two constants made opposite predictions. *(a)* "Breadth arriving from a
+  decorrelated vintage costs nothing" (#41 → #42: 47 → 63 names at rising Sharpe and improving
+  drawdown) predicted ≈ 0. *(b)* De-concentration at ≈ 0.05 Sharpe per 30% of HHI (#53)
+  predicted **−0.077** on the measured −46% HHI. Observed **−0.037**, almost exactly halfway.
+  **Restate (a) as a discount, not an exemption**: the concentration price is real on this
+  axis and runs at roughly half rate when the names arrive from legs that disagree. #41/#42's
+  "free" reading was the same effect at a far smaller de-concentration with a gain on the
+  other side that happened to cover it.
+  Three riders. **Live is now a precondition with no predictive content at five axes, not
+  three** — this is the fifth live averaging axis to lose, and it is the extreme point of one,
+  so the screens (overlap, core-vs-fringe) should be used only to kill, never to promote. The
+  move is **de-risking, not dilution**: ann_ret −4.2pp against ann_vol −2.9pp, validation maxDD
+  *improving* −27.8% → −27.4%, turnover 3.11x → 2.5x — another risk/return-dial pair like
+  #32/#33, and one a human weighing risk might want to see. And a **pre-registration that was
+  wrong in a useful way**: turnover was predicted to *rise* (each leg re-forms from a window
+  sharing no data with its neighbours) and it *fell*. Leg disagreement damps book-level churn
+  rather than adding to it, the same 1/N damping already measured across tranches, now across
+  lengths. **Do not reason about a book's turnover from its legs' turnover.**
+
+- **The horizon axis is closed by a bracket rather than an assertion, and the tool that closed
+  it is a piece of paper.** `research/SUMMARY.md` #3 — write any trend/MA-type signal as its
+  weight vector over past returns — sat unexercised for seven sessions. At *score* level an
+  equal average of nested momentum legs **is** a single momentum score with a declining step
+  kernel over the 252 days before the skip-month. Quarter weights, and the kernel's mean lag
+  in quarters:
+
+      #44 geometric 252/159/100/63   [0.569 0.254 0.114 0.062]   mean lag 1.670   -0.021 (K=1)
+      #42 champion  252/189/126/63   [0.521 0.271 0.146 0.062]   mean lag 1.750    best
+      #41 two-leg   252/126          [0.375 0.375 0.125 0.125]   mean lag 2.000   -0.008 (K=6)
+      #55 disjoint  four quarters    [0.250 0.250 0.250 0.250]   mean lag 2.500   -0.037 (K=6)
+
+  **The champion's kernel is bracketed on both sides** — flatter costs 0.008 and 0.037, more
+  recency-tilted costs 0.021. The triage also **retrodicts #44 before any data**: geometric
+  spacing moves the mean lag by 0.08 of a quarter, so a null was predictable on paper. Two
+  boundaries: the bracket's arms sit on two different bases (K=6, K=1), so it is directional
+  rather than paired, and all three margins are inside the family's resolution floor
+  (0.03–0.14) — what is established is the *shape*, not any single gap. **Practical rule: any
+  future proposal that is a linear filter over past returns — another spacing, another leg
+  count, another nesting rule, an exponential or a "new" trend signal — should be written as
+  its kernel and compared to the row above before a file is written.** Near-identical mean lag
+  ⇒ re-parameterisation ⇒ no trial. Boundary from the source: linear filters only; it says
+  nothing about the buffer, the magnitude transform, the tranche overlap or the trim.
+
+- **The risk-contribution statistic has a second miss, its slope does not survive a change of
+  base, and this is the third instance of one general failure.** Three correct pre-registered
+  drawdown calls (#52, #53, #54) and one recorded miss (#50, blamed on weight-vector
+  staleness). Trial #55 misses again and **staleness cannot explain it** — #55 re-targets
+  monthly exactly as the champion does. Effective risk bets +62% (8.54 → 13.84) predicts
+  validation maxDD ≈ **−26.1%** at the recorded linear calibration (5.3pp per +195%); observed
+  **−27.4%** against the champion's −27.8%. Sign right, size overstated ~3x. The shape: **every
+  calibration point was fitted on the K=1 base at ~6 effective risk bets, and the reinstated
+  base starts at 8.5.** A book whose drawdowns are already dominated by a factor common to all
+  its vintages cannot diversify them away by holding more names, so the marginal drawdown value
+  of a risk bet must fall as the count rises — precisely what a constant fitted at the bottom
+  of the range would miss, in this direction. **Keep the statistic and its sign; stop quoting
+  its slope until it is re-fitted on this base** (free — holdings-only on trials already
+  recorded, and the cheapest thing a next session can do). The general failure, now at three
+  instances: #52 showed "the base has absorbed it" does not generalise across *components*,
+  #54 showed the ordinal/cardinal share did not transfer across *leg counts*, and #55 shows a
+  *calibration* does not transfer across *bases*. **A constant measured on one construction is
+  a property of that construction until re-measured.**
+
+- **The champion's construction is now fully mapped on its own base, which changes what the
+  lab should ask a human for.** After #55 every component of the reinstated champion has a
+  measured marginal value: signal definition, kernel shape, leg count, leg nesting, within-leg
+  weighting, cross-leg agreement, membership band, weight anchor, tranche depth, re-target
+  cadence, and the trim overlay. Each is at a local optimum or a refuted alternative, and every
+  component measured only on the retired K=1 base carries a **negative** recorded sign on
+  transfer (equal weighting −0.206, no agreement premium −0.043, rank weighting −0.106, weekly
+  re-target −0.142, no re-target −0.276, subsample folds −0.021, phase vintages −0.076,
+  geometric spacing −0.021, deliberate cohort trim −0.013 measured on *this* base by #46). The
+  single exception with a positive recorded validation sign — deleting the membership band
+  (#51, +0.109) — is **declined and should stay declined**: choosing it means reading the
+  holdout replay table to pick something the veto will not catch, which is the holdout-informed
+  reasoning the post-#43 corollary forbids, and its measured effect is to destroy 1.8 effective
+  risk bets. **What is left is an input, not a construction.** `program.md`'s own
+  human-approval-gated list names point-in-time survivorship-free constituents, fundamentals and
+  intraday bars; `research/SUMMARY.md` #34–#36 (added 2026-08-26) put a magnitude on the first
+  for the first time — up to 8%/yr of overstatement for this repo's literal recipe, with return
+  up, volatility down and drawdown understated, flattering three of `program.md`'s own gates at
+  once. A session that finds itself with budget left and no idea above the floor should say
+  this rather than spend a trial re-deriving a recorded negative.
