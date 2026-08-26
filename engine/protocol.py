@@ -1,14 +1,19 @@
 """The fixed experimental protocol. Agents never edit this file.
 
 Owns: walk-forward splits, engine parameters, hard gates, the causality
-(no-lookahead) check, trial recording, the champion-vs-candidate verdict, and
-promotion (including the only permitted holdout evaluation).
+(no-lookahead) check, trial recording, the champion-vs-candidate verdict, the
+holdout veto, and promotion.
+
+The holdout split is read in exactly one place — `holdout_gate` — and only for
+candidates that have already won on validation and cleared the deflated-Sharpe
+bar. It can veto a promotion; it is never scored, ranked or maximized.
 """
 
 from __future__ import annotations
 
 import importlib.util
 import json
+import math
 import re
 import shutil
 from dataclasses import dataclass, field
@@ -66,6 +71,27 @@ DSR_THRESHOLD = 0.95
 # and rewards fine-tuning the incumbent.
 TRIAL_CLUSTER_RHO = 0.95
 
+# The holdout veto. A candidate that has already won on validation is refused the
+# seat if it is worse than the incumbent on holdout by more than this many paired
+# standard errors (`metrics.sharpe_diff_se`).
+#
+# Why a veto and not a second objective. Scoring holdout would make it a selection
+# set, and there is no third split held in reserve; a one-sided veto leaks roughly
+# one bit per trial where maximizing it would leak the whole ranking. The gate is
+# also placed last, after causality, the hard gates, the champion comparison and
+# DSR, so it reads holdout only for candidates that would have been promoted
+# outright before it existed — the number of candidate holdout reads is unchanged.
+#
+# Why it exists. Validation and holdout stopped agreeing at trial #43, and the
+# gate could not see it: four consecutive promotions raised validation Sharpe
+# 1.120 -> 1.229 while holdout fell 1.377 -> 0.691. On the closed-form paired SE
+# no promotion in this repo's history ever cleared |t| = 2 on validation, while
+# five of six superseded champions beat the incumbent on holdout at |t| > 2. The
+# gate was breaking ties on the split with no resolving power. At 2.0 the veto
+# fires only on a loss the data can actually resolve; a tie still promotes, so
+# the burden of proof stays on the challenger without holdout becoming a target.
+HOLDOUT_VETO_T = 2.0
+
 
 @dataclass
 class TrialResult:
@@ -73,16 +99,23 @@ class TrialResult:
     name: str
     family: str
     hypothesis: str
-    verdict: str                      # PROMOTE | REJECT | GATE_FAIL
+    verdict: str                      # PROMOTE | REJECT | GATE_FAIL | HOLDOUT_VETO
     reasons: list[str]
     train: dict = field(default_factory=dict)
     validation: dict = field(default_factory=dict)
-    holdout: dict | None = None       # filled only on promotion
+    holdout: dict | None = None       # filled only when the holdout gate is reached
     champion_val_sharpe: float | None = None
     champion_dsr: float | None = None  # incumbent re-deflated at today's bar
     dsr: float | None = None
     n_trials: int = 0
     n_effective_trials: float = 0.0
+    # The holdout gate's arithmetic, recorded whether it vetoed or let the
+    # candidate through, so every reading of the split leaves an audit trail.
+    champion_holdout_sharpe: float | None = None
+    holdout_delta: float | None = None   # candidate minus champion, annualized
+    holdout_se: float | None = None      # paired SE of that difference
+    holdout_rho: float | None = None     # correlation of the two holdout series
+    holdout_t: float | None = None       # delta / se
     ts: str = ""
 
     def to_record(self) -> dict:
@@ -381,28 +414,28 @@ def run_trial(candidate_path: Path, prices: pd.DataFrame) -> TrialResult:
     )
     champion_provisional = result.champion_dsr < DSR_THRESHOLD
 
+    # Each branch either rejects outright or states the case for promotion. Nothing
+    # is promoted here — every winner still has to clear the holdout gate below.
+    promote_reasons: list[str] | None = None
+
     if result.validation["sharpe"] <= champ_val["sharpe"]:
         result.verdict = "REJECT"
         result.reasons = [
             f"validation sharpe {result.validation['sharpe']} <= champion {champ_val['sharpe']}"
         ]
     elif result.dsr >= DSR_THRESHOLD:
-        result.verdict = "PROMOTE"
-        result.reasons = [
+        promote_reasons = [
             f"beats champion ({result.validation['sharpe']} > {champ_val['sharpe']}) "
             f"with DSR {result.dsr} ({bar})"
         ]
-        promote(candidate_path, result, prices)
     elif champion_provisional and result.dsr > result.champion_dsr:
-        result.verdict = "PROMOTE"
-        result.reasons = [
+        promote_reasons = [
             f"provisional champion: incumbent no longer clears the bar "
             f"(champion DSR {result.champion_dsr} < {DSR_THRESHOLD}), and this candidate "
             f"beats it on validation sharpe ({result.validation['sharpe']} > "
             f"{champ_val['sharpe']}) and on deflated sharpe ({result.dsr} > "
             f"{result.champion_dsr}) ({bar}). Still below {DSR_THRESHOLD} — not yet earned"
         ]
-        promote(candidate_path, result, prices)
     else:
         result.verdict = "REJECT"
         result.reasons = [
@@ -410,15 +443,95 @@ def run_trial(candidate_path: Path, prices: pd.DataFrame) -> TrialResult:
             f"champion DSR {result.champion_dsr}"
         ]
 
+    if promote_reasons is not None:
+        result.verdict = holdout_gate(
+            mod, champ_mod, prices, result, promote_reasons, candidate_path
+        )
+
     record_trial(result)
     return result
+
+
+# ---------------------------------------------------------------------------
+# The holdout gate — the last word on a promotion
+# ---------------------------------------------------------------------------
+
+def holdout_gate(
+    mod,
+    champ_mod,
+    prices: pd.DataFrame,
+    result: TrialResult,
+    promote_reasons: list[str],
+    candidate_path: Path,
+) -> str:
+    """Final gate: refuse the seat to a candidate the holdout says is worse.
+
+    Reached only by candidates that have already won on validation and cleared
+    the deflated-Sharpe bar — i.e. exactly the set that was promoted outright
+    before this gate existed, so it reads no candidate's holdout that the old
+    protocol would not have read anyway. The incumbent is re-scored on the same
+    window for a paired comparison; its holdout is already public in the card
+    and in `trials.jsonl`, so that costs no new information.
+
+    The test is one-sided. A candidate that ties, or wins, on holdout is
+    promoted; only a loss large enough to resolve against the paired standard
+    error (`t < -HOLDOUT_VETO_T`) is refused. Holdout is never scored, ranked or
+    maximized here — it can only ever say no.
+
+    Returns the verdict and, on a veto, leaves the champion untouched.
+    """
+    cand_hold = evaluate_split(mod.generate_weights, prices, "holdout")
+    champ_hold = evaluate_split(champ_mod.generate_weights, prices, "holdout")
+
+    se, rho = metrics.sharpe_diff_se(cand_hold["_returns"], champ_hold["_returns"])
+    delta = cand_hold["sharpe"] - champ_hold["sharpe"]
+    # A degenerate comparison returns se = inf, so t = 0.0 and nothing is vetoed.
+    t = delta / se if se else 0.0
+
+    result.holdout = cand_hold
+    result.champion_holdout_sharpe = champ_hold["sharpe"]
+    result.holdout_delta = round(float(delta), 4)
+    result.holdout_se = None if not math.isfinite(se) else round(float(se), 4)
+    result.holdout_rho = None if not math.isfinite(rho) else round(float(rho), 4)
+    result.holdout_t = round(float(t), 3)
+
+    arith = (
+        f"holdout {cand_hold['sharpe']} vs champion {champ_hold['sharpe']} "
+        f"(delta {delta:+.3f}, paired SE {se:.3f} at rho {rho:.3f}, t {t:+.2f})"
+    )
+
+    if t < -HOLDOUT_VETO_T:
+        result.reasons = [
+            f"holdout veto: {arith} — worse than the incumbent by more than "
+            f"{HOLDOUT_VETO_T} paired standard errors. It won validation "
+            f"({result.validation['sharpe']} > {result.champion_val_sharpe}), but the "
+            f"two splits disagree and the seat is not transferred on a split the "
+            f"comparison cannot resolve"
+        ]
+        return "HOLDOUT_VETO"
+
+    result.reasons = promote_reasons + [f"holdout gate passed: {arith}"]
+    promote(candidate_path, result, prices, holdout=cand_hold)
+    return "PROMOTE"
 
 
 # ---------------------------------------------------------------------------
 # Promotion — the only place holdout is ever evaluated
 # ---------------------------------------------------------------------------
 
-def promote(candidate_path: Path, result: TrialResult, prices: pd.DataFrame) -> None:
+def promote(
+    candidate_path: Path,
+    result: TrialResult,
+    prices: pd.DataFrame,
+    holdout: dict | None = None,
+) -> None:
+    """Seat the candidate as champion.
+
+    `holdout` may carry the metrics the holdout gate has already computed, so a
+    promotion reads the split once rather than twice. The gate scores the
+    candidate module and this scores the freshly-copied champion file, which is
+    a byte-for-byte copy of it — the two are the same measurement.
+    """
     stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     if CHAMPION_FILE.exists():
         ARCHIVE_DIR.mkdir(parents=True, exist_ok=True)
@@ -431,8 +544,10 @@ def promote(candidate_path: Path, result: TrialResult, prices: pd.DataFrame) -> 
 
     shutil.copy2(candidate_path, CHAMPION_FILE)
 
-    mod, _ = load_strategy(CHAMPION_FILE)
-    result.holdout = evaluate_split(mod.generate_weights, prices, "holdout")
+    if holdout is None:
+        mod, _ = load_strategy(CHAMPION_FILE)
+        holdout = evaluate_split(mod.generate_weights, prices, "holdout")
+    result.holdout = holdout
 
     card = {
         "name": result.name,
@@ -447,6 +562,14 @@ def promote(candidate_path: Path, result: TrialResult, prices: pd.DataFrame) -> 
         "train": _public(result.train),
         "validation": _public(result.validation),
         "holdout": _public(result.holdout),
+        "holdout_gate": {
+            "champion_holdout_sharpe": result.champion_holdout_sharpe,
+            "delta": result.holdout_delta,
+            "se": result.holdout_se,
+            "rho": result.holdout_rho,
+            "t": result.holdout_t,
+            "veto_t": HOLDOUT_VETO_T,
+        },
         "engine_params": ENGINE_PARAMS,
     }
     CHAMPION_CARD.write_text(json.dumps(card, indent=2) + "\n")

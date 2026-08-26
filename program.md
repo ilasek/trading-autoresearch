@@ -16,10 +16,29 @@ accounting for multiple-testing (deflated Sharpe) and data limitations.
   costs, deflated by the total number of trials ever recorded in `experiments/trials.jsonl`.
 - A candidate is promoted to champion only if `run_experiment.py` says `PROMOTE`:
   it must beat the champion's validation Sharpe, have deflated-Sharpe probability ≥ 0.95,
-  pass all hard gates (drawdown, turnover, concentration, causality check), and pass
-  the train-split sanity check.
-- The **holdout split (2024-01-01 →)** is evaluated only at promotion time, automatically,
-  and every touch is journaled. Never run anything on holdout manually.
+  pass all hard gates (drawdown, turnover, concentration, causality check), pass
+  the train-split sanity check, and **clear the holdout veto** below.
+- **The holdout veto.** A candidate that has won everything above is still refused the
+  seat if it is worse than the incumbent on the **holdout split (2024-01-01 →)** by more
+  than `HOLDOUT_VETO_T` = 2.0 paired standard errors (Memmel's correction to
+  Jobson-Korkie, `metrics.sharpe_diff_se`). Such a trial is recorded as `HOLDOUT_VETO`:
+  it still counts against the deflated-Sharpe bar, and the champion does not move.
+  - The veto is **one-sided**. Holdout is never scored, ranked, or maximized — it can
+    only ever say no. A candidate that ties or wins on holdout is promoted on its
+    validation case alone, so the burden of proof stays on the challenger.
+  - The gate runs **last**, so it reads the holdout only for candidates that would have
+    been promoted outright before it existed. The number of candidate holdout reads is
+    therefore unchanged by its introduction.
+  - Why it exists: between trials #43 and #51 four consecutive promotions raised
+    validation Sharpe 1.120 → 1.229 while holdout Sharpe fell 1.377 → 0.691. No promotion
+    in this repo's history has ever cleared |t| = 2 on validation, while five of six
+    superseded champions beat the incumbent on holdout at |t| > 2. The gate was breaking
+    ties on the split with no resolving power.
+- Holdout is read **only** by that gate, automatically, and every read is journaled.
+  Never run anything on holdout manually.
+- **A trial that reaches the holdout gate ends the session** — whether it promoted or was
+  vetoed. Once a session has seen a holdout number, every later candidate it designs is
+  holdout-informed. This rations the one split that is not yet spent.
 
 ## Experiment budget
 

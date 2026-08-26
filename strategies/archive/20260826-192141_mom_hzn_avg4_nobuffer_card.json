@@ -1,0 +1,54 @@
+{
+  "name": "mom_hzn_avg4_nobuffer",
+  "family": "cross-sectional momentum",
+  "hypothesis": "Deleting the membership band from the champion \u2014 each of the four horizon legs holding exactly its current top 15 rather than entering at 15 and holding to 25, with signal, skip-month, magnitude weighting, single-tranche formation, cohort trim and both trim constants otherwise identical \u2014 lands validation Sharpe at or above 1.215 net of 15 bps costs, because a holdings-only diagnostic prices the band's entire documented benefit on this base at 0.47x of annual turnover (~0.003 Sharpe, against the 24% cost saving that justified it on the single-leg base of trial #17, four-leg averaging having since absorbed the churn a band was invented to suppress) while the removal carries a +0.017 Sharpe concentration tailwind (HHI +25.7%) and a rotation-speed benefit measured near zero (core-vs-fringe L1 0.063 on the top-10 against 0.127 on the rest, i.e. the band is a fringe phenomenon here); landing materially below 1.201 shows the buffer does real work on this base through a channel other than cost, whose mechanism the repo would then not know.",
+  "promoted_at": "2026-08-21T23:11:47+00:00",
+  "source_candidate": "strategies/candidates/mom_hzn_avg4_nobuffer.py",
+  "n_trials_at_promotion": 51,
+  "n_effective_trials_at_promotion": 12.0,
+  "dsr_at_promotion": 0.979,
+  "provisional": false,
+  "train": {
+    "ann_return": 0.1907,
+    "ann_vol": 0.2116,
+    "sharpe": 0.931,
+    "sortino": 1.183,
+    "max_drawdown": -0.5813,
+    "n_days": 14261,
+    "ann_turnover": 5.39,
+    "avg_positions": 19.64,
+    "active_days": 11370,
+    "sharpe_daily": 0.058644
+  },
+  "validation": {
+    "ann_return": 0.3096,
+    "ann_vol": 0.2438,
+    "sharpe": 1.229,
+    "sortino": 1.654,
+    "max_drawdown": -0.296,
+    "n_days": 1562,
+    "ann_turnover": 8.32,
+    "avg_positions": 30.3,
+    "active_days": 1562,
+    "sharpe_daily": 0.077424
+  },
+  "holdout": {
+    "ann_return": 0.1755,
+    "ann_vol": 0.2985,
+    "sharpe": 0.691,
+    "sortino": 0.92,
+    "max_drawdown": -0.305,
+    "n_days": 687,
+    "ann_turnover": 8.58,
+    "avg_positions": 29.02,
+    "active_days": 687,
+    "sharpe_daily": 0.043541
+  },
+  "engine_params": {
+    "cost_bps": 10.0,
+    "slippage_bps": 5.0,
+    "max_weight": 0.25,
+    "max_leverage": 1.0,
+    "allow_short": false
+  }
+}

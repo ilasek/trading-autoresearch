@@ -69,6 +69,41 @@ def generate_weights(prices):
 '''
 
 
+# Both holdout fixtures below beat the equal-weight champion on validation by the
+# same tilt, and differ only in what they do after the holdout starts. Tilting by
+# calendar date is causal — the rule reads the date, never a future price — so
+# both pass the causality check and reach the holdout gate.
+_HOLDOUT_TILT = '''
+import pandas as pd
+STRATEGY = {{"name": "{name}", "family": "baseline",
+            "hypothesis": "{hypothesis}"}}
+def generate_weights(prices):
+    rebal = prices.groupby(pd.Grouper(freq="ME")).tail(1).index
+    w = pd.DataFrame(1.0 / prices.shape[1], index=rebal, columns=prices.columns)
+    val = (w.index >= "2018-01-01") & (w.index <= "2023-12-31")
+    w.loc[val] = w.loc[val] * 0.90
+    w.loc[val, "A5"] += 0.10          # A5 is the strongest asset in validation
+    hold = w.index >= "2024-01-01"
+    w.loc[hold] = w.loc[hold] * (1 - {tilt})
+    w.loc[hold, "{asset}"] += {tilt}
+    return w
+'''
+
+# A2 is the only asset with a negative holdout Sharpe: this wins validation and
+# then falls apart on the split the old gate could not see.
+HOLDOUT_DEGRADER_STRATEGY = _HOLDOUT_TILT.format(
+    name="holdout_degrader", asset="A2", tilt=0.75,
+    hypothesis="Wins validation, collapses on holdout.",
+)
+
+# A3 is the strongest asset in holdout: the same validation win, but the two
+# splits now agree, so the gate has no grounds to refuse it.
+HOLDOUT_AGREEING_STRATEGY = _HOLDOUT_TILT.format(
+    name="holdout_agreeing", asset="A3", tilt=0.25,
+    hypothesis="Wins validation without giving up holdout.",
+)
+
+
 def write_candidate(sandbox, code, name):
     p = sandbox / "strategies" / "candidates" / f"{name}.py"
     p.write_text(code)
@@ -126,3 +161,68 @@ def test_identical_candidate_cannot_beat_champion(prices, sandbox):
     assert result.verdict == "REJECT"
     # Trial count grows regardless of verdict — the multiple-testing bar rises.
     assert len(protocol.TRIALS_FILE.read_text().strip().splitlines()) == 2
+
+
+def test_holdout_veto_blocks_a_candidate_that_wins_validation(prices, sandbox):
+    """The failure mode the gate exists for: validation says yes, holdout says no."""
+    protocol.run_trial(write_candidate(sandbox, CAUSAL_STRATEGY, "baseline"), prices)
+    champion_before = protocol.CHAMPION_FILE.read_text()
+
+    result = protocol.run_trial(
+        write_candidate(sandbox, HOLDOUT_DEGRADER_STRATEGY, "degrader"), prices
+    )
+
+    assert result.verdict == "HOLDOUT_VETO"
+    # It really did win the old gate's only contest — that is the point.
+    assert result.validation["sharpe"] > result.champion_val_sharpe
+    assert result.dsr >= protocol.DSR_THRESHOLD
+    # And it was refused on a resolvable holdout loss, not on a rounding error.
+    assert result.holdout_t < -protocol.HOLDOUT_VETO_T
+    assert result.holdout_delta < 0
+    assert "holdout veto" in result.reasons[0]
+
+    # The seat does not move, and the trial still counts against the DSR bar.
+    assert protocol.CHAMPION_FILE.read_text() == champion_before
+    assert len(protocol.TRIALS_FILE.read_text().strip().splitlines()) == 2
+    record = json.loads(protocol.TRIALS_FILE.read_text().strip().splitlines()[-1])
+    assert record["verdict"] == "HOLDOUT_VETO"
+    assert record["holdout"] is not None          # every holdout read leaves a trail
+
+
+def test_holdout_gate_promotes_when_the_splits_agree(prices, sandbox):
+    """The veto is one-sided: it refuses losses, it does not demand holdout gains."""
+    protocol.run_trial(write_candidate(sandbox, CAUSAL_STRATEGY, "baseline"), prices)
+
+    result = protocol.run_trial(
+        write_candidate(sandbox, HOLDOUT_AGREEING_STRATEGY, "agreeing"), prices
+    )
+
+    assert result.verdict == "PROMOTE"
+    assert result.holdout_t > -protocol.HOLDOUT_VETO_T
+    card = json.loads(protocol.CHAMPION_CARD.read_text())
+    assert card["name"] == "holdout_agreeing"
+    assert card["holdout_gate"]["t"] == result.holdout_t
+
+
+def test_holdout_is_not_read_before_the_gate(prices, sandbox):
+    """The gate runs last, so it reads no holdout the old protocol would not have.
+
+    A candidate rejected on validation Sharpe never reaches it, and one that
+    fails a hard gate never even gets scored.
+    """
+    protocol.run_trial(write_candidate(sandbox, CAUSAL_STRATEGY, "baseline"), prices)
+
+    rejected = protocol.run_trial(write_candidate(sandbox, CAUSAL_STRATEGY, "copycat"), prices)
+    assert rejected.verdict == "REJECT"
+    assert rejected.holdout is None
+    assert rejected.holdout_t is None
+
+    gate_failed = protocol.run_trial(write_candidate(sandbox, PEEKING_STRATEGY, "peeker"), prices)
+    assert gate_failed.verdict == "GATE_FAIL"
+    assert gate_failed.holdout is None
+
+    holdouts = [
+        json.loads(line)["holdout"]
+        for line in protocol.TRIALS_FILE.read_text().strip().splitlines()
+    ]
+    assert [h is not None for h in holdouts] == [True, False, False]
