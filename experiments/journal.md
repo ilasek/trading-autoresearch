@@ -3852,3 +3852,5 @@ null distribution consumes trials before any session can run it.
    the membership band on this base. Recorded explicitly so the next session does not spend
    effort rediscovering it and then has to decline it too.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-27 (learning agent): 3 notes added, see research/SUMMARY.md

@@ -1058,6 +1058,82 @@ repo has** — the matched-pair measurement needs point-in-time constituents, wh
 under human-approval-gated future upgrades. That is a better statement than the caveat had, and it is
 not a number._
 
+### What implementation costs — execution, price impact, and paper versus reality (cross-family)
+
+Not a `program.md` family. The **last untouched cost-side vocabulary**: session 6 named it, session 7
+answered from friction-aware portfolio choice instead, session 12 ranked it second, and session 13
+left it as the only one of its two candidates remaining, with the explicit prior that it would *close*
+rather than open. It closes. But the closure is more useful than "nothing here", because it grades a
+number the repo has never had outside evidence for — the 15 bps/side charge itself — and it settles a
+published dispute about whether this repo's champion family survives costs at all.
+
+**The engine is charging the right quantity, and the level is conservative-to-fair.** Implementation
+shortfall is `ret_theory − ret_actual`: the gap between a paper book priced at the decision price and
+a real one priced at fills, split into an execution term and an opportunity-cost term for shares never
+obtained (Perold 1988, recorded **unread** — paywalled at `pm-research.com`, no repository or mirror
+copy found; its definition is used only as restated in the source that was read). Frazzini–Israel–
+Moskowitz measure it on **$1.7tn of live institutional executions across 21 developed markets**, and
+define the theoretical price as *"the closing price at the time the strategy's desired holdings and
+trades are generated, which is typically the prior day's closing price"* — which is this repo's
+signal-at-close-`t`, trade-at-`t+1` convention stated in the same words. On level, mean per-trade
+implementation shortfall is **11.02 bps**, median 8.63, dollar-value-weighted 16.06, on trades
+averaging **0.9% of daily volume**; large-cap trades average 8.90 bps against 18.95 for small caps.
+The engine's **15 bps/side therefore sits above the live mean and just under the value-weighted mean**
+for a manager trading a universe of comparable liquidity to this one. Combined with `learnings.md`'s
+own accounting (0.45%/yr ≈ 0.019 Sharpe at 3.0× turnover), the conclusion is symmetric and final:
+**cost is not where this repo's edge is hiding, in either direction** — the modelled rate is not
+secretly too generous. Tier A on the measurement, `validation_overlap: false`.
+→ `notes/2026-08-27-live-execution-costs-implementation-shortfall.md`
+
+**Impact is concave in size and proportional to volatility, and the flat model misses exactly one
+thing that points against this repo.** The cost function is `MI = a + b·x + c·√x` in `x` = trade size
+as a percent of daily volume; an F-test rejects linearity in favour of the square-root term, and the
+fitted log-log slope is ≈0.35. Independently, Almgren–Thum–Hauptmann–Li fit Citigroup brokerage
+executions to `I = γσ(X/V)(Θ/V)^{1/4}` for permanent impact (linear in size, `γ = 0.314`) and
+`ησ|X/(VT)|^{3/5}` for temporary (concave in the *trade rate*, `η = 0.142`), and **reject the
+square-root exponent at 95% from the other side**. Two claims survive both datasets and are the
+transferable ones: **concavity** (the exponent itself is calibration, not a constant — the two studies
+bracket ½), and **cost is denominated in volatility** — the temporary function needs no stock-specific
+correction at all once expressed as a fraction of `σ`. A flat bps charge is therefore
+*volatility-blind*, and a cross-sectional momentum basket systematically holds the high-volatility
+tail, so the engine under-prices the champion's book specifically, by a multiplier. **The magnitude
+does not change a verdict**: even a 1.5× multiplier leaves the drag under ~0.03 Sharpe, inside the
+paired standard errors session 11 derived. Recorded so the flat-cost caveat is stated correctly rather
+than assumed neutral. Also from the split: patience reduces only the *temporary* term (as `T^{3/5}`)
+while 85–90% of measured impact is **permanent**, so slower execution attacks the small half of the
+cost — a declined idea with a mechanism. Tier A / B, no overlap.
+→ `notes/2026-08-27-market-impact-functional-form-and-trade-rate.md`
+
+**The published "momentum does not survive costs" verdict is correctly scoped, and its scope is not
+this repo.** Two tier-1 papers of the same year reach opposite conclusions on the repo's own champion
+family. Lesmond–Schill–Zhou show the signal **selects for expensive stocks** — winner and loser
+portfolios run 18–61% and 30–75% above the untraded middle portfolio on four independent cost
+estimators — and conclude the gross spread is bounded by the friction that prevents its arbitrage.
+Korajczyk–Sadka, studying **long-only winner portfolios** (this repo's setting, chosen because they
+decline to model short execution), reframe the question as **capacity**: proportional costs are
+size-independent but price impact is not, so the output is a break-even fund size — roughly $200M
+equal-weighted, $2bn+ value-weighted, $4.5–5bn liquidity-weighted (normalised to end-1999 market cap).
+Post-impact the **pre-cost ranking of weighting schemes inverts**: value weighting beats equal
+weighting because it trades liquid names. The two papers agree about equal-weighted micro-cap
+momentum and disagree about generalisation, and the disagreement is entirely about the cost
+function's shape and level — which the live-execution evidence adjudicates **against both, in the same
+direction**: a linear TAQ-calibrated impact model (Korajczyk–Sadka's) overstates a patient trader's
+cost by ~3× at 2% of daily volume and by nearly an order of magnitude at 10%, and Lesmond et al.'s
+proportional estimates run higher still (their own spreads are 1.18×–5.55× Korajczyk–Sadka's).
+**Two structural results survive the cost-level correction untouched**, and both cut against importing
+published momentum magnitudes: the composition result above, and that **53–70% of the long-short
+momentum spread comes from the short leg** — the side a long-only book cannot trade. Tier A on both,
+US-only on both, no overlap.
+→ `notes/2026-08-27-momentum-net-of-costs-debate.md`
+
+_Net: the cost axis is **closed on both halves**. The rate the engine charges is right, so no
+strategy fails here for a cost-model reason; and the literature's standing objection to momentum
+net of costs is a claim about equal-weighted micro-cap books measured with estimators that overstate
+a patient trader's cost. What the session adds that is not a closure is **one caveat and one
+discount**: every Sharpe in this repo is a **small-fund Sharpe** with no term that degrades as
+notional grows, and a long-only implementation of a published long-short momentum effect should be
+expected to capture **roughly a third** of it before any other adjustment._
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -1516,6 +1592,29 @@ unknown expected return, and is too severe otherwise. This generalises past surv
 selected sample the lab reads, its own trial log included.
 → `notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`,
 `notes/2026-08-26-look-ahead-benchmark-bias-index-constituents.md`
+
+**A "net of costs" verdict is a claim about an execution style, not about a strategy — so read the
+cost estimator before reading the conclusion.** Two tier-1 papers reached opposite conclusions about
+the same strategy family in the same year, and the entire difference was the cost function: one
+applied a proportional estimate inferred from daily price behaviour, the other a linear price-impact
+model calibrated to intraday trade-and-quote data. Measured against live institutional executions,
+both overstate what a *patient* trader pays — the linear model by roughly 3× at 2% of daily volume
+and by nearly an order of magnitude at 10%; the proportional family by more still. The reason is
+structural rather than a calibration slip: aggregated market data measures the average participant,
+who includes informed insiders, impatient traders and liquidity demanders, and a patient limit-order
+book is by construction not that participant. **The rule.** When importing a net-of-cost result, ask
+what produced the cost number, and apply the discount before the conclusion, not after: a verdict
+built on a linear TAQ-calibrated impact model is measuring a different trader. This never invalidates
+a paper's *gross* result or its *cross-sectional* patterns — those are untouched — only its net
+verdict. Two riders that keep it from becoming a blanket dismissal of costs. First, the correction
+runs the other way for **capacity**: the same concavity that makes flat and linear models overstate
+small trades means they *understate* nothing, so a strategy declared dead on cost may be alive at
+small size and dead at large, which is a break-even fund size rather than a verdict. Second, the
+composition results these papers establish — *which* stocks a signal makes you trade — survive the
+cost-level correction entirely, and are usually the more transferable half.
+→ `notes/2026-08-27-live-execution-costs-implementation-shortfall.md`,
+`notes/2026-08-27-momentum-net-of-costs-debate.md`,
+`notes/2026-08-27-market-impact-functional-form-and-trade-rate.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -2164,6 +2263,45 @@ hypothesis fodder, then anti-candidates.
     about a signal-selected book. The only free, holdings-only piece is the input: realised monthly `σ`
     at each rung, which the repo already computes. Tier A, no overlap.
     → `notes/2026-08-26-skewness-and-concentration-of-stock-returns.md`
+37. **[Added 2026-08-27] A discount to apply to every long-short momentum result this folder ever
+    imports, and it is the most specific one here.** Using the untraded middle portfolio as the
+    benchmark, **53% to 70% of the total long-short momentum spread comes from the loser leg**, across
+    three published strategy definitions and robust to using the value- or equal-weighted market as
+    benchmark instead; two independent studies cited alongside reach the same conclusion. The operative
+    form: **a long-only implementation of a published long-short momentum effect should be expected to
+    capture roughly a third of it, before any other adjustment.** This is not the quantity session 10
+    retired after three failures (the long-only constraint's leakage as a function of signal
+    dispersion) — it is narrower, family-specific, and obtained rather than estimated. It costs nothing
+    and applies at hypothesis-writing time. Tier A, US-only, no overlap.
+    → `notes/2026-08-27-momentum-net-of-costs-debate.md`
+38. **[Added 2026-08-27] A caveat for `learnings.md`'s permanent list, not a build: every Sharpe in
+    this repo is a small-fund Sharpe.** Real cost is `a + b·x + c·√x` in trade size as a fraction of
+    daily volume; the engine charges the constant `a` alone. That is correct only in the small-`x`
+    limit, so this repo's backtests are **capacity-blind** — valid at some notional and silently wrong
+    above it, with no term that degrades. The vocabulary for the missing quantity is **break-even fund
+    size**, and for a momentum book it is set by the *illiquid* names in the basket rather than the
+    average one; published long-only momentum break-evens run from ~$200M (equal-weighted) to ~$5bn
+    (liquidity-weighted), normalised to end-1999 market capitalisation. **Unmeasurable here**: the
+    calculator needs dollar volume and market capitalisation, which `program.md` gates behind human
+    approval, and no attempt should be made to proxy volume from adjusted closes. Ranked as a caveat
+    because it changes how results are *stated*, not what is built. Tier A, no overlap.
+    → `notes/2026-08-27-live-execution-costs-implementation-shortfall.md`,
+      `notes/2026-08-27-momentum-net-of-costs-debate.md`
+39. **[Added 2026-08-27] A free holdings-only diagnostic denominated in the unit the gate reads —
+    the first since `γ*`, and unlike `γ*` its currency checks out.** Impact cost in basis points is
+    proportional to the traded name's daily volatility (the temporary-impact function needs *no*
+    stock-specific correction once expressed as a fraction of `σ`). The engine's flat charge is
+    volatility-blind, and a momentum basket holds the high-volatility tail by construction, so the
+    honest cost multiplier is the **turnover-weighted ratio of held names' trailing daily volatility to
+    the universe median's** — computable from the stored weight matrix and prices, forecasting nothing
+    and scoring nothing. Multiplied by the existing modelled cost drag it lands in annualised return
+    and thence Sharpe, satisfying #27 (*check the currency*) rather than tripping over it. **State the
+    expected size before running it**: at 3.0× turnover and 0.019 Sharpe of modelled drag, even a 1.5×
+    multiplier stays under ~0.03 Sharpe, inside the paired standard errors of session 11 — so this is a
+    correctness fix to a caveat, not a lever. **Caution that must travel with it:** a cost account,
+    never an objective; a book can lower it by holding placid names and lose far more on selection.
+    Tier A / B, no overlap.
+    → `notes/2026-08-27-market-impact-functional-form-and-trade-rate.md`
 
 ## Coverage log
 
@@ -2182,6 +2320,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-24 (session 11) | Session 10's two named open questions, in its own priority order, and both close: (a) **the paired standard error of a difference of Sharpe ratios** — the quantity the gate adjudicates and the one session 10 forbade itself to substitute the single-strategy error for — chased in the vocabulary that session named (Jobson–Korkie / Memmel; Ledoit–Wolf); and (b) **the deflated Sharpe ratio itself**, the last uncovered piece of the gate's own machinery, together with the rival multiple-testing correction the DSR authors call complementary. Three notes; full text read directly for Ledoit–Wolf, Bailey–López de Prado, the Bailey–Borwein–López de Prado–Zhu companion, Harvey–Liu and O'Connor, and in part for Harvey–Liu–Zhu. The session's shape is one *closed form* that reproduces a number the lab had only bootstrapped (and grades the lab's bootstrap as the right method with two free refinements), one *coverage obligation discharged* on the gate's statistic, and one *correction to a sentence the folder repeats* — "every trial raises the bar" is a family-wise-error-rate property, not a law. | Ledoit–Wolf 2008 (JEF; UZH-hosted published PDF read in full), with Jobson–Korkie 1981 (JF) and Memmel 2003 (Finance Letters) recorded **second-hand** from two independent restatements of their formula, and Opdyke 2007 recorded **unread** (`2026-08-24-testing-differences-of-sharpe-ratios.md`); Bailey–López de Prado 2014 (JPM; author-hosted PDF read in full) + Bailey–Borwein–López de Prado–Zhu 2016 (J. Computational Finance; author-hosted PDF read in full), with the Notices-of-the-AMS companion recorded **unread** (`2026-08-24-deflated-sharpe-ratio.md`); Harvey–Liu 2015 (JPM; Duke-hosted PDF read in full) + Harvey–Liu–Zhu 2016 (RFS; Duke-hosted PDF read in part) (`2026-08-24-multiple-testing-haircut.md`) |
 | 2026-08-25 (session 12) | Session 11's open question (c), the last unpatched seam in the scoring apparatus: **a multiple-testing correction that knows why a trial was run** — chased in the vocabulary session 11 named (prior-weighted, hierarchical and empirical-Bayes multiple testing), and answered from all three directions. Three notes; full text read directly for all four primary texts. The session's shape is one *machinery* that closes the question in statistics and immediately constrains it (a discount is zero-sum), one *exchange rate* in a finance venue that prices the discount at about one t-unit and finds it never falls below the naive bar, and one *narrowing correction* to `learnings.md`'s ⚠ standing protocol concern that removes its weaker half and sharpens the rest. | Genovese–Roeder–Wasserman 2006 (Biometrika; CMU Technical Report 811, the working version, read in full) + Roeder–Wasserman 2009 (Statistical Science; arXiv reprint read in full) (`2026-08-25-prior-weighted-multiple-testing.md`); Harvey 2017 (JF, Presidential Address; Duke-hosted PDF read in full) (`2026-08-25-bayesianized-p-values-prior-odds.md`); Jensen–Kelly–Pedersen 2023 (JF; CBS Research Portal published CC-BY version read in full) (`2026-08-25-hierarchical-bayesian-factor-replication.md`) |
 | 2026-08-26 (session 13) | Session 12's open question (b), taking the better of the two structurally-different targets it named: **the statistical properties of the universe itself** — survivorship and constituent selection, which `learnings.md` lists as a permanent caveat and which no note here had ever sourced. Three notes, five sources; full text read directly for four, one recorded second-hand from its abstract. The session's shape is one *re-aiming* of the lab's oldest caveat (the level effect is the forgiving half; the persistence inference is the severe half, and a cross-sectional momentum book is a persistence claim), one *magnitude* for this repo's literal data-construction recipe together with the sign of the index-membership channel, and one *distribution* that explains why that magnitude is large — plus the folder's fourth and first distributional account of what concentration costs. | Brown–Goetzmann–Ibbotson–Ross 1992 (RFS; `terpconnect.umd.edu` mirror read in full) + Stambaugh 2011 (Quarterly Journal of Finance; the 2002 working version read in full from a Berkeley Haas upload), with Brown–Goetzmann–Ross 1995 (JF) recorded **second-hand from its published abstract only** — `oa_status: closed`, no repository copy found (`2026-08-26-survivorship-conditioning-and-spurious-persistence.md`); Daniel–Sornette–Wöhrmann 2009 (JPM; arXiv:0810.1922 read in full) + Cai–Houge 2008 (FAJ; author-hosted accepted version at `biz.uiowa.edu` read in full) (`2026-08-26-look-ahead-benchmark-bias-index-constituents.md`); Bessembinder 2018 (JFE; accepted-manuscript PDF read in full), with Bessembinder–Chen–Choi–Wei 2023 (FAJ, global) recorded **unread** (`2026-08-26-skewness-and-concentration-of-stock-returns.md`) |
+| 2026-08-27 (session 14) | Session 13's open question (b), and the last vocabulary the folder had never opened: **execution and implementation shortfall**. Taken with the stated prior that it would close rather than open — which held, but the closures are load-bearing rather than empty. Three notes, five sources; full text read directly for four, one recorded **unread**. The session's shape is one *verification* of a number the repo has never had outside evidence for (the 15 bps/side charge, graded against $1.7tn of live institutional fills and found conservative-to-fair, with the engine's decision-price convention matching the source's definition word for word), one *shape correction* that identifies the single asymmetry in the flat cost model pointing against this repo (impact is denominated in volatility; a momentum basket holds the high-volatility tail) together with the arithmetic showing it does not change a verdict, and one *adjudication* of a published tier-1 disagreement about whether the repo's own champion family survives costs — which resolves in the repo's favour on level while leaving two structural results untouched, one of which (most of the momentum spread lives on the short leg) is the folder's most specific long-only discount to date. | Frazzini–Israel–Moskowitz 2018 (AQR/SSRN working paper; author-hosted PDF read in full), with Perold 1988 (JPM) recorded **unread** — paywalled, no repository or mirror copy found, its definition used only as restated in the source read (`2026-08-27-live-execution-costs-implementation-shortfall.md`); Almgren–Thum–Hauptmann–Li 2005 (Risk; authors' dated version read in full from a university course-reading directory) (`2026-08-27-market-impact-functional-form-and-trade-rate.md`); Lesmond–Schill–Zhou 2004 (JFE; a university PhD-course mirror served the typeset article) + Korajczyk–Sadka 2004 (JF; Kellogg faculty page) (`2026-08-27-momentum-net-of-costs-debate.md`) |
 
 ### Open questions for future sessions
 
@@ -2728,6 +2867,70 @@ hypothesis fodder, then anti-candidates.
   conjecture, not a result, and every magnitude in these notes belongs to a different universe than
   this repo's. The notes state the mechanism; they do not adjust anything.
 
+  **— (b) ANSWERED AND CLOSED 2026-08-27 (session 14), and the prior attached to it was right about
+  the direction but wrong about the value.** Session 13 predicted the execution literature would close
+  rather than open, on the grounds that `learnings.md` already prices total cost drag at ~0.019 Sharpe
+  and session 2 declared cost mitigation exhausted. It does close — nothing here opens a build — but
+  "closes" turns out to mean three specific things the folder did not have. **(i) The 15 bps/side rate
+  is now graded from outside, and it holds.** Against $1.7tn of live institutional executions across
+  21 developed markets, mean per-trade implementation shortfall is 11.02 bps (median 8.63,
+  value-weighted 16.06) at ~0.9% of daily volume, and the source defines its benchmark price as the
+  prior close at which the model generated its trades — the engine's own convention, word for word. So
+  the repo charges the right *quantity* at a level that is conservative-to-fair, and the drag is not
+  secretly larger than modelled. Every previous statement about cost in this repo rested on the
+  engine's own assumption; that assumption now has outside support. **(ii) The one asymmetry that
+  points against this repo is identified and priced.** Impact is denominated in volatility; the flat
+  charge is not; a momentum basket holds the high-volatility tail by construction. The correction is a
+  multiplier, is a free holdings-only diagnostic (#39), and is small enough at 3.0× turnover that it
+  moves nothing — which is worth having *because* it converts an unexamined assumption into a bounded
+  one. **(iii) The literature's standing objection to this repo's champion family is adjudicated.**
+  Two tier-1 papers disagree about whether momentum survives costs; the disagreement is entirely about
+  the cost function's shape and level, and the live-execution measurement rules against both in the
+  same direction. What survives the correction — momentum sorts toward expensive stocks, and 53–70% of
+  the long-short spread lives on the short leg — is structural, transfers here, and is now candidate
+  #37. **The discipline note session 13 would want recorded:** its prior ("worth one session at most,
+  and only if nothing better presents itself") was correct as a *ranking* and would have been wrong as
+  a *skip*. A vocabulary that only closes things is still worth one session when what it closes is a
+  parameter every result in the repo is divided by.
+
+- **New open questions raised by session 14, in priority order.**
+  (a) *The folder has now covered every axis it named, and the honest consequence is that there is no
+  obviously-correct target for session 15.* Fourteen sessions have closed: all seven `program.md`
+  families; portfolio construction and rebalance mechanics; the objective and the gate's full scoring
+  apparatus (statistic, deflator, paired test, motivation question); the universe's own statistical
+  properties; and now the cost side, on both the level and the functional-form halves. The two
+  candidates session 12 named as structurally different are both spent. **This should be stated as a
+  finding rather than as a gap**: the marginal literature session is now worth materially less than
+  the first ten were, and a session that finds nothing is a more likely outcome than at any prior
+  point. The three directions that remain genuinely unopened, none of them compelling: the
+  **cross-sectional-anomaly replication crisis literature at the level of individual predictors**
+  (Hou–Xue–Zhang's *Replicating Anomalies* is cited throughout this folder as a rubric input but has
+  never been read as a source); the **behavioural-finance mechanism literature** on why momentum
+  exists at all, which would inform hypothesis *motivation* under the prior-weighting machinery of
+  session 12 (#31) rather than construction; and **international/global evidence on momentum
+  construction specifically**, which matters because this repo's universe is global and almost every
+  source in this folder is US-only. The third is the best of the three and is the only one that could
+  change a construction choice.
+  (b) *The one thing this session recommends measuring, and it is cheap.* Candidate #39 — the
+  turnover-weighted volatility ratio of the held book against the universe median — is free,
+  holdings-only, and denominated in Sharpe once multiplied through the existing drag. It should be
+  computed once and recorded, not because it will change a verdict (the arithmetic says it will not)
+  but because it converts "the flat cost model is presumably fine" into a bounded statement, and the
+  folder has twice been embarrassed by unexamined premises that were checkable on paper (session 10's
+  discipline note (d)). Low value, near-zero cost.
+  (c) *Recorded as declined, so it is not rediscovered as an opportunity.* The **LDV / zero-return-day
+  cost estimator** is the one cost model in this literature that runs on daily closes alone, and is
+  therefore the only externally-motivated per-instrument cost estimate this repo could actually build.
+  It is declined for three independent reasons stated in full in the momentum-cost note: it is a fitted
+  per-instrument parameter (screen #1's class) estimated on the same window as the signal; its input
+  signal — zero-return days — is nearly absent in a global large-cap and ETF universe, so it would fit
+  noise; and the live-execution evidence places its whole estimator family at the top of the
+  overstatement ladder. **Buildable, and should not be built.**
+  (d) *Also declined, with a mechanism.* Executing the rebalance more patiently over several days is
+  the natural "free" cost idea and is priced by the permanent/temporary split: patience reduces only
+  the temporary term, as `T^{3/5}`, while 85–90% of measured impact is permanent. It attacks the small
+  half of the cost, and the engine's single one-day lag is frozen in any case.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -2739,6 +2942,34 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 14 (2026-08-27) read full text directly for four of its five sources**; the fifth was not
+  obtainable by any route and is recorded **unread**, its one contribution (a definition) taken only as
+  restated inside a source that was read. The session's access lesson is that **a university course's
+  reading-list directory is a searchable index, not just a link** — a guessed filename for the
+  Almgren *Risk* article hit a `~faculty/finread/` directory on a CS department server, and fetching
+  the **parent directory** and grepping its `href`s turned up the correct file immediately, the same
+  trick that worked on Duke's `Published_Papers/` in sessions 11 and 12 but applied to a course page
+  rather than an author page. Channels that worked first try: a **Kellogg faculty page** served the
+  typeset *Journal of Finance* article; a **PhD-course mirror on a business-school server**
+  (`bauer.uh.edu/rsusmel/phd/`) served the typeset *JFE* article complete with journal header and
+  pagination; and an **S3 offload bucket behind a university faculty WordPress site**
+  (`spinup-…-wp-offload-media.s3.amazonaws.com/faculty/…`) served an 88-page AQR working paper that
+  SSRN would have refused — a host pattern worth remembering, since the faculty page linking it is
+  indexed but the bucket is where the file actually lives. Limits hit, all as documented and two of
+  them hard: **OpenAlex's daily budget was exhausted before the session's first query**
+  (`Insufficient budget`), and **Semantic Scholar's title-search endpoint returned 429 on four
+  consecutive attempts spread across the session** while its DOI endpoint answered every DOI lookup
+  it was given, including — for the third time in four sessions the exception rather than the rule —
+  a *Journal of Finance* DOI. One index consequence to record: **Almgren–Thum–Hauptmann–Li 2005 has
+  no registered DOI** (*Risk* magazine does not assign them for that vintage), Crossref finds it under
+  neither DOI nor bibliographic query, and with both remaining indices unavailable it is recorded as
+  `citations: not indexed by any channel reachable this session` rather than estimated. Per the rubric
+  that is not on its own grounds to downgrade; its tier rests on venue, sample and the independent
+  confirmation of its central claim. Also worth noting for the "disbelieve a lone low count" list in
+  the *opposite* direction from usual: for both 2004 articles here, **Semantic Scholar's count exceeds
+  Crossref's by roughly a third** (684 vs 502; 611 vs 461), which is the normal relationship and is
+  recorded so the several sessions of Crossref-over-Semantic-Scholar anomalies are not read as a rule.
 
   **Session 13 (2026-08-26) read full text directly for four of its five sources**; the fifth is
   recorded from its abstract. The session's access lesson is that **a citing paper's reference list is
