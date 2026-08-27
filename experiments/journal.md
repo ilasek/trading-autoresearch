@@ -3854,3 +3854,135 @@ null distribution consumes trials before any session can run it.
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-27 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Session summary — 2026-08-27 (nightly)
+
+- **Integrity check.** Session opened on per-run branch `main-wrvpwt`, bit-identical to
+  `origin/main` (0 ahead / 0 behind); corrected to `main` before any work.
+  `git branch -r --no-merged origin/main` **empty** for the second consecutive session, so
+  the shallow-clone fix is holding. Engine tests green (**22 passed**). Store fresh through
+  **2026-08-27** (today).
+- Experiments run: **0 of the 8-trial budget.** **No holdout look was spent** — the count
+  since 2026-08-17 stands at five, plus the human's replay.
+- Three free results (holdings-only weight matrices with prices truncated at 2023-12-31, a
+  252-day trailing sample covariance, and arithmetic on already-recorded trial statistics;
+  **no 2024+ data loaded, no strategy re-scored for return, trial count untouched**).
+
+### The night in one line
+
+The lab's most-leaned-on diagnostic was re-fitted on the reinstated base as last session
+asked — and the re-fit found that the *explanation* last session offered for its misses is
+the wrong shape: the risk-contribution statistic's slope is a property of the **construction**,
+not of the risk-bet count, because the statistic is computed on a normalised single-date
+weight vector and is therefore structurally blind to every risk axis that is not
+cross-sectional and contemporaneous.
+
+### Free result 1 — the calibration re-fitted per base, and last session's mechanism refuted
+
+Effective risk bets (Herfindahl over `x_i·∂_iσ(x)`, 75 sampled validation dates, 252-day
+trailing sample covariance per `research/SUMMARY.md` #1's long-only corollary) against
+recorded validation maxDD, on the eight K=6 books and the eight K=1 books that have files:
+
+    base   n   effR span     slope (pp maxDD per risk bet)    r        residual SD
+    K=1    8   5.94-17.61            +0.492               +0.978        0.427 pp
+    K=6    8   6.43-13.64            +0.322               +0.733        0.784 pp
+    K=6    5 (unique weight matrices) +0.214               +0.697            —
+
+The recorded calibration (5.3pp per +195% from 5.99, i.e. **+0.453** per risk bet) is
+**reproduced on its own base at +0.492, r = +0.978** — it was sound where it was fitted.
+On the reinstated K=6 base it is 35–55% too steep and much noisier.
+
+**Last session's stated mechanism for the miss does not survive.** It said the marginal
+drawdown value of a risk bet must fall as the count rises, and blamed the K=1 fit for being
+anchored "at ~6 effective risk bets" while "the reinstated base starts at 8.5". Both halves
+fail. The K=6 base does *not* start at 8.5 — it has books down at 6.43; 8.5 is only where the
+champion happens to sit. And restricting the K=1 fit to the K=6 span (5.94–11.39, n=7) makes
+it **steeper, +0.565**, not shallower — the level-of-count story predicts the wrong sign. The
+two bases differ at the *same* counts, so the slope is a property of the construction.
+
+### Free result 2 — the blind spot, which is one mechanism for every miss on record
+
+Five of the eight K=6 books are three pairs/triples with a **bit-identical normalised weight
+matrix**, because the trim is a pure exposure scalar and the diagnostic renormalises:
+
+    effR 6.4343   #32 daily_trim -29.11 | #38 notrim -30.28 | #40 legacy_trim -29.11   spread 1.17 pp
+    effR 8.4248   #42 champion   -27.80 | #46 cohort_trim -28.51                       spread 0.71 pp
+
+These are books the statistic **cannot distinguish even in principle**, and their validation
+maxDD spans up to **1.17pp**. The K=6 fit's own residual SD is **0.784pp with max |residual|
+1.207pp** — the scatter of the regression equals the scatter among books it is blind to.
+
+The generalisation: risk contributions are computed on a **normalised, single-date** weight
+vector, so the statistic sees only *cross-sectional, contemporaneous* risk sharing. It is
+blind to (a) **exposure scalars** — i.e. to every de-risking overlay, the exact thing a
+drawdown diagnostic is most often asked about — and (b) **formation-date diversity**, which
+`learnings.md` already establishes as the overlap's active ingredient. That is one mechanism
+for the shallower K=6 slope (part of a K=6 book's drawdown risk is already diversified along
+a temporal axis the covariance of one date cannot report, so contemporaneous risk bets buy
+less on top) *and* for both recorded "misses", and it subsumes the ad-hoc "weight-vector
+staleness" story invented for #50.
+
+**Trial #55 was therefore not a miss.** Predicted −26.1%, observed −27.4%, error **1.32pp** —
+inside this base's 1.207pp max residual and comparable to the 1.17pp spread among
+indistinguishable books. At the unique-book slope the error is 0.76pp. The statistic's record
+is better than last session recorded; what was wrong was the error bar, which had never been
+computed.
+
+### Free result 3 — `research/SUMMARY.md` #39 exercised, and it lands where it pre-registered
+
+The volatility-weighted cost multiplier: turnover-weighted ratio of traded names' 252-day
+trailing daily volatility to the universe median, over the full validation split.
+
+    champion #42          1.431   3.11x turnover   0.93%/yr modelled -> 1.34%/yr   -0.018 Sharpe
+    #52 equal-weight      1.221   8.06x            2.42%/yr          -> 2.95%/yr   -0.024
+    #54 rank-weight       1.293   8.32x            2.50%/yr          -> 3.23%/yr   -0.032
+    #51 no-buffer (K=1)   1.388   8.32x            2.50%/yr          -> 3.47%/yr   -0.043
+    K=6 mean 1.427 | K=1 mean 1.331 | range 1.221-1.466
+
+#39 pre-registered "even a 1.5x multiplier stays under ~0.03 Sharpe". Measured **1.431x and
+0.018 Sharpe** on the champion — confirmed, and it is a correctness fix to a caveat, not a
+lever. Two things it adds. The multiplier is **monotone in weighting concentration** (equal
+1.221 < rank 1.293 < magnitude 1.367–1.388), which is #39's own mechanism observed directly:
+magnitude weighting tilts further into the high-volatility tail the flat cost model
+under-prices. And although the K=6 books carry the *higher multiplier*, the **Sharpe**
+correction is 2–2.5x larger on K=1 books because they trade 2.7x more — so the recorded
+#51-vs-#42 validation gap of **+0.109** narrows to **+0.084** once both books pay their true
+volatility-denominated cost. Still positive, still inside the family's resolution floor, and
+it changes no verdict — exactly as #39 said it would.
+**Idea provenance: `research/SUMMARY.md` #39 (added 2026-08-27).**
+
+### Why zero trials
+
+Not a new argument, and it should not be dressed up as one: last session established that
+every component of the reinstated champion now has a measured marginal value, all of them at
+a local optimum or a recorded negative on transfer, and `research/SUMMARY.md` #32's table of
+required gains (+0.138 at `rho` = 0.99, +0.205 at 0.978, +0.438 at 0.90) is cleared by
+nothing in the family. Tonight's diagnostics did not open a build either: free result 2 is a
+boundary on a diagnostic, and free result 3 is explicitly a cost account rather than an
+objective — #39 attaches that caution itself, and the lab has already refuted the direction
+it would tempt (tilting away from high-volatility names is the closed low-vol/inverse-vol
+family). The one component with a positive recorded validation sign — deleting the membership
+band — remains **declined** as holdout-informed, and is anyway +0.109 against a +0.138 bar.
+
+### Ideas for next session
+
+1. **The risk-contribution statistic now has an error bar; quote it.** Slope **+0.32 pp per
+   risk bet on the K=6 base** (not the recorded +0.45), with a **±1.2pp** irreducible scatter
+   that is a structural blind spot, not noise to be reduced. Any pre-registered drawdown call
+   smaller than ~1.2pp on this base is unfalsifiable and should not be made.
+2. **Pair the statistic with something that sees the axes it cannot.** Exposure scalars and
+   formation-date diversity both move maxDD and are both invisible to it. No such statistic is
+   proposed here and inventing one is not free — but the gap is now named and measured.
+3. **Retired from the idea list**, added to the standing set: re-fitting the risk slope (done);
+   `research/SUMMARY.md` #39's cost multiplier (done, confirmed, not a lever). Carried
+   unchanged: cross-specification averaging, the band's expectation argument, the two-speed
+   book, any further kernel-shape proposal, and any construction motivated by recovering a
+   mechanism the journal records as helping the holdout.
+4. **For the human, unchanged and now the only live item.** What is left is an *input*, not a
+   construction — `program.md`'s human-approval-gated list (point-in-time survivorship-free
+   constituents, fundamentals, intraday bars). Two smaller standing items also unchanged: a
+   second *scored* quantity is available at zero marginal cost (train Sharpe,
+   `corr(train, holdout)` = +0.908 over the magnitude-weighted era), and
+   `research/SUMMARY.md` #35's random-portfolio null still needs a human ruling on whether a
+   null distribution consumes trials.
+- No engine issues encountered this session.

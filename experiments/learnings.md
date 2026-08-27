@@ -644,7 +644,7 @@ across experiments; prune entries that later evidence contradicts.
   about what happens *between* rebalances can be checked by diffing the sanitized
   weight matrix, which scores no returns and costs nothing.
 
-- **The membership buffer's stated justification is dead on this base, what it
+- **The membership buffer's stated justification is dead on the K=1 base, what it
   actually buys is risk breadth the gate cannot see, and the core-vs-fringe screen
   does not detect that.** The hold-25/enter-15 band has been inherited unexamined
   since trial #17, where it was justified — locally and by `research/SUMMARY.md`
@@ -744,7 +744,7 @@ across experiments; prune entries that later evidence contradicts.
   no-op. The general habit stands and keeps paying: check what a component's code reads,
   then measure how much it reads differently, *then* decide whether to spend a trial.
 
-- **Magnitude weighting's information is more ordinal than cardinal on this base, and the
+- **Magnitude weighting's information is more ordinal than cardinal on the K=1 base, and the
   split does not transfer across leg counts either.** #52 (equal weight) and #53 (no
   cross-leg agreement premium) left one quantity unresolved: whether the ~0.116 Sharpe of
   the within-leg magnitude transform that is *not* concentration is the score's ordering or
@@ -1027,8 +1027,9 @@ across experiments; prune entries that later evidence contradicts.
   that was about *riding* the trailing month in weighting, which #50 refuted at a cost of
   0.276. The point here is the reverse: the skip-month stops the re-target taking a position
   on that month in either direction. **The membership band now has no live justification of any
-  kind on this base** — cost measured at 0.003, expectation refuted here, risk breadth the only
-  surviving one and it is not on the gate's axis.
+  kind on the K=1 base** — cost measured at 0.003, expectation refuted here, risk breadth the
+  only surviving one and it is not on the gate's axis. (The band is *present* in the reinstated
+  K=6 champion and its marginal value there has never been measured; #51 deleted it on K=1.)
 
 - **[CORRECTION, arithmetic only] "Turnover reduction is a spent lever" was measured on the
   K=6 base and the current champion is not on it.** That entry prices the drag at "0.45%/yr ≈
@@ -1169,24 +1170,82 @@ across experiments; prune entries that later evidence contradicts.
   ⇒ re-parameterisation ⇒ no trial. Boundary from the source: linear filters only; it says
   nothing about the buffer, the magnitude transform, the tranche overlap or the trim.
 
-- **The risk-contribution statistic has a second miss, its slope does not survive a change of
+- **[RE-FITTED AND PARTLY CORRECTED 2026-08-27 — read the entry below this one first; the
+  mechanism asserted here for the miss is refuted, and #55 turns out not to have been a miss.]
+  The risk-contribution statistic has a second miss, its slope does not survive a change of
   base, and this is the third instance of one general failure.** Three correct pre-registered
   drawdown calls (#52, #53, #54) and one recorded miss (#50, blamed on weight-vector
   staleness). Trial #55 misses again and **staleness cannot explain it** — #55 re-targets
   monthly exactly as the champion does. Effective risk bets +62% (8.54 → 13.84) predicts
   validation maxDD ≈ **−26.1%** at the recorded linear calibration (5.3pp per +195%); observed
-  **−27.4%** against the champion's −27.8%. Sign right, size overstated ~3x. The shape: **every
+  **−27.4%** against the champion's −27.8%. Sign right, size overstated ~3x. ~~The shape: every
   calibration point was fitted on the K=1 base at ~6 effective risk bets, and the reinstated
-  base starts at 8.5.** A book whose drawdowns are already dominated by a factor common to all
+  base starts at 8.5 — a book whose drawdowns are already dominated by a factor common to all
   its vintages cannot diversify them away by holding more names, so the marginal drawdown value
-  of a risk bet must fall as the count rises — precisely what a constant fitted at the bottom
-  of the range would miss, in this direction. **Keep the statistic and its sign; stop quoting
-  its slope until it is re-fitted on this base** (free — holdings-only on trials already
-  recorded, and the cheapest thing a next session can do). The general failure, now at three
-  instances: #52 showed "the base has absorbed it" does not generalise across *components*,
-  #54 showed the ordinal/cardinal share did not transfer across *leg counts*, and #55 shows a
-  *calibration* does not transfer across *bases*. **A constant measured on one construction is
-  a property of that construction until re-measured.**
+  of a risk bet must fall as the count rises.~~ **Refuted 2026-08-27: the K=6 base has books
+  down at 6.43 risk bets (8.5 is only where the champion sits), and restricting the K=1 fit to
+  the K=6 span makes it *steeper*, not shallower — the level-of-count story predicts the wrong
+  sign.** What survives is the instruction that followed it — the slope *is* base-specific and
+  has now been re-fitted — and the general failure, now at three instances: #52 showed "the base
+  has absorbed it" does not generalise across *components*, #54 showed the ordinal/cardinal
+  share did not transfer across *leg counts*, and #55 shows a *calibration* does not transfer
+  across *bases*. **A constant measured on one construction is a property of that construction
+  until re-measured.**
+
+- **The risk-contribution statistic is blind to every risk axis that is not cross-sectional and
+  contemporaneous, and that one fact supplies its base-specific slope, both of its recorded
+  "misses", and — for the first time — an error bar.** Re-fitted holdings-only on the eight K=6
+  and eight K=1 books that have candidate files (75 sampled validation dates, 252-day trailing
+  sample covariance), against recorded validation maxDD:
+
+      base   n   effR span     slope (pp maxDD per risk bet)     r      residual SD
+      K=1    8   5.94-17.61            +0.492                 +0.978     0.427 pp
+      K=6    8   6.43-13.64            +0.322                 +0.733     0.784 pp
+      K=6    5 (unique weight matrices) +0.214                +0.697         —
+
+  The recorded +0.453 is **reproduced on its own base** (+0.492); on the reinstated base it is
+  35–55% too steep. **Quote +0.32 for the K=6 base, not +0.45.**
+  **The mechanism, and it is structural rather than statistical.** Risk contributions are
+  computed on a **normalised, single-date** weight vector, so the statistic can only see risk
+  sharing that is cross-sectional and contemporaneous. It is therefore blind to (a) **exposure
+  scalars** — every de-risking overlay, i.e. the exact class of change a drawdown diagnostic is
+  most often asked about — and (b) **formation-date diversity**, which this file already
+  establishes as the date overlap's active ingredient. Both move maxDD. This is why the K=6
+  slope is shallower at the same counts (part of a K=6 book's drawdown risk is already
+  diversified along a temporal axis one date's covariance cannot report, so contemporaneous
+  risk bets buy less on top), and it subsumes the ad-hoc "weight-vector staleness" story
+  invented for #50.
+  **The error bar, measured directly.** Five of the eight K=6 books are groups sharing a
+  **bit-identical normalised weight matrix** — the trim is a pure exposure scalar and the
+  diagnostic renormalises — so the statistic cannot distinguish them even in principle:
+  #32/#38/#40 all sit at effR 6.4343 with validation maxDD −29.11 / −30.28 / −29.11 (**spread
+  1.17pp**), and #42/#46 both at 8.4248 with −27.80 / −28.51 (spread 0.71pp). The K=6 fit's own
+  residual SD is **0.784pp, max |residual| 1.207pp** — the regression's scatter *equals* the
+  scatter among books it is blind to. **Operational rule: on this base, do not pre-register a
+  drawdown call smaller than ~1.2pp; it is unfalsifiable.**
+  **Consequence for the record: #55 was not a miss.** Its 1.32pp error (0.76pp at the
+  unique-book slope) is inside that floor. The statistic's hit rate is better than the entry
+  above records; what was actually missing was never an error bar at all, and this is the
+  fourth time in this repo that a component's error bar, once computed, changed the reading of
+  its point estimate.
+
+- **`research/SUMMARY.md` #39's volatility-weighted cost multiplier, measured: the flat cost
+  model under-charges this repo by ~1.4x, it is monotone in weighting concentration, and it
+  changes no verdict.** Turnover-weighted ratio of traded names' 252-day trailing daily
+  volatility to the universe median, over the full validation split (holdings-only):
+  **champion 1.431**, range 1.221–1.466 across sixteen books, K=6 mean 1.427, K=1 mean 1.331.
+  On the champion that turns 0.93%/yr of modelled drag into 1.34%/yr, i.e. **0.018 Sharpe** of
+  cost the engine does not charge — against #39's pre-registered "even a 1.5x multiplier stays
+  under ~0.03 Sharpe". Confirmed as stated. Two additions. The multiplier is **monotone in
+  weighting concentration** (equal 1.221 < rank 1.293 < magnitude 1.367–1.388), which is #39's
+  own mechanism observed directly: magnitude weighting tilts further into the high-volatility
+  tail a flat bps charge under-prices. And although K=6 books carry the higher *multiplier*,
+  the **Sharpe** correction is 2–2.5x larger on K=1 books because they trade 2.7x more — so the
+  recorded #51-vs-#42 validation gap of **+0.109 narrows to +0.084** once both pay their true
+  volatility-denominated cost. Still positive, still inside the resolution floor, verdict
+  unchanged. **Carry the caution #39 attaches: this is a cost account, never an objective** — a
+  book can lower it by holding placid names and lose far more on selection, which is the closed
+  low-vol family.
 
 - **The champion's construction is now fully mapped on its own base, which changes what the
   lab should ask a human for.** After #55 every component of the reinstated champion has a
