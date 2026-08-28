@@ -3988,3 +3988,168 @@ band — remains **declined** as holdout-informed, and is anyway +0.109 against 
 - No engine issues encountered this session.
 
 ## Research session — 2026-08-28 (learning agent): 4 notes added, see research/SUMMARY.md
+
+## Session summary — 2026-08-28 (nightly)
+
+- **Integrity check.** Session opened on per-run branch `main-ar91zf` (harness default),
+  bit-identical to `origin/main` at `ffd7493` (0 ahead / 0 behind); corrected to `main`
+  before any work. `git branch -r --no-merged origin/main` **empty** for the third
+  consecutive session, so the shallow-clone fix continues to hold. Engine tests green
+  (**22 passed**). Store fresh through **2026-08-28** (today).
+- Experiments run: **0 of the 8-trial budget.** **No holdout look was spent** — the count
+  since 2026-08-17 stands at five, plus the human's replay.
+- Four free results (holdings-only weight matrices with prices truncated at 2023-12-31, a
+  252-day trailing sample covariance, and a decomposition of the **champion's own** book —
+  an already-recorded strategy — into group shares and within-group returns; **no 2024+
+  data loaded, no candidate return series formed, trial count untouched**).
+
+### The night in one line
+
+`research/SUMMARY.md` #40 — regional-neutral ranking, the folder's top-ranked buildable
+idea and the first grouping ever to pass its own #5 neutralisation screen — was taken
+seriously enough to write the candidate file, and then **killed for free by a bracket**:
+its premise is real and larger than the folder guessed, and removing it is worth at most
++0.065 gross Sharpe *at an in-sample-fitted optimum that #22 forbids*, while every
+regional target constructible **without** fitting the split loses 0.08 to 0.17.
+
+### Free result 1 — #40's premise, and it is stronger than the note claims
+
+The note argues a globally pooled momentum sort mechanically overweights whichever market
+rose. Measured on the champion's sanitized weight matrix over validation, as a share of
+gross exposure:
+
+    group     book mean   book std   book min-max   eligible-name share   over/under
+    STK_NA      0.6306     0.1163    0.429-0.915          0.3579            +27.3pp
+    STK_EU      0.1519     0.0837    0.015-0.378          0.2004             -4.9pp
+    STK_AP      0.1689     0.0984    0.051-0.389          0.1411             +2.8pp
+    ETF         0.0486     0.0475    0.004-0.185          0.3006            -25.2pp
+
+North-American stock weight sits **+27.3pp** above its eligible-name share and swings
+**43%–91%** across the split. The premise is confirmed as strongly as it can be, and the
+regional grouping is genuinely decorrelated in a way nothing else in this repo is: the four
+within-group book returns correlate **0.32–0.61**, against the 0.978 at which the
+four-horizon family's own candidates sit.
+
+### Free result 2 — the candidate was built, screened, and withdrawn unrun
+
+`mom_hzn_avg4_region_neutral`: each leg's momentum score demeaned within its regional
+group (NA / Europe / Asia-Pacific stocks, ETF sleeve as its own group per #40's second
+pitfall), pooled-sigma scaling so the change is the demeaning alone, everything else
+bit-identical to the champion. Demeaning rather than full within-group z-scoring was
+deliberate — dividing by each group's own sigma would inflate the low-dispersion ETF
+sleeve's scores and pull the book toward a sleeve `learnings.md` prices at 0.35–0.49
+standalone, which is a second change with a known-refuted confound.
+
+Holdings-only, it does exactly what it claims. Regional-share **standard deviations
+collapse**: NA 0.1163 → 0.0771 (−34%), EU 0.0837 → 0.0480 (−43%), AP 0.0984 → 0.0477
+(−52%). Weight overlap with the champion **0.868** (live — well clear of the 0.963 that
+killed buffer-band vintages), positions 62.7 → 64.3, effective risk bets 8.73 → 8.06.
+That last predicts a validation maxDD move of **−0.21pp**, which is **inside last
+session's ±1.2pp unfalsifiable floor**, so no drawdown call was pre-registered — the first
+time that boundary has bound a session prospectively.
+
+### Free result 3 — the kill, which is a bracket rather than an argument
+
+The candidate damps the regional bet by 34–52%; the question is what removing it *entirely*
+is worth. Decomposing the champion's own book as `R(t) = Σ_g s_g(t)·r_g(t)` and freezing
+the group shares at their split means, within-group selection untouched:
+
+    champion book, gross           ann_ret 25.91%   ann_vol 22.72%   Sharpe 1.1402
+    regional shares frozen at mean ann_ret 26.33%   ann_vol 21.84%   Sharpe 1.2055   +0.065
+
+So the **upper bound** on the whole mechanism is **+0.065**, of which +0.046 is the pure
+variance channel — already below the family's twice-measured resolution floor (0.08–0.10)
+and less than half the +0.138 the required-gain table demands at `rho` = 0.99. The
+candidate captures 34–52% of it, i.e. **≈ +0.03**.
+
+And the +0.065 is not constructible. Freezing at each group's *realised split mean* fits a
+parameter to the scoring split, which `research/SUMMARY.md` #22 forbids. The two targets
+that need no fitting — contemporaneous eligible-name shares, and a flat 1/4 per group —
+both **lose**:
+
+    regional shares = eligible-name shares   ann_ret 17.65%  ann_vol 18.14%  Sharpe 0.973  -0.167
+    regional shares = equal 1/4 per group    ann_ret 18.17%  ann_vol 17.18%  Sharpe 1.058  -0.083
+
+That is the bracket. The mechanism is real, its best case is below the floor, its best case
+is unreachable without fitting, and everything reachable is worse than doing nothing.
+Note also the sign of the mean: freezing the shares **raises** annual return 0.42pp, so the
+pooled sort's regional timing is mildly value-destroying rather than value-adding — the
+book is not being paid for the bet, it simply cannot shed it more cheaply than it costs.
+**Idea provenance: `research/SUMMARY.md` #40.** The candidate file was deleted unrun so no
+future session mistakes it for a recorded trial; the construction is fully specified above.
+
+### Free result 4 — a screen of #41, so the next session does not spend a trial to learn it
+
+`research/SUMMARY.md` #41 (negative past-5-year return as a price-only value proxy) is the
+folder's second buildable idea and the first *signal* it has ever supplied that this repo
+could not already compute. Its mean cannot be priced for free — that would be the ad-hoc
+backtest the manual forbids — but its holdings can, under the champion's own buffer and
+magnitude machinery (K=1, single leg):
+
+    weight overlap with champion       0.054   (most decorrelated object ever measured here;
+                                                next lowest is #55's disjoint legs at 0.141)
+    positions                          18.7    (champion 62.7)
+    ETF share                          0.165   (champion 0.049)
+    distinct names ever held             49
+    mean book weight in its 10 most-held names   0.597
+    mean daily |dw| (L1)               0.008   -- it barely trades
+
+Its ten most-held names, several held on **all 1,562 validation days**: BP, HSBC, Barclays,
+BAT, Lloyds, Bayer, Deutsche Bank, GE, GSK, BASF, then IBM and Exxon. Three things follow,
+and they convert #41's three stated caveats from concerns into measurements while adding a
+fourth the folder did not state. (i) At 0.054 overlap it is unambiguously a *different
+return stream*, so #2's design test applies and it pays the capital-dilution tax
+`learnings.md` measures at ~0.015–0.02 Sharpe per 20% of capital regardless of the base
+leg's quality. (ii) It is **near-static** — 60% of book weight in a ten-name repeat cast,
+membership essentially frozen for six years — so it is a standing European-financials-and-
+energy tilt wearing a value label, not a rotating signal. (iii) That cast is #34's re-aimed
+survivorship caveat observed directly: every one of those names fell for five years and is
+in today's universe **because it survived**, which is exactly the conditioning that inflates
+a persistence claim. A 5-year-reversal signal is the single most survivorship-flattered
+object this repo could build, and the flattery lands on the mean — the one quantity the
+screen cannot bound.
+**Idea provenance: `research/SUMMARY.md` #41.**
+
+### Why zero trials
+
+Tonight is not last session's argument repeated. The last two sessions declined on a
+*general* claim — every component is at a local optimum, and nothing in the family clears
+the required-gain table. Tonight the research folder supplied a genuinely new axis that was
+outside that argument, the session took it seriously enough to verify the premise, write the
+file and screen it, and then killed it on a **measured bracket specific to it**. That is a
+different and much stronger reason to spend nothing, and it retires the folder's top-ranked
+buildable idea rather than deferring it.
+
+The regional axis is also the strongest possible test of a claim `learnings.md` has been
+building for five axes: at 0.32–0.61 between-group return correlation it is by far the most
+decorrelated grouping available here, and it still loses. **Live is now a precondition with
+no predictive content at six axes.**
+
+### Ideas for next session
+
+1. **#40 is closed** (free result 3) — mechanism real, best case +0.065 and below the floor,
+   best case unreachable without fitting, everything constructible negative. Do not
+   re-propose regional neutralisation, and note the shape: the folder's #5 screen correctly
+   identified a *live* grouping, and liveness still did not predict payoff.
+2. **#41 is screened but not decided** (free result 4). It is the one remaining buildable
+   idea whose sign genuinely cannot be established for free, because the screen bounds its
+   breadth and its survivorship exposure but not its mean. A session that spends a trial on
+   it should pre-register against the dilution tax and read a positive result with the
+   ten-name repeat cast in front of it.
+3. **Retired from the idea list**, added to the standing set: regional-neutral ranking
+   (free result 3). Carried unchanged: cross-specification averaging, the band's expectation
+   argument, the two-speed book, any further kernel-shape or vintage-averaging proposal, and
+   any construction motivated by recovering a mechanism the journal records as helping the
+   holdout.
+4. **For the human, unchanged and still the only live item.** What is left is an *input*,
+   not a construction — `program.md`'s human-approval-gated list (point-in-time
+   survivorship-free constituents, fundamentals, intraday bars). Tonight's free result 4 is
+   the sharpest illustration the lab has produced of why the first of those matters: the
+   only genuinely new signal the research folder has ever supplied is also the one this
+   universe's survivorship conditioning flatters most, and no session can tell the
+   difference from inside the data it has. The two smaller standing items are also
+   unchanged: a second *scored* quantity is available at zero marginal cost (train Sharpe,
+   `corr(train, holdout)` = +0.908 over the magnitude-weighted era), and
+   `research/SUMMARY.md` #35's random-portfolio null still needs a human ruling on whether a
+   null distribution consumes trials.
+- No engine issues encountered this session.

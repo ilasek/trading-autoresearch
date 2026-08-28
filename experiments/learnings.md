@@ -1267,3 +1267,64 @@ across experiments; prune entries that later evidence contradicts.
   up, volatility down and drawdown understated, flattering three of `program.md`'s own gates at
   once. A session that finds itself with budget left and no idea above the floor should say
   this rather than spend a trial re-deriving a recorded negative.
+
+- **Regional neutralisation is closed by a bracket, and the bracket's shape is the general
+  lesson: a mechanism can be real, large, and still unreachable.** `research/SUMMARY.md` #40
+  was the folder's top-ranked buildable idea and the first grouping ever to pass its own #5
+  neutralisation screen — for sectors the lab could name no mechanism and the trial duly lost
+  0.16, while for regions the mechanism (large country-specific components in international
+  returns) is documented. Its premise verified *stronger* than the note claimed: the champion
+  holds **63.1%** North-American stock weight against a **35.8%** eligible-name share, a
+  **+27.3pp** overweight swinging **43%–91%** across validation, and the four within-group book
+  returns correlate only **0.32–0.61** against the 0.978 at which this family's candidates sit.
+  It is by a wide margin the most decorrelated grouping available here. Three free measurements
+  then closed it without a trial. *(a)* The candidate (within-group demeaning, everything else
+  bit-identical) does work: regional-share standard deviations fall **34–52%**, weight overlap
+  0.868, positions 62.7 → 64.3. *(b)* Decomposing the champion's own book as
+  `R = Σ_g s_g(t)·r_g(t)` and freezing the group shares at their split means puts the **upper
+  bound on the entire mechanism at +0.065** gross Sharpe (ann_vol 22.72% → 21.84%, of which
+  +0.046 is the pure variance channel) — already under the twice-measured 0.08–0.10 resolution
+  floor and under half the +0.138 the required-gain table demands at `rho` = 0.99; the candidate
+  captures 34–52% of it, ≈ +0.03. *(c)* That +0.065 is **not constructible**: freezing at the
+  realised split mean fits a parameter to the scoring split (forbidden by #22), and both targets
+  needing no fitting lose — eligible-name shares **−0.167**, flat 1/4 per group **−0.083**.
+  Two riders. Freezing the shares *raises* annual return 0.42pp, so the pooled sort's regional
+  timing is mildly value-destroying and the book is not being paid for the bet — it simply
+  cannot shed it more cheaply than it costs, which is the long-only discount (`SUMMARY.md` #4,
+  #42) arriving on the variance side. And **live is now a precondition with no predictive
+  content at six axes**, this being the extreme point of the strongest one: the #5 screen
+  correctly separated a live grouping from a dead one and liveness still did not predict payoff.
+  A screen that only ever kills is still worth running; it just may not be upgraded to a
+  forecast.
+
+- **The `±1.2pp` unfalsifiability floor bound a session prospectively for the first time, and
+  the discipline it enforces is to decline to pre-register rather than to pre-register weakly.**
+  Last session established that the risk-contribution statistic's K=6 residual scatter (0.784pp
+  SD, 1.207pp max) equals the scatter among books it cannot distinguish even in principle, so a
+  drawdown call smaller than ~1.2pp on this base is unfalsifiable. Tonight's candidate moved
+  effective risk bets 8.73 → 8.06, predicting **−0.21pp** at the re-fitted +0.322 slope. No call
+  was made. The general form, and it is the counterpart to "measure the premise before spending
+  the trial": **once a diagnostic has an error bar, an effect inside it is not a small prediction
+  but an absent one**, and recording it as a prediction would manufacture a hit or a miss out of
+  noise — which is how this same statistic acquired two "misses" that later turned out to be
+  inside its own scatter.
+
+- **The only genuinely new signal the research folder has ever supplied is also the one this
+  universe flatters most, and the screen that shows it is free.** `research/SUMMARY.md` #41
+  (negative past-5-year return as a price-only value proxy) cannot have its *mean* priced
+  without a trial, but its holdings can. Built under the champion's own buffer and magnitude
+  machinery: weight overlap with the champion **0.054** — the most decorrelated object ever
+  measured in this repo, next lowest being #55's disjoint legs at 0.141 — on **18.7** positions,
+  **49** distinct names ever held, **59.7%** of book weight in a ten-name repeat cast, and a mean
+  daily weight change of 0.008, i.e. it barely trades. The cast, several names held on all 1,562
+  validation days: BP, HSBC, Barclays, BAT, Lloyds, Bayer, Deutsche Bank, GE, GSK, BASF, IBM,
+  Exxon. Three consequences, converting the folder's three stated caveats into measurements and
+  adding a fourth. At 0.054 overlap it is unambiguously a **different return stream**, so #2's
+  design test applies and it pays the dilution tax measured here at ~0.015–0.02 Sharpe per 20%
+  of capital. It is **near-static**, so it is a standing European-financials-and-energy tilt
+  wearing a value label rather than a rotating signal. And that cast is the re-aimed
+  survivorship caveat observed directly — every one of those names fell for five years and is in
+  today's universe *because it survived* — so the conditioning lands squarely on the one quantity
+  the free screen cannot bound. **A holdings-only screen can bound an idea's breadth, its
+  concentration and its exposure to a known bias while leaving its sign completely open; say
+  which of the three you have bounded before concluding anything.**
