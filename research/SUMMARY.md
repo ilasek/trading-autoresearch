@@ -52,6 +52,71 @@ leg. Additional hard constraint: both scale *up* when volatility is low, which g
 Tier A, `validation_overlap: false`.
 → `notes/2026-08-17-momentum-crash-risk-management.md`
 
+**[Added 2026-08-28] The international literature builds a global momentum book by ranking
+*within* markets and pooling afterwards — this repo ranks one pooled global cross-section, and
+that is the session's one construction lead.** Three tier-1 sources, spanning three decades of
+publication and four independent samples, assemble global momentum the same way and none of them
+ranks a single global pool: Rouwenhorst (1998) forms deciles against same-country stocks;
+Fama–French (2012) use **each region's own momentum breakpoints even when building global
+portfolios**, computed from that region's big stocks; Chui–Titman–Wei (2010) pool within-country
+winner portfolios into a country-neutral global book. Rouwenhorst is the one who reports what the
+change buys, and the shape matters: country-neutral ranking lowers the winner-minus-loser **mean
+only slightly**, but raises the two legs' correlation (≈0.74 → ≈0.88) and cuts the spread's
+**volatility by about 40%**, sharply raising its t-statistic. So this is a variance mechanism, not
+an alpha mechanism — a large share of an unconstrained international momentum book's risk is
+country-specific and is removable by construction rather than by adding names. The confound has a
+name and a citation (large country-specific components in international stock returns,
+Heston–Rouwenhorst / Griffin–Karolyi), which is exactly what candidate #5's group-neutralisation
+screen demands and exactly what the lab's refuted *sector*-neutral z-score lacked. All tier A,
+`validation_overlap: false`.
+→ `notes/2026-08-28-international-momentum-country-neutral.md`,
+`notes/2026-08-28-local-versus-global-factor-construction.md`,
+`notes/2026-08-28-individualism-cross-country-momentum.md`
+
+**[Added 2026-08-28] Four independent sources now put this repo's universe in the size bucket
+where momentum is weakest, and one of them cannot distinguish it from zero.** Fama–French find
+the winner-minus-loser spread larger for small stocks in every region they study except Japan,
+with the difference exceeding two standard errors everywhere except Japan — and in their global
+portfolios the **big-stock spread carries a t-statistic near 1.4**, i.e. pooled across 23
+developed markets over two decades, large-cap momentum is not statistically distinguishable from
+zero. Rouwenhorst's largest size group earns roughly half the smallest group's spread;
+Chui–Titman–Wei report momentum profits negatively related to firm size across 41 countries;
+Asness–Moskowitz–Pedersen state their results are conservative *because* their universe is the
+largest names covering 90% of market cap. This does not contradict the lab's own measurements —
+a concentrated long-only magnitude-weighted book on a survivorship-conditioned universe is a
+different object from a value-weighted long-short factor — but it fixes where the external prior
+should sit: **the bottom of the published range, not the middle.** Tier A, `validation_overlap:
+false`. → `notes/2026-08-28-local-versus-global-factor-construction.md`,
+`notes/2026-08-28-international-momentum-country-neutral.md`
+
+**[Added 2026-08-28] Geography does not diversify a momentum book, and this is the outside
+version of a result the lab has already measured.** Asness–Moskowitz–Pedersen find the average
+single-market stock momentum strategy correlates ≈0.65 with the average momentum strategy in
+*other* stock markets (and ≈0.37 with momentum in non-stock asset classes), a co-movement
+*stronger* than that of passive exposures to the same markets — the strategies are market-neutral
+within each class, so it cannot be the assets moving together. Consequence for a global pooled
+book: adding names across regions raises nominal breadth `N` but adds little independent risk,
+which is the fundamental-law point in published numbers and is consistent with the lab's own
+finding that widening the basket from 25/15 to 35/20 left maximum drawdown essentially unchanged.
+The source of the common factor is only partially explained — macro links are modest, funding
+liquidity risk loads positively on momentum and negatively on value but accounts for a small
+fraction of the premia by the authors' own accounting. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-28-value-momentum-everywhere-global-comovement.md`
+
+**[Added 2026-08-28] The repo's magnitude weighting has its first outside construction match, and
+the match is the *ordinal* version the lab converged on independently.**
+Asness–Moskowitz–Pedersen weight securities by **cross-sectional rank of the signal** minus the
+average rank, stating that ranks blunt outliers (raw-signal weights are similar and slightly
+better), and report that such signal-weighted books beat coarse tercile-sort spreads for two
+reasons: the weight is a positive linear function of the signal rather than a three-way
+classification, and more names carry nonzero weight so the book is better diversified. That is
+the lab's largest single measured construction gain and the lab's later refinement of it
+(`learnings.md`: the information is "more ordinal than cardinal") arrived at from outside. The
+boundary: their portfolio is dollar-neutral long-short, so rank-minus-mean produces negative
+weights; the long-only analogue is the champion's and the equivalence remains the lab's
+inference. Tier A, `validation_overlap: false`.
+→ `notes/2026-08-28-value-momentum-everywhere-global-comovement.md`
+
 ### 2. Time-series momentum / trend following
 
 **The best-known result in this family is contested in its own literature, and the version this
@@ -2302,6 +2367,84 @@ hypothesis fodder, then anti-candidates.
     never an objective; a book can lower it by holding placid names and lose far more on selection.
     Tier A / B, no overlap.
     → `notes/2026-08-27-market-impact-functional-form-and-trade-rate.md`
+40. **[Added 2026-08-28] The one construction change this session opens, and the first grouping the
+    folder has found that passes candidate #5's screen: rank the momentum composite *within coarse
+    regional groups* rather than in one global pool.** #5 requires naming the mechanism by which the
+    signal would load on the group even if the effect were absent. For sectors the lab could not name
+    one and the trial duly lost. For **countries/regions** the mechanism is documented and cited
+    (large country-specific components in international stock returns): a globally pooled momentum
+    sort mechanically overweights whichever *market* rose, so the book takes an unrequested country
+    bet on top of its stock bets. Three tier-1 sources build global momentum this way and none ranks
+    one pooled cross-section. **Predict the sign before running it, per #24: this is a variance
+    mechanism, not an alpha one** — Rouwenhorst's country-neutral book keeps almost all of the mean,
+    raises the legs' correlation (≈0.74 → ≈0.88) and cuts the spread's volatility ~40%. So the
+    prediction is a Sharpe gain with a flat-to-slightly-lower numerator and a materially lower
+    denominator; a version that raises the mean would be evidence the mechanism is *not* the one
+    claimed. Three implementation pitfalls, all cheap to check first: per-group counts on ~145
+    instruments make a three-way NA / Europe / Asia-Pacific split about the practical limit;
+    the ETF sleeve's country and regional funds **are** regions rather than belonging to one, so
+    the two legs must be grouped separately or the stock leg grouped alone; and this changes
+    *ranking*, not weighting, so it composes with magnitude weighting rather than competing with it.
+    Tier A, no overlap. → `notes/2026-08-28-international-momentum-country-neutral.md`,
+    `notes/2026-08-28-local-versus-global-factor-construction.md`
+41. **[Added 2026-08-28] The second buildable idea, and the first *signal* this folder has ever
+    supplied that this repo could not already compute: the negative of the past 5-year return as a
+    price-only value proxy.** Asness–Moskowitz–Pedersen use it as the value measure for every asset
+    class without book values, and validate it in equities against book-to-market: it produces a
+    value strategy correlating ≈ −0.48 with momentum, close to BE/ME's ≈ −0.53, and the negative
+    value/momentum correlation survives lagging BE/ME's price by a year so the two signals share no
+    price data. This repo has no fundamentals and has therefore never had a value signal; it now has
+    one that needs nothing but daily closes. **Ranked below #40 and behind three caveats.** (i) The
+    evidence is long-short, so #4 applies and the long-only half is the weaker half. (ii) #2's design
+    test classes a value sleeve blended with a momentum sleeve as *mixing different return streams*,
+    not averaging estimates of one quantity — so it pays the capital-dilution tax the lab has
+    already measured, and the ≈ −0.5 correlation is what would have to beat that tax; the tax is
+    known here and the correlation is not measured here. (iii) A 5-year lookback is the construction
+    most exposed to this repo's survivorship conditioning — a name that collapsed five years ago and
+    is still in today's universe is a selected survivor — so #34's re-aimed caveat bites hardest
+    exactly here. Tier A, no overlap.
+    → `notes/2026-08-28-value-momentum-everywhere-global-comovement.md`
+42. **[Added 2026-08-28] Import discount, free: every momentum magnitude in the literature is an
+    upper bound for this universe, and on large caps alone the published premium is not reliably
+    different from zero.** Fama–French's *global* big-stock winner-minus-loser spread carries a
+    t-statistic near 1.4 across 23 developed markets over two decades, while the small-stock spread
+    exceeds 3; Rouwenhorst's largest size group earns about half his smallest group's spread;
+    Chui–Titman–Wei find momentum profits negatively related to firm size across 41 countries; and
+    Asness–Moskowitz–Pedersen call their own results conservative *because* their universe is the
+    largest names covering 90% of market cap — the closest published universe to this repo's. Use it
+    as #4 is used: not to doubt the lab's own measured Sharpe (a concentrated long-only
+    magnitude-weighted book is a different object from a value-weighted long-short factor), but to
+    place the *external* prior for any momentum-construction hypothesis at the bottom of the
+    published range. Corollary for hypothesis writing under #31: "the literature reports a large
+    momentum premium" is not a motivating prior for this universe; "the literature reports a premium
+    that shrinks monotonically in size and is weakest where our universe sits" is.
+    Tier A, no overlap. → `notes/2026-08-28-local-versus-global-factor-construction.md`
+43. **[Added 2026-08-28] Interpretation rule, free: adding names across regions does not buy
+    breadth.** The average single-market stock momentum strategy correlates ≈0.65 with the average
+    momentum strategy in *other* stock markets — co-movement stronger than that of passive exposures
+    to the same markets, on strategies that are market-neutral within each market, so it is not the
+    assets moving together. A global momentum book therefore has one dominant common factor, and
+    widening it geographically raises nominal `N` without raising the number of independent bets.
+    This is the published version of the fundamental-law point already here, and it retro-explains
+    the lab's own result that widening the basket 25/15 → 35/20 left maximum drawdown unchanged.
+    Consequence: any future proposal whose stated benefit is "more names, more regions, more
+    diversification" should be required to predict the effect on *risk* — and the prior for that
+    prediction is ≈zero. Tier A, no overlap.
+    → `notes/2026-08-28-value-momentum-everywhere-global-comovement.md`
+44. **[Added 2026-08-28] Anti-candidate — do not exclude or down-weight a regional bloc on the
+    cross-country-heterogeneity evidence.** The natural reading of Chui–Titman–Wei (momentum is
+    stronger in more individualistic cultures; the Japanese exception is the stock example) is to
+    drop or shrink low-individualism names from the basket. Three reasons not to, and they compose:
+    the effect is measured on **within-country long-short** books, not on a long-only global basket;
+    **Fama–French explicitly decline the explanation** — the psychological argument is reversible,
+    and their Hotelling `T²` test fails to reject equality of expected momentum returns across the
+    four regions at the 90% level, so the exception may be noise; and any such exclusion is a free
+    parameter chosen from a disputed source whose sample ended long before this repo's data. Note
+    the asymmetry with #40, which is the point: a regional grouping used for **neutralised ranking**
+    is a variance argument with a named confound and is licensed; the same grouping used for
+    **exclusion** is a mean argument resting on the disputed result and is not. Tier A, no overlap.
+    → `notes/2026-08-28-individualism-cross-country-momentum.md`,
+    `notes/2026-08-28-local-versus-global-factor-construction.md`
 
 ## Coverage log
 
@@ -2321,6 +2464,7 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-25 (session 12) | Session 11's open question (c), the last unpatched seam in the scoring apparatus: **a multiple-testing correction that knows why a trial was run** — chased in the vocabulary session 11 named (prior-weighted, hierarchical and empirical-Bayes multiple testing), and answered from all three directions. Three notes; full text read directly for all four primary texts. The session's shape is one *machinery* that closes the question in statistics and immediately constrains it (a discount is zero-sum), one *exchange rate* in a finance venue that prices the discount at about one t-unit and finds it never falls below the naive bar, and one *narrowing correction* to `learnings.md`'s ⚠ standing protocol concern that removes its weaker half and sharpens the rest. | Genovese–Roeder–Wasserman 2006 (Biometrika; CMU Technical Report 811, the working version, read in full) + Roeder–Wasserman 2009 (Statistical Science; arXiv reprint read in full) (`2026-08-25-prior-weighted-multiple-testing.md`); Harvey 2017 (JF, Presidential Address; Duke-hosted PDF read in full) (`2026-08-25-bayesianized-p-values-prior-odds.md`); Jensen–Kelly–Pedersen 2023 (JF; CBS Research Portal published CC-BY version read in full) (`2026-08-25-hierarchical-bayesian-factor-replication.md`) |
 | 2026-08-26 (session 13) | Session 12's open question (b), taking the better of the two structurally-different targets it named: **the statistical properties of the universe itself** — survivorship and constituent selection, which `learnings.md` lists as a permanent caveat and which no note here had ever sourced. Three notes, five sources; full text read directly for four, one recorded second-hand from its abstract. The session's shape is one *re-aiming* of the lab's oldest caveat (the level effect is the forgiving half; the persistence inference is the severe half, and a cross-sectional momentum book is a persistence claim), one *magnitude* for this repo's literal data-construction recipe together with the sign of the index-membership channel, and one *distribution* that explains why that magnitude is large — plus the folder's fourth and first distributional account of what concentration costs. | Brown–Goetzmann–Ibbotson–Ross 1992 (RFS; `terpconnect.umd.edu` mirror read in full) + Stambaugh 2011 (Quarterly Journal of Finance; the 2002 working version read in full from a Berkeley Haas upload), with Brown–Goetzmann–Ross 1995 (JF) recorded **second-hand from its published abstract only** — `oa_status: closed`, no repository copy found (`2026-08-26-survivorship-conditioning-and-spurious-persistence.md`); Daniel–Sornette–Wöhrmann 2009 (JPM; arXiv:0810.1922 read in full) + Cai–Houge 2008 (FAJ; author-hosted accepted version at `biz.uiowa.edu` read in full) (`2026-08-26-look-ahead-benchmark-bias-index-constituents.md`); Bessembinder 2018 (JFE; accepted-manuscript PDF read in full), with Bessembinder–Chen–Choi–Wei 2023 (FAJ, global) recorded **unread** (`2026-08-26-skewness-and-concentration-of-stock-returns.md`) |
 | 2026-08-27 (session 14) | Session 13's open question (b), and the last vocabulary the folder had never opened: **execution and implementation shortfall**. Taken with the stated prior that it would close rather than open — which held, but the closures are load-bearing rather than empty. Three notes, five sources; full text read directly for four, one recorded **unread**. The session's shape is one *verification* of a number the repo has never had outside evidence for (the 15 bps/side charge, graded against $1.7tn of live institutional fills and found conservative-to-fair, with the engine's decision-price convention matching the source's definition word for word), one *shape correction* that identifies the single asymmetry in the flat cost model pointing against this repo (impact is denominated in volatility; a momentum basket holds the high-volatility tail) together with the arithmetic showing it does not change a verdict, and one *adjudication* of a published tier-1 disagreement about whether the repo's own champion family survives costs — which resolves in the repo's favour on level while leaving two structural results untouched, one of which (most of the momentum spread lives on the short leg) is the folder's most specific long-only discount to date. | Frazzini–Israel–Moskowitz 2018 (AQR/SSRN working paper; author-hosted PDF read in full), with Perold 1988 (JPM) recorded **unread** — paywalled, no repository or mirror copy found, its definition used only as restated in the source read (`2026-08-27-live-execution-costs-implementation-shortfall.md`); Almgren–Thum–Hauptmann–Li 2005 (Risk; authors' dated version read in full from a university course-reading directory) (`2026-08-27-market-impact-functional-form-and-trade-rate.md`); Lesmond–Schill–Zhou 2004 (JFE; a university PhD-course mirror served the typeset article) + Korajczyk–Sadka 2004 (JF; Kellogg faculty page) (`2026-08-27-momentum-net-of-costs-debate.md`) |
+| 2026-08-28 (session 15) | Session 14's open question (a), taking the one of its three unopened directions it called "the best of the three and the only one that could change a construction choice": **international / global evidence on momentum construction**, chased because this repo's universe is global while almost every source in this folder is US-only. Four sources, four notes; full text read directly for all four, one of them in a working-paper rather than published version (flagged in-note). The session's shape is one **opened build** — the first grouping ever to pass candidate #5's neutralisation screen — one second build of a kind the folder has never supplied (a *signal*, price-only), two free discount/interpretation rules, one anti-candidate, and one unresolved disagreement between two tier-1 sources that is recorded rather than adjudicated. | Rouwenhorst 1998 (JF; Yale ICF working-paper depot served the February 1997 revision in full) (`2026-08-28-international-momentum-country-neutral.md`); Fama–French 2012 (JFE; the typeset article with volume and page headers from an author-adjacent faculty site, `johnhcochrane.com`) (`2026-08-28-local-versus-global-factor-construction.md`); Asness–Moskowitz–Pedersen 2013 (JF; the typeset article from an author's NYU Stern page) (`2026-08-28-value-momentum-everywhere-global-comovement.md`); Chui–Titman–Wei 2010 (JF; the **November 2004 working-paper version** read in full from a National Taiwan University conference-proceedings mirror, the published article not obtained — two of its findings taken from the published abstract and marked as such) (`2026-08-28-individualism-cross-country-momentum.md`) |
 
 ### Open questions for future sessions
 
@@ -2931,6 +3075,71 @@ hypothesis fodder, then anti-candidates.
   the temporary term, as `T^{3/5}`, while 85–90% of measured impact is permanent. It attacks the small
   half of the cost, and the engine's single one-day lag is frozen in any case.
 
+  **— (a)'s third direction ANSWERED 2026-08-28 (session 15), and against session 14's own
+  expectation it opened rather than closed.** Session 14 named three remaining unopened directions
+  and predicted the marginal session was now worth materially less; it ranked
+  **international/global momentum construction** best of the three because this repo's universe is
+  global while almost every source in the folder is US-only. That ranking was right, and the
+  session produced the folder's first *construction* lead in some time plus its first *signal*
+  idea ever. The four findings, in the order they matter: **(i)** three tier-1 sources spanning
+  three decades build a global momentum book by ranking **within markets and pooling afterwards**
+  — Fama–French use each region's own momentum breakpoints even when constructing global
+  portfolios — and none of them ranks a single global pool, which is what this repo does.
+  Rouwenhorst reports what the change buys and the shape is the useful part: the mean is nearly
+  unchanged, the legs' correlation rises and the spread's volatility falls ~40%. It is a
+  **variance** mechanism with a **named, cited confound** (large country-specific components in
+  international returns), which is precisely what candidate #5 demands and what the lab's refuted
+  sector-neutral z-score lacked — the first grouping ever to pass that screen (#40). **(ii)** Four
+  independent sources put this universe in the size bucket where momentum is weakest, and
+  Fama–French's *global big-stock* spread carries a t-statistic near 1.4 — pooled across 23
+  developed markets over two decades, large-cap momentum is not statistically distinguishable from
+  zero (#42). **(iii)** Geography does not diversify momentum: ≈0.65 cross-market co-movement,
+  stronger than passive exposures, on market-neutral strategies — the fundamental-law point in
+  published numbers, and it retro-explains the lab's own basket-widening null (#43). **(iv)** The
+  by-product, and the first thing this folder has ever supplied that the repo could not already
+  compute: **the negative of the past 5-year return is a price-only value proxy**, used as such
+  for every asset class without book values and validated against BE/ME, correlating ≈ −0.5 with
+  momentum (#41). Two things the session deliberately did **not** do: it did not adjudicate the
+  Chui–Titman–Wei / Fama–French disagreement about whether cross-market momentum differences are
+  real (recorded in both notes, and the later source is the skeptical one), and it did not convert
+  that disagreement into a regional exclusion rule (#44 is the anti-candidate).
+
+- **New open questions raised by session 15, in priority order.**
+  (a) *The one thing the lab can settle that the literature cannot.* Candidate #40 is now the
+  folder's best-motivated buildable proposal, but every source supporting it measures a
+  **long-short, single-asset-class, equity-only** book, and this repo's universe mixes global
+  large-cap stocks with country and regional **ETFs** — instruments that *are* regions rather than
+  belonging to one. Nothing read anywhere in fifteen sessions describes neutralising a grouping in
+  a universe whose members include the groups themselves. That is not a literature gap a future
+  session can fill by reading more; it is a design question for the strategy agent, and the note
+  states the two options (group the legs separately, or group the stock leg alone). Recorded here
+  so a future session does not spend itself looking for a source that will not exist.
+  (b) *The residual on the currency axis, and it is genuinely open.* Both international sources
+  compute momentum on returns converted to a single currency and **both state that exchange-rate
+  risk is ignored rather than handled** — Fama–French say so explicitly and call it a potential
+  problem in their inferences. This repo converts to USD unhedged and computes signals on the
+  converted series, so its convention is the literature's convention *and* the literature's
+  acknowledged approximation. What no source read here answers is whether the FX component inside
+  the signal carries information, is noise, or is a country bet in disguise — which matters
+  because #40's whole claim is that a pooled global rank takes an unrequested market bet. The
+  vocabulary not yet opened: the international-asset-pricing literature on currency risk premia
+  and hedging (Adler–Dumas, Dumas–Solnik are the names both sources cite for it). Medium priority
+  with a stated failure mode: it may resolve into "hedging is unavailable here anyway", in which
+  case it closes without changing anything.
+  (c) *A source-quality debt this session incurred and should be paid before anything leans on it.*
+  Chui–Titman–Wei is recorded from its **November 2004 working paper**; the published JF 2010
+  article was not obtained, and two of the findings used here come from its published abstract
+  only. Nothing in the current candidate list depends on a number from it — #44 uses it as the
+  hypothesis being declined, and its construction details corroborate two other sources rather
+  than standing alone — but if a future session ever wants its size or transaction-cost relation
+  quantitatively, the published version must be read first.
+  (d) *Recorded as declined, so it is not rediscovered as an opportunity.* The obvious next move
+  after #41 — sweeping the reversal lookback (3-year, 5-year, 7-year) to find which value horizon
+  pairs best with momentum — is **exactly the parameter-sweep spam `program.md` forbids and the
+  deflated-Sharpe bar punishes**. If #41 is ever built, it is built once at the literature's
+  stated horizon, and a horizon that disappoints is a result about the idea, not an invitation to
+  search. The folder's own bracket discipline (`learnings.md`, horizon axis) says the same thing.
+
 - **Tooling limitation — RESOLVED 2026-08-17.** Sessions 1–3 ran in an egress-restricted
   environment that permitted only package registries plus Anthropic hosts, so `WebFetch` failed
   for every domain probed, Crossref and Semantic Scholar returned 403 at the proxy tunnel, and
@@ -2942,6 +3151,37 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 15 (2026-08-28) read full text directly for all four of its sources**, one of them in a
+  working-paper rather than published version (Chui–Titman–Wei, flagged in-note and in the coverage
+  log). The session's access lesson is that **a web search naming the paper plus `pdf` still beats
+  guessing filenames on faculty hosts** — three of the four PDFs came straight out of search
+  results, and the two guessed paths tried (a Houston PhD-course mirror and a Semantic Scholar PDF
+  mirror) returned 403 and an empty 202 respectively. New channels that worked first try and are
+  worth the list: **a business school's working-paper depot** (`depot.som.yale.edu/icf/papers/…`)
+  served the full pre-publication version of a 1998 *Journal of Finance* article, complete with
+  abstract, tables and the SSRN stamp; **a co-author-adjacent academic's personal site**
+  (`johnhcochrane.com/s/…`) served the typeset *JFE* article, which is a reminder that the host
+  need not belong to an author of the paper; **an author's NYU Stern page**
+  (`pages.stern.nyu.edu/~lpederse/papers/`) served the typeset *Journal of Finance* article with
+  volume and page headers; and — new to this folder — **a conference-proceedings mirror on a
+  foreign university's finance department server** (`fin.ntu.edu.tw/~conference/…`) served the
+  full working paper of an article whose published version is paywalled on both Wiley and SSRN.
+  Index behaviour, and this session **narrows** the folder's standing rule rather than confirming
+  it: Semantic Scholar's DOI endpoint does not resolve `10.1111/0022-1082.95722` (a 1,357-citation
+  1998 *Journal of Finance* article), but it resolved the **other two JF DOIs** it was given this
+  session on the first try. With sessions 12 and 13 missing and session 14 hitting, the honest form
+  of the session-12 rule is weaker than "JF DOIs miss": **go to Crossref first for a JF DOI,
+  because a Semantic Scholar miss there is common enough not to be evidence the paper is
+  unindexed** — and the misses skew old (1995, 1998) while recent JF DOIs resolve. The sharper
+  anomaly this session is elsewhere: Semantic Scholar reports **361** citations for Fama–French
+  2012 against Crossref's
+  **1,431** — another instance of session 7's "disbelieve a lone low count", and a wide one for a
+  paper whose venue and vintage make a four-figure count unsurprising. Crossref answered every lookup, including two DOIs recovered by
+  `query.bibliographic` after a plausible-looking DOI failed. OpenAlex was not needed this session
+  and was therefore not queried, leaving its daily budget untouched. One count is worth flagging
+  in the *agreeing* direction for balance: for Asness–Moskowitz–Pedersen the two indices land
+  within 2% of each other (2,078 vs 2,041), which is the exception in this folder's experience.
 
   **Session 14 (2026-08-27) read full text directly for four of its five sources**; the fifth was not
   obtainable by any route and is recorded **unread**, its one contribution (a definition) taken only as

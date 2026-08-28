@@ -3986,3 +3986,5 @@ band — remains **declined** as holdout-informed, and is anyway +0.109 against 
    `research/SUMMARY.md` #35's random-portfolio null still needs a human ruling on whether a
    null distribution consumes trials.
 - No engine issues encountered this session.
+
+## Research session — 2026-08-28 (learning agent): 4 notes added, see research/SUMMARY.md
