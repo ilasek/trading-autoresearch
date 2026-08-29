@@ -4,4 +4,6 @@ pyarrow>=16
 PyYAML>=6.0
 requests>=2.31
 pytest>=8.0
+scikit-learn>=1.5
+scipy>=1.13
 yfinance>=0.2.50

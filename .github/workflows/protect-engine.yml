@@ -3,6 +3,12 @@ name: protect-engine
 # The engine, protocol, and data scripts are frozen: research agents must never
 # change them. Commits touching those paths need "[engine-maintenance]" in the
 # message of the commit that changed them (reserved for human-reviewed changes).
+#
+# strategies/lib/ is frozen-on-use rather than frozen: a promoted candidate is
+# copied to strategies/champion.py and keeps importing that package, so editing
+# a helper in place would silently change an already-measured champion's
+# behaviour. Adding a new file there is free; modifying an existing one needs
+# the same [engine-maintenance] tag.
 
 on:
   push:
@@ -31,10 +37,14 @@ jobs:
             RANGE="$BEFORE..HEAD"
           fi
           FROZEN='^(engine/|scripts/|tests/|program\.md|CLAUDE\.md|data/universe\.yaml|\.github/)'
+          LIB='^strategies/lib/'
           violations=0
           for commit in $(git rev-list $RANGE); do
             files=$(git diff-tree --no-commit-id --name-only -r $commit | grep -E "$FROZEN" || true)
-            if [ -n "$files" ]; then
+            # Modifications (not additions) under strategies/lib/ are frozen too.
+            files="$files$(printf '\n%s' "$(git diff-tree --no-commit-id --name-only -r \
+              --diff-filter=M $commit | grep -E "$LIB" || true)")"
+            if [ -n "$(echo "$files" | tr -d '[:space:]')" ]; then
               msg=$(git log -1 --format=%B $commit)
               if ! echo "$msg" | grep -q "\[engine-maintenance\]"; then
                 echo "::error::commit $commit touches frozen paths without [engine-maintenance]:"

@@ -109,6 +109,38 @@ def _fx_to_usd(currency: str, universe: dict) -> pd.Series:
     return rate * scale
 
 
+def _raw_panel(
+    field: str,
+    types: tuple[str, ...],
+    universe: dict,
+    fx_cache: dict[str, pd.Series],
+    convert_fx: bool = True,
+) -> pd.DataFrame:
+    """One field as a wide frame (dates x instrument ids), sorted, unaligned.
+
+    `convert_fx=False` leaves the series in its native unit — used for volume,
+    which is a share count and must not be multiplied by an FX rate.
+    """
+    cols: dict[str, pd.Series] = {}
+    for inst in universe["instruments"]:
+        if inst["type"] not in types:
+            continue
+        df = load_ohlcv(inst["id"])
+        if df is None or df.empty:
+            continue
+        series = df[field].astype(float)
+        cur = inst["currency"]
+        if convert_fx and cur != "USD":
+            if cur not in fx_cache:
+                fx_cache[cur] = _fx_to_usd(cur, universe)
+            fx = fx_cache[cur].reindex(series.index).ffill()
+            series = series * fx
+        cols[inst["id"]] = series
+    if not cols:
+        raise FileNotFoundError("data store is empty; run scripts/seed_data.py")
+    return pd.DataFrame(cols).sort_index()
+
+
 def load_prices(
     types: tuple[str, ...] = ("stock", "etf"),
     currency: str = "USD",
@@ -122,26 +154,7 @@ def load_prices(
     """
     if currency != "USD":
         raise ValueError("only USD target currency is supported")
-    universe = load_universe()
-    cols: dict[str, pd.Series] = {}
-    fx_cache: dict[str, pd.Series] = {}
-    for inst in universe["instruments"]:
-        if inst["type"] not in types:
-            continue
-        df = load_ohlcv(inst["id"])
-        if df is None or df.empty:
-            continue
-        series = df[field].astype(float)
-        cur = inst["currency"]
-        if cur != "USD":
-            if cur not in fx_cache:
-                fx_cache[cur] = _fx_to_usd(cur, universe)
-            fx = fx_cache[cur].reindex(series.index).ffill()
-            series = series * fx
-        cols[inst["id"]] = series
-    if not cols:
-        raise FileNotFoundError("data store is empty; run scripts/seed_data.py")
-    prices = pd.DataFrame(cols).sort_index()
+    prices = _raw_panel(field, types, load_universe(), {})
     # Drop weekend/garbage rows where nearly nothing traded.
     prices = prices.dropna(how="all")
     # The index is the union of all exchange calendars, so every column has
@@ -150,6 +163,53 @@ def load_prices(
     # zeroes weights on NaN prices).
     prices = prices.ffill(limit=10)
     return prices
+
+
+# Panels a strategy may receive as its optional second argument. `close` is
+# omitted: it is `load_prices()`, which the strategy already gets as `prices`.
+AUX_FIELDS = ("open", "high", "low", "volume")
+
+
+def load_panels(
+    types: tuple[str, ...] = ("stock", "etf"),
+    fields: tuple[str, ...] = AUX_FIELDS,
+) -> dict[str, pd.DataFrame]:
+    """Auxiliary OHLCV panels aligned to `load_prices()`'s index and columns.
+
+    Every frame shares the close panel's index and column order exactly, so a
+    caller can truncate `prices` and the panels by the same slice and know they
+    still line up — the property the protocol's causality check depends on.
+
+    - `open`/`high`/`low` are FX-converted to USD like the close, and briefly
+      forward-filled on the same 10-day cap, for the same reason.
+    - `volume` is a **share count** and is left in native units, un-ffilled: a
+      foreign holiday has no volume, and fabricating one would corrupt any
+      liquidity measure built on it. Expect NaN there and skip it.
+    - `dollar_volume` is close_usd * volume, i.e. USD traded notional — the
+      currency-correct input for Amihud-style illiquidity.
+    """
+    close = load_prices(types=types)
+    universe = load_universe()
+    fx_cache: dict[str, pd.Series] = {}
+    panels: dict[str, pd.DataFrame] = {}
+    for field in fields:
+        raw = _raw_panel(field, types, universe, fx_cache, convert_fx=(field != "volume"))
+        panel = raw.reindex(index=close.index, columns=close.columns)
+        if field != "volume":
+            panel = panel.ffill(limit=10)
+        panels[field] = panel
+    if "volume" in panels:
+        panels["dollar_volume"] = panels["volume"] * close
+    return panels
+
+
+def slice_panels(panels: dict[str, pd.DataFrame] | None, index) -> dict[str, pd.DataFrame]:
+    """Restrict every panel to `index` (a DatetimeIndex, typically a truncated
+    price index). The one supported way to narrow a panel dict: doing it by hand
+    risks handing a strategy rows its prices cannot see."""
+    if not panels:
+        return {}
+    return {k: v.reindex(index=index) for k, v in panels.items()}
 
 
 # ---------------------------------------------------------------------------
