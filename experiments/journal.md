@@ -4312,3 +4312,44 @@ cheap is now observed rather than simulated.
   within leading groups — which is the diffusion claim proper and is free of the
   sector-trend reading.
 
+## 2026-08-29T23:16:40+00:00 — sc_same_month_seasonal — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sc_same_month_seasonal.py` (family: seasonality-calendar, track: scout, trial #59)
+- Hypothesis: Scoring each instrument by its average realised return in the calendar month about to start, minus its average return in all other months, and holding the top 25 equal-weighted with an enter-25/hold-45 band, earns a validation Sharpe above the 0.49 equal-weight floor net of 15 bps costs — i.e. the same-calendar-month component that survives orthogonalisation against a name's long-run mean is tradeable despite the full monthly re-selection it forces.
+- Verdict: FAMILY_LEAD — first recorded result in family 'seasonality-calendar': validation sharpe 0.671, DSR 0.7232 (59 trials, 16 effective after clustering at rho 0.95)
+- Train: sharpe +0.40, ann_ret +3.7%, maxDD -53.2%, turnover 2.9x
+- Validation: sharpe +0.67, ann_ret +10.7%, maxDD -33.4%, turnover 12.4x
+- Deflated Sharpe prob: 0.7232 (bar from 59 trials, 16 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The pre-registered screen failed, the trial was run anyway on a stated
+  supplementary control, and the trial's own rho says the screen was right.** `SUMMARY.md`
+  #48 pre-registered Heston-Sadka's *sign disagreement* — annual lags positive, non-annual
+  months negative — as the thing that would open or close this family for free. Measured on
+  train only: annual lags +15.7%/yr (t = +5.16) and non-annual **+12.8%/yr (t = +3.70)**,
+  both positive. The identifying contrast is absent on this universe, and #48's own rule
+  says close the family. It was opened instead because orthogonalising the two leaves
+  +11.7%/yr (t = +3.97), which is a fact the pre-registration did not anticipate; that
+  reasoning is now priced and the price is a floor. Validation 0.671 against the 0.49
+  equal-weight floor — third of the four family leads, and the two numbers behind it both
+  point the same way. **Turnover 12.4x landed exactly on the pre-registered failure
+  threshold** ("above roughly 12x and the verdict is about cost, not signal"): ~1.9%/yr of
+  drag against a ~1.8pp margin over the floor, i.e. the entire edge. And **rho 0.750 to the
+  champion** is the tell — a calendar seasonal has no business correlating that highly with
+  a four-horizon momentum book. Failed sign screen plus high trend correlation gives one
+  economical reading: what survives orthogonalisation here is persistence, not a calendar
+  effect, on a universe selected on who is listed today. **Treat the family as closed
+  unless someone can supply the identifying contrast, and treat a screen that fails as an
+  answer rather than as a hurdle to argue past** — this session argued past one and bought
+  a floor with a trial that the screen had already predicted.
+  Two riders worth carrying. (a) **Third split-instability finding in two nights**: train
+  avg_pos 9.9 against validation 28.4, because before the mid-1990s few names have five
+  same-calendar-month observations. Train Sharpe 0.40 and its -53.2% drawdown are a
+  ten-name book, not the validation book, and scouts in thin-history families should say so
+  rather than read their train column as an out-of-sample check. (b) **A library alignment
+  bug, recorded not patched.** `strategies/lib/features.seasonal_same_month_return`
+  averages the calendar month that has just *ended* and publishes it on that month-end row;
+  the engine forward-fills and lags, so it is traded during the *following* month — one
+  month off the signal it names. Train split: shipped alignment Q5-Q1 **-0.49%/yr
+  (t = -0.17)**, corrected alignment **+15.7%/yr (t = +5.16)**. `CLAUDE.md` forbids editing
+  an existing lib file and this candidate carries its own corrected version instead. Any
+  future candidate reaching for that helper should read this line first.
+

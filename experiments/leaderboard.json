@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T23:11:35+00:00",
+  "generated_at": "2026-08-29T23:16:47+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -120,6 +120,23 @@
         "avg_positions": 24.9
       },
       "train_sharpe": 1.001
+    },
+    "seasonality-calendar": {
+      "name": "sc_same_month_seasonal",
+      "candidate": "strategies/candidates/sc_same_month_seasonal.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-29T23:16:40+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.7497,
+      "validation": {
+        "sharpe": 0.671,
+        "ann_return": 0.1074,
+        "max_drawdown": -0.3343,
+        "ann_turnover": 12.43,
+        "avg_positions": 28.36
+      },
+      "train_sharpe": 0.4
     },
     "statistical-learning": {
       "name": "sl_ridge_xs_walkforward",
