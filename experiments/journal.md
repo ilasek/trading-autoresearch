@@ -4426,3 +4426,34 @@ cheap is now observed rather than simulated.
   sort cannot express (an interaction, a state-dependence) rather than for a better
   ranking of the same names.
 
+## 2026-08-29T23:28:04+00:00 — ll_group_laggard_diffusion — **SCOUT**
+- Candidate: `strategies/candidates/ll_group_laggard_diffusion.py` (family: lead-lag-spillover, track: scout, trial #62)
+- Hypothesis: Holding only the bottom-half performers *within* the same three leading sector groups that trial #58 selected — group choice bit-identical, one third of capital per group — scores at or above #58's recorded validation 0.688, because the members that have not yet adjusted to their group's move are the ones with the catching-up left to do; a materially lower score instead refutes the diffusion reading and re-labels #58 as one-month sector momentum.
+- Verdict: SCOUT — scouted family 'lead-lag-spillover': validation sharpe 0.665 <= the family's best 0.688 (DSR 0.7197, 62 trials, 16 effective after clustering at rho 0.95)
+- Train: sharpe +0.67, ann_ret +7.0%, maxDD -44.1%, turnover 7.9x
+- Validation: sharpe +0.67, ann_ret +10.0%, maxDD -31.6%, turnover 18.3x
+- Deflated Sharpe prob: 0.7197 (bar from 62 trials, 16 effective)
+- Scout track: family best before this trial +0.69; the champion was not compared and the holdout was not read
+- Lesson: **The within-group ordering is a null, so the diffusion reading of #58 is closed
+  and #58 should be labelled one-month group trend.** Group selection was bit-identical to
+  #58; the only change was holding the laggard half of each leading group instead of all
+  of it. Validation 0.665 against #58's 0.688 — a 0.023 gap on a paired design, which the
+  pre-registration named as the outcome that closes the mechanism claim: diffusion is a
+  claim about *which members* have not yet adjusted, and a null on that ordering is a null
+  on the claim. Neither "laggards catch up" nor "winners keep winning" survives; inside a
+  leading group it does not matter which half you hold.
+  **Read gross, the sign flips and the reason is turnover again.** #58 ran 13.8x (~2.06%/yr
+  at 15 bps) on 14.5% vol, gross Sharpe ≈ 0.830; this book ran 18.3x (~2.75%/yr) on 15.0%
+  vol, gross Sharpe ≈ 0.848. So the laggard half was fractionally *better* before costs and
+  worse after, because within-group membership churns every month even when the groups
+  themselves do not. +0.018 gross is far too small to claim as support for anything — the
+  point is the accounting, not the sign. **This is the fourth trial in two sessions whose
+  entire measured difference is execution rather than signal** (#56→#61 turnover fix +0.09,
+  #59→#60 alignment bug −4.7x turnover, #58→#62 here), and it is now a pattern rather than
+  a coincidence: on this universe, outside `price-trend`, the cross-sectional signals
+  available are weak enough that construction cost differences of 5-10x turnover dominate
+  every mechanism comparison the lab tries to run. **A scout that changes selection and
+  turnover at the same time cannot answer a mechanism question** — hold turnover fixed by
+  design, or report the gross decomposition as this entry does, or the trial measures the
+  broker.
+
