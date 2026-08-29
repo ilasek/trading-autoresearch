@@ -4153,3 +4153,125 @@ no predictive content at six axes.**
    `research/SUMMARY.md` #35's random-portfolio null still needs a human ruling on whether a
    null distribution consumes trials.
 - No engine issues encountered this session.
+## 2026-08-29T15:58:10+00:00 — sl_ridge_xs_walkforward — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sl_ridge_xs_walkforward.py` (family: statistical-learning, track: scout, trial #56)
+- Hypothesis: A ridge regression refitted at every month-end on realized outcomes only, mapping eleven cross-sectionally ranked price, range and volume features to the rank of next month's return, produces a long-only top-20 book whose validation Sharpe beats the 0.49 equal-weight floor — i.e. a learned linear combination of the whole daily bar carries cross-sectional information that the lab's single-signal constructions have not already extracted.
+- Verdict: FAMILY_LEAD — first recorded result in family 'statistical-learning': validation sharpe 0.601, DSR 0.6865 (56 trials, 13 effective after clustering at rho 0.95)
+- Train: sharpe +0.95, ann_ret +17.4%, maxDD -54.6%, turnover 7.5x
+- Validation: sharpe +0.60, ann_ret +11.1%, maxDD -34.3%, turnover 15.4x
+- Deflated Sharpe prob: 0.6865 (bar from 56 trials, 13 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: The first learned strategy this lab has ever run clears the "no signal" floor and
+  nothing more. Validation 0.601 against the 0.49 equal-weight sleeve and the champion's
+  1.120: a penalised linear combination of eleven causal features spanning returns, range
+  volatility, illiquidity and volume finds something, and that something is worth about
+  0.11 Sharpe over holding everything equally. Two readings, and the second is the useful
+  one. (a) The obvious one: capacity was not the constraint worth relaxing first — before
+  reaching for a model with more of it, note that this one's 15.4x turnover is 5x the
+  champion's and costs ~2.3%/yr at 15 bps, so roughly a third of the gap to the equal-weight
+  floor is being paid to the broker. A rank target refitted monthly re-ranks the whole
+  cross-section every month; nothing in the construction asks it to be stable. **The first
+  thing to try in this family is not a bigger model but the same model with a persistence
+  or turnover penalty, or a longer target horizon.** (b) The feature set is three parts
+  momentum by construction (12-1, 6-1, 3-1 are the champion's own lookbacks), and the
+  result's rho to the champion is 0.774 — the highest of any non-price-trend family on the
+  leaderboard. A learned model fed the incumbent's features mostly rediscovers the
+  incumbent, worse. A second statistical-learning candidate should drop the momentum
+  lookbacks entirely and see what the range/volume/liquidity block alone supports; that is a
+  cleaner question and produces a more useful ensemble leg either way.
+
+## 2026-08-29T15:59:17+00:00 — lv_amihud_illiquidity_tilt — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/lv_amihud_illiquidity_tilt.py` (family: liquidity-volume, track: scout, trial #57)
+- Hypothesis: Holding the 20 most illiquid instruments by trailing-quarter Amihud ILLIQ, equal-weighted with a hold-30/enter-20 band and rebalanced monthly, earns a validation Sharpe above the 0.49 equal-weight floor net of 15 bps costs — i.e. an illiquidity premium is present and harvestable even within a universe of large, currently-listed survivors.
+- Verdict: FAMILY_LEAD — first recorded result in family 'liquidity-volume': validation sharpe 0.681, DSR 0.7429 (57 trials, 14 effective after clustering at rho 0.95)
+- Train: sharpe +1.00, ann_ret +13.9%, maxDD -50.1%, turnover 0.3x
+- Validation: sharpe +0.68, ann_ret +11.3%, maxDD -36.4%, turnover 1.0x
+- Deflated Sharpe prob: 0.7429 (bar from 57 trials, 14 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: A single sort on Amihud illiquidity, one mechanism and no overlay, returns validation
+  0.681 at **1.0x annual turnover** — the second-cheapest book ever run here, and the highest
+  train Sharpe in the whole leaderboard at 1.001. It does not threaten the seat and was never
+  going to. What makes it worth keeping is the pair of numbers the leaderboard exists to
+  report: **rho 0.589 to the champion at 0.681 validation Sharpe.** That is the most
+  decorrelated non-trivial result the lab has, and its cost profile is the opposite of the
+  champion's, so it is the first genuine ensemble-leg candidate on record. Note also what a
+  1.0x-turnover book means for a constraint this repo retired: `learnings.md` closed
+  turnover reduction as a spent lever *on the overlapping-tranche base*, correctly — the
+  point here is not that trading is cheap again but that a family exists whose entire cost
+  drag is 0.15%/yr, which changes what an overlay on it could afford. The honest caveat
+  stands as pre-registered: on a survivorship-selected large-cap universe this is a
+  small-cap tilt among survivors as much as an illiquidity premium, and the train split's
+  -50.1% drawdown is outside what the validation gate would tolerate.
+
+
+## Session summary — 2026-08-29 (human-directed program change)
+
+**Not a nightly session.** A human directed the lab to stop grinding one family and gave it
+the machinery to search wider. Two scout trials were run to prove that machinery end to end;
+the eight-trial nightly budget did not apply and was not spent.
+
+**What changed** (three commits, `[engine-maintenance]` where frozen paths were touched):
+
+1. **Strategies now see the whole daily bar.** `data.load_panels()` exposes
+   open/high/low/volume/dollar_volume; a candidate declaring `generate_weights(prices, aux)`
+   receives them truncated to exactly the window its prices cover. `evaluate_split` and
+   `causality_check` slice both together, so hiding the future still hides it — and
+   `tests/test_tracks.py::test_peeking_through_aux_is_caught` fails if that truncation is
+   ever removed. The one-argument contract is untouched and `load_prices()` returns a
+   bit-identical frame, verified against a pre-change snapshot along with the champion's
+   train and validation series.
+2. **The scout track.** `STRATEGY["track"] = "scout"` runs the same causality check, splits,
+   hard gates and deflator, but never compares against the champion — so `holdout_gate` is
+   unreachable from it and **a scouting session spends no holdout look**. Verdicts
+   `FAMILY_LEAD` / `SCOUT`. The promotion rule, the DSR threshold, the hard gates and the
+   holdout veto are all unchanged.
+3. **`experiments/leaderboard.json`**, engine-written after every trial: each family's best
+   validation result and its return correlation to the seated champion, derived from
+   `trials.jsonl` and the stored returns. No re-run, no split read.
+
+`program.md`'s seven families became eight slugs with a budget allocation that caps
+`price-trend` at 2 trials a session; `research/README.md` retargets the learning agent at the
+uncovered families and corrects the "daily closes only" constraint that kept every
+volume-based idea out of the folder for good; scikit-learn and scipy are installed.
+
+**Experiments run: 2, both scouts, both FAMILY_LEAD (first in their families).**
+
+    #56  sl_ridge_xs_walkforward      statistical-learning   val 0.601  train 0.95  turn 15.4x  rho 0.774
+    #57  lv_amihud_illiquidity_tilt   liquidity-volume       val 0.681  train 1.00  turn  1.0x  rho 0.589
+
+**Best finding — and it is a free kill, not either trial.** The leaderboard's first use was
+to price the blends these two legs invite, on stored validation returns, no trial spent:
+
+    leg                          rho     10%      20%      30%
+    lv_amihud_illiquidity_tilt  0.589  -0.001   -0.008   -0.023
+    sl_ridge_xs_walkforward     0.774  -0.028   -0.061   -0.100
+
+**Neither blend gains anything on validation at any weight tested**, and a 20% Amihud blend
+would sit at rho 0.9897 to the champion, needing +0.140 by the required-gain table to be
+resolvable at all. So the obvious next move — "we have decorrelated legs now, blend them" —
+is dead before it costs a trial. What the Amihud row does show is the shape of what would
+work: at 10% weight its decorrelation almost exactly pays for its lower Sharpe (-0.001).
+A leg that is *this* decorrelated and merely as good as the equal-weight floor is not
+enough; one at rho ≈ 0.6 and validation Sharpe ≈ 0.9 would be.
+
+**The deflator behaved exactly as pre-registered.** Two decorrelated trials moved the
+effective count 12 → 13 → 14, i.e. ~1 effective trial each, against the 34 recorded
+price-trend trials that cluster into far fewer. The claim in `program.md` that breadth is
+cheap is now observed rather than simulated.
+
+**Next ideas, in order.**
+1. `statistical-learning` again, with the three momentum lookbacks *removed* — the current
+   feature set is partly the incumbent's own signal, which is why its rho is 0.774. Ask what
+   the range/volume/liquidity block supports on its own, and add a turnover penalty or a
+   longer target horizon; 15.4x is paying ~2.3%/yr for a re-ranking nothing asked to be
+   stable.
+2. Four families still have **zero** trials: `range-variance`, `seasonality-calendar`,
+   `lead-lag-spillover`, `statistical-arbitrage`. `program.md` requires at least one trial in
+   an untried family while any remain. `lead-lag-spillover` is the best-suited to this
+   universe — 15 regions and 42 ETFs — and is the only one of the four whose mechanism has no
+   overlap with anything the lab has tested.
+3. Do **not** propose a champion+leg blend until a leg exists at roughly rho < 0.7 and
+   validation Sharpe > 0.9. The table above says why, and it costs nothing to re-run for a
+   new leg.
+
+**No engine issues encountered.** The holdout was not read this session.

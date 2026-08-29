@@ -1328,3 +1328,67 @@ across experiments; prune entries that later evidence contradicts.
   the free screen cannot bound. **A holdings-only screen can bound an idea's breadth, its
   concentration and its exposure to a known bias while leaving its sign completely open; say
   which of the three you have bounded before concluding anything.**
+
+- **[PROGRAM CHANGE 2026-08-29 — scope note that applies to this entire file.] Almost
+  everything above was measured on one family, and the file does not say so anywhere.** The
+  lab's first 55 trials were 34 cross-sectional momentum, 8 combinations of it, 5 regime
+  switches over it, and 8 others; all 7 promotions were in it. `program.md` now calls that
+  one family, `price-trend`, and caps it at 2 trials a session. **Every calibrated constant
+  in this file is a `price-trend` constant** — the ~0.05-Sharpe-per-30%-HHI de-concentration
+  price, the required-gain table, the risk-contribution slope, the ±1.2pp unfalsifiability
+  floor, the resolution floor `SE ≈ 0.568·sqrt(1−rho)`. The last of those is a property of
+  the 1,562-day window and transfers; the rest were fitted on one construction and do not.
+  `CLAUDE.md` now forbids carrying them into a new family by analogy. Re-measure, or say you
+  have not.
+
+- **Breadth was blocked by three mechanical constraints, not by the deflator, and the
+  deflator excuse is now measured and dead.** Sessions had good reason to stay in one family:
+  strategies received closing prices only (so every volume, liquidity and range mechanism was
+  inexpressible), there was no estimator library (so learned models were unimplementable),
+  and the only non-REJECT verdict was PROMOTE (so a 0.7-Sharpe result in a new family was
+  indistinguishable in `trials.jsonl` from a broken one). All three are fixed. The fourth
+  suspected blocker, the deflated-Sharpe bar, turns out never to have been one: at a
+  1.2-Sharpe candidate, DSR runs 0.976 / 0.971 / 0.967 / 0.963 / 0.956 at 12 / 16 / 20 / 25 /
+  35 effective trials, so thirteen extra *decorrelated* trials cost ~0.013 of DSR and stay
+  clear of 0.95. Observed on the night: two decorrelated scouts moved the effective count
+  12 → 13 → 14, one each, against 34 recorded price-trend trials that cluster into far fewer.
+  **Exploring is cheap. It always was. What was expensive was having nowhere to record the
+  result.**
+
+- **The leaderboard's first act was to kill the idea it was built to enable, for free — and
+  the kill is more useful than either trial that produced it.** With two decorrelated legs
+  finally on the board (`lv_amihud_illiquidity_tilt`, val 0.681 at rho 0.589;
+  `sl_ridge_xs_walkforward`, val 0.601 at rho 0.774), the obvious move is to blend one into
+  the champion. Priced on the stored validation return series — no strategy re-run, no trial
+  spent — every blend loses:
+
+      leg                          rho     10%      20%      30%
+      lv_amihud_illiquidity_tilt  0.589  -0.001   -0.008   -0.023
+      sl_ridge_xs_walkforward     0.774  -0.028   -0.061   -0.100
+
+  and a 20% Amihud blend would sit at rho 0.9897 to the champion, needing **+0.140** by the
+  required-gain table to be resolvable at all. **A decorrelated leg is not enough; it has to
+  be decorrelated *and* good.** The Amihud row shows the exchange rate precisely: at 10%
+  weight its decorrelation almost exactly pays for its Sharpe deficit (−0.001), so a leg at
+  rho ≈ 0.6 needs validation Sharpe ≈ 0.9 before a blend is worth a trial. **Standing rule:
+  run this table for any new leg before writing a blend candidate. It costs nothing and it
+  has already saved one trial.** Note what this does *not* say — it prices blends against the
+  gate's axis only, and `learnings.md`'s own ⚠ concern is that that axis has been the wrong
+  one since #43. A leg whose blend is flat on validation and materially better on turnover
+  and drawdown is still a thing a human weighing risk would want to see.
+
+- **First reading on two new families, both first-of-family and both honest floors rather
+  than leads worth chasing yet.** `statistical-learning` (ridge over eleven causal
+  return/range/liquidity/volume features, refitted monthly walk-forward, val **0.601**) clears
+  the 0.49 equal-weight floor and little else, and two things about *how* it fails are more
+  informative than the number: 15.4x turnover costs it ~2.3%/yr, roughly a third of its
+  margin over the floor, because a monthly rank target re-ranks the whole cross-section and
+  nothing in the construction asks it to be stable; and three of its eleven features are the
+  champion's own lookbacks, which is why its rho is 0.774 — **feed a learner the incumbent's
+  features and it rediscovers the incumbent, worse.** `liquidity-volume` (single sort on
+  trailing-quarter Amihud ILLIQ, val **0.681**) is the more interesting of the two despite
+  scoring below the champion on every axis the gate reads: **1.0x annual turnover** (0.15%/yr
+  of cost drag), the highest train Sharpe on the board at 1.001, and rho 0.589 — the most
+  decorrelated non-trivial result the lab has. Neither is a challenger. Both are the first
+  entries in families that had none, which is the point of a scout.
+
