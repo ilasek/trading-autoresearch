@@ -4388,3 +4388,41 @@ cheap is now observed rather than simulated.
   suggestion (`SUMMARY.md` #49) — use it as an execution overlay that re-times trades the
   incumbent was going to make anyway, which adds no turnover — not as a book.
 
+## 2026-08-29T23:24:04+00:00 — sl_ridge_nontrend_block — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sl_ridge_nontrend_block.py` (family: statistical-learning, track: scout, trial #61)
+- Hypothesis: A ridge over four causal NON-trend features — same-calendar-month seasonal, Amihud illiquidity, volume shock and 21-day market-residual reversal, each measured on the train split to carry independent univariate information — refitted monthly walk-forward against a 63-day forward-return rank and traded as a banded equal-weight top-20 book, beats the 0.601 recorded by the eleven-feature ridge that included the champion's own 12-1/6-1/3-1 lookbacks, at a materially lower correlation than that trial's rho 0.774 — i.e. the incumbent's features were subtracting from the learner rather than adding.
+- Verdict: FAMILY_LEAD — best result yet in family 'statistical-learning': validation sharpe 0.634 > 0.601 (DSR 0.6935, 61 trials, 16 effective after clustering at rho 0.95)
+- Train: sharpe +0.75, ann_ret +9.0%, maxDD -45.1%, turnover 1.6x
+- Validation: sharpe +0.63, ann_ret +10.0%, maxDD -35.9%, turnover 6.0x
+- Deflated Sharpe prob: 0.6935 (bar from 61 trials, 16 effective)
+- Scout track: family best before this trial +0.60; the champion was not compared and the holdout was not read
+- Lesson: **Both pre-registered readings hit, and the free blend table then showed the
+  result means something different from what winning them implied.** Removing the
+  champion's three lookbacks and fixing the target horizon and band moved validation
+  0.601 → **0.634**, rho 0.774 → **0.610**, turnover 15.4x → **6.0x**. The third
+  pre-registered outcome — rho staying near 0.774 with trend removed, which would have
+  meant the remaining features were trend in disguise — did not occur.
+  **But the improvement is entirely execution, not signal.** Backing the cost out:
+  #56 ran 15.4x ≈ 2.30%/yr on 18.5% vol, gross Sharpe ≈ 0.724; this book runs 6.0x ≈
+  0.90%/yr on 15.8% vol, gross Sharpe ≈ 0.690. **Gross, the non-trend block is slightly
+  worse**; net it wins by 0.033 because the turnover fix is worth ≈ +0.09 Sharpe and the
+  feature swap costs ≈ -0.05. The honest one-line reading is that the incumbent's features
+  were not subtracting from the learner in gross terms — the hypothesis as written is only
+  narrowly true — and that the whole family's headroom so far has come from asking the
+  book to be stable rather than from asking the model to be smarter. Second session
+  running that the biggest single lever in a scout was turnover.
+  **The finding that matters is in the blend table, and it is a general one.** This book
+  correlates **0.976** with `lv_amihud_illiquidity_tilt` — a single unconditional sort on
+  one of its four features — while scoring below it (0.634 vs 0.681). So the #56 pattern
+  repeats one level down: fed the incumbent's features a learner rediscovered the
+  incumbent, worse (rho 0.774); fed a four-feature non-trend block it rediscovered the
+  strongest single sort in that block, worse (rho 0.976). Stated generally and worth
+  carrying: **on a 140-name monthly cross-section a penalised linear combiner does not
+  beat its own best input — it reproduces it and pays the combination's noise.** That is
+  `SUMMARY.md` #51's "the reachable question is which feature groups carry signal, not
+  which estimator wins" arriving as a measurement, and it sets the design rule for the
+  next candidate in this family: a learned book is only worth a trial if its feature block
+  contains no single member that already works, or if the model is asked for something a
+  sort cannot express (an interaction, a state-dependence) rather than for a better
+  ranking of the same names.
+
