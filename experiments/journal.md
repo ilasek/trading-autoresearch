@@ -4457,3 +4457,131 @@ cheap is now observed rather than simulated.
   design, or report the gross decomposition as this entry does, or the trial measures the
   broker.
 
+
+## Session summary — 2026-08-29 (nightly)
+
+Second entry dated 2026-08-29: the earlier one is the human-directed program change, this
+is the nightly session that ran under the new budget allocation for the first time.
+
+**Budget: 5 of 8 experiments spent, and the three unspent ones are the session's main
+result.** Allocation compliance: 0 in `price-trend` (cap 2), at most 2 in any one family
+(`lead-lag-spillover` 2, `seasonality-calendar` 2, `statistical-learning` 1), and two
+families with no recorded trial were opened, against a requirement of one.
+
+    #58  ll_group_lastmonth_lead          lead-lag-spillover     FAMILY_LEAD  val 0.688  rho 0.698  turn 13.8x
+    #59  sc_same_month_seasonal           seasonality-calendar   FAMILY_LEAD  val 0.671  rho 0.750  turn 12.4x
+    #60  sc_same_month_seasonal_aligned   seasonality-calendar   FAMILY_LEAD  val 0.747  rho 0.753  turn 17.1x
+    #61  sl_ridge_nontrend_block          statistical-learning   FAMILY_LEAD  val 0.634  rho 0.610  turn  6.0x
+    #62  ll_group_laggard_diffusion       lead-lag-spillover     SCOUT        val 0.665  rho    —   turn 18.3x
+
+**Best finding, and it is free: the blend program as the lab has been framing it is out of
+reach by a factor of two, and the number that shows it is a table nobody had computed.**
+`learnings.md` carried an informal target — "a leg at rho ~0.6 needs validation Sharpe
+~0.9". Solved properly on the stored validation series, break-even for a leg of equal
+volatility at 20% weight is:
+
+    rho        0.40   0.50   0.60   0.70   0.75   0.80   0.90   0.95
+    needs S    0.554  0.652  0.749  0.844  0.891  0.938  1.029  1.075
+
+so the informal target was *too pessimistic* at rho 0.6 (0.75, not 0.9) — and leg
+volatility matters as much as correlation, which the old rule of thumb omitted entirely.
+The Amihud leg is only **0.044** short of break-even, not 0.22. But break-even is not the
+bar that matters. A 20% blend sits at rho 0.987-0.994 *to the champion*, so the repo's own
+resolution floor `SE = 0.568*sqrt(1-rho)` puts one paired standard error at 0.044-0.064,
+and a two-SE improvement needs the leg's own validation Sharpe to be:
+
+    leg                              rho_leg    k   own S   need for break-even   need for +2 SE
+    lv_amihud_illiquidity_tilt         0.589  0.80   0.681         0.724               1.375
+    sl_ridge_nontrend_block            0.610  0.77   0.634         0.744               1.382
+    ll_group_lastmonth_lead            0.698  0.69   0.688         0.826               1.402
+    sc_same_month_seasonal_aligned     0.753  0.81   0.747         0.885               1.415
+    str_reversal_monthly               0.682  1.03   0.820         0.829               1.418
+    lowvol_equity_tilt                 0.550  0.59   0.685         0.669               1.341
+
+**Every resolvable blend requires a leg better than the champion itself (1.120).** A leg
+worse than the incumbent can, at these correlations and weights, only ever buy an
+improvement smaller than the noise on the measurement. Two riders. `lowvol_equity_tilt` —
+the refuted low-vol tilt — is the only leg on record whose blend point estimate is
+*positive* (+0.003 at 10%, +0.002 at 20%), purely on its low correlation and low
+volatility, and it is far inside the floor, so this is a curiosity and not a proposal.
+And the five family leads correlate **0.75-0.85 with each other**: an equal-weight
+ensemble of all five sits at rho 0.740 to the champion, barely below its best single
+member, and blends at -0.010 / -0.025 / -0.045 for 10/20/30%. **Long-only books on 140
+names share too much market beta for family breadth to deliver portfolio decorrelation** —
+that is the long-only discount arriving on the axis the whole scout programme was built to
+exploit, and it should be priced into what the leaderboard is expected to produce.
+
+**Three trials were declined on free evidence, each of which had a standing proposal
+behind it.** All measurements are train-split only, holdings-free, no returns scored.
+
+1. **`range-variance` — no trial spent.** Four mechanisms screened plus two references:
+   GK vol compression (short vs own long-run range vol) Q5-universe **-0.79%/yr,
+   t = -0.15**; vol-of-vol -2.21%/yr, t = -1.56; close-to-close/GK variance ratio +0.07%/yr,
+   t = +0.04 either way; range-lottery (max daily range) -7.95%/yr, t = -4.30. The last is
+   simply low-vol: the plain GK vol level gives -7.59%/yr (t = -4.15) against close-to-close
+   vol's -6.21%/yr (t = -3.25). That answers `SUMMARY.md` #47's open question — **the low-vol
+   refutation was not estimator-limited**; a 7.4x-efficiency estimator reproduces it slightly
+   *more* strongly. The compression premise does hold on its own terms (forward vol 0.273
+   compressed vs 0.287 universe vs 0.318 loud) and buys nothing: crude return/vol 0.0635
+   against the universe's 0.0633, excess return t = -0.49. Incidentally the high-minus-low
+   vol spread of **+19.4%/yr on train** is the survivorship bias observed directly, and is a
+   plausible order-of-magnitude bound on how much it distorts any vol-sorted result here.
+2. **`statistical-arbitrage` — no trial spent, and the family's premise is refuted.** Its
+   canonical construction is residual reversion, and the claim is that removing factor
+   structure improves raw reversal. Measured: raw 5-day reversal IC **+0.0455 (t = +4.49)**,
+   one-factor market residual +0.0375, PCA k=3 +0.0331, PCA k=5 +0.0336. **Residualising
+   makes the signal monotonically worse here**, so the family has nothing to add on this
+   universe. Worse, the surviving object is raw 5-10 day reversal — the strongest single
+   signal measured anywhere tonight (IC +0.0400, t = +4.22 at 10 days, decaying to a null by
+   21 days) — which sits exactly at the horizon `SUMMARY.md` #18 closes on mechanism: the
+   premium is compensation for *providing* liquidity and a book paying 15 bps a side is on
+   the other side of it. **The strongest thing measurable on this universe is the one thing
+   the cost model structurally forbids trading.**
+3. **`liquidity-volume` — no second trial spent; both proposals answered instead.**
+   `SUMMARY.md` #46 predicted, from a tier-1 commissioned replication, that log mean dollar
+   volume would beat Amihud `ILLIQ`. **It is refuted here and the disagreement is recorded
+   as #46 itself asked**: `ILLIQ` Q5-universe +1.72%/yr (IC +0.0118, t = +1.18), ratio of
+   means +1.92%/yr (IC +0.0133, t = +1.32), **log mean dollar volume -0.32%/yr (IC +0.0010,
+   t = +0.11)** — a clean null. The rank correlations replicate the source (`ILLIQ` to
+   -log ADV 0.929, to ratio-of-means 0.993), so this is a disagreement about which end of a
+   near-identical ranking pays, not about the measures. Most likely reason: on 140 mega-caps
+   log ADV is a pure size ranking with no genuinely illiquid tail, whereas `ILLIQ`'s absolute
+   return numerator supplies the variation that pays. #45's confound is also settled:
+   `ILLIQ` sorted **within trailing-volatility terciles** gives Q5-universe +2.01%/yr
+   (t = +0.84) against the unconditional sort's +1.72%/yr, so the existing scout is **not**
+   an unintended volatility tilt and does not need the double sort.
+
+**A bug found and priced, not patched.** `strategies/lib/features.seasonal_same_month_return`
+averages the calendar month that has just *ended* and is therefore traded one month off the
+signal it names; on the train split the shipped alignment is a null (Q5-Q1 -0.49%/yr,
+t = -0.17) where the corrected alignment is +15.7%/yr (t = +5.16). Trial #59 inherited a
+variant of the same mistake — `MonthEnd(1)` on a rebalance date that is the last *trading*
+day, wrong on **29.8%** of month-ends — and #60 is the identical file with that one
+expression corrected: 0.671 → **0.747**, and turnover 12.4x → 17.1x. The stale signal made
+the book look *cheaper*. Both files are kept exactly as they ran; the lib file is untouched
+per `CLAUDE.md` and the finding is recorded here for the next candidate that reaches for it.
+
+**Next ideas, in order, with provenance.**
+1. **Stop proposing champion+leg blends until a leg beats 1.35 validation Sharpe**, or until
+   a human decides the promotion gate should read something other than validation Sharpe.
+   The table above is cheap to re-run for any new leg and now says what to look for. This
+   supersedes the "rho < 0.7 and Sharpe > 0.9" target recorded last session.
+2. **`SUMMARY.md` #49 — the execution overlay** (Heston-Sadka's own suggestion): use the
+   seasonal to *re-time* trades the incumbent was already going to make, asymmetrically and
+   signal-conditionally, adding no turnover. Four trials in two sessions have now had their
+   entire measured difference come from turnover; this is the one recorded proposal that
+   attacks that axis directly instead of paying it. It is a `price-trend` overlay, so it
+   fits the 2-trial cap.
+3. **A learned candidate is only worth a trial if its feature block contains no single
+   member that already works** — #56 fed the incumbent's lookbacks reproduced the incumbent
+   at rho 0.774 and lower Sharpe; #61 fed a four-feature non-trend block reproduced the
+   Amihud single sort at **rho 0.976** and lower Sharpe. Ask a model for an interaction or a
+   state-dependence a sort cannot express, per `SUMMARY.md` #50, or do not ask.
+4. **`portfolio-learning` is the only untried family left with a live mechanism**, and the
+   blend table above is the argument it has to beat. `range-variance` and
+   `statistical-arbitrage` remain untried and both were declined tonight on measured
+   evidence rather than on prior; reopening either needs a mechanism the screens above do
+   not already cover.
+
+**No engine issues encountered. The holdout was not read this session** — the scout track
+never reaches the gate, and no `challenge` candidate was run.
