@@ -32,7 +32,8 @@ def fmt_split(name: str, m: dict | None) -> str:
 def journal_entry(r: protocol.TrialResult) -> str:
     lines = [
         f"## {r.ts} — {r.name} — **{r.verdict}**",
-        f"- Candidate: `{r.candidate}` (family: {r.family}, trial #{r.n_trials})",
+        f"- Candidate: `{r.candidate}` (family: {r.family}, track: {r.track}, "
+        f"trial #{r.n_trials})",
         f"- Hypothesis: {r.hypothesis or '_none stated_'}",
         f"- Verdict: {r.verdict} — " + "; ".join(r.reasons),
     ]
@@ -48,6 +49,15 @@ def journal_entry(r: protocol.TrialResult) -> str:
         lines.append(
             f"- Deflated Sharpe prob: {r.dsr} (bar from {r.n_trials} trials, "
             f"{r.n_effective_trials:g} effective)"
+        )
+    if r.track == "scout":
+        best = (
+            f"{r.family_best_sharpe:+.2f}" if r.family_best_sharpe is not None
+            else "none recorded"
+        )
+        lines.append(
+            f"- Scout track: family best before this trial {best}; the champion was not "
+            f"compared and the holdout was not read"
         )
     if r.champion_val_sharpe is not None:
         lines.append(f"- Champion validation sharpe at the time: {r.champion_val_sharpe:+.2f}")
@@ -78,13 +88,15 @@ def main() -> int:
 
     print(f"Loading price data …")
     prices = data.load_prices()
+    aux = data.load_panels()
     print(f"  {prices.shape[1]} instruments, {prices.index[0].date()} → {prices.index[-1].date()}")
+    print(f"  aux panels: {', '.join(sorted(aux))}")
 
     print(f"Running protocol on {candidate.name} …")
-    result = protocol.run_trial(candidate, prices)
+    result = protocol.run_trial(candidate, prices, aux)
 
     print()
-    print(f"=== {result.name} [{result.family}] — {result.verdict} ===")
+    print(f"=== {result.name} [{result.family} / {result.track}] — {result.verdict} ===")
     print("reasons: " + "; ".join(result.reasons))
     print(fmt_split("train     ", protocol._public(result.train)))
     print(fmt_split("validation", protocol._public(result.validation)))
@@ -108,6 +120,13 @@ def main() -> int:
             f"rho {result.holdout_rho}, t {result.holdout_t:+.2f} "
             f"(veto below -{protocol.HOLDOUT_VETO_T})"
         )
+    if result.track == "scout":
+        best = (
+            f"{result.family_best_sharpe:+.2f}" if result.family_best_sharpe is not None
+            else "none recorded"
+        )
+        print(f"  family best before this trial: {best}")
+        print(f"  scout track — champion untouched, holdout not read")
     if result.verdict == "HOLDOUT_VETO":
         print(
             "  the champion was NOT replaced. This session has now seen a holdout\n"
@@ -120,6 +139,9 @@ def main() -> int:
     with open(JOURNAL, "a") as f:
         f.write(journal_entry(result))
     print(f"\njournal entry appended → {JOURNAL.relative_to(protocol.ROOT)}")
+    if protocol.LEADERBOARD_FILE.exists():
+        print(f"leaderboard rewritten  → "
+              f"{protocol.LEADERBOARD_FILE.relative_to(protocol.ROOT)}")
     return 0
 
 

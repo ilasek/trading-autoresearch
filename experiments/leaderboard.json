@@ -1,0 +1,159 @@
+{
+  "generated_at": "2026-08-29T15:59:23+00:00",
+  "champion": "mom_zscore_overlap6_hzn_avg4",
+  "families": {
+    "cross-sectional momentum": {
+      "name": "mom_hzn_avg4_nobuffer",
+      "candidate": "strategies/candidates/mom_hzn_avg4_nobuffer.py",
+      "track": "challenge",
+      "verdict": "PROMOTE",
+      "ts": "2026-08-21T23:11:47+00:00",
+      "n_trials": 34,
+      "rho_to_champion": 0.9393,
+      "validation": {
+        "sharpe": 1.229,
+        "ann_return": 0.3096,
+        "max_drawdown": -0.296,
+        "ann_turnover": 8.32,
+        "avg_positions": 30.3
+      },
+      "train_sharpe": 0.931
+    },
+    "regime switching": {
+      "name": "mom_hzn_avg4_k1_cohort_trim",
+      "candidate": "strategies/candidates/mom_hzn_avg4_k1_cohort_trim.py",
+      "track": "challenge",
+      "verdict": "PROMOTE",
+      "ts": "2026-08-18T23:15:13+00:00",
+      "n_trials": 5,
+      "rho_to_champion": 0.9466,
+      "validation": {
+        "sharpe": 1.201,
+        "ann_return": 0.2859,
+        "max_drawdown": -0.2869,
+        "ann_turnover": 7.86,
+        "avg_positions": 35.1
+      },
+      "train_sharpe": 0.942
+    },
+    "combinations": {
+      "name": "mom_hzn_avg4_subsample_bag3",
+      "candidate": "strategies/candidates/mom_hzn_avg4_subsample_bag3.py",
+      "track": "challenge",
+      "verdict": "REJECT",
+      "ts": "2026-08-19T23:15:28+00:00",
+      "n_trials": 8,
+      "rho_to_champion": 0.9507,
+      "validation": {
+        "sharpe": 1.18,
+        "ann_return": 0.2548,
+        "max_drawdown": -0.2692,
+        "ann_turnover": 7.41,
+        "avg_positions": 53.3
+      },
+      "train_sharpe": 0.944
+    },
+    "short-term mean reversion": {
+      "name": "str_reversal_monthly",
+      "candidate": "strategies/candidates/str_reversal_monthly.py",
+      "track": "challenge",
+      "verdict": "REJECT",
+      "ts": "2026-08-04T01:16:01+00:00",
+      "n_trials": 2,
+      "rho_to_champion": 0.6817,
+      "validation": {
+        "sharpe": 0.82,
+        "ann_return": 0.1793,
+        "max_drawdown": -0.3549,
+        "ann_turnover": 19.45,
+        "avg_positions": 15.0
+      },
+      "train_sharpe": 0.753
+    },
+    "low-volatility / quality tilts": {
+      "name": "lowvol_equity_tilt",
+      "candidate": "strategies/candidates/lowvol_equity_tilt.py",
+      "track": "challenge",
+      "verdict": "REJECT",
+      "ts": "2026-08-02T19:24:35+00:00",
+      "n_trials": 2,
+      "rho_to_champion": 0.5496,
+      "validation": {
+        "sharpe": 0.685,
+        "ann_return": 0.0866,
+        "max_drawdown": -0.2954,
+        "ann_turnover": 3.08,
+        "avg_positions": 20.0
+      },
+      "train_sharpe": 0.828
+    },
+    "liquidity-volume": {
+      "name": "lv_amihud_illiquidity_tilt",
+      "candidate": "strategies/candidates/lv_amihud_illiquidity_tilt.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-29T15:59:17+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.5887,
+      "validation": {
+        "sharpe": 0.681,
+        "ann_return": 0.1129,
+        "max_drawdown": -0.3638,
+        "ann_turnover": 1.01,
+        "avg_positions": 24.9
+      },
+      "train_sharpe": 1.001
+    },
+    "statistical-learning": {
+      "name": "sl_ridge_xs_walkforward",
+      "candidate": "strategies/candidates/sl_ridge_xs_walkforward.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-29T15:58:10+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.7738,
+      "validation": {
+        "sharpe": 0.601,
+        "ann_return": 0.1109,
+        "max_drawdown": -0.3427,
+        "ann_turnover": 15.36,
+        "avg_positions": 19.87
+      },
+      "train_sharpe": 0.953
+    },
+    "time-series momentum / trend following": {
+      "name": "gtaa_trend_diversified",
+      "candidate": "strategies/candidates/gtaa_trend_diversified.py",
+      "track": "challenge",
+      "verdict": "REJECT",
+      "ts": "2026-08-02T19:23:42+00:00",
+      "n_trials": 2,
+      "rho_to_champion": 0.4884,
+      "validation": {
+        "sharpe": 0.505,
+        "ann_return": 0.0353,
+        "max_drawdown": -0.1603,
+        "ann_turnover": 3.75,
+        "avg_positions": 8.65
+      },
+      "train_sharpe": 0.511
+    },
+    "volatility targeting / risk parity": {
+      "name": "ew_global_etf",
+      "candidate": "strategies/candidates/ew_global_etf.py",
+      "track": "challenge",
+      "verdict": "REJECT",
+      "ts": "2026-08-02T19:16:48+00:00",
+      "n_trials": 2,
+      "rho_to_champion": 0.6413,
+      "validation": {
+        "sharpe": 0.492,
+        "ann_return": 0.0445,
+        "max_drawdown": -0.1964,
+        "ann_turnover": 0.0,
+        "avg_positions": 10.0
+      },
+      "train_sharpe": 0.417
+    }
+  }
+}

@@ -7,11 +7,22 @@ holdout veto, and promotion.
 The holdout split is read in exactly one place — `holdout_gate` — and only for
 candidates that have already won on validation and cleared the deflated-Sharpe
 bar. It can veto a promotion; it is never scored, ranked or maximized.
+
+Two tracks share this protocol. A `challenge` candidate (the default) competes
+for the champion seat exactly as it always has. A `scout` candidate explores a
+family the lab has not established: it runs the same causality check, the same
+splits and the same hard gates, and it counts as a full trial in the
+deflated-Sharpe deflator — but it never compares against the champion, so it
+never reaches the holdout gate. It earns `FAMILY_LEAD` by being the best result
+yet recorded in its own family. The seat is unchanged and unreachable from the
+scout track; a family's lead reaches it, if at all, through a `challenge`
+candidate that builds on it.
 """
 
 from __future__ import annotations
 
 import importlib.util
+import inspect
 import json
 import math
 import re
@@ -23,11 +34,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import metrics
+from . import data, metrics
 from .backtest import run_backtest, sanitize_weights
 
 ROOT = Path(__file__).resolve().parent.parent
 CHAMPION_FILE = ROOT / "strategies" / "champion.py"
+LEADERBOARD_FILE = ROOT / "experiments" / "leaderboard.json"
 CHAMPION_CARD = ROOT / "strategies" / "champion_card.json"
 ARCHIVE_DIR = ROOT / "strategies" / "archive"
 TRIALS_FILE = ROOT / "experiments" / "trials.jsonl"
@@ -92,6 +104,13 @@ TRIAL_CLUSTER_RHO = 0.95
 # the burden of proof stays on the challenger without holdout becoming a target.
 HOLDOUT_VETO_T = 2.0
 
+# Tracks. `challenge` is the historical behaviour and stays the default, so
+# every candidate written before this existed is a challenger. `scout` trades
+# the champion comparison (and with it any access to the holdout) for a verdict
+# that can record progress inside a family the lab has not yet established.
+TRACKS = ("challenge", "scout")
+DEFAULT_TRACK = "challenge"
+
 
 @dataclass
 class TrialResult:
@@ -100,6 +119,7 @@ class TrialResult:
     family: str
     hypothesis: str
     verdict: str                      # PROMOTE | REJECT | GATE_FAIL | HOLDOUT_VETO
+                                      # | FAMILY_LEAD | SCOUT
     reasons: list[str]
     train: dict = field(default_factory=dict)
     validation: dict = field(default_factory=dict)
@@ -109,6 +129,8 @@ class TrialResult:
     dsr: float | None = None
     n_trials: int = 0
     n_effective_trials: float = 0.0
+    track: str = DEFAULT_TRACK
+    family_best_sharpe: float | None = None   # best prior validation sharpe in this family
     # The holdout gate's arithmetic, recorded whether it vetoed or let the
     # candidate through, so every reading of the split leaves an audit trail.
     champion_holdout_sharpe: float | None = None
@@ -134,19 +156,48 @@ def load_strategy(path: Path):
     if not hasattr(mod, "generate_weights"):
         raise ValueError(f"{path} does not define generate_weights(prices)")
     meta = getattr(mod, "STRATEGY", {})
+    track = str(meta.get("track", DEFAULT_TRACK)).strip().lower()
+    if track not in TRACKS:
+        raise ValueError(f"{path}: STRATEGY['track'] must be one of {TRACKS}, got {track!r}")
     return mod, {
         "name": meta.get("name", path.stem),
         "family": meta.get("family", "unknown"),
         "hypothesis": meta.get("hypothesis", ""),
+        "track": track,
     }
 
 
-def evaluate_split(generate_weights, prices: pd.DataFrame, split: str) -> dict:
+def normalize_family(family: str) -> str:
+    """Family labels are free text; the leaderboard groups on this."""
+    return " ".join(str(family or "unknown").strip().lower().split())
+
+
+def call_strategy(generate_weights, prices: pd.DataFrame, aux: dict | None = None):
+    """Call a strategy under whichever contract it declares.
+
+    `generate_weights(prices)` is the original contract and still the whole of
+    what most candidates need. A strategy that also declares a second positional
+    parameter receives the auxiliary OHLCV panels — already narrowed to exactly
+    the rows of `prices`, because a panel that outran the prices it accompanies
+    would hand the strategy the future while the causality check watched the
+    wrong frame."""
+    params = [
+        p for p in inspect.signature(generate_weights).parameters.values()
+        if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)
+    ]
+    if len(params) >= 2:
+        return generate_weights(prices, data.slice_panels(aux, prices.index))
+    return generate_weights(prices)
+
+
+def evaluate_split(
+    generate_weights, prices: pd.DataFrame, split: str, aux: dict | None = None
+) -> dict:
     """Run the strategy with data visible up to the split's end; score only the
     returns inside the split window."""
     start, end = SPLITS[split]
     visible = prices.loc[:end] if end else prices
-    weights = generate_weights(visible)
+    weights = call_strategy(generate_weights, visible, aux)
     res = run_backtest(weights, visible, **ENGINE_PARAMS)
     window = res.returns.loc[start:end] if start else res.returns.loc[:end]
     w_window = res.weights.loc[window.index]
@@ -176,7 +227,8 @@ def _public(d: dict | None) -> dict | None:
 # ---------------------------------------------------------------------------
 
 def causality_check(
-    generate_weights, prices: pd.DataFrame, cuts=(63, 252), tail_buffer=5
+    generate_weights, prices: pd.DataFrame, cuts=(63, 252), tail_buffer=5,
+    aux: dict | None = None,
 ) -> str | None:
     """Recompute weights on truncated histories: a causal strategy produces
     identical *effective daily holdings* for the dates both runs can see.
@@ -193,14 +245,14 @@ def causality_check(
 
     end = SPLITS["validation"][1]
     visible = prices.loc[:end]
-    w_full = effective(generate_weights(visible), visible)
+    w_full = effective(call_strategy(generate_weights, visible, aux), visible)
     # Always include a deep truncation: shallow cuts can miss strategies whose
     # future-dependent selection happens to be stable over short horizons.
     for cut in (*cuts, len(visible) // 2):
         if len(visible) <= cut + 300:
             continue
         truncated = visible.iloc[:-cut]
-        w_trunc = effective(generate_weights(truncated), truncated)
+        w_trunc = effective(call_strategy(generate_weights, truncated, aux), truncated)
         common = w_trunc.index[:-tail_buffer]
         diff = (w_full.loc[common] - w_trunc.loc[common]).abs().max().max()
         if diff > 1e-6:
@@ -329,6 +381,111 @@ def effective_n_trials(returns_list: list[pd.Series | None], rho: float = TRIAL_
     return float(n_clusters + n_missing)
 
 
+def recorded_trials() -> list[dict]:
+    """Every trial record, oldest first. Read-only; `trials.jsonl` is append-only."""
+    if not TRIALS_FILE.exists():
+        return []
+    out = []
+    with open(TRIALS_FILE) as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                out.append(json.loads(line))
+    return out
+
+
+def family_best_sharpe(family: str, records: list[dict] | None = None) -> float | None:
+    """Best validation Sharpe yet recorded in `family`, or None if it has none.
+
+    Only trials that reached the validation split count — a candidate killed by
+    the causality check or the hard gates has no number to be best with."""
+    fam = normalize_family(family)
+    best = None
+    for rec in (recorded_trials() if records is None else records):
+        if normalize_family(rec.get("family", "")) != fam:
+            continue
+        sharpe = (rec.get("validation") or {}).get("sharpe")
+        if sharpe is None:
+            continue
+        best = float(sharpe) if best is None else max(best, float(sharpe))
+    return best
+
+
+def champion_trial_returns(records: list[dict]) -> pd.Series | None:
+    """The seated champion's stored validation returns, for correlation only.
+
+    Found from the champion card's name, falling back to the last PROMOTE. Used
+    to report how decorrelated each family's lead is from the incumbent — the
+    quantity an ensemble challenger has to argue from. Costs no re-run."""
+    name = None
+    if CHAMPION_CARD.exists():
+        try:
+            name = json.loads(CHAMPION_CARD.read_text()).get("name")
+        except (json.JSONDecodeError, OSError):
+            name = None
+    matches = [r for r in records if name and r.get("name") == name]
+    if not matches:
+        matches = [r for r in records if r.get("verdict") == "PROMOTE"]
+    for rec in reversed(matches):
+        rets = load_trial_returns(rec.get("ts", ""), rec.get("name", ""))
+        if rets is not None and len(rets) > 1:
+            return rets
+    return None
+
+
+def write_leaderboard() -> dict:
+    """Regenerate `experiments/leaderboard.json` from the recorded trials.
+
+    One row per family: its best validation result, and that result's return
+    correlation with the seated champion. Derived entirely from `trials.jsonl`
+    and the stored per-trial returns — no strategy is re-run, no split is read,
+    and nothing here feeds a gate. It exists so that a family the champion
+    comparison would score as a plain REJECT still leaves a legible record of
+    how far it got and how decorrelated it is."""
+    records = recorded_trials()
+    champ_rets = champion_trial_returns(records)
+    rows: dict[str, dict] = {}
+    for rec in records:
+        val = rec.get("validation") or {}
+        if val.get("sharpe") is None:
+            continue
+        fam = normalize_family(rec.get("family", ""))
+        row = rows.get(fam)
+        if row is not None and float(val["sharpe"]) <= row["validation"]["sharpe"]:
+            rows[fam] = {**row, "n_trials": row["n_trials"] + 1}
+            continue
+        rho = None
+        rets = load_trial_returns(rec.get("ts", ""), rec.get("name", ""))
+        if champ_rets is not None and rets is not None and len(rets) > 1:
+            r = float(rets.corr(champ_rets))
+            rho = None if not math.isfinite(r) else round(r, 4)
+        rows[fam] = {
+            "name": rec.get("name"),
+            "candidate": rec.get("candidate"),
+            "track": rec.get("track", DEFAULT_TRACK),
+            "verdict": rec.get("verdict"),
+            "ts": rec.get("ts"),
+            "n_trials": (row["n_trials"] + 1) if row else 1,
+            "rho_to_champion": rho,
+            "validation": {
+                k: val.get(k) for k in
+                ("sharpe", "ann_return", "max_drawdown", "ann_turnover", "avg_positions")
+            },
+            "train_sharpe": (rec.get("train") or {}).get("sharpe"),
+        }
+    board = {
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "champion": (
+            json.loads(CHAMPION_CARD.read_text()).get("name")
+            if CHAMPION_CARD.exists() else None
+        ),
+        "families": dict(sorted(rows.items(), key=lambda kv: -kv[1]["validation"]["sharpe"])),
+    }
+    LEADERBOARD_FILE.parent.mkdir(parents=True, exist_ok=True)
+    LEADERBOARD_FILE.write_text(json.dumps(board, indent=2) + "\n")
+    return board
+
+
 def record_trial(result: TrialResult) -> None:
     TRIALS_FILE.parent.mkdir(parents=True, exist_ok=True)
     rets = (result.validation or {}).get("_returns")
@@ -342,31 +499,36 @@ def record_trial(result: TrialResult) -> None:
         f.write(json.dumps(rec) + "\n")
 
 
-def run_trial(candidate_path: Path, prices: pd.DataFrame) -> TrialResult:
+def run_trial(
+    candidate_path: Path, prices: pd.DataFrame, aux: dict | None = None
+) -> TrialResult:
     """The one entry point for judging a candidate. Never bypass this."""
     mod, meta = load_strategy(candidate_path)
     result = TrialResult(
         candidate=str(candidate_path.relative_to(ROOT)),
         name=meta["name"], family=meta["family"], hypothesis=meta["hypothesis"],
-        verdict="GATE_FAIL", reasons=[],
+        verdict="GATE_FAIL", reasons=[], track=meta["track"],
         ts=datetime.now(timezone.utc).isoformat(timespec="seconds"),
     )
 
-    causality_error = causality_check(mod.generate_weights, prices)
+    causality_error = causality_check(mod.generate_weights, prices, aux=aux)
     if causality_error:
         result.reasons = [f"causality: {causality_error}"]
         record_trial(result)
+        write_leaderboard()
         return result
 
-    result.train = evaluate_split(mod.generate_weights, prices, "train")
-    result.validation = evaluate_split(mod.generate_weights, prices, "validation")
+    result.train = evaluate_split(mod.generate_weights, prices, "train", aux)
+    result.validation = evaluate_split(mod.generate_weights, prices, "validation", aux)
 
     gate_fails = apply_gates(result.train, result.validation)
     if gate_fails:
         result.reasons = gate_fails
         record_trial(result)
+        write_leaderboard()
         return result
 
+    prior_records = recorded_trials()
     prior = past_trials()
     trial_sharpes = [s for s, _ in prior] + [result.validation["sharpe_daily"]]
     trial_returns = [r for _, r in prior] + [result.validation["_returns"]]
@@ -383,6 +545,37 @@ def run_trial(candidate_path: Path, prices: pd.DataFrame) -> TrialResult:
         f"after clustering at rho {TRIAL_CLUSTER_RHO}"
     )
 
+    if result.track == "scout":
+        # A scout is not competing for the seat, so the champion is never loaded
+        # and `holdout_gate` is unreachable from here: a scouting session spends
+        # no look at the holdout and never has to stop. It is still a full trial
+        # in the deflator above — exploring is cheap, but it is not free, and
+        # pretending otherwise would understate the bar for everyone after.
+        result.family_best_sharpe = family_best_sharpe(result.family, prior_records)
+        if result.family_best_sharpe is None:
+            result.verdict = "FAMILY_LEAD"
+            result.reasons = [
+                f"first recorded result in family '{normalize_family(result.family)}': "
+                f"validation sharpe {result.validation['sharpe']}, DSR {result.dsr} ({bar})"
+            ]
+        elif result.validation["sharpe"] > result.family_best_sharpe:
+            result.verdict = "FAMILY_LEAD"
+            result.reasons = [
+                f"best result yet in family '{normalize_family(result.family)}': "
+                f"validation sharpe {result.validation['sharpe']} > "
+                f"{result.family_best_sharpe} (DSR {result.dsr}, {bar})"
+            ]
+        else:
+            result.verdict = "SCOUT"
+            result.reasons = [
+                f"scouted family '{normalize_family(result.family)}': validation sharpe "
+                f"{result.validation['sharpe']} <= the family's best "
+                f"{result.family_best_sharpe} (DSR {result.dsr}, {bar})"
+            ]
+        record_trial(result)
+        write_leaderboard()
+        return result
+
     if not CHAMPION_FILE.exists():
         # The first champion clears the same bar as every challenger after it.
         # Nothing holds the seat until something earns it.
@@ -395,12 +588,13 @@ def run_trial(candidate_path: Path, prices: pd.DataFrame) -> TrialResult:
         else:
             result.verdict = "PROMOTE"
             result.reasons = [f"bootstrap: no champion exists; gates passed with DSR {result.dsr}"]
-            promote(candidate_path, result, prices)
+            promote(candidate_path, result, prices, aux=aux)
         record_trial(result)
+        write_leaderboard()
         return result
 
     champ_mod, _ = load_strategy(CHAMPION_FILE)
-    champ_val = evaluate_split(champ_mod.generate_weights, prices, "validation")
+    champ_val = evaluate_split(champ_mod.generate_weights, prices, "validation", aux)
     result.champion_val_sharpe = champ_val["sharpe"]
     # Re-deflate the incumbent against exactly the bar the challenger faces. A
     # champion promoted when the trial count was low is not entitled to a seat it
@@ -445,10 +639,11 @@ def run_trial(candidate_path: Path, prices: pd.DataFrame) -> TrialResult:
 
     if promote_reasons is not None:
         result.verdict = holdout_gate(
-            mod, champ_mod, prices, result, promote_reasons, candidate_path
+            mod, champ_mod, prices, result, promote_reasons, candidate_path, aux=aux
         )
 
     record_trial(result)
+    write_leaderboard()
     return result
 
 
@@ -463,6 +658,7 @@ def holdout_gate(
     result: TrialResult,
     promote_reasons: list[str],
     candidate_path: Path,
+    aux: dict | None = None,
 ) -> str:
     """Final gate: refuse the seat to a candidate the holdout says is worse.
 
@@ -480,8 +676,8 @@ def holdout_gate(
 
     Returns the verdict and, on a veto, leaves the champion untouched.
     """
-    cand_hold = evaluate_split(mod.generate_weights, prices, "holdout")
-    champ_hold = evaluate_split(champ_mod.generate_weights, prices, "holdout")
+    cand_hold = evaluate_split(mod.generate_weights, prices, "holdout", aux)
+    champ_hold = evaluate_split(champ_mod.generate_weights, prices, "holdout", aux)
 
     se, rho = metrics.sharpe_diff_se(cand_hold["_returns"], champ_hold["_returns"])
     delta = cand_hold["sharpe"] - champ_hold["sharpe"]
@@ -511,7 +707,7 @@ def holdout_gate(
         return "HOLDOUT_VETO"
 
     result.reasons = promote_reasons + [f"holdout gate passed: {arith}"]
-    promote(candidate_path, result, prices, holdout=cand_hold)
+    promote(candidate_path, result, prices, holdout=cand_hold, aux=aux)
     return "PROMOTE"
 
 
@@ -524,6 +720,7 @@ def promote(
     result: TrialResult,
     prices: pd.DataFrame,
     holdout: dict | None = None,
+    aux: dict | None = None,
 ) -> None:
     """Seat the candidate as champion.
 
@@ -546,13 +743,14 @@ def promote(
 
     if holdout is None:
         mod, _ = load_strategy(CHAMPION_FILE)
-        holdout = evaluate_split(mod.generate_weights, prices, "holdout")
+        holdout = evaluate_split(mod.generate_weights, prices, "holdout", aux)
     result.holdout = holdout
 
     card = {
         "name": result.name,
         "family": result.family,
         "hypothesis": result.hypothesis,
+        "track": result.track,
         "promoted_at": result.ts,
         "source_candidate": result.candidate,
         "n_trials_at_promotion": result.n_trials,

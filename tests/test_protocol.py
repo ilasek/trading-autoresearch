@@ -28,6 +28,9 @@ def sandbox(tmp_path, monkeypatch):
     monkeypatch.setattr(protocol, "CHAMPION_CARD", tmp_path / "strategies" / "champion_card.json")
     monkeypatch.setattr(protocol, "ARCHIVE_DIR", tmp_path / "strategies" / "archive")
     monkeypatch.setattr(protocol, "TRIALS_FILE", tmp_path / "experiments" / "trials.jsonl")
+    monkeypatch.setattr(
+        protocol, "LEADERBOARD_FILE", tmp_path / "experiments" / "leaderboard.json"
+    )
     (tmp_path / "strategies" / "candidates").mkdir(parents=True)
     return tmp_path
 

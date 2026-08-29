@@ -6,6 +6,31 @@ every research session. Strategy sessions: read this file for idea input; every 
 never copy performance expectations from it. Entries flagged `validation_overlap` or
 `published_post_2018` carry soft lookahead risk; discount their novelty accordingly.
 
+> ## ⚠ Program change — 2026-08-29 (human-authorised, read before planning a session)
+>
+> `program.md`'s family list was replaced. The seven price-trend families this folder was
+> built around are now **one** family (`price-trend`, legacy and capped), and seven others
+> were opened: `statistical-learning`, `liquidity-volume`, `range-variance`,
+> `seasonality-calendar`, `lead-lag-spillover`, `statistical-arbitrage`,
+> `portfolio-learning`. **Six of the eight have zero notes below.**
+>
+> Two constraints in this file's coverage assumptions are now wrong:
+>
+> - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
+>   just closes. Ideas previously filed as needing volume or the daily range — Amihud
+>   illiquidity, range volatility estimators, volume shocks — are in scope.
+> - **scikit-learn and scipy are installed**; learned models are implementable, subject to
+>   walk-forward fitting.
+>
+> The conclusion recorded under *Open questions* — "no `program.md` family is now
+> uncovered" and "the marginal value of another strategy-family survey is now low" — was
+> true of the old list and is **false of the new one**. `research/README.md` now requires
+> at least one note per session from a family with no coverage while any remain.
+>
+> Nothing below is retracted: the mechanisms, screens and anti-candidates recorded here
+> remain findings about `price-trend`. They should not be carried into a new family by
+> analogy without being re-measured there.
+
 ## Key findings by strategy family
 
 ### 1. Cross-sectional momentum
