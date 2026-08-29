@@ -9,17 +9,64 @@ the repo's data, engine, or evaluation machinery.
 ## Mission
 
 Each session, find and deeply summarize **2–4 new sound sources** relevant to the strategy
-families in `program.md` (cross-sectional momentum; time-series momentum / trend following;
-vol targeting / risk parity; short-term mean reversion; low-vol / quality tilts; regime
-switching; ensembles). Prioritize what is **implementable under this project's constraints**:
+families in `program.md`. That list was rewritten on 2026-08-29 and is now much wider than
+the seven price-trend families this folder was built around:
+
+`statistical-learning` · `liquidity-volume` · `range-variance` · `seasonality-calendar` ·
+`lead-lag-spillover` · `statistical-arbitrage` · `portfolio-learning` · `price-trend` (legacy)
+
+**At least one note per session must come from a family with no coverage yet**, while any
+such family remains. The previous conclusion in `SUMMARY.md` — "no `program.md` family is
+now uncovered", "the marginal value of another strategy-family survey is now low" — was
+true of the old seven-family list and is false of this one. Six of the eight families above
+have zero notes.
+
+Prioritize what is **implementable under this project's constraints**:
 
 - long-only, gross leverage ≤ 1.0, max 25% per position
-- daily USD-adjusted closes only — no intraday, no fundamentals, no options/short data
+- **daily OHLCV**: strategies now receive open, high, low, volume and dollar volume
+  alongside the USD-adjusted close. Still no intraday, no fundamentals, no options or
+  short-interest data. This changed on 2026-08-29 — anything you previously filed as
+  "needs volume" or "needs the daily range" is now in scope, and range-based volatility
+  estimators, Amihud-style illiquidity and volume-shock effects are all reachable.
+- **scikit-learn and scipy are installed**, so learned models are implementable — subject
+  to walk-forward fitting (a single full-sample fit fails the lab's causality check).
 - 15 bps per-side costs, 1-day execution lag; high-turnover ideas must survive that
-- global stock + ETF universe (~145 instruments), free data, survivorship-biased constituents
+- global stock + ETF universe (~140 instruments across 15 regions, 42 of them ETFs), free
+  data, survivorship-biased constituents
 
 A brilliant paper that needs fundamentals or intraday data is a low-priority note; a modest
-effect that runs on daily closes is a high-priority one.
+effect that runs on daily OHLCV is a high-priority one.
+
+### Standing search areas for the newly opened families
+
+Rotate through these rather than re-grading the lab's existing momentum mechanisms, which
+is now a well-covered vein with diminishing returns:
+
+- **Machine learning in asset pricing** — the comparative-method literature (penalised
+  linear models, trees, boosting, neural nets for cross-sectional return prediction), which
+  features survive costs, how much of the reported gain is nonlinearity versus feature
+  count, and the methodological literature on doing it without leakage (purged
+  cross-validation, embargoes, backtest overfitting). Note especially any finding about
+  *how few* predictors actually matter — this universe is 140 names and cannot support a
+  900-feature model.
+- **Liquidity and volume from daily data** — Amihud's ILLIQ and its successors, volume
+  shocks, turnover as a signal rather than a control.
+- **Range-based volatility** — Parkinson, Garman-Klass, Rogers-Satchell, HAR-RV, and what
+  the extra intraday information in a daily bar is actually worth.
+- **Seasonality** — same-calendar-month effects, turn-of-month, holiday windows; and the
+  standing skeptical literature on whether they survive costs and multiple testing.
+- **Lead-lag and spillover** — cross-asset and cross-region predictability, ETF versus
+  constituent, network/graph momentum.
+- **Statistical arbitrage** — residual reversion on factor or PCA residuals, cointegration,
+  and specifically what survives a **long-only** constraint, since only the cheap side of a
+  residual is tradeable here.
+- **Portfolio learning** — hierarchical risk parity and clustering-based allocation,
+  stacking and meta-labelling, ensembles of decorrelated signals.
+
+The same soundness rubric and the same anti-lookahead rules apply to all of it. A machine
+learning paper is not exempt from the tier system, and a preprint with no replication is
+Tier C however impressive its architecture.
 
 ## Source-soundness rubric
 
@@ -145,7 +192,8 @@ revisit a source, edit its existing note rather than duplicating.
 1. Read `research/SUMMARY.md` — especially the coverage log — and skim
    `experiments/learnings.md` so you don't re-import ideas the lab has already refuted
    (if a source contradicts a refutation, note the tension explicitly instead).
-2. Pick a focus (rotate across families; fill gaps in SUMMARY.md; follow up open questions).
+2. Pick a focus (rotate across families; **at least one note from a family with no coverage
+   yet**; fill gaps in SUMMARY.md; follow up open questions).
 3. Search, assess soundness with the rubric, and write 2–4 notes.
 4. Update `SUMMARY.md`: key findings per family, candidate ideas ranking, coverage log row.
 5. Append one line to `experiments/journal.md`:
