@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T23:16:47+00:00",
+  "generated_at": "2026-08-29T23:22:33+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -70,6 +70,23 @@
       },
       "train_sharpe": 0.753
     },
+    "seasonality-calendar": {
+      "name": "sc_same_month_seasonal_aligned",
+      "candidate": "strategies/candidates/sc_same_month_seasonal_aligned.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-29T23:22:25+00:00",
+      "n_trials": 2,
+      "rho_to_champion": 0.753,
+      "validation": {
+        "sharpe": 0.747,
+        "ann_return": 0.1271,
+        "max_drawdown": -0.3206,
+        "ann_turnover": 17.08,
+        "avg_positions": 28.36
+      },
+      "train_sharpe": 0.435
+    },
     "lead-lag-spillover": {
       "name": "ll_group_lastmonth_lead",
       "candidate": "strategies/candidates/ll_group_lastmonth_lead.py",
@@ -120,23 +137,6 @@
         "avg_positions": 24.9
       },
       "train_sharpe": 1.001
-    },
-    "seasonality-calendar": {
-      "name": "sc_same_month_seasonal",
-      "candidate": "strategies/candidates/sc_same_month_seasonal.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-08-29T23:16:40+00:00",
-      "n_trials": 1,
-      "rho_to_champion": 0.7497,
-      "validation": {
-        "sharpe": 0.671,
-        "ann_return": 0.1074,
-        "max_drawdown": -0.3343,
-        "ann_turnover": 12.43,
-        "avg_positions": 28.36
-      },
-      "train_sharpe": 0.4
     },
     "statistical-learning": {
       "name": "sl_ridge_xs_walkforward",

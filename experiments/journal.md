@@ -4353,3 +4353,38 @@ cheap is now observed rather than simulated.
   an existing lib file and this candidate carries its own corrected version instead. Any
   future candidate reaching for that helper should read this line first.
 
+## 2026-08-29T23:22:25+00:00 — sc_same_month_seasonal_aligned — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sc_same_month_seasonal_aligned.py` (family: seasonality-calendar, track: scout, trial #60)
+- Hypothesis: Scoring each instrument by its average realised return in the calendar month about to start, minus its average return in all other months, and holding the top 25 equal-weighted with an enter-25/hold-45 band, earns a validation Sharpe above the 0.49 equal-weight floor net of 15 bps costs — i.e. the same-calendar-month component that survives orthogonalisation against a name's long-run mean is tradeable despite the full monthly re-selection it forces.
+- Verdict: FAMILY_LEAD — best result yet in family 'seasonality-calendar': validation sharpe 0.747 > 0.671 (DSR 0.7827, 60 trials, 16 effective after clustering at rho 0.95)
+- Train: sharpe +0.43, ann_ret +4.1%, maxDD -53.3%, turnover 3.9x
+- Validation: sharpe +0.75, ann_ret +12.7%, maxDD -32.1%, turnover 17.1x
+- Deflated Sharpe prob: 0.7827 (bar from 60 trials, 16 effective)
+- Scout track: family best before this trial +0.67; the champion was not compared and the holdout was not read
+- Lesson: **A one-expression date-alignment bug is worth +0.076 validation Sharpe, and it
+  hid itself by lowering turnover.** #59 computed the month it was predicting as
+  `(rebalance_date + MonthEnd(1)).month`; rebalance dates are the last *trading* day of a
+  month, so on **29.8% of train-split months** that expression rolls forward only to the
+  calendar month-end and returns the month that has just *ended*. This file changes that
+  one expression to `MonthBegin(1)` and nothing else, which makes the pair a controlled
+  measurement the lab has never had: what a date misalignment costs **in a costed book**
+  rather than in a quintile spread. Answer: validation 0.671 → **0.747**, annual return
+  10.7% → 12.7%. Note the direction of the *turnover*: 12.4x → **17.1x**. The bug repeated
+  the previous month's target on three months in ten, which mechanically stabilised
+  holdings — so **a stale-signal bug shows up as a cheaper book, not a worse-looking one**,
+  and any diagnostic that screens candidates on turnover would have preferred the broken
+  version. That is the transferable lesson: check date alignment against the *trading*
+  calendar, never the calendar month, and treat an unexpectedly low turnover as a
+  symptom to explain rather than a result to bank.
+  On the family itself the correction does not change the verdict, it sharpens it.
+  0.747 is now the best result outside `price-trend` except the closed short-term-reversal
+  entry, and **rho 0.753** to the champion. But turnover 17.1x costs ~2.6%/yr at 15 bps —
+  the corrected signal is *more* expensive precisely because it is less stale — and
+  #48's pre-registered sign screen still failed (annual lags +15.7%/yr t=+5.16, non-annual
+  **+12.8%/yr t=+3.70**, where the source predicts negative). So the family's honest
+  summary is unchanged from #59: a real cross-sectional signal, not identified as a
+  calendar seasonal, three-quarters correlated with a momentum book, and paying most of its
+  gross edge to the broker. The one thing worth a future trial here is the authors' own
+  suggestion (`SUMMARY.md` #49) — use it as an execution overlay that re-times trades the
+  incumbent was going to make anyway, which adds no turnover — not as a book.
+
