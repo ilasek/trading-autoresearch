@@ -4277,3 +4277,38 @@ cheap is now observed rather than simulated.
 **No engine issues encountered.** The holdout was not read this session.
 
 ## Research session — 2026-08-29 (learning agent): 4 notes added, see research/SUMMARY.md
+## 2026-08-29T23:11:22+00:00 — ll_group_lastmonth_lead — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/ll_group_lastmonth_lead.py` (family: lead-lag-spillover, track: scout, trial #58)
+- Hypothesis: The most recent month, which reverses at the individual-name level and is therefore skipped by every momentum construction in this repo, *continues* at the group level: holding all members of the three sector groups with the highest median trailing 21-day return, one third of capital per group and rebalanced monthly with a top-3-enter / top-5-hold band, earns a validation Sharpe above the 0.49 equal-weight floor net of 15 bps costs.
+- Verdict: FAMILY_LEAD — first recorded result in family 'lead-lag-spillover': validation sharpe 0.688, DSR 0.7429 (58 trials, 15 effective after clustering at rho 0.95)
+- Train: sharpe +0.64, ann_ret +6.5%, maxDD -43.6%, turnover 5.1x
+- Validation: sharpe +0.69, ann_ret +10.0%, maxDD -31.1%, turnover 13.8x
+- Deflated Sharpe prob: 0.7429 (bar from 58 trials, 15 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The same 21-day window has opposite signs at the name level and the group level,
+  and that is now measured rather than cited.** Every momentum construction in this repo
+  skips the last month because a name's own last month reverses; this book scores *only*
+  that window, at the group level, and returns validation 0.688 against the 0.49
+  equal-weight floor. The mechanical consequence is the number worth keeping: **rho 0.698
+  to the champion** on a signal built entirely from the data the champion throws away —
+  the second-most decorrelated non-trivial result on the board after Amihud's 0.589, and
+  unlike Amihud it is not a size proxy. Three qualifications, all against the result.
+  (a) **13.8x turnover costs ~2.1%/yr at 15 bps**, which is the entire margin over the
+  floor and then some; rotating 3 of 12 buckets a month is expensive even with a
+  top-3-enter/top-5-hold band, and this is the *second* scout in two sessions whose main
+  self-inflicted wound is turnover (the ridge scout paid ~2.3%/yr). A family lead that
+  spends its whole edge on execution is a lead about the signal, not about the book.
+  (b) The book is **not the same object across splits**: train turnover 5.1x against
+  validation 13.8x, because early history has fewer instruments clearing the four-member
+  group minimum, so fewer groups compete and the rotation is slower. Train Sharpe 0.641
+  is therefore not a clean out-of-sample check of the validation figure, and the train
+  drawdown of -43.6% sits just inside the -45% gate — the sector concentration was
+  pre-registered as the price of holding whole groups and it showed up exactly there.
+  (c) The result does not establish diffusion as the mechanism. A book that holds all of
+  the three strongest sectors is also a sector-momentum book, and this design cannot
+  separate "the group leads its members" from "sector-level trend at a one-month horizon
+  is simply not the reversal the name level shows". The next trial in this family should
+  hold the group's members *against* their own last-month return — long the laggards
+  within leading groups — which is the diffusion claim proper and is free of the
+  sector-trend reading.
+

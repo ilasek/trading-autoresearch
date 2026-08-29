@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T15:59:23+00:00",
+  "generated_at": "2026-08-29T23:11:35+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -69,6 +69,23 @@
         "avg_positions": 15.0
       },
       "train_sharpe": 0.753
+    },
+    "lead-lag-spillover": {
+      "name": "ll_group_lastmonth_lead",
+      "candidate": "strategies/candidates/ll_group_lastmonth_lead.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-29T23:11:22+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.6981,
+      "validation": {
+        "sharpe": 0.688,
+        "ann_return": 0.1001,
+        "max_drawdown": -0.3108,
+        "ann_turnover": 13.76,
+        "avg_positions": 44.26
+      },
+      "train_sharpe": 0.641
     },
     "low-volatility / quality tilts": {
       "name": "lowvol_equity_tilt",
