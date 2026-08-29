@@ -4275,3 +4275,5 @@ cheap is now observed rather than simulated.
    new leg.
 
 **No engine issues encountered.** The holdout was not read this session.
+
+## Research session — 2026-08-29 (learning agent): 4 notes added, see research/SUMMARY.md

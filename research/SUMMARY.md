@@ -12,7 +12,13 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > built around are now **one** family (`price-trend`, legacy and capped), and seven others
 > were opened: `statistical-learning`, `liquidity-volume`, `range-variance`,
 > `seasonality-calendar`, `lead-lag-spillover`, `statistical-arbitrage`,
-> `portfolio-learning`. **Six of the eight have zero notes below.**
+> `portfolio-learning`. **Six of the eight had zero notes below.**
+>
+> **Status after session 16 (2026-08-29):** four of those six are now covered —
+> `statistical-learning`, `liquidity-volume`, `range-variance` and `seasonality-calendar`, in
+> sections 8–11. **Two remain uncovered: `lead-lag-spillover` and `statistical-arbitrage`**, and
+> `research/README.md`'s rule (at least one note per session from a family with no coverage) is
+> still live for them.
 >
 > Two constraints in this file's coverage assumptions are now wrong:
 >
@@ -470,6 +476,193 @@ object candidate #3's closed-form triage rule operates on. Offered as a lens, no
 the windows are not orthogonal, and the lab averages *portfolios*, whose selection step is
 nonlinear. Tier A, `validation_overlap: false`.
 → `notes/2026-08-19-model-averaging-mallows-weights.md`
+
+---
+
+## The families opened on 2026-08-29 (first coverage, session 16)
+
+Sections 1–7 above are the seven families that `program.md` collapsed into the single legacy
+`price-trend` family on 2026-08-29. The four sections below are the first coverage of the
+newly-opened families. Everything in them is literature-derived and **unmeasured on this repo's
+data**; `CLAUDE.md` explicitly forbids carrying `learnings.md`'s price-trend constants into these
+families by analogy, and the same applies in reverse — nothing below has been re-measured here.
+
+### 8. `statistical-learning`
+
+**The reference comparative study of ML for cross-sectional return prediction ranks methods, and
+the ranking is not the interesting part — the diagnostics behind it are.** Gu–Kelly–Xiu (2020,
+RFS) run thirteen estimators from OLS to five-layer neural nets on one US dataset with one
+out-of-sample protocol. Three results transfer, and one warning does.
+
+*(i) The nonlinear gain is interactions, not curvature.* A generalized linear model with a
+group-lasso penalty over **spline expansions of individual features** — arbitrary univariate
+nonlinearity, no interactions — fails to improve on the purely linear models, despite selecting
+more features than elastic net. The entire advantage of trees and neural networks therefore traces
+to *predictor interactions*. A Monte Carlo confirms the direction in both senses: linear methods
+dominate on simulated linear-additive data, trees and nets dominate on simulated interactive data.
+**Corollary the lab can use before writing a candidate: if a proposed feature set has no
+interaction story, a penalised linear model is the right estimator and a heavier learner is
+predicted not to help.** *(ii) Dimension reduction beats variable selection* — PCR and PLS
+outperform elastic net, which the authors read as characteristics being "partially redundant and
+fundamentally noisy": combining them into low-dimension components averages out noise. That is the
+folder's own averaging-beats-selecting result arriving from a third direction, now stated about
+**features** rather than models. *(iii) Shallow beats deep* — three hidden layers is the peak, four
+and five do not improve on it, attributed to the dearth of data and low signal-to-noise in asset
+pricing. Also: **Huber loss beats squared loss** for every method where both were run, and the
+fitted models are small — random forests grow trees one to five levels deep, boosted ensembles use
+30–50 of the 920 available covariates. Tier A, `validation_overlap: false`,
+`published_post_2018: true`. → `notes/2026-08-29-machine-learning-cross-section-comparative.md`
+
+**All thirteen methods agree on a small dominant feature set, and its top three groups are three
+`program.md` families in order.** Two independent importance measures correlate 84–98% within each
+model, and the rank ordering of the top third of characteristics is stable across thirty successive
+training samples. The order: **price trends** (five of the top seven — short-term reversal,
+12-month momentum, momentum change, industry momentum, max return, long-term reversal), then
+**liquidity** (turnover and turnover volatility, log market equity, dollar volume, Amihud `ILLIQ`,
+zero-trading days, bid-ask spread), then **risk** (total and idiosyncratic volatility, beta, beta
+squared), then valuation/fundamentals — the group this repo cannot express at all. Penalised linear
+and dimension-reduction models are "highly skewed toward momentum and reversal"; trees and neural
+nets are "more democratic". **This is the mechanism behind the lab's own observed result that
+feeding a learner the incumbent's lookbacks reproduces the incumbent at higher correlation and lower
+Sharpe** — a linear learner loads on trend because that is where the marginal signal is. If a
+`statistical-learning` candidate exists to supply a *decorrelated* leg, the price-trend features have
+to be excluded or orthogonalised deliberately.
+
+**Two things the paper does not do, and the second is load-bearing here.** It does not model
+transaction costs anywhere — every economic-gain figure in it is gross, with no turnover accounting
+— and it does not ask its models for stable holdings. Predicting returns well and holding a
+tradeable book are different objectives; the folder's dynamic-trading and parametric-portfolio notes
+are the bridge. The lab's own first scout in this family paid roughly a third of its margin over the
+equal-weight floor to a monthly full-cross-section re-rank, which is the same failure this paper
+would never have detected. Its **protocol**, by contrast, transfers cleanly and cheaply: cross-
+sectional rank of every feature mapped to `[-1,1]` as the only preprocessing; a fixed
+train/validation/test split with **no cross-validation, to preserve temporal ordering**; refit
+**annually** with an expanding training window and a rolling validation block; out-of-sample R²
+benchmarked against **zero** rather than the historical mean (which the authors put at ~3pp of
+inflation); Diebold–Mariano tests rather than eyeballed R² gaps, under whose Bonferroni-adjusted
+version the neural nets are only *marginally* significant over penalised linear models.
+
+### 9. `liquidity-volume`
+
+**Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
+should act on — is not better than substantially simpler measures built from the same two data
+series.** The *Critical Finance Review* commissioned a replication of Amihud (2002) and published
+the author's reply in the same issue, a level of evidence almost nothing else in this folder has.
+Harris–Amato reproduce the original "quantitatively very close and qualitatively the same" using
+current CRSP data and Amihud's own filters. Applying the same methods after the original sample
+ends, the cross-sectional relation is much weaker and **only the *unexpected* component of
+illiquidity remains related to index returns**, where the original found both expected and
+unexpected components priced; an independent citation reports a declining liquidity premium over
+four decades. Amihud's reply does not contest any of this: he builds a volatility-controlled
+illiquid-minus-liquid factor over a longer span and reports it positive and significant, **lower
+after his 2002 paper but still positive and significant**. Tier A as a cluster,
+`validation_overlap: false`. → `notes/2026-08-29-amihud-illiquidity-measure-and-replication.md`
+
+**The horserace result, and why it is a cheap next trial rather than a footnote.** Against
+alternatives computable from the same daily returns and volume — the *ratio of mean |return| to
+mean dollar volume*, mean |return| alone, inverse mean volume, **log mean dollar volume**, and the
+Kyle–Obizhaeva invariance measure — `ILLIQ` has among the **lowest** average R² in every subgroup
+and both specifications, though its t-statistic is among the highest. The best proxies by R² are
+the invariance measure and **log average dollar volume**. Further: the ratio of means is ~92%
+correlated with `ILLIQ` and delivers essentially identical coefficients, and decomposing `ILLIQ`
+into the ratio of means plus the residual shows almost all explanatory power sits in the ratio of
+means — i.e. **the day-by-day pairing of |return| with volume, which is the entire motivation for
+the measure's functional form, contributes nothing.** Taken alone, mean absolute return enters with
+a negative, often insignificant coefficient that the authors call "simply a re-identification of
+the low-volatility effect".
+
+**The construction detail this lab most needs, and it is one line.** `ILLIQ` and return volatility
+are positively correlated by construction — the numerator *is* an absolute return — so an
+unconditional `ILLIQ` sort is partly a volatility sort. Amihud's own factor therefore **sorts
+volatility first**: three trailing-volatility terciles, five `ILLIQ` quintiles within each,
+capitalisation-weighted, and the spread taken across the volatility buckets. The lab has run an
+unconditional single sort on trailing-quarter `ILLIQ` (`FAMILY_LEAD`, the most decorrelated
+non-trivial result on the board) and has **separately refuted low-vol tilts on this universe** —
+so the confound is consequential in both directions and the existing scout cannot tell which way it
+runs. Also transferable: Amihud's day-level screens exist to stop near-zero-volume days dominating
+the average (drop days with volume under 100 shares, drop the single largest daily `ILLIQ` each
+year, require >200 valid days), which matters more here than in CRSP because **this repo's volume
+panel is not forward-filled and is NaN on foreign holidays**.
+
+### 10. `range-variance`
+
+**This family is a measurement result, not a premium, and the measurement gain is large, analytical
+and free.** For a driftless Brownian motion the log range has **about one-quarter the standard
+deviation of the log absolute return** as an estimator of log volatility (0.29 vs 1.11), and the log
+range is **almost exactly Gaussian** (skewness 0.17, kurtosis 2.80) where the log absolute return is
+badly not (−1.53, 6.93). These are theorems about Brownian motion — they do not decay, are not
+subject to publication bias, and carry no sample. The range is also robust to bid-ask bounce in a
+way high-frequency realised volatility is not: the spread adds at most one spread to high-minus-low
+however many trades occurred. Tier A for the analytical results, B for the empirical estimator
+ranking. `validation_overlap: false`.
+→ `notes/2026-08-29-range-based-volatility-estimators.md`
+
+**The estimator ladder, with efficiencies relative to the squared return (=1):** Parkinson 4.9,
+Rogers–Satchell 6.0 at zero drift (>2 at any drift), Garman–Klass 7.4, Meilijson 7.7. Formulas, in
+terms of `c = ln(C) − ln(O)`, `h = ln(H) − ln(O)`, `l = ln(L) − ln(O)` — **all measured from the
+open, not the previous close**: `σ²_P = (h−l)²/(4 ln 2)`; `σ²_GK = 0.5(h−l)² − (2 ln 2 − 1)c²`;
+`σ²_RS = h(h−c) + l(l−c)`. Garman–Klass reads as the minimum-variance combination of the Parkinson
+estimator and the simple squared return. Zero drift is a very good approximation at the daily
+frequency (mean daily return ≪ daily standard deviation) and stops being one at annual horizons.
+
+**Being a good variance estimator does not make an estimator a good *denominator*, and only one of
+them is.** Molnár standardises returns by each estimator: Parkinson is mechanically correlated with
+the return it standardises (`|r|/σ_P` is bounded above by `sqrt(4 ln 2) ≈ 1.665`, correlation 0.79),
+giving a **bimodal, tailless** distribution; Rogers–Satchell is catastrophic (standardised kurtosis
+≈ 124 — its drift-generality works against it when the drift is in fact zero); Meilijson has
+Parkinson's defect mildly. **Garman–Klass is the only one appropriate for standardising returns**,
+because subtracting the squared return from the Parkinson term cancels most of the correlation with
+`|r|` (0.79 → 0.36). Every construction that divides by a volatility estimate — vol targeting,
+inverse-vol weighting, feature normalisation — is therefore an instruction to use Garman–Klass and
+not the two more obvious choices. Two further facts: all these estimators are **unbiased for the
+variance but not for the standard deviation** (the square root introduces a bias, which mostly
+cancels cross-sectionally and mostly does not in a time-series vol target); and **all of them see
+only trading-hours volatility**, missing the overnight gap entirely — a systematic, time-zone-
+correlated under-estimate on a 15-region universe, and a confound for any cross-sectional
+comparison of range volatility across regions.
+
+### 11. `seasonality-calendar`
+
+**A permanent cross-sectional seasonal, with a sign pattern sharp enough to be a genuine
+prediction.** Heston–Sadka (2008, JFE): sorting stocks on their average return in the **annual
+lags only** (t−12, t−24, … t−240) produces a positive winner-minus-loser spread at **every** annual
+horizon out to twenty years, while sorting on the **non-annual** months of the same intervals
+produces a **negative** spread at every horizon. The familiar Jegadeesh–Titman-then-DeBondt–Thaler
+shape is a *contiguous-months* result; a periodic seasonal of the opposite sign is superimposed on
+it. The pattern survives controls for size, industry, earnings-announcement months, dividend and
+ex-dividend months, calendar effects and fiscal year, and the decile spreads have approximately
+**zero loadings on the market and the Fama–French three factors** — the authors state plainly that
+conventional systematic risk does not explain it, and do not claim to know what does. The
+international companion reports it in Canada, Japan and twelve European countries, surviving size,
+beta and value controls under **either global or local** risk factors, and — the most relevant line
+for this lab — finds the strategies **not highly correlated across countries**. Tier A for the US
+paper; the international companion is recorded from its **published abstract only** (`oa_status`
+closed) and is tier B as recorded. `validation_overlap: false`.
+→ `notes/2026-08-29-same-calendar-month-seasonality.md`
+
+**The authors model the cost problem themselves, and it is the finding to lead with.** They draw
+the distinction explicitly: momentum and contrarian strategies rebalance only part of the portfolio
+every few months, "while seasonal strategies require rebalancing the **entire portfolio every
+month**". Their own conclusion is that it "may not be generally profitable to incur round-trip
+transaction costs" for a gain of this size, and that short-lived fluctuations in monthly expected
+return "may not form an effective foundation for a long-term investment strategy" — noting further
+that the periods where the raw effect is largest are periods where costs are documented to be
+higher (they cite the same Korajczyk–Sadka this folder covers). `program.md` independently names the
+turnover gate as the thing to watch in this family; a tier-1 source reaches the same conclusion from
+the other direction, before the lab has to spend a trial discovering it. **Their constructive
+suggestion is not to trade the signal but to use it as an execution overlay**: "it is relatively
+simple to postpone the sale or purchase of a particular stock if it has a large positive or negative
+expected return over the next month" — which adds no turnover, it *re-times* existing turnover, and
+is structurally an asymmetric signal-conditional no-trade band rather than the symmetric one the
+folder already holds.
+
+**One construction fact that is about `price-trend`, not this family.** Within the one-year
+interval, sorting on the **12-month lagged month alone** delivers better return-per-unit-risk than
+sorting on all twelve months of the past year. Most of what a conventional twelve-month momentum
+sort captures is available from the single month twelve months back — a claim about the composition
+of the signal the champion is built on, checkable at no cost.
+
+---
 
 ### Portfolio construction & rebalance mechanics (cross-family)
 
@@ -2471,6 +2664,124 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-08-28-individualism-cross-country-momentum.md`,
     `notes/2026-08-28-local-versus-global-factor-construction.md`
 
+45. **[Added 2026-08-29] Free decomposition, and the cheapest informative trial in
+    `liquidity-volume`: sort `ILLIQ` *within* trailing-volatility buckets, because the
+    unconditional sort the lab has already run is partly a volatility sort.** `ILLIQ`'s numerator
+    is an absolute return, so it is positively correlated with return volatility by construction —
+    Amihud says so and builds his own illiquid-minus-liquid factor as a **three-volatility-tercile
+    × five-`ILLIQ`-quintile** double sort for exactly that reason, following Fama–French's HML
+    logic. This lab holds two facts that make the confound consequential in *both* directions: its
+    `lv_amihud_illiquidity_tilt` scout is a single unconditional sort and is the most decorrelated
+    non-trivial result on the board, and `learnings.md` records low-vol tilts as refuted on this
+    universe. The unconditional scout cannot tell whether it is being helped or dragged by an
+    unintended volatility tilt. **This is a decomposition, not a knob** — it is the one variant that
+    separates two effects rather than adding a parameter, and it is the family's obvious second
+    trial. Tier A, `validation_overlap: false`.
+    → `notes/2026-08-29-amihud-illiquidity-measure-and-replication.md`
+
+46. **[Added 2026-08-29] The companion trial to #45, and the one a tier-1 commissioned replication
+    predicts will *win*: replace `ILLIQ` with log mean dollar volume, or with the ratio of mean
+    |return| to mean dollar volume.** Harris–Amato's horserace finds `ILLIQ` among the **lowest**
+    average R² of every simple measure built from the same daily returns and volume, with log
+    average dollar volume and the Kyle–Obizhaeva invariance measure the best; and decomposing
+    `ILLIQ` shows almost all its explanatory power sits in the **ratio of the two means**, not in
+    the day-by-day pairing of |return| with volume that is the measure's entire motivation. The
+    ratio of means is ~92% correlated with `ILLIQ` and delivers essentially identical coefficients.
+    Practical consequences here, all favourable: `dollar_volume` arrives directly in the `aux`
+    panel; a ratio of means is far smoother than a mean of ratios and so should turn over less; and
+    it is immune to the NaN-and-infinity failure mode that a per-day `|R|/volume` hits on every
+    foreign holiday, since this repo's volume panel is **not forward-filled**. If it wins, the
+    family's signal is an activity/size proxy rather than price impact and the lab should say so;
+    if it loses, that is a real disagreement with a published replication and worth recording as
+    one. Tier A, `validation_overlap: false`.
+    → `notes/2026-08-29-amihud-illiquidity-measure-and-replication.md`
+
+47. **[Added 2026-08-29] Free measurement rule, and it changes an input to every existing
+    volatility-based construction: use Garman–Klass, never Parkinson and never Rogers–Satchell,
+    whenever a volatility estimate is a *denominator*.** Range-based estimators have 5–8× the
+    efficiency of the squared return (Parkinson 4.9, Rogers–Satchell 6.0 at zero drift, Garman–Klass
+    7.4, Meilijson 7.7), which is free accuracy from a panel this repo now receives. But efficiency
+    is not the binding criterion when the estimate is a divisor: Parkinson is mechanically
+    correlated with the return it standardises (`|r|/σ_P ≤ sqrt(4 ln 2) ≈ 1.665`, correlation 0.79)
+    and gives a bimodal tailless standardised distribution; Rogers–Satchell gives standardised
+    kurtosis ≈ 124 because its drift-generality works against it at zero drift; **Garman–Klass is
+    the only one of the set that standardises returns to approximate normality**, because
+    subtracting the squared return cancels most of the correlation with `|r|` (0.79 → 0.36). Costs
+    no trial — it is a change of estimator inside constructions the lab already runs. **What it does
+    *not* license**: reopening the vol-targeting and inverse-vol constructions `learnings.md` has
+    refuted. Those failed on their construction, not visibly on their measurement, and `CLAUDE.md`'s
+    rule against carrying a family's constants across by analogy cuts here too — if the lab wants to
+    claim measurement was the binding constraint, it has to re-measure and say so. Tier A
+    (analytical), `validation_overlap: false`.
+    → `notes/2026-08-29-range-based-volatility-estimators.md`
+
+48. **[Added 2026-08-29] Free diagnostic that can close or open `seasonality-calendar` before a
+    trial is spent, plus the version of the signal to scout if it opens.** Heston–Sadka's result is
+    a **sign prediction**, which makes it unusually cheap to pre-test: the cross-sectional
+    winner-minus-loser spread should be **positive at every annual lag** (t−12, t−24, …) and
+    **negative at the non-annual months of the same intervals**. Run that contrast as a
+    holdings-free measurement on the training split — under `CLAUDE.md` diagnostic work that scores
+    no returns is free and unlimited. If the sign pattern is absent on this universe, the family
+    closes for one diagnostic and zero trials; if present, the scout is motivated by a measurement
+    rather than a citation. **The version to scout is the single 12-month lag**, not the twenty-year
+    ladder: it needs thirteen months of history instead of twenty-one years, is available for the
+    whole universe rather than a survivor-selected subset (which is the severe case in
+    `notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`, since the claim being
+    tested *is* a persistence claim), and is the version the paper reports as having the best
+    return-per-unit-risk. Tier A, `validation_overlap: false`.
+    → `notes/2026-08-29-same-calendar-month-seasonality.md`
+
+49. **[Added 2026-08-29] The one *build* this session opens, and it is an overlay rather than a
+    book: an asymmetric, signal-conditional no-trade band that defers trades the incumbent was
+    going to make anyway.** This is the authors' own suggestion, not an inference — Heston–Sadka
+    decline to recommend trading their signal (a seasonal strategy "requires rebalancing the entire
+    portfolio every month", and they doubt the round-trip costs are worth it) and instead observe
+    that "it is relatively simple to postpone the sale or purchase of a particular stock if it has a
+    large positive or negative expected return over the next month." That **adds no turnover; it
+    re-times existing turnover**, which is precisely the axis `learnings.md` says is the lab's live
+    one. Structurally it is the banding/no-trade-region mechanism the folder already ranks first
+    among cost-mitigation techniques, but with an **asymmetric, signal-conditional** band instead of
+    a symmetric one — a combination this folder has never recorded and the lab has never tried.
+    Ranked below the free rules because it is a real trial with a real design space. Tier A,
+    `validation_overlap: false`.
+    → `notes/2026-08-29-same-calendar-month-seasonality.md`,
+    `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+
+50. **[Added 2026-08-29] Free design screen for every `statistical-learning` candidate, at the top
+    with #1, #2 and #29: does the proposed feature set have an *interaction* story? If not, use a
+    penalised linear model and expect a heavier learner not to help.** Gu–Kelly–Xiu's cleanest
+    diagnostic is that a generalized linear model over **spline expansions of individual features** —
+    arbitrary univariate nonlinearity, no interactions — fails to beat the purely linear models
+    despite selecting more features, so the entire tree/neural-net advantage traces to predictor
+    interactions rather than to curvature; their Monte Carlo confirms it in both directions. Two
+    riders that cost nothing and come from the same source: **dimension reduction beats variable
+    selection** (PCR/PLS over elastic net, because characteristics are "partially redundant and
+    fundamentally noisy" — the folder's averaging-beats-selecting result, now stated about features
+    rather than models), and **Huber loss beats squared loss** for every method where both were run.
+    Also free, and the mechanism behind a result the lab already measured: penalised linear models'
+    variable importance is "highly skewed toward momentum and reversal", which is *why* feeding a
+    learner the incumbent's lookbacks reproduces the incumbent at higher `rho` and lower Sharpe —
+    **if the point of the candidate is a decorrelated leg, the trend features have to be excluded or
+    orthogonalised deliberately, because the estimator will not do it for you.** Tier A,
+    `validation_overlap: false`, `published_post_2018: true`.
+    → `notes/2026-08-29-machine-learning-cross-section-comparative.md`
+
+51. **[Added 2026-08-29] Import discount, free, and it applies to the whole
+    `statistical-learning` literature rather than to one paper: every economic-gain figure in the
+    reference ML asset-pricing study is *gross*.** Gu–Kelly–Xiu model no transaction costs
+    anywhere, report no turnover, and ask their models for return accuracy rather than for stable
+    holdings — the objective never penalises re-ranking the entire cross-section every period. The
+    lab has already paid this bill once (its ridge scout's monthly full-cross-section re-rank cost
+    roughly a third of its margin over the equal-weight floor). Two protocol details from the same
+    paper point the cheap way out and are worth copying verbatim: **refit annually** with an
+    expanding training window and a rolling validation block, and use **no cross-validation**, to
+    preserve temporal ordering. One further caution on ambition: the out-of-sample R² values that
+    separate thirteen estimators there are *fractions of a percent per month*, on a cross-section
+    200× larger than this one — a trial spent ranking estimators here is a trial spent on noise, and
+    the reachable question is which **feature groups** carry signal, which is what `program.md`
+    says the interesting question is anyway. Tier A, `published_post_2018: true`.
+    → `notes/2026-08-29-machine-learning-cross-section-comparative.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -2490,8 +2801,58 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-26 (session 13) | Session 12's open question (b), taking the better of the two structurally-different targets it named: **the statistical properties of the universe itself** — survivorship and constituent selection, which `learnings.md` lists as a permanent caveat and which no note here had ever sourced. Three notes, five sources; full text read directly for four, one recorded second-hand from its abstract. The session's shape is one *re-aiming* of the lab's oldest caveat (the level effect is the forgiving half; the persistence inference is the severe half, and a cross-sectional momentum book is a persistence claim), one *magnitude* for this repo's literal data-construction recipe together with the sign of the index-membership channel, and one *distribution* that explains why that magnitude is large — plus the folder's fourth and first distributional account of what concentration costs. | Brown–Goetzmann–Ibbotson–Ross 1992 (RFS; `terpconnect.umd.edu` mirror read in full) + Stambaugh 2011 (Quarterly Journal of Finance; the 2002 working version read in full from a Berkeley Haas upload), with Brown–Goetzmann–Ross 1995 (JF) recorded **second-hand from its published abstract only** — `oa_status: closed`, no repository copy found (`2026-08-26-survivorship-conditioning-and-spurious-persistence.md`); Daniel–Sornette–Wöhrmann 2009 (JPM; arXiv:0810.1922 read in full) + Cai–Houge 2008 (FAJ; author-hosted accepted version at `biz.uiowa.edu` read in full) (`2026-08-26-look-ahead-benchmark-bias-index-constituents.md`); Bessembinder 2018 (JFE; accepted-manuscript PDF read in full), with Bessembinder–Chen–Choi–Wei 2023 (FAJ, global) recorded **unread** (`2026-08-26-skewness-and-concentration-of-stock-returns.md`) |
 | 2026-08-27 (session 14) | Session 13's open question (b), and the last vocabulary the folder had never opened: **execution and implementation shortfall**. Taken with the stated prior that it would close rather than open — which held, but the closures are load-bearing rather than empty. Three notes, five sources; full text read directly for four, one recorded **unread**. The session's shape is one *verification* of a number the repo has never had outside evidence for (the 15 bps/side charge, graded against $1.7tn of live institutional fills and found conservative-to-fair, with the engine's decision-price convention matching the source's definition word for word), one *shape correction* that identifies the single asymmetry in the flat cost model pointing against this repo (impact is denominated in volatility; a momentum basket holds the high-volatility tail) together with the arithmetic showing it does not change a verdict, and one *adjudication* of a published tier-1 disagreement about whether the repo's own champion family survives costs — which resolves in the repo's favour on level while leaving two structural results untouched, one of which (most of the momentum spread lives on the short leg) is the folder's most specific long-only discount to date. | Frazzini–Israel–Moskowitz 2018 (AQR/SSRN working paper; author-hosted PDF read in full), with Perold 1988 (JPM) recorded **unread** — paywalled, no repository or mirror copy found, its definition used only as restated in the source read (`2026-08-27-live-execution-costs-implementation-shortfall.md`); Almgren–Thum–Hauptmann–Li 2005 (Risk; authors' dated version read in full from a university course-reading directory) (`2026-08-27-market-impact-functional-form-and-trade-rate.md`); Lesmond–Schill–Zhou 2004 (JFE; a university PhD-course mirror served the typeset article) + Korajczyk–Sadka 2004 (JF; Kellogg faculty page) (`2026-08-27-momentum-net-of-costs-debate.md`) |
 | 2026-08-28 (session 15) | Session 14's open question (a), taking the one of its three unopened directions it called "the best of the three and the only one that could change a construction choice": **international / global evidence on momentum construction**, chased because this repo's universe is global while almost every source in this folder is US-only. Four sources, four notes; full text read directly for all four, one of them in a working-paper rather than published version (flagged in-note). The session's shape is one **opened build** — the first grouping ever to pass candidate #5's neutralisation screen — one second build of a kind the folder has never supplied (a *signal*, price-only), two free discount/interpretation rules, one anti-candidate, and one unresolved disagreement between two tier-1 sources that is recorded rather than adjudicated. | Rouwenhorst 1998 (JF; Yale ICF working-paper depot served the February 1997 revision in full) (`2026-08-28-international-momentum-country-neutral.md`); Fama–French 2012 (JFE; the typeset article with volume and page headers from an author-adjacent faculty site, `johnhcochrane.com`) (`2026-08-28-local-versus-global-factor-construction.md`); Asness–Moskowitz–Pedersen 2013 (JF; the typeset article from an author's NYU Stern page) (`2026-08-28-value-momentum-everywhere-global-comovement.md`); Chui–Titman–Wei 2010 (JF; the **November 2004 working-paper version** read in full from a National Taiwan University conference-proceedings mirror, the published article not obtained — two of its findings taken from the published abstract and marked as such) (`2026-08-28-individualism-cross-country-momentum.md`) |
+| 2026-08-29 (session 16) | **The first session under the rewritten `program.md`, and the first in this folder's history not aimed at a seam in the price-trend programme.** Six of the eight families had zero notes; the session took four of them, chosen so that two match the families the strategy agent has just scouted (`statistical-learning`, `liquidity-volume` — so the literature lands where trials already exist) and two are cold opens made reachable by the same-day constraint change (`range-variance`, `seasonality-calendar` — both need the OHLCV panel or were never cheap enough to justify). Four notes, eight sources; full text read directly for six, one recorded **second-hand** from a source that reproduces its derivations, one from its **published abstract only**. The session's shape is one *methodological transfer* that explains a result the lab had already measured but not understood (a linear learner loads on trend because that is where the marginal signal is), one *commissioned replication* that survives the replication and loses the horserace — the strongest "your family lead may be measuring the wrong thing" finding this folder has produced — one *free measurement improvement* that is analytical rather than empirical and that names the only estimator safe to divide by, and one *cost warning delivered by the source's own authors* against the family they discovered, together with the overlay they suggest instead. | Gu–Kelly–Xiu 2020 (RFS; NBER WP 25398, Sept 2019 revision, read in full) (`2026-08-29-machine-learning-cross-section-comparative.md`); Amihud 2002 (JFM; typeset article from a UPenn course reading directory) + Harris–Amato 2019 (CFR) + Amihud 2019 (CFR), the latter two read in full from the journal's own editor-hosted mirror `cfr.ivo-welch.info/published/papers/` (`2026-08-29-amihud-illiquidity-measure-and-replication.md`); Alizadeh–Brandt–Diebold 2002 (JF; author's UPenn page, typeset article read in full) + Molnár 2012 (IRFA; read in full as Chapter 2 of the author's 2020 habilitation thesis, which reproduces the article with its journal header), with Parkinson 1980, Garman–Klass 1980, Rogers–Satchell 1991 and Meilijson 2009 recorded **second-hand** — their formulas and efficiencies taken as restated with derivations in Molnár and cross-checked against ABD's independent restatement (`2026-08-29-range-based-volatility-estimators.md`); Heston–Sadka 2008 (JFE; the October 2006 working version read in full from NYU Stern's seminar archive), with Heston–Sadka 2010 (JFQA, the international companion) recorded from its **published abstract only** — `oa_status` closed, no repository copy found (`2026-08-29-same-calendar-month-seasonality.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-08-29] Two families still have zero coverage, and the README's rule is live for both.**
+  `lead-lag-spillover` and `statistical-arbitrage`. They are the two remaining cold opens and one of
+  them must supply a note next session. Concretely:
+  - **`lead-lag-spillover`** is the better-suited of the two to this repo and should probably go
+    first. The universe is 15 regions and 42 ETFs — an unusually good fit for cross-region and
+    cross-asset predictability, and the one family where this repo's breadth is an *advantage*
+    rather than the survivorship liability it is everywhere else. The vocabulary to search: lagged
+    cross-country return predictability (Rapach–Strauss–Zhou's international work is the obvious
+    anchor), ETF-versus-constituent lead-lag, network/graph momentum, and the standing skeptical
+    literature on whether any of it survives the one-day execution lag this engine already imposes.
+    Note the tension to check rather than assume: this repo's engine lags execution by a day, which
+    is exactly the horizon most lead-lag results live on, so the family's implementability question
+    is sharper here than the citation count suggests.
+  - **`statistical-arbitrage`** is the harder ask and should be scoped narrowly when it is taken:
+    the interesting question is not "does residual reversion work" but **what survives a long-only
+    constraint**, since only the cheap side of a residual is tradeable here. A note that does not
+    answer that is a low-priority note. `notes/2026-08-22-long-only-as-l1-regularization.md` is the
+    right prior to read first.
+- **[2026-08-29] `portfolio-learning` is covered only by analogy, and the gap is specific.** The
+  folder's ensemble/forecast-combination material (family 7 above, plus the bagging and
+  model-averaging notes) is what `program.md` now calls `portfolio-learning`, so the family is not
+  cold. But none of it covers the two named members: **hierarchical risk parity / clustering-based
+  allocation**, and **stacking or meta-labelling over family leads**. `program.md` says this is
+  "where scouted leads become a challenger", and the lab now has two family leads and a measured
+  exchange rate for blending them (`learnings.md`'s required-gain table). A note on HRP and on
+  stacking would land directly on a decision the lab is about to face, and it should be taken
+  before either of the two cold families if the strategy agent starts building blends.
+- **[2026-08-29] One open question inside a family this session covered, and it is the most
+  actionable thing here.** Harris–Amato find that `ILLIQ`'s day-by-day pairing of |return| with
+  volume contributes essentially nothing over the ratio of the two means, and that log average
+  dollar volume is among the *best* simple proxies. They cite **Lou–Shu 2017 (RFS), "Price Impact or
+  Trading Volume: Why Is the Amihud (2002) Measure Priced?"** as reaching a similar conclusion by a
+  different route. That paper is **unread** and is the natural follow-up: it is the source that
+  decomposes the measure directly, and its answer determines whether the lab's `liquidity-volume`
+  lead is a price-impact story or a trading-activity story — which is the difference between two
+  quite different second trials. Also unread and relevant to the same question:
+  Goyenko–Holden–Trzcinka 2009 (JFE), "Do liquidity measures measure liquidity?", the field's
+  horserace of low-frequency liquidity proxies against intraday benchmarks.
+- **[2026-08-29] A tension this session did *not* resolve, recorded rather than adjudicated.**
+  Gu–Kelly–Xiu report that machine-learning predictability is **stronger among large stocks than
+  small**, and say so explicitly to rebut the reading that it is a microcap-illiquidity artifact.
+  Amihud/Harris–Amato's liquidity premium runs the other way — it lives in the illiquid tail, and
+  McLean–Pontiff independently put surviving post-publication predictability in
+  high-idiosyncratic-risk, low-liquidity names. These are not formally contradictory (one is about
+  where a *forecast* is accurate, the others about where a *premium* is paid) but they point a
+  ~145-name universe of large liquid global instruments in opposite directions, and the folder's
+  standing pessimism about this universe's instrument set rests on the second reading. Worth
+  chasing once, in either family.
 
 - ~~Families 2, 5 and 7 have no coverage~~ — **all covered; family 5 done 2026-08-18 (session
   5), and the answer closes it.** The gap named in `learnings.md` was a genuinely different
@@ -3176,6 +3537,42 @@ hypothesis fodder, then anti-candidates.
   remaining limits (Semantic Scholar title-search rate limits; OpenAlex's daily budget; SSRN and
   ScienceDirect serving Cloudflare bot challenges, which is the origin refusing an automated
   client, **not** an egress block).
+
+  **Session 16 (2026-08-29) read full text directly for six of its eight sources**; one is recorded
+  **second-hand** and one from its **published abstract only**. The session's access lesson is new to
+  this folder and worth generalising: **a journal's own editor-hosted mirror can be a better channel
+  than the publisher**, and **an author's later habilitation or PhD thesis reproduces their journal
+  articles verbatim**, header and pagination included, which is the cleanest route yet found to a
+  paywalled Elsevier article. Concretely: both *Critical Finance Review* papers (the commissioned
+  Amihud replication and Amihud's reply) came from `cfr.ivo-welch.info/published/papers/` — the
+  editor's own site — where Emerald would have refused; the directory has no index page and returns
+  nothing to a listing request, but **the filenames follow `<firstauthor><year><keyword>.pdf` and one
+  guess from that pattern found the replication on the second try**, which is a cheaper channel than
+  another search once one file from a journal is in hand. And Molnár's *International Review of
+  Financial Analysis* article, closed on ScienceDirect and 403 on SSRN, is reproduced in full as
+  Chapter 2 of his 2020 habilitation thesis on a University of Economics in Prague server, complete
+  with the IRFA volume-and-page running header. Other channels that worked first try, all previously
+  recorded: an **author's own university page** (`sas.upenn.edu/~fdiebold/`) for the typeset JF
+  article; a **university course reading directory** (`cis.upenn.edu/~mkearns/finread/`) — the same
+  host *pattern* as session 14's Almgren find, and it served the typeset JFM article; **NBER working
+  paper PDFs** for the RFS article; and a **business school's seminar archive**
+  (`w4.stern.nyu.edu/finance/docs/pdfs/Seminars/`), new to this list, which served the full working
+  version of a JFE article. One guessed URL failed silently in the documented way (a
+  `dachxiu.chicagobooth.edu` path returned no file at all rather than a 404 page), and one NHH
+  open-access repository link returned nothing to `curl` on either the query-string or the bare
+  form. Index behaviour, and it extends the folder's standing rule rather than contradicting it:
+  **Semantic Scholar's DOI endpoint does not resolve `10.1093/rfs/hhaa009`** — a 2,323-citation RFS
+  article — while resolving four other DOIs the same session on the first try, so the "go to Crossref
+  first" rule now has an **RFS** instance alongside its JF ones. The session's citation-count anomaly
+  runs the folder's usual way: **Crossref reports 292 for Heston–Sadka 2008 against Semantic
+  Scholar's 97**, a third-of-the-true-value undercount on a tier-1 JFE article, and a further
+  instance of "disbelieve a lone low count". OpenAlex was not needed and was not queried, leaving its
+  daily budget untouched. Two sources are recorded as less than fully read and are flagged in-note
+  and above: the four range-estimator primaries (Parkinson, Garman–Klass, Rogers–Satchell, Meilijson)
+  are taken **second-hand** from Molnár's restatement-with-derivations, cross-checked against an
+  independent restatement in Alizadeh–Brandt–Diebold — the same two-independent-restatements standard
+  session 11 used for Jobson–Korkie — and Heston–Sadka 2010 (JFQA, the international companion) is
+  `oa_status` closed with no repository copy and is used only at the level of its published abstract.
 
   **Session 15 (2026-08-28) read full text directly for all four of its sources**, one of them in a
   working-paper rather than published version (Chui–Titman–Wei, flagged in-note and in the coverage
