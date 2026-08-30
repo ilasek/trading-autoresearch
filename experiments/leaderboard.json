@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T23:28:19+00:00",
+  "generated_at": "2026-08-30T23:17:07+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -188,6 +188,23 @@
         "avg_positions": 10.0
       },
       "train_sharpe": 0.417
+    },
+    "statistical-arbitrage": {
+      "name": "sa_pca_residual_excursion",
+      "candidate": "strategies/candidates/sa_pca_residual_excursion.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-30T23:16:55+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.6922,
+      "validation": {
+        "sharpe": 0.468,
+        "ann_return": 0.0733,
+        "max_drawdown": -0.4013,
+        "ann_turnover": 17.39,
+        "avg_positions": 13.13
+      },
+      "train_sharpe": 0.723
     }
   }
 }

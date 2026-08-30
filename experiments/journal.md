@@ -4587,3 +4587,33 @@ per `CLAUDE.md` and the finding is recorded here for the next candidate that rea
 never reaches the gate, and no `challenge` candidate was run.
 
 ## Research session — 2026-08-30 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-30T23:16:55+00:00 — sa_pca_residual_excursion — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sa_pca_residual_excursion.py` (family: statistical-arbitrage, track: scout, trial #63)
+- Hypothesis: Selecting names by a conditional OU excursion of their PCA residual — factor count fixed by a 55% explained-variance target, admissibility gated on estimated reversion speed (kappa > 252/30), long opened at s < -1.25 and closed at s > -0.50, equal-weighted and rebalanced monthly — earns a validation Sharpe above the 0.49 equal-weight floor net of 15 bps costs, i.e. the residual-reversion premise survives once the factor count is out of the region the lab's earlier k in {1,3,5} screen tested and the trade is conditioned on an excursion rather than measured as an unconditional cross-sectional IC.
+- Verdict: FAMILY_LEAD — first recorded result in family 'statistical-arbitrage': validation sharpe 0.468, DSR 0.5252 (63 trials, 17 effective after clustering at rho 0.95)
+- Train: sharpe +0.72, ann_ret +8.8%, maxDD -44.8%, turnover 7.7x
+- Validation: sharpe +0.47, ann_ret +7.3%, maxDD -40.1%, turnover 17.4x
+- Deflated Sharpe prob: 0.5252 (bar from 63 trials, 17 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **Falsified against its own pre-registered bar — 0.468 is *below* the 0.49
+  equal-weight floor, so the family's first entry is not even a floor-clearing result.**
+  The interesting part is that the train-split premise held and did not transfer. The
+  free screen bracketed the source's 55% variance target against 40% and 75% and 55%
+  won on both IC (+0.0402) and Q5-universe spread (+6.14%/yr, t = 4.18), reproducing the
+  source's interior-optimum structure and explaining why the lab's earlier k ∈ {1,3,5}
+  screen — entirely inside the region the source also calls worst — declined the family;
+  the conditional bucket at s < -1.25 was +7.56%/yr over the universe (t = 3.29) and
+  monotone in threshold. None of that survived into validation. The arithmetic says where
+  it went: validation ann_ret +7.3% on ann_vol ~15.6%, and **17.4x turnover is ~2.6%/yr,
+  i.e. ~0.17 of the ~0.63 gross Sharpe** — so cost is a third of the deficit and the other
+  two-thirds is the train edge simply not repeating. Two things this establishes for the
+  family. (a) **The 2026-08-29 screen's verdict was right for the wrong reason**: it
+  declined `statistical-arbitrage` on a factor-count region the source itself calls worst,
+  and correcting that region moves the *train* reading a lot and the *validation* reading
+  to below the floor. (b) The κ-filter is a real admissibility condition (it improved train
+  IC +0.0402 → +0.0452) and it is not enough: an OU excursion that reverts inside 30
+  trading days is being traded on a monthly grid, so most of the excursion is over before
+  the book can act — the same horizon squeeze `SUMMARY.md` #18 names, arriving on the one
+  construction designed to dodge it. Also worth recording: maxDD -40.1% is the worst
+  validation drawdown of any recorded scout, on 13.1 average positions.
+
