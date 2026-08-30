@@ -4684,3 +4684,36 @@ never reaches the gate, and no `challenge` candidate was run.
   -38.5% is the second-worst of tonight's three. Reversal books here are cheap in Sharpe
   terms and expensive in drawdown.
 
+## 2026-08-30T23:22:59+00:00 — pt_fast_reversal_slow_grid — **SCOUT**
+- Candidate: `strategies/candidates/pt_fast_reversal_slow_grid.py` (family: price-trend, track: scout, trial #66)
+- Hypothesis: Fading the raw 5-day return on a monthly rebalance grid — the identical 20-name hold-30/enter-20 equal-weight book as trial #65, which fades the 21-day return — scores a validation Sharpe above that trial's 0.701 at the same annual turnover (11.82x against 11.93x, verified holdings-only on train, because at monthly spacing both lookback windows are fully disjoint from their predecessor), i.e. the short-horizon reversal premium the lab recorded as structurally untradeable is reachable once the scoring horizon is decoupled from the rebalance frequency.
+- Verdict: SCOUT — scouted family 'price-trend': validation sharpe 0.647 <= the family's best 0.701 (DSR 0.6878, 66 trials, 18 effective after clustering at rho 0.95)
+- Train: sharpe +0.86, ann_ret +12.7%, maxDD -48.0%, turnover 7.1x
+- Validation: sharpe +0.65, ann_ret +12.0%, maxDD -38.1%, turnover 17.3x
+- Deflated Sharpe prob: 0.6878 (bar from 66 trials, 18 effective)
+- Scout track: family best before this trial +0.70; the champion was not compared and the holdout was not read
+- Lesson: **Falsified on validation, and the standing claim is sharpened rather than
+  overturned — but the two splits disagree about the sign, which is the third such
+  disagreement tonight and the session's real result.** The structural premise held
+  exactly: at monthly spacing a 5-day and a 21-day lookback are both fully disjoint from
+  their predecessor, so the book's churn is set by the grid, and the engine confirmed it
+  out of sample (**17.3x against #65's 17.6x, 21.6 average positions against 21.8**). So
+  the cost objection genuinely does not apply to this construction, and the "reversal is
+  untradeable here" conclusion was, as suspected, a statement conflating scoring horizon
+  with rebalance frequency. What is left once that confound is removed is a *decay*
+  argument, and it now has its first direct evidence: **train prefers the 5-day score by
+  +0.119 (0.856 vs 0.737) and validation prefers the 21-day score by -0.054** (0.647 vs
+  0.701). A 5-day excursion reverts inside the holding month, so a monthly book collects
+  its front and then holds a spent position for three weeks; a 21-day score is still
+  reverting while the book holds it. Restate the standing claim as: **the 5-10 day
+  reversal premium is unreachable on a monthly grid because it decays inside the holding
+  period, not because it costs too much to trade** — which is a different mechanism from
+  `SUMMARY.md` #18's liquidity-provision account, and unlike that account it is
+  measurable here.
+- Boundary, stated because the margin does not support more: -0.054 is far inside this
+  construction's paired standard error (`SE = 0.568*sqrt(1-rho)` puts one SE at ~0.08 even
+  at rho 0.98), so what is established is the *direction* of the train/validation
+  disagreement, not the size of the gap. The pre-registered discount was right about the
+  magnitude — tonight's #64/#65 calibration predicted ~+0.04 and the observed move was
+  -0.054, i.e. inside the same noise band in the opposite direction.
+
