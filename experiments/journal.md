@@ -4585,3 +4585,5 @@ per `CLAUDE.md` and the finding is recorded here for the next candidate that rea
 
 **No engine issues encountered. The holdout was not read this session** — the scout track
 never reaches the gate, and no `challenge` candidate was run.
+
+## Research session — 2026-08-30 (learning agent): 3 notes added, see research/SUMMARY.md

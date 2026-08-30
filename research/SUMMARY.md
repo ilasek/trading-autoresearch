@@ -14,11 +14,14 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > `seasonality-calendar`, `lead-lag-spillover`, `statistical-arbitrage`,
 > `portfolio-learning`. **Six of the eight had zero notes below.**
 >
-> **Status after session 16 (2026-08-29):** four of those six are now covered —
-> `statistical-learning`, `liquidity-volume`, `range-variance` and `seasonality-calendar`, in
-> sections 8–11. **Two remain uncovered: `lead-lag-spillover` and `statistical-arbitrage`**, and
-> `research/README.md`'s rule (at least one note per session from a family with no coverage) is
-> still live for them.
+> **Status after session 17 (2026-08-30): every `program.md` family now has coverage.**
+> Sessions 16 and 17 between them took all six cold opens — `statistical-learning`,
+> `liquidity-volume`, `range-variance`, `seasonality-calendar` (sections 8–11, session 16) and
+> `lead-lag-spillover`, `statistical-arbitrage` (sections 12–13, session 17). **`research/README.md`'s
+> "at least one note from a family with no coverage" rule is now spent** — no family is cold, so the
+> rule no longer binds and future sessions should be aimed by the open questions below instead.
+> The one remaining *partial* gap is `portfolio-learning`, covered only by analogy (see the open
+> question dated 2026-08-29, and the 2026-08-30 note revising its priority downward).
 >
 > Two constraints in this file's coverage assumptions are now wrong:
 >
@@ -661,6 +664,142 @@ interval, sorting on the **12-month lagged month alone** delivers better return-
 sorting on all twelve months of the past year. Most of what a conventional twelve-month momentum
 sort captures is available from the single month twelve months back — a claim about the composition
 of the signal the champion is built on, checkable at no cost.
+
+---
+
+### 12. `lead-lag-spillover`
+
+**The mechanism is gradual information diffusion, and it has an identifying restriction the lab
+cannot run.** Hong–Torous–Valkanov (2007, JFE, Tier 1) build on Merton (1987) and Hong–Stein
+(1999): attention and information-processing capacity are scarce, investors specialise, so news
+originating in one asset market reaches investors in another only with a lag. Their model yields
+two properties worth more than the empirical result. First, **own-serial correlation can be zero
+while cross-serial correlation is non-zero** — each market's investors condition efficiently on
+their own information and fail only on the other market's — so the signature of the mechanism is
+cross-predictability that is *not* a restatement of own-lag predictability, and a construction
+without an own-lag control has not tested it. Second, **the sign of the cross-prediction follows the
+covariance of the two assets' payoffs and is not required to be positive**; their own leaders
+include both signs. A long-only construction of the form "leader up ⇒ buy the laggard" is assuming a
+sign the theory does not supply. Their identifying test is that an asset leads the market only if
+it carries information about *fundamentals*, verified by relating each group's ability to predict
+the market to its ability to predict industrial production — **which needs a macro series this repo
+does not have and may not fetch.** A lead-lag candidate here therefore runs the symptom test
+without the identification test, and should say so.
+`validation_overlap: false`, `published_post_2018: false`.
+→ `notes/2026-08-30-industry-lead-lag-gradual-diffusion.md`
+
+**The count, not the coefficient, is the object — and the count is not stable.** HTV handle multiple
+testing by simulation: with 34 regressions one expects ≈3.4 significant leaders at the 10% level
+under the null, and the test is whether the observed count is in the tail. That discipline is the
+transferable part, and it is mandatory here rather than optional: 15 regions give 210 ordered pairs,
+so a per-pair t-statistic means nothing. The count itself, however, is where the literature
+disagrees. The authors' own posted replication package (2014, unrefereed, with two independent
+replications of the main table) extends the sample by roughly a decade and reports predictability
+persisting for a **smaller** subset of the original leaders, with rolling regressions showing a
+stable core plus subsample-only leaders — a decay-and-instability finding from the authors
+themselves. Tse (2015, *Journal of Empirical Finance*, recorded **from its published abstract
+only** — closed access) extends the same decade with a finer 48-industry partition and reports only
+a handful of leaders survive, that the original sample's results weaken after data revisions, that
+there is evidence of the *reverse* direction, and reads the whole as consistent with market
+efficiency. **This folder does not adjudicate that.** Record it as: the qualitative mechanism has
+multi-market support (HTV replicate the count and the fundamentals relation in eight developed
+markets on an independent vendor, seven of eight for the latter); the specific claim "N groups lead"
+is sensitive to data vintage and partition choice.
+
+**The construction that is actually implementable comes from the daily/weekly end of the family,
+and it brings a per-instrument statistic that costs nothing.** Chordia–Swaminathan (2000, JF, Tier
+A) show that **trading volume determines who leads and who lags**, over and above size: high-volume
+portfolios lead low-volume portfolios of the same size, the asymmetry survives inside the largest
+size quartile (so non-trading is not the explanation) and survives controlling for the follower's
+own autocorrelation (so it is not a repackaged portfolio autocorrelation). The mechanism is
+differential **speed of adjustment to common information**. Two things carry over. (a) Their volume
+measure is **turnover** — shares traded ÷ shares outstanding — chosen because raw and dollar volume
+correlate ≈0.78 with size while turnover correlates ≈0.15; the sort is designed to *not* be a size
+ranking. This repo has no shares-outstanding panel, so turnover is not computable, and substituting
+dollar volume reintroduces exactly the size ranking the design removes — which is the mechanism
+behind the lab's measured null on log average dollar volume. The causal substitutes are relative
+volume (each name's volume over its own trailing average, so the size level cancels) or (b) the
+direct measure: **`DELAY`**, a logit of the ratio of summed lagged Dimson betas to the
+contemporaneous beta, `DELAY = 1/(1+exp(−Σ₁₅βₖ/β₀))`, higher = slower adjustment. It needs **closes
+only**, is the thing the volume sort proxies *for*, and nothing in this lab has used it. Note also
+their diagnostic warning: **own-autocorrelation is not a valid speed-of-adjustment measure** (a
+stock reacting to today's *and* yesterday's news shows positive own-autocorrelation while being the
+faster adjuster); the screen must be a cross-quantity. `validation_overlap: false`.
+→ `notes/2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`
+
+**Two cost verdicts, both from the sources' own authors, and they point the same way.** HTV report
+their timing rule improves risk-adjusted return before costs and immediately caution that adding
+industry information roughly **doubles the number of switches**; they do not model costs.
+Chordia–Swaminathan state plainly that it is not clear the patterns are tradeable because
+transaction costs are likely to overwhelm the profits — and offer that as the explanation for why
+the effect is not arbitraged away. **Add this repo's own confound**: 15 regions with non-overlapping
+sessions and unhedged USD conversion guarantee a mechanical daily "US leads Asia" cross-correlation
+that is a time-zone artifact, not speed of adjustment. Any daily region-level lead-lag result here
+should be assumed to be that artifact until a weekly version reproduces it. The engine's one-day
+execution lag also eats most of a daily effect while costing a monthly one almost nothing — so the
+family's two ends have opposite implementability profiles, and the middle (weekly) is where a
+candidate has to live if it lives anywhere.
+
+---
+
+### 13. `statistical-arbitrage`
+
+**The family's central empirical claim is about the factor count, and it is non-monotone.**
+Avellaneda–Lee (2010, *Quantitative Finance*, Tier B — heavily cited, peer-reviewed, but single
+market, single sample, no known independent replication) trade the residual of each stock against a
+small factor set, modelled as an Ornstein–Uhlenbeck process. Their structural finding is that
+whether mean reversion is *measurable* depends on how much systematic variation is removed first,
+and the relationship has an interior optimum: remove too little (one market factor) and residuals
+carry leftover common variation — slow estimated reversion, high residual volatility, worst results
+of any configuration they test; remove too much (a 75% explained-variance target) and what remains
+is noise whose reversion is real but smaller than costs, which they report as a **steady loss** and
+name "noise trading". Their optimum on a US large-cap universe is ~15 factors or a ~55%
+explained-variance target. `validation_overlap: false`, `published_post_2018: false`.
+→ `notes/2026-08-30-pca-residual-statistical-arbitrage-long-only.md`
+
+**This is in direct tension with the lab's own declined screen, and the tension is worth stating
+rather than resolving.** `learnings.md` records that residualising 5-day reversal made it
+monotonically *worse* on the train split — raw beat one-factor beat PCA k=3 and k=5 — and the family
+was declined on that basis. The source agrees about the low end (one factor is its worst
+configuration too, for a stated reason) and the lab's tested range k ∈ {1,3,5} sits **entirely
+inside the region this source also found worst**, with the reported optimum untested. Three reasons
+that is not a refutation of the lab's result: (i) 15 factors on ~140 instruments is a very different
+factor-to-name ratio than on many hundreds, so the noise-trading failure arrives at a lower count
+here and the *explained-variance target*, not the count, is the transferable parameter; (ii) the two
+measurements are of different objects — the lab measured an **unconditional cross-sectional IC**,
+the source trades a **conditional excursion** (only names more than 1.25 equilibrium standard
+deviations from equilibrium *and* whose estimated reversion speed clears a filter), and an
+unconditional IC can be null while the conditional tail trade is not; (iii) the source pays 5 bps
+per trade against this repo's 15, and its characteristic reversion time is on the order of a week —
+the configuration it reports *losing money on* is the regime a 3×-more-expensive book starts in.
+
+**What survives the long-only constraint — the question `SUMMARY.md` scoped this family to.** Every
+position in the source is a stock against βᵢ dollars of its factors: the residual is what is traded,
+and the factor leg is what makes it *tradeable* rather than merely *measurable*. A long-only book
+capped at gross 1.0 holds only the cheap side, so what survives is **not** a market-neutral residual
+portfolio but a long book whose cross-sectional weights are tilted by a residual signal, with
+returns dominated by the market exposure it cannot remove. **Removing factor structure from the
+signal does not remove it from the book** — which is the mechanism-level account of the lab's own
+measurement that five long-only family leads from five different mechanisms correlate 0.75–0.85 with
+each other. The honest framing for any candidate here is a *selection* question ("does a residual
+s-score rank names better than a raw price rank?"), not a decorrelation claim.
+
+**Four pieces port cleanly and cheaply, independent of whether the family is ever traded.** (a) The
+**s-score**, `(X − m)/σ_eq` with `σ_eq = σ/√(2κ)` — a dimensionless, causal, better-specified
+reversal signal than "trailing n-day return", whatever the factor count. (b) A **κ-filter**: only
+take a mean-reversion bet where the estimated reversion time is short relative to the estimation
+window (they require τ < half the window). This is a falsifiable admissibility condition and nothing
+in this lab's reversal work has used one. (c) The **number of components needed for a fixed variance
+share** is a free regime statistic for cross-sectional correlation concentration, computable from
+the same eigendecomposition — `range-variance`-adjacent, costs nothing. (d) **Trading-time volume
+rescaling**: `R̃ = R × ⟨δV⟩/ΔV` over a ~10-day trailing volume window, which shrinks moves made on
+heavy volume and inflates those made on light volume — economically, *do not fade a move that came
+with heavy trading*. It is a return *transformation* rather than a sort, which is a use of the
+volume panel the lab has not tried, and it is testable on any reversal signal without the rest of
+the apparatus. Two explicit **anti-candidates** from the same source: adding an estimated drift term
+(equivalently a 60-day moving-average slope, a built-in momentum overlay) is reported to add
+essentially nothing to a residual-reversion signal; and the "bang-bang" all-or-nothing sizing that
+wins there is a turnover machine under a 15 bps/side cost model.
 
 ---
 
@@ -2781,6 +2920,107 @@ hypothesis fodder, then anti-candidates.
     the reachable question is which **feature groups** carry signal, which is what `program.md`
     says the interesting question is anyway. Tier A, `published_post_2018: true`.
     → `notes/2026-08-29-machine-learning-cross-section-comparative.md`
+52. **[Added 2026-08-30] Free screen for every `lead-lag-spillover` candidate, and it is three
+    conditions, not one.** All three come from the family's founding sources and all three are
+    computable on the train split without a trial. *(i) Control for the follower's own lag.* The
+    mechanism's signature is cross-predictability that is **not** a restatement of own-lag
+    predictability — Hong–Torous–Valkanov's model gives zero own-serial and non-zero cross-serial
+    correlation precisely because investors condition efficiently on their own market — and
+    Chordia–Swaminathan's tests are built around the same separation. Without the own-lag control,
+    `price-trend` shows up wearing a lead-lag costume, and the lab already has a measured case of a
+    differently-motivated family arriving at rho ≈ 0.75 to a momentum champion. *(ii) Count the
+    leaders against chance, do not t-test a pair.* HTV simulate the null count (≈3.4 of 34 expected
+    at the 10% level) and test whether the observed count is in the tail. With 15 regions there are
+    210 ordered pairs here, so per-pair significance is meaningless and the count framing is
+    mandatory. *(iii) Require horizon decay.* The effect should be visible at one month and
+    materially weaker by three; HTV treat the *absence* of long-horizon predictability as evidence
+    the short-horizon result is not a regression artifact. A lead-lag signal flat across horizons is
+    a slow-moving risk proxy. Tier A, no overlap.
+    → `notes/2026-08-30-industry-lead-lag-gradual-diffusion.md`
+53. **[Added 2026-08-30] The one genuinely new *signal* this session opens, and it costs nothing to
+    compute: `DELAY`, a closes-only per-instrument speed-of-adjustment statistic.** From a Dimson
+    regression of instrument *i* on an equal-weight universe return with five leads and five lags,
+    `x = (Σ_{k=1..5} β_k)/β_0` and `DELAY = 1/(1+e^{−x})`; higher means slower adjustment to
+    common information. Chordia–Swaminathan show it separates the names that contribute most and
+    least to cross-autocorrelation, and that it is what their turnover sort is a proxy *for* — so
+    sorting on it is strictly closer to the hypothesis than sorting on the proxy. It needs no
+    volume panel, which matters because **this repo cannot compute their actual sorting variable**:
+    turnover is shares traded ÷ shares outstanding, chosen exactly because raw and dollar volume
+    correlate ≈0.78 with size while turnover correlates ≈0.15, and there is no shares-outstanding
+    panel here. Substituting dollar volume reintroduces the size ranking the design exists to
+    remove — which is the mechanism behind the lab's own measured null on log average dollar volume.
+    The causal alternative if a volume-based sort is wanted anyway is **relative volume** (each
+    name's volume over its own trailing average), which cancels the size level by construction but
+    measures "unusually active for this name" rather than "active relative to float"; say which one
+    the hypothesis is about. Two riders before spending a trial: estimate `DELAY` walk-forward on a
+    year of daily data (the source re-estimates annually), and check its overlap with a trailing-vol
+    sort first — high-`DELAY` names in the source are smaller and *lower* volatility, and this lab
+    has refuted low-vol twice. Tier A, no overlap.
+    → `notes/2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`
+54. **[Added 2026-08-30] Free reframing that decides what a `statistical-arbitrage` candidate can
+    honestly claim, and it removes the family's headline selling point.** In the reference
+    construction every position is a stock against βᵢ dollars of its factors: the residual is what
+    is traded and the factor leg is what makes it *tradeable* rather than merely *measurable*. A
+    long-only book at gross ≤ 1.0 holds only the cheap side, so what survives is not a
+    market-neutral residual portfolio but a long book tilted by a residual signal, dominated by the
+    market exposure it cannot remove. **Removing factor structure from the signal does not remove it
+    from the book** — which is the mechanism-level explanation for the lab's measured 0.75–0.85
+    cross-correlations among five long-only family leads from five different mechanisms. The
+    consequence is a scoping rule, not a build: a candidate here answers a *selection* question
+    ("does a residual s-score rank names better than a raw price rank?") and must not be argued as a
+    decorrelation play. Tier B source, no overlap.
+    → `notes/2026-08-30-pca-residual-statistical-arbitrage-long-only.md`
+55. **[Added 2026-08-30] The one buildable idea in `statistical-arbitrage`, and it is the specific
+    thing the lab's declined screen did not test.** The source's structural finding is that the
+    factor count has an **interior optimum**: one factor is its *worst* configuration (leftover
+    common variation ⇒ slow measured reversion, high residual volatility), a 75% explained-variance
+    target loses steadily (residual real but smaller than costs — "noise trading"), and its optimum
+    is ~15 factors or a ~55% variance target on a US large-cap universe. The lab's screen tested
+    k ∈ {1,3,5} — entirely inside the region this source also found worst — measured an
+    **unconditional cross-sectional IC**, and declined the family. The source trades a **conditional
+    excursion**: only names whose residual is >1.25 equilibrium standard deviations from its mean
+    (`s = (X−m)/σ_eq`, `σ_eq = σ/√(2κ)`) *and* whose estimated reversion speed clears a filter
+    (τ = 1/κ shorter than half the estimation window). An unconditional IC can be null while the
+    conditional tail trade is not, and the κ-filter is a falsifiable admissibility condition nothing
+    in this lab's reversal work has used. **Ranked below the free rules and with two explicit
+    discounts**: 15 factors on ~140 instruments is a very different factor-to-name ratio (so the
+    variance *target*, not the count, is the transferable parameter, and noise-trading arrives at a
+    lower count here), and the source pays 5 bps per trade against this repo's 15 with a
+    characteristic holding period of about a week — the configuration it reports losing money on is
+    the regime a 3×-more-expensive book starts in. If run: fix the factor count by variance target,
+    add the κ-filter and the |s| threshold, rebalance monthly not daily, and report the
+    gross-versus-net decomposition, per `learnings.md`'s standing turnover warning. Tier B,
+    no overlap. → `notes/2026-08-30-pca-residual-statistical-arbitrage-long-only.md`
+56. **[Added 2026-08-30] A use of the volume panel the lab has not tried: rescale returns rather
+    than sort on them.** "Trading time" replaces each return with `R̃ = R × ⟨δV⟩/ΔV`, where ΔV is
+    volume over the interval and ⟨δV⟩ a trailing average (≈10 days in the source, deliberately not
+    optimised). Moves made on heavy volume shrink; moves made on light volume inflate. Economically:
+    **do not fade a move that came with heavy trading**, because it is more likely information than
+    an excursion worth reverting. Reported to help ETF-based residual signals unequivocally and to
+    do little for PCA-based ones. It is a return *transformation*, so it composes with any existing
+    reversal or reversion signal without adding a sort, and it is testable on the train split on its
+    own. One implementation trap: volume is not forward-filled and is NaN on foreign holidays, so
+    the trailing denominator must skip those rather than treat them as zero volume — otherwise the
+    rescaling explodes exactly where the panel is thinnest. Tier B, no overlap.
+    → `notes/2026-08-30-pca-residual-statistical-arbitrage-long-only.md`
+57. **[Added 2026-08-30] Two anti-candidates and one confound, all free.** *(a) Do not bolt a trend
+    term onto a residual-reversion signal.* The source extends its s-score with an estimated drift
+    (algebraically the slope of a 60-day moving average — a built-in momentum overlay) and reports
+    the effect on results is minor; its own reading is that stock returns carry negligible momentum
+    after controlling for industry/size factors at this trading scale. *(b) Do not assume the
+    lead-lag sign.* HTV's model makes the sign of a cross-prediction follow the covariance of the
+    two assets' payoffs, and their own leaders include both signs; a long-only "leader up ⇒ buy the
+    laggard" construction imposes a sign the theory does not supply, so estimate it. *(c) A daily
+    region-level lead-lag on this universe is a time-zone artifact until proven otherwise.* Fifteen
+    regions with non-overlapping sessions and unhedged USD conversion mechanically manufacture "US
+    leads Asia" at the daily frequency. Both source papers' own screens point the same way — drop
+    returns where the instrument did not trade at *t* or *t−1*, and move to weekly. Note the
+    asymmetry this creates for the family: the engine's one-day execution lag eats most of a daily
+    effect and costs a monthly one almost nothing, so the two ends have opposite implementability
+    profiles and a candidate has to live in the middle. Tier A/B, no overlap.
+    → `notes/2026-08-30-industry-lead-lag-gradual-diffusion.md`,
+    `notes/2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`,
+    `notes/2026-08-30-pca-residual-statistical-arbitrage-long-only.md`
 
 ## Coverage log
 
@@ -2802,27 +3042,52 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-27 (session 14) | Session 13's open question (b), and the last vocabulary the folder had never opened: **execution and implementation shortfall**. Taken with the stated prior that it would close rather than open — which held, but the closures are load-bearing rather than empty. Three notes, five sources; full text read directly for four, one recorded **unread**. The session's shape is one *verification* of a number the repo has never had outside evidence for (the 15 bps/side charge, graded against $1.7tn of live institutional fills and found conservative-to-fair, with the engine's decision-price convention matching the source's definition word for word), one *shape correction* that identifies the single asymmetry in the flat cost model pointing against this repo (impact is denominated in volatility; a momentum basket holds the high-volatility tail) together with the arithmetic showing it does not change a verdict, and one *adjudication* of a published tier-1 disagreement about whether the repo's own champion family survives costs — which resolves in the repo's favour on level while leaving two structural results untouched, one of which (most of the momentum spread lives on the short leg) is the folder's most specific long-only discount to date. | Frazzini–Israel–Moskowitz 2018 (AQR/SSRN working paper; author-hosted PDF read in full), with Perold 1988 (JPM) recorded **unread** — paywalled, no repository or mirror copy found, its definition used only as restated in the source read (`2026-08-27-live-execution-costs-implementation-shortfall.md`); Almgren–Thum–Hauptmann–Li 2005 (Risk; authors' dated version read in full from a university course-reading directory) (`2026-08-27-market-impact-functional-form-and-trade-rate.md`); Lesmond–Schill–Zhou 2004 (JFE; a university PhD-course mirror served the typeset article) + Korajczyk–Sadka 2004 (JF; Kellogg faculty page) (`2026-08-27-momentum-net-of-costs-debate.md`) |
 | 2026-08-28 (session 15) | Session 14's open question (a), taking the one of its three unopened directions it called "the best of the three and the only one that could change a construction choice": **international / global evidence on momentum construction**, chased because this repo's universe is global while almost every source in this folder is US-only. Four sources, four notes; full text read directly for all four, one of them in a working-paper rather than published version (flagged in-note). The session's shape is one **opened build** — the first grouping ever to pass candidate #5's neutralisation screen — one second build of a kind the folder has never supplied (a *signal*, price-only), two free discount/interpretation rules, one anti-candidate, and one unresolved disagreement between two tier-1 sources that is recorded rather than adjudicated. | Rouwenhorst 1998 (JF; Yale ICF working-paper depot served the February 1997 revision in full) (`2026-08-28-international-momentum-country-neutral.md`); Fama–French 2012 (JFE; the typeset article with volume and page headers from an author-adjacent faculty site, `johnhcochrane.com`) (`2026-08-28-local-versus-global-factor-construction.md`); Asness–Moskowitz–Pedersen 2013 (JF; the typeset article from an author's NYU Stern page) (`2026-08-28-value-momentum-everywhere-global-comovement.md`); Chui–Titman–Wei 2010 (JF; the **November 2004 working-paper version** read in full from a National Taiwan University conference-proceedings mirror, the published article not obtained — two of its findings taken from the published abstract and marked as such) (`2026-08-28-individualism-cross-country-momentum.md`) |
 | 2026-08-29 (session 16) | **The first session under the rewritten `program.md`, and the first in this folder's history not aimed at a seam in the price-trend programme.** Six of the eight families had zero notes; the session took four of them, chosen so that two match the families the strategy agent has just scouted (`statistical-learning`, `liquidity-volume` — so the literature lands where trials already exist) and two are cold opens made reachable by the same-day constraint change (`range-variance`, `seasonality-calendar` — both need the OHLCV panel or were never cheap enough to justify). Four notes, eight sources; full text read directly for six, one recorded **second-hand** from a source that reproduces its derivations, one from its **published abstract only**. The session's shape is one *methodological transfer* that explains a result the lab had already measured but not understood (a linear learner loads on trend because that is where the marginal signal is), one *commissioned replication* that survives the replication and loses the horserace — the strongest "your family lead may be measuring the wrong thing" finding this folder has produced — one *free measurement improvement* that is analytical rather than empirical and that names the only estimator safe to divide by, and one *cost warning delivered by the source's own authors* against the family they discovered, together with the overlay they suggest instead. | Gu–Kelly–Xiu 2020 (RFS; NBER WP 25398, Sept 2019 revision, read in full) (`2026-08-29-machine-learning-cross-section-comparative.md`); Amihud 2002 (JFM; typeset article from a UPenn course reading directory) + Harris–Amato 2019 (CFR) + Amihud 2019 (CFR), the latter two read in full from the journal's own editor-hosted mirror `cfr.ivo-welch.info/published/papers/` (`2026-08-29-amihud-illiquidity-measure-and-replication.md`); Alizadeh–Brandt–Diebold 2002 (JF; author's UPenn page, typeset article read in full) + Molnár 2012 (IRFA; read in full as Chapter 2 of the author's 2020 habilitation thesis, which reproduces the article with its journal header), with Parkinson 1980, Garman–Klass 1980, Rogers–Satchell 1991 and Meilijson 2009 recorded **second-hand** — their formulas and efficiencies taken as restated with derivations in Molnár and cross-checked against ABD's independent restatement (`2026-08-29-range-based-volatility-estimators.md`); Heston–Sadka 2008 (JFE; the October 2006 working version read in full from NYU Stern's seminar archive), with Heston–Sadka 2010 (JFQA, the international companion) recorded from its **published abstract only** — `oa_status` closed, no repository copy found (`2026-08-29-same-calendar-month-seasonality.md`) |
+| 2026-08-30 (session 17) | **The last two cold opens, taken together, which retires the README's zero-coverage rule.** `lead-lag-spillover` first, as `SUMMARY.md` instructed — two sources, one per horizon end (monthly group→market; daily/weekly volume-sorted) — then `statistical-arbitrage`, scoped to the single question the previous session posed for it: *what survives a long-only constraint*. Three notes, five sources; full text read directly for three primaries plus one authors' replication package, one recorded from its **published abstract only**, one further paper recorded **unread** from its abstract as a flagged follow-up. The session's shape is one *mechanism plus a three-part free screen* whose most useful clause is that a lead-lag construction without an own-lag control is momentum in costume, one *new closes-only signal* (`DELAY`) that arrives together with the finding that this repo cannot compute the source's actual sorting variable, one *tension recorded rather than resolved* (the lab's declined residual-reversion screen tested only the factor-count region the source also found worst, but three discounts stop that being a refutation), and one *scoping rule* that removes the long-only version of `statistical-arbitrage`'s decorrelation claim while leaving its selection claim intact. | Hong–Torous–Valkanov 2007 (JFE; the authors' 5 Dec 2005 draft read in full from `columbia.edu/~hh2679`) + the authors' October 2014 replication Note (read in full from `rady.ucsd.edu`), with Tse 2015 (Journal of Empirical Finance, the reexamination) recorded from its **published abstract only** — closed access, no repository copy — and Hou 2007 (RFS) recorded **unread** from its abstract as a flagged follow-up (`2026-08-30-industry-lead-lag-gradual-diffusion.md`); Chordia–Swaminathan 2000 (JF; typeset article read in full from a UPenn course-reading mirror) (`2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`); Avellaneda–Lee 2010 (Quantitative Finance; the authors' June 2009 working version read in full from the first author's Courant page) (`2026-08-30-pca-residual-statistical-arbitrage-long-only.md`) |
 
 ### Open questions for future sessions
 
-- **[2026-08-29] Two families still have zero coverage, and the README's rule is live for both.**
-  `lead-lag-spillover` and `statistical-arbitrage`. They are the two remaining cold opens and one of
-  them must supply a note next session. Concretely:
-  - **`lead-lag-spillover`** is the better-suited of the two to this repo and should probably go
-    first. The universe is 15 regions and 42 ETFs — an unusually good fit for cross-region and
-    cross-asset predictability, and the one family where this repo's breadth is an *advantage*
-    rather than the survivorship liability it is everywhere else. The vocabulary to search: lagged
-    cross-country return predictability (Rapach–Strauss–Zhou's international work is the obvious
-    anchor), ETF-versus-constituent lead-lag, network/graph momentum, and the standing skeptical
-    literature on whether any of it survives the one-day execution lag this engine already imposes.
-    Note the tension to check rather than assume: this repo's engine lags execution by a day, which
-    is exactly the horizon most lead-lag results live on, so the family's implementability question
-    is sharper here than the citation count suggests.
-  - **`statistical-arbitrage`** is the harder ask and should be scoped narrowly when it is taken:
-    the interesting question is not "does residual reversion work" but **what survives a long-only
-    constraint**, since only the cheap side of a residual is tradeable here. A note that does not
-    answer that is a low-priority note. `notes/2026-08-22-long-only-as-l1-regularization.md` is the
-    right prior to read first.
+- **[2026-08-30] The README's zero-coverage rule is spent; here is what should aim the next
+  session instead.** Every `program.md` family now has at least one dedicated note. In rough
+  priority order, and none of these is a family survey:
+  - **`portfolio-learning`'s specific gap (HRP, stacking), but at a *lower* priority than the
+    2026-08-29 entry below gave it.** That entry said to take it "before either of the two cold
+    families if the strategy agent starts building blends". The blend route has since been
+    measured and it is much narrower than it looked: `learnings.md`'s solved break-even table plus
+    its resolution floor put the required *leg* Sharpe at 1.34–1.42 against a champion at 1.120,
+    and five family leads from five mechanisms correlate 0.75–0.85 **with each other**, so an
+    allocator over them is allocating over one thing. A clustering allocator cannot manufacture
+    decorrelation that the long-only constraint forbids — see candidate #54 for the mechanism.
+    Worth one note for the *stacking / meta-labelling* half (a learned combiner is a different
+    object from a risk allocator, and `learnings.md`'s own design rule says a learned candidate
+    earns a trial only when asked for something a sort cannot express); the HRP half should be
+    taken with the explicit prior that it will close rather than open.
+  - **The two follow-ups this session flagged but did not read**, both cheap and both aimed at
+    open threads rather than at breadth: **Hou 2007 (RFS)**, "Industry Information Diffusion and
+    the Lead-lag Effect in Stock Returns" — its abstract claims the lead-lag effect is
+    predominantly *intra*-industry and that little cross-industry predictability survives once
+    that channel is accounted for, which if right says the **grouping variable matters more than
+    the lead-lag machinery**, and this repo's grouping choice (region vs ETF sleeve vs sector) is
+    exactly the live design decision. Closed access; SSRN serves a bot challenge, so it needs a
+    course or repository mirror. And **Lou–Shu 2017 (RFS)** plus **Goyenko–Holden–Trzcinka 2009
+    (JFE)**, still unread from the 2026-08-29 entry below.
+  - **The single most useful unread thing for the family this session opened**: nothing in either
+    lead-lag source speaks to **ETF-versus-constituent** lead-lag, which is the one sub-mechanism
+    `program.md` names and this repo is unusually well set up for (42 ETFs alongside their
+    constituent-adjacent single names). Both notes here are group→group or group→market. That is a
+    real gap inside a now-covered family.
+- ~~**[2026-08-29] Two families still have zero coverage, and the README's rule is live for
+  both**~~ — **both taken 2026-08-30 (session 17)**, and each closed differently from how this
+  entry expected. The forecast that `lead-lag-spillover` would be "the better-suited of the two"
+  held on universe fit and failed on horizon: the tension this entry told the session to check —
+  that the engine's one-day lag sits exactly where lead-lag results live — resolves as an
+  *asymmetry* rather than a blanket problem. The one-day lag eats most of a **daily** effect and
+  costs a **monthly** one almost nothing, so the family's two ends have opposite implementability
+  profiles and a candidate has to live in the middle; and the sharper obstacle turned out to be a
+  different one this entry did not anticipate, namely that 15 non-overlapping trading sessions
+  under unhedged USD conversion manufacture daily cross-correlation mechanically (candidate #57c).
+  `statistical-arbitrage`, scoped as instructed to the long-only question, answers it negatively
+  at the level of the *claim* (candidate #54) while leaving one buildable idea and one free
+  transformation standing (#55, #56).
 - **[2026-08-29] `portfolio-learning` is covered only by analogy, and the gap is specific.** The
   folder's ensemble/forecast-combination material (family 7 above, plus the bagging and
   model-averaging notes) is what `program.md` now calls `portfolio-learning`, so the family is not
@@ -2832,6 +3097,10 @@ hypothesis fodder, then anti-candidates.
   exchange rate for blending them (`learnings.md`'s required-gain table). A note on HRP and on
   stacking would land directly on a decision the lab is about to face, and it should be taken
   before either of the two cold families if the strategy agent starts building blends.
+  **Priority revised down 2026-08-30** — see the first open question above: the blend route's
+  required leg Sharpe has since been solved (1.34–1.42 against a 1.120 champion) and the five
+  recorded leads correlate 0.75–0.85 with each other, so the HRP half should be expected to close.
+  The stacking half is still worth a note.
 - **[2026-08-29] One open question inside a family this session covered, and it is the most
   actionable thing here.** Harris–Amato find that `ILLIQ`'s day-by-day pairing of |return| with
   volume contributes essentially nothing over the ratio of the two means, and that log average
