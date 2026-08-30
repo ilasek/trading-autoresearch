@@ -4717,3 +4717,196 @@ never reaches the gate, and no `challenge` candidate was run.
   magnitude — tonight's #64/#65 calibration predicted ~+0.04 and the observed move was
   -0.054, i.e. inside the same noise band in the opposite direction.
 
+
+## Session summary — 2026-08-30 (nightly)
+
+**Budget: 4 of 8 experiments spent; the four unspent ones were each declined on a free
+measurement, and two of those declines are worth more than a trial would have been.**
+Allocation compliance: `price-trend` 2 (at the cap), `statistical-arbitrage` 1,
+`liquidity-volume` 1; one family with no recorded trial at all was opened, against a
+requirement of one. No `challenge` candidate was run, so the champion was untouched and
+**the holdout was not read**.
+
+    #63  sa_pca_residual_excursion    statistical-arbitrage  FAMILY_LEAD  val 0.468  rho 0.692  turn 17.4x
+    #64  lv_trading_time_reversal     liquidity-volume       SCOUT        val 0.590  rho 0.683* turn 16.7x
+    #65  pt_raw_reversal_control      price-trend            FAMILY_LEAD  val 0.701  rho 0.683  turn 17.6x
+    #66  pt_fast_reversal_slow_grid   price-trend            SCOUT        val 0.647  rho ~0.68  turn 17.3x
+
+**Best finding, and it is a methodological one the lab can act on immediately: three
+independent train-split advantages all reversed sign on validation, and two of the three
+were turnover-matched paired designs built specifically so that nothing else could
+explain the difference.**
+
+    reading                         train                       validation
+    #63 residual excursion          Q5-uni +6.14%/yr (t=4.18)   0.468, below the 0.49 floor
+    #64 vs #65 volume rescaling     +0.030 Sharpe               -0.111 Sharpe
+    #66 vs #65 5d vs 21d score      +0.119 Sharpe               -0.054 Sharpe
+
+This is the first time the lab has run a *designed* pair with turnover and breadth held
+fixed by prior measurement rather than argued clean afterwards — #64/#65 at 16.7x/17.6x
+turnover and 21.8/21.8 positions, #66/#65 at 17.3x/17.6x and 21.6/21.8. `learnings.md`
+records from four consecutive trials on 2026-08-29 that "outside `price-trend`, turnover
+differences dominate every mechanism comparison the lab tries to run"; that confound is
+now removed by construction, and what appears underneath it is a train/validation
+disagreement.
+
+**Free population check, and it is honest about not being significant.** From
+`trials.jsonl` scalars alone (no strategy re-run, no returns scored, no holdout read),
+`corr(train Sharpe, validation Sharpe)`:
+
+    all 66 recorded trials                          +0.650  (spearman +0.640)
+    the 57 legacy price-trend-lineage trials        +0.697  (spearman +0.628, p < 0.001)
+    the 11 trials since the 2026-08-29 program change  -0.322  (spearman -0.400, p = 0.33)
+
+The ordering inside those 11 is close to inverted: the two highest train Sharpes
+(`sl_ridge_xs_walkforward` 0.953, `pt_fast_reversal_slow_grid` 0.856) sit near the bottom
+on validation, and the two lowest (`sc_same_month_seasonal` 0.400, its aligned twin 0.435)
+sit at the top. **Three caveats, stated rather than chosen between.** (i) At n = 11 the
+correlation is *not* distinguishable from zero (p = 0.33), and 3-of-3 sign agreement in
+the paired readings is p = 0.25 two-sided — this is suggestive, not established. (ii) The
+legacy +0.697 is partly an artifact of 57 trials that are mostly near-identical variants
+of one construction; the 11 new ones are structurally different books, so the smaller
+sample is the cleaner one, which cuts both ways. (iii) **There is a mechanism, and it is
+selection, not chance**: every one of these 11 candidates was designed *after* a
+train-split screen, so the ones with the highest train Sharpe are exactly the ones whose
+screen flattered them most, and a screen-induced negative correlation is what overfitting
+a screen looks like from the outside.
+
+**And there is a second reading that this session cannot adjudicate and must not try to.**
+`learnings.md`'s ⚠ standing concern records `corr(train, holdout) = +0.887` over the
+promotion ladder and `corr(train, validation) = -0.947` in the magnitude-weighted era.
+If train is the split that tracks the holdout, then tonight's train-preferred candidates
+are the better ones and validation is the split that is wrong — which is the lab's
+standing concern arriving on entirely new constructions, in five families it was never
+measured in, and prospectively rather than retrospectively. Resolving it would mean
+reading the holdout. **Not done, not proposed.** Recorded for the human alongside the
+existing ⚠ entry.
+
+**The operational rule that follows, and it costs nothing.** Tonight calibrated, for the
+first time, the exchange rate between a quintile screen and the book it motivates:
+**+3.35%/yr of Q5-universe spread bought +0.03 of train Sharpe and -0.11 of validation
+Sharpe.** A 20-name book with a hysteresis band holds a *tail*, not a quintile, and
+re-ranking inside that tail moves the quintile statistic far more than it moves the book.
+Screen on the statistic the trial will be scored on, or discount the screen's magnitude by
+roughly an order of magnitude before pre-registering. Applied prospectively to #66 the
+discount was right — it predicted ~+0.04 against an observed -0.054, i.e. inside the same
+noise band.
+
+**A headline conclusion corrected, and a second one sharpened.**
+The 2026-08-29 session closed on "the strongest thing measurable on this universe is the
+one thing the cost model structurally forbids", reasoning from a raw reversal IC that
+decays to a null by 21 days. Two corrections. *(a)* **A plain 21-day reversal book scores
+validation 0.701 net of 15 bps** — the best non-momentum-mechanism result the lab has
+recorded except `str_reversal_monthly`'s 0.820, which is also a reversal book (and which
+correlates **0.98** with #65, so the two should be read as one object and their gap is
+inside the resolution floor). A null cross-sectional IC and a 0.70-Sharpe book coexist
+here because the book buys the extreme tail, not the quintile mean. *(b)* Scoring horizon
+and rebalance frequency are **separate choices**: at monthly spacing a 5-day, a 10-day and
+a 21-day lookback are all fully disjoint from their predecessor, so the book pays the same
+turnover (11.82x / 11.93x / 11.93x, holdings-only on train; 17.3x / 17.6x observed on
+validation). The cost objection therefore never applied to a monthly book. What is left is
+a **decay** argument with direct evidence for the first time: #66 held the grid fixed and
+lost 0.054 on validation, so the 5-day excursion reverts inside the holding month and a
+monthly book collects its front then holds a spent position. Restate the claim as *"the
+5-10 day reversal premium is unreachable on a monthly grid because it decays inside the
+holding period"* — a different mechanism from `SUMMARY.md` #18's liquidity-provision
+account, and unlike it, measurable here.
+
+**Four trials declined on free evidence. All measurements train-split or
+holdings/scalar-only; no returns scored, no holdout touched.**
+
+1. **`lead-lag-spillover` — `SUMMARY.md` #53's `DELAY` signal, declined on the folder's
+   own pre-registered screen.** The Dimson speed-of-adjustment statistic (instrument on an
+   equal-weight universe return with five leads and five lags, `x = Σβ_lag/β_0`, logistic)
+   is a clean null at the monthly horizon: **IC -0.0016 (t = -0.18)**, Q5-universe
+   +2.04%/yr (t = +1.28). Decisively, it **fails screen (iii) of `SUMMARY.md` #52**, which
+   requires horizon decay — the effect is *larger* at three months (+6.85%/yr, t = +1.95)
+   than at one, and #52 says a lead-lag signal flat across horizons is a slow-moving risk
+   proxy rather than an information-diffusion effect. Per last session's own lesson
+   (*"treat a failed pre-registered screen as an answer, not as a hurdle to argue past"*),
+   no trial was spent. Coverage caveat worth recording: `DELAY` needs a complete 252-day
+   history plus five market leads and lags, so it is computable for a mean of only **57**
+   names per date, well under half the universe.
+2. **`range-variance` — declined a second consecutive session, now on seven screened
+   mechanisms.** Last session screened GK vol compression, vol-of-vol, the C2C/GK variance
+   ratio and the range-lottery measure. Tonight added three that use the OHLC panel
+   *directionally* rather than as a variance estimate. **Close-location value** ((C-L)/(H-L)
+   averaged over a trailing window, "does it close near its highs") carries the *wrong*
+   sign for its own story — IC **-0.0208 (t = -2.48)** at 21 days, weakening to -0.0048 at
+   63 — and rank-correlates **+0.384** with the trailing 63-day return, i.e. it is
+   short-horizon reversal in costume. The **overnight/intraday return decomposition**,
+   newly reachable via the open panel, is dominated by its own control at every window:
+   overnight sums give Q5-universe +4.33/+5.59/+4.13%/yr at 21/63/126 days against the
+   plain trailing 63-day *total* return's **+7.36%/yr (t = +3.48)**, with IC a null
+   throughout (|t| < 1). Splitting a return into its two sessions loses to not splitting it.
+3. **`liquidity-volume` — `SUMMARY.md` #53's relative-volume alternative, declined; and it
+   is a clean null that *passes* its own design test.** #53 proposes relative volume (each
+   name's volume over its own trailing average) as the causal substitute for the turnover
+   sort this repo cannot compute, because it cancels the size level by construction. It
+   does exactly that — `spearman(rel-volume 21/252, log ADV) = **+0.045**` against the
+   ≈0.78 the note reports for raw and dollar volume — and it predicts nothing: IC
+   -0.0077 / -0.0009 / -0.0020 (|t| ≤ 1.06) at 5/63, 21/252 and 21/63, Q5-universe never
+   above +2.6%/yr. Together with last session's log-ADV null this says the family's live
+   content is `ILLIQ`'s **price-impact numerator**, not trading activity in any
+   normalisation — which is a partial answer to the Lou–Shu question `SUMMARY.md`'s open
+   questions flag as the natural follow-up, reached without the paper.
+4. **`portfolio-learning` — the last live zero-trial family, killed for free on the same
+   arithmetic that killed cross-specification averaging.** Priced on stored validation
+   return series (no strategy re-run, no trial spent), and cherry-picking the best subset
+   of each size *ex post*, which is an optimistic upper bound on any honest a-priori
+   choice: best 2-way **0.834**, 3-way 0.829, 4-way 0.819, 5-way 0.806, 6-way 0.795, 7-way
+   0.780, all-8 0.744 — monotone decreasing in leg count, against the **best single member
+   at 0.820**. The entire ex-post-optimal gain is **+0.014**, an order of magnitude inside
+   the resolution floor. The reason is visible in the correlation matrix: the eight
+   recorded legs correlate **0.68-0.98** with each other, and two pairs are effectively the
+   same object — `lv_amihud_illiquidity_tilt` with `sl_ridge_nontrend_block` at **0.98**
+   (the learned combiner reproducing its own best input, confirming last session's
+   holdings-based 0.976 on the return series) and `pt_raw_reversal_control` with
+   `str_reversal_monthly` at **0.98**. An allocator over these is allocating over one
+   thing. This closes `program.md`'s "where scouted leads become a challenger" route on
+   arithmetic rather than on prior, and it agrees with `SUMMARY.md`'s own 2026-08-30
+   priority revision.
+
+**What the leaderboard looks like after tonight.** Seven families now have a recorded
+lead. The non-`price-trend` board, by validation Sharpe: `str_reversal_monthly` 0.820
+(legacy short-term reversal), **`pt_raw_reversal_control` 0.701 (new)**,
+`ll_group_lastmonth_lead` 0.688, `lowvol_equity_tilt` 0.685, `lv_amihud_illiquidity_tilt`
+0.681, `sc_same_month_seasonal_aligned` 0.747, `sl_ridge_nontrend_block` 0.634,
+**`sa_pca_residual_excursion` 0.468 (new, and the only recorded result below the 0.49
+equal-weight floor)**. Nothing is within reach of the champion's 1.120, and by
+`learnings.md`'s solved blend table nothing at these correlations can be blended into the
+seat resolvably — a leg needs its own Sharpe at 1.34-1.42 to buy a two-SE improvement.
+
+**Next ideas, in order, with provenance.**
+1. **Stop screening candidates on cross-sectional quintile spreads and start screening
+   them on the book.** Tonight's calibration (+3.35%/yr of Q5 spread → +0.03 train / -0.11
+   validation Sharpe) says the screen the lab has used for two sessions over-predicts by
+   roughly an order of magnitude and got the sign wrong twice. A holdings-only book
+   simulation of the *selection* (positions, turnover, weight overlap) is already routine
+   here and is the right unit; the quintile spread should be used only to kill.
+2. **The train/validation disagreement is the most testable open question the lab has, and
+   it is testable without the holdout.** Every future scout should record its train Sharpe
+   as a *pre-registered prediction* of its validation Sharpe, so the n = 11 sample above
+   grows into something that can be resolved. If the anti-correlation survives to n ≈ 25 it
+   is a fact about this universe; if it decays it was screen-induced selection, which is
+   the mechanism offered above. Costs nothing beyond writing the number down.
+3. **`SUMMARY.md` #49 — the execution overlay** (Heston-Sadka's own suggestion): use a
+   signal to *re-time* trades the incumbent was already going to make, adding no turnover.
+   Carried forward unspent from last session's list; it remains the only recorded proposal
+   that attacks the turnover axis directly instead of paying it, and tonight's
+   turnover-matched pairs are the design template for testing it honestly.
+4. **`SUMMARY.md` #55's remaining half, if `statistical-arbitrage` is reopened at all.**
+   Tonight's #63 established that the source's interior-optimum structure *replicates on
+   train* (55% variance target beats 40% and 75% on both IC and Q5 spread) and that it does
+   not transfer to validation. The one untested clause is the source's own cadence — it
+   trades weekly, this repo cannot — so the family should probably be considered closed
+   here rather than re-scoped; the κ-filter is a real admissibility condition (train IC
+   +0.0402 → +0.0452) and it was not enough.
+5. **Not recommended: another `range-variance` or `portfolio-learning` attempt.** Both are
+   now declined on measured evidence rather than prior — seven screened mechanisms and an
+   ex-post-optimal ensemble bound respectively — and reopening either needs a mechanism
+   those screens do not already cover.
+
+**No engine issues encountered.** Tests green (33 passed) before the first trial. The
+holdout was not read this session: every candidate ran on the scout track, which never
+reaches the gate.
