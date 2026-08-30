@@ -4617,3 +4617,70 @@ never reaches the gate, and no `challenge` candidate was run.
   construction designed to dodge it. Also worth recording: maxDD -40.1% is the worst
   validation drawdown of any recorded scout, on 13.1 average positions.
 
+## 2026-08-30T23:18:22+00:00 — lv_trading_time_reversal — **SCOUT**
+- Candidate: `strategies/candidates/lv_trading_time_reversal.py` (family: liquidity-volume, track: scout, trial #64)
+- Hypothesis: Rescaling each daily return by the ratio of trailing-average dollar volume to that day's dollar volume, then fading the 21-day sum of the rescaled returns (hold 20 names, hold-30/enter-20 band, equal weight, monthly), earns a validation Sharpe above the 0.49 equal-weight floor net of 15 bps costs — i.e. down-weighting price moves that arrived on heavy volume moves part of the reversal premium from the 5-10 day horizon the cost model forbids up to the monthly horizon it allows, where the untransformed signal is a measured train-split null.
+- Verdict: SCOUT — scouted family 'liquidity-volume': validation sharpe 0.59 <= the family's best 0.681 (DSR 0.6412, 64 trials, 17 effective after clustering at rho 0.95)
+- Train: sharpe +0.77, ann_ret +11.5%, maxDD -59.7%, turnover 6.9x
+- Validation: sharpe +0.59, ann_ret +10.7%, maxDD -38.3%, turnover 16.7x
+- Deflated Sharpe prob: 0.6412 (bar from 64 trials, 17 effective)
+- Scout track: family best before this trial +0.68; the champion was not compared and the holdout was not read
+- Lesson: **Clears the 0.49 floor and loses its own mechanism test — read this entry
+  together with trial #65, which is the same file with one expression changed.** The
+  rescaling's train-split case was strong and pre-registered: at the 21-day horizon the
+  raw signal is a null (Q5-universe +2.50%/yr, t = 1.27) and the rescaled one is not
+  (+5.85%/yr, t = 2.81), with three free controls run first — the scale factor alone is a
+  null (IC +0.0034, t = +0.45), so it is not the Amihud lead in disguise; the clip and the
+  trailing-average window are both flat (IC +0.0208/+0.0205/+0.0222/+0.0218 at clip
+  none/3/5/10, +0.0196/+0.0222/+0.0236 at ⟨δV⟩ over 5/10/21 days), so nothing was tuned;
+  and the two books were shown holdings-only to run **11.80x against 11.93x** annual
+  turnover on train, so the comparison is turnover-matched by design rather than argued
+  clean afterwards. The engine confirms the match out of sample: **16.7x against 17.6x on
+  validation at an identical 21.8 average positions.** The rescaled book still scores
+  **0.590 against the raw book's 0.701**. `SUMMARY.md` #56's implementation trap was
+  handled (NaN volume skipped, never read as zero), so this is the mechanism failing, not
+  the implementation.
+- Second lesson, methodological and more transferable than the first: **a
+  quintile-spread screen badly over-predicted a book-level effect here, and the
+  overprediction was visible on train before validation was touched.** +3.35%/yr of
+  Q5-universe spread became **+0.03** of train Sharpe (0.77 against 0.74) and then
+  **−0.11** of validation Sharpe. A 20-name book with a hysteresis band holds a narrow
+  tail, not a quintile, and re-ranking inside that tail moves the quintile statistic far
+  more than it moves the book. Screen on the statistic the trial will be scored on, or
+  discount the screen: the sign was right on train and the size was wrong by an order of
+  magnitude, and the sign then reversed.
+
+## 2026-08-30T23:19:12+00:00 — pt_raw_reversal_control — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/pt_raw_reversal_control.py` (family: price-trend, track: scout, trial #65)
+- Hypothesis: Fading the raw 21-day return on the identical construction as `lv_trading_time_reversal` (hold 20 names, hold-30/enter-20 band, equal weight, monthly) scores a validation Sharpe materially below that candidate's 0.590 — i.e. the volume rescaling, and not the choice of a monthly horizon or the shared 20/30 book construction, is what produced its result, the two books having been shown holdings-only to run the same annual turnover (11.93x against 11.80x on train).
+- Verdict: FAMILY_LEAD — first recorded result in family 'price-trend': validation sharpe 0.701, DSR 0.7379 (65 trials, 17 effective after clustering at rho 0.95)
+- Train: sharpe +0.74, ann_ret +11.0%, maxDD -56.9%, turnover 7.2x
+- Validation: sharpe +0.70, ann_ret +13.8%, maxDD -38.5%, turnover 17.6x
+- Deflated Sharpe prob: 0.7379 (bar from 65 trials, 17 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The control won, so `SUMMARY.md` #56 is refuted on this universe: rescaling
+  returns by the volume that produced them subtracts 0.111 of validation Sharpe from an
+  otherwise identical book.** Turnover 17.6x against #64's 16.7x and average positions
+  21.8 against 21.8, so the pair is matched on the two axes that have confounded every
+  recent out-of-family comparison, and the difference is which 20 names each holds.
+  `learnings.md`'s "live is a precondition with no predictive content" now stands at a
+  **seventh** axis and its first instance outside the averaging axes — a train screen that
+  separated a null from a signal at t = 2.81 still failed to predict which book wins.
+- Second finding, and it is a correction to a headline conclusion rather than a
+  by-product of this pair. The 2026-08-29 session closed on "the strongest thing
+  measurable on this universe is the one thing the cost model structurally forbids",
+  reasoning from a train IC that decays to a null by 21 days (+0.0102, t = +0.97).
+  **A plain 21-day reversal book scores validation 0.701 net of 15 bps at 17.6x
+  turnover** — the second-best non-`price-trend`-mechanism result the lab has recorded,
+  behind only `str_reversal_monthly`'s 0.820, which is also a reversal book. So the
+  cross-sectional IC at a horizon is not the right instrument for asking whether that
+  horizon is tradeable: a null IC and a 0.70-Sharpe tail book coexist here, because the
+  book buys the extreme tail rather than the quintile mean. The reversal horizon question
+  should be reopened on book-level evidence, and the standing "reversal is untradeable
+  here" claim should be quoted as "the *5-10 day* reversal premium is untradeable here",
+  which is what was actually measured.
+- Recorded as a caveat, not a claim: this book's train maxDD is **-56.9%**, well outside
+  the validation gate's -45% (train is floor-checked only), and its validation maxDD
+  -38.5% is the second-worst of tonight's three. Reversal books here are cheap in Sharpe
+  terms and expensive in drawdown.
+

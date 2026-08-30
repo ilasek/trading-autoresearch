@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T23:17:07+00:00",
+  "generated_at": "2026-08-30T23:19:15+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -87,6 +87,23 @@
       },
       "train_sharpe": 0.435
     },
+    "price-trend": {
+      "name": "pt_raw_reversal_control",
+      "candidate": "strategies/candidates/pt_raw_reversal_control.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-30T23:19:12+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.683,
+      "validation": {
+        "sharpe": 0.701,
+        "ann_return": 0.1376,
+        "max_drawdown": -0.3848,
+        "ann_turnover": 17.6,
+        "avg_positions": 21.77
+      },
+      "train_sharpe": 0.737
+    },
     "lead-lag-spillover": {
       "name": "ll_group_lastmonth_lead",
       "candidate": "strategies/candidates/ll_group_lastmonth_lead.py",
@@ -127,7 +144,7 @@
       "track": "scout",
       "verdict": "FAMILY_LEAD",
       "ts": "2026-08-29T15:59:17+00:00",
-      "n_trials": 1,
+      "n_trials": 2,
       "rho_to_champion": 0.5887,
       "validation": {
         "sharpe": 0.681,
