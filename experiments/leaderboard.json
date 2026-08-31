@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-30T23:23:02+00:00",
+  "generated_at": "2026-08-31T23:12:17+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -154,6 +154,23 @@
         "avg_positions": 24.9
       },
       "train_sharpe": 1.001
+    },
+    "portfolio-learning": {
+      "name": "pl_integrated_signal_blend",
+      "candidate": "strategies/candidates/pl_integrated_signal_blend.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-08-31T23:11:49+00:00",
+      "n_trials": 1,
+      "rho_to_champion": 0.667,
+      "validation": {
+        "sharpe": 0.635,
+        "ann_return": 0.1066,
+        "max_drawdown": -0.3381,
+        "ann_turnover": 14.69,
+        "avg_positions": 22.44
+      },
+      "train_sharpe": 0.636
     },
     "statistical-learning": {
       "name": "sl_ridge_nontrend_block",

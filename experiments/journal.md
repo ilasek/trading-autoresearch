@@ -4933,3 +4933,58 @@ Also present: `origin/main-ar91zf`, 0 commits ahead of `main` and 15 behind — 
 recover. Deleting remote branches is outside this agent's remit; a human may prune both.
 
 ## Research session — 2026-08-31 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-08-31T23:11:49+00:00 — pl_integrated_signal_blend — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/pl_integrated_signal_blend.py` (family: portfolio-learning, track: scout, trial #67)
+- Hypothesis: Averaging the cross-sectional z-scores of four family-lead signals — Amihud illiquidity, same-calendar-month seasonality, sector-group 21-day lead-lag and 21-day name-level reversal, equal-weighted because the parameter-counting screen forbids estimating leg weights — and constructing ONE long-only hold-30/enter-20 equal-weight monthly book from the averaged score scores a validation Sharpe above the best single leg's 0.747, because the aggregation bound that closed this family was measured on the legs' realised return series (rho 0.68-0.98, dominated by a common long-only market component) while the quantity governing an integrated build is the cross-sectional correlation of the signals themselves, measured here at a mean |rho| of 0.054 on train and 0.070 on validation.
+- Verdict: FAMILY_LEAD — first recorded result in family 'portfolio-learning': validation sharpe 0.635, DSR 0.6716 (67 trials, 19 effective after clustering at rho 0.95)
+- Train: sharpe +0.64, ann_ret +7.1%, maxDD -44.3%, turnover 3.9x
+- Validation: sharpe +0.64, ann_ret +10.7%, maxDD -33.8%, turnover 14.7x
+- Deflated Sharpe prob: 0.6716 (bar from 67 trials, 19 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **Falsified against its pre-registered bar, and the falsification is the useful
+  kind: `SUMMARY.md` #60's premise was confirmed and its conclusion still failed, for a
+  measured reason that inverts the premise.** The premise checked out exactly — the
+  correlation the family's closure rested on *was* the wrong statistic. Measured
+  holdings-only on identical instruments and month-ends (no returns scored), the four legs'
+  cross-sectional signal ranks correlate at a mean |rho| of **0.054 on train and 0.070 on
+  validation**, against the **0.68-0.98** the 2026-08-30 closure measured on their realised
+  return series. That gap is the common long-only market component, exactly as #60 said, and
+  it is an order of magnitude. The only material pair is group-lead against 21-day reversal
+  at **-0.448**, which is mechanical (same 21-day window, opposite signs, group level against
+  name level). So the legs genuinely do disagree in the cross-section, the aggregation bound
+  was not binding on the statistic that governs an integrated build, and the trial was worth
+  running. It scored **0.635 against a pre-registered 0.747** — below every one of its four
+  legs (0.681 illiq, 0.747 seasonal, 0.688 group-lead, 0.701 reversal).
+- Second lesson, and it is the transferable one: **orthogonality is not free breadth on this
+  universe, it is tail dilution — and the same near-zero correlation that makes integration
+  worth testing is what makes it lose.** A free post-hoc diagnostic (holdings-only, no returns
+  scored) says where the book went. Averaging `n` near-orthogonal z-scores shrinks the
+  composite's cross-sectional dispersion by ~`1/sqrt(n)`, so the integrated top-20 sits at mean
+  z **+0.491 (train) / +0.685 (validation)** on its own score against each leg's own top-20
+  sitting at **+1.156 / +1.480** on its leg's score — ratios of **0.42 and 0.46** against the
+  0.50 that exact orthogonality predicts. The book buys a tail less than half as deep as any
+  leg's. That is fatal *here specifically*, because this repo has already measured that these
+  signals' edge lives only in the extreme tail: `pt_raw_reversal_control` scores 0.701 on a
+  21-day reversal whose cross-sectional IC is a **null** (+0.0102, t = +0.97), and the
+  2026-08-30 entry states the reason — "a null IC and a 0.70-Sharpe book coexist because the
+  book buys the extreme tail, not the quintile mean". Integration trades tail depth for
+  agreement breadth, and on signals with no quintile-mean content there is nothing to buy with
+  the proceeds. **The general form: when a family's legs pay only in their extreme tails,
+  score-averaging is strictly worse than leg selection, and the more orthogonal the legs the
+  worse it gets.** This is the same tail-versus-quintile boundary the 2026-08-30 calibration
+  entry records, arriving from a third direction.
+- Third: **#60's stated rationale for the integrated build is not what the book does.** The
+  note argues integration buys names "jointly attractive on several legs but top-decile on
+  none", unreachable by any capital mix of the legs' books. Measured: **97.6% (train) / 93.2%
+  (validation)** of the integrated top-20 sits in *some* leg's own top-20, so the genuinely
+  unreachable names are **2.4% / 6.8%** of the book, and the mean number of endorsing legs is
+  **1.93 / 1.50** of four. The integrated book is overwhelmingly a re-weighted *mixture* of the
+  legs' own picks — which is the object the 2026-08-30 arithmetic already bounded — plus a
+  small tail-diluted fringe. So the portfolio-mix bound was closer to governing this
+  construction than #60 allowed, and `portfolio-learning` now closes a **second** time, on the
+  statistic #60 correctly said the first closure should have used.
+- Pre-registration record, per the 2026-08-30 standing instruction that every scout record its
+  train Sharpe as a prediction of its validation Sharpe: predicted **0.636**, observed
+  **0.635**. The closest agreement of any reading in the series, and it is the fourth data
+  point in the train/validation-disagreement sample — this one *agreeing*, not inverting.
+
