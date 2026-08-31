@@ -4988,3 +4988,73 @@ recover. Deleting remote branches is outside this agent's remit; a human may pru
   **0.635**. The closest agreement of any reading in the series, and it is the fourth data
   point in the train/validation-disagreement sample — this one *agreeing*, not inverting.
 
+## 2026-08-31T23:18:36+00:00 — pl_maxleg_signal_blend — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/pl_maxleg_signal_blend.py` (family: portfolio-learning, track: scout, trial #68)
+- Hypothesis: Scoring each name by the MAXIMUM of the same four family-lead z-scores that trial #67 averaged — Amihud illiquidity, same-calendar-month seasonality, sector-group 21-day lead-lag and 21-day reversal — and otherwise leaving that candidate bit-identical (same legs, same joint-coverage rule, same hold-30/enter-20 equal-weight monthly book, turnover matched holdings-only at 13.7x against 13.9x on train) scores a validation Sharpe above its 0.635, because #67's deficit was tail dilution — averaging four near-orthogonal z-scores cut the held book's own-score depth to +0.491 against each leg's +1.096, and the max operator restores it to +1.948 — and these signals are measured to pay only in their extreme tails.
+- Verdict: FAMILY_LEAD — best result yet in family 'portfolio-learning': validation sharpe 1.008 > 0.635 (DSR 0.9112, 68 trials, 20 effective after clustering at rho 0.95)
+- Train: sharpe +0.62, ann_ret +7.2%, maxDD -47.5%, turnover 3.9x
+- Validation: sharpe +1.01, ann_ret +17.6%, maxDD -27.6%, turnover 14.1x
+- Deflated Sharpe prob: 0.9112 (bar from 68 trials, 20 effective)
+- Scout track: family best before this trial +0.64; the champion was not compared and the holdout was not read
+- Lesson: **Confirmed decisively, and it is the best non-`price-trend` result the lab has
+  ever recorded: validation 1.008 against a pre-registered 0.635, +0.373 on a designed pair
+  in which one operator changed and turnover was matched by prior measurement (14.1x
+  against #67's 14.7x observed, 13.7x against 13.9x predicted holdings-only).** Of the two
+  competing mechanisms stated in advance, (a) *tail depth pays* is confirmed and (b) *the
+  max operator selects on noise* is refuted at four legs. The premise carried the size as
+  well as the sign: held-book own-score depth +0.491 → +1.948 on train and +0.685 → +2.210
+  on validation, ~4x, and the Sharpe moved with it. The book also beats **every one of its
+  four legs** (0.681 / 0.747 / 0.688 / 0.701) by a margin far outside the family's
+  resolution floor, which the mean operator did not come close to doing.
+- Second lesson, and it is the transferable one: **the aggregation bound this repo has
+  rediscovered four times — "the gain is bounded by the components' disagreement" — is a
+  statement about *averaging* operators, not about aggregation, and the lab had been
+  reading it as the latter.** Every prior aggregation result here (cross-specification
+  model averaging, the five vintage axes, the 2026-08-30 ensemble arithmetic, and #67)
+  used a mean, and a mean of `n` near-orthogonal scores is bounded *between* its components
+  by construction while shrinking cross-sectional dispersion by ~`1/sqrt(n)`. A max is
+  bounded *above* them. On signals whose edge lives only in the extreme tail — which this
+  repo has measured directly, a null 21-day reversal IC (+0.0102, t = +0.97) coexisting
+  with a 0.701-Sharpe book — that difference is the whole result. **Orthogonality is not
+  free breadth under a mean and it is exactly what makes a max work**: the more independent
+  the legs, the more often at least one of them is genuinely extreme. The two trials price
+  the same orthogonality at -0.112 under a mean and +0.261 under a max, against the best
+  single leg.
+- Third, and it is why the reading is not simply "one leg carried it": the argmax share of
+  held names is **0.206 / 0.240 / 0.331 / 0.224 on train** and **0.178 / 0.294 / 0.270 /
+  0.258 on validation** across illiquidity / seasonal / group-lead / reversal, measured
+  holdings-only before the run. No leg supplies even a third of the book, and the book's
+  top-20 overlaps #67's by only 0.614 / 0.469, so the two operators really do select
+  different names from identical inputs.
+- Fourth, recorded because the repo is collecting these: **the train-Sharpe pre-registration
+  missed badly and in the anti-correlated direction.** Predicted 0.62 (train), observed
+  **1.008** — a +0.39 miss, the largest in the series, and it is the fifth data point in the
+  2026-08-30 train/validation sample. #67 agreed almost exactly (0.636 → 0.635) and #68
+  inverts hard, on two books that differ by one operator. Whatever that sample is measuring,
+  it is not stable across an operator change; n is now 13 and the sign is still unresolved.
+  Note also this book's train profile is poor on its own terms (Sharpe 0.62, maxDD -47.5%,
+  outside the validation gate's -45%), which is the standing caveat on every reversal- and
+  illiquidity-flavoured book here.
+- **Blend arithmetic, run free per the standing rule and reported rather than acted on.**
+  Priced on stored validation return series (no re-run, no trial, no holdout): this leg sits
+  at **rho 0.7316** to the champion with vol ratio **k 0.778**, so `learnings.md`'s solved
+  break-even at 20% weight needs **0.833** and the leg supplies **1.008**. It is the **first
+  leg in this repo's history to clear its own break-even bar**, and the first with a
+  positive blend row at every weight:
+
+      w      blend Sharpe   delta    rho(blend, champ)   1 SE    t
+      0.10      1.133       +0.014        0.9985        0.022   +0.61
+      0.20      1.144       +0.024        0.9933        0.046   +0.53
+      0.30      1.151       +0.032        0.9837        0.073   +0.43
+      0.40      1.153       +0.034        0.9687        0.101   +0.33
+
+  **No challenge candidate was written, and the reason is this file's own screen rather than
+  caution.** At the blend's rho of 0.993 the required-gain table demands **+0.076 to +0.138**
+  and the point estimate is **+0.024**, i.e. ~0.5 paired SE — inside the resolution floor,
+  exactly the unresolvable margin the ⚠ standing concern is about. A challenge would have
+  beaten the champion on validation (1.144 > 1.120), possibly cleared DSR, reached the
+  holdout gate, spent the one unspent split and ended the session — on a candidate whose own
+  arithmetic says the data cannot resolve it. The productive move is to raise **the leg's own
+  Sharpe** toward the 1.34-1.42 that makes a blend resolvable, not to cash a 0.5-SE win.
+  That is the next session's top item.
+
