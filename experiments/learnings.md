@@ -1622,3 +1622,96 @@ across experiments; prune entries that later evidence contradicts.
   normalisation, which answers the Lou–Shu question `SUMMARY.md` flags as its natural
   follow-up without the paper. **A null that passes its own identifying test is worth more
   than one that fails it: it rules out the mechanism, not the measurement.**
+
+- **[Measured 2026-08-31, nightly] The aggregation bound this file states five times — "the
+  gain is bounded by the components' disagreement" — is a property of *averaging* operators,
+  not of aggregation, and reading it as the latter cost the lab a family.** Every prior
+  aggregation result here used a mean: cross-specification model averaging, the five vintage
+  axes, the 2026-08-30 ensemble arithmetic that closed `portfolio-learning`, and #67. A mean
+  of `n` scores is bounded between its components by construction; a **max** is not. Over one
+  fixed set of four family-lead signals, with the book construction, universe, warmup and
+  turnover held bit-identical, the operator is worth more than any mechanism the lab has found
+  outside the incumbent's family: mean 0.635 (#67), max-of-rank 0.877 (#69), **max-of-z 1.008
+  (#68)**, against the best single leg's 0.747 and legs at 0.681 / 0.747 / 0.688 / 0.701.
+  #68 is the **best non-`price-trend` result ever recorded here** (previous best 0.820), at
+  validation maxDD **-27.6%**, better than the champion's -27.8%.
+  **The mechanism, and it is now closed-form.** These signals pay only in their extreme tails —
+  a null 21-day reversal IC (+0.0102, t = +0.97) coexists with a 0.701-Sharpe book — and
+  averaging shrinks the tail the book buys. For `n` equicorrelated legs the mean operator's
+  tail depth relative to a single leg's own is **`sqrt((1 + (n-1)*rho) / n)`**, verified on two
+  leg sets an order of magnitude apart in correlation:
+
+      leg set                    mean pairwise rho   predicted   observed
+      four mechanisms (train)          0.054           0.539       0.448
+      four mechanisms (validation)     0.070           0.550       0.464
+      four horizons   (train)          0.646           0.857       0.873
+      four horizons   (validation)     0.669           0.867       0.870
+
+  **Use it as a free pre-trial screen for any aggregation proposal in any family**: state the
+  leg correlation, read off the mean operator's tail-depth penalty, and propose a max-type
+  operator only when the penalty is large. Near-exact at high correlation; it over-predicts by
+  ~0.09 at low correlation, where rank correlation and a top-20 tail mean both depart from its
+  linear-correlation assumption — a guide, not a law.
+  **Corollary that inverts a standing reading: orthogonality is not free breadth under a mean,
+  and it is exactly what makes a max work.** The same |rho| ~ 0.05 across four legs is priced at
+  **-0.112** by the mean and **+0.261** by the max, both against the best single leg. It also
+  closes the `SUMMARY.md` #60 question properly: the family's 2026-08-30 closure *was* measured
+  on a confounded statistic (return-series rho 0.68-0.98 against cross-sectional signal rho
+  0.054/0.070, the gap being the common long-only market component), and correcting it reopens
+  the family — but not for the reason #60 gave. #60's own rationale, that integration buys names
+  "jointly attractive but top-decile on none", is false here: **97.6% / 93.2%** of #67's picks
+  sit in some leg's own top-20.
+
+- **[Measured 2026-08-31, nightly] Report a mechanism's effect over the arbitrary implementation
+  choices it contains, not at the one that scored best — and run the alternative *before*
+  quoting the number.** #68's max-of-z at 1.008 and #69's max-of-rank at 0.877 differ only in a
+  scoring transform with no principled basis. Measured: `rho` = **0.9690**, closed-form paired
+  SE **0.100**, gap 0.131 at **t = +1.31** — **not distinguishable**, so nothing licenses
+  preferring either. What survives is the mean/max distinction (max beats mean by +0.373 and
+  **+0.242**, the latter at t = +1.53; both max books beat all four legs); what does not survive
+  is the *level*. This matters because the level is what a blend is priced on: at rho 0.73 and
+  k 0.78 the solved break-even at 20% weight is 0.833, so **this is the first leg in this repo's
+  history to clear its own break-even bar on either reading** — and the 20% blend delta is
+  **+0.024 (t = +0.53)** at 1.008 and **+0.003 (t = +0.06)** at 0.877. The leg's entire blend
+  value swings from "the first positive row ever recorded" to zero across a coin flip.
+  **Quote 0.88-1.01 as a range, never 1.008 as a point.** This repo has three recorded cases of
+  a headline turning out to be a property of an incidental implementation detail — the `dropna`
+  trim cohort (four trials), the forward-fill weight-drift claim (two trials), the
+  `MonthEnd`/`MonthBegin` alignment — every one caught *after* being built on. This is the first
+  caught before, and it cost one trial.
+
+- **[2026-08-31, nightly] A session declined a challenge it could have won, and the arithmetic
+  for declining is the same table that has been in this file since 2026-08-25.** The new leg
+  blends into the seat at 1.144 against the champion's 1.120 at 20% weight — it would have
+  beaten the champion on validation, plausibly cleared DSR, **reached the holdout gate, spent
+  the one unspent split and ended the session**. At the blend's rho of 0.993 the required-gain
+  table demands **+0.076 to +0.138** and the point estimate is **+0.003 to +0.024**, i.e. ~0.5
+  paired SE. That is exactly the unresolvable margin the ⚠ standing concern is about, and
+  promoting on it would have been the sixth instance of the gate breaking a tie on the split
+  with no resolving power. **The productive move on a promising leg is to raise the leg's own
+  Sharpe toward the 1.34-1.42 that makes a blend resolvable, not to cash a half-SE win into a
+  holdout look.** Recorded as the first time this file's own required-gain table has bound a
+  session away from a candidate that would have *promoted*, rather than one that would have
+  failed.
+
+- **[Measured 2026-08-31, nightly] Three families closed on free screens, one of them the last
+  named `program.md` sub-mechanism with no coverage.** *(a)* **`liquidity-volume`**:
+  `SUMMARY.md` #58's constant-Amihud `A_C = mean_d(1/dollar_volume)` was argued to be a
+  different cross-sectional object from the volume functionals already screened, because it is a
+  mean of reciprocals rather than a function of the mean. On train, **spearman(log `A_C`, -log
+  mean dollar volume) = +0.993** — there is no Jensen gap on this universe, and by the note's own
+  pre-registered rule the family closes properly, `A_C` inheriting log ADV's measured null. The
+  source's corr(`A_C`, `ILLIQ`) ~ 0.90 replicates (0.933). *(b)* **ETF-versus-constituent
+  lead-lag**, reachable (9 SPDR sector ETFs + VNQ; 8 groups with >= 4 constituents) and dead: the
+  ETF's residual of the existing member-median control is a null at every horizon pair
+  (IC -0.0095 / -0.0086 / +0.0057), so the ETF is not a new leader; #59's negative-move asymmetry
+  has the right sign but t = 1.43, **fails #52's screen (iii)** (flat from one month to three),
+  and sits on the leg long-only cannot reach, while the reachable side is a null at t = +0.07.
+  *(c)* **`range-variance`**, declined a third session and now with one cause for all eight
+  screened mechanisms: the seven previously screened all sort on a cross-sectional **level**, and
+  the level *is* the survivorship artifact (raw GK level IC +0.0766, t = +5.75; the +19.4%/yr
+  high-minus-low vol spread on train). A within-name de-levelling — 21-day range vol against the
+  name's own 252-day baseline — is a clean null (IC +0.0087 / +0.0132, t = +1.00 / +1.56).
+  **Remove the level and nothing is left.** `range-variance` is now the only family with zero
+  recorded trials, and no session can honestly propose a candidate there on current evidence —
+  flagged for the human against `program.md`'s cold-family allocation rule.

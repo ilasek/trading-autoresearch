@@ -5105,3 +5105,209 @@ recover. Deleting remote branches is outside this agent's remit; a human may pru
   the same anti-correlated direction as #68's +0.39. Two of tonight's three scouts under-predict
   from train and one was near-exact; the 2026-08-30 sample is now n = 14 and still unresolved.
 
+
+## Session summary — 2026-08-31 (nightly)
+
+**Budget: 3 of 8 experiments spent. Five were declined, each on a free measurement, and two
+of those declines answer questions a trial could not have answered better.** Allocation:
+`portfolio-learning` 3, `price-trend` 0 (cap 2, unused). One family with no recorded trial at
+all was opened (`portfolio-learning`), against a requirement of one. Every candidate ran on
+the **scout** track, so the champion was untouched and **the holdout was not read**.
+
+    #67  pl_integrated_signal_blend   portfolio-learning  FAMILY_LEAD  val 0.635  rho 0.667  turn 14.7x
+    #68  pl_maxleg_signal_blend       portfolio-learning  FAMILY_LEAD  val 1.008  rho 0.732  turn 14.1x
+    #69  pl_maxleg_rank_control       portfolio-learning  SCOUT        val 0.877  rho 0.727  turn 13.3x
+
+### Best finding: the aggregation bound this repo has rediscovered five times is a statement about *averaging*, not about aggregation
+
+Every prior aggregation result here used a **mean** — cross-specification model averaging,
+the five vintage axes, the 2026-08-30 ensemble arithmetic that closed `portfolio-learning`,
+and #67. A mean of `n` scores is bounded between its components by construction. A **max** is
+not. On this universe that difference is worth more than any mechanism the lab has found
+outside the incumbent's family:
+
+    operator over the same four legs        validation Sharpe
+    mean of z-scores          (#67)               0.635
+    max of percentile ranks   (#69)               0.877
+    max of z-scores           (#68)               1.008
+    best single leg (seasonal)                    0.747
+    all four legs                        0.681 / 0.747 / 0.688 / 0.701
+
+**`pl_maxleg_signal_blend` at 1.008 is the best non-`price-trend` result the lab has recorded**
+(previous best: `str_reversal_monthly` 0.820), at validation maxDD **-27.6%** — better than the
+champion's -27.8% — on 14.1x turnover and rho 0.732 to the seat.
+
+**The mechanism, measured rather than argued, and now in closed form.** #67 lost because
+averaging `n` near-orthogonal z-scores shrinks the composite's cross-sectional dispersion, so
+the book buys a shallower tail of signals this repo has already measured to pay *only* in
+their extreme tails (a null 21-day reversal IC, +0.0102 at t = +0.97, coexisting with a
+0.701-Sharpe book). For `n` equicorrelated legs the mean operator's tail depth relative to a
+single leg's own is `sqrt((1 + (n-1)*rho) / n)`, and that predicts both leg sets measured
+tonight:
+
+    leg set                     mean pairwise rho   predicted   observed
+    four mechanisms  (train)          0.054           0.539       0.448
+    four mechanisms  (validation)     0.070           0.550       0.464
+    four horizons    (train)          0.646           0.857       0.873
+    four horizons    (validation)     0.669           0.867       0.870
+
+**This is a free pre-trial screen for any future aggregation proposal**: compute the mean
+pairwise leg correlation, read off the mean operator's tail-depth penalty, and propose a
+max-type operator only when the penalty is large. It is near-exact at high correlation and
+over-predicts by ~0.09 at low correlation, where rank correlation and the top-20 tail mean
+both depart from the formula's linear-correlation assumption — quote it as a guide, not a law.
+
+**Orthogonality is not free breadth under a mean, and it is exactly what makes a max work.**
+The same |rho| ~ 0.05 across the four legs is priced at **-0.112** by the mean operator and
+**+0.261** by the max, both against the best single leg. That inverts the reading the lab has
+carried since the vintage axes closed.
+
+### The self-correction, and it is why no challenge candidate was written
+
+#69 was run specifically to check that #68's headline was not an artifact of the z-transform,
+which a `max` rewards whenever one leg has a fatter right tail. Verdict: **split**.
+
+- **Survives:** both max books beat all four legs and both beat the mean twin (+0.373 and
+  **+0.242**, the latter at rho 0.9228, SE 0.158, **t = +1.53**). Same sign, two independent
+  transforms, one common control.
+- **Does not survive:** the *level*. `rho`(max-of-z, max-of-rank) = **0.9690**, paired SE
+  **0.100**, gap 0.131 at **t = +1.31** — the two operators are **not distinguishable**, so
+  nothing licenses preferring 1.008 to 0.877.
+
+**That correction is decisive for the blend.** Priced free on stored validation series, this
+leg sits at rho 0.73 and k 0.78 to the champion, so `learnings.md`'s solved break-even at 20%
+weight is **0.833**:
+
+    leg reading            break-even   blend delta at 10 / 20 / 30%      t at 20%
+    #68 max-of-z  1.008      cleared     +0.014 / +0.024 / +0.032          +0.53
+    #69 max-of-rank 0.877    cleared     +0.003 / +0.003 / -0.002          +0.06
+
+It is the **first leg in this repo's history to clear its own break-even bar**, on either
+reading. But the blend's value swings from "the first positive row ever recorded" to *zero*
+across a coin-flip between two transforms the data cannot separate, and at the blend's rho of
+0.993 the required-gain table demands **+0.076 to +0.138** against a point estimate of
+**+0.003 to +0.024**. A challenge candidate would have beaten the champion on validation
+(1.144 > 1.120), possibly cleared DSR, **reached the holdout gate, spent the one unspent split
+and ended the session** — on a margin its own arithmetic says is unresolvable, which is
+precisely the failure mode of this file's ⚠ standing concern. **Not written. The productive
+move is to raise the leg's own Sharpe toward the 1.34-1.42 that makes a blend resolvable.**
+
+**General lesson, new to this file: report a mechanism's effect over the arbitrary
+implementation choices it contains, not at the one that scored best.** This repo has repeatedly
+discovered that a headline was a property of an incidental detail — the `dropna` trim cohort
+(four trials), the forward-fill weight-drift claim (two trials), the `MonthEnd`/`MonthBegin`
+alignment — always *after* building on it. Tonight the check cost one trial and ran *first*,
+converting a headline into a range.
+
+### Five trials declined on free evidence. All train-split, holdings-only or scalar-only; no returns scored beyond the three trials above, no holdout touched.
+
+1. **`liquidity-volume` — `SUMMARY.md` #58's constant-Amihud measure, closed on the note's own
+   pre-registered decision rule.** #58 argued `A_C = mean_d(1/dollar_volume)` is "not any volume
+   functional the lab has tested" because it is the mean of a **reciprocal** where the 2026-08-29
+   and 2026-08-30 screens used functions of the **mean**, and that by Jensen the two orderings
+   differ. Measured on train (336 month-ends, mean 93.7 names): **spearman(log A_C, -log mean
+   dollar volume) = +0.993**. There is no Jensen gap on this universe. The note's own rule —
+   "near 1.0 and the family closes properly" — therefore applies, and since log ADV is a measured
+   null here (-0.32%/yr, IC +0.0010, t = +0.11), `A_C` inherits it. Two by-products: the source's
+   reported corr(`A_C`, `ILLIQ`) ~ 0.90 **replicates** (0.933 here), and `ILLIQ` vs -log ADV is
+   0.925 — so all three measures are 0.93-0.99 rank-identical while only `ILLIQ` predicts, which
+   sharpens the standing "which end of a near-identical ranking pays" reading rather than
+   overturning it.
+2. **`lead-lag-spillover` — the ETF-versus-constituent sub-mechanism, the one `program.md` names
+   with no coverage at all, opened and closed in one screen.** `SUMMARY.md` #59's precondition
+   check answers **yes**: the universe carries 9 SPDR sector ETFs (XLE XLF XLK XLV XLI XLP XLY
+   XLU XLB) plus VNQ, so an industry taxonomy *is* reachable from prices alone, and 8 sector
+   groups have an ETF leader with >= 4 constituents. Three screens on train, all negative:
+
+       lookback -> forward     ETF IC        member-median    ETF resid of median   leader DOWN      leader UP
+       21d -> 21d            -0.0047 (-0.31)  -0.0036 (-0.23)   -0.0095 (-0.79)    +0.0336 (+1.43)  +0.0015 (+0.07)
+       21d -> 63d            +0.0029 (+0.19)  +0.0155 (+0.99)   -0.0086 (-0.71)    +0.0306 (+1.39)  -0.0077 (-0.37)
+       63d -> 21d            +0.0136 (+0.89)  +0.0190 (+1.21)   +0.0057 (+0.47)    +0.0211 (+0.76)  +0.0079 (+0.43)
+
+   **The ETF adds nothing over the existing member-median control** (residual IC a null at all
+   three horizon pairs), so substituting the sector ETF for the group median is not a new signal.
+   #59's asymmetry has the right *sign* — the effect is in the leader's **down** moves, as Hou
+   predicts — but at t = 1.43 it is not a signal, it **fails `SUMMARY.md` #52's screen (iii)**
+   (essentially flat from one month to three, +0.0336 -> +0.0306, the signature #52 assigns to a
+   slow-moving risk proxy rather than information diffusion), and it sits on the leg a long-only
+   book cannot reach, while the long-only-reachable side is a dead null at **t = +0.07**. Per the
+   standing lesson *"treat a failed pre-registered screen as an answer, not a hurdle to argue
+   past"*, no trial. This closes the last named `program.md` sub-mechanism.
+3. **`range-variance` — declined a third consecutive session, and this time with a common cause
+   rather than another null.** The seven mechanisms screened over the previous two sessions all
+   sort on a cross-sectional **level**. The unscreened object is a within-name normalisation —
+   each name's 21-day range vol against its own 252-day baseline — which cancels the level the way
+   `SUMMARY.md` #53's relative volume cancelled size. Measured on train (401 month-ends):
+
+       signal                    IC @21d            IC @63d          low-quintile minus universe @63d
+       rel GK (21/252)      +0.0087 (t=+1.00)   +0.0132 (t=+1.56)          -1.54%/yr (t=-1.56)
+       rel PK (21/252)      +0.0042 (t=+0.49)   +0.0115 (t=+1.34)          -0.41%/yr (t=-0.42)
+       raw GK level         +0.0413 (t=+3.08)   +0.0766 (t=+5.75)          -7.18%/yr (t=-6.50)
+
+   **The only live content in the range panel on this universe is the volatility *level*, and
+   the level is the survivorship artifact the lab has already identified** (the +19.4%/yr
+   high-minus-low vol spread on train). De-level it and nothing remains — and the de-levelling
+   is only partial (spearman +0.309 against the raw level), so the null is if anything
+   understated. Eight screened mechanisms now, with one explanation for all of them.
+4. **The champion+leg challenge blend** — declined on this file's own required-gain table; see
+   the self-correction section above.
+5. **A mean-vs-max operator pair on the champion's own four horizon legs**, which would have
+   tested the generality of tonight's finding in `price-trend` (both slots unused). **The free
+   screen answered it instead.** Those legs rank-correlate **+0.646 / +0.669**, matching the
+   0.66 already on record and ~10x tonight's legs, and the closed form above says the mean
+   operator loses only **13%** of tail depth there against **55%** here — so the max's headroom
+   is small by construction. Against that sits a *measured* counter-channel: trial #53 priced the
+   cross-leg agreement premium at **-0.043**, and a max destroys that channel entirely. Predicted
+   net is inside `price-trend`'s 0.03-0.14 resolution floor, and two operators on the same legs
+   would correlate ~0.97 (SE ~0.10), i.e. larger than the effect. Per the standing rule, a
+   pre-registered effect inside the floor buys an unresolvable point estimate while permanently
+   raising the DSR bar. Not spent.
+
+### Protocol and allocation notes, stated plainly
+
+- **`range-variance` remains the one family with zero recorded trials**, declined for a third
+  session on measured evidence. `program.md`'s allocation rule asks for "at least 1 in a family
+  with no trials at all, while any such family remains", and this session satisfied it by
+  opening `portfolio-learning`. Spending a trial in `range-variance` purely to satisfy a
+  counting rule would knowingly raise the DSR bar for every future candidate on a mechanism
+  eight free screens have measured as absent. **Flagged for the human**: either the rule is
+  satisfied by opening one cold family per session, or `range-variance` needs an explicit
+  human decision, because no session can honestly propose a candidate there on current evidence.
+- **Three trials in one family** is more concentration than the program's spirit invites. They
+  are one coherent line — a hypothesis, its mechanism, and the control that qualified it — and
+  the alternative was weakly-motivated breadth in families that were all declined tonight on
+  free evidence. Recorded so the pattern is visible rather than buried.
+- **The train-Sharpe-as-prediction sample** (2026-08-30's standing instruction) now has three
+  more points, and they do not agree with each other: #67 predicted 0.636 and got **0.635**
+  (near-exact), #68 predicted 0.62 and got **1.008** (+0.39), #69 predicted 0.62 and got
+  **0.877** (+0.26). Two large under-predictions and one near-exact hit, on three books that
+  differ only by an aggregation operator. n = 14; the sign remains unresolved, and whatever the
+  relationship is, it is not stable across an operator change.
+
+### Next ideas, in order, with provenance
+
+1. **Raise the max-integration leg's own Sharpe — this is the session's one live build.** It is
+   the first leg ever to clear break-even against the seat, and the *only* thing standing between
+   it and a resolvable challenge blend is its own level: the solved table needs 1.34-1.42 and it
+   supplies 0.88-1.01. Concrete unexplored levers that do not touch the operator: the leg set
+   (four is an arbitrary count; the exclusion rule deliberately dropped two recorded leads), the
+   book construction (all three books inherited core-20/band-30 equal weight from the scouts, and
+   nothing has tested magnitude weighting or a wider band on a max-integrated score), and the
+   turnover (14x is high for a book whose legs run 1.0x to 17.6x). Any of these is a mechanism,
+   not a knob, because none has ever been measured on this construction.
+2. **Apply the tail-depth formula as a standing pre-trial screen.** `sqrt((1+(n-1)rho)/n)` costs
+   nothing, needs only a guessed leg correlation, and now has four calibration points across two
+   very different leg sets. Any future aggregation proposal — in any family — should state its
+   leg correlation and read off the mean operator's penalty before a file is written.
+3. **`SUMMARY.md` #49 — the execution overlay** (use a signal to *re-time* trades the incumbent
+   was already going to make, adding no turnover). Carried forward unspent for a third session;
+   it remains the only recorded proposal that attacks the turnover axis directly instead of
+   paying it, and it is now more interesting because tonight's leg runs 14x.
+4. **Not recommended without new evidence:** `range-variance` (eight screened mechanisms, one
+   identified common cause), `statistical-arbitrage` (closed 2026-08-30), the ETF-constituent
+   lead-lag (closed tonight on three screens), and `A_C` in `liquidity-volume` (closed tonight
+   on the source's own decision rule).
+
+**No engine issues encountered.** Tests green (33 passed) before the first trial. Integrity
+check at session start: on `main`, level with `origin/main`, no unmerged remote branches — the
+2026-08-30 split-history problem recorded above did not recur.
