@@ -5058,3 +5058,50 @@ recover. Deleting remote branches is outside this agent's remit; a human may pru
   Sharpe** toward the 1.34-1.42 that makes a blend resolvable, not to cash a 0.5-SE win.
   That is the next session's top item.
 
+## 2026-08-31T23:23:00+00:00 — pl_maxleg_rank_control — **SCOUT**
+- Candidate: `strategies/candidates/pl_maxleg_rank_control.py` (family: portfolio-learning, track: scout, trial #69)
+- Hypothesis: Taking the maximum of the four family-lead signals' cross-sectional PERCENTILE RANKS rather than of their z-scores — everything else bit-identical to trial #68, whose validation Sharpe was 1.008 — lands within 0.10 of that number, i.e. #68's result is a conviction effect rather than an artifact of the z-transform favouring whichever leg has the fattest right tail; ranks are uniform by construction and equalise the per-leg argmax share from #68's 0.18-0.30 to a near-exact quarter each, while re-drawing only 16-19% of the held book.
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.877 <= the family's best 1.008 (DSR 0.8506, 69 trials, 20 effective after clustering at rho 0.95)
+- Train: sharpe +0.62, ann_ret +7.1%, maxDD -46.2%, turnover 3.9x
+- Validation: sharpe +0.88, ann_ret +15.0%, maxDD -28.8%, turnover 13.3x
+- Deflated Sharpe prob: 0.8506 (bar from 69 trials, 20 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: **Falsified by the letter of its pre-registration (0.877 against a stated floor of
+  0.90) and the honest reading is a split verdict: the max operator's *qualitative* finding
+  survives the transform, its *level* does not, and the level is what the next session was
+  about to build on.** Measured on the stored series rather than guessed: `rho`(max-of-z,
+  max-of-rank) = **0.9690**, so the closed-form paired SE is **0.100** and the 0.131 gap runs
+  at **t = +1.31** — the two operators are **not distinguishable**, exactly as this file's
+  boundary said in advance. So nothing licenses preferring z to rank; they are two arbitrary
+  choices of scoring transform whose difference the data cannot resolve.
+- **What survives, and it is the session's durable claim.** Both max books beat all four of
+  their legs (0.681 / 0.747 / 0.688 / 0.701) and both beat the mean-operator twin: max-of-z
+  by +0.373 and max-of-rank by **+0.242 (rho 0.9228, SE 0.158, t = +1.53)**. Neither margin
+  clears |t| = 2, so the operator claim is *suggestive rather than established* — but it is
+  the same sign, on two independent transforms, against a common control, and it is far
+  larger than anything the averaging axes ever produced. **The generalisable statement is
+  the mean/max distinction, not the number 1.008.**
+- **The correction that matters most, and it is to last entry's own blend arithmetic.** #68's
+  1.008 clears the solved break-even bar (0.833 at rho 0.73, k 0.78) by 0.175 and prices a
+  20% blend at **+0.024**. The rank twin sits at rho 0.7270, k 0.782 — essentially identical
+  geometry — and 0.877, which clears break-even by only 0.044 and prices the same blends at
+  **+0.003 / +0.003 / -0.002 at 10 / 20 / 30% (t = +0.15 / +0.06 / -0.03)**, i.e. *nothing*.
+  So the leg's entire blend value swings from "the first positive row in repo history" to
+  "zero" across a coin-flip between two transforms the data cannot separate. **#68's 1.008
+  must not be quoted as this leg's Sharpe for blend arithmetic; the honest quantity is a
+  range, 0.88-1.01, over which the blend delta runs 0.00-0.02 — inside the resolution floor
+  at every point in the range.** Last night's decision not to spend a challenge trial was
+  right for a weaker reason than the one now available.
+- **General lesson, and it is a new one for this file: report a mechanism's effect over the
+  arbitrary implementation choices it contains, not at the one that scored best.** This repo
+  has a long record of headline numbers that later turned out to be properties of an
+  incidental implementation detail — the `dropna` trim cohort (four trials), the forward-fill
+  weight-drift claim (two trials), the `MonthEnd`/`MonthBegin` alignment. Each was caught
+  *after* being built on. Here the check was run *before*, at a cost of one trial, and it
+  converted a headline into a range. **When a construction contains a choice with no
+  principled basis — a scoring transform, a tie-break, a normalisation — run the alternative
+  before quoting the number, and quote the span.**
+- Pre-registration record: train 0.62 predicted, validation 0.877 observed — a +0.26 miss in
+  the same anti-correlated direction as #68's +0.39. Two of tonight's three scouts under-predict
+  from train and one was near-exact; the 2026-08-30 sample is now n = 14 and still unresolved.
+
