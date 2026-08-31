@@ -20,8 +20,14 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > `lead-lag-spillover`, `statistical-arbitrage` (sections 12–13, session 17). **`research/README.md`'s
 > "at least one note from a family with no coverage" rule is now spent** — no family is cold, so the
 > rule no longer binds and future sessions should be aimed by the open questions below instead.
-> The one remaining *partial* gap is `portfolio-learning`, covered only by analogy (see the open
-> question dated 2026-08-29, and the 2026-08-30 note revising its priority downward).
+>
+> **Status after session 18 (2026-08-31): the last *partial* gap is closed too.**
+> `portfolio-learning` — previously covered only by analogy through the ensemble and
+> forecast-combination material — now has its own section 14 and its own note, taking the
+> "stacking half" the 2026-08-30 open question asked for. **Every `program.md` family now has
+> dedicated coverage.** One *sub*-mechanism named in `program.md` still has none:
+> **ETF-versus-constituent lead-lag** (see the 2026-08-31 open question), and it is the standing
+> target for the next session absent a reopened family.
 >
 > Two constraints in this file's coverage assumptions are now wrong:
 >
@@ -587,6 +593,41 @@ the average (drop days with volume under 100 shares, drop the single largest dai
 year, require >200 valid days), which matters more here than in CRSP because **this repo's volume
 panel is not forward-filled and is NaN on foreign holidays**.
 
+**[Added 2026-08-31] The premium in `ILLIQ` is not in the price-impact numerator, and the volume
+functional that carries it is not one the lab has tested.** Lou–Shu (2017, *RFS*, Tier A, read in
+full; `validation_overlap: false`, `published_post_2018: false`) decompose the measure directly —
+the paper `SUMMARY.md` has flagged as the natural follow-up since 2026-08-29. Their structural
+observation is that `ILLIQ`'s denominator has ~100× cross-sectional dispersion against the
+numerator's ~2×, so a "constant" measure `A_C = mean_d(1 / dollar_volume_d)` — the numerator
+deleted — correlates 0.90 with the original, is priced about as strongly, and **the part of
+`ILLIQ` orthogonal to `A_C` is not priced at all**. Since the |return| numerator is exactly what
+makes the ratio a price-impact construct, the premium is not compensation for price impact. They
+close the "then `A_C` is a better illiquidity proxy" escape too: high-frequency price-impact and
+spread benchmarks correlate 0.74 with `ILLIQ` itself but only **0.35** with the component that
+does the pricing, and decomposing `ILLIQ` into a fitted transaction-cost part and an orthogonal
+residual leaves **the non-cost part priced and the cost part not**. Four conditioning tests then
+favour mispricing over liquidity: the volume premium is absent in January while the liquidity
+benchmarks are priced *only* in January; it is not larger after episodes of scarce aggregate
+liquidity; it is larger after high sentiment **with the difference on the short leg**; and it is
+concentrated in the three-day earnings-announcement window.
+→ `notes/2026-08-31-amihud-volume-component-decomposition.md`
+
+**This contradicts the lab's own 2026-08-30 measurement, and the escape hatch is a functional
+form.** `learnings.md` concludes that "the family's live content is `ILLIQ`'s **price-impact
+numerator** and not trading activity under any normalisation, which answers the Lou–Shu question
+without the paper." Lou–Shu answer the opposite way on a five-decade cross-section. The clause
+that does not survive is **"under any normalisation"**: the lab tested log *average* dollar volume
+and relative volume, both functions of the mean of volume, while Lou–Shu's priced object is the
+mean of the **reciprocal** — a Jensen-different statistic dominated by an instrument's *quietest*
+days rather than its typical ones. See candidate #58: one free rank correlation decides which
+reading holds, and the lab's own standard — "a null that passes its own identifying test rules out
+the mechanism, not the measurement" — is what makes the distinction worth the check. Two further
+discounts point the other way and belong in the same breath: the mispricing reading puts the
+effect in hard-to-arbitrage small illiquid names (this universe is the opposite tail, and the
+short-leg concentration is unreachable long-only), and **cross-market volume is not comparable** —
+Lou–Shu drop an entire exchange from a single-country sample over a volume-reporting convention,
+which is a strong prior that a raw volume sort across 15 regions is substantially a venue sort.
+
 ### 10. `range-variance`
 
 **This family is a measurement result, not a premium, and the measurement gain is large, analytical
@@ -740,6 +781,35 @@ execution lag also eats most of a daily effect while costing a monthly one almos
 family's two ends have opposite implementability profiles, and the middle (weekly) is where a
 candidate has to live if it lives anywhere.
 
+**[Added 2026-08-31] The grouping variable is the hypothesis, not a nuisance parameter — and the
+grouping this family's strongest source endorses is one this repo probably cannot build.** Hou
+(2007, *RFS*, Tier A on venue and 617 citations, but **recorded from its published abstract
+only** — closed access, no repository mirror, SSRN bot-challenged) argues that slow diffusion of
+**industry** information is the leading cause of the lead-lag effect, and that the big-firm →
+small-firm effect is *predominantly an intra-industry phenomenon*, robust to the rival
+determinants. Two further claims from the same abstract are directly usable: the effect is
+**driven by sluggish adjustment to negative information** (a sign asymmetry, free to add to any
+lead-lag construction), and it is stronger in **small, less competitive and neglected industries**
+— the limited-attention signature. Its microfoundation is post-earnings-announcement drift in
+small firms following big firms' earnings *within the same industry*.
+→ `notes/2026-08-31-intra-industry-lead-lag-grouping.md`
+
+**What this does to the lab's existing lead-lag results is discount them, not extend them.** If
+pooled big→small predictability is largely an unmodelled industry channel wearing a size label,
+then the lab's region→region and group→market scouts are the same manoeuvre with a *geographic*
+partition substituted for the industry one, and nothing in this source suggests geography proxies
+for industry — Hou's cross-sectional evidence attaches the effect to industry attributes
+(competitiveness, neglect) that have no regional analogue. This repo has no sector taxonomy (no
+fundamentals), so the free precondition is candidate #59's instrument-list check: if some of the
+42 ETFs are sector funds, an industry-ish grouping is buildable from prices alone; if they are all
+region and broad-market funds, **Hou's construction is unreachable here and that is a
+family-scoping fact to record rather than to work around by analogy**. Either way the lab should
+state which claim a failed lead-lag scout is evidence about — the mechanism, or the grouping.
+Note the double discount even in the good case: the effect lives in small, neglected, thinly
+covered industries, and ~145 large globally-known instruments sample the neglect-free end of every
+one of those sorts. The **ETF-versus-constituent** sub-mechanism `program.md` names remains
+uncovered after this session.
+
 ---
 
 ### 13. `statistical-arbitrage`
@@ -800,6 +870,62 @@ the apparatus. Two explicit **anti-candidates** from the same source: adding an 
 (equivalently a 60-day moving-average slope, a built-in momentum overlay) is reported to add
 essentially nothing to a residual-reversion signal; and the "bang-bang" all-or-nothing sizing that
 wins there is a turnover machine under a 15 bps/side cost model.
+
+---
+
+### 14. `portfolio-learning`
+
+**[First dedicated coverage 2026-08-31. This closes the last partial family gap — every
+`program.md` family now has a section of its own.]** The folder's ensemble and
+forecast-combination material (family 7, plus the bagging and model-averaging notes) covered this
+family by analogy; what it never covered is the distinction that turns out to be the whole
+question under a long-only constraint.
+
+**There are two ways to combine signals into one book, they are not close substitutes when the
+book is long-only, and the lab has measured exactly one of them.** Fitzgibbons–Friedman–Pomorski–
+Serban (2017, *Journal of Investing*, Tier 3 practitioner, read in full) separate **portfolio
+blending** — build one long-only portfolio per signal, then hold a weighted mix of the portfolios
+— from **signal blending / integration** — combine the signals into one per-instrument score
+first, then run portfolio construction *once*. The structural claim, which is arithmetic rather
+than empirics and is not disputed by the rebuttal below: **the mix's return is bounded between its
+components' by construction; the integrated book carries no such bound and can beat all of them.**
+The mechanism is the long-only constraint itself. An unconstrained book expresses a view long *and
+short*; a long-only book can only underweight, so most of its risk comes from the long side and
+the short half of the view is discarded. A stand-alone signal-A portfolio has no way to use "this
+name is bad on signal B" — so the mix holds names with strongly offsetting views, and gives them
+real weight. Integration recovers part of that discarded half, which shows up as a materially
+higher **transfer coefficient**: the mix pays the long-only distortion *once per signal*, the
+integrated book *once in total*. → `notes/2026-08-31-signal-blending-vs-portfolio-blending.md`
+
+**The same framework says when the choice does not matter, and that is the part the lab needs.**
+The gap goes to zero as signal correlation → +1 (at perfect correlation the two constructions hold
+the same names and are identical); goes to zero as target active risk → 0 (with a non-binding
+long-only constraint there is no distortion to avoid); and widens with the number of signals
+combined. A secondary and smaller benefit is **trade netting** — a mix can have one sleeve buying
+what another sells — which scales with sleeve count and unconstrained turnover, so it is close to
+nothing for a two-or-three-leg monthly blend and no candidate should rest its case on it.
+
+**The empirical magnitude is contested in a peer-reviewed venue and should not be imported.**
+Leippold–Rüegg (2018, *European Financial Management*, Tier 2, **abstract only** — every route to
+the full text refused an automated client) re-examine the comparison with robust
+performance-testing tools and report, verbatim: *"we demystify these findings as a statistical
+fluke… We do not find any evidence favouring the integrated approach. What we do find is that the
+integrated approach exhibits a higher sensitivity to the low-risk anomaly. However, this reduction
+in risk does not lead to an improvement in performance."* That is why this cluster is Tier B. It
+also hands the lab the right null hypothesis: averaging scores mechanically pulls a book toward
+the centre of every signal's distribution and therefore *lowers its volatility*, and this lab has
+already refuted low-vol tilts on this universe. **Any integrated candidate must be screened
+against a plain low-volatility book before its result is attributed to information combination**,
+or the lab will re-run a refuted trial under a new name.
+
+**Net effect on `learnings.md`'s 2026-08-30 closure of this family: the scope narrows, the
+arithmetic stands.** The lab priced equal-weight ensembles of the eight legs' *stored return
+series* and found them monotone decreasing against the best single member. That is precisely the
+**mix**, and this literature agrees the mix is bounded that way by construction. The integrated
+construction is untested here and is not subject to that bound. See candidate #60 for the one free
+diagnostic that decides it — and note that `SUMMARY.md`'s 2026-08-30 downgrade of the **HRP** half
+is untouched and, if anything, corroborated: HRP is a risk allocator over finished books, i.e. a
+mix, and no clustering allocator can escape a bound that binds on the whole class.
 
 ---
 
@@ -3022,6 +3148,83 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`,
     `notes/2026-08-30-pca-residual-statistical-arbitrage-long-only.md`
 
+58. **[Added 2026-08-31] The highest-value item this session produces: one free rank correlation
+    that either confirms or reopens the lab's `liquidity-volume` verdict, plus the build it gates.**
+    Lou–Shu's priced object is the **"constant" Amihud measure**
+    `A_C = mean_d( 1 / dollar_volume_d )` over the estimation month — the |return| numerator
+    deleted. It correlates 0.90 with full `ILLIQ`, is priced about as strongly, and the residual of
+    `ILLIQ` on it is not priced at all. **`A_C` is not any volume functional the lab has tested.**
+    The 2026-08-29 and 2026-08-30 screens used log *average* dollar volume and relative volume,
+    both functions of the **mean** of volume; `A_C` is the mean of the **reciprocal**, and by
+    Jensen these have different cross-sectional orderings, with the gap growing in within-month
+    volume dispersion. Economically, `A_C` ranks instruments by *how illiquid they get on their
+    quietest days*, not by how much they trade on average. **The free diagnostic, first:**
+    rank-correlate `log(A_C)` against `log(mean dollar volume)` in the cross-section. Near 1.0 and
+    the family closes properly — the lab's null already covered this functional under another name,
+    and "under any normalisation" is earned. Materially below 1.0 and the null was measured on a
+    different object, and the build is worth a trial: monthly `A_C` per instrument, ≥10 valid days
+    required, cross-section winsorized at 1/99 (a mean of reciprocals is unbounded as volume → 0,
+    so this is not optional), logged, **normalised within region**, ETFs excluded or their split
+    neutralised, sorted long-only on high `A_C`. Lag two months, per the source's own convention.
+    Carry three discounts into any hypothesis: the mispricing reading puts the effect in
+    hard-to-arbitrage small illiquid names and this universe is the opposite tail; the conditional
+    variation the paper identifies sits on the **short leg**, which long-only cannot reach; and
+    cross-market volume comparability is a live confound over 15 regions — Lou–Shu drop a whole
+    exchange from a *single-country* sample over exactly this. Tier A, no overlap.
+    → `notes/2026-08-31-amihud-volume-component-decomposition.md`
+    **Free and separable from the above: the residual sort as a general instrument.** Regress any
+    composite signal cross-sectionally on its suspected driver and sort on the residual. Lou–Shu
+    use it to prove which half of a ratio carries a premium; the lab has a standing "is this signal
+    a known signal in costume" problem (#52's own-lag control, #57c's confound) and this is cheaper
+    than another trial.
+
+59. **[Added 2026-08-31] Free precondition check that decides whether `lead-lag-spillover` has a
+    buildable grouping at all, plus one free construction change.** Hou's claim is that the
+    lead-lag effect is *predominantly intra-industry* — so the grouping variable carries the
+    hypothesis, and a region grouping is not evidence about the industry channel. **The check:
+    does the 42-ETF list include sector or industry funds?** If yes, that is the only
+    industry-ish taxonomy reachable without fundamentals and a grouping can be built from prices
+    alone. If no, record that Hou's construction is **unreachable here** as a family-scoping fact
+    rather than substituting geography by analogy — and read every past and future region-grouped
+    lead-lag null as evidence about *regions as a diffusion channel*, which is a different finding
+    from evidence about lead-lag. **The free construction change, independent of that check:**
+    condition the leader's signal on **negative** moves. Hou puts the effect in sluggish adjustment
+    to bad news, so a symmetric construction averages a live channel with a dead one; and the
+    asymmetry doubles as an identifying test, since momentum-in-costume should not care about the
+    sign of the leader's move (it sharpens #52's screen (iii)). Expect a weak effect even when
+    reachable: the source puts it in small, less competitive, **neglected** industries, and ~145
+    large globally-known instruments are the neglect-free end of all three sorts. Tier A on venue
+    and citations, but **abstract-only** — no construction detail, lookback, or robustness evidence
+    was obtainable, so treat as strong prior, not verified.
+    → `notes/2026-08-31-intra-industry-lead-lag-grouping.md`
+
+60. **[Added 2026-08-31] The one measurement that decides whether `portfolio-learning` is actually
+    closed — free, and it corrects a statistic the closure rests on.** `learnings.md` closed the
+    family by pricing equal-weight ensembles of the eight legs' **stored return series** and
+    finding them monotone decreasing against the best single member. That is the **portfolio mix**,
+    which this literature says is bounded between its components *by construction*; the
+    **integrated** construction — average the legs' cross-sectional *scores*, then build one
+    long-only book in a single step — is not subject to that bound, and has not been measured here.
+    The gap between them is governed by the **cross-sectional correlation of the signals**, and the
+    0.68–0.98 the lab measured is the correlation of *realised return series of long-only books*,
+    which shares a large common market component and sits far above the signal correlation
+    underneath. **So: recompute the correlation matrix on cross-sectional signal ranks.** Still
+    0.7–0.98 and the family closes on the literature's own terms, twice over, and the lab can say
+    so. Materially lower and the closure was measured on a confounded statistic, and the integrated
+    build is worth one trial: expose each lead's cross-sectional score, average the z-scores with
+    **equal** weights (the parameter-counting screen, #1, forbids estimating them), construct once.
+    Note this is a *different function* from `strategies/lib/blend.py`, which combines books — it
+    needs a new file in `strategies/lib/`. **Mandatory screen if built:** check the integrated book
+    against a plain low-volatility book first. The peer-reviewed rebuttal's specific finding is
+    that integration's apparent edge is a low-risk tilt, averaging scores mechanically de-extremes
+    the book, and the lab has already refuted low-vol tilts on this universe. Three standing
+    discounts: the mechanism's gain → 0 as signal correlation → +1 and → 0 as active risk → 0;
+    breadth enters directly, and a ~145-name cross-section holds few of the jointly-attractive
+    names integration exists to find; and the solved required-leg-Sharpe bar (1.34–1.42 against a
+    1.120 champion) is a separate constraint that none of this relaxes. Tier B — the mechanism is
+    sound and general, the magnitude is contested in a peer-reviewed venue and must not be imported
+    into a hypothesis. → `notes/2026-08-31-signal-blending-vs-portfolio-blending.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -3044,8 +3247,45 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-29 (session 16) | **The first session under the rewritten `program.md`, and the first in this folder's history not aimed at a seam in the price-trend programme.** Six of the eight families had zero notes; the session took four of them, chosen so that two match the families the strategy agent has just scouted (`statistical-learning`, `liquidity-volume` — so the literature lands where trials already exist) and two are cold opens made reachable by the same-day constraint change (`range-variance`, `seasonality-calendar` — both need the OHLCV panel or were never cheap enough to justify). Four notes, eight sources; full text read directly for six, one recorded **second-hand** from a source that reproduces its derivations, one from its **published abstract only**. The session's shape is one *methodological transfer* that explains a result the lab had already measured but not understood (a linear learner loads on trend because that is where the marginal signal is), one *commissioned replication* that survives the replication and loses the horserace — the strongest "your family lead may be measuring the wrong thing" finding this folder has produced — one *free measurement improvement* that is analytical rather than empirical and that names the only estimator safe to divide by, and one *cost warning delivered by the source's own authors* against the family they discovered, together with the overlay they suggest instead. | Gu–Kelly–Xiu 2020 (RFS; NBER WP 25398, Sept 2019 revision, read in full) (`2026-08-29-machine-learning-cross-section-comparative.md`); Amihud 2002 (JFM; typeset article from a UPenn course reading directory) + Harris–Amato 2019 (CFR) + Amihud 2019 (CFR), the latter two read in full from the journal's own editor-hosted mirror `cfr.ivo-welch.info/published/papers/` (`2026-08-29-amihud-illiquidity-measure-and-replication.md`); Alizadeh–Brandt–Diebold 2002 (JF; author's UPenn page, typeset article read in full) + Molnár 2012 (IRFA; read in full as Chapter 2 of the author's 2020 habilitation thesis, which reproduces the article with its journal header), with Parkinson 1980, Garman–Klass 1980, Rogers–Satchell 1991 and Meilijson 2009 recorded **second-hand** — their formulas and efficiencies taken as restated with derivations in Molnár and cross-checked against ABD's independent restatement (`2026-08-29-range-based-volatility-estimators.md`); Heston–Sadka 2008 (JFE; the October 2006 working version read in full from NYU Stern's seminar archive), with Heston–Sadka 2010 (JFQA, the international companion) recorded from its **published abstract only** — `oa_status` closed, no repository copy found (`2026-08-29-same-calendar-month-seasonality.md`) |
 | 2026-08-30 (session 17) | **The last two cold opens, taken together, which retires the README's zero-coverage rule.** `lead-lag-spillover` first, as `SUMMARY.md` instructed — two sources, one per horizon end (monthly group→market; daily/weekly volume-sorted) — then `statistical-arbitrage`, scoped to the single question the previous session posed for it: *what survives a long-only constraint*. Three notes, five sources; full text read directly for three primaries plus one authors' replication package, one recorded from its **published abstract only**, one further paper recorded **unread** from its abstract as a flagged follow-up. The session's shape is one *mechanism plus a three-part free screen* whose most useful clause is that a lead-lag construction without an own-lag control is momentum in costume, one *new closes-only signal* (`DELAY`) that arrives together with the finding that this repo cannot compute the source's actual sorting variable, one *tension recorded rather than resolved* (the lab's declined residual-reversion screen tested only the factor-count region the source also found worst, but three discounts stop that being a refutation), and one *scoping rule* that removes the long-only version of `statistical-arbitrage`'s decorrelation claim while leaving its selection claim intact. | Hong–Torous–Valkanov 2007 (JFE; the authors' 5 Dec 2005 draft read in full from `columbia.edu/~hh2679`) + the authors' October 2014 replication Note (read in full from `rady.ucsd.edu`), with Tse 2015 (Journal of Empirical Finance, the reexamination) recorded from its **published abstract only** — closed access, no repository copy — and Hou 2007 (RFS) recorded **unread** from its abstract as a flagged follow-up (`2026-08-30-industry-lead-lag-gradual-diffusion.md`); Chordia–Swaminathan 2000 (JF; typeset article read in full from a UPenn course-reading mirror) (`2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`); Avellaneda–Lee 2010 (Quantitative Finance; the authors' June 2009 working version read in full from the first author's Courant page) (`2026-08-30-pca-residual-statistical-arbitrage-long-only.md`) |
 
+| 2026-08-31 (session 18) | **Aimed entirely by `SUMMARY.md`'s own open questions rather than by breadth, and it takes all three of its top-priority items.** Two of them are papers this folder has flagged unread across multiple sessions (Lou-Shu, Hou); the third is the last partial family gap (`portfolio-learning`'s "stacking half"), which closes it and gives every `program.md` family a section of its own. Three notes, four sources; full text read directly for two primaries, two recorded **from their published abstracts only** (both closed access with no repository copy and every mirror bot-challenged). The session's shape is unusual and worth naming: **two of the three notes end by narrowing a conclusion `experiments/learnings.md` recorded as final, and in both cases the narrowing is one free measurement wide** - the `liquidity-volume` null was measured on the mean of volume where the priced functional is the mean of the *reciprocal*, and the `portfolio-learning` closure was measured on return-series correlation where the governing quantity is cross-sectional *signal* correlation. Neither lab result is wrong; both are one step narrower than stated, and candidates #58 and #60 are the zero-cost checks that settle them. The third note is a *discount* rather than a build: the strongest source on lead-lag says the grouping variable carries the hypothesis, and the grouping it endorses needs a taxonomy this repo probably does not have. | Lou-Shu 2017 (RFS; the authors' August 2016 working version read in full from an ICMA-hosted mirror, `icmagroup.org/assets/documents/.../Bond-Market-Liquidity-Library/`) (`2026-08-31-amihud-volume-component-decomposition.md`); Hou 2007 (RFS) recorded **from its published abstract only** - `oa_status: closed`, no repository fulltext, SSRN bot-challenged on both posted abstract pages, CORE and CiteSeerX resolved nothing; abstract read verbatim from the RePEc/IDEAS record (`2026-08-31-intra-industry-lead-lag-grouping.md`); Fitzgibbons-Friedman-Pomorski-Serban 2017 (Journal of Investing; the typeset article read in full from AQR's own hosting) paired with its peer-reviewed rebuttal Leippold-Ruegg 2018 (European Financial Management), the latter recorded **from its published abstract only** - SSRN, Taylor & Francis, the EFMA conference mirror and the Zurich Open Repository each refused an automated client (`2026-08-31-signal-blending-vs-portfolio-blending.md`) |
+
 ### Open questions for future sessions
 
+- **[2026-08-31] Two of this session's three notes end in a *free diagnostic the lab must run
+  before the next session's literature is worth anything*, and that is the shape to keep.** Both
+  #58 and #60 identify a case where the lab measured a real quantity and drew a conclusion one
+  step wider than the quantity supports — `ILLIQ`'s volume content tested through the mean rather
+  than the reciprocal; the blend bound measured on return-series correlation rather than
+  cross-sectional signal correlation. Neither is an error, and in both cases the wider conclusion
+  may well be right; but in both cases a zero-cost measurement settles it, and until it is run the
+  literature cannot tell the lab anything more. **The next session should check
+  `experiments/learnings.md` for whether #58's and #60's diagnostics were run before choosing a
+  focus**, because the answers redirect two families. If both come back confirming the closures,
+  `liquidity-volume` and `portfolio-learning` are genuinely finished and future effort belongs
+  elsewhere; if either reopens, the follow-up literature is obvious and specific.
+- **[2026-08-31] What is left unread, in priority order.**
+  - **`ETF`-versus-constituent lead-lag remains the one `program.md` sub-mechanism with no
+    coverage at all**, now flagged for the second session running. Hou did not touch it (he is
+    group→group within industries) and neither did Hong–Torous–Valkanov or
+    Chordia–Swaminathan. This repo is unusually well set up for it — 42 ETFs alongside
+    constituent-adjacent single names — and it is the only remaining *named* gap in the
+    `program.md` list. It should be taken next unless a diagnostic above reopens a family.
+  - **Hou 2007 deserves a second attempt at full text.** This session's note is abstract-only:
+    six sentences carrying four claims, with no lookback, no formation cadence, no industry
+    granularity and no robustness evidence. The claims are load-bearing enough (they discount
+    every region-grouped lead-lag result the lab has) that the construction detail is worth one
+    more try through a route this session did not attempt — an interlibrary or course-packet
+    mirror, or the citing literature's restatements (the paper has 617 citations; a well-cited
+    successor restating its specification second-hand would be enough).
+  - **Goyenko–Holden–Trzcinka 2009 (JFE)**, the low-frequency liquidity-proxy horserace, still
+    unread from the 2026-08-29 entry — and now *more* interesting rather than less, because
+    Lou–Shu use exactly its class of high-frequency benchmarks to show that `ILLIQ`'s genuine
+    liquidity content and its return premium sit in different places. It is the source that
+    would say how much of the "measures liquidity well" result survives that split.
+  - **Hierarchical risk parity is now closed twice and should not be taken.** The lab's
+    2026-08-30 arithmetic and this session's mix-bound mechanism agree, from different
+    directions, that a risk allocator over finished long-only books cannot escape the bound.
+    Recording this so a future session does not spend the last `portfolio-learning` slot on it.
 - **[2026-08-30] The README's zero-coverage rule is spent; here is what should aim the next
   session instead.** Every `program.md` family now has at least one dedicated note. In rough
   priority order, and none of these is a family survey:

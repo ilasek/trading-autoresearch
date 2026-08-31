@@ -4910,3 +4910,26 @@ seat resolvably — a leg needs its own Sharpe at 1.34-1.42 to buy a two-SE impr
 **No engine issues encountered.** Tests green (33 passed) before the first trial. The
 holdout was not read this session: every candidate ran on the scout track, which never
 reaches the gate.
+
+## Protocol issue — 2026-08-31 (learning agent): split trial history on `origin/main-rdlknw`, resolved by fast-forward
+
+At the start of the 2026-08-31 research session, `origin/main` did **not** contain the
+2026-08-30 nightly strategy session. Five commits — `bf5f60c`, `374ddab`, `98df6c0`,
+`bb4bf5e`, `487154a`, carrying **4 trials** (`sa_pca_residual_excursion`,
+`lv_trading_time_reversal`, `pt_raw_reversal_control`, `pt_fast_reversal_slow_grid`), their
+`trial_returns/` parquets, the leaderboard update, the session summary and the distilled
+learnings — sat only on the per-run branch `origin/main-rdlknw`. This is the failure mode
+recorded for 2026-08-12..15: trials that never reach `main` leave every later trial scored
+against an understated deflated-Sharpe bar.
+
+The branch was **0 commits behind** `main` and a clean descendant of it, so it was resolved by
+fast-forward (`git merge --ff-only origin/main-rdlknw`) rather than left for a human. No
+content was authored, edited or reordered by this agent: `engine/`, `scripts/`, `tests/`,
+`data/`, `program.md`, `CLAUDE.md` and `research/` are untouched by the merge, and
+`trials.jsonl` gains exactly the four rows the strategy agent had already written. **The trial
+count on `main` is now complete through 2026-08-30 and the DSR bar is honest again.**
+
+Also present: `origin/main-ar91zf`, 0 commits ahead of `main` and 15 behind — stale, nothing to
+recover. Deleting remote branches is outside this agent's remit; a human may prune both.
+
+## Research session — 2026-08-31 (learning agent): 3 notes added, see research/SUMMARY.md
