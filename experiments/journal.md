@@ -5380,3 +5380,65 @@ check at session start: on `main`, level with `origin/main`, no unmerged remote 
   `portfolio-learning` books under-predict from train and all four differ only in an
   aggregation operator.
 
+## 2026-09-01T23:26:22+00:00 — pl_fixed_share_tails — **SCOUT**
+- Candidate: `strategies/candidates/pl_fixed_share_tails.py` (family: portfolio-learning, track: scout, trial #71)
+- Hypothesis: Holding the union of the top 5 names from each of the same four family-lead z-scores that trial #68 took the maximum of — a fixed 25% share per leg by name count — rather than letting the max operator vary each leg's contribution by date (measured argmax shares 0.199/0.252/0.317/0.232 with per-leg sd 0.10-0.18 and one leg reaching 0.850 of the book in a single month), and otherwise leaving that candidate bit-identical (same legs, same z-scoring, same joint-coverage rule, same hysteresis band, same equal weight, same monthly grid; turnover matched holdings-only at 14.14x against 14.55x and breadth at 20.4 against 22.6 names) scores near 0.88 on validation, materially below #68's 1.008, because the max operator's edge is the date-conditioning of the per-leg quota rather than the union of tails as such — the tail-depth account that had been credited with it is refuted by trial #70's follow-up screen, in which standardized book depth is flat at 1.46-1.56 SDs across every operator and correlates -0.053 with Sharpe.
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.958 <= the family's best 1.008 (DSR 0.8929, 71 trials, 20 effective after clustering at rho 0.95)
+- Train: sharpe +0.68, ann_ret +8.0%, maxDD -44.8%, turnover 4.4x
+- Validation: sharpe +0.96, ann_ret +17.9%, maxDD -30.3%, turnover 13.7x
+- Deflated Sharpe prob: 0.8929 (bar from 71 trials, 20 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: **Falsified — and the falsification hands the lab a strictly better object than the
+  one it was defending.** Pre-registered 0.88 on the reading that the max operator's edge is
+  its date-conditioning; observed **0.958**. Against #68: `rho` **0.9663**, closed-form paired
+  SE **0.104**, gap **-0.050 at t = -0.48**. The two are **not distinguishable**, so the
+  conditioning — a per-leg share with sd 0.10-0.18 that reaches 0.850 of the book in a single
+  month — is worth nothing measurable. **What the max operator buys is the union of the legs'
+  own tails; letting the quota float is decoration.**
+- **The finding is what the control costs nothing to remove, and it is an arbitrariness rather
+  than a parameter.** #69 established that #68's level is a coin flip between two scoring
+  transforms the data cannot separate (max-of-z 1.008, max-of-rank 0.877, `rho` 0.9690,
+  t = +1.31), and the standing instruction from that trial is to quote the span 0.88-1.01
+  rather than the best member. **The fixed-share book has no such choice to make.** Selecting
+  the top 5 of each leg is invariant to *any* strictly monotone per-leg transform, because the
+  quota never compares one leg's score against another's. Verified rather than asserted — the
+  weight matrix was rebuilt with per-leg percentile ranks and with `exp(z)` in place of the
+  z-scores, and both are **bit-identical** to the shipped book (max |diff| 0.0 on every date).
+  The trial's own numbers put it inside the coin-flip span it eliminates: 0.958, above
+  max-of-rank (+0.081, t = +1.07) and below max-of-z (-0.050, t = -0.48), indistinguishable
+  from both.
+- **Why the arbitrariness was there in the first place, stated as the transferable mechanism.**
+  A `max` is a comparison *across* legs, so it needs the legs on a common scale — and there is
+  no principled common scale for an illiquidity ratio, a seasonal mean and a 21-day return.
+  z-scoring and ranking are two answers to a question with no right answer, which is exactly
+  why #69 could not separate them. A per-leg quota asks only *within* each leg, where the
+  ordering is the whole content and every monotone transform agrees. **General form: when an
+  aggregation rule requires cross-component comparability, the normalisation it needs is a free
+  parameter in disguise; a rule that only ever ranks within a component has none.** This is the
+  same lesson #69 reached — report the effect over the arbitrary choices it contains — advanced
+  one step: better than quoting the span is building the object that does not have one.
+- **The two trials together re-describe this family's result without changing its level.** The
+  ladder is now max-of-z 1.008 / fixed-share **0.958** / max-of-rank 0.877 / k=2 0.753 / mean
+  0.635, and the account that survives all of it is: *hold the union of four near-orthogonal
+  legs' own tails.* Not depth (#70's screen: standardized depth flat, correlation -0.053), not
+  the winner's curse (#70: requiring two endorsements costs 0.255), not the conditioning (here:
+  -0.050 at t = -0.48). The three top books span 0.877-1.008 at pairwise `rho` 0.966-0.982 and
+  none is distinguishable from another; **the honest object is "the union book", worth ~0.88-1.01,
+  and the fixed-share construction is the member of that class with the fewest free choices.**
+- **Blend arithmetic, run free per the standing rule and reported rather than acted on.** Priced
+  on stored validation series (no re-run, no trial, no holdout): `rho` **0.7346** to the champion,
+  vol ratio `k` **0.840**, so the solved 20%-weight break-even is **0.869** and the leg supplies
+  **0.958** — clearing it, as #68 did. The blend rows are +0.010 / +0.016 / +0.017 / +0.013 at
+  10/20/30/40% (t = +0.41 / +0.32 / +0.23 / +0.13) against a required gain of **+0.076 to +0.138**
+  at the blend's `rho` of 0.992-0.998. **No challenge candidate written**, for the third session
+  running and now on a third construction: a challenge would beat the champion on validation
+  (1.136 > 1.120), plausibly clear DSR, reach the holdout gate, spend the one unspent split and
+  end the session — on ~0.3 of a paired SE. The productive move remains raising the leg's own
+  Sharpe toward 1.34-1.42, and tonight's two trials say the levers the lab had listed for that
+  were priced on a void statistic.
+- Pre-registration record: train **0.68** predicted, validation **0.958** observed — a +0.28
+  under-prediction, the fourth in a row from this family and the same direction as #68 (+0.39),
+  #69 (+0.26) and #70 (+0.15). The 2026-08-30 sample is n = 16. Worth noting the regularity now
+  visible: all five `portfolio-learning` books under-predict except #67, the one whose train and
+  validation books were most alike, and the size of the miss tracks nothing obvious.
+
