@@ -29,6 +29,14 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > **ETF-versus-constituent lead-lag** (see the 2026-08-31 open question), and it is the standing
 > target for the next session absent a reopened family.
 >
+> **Status after session 19 (2026-09-01): that sub-mechanism is closed too — by the lab, not by
+> this folder.** `experiments/learnings.md` (2026-08-31) screened ETF-versus-constituent lead-lag
+> on 9 SPDR sector ETFs plus VNQ across 8 groups and found the ETF's residual of the existing
+> member-median control a null at every horizon pair; the reachable side of the one asymmetry
+> with the right sign is itself a null. **`program.md` now has no named family or sub-mechanism
+> without coverage.** Session 19 was therefore aimed by the lab's own results rather than by
+> breadth, and future sessions should be too — see the 2026-09-01 open questions below.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -551,6 +559,40 @@ benchmarked against **zero** rather than the historical mean (which the authors 
 inflation); Diebold–Mariano tests rather than eyeballed R² gaps, under whose Bonferroni-adjusted
 version the neural nets are only *marginally* significant over penalised linear models.
 
+**[2026-09-01] A second, independent route to "few predictors matter" — and it explains, for the
+first time with an outside source, *why this universe in particular keeps producing nulls*.**
+Freyberger–Neuhierl–Weber (RFS, Tier 1 venue, graded **B** here for being single-market and
+modelling **no transaction costs** on a monthly extreme-decile book) rank each of 36
+characteristics cross-sectionally, fit expected return as an **additive quadratic spline in the
+ranks**, and select with an **adaptive group LASSO** (one group per characteristic, so it is in or
+out as a unit). Of 36, 15 survive conditioning on the others across all stocks. **The
+load-bearing table is the size cut**: restricting to progressively larger firms, characteristics
+drop out in a specific order — **idiosyncratic volatility** goes first, then **lagged turnover and
+momentum**, and at the largest size cut **only seven characteristics retain incremental power**,
+of which only *closeness to the 52-week high*, *past-return predictors* and *standardized
+unexplained volume* are computable without fundamentals. This is outside corroboration of three
+things the lab measured on its own universe and recorded as puzzling: the `liquidity-volume`
+volume nulls, the repeated failure of volatility-level sorts, and the difficulty of finding
+anything outside `price-trend`. **A ~145-name large-cap universe is where this source predicts
+most characteristics stop working.** The four survivors stable across every sample half, knot
+count and size cut are size, closeness to the 52-week high, short-term reversal and standardized
+unexplained volume. `validation_overlap: false`; `published_post_2018: true`.
+→ `notes/2026-09-01-nonparametric-characteristic-selection-large-stocks.md`
+
+**The functional-form result is sharper than "nonlinearities matter" and it names the one learned
+candidate this lab should build.** In their out-of-sample design the nonparametric model selected
+**eight** characteristics and the linear model **twenty-one**, and the smaller model won. Two
+diagnostics pin the cause: handing the *nonparametric* estimator the linear model's 21
+characteristics improves out-of-sample performance, while handing the *linear* estimator the
+nonparametric model's 8 produces a result identical to its own 21. **The gain is in the functional
+form, not the characteristic count** — the linear model's extra characteristics are it overfitting
+in sample. Against `learnings.md`'s standing rule that a learned candidate earns a trial only when
+asked for something a sort cannot express, this names the something: **the shape of one
+characteristic's relation to return**. A monotone rank sort is itself a functional-form assumption
+and a probably-wrong one; a spline in the rank of a *single* characteristic is the minimal
+departure, has a handful of parameters, and is walk-forward fittable. That is a far narrower
+learned candidate than the ridge feature block the lab already ruled out.
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -664,6 +706,50 @@ cancels cross-sectionally and mostly does not in a time-series vol target); and 
 only trading-hours volatility**, missing the overnight gap entirely — a systematic, time-zone-
 correlated under-estimate on a 15-region universe, and a confound for any cross-sectional
 comparison of range volatility across regions.
+
+**[2026-09-01] The family's first *asymmetric* mechanism, and it is the one direction in which
+this universe's survivorship artifact works *for* the hypothesis instead of against it.** All
+eight mechanisms the lab has screened here are functionals of the **width** of the daily return
+distribution — Garman–Klass level, vol-of-vol, close-to-close/GK ratio, close-location value, the
+overnight/intraday split, the within-name de-levelled range. `learnings.md`'s 2026-08-31 verdict
+was "the level *is* the survivorship artifact; remove the level and nothing is left".
+Bali–Cakici–Whitelaw (JFE, Tier A, 1756 citations) sort on a different functional of the same
+bars: the **upper tail only** — `MAX(N)`, the average of the `N` largest daily returns of the past
+month, with `MAX(5)` the authors' preferred and more powerful version. The story is lottery
+demand: under-diversified investors over-pay for small probabilities of large payoffs, so
+lottery-like stocks are over-priced and subsequently underperform. The prediction is therefore
+**negative** — high `MAX` earns less — where the artifact makes high-volatility names here look
++19.4%/yr *better* on train. **A positive finding would be running against the artifact, which is
+the opposite of every other sort this family has tried.** `validation_overlap: false`;
+`published_post_2018: false`. → `notes/2026-09-01-max-lottery-extreme-positive-returns.md`
+
+**The identifying test is free, it is two numbers, and it is exactly the test the lab's own
+range-lottery screen did not run.** Volatility is symmetric; lottery demand is not. So the
+authors sort on `MIN` (the negative of the month's smallest daily return), which is nearly as
+correlated with volatility as `MAX` is (~0.75–0.76 with total and idiosyncratic volatility in
+their sample): a volatility story predicts `MAX` and `MIN` carry the **same** sign, a
+skewness-preference story predicts **opposite** signs, and the data side with the asymmetric one.
+`learnings.md`'s 2026-08-29 screen found a range-based lottery proxy at −7.95%/yr, t = −4.30 and
+dismissed it as "just low-vol" — note that this is a **significant effect with the predicted
+sign**, dismissed on collinearity rather than on its own statistic, and that a *range* proxy is a
+width measure, i.e. precisely the confounded object the `MIN` test exists to separate. The
+sources do not contradict the lab's measurement; they say the lab measured the confounded
+quantity and then used the confound to dismiss it. Same shape as #58's narrowing, and it should
+be resolved the same way. The paper's other structural claim is that including `MAX` **reverses**
+the idiosyncratic-volatility puzzle — conditional on `MAX`, idiosyncratic risk is *rewarded* —
+which the cross-country companion (Cheon–Lee, *Management Science*, abstract only) restates as
+the puzzle existing "only for stocks with high MAX", and which the `statistical-learning` note
+above independently corroborates from the size-cut side.
+
+**Two honest discounts, both large.** The authors state the effect "is certainly concentrated
+among smaller stocks" — it survives dropping low-priced shares, restricting to NYSE-listed names
+and excluding the bottom NYSE size quintile, but its magnitude and significance rise
+monotonically as capitalisation falls, so a large-cap universe sees the weakest end of it. And
+the cross-country evidence is real but partial: **26 of 42 countries**. One favourable asymmetry
+against those: unlike `statistical-arbitrage`'s residual reversion and the ETF lead-lag, the
+**profitable leg here is the reachable one** — the low-`MAX` decile is the high-return leg, so a
+long-only book holds it directly, and the authors' own "would require shorting" caveat is about
+capturing the full spread, not about which end pays.
 
 ### 11. `seasonality-calendar`
 
@@ -926,6 +1012,35 @@ construction is untested here and is not subject to that bound. See candidate #6
 diagnostic that decides it — and note that `SUMMARY.md`'s 2026-08-30 downgrade of the **HRP** half
 is untouched and, if anything, corroborated: HRP is a risk allocator over finished books, i.e. a
 mix, and no clustering allocator can escape a bound that binds on the whole class.
+
+**[2026-09-01] The algebra behind the lab's mean-versus-max result, and it says the boundary is
+exactly where the lab found it.** Novy-Marx (working paper, R&R at JFE, Tier B; 41 citations)
+proves an **exact equivalence**: for a composite formed as a *linear* combination of signals, the
+resulting signal-weighted strategy's return is **identical** to a portfolio of the single-signal
+strategies held at the composite weights. Integration and mixing are the same object under
+linearity. That is why `learnings.md`'s mean-operator ensembles were bounded by their legs
+(2026-08-30) and why the closed-form tail-depth penalty `sqrt((1 + (n−1)ρ)/n)` (2026-08-31) holds:
+the bound is not an empirical regularity, it is this equivalence plus Markowitz. **The max
+operator is not a linear combination, so neither the equivalence nor the bound applies to it** —
+the lab found the boundary empirically and this is the algebra for why it sits there.
+`validation_overlap: false`. → `notes/2026-09-01-multi-signal-overfitting-critical-t.md`
+
+**It also resolves the apparent conflict with the integration literature, and sharpens both.**
+Fitzgibbons et al. argue integration beats mixing under a long-only constraint; Novy-Marx proves
+they are identical for linear composites. Both are right, and the reconciliation is that
+Fitzgibbons et al.'s entire gap comes from the **long-only truncation**, a nonlinearity applied
+*after* the linear blend, while the equivalence is derived for untruncated signal-weighted books.
+**Strip the nonlinearity and the integration advantage vanishes** — which predicts the advantage
+should scale with how binding the constraint is, and makes Leippold–Rüegg's "much ado about
+nothing" rebuttal what it looks like when the constraint is slack. It is also the general form of
+the lab's own finding: the value of an aggregation operator is the value of its nonlinearity.
+
+**The cost side, and it lands on the integrated candidate the lab just built.** The same paper is
+the field's sharpest statement of what a multi-signal backtest is worth as *evidence* — see the
+cross-cutting entry below. The short version for this family: the equivalence exonerates nothing
+about inference, the selection of four family leads from a screened pool of order 20–30 sits in
+the paper's `n^k` regime, and **a composite containing no mediocre legs is the paper's stated
+signature of selection bias.** A composite of family *leads* is by construction exactly that.
 
 ---
 
@@ -1491,6 +1606,45 @@ low across-correlation) is the empirical form of the grouped weighting scheme th
 requires. Tier A, but **`validation_overlap: true` and `published_post_2018: true`** — sample to 2020,
 published 2023, so mechanism only. Recorded as candidate #33.
 → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`
+
+**[2026-09-01] There is a bias in this repo's protocol that the trial count structurally cannot
+see, and the lab's newest candidate class is made of it.** Every correction this folder holds —
+deflated Sharpe, the multiple-testing haircut, publication decay, the hierarchical prior — counts
+**trials**. Novy-Marx (Tier B, working paper, R&R at JFE) identifies a second, *distinct* bias
+that lives **inside a single trial**: the **overfitting bias** created by the act of signing each
+component signal so that it predicts positive in-sample returns. It is present even with **zero**
+selection — a researcher who considers `n` signals and honestly employs every one of them is
+still exposed — and in his simulations, built on real stock returns with **purely random** sorting
+variables, it alone produces critical values above the familiar multiple-testing ones across the
+whole range tested. **Combining random signals routinely backtests at `t` above 5; under some
+constructions 5% significance requires `t` above 7.**
+→ `notes/2026-09-01-multi-signal-overfitting-critical-t.md`
+
+**The two biases multiply, and the multiplication is exponential.** Combining the best `k` of `n`
+candidate signals carries a bias almost as large as selecting the single best of **`n^k`**
+candidates — derived in a model and confirmed in simulation. Usable 5% critical `|t|` from that
+simulation: ≈2.6 for the best 1-of-10 (pure selection, i.e. Bonferroni), ≈3.5 for the best 2-of-10,
+>4 for the best 3-of-20, ≈5 for the best 4-of-40, rising to ≈7–8 when signals are weighted by
+their own in-sample performance. **Weighting signals by how well they backtested is strictly
+worse than equal-weighting them**, always: the equal-weighted composite's `t` is the scaled **L1**
+norm of the employed legs' t-statistics (`= √k ×` their mean) and the performance-weighted one is
+the **L2** norm, with `L1/√k ≤ L2` and equality only when the legs are identical. That inequality
+is the entire cost of letting yourself choose weights, and it is one more derivation of the
+parameter-counting screen (#1) this folder already applies.
+
+**Two design flags that apply to this lab's own construction right now.** *(i)* For a typical
+candidate set the backtest-maximising equal-weighted composite uses **roughly the best half** of
+the signals and discards the rest — so **a multi-signal strategy containing no mediocre legs is
+itself evidence that mediocre candidates were considered and dropped**, i.e. selection bias
+stacked on overfitting bias, worth about 60% of extra expected `t`. A composite of four *family
+leads* is by definition that object. *(ii)* Adding a signal stops improving the backtest `t` once
+the new one is less than **half as good as the average of those already employed** — a
+description of when an overfitter stops adding, not a target to aim at. **The author's
+first-choice remedy is free here and is candidate #63**: price each leg's marginal alpha
+*relative to all the others*, Bonferroni-corrected for the number of signals considered, rather
+than reading the composite's own statistic. His closing rule is the one to carry: *combine
+signals you believe in individually; never believe in a combination because it backtests well
+together.*
 
 _With this, **the scoring apparatus is covered on all four sides**: the statistic, the deflator, the
 paired test, and now the question of whether a trial's motivation may enter the correction. The
@@ -3225,6 +3379,118 @@ hypothesis fodder, then anti-candidates.
     sound and general, the magnitude is contested in a peer-reviewed venue and must not be imported
     into a hypothesis. → `notes/2026-08-31-signal-blending-vs-portfolio-blending.md`
 
+61. **[Added 2026-09-01] The free two-number screen that either opens `range-variance` or closes
+    it for the fourth time — and it is the highest-priority item on this list because that family
+    has zero recorded trials and `learnings.md` has flagged it to the human as unproposable on
+    current evidence.** All eight mechanisms screened there sort on the **width** of the return
+    distribution; the lottery mechanism sorts on the **upper tail only**. Compute, on train:
+    `MAX(5)` = the mean of the five largest daily returns of the past month, and `MIN` = the
+    negative of the smallest. Then read **two** things. *(i)* **Persistence** — the decile
+    transition rate of `MAX(5)` month to month. The source's mechanism requires it (an investor
+    must be able to buy lottery exposure in advance) and reports roughly one-in-three staying in
+    the top decile; if `MAX(5)` does not persist here, stop. *(ii)* **The sign test** — the
+    information coefficients of `MAX(5)` and `MIN`. **Same sign ⇒ it is volatility**, which this
+    lab has refuted three ways, and the family closes properly on the source's own identifying
+    test. **Opposite signs (`MAX` negative, `MIN` positive) ⇒ the asymmetric mechanism is present
+    and `range-variance` has its first honest candidate.** Note what this screen fixes: the lab's
+    2026-08-29 range-lottery reading (−7.95%/yr, t = −4.30) is a **significant result with the
+    predicted sign**, dismissed as "just low-vol" — but a *range* proxy is a width measure, i.e.
+    exactly the confounded object `MIN` exists to separate, so the confound was used to dismiss
+    the effect it confounds. If the screen passes, the buildable version is `MAX(5)`
+    orthogonalised **within trailing-volatility terciles** (the machinery exists — it is what
+    settled the `ILLIQ` confound on 2026-08-29), used as a long-only **underweight or exclusion
+    screen** rather than a spread trade, since the low-`MAX` leg is the high-return leg and is
+    the reachable one. Mandatory second control: **within reversal terciles**, because `MAX(5)`
+    is a formation-month statistic and raw 5-day reversal is the strongest thing on this universe
+    (IC +0.0455, t = +4.49) — without it, any result is reversal in costume. Sort within the
+    single-name subset only (ETFs are diversified by construction and cannot be lottery assets),
+    and expect the **weakest end** of the effect: the source says plainly it is concentrated in
+    small caps, and the cross-country companion finds it in 26 of 42 countries. The one favourable
+    asymmetry is that this universe's survivorship artifact points the *wrong way* for the
+    hypothesis, so a positive finding is unusually credible here and a null is uninformative.
+    Tier A. → `notes/2026-09-01-max-lottery-extreme-positive-returns.md`
+
+62. **[Added 2026-09-01] The one volume functional this lab has not screened, and it is a
+    *residual* rather than a level — free, and it is the last thing standing between
+    `liquidity-volume` and a clean third closure.** Every volume object screened here is a
+    function of the volume **level** or of volume scaled by a price move: `ILLIQ`, ratio-of-means
+    Amihud, constant-Amihud `A_C`, log average dollar volume, relative volume. **Standardized
+    unexplained volume (SUV)** is none of those. Recipe, from Garfinkel (2009) via
+    Freyberger–Neuhierl–Weber: over the trailing month, regress **daily volume** on a constant and
+    on the absolute values of **positive and negative daily returns as two separate regressors**
+    (volume may respond asymmetrically to up- and down-moves); SUV is the sum of the residuals,
+    standardized by the residual standard deviation. It is trading activity **orthogonal by
+    construction to the contemporaneous price move**. Two reasons it earns the slot: it is one of
+    the **seven characteristics surviving at the largest size cut** in a Tier-1 nonparametric
+    conditional selection, and one of only **four stable across every sample half, knot count and
+    size cut**; and this repo's universe is the large-cap regime where that source predicts most
+    other characteristics stop working — which it does, and which the lab has already observed
+    without a reason. **Pre-register the closure rule before looking**, as `A_C` was: compute
+    `spearman(SUV, log ADV)` and `spearman(SUV, |return|)` first — if either is ≈0.9, SUV inherits
+    a measured null and the family closes for good; if both are low, measure its IC at 5/21/63 days
+    and apply screen (iii) of #52. Pitfalls: volume is **not forward-filled** and is NaN on foreign
+    holidays, so fix a minimum-valid-observations rule per name **before** seeing a result, or the
+    signal is defined on a different number of days per region; and run the regression on **log**
+    volume, since raw volume is a share count in native units. Tier B source (single market, no
+    costs modelled). → `notes/2026-09-01-nonparametric-characteristic-selection-large-stocks.md`
+
+63. **[Added 2026-09-01] The audit the integrated max-of-z book needs before anything is built on
+    it — free, no trial, no holdout read, computable from stored trial return series.** The lab's
+    strongest non-`price-trend` result is a four-leg max-of-z integration quoted as a 0.88–1.01
+    range. Novy-Marx's remedy, in his own order of preference, is to **evaluate each leg's
+    marginal alpha relative to all the others**, Bonferroni-corrected for the number of signals
+    *considered* (not merely employed), rather than reading the composite's own statistic. Run it.
+    It answers the question the lab currently cannot answer about that book: **which legs are
+    carrying it, and would any survive being priced against the other three** — and if the edge
+    collapses onto one leg, that leg is the candidate and the integration is decoration. Three
+    things to hold while reading the result. *(i)* The paper's **critical-value table does not
+    transfer numerically** to a max operator: every value in it is derived for *linear* composites,
+    and the max is precisely the construction that escapes his linearity equivalence. *(ii)* The
+    **selection half transfers undiminished** — four legs chosen from a screened pool of order
+    20–30 puts this squarely in the `n^k` regime. *(iii)* A composite of four **family leads**
+    contains no mediocre legs, which is the paper's stated signature of selection bias on top of
+    overfitting bias, worth roughly 60% of extra expected `t`; **expect the integrated book's edge
+    over its legs to shrink out of sample for this reason alone**, independent of every other
+    discount already recorded. This is a discount on inference, not on the mechanism: the same
+    paper is explicit that combining signals you believe in individually is fine.
+    → `notes/2026-09-01-multi-signal-overfitting-critical-t.md`
+
+64. **[Added 2026-09-01] A refuted signal that was refuted as the wrong *kind* of thing, and the
+    correction is cheap.** `learnings.md` records 52-week-high proximity as "tried and refuted",
+    and reading the entry: it was swapped in as a **drop-in replacement for the champion's
+    return-magnitude z-score inside the same buffer-band machinery**, and it failed because the
+    bounded `(0,1]` ratio clusters near 1 and more than doubled turnover. That is a refutation of
+    one construction, and the entry says so itself. Freyberger–Neuhierl–Weber find closeness-to-
+    the-52-week-high surviving **conditional on momentum, short-term reversal and long-term
+    reversal**, and among the four characteristics stable across every specification they run —
+    i.e. as an **additional** signal, not a better momentum score, which is exactly the use the
+    lab's refutation did not test. The turnover objection is construction-specific and has a known
+    fix in this repo: **rank the signal and feed it to the max-of-z integration** rather than to a
+    buffer band, where the clustering-near-1 problem becomes a rank problem and disappears. Cheap,
+    and it re-opens one line rather than a family. Same Tier B source and the same caveat: a
+    US-only shortlist, imported into a 15-region universe against this folder's standing
+    local-versus-global warning.
+    → `notes/2026-09-01-nonparametric-characteristic-selection-large-stocks.md`
+
+65. **[Added 2026-09-01] The narrowest learned candidate this folder has ever been able to
+    justify, and it satisfies `learnings.md`'s own design rule for the first time.** That rule
+    says a learned candidate earns a trial only when it is asked for **something a sort cannot
+    express**. Freyberger et al. name the something, and it is not an interaction: it is **the
+    shape of one characteristic's relation to expected return**. Their out-of-sample evidence is
+    unusually clean on this point — the nonparametric model selected **eight** characteristics
+    against the linear model's **twenty-one** and beat it; handing the *nonparametric* estimator
+    the linear model's 21 characteristics **improved** out-of-sample performance, while handing
+    the *linear* estimator the nonparametric model's 8 changed nothing. **The gain is in the
+    functional form, not the characteristic count.** A monotone rank sort is itself a
+    functional-form assumption and probably a wrong one. The minimal departure: a **quadratic
+    spline in the cross-sectional rank of a single characteristic** — a handful of parameters,
+    walk-forward fittable with `strategies/lib/walkforward.py`, cheap enough to refit monthly,
+    and asked for exactly one thing a sort cannot do. **Do not import their shortlist as a feature
+    block**: their selection consistency needs hundreds of thousands of observations and this
+    cross-section is three orders of magnitude smaller, and #63 above is the reason a
+    multi-characteristic composite is the wrong next object.
+    → `notes/2026-09-01-nonparametric-characteristic-selection-large-stocks.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -3248,8 +3514,55 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-30 (session 17) | **The last two cold opens, taken together, which retires the README's zero-coverage rule.** `lead-lag-spillover` first, as `SUMMARY.md` instructed — two sources, one per horizon end (monthly group→market; daily/weekly volume-sorted) — then `statistical-arbitrage`, scoped to the single question the previous session posed for it: *what survives a long-only constraint*. Three notes, five sources; full text read directly for three primaries plus one authors' replication package, one recorded from its **published abstract only**, one further paper recorded **unread** from its abstract as a flagged follow-up. The session's shape is one *mechanism plus a three-part free screen* whose most useful clause is that a lead-lag construction without an own-lag control is momentum in costume, one *new closes-only signal* (`DELAY`) that arrives together with the finding that this repo cannot compute the source's actual sorting variable, one *tension recorded rather than resolved* (the lab's declined residual-reversion screen tested only the factor-count region the source also found worst, but three discounts stop that being a refutation), and one *scoping rule* that removes the long-only version of `statistical-arbitrage`'s decorrelation claim while leaving its selection claim intact. | Hong–Torous–Valkanov 2007 (JFE; the authors' 5 Dec 2005 draft read in full from `columbia.edu/~hh2679`) + the authors' October 2014 replication Note (read in full from `rady.ucsd.edu`), with Tse 2015 (Journal of Empirical Finance, the reexamination) recorded from its **published abstract only** — closed access, no repository copy — and Hou 2007 (RFS) recorded **unread** from its abstract as a flagged follow-up (`2026-08-30-industry-lead-lag-gradual-diffusion.md`); Chordia–Swaminathan 2000 (JF; typeset article read in full from a UPenn course-reading mirror) (`2026-08-30-volume-and-cross-autocorrelation-lead-lag.md`); Avellaneda–Lee 2010 (Quantitative Finance; the authors' June 2009 working version read in full from the first author's Courant page) (`2026-08-30-pca-residual-statistical-arbitrage-long-only.md`) |
 
 | 2026-08-31 (session 18) | **Aimed entirely by `SUMMARY.md`'s own open questions rather than by breadth, and it takes all three of its top-priority items.** Two of them are papers this folder has flagged unread across multiple sessions (Lou-Shu, Hou); the third is the last partial family gap (`portfolio-learning`'s "stacking half"), which closes it and gives every `program.md` family a section of its own. Three notes, four sources; full text read directly for two primaries, two recorded **from their published abstracts only** (both closed access with no repository copy and every mirror bot-challenged). The session's shape is unusual and worth naming: **two of the three notes end by narrowing a conclusion `experiments/learnings.md` recorded as final, and in both cases the narrowing is one free measurement wide** - the `liquidity-volume` null was measured on the mean of volume where the priced functional is the mean of the *reciprocal*, and the `portfolio-learning` closure was measured on return-series correlation where the governing quantity is cross-sectional *signal* correlation. Neither lab result is wrong; both are one step narrower than stated, and candidates #58 and #60 are the zero-cost checks that settle them. The third note is a *discount* rather than a build: the strongest source on lead-lag says the grouping variable carries the hypothesis, and the grouping it endorses needs a taxonomy this repo probably does not have. | Lou-Shu 2017 (RFS; the authors' August 2016 working version read in full from an ICMA-hosted mirror, `icmagroup.org/assets/documents/.../Bond-Market-Liquidity-Library/`) (`2026-08-31-amihud-volume-component-decomposition.md`); Hou 2007 (RFS) recorded **from its published abstract only** - `oa_status: closed`, no repository fulltext, SSRN bot-challenged on both posted abstract pages, CORE and CiteSeerX resolved nothing; abstract read verbatim from the RePEc/IDEAS record (`2026-08-31-intra-industry-lead-lag-grouping.md`); Fitzgibbons-Friedman-Pomorski-Serban 2017 (Journal of Investing; the typeset article read in full from AQR's own hosting) paired with its peer-reviewed rebuttal Leippold-Ruegg 2018 (European Financial Management), the latter recorded **from its published abstract only** - SSRN, Taylor & Francis, the EFMA conference mirror and the Zurich Open Repository each refused an automated client (`2026-08-31-signal-blending-vs-portfolio-blending.md`) |
+| 2026-09-01 (session 19) | **The session's aim was set by the lab, not by this folder: both of the diagnostics `SUMMARY.md` made its top priority (#58, #60) were run overnight, and the ETF-versus-constituent gap this log has flagged for two sessions was screened dead by the lab itself — so the standing question list was spent on arrival and the focus moved to what the lab's own results opened.** Three notes, four sources; full text read directly for three primaries, one recorded from its **published abstract only**. The shape is *one mechanism aimed at the only family with zero trials, one discount aimed at the lab's best new result, and one source that explains a pattern the lab has hit repeatedly without a reason.* `range-variance` gets its first **asymmetric** mechanism (upper tail rather than width) together with a free two-number test that decides it either way — and the reading that the lab's own range-lottery screen dismissed a significant, correctly-signed result *using the confound the test exists to separate*. `portfolio-learning` and the inference layer get the algebra behind the lab's mean-versus-max finding — a proof that linear composites are *exactly* equivalent to portfolios of their legs, which is why the mean is bounded and the max is not — plus a second bias, distinct from every correction this folder holds, that lives **inside a single trial** and that the trial count cannot see. And `statistical-learning` gets the size-cut result that predicts, from outside, that a ~145-name large-cap universe is where most characteristics stop working: it names the three daily-data survivors, one of which (`SUV`) is the single volume functional the lab has not screened. | Bali–Cakici–Whitelaw 2011 (JFE; the typeset article read in full from the corresponding author's NYU Stern page), with Cheon–Lee 2018 (Management Science) recorded **from its published abstract only** — closed access (`2026-09-01-max-lottery-extreme-positive-returns.md`); Novy-Marx 2016 (NBER WP 21329 / author's March 2016 draft, R&R at JFE per his posted CV; read in full from `mysimon.rochester.edu`) (`2026-09-01-multi-signal-overfitting-critical-t.md`); Freyberger–Neuhierl–Weber 2020 (RFS; the NBER working-paper draft read in full, including the appendix selection table and variable definitions) (`2026-09-01-nonparametric-characteristic-selection-large-stocks.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-01] The three standing top-priority items were all resolved by the lab before this
+  session ran, and that is the pattern to keep.** #58's diagnostic came back **confirming** the
+  closure (`spearman(log A_C, −log mean dollar volume) = +0.993`; no Jensen gap on this universe),
+  #60's came back **reopening** `portfolio-learning` but for a different reason than #60 gave, and
+  ETF-versus-constituent lead-lag — flagged here as the top unread gap for two sessions running —
+  was screened and is dead (the ETF's residual of the member-median control is a null at every
+  horizon pair). **Every one of those was decided by a free measurement, none of them cost a
+  trial, and in two of three cases the answer was not the one this folder predicted.** Keep
+  writing candidates in that form. This session's #61, #62 and #63 are all of it.
+- **[2026-09-01] What should aim the next session, in order.**
+  - **Check whether #61's `MAX`/`MIN` sign test was run before choosing anything else.**
+    `range-variance` is the only `program.md` family with zero recorded trials and `learnings.md`
+    has escalated it to the human as unproposable on current evidence; #61 either gives it a
+    candidate or closes it a fourth time on the source's own identifying test. If it closes, the
+    honest conclusion is that this family is unreachable *on this universe* rather than
+    unreachable, and that is a finding worth writing up rather than another survey.
+  - **`seasonality-calendar` is the thinnest genuinely-live family and this folder has one note
+    on it.** The gap is not the cross-sectional seasonal (covered) but the **calendar** half —
+    turn-of-the-month, holiday and month-boundary effects, and specifically the standing skeptical
+    literature on whether any of them survive costs and multiple testing. It matters more than it
+    did: `learnings.md`'s 2026-08-29 entry found the lib's `seasonal_same_month_return` traded one
+    month late, and the corrected alignment turns a null into +15.7%/yr (t = +5.16) on train. That
+    is an unexploited live result inside the one family with a single note. Take it before any
+    further inference/methodology material — this folder now holds a great deal of the latter.
+  - **`Goyenko–Holden–Trzcinka 2009 (JFE)`** remains unread from the 2026-08-29 entry and should
+    now be **dropped in priority, not carried forward again.** `liquidity-volume` has closed
+    twice on the lab's own measurements and #62 is the last free check standing between it and a
+    third; a horserace of low-frequency liquidity proxies against intraday benchmarks cannot
+    change a null measured on this universe's own instruments.
+  - **Do not spend a slot on more multiple-testing or inference literature.** With this session's
+    note the folder holds six sources on the topic (deflated Sharpe, the haircut, testing Sharpe
+    differences, Bayesianized p-values, the hierarchical prior, and now the multi-signal
+    overfitting bias) against a lab that has one live candidate class. The marginal note there is
+    now worth less than the marginal *mechanism* note in a thin family.
+- **[2026-09-01] A tension this session created and did not resolve, recorded rather than
+  adjudicated.** Freyberger et al. find **fewer** characteristics surviving among large firms;
+  Gu–Kelly–Xiu (2026-08-29 note) find machine-learning predictability **stronger** among large
+  stocks and say so explicitly to rebut the microcap-artifact reading. These are not formally
+  contradictory — one counts independent predictors, the other measures forecast accuracy — but
+  they are the second and third readings this folder has taken on the same question and they
+  point a ~145-name large-cap universe in opposite directions. The 2026-08-29 entry below flagged
+  the first version of this (Gu–Kelly–Xiu against the liquidity premium's illiquid-tail location);
+  it is now a three-source disagreement about **where in the size distribution this universe
+  sits**, which is the single most consequential unknown about the instrument set. If one source
+  is taken next session, it should be one that measures predictability *by size decile* directly.
 
 - **[2026-08-31] Two of this session's three notes end in a *free diagnostic the lab must run
   before the next session's literature is worth anything*, and that is the shape to keep.** Both

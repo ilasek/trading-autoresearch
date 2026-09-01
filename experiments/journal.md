@@ -5311,3 +5311,5 @@ converting a headline into a range.
 **No engine issues encountered.** Tests green (33 passed) before the first trial. Integrity
 check at session start: on `main`, level with `origin/main`, no unmerged remote branches — the
 2026-08-30 split-history problem recorded above did not recur.
+
+## Research session — 2026-09-01 (learning agent): 3 notes added, see research/SUMMARY.md
