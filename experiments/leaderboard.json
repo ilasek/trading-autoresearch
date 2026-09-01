@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-01T23:27:11+00:00",
+  "generated_at": "2026-09-01T23:36:28+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -88,21 +88,21 @@
       "train_sharpe": 0.753
     },
     "seasonality-calendar": {
-      "name": "sc_same_month_seasonal_aligned",
-      "candidate": "strategies/candidates/sc_same_month_seasonal_aligned.py",
+      "name": "sc_seasonal_matched_control",
+      "candidate": "strategies/candidates/sc_seasonal_matched_control.py",
       "track": "scout",
       "verdict": "FAMILY_LEAD",
-      "ts": "2026-08-29T23:22:25+00:00",
-      "n_trials": 2,
-      "rho_to_champion": 0.753,
+      "ts": "2026-09-01T23:35:38+00:00",
+      "n_trials": 3,
+      "rho_to_champion": 0.7476,
       "validation": {
-        "sharpe": 0.747,
-        "ann_return": 0.1271,
-        "max_drawdown": -0.3206,
-        "ann_turnover": 17.08,
-        "avg_positions": 28.36
+        "sharpe": 0.782,
+        "ann_return": 0.1422,
+        "max_drawdown": -0.3417,
+        "ann_turnover": 18.98,
+        "avg_positions": 21.14
       },
-      "train_sharpe": 0.435
+      "train_sharpe": 0.577
     },
     "price-trend": {
       "name": "pt_raw_reversal_control",

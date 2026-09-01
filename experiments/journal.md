@@ -5442,3 +5442,61 @@ check at session start: on `main`, level with `origin/main`, no unmerged remote 
   visible: all five `portfolio-learning` books under-predict except #67, the one whose train and
   validation books were most alike, and the size of the miss tracks nothing obvious.
 
+## 2026-09-01T23:35:38+00:00 — sc_seasonal_matched_control — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sc_seasonal_matched_control.py` (family: seasonality-calendar, track: scout, trial #72)
+- Hypothesis: Holding the top 20 names of the same-calendar-month seasonal score alone — the identical leg the union books of trials #68 and #71 use, imported unchanged — under those books' own machinery rather than its own (core-20/band-30 instead of 25/45, warmup 60, and the cross-section restricted to the names all four legs can score, so the eligible pool is identical) scores near 0.80 on validation, materially below the fixed-share union's 0.958, because the union's margin over its legs is a real four-leg effect and not one leg plus machinery — even though the free train decile screen puts the only significant cross-sectional content in this leg (decile-10 excess +10.59%/yr at t = +4.16, against +3.37 / +2.85 / +1.90 for the other three) and even though this control is handicapped ~0.05 Sharpe by trading 19.60x against the union's 14.14x.
+- Verdict: FAMILY_LEAD — best result yet in family 'seasonality-calendar': validation sharpe 0.782 > 0.747 (DSR 0.794, 72 trials, 20 effective after clustering at rho 0.95)
+- Train: sharpe +0.58, ann_ret +6.5%, maxDD -52.5%, turnover 5.2x
+- Validation: sharpe +0.78, ann_ret +14.2%, maxDD -34.2%, turnover 19.0x
+- Deflated Sharpe prob: 0.794 (bar from 72 trials, 20 effective)
+- Scout track: family best before this trial +0.75; the champion was not compared and the holdout was not read
+- Lesson: **Confirmed at the pre-registered number — 0.782 against a stated 0.80, the closest
+  call in this family's recent series — and it answers `SUMMARY.md` #63's question in the
+  direction the return-series audit could not reach. The union book is not one leg plus
+  machinery.** Against the fixed-share union (#71): `rho` **0.9119**, closed-form paired SE
+  **0.169**, gap **+0.175 at t = +1.04**. Against the max-of-z union (#68): +0.226 at
+  **t = +1.22**. Netting the control's measured cost handicap (19.0x against 13.7x actual
+  turnover = 0.80%/yr = **0.044** Sharpe at its 18.2% vol) leaves the union ahead by **+0.13
+  to +0.18** on mechanism. Positive on both readings and **not resolvable on either** — this
+  is the family's own resolution floor doing what it always does, and the claim is recorded
+  as suggestive rather than established.
+- **The by-product is worth more than the headline, because it retro-validates a comparison
+  the whole family rests on.** The trial existed because "the union beats every one of its
+  four legs (0.681 / 0.747 / 0.688 / 0.701)" compares books with different bands, warmups and
+  — decisively — different eligible universes, since a union book can only hold names all four
+  legs cover. Measured: the matched control against the recorded `sc_same_month_seasonal_aligned`
+  is **+0.036 at `rho` 0.9906, SE 0.055, t = +0.65**. **The machinery confound is worth
+  essentially nothing.** Changing band 25/45 -> 20/30, adding a 60-month warmup and restricting
+  to the four-leg joint pool moves this leg by less than a tenth of the gap it was suspected of
+  manufacturing. Every earlier leg-versus-union comparison in this family therefore stands as
+  recorded, and the lab can stop discounting them.
+- **What the leg-level evidence and the book-level evidence say jointly, because they point
+  opposite ways and both are right.** The free train decile screen puts effectively all of the
+  *cross-sectional* content in this one leg — decile-10 excess **+10.59%/yr at t = +4.16**,
+  against +3.37 (t = +1.68), +2.85 (t = +0.76) and +1.90 (t = +0.54) for illiquidity, group-lead
+  and reversal, and no leg shows a reliable non-monotone shape. Yet a book holding this leg's
+  top 20 alone scores 0.782 while the union of four legs' top-5s scores 0.958. **Three legs with
+  no individually significant cross-sectional content add ~0.18 to a book built on the one leg
+  that has it.** The reconciliation is that they are not adding signal, they are adding
+  *timing independence*: at a mean cross-sectional |rho| of 0.054-0.070 the months in which the
+  seasonal leg's top decile is wrong are unrelated to the months in which the other three are,
+  so a 20-name book drawn from four near-orthogonal tails carries far less month-specific
+  idiosyncratic risk than a 20-name book drawn from one. That also explains the turnover
+  direction the screen found surprising — the union trades **less** than any of its legs
+  (13.7x against 19.0x here), which is 1/N churn damping across disagreeing selectors, the same
+  effect `learnings.md` records across tranches and across lookback lengths.
+- **Practical consequence for the leg-set lever.** The 2026-08-31 session listed "the leg set"
+  as one of three untested ways to raise this leg's own Sharpe, and the natural reading of
+  tonight's decile table — drop the three weak legs, keep the strong one — is now measured and
+  **wrong by 0.18**. A leg earns its place in a union book by being *independent*, not by being
+  individually significant, which inverts the screen a session would naturally apply.
+- Pre-registration record: train **0.58** predicted, validation **0.782** observed — a +0.20
+  under-prediction. That is the fifth consecutive under-prediction across two families
+  (#68 +0.39, #69 +0.26, #70 +0.15, #71 +0.28, this +0.20) against #67's near-exact hit; the
+  2026-08-30 sample is now n = 17 and the *sign* has stopped looking unresolved outside
+  `price-trend` — six of the last six readings have train below validation. Worth noting the
+  competing explanation the sample cannot yet separate: these books all hold ~20 of ~140 names
+  on a 1962-2017 train split where the universe is far smaller and the survivorship
+  conditioning far longer, so a systematic train/validation level difference need not be
+  telling the lab anything about candidate quality at all.
+
