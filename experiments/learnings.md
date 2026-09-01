@@ -1623,7 +1623,16 @@ across experiments; prune entries that later evidence contradicts.
   follow-up without the paper. **A null that passes its own identifying test is worth more
   than one that fails it: it rules out the mechanism, not the measurement.**
 
-- **[Measured 2026-08-31, nightly] The aggregation bound this file states five times — "the
+- **[PARTLY RETRACTED 2026-09-01 — the mean/max *result* below stands and is strengthened by a
+  fourth rung; its *explanation* does not, and the standing pre-trial screen it promotes is
+  withdrawn. Read the 2026-09-01 entries at the end of this file before using anything here.
+  In short: the "tail depth" the entry credits is measured in each operator's own raw score
+  units and is not scale-free; standardized, every one of these books reaches the same
+  1.46-1.56 SDs into its own distribution, because they all hold the top ~20 of ~140 names and
+  therefore buy the same quantile by construction. `sqrt((1+(n-1)rho)/n)` predicts the
+  composite score's *dispersion* ratio, not the depth of the book, and the two coincide only if
+  book size is fixed in score units rather than in names.]**
+  **[Measured 2026-08-31, nightly] The aggregation bound this file states five times — "the
   gain is bounded by the components' disagreement" — is a property of *averaging* operators,
   not of aggregation, and reading it as the latter cost the lab a family.** Every prior
   aggregation result here used a mean: cross-specification model averaging, the five vintage
@@ -1715,3 +1724,140 @@ across experiments; prune entries that later evidence contradicts.
   **Remove the level and nothing is left.** `range-variance` is now the only family with zero
   recorded trials, and no session can honestly propose a candidate there on current evidence —
   flagged for the human against `program.md`'s cold-family allocation rule.
+
+- **[Measured 2026-09-01, nightly] The statistic that explained this lab's best
+  non-`price-trend` result does not survive standardisation, and the mechanism it named is not
+  identified. This retracts the tail-depth account and the pre-trial screen built on it.** The
+  2026-08-31 entries explain the aggregation ladder — max-of-z 1.008, max-of-rank 0.877,
+  mean 0.635 — by "these signals pay only in their extreme tails, and a mean shrinks the tail
+  the book buys", measured as the held book's mean score **in its own raw units**, and promote
+  `sqrt((1+(n-1)rho)/n)` to a standing pre-trial screen. Trial #70 added a fourth rung (the
+  k=2 order statistic, 0.753) and a free follow-up measured three candidate depth statistics
+  over 325 month-ends:
+
+      operator        Sharpe   (1) own-score   (2) standardized   (3) max-scale
+      max (k=1)        1.008       2.136            1.562             2.136
+      max-of-rank      0.877       0.977            1.127             2.087
+      k=2   (#70)      0.753       1.120            1.524             1.676
+      mean  (#67)      0.635       0.651            1.464             1.783
+
+      corr with Sharpe            +0.876           -0.053            +0.845
+
+  Statistic (2) — the book's mean score in **cross-sectional SDs of that operator's own
+  score**, i.e. how far into its own distribution the book actually reaches — is **flat at
+  1.46-1.56 and correlates -0.053 with Sharpe**. It is flat by construction: every one of these
+  books holds the top ~20 of ~140 names, so they buy the **same quantile** and cannot differ in
+  tail depth. (1) and (3) track Sharpe only because they are **not scale-free** — the maximum of
+  four z-scores has a wider right tail than the second-largest or the mean, so "own-score depth"
+  reports the operator's own score *dispersion*. `max-of-rank` settles it: shallowest
+  standardized depth of the four, second-best Sharpe. The formula predicts the composite score's
+  dispersion ratio, which equals a depth ratio only if book size is held fixed in *score* units
+  rather than in *names*, and it never is here. **The ladder is real; the explanation is void.**
+  Do not price a construction against the 0.245-Sharpe-per-unit rate read off statistic (1) —
+  the narrowing, depth-weighting and leg-count levers the 2026-08-31 session listed were all
+  priced that way and their prices are withdrawn.
+  **General form, and it is this repo's oldest habit arriving on a descriptive statistic rather
+  than on code: before crediting a mechanism, check that the statistic naming it is invariant to
+  the thing it is not supposed to measure.** Four prior instances were components whose code did
+  not read what they claimed (the `dropna` trim cohort, the forward-fill drift claim, the
+  `MonthEnd` alignment, `eta(q)`'s estimability). This is the same failure one level up.
+
+- **[Measured 2026-09-01, nightly] What the max operator buys is the union of the legs' tails,
+  and the arbitrary normalisation it needs is removable for free. Better than quoting a
+  mechanism's span over its incidental choices is building the object that has no span.** Two
+  designed pairs, turnover matched holdings-only in advance, settle what the operator is doing.
+  *(a)* Requiring **two** legs to endorse a name (the k=2 order statistic, everything else
+  bit-identical, turnover 13.18x against 14.55x) costs **-0.255** (`rho` 0.8999, SE 0.180,
+  t = -1.42), so the winner's-curse account is refuted. *(b)* Freezing each leg's contribution
+  at a **fixed quota** — hold the union of the top 5 names of each leg, never letting the share
+  float — scores **0.958** against 1.008 (`rho` 0.9663, SE 0.104, **t = -0.48**), so the
+  date-conditioning (per-leg share sd 0.10-0.18, reaching 0.850 of the book in one month) is
+  worth nothing measurable. The union of tails is the whole mechanism.
+  **The fixed-quota book is invariant to any strictly monotone per-leg transform** — verified,
+  not asserted: rebuilt on percentile ranks and on `exp(z)`, **bit-identical** to the z-scored
+  book on every date. That removes the exact arbitrariness #69 could not resolve (max-of-z
+  against max-of-rank, `rho` 0.9690, t = +1.31, level swinging 0.877-1.008). The reason is
+  structural: a `max` compares **across** legs and therefore needs them on a common scale, and
+  there is no principled common scale for an illiquidity ratio, a seasonal mean and a 21-day
+  return; a quota only ever ranks **within** a leg, where every monotone transform agrees.
+  **Standing rule: when an aggregation rule requires cross-component comparability, the
+  normalisation it needs is a free parameter in disguise — prefer the rule that needs none, and
+  check invariance by rebuilding the weight matrix under an alternative transform, which costs
+  nothing.**
+
+- **[Measured 2026-09-01, nightly] A leg earns its place in a union book by being independent,
+  not by being individually significant — which inverts the screen a session would naturally
+  apply.** Rebuilding the strongest leg alone under the union's own machinery and its own
+  joint-coverage pool (#72) gives **0.782** against the four-leg union's 0.958: gap **+0.175**,
+  `rho` 0.9119, SE 0.169, **t = +1.04**, or **+0.13** net of the control's measured cost
+  handicap (19.0x against 13.7x turnover). Suggestive, not resolvable — but the direction is
+  corroborated by a free train decile screen that points the *opposite* way at leg level:
+  `seasonal` decile-10 excess **+10.59%/yr (t = +4.16)** against **+3.37 / +2.85 / +1.90** at
+  t = +1.68 / +0.76 / +0.54 for illiquidity, group-lead and reversal, with no leg showing a
+  reliable non-monotone shape. **Three legs with no individually significant cross-sectional
+  content add ~0.18 to a book built on the one leg that has it.** They add *timing
+  independence*, not signal: at cross-sectional |rho| 0.054-0.070 the months in which one leg's
+  tail is wrong are unrelated to the months in which the others are, so a 20-name book drawn
+  from four near-orthogonal tails carries far less month-specific idiosyncratic risk than a
+  20-name book drawn from one. It also explains the turnover direction, which the pre-screen got
+  backwards: **the union trades less than any of its legs** (13.7x against 19.0x), the same 1/N
+  churn damping already recorded across tranches and across lookback lengths.
+  Two riders. The machinery confound this trial existed to remove is worth only **+0.036**
+  (t = +0.65), so every earlier leg-versus-union comparison in this family **stands as
+  recorded**. And the claim rests on one retrospective reading; the prospective test — adding a
+  fifth, maximally orthogonal leg — is a ~0.03 effect against a ~0.10 floor and must be run as a
+  **leg-count contrast wide enough to resolve** (2 legs against 4 and 5), not as a single
+  marginal addition.
+
+- **[Measured 2026-09-01, nightly] A long-only book whose only alternative is cash can exploit a
+  calendar effect only if the complement window's return is at or below zero — which closes the
+  whole `calendar` half of `seasonality-calendar` in one screen, on a structural argument rather
+  than an empirical one.** The effects are large and highly significant on train: turn-of-month
+  (before=1, after=3) runs **+36.9%/yr in-window against +12.6%/yr out, +9.63 bps/day at
+  t = +4.38**; Mondays **-10.00 bps/day (t = -4.13)**; Nov-Apr **+6.18 bps/day (t = +3.58)**.
+  None is reachable. A hold-in-window/cash-out book trades 24x annually (3.60%/yr of drag) and
+  nets Sharpe **+0.32 to +0.63** against buy-and-hold's **+1.05**, because the complement window
+  still earns +11% to +14%/yr and sitting it out forgoes more than the concentration gains; and
+  `max_leverage = 1.0` means overweighting in-window is not available, so the constraint binds by
+  construction, not by parameter choice. **Check the complement window's sign before proposing
+  any timing overlay here.** This is the third instance of the standing shape — a mechanism can
+  be real, large and significant, and still structurally unreachable on this universe (the
+  others: 5-10 day reversal, and regional neutralisation).
+
+- **[Measured 2026-09-01, nightly] `range-variance` is now nine screened mechanisms with one
+  cause, including its first *asymmetric* one, and the family should be treated as unreachable on
+  this universe rather than unexplored.** `research/SUMMARY.md` #61 supplied the one object there
+  that is not a width measure — the lottery/`MAX` upper-tail sort — together with a two-number
+  test that decides it either way. Precondition **passes**: `MAX(5)`'s top-decile month-to-month
+  stay rate is **0.452** (source ~1/3, random 0.10). The identifying sign test **fails**: on train
+  single stocks against the forward 21-day return, `MAX(5)` IC **+0.0167 (t = +1.46)** and
+  `MIN(5)` IC **+0.0253 (t = +2.11)** — same sign, which is the source's own criterion for "this
+  is volatility", and both *positive*, the opposite of the lottery prediction. `spearman(MAX5,
+  21d vol) = +0.872`, and **within trailing-volatility terciles `MAX(5)` is a clean null,
+  IC -0.0055 (t = -0.75)**. This also resolves #61's objection to the lab's earlier range-lottery
+  reading: the note argued that dismissing a significant, correctly-signed range result as "just
+  low-vol" used the very confound `MIN` exists to separate — with the separation run, the
+  dismissal was right. **`program.md`'s cold-family allocation rule cannot be honestly satisfied
+  here and needs a human**: spending a trial would mean knowingly building on the survivorship
+  artifact every screen keeps finding, and permanently raising the DSR bar to satisfy a count.
+
+- **[Measured 2026-09-01, nightly] Two more signals confirmed as reversal in costume, and the
+  pattern now has a name.** `research/SUMMARY.md` #64 (52-week-high proximity as an *additional*
+  signal rather than a replacement momentum score) has its construction objection genuinely
+  disarmed — the bounded-ratio turnover blow-up that sank the lab's earlier refutation cannot bite
+  inside a per-leg quota, since only the within-leg ordering is read — and it still fails, on its
+  own sign: top-20 **-2.74%/yr (t = -1.56)**, bottom-20 **+4.98%/yr**, IC **-0.0248 (t = -1.75)**,
+  with `spearman(wh52, reversal) = -0.436`. **A price level measured against a trailing extreme
+  carries the wrong sign for its own story on this universe and turns out to be reversal wearing
+  a label** — the second instance after close-location value (2026-08-30, IC -0.0208, rank
+  correlation +0.384 with the trailing 63-day return). Screen any such proposal against reversal
+  before writing a file. Two smaller results filed at the same time: #65's spline candidate is
+  declined because the only leg with content has a **step at the top decile** (+10.59%/yr,
+  t = +4.16, flat across deciles 1-9) and a top-quantile cut already is that step; and #62's
+  standardized unexplained volume **passes** its pre-registered closure rule
+  (`spearman(SUV, log ADV) = +0.110`, `spearman(SUV, |return|) = +0.060` — the first volume object
+  here that is not a disguised level, so `liquidity-volume` does **not** close) while **failing**
+  screen (iii), its IC growing with horizon (+0.0033 / +0.0101 / **+0.0140** at 5 / 21 / 63 days,
+  t = +0.50 / +1.45 / **+2.10**), which is the slow-moving-risk-proxy signature. SUV survives as
+  the most orthogonal candidate *union leg* ever measured here (|rho| 0.002-0.107 against all four
+  existing legs), not as a sort.
