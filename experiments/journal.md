@@ -5313,3 +5313,70 @@ check at session start: on `main`, level with `origin/main`, no unmerged remote 
 2026-08-30 split-history problem recorded above did not recur.
 
 ## Research session — 2026-09-01 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-01T23:19:27+00:00 — pl_second_best_leg — **SCOUT**
+- Candidate: `strategies/candidates/pl_second_best_leg.py` (family: portfolio-learning, track: scout, trial #70)
+- Hypothesis: Scoring each name by the SECOND-largest of the same four family-lead z-scores that trial #68 took the maximum of — Amihud illiquidity, same-calendar-month seasonality, sector-group 21-day lead-lag and 21-day reversal — and otherwise leaving that candidate bit-identical (same legs, same joint-coverage rule, same hold-30/enter-20 equal-weight monthly book, breadth matched holdings-only at 22.7 against 22.6 names and turnover LOWER at 13.18x against 14.55x) scores at or below 0.91 on validation, because #68's advantage is tail depth rather than noise-robustness: the k=2 book's depth on the max scale is +1.676 against #68's +2.136, and the lab's one calibration of depth (0.245 Sharpe per unit, from #67 -> #68) prices that deficit at -0.113. Scoring materially above #68's 1.008 instead would show the max operator was selecting on single spuriously extreme draws — the winner's-curse mechanism #68 stated and could not test.
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.753 <= the family's best 1.008 (DSR 0.7702, 70 trials, 20 effective after clustering at rho 0.95)
+- Train: sharpe +0.60, ann_ret +6.8%, maxDD -46.6%, turnover 3.8x
+- Validation: sharpe +0.75, ann_ret +13.2%, maxDD -37.0%, turnover 12.8x
+- Deflated Sharpe prob: 0.7702 (bar from 70 trials, 20 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: **The trial confirmed its pre-registration and then a free follow-up screen
+  destroyed the statistic the pre-registration was written in. Both halves matter, and the
+  second is the session's finding.** Observed **0.753** against a stated 0.91; `rho`(k=1,
+  k=2) = **0.8999**, closed-form paired SE **0.180**, gap **-0.255 at t = -1.42**. So of the
+  two mechanisms #68 stated and could not separate, **(b) — "the max operator selects on
+  noise" — is refuted**: requiring two legs to endorse a name does not rescue the book, it
+  costs a quarter of a Sharpe. #68's 1.008 is not a winner's curse that a free construction
+  change removes, and the ladder is monotone in `k`: max 1.008 > k=2 0.753, with #67's mean
+  0.635 below both.
+- **Second lesson, and it retracts the mechanism rather than the result: "tail depth pays"
+  is not identified, because the depth statistic the lab has been quoting is not scale-free
+  and every one of these books buys the same quantile.** The reading was built on the held
+  book's mean score *in its own raw units* (#67 +0.685 -> #68 +2.210). Measured
+  holdings-only over 325 month-ends on all four operators, three candidate statistics:
+
+      operator        Sharpe   (1) own-score   (2) standardized   (3) max-scale
+      max (k=1)        1.008       2.136            1.562             2.136
+      max-of-rank      0.877       0.977            1.127             2.087
+      k=2              0.753       1.120            1.524             1.676
+      mean (#67)       0.635       0.651            1.464             1.783
+
+      corr with Sharpe            +0.876           -0.053            +0.845
+
+  Statistic (2) — the held book's mean score expressed in **cross-sectional SDs of that
+  operator's own score**, i.e. how far into its own distribution the book actually reaches —
+  is **flat at 1.46-1.56 across the three z-based operators and anti-correlated with Sharpe
+  (-0.053)**. That is mechanically forced: all four books hold the top ~20 of ~140 names, so
+  they buy the *same quantile* by construction and cannot differ in tail depth. Statistics
+  (1) and (3) correlate with Sharpe only because they are **not** scale-free — the maximum of
+  four z-scores has a wider right tail than the second-largest or the mean, so "own-score
+  depth" mostly reports the **operator's own score dispersion**, not the depth of the tail
+  bought. The clincher is `max-of-rank`: it reaches the *shallowest* standardized depth of
+  all four (1.127 SDs, its score being bounded) and scores **second best** at 0.877.
+- **What this leaves standing, and what it removes.** Standing: the ordering
+  max > max-of-rank > k=2 > mean is real, it is monotone, and #68 remains the best
+  non-`price-trend` result the lab has recorded. Removed: the *explanation*. These operators
+  do not differ in how deep a tail they buy; they differ in **which names the same quantile
+  contains**. Every idea the 2026-08-31 session listed for raising this leg's own Sharpe —
+  narrowing the book, depth-weighting the held names, adding legs — was motivated by the
+  depth account and priced against a 0.245-Sharpe-per-unit rate read off statistic (1). Those
+  prices are void. (Measured for the record: this trial's own gap fits statistic (1) at
+  0.251/unit and #67 -> #68 at 0.245/unit — three points on one line, which is exactly how a
+  scale artifact behaves when scale is monotone in the outcome.)
+- **General form, and it is this repo's oldest habit arriving on a statistic instead of on a
+  component: before crediting a mechanism, check that the statistic naming it is invariant to
+  the thing it is not supposed to measure.** The lab has paid for this four times on code that
+  did not read what it claimed (the `dropna` trim cohort, the forward-fill drift claim, the
+  `MonthEnd` alignment, the `eta(q)` estimability check). This is the same failure in a
+  descriptive statistic: `sqrt((1+(n-1)rho)/n)`, the tail-depth formula promoted to a standing
+  pre-trial screen on 2026-08-31, predicts the *dispersion* ratio of the composite score and
+  was read as predicting the depth of the book — which is true only if the book's size is held
+  fixed in *score* units rather than in *names*, and it never is here.
+- Pre-registration record, per the standing instruction that every scout record its train
+  Sharpe as a prediction of its validation Sharpe: predicted **0.60**, observed **0.753** — a
+  +0.15 under-prediction, the same direction as #68 (+0.39) and #69 (+0.26) and against #67's
+  near-exact hit. The 2026-08-30 sample is now n = 15; three of the four
+  `portfolio-learning` books under-predict from train and all four differ only in an
+  aggregation operator.
+
