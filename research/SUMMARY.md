@@ -792,6 +792,56 @@ sorting on all twelve months of the past year. Most of what a conventional twelv
 sort captures is available from the single month twelve months back — a claim about the composition
 of the signal the champion is built on, checkable at no cost.
 
+**[2026-09-02] The successor paper says the identifying test this lab pre-registered was the wrong
+one, and supplies the right one.** Keloharju–Linnainmaa–Nyberg (2016, JF, Tier A) is the direct
+descendant of Heston–Sadka, and its central claim is that the seasonal component of expected
+returns **overwhelms** the unconditional cross-sectional component rather than opposing it in sign.
+That predicts the lab's 2026-08-29 screen failure — annual +15.7%/yr and non-annual +12.8%/yr, both
+positive — as the normal appearance of a universe with large persistent mean-return differences,
+not as the absence of a seasonal. Their discriminating test is a fixed-effects contrast: the
+annual-lag pattern survives **stock** fixed effects and disappears under **stock-calendar-month**
+fixed effects, which is what rules out "stocks repeat their own past shocks" and rules in "each
+stock has its own twelve monthly expected returns". The economic content is that a sort on past
+same-calendar-month returns is a **noisy proxy for a bundle of characteristics whose premiums are
+seasonal** — size, dividend-to-price and industry are named — so individual stocks *aggregate*
+seasonalities across factors, which is why the effect looks strong in single names and weak in any
+one factor. At least **two-thirds** of it is common-factor-borne (the strategy's variance is ~5x
+what pure idiosyncratic risk would give), from which the authors draw the operational rule that
+**seasonal strategies must stay exposed to systematic risk, because hedging it removes the
+seasonality with it**. Construction: average same-calendar-month return over the prior **20 years**,
+cross-sectionally demeaned, decile sorts re-formed monthly. Two facts make this the family's best
+remaining lead here: seasonality strategies on **well-diversified characteristic- and
+country-sorted portfolios** are about as profitable as single-stock ones (this repo has 42 ETFs
+across 15 regions, and an ETF-level version dodges the survivorship objection), and seasonality
+strategies in different corners of the market are **near-uncorrelated with each other** (≈0.17
+between the small-stock and high-dividend-yield versions; negligible across asset classes), which
+is a measured source of the orthogonal leg the live `portfolio-learning` question needs. Recorded
+tension inside the cluster: the same authors' 2021 JFE companion (Tier 1, abstract only, 24
+citations) reports **seasonal reversals** that sum to approximately zero over the calendar year and
+reads them as temporary mispricing rather than risk — which cuts against the 2016 paper's own
+factor framing. `validation_overlap: false`.
+→ `notes/2026-09-02-return-seasonalities-common-factors.md`
+
+**[2026-09-02] The `calendar` half now has a mechanism with a timing restriction it did not choose
+— and one free number that settles the lab's structural closure either way.** Ogden (1990, JF,
+Tier 1, abstract only) attributes the turn-of-the-month pattern to the **standardised monthly
+payment cycle**: wages, pensions, dividends and interest cluster at the month boundary, releasing
+investable cash. Etula–Rinne–Suominen–Vaittinen (2020, RFS, Tier 1, read in full) test the
+institutional side and decompose the cycle into three windows with **different predicted signs**:
+**T−8 to T−4 liquidity-motivated selling (negative)**, T−3 to T+3 positive reversal, T+4 to T+8
+negative reversal. The window locations are **pinned by settlement conventions rather than fitted
+to returns** — their identifying evidence is that the 1-day-settlement Treasury market's pressure
+window sits later (T−2) than the 3-day equity market's (T−4), with corporate bonds hybrid. The
+effect is stronger in countries with larger mutual-fund sectors, and reversals are significant in
+22 of the countries studied. **This does not overturn `learnings.md`'s 2026-09-01 structural
+closure of this half; it identifies one window the closing screen did not test.** That screen used
+(before = 1, after = 3) — the source's *positive-reversal* window — and pooled the source's negative
+pressure window into an undifferentiated complement measured at +11% to +14%/yr. The closure's own
+instruction was "check the complement window's sign", and the sign of **T−8 to T−4 alone** is
+unmeasured. It is free, and it either meets the closure's binding condition for a narrow overlay or
+closes the family for good. `published_post_2018: true` for the RFS paper.
+→ `notes/2026-09-02-turn-of-month-payment-cycle.md`
+
 ---
 
 ### 12. `lead-lag-spillover`
@@ -1759,6 +1809,35 @@ unambiguous direction**, and its **magnitude on this universe remains unmeasurab
 repo has** — the matched-pair measurement needs point-in-time constituents, which `program.md` lists
 under human-approval-gated future upgrades. That is a better statement than the caveat had, and it is
 not a number._
+
+**[2026-09-02] The size question the last three sessions kept circling now has a direct measurement,
+and it retrodicts the lab's whole trial history.** Fama–French (2008, JF, Tier A, 1312 citations)
+sort anomalies **separately within size groups** rather than aggregating, because an equal-weight
+all-stock decile spread is largely a statement about the smallest stocks: tiny stocks are ~3% of
+market capitalisation but ~**60% of the number of stocks**, and they have the largest cross-sectional
+dispersion in anomaly variables, so they occupy **more than 60% of the names in the extreme
+deciles**. Value-weighting is not the fix (it hands the answer to a few of the largest names); the
+fix is to report all three groups and require the effect in each. Their result: **net stock issues,
+accruals and momentum are pervasive across all size groups**, while **asset growth is absent among
+big stocks** — the group holding more than 90% of market capitalisation — and profitability is
+asymmetric (higher profitability pays among profitable firms; unprofitable firms are not unusually
+bad). **This universe has no tiny or small group at all**, so every trial this lab has run is a
+big-stock sort, and the reference class for any imported result is the big-stock column rather than
+the headline. The consequence is uncomfortably tight: of the three predictors certified pervasive
+there, **two require fundamentals this repo does not have, leaving momentum as the only one
+computable from daily OHLCV** — and `price-trend` holds all 7 promotions while every family built on
+a characteristic *level* has closed on measurement (`liquidity-volume` twice, `range-variance` four
+times over nine mechanisms, `learnings.md`'s own diagnosis being that "the level *is* the
+survivorship artifact"). This source supplies the prior that would have predicted that pattern in
+advance, and the free screen in candidate #68 is how to spend it. It also **reconciles the folder's
+three-source size tension rather than adding a fourth reading**: Gu–Kelly–Xiu (predictability
+stronger among large stocks) and Freyberger et al. (fewer characteristics surviving among large
+firms) are consistent once separated as *accuracy* versus *count* — **expect few live signals on
+this universe, not weak ones**, which is what `research/README.md` already told the
+`statistical-learning` family on general grounds and now has a measurement behind it. Single-market
+(US) is the gap; the effect on ETFs and on non-US markets separately is outside its scope and must
+not be extended there by analogy. `validation_overlap: false`.
+→ `notes/2026-09-02-anomalies-by-size-group.md`
 
 ### What implementation costs — execution, price impact, and paper versus reality (cross-family)
 
@@ -3491,6 +3570,87 @@ hypothesis fodder, then anti-candidates.
     multi-characteristic composite is the wrong next object.
     → `notes/2026-09-01-nonparametric-characteristic-selection-large-stocks.md`
 
+66. **[Added 2026-09-02] The free test that replaces the seasonality screen this lab failed and
+    then argued past — and the reason the failure was over-read.** On 2026-08-29 the lab
+    pre-registered Heston–Sadka's *sign disagreement* (annual lags positive, non-annual negative),
+    measured both positive, and concluded that "the contrast that separates a calendar seasonal
+    from persistent cross-sectional mean-return differences is absent here". **Keloharju–
+    Linnainmaa–Nyberg predict that failure**: their central claim is that the seasonal component
+    *overwhelms* the unconditional cross-sectional component rather than opposing it in sign, so a
+    positive non-annual coefficient is what a universe with large persistent mean-return
+    differences should produce and does not by itself deny a seasonal. The discriminating test they
+    use is a **fixed-effects contrast**: the annual-lag pattern survives stock fixed effects and
+    **vanishes under stock-calendar-month fixed effects**; equivalently, rank the *same* assets over
+    the *same* window on same-calendar-month history versus other-calendar-month history and check
+    that only the former carries information. Both are free panel computations on train. This is
+    a correction to a screen the lab is still carrying, and it costs no trial either way. Tier A,
+    no overlap.
+    → `notes/2026-09-02-return-seasonalities-common-factors.md`
+
+67. **[Added 2026-09-02] One free number that either re-opens the `calendar` half of
+    `seasonality-calendar` or closes it for good — and it is the number the lab's own closure asked
+    for.** `learnings.md` (2026-09-01) closed the half structurally: long-only at
+    `max_leverage = 1.0` can exploit a calendar effect only if the **complement window's return is
+    at or below zero**, and the complement was measured at +11% to +14%/yr. But the window tested
+    was **(before = 1, after = 3)**, i.e. T−1 to T+3, and its "complement" pooled ordinary mid-month
+    days with the one window the mechanism says is *negative*. Etula–Rinne–Suominen–Vaittinen
+    decompose the payment cycle into three windows with different predicted signs —
+    **T−8 to T−4 liquidity-motivated selling (negative)**, T−3 to T+3 positive reversal, T+4 to T+8
+    negative reversal — with the timing pinned by **settlement conventions rather than fitted to
+    returns** (their identifying evidence: the 1-day-settlement Treasury market's pressure window
+    sits later than the 3-day equity market's). **Measure the mean daily return of T−8 to T−4 alone
+    on train.** At or below zero, the closure's own binding condition is met for a narrow overlay
+    (~12 round trips a year against the 24 the closing screen priced at 3.60%/yr). Positive, and
+    the family closes a second time and should be recorded as final rather than re-litigated. Note
+    the settlement caveat: the recipe sits under a 3-day convention and US equity settlement
+    shortened to 2 days in 2017, shifting the predicted last-sale day one day later — verify the
+    offset, do not hard-code it. Tier A, no overlap, `published_post_2018: true`.
+    → `notes/2026-09-02-turn-of-month-payment-cycle.md`
+
+68. **[Added 2026-09-02] A free interpretation rule that applies retrospectively to every note in
+    this folder, and which would have predicted the lab's entire empirical history.** Fama–French
+    sort anomalies separately by size group and find that **net stock issues, accruals and momentum
+    are pervasive in all size groups, while asset growth is absent among big stocks** — the group
+    accounting for more than 90% of market capitalisation. The construction artifact behind the
+    difference: tiny stocks are ~3% of market cap but ~60% of the *number* of stocks, and have the
+    largest cross-sectional dispersion in anomaly variables, so they occupy more than 60% of the
+    names in the extreme deciles of an equal-weight all-stock sort. **This universe is entirely
+    "big"** — ~145 large-cap names plus 42 ETFs — so every trial this lab has run is a big-stock
+    sort. Of the three predictors certified pervasive there, two need fundamentals this repo lacks,
+    **leaving momentum as the only one computable from daily OHLCV** — and `price-trend` holds all
+    7 promotions while every characteristic-*level* family has closed (`liquidity-volume` twice,
+    `range-variance` four times). **The rule: before proposing a candidate from a source, ask
+    whether that source reported the effect separately for big stocks and whether it survived
+    there. If it reports only an all-stock equal-weight spread, discount hard regardless of tier or
+    citation count.** Cheaper than a trial, and it makes the next characteristic-family null cheap
+    to skip rather than merely cheap to interpret. Tier A, no overlap.
+    → `notes/2026-09-02-anomalies-by-size-group.md`
+
+69. **[Added 2026-09-02] The seasonal candidate that fits this universe's actual shape, and the
+    most principled source of an orthogonal leg the live `portfolio-learning` question has been
+    given.** Keloharju–Linnainmaa–Nyberg show seasonality strategies trading **well-diversified
+    portfolios formed on characteristics such as size and industry** are about as profitable as
+    those trading individual stocks, and document the same effect in the cross section of **country
+    stock-market indexes** and in commodities. This repo has **42 ETFs across 15 regions** — exactly
+    those diversified portfolios — and an ETF-only seasonal sort sidesteps the survivorship bias
+    `program.md` warns inflates single-stock results, which is the standing objection to the lab's
+    existing single-name seasonal leg. Two further reasons it is the right next object here:
+    the authors measure seasonality strategies **in different corners of the market as
+    near-uncorrelated with each other** (≈0.17 between the small-stock and high-dividend-yield
+    versions; negligible across asset classes), which is a *measured* rather than hoped-for source
+    of the "fifth maximally orthogonal leg" that `learnings.md`'s 2026-09-01 leg-count contrast
+    needs; and their signal is the **average same-calendar-month return over the prior 20 years**,
+    cross-sectionally demeaned. **Precondition, to run first and for free: count the available
+    annual lags per instrument.** The store's history bounds how many the newest instruments have,
+    and warmup shortens the eligible universe the way `learnings.md` has already recorded for other
+    long-lookback constructions — the honest version of this signal may not fit, and that is itself
+    a finding. Two riders carried from the source: **do not neutralise the systematic exposure**
+    (the authors show the factor exposure is the effect's carrier — at least two-thirds of the
+    seasonality is common-factor-borne, and hedging it removes the effect), and re-verify the
+    month alignment against the corrected helper, since `learnings.md` records that the lib's
+    `seasonal_same_month_return` once traded a month late. Tier A, no overlap.
+    → `notes/2026-09-02-return-seasonalities-common-factors.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -3515,8 +3675,65 @@ hypothesis fodder, then anti-candidates.
 
 | 2026-08-31 (session 18) | **Aimed entirely by `SUMMARY.md`'s own open questions rather than by breadth, and it takes all three of its top-priority items.** Two of them are papers this folder has flagged unread across multiple sessions (Lou-Shu, Hou); the third is the last partial family gap (`portfolio-learning`'s "stacking half"), which closes it and gives every `program.md` family a section of its own. Three notes, four sources; full text read directly for two primaries, two recorded **from their published abstracts only** (both closed access with no repository copy and every mirror bot-challenged). The session's shape is unusual and worth naming: **two of the three notes end by narrowing a conclusion `experiments/learnings.md` recorded as final, and in both cases the narrowing is one free measurement wide** - the `liquidity-volume` null was measured on the mean of volume where the priced functional is the mean of the *reciprocal*, and the `portfolio-learning` closure was measured on return-series correlation where the governing quantity is cross-sectional *signal* correlation. Neither lab result is wrong; both are one step narrower than stated, and candidates #58 and #60 are the zero-cost checks that settle them. The third note is a *discount* rather than a build: the strongest source on lead-lag says the grouping variable carries the hypothesis, and the grouping it endorses needs a taxonomy this repo probably does not have. | Lou-Shu 2017 (RFS; the authors' August 2016 working version read in full from an ICMA-hosted mirror, `icmagroup.org/assets/documents/.../Bond-Market-Liquidity-Library/`) (`2026-08-31-amihud-volume-component-decomposition.md`); Hou 2007 (RFS) recorded **from its published abstract only** - `oa_status: closed`, no repository fulltext, SSRN bot-challenged on both posted abstract pages, CORE and CiteSeerX resolved nothing; abstract read verbatim from the RePEc/IDEAS record (`2026-08-31-intra-industry-lead-lag-grouping.md`); Fitzgibbons-Friedman-Pomorski-Serban 2017 (Journal of Investing; the typeset article read in full from AQR's own hosting) paired with its peer-reviewed rebuttal Leippold-Ruegg 2018 (European Financial Management), the latter recorded **from its published abstract only** - SSRN, Taylor & Francis, the EFMA conference mirror and the Zurich Open Repository each refused an automated client (`2026-08-31-signal-blending-vs-portfolio-blending.md`) |
 | 2026-09-01 (session 19) | **The session's aim was set by the lab, not by this folder: both of the diagnostics `SUMMARY.md` made its top priority (#58, #60) were run overnight, and the ETF-versus-constituent gap this log has flagged for two sessions was screened dead by the lab itself — so the standing question list was spent on arrival and the focus moved to what the lab's own results opened.** Three notes, four sources; full text read directly for three primaries, one recorded from its **published abstract only**. The shape is *one mechanism aimed at the only family with zero trials, one discount aimed at the lab's best new result, and one source that explains a pattern the lab has hit repeatedly without a reason.* `range-variance` gets its first **asymmetric** mechanism (upper tail rather than width) together with a free two-number test that decides it either way — and the reading that the lab's own range-lottery screen dismissed a significant, correctly-signed result *using the confound the test exists to separate*. `portfolio-learning` and the inference layer get the algebra behind the lab's mean-versus-max finding — a proof that linear composites are *exactly* equivalent to portfolios of their legs, which is why the mean is bounded and the max is not — plus a second bias, distinct from every correction this folder holds, that lives **inside a single trial** and that the trial count cannot see. And `statistical-learning` gets the size-cut result that predicts, from outside, that a ~145-name large-cap universe is where most characteristics stop working: it names the three daily-data survivors, one of which (`SUV`) is the single volume functional the lab has not screened. | Bali–Cakici–Whitelaw 2011 (JFE; the typeset article read in full from the corresponding author's NYU Stern page), with Cheon–Lee 2018 (Management Science) recorded **from its published abstract only** — closed access (`2026-09-01-max-lottery-extreme-positive-returns.md`); Novy-Marx 2016 (NBER WP 21329 / author's March 2016 draft, R&R at JFE per his posted CV; read in full from `mysimon.rochester.edu`) (`2026-09-01-multi-signal-overfitting-critical-t.md`); Freyberger–Neuhierl–Weber 2020 (RFS; the NBER working-paper draft read in full, including the appendix selection table and variable definitions) (`2026-09-01-nonparametric-characteristic-selection-large-stocks.md`) |
+| 2026-09-02 (session 20) | **Aimed by `SUMMARY.md`'s own ranked open questions, both of which survived contact with the lab this time — and the session's shape is *two corrections to screens the lab is still carrying*, not two new mechanisms.** The 2026-09-01 nightly ran #61's `MAX`/`MIN` sign test and closed `range-variance` a fourth time, so the standing list's first item was spent on arrival and its second (`seasonality-calendar`, the **calendar** half) became the focus. That half had *also* been closed overnight, structurally — which turned the intended survey into an audit of the two screens the family now rests on. Both audits found the screen narrower than the conclusion drawn from it, and both end in a **free measurement that decides the family either way** (#66, #67). The third note takes the standing size-distribution tension, which asked explicitly for a source measuring predictability *by size group directly*. Three notes, five sources; full text read directly for three primaries (two via author/NBER working-paper versions of the published articles, one via a university mirror of the authors' working draft), two recorded **from their published abstracts only** (both closed access). Keloharju–Linnainmaa–Nyberg 2016 (JF) + 2021 (JFE companion) (`2026-09-02-return-seasonalities-common-factors.md`); Ogden 1990 (JF) + Etula–Rinne–Suominen–Vaittinen 2020 (RFS) (`2026-09-02-turn-of-month-payment-cycle.md`); Fama–French 2008 (JF) (`2026-09-02-anomalies-by-size-group.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-02] Both of this folder's standing priorities were closed by the lab before the
+  session ran — for the second session in a row — and the useful response was to audit the
+  closures rather than to survey somewhere else.** #61's `MAX`/`MIN` sign test was run and
+  `range-variance` closed a fourth time (correctly, on the source's own identifying criterion); the
+  **calendar** half of `seasonality-calendar`, this list's number-two item, was closed the same
+  night on a structural argument. Neither closure is wrong. But **both rest on a screen narrower
+  than the conclusion drawn from it**, and in both cases one free number decides it: the calendar
+  closure tested the T−1..T+3 window and pooled the payment cycle's *negative* window (T−8..T−4)
+  into an undifferentiated complement (#67), and the family's cross-sectional half is still
+  carrying a **pre-registered screen its own successor literature predicts will fail** (#66). This
+  is now a recognisable pattern worth naming: *the lab's free screens are fast enough that this
+  folder's value has shifted from finding new mechanisms to checking that the lab's negative
+  results measured what they claimed.* Three of the last six notes have ended that way.
+- **[2026-09-02] What should aim the next session, in order.**
+  - **Check whether #66 and #67 were run before choosing anything else**, exactly as the
+    2026-08-31 and 2026-09-01 entries below instructed for their own diagnostics — the answers
+    redirect the only family with a live, uncontested lead. If #67 comes back positive, record the
+    `calendar` closure as **final** and stop proposing calendar overlays; if #66's fixed-effects
+    contrast comes back null, the cross-sectional seasonal is a persistent mean-return sort rather
+    than a seasonal and the whole family should be re-described, which matters because that leg is
+    currently the lab's only one with reliable cross-sectional content.
+  - **`seasonality-calendar` is still the thinnest live family and now has the folder's most
+    specific untried candidate (#69, the ETF/country-index seasonal).** It is also the only
+    proposal on the table that answers *two* open lab questions at once — the survivorship
+    objection to single-name seasonality, and the "fifth maximally orthogonal leg" the
+    `portfolio-learning` leg-count contrast needs — with the orthogonality **measured in the
+    source** rather than assumed. Its precondition (count available annual lags per instrument) is
+    free and should be run first; if the 20-year lookback does not fit this store, say so and
+    record it, because a shortened-window version is a different object from the published one.
+  - **Do not take another size/microcap source.** With #68 the folder has four readings on where
+    this universe sits and they now reconcile (accuracy versus count; momentum pervasive among big
+    stocks, characteristic levels not). The marginal note there is spent. The same standing
+    embargo from 2026-09-01 on **multiple-testing and inference literature** remains in force and
+    was honoured this session.
+  - **`Goyenko–Holden–Trzcinka 2009 (JFE)` should now be dropped from this list entirely** rather
+    than carried a fourth time. It has been deferred since 2026-08-29, `liquidity-volume` has since
+    closed twice on the lab's own measurements, and #68 supplies the general reason a liquidity
+    premium located in the illiquid tail is unreachable on an all-big-stock universe. Nothing a
+    proxy horserace could say changes that.
+  - **The one genuinely uncovered thing left, and it is a method rather than a family:** every
+    remaining live question in this folder is now of the form *"the lab measured X and concluded
+    Y ⊃ X"*. There is a real literature on pre-registration and specification-curve/multiverse
+    reporting for exactly that failure. It was **not** taken this session because it sits under the
+    inference-literature embargo, and it should only be taken if a session finds itself with no
+    mechanism-note candidate in a thin family — which was not the case tonight and is unlikely to
+    be next time either.
+- **[2026-09-02] A tension carried forward, not resolved.** Keloharju–Linnainmaa–Nyberg's 2016 JF
+  paper argues return seasonalities are **common-factor-borne and unhedgeable** (at least
+  two-thirds from shared factors; hedging the exposure removes the effect), while the same authors'
+  2021 JFE companion reports **seasonal reversals summing to roughly zero over the calendar year**
+  and reads them as temporary mispricing. Both are Tier 1 and they are the same research team five
+  years apart. The lab does not have to adjudicate it, but the two readings imply different
+  answers to a question it *will* face: whether a seasonally-tilted long-only book that trades the
+  same names around the year nets anything after a year of turnover. That is checkable for free on
+  train and is the first thing to measure if #69 is built.
 
 - **[2026-09-01] The three standing top-priority items were all resolved by the lab before this
   session ran, and that is the pattern to keep.** #58's diagnostic came back **confirming** the

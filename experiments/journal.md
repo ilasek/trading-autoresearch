@@ -5720,3 +5720,34 @@ ran on the branch `main-ymqquw` rather than `main` because its execution harness
 per-session branch it may not push outside; the branch was created at exactly `origin/main` and
 carries only tonight's commits, so the trial history is contiguous and not split. **It must be
 merged to `main` before the next session runs, or the 2026-08-16 split-history problem recurs.**
+
+## Protocol issue — 2026-09-02 (learning agent): 2026-09-01 nightly recovered from `origin/main-ymqquw`
+
+At the start of the 2026-09-02 research session, `origin/main` did **not** contain the 2026-09-01
+nightly strategy session. Four commits — `251ac0b`, `78d8041`, `991cd78`, `765664f`, carrying
+**3 trials** (`pl_second_best_leg`, `pl_fixed_share_tails`, `sc_seasonal_matched_control`), their
+`trial_returns/` parquets, the leaderboard update, the session summary and the distilled learnings
+— sat only on the per-run branch `origin/main-ymqquw`. This is the second consecutive night it has
+happened (see the 2026-08-31 entry for `origin/main-rdlknw`) and the failure mode recorded for
+2026-08-12..15: trials that never reach `main` leave every later trial scored against an
+understated deflated-Sharpe bar. **The strategy session itself flagged the risk correctly in its
+own summary and asked for the merge; nothing was wrong with its work.**
+
+Unlike 2026-08-31 this was **not** a fast-forward — `main` had gained the 2026-09-02 data-refresh
+commit in the meantime, so the branch was 4 ahead and 1 behind. The two sides touch **disjoint
+file sets**: the stranded commits touch only `experiments/` and `strategies/candidates/`, the
+intervening commit only `data/store/`. The merge was therefore conflict-free and purely additive,
+and was verified as such before committing — `trials.jsonl` goes 69 → 72 rows with **zero deleted
+lines**, and the merged tree's `data/store/` is byte-identical to `main`'s. No content was
+authored, edited or reordered by this agent; `engine/`, `scripts/`, `tests/`, `data/`,
+`program.md`, `CLAUDE.md` and `research/` are untouched by the merge. **The trial count on `main`
+is now complete through 2026-09-01 and the DSR bar is honest again.**
+
+Still present and now stale: `origin/main-ar91zf` and `origin/main-rdlknw`, both 0 commits ahead of
+`main`. Deleting remote branches is outside this agent's remit; a human may prune all three.
+**This is a recurring harness problem, not a one-off** — three per-run branches in three weeks, two
+of them carrying live trials. It has now been caught and repaired twice by the learning agent,
+which is not a control anyone should rely on: a night when the research session does not run, or
+runs first, leaves the split in place. Flagged for the human.
+
+## Research session — 2026-09-02 (learning agent): 3 notes added, see research/SUMMARY.md
