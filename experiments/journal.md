@@ -5785,3 +5785,93 @@ runs first, leaves the split in place. Flagged for the human.
   is the first non-`price-trend` scout in seven readings where train did not
   under-predict validation (the standing sample was six consecutive under-predictions).
 
+## 2026-09-02T23:22:49+00:00 — pl_2leg_null_partner — **SCOUT**
+- Candidate: `strategies/candidates/pl_2leg_null_partner.py` (family: portfolio-learning, track: scout, trial #74)
+- Hypothesis: A two-leg fixed-quota union book holding the top 10 names of the same-calendar-month seasonal score and the top 10 of standardized unexplained volume — a partner as orthogonal to the seasonal leg as arm A's (rho +0.001 against -0.006) but carrying no tail content whatever (+0.09%/yr top-20 excess on train, t = +0.08, against arm A's +2.31%/yr) — scores near 0.72 on validation, below both trial #72's single-leg 0.782 and arm A's 0.786, because a union leg pays through its own tail and not through orthogonality as such, so filling half the book's slots with a leg that orders names at random with respect to forward returns dilutes it toward the equal-weight floor. Landing at or above 0.786 would instead show the book's slots are near-interchangeable and that extra legs supply breadth of holdings rather than breadth of signal. Breadth, churn and joint coverage are matched holdings-only in advance (20.9 against 20.6 names, 13.44x against 13.01x annual turnover, 49.2 against 49.3 names of joint pool, same 350 months). The SUV leg is the two-window construction in strategies/lib/union_legs.py, not the single-window recipe screened on 2026-09-01, which is identically zero because an OLS with an intercept has residual sum zero on its own fitting sample.
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.913 <= the family's best 1.008 (DSR 0.8726, 74 trials, 22 effective after clustering at rho 0.95)
+- Train: sharpe +0.81, ann_ret +10.5%, maxDD -52.2%, turnover 6.9x
+- Validation: sharpe +0.91, ann_ret +16.2%, maxDD -28.9%, turnover 17.9x
+- Deflated Sharpe prob: 0.8726 (bar from 74 trials, 22 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: **The pre-registration inverted: the partner with NO measurable content added
+  +0.131 where the partner with a real tail added +0.004 — and the free diagnostics that
+  followed removed every comfortable explanation, which is why arm C was then run.**
+  Pre-registered 0.72; observed **0.913**. Against #72's single leg: `rho` 0.9427, SE
+  0.1360, **d = +0.131, t = +0.96**. Against arm A: `rho` 0.9382, SE 0.1412, **d = +0.127,
+  t = +0.90**. Neither is resolvable on its own, but both point the way the design said
+  they would not.
+  **Three things were ruled out for free before crediting anything.** (i) *Not a defensive
+  or size tilt in costume* — SUV's picks sit at **1.140x** the joint pool's 21-day
+  volatility (above the pool, not below), at pool-average log dollar volume (**-0.029**)
+  and slightly below pool ETF share (0.127 against 0.149). (ii) *Not content the pre-trial
+  screen was too shallow to see* — at the depth the book actually buys it, SUV's
+  top-10-of-pool forward-21-day excess on train is **-0.77%/yr (t = -0.51)**, mildly
+  negative rather than hidden-positive. (iii) *Not corroborated by the larger split* — on
+  **train, 9.1x longer, the two arms tie: 0.806 against 0.810**, so the 14,261-day sample
+  prices the partner's identity at 0.004 while the 1,562-day sample prices it at 0.127.
+  Scaling the closed form by sqrt(1562/14261) puts the train SE near **0.046** at the same
+  `rho` (assumed, not measured — only validation series are stored), so the train null is
+  ~3x tighter than the validation signal.
+  **The one account left standing after those three was the partner's own volatility**
+  (arm A 1.230x, arm B 1.140x), which orders the two books correctly and is consistent with
+  arm B's much better validation drawdown (**-28.9% against -35.5%**) at a slightly *higher*
+  annual return (16.2% against 15.6%). Trial #75 was designed to test exactly that and
+  refuted it. Read this entry with #75's.
+  Also recorded: the SUV leg used here is **not** the object screened on 2026-09-01. That
+  screen's stated recipe — one 21-day window, regress log volume on a constant plus the
+  signed return parts, sum that window's residuals — is **identically zero**, because an
+  OLS containing an intercept has residual sum zero on its own fitting sample. Measured
+  over 416 name-dates the largest |sum of residuals| is **1.6e-11**, mean 2.4e-13, i.e. the
+  rounding error of the linear solve; an independent reimplementation of the stated recipe
+  reproduces that screen's 21-day IC to four decimals (+0.0102 against +0.0101). That also
+  explains the property SUV was selected for — "the most orthogonal signal ever measured
+  against these legs", |rho| 0.002-0.107: **an object with no content is orthogonal to
+  everything by construction.** `strategies/lib/union_legs.py` implements the literature's
+  two-window version instead.
+
+## 2026-09-02T23:28:04+00:00 — pl_2leg_placebo_partner — **SCOUT**
+- Candidate: `strategies/candidates/pl_2leg_placebo_partner.py` (family: portfolio-learning, track: scout, trial #75)
+- Hypothesis: A two-leg fixed-quota union book holding the top 10 names of the same-calendar-month seasonal score and the top 10 of a deterministic pseudo-random score that reads no market data at all scores near 0.95 on validation — at or above trial #74's 0.913, whose partner was a measured but contentless signal, and well above trial #73's 0.786, whose partner carried a real tail — because the union book's second slot is content-insensitive and what orders these books is the volatility of whatever fills it (partner picks at 1.005x, 1.140x and 1.230x the pool's 21-day volatility for the placebo, SUV and reversal partners respectively), the operative mechanism being that a second leg lets the book draw the working leg's own deeper tail (seasonal's top-10 train excess is +12.21%/yr at t = +6.86 against its top-20's +6.94%/yr) while the remaining slots merely dilute month-specific idiosyncratic risk. Landing near 0.786 instead would restore the partner's content as the operative variable. Breadth and churn are matched holdings-only in advance to within 0.5% and 0.1% of trial #74 (21.0 against 20.9 names, 13.42x against 13.44x annual turnover, same 350 months).
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.799 <= the family's best 1.008 (DSR 0.8076, 75 trials, 21 effective after clustering at rho 0.95)
+- Train: sharpe +0.83, ann_ret +10.6%, maxDD -54.4%, turnover 6.9x
+- Validation: sharpe +0.80, ann_ret +13.7%, maxDD -30.8%, turnover 18.6x
+- Deflated Sharpe prob: 0.8076 (bar from 75 trials, 21 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: **The placebo did its job: a coin flip in the second slot scores 0.799, the
+  volatility account is refuted, and the whole three-arm spread collapses into one standard
+  error.** Pre-registered 0.95 on the volatility ordering; observed **0.799**, which sits
+  *below* arm B rather than above it — `rho` 0.9524, SE 0.1240, **d = -0.114, t = -0.92**.
+  The partner's 21-day volatility relative to the pool runs 1.230x / 1.140x / **1.005x**
+  across arms A / B / C against validation Sharpes 0.786 / 0.913 / 0.799, so the ordering
+  is not monotone in volatility and that account is dead one trial after it was proposed.
+  **What the triple establishes, and it is the session's headline.** Against the same
+  single-leg baseline (#72, 0.782), three partners chosen to differ as much as a partner
+  can — a measured signal with a real tail, a measured signal with none, and a hash of the
+  date and the ticker that reads no market data at all — add:
+
+      arm  partner    d vs #72    SE      t       train    validation
+      A    reversal    +0.004   0.1373  +0.03     0.806      0.786
+      B    suv         +0.131   0.1360  +0.96     0.810      0.913
+      C    placebo     +0.017   0.1139  +0.15     0.834      0.799
+
+  **Not one of the three is distinguishable from the single-leg book, the full spread
+  across all three (0.127) is inside a single paired SE (~0.13), and on the 9.1x longer
+  train split the three partners span 0.028 — with the coin flip winning it.** The two
+  splits also disagree on the ordering (train C > B > A, validation B > C > A), which is
+  this repo's ⚠ standing concern arriving inside a single designed family rather than along
+  a promotion ladder.
+  **Consequence for the standing claim.** `learnings.md` (2026-09-01) records "a leg earns
+  its place in a union book by being independent, not by being individually significant",
+  from #71-vs-#72 at **t = +1.04**. A placebo partner is maximally independent and
+  maximally insignificant, and it buys **+0.017**. So the claim as written does not survive
+  its own control: independence is not sufficient, and at two legs nothing about the
+  partner is measurable at all. What is *not* refuted is the 1-leg → 4-leg gap itself
+  (+0.175, t = +1.04, unchanged), only the per-leg reading of it — the gain, if real, is
+  not delivered by the first partner and cannot be priced at +0.175/3, which is precisely
+  the arithmetic the 2026-09-01 session used to decline the fifth leg as a ~0.03 effect.
+  **Method note worth carrying: a placebo arm is the cheapest falsification available to
+  this lab and it had never been run.** It cost one trial and it converted a surprising
+  result (arm B) from "a mechanism to build on" into "one draw inside a standard error",
+  which is what three sessions of retracted mechanism accounts in this file suggest should
+  be done before, not after, building on a surprise.
+
