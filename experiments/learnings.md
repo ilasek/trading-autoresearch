@@ -1785,7 +1785,12 @@ across experiments; prune entries that later evidence contradicts.
   check invariance by rebuilding the weight matrix under an alternative transform, which costs
   nothing.**
 
-- **[Measured 2026-09-01, nightly] A leg earns its place in a union book by being independent,
+- **[FAILS ITS OWN CONTROL 2026-09-02 — read the union-partner triple near the end of this file
+  before using this entry. A placebo partner (a hash of the date and the ticker, reading no market
+  data) is maximally independent and maximally insignificant and buys +0.017 against the same
+  baseline, so independence is NOT sufficient. The +0.175 gap below is untouched; what dies is the
+  per-leg linear reading of it, including the "+0.175/3" arithmetic used to decline a fifth leg.]**
+  **[Measured 2026-09-01, nightly] A leg earns its place in a union book by being independent,
   not by being individually significant — which inverts the screen a session would naturally
   apply.** Rebuilding the strongest leg alone under the union's own machinery and its own
   joint-coverage pool (#72) gives **0.782** against the four-leg union's 0.958: gap **+0.175**,
@@ -1861,3 +1866,154 @@ across experiments; prune entries that later evidence contradicts.
   t = +0.50 / +1.45 / **+2.10**), which is the slow-moving-risk-proxy signature. SUV survives as
   the most orthogonal candidate *union leg* ever measured here (|rho| 0.002-0.107 against all four
   existing legs), not as a sort.
+  **[RETRACTED 2026-09-02 — the SUV half of this entry only. The recipe as stated is identically
+  zero (an OLS with an intercept has residual sum zero on its own fitting sample; largest
+  |sum of residuals| 1.6e-11 over 416 name-dates), so every number quoted for SUV above is the
+  rounding error of the linear solve, and the |rho| 0.002-0.107 that made it look like the ideal
+  fifth leg is what an object with no content scores against everything by construction. The
+  two-window repair in `strategies/lib/union_legs.py` is a real object and is also a null on the
+  tail statistic. See the entry near the end of this file. The `A_C` and ETF-lead-lag halves of
+  this entry are unaffected.]**
+
+- **[Measured 2026-09-02, nightly] `SUMMARY.md` #62's standardized unexplained volume, as this
+  lab implemented it, is identically zero — and the property it was selected for is a
+  consequence of that. Fifth instance of the repo's oldest failure mode, and the first caught
+  on an object the lab had already written a conclusion about.** The 2026-09-01 screen's recipe
+  is "log volume on a constant plus |positive| and |negative| returns as separate regressors
+  over 21 days, residual sum standardized". **An OLS containing an intercept has residual sum
+  exactly zero on its own fitting sample**, so one window for both the fit and the sum returns 0
+  for every name on every date. Measured over 416 name-dates: largest |sum of residuals|
+  **1.6e-11**, mean **2.4e-13** — the rounding error of the linear solve. An independent
+  reimplementation of the stated recipe reproduces that screen's 21-day IC to four decimals
+  (**+0.0102** against **+0.0101**), which is what two implementations of one degenerate formula
+  do on the same data. **This retracts the reading that SUV is "the most orthogonal signal ever
+  measured against these legs" (|rho| 0.002-0.107): an object with no content is orthogonal to
+  everything by construction, so that number was a symptom, not a finding.** The literature's
+  construction needs two *disjoint* windows (estimation t-63..t-11, event t-10..t, standardized
+  by the estimation residual SD); it is implemented in `strategies/lib/union_legs.py` and is
+  well-behaved (median -0.025, quartiles ±1.42, 99.96% inside ±10 once a units floor on the
+  estimation residual SD guards a degenerate fit). The repaired object is **also a null** on the
+  statistic a book is scored on — top-20 excess +0.09%/yr (t = +0.08), top-10-of-pool
+  **-0.77%/yr (t = -0.51)** — so `SUMMARY.md` #62's sort is declined either way, but for the
+  right reason now. **The general habit, at its fifth instance and now with a cheap test
+  attached: when a screen reports a suspiciously clean orthogonality, print the object's own
+  dispersion before believing it.** Prior instances: the `dropna` trim cohort (four trials), the
+  forward-fill weight-drift claim (two trials), the `MonthEnd`/`MonthBegin` alignment,
+  `eta(q)`'s estimability.
+
+- **[Measured 2026-09-02, nightly] The union book's second slot is indistinguishable from a coin
+  flip on both splits, and the standing "legs earn their place by independence" claim does not
+  survive its own placebo.** Three two-leg fixed-quota union books, each `seasonal` plus one
+  partner, with breadth, churn, warmup, joint pool and machinery matched holdings-only in
+  advance (20.1-21.0 names, 13.0-13.4x train turnover, same 350 months):
+
+      arm  partner    partner's own tail        vol/pool   d vs #72    SE      t     train   val
+      A    reversal   +2.31%/yr (t=+1.29)         1.230     +0.004   0.1373  +0.03   0.806  0.786
+      B    suv        +0.09%/yr (t=+0.08)         1.140     +0.131   0.1360  +0.96   0.810  0.913
+      C    placebo    zero by construction        1.005     +0.017   0.1139  +0.15   0.834  0.799
+
+  Arm C's partner is a hash of the rebalance date and the ticker: it reads **no market data at
+  all**. **Not one of the three is distinguishable from the single-leg baseline (#72, 0.782), the
+  entire spread across all three partners (0.127) sits inside one paired SE (~0.13), and on the
+  9.1x longer train split the three span 0.028 — with the coin flip winning it.** The two splits
+  also disagree on the ordering (train C > B > A, validation B > C > A), which is this file's ⚠
+  standing concern arriving inside one designed family rather than along a promotion ladder.
+  **What this refutes and what it leaves standing.** The 2026-09-01 claim that "a leg earns its
+  place in a union book by being independent, not by being individually significant" rests on
+  #71-vs-#72 at t = +1.04. A placebo partner is maximally independent *and* maximally
+  insignificant and buys +0.017, so **independence is not sufficient** and the claim as written
+  fails its own control. The 1-leg → 4-leg gap itself (+0.175, t = +1.04) is untouched; what dies
+  is the **per-leg linear reading** of it — the gain is not delivered by the first partner and
+  must not be priced at +0.175/3, which is exactly the arithmetic the 2026-09-01 session used to
+  decline the fifth leg as a "~0.03 effect". If the gap is real it is a **threshold in leg count**,
+  not an increment, and it has never been measured at three legs.
+  **Two accounts were killed by free diagnostics rather than by trials, in the order they were
+  proposed.** *Style tilt in costume*: SUV's picks sit at 1.140x the pool's 21-day volatility
+  (above it, not below), pool-average log dollar volume (-0.029), below-pool ETF share (0.127 vs
+  0.149) — refuted. *Partner volatility*: it ordered arms A and B correctly and predicted arm C
+  highest; C landed **below** B, refuting it one trial after it was proposed.
+  **Method, and it is the transferable half: a placebo arm is the cheapest falsification this lab
+  has and it had never been run.** It cost one trial and converted a surprising result into one
+  draw inside a standard error. Given this file's record of mechanism accounts retracted a session
+  or two after being built on, **run the placebo before building on a surprise, not after.**
+
+- **[Measured 2026-09-02, nightly] The cost of a calendar overlay is set by how many times it
+  crosses the window boundary, not by how wide the window is — which closes the `calendar` half of
+  `seasonality-calendar` a second time, on cost, after its sign condition finally passed.**
+  `research/SUMMARY.md` #67 argued the 2026-09-01 structural closure tested the wrong window: its
+  complement pooled ordinary mid-month days with the T-8..T-4 window the payment-cycle mechanism
+  says is *negative*. Measured on train, equal-weight universe, offsets relative to each month's
+  last trading day: **T-8..T-4 runs -0.388 bps/day** (t = -0.22, -0.97%/yr if held always) against
+  T-3..T+3 at +12.43 bps/day (t = +8.34) and all other days at +9.02. **So the closure's own
+  binding condition — the sat-out window must earn at or below zero — is met, and the note's test
+  passes.** The overlay is still unreachable, and the reason generalises. Excluding a 5-day window
+  costs **23.8x** of annual turnover, *the same as holding only in-window*, because either way the
+  book exits and re-enters once a month: turnover is a property of the **boundary crossings**, not
+  of the window's width, and #67's "~12 round trips against 24" is wrong for that reason. Priced:
+  gross Sharpe rises **1.050 → 1.216** (the mechanism is real and works gross), and net it falls to
+  **0.966**, below buy-and-hold. Decomposed, sitting out T-8..T-4 avoids **+0.230%/yr** of loss
+  against **-3.565%/yr** of transition cost, a 15x deficit. **General rule: a monthly calendar
+  overlay on this universe must find a window losing more than ~3.6%/yr — about -30 bps/day over
+  five days — and the most negative single offset measured here is -1.26 bps/day.** Two riders: the
+  window is regime-dependent (US settlement went T+3 → T+2 in 2017 and T+1 in 2024, and the note
+  itself warns the predicted day shifts with it), and every neighbouring specification tested
+  (T-7..T-4, T-7..T-3, T-8..T-3, T-6..T-4) nets between 0.886 and 0.943, all below buy-and-hold.
+
+- **[Measured 2026-09-02, nightly] The lab's seasonal leg is better identified than the lab
+  thought, and the correction comes from running the source's own test rather than the one the lab
+  chose.** `SUMMARY.md` #66 says the 2026-08-29 session over-read its Heston-Sadka failure: that
+  screen wanted annual lags positive and non-annual *negative*, measured both positive, and
+  concluded the identification was absent. Keloharju-Linnainmaa-Nyberg predict exactly that and use
+  a different contrast — rank the same assets on same-calendar-month history versus
+  other-calendar-month history and check that only the former carries information. Run on train,
+  monthly, all 140 instruments: **same-calendar-month mean IC +0.0632 (t = +6.98)** against
+  **other-month mean IC +0.0143 (t = +1.49)**; top-20 excess +6.90%/yr (t = +4.73) against
+  +4.01%/yr (t = +2.23). **The discriminating test passes.** This matters beyond the seasonal leg,
+  because the other-month mean is precisely the "this name has a high unconditional mean return"
+  channel that survivorship bias inflates — so the family's strongest object is **not** explained by
+  the artifact that closed `range-variance`. Note also that the lab's leg subtracts the other-month
+  mean and the raw same-month mean scores slightly higher on both statistics (+0.0632 vs +0.0573,
+  +6.90 vs +6.63%/yr); the difference is far inside the resolution floor and is **not** worth a
+  trial, but the demeaning should stop being described as adding identification — the free control
+  is what supplies it.
+
+- **[Measured 2026-09-02, nightly] `SUMMARY.md` #69's ETF-only seasonal leg — the folder's
+  top-ranked source of an orthogonal leg — is dead on this universe, and its own pre-registered
+  precondition is what kills it.** The note asks for an annual-lag count first. Measured: ETFs have
+  median 16.3 years of history and **only 5 of 42 reach 20 years**; requiring the leg's own 5
+  same-month observations leaves **149 of 612 train month-ends** with 20+ ETFs scoreable, the first
+  in **2005-08**. And the content is absent where it is computable: ETF-only same-calendar-month
+  mean gives **IC -0.0049 (t = -0.19)**, same-minus-other **-0.0005 (t = -0.02)**, top-8 excess
+  +1.64%/yr (t = +0.74) — against +0.0632 (t = +6.98) for the same construction on the full
+  cross-section. **The source's claim that seasonality strategies on well-diversified
+  characteristic portfolios are about as profitable as single-stock ones does not replicate here.**
+  Consequence worth carrying: this repo's seasonal effect is a **single-stock** effect, which
+  removes the survivorship-relief argument that motivated the ETF version — though the
+  other-month control above bounds that worry from the other side.
+
+- **[Measured 2026-09-02, nightly] `range-variance` is declined a fourth session, and for the first
+  time on the statistic its own defence rested on.** Three sessions closed the family on ICs and
+  quintile spreads. That was open to a real objection the lab itself supplies: `learnings.md`
+  (2026-08-30) records that a **null IC and a 0.70-Sharpe book coexist here**, because a 20-of-140
+  book buys the tail rather than the quintile mean, so an IC screen cannot close a family whose
+  candidate would be a tail book. The one object in the family that is not a cross-sectional level
+  — and the level *is* the survivorship artifact — is within-name de-levelled range volatility
+  (21-day Garman-Klass against the same name's own 252-day GK baseline), screened in 2026-08-31 as
+  an IC null and declined. **Measured tonight on the tail instead: top-20 excess -0.97%/yr
+  (t = -0.63) and bottom-20 -0.27%/yr (t = -0.20) — both ends dead, and the top end is the wrong
+  sign for a book.** The de-levelling is also only partial: `spearman(DLRV, raw GK level) = +0.563`
+  and `spearman(DLRV, 21d reversal) = +0.235`, so more than half of it is still the level artifact
+  plus some reversal. **Ten screened mechanisms across five sessions, one identified cause, and the
+  last escape hatch closed on its own terms.** The standing recommendation to the human is
+  unchanged and now better evidenced: this family is **unreachable on this universe rather than
+  unexplored**, and `program.md`'s cold-family allocation rule cannot be honestly satisfied here —
+  spending the trial would mean knowingly building on the survivorship artifact and permanently
+  raising the DSR bar to satisfy a count.
+
+- **[2026-09-02, nightly] The train-Sharpe-as-prediction sample breaks its streak.** Six
+  consecutive non-`price-trend` scouts had under-predicted validation. Tonight's three:
+  #73 train 0.806 → val **0.786** (over), #74 0.810 → **0.913** (under), #75 0.834 → **0.799**
+  (over). Two of three over-predict, so the level story the last session offered as the competing
+  explanation (these books all hold ~20 of ~140 names on a train split with a smaller universe and
+  longer survivorship conditioning) no longer accounts for the sample on its own. n = 20 outside
+  `price-trend`; still unresolved, still free to keep recording.

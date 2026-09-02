@@ -5875,3 +5875,181 @@ runs first, leaves the split in place. Flagged for the human.
   which is what three sessions of retracted mechanism accounts in this file suggest should
   be done before, not after, building on a surprise.
 
+
+## Session summary — 2026-09-02 (nightly)
+
+**Budget: 3 of 8 experiments spent, all on one designed triple that ends in a placebo
+control; five more ideas were declined on free measurements.** Allocation:
+`portfolio-learning` 3, `price-trend` 0 (cap 2, unused). Every candidate ran on the
+**scout** track, so the champion was untouched and **the holdout was not read**. The
+cold-family rule was NOT satisfied — see the protocol note below, which is again the one
+item needing a human.
+
+    #73  pl_2leg_content_partner   portfolio-learning  SCOUT  val 0.786  turn 17.5x
+    #74  pl_2leg_null_partner      portfolio-learning  SCOUT  val 0.913  turn 17.9x
+    #75  pl_2leg_placebo_partner   portfolio-learning  SCOUT  val 0.799  turn 18.6x
+
+### Best finding: the union book's second slot is indistinguishable from a coin flip, on both splits
+
+The 2026-09-01 session's most generalisable result was "a leg earns its place in a union
+book by being **independent**, not by being individually significant", from one
+retrospective reading (#71 four legs 0.958 against #72 one leg 0.782, t = +1.04). Its
+untested half is that "not individually significant" is not the same as "empty" — the three
+weak legs all carry small positive tails (+3.87 / +3.25 / +2.31 %/yr on train). So tonight
+built a designed triple: the same single-leg `seasonal` book plus one partner, with
+breadth, churn, warmup, joint pool and machinery matched holdings-only in advance, varying
+only what the partner is.
+
+    arm  partner    partner's own tail        vol/pool   d vs #72    SE      t     train   val
+    A    reversal   +2.31%/yr (t=+1.29)         1.230     +0.004   0.1373  +0.03   0.806  0.786
+    B    suv        +0.09%/yr (t=+0.08)         1.140     +0.131   0.1360  +0.96   0.810  0.913
+    C    placebo    zero by construction        1.005     +0.017   0.1139  +0.15   0.834  0.799
+
+Arm C's partner is a hash of the rebalance date and the ticker: it reads **no market data
+at all**. **Not one of the three is distinguishable from the single-leg baseline, the whole
+spread across all three partners (0.127) is inside one paired SE (~0.13), and on the 9.1x
+longer train split the three span 0.028 — with the coin flip winning it.** The splits also
+disagree on the ordering (train C > B > A, validation B > C > A), which is this repo's ⚠
+standing concern arriving inside one designed family rather than along a promotion ladder.
+
+**Independence is therefore not sufficient**, and the claim as written fails its own
+control. The 1-leg → 4-leg gap itself (+0.175, t = +1.04) is untouched; what dies is the
+per-leg linear reading of it — the gain is not delivered by the first partner and cannot be
+priced at +0.175/3, which is exactly the arithmetic the last session used to decline a
+fifth leg as a "~0.03 effect". If the gap is real it is a **threshold in leg count**, not
+an increment, and three legs has never been measured.
+
+Two intermediate accounts were killed by free diagnostics rather than by trials, in the
+order they arose. *Arm B is a defensive/size tilt in costume*: refuted — SUV's picks sit at
+1.140x the pool's 21-day volatility (**above** it), pool-average log dollar volume
+(-0.029), below-pool ETF share (0.127 vs 0.149), and its top-10-of-pool train excess is
+**-0.77%/yr (t = -0.51)**. *The partner's volatility is what orders them*: it fitted A and B
+and predicted C highest; C landed **below** B, refuting it one trial after it was proposed.
+
+**Method note, and it is the half most worth carrying: a placebo arm is the cheapest
+falsification this lab has and it had never been run.** It cost one trial and converted a
+surprising result into one draw inside a standard error. Against this file's record of
+mechanism accounts retracted a session or two after being built on, the placebo belongs
+*before* the building, not after.
+
+### Second finding: a headline object from last session is identically zero
+
+`SUMMARY.md` #62's standardized unexplained volume was screened on 2026-09-01 to the recipe
+"log volume on a constant plus |positive| and |negative| returns as separate regressors over
+21 days, residual sum standardized", passed its closure rule, and was recorded as **the most
+orthogonal candidate union leg ever measured here** (|rho| 0.002-0.107) and handed to this
+session as the ideal fifth leg. **An OLS containing an intercept has residual sum exactly
+zero on its own fitting sample**, so that recipe returns 0 for every name on every date:
+over 416 name-dates the largest |sum of residuals| is **1.6e-11** and the mean **2.4e-13**,
+the rounding error of the linear solve. An independent reimplementation of the stated recipe
+reproduces the screen's 21-day IC to four decimals (+0.0102 against +0.0101) — what two
+implementations of one degenerate formula do on the same data. **The orthogonality was a
+symptom, not a finding: an object with no content is orthogonal to everything.**
+
+`strategies/lib/union_legs.py` implements the literature's two-window version instead
+(estimation t-63..t-11, event t-10..t, standardized by the estimation residual SD, with a
+units floor guarding a degenerate fit). That object is real and well-behaved — and is *also*
+a null on the statistic a book is scored on, so #62's sort is declined either way, now for
+the right reason. This is the fifth instance of the repo's oldest failure mode; the new,
+cheap detector is **print the object's own dispersion whenever a screen reports a
+suspiciously clean orthogonality.**
+
+### Five ideas declined on free evidence. All train-split or holdings-only; no returns scored beyond the three trials above, no holdout touched.
+
+1. **`SUMMARY.md` #67 — the turn-of-month payment cycle — passed its sign test and still
+   closes, on cost.** The note was right that the 2026-09-01 structural closure tested the
+   wrong window: measured on train, **T-8..T-4 runs -0.388 bps/day** against T-3..T+3 at
+   +12.43 (t = +8.34) and all other days at +9.02, so the closure's binding condition (the
+   sat-out window must earn at or below zero) is **met**. The overlay is still unreachable
+   and the reason generalises: excluding a 5-day window costs **23.8x** of annual turnover,
+   *the same as holding only in-window*, because either way the book exits and re-enters
+   once a month — **turnover is set by the boundary crossings, not the window's width**, and
+   the note's "~12 round trips against 24" is wrong for that reason. Priced: gross Sharpe
+   **1.050 → 1.216** (the mechanism is real gross), net **0.966**, below buy-and-hold;
+   +0.230%/yr of avoided loss against -3.565%/yr of transition cost. Every neighbouring
+   specification (T-7..T-4, T-7..T-3, T-8..T-3, T-6..T-4) nets 0.886-0.943. **A monthly
+   calendar overlay here needs a window losing ~-30 bps/day over five days; the most negative
+   single offset measured is -1.26.**
+2. **`SUMMARY.md` #66 — the fixed-effects seasonality contrast — run, and it passes, which
+   corrects a screen the lab was still carrying.** Same-calendar-month mean **IC +0.0632
+   (t = +6.98)** against the other-month mean's **+0.0143 (t = +1.49)**; top-20 excess
+   +6.90%/yr (t = +4.73) against +4.01 (t = +2.23). The 2026-08-29 Heston-Sadka reading
+   over-read its own failure, exactly as the note predicted. This matters beyond the leg: the
+   other-month mean is the "high unconditional mean return" channel survivorship bias
+   inflates, and it is the **null** — so the strongest object outside `price-trend` is not
+   the artifact that closed `range-variance`. (The lab's leg subtracts the other-month mean;
+   the raw same-month mean scores slightly higher on both statistics. Far inside the floor,
+   not worth a trial — but the demeaning should stop being described as what supplies the
+   identification.)
+3. **`SUMMARY.md` #69 — the ETF-only seasonal leg, the folder's top-ranked source of an
+   orthogonal leg — dead, killed by its own pre-registered precondition.** ETFs have median
+   16.3 years of history and **only 5 of 42 reach 20**; requiring 5 same-month observations
+   leaves **149 of 612** train month-ends with 20+ ETFs scoreable, first in 2005-08. Where it
+   is computable the content is absent: **IC -0.0049 (t = -0.19)**, same-minus-other -0.0005
+   (t = -0.02), top-8 +1.64%/yr (t = +0.74). The source's claim that diversified
+   characteristic portfolios carry the effect as well as single stocks does not replicate
+   here, and the survivorship-relief argument that motivated it goes with it.
+4. **`range-variance`, declined a fourth session — for the first time on the statistic its
+   own defence rested on.** The previous closures used ICs and quintile spreads, which is
+   open to the lab's own objection that a null IC and a 0.70-Sharpe book coexist here because
+   a 20-of-140 book buys the tail. The family's one non-level object — within-name de-levelled
+   range vol — was declined in 2026-08-31 on IC. Measured on the **tail**: top-20 excess
+   **-0.97%/yr (t = -0.63)**, bottom-20 -0.27%/yr (t = -0.20), both ends dead and the top end
+   the wrong sign for a book. The de-levelling is only partial anyway
+   (`spearman` +0.563 with the raw GK level, +0.235 with 21-day reversal). Ten screened
+   mechanisms, five sessions, one cause, last escape hatch closed.
+5. **A fifth union leg, and further leg-count ladder points.** Both were on the standing
+   next-ideas list. The fifth leg was to be SUV, which finding (2) shows was never the object
+   the list thought it was, and which the repair shows is a null. Further ladder points
+   (3 legs, 5 legs) are increments of 0.04-0.13 against a floor of 0.13-0.16 — inside it, and
+   therefore absent predictions rather than small ones by the standing rule.
+
+### Protocol and allocation notes, stated plainly
+
+- **The cold-family rule was not satisfied, for the third session running, and this needs a
+  human.** `program.md` requires "at least 1 in a family with no trials at all, while any
+  such family remains", and `range-variance` is the only such family. Tonight ran the one
+  remaining argument for it — that every prior closure used the wrong statistic — and the
+  right statistic closes it too (decline 4 above). The lab's judgement is unchanged and
+  better evidenced: **this family is unreachable on this universe rather than unexplored, and
+  the rule should be amended or the family retired.** Both are edits to a frozen file.
+- **Session branch.** This session ran on `main` directly. The 2026-09-01 and 2026-08-31
+  nightlies were both stranded on per-run branches and had to be recovered by the learning
+  agent (see the 2026-09-02 and 2026-08-31 protocol entries); the integrity check at start
+  found `main-qg2r5h` pointing at exactly `origin/main` with no unmerged remote branches, and
+  work moved to `main` before the first trial so the trial history stays contiguous.
+- **Three of tonight's five declines came from the research folder** (#62, #66, #67, #69),
+  and two of the four answers were not the ones the folder predicted (#67's sign test passed
+  and the idea still died; #69 died on its own precondition). #66 is the more useful kind —
+  the folder corrected the lab.
+- **A new lib file was added**, `strategies/lib/union_legs.py` (two-window SUV, and the
+  fixed-quota union builder factored out of #71 so a designed pair is bit-identical). No
+  existing lib file was edited; `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md` and `research/` are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **Measure the leg-count ladder at three legs, or stop claiming a leg-count effect.** The
+   whole `portfolio-learning` story now rests on one gap (#71 vs #72, +0.175, t = +1.04)
+   whose per-leg reading is refuted and whose threshold reading is untested. Three legs is
+   the one point that separates "threshold" from "noise", and it is the only ladder point
+   whose predicted effect (~+0.09 to +0.17 against a ~0.15 floor) is not already inside the
+   floor. If it lands flat, the family's four-leg advantage should be recorded as
+   unreproduced and the lab should stop building union books.
+2. **`SUMMARY.md` #49 — the execution overlay** (re-time trades the incumbent was already
+   going to make, adding no turnover). Carried unspent for a fifth session. It is now the
+   more attractive for a measured reason: the seasonal leg's top-10 turns over **81% a month**
+   (stay rate 0.188) and the union books run 13-19x, so cost is 2-3%/yr on every object in
+   this family — the largest identified, unattacked drag outside the champion.
+3. **`SUMMARY.md` #68's big-stock rule, applied as a filter on the folder itself.** It is
+   free and retrospective: before proposing any candidate from a source, check whether that
+   source reported the effect separately for big stocks. This universe is entirely big, and
+   the rule would have pre-emptively discounted several of this session's own declines.
+4. **Not recommended without new evidence:** `range-variance` (ten screened mechanisms, one
+   cause, and see the protocol note), the `calendar` half of `seasonality-calendar` (now
+   closed twice, structurally and on cost), SUV as a sort or a leg (null on the tail after
+   repair), an ETF-only seasonal (no history and no content), and the champion+leg challenge
+   blend (declined for the fourth consecutive session: the best leg on the board is still
+   1.008 against the 1.34-1.42 a resolvable 20% blend requires).
+
+**No engine issues encountered.** Tests green (33 passed) before the first trial.
