@@ -5751,3 +5751,37 @@ which is not a control anyone should rely on: a night when the research session 
 runs first, leaves the split in place. Flagged for the human.
 
 ## Research session — 2026-09-02 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-02T23:20:53+00:00 — pl_2leg_content_partner — **SCOUT**
+- Candidate: `strategies/candidates/pl_2leg_content_partner.py` (family: portfolio-learning, track: scout, trial #73)
+- Hypothesis: A two-leg fixed-quota union book holding the top 10 names of the same-calendar-month seasonal score and the top 10 of the 21-day reversal score — a partner that is orthogonal to the seasonal leg in the cross-section (rho -0.006) AND carries a real tail of its own (+2.31%/yr top-20 excess on train, t = +1.29) — scores near 0.87 on validation, above trial #72's single-leg 0.782 under bit-identical machinery, and materially above its matched twin `pl_2leg_null_partner`, which substitutes a partner of equal orthogonality (rho +0.001) but no tail whatever (+0.09%/yr, t = +0.08); because a union leg pays through the interaction of independence with its own tail content rather than through independence alone, which is the untested half of the 2026-09-01 finding that legs earn their place by independence rather than by individual significance. Breadth, churn and joint coverage are matched holdings-only in advance (20.6 against 20.9 names, 13.01x against 13.44x annual turnover, 49.3 against 49.2 names of joint pool, same 350 months).
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.786 <= the family's best 1.008 (DSR 0.7958, 73 trials, 21 effective after clustering at rho 0.95)
+- Train: sharpe +0.81, ann_ret +11.3%, maxDD -54.3%, turnover 6.7x
+- Validation: sharpe +0.79, ann_ret +15.6%, maxDD -35.5%, turnover 17.5x
+- Deflated Sharpe prob: 0.7958 (bar from 73 trials, 21 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: **Adding a second orthogonal leg that carries a real tail of its own bought
+  exactly nothing, and the leg-count ladder is therefore not monotone in leg count.**
+  Pre-registered 0.87; observed **0.786** against trial #72's single-leg **0.782** —
+  `rho` **0.9416**, closed-form paired SE **0.1373**, **d = +0.0037, t = +0.03**. This is
+  the flattest reading this family has produced. The ladder now runs 1 leg 0.782 → 2 legs
+  0.786 → 4 legs 0.958 (#71), i.e. **flat across the first addition and then a jump**:
+  #73 against #71 is d = -0.172 at `rho` 0.9272, SE 0.1533, t = -1.12, essentially the
+  same gap #72 had against #71 (-0.175, t = -1.04). So the +0.175 that the 2026-09-01
+  session attributed to "three legs earning their place by independence" is **not
+  delivered one leg at a time**, and the first leg added — orthogonal to `seasonal` at
+  `rho` -0.006 and carrying a +2.31%/yr train tail of its own — contributed none of it.
+  Two readings survive and this trial cannot separate them: either the gain needs
+  **several** independent legs before it appears (a breadth threshold rather than a
+  per-leg increment), or the specific partner matters and `reversal` is the wrong one —
+  note it is the leg most correlated with another member of the four (`group_lead`, at
+  -0.449), so a 2-leg book built on it is the *least* independent pair available.
+  What the trial does establish is that the per-leg linear reading of the independence
+  account is wrong: nothing in the recorded evidence licenses pricing the fifth leg at
+  +0.175/3, which is exactly the arithmetic the 2026-09-01 session used to decline the
+  SUV leg as a ~0.03 effect.
+  Two riders. Turnover is a small **tailwind** to this book, not a handicap — 17.5x
+  against #72's 18.98x, worth ~+0.011 Sharpe, so the honest gap is nearer 0.000 than
+  +0.004. And the train reading breaks a streak: **train 0.81 against validation 0.79**
+  is the first non-`price-trend` scout in seven readings where train did not
+  under-predict validation (the standing sample was six consecutive under-predictions).
+
