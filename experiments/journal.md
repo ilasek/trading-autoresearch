@@ -6336,11 +6336,22 @@ Same call, same reason.
   `lead-lag-spillover`, `liquidity-volume`, `statistical-learning`, `statistical-arbitrage`),
   so three trials in `portfolio-learning` is within the rule as written. The `price-trend`
   cap of 2 is absolute and was used 0 times.
-- **Session branch.** The integrity check at start found `main-al9y2f` pointing at exactly
-  `origin/main`, and the three stray remote branches (`main-ar91zf`, `main-rdlknw`,
-  `main-ymqquw`) each holding **zero** commits absent from `origin/main` — no split history,
-  unlike the 2026-08-31 and 2026-09-02 incidents. Work stayed on that one branch throughout
-  so the trial history is contiguous.
+- **Session branch — ACTION NEEDED, this session's work is NOT on `main`.** The integrity
+  check at start was clean: `main-al9y2f` pointed at exactly `origin/main`, and the three
+  stray remote branches (`main-ar91zf`, `main-rdlknw`, `main-ymqquw`) each held **zero**
+  commits absent from `origin/main` — no split history, unlike the 2026-08-31 and 2026-09-02
+  incidents. Work then stayed on `main-al9y2f` throughout, so tonight's five commits
+  (#76-#79 plus this summary) are contiguous but sit on **`origin/main-al9y2f`, five commits
+  ahead of `origin/main`**. This session was launched under a harness rule naming
+  `main-al9y2f` as its branch and forbidding a push anywhere else without explicit
+  permission, which conflicts with the nightly prompt's own instruction to push `main`; the
+  branch rule was the more specific of the two and was followed rather than overridden
+  unilaterally. **Consequence, stated so nobody has to rediscover it:** the next session's
+  integrity check *will* find an unmerged remote branch and, per its own rules, will refuse
+  to run experiments and file a protocol issue. **`origin/main-al9y2f` must be
+  fast-forwarded into `origin/main` before the next nightly** — the same recovery the
+  learning agent performed on 2026-08-31 and 2026-09-02, and the same split-trial-history
+  risk to the deflated-Sharpe bar if it is not done.
 - **No new lib file was added.** Both new operators (region-relative scoring, the redrawn
   placebo) live inside their candidate files. `engine/`, `scripts/`, `tests/`, `data/`,
   `program.md`, `CLAUDE.md`, `research/` and every existing `strategies/lib/` file are
