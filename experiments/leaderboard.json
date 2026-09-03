@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-02T23:28:16+00:00",
+  "generated_at": "2026-09-03T23:28:04+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -59,7 +59,7 @@
       "track": "scout",
       "verdict": "FAMILY_LEAD",
       "ts": "2026-08-31T23:18:36+00:00",
-      "n_trials": 8,
+      "n_trials": 11,
       "rho_to_champion": 0.7316,
       "validation": {
         "sharpe": 1.008,
@@ -69,6 +69,23 @@
         "avg_positions": 22.57
       },
       "train_sharpe": 0.624
+    },
+    "liquidity-volume": {
+      "name": "lv_illiq_region_relative",
+      "candidate": "strategies/candidates/lv_illiq_region_relative.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-09-03T23:24:39+00:00",
+      "n_trials": 3,
+      "rho_to_champion": 0.6959,
+      "validation": {
+        "sharpe": 0.917,
+        "ann_return": 0.1671,
+        "max_drawdown": -0.3302,
+        "ann_turnover": 1.25,
+        "avg_positions": 24.29
+      },
+      "train_sharpe": 0.917
     },
     "short-term mean reversion": {
       "name": "str_reversal_monthly",
@@ -154,23 +171,6 @@
         "avg_positions": 20.0
       },
       "train_sharpe": 0.828
-    },
-    "liquidity-volume": {
-      "name": "lv_amihud_illiquidity_tilt",
-      "candidate": "strategies/candidates/lv_amihud_illiquidity_tilt.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-08-29T15:59:17+00:00",
-      "n_trials": 2,
-      "rho_to_champion": 0.5887,
-      "validation": {
-        "sharpe": 0.681,
-        "ann_return": 0.1129,
-        "max_drawdown": -0.3638,
-        "ann_turnover": 1.01,
-        "avg_positions": 24.9
-      },
-      "train_sharpe": 1.001
     },
     "statistical-learning": {
       "name": "sl_ridge_nontrend_block",
