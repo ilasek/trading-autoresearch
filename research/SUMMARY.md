@@ -593,6 +593,61 @@ and a probably-wrong one; a spline in the rank of a *single* characteristic is t
 departure, has a handful of parameters, and is walk-forward fittable. That is a far narrower
 learned candidate than the ridge feature block the lab already ruled out.
 
+**[2026-09-03] "How few predictors matter" has been asked in the wrong space, and the correction is
+this family's most consequential single result.** Kozak–Nagel–Santosh (JFE, Tier **A**, 776
+citations) show that **sparsity in the space of characteristics fails** — an L1 selection of a few
+characteristics-based factors performs poorly out of sample, and even a dual L1+L2 estimator cannot
+compress dozens of predictors into a handful without losing explanatory power, because there is not
+enough redundancy among them. **Sparsity in the space of principal components of those same factor
+returns succeeds**: a model containing a small number of *high-variance* PCs, with the L2 penalty at
+its optimum, delivers the best out-of-sample cross-sectional fit, and zeroing the low-variance PCs
+costs little. The asymmetry is economic, not numerical: absence of near-arbitrage implies a factor
+earning a large premium must itself be a major source of variance or load on one, so most of the
+SDF's variance should sit in high-eigenvalue PCs — whereas nothing implies that a few *observable
+characteristics* should suffice. `validation_overlap: false`; `published_post_2018: true`.
+→ `notes/2026-09-03-shrinking-the-cross-section-sdf-shrinkage.md`
+
+**Two mechanics from the same source that transfer even if its headline does not.** (a) The
+estimator is `b̂ = (Σ + γI)⁻¹ μ̄` — ridge applied to the mapping from **covariances to mean returns**,
+not to a return-on-features regression, so the shrinkage is **unequal across PC directions by
+construction** (low-eigenvalue directions are shrunk hardest). This is structurally different from a
+uniform ridge on a feature panel, which is what `learnings.md` (2026-08-29) actually tested when its
+penalised combiner "reproduced its own best input, worse" — that result is evidence about
+ridge-on-features, not about this estimator, and the design rule drawn from it is aimed at a
+different failure. (b) The penalty has an **economic unit**: γ maps one-to-one to `κ`, the root
+expected maximum squared Sharpe ratio the prior considers plausible, which converts a
+hyperparameter this repo cannot legally cross-validate into a stated prior. A third, smaller point:
+they estimate Σ from daily returns and treat it as known, finding that **uncertainty in means
+dominates uncertainty in covariances** — the shrinkage that matters is on expected returns.
+**Caveat that must travel with the recipe:** their K-fold CV splits the whole sample and is
+explicitly upward-biased; it is illegal here and must be replaced by walk-forward selection or an a
+priori γ.
+
+**[2026-09-03] And the deflationary half, which decides whether this family is worth trials at all
+on this universe.** Avramov–Cheng–Metzker (Management Science, Tier **A**, 201 citations) take four
+published learned methods — a deep network (GKX), a no-arbitrage network (CPZ), the linear IPCA, and
+a conditional autoencoder — reproduce their headline results, then impose economic restrictions.
+Excluding **microcaps** cuts the deep learners' risk-adjusted payoff by roughly half to
+three-quarters; excluding **financially distressed** firms removes most of what is left, after which
+none of the deep methods is significant at the 5% level. Traditional anomaly sorts deteriorate in
+similar proportion, so this is about where cross-sectional predictability lives, not about neural
+networks specifically. **The load-bearing result for this repo is the second one: IPCA, the linear
+method, deteriorates only modestly on the cheap-to-trade subsamples.** The *incremental value of
+nonlinearity* is what is concentrated in difficult-to-value, difficult-to-arbitrage names. A third
+constraint binds independently: all four signals turn over at least ~87% and up to ~150% a month,
+and the implied **break-even one-way cost** falls by roughly half once microcaps are excluded,
+landing at or below plausible cost estimates. `validation_overlap: false`; `published_post_2018: true`.
+→ `notes/2026-09-03-machine-learning-economic-restrictions.md`
+
+**Two results in that paper cut the other way and should not be dropped when it is quoted.** Unlike
+most individual anomalies — whose payoff is concentrated in the **short** leg — the learned signals
+earn their risk-adjusted return in the **long** leg, with the short leg insignificant; that is
+exactly the half a `max_leverage = 1.0` book can hold. And decomposing against an industry
+benchmark, the **intra-industry** version (rank within peer group) outperforms both the
+unconditional and the industry-rotation versions: the content is in **peer-relative** ranking, which
+is a free rebuild of any existing leg and a different question from the regional-neutralisation
+bracket the lab closed (that was about *weights*, this is about the *scoring benchmark*).
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -1006,6 +1061,47 @@ the apparatus. Two explicit **anti-candidates** from the same source: adding an 
 (equivalently a 60-day moving-average slope, a built-in momentum overlay) is reported to add
 essentially nothing to a residual-reversion signal; and the "bang-bang" all-or-nothing sizing that
 wins there is a turnover machine under a 15 bps/side cost model.
+
+**[2026-09-03] The family has a second, much cheaper construction, and it is the one that tests the
+half of the above tension the lab has not touched.** Gatev–Goetzmann–Rouwenhorst's **distance
+method** (RFS, Tier 1 venue; graded **B** here — single-market in the version read, and the
+cost-and-decay reexamination is second-hand) trades one stock against **one matched partner**, with
+no factor model, no covariance estimation and no parameter beyond two window lengths and a trigger.
+Partners are chosen by minimising the **sum of squared deviations between normalised cumulative
+total-return series** over a 12-month formation window; a position opens when the pair's normalised
+prices diverge by more than **two formation-window standard deviations** and closes at the **next
+crossing**, over a 6-month trading window, with a **one-day execution delay** on every open and
+close and **six overlapping monthly tranches** running concurrently. Three of those are already this
+repo's conventions. `validation_overlap: false`; `published_post_2018: false`.
+→ `notes/2026-09-03-pairs-trading-distance-method.md`
+
+**What the source establishes beyond "it made money", which is the part that transfers.** (a) It is
+**not** the bid-ask bounce and **not** one-day reversal: the one-day delay is imposed throughout and
+monthly returns are *positively* autocorrelated, so the payoff accrues gradually over a holding
+period measured in weeks. (b) It is **conditional** — most pairs hold nothing most of the time,
+opening on the order of a couple of round trips per six-month window — which is precisely the
+"conditional excursion versus unconditional IC" distinction this section already flagged as the gap
+in the lab's declined screen, now reachable with a construction that estimates nothing. (c) It is
+**not factor-neutral in practice**: market exposure is insignificant (partners comove by
+construction) but size, value, default-premium and term-premium exposures are positive and
+significant, so a matched pair removes the market and leaves the rest — and a long-only book, which
+can hold only the cheap leg, keeps all of it. The honest framing is again a **selection** question
+("does a partner-relative spread rank names better than an unconditional price rank?"), which is the
+same diagnosis this section reached from Avellaneda–Lee by a different route. (d) The authors run a
+**random-within-sector-partner bootstrap** as a placebo — the exact control `learnings.md`
+(2026-09-02) concluded the lab had never run and most needed.
+
+**The independent reexamination, recorded second-hand and flagged as such.** Do–Faff (FAJ 2010;
+Journal of Financial Research 2012) re-run the rules over a longer sample with commissions, market
+impact and shorting fees modelled. From their abstracts, verbatim: pairs trading "remains
+profitable, albeit at much more modest levels", with what survives concentrated "among portfolios of
+well-matched pairs that are formed within refined industry groups", and it "exhibits a lower risk
+and lower return profile than a short-term reversal strategy that sorts stocks relative to their
+industry peers". They also document **secular decay** — the McLean–Pontiff pattern for a heavily
+published top-journal rule. Two directional lessons: **finer grouping in the matching step is where
+the cost-surviving profit sits**, and the effect should be expected smaller than the original
+literature implies. Neither Do–Faff paper could be read in full (SSRN 403; both publisher pages
+closed), so nothing above rests on their internals.
 
 ---
 
@@ -3651,6 +3747,93 @@ hypothesis fodder, then anti-candidates.
     `seasonal_same_month_return` once traded a month late. Tier A, no overlap.
     → `notes/2026-09-02-return-seasonalities-common-factors.md`
 
+70. **[Added 2026-09-03] The free eigenvalue screen that decides whether a learned combiner is worth
+    a trial here — and the correction to the design rule the lab drew from the one it already ran.**
+    `learnings.md` (2026-08-29) fed a penalised linear combiner eleven features, got `rho` 0.774 to
+    the champion at a lower Sharpe, then got `rho` 0.976 to a single one of four inputs, and
+    concluded a learned candidate earns a trial only if no single feature already works alone. That
+    trial regressed **returns on features with a uniform L2 penalty**. Kozak–Nagel–Santosh's
+    estimator is a different object: `b̂ = (Σ + γI)⁻¹ μ̄`, ridge on the map from **covariances to mean
+    returns**, whose shrinkage is **unequal across principal-component directions by construction**
+    — low-eigenvalue directions are shrunk hardest, high-variance ones barely. The lab's result is
+    therefore evidence about ridge-on-features, not about this estimator, and the rule derived from
+    it targets the wrong failure. **The screen, which is free and is the paper's own identifying
+    prediction:** build the lab's existing legs as rank-based zero-investment managed portfolios
+    (`z = (rank/(n+1) − mean) / Σ|deviation|`, factor return `F = Z′R`), take the daily covariance
+    matrix of those factor returns, and check whether **mean returns line up with the high-variance
+    PCs** — report the eigenvalue spectrum next to each PC's mean and t-statistic. Line up, and the
+    economic prior transfers and a KNS-form combiner is worth a trial; unrelated to the eigenvalue
+    ordering, and the prior does not transfer and the idea closes without a trial. Either answer is a
+    finding, and neither costs one. A second free gain regardless of the outcome: γ maps one-to-one
+    to `κ`, the **prior root expected maximum squared Sharpe ratio**, so the regularisation constant
+    this repo cannot legally cross-validate becomes a stated prior instead of a tuned parameter.
+    **Hard caveat:** their K-fold CV splits the whole sample and is explicitly upward-biased —
+    illegal here; select γ walk-forward or fix it a priori from `κ`. Tier A, no overlap.
+    → `notes/2026-09-03-shrinking-the-cross-section-sdf-shrinkage.md`
+
+71. **[Added 2026-09-03] A second free diagnostic, on the *benchmark a signal is scored against*
+    rather than on the signal — and it is a question the lab has never asked separately from
+    weighting.** Avramov–Cheng–Metzker decompose learned-signal payoffs against an industry
+    benchmark into unconditional, **intra-industry** (long peer-group winners) and inter-industry
+    (industry rotation) components, and find the intra-industry version outperforms both others: the
+    content is in **peer-relative** ranking, not in picking groups. This is free to run on every leg
+    the lab already has — rebuild each score as a deviation from its region or sector peer-group mean
+    and compare the holdings and the train-decile spread against the unconditional version. Note
+    carefully what it is *not*: `learnings.md` closed regional neutralisation by a bracket, but that
+    was about **weights** (neutralising the book's regional exposure). This is about the **scoring
+    benchmark** (what each name's score is measured relative to), which is a different operator and
+    an untested one. Tier A, no overlap, `published_post_2018: true`.
+    → `notes/2026-09-03-machine-learning-economic-restrictions.md`
+
+72. **[Added 2026-09-03] The one new *mechanism* on this list, and it is the cheapest construction
+    the `statistical-arbitrage` family has been given.** Gatev–Goetzmann–Rouwenhorst's distance
+    method estimates nothing: match each instrument to the partner minimising the **sum of squared
+    deviations between normalised cumulative total-return series** over a trailing 12 months, open
+    when the pair diverges past **2 formation-window standard deviations**, close at the **next
+    crossing**, 6-month trading window, **one-day execution delay**, **six overlapping monthly
+    tranches**. The last three are already this repo's conventions, and the overlapping-tranche
+    structure is the lab's own strongest recorded mechanism. **Long-only version:** hold the names
+    most depressed relative to their own matched partner, capped and equal-weighted — a *selection*
+    rule, since the hedge leg is unholdable and the book therefore keeps the common exposure the pair
+    was built to remove (the same diagnosis this folder reached for residual reversion, from a
+    different construction). It is the family's first genuinely **conditional** object, which is
+    exactly the untested half of the tension `SUMMARY.md` recorded when the lab declined residual
+    reversal on an *unconditional* IC. **Run two free things first, in this order.** (a) **Count the
+    matching pool and the match-distance distribution per region.** ~145 names across 15 regions is
+    thin; if the best available partner for most names is a poor match, the mechanism is absent by
+    construction — the same precondition shape that killed #69, and the same honest outcome. Expect
+    the ETFs to dominate the closest matches (broad index funds have little idiosyncratic variance,
+    the same reason utilities dominated the source's top pairs), and decide their eligibility in
+    advance. (b) **Screen the pair-spread z-score panel's forward-return spread on train** before
+    spending a trial. **And specify the placebo with the candidate**: the source's own control is a
+    random-within-group partner assignment traded by identical rules, which is one extra
+    weight-matrix build and is what makes either result interpretable — the control `learnings.md`
+    (2026-09-02) named as the lab's cheapest and least-used falsification. Riders: restrict matching
+    within region (cross-region "substitutes" are currency and region factors); prefer **finer**
+    grouping, which is where the independent cost-aware reexamination reports the surviving profit;
+    expect decay, since this is a heavily published top-journal rule; and **measure turnover
+    holdings-only** rather than assuming the source's low round-trip count survives a monthly
+    long-only rebuild. Tier B, no overlap.
+    → `notes/2026-09-03-pairs-trading-distance-method.md`
+
+73. **[Added 2026-09-03] An anti-candidate with a measurement behind it, stacking with #68 into the
+    folder's most general pre-trial discount.** Avramov–Cheng–Metzker measure where the *incremental
+    value of nonlinearity* lives: deep learners beat the linear IPCA on an all-stock sample, but
+    their advantage collapses on cheap-to-trade subsamples while IPCA's performance barely moves.
+    Excluding microcaps cuts deep-learning risk-adjusted payoffs by roughly half to three-quarters
+    and excluding distressed names removes most of the remainder, after which none is significant at
+    the 5% level; turnover of ~87–150% a month drives the implied break-even one-way cost to at or
+    below plausible cost levels. **This universe is the restricted subsample permanently** — no
+    microcaps, no distress, everything rating- and analyst-covered. **The rule: a candidate proposing
+    a tree ensemble, a boosted learner or a neural network on this cross-section should be expected
+    to reproduce its penalised-linear counterpart at higher turnover, and can be declined on that
+    prior without a trial.** State the model class's expected gain over linear *before* building, and
+    if the answer is "the nonlinearity", say which names are supposed to supply it. Where this
+    universe differs from the paper's restricted subsample is that its long leg is holdable and the
+    learned signals' payoff there was the significant half — so the discount applies to *model
+    class*, not to the family. Tier A, no overlap, `published_post_2018: true`.
+    → `notes/2026-09-03-machine-learning-economic-restrictions.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -3676,8 +3859,76 @@ hypothesis fodder, then anti-candidates.
 | 2026-08-31 (session 18) | **Aimed entirely by `SUMMARY.md`'s own open questions rather than by breadth, and it takes all three of its top-priority items.** Two of them are papers this folder has flagged unread across multiple sessions (Lou-Shu, Hou); the third is the last partial family gap (`portfolio-learning`'s "stacking half"), which closes it and gives every `program.md` family a section of its own. Three notes, four sources; full text read directly for two primaries, two recorded **from their published abstracts only** (both closed access with no repository copy and every mirror bot-challenged). The session's shape is unusual and worth naming: **two of the three notes end by narrowing a conclusion `experiments/learnings.md` recorded as final, and in both cases the narrowing is one free measurement wide** - the `liquidity-volume` null was measured on the mean of volume where the priced functional is the mean of the *reciprocal*, and the `portfolio-learning` closure was measured on return-series correlation where the governing quantity is cross-sectional *signal* correlation. Neither lab result is wrong; both are one step narrower than stated, and candidates #58 and #60 are the zero-cost checks that settle them. The third note is a *discount* rather than a build: the strongest source on lead-lag says the grouping variable carries the hypothesis, and the grouping it endorses needs a taxonomy this repo probably does not have. | Lou-Shu 2017 (RFS; the authors' August 2016 working version read in full from an ICMA-hosted mirror, `icmagroup.org/assets/documents/.../Bond-Market-Liquidity-Library/`) (`2026-08-31-amihud-volume-component-decomposition.md`); Hou 2007 (RFS) recorded **from its published abstract only** - `oa_status: closed`, no repository fulltext, SSRN bot-challenged on both posted abstract pages, CORE and CiteSeerX resolved nothing; abstract read verbatim from the RePEc/IDEAS record (`2026-08-31-intra-industry-lead-lag-grouping.md`); Fitzgibbons-Friedman-Pomorski-Serban 2017 (Journal of Investing; the typeset article read in full from AQR's own hosting) paired with its peer-reviewed rebuttal Leippold-Ruegg 2018 (European Financial Management), the latter recorded **from its published abstract only** - SSRN, Taylor & Francis, the EFMA conference mirror and the Zurich Open Repository each refused an automated client (`2026-08-31-signal-blending-vs-portfolio-blending.md`) |
 | 2026-09-01 (session 19) | **The session's aim was set by the lab, not by this folder: both of the diagnostics `SUMMARY.md` made its top priority (#58, #60) were run overnight, and the ETF-versus-constituent gap this log has flagged for two sessions was screened dead by the lab itself — so the standing question list was spent on arrival and the focus moved to what the lab's own results opened.** Three notes, four sources; full text read directly for three primaries, one recorded from its **published abstract only**. The shape is *one mechanism aimed at the only family with zero trials, one discount aimed at the lab's best new result, and one source that explains a pattern the lab has hit repeatedly without a reason.* `range-variance` gets its first **asymmetric** mechanism (upper tail rather than width) together with a free two-number test that decides it either way — and the reading that the lab's own range-lottery screen dismissed a significant, correctly-signed result *using the confound the test exists to separate*. `portfolio-learning` and the inference layer get the algebra behind the lab's mean-versus-max finding — a proof that linear composites are *exactly* equivalent to portfolios of their legs, which is why the mean is bounded and the max is not — plus a second bias, distinct from every correction this folder holds, that lives **inside a single trial** and that the trial count cannot see. And `statistical-learning` gets the size-cut result that predicts, from outside, that a ~145-name large-cap universe is where most characteristics stop working: it names the three daily-data survivors, one of which (`SUV`) is the single volume functional the lab has not screened. | Bali–Cakici–Whitelaw 2011 (JFE; the typeset article read in full from the corresponding author's NYU Stern page), with Cheon–Lee 2018 (Management Science) recorded **from its published abstract only** — closed access (`2026-09-01-max-lottery-extreme-positive-returns.md`); Novy-Marx 2016 (NBER WP 21329 / author's March 2016 draft, R&R at JFE per his posted CV; read in full from `mysimon.rochester.edu`) (`2026-09-01-multi-signal-overfitting-critical-t.md`); Freyberger–Neuhierl–Weber 2020 (RFS; the NBER working-paper draft read in full, including the appendix selection table and variable definitions) (`2026-09-01-nonparametric-characteristic-selection-large-stocks.md`) |
 | 2026-09-02 (session 20) | **Aimed by `SUMMARY.md`'s own ranked open questions, both of which survived contact with the lab this time — and the session's shape is *two corrections to screens the lab is still carrying*, not two new mechanisms.** The 2026-09-01 nightly ran #61's `MAX`/`MIN` sign test and closed `range-variance` a fourth time, so the standing list's first item was spent on arrival and its second (`seasonality-calendar`, the **calendar** half) became the focus. That half had *also* been closed overnight, structurally — which turned the intended survey into an audit of the two screens the family now rests on. Both audits found the screen narrower than the conclusion drawn from it, and both end in a **free measurement that decides the family either way** (#66, #67). The third note takes the standing size-distribution tension, which asked explicitly for a source measuring predictability *by size group directly*. Three notes, five sources; full text read directly for three primaries (two via author/NBER working-paper versions of the published articles, one via a university mirror of the authors' working draft), two recorded **from their published abstracts only** (both closed access). Keloharju–Linnainmaa–Nyberg 2016 (JF) + 2021 (JFE companion) (`2026-09-02-return-seasonalities-common-factors.md`); Ogden 1990 (JF) + Etula–Rinne–Suominen–Vaittinen 2020 (RFS) (`2026-09-02-turn-of-month-payment-cycle.md`); Fama–French 2008 (JF) (`2026-09-02-anomalies-by-size-group.md`) |
+| 2026-09-03 (session 21) | **The first session in three whose aim was not set by the lab overnight — every item on the standing list had been answered, all of them negatively, so the focus was chosen by asking which *live* families the lab could still act in.** The 2026-09-02 nightly ran #66, #67 and #69 and closed all three (the seasonal leg's identification repaired but the demeaning shown not to be what supplies it; the calendar half closed a second time on cost; the ETF-only seasonal dead on its own precondition — 5 of 42 ETFs reach a 20-year lookback), and declined `range-variance` a fourth time on the tail statistic its defence rested on. That leaves `statistical-learning` and `statistical-arbitrage` as the two families that are neither closed by the lab nor over-covered here, and the session took two notes in the first and one in the second. The shape is *one correction, one discount, one mechanism.* The correction: "how few predictors matter" has been asked in the wrong space — characteristic-space sparsity fails, PC-space sparsity works, and the estimator that exploits it shrinks unequally across eigenvalue directions, which is **not** what the lab's uniform ridge-on-features tested, so the design rule drawn from that trial targets a different failure (#70). The discount: the *incremental value of nonlinearity* was measured and found to live in microcaps and distressed names, which this universe does not contain — an anti-candidate for learned model classes that stacks with #68 (#73). The mechanism: the distance method, a relative-value construction that estimates nothing, whose execution lag, overlapping monthly tranches and total-return inputs are already this repo's conventions, and which comes with its own placebo control (#72). Three notes, five sources; **full text read directly for all three primaries**, two supporting sources recorded **from their abstracts only** (both closed access, SSRN 403 as documented). | Kozak–Nagel–Santosh 2020 (JFE; the authors' accepted manuscript read in full from Nagel's university page) (`2026-09-03-shrinking-the-cross-section-sdf-shrinkage.md`); Avramov–Cheng–Metzker 2023 (Management Science; the typeset INFORMS article read in full from the second author's own site) (`2026-09-03-machine-learning-economic-restrictions.md`); Gatev–Goetzmann–Rouwenhorst 2006 (RFS; the NBER WP 7032 version read in full) with Do–Faff 2010 (FAJ) and 2012 (Journal of Financial Research) recorded **from their published abstracts only** (`2026-09-03-pairs-trading-distance-method.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-03] The standing list was spent on arrival for the third session running — but this
+  time every item came back *negative*, and that changes what this folder is for.** The 2026-09-02
+  nightly ran #66 (the fixed-effects contrast: it corrected the lab, and the seasonal leg's
+  demeaning turns out not to be what supplies its identification), #67 (the T−8..T−4 window: the
+  sign test *passed* and the idea died anyway on cost — 12 round trips is still 12 round trips) and
+  #69 (dead on its own precondition: only 5 of 42 ETFs reach a 20-year lookback), and declined
+  `range-variance` a fourth time on the tail statistic. Four of the folder's last five proposals
+  were answered for free and none opened anything. **The useful reading is not that the proposals
+  were bad — three of the four were decided by the precondition or control the proposal itself
+  specified, which is the format working as intended — but that the lab has now closed every family
+  whose object is a cross-sectional characteristic *level*, and the folder should stop proposing
+  them.** What is left live is `statistical-learning` (one screen run, and it tested a different
+  estimator than the literature's — see #70), `statistical-arbitrage` (one screen run, and it
+  tested the unconditional half of a conditional mechanism — see #72), and `portfolio-learning`
+  (the leg-count threshold, which is the lab's own next measurement and needs nothing from here).
+- **[2026-09-03] What should aim the next session, in order.**
+  - **Check whether #70 and #71 were run before choosing anything else** — the same instruction
+    the last three entries gave, for the same reason: both are free, both decide a live family, and
+    both have been written so that either answer is a finding. #70 in particular is the first
+    proposal here that says the lab's *own screen measured a different object than the one it
+    concluded about*, and if the eigenvalue spectrum comes back unrelated to the PC means then
+    `statistical-learning` closes on this universe with a reason rather than on a null.
+  - **If #72's matching-pool precondition comes back thin, record `statistical-arbitrage` as
+    unreachable on this universe rather than unexplored** — the same conclusion `range-variance`
+    earned after five sessions, and worth reaching in one instead of five. ~145 names across 15
+    regions is a small pool for exhaustive pairwise matching, and the honest failure mode is
+    structural, not empirical.
+  - **The inference and multiple-testing embargo stands** and was honoured again. So does the
+    2026-09-02 embargo on further size/microcap sources: #73 is the fourth reading on that question
+    and it now agrees with the other three, so the vein is spent.
+  - **A gap this session opened rather than closed, and it is the honest next survey if the free
+    screens above come back null:** every learned-model source in this folder studies **individual
+    stocks with dozens to thousands of features**. The lab's actual learned object is a combiner over
+    **a handful of its own legs** — a ten-input problem, not a high-dimensional one — and none of
+    the three notes on `statistical-learning` is really about that regime. The relevant literature
+    is small-*n* forecast combination and shrinkage toward equal weights, which this folder holds
+    (Timmermann, Hansen, the bagging and model-averaging notes) but has never connected to the
+    learned-combiner question. **Re-reading the folder's own material against that question may be
+    worth more than a new source**, and would cost no external search.
+- **[2026-09-03] A tension to hold open rather than resolve.** Gu–Kelly–Xiu report machine-learning
+  predictability as *stronger* among large stocks; Avramov–Cheng–Metzker report that imposing
+  large-stock and non-distress restrictions removes most of the deep learners' *advantage over a
+  linear model*. Both can be true — forecast **accuracy** where the data is clean, versus where the
+  extra **nonlinearity** pays — and #73 is written to the second reading only. If the lab ever runs
+  a nonlinear candidate here, the discriminating question is not "did it beat the sort" but "did it
+  beat the *linear* model built from the same features", which is a comparison neither the lab nor
+  this folder has ever specified.
+- **[2026-09-03] Access and index behaviour, for the recipe.** Three primaries read in full, all
+  from **author- or co-author-hosted PDFs**, including a channel not previously used here: an
+  **author's own site serving the typeset INFORMS article** complete with volume/issue/page headers
+  and the publisher's download stamp — worth trying first for Management Science and Operations
+  Research papers, whose publisher endpoint is closed. A university **`voices`/`wpmucdn` faculty
+  blog host** served the accepted manuscript of a JFE article (and its Internet Appendix at the same
+  path). **NBER working-paper PDFs** worked again, and for a 2006 RFS article the NBER version
+  carried the complete methodology, the risk decomposition and the placebo bootstrap. Index
+  behaviour, and it is a *fifth* instance of the standing "disbelieve a lone count" rule with a new
+  tell: **Semantic Scholar's DOI endpoint returns "not found" for `10.1016/j.jfineco.2019.06.008`**
+  — a 700-plus-citation JFE paper — extending the pattern previously recorded for Journal of Finance
+  DOIs to JFE, so **for a top-three finance journal DOI, query Crossref and OpenAlex first and do not
+  treat a Semantic Scholar miss as evidence the paper is unindexed.** Also inverted from the usual
+  direction: for `10.1287/mnsc.2022.4449`, **Crossref reports 201 and Semantic Scholar 119** — the
+  low count is the *Semantic Scholar* one this time, so the rule is symmetric and is about
+  disagreement, not about which index. Limits hit as documented: **SSRN returned 403** on both
+  Do–Faff papers, and the Wiley and Taylor & Francis landing pages serve no full text, so both are
+  recorded from **abstracts obtained verbatim from a university research portal** and are flagged
+  second-hand in the note and in the family section.
 
 - **[2026-09-02] Both of this folder's standing priorities were closed by the lab before the
   session ran — for the second session in a row — and the useful response was to audit the

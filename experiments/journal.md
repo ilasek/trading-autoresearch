@@ -6053,3 +6053,5 @@ suspiciously clean orthogonality.**
    1.008 against the 1.34-1.42 a resolvable 20% blend requires).
 
 **No engine issues encountered.** Tests green (33 passed) before the first trial.
+
+## Research session — 2026-09-03 (learning agent): 3 notes added, see research/SUMMARY.md
