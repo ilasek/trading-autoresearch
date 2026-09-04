@@ -6425,3 +6425,35 @@ place, and the strategy agent's own integrity check would then block its session
 human for the third time; the fix belongs in the harness, not in this repair.
 
 ## Research session — 2026-09-04 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-04T23:23:33+00:00 — lv_illiq_region_tail10 — **SCOUT**
+- Candidate: `strategies/candidates/lv_illiq_region_tail10.py` (family: liquidity-volume, track: scout, trial #80)
+- Hypothesis: Holding the 10 instruments whose trailing-quarter Amihud ILLIQ is highest relative to their own region's mean — a hold-15/enter-10 band, everything else bit-identical to the seated family lead `lv_illiq_region_relative` (63-day window, equal weight, monthly grid, MIN_REGION=4) — scores near 0.95 on validation, above that lead's 0.917, because region-demeaning narrows the scoreable pool from ~84 to ~77 names and the inherited enter-20 therefore buys the top 26.1% of the pool rather than the ~14% tail the same band buys on the full 140-name cross-section the band was designed on; enter-10 restores that design quantile at 13.0% and raises the train top-N excess over the pool from +4.31%/yr (t = +4.29) to +7.09%/yr (t = +3.97). The book stays at its pool's median volatility throughout (vol percentile 0.515 -> 0.549 against ~0.9 for a book that harvests this universe's survivorship artifact), so the gain is not a volatility tilt, and it moves down a size ranking this family has measured as a null four times, so it is not a size premium. Against it, breadth halves (25.2 -> 12.4 names) and HHI doubles (0.0398 -> 0.0809); the de-concentration price that would make this lose is a `price-trend` constant that has never been measured in this family. A result below 0.917 says the inherited band was already deep enough once the pool narrowed and closes the tail-depth axis here.
+- Verdict: SCOUT — scouted family 'liquidity-volume': validation sharpe 0.874 <= the family's best 0.917 (DSR 0.8576, 80 trials, 23 effective after clustering at rho 0.95)
+- Train: sharpe +1.13, ann_ret +19.2%, maxDD -48.6%, turnover 0.8x
+- Validation: sharpe +0.87, ann_ret +16.7%, maxDD -34.5%, turnover 2.4x
+- Deflated Sharpe prob: 0.8576 (bar from 80 trials, 23 effective)
+- Scout track: family best before this trial +0.92; the champion was not compared and the holdout was not read
+- Lesson: **Pre-registered 0.95, landed 0.874 — the falsifying branch, and it closes the
+  tail-depth axis in `liquidity-volume` in the narrowing direction.** The inherited
+  hold-30/enter-20 band was already at or past the right depth once region-demeaning
+  narrowed the pool, so the "restore the design quantile" argument is answered: the
+  design quantile is not what the construction wants. Three things the trial establishes
+  beyond the verdict. **(i) The family's first measured concentration price, and the
+  `price-trend` constant does not transfer.** HHI +103% (0.0398 -> 0.0809) at breadth
+  25.2 -> 12.4 names cost **-0.043** of validation Sharpe against a train tail excess
+  that rose +4.31 -> +7.09%/yr. `learnings.md`'s ~0.05-Sharpe-per-30%-HHI figure would
+  have predicted roughly +0.17 in the *other* direction on the argument that concentrating
+  into a monotone score pays; observed is a loss a quarter that size. `CLAUDE.md`'s rule
+  that the file's constants are `price-trend` constants is confirmed prospectively rather
+  than assumed. **(ii) The confound this leaves, and why it is worth one more trial.**
+  Concentration here was bought by *cutting breadth*, whereas #52/#53 measured it by
+  *re-weighting at fixed membership*; the two are not the same channel, and this family
+  has never measured the second. **(iii) Another over-prediction by train, and the largest
+  yet outside `price-trend`**: train 1.13 -> validation 0.874, a gap of -0.26 against the
+  seated lead's exact 0.917 -> 0.917. The 2026-09-03 hypothesis that the exact reading
+  belonged to it being a plain single sort rather than a union book does **not** survive:
+  this is also a plain single sort and it over-predicts by more than any union book has.
+  Also worth recording: validation maxDD widened -33.0% -> -34.5% and train maxDD to
+  -48.6%, so the narrowing was not a risk/return dial with a reading a human might want —
+  it lost on both axes.
+

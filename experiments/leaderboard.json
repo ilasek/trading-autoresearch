@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-03T23:28:04+00:00",
+  "generated_at": "2026-09-04T23:23:48+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -76,7 +76,7 @@
       "track": "scout",
       "verdict": "FAMILY_LEAD",
       "ts": "2026-09-03T23:24:39+00:00",
-      "n_trials": 3,
+      "n_trials": 4,
       "rho_to_champion": 0.6959,
       "validation": {
         "sharpe": 0.917,
