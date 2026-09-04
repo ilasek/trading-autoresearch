@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T23:27:28+00:00",
+  "generated_at": "2026-09-04T23:30:01+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -71,21 +71,21 @@
       "train_sharpe": 0.624
     },
     "liquidity-volume": {
-      "name": "lv_illiq_region_relative",
-      "candidate": "strategies/candidates/lv_illiq_region_relative.py",
+      "name": "lv_illiq_region_wide30",
+      "candidate": "strategies/candidates/lv_illiq_region_wide30.py",
       "track": "scout",
       "verdict": "FAMILY_LEAD",
-      "ts": "2026-09-03T23:24:39+00:00",
-      "n_trials": 5,
-      "rho_to_champion": 0.6959,
+      "ts": "2026-09-04T23:29:47+00:00",
+      "n_trials": 6,
+      "rho_to_champion": 0.7146,
       "validation": {
-        "sharpe": 0.917,
-        "ann_return": 0.1671,
-        "max_drawdown": -0.3302,
-        "ann_turnover": 1.25,
-        "avg_positions": 24.29
+        "sharpe": 0.942,
+        "ann_return": 0.1643,
+        "max_drawdown": -0.3346,
+        "ann_turnover": 0.93,
+        "avg_positions": 36.11
       },
-      "train_sharpe": 0.917
+      "train_sharpe": 0.624
     },
     "short-term mean reversion": {
       "name": "str_reversal_monthly",

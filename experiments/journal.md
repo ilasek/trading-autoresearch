@@ -6498,3 +6498,58 @@ human for the third time; the fix belongs in the harness, not in this repair.
   that the seated lead's exact 0.917 -> 0.917 reading belonged to it being a single sort
   rather than a union book. n = 26 outside `price-trend`.
 
+## 2026-09-04T23:29:47+00:00 — lv_illiq_region_wide30 — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/lv_illiq_region_wide30.py` (family: liquidity-volume, track: scout, trial #82)
+- Hypothesis: Widening the seated family lead's band from hold-30/enter-20 to hold-45/enter-30 — the same 1.5x band ratio, and window, weighting, grid, pool and region operator bit-identical to `lv_illiq_region_relative` — scores near 0.94 on validation against that lead's 0.917, because tonight's two trials show both concentrating channels lose in this family (cutting breadth -0.043 at +103% HHI, re-weighting at fixed breadth -0.049 at +31% HHI) and this is the same trade in reverse: breadth 25.2 -> 36.9 names and HHI -31%, bought by giving up 0.92%/yr of train tail excess (+4.31 -> +3.39%/yr, both t > 4) worth about -0.048 of Sharpe if delivered one-for-one. The book holds its pool's median volatility (0.515 -> 0.509) so this is not the closed low-vol tilt in disguise, and its churn falls, so the standing turnover confound cannot bite in the candidate's favour. This is the third and final point of a bracket: above ~0.94 says the hold-30/enter-20 band that twenty-five non-`price-trend` books inherited is too narrow; between 0.90 and 0.94 says the incumbent is an interior optimum and the axis is closed; below 0.90 says both directions lose and the three books are one object inside the family's resolution floor, which would be a statement about what this split can resolve rather than about the band.
+- Verdict: FAMILY_LEAD — best result yet in family 'liquidity-volume': validation sharpe 0.942 > 0.917 (DSR 0.8923, 82 trials, 23 effective after clustering at rho 0.95)
+- Train: sharpe +0.62, ann_ret +6.0%, maxDD -46.1%, turnover 0.2x
+- Validation: sharpe +0.94, ann_ret +16.4%, maxDD -33.5%, turnover 0.9x
+- Deflated Sharpe prob: 0.8923 (bar from 82 trials, 23 effective)
+- Scout track: family best before this trial +0.92; the champion was not compared and the holdout was not read
+- Lesson: **Pre-registered 0.94, landed 0.942 — the closest pre-registration this repo has
+  recorded outside the seated lead's own exact reading, and it completes the bracket.**
+  On the validation split, which is the only split on which the three points are
+  comparable (see the sample caveat below), the concentration axis in
+  `liquidity-volume` now reads:
+
+      book                          breadth    HHI        validation
+      hold-15/enter-10  (#80)         12.4    0.0809 (+103%)   0.874
+      hold-30/enter-20  (seated)      25.2    0.0398          0.917
+      hold-30/enter-20 rank-wt (#81)  25.2    0.0521 ( +31%)   0.868
+      hold-45/enter-30  (#82)         36.9    0.0273 ( -31%)   0.942
+
+  **Monotone in breadth on both arms, and the axis is closed as promised — no fourth
+  point.** The finding is not the new lead; it is the *shape*, and the shape inverts
+  `price-trend`'s. There, concentrating into the score paid (+0.100 ordering, +0.206
+  ordering plus spacing) and de-concentrating was priced at ~0.05 Sharpe per 30% of HHI.
+  Here every step toward concentration loses and the step away gains, at -31% of HHI
+  through the breadth channel, for **+0.025**. Both families' constants are real; neither
+  transfers, and this one transfers with the *wrong sign*, which is a stronger statement
+  than `CLAUDE.md`'s rule anticipates.
+  **Read the level with the floor, not without it.** +0.025 over the seated lead is far
+  inside this family's resolution floor (the three books share membership cores and sit at
+  weight overlaps of 0.71-0.87; `SE = 0.568*sqrt(1-rho)` puts one paired SE at roughly
+  0.10). So the honest claim is the ordering across a 3x span of breadth, not the gap. The
+  seated lead is on a mild slope toward breadth, not at an interior optimum — which is the
+  branch this file named in advance as the most transferable, because **twenty-five
+  non-`price-trend` books in this repo inherited hold-30/enter-20 from constructions built
+  on the full 140-name cross-section**, and this is the first evidence that the band is too
+  narrow for a pool an operator has shrunk.
+  **A sample caveat that any future band comparison here must carry, and that this trial
+  found the hard way.** A wider band raises the minimum scoreable pool a month must supply,
+  and this universe's pool grows over its history, so the band silently changes the *train*
+  sample: the three points run on **546 / 381 / 227** of 666 train month-ends, starting
+  **1972-07 / 1986-04 / 1999-02**. Validation is unaffected — all three cover 72 of 72
+  month-ends — so the validation bracket is like-for-like and the train column is not
+  comparable at all. This is the sixth instance of the repo's oldest habit (check what a
+  component's code actually reads) arriving on a *sample* rather than on a statistic.
+  **Consequences:** this candidate's train 0.62 -> validation 0.942 is **not** admissible
+  to the train-as-prediction record (different samples, n stays at 26), and #82's train
+  maxDD of -46.1% is measured on a 1999+ window that excludes most of the drawdowns the
+  other two books are charged for.
+  Two riders. Turnover fell to **0.9x** annual, making this the cheapest book ever recorded
+  in this repo (0.14%/yr of drag) — the wide arm is cheaper as well as better, so no part
+  of the gain is a cost artifact. And validation maxDD is -33.5% against the seated lead's
+  -33.0%, i.e. the extra breadth bought no drawdown relief, which is worth noting because
+  in `price-trend` breadth and drawdown move together.
+
