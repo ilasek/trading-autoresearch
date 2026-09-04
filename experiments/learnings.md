@@ -2121,3 +2121,127 @@ across experiments; prune entries that later evidence contradicts.
   single sort rather than a union. That is a hypothesis worth recording rather than a finding:
   the under-prediction may be a property of the union machinery's small early-sample pools
   rather than of the splits. Still free to keep recording.
+
+- **[Measured 2026-09-04, nightly] The concentration axis is now bracketed in a second family,
+  and `price-trend`'s constant does not merely fail to transfer — it transfers with the wrong
+  sign. This is the strongest form the `CLAUDE.md` scope rule has yet taken.** Three trials on
+  one night, each moving the seated `liquidity-volume` lead's concentration and nothing else,
+  on validation (the only split on which they are comparable — see the sample caveat below):
+
+      book                            breadth    HHI          validation   t vs seated
+      hold-15/enter-10        (#80)     12.4   0.0809 (+103%)    0.874        -0.46
+      hold-30/enter-20 rank-wt (#81)    25.2   0.0521 ( +31%)    0.868        -0.96
+      hold-30/enter-20 equal (seated)   25.2   0.0398             0.917          —
+      hold-45/enter-30        (#82)     36.9   0.0273 ( -31%)    0.942        +0.36
+
+  Monotone in breadth across a 3x span, on both arms, through both channels — cutting names
+  and re-weighting at bit-identical membership (#81 returned `avg_pos` 24.3 against the
+  seated 24.29, so the isolation held exactly). In `price-trend` every one of those arrows
+  points the other way: ordering-only re-weighting is worth **+0.100** (#54) and
+  de-concentration is priced at **~0.05 Sharpe per 30% of HHI** (#53). Here re-weighting is
+  worth **-0.049** at the same +31% of HHI and de-concentration *gains*.
+  **The mechanism, pre-registered and surviving.** A momentum composite's score is a direct
+  estimate of expected continuation, so tilting capital up its ranking buys forecast. This
+  score's cardinal content is not a forecast: decomposing `log ILLIQ ~ log|r| - log(dv)` on
+  train, the denominator alone is a **size ranking this family has measured as a null four
+  times** (top-20 +1.94%/yr, t = +1.88) and the numerator alone is the **survivorship-inflated
+  volatility level** (+8.53%/yr, t = +3.62) that is the single identified cause behind
+  `range-variance`'s eleven closed mechanisms. So the region-relative `ILLIQ` score is
+  monotone in tail excess (+4.31 / +5.63 / +7.09 / +9.90 %/yr at top-20 / 15 / 10 / 5) while
+  **that extra mean does not survive the variance it costs to reach it.**
+  **Read the shape, never the levels.** The four books correlate **0.959-0.992** on validation,
+  so by `SE = 0.568*sqrt(1-rho)` no single gap here is resolvable (|t| 0.36-0.96) and the
+  +0.025 new lead is a quarter of a standard error. What is established is the ordering across
+  a 3x breadth span, not any gap in it. **The axis is closed: no fourth point, in either
+  direction.**
+  **The transferable consequence is about the other twenty-five books, not this one.**
+  `hold-30/enter-20` was adopted by the first non-`price-trend` scout and copied unexamined
+  ever since, and it was designed on the **full ~140-name cross-section**, where enter-20 buys
+  a top-14% tail. The region operator shrinks its own pool to ~77, so the same band buys the
+  top 26% — and the repair that "restores the design quantile" (#80) is the arm that **loses
+  worst**. The band is not too narrow relative to the pool; it is too narrow full stop, in the
+  one family where that has been tested. Any book here whose operator restricts its pool
+  should have its band re-bracketed rather than inherited.
+
+- **[Measured 2026-09-04, nightly] A band-width change silently changes the *train* sample in
+  this repo, and every past and future band comparison has to report coverage.** A wider band
+  raises the minimum scoreable pool a month must supply, and this universe's pool grows over
+  its history, so the three bracket points above run on **546 / 381 / 227** of 666 train
+  month-ends, first scoreable in **1972-07 / 1986-04 / 1999-02**. Validation is unaffected
+  (72 of 72 for all three), which is why the bracket is quoted on validation alone. Two
+  consequences worth carrying. #82's train Sharpe of 0.62 and train maxDD of -46.1% are
+  measured on a 1999+ window that excludes most of what the other two books are charged for,
+  so **the reading is inadmissible to the train-as-prediction record** (n stays at 26). And a
+  band comparison scored on train anywhere in this repo's history is comparing samples, not
+  constructions. Sixth instance of this repo's oldest habit — check what a component actually
+  reads — and the first to land on a *sample* rather than on a statistic or a line of code.
+
+- **[Measured 2026-09-04, nightly] The lab ran the first control designed to break one of its
+  own passing results, and the result survived twice — once against the folder's proposed test
+  and once against a sharper one the folder did not propose.** `SUMMARY.md` #76(b) predicted
+  that region-demeaning should be nearly inert on a unit-free percent-cost proxy if the
+  2026-09-03 venue-unit account of the family lead is right, and should help as much as it
+  helped `ILLIQ` if the account is wrong. Measured on train (top-20 excess over the scoreable
+  pool): `ILLIQ` **+3.67 -> +4.31 %/yr**, FHT **+1.77 -> +1.00 %/yr**. The operator helps the
+  unit-set ratio and *hurts* the unit-free fraction. **The account passes its own falsification.**
+  A second, sharper control the folder did not ask for splits the ratio itself. Demeaning only
+  the **denominator** (`log dv`, the half whose units the account blames) reproduces **+0.52 of
+  the +0.65** total gain; demeaning only the **numerator** (`log|r|`, a return) is worth
+  **-0.43**, i.e. the wrong sign. That is this file's own 2026-09-03 rule — *before neutralising
+  a score against anything, ask whether the thing being removed is a unit or a return* —
+  measured directly on both halves of one object for the first time, rather than inferred from
+  which legs the operator helped.
+  **A competing account specific to this repo's code was proposed and refuted for free.**
+  `load_prices` forward-fills closes across foreign holidays while `load_panels` does not
+  forward-fill volume, so the first traded day after a holiday carries a multi-day return
+  against a one-day volume — inflating `ILLIQ` in proportion to a name's local holiday density,
+  which is a *regional* property that region-demeaning would also remove. Rebuilding `ILLIQ`
+  on days where day `t` and day `t-1` both traded gives `spearman(standard, clean) = +0.999`
+  and an identical region gain (+0.65 either way). The artifact is real in principle and
+  absent in magnitude. **Recording it because a refuted alternative is what makes the surviving
+  account worth something** — and because this is the pattern the 2026-09-02 placebo entry asks
+  for: run the control before building further, not after.
+  **The account is now bounded on three sides and has nothing left to be applied to.** It does
+  not rescue log ADV (measured last session), it is inert on unit-free scores (measured
+  tonight, twice), and `region` is already the finest venue label `data/universe.yaml` carries
+  — 15 regions, each a single country bar the 9-ETF `GLOBAL` bucket — so #76(a)'s "demean
+  against listing venue instead" is **not expressible here**. A (region x currency) partition
+  is finer but leaves only 7 of 18 cells with 4+ members. The journal's own standing next-idea
+  "ask what else carries a venue-set unit" therefore closes: `ILLIQ` is the only ratio in this
+  repo whose numerator and denominator scale differently by venue.
+
+- **[Measured 2026-09-04, nightly] Both of the research folder's new liquidity proposals died
+  on their own pre-registered preconditions, and the more useful death is the one that took the
+  folder's own threshold seriously.** *(a)* **`SUMMARY.md` #74, Corwin-Schultz high-low spread.**
+  The note pre-registers the kill: if `spearman(CS_spread, trailing 21-day range volatility)`
+  is at or above ~0.7, the variance cancellation failed on this universe and the object is the
+  width level again. Measured over 453 train month-ends: **+0.788**. The obvious escape is that
+  the failure is an FX artifact — `aux["high"]`/`aux["low"]` *are* USD-converted here, and a
+  two-day range absorbs an overnight FX move the one-day terms cancel, mechanically inflating
+  `gamma` on the 13 non-USD regions. It is not the escape: restricted to **USD-quoted names
+  only**, where no FX enters `gamma` at all, the correlation is **+0.769**. The estimator's
+  variance cancellation genuinely fails on this universe. `range-variance` closes on its own
+  identified cause for the twelfth screened mechanism, and this time on the folder's top-ranked
+  range object with the folder's own number. *(b)* **`SUMMARY.md` #75, FHT.** Its mandatory
+  non-trading-day filter is confirmed necessary and prospectively: uncorrected, FHT
+  rank-correlates **+0.421** with local holiday density and the filter changes the ranking
+  materially (filtered-vs-unfiltered +0.722). Correctly filtered it passes every orthogonality
+  precondition — vs 21-day range vol **+0.031**, vs log ADV **-0.234**, vs CS spread **+0.080**
+  — with ample dispersion (p90/p10 6.69). It then fails on content: top-20 excess **+1.77%/yr
+  (t = +1.62)**, IC **+0.0061 (t = +0.75)**. The decomposition says why, and it is the reason to
+  record this rather than just the number: FHT's cross-sectional ranking follows the `Zeros`
+  factor at **+0.912** and `sigma` at only **+0.170**, and `Zeros` alone is a clean null
+  (+0.25%/yr, t = +0.25) over which **47.8% of name-dates are exact ties at zero**. On 140
+  mega-caps a zero-return day is too rare to rank anything. **A proposal can pass every
+  orthogonality screen and still be a null, because orthogonality bounds an object's breadth,
+  not its sign** — the same distinction this file drew for the value-proxy holdings screen.
+
+- **[2026-09-04, nightly] The blend is declined for the sixth consecutive session, and the new
+  lead is the first leg to clear its solved break-even at *every* weight while still being
+  half a Sharpe short of resolvability.** `lv_illiq_region_wide30`: `rho` 0.7146, `k` 0.787,
+  own Sharpe 0.942 against break-evens of 0.823 / 0.847 / 0.874 / 0.903 at 10/20/30/40%. Blend
+  deltas **+0.010 / +0.016 / +0.018 / +0.014** at **t = +0.42 / +0.34 / +0.24 / +0.14**; the
+  leg would need its own Sharpe at **1.385-1.470** for a two-SE blend. At 0.93x annual turnover
+  it is also the cheapest book ever recorded in this repo (0.14%/yr of drag). The gap between
+  what the gate would accept and what is distinguishable from noise is unchanged at roughly a
+  factor of 1.5 in required leg Sharpe. Nothing here has moved the standing recommendation.
