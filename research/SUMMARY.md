@@ -725,6 +725,51 @@ short-leg concentration is unreachable long-only), and **cross-market volume is 
 Lou–Shu drop an entire exchange from a single-country sample over a volume-reporting convention,
 which is a strong prior that a raw volume sort across 15 regions is substantially a venue sort.
 
+**[Added 2026-09-04] The lab's region-demeaning result has independent Tier 1 support that predates
+it by more than a decade, and the support narrows the mechanism rather than merely confirming it.**
+Karolyi–Lee–van Dijk (2012, *JFE*, Tier A, read in full; sample 1995–2009, 40 countries;
+`validation_overlap: false`) build the same daily Amihud panel this repo builds, across 40 markets,
+and state in print that **"a direct comparison of the level of Amihud liquidity across countries is
+not possible because of differences in currency units and trading volume definitions"** — handling
+it by only ever relating stocks to peers *within* a country. That is the lab's 2026-09-03 finding
+stated as a design constraint by a study that never needed to discover it. Two consequences. First,
+**the scope is narrower than the lab's account.** The paper names currency units and volume
+definitions; this repo's `dollar_volume` is `close_usd * volume`, so the currency half is already
+handled, and lot size — named in the lab's account — should not matter for a dollar quantity at
+all, since it moves share count and price reciprocally. What is left is **volume reporting**:
+dealer double-counting, off-exchange consolidation, and what fraction of a dually-listed name's
+trading the sampled venue sees. Second, the paper's unit is the **country**, because that is where
+the convention is set; this repo's `region` is coarser, so region-demeaning removes only the average
+convention of a multi-exchange region. Refining region → listing venue is a free screen on the
+existing family lead with a signed prior attached (see candidate #76).
+→ `notes/2026-09-04-commonality-in-liquidity-across-countries.md`
+
+**[Added 2026-09-04] The class of liquidity proxy this family has screened exclusively is the
+class the measurement literature says is worst measured from daily data — and two proxies from the
+better class are buildable here and have never been tested.** Fong–Holden–Trzcinka (2017, *Review
+of Finance*, Tier A, read in full; 43 exchanges, 1996–2007; `validation_overlap: false`) run the
+global horserace of daily-data liquidity proxies against intraday benchmarks, on three separately
+graded dimensions: cross-sectional correlation, portfolio time-series correlation, and **RMSE
+against the level**. The structural finding is that **percent-cost proxies** (what a round trip
+costs as a fraction of price) are far better approximated from daily data than **cost-per-volume
+proxies** (how far price moves per dollar traded) — the best of the former reaches average
+cross-sectional correlation near 0.8 with percent effective spread, the best of the latter near
+0.56 with lambda — and that the three dimensions genuinely come apart: **all five leading
+cost-per-volume proxies, `ILLIQ` included, are highly correlated with lambda and none of them
+captures its level, at either frequency.** That is the same non-comparability as Karolyi et al.,
+reached from measurement rather than from market design, and it is the general form of the lab's
+#71 account. Disaggregated by exchange the asymmetry sharpens: the best percent-cost proxy tops 42
+of 43 exchanges, while the cost-per-volume top slot fragments across five different proxies and
+**`ILLIQ` wins on 2 of 43** (top-or-indistinguishable on 6), though it remains the best *daily*
+cost-per-volume proxy globally. Every object `liquidity-volume` has screened here is
+cost-per-volume or a raw volume functional. **The two percent-cost proxies computable on this
+repo's data — Corwin–Schultz High-Low from `aux["high"]`/`aux["low"]`, and FHT from the
+zero-return frequency and non-zero-return volatility of the closes alone — contain no volume at
+all**, which makes them the cleanest available test of whether this family's content is liquidity
+or is volume. See candidates #74 and #75, both of which lead with a free precondition.
+→ `notes/2026-09-04-global-liquidity-proxy-horserace.md`,
+`notes/2026-09-04-high-low-spread-estimator.md`
+
 ### 10. `range-variance`
 
 **This family is a measurement result, not a premium, and the measurement gain is large, analytical
@@ -805,6 +850,28 @@ against those: unlike `statistical-arbitrage`'s residual reversion and the ETF l
 **profitable leg here is the reachable one** — the low-`MAX` decile is the high-return leg, so a
 long-only book holds it directly, and the authors' own "would require shorting" caveat is about
 capturing the full spread, not about which end pays.
+
+**[Added 2026-09-04] One range construction exists that the family's identified cause does not
+automatically explain, and it is not a volatility estimator.** `learnings.md` closes this family on
+a single cause covering ten screened mechanisms: they all sort on a cross-sectional **level of
+width**, and the width level *is* the survivorship artifact. Every estimator this folder has
+recorded here — Parkinson, Garman-Klass, Rogers-Satchell, HAR-RV, the `MAX`/`MIN` tail sorts — is a
+width measure, so the closure is fair on the evidence. Corwin–Schultz (2012, *JF*, Tier A, read in
+full; 1,009 citations) is the exception in the literature: it is a **difference of two range
+statistics designed to cancel the variance component**. Its identification is that the variance
+part of a log high-low range scales with the measurement interval while the bid–ask spread part
+does not, so comparing the sum of two consecutive one-day squared log ranges against the single
+two-day squared log range identifies volatility and spread separately. The residual it keeps is a
+**percent-cost liquidity measure**, not a width — which is why its natural family home is
+`liquidity-volume` and it appears here only because its inputs are the daily range. **This does not
+contest the closure**; the honest reading is that the closure's cause covers levels of width and
+this object is not one, and one free rank correlation decides which it behaves like on this
+universe. See candidate #74, which is written so that a high `spearman(CS spread, trailing range
+vol)` closes the family an eleventh time on its own cause rather than reopening anything.
+A by-product worth recording separately: the same two equations yield a **transaction-cost-corrected
+range variance estimator**, which is a different defect from the one that closed this family but is
+the version to use if a range volatility estimate is ever wanted here again.
+→ `notes/2026-09-04-high-low-spread-estimator.md`
 
 ### 11. `seasonality-calendar`
 
@@ -3834,6 +3901,121 @@ hypothesis fodder, then anti-candidates.
     class*, not to the family. Tier A, no overlap, `published_post_2018: true`.
     → `notes/2026-09-03-machine-learning-economic-restrictions.md`
 
+74. **[Added 2026-09-04] The first liquidity object proposed here that contains no volume, and the
+    first range object whose null hypothesis is not "it's the width level". Free precondition
+    first, and either answer is a finding.** Corwin–Schultz estimate the **proportional bid–ask
+    spread** from daily highs and lows. Identification: the variance component of a log high-low
+    range scales with the measurement interval, the spread component does not, so one-day against
+    two-day ranges identify both. With `beta` the sum of the two consecutive one-day squared log
+    ranges and `gamma` the squared log two-day range,
+    `alpha = (sqrt(2*beta) − sqrt(beta))/(3 − 2*sqrt(2)) − sqrt(gamma/(3 − 2*sqrt(2)))` and
+    `S = 2(exp(alpha) − 1)/(1 + exp(alpha))`. Two adjustments are **required**, not optional:
+    shift day `t+1`'s high and low by the overnight gap whenever day `t`'s close falls outside day
+    `t+1`'s range (do *not* use close-to-open), and **set negative two-day estimates to zero before
+    averaging**. Aggregate over overlapping consecutive pairs; the source validates weekly windows
+    as well as monthly, so a trailing quarter is comfortable.
+    **Run this precondition before anything else: `spearman(CS_spread, trailing 21-day range
+    volatility)` cross-sectionally.** If it is high — say ≥ 0.7, the neighbourhood where `MAX(5)`
+    sat against 21-day vol (+0.872) — the variance cancellation failed on this universe, the object
+    is the width level again, and **`range-variance` closes an eleventh time on its own identified
+    cause with no trial spent**. If it is low, the lab holds a characteristic orthogonal to both
+    volatility and volume, which is a new axis here. Two further free controls in the same screen:
+    `spearman(CS_spread, region-relative log ADV)` — near −0.9 would say it is the size ranking
+    again, as region-relative `ILLIQ` was — and the region-demeaning contrast in #76.
+    **Preconditions and pitfalls, all cheap and all capable of invalidating the result.**
+    (a) **Establish whether `aux["high"]`/`aux["low"]` are USD-converted or native before computing
+    anything.** The one-day terms are within-day ratios so any per-day scale cancels, but `gamma`
+    spans two days — if they are USD-converted, the two-day range absorbs the overnight FX move for
+    the 13 non-USD regions while the one-day terms do not, mechanically inflating `gamma` on
+    exactly the foreign names and turning the sort partly into a currency-volatility sort.
+    (b) **Drop non-trading days using the volume panel's NaN pattern.** A forward-filled close gives
+    `H = L`, hence `beta = 0` with `gamma > 0`, hence a zeroed estimate — across 15 regions with
+    non-overlapping sessions that ranks names by local holiday count. (c) **Check the estimated
+    spread actually has cross-sectional dispersion on this universe**: the source's own boundary is
+    that Effective Tick beats High-Low on the *very largest* stocks, and every name here is large,
+    so a small-dispersion characteristic estimated with noise is mostly a sort on the noise
+    (#68's rule, applied to a measurement rather than a premium). Cost profile is the favourable
+    part: a trailing-quarter estimated spread is a slow characteristic, so expect the 1–2x turnover
+    regime of the current family lead rather than the union books' 13–19x. **This is a measurement
+    hypothesis, not a premium** — the claim under test is that a better-measured liquidity
+    characteristic ranks better than a worse-measured one, the same shape as the lab's own
+    2026-09-03 result. Do not import a spread-premium expectation into it. Tier A, no overlap.
+    → `notes/2026-09-04-high-low-spread-estimator.md`,
+    `notes/2026-09-04-global-liquidity-proxy-horserace.md`
+
+75. **[Added 2026-09-04] The cheapest untested object in a live family: a percent-cost liquidity
+    proxy from the closes alone, with one contamination check that is mandatory on this panel.**
+    FHT simplifies the LOT model to an analytic expression in two ingredients the lab already
+    computes: `sigma` = standard deviation of **non-zero** daily returns over the window, `Zeros` =
+    zero-return days / total days, and `FHT = 2 * sigma * Phi^{-1}((1 + Zeros)/2)`. The mechanism
+    is that a zero observed return signals a true value change too small to clear the round-trip
+    cost band, so a higher zero frequency at given volatility implies a wider band. In the global
+    horserace FHT lands consistently in the top three percent-cost proxies on all three graded
+    dimensions, and dominates the raw `Zeros` and LOT Mixed measures it replaces. It uses **no
+    volume, no range, no currency** — one inverse-normal call on the existing close panel.
+    **The mandatory check, and it is free: exclude non-trading days from both the zero count and
+    the day count.** This repo forward-fills closes across foreign holidays and does not
+    forward-fill volume, so a stale bar manufactures a zero return that FHT reads as illiquidity.
+    Uncorrected, FHT on this panel is a **holiday-calendar sort** ranking the 15 regions by local
+    holiday density — the lab's own "check the statistic is invariant to the thing it is not
+    supposed to measure" rule, arriving on an external proposal for the second time. Use the volume
+    panel's NaN pattern to identify non-trading days, exactly as the Amihud note's day-level screens
+    already require. Residual caveat: zero returns also arise from a price failing to clear the
+    **tick**, and minimum tick is a venue property — so FHT is unit-free but not perfectly
+    venue-free, which is a prediction about the magnitude in #76, not a zero. Natural second arm of
+    the #74 screen; run both in one pass since they share the non-trading-day filter. Tier A, no
+    overlap. → `notes/2026-09-04-global-liquidity-proxy-horserace.md`
+
+76. **[Added 2026-09-04] Two free contrasts that stress-test the lab's best current result rather
+    than extending it, and the more valuable outcome of each is the falsifying one.** The
+    2026-09-03 leg rests on the account that region-demeaning `ILLIQ` removes a **venue unit**.
+    Two independent Tier 1 sources now support the account (Karolyi et al. state the
+    non-comparability as a design constraint; Fong–Holden–Trzcinka show no cost-per-volume proxy
+    captures lambda's level at any frequency) and both sharpen it into signed predictions.
+    **(a) Venue beats region, if the account is right.** Karolyi et al.'s unit is the *country*,
+    because currency and volume convention are set there; this repo's `region` is coarser and a
+    multi-exchange region has its conventions averaged away rather than removed. Re-screen the
+    existing leg demeaning against **listing venue** instead of region. The account predicts the
+    effect gets *stronger*; a null is evidence against it.
+    **(b) A percent-cost proxy should gain much less from region-demeaning than `ILLIQ` did.**
+    `ILLIQ` is a ratio whose numerator and denominator scale differently by venue; a percent-cost
+    proxy (#74, #75) is a dimensionless fraction of price and is already unit-free, so by the lab's
+    own rule — the same rule that predicted, and observed, region-demeaning doing nothing on the
+    two unit-free legs — the operator should be nearly inert on it. **If region-demeaning helps a
+    percent-cost proxy as much as it helped `ILLIQ`, the venue-unit account of the family lead is
+    wrong** and the gain is coming from something else (a regional return premium, a survivorship
+    artifact, a regional momentum residual). That falsification is worth more than a passing
+    screen, and it costs one extra column in the same run as #74/#75.
+    **(c) A narrower reason to check, from the same source.** Karolyi et al. name *currency units*
+    and *volume definitions*. The currency half is already handled here (`dollar_volume` is a USD
+    quantity), and lot size — named in the lab's account — moves share count and price
+    reciprocally and so should not affect a dollar quantity. If venue non-comparability enters
+    through volume **reporting** (dealer double-counting, off-exchange consolidation, dual-listing
+    coverage) rather than through the `|return|` numerator, region-demeaning should also tighten a
+    plain log-dollar-volume ranking; if it enters through the numerator, it should not. Half the
+    data for this is already on disk (`spearman(region-relative ILLIQ, region-relative log ADV)`
+    = −0.912, with that size sort's own tail a null). Tier A, no overlap.
+    → `notes/2026-09-04-commonality-in-liquidity-across-countries.md`,
+    `notes/2026-09-04-global-liquidity-proxy-horserace.md`
+
+77. **[Added 2026-09-04] An anti-candidate, closed on a precondition this folder can check without
+    the lab: commonality in liquidity is structurally unreachable on this universe.** The standard
+    construction is a per-stock monthly R² from regressing daily liquidity innovations on the
+    market's (own-stock-excluded, cap-weighted) liquidity innovations with one lead and one lag,
+    aggregated to a country-month average and logit-transformed. It carries two hard screens:
+    **≥ 15 daily observations per stock-month** (fine here) and **≥ 10 stocks per country-month**
+    (not fine). This universe is ~145 instruments across 15 regions — under ten names per region on
+    average — and 42 of them are ETFs whose co-movement with constituent-adjacent names is
+    definitional rather than economic. **Record `commonality` as unreachable for a structural
+    reason rather than untested**, the same honest verdict `range-variance` and
+    `statistical-arbitrage` earned, and reached here in zero trials. Note also what the source is
+    *not*: it is an explanation of why liquidity co-moves, not a return premium, and nothing in it
+    licenses "buy low-commonality names". One transferable free item survives: the source's
+    `−log(1 + ILLIQ)` outlier transform is sensible hygiene, but it is **monotone**, so it changes
+    nothing in a rank-based sort and matters only if `ILLIQ` is ever used as a regression input or
+    a weighting scale. Tier A, no overlap.
+    → `notes/2026-09-04-commonality-in-liquidity-across-countries.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -3860,8 +4042,85 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-01 (session 19) | **The session's aim was set by the lab, not by this folder: both of the diagnostics `SUMMARY.md` made its top priority (#58, #60) were run overnight, and the ETF-versus-constituent gap this log has flagged for two sessions was screened dead by the lab itself — so the standing question list was spent on arrival and the focus moved to what the lab's own results opened.** Three notes, four sources; full text read directly for three primaries, one recorded from its **published abstract only**. The shape is *one mechanism aimed at the only family with zero trials, one discount aimed at the lab's best new result, and one source that explains a pattern the lab has hit repeatedly without a reason.* `range-variance` gets its first **asymmetric** mechanism (upper tail rather than width) together with a free two-number test that decides it either way — and the reading that the lab's own range-lottery screen dismissed a significant, correctly-signed result *using the confound the test exists to separate*. `portfolio-learning` and the inference layer get the algebra behind the lab's mean-versus-max finding — a proof that linear composites are *exactly* equivalent to portfolios of their legs, which is why the mean is bounded and the max is not — plus a second bias, distinct from every correction this folder holds, that lives **inside a single trial** and that the trial count cannot see. And `statistical-learning` gets the size-cut result that predicts, from outside, that a ~145-name large-cap universe is where most characteristics stop working: it names the three daily-data survivors, one of which (`SUV`) is the single volume functional the lab has not screened. | Bali–Cakici–Whitelaw 2011 (JFE; the typeset article read in full from the corresponding author's NYU Stern page), with Cheon–Lee 2018 (Management Science) recorded **from its published abstract only** — closed access (`2026-09-01-max-lottery-extreme-positive-returns.md`); Novy-Marx 2016 (NBER WP 21329 / author's March 2016 draft, R&R at JFE per his posted CV; read in full from `mysimon.rochester.edu`) (`2026-09-01-multi-signal-overfitting-critical-t.md`); Freyberger–Neuhierl–Weber 2020 (RFS; the NBER working-paper draft read in full, including the appendix selection table and variable definitions) (`2026-09-01-nonparametric-characteristic-selection-large-stocks.md`) |
 | 2026-09-02 (session 20) | **Aimed by `SUMMARY.md`'s own ranked open questions, both of which survived contact with the lab this time — and the session's shape is *two corrections to screens the lab is still carrying*, not two new mechanisms.** The 2026-09-01 nightly ran #61's `MAX`/`MIN` sign test and closed `range-variance` a fourth time, so the standing list's first item was spent on arrival and its second (`seasonality-calendar`, the **calendar** half) became the focus. That half had *also* been closed overnight, structurally — which turned the intended survey into an audit of the two screens the family now rests on. Both audits found the screen narrower than the conclusion drawn from it, and both end in a **free measurement that decides the family either way** (#66, #67). The third note takes the standing size-distribution tension, which asked explicitly for a source measuring predictability *by size group directly*. Three notes, five sources; full text read directly for three primaries (two via author/NBER working-paper versions of the published articles, one via a university mirror of the authors' working draft), two recorded **from their published abstracts only** (both closed access). Keloharju–Linnainmaa–Nyberg 2016 (JF) + 2021 (JFE companion) (`2026-09-02-return-seasonalities-common-factors.md`); Ogden 1990 (JF) + Etula–Rinne–Suominen–Vaittinen 2020 (RFS) (`2026-09-02-turn-of-month-payment-cycle.md`); Fama–French 2008 (JF) (`2026-09-02-anomalies-by-size-group.md`) |
 | 2026-09-03 (session 21) | **The first session in three whose aim was not set by the lab overnight — every item on the standing list had been answered, all of them negatively, so the focus was chosen by asking which *live* families the lab could still act in.** The 2026-09-02 nightly ran #66, #67 and #69 and closed all three (the seasonal leg's identification repaired but the demeaning shown not to be what supplies it; the calendar half closed a second time on cost; the ETF-only seasonal dead on its own precondition — 5 of 42 ETFs reach a 20-year lookback), and declined `range-variance` a fourth time on the tail statistic its defence rested on. That leaves `statistical-learning` and `statistical-arbitrage` as the two families that are neither closed by the lab nor over-covered here, and the session took two notes in the first and one in the second. The shape is *one correction, one discount, one mechanism.* The correction: "how few predictors matter" has been asked in the wrong space — characteristic-space sparsity fails, PC-space sparsity works, and the estimator that exploits it shrinks unequally across eigenvalue directions, which is **not** what the lab's uniform ridge-on-features tested, so the design rule drawn from that trial targets a different failure (#70). The discount: the *incremental value of nonlinearity* was measured and found to live in microcaps and distressed names, which this universe does not contain — an anti-candidate for learned model classes that stacks with #68 (#73). The mechanism: the distance method, a relative-value construction that estimates nothing, whose execution lag, overlapping monthly tranches and total-return inputs are already this repo's conventions, and which comes with its own placebo control (#72). Three notes, five sources; **full text read directly for all three primaries**, two supporting sources recorded **from their abstracts only** (both closed access, SSRN 403 as documented). | Kozak–Nagel–Santosh 2020 (JFE; the authors' accepted manuscript read in full from Nagel's university page) (`2026-09-03-shrinking-the-cross-section-sdf-shrinkage.md`); Avramov–Cheng–Metzker 2023 (Management Science; the typeset INFORMS article read in full from the second author's own site) (`2026-09-03-machine-learning-economic-restrictions.md`); Gatev–Goetzmann–Rouwenhorst 2006 (RFS; the NBER WP 7032 version read in full) with Do–Faff 2010 (FAJ) and 2012 (Journal of Financial Research) recorded **from their published abstracts only** (`2026-09-03-pairs-trading-distance-method.md`) |
+| 2026-09-04 (session 22) | **The first session aimed by a lab result that *opened* rather than closed something, and the first in six whose three notes all serve one family.** The 2026-09-03 nightly answered the whole standing list — #70 declined on its own placebo, #72 declined with its pool precondition passing, `portfolio-learning` closed on three independent controls — and produced the exception: #71's region-relative `ILLIQ` at 1.2x turnover, the lab's first leg improvement from a stated *measurement* mechanism. That reverses the 2026-09-02 reasoning that retired the liquidity-proxy horserace from this list ("a horserace cannot change a null measured on this universe"), because the family no longer rests on a null. Focus: the measurement literature the lab's own account implies. Three primaries read in full — the international successor to the horserace this folder dropped, the 40-country Amihud panel that states the non-comparability as a design constraint, and the one range construction built to cancel the width level. | Fong–Holden–Trzcinka 2017 (RoF) (`2026-09-04-global-liquidity-proxy-horserace.md`); Karolyi–Lee–van Dijk 2012 (JFE) (`2026-09-04-commonality-in-liquidity-across-countries.md`); Corwin–Schultz 2012 (JF) (`2026-09-04-high-low-spread-estimator.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-04] For the first time in four sessions the standing list was spent on arrival with one
+  *positive* answer in it, and that is what set tonight's focus.** The 2026-09-03 nightly closed
+  #70 (the eigenvalue screen failed its own placebo — and the folder's statistic, not the lab's,
+  was the one that needed the invariance check), closed #72 (`statistical-arbitrage` declined with
+  its **pool precondition passing** and its content precondition failing, which is the informative
+  direction the proposal was written to produce) and closed `portfolio-learning` outright on three
+  independent controls — union books respond to the *number* of orderings they are handed, not to
+  their content, so no leg improvement can reach one. Against that, **#71 passed**: region-relative
+  `ILLIQ` at validation 0.917 and 1.2x turnover, the cheapest book on the board, from an argument
+  about *measurement* rather than a premium. **The reading worth keeping is about proposal shape,
+  not hit rate.** Four of the last five proposals were decided for free by a precondition or
+  control the proposal itself specified. The one that produced a leg was the one that named a
+  physical reason a number should be wrong (a price-impact ratio whose cross-region level is set by
+  the venue) and a control that would fail if the reason were wrong (the same operator inert on
+  unit-free legs). That is the format to keep writing in — and it is what this session's #74, #75
+  and #76 are.
+- **[2026-09-04] What should aim the next session, in order.**
+  - **Check whether #74's and #75's preconditions were run before choosing anything else** — the
+    same instruction the last four entries gave, for the same reason. Both are free, both are in
+    the one family the lab just reopened, and both are written so either answer is a finding: a
+    high `spearman(CS spread, range vol)` closes `range-variance` an eleventh time on its own
+    identified cause, and a holiday-contaminated `Zeros` count closes FHT before it is built.
+  - **#76(b) is the item to run even if #74 and #75 both die**, because it is the only proposal on
+    this list that can *falsify* the lab's current best result rather than extend it. If a
+    percent-cost proxy gains as much from region-demeaning as `ILLIQ` did, the venue-unit account
+    of the family lead is wrong and the 2026-09-03 transferable rule ("is the thing being removed a
+    unit or a return?") needs rewriting. The lab has never yet run a control designed to break one
+    of its own passing results, and this one costs a column.
+  - **The gap the 2026-09-03 entry opened is still open and is now differently shaped.** That entry
+    named small-*n* forecast combination — shrinkage toward equal weights, stacking over a handful
+    of legs — as the honest next survey, on the grounds that every learned-model source here studies
+    individual stocks with dozens to thousands of features while the lab's learned object is a
+    ten-input combiner. **It was deliberately not taken tonight**, because the lab closed
+    `portfolio-learning` the same night the entry was written: if a union book is inert to leg
+    *content*, a learned weighting over leg content is inert for the same reason, and a survey
+    would arrive as confirmation of a closure rather than as a candidate. It should be taken only
+    if the lab builds a combiner that is **not** a fixed-quota union — a signal-level blend where
+    leg scores actually enter the ranking — since that is a different object from the one the
+    inertness result covers. Recording the condition so a future session does not spend a slot
+    re-confirming a closed family.
+  - **The standing embargoes hold and were honoured.** No further multiple-testing or inference
+    literature (six sources already); no further size/microcap sources (four readings that now
+    reconcile). The 2026-09-02 instruction to **drop Goyenko–Holden–Trzcinka 2009** is *not*
+    reinstated by tonight's work: what was taken is its **international successor**, which answers a
+    different question (are these proxies comparable across venues) than the US horserace did
+    (which proxy is most accurate), and the reason for the drop — that a horserace cannot overturn
+    a null measured on this universe — expired when the family stopped resting on a null. The 2009
+    US paper itself stays dropped.
+- **[2026-09-04] A tension recorded rather than resolved, and it cuts against this session's own
+  proposals.** Fong–Holden–Trzcinka find percent-cost proxies far better measured from daily data
+  than cost-per-volume proxies — the argument for #74 and #75. But Corwin–Schultz report their own
+  boundary in the other direction: on the **very largest** stocks the Effective Tick estimator
+  correlates better with intraday effective spreads than High-Low does, and this universe is
+  entirely large stocks. Both can be true (a class-level ranking versus a size-conditional
+  exception), and #68's big-stock rule says to take the size-conditional reading seriously. The
+  discriminating question is not "is the percent-cost class better" but "does the estimated spread
+  have enough cross-sectional **dispersion** among ~145 large global names to sort on at all",
+  which is a precondition inside #74 and should be run as one. If dispersion is thin, the honest
+  outcome is that the percent-cost route is unreachable *on this universe* — the same shape as
+  `range-variance` — rather than that the literature is wrong.
+- **[2026-09-04] Access and index behaviour, for the recipe.** Three primaries read in full, all
+  from **conference- or author-hosted PDFs**, and two channels not previously used here: the
+  **CICF conference paper host** (`cicfconf.org/sites/default/files/`) served the authors'
+  working-paper version of a Review of Finance article, and **`users.nber.org/~confer/`** — the
+  NBER *conference programme* archive, distinct from the working-paper series this folder has used
+  before — served the pre-publication manuscript of a Journal of Finance article. Both are worth
+  trying for finance papers whose publisher endpoint is closed. Index behaviour: a **sixth**
+  instance of the standing "disbelieve a lone count" rule, and it extends the pattern to a third
+  journal family — **Semantic Scholar's DOI endpoint returns "not found" for
+  `10.1093/rof/rfx003`**, a 400-plus-citation *Review of Finance* article, after previously missing
+  Journal of Finance and JFE DOIs. Crossref resolved it instantly. The working rule is now general
+  rather than journal-specific: **for any top-tier finance DOI, query Crossref first and never
+  treat a Semantic Scholar miss as evidence a paper is unindexed.** Where both indexes answered
+  they disagreed in the usual mild way (JFE 624 Crossref / 690 S2; JF 1009 / 1030), which is
+  ordinary lag, not the pathology.
 
 - **[2026-09-03] The standing list was spent on arrival for the third session running — but this
   time every item came back *negative*, and that changes what this folder is for.** The 2026-09-02

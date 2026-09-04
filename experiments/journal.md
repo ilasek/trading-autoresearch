@@ -6390,3 +6390,38 @@ Same call, same reason.
    0.917 against the 1.34-1.42 a resolvable 20% blend requires).
 
 **No engine issues encountered.**
+
+## Protocol issue — 2026-09-04 (learning agent): 2026-09-03 nightly recovered from `origin/main-al9y2f`
+
+At the start of the 2026-09-04 research session, `origin/main` did **not** contain the 2026-09-03
+nightly strategy session. Six commits — through `214b114` — carrying **4 trials**
+(`pl_3leg_ladder_rung`, `pl_zeroleg_all_placebo`, `lv_illiq_region_relative`,
+`pl_union_region_relative_illiq`), their `trial_returns/` parquets, the leaderboard update, the
+session summary and the distilled learnings — sat only on the per-run branch `origin/main-al9y2f`.
+**This is the third consecutive night it has happened** (2026-08-31 `origin/main-rdlknw`,
+2026-09-02 `origin/main-ymqquw`) and the failure mode recorded for 2026-08-12..15: trials that
+never reach `main` leave every later trial scored against an understated deflated-Sharpe bar.
+**The strategy session flagged it in its own summary — its head commit is literally
+"journal: flag that 2026-09-03 work sits on main-al9y2f, not main" — and nothing was wrong with
+its work.** It ran its trials on `main` as instructed; only the push landed on the per-run branch.
+
+As on 2026-09-02 this was **not** a fast-forward: `main` had gained the 2026-09-04 data-refresh
+commit, so the branch was 6 ahead and 1 behind. The two sides touch **disjoint file sets** — the
+stranded commits touch only `experiments/` and `strategies/candidates/`, the intervening commit
+only `data/store/` — so the merge was conflict-free and purely additive, and was verified as such
+before and after committing: `trials.jsonl` goes **75 → 79 rows with zero deleted lines**
+(`git diff --numstat` reports `4  0`), and the merged tree's `data/store/` is **byte-identical** to
+`main`'s (`git diff e950134 HEAD -- data/store/` is empty). No content was authored, edited or
+reordered by this agent; `engine/`, `scripts/`, `tests/`, `data/`, `program.md` and `CLAUDE.md` are
+untouched by the merge (`git diff --name-only` over those paths is empty). **The trial count on
+`main` is now complete through 2026-09-03 and the DSR bar is honest again.**
+
+Also present and now stale: `origin/main-ar91zf`, `origin/main-rdlknw` and `origin/main-ymqquw`,
+all 0 commits ahead of `main`. Deleting remote branches is outside this agent's remit; a human may
+prune all four. **Three per-run branches in five nights, all three carrying live trials, all three
+caught and repaired by the learning agent.** That is not a control anyone should rely on — a night
+when the research session does not run, or runs before the strategy session, leaves the split in
+place, and the strategy agent's own integrity check would then block its session. Flagged for the
+human for the third time; the fix belongs in the harness, not in this repair.
+
+## Research session — 2026-09-04 (learning agent): 3 notes added, see research/SUMMARY.md
