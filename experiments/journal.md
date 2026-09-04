@@ -6457,3 +6457,44 @@ human for the third time; the fix belongs in the harness, not in this repair.
   -48.6%, so the narrowing was not a risk/return dial with a reading a human might want —
   it lost on both axes.
 
+## 2026-09-04T23:27:12+00:00 — lv_illiq_region_rankweight — **SCOUT**
+- Candidate: `strategies/candidates/lv_illiq_region_rankweight.py` (family: liquidity-volume, track: scout, trial #81)
+- Hypothesis: Weighting the seated family lead's held set by linear rank of its region-relative Amihud ILLIQ score instead of equally — membership, band, window, grid and pool bit-identical to `lv_illiq_region_relative`, so only the weighting channel moves (25.23 names either way, HHI 0.0398 -> 0.0521, +30.8%, weight overlap 0.760, annual L1 churn 0.58x -> 1.43x worth 0.13%/yr) — scores near 0.94 on validation against that lead's 0.917, and in particular does NOT reproduce the +0.100 that the identical ordering-only re-weighting is worth in `price-trend` (#54: equal 1.023 / rank 1.123 / magnitude 1.229). The reason is that this score's cardinal content is a size ranking measured as a null four times in this family (log ADV alone, top-20 +1.94%/yr, t = +1.88) divided into a volatility level that is this universe's survivorship artifact (log|r| alone, +8.53%/yr, t = +3.62), neither of which is a forecast of return, whereas a momentum composite's spacing is a direct estimate of expected continuation worth a measured ~0.116. Trial #80 has already shown the breadth-cutting concentration channel costs -0.043 here; this isolates the re-weighting channel at fixed membership, which is the channel `price-trend`'s constant was measured on. A result near 0.917 says the within-leg weighting axis is dead in this family and that the inherited equal weight was the right default; a result near 1.02 says the `price-trend` constant transfers and every non-`price-trend` book in this repo has been leaving that much on the table for twenty-five trials.
+- Verdict: SCOUT — scouted family 'liquidity-volume': validation sharpe 0.868 <= the family's best 0.917 (DSR 0.8558, 81 trials, 23 effective after clustering at rho 0.95)
+- Train: sharpe +0.97, ann_ret +13.4%, maxDD -45.5%, turnover 0.8x
+- Validation: sharpe +0.87, ann_ret +16.1%, maxDD -33.5%, turnover 2.5x
+- Deflated Sharpe prob: 0.8558 (bar from 81 trials, 23 effective)
+- Scout track: family best before this trial +0.92; the champion was not compared and the holdout was not read
+- Lesson: **Pre-registered 0.94, landed 0.868 — and the answer to `CLAUDE.md`'s
+  re-measurement instruction is stronger than "the constant does not transfer": it
+  *inverts*.** The identical ordering-only re-weighting is worth **+0.100** in
+  `price-trend` (#54, equal 1.023 -> rank 1.123) and **-0.049** here, at bit-identical
+  membership both times. `avg_pos` came back 24.3 against the seated lead's 24.29, so the
+  isolation held exactly and this is a clean single-channel reading.
+  **Tonight's two trials are one finding.** #80 concentrated by cutting breadth (+103%
+  HHI, -0.043); #81 concentrated by re-weighting at fixed breadth (+30.8% HHI, -0.049).
+  Both channels lose, and the second is ~3.8x more expensive per unit of HHI. So the
+  unified statement is: **the region-relative `ILLIQ` score is monotone in tail excess
+  (+4.31 / +5.63 / +7.09 / +9.90 %/yr at top-20 / 15 / 10 / 5) and that extra mean does
+  not survive the variance it costs to reach it.** In `price-trend` it did, which is what
+  the +0.100 and +0.206 readings are. The mechanism this file pre-registered is the
+  candidate explanation and it survives: this score's cardinal content is a size ranking
+  this family has measured as a null four times, divided into a volatility level that is
+  the universe's survivorship artifact, so tilting up the ranking buys risk without a
+  return forecast. **Equal weight is not an unexamined inheritance in this family any
+  more; it is the measured optimum of the three schemes on the axis, and the twenty-five
+  non-`price-trend` books that adopted it were right by luck rather than by argument.**
+  Cost accounts for part but not most of it: engine turnover 1.25x -> 2.5x is 0.19%/yr,
+  ~0.019 of Sharpe against the observed -0.049.
+  **Second finding, and it closes a loop opened last session.** The standing rule that a
+  cross-sectional screen over-predicts the book it motivates ran *backwards* for #78, and
+  the 2026-09-03 boundary drawn on it was "do not apply it to an operator that changes the
+  score's scale rather than its ordering within the book". #80 and #81 are both operators
+  of exactly the class the rule *was* calibrated on — they move weight around inside a
+  fixed score — and the rule holds for both, twice, prospectively. The boundary is
+  confirmed from the other side.
+  **Train over-predicted again**: 0.97 -> 0.868. With #80 (1.13 -> 0.874) that is two more
+  over-predictions from plain single sorts, which finishes off the 2026-09-03 hypothesis
+  that the seated lead's exact 0.917 -> 0.917 reading belonged to it being a single sort
+  rather than a union book. n = 26 outside `price-trend`.
+
