@@ -2017,3 +2017,107 @@ across experiments; prune entries that later evidence contradicts.
   explanation (these books all hold ~20 of ~140 names on a train split with a smaller universe and
   longer survivorship conditioning) no longer accounts for the sample on its own. n = 20 outside
   `price-trend`; still unresolved, still free to keep recording.
+
+- **[Measured 2026-09-03, nightly] `portfolio-learning` is inert to leg quality, on three
+  independent controls, and should be closed.** The union leg-count ladder is now complete and
+  has an intercept. On validation: **0.759** (four legs replaced by hashes, #77) / 0.782 (one
+  leg, #72) / 0.833 (mean of the three 2-leg arms, #73-#75) / **0.889** (three legs, #76) /
+  0.958 (four legs, #71) — monotone, R² 0.974, slope +0.0505 per leg, fitted intercept 0.7433
+  against a zero-leg rung *pre-registered at 0.75*. The shape survives its hardest control and
+  is not an extrapolation artifact. It is still empty, for three reasons that only appear
+  together. **(i)** Against the hash book, the seasonal leg — the only leg here with significant
+  train content (decile-10 +10.59%/yr, t = +4.16) — is worth **+0.023 (t = +0.13)**, and the
+  four-leg headline object is worth **+0.199 (t = +1.11)**. *No rung is individually
+  distinguishable from a book that reads no market data.* **(ii)** Train disagrees about the
+  shape: 0.471 / 0.577 / 0.814 / 0.696 / 0.678, an inverted U **peaking at two legs**, on a
+  split 9.1x longer. **(iii)** #79 swapped in a leg measured **+0.236 better standalone** with
+  everything else bit-identical and churn matched in advance, and the book moved **−0.003
+  (t = −0.03)**. With the 2026-09-02 placebo partner outscoring a content partner, that is four
+  readings agreeing: **the union responds to the number of orderings it is handed, not to their
+  content.** The planning corollary is what matters — *no improvement to a leg can reach a union
+  book*, so there is no route from the scouting programme to a challenger through this
+  construction. Cleanest single comparison: the upgraded leg **alone** scores 0.917 at **1.2x**
+  turnover; wrapped in the union, 0.954 at **13.6x** — +0.038 (t = +0.24) bought with ~1.9%/yr
+  of costs. Nine trials in this family; stop building union books.
+
+- **[Measured 2026-09-03, nightly] The first leg improvement in this repo that came from a stated
+  mechanism rather than from a screened table — and the mechanism is *measurement*, not a
+  premium.** `SUMMARY.md` #71's peer-relative scoring benchmark (distinct from the regional
+  *weight* neutralisation this file closed by a bracket: that is what the book is exposed to,
+  this is what each name's score is measured against) was screened free on all four legs and
+  then tested only where it had an argument. `ILLIQ` is |return| / dollar volume, a price-impact
+  ratio whose **cross-region level is partly set by the venue** — tick size, lot size,
+  settlement, listed float — so region-demeaning should beat sector-demeaning, because venue is
+  a regional property and not an industrial one. It does: train IC **+0.0347 (t = +4.47)**
+  region against **+0.0145 (t = +1.59)** sector, from an unconditional +0.0186 (t = +1.78).
+  Trial #78 scored validation **0.917** against the seated family lead's 0.681 (+0.236,
+  `rho` 0.8323, SE 0.2329, t = +1.01) at **1.2x annual turnover** — 0.18%/yr of drag, the
+  cheapest book on the board by an order of magnitude — with churn matched holdings-only in
+  advance (0.81x against 0.77x), so it provably did not measure the broker.
+  **Four free controls, all passed, and they are the reason to believe it rather than the
+  score.** Both tails move correctly (top-20 +4.25 → +5.55%/yr, bottom-20 −3.29 → −3.87). The
+  same operator on the two **unit-free** legs does nothing or hurts (seasonal +6.73 → +5.03,
+  reversal +2.70 → +2.89) — the discriminating prediction of a venue account, which a general
+  "peer benchmarks are good" account does not make. It is not size in costume: region-relative
+  `ILLIQ` rank-correlates **−0.912** with region-relative log ADV, yet that size sort's own
+  top-20 is a null (+0.58%/yr, t = +0.41) — the 2026-08-29 shape again, two near-identical
+  rankings disagreeing about which *end* pays, and further confirmation that a 20-of-140 book
+  buys a tail rather than a quantile mean. And the account is **bounded**: it does not rescue
+  log ADV, because it explains a ratio whose numerator and denominator scale differently by
+  venue, not a level.
+  **Transferable rule: before neutralising a score against anything, ask whether the thing being
+  removed is a unit or a return.** Removing a unit is free measurement hygiene; removing a
+  return is removing signal, and this repo has a bracket showing that loses.
+  **Also, the standing "a cross-sectional screen over-predicts the book it motivates" rule ran
+  backwards here** — the screen's +1.30%/yr of extra tail excess was worth +0.236 of Sharpe, not
+  the ≤+0.06 the rule implied, and the trial was pre-registered at 0.72 on that rule. The rule
+  was calibrated on a designed `price-trend` pair that changed the *ranking inside a tail*; this
+  change moved which names are in the tail at all. Do not apply it to an operator that changes
+  the score's scale rather than its ordering within the book.
+
+- **[Measured 2026-09-03, nightly] `research/SUMMARY.md` #70's eigenvalue screen fails its own
+  placebo, and the way it fails is the repo's oldest habit arriving on the folder's statistic
+  rather than on the lab's.** Fourteen rank-based zero-investment managed portfolios built from
+  the lab's own characteristics, PCA'd on the daily covariance. The note's statistic —
+  spearman(eigenvalue, |PC mean|) — comes back **+0.776**, which reads as a clean pass. It is
+  not one: `|PC mean| = |PC Sharpe| × PC vol`, PC vol spans 17.7% to 0.87%, and shuffling the
+  observed Sharpes across PCs with vols held fixed gives a null **mean of +0.584** and
+  **p(≥ obs) = 0.124**. The scale-free version is **+0.367**, under the n = 14 critical value.
+  What survives is weaker and different: the seven PCs holding 90% of variance carry **0.842**
+  of the squared Sharpe against a placebo mean of 0.502 (p = 0.014) — but that is the *bottom*
+  seven being quiet, not the top being strong, since the two largest |SR| sit at PC4 and PC6
+  (var shares 0.065 and 0.045) while PC1, at 38% of variance, ranks 10th of 14 on |SR|. So
+  low-eigenvalue directions are safe to shrink and mean returns do **not** line up with the
+  variance ordering; by the note's own decision rule that is a decline, and
+  `statistical-learning` gets no trial from it. **Seventh instance of "check that the statistic
+  naming a mechanism is invariant to the thing it is not supposed to measure", and the first
+  caught on an external proposal before a trial was spent.** The generalisation worth keeping is
+  the *method*: when a screen's statistic is a product of the quantity you care about and a
+  quantity mechanically tied to the axis, permute the first and hold the second — it costs
+  nothing and it is the difference between +0.776 and p = 0.124.
+
+- **[Measured 2026-09-03, nightly] `SUMMARY.md` #72's distance method is declined with its pool
+  precondition PASSING and its content precondition failing — which is the informative
+  direction.** The note predicted the matching pool would be thin on ~145 names across 15
+  regions. It is not: best-partner SSD runs at **0.134** of the median admissible partner's
+  within region (0.255 sector, 0.098 universe-wide), and ETFs take 0.396 of best-partner slots
+  against a 0.300 universe share — over-represented, not dominant. The mechanism is simply
+  absent. Pair-spread z-scores against the forward 21-day return: top-20 excess **−0.6 / +1.0 /
+  +0.7 %/yr** (t = −0.49 / +0.64 / +0.45) for region / sector / universe matching, IC
+  t = +0.48 / +0.52 / +1.14, and **GGR's own >2-formation-SD divergence trigger** (11-14
+  names/date) at −1.8 / −0.5 / +0.8 %/yr (t = −0.73 / −0.26 / +0.38). The sign control fails
+  too — within region the **rich** side has the higher forward return. And it is partly the
+  incumbent in costume: spearman(−z, 21-day reversal) **+0.307**, spearman(−z, 252-day
+  momentum) **−0.304**. Partner stability is 0.420 month-over-month and **0.139**
+  year-over-year against ~0.01 for a random draw, so the "partner" is largely refitted each
+  year rather than an economic pairing. This is `statistical-arbitrage`'s first genuinely
+  *conditional* object, which was the open half of the family's earlier unconditional-IC
+  decline; the family is now declined on the test it asked for.
+
+- **[2026-09-03, nightly] The train-Sharpe-as-prediction record, four more readings.** #76 train
+  0.696 → val **0.889** (under), #77 0.471 → **0.759** (under), #78 0.917 → **0.917** (exact
+  to three decimals, the best reading ever recorded here), #79 0.650 → **0.954** (under). n = 24 outside `price-trend`; three of
+  four under-predict again, and the one exception is the only book in the set that is a plain
+  single sort rather than a union. That is a hypothesis worth recording rather than a finding:
+  the under-prediction may be a property of the union machinery's small early-sample pools
+  rather than of the splits. Still free to keep recording.
