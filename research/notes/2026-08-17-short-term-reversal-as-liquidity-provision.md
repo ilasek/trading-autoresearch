@@ -178,6 +178,12 @@ data-generating process from momentum's, operating on the opposite sign. Recorde
 - `2026-08-17-cross-sectional-vs-time-series-construction.md` — records the finding that a
   time-series (own-return) rule *misses* short-horizon reversal entirely, which is one more
   reason this effect is inherently cross-sectional.
+- **[Added 2026-09-05] `2026-09-05-contrarian-profit-decomposition.md` is now the canonical
+  record of Lo–MacKinlay (1990)**, one of this note's three clustered sources. That note carries
+  the *identity* — `E[pi(k)] = C_k + O_k − sigma2_mu` — which this note does not, and which is the
+  only implementable part of the paper. This note keeps the reversal-family reading and is not
+  superseded; go there for the algebra, the asymmetry test, and the survivorship term.
+  `2026-09-05-cross-serial-correlation-as-restatement.md` is the rebuttal that must be read with it.
 - Contradiction check against `experiments/learnings.md`: no tension. The lab's two reversal
   results (blend superseded, reversal leg subtracts value on the buffered basket) are what this
   mechanism predicts for a cost-paying long-only implementation.

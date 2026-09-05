@@ -1068,6 +1068,88 @@ covered industries, and ~145 large globally-known instruments sample the neglect
 one of those sorts. The **ETF-versus-constituent** sub-mechanism `program.md` names remains
 uncovered after this session.
 
+**[Added 2026-09-05] The family now has an identity, a null and a measure — and the null is the
+finding.** Three sources, all Tier A, all read in full, and they are best read as one argument in
+three steps.
+
+*Step one, the identity.* Lo–MacKinlay (1990, RFS) show that the expected profit of a
+deviation-weighted cross-sectional book decomposes into **exactly three** terms:
+`E[pi(k)] = C_k + O_k − sigma2_mu`, where `C_k` uses only the **off**-diagonals of the lag-`k`
+autocovariance matrix (cross-predictability), `O_k` only the **diagonals** (own reversal), and
+`sigma2_mu` is the cross-sectional variance of unconditional mean returns — **which depends on no
+autocovariance at all** and enters a momentum book with a plus sign. Their lead-lag evidence is the
+**asymmetry** of the cross-autocorrelation matrix (large-stock lags predict small-stock returns
+far more strongly than the reverse), not any single entry. Two things transfer beyond the family.
+The lag profile is a free microstructure test: a common-factor-plus-bid-ask-bounce world implies
+expected contrarian profit can be positive only at lag 1 and negative beyond it, and they observe
+it positive through lag 4. And `sigma2_mu` is the algebraic name for what a **survivorship-
+conditioned** universe hands every cross-sectional ranking book for free — the folder's first
+formal statement of a caveat `learnings.md` carries qualitatively.
+`validation_overlap: false`, `published_post_2018: false`.
+→ `notes/2026-09-05-contrarian-profit-decomposition.md`
+
+*Step two, the null that reproduces the same evidence with no lead-lag in it, and it is two
+numbers.* Boudoukh–Richardson–Whitelaw (1994, RFS) show that under AR(1) returns with
+contemporaneously correlated shocks,
+**`corr(R_i,t, R_j,t−1) = corr(R_i,t, R_j,t) × corr(R_i,t, R_i,t−1)`** — the cross-serial
+correlation is the *contemporaneous* correlation times the follower's **own** autocorrelation, and
+nothing else. Their implied values match the estimated cross-serials in both magnitude and
+cross-portfolio ordering; the asymmetry arises automatically whenever groups have unequal own-
+autocorrelations. Their phrase for the lead-lag relation is a **"red herring"**: a less efficient
+restatement of own-autocorrelation. They add that nonsynchronous trading has been *understated* —
+relaxing the standard model's homogeneity and time-independence assumptions raises induced
+autocorrelation from ~7% to as much as 20% in a world with no true autocorrelation at all — and
+they supply an ex ante test: a small-firm spot index is significantly autocorrelated while the
+**futures contract written on it** is indistinguishable from zero, with bid-ask bias and stochastic
+carry both checked and rejected as explanations. One free methodological rule falls out and applies
+to every weekly statistic this lab computes: the same weekly autocorrelation estimated with each of
+the five week-ending weekdays varied by roughly half its own magnitude, with a Wald test rejecting
+equality — so **any weekly result must be reported for all five week-ending days.**
+`validation_overlap: false`, `published_post_2018: false`.
+→ `notes/2026-09-05-cross-serial-correlation-as-restatement.md`
+
+**This is what the lab's own two lead-lag trials already look like.** #58
+(`ll_group_lastmonth_lead`) buys the members of the top sector groups by median trailing 21-day
+return; #62 held the laggard half of the *same* groups and came back a null, which the lab read as
+closing the diffusion claim and relabelling #58 "one-month group trend". Under this pair of
+sources that is the **predicted** outcome, not a surprise: a group-trend book bets on the group
+series' own autocorrelation, so within-group ordering has nothing to say because there was never a
+diffusion channel. The identity says only two possibilities remain for #58 — group-level `O_k`, or
+`sigma2_mu` — and both are computable from the group return series the candidate already builds.
+The tension with `notes/2026-08-30-volume-and-cross-autocorrelation-lead-lag.md` is stated rather
+than resolved: Chordia–Swaminathan report their volume asymmetry surviving a control for the
+follower's own autocorrelation, which is exactly the control this null demands, so the two are not
+in contradiction — but their control was run on US size-and-turnover portfolios, and it has never
+been run here.
+
+*Step three, the per-name measure — buildable, with a kill line supplied by its own authors.*
+Hou–Moskowitz (2005, RFS) define `DELAY`, which `SUMMARY.md` has carried second-hand for a week.
+Regress each name's **weekly** return on the contemporaneous market return and four weekly lags;
+`D1 = 1 − R2_restricted/R2_unrestricted` is the share of return variation explained by *lagged*
+market news. Closes only, annual refit, ~35% annual turnover. The construction choices all carry
+stated reasons worth keeping (weekly because monthly has almost no dispersion and daily confounds
+microstructure; market lags only, never own-return lags, because portfolio and individual
+autocorrelation have opposite signs; four lags; skip a month). The authors find delay **subsumes
+the size effect** and captures part of value, and that idiosyncratic risk is priced only among the
+most delayed names. **And they report the number that decides this universe**: the top-minus-bottom
+quintile spread in the delay characteristic is **0.26 among the smallest stocks and 0.03 among the
+largest**, with the premium itself "prevalent only among the smallest stocks" and concentrated in a
+decile under **0.02% of total market capitalisation**. Their own noise correction is the other half
+of the lesson: individual `D1` from 52 weekly observations is too imprecise to trade, so they sort
+into portfolios on it and re-estimate on the portfolio series — which is `SUMMARY.md` #1's triage
+screen arrived at independently. `validation_overlap: false`, `published_post_2018: false`.
+→ `notes/2026-09-05-price-delay-market-frictions.md`
+
+**The family-scoping statement this session supports.** `lead-lag-spillover` is not short of
+mechanisms; it is short of an **identification**, and the identification is now a two-correlation
+screen that costs no trial (#78). The honest order is: run the implied-versus-actual screen on the
+lab's own group series first; only if a stable residual survives does any construction question —
+which grouping, which measure, which weighting — become worth a trial. The ETF-versus-constituent
+object `program.md` names and the lab screened dead as a *signal* returns here as the one good
+**diagnostic** in the family (#80), because it is this repo's analogue of the spot-versus-futures
+test: a continuously traded single-venue claim against a basket computed from foreign-session
+prices.
+
 ---
 
 ### 13. `statistical-arbitrage`
@@ -4016,6 +4098,104 @@ hypothesis fodder, then anti-candidates.
     a weighting scale. Tier A, no overlap.
     → `notes/2026-09-04-commonality-in-liquidity-across-countries.md`
 
+78. **[Added 2026-09-05] The cheapest screen this folder has ever proposed, and it decides a live
+    family in two correlation matrices: does `lead-lag-spillover` contain anything that is not a
+    restatement of own-autocorrelation?** Under AR(1) returns with contemporaneously correlated
+    shocks, the cross-serial correlation is **forced**:
+    `corr(R_i,t, R_j,t−1) = corr(R_i,t, R_j,t) × corr(R_i,t, R_i,t−1)`. So for every ordered pair of
+    series in whatever partition a lead-lag candidate uses, compute `implied` from that identity and
+    `actual` directly, on **weekly** returns, and compare the two matrices — magnitudes *and* the
+    ordering across pairs. **Either answer is a finding.** If `actual ≈ implied` pairwise, the
+    family's apparent lead-lag structure is a red herring in the source's own word, the lab's family
+    lead #58 is confirmed as a group-level own-autocorrelation object (which its own follow-up #62
+    already implied by nulling the within-group ordering), and `lead-lag-spillover` closes on an
+    identified cause rather than on a null — the shape `range-variance` reached after five sessions
+    and this reaches in one screen. If a **stable, signed residual** `actual − implied` survives
+    across ordered pairs, that residual is the only tradeable content in the family and the pairs it
+    names *are* the construction. Two mandatory riders, both free. (a) Run the regression form as
+    well: `R_i,t` on `R_i,t−1` **and** `R_j,t−1` jointly — any lead-lag construction lacking the
+    follower's own lag as a control has not tested its own mechanism, and none of the lab's two have
+    it. (b) Report every number for **all five week-ending weekdays**: the source measures the same
+    weekly autocorrelation varying by roughly half its own magnitude across the five, with a Wald
+    test rejecting equality, so a single-weekday result is not evidence. Run it on the lab's own 12
+    sector groups first (the partition #58 already builds), then on `region`, and expect the region
+    version to be the contaminated one even weekly. Costs no trial, scores no returns, reads no
+    holdout. Tier A, no overlap.
+    → `notes/2026-09-05-cross-serial-correlation-as-restatement.md`,
+    `notes/2026-09-05-contrarian-profit-decomposition.md`
+
+79. **[Added 2026-09-05] A per-name measure of adjustment speed that runs on closes alone, with a
+    pre-registered kill line supplied by its own authors rather than by this folder.** `DELAY`:
+    once a year, regress each name's **weekly** return on the contemporaneous own-universe
+    equal-weighted index return and **four weekly lags** of it; `D1 = 1 − R2_restricted /
+    R2_unrestricted` is the share of variation explained by *lagged* market news, higher = slower.
+    Annual refit, ~35% natural turnover, closes only, and it is the thing Chordia–Swaminathan's
+    volume sort is a proxy *for* — so it is strictly closer to the mechanism than the proxy the lab
+    has already measured as a null. **The precondition, and it is one measurement:** the source
+    reports the top-minus-bottom quintile spread in the delay characteristic as **0.26 among the
+    smallest stocks and 0.03 among the largest**, and this universe is entirely the largest end.
+    Compute `D1` for every name at each refit and report the top-minus-bottom quintile spread and
+    the p90/p10 ratio. **Near 0.03 ⇒ nothing to sort on, and the per-name branch of
+    `lead-lag-spillover` closes on its identified cause** — the same shape as the Corwin–Schultz
+    threshold that closed `range-variance` a twelfth time, and equally free. Two discounts stack
+    before any of this: the premium is concentrated in a decile under 0.02% of market
+    capitalisation with no significant low-delay side (a population this universe does not contain,
+    third independent source after #68 and #73), and it rises monotonically in idiosyncratic
+    volatility, which is survivorship-selected here. **If the precondition passes, the use is as a
+    *grouping* variable, not a level sort** — the authors themselves treat individual `D1` from 52
+    weekly observations as too noisy to trade and use it only to form portfolios, which is #1's
+    triage screen arrived at independently. Split fast/slow adjusters and ask whether the fast
+    half's lagged return predicts the slow half's — then put that through #78, since a `D1`
+    partition sorts on exactly the own-autocorrelation quantity #78's control is built to catch.
+    Watch two repo-specific artifacts: non-overlapping sessions put a mechanical lag-1 market
+    coefficient on every non-US name (so `D1` would rank by time zone), and `D1` is a **unit-free**
+    variance ratio, on which the lab has already measured region-demeaning to be inert — the repair
+    is the weekly frequency plus a US-only placebo, not the `ILLIQ` operator by analogy. Tier A,
+    no overlap. → `notes/2026-09-05-price-delay-market-frictions.md`
+
+80. **[Added 2026-09-05] The one good use left for an object the lab screened dead, and it is a
+    diagnostic rather than a signal: ETF-versus-constituent as this repo's spot-versus-futures
+    test.** The strongest evidence in the skeptical literature is not an argument but a natural
+    experiment — a small-firm **spot index** is significantly autocorrelated while the **futures
+    contract written on it** is indistinguishable from zero, with bid-ask bias and stochastic carry
+    both checked and rejected. Both are claims on the same fundamentals; only the index is computed
+    from a basket of prices set asynchronously. This universe has the same pair: a **region ETF** is
+    a single continuously-traded claim with one closing time, and the equal-weighted basket of that
+    region's constituents is computed from prices set in a *foreign* session. Compute the weekly
+    autocorrelation of both series for each region that has both. **A basket that is autocorrelated
+    while its ETF is not is measurement, not diffusion** — and that would put a number on the
+    session-offset artifact this folder has been warning about qualitatively for a week, bounding
+    how much of *any* region-level lead-lag result here is a time-zone effect. `SUMMARY.md` records
+    the ETF-versus-constituent **signal** as screened dead by the lab; this is a different object
+    and does not reopen it. Known limit before it is run, from the lab's own #69 measurement: only
+    5 of 42 ETFs reach a 20-year lookback, so this is a recent-window diagnostic and must be
+    reported as one. Costs no trial. Tier A, no overlap.
+    → `notes/2026-09-05-cross-serial-correlation-as-restatement.md`
+
+81. **[Added 2026-09-05] An interpretation rule with an algebraic form, aimed at every
+    cross-sectional book this lab has ever run including the champion: name the term that needs no
+    forecastability.** Expected profit of a deviation-weighted cross-sectional book decomposes into
+    exactly three terms, `C_k + O_k − sigma2_mu`, where `sigma2_mu` is the **cross-sectional
+    variance of unconditional mean returns** — it contains no autocovariance, does not vary with the
+    lag `k`, and enters a *momentum* book with a **plus** sign. It is what a ranking book earns from
+    names simply having persistently different average returns, with no time-series predictability
+    anywhere in the system. This universe is **current** constituents, so survivorship conditioning
+    inflates precisely that quantity: survivors' realised means are more dispersed and more
+    persistently ordered than a point-in-time panel's. The free version of the rule for hypothesis
+    writing: before claiming a cross-sectional signal has *forecast* content, re-run its
+    decomposition (or the crude equivalent — the same book on returns demeaned by each name's own
+    full-sample mean, which annihilates the term by construction) and ask whether anything is left.
+    Two boundaries. The identity holds for the zero-net deviation-weighted twin of a book, not for
+    a banded long-only one, so use it to decide **what a signal contains**, never as a Sharpe
+    prediction. And the terms scale differently in the number of series — `C_k` sums `N(N−1)`
+    off-diagonals against `O_k`'s `N` diagonals — so on 12–15 group series `C_k` is noisy and needs
+    the source's heteroskedasticity-robust errors, with the source's own warning that `C_k` and
+    `O_k` are strongly negatively correlated as estimators and can both be insignificant while
+    their sum is not. Related free test in the same identity: expected contrarian profit that stays
+    **positive at lags ≥ 2** rules out a common-factor-plus-bid-ask-bounce explanation, which is a
+    microstructure discriminator costing one extra lag. Tier A, no overlap.
+    → `notes/2026-09-05-contrarian-profit-decomposition.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -4043,8 +4223,74 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-02 (session 20) | **Aimed by `SUMMARY.md`'s own ranked open questions, both of which survived contact with the lab this time — and the session's shape is *two corrections to screens the lab is still carrying*, not two new mechanisms.** The 2026-09-01 nightly ran #61's `MAX`/`MIN` sign test and closed `range-variance` a fourth time, so the standing list's first item was spent on arrival and its second (`seasonality-calendar`, the **calendar** half) became the focus. That half had *also* been closed overnight, structurally — which turned the intended survey into an audit of the two screens the family now rests on. Both audits found the screen narrower than the conclusion drawn from it, and both end in a **free measurement that decides the family either way** (#66, #67). The third note takes the standing size-distribution tension, which asked explicitly for a source measuring predictability *by size group directly*. Three notes, five sources; full text read directly for three primaries (two via author/NBER working-paper versions of the published articles, one via a university mirror of the authors' working draft), two recorded **from their published abstracts only** (both closed access). Keloharju–Linnainmaa–Nyberg 2016 (JF) + 2021 (JFE companion) (`2026-09-02-return-seasonalities-common-factors.md`); Ogden 1990 (JF) + Etula–Rinne–Suominen–Vaittinen 2020 (RFS) (`2026-09-02-turn-of-month-payment-cycle.md`); Fama–French 2008 (JF) (`2026-09-02-anomalies-by-size-group.md`) |
 | 2026-09-03 (session 21) | **The first session in three whose aim was not set by the lab overnight — every item on the standing list had been answered, all of them negatively, so the focus was chosen by asking which *live* families the lab could still act in.** The 2026-09-02 nightly ran #66, #67 and #69 and closed all three (the seasonal leg's identification repaired but the demeaning shown not to be what supplies it; the calendar half closed a second time on cost; the ETF-only seasonal dead on its own precondition — 5 of 42 ETFs reach a 20-year lookback), and declined `range-variance` a fourth time on the tail statistic its defence rested on. That leaves `statistical-learning` and `statistical-arbitrage` as the two families that are neither closed by the lab nor over-covered here, and the session took two notes in the first and one in the second. The shape is *one correction, one discount, one mechanism.* The correction: "how few predictors matter" has been asked in the wrong space — characteristic-space sparsity fails, PC-space sparsity works, and the estimator that exploits it shrinks unequally across eigenvalue directions, which is **not** what the lab's uniform ridge-on-features tested, so the design rule drawn from that trial targets a different failure (#70). The discount: the *incremental value of nonlinearity* was measured and found to live in microcaps and distressed names, which this universe does not contain — an anti-candidate for learned model classes that stacks with #68 (#73). The mechanism: the distance method, a relative-value construction that estimates nothing, whose execution lag, overlapping monthly tranches and total-return inputs are already this repo's conventions, and which comes with its own placebo control (#72). Three notes, five sources; **full text read directly for all three primaries**, two supporting sources recorded **from their abstracts only** (both closed access, SSRN 403 as documented). | Kozak–Nagel–Santosh 2020 (JFE; the authors' accepted manuscript read in full from Nagel's university page) (`2026-09-03-shrinking-the-cross-section-sdf-shrinkage.md`); Avramov–Cheng–Metzker 2023 (Management Science; the typeset INFORMS article read in full from the second author's own site) (`2026-09-03-machine-learning-economic-restrictions.md`); Gatev–Goetzmann–Rouwenhorst 2006 (RFS; the NBER WP 7032 version read in full) with Do–Faff 2010 (FAJ) and 2012 (Journal of Financial Research) recorded **from their published abstracts only** (`2026-09-03-pairs-trading-distance-method.md`) |
 | 2026-09-04 (session 22) | **The first session aimed by a lab result that *opened* rather than closed something, and the first in six whose three notes all serve one family.** The 2026-09-03 nightly answered the whole standing list — #70 declined on its own placebo, #72 declined with its pool precondition passing, `portfolio-learning` closed on three independent controls — and produced the exception: #71's region-relative `ILLIQ` at 1.2x turnover, the lab's first leg improvement from a stated *measurement* mechanism. That reverses the 2026-09-02 reasoning that retired the liquidity-proxy horserace from this list ("a horserace cannot change a null measured on this universe"), because the family no longer rests on a null. Focus: the measurement literature the lab's own account implies. Three primaries read in full — the international successor to the horserace this folder dropped, the 40-country Amihud panel that states the non-comparability as a design constraint, and the one range construction built to cancel the width level. | Fong–Holden–Trzcinka 2017 (RoF) (`2026-09-04-global-liquidity-proxy-horserace.md`); Karolyi–Lee–van Dijk 2012 (JFE) (`2026-09-04-commonality-in-liquidity-across-countries.md`); Corwin–Schultz 2012 (JF) (`2026-09-04-high-low-spread-estimator.md`) |
+| 2026-09-05 (session 23) | **The standing list was spent on arrival for the fifth session running — every 2026-09-04 proposal was decided overnight, four of them for free — and the one surviving instruction pointed at a family the folder had covered three times without ever recording its *null*.** The 2026-09-04 nightly declined #74 on its own pre-registered threshold (`spearman(CS spread, Parkinson range vol)` = +0.788 against a 0.7 kill line, with the FX escape closed at +0.769 on USD-quoted names alone), declined #75 on content after confirming its holiday filter was necessary, recorded #76(a) as not expressible and #77 as agreed, and ran #76(b) — the lab's first control designed to break one of its own passing results, which the venue-unit account survived twice. That leaves `liquidity-volume` closed by the lab's own account and `lead-lag-spillover` as the live family with the fewest trials (2) and the weakest identification. **Focus: the identification, not another mechanism** — the shape is *one identity, one null, one measure*, and the null is the finding. Three primaries, all Tier 1 venues, **all read in full**; one of them (BRW) is a scanned PDF with no text layer, read by rendering pages to PNG and reading them visually, which is a new capability for this folder and is written up below. The session's central result is that the lab's own family lead #58 and its null follow-up #62 are *exactly* what the skeptical literature predicts with no lead-lag mechanism present at all, and that a two-matrix screen (#78) decides it either way without a trial. | Lo–MacKinlay 1990 (RFS; NBER WP 2977 read in full) (`2026-09-05-contrarian-profit-decomposition.md`); Boudoukh–Richardson–Whitelaw 1994 (RFS; the published article read in full from the third author's NYU Stern page, page-images) (`2026-09-05-cross-serial-correlation-as-restatement.md`); Hou–Moskowitz 2005 (RFS; the authors' 2003 manuscript read in full from a university mirror) (`2026-09-05-price-delay-market-frictions.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-05] The lab has now closed every family whose object is a cross-sectional
+  characteristic *level*, and tonight is the first session to propose something that is not one.**
+  The 2026-09-04 nightly closed `range-variance` for a twelfth screened mechanism, declined the
+  percent-cost route on content, and declared `liquidity-volume`'s construction exhausted on both
+  sides of a bracketed axis. Four of the folder's last six proposals were decided for free by a
+  precondition the proposal itself specified — the format working as intended — and the one that
+  produced a leg named a *physical reason a number should be wrong*. **Tonight's #78 is a different
+  shape again and worth naming as a category:** not a mechanism and not a measurement, but an
+  **identification** — an algebraic identity that says what a family's evidence would look like if
+  the family's mechanism did not exist, plus the two correlations that tell the two apart. It is
+  the first proposal here that can retire a family by *explaining* its existing result rather than
+  by failing to improve on it. If it works, it is the format to write in when a family has leads
+  but no established mechanism.
+- **[2026-09-05] What should aim the next session, in order.**
+  - **Check whether #78 was run before choosing anything else.** It is free, it decides the live
+    family with the fewest trials, and both answers are findings: `actual ≈ implied` closes
+    `lead-lag-spillover` on an identified cause and retro-explains both of the lab's trials in it;
+    a stable residual names the ordered pairs a construction would use. Its two riders (the joint
+    regression including the follower's own lag; all five week-ending weekdays) are what make
+    either answer credible, and neither has ever been run here.
+  - **#79's dispersion precondition is the item to run even if #78 kills the family**, because it
+    decides a *different* branch (per-name adjustment speed rather than group cross-prediction) and
+    because the kill line is quoted from the source rather than chosen here: 0.03 among the largest
+    stocks against 0.26 among the smallest. A `D1` spread near 0.03 on this universe is the
+    cleanest "unreachable rather than unexplored" verdict the folder has been able to hand over,
+    and it costs one annual regression per name.
+  - **#80 is the cheapest of the three and should be run alongside them regardless**, because it
+    bounds an artifact that contaminates every region-level result this lab will ever produce, not
+    just lead-lag ones. Its 5-of-42 ETF-lookback limit is known in advance and does not disqualify
+    it; it makes it a recent-window number, which is still a number where the folder currently has
+    an assumption.
+  - **The standing embargoes hold and were honoured.** No further multiple-testing or inference
+    literature (six sources); no further size/microcap sources — #79 touches the size question but
+    takes it from a *delay* channel with a stated interaction, and it is the last reading this
+    vein gets. The 2026-09-03 gap on **small-*n* forecast combination** stays deliberately untaken
+    for the second session, under the condition recorded then: it becomes worth a slot only if the
+    lab builds a signal-level blend where leg scores enter the ranking, rather than another
+    fixed-quota union book, since the inertness result already covers those.
+- **[2026-09-05] A tension recorded rather than resolved, and it is internal to this session.**
+  Boudoukh–Richardson–Whitelaw's identity says a cross-serial correlation is contemporaneous
+  correlation times the follower's own autocorrelation, and their reading is that the lead-lag
+  relation is a red herring. Chordia–Swaminathan (already in this folder) report their volume-based
+  lead-lag asymmetry surviving a control for the follower's own autocorrelation — which is exactly
+  the control BRW demand. **Both can be true**: BRW show the *unconditional size-portfolio*
+  asymmetry needs no lead-lag, while Chordia–Swaminathan claim a *volume*-sorted asymmetry that
+  survives the control. What settles it here is not adjudicating the literature but running the
+  control on **this** universe, which is #78. The discriminating question is whether the residual
+  `actual − implied` is stable and signed, not whether either paper is right about CRSP.
+- **[2026-09-05] Access and index behaviour, for the recipe — one new capability and a seventh
+  index instance.** **A scanned PDF with no text layer is now readable.** `pypdf` returned 34
+  characters for the whole of BRW; installing `pymupdf` into the scratchpad
+  (`pip install --target ./pylibs pymupdf`), rendering each page at ~140 dpi to PNG
+  (`fitz.open(f)[i].get_pixmap(dpi=140).save(...)`) and reading the images directly recovered the
+  full article including its equations and tables. No OCR binary is installed and none is needed.
+  Cost is roughly one read per page, so target the pages first (abstract, the section the argument
+  lives in, the conclusion) rather than rendering-and-reading all of them. Author-hosted mirrors
+  again did the work: **`pages.stern.nyu.edu/~<user>/papers/`** and **`ruf.rice.edu/~<user>/`**
+  both served closed-access RFS articles in full, and the NYU page's own research listing had to be
+  fetched to recover the exact filename after two guesses 404'd — **fetch the faculty listing page
+  rather than guessing PDF filenames.** Index behaviour: a **seventh** instance of the standing
+  "disbelieve a lone count" rule, now including a second RFS DOI — **Semantic Scholar returns "not
+  found" for `10.1093/rfs/hhi023`**, a 900-plus-citation article, while Crossref and OpenAlex both
+  resolve it. Where two indexes answered they disagreed in the usual mild way (RFS 1990: 1334
+  Crossref / 1892 S2; RFS 1994: 292 / 398), which is ordinary coverage difference, not pathology.
 
 - **[2026-09-04] For the first time in four sessions the standing list was spent on arrival with one
   *positive* answer in it, and that is what set tonight's focus.** The 2026-09-03 nightly closed

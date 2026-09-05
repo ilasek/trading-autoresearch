@@ -6728,3 +6728,5 @@ region gain. Real in principle, absent in magnitude.
    and denominator scale differently by venue. (Closes the 2026-09-03 next-idea #2.)
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-05 (learning agent): 3 notes added, see research/SUMMARY.md
