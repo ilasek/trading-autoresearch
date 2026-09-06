@@ -6763,3 +6763,40 @@ region gain. Real in principle, absent in magnitude.
   is the falsification the union machinery failed on nine trials; and the union of the same two tails
   scores **+4.21%/yr, below both its legs**, another instance of the 2026-08-30 aggregation bound.
 
+## 2026-09-06T23:23:46+00:00 — pl_intersection_fixed_breadth — **SCOUT**
+- Candidate: `strategies/candidates/pl_intersection_fixed_breadth.py` (family: portfolio-learning, track: scout, trial #84)
+- Hypothesis: Holding the intersection book's breadth fixed by construction -- each leg keeping the top round(sqrt(14*n)) of a joint pool of n, so the expected intersection is 14 names at any pool size, with the buffer band at round(sqrt(1.5*14*n)) so the book-level hysteresis is the family's usual 1.5x rather than the 2.25x an inherited per-leg ratio squares into -- scores near 0.90 on validation against trial #83's 0.804, with both legs, the region operator, the warmup, the equal weighting and the 45-name pool floor bit-identical so the two trials run on the same scoreable month-ends. #83 reported avg_pos 9.1 against the 13.9 its band was profiled at, because an intersection holds about m^2/n names: breadth is quadratic in the band and inverse in the pool, and this repo's pool grows from 55 to 126 names across the sample, so an absolute band buys a third fewer names on validation (mean pool 125.7) than on the train split it was profiled on (104.5). Above 0.942 the operator beats its own better leg and is real; between 0.85 and 0.942 the breadth account is right and `portfolio-learning` closes on all three aggregation operators with the intersection failing on breadth rather than on content; at or below 0.804 the breadth account is wrong and the intersection is refuted on its own terms with no confound left to blame.
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.789 <= the family's best 1.008 (DSR 0.8088, 84 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.61, ann_ret +5.7%, maxDD -38.2%, turnover 1.5x
+- Validation: sharpe +0.79, ann_ret +14.1%, maxDD -36.3%, turnover 5.7x
+- Deflated Sharpe prob: 0.8088 (bar from 84 trials, 24 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: Pre-registered 0.90; scored **0.789**. The breadth repair worked exactly as designed —
+  validation `avg_pos` **6.7 → 16.1**, a **+109%** change, with the band rule the only edit and the
+  45-name pool floor deliberately un-retuned so both trials run on the same scoreable month-ends — and
+  the Sharpe went **0.804 → 0.789**, `d = −0.016`, paired `SE = 0.102`, `t = −0.15`, `rho = 0.9675`.
+  **My "≤ 0.804" branch fired, so the breadth account I offered for #83 is refuted and #83's number was
+  the operator all along.** Recording that plainly: the confound was real, worth removing, and turned
+  out not to be the explanation. Two things follow. **(i) The intersection is closed, and now on its own
+  terms.** Neither arm beats its own better leg — against `lv_illiq_region_wide30` (0.942) the gaps are
+  −0.138 and −0.153 (`t` = −0.96 for #84), and against the seated max operator (1.008) −0.204 and −0.219
+  (`t` = −0.90) — and while no single gap is individually resolvable, the two arms bracket a 2.4x span of
+  book size and both land in the same place. `portfolio-learning` now has **eleven trials and closes on
+  all three aggregation operators**: mean (bounded by leg disagreement), max (inert to leg content on a
+  placebo), intersection (responds to content — it passed the placebo the union failed — and still has
+  no headroom). The epitaphs differ, which is worth keeping: the union fails because it does not read
+  its legs, the intersection fails **though it does**. **(ii) Breadth is inert for this operator, which
+  is the 2026-09-04 concentration finding failing to transfer one family over.** There, moving the
+  liquidity-volume lead across a 3x breadth span moved validation monotonically (0.874 / 0.917 / 0.942);
+  here a 2.4x span moves it −0.016. Same universe, same split, one of the two legs literally the same
+  score. **A concentration calibration is a property of a construction, not of a family or a score** —
+  the scope rule in `CLAUDE.md` holding at a finer grain than it is written at.
+  **The other casualty is a scope exemption this file granted three days ago.** On 2026-09-03 the
+  standing "a cross-sectional screen over-predicts the book it motivates by roughly an order of
+  magnitude" rule was suspended for operators that change *which names are in the tail* rather than the
+  ranking inside it. The intersection is exactly such an operator — it changes tail membership wholesale
+  — and its screen said +7.55%/yr of tail excess against +6.47 and +5.76 for its legs at matched book
+  size, while the book came in **below both legs on validation, twice**. So the 2026-09-03 exemption is
+  **not general**: it was one reading on one operator, and the over-prediction rule should be restored
+  as the default with region-demeaning noted as the single exception rather than as the new class.
+
