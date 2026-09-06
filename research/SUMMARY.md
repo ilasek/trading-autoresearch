@@ -2160,6 +2160,92 @@ discount**: every Sharpe in this repo is a **small-fund Sharpe** with no term th
 notional grows, and a long-only implementation of a published long-short momentum effect should be
 expected to capture **roughly a third** of it before any other adjustment._
 
+### The shape of a sorted book — how many bins, whether the ranking is monotone, which end is used (cross-family)
+
+Opened 2026-09-06, aimed by the lab's own open item: roughly twenty-five non-`price-trend` books
+inherited `hold-30/enter-20` from a construction designed on the full ~140-name cross-section, and
+the 2026-09-05 bracket was the first evidence that the band is too narrow. Every strategy this lab
+has ever run is the same object — rank a score, hold a band of the top — and this section is the
+first coverage of that object's three design choices as a literature.
+
+**The number of names in a band is a bandwidth, and this universe is too small for the regime the
+theory assumes.** Cattaneo–Crump–Farrell–Schaumburg cast portfolio sorting as partition regression:
+`J`, the number of quantile portfolios, is the tuning parameter of a nonparametric estimator of
+`E[return | characteristic]`. Wide bins are low-variance and **biased** — the bin holding the target
+also holds names far from it, so "the return at the top of the ranking" is contaminated by the
+middle; narrow bins reverse the trade. The MSE-optimal choices differ by objective:
+`J* ∝ n^(1/2)T^(1/4)` for testing a spread, `J** ∝ n^(1/3)T^(1/3)` for building a portfolio from
+one, so **you should cut more finely to test than to trade** — and their homoskedastic special case
+gives the intuition that transfers: a steeper characteristic-return relation calls for more
+portfolios, more idiosyncratic noise calls for fewer. Two consequences for this repo, both computed
+from constants it already records. First, the lab's entire 2026-09-05 bracket lives between `J ≈ 2.6`
+and `J ≈ 7.7`, below the literature's `J = 10` default, and the `n^(1/3)`/`n^(1/2)` scaling says a
+140-name universe should sit below a 500-name one — the same direction the bracket found empirically,
+by a rate argument with an unknown constant. Second, and more usefully, **the asymptotic regime does
+not exist here**: the paper's two rate conditions want `J ≪ n/log T ≈ 21` and `J ≫ (nT)^(1/3) ≈ 45`
+at `n ≈ 140`, `T ≈ 666`, and those windows do not overlap. These are limits, not finite-sample
+inequalities, so the reading is heuristic and flagged as such in the note — but the design rule that
+follows is not: **band width here should be chosen on economic grounds and held fixed, and every
+top-band estimate should be assumed contaminated by the middle of the ranking.** Tier A;
+`validation_overlap: false`, `published_post_2018: true`; the theory is a theorem, the empirical
+illustration is US-only and cost-free.
+→ `notes/2026-09-06-number-of-portfolios-as-tuning-parameter.md`
+
+**The statistic this lab uses to justify holding a band does not test the pattern the band assumes.**
+Patton–Timmermann's point is that a top-minus-bottom `t`-test uses two numbers out of `J` and is blind
+to the interior, and both failure modes are visible in their own applications: a significant spread
+with a non-monotone interior (their term premia: the `t`-test rejects, the monotonic-relation test
+comes nowhere near rejecting, and the Up statistic shows increasing *segments* without an increasing
+*relation*), and an insignificant spread over a genuinely monotone interior (their beta deciles: the
+`t`-statistic is small, the MR test rejects). The MR test puts monotonicity in the **alternative** —
+`H₀: Δ ≤ 0` against `H₁: min_i Δ_i > 0` with statistic `min_i Δ̂_i` — so a rejection is positive
+evidence for the ranking, and its critical values come from a studentized stationary bootstrap that
+resamples **dates**, shared across bins, preserving cross-sectional dependence. The Up and Down
+statistics accumulate the size and frequency of deviations in each direction and diagnose whether a
+non-rejection is flatness or low power. The result most relevant to this universe is from their
+two-way sorts: the momentum ordering is established within the smaller size quintiles and **not
+established within the largest**, and the size ordering holds in the value column but not the growth
+column — a monotone pooled sort need not survive conditioning on the part of the market you trade.
+Tier A; `validation_overlap: false`, `published_post_2018: false`. The note records, rather than
+glosses, that this source sits adjacent to the folder's standing embargo on inference literature: it
+adds no haircut and no correction to any `t`, only a train-split statement about the shape of a sort.
+→ `notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`
+
+**Which end of the ranking a long-only book needs depends on the objective, and this repo's objective
+is the favourable one — but the folder has been quoting the unfavourable one.** Israel–Moskowitz
+separate two questions the anomaly literature runs together. Under a **raw-return** objective
+shorting is close to irrelevant: the long side accounts for more than 100% of the raw
+long-minus-short spread in every size quintile for both value and momentum, because the short leg is
+still equities and gives away a positive expected return. Under a **benchmark-relative** objective it
+matters: in market-adjusted alphas the long side carries essentially all of size, roughly 60% of
+value and about half of momentum. Their long-only legs carry betas above one, so a raw-return
+long-only book is first a levered market position and only second a score — the market-adjusted share
+is the honest one. The size interaction splits the two families it studies: the value premium
+declines monotonically with firm size and is insignificant among the largest two quintiles, while
+**momentum shows no reliable relation with size**, and the older claims that momentum is markedly
+stronger among small caps and mostly a short-side effect are shown to be specific to the samples they
+were first measured in. Tier A, and among the most robust sources in this folder: 86 years of US
+data, four international equity markets, five other asset classes, subperiod variation consistent
+with chance, and no detectable relation to trading-cost or institutional-ownership trends.
+`validation_overlap: false`, `published_post_2018: false`.
+→ `notes/2026-09-06-long-side-share-of-anomaly-profits.md`
+
+_Net, and it includes a correction to this file._ The cost section above concludes that "a long-only
+implementation of a published long-short momentum effect should be expected to capture **roughly a
+third** of it", resting on Lesmond–Schill–Zhou's 53–70% short-leg share. Israel–Moskowitz measure
+the same split on a far longer panel and eight other markets and get about half of the *alpha* and
+more than all of the *raw return* from the long side. **Both can be right, and the reason is the
+benchmark**: LSZ measure against the untraded middle portfolio, IM against the market, and the
+long/short split is defined relative to whichever is chosen. That is not a detail to arbitrate in the
+literature, because for an equal-weight long-only book the correct benchmark is neither — it is the
+equal-weight universe, by the identity `active return = mean(held) − mean(all)`, under which the
+shortfall of the bottom band below the universe mean enters a book's return with exactly the same
+standing as the excess of the top band above it. **The "roughly a third" expectation should be
+treated as benchmark-specific and not carried into a raw-return book**, and the split should be
+measured on this universe instead — which is candidate #84 and costs no trial. The three notes also
+compose into one screen rather than three: fix `J` on the grounds in the first, test the ranking's
+shape with the second, and read which end carries it with the third.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -4196,6 +4282,81 @@ hypothesis fodder, then anti-candidates.
     microstructure discriminator costing one extra lag. Tier A, no overlap.
     → `notes/2026-09-05-contrarian-profit-decomposition.md`
 
+82. **[Added 2026-09-06] A pre-registered band width for the roughly twenty-five books that
+    inherited one, from a formula rather than from a copy.** The lab's own next-idea list asks for a
+    breadth screen before the next scout; this is that screen with a target rather than a profile.
+    Treat the number of quantile portfolios `J` as the bandwidth it is and minimise the source's
+    feasible construction MSE on the **train split only**,
+    `MSE(J) = V̂⁽¹⁾·J/(nT) + B̂²/J²`, over a grid of `J` for the score a candidate would rank on;
+    the held band is then the top `n/J` names. Cost: no trial, no holdout, the same inputs the lab
+    already uses for its free top-`k` and IC diagnostics. **Both answers are findings.** A minimum
+    at `J < 5` (top band ≥ 28 of 140, or ≥ 15 of a 77-name region pool) says the inherited
+    `enter-20` is too narrow for every book that copied it and retro-explains the 2026-09-05
+    bracket's sign; a minimum at `J ≥ 10` says the inherited band is too *wide* for the score in
+    question and that the bracket's result is family-specific rather than universal. **Two riders
+    are what make either answer credible.** Run it on at least two scores of different measured
+    strength — one family lead and one screened-null score — because the formula's whole content is
+    that a steeper relation wants more bins and a noisier one fewer; if `J*` comes back identical
+    for a lead and a null, the estimate is not responding to the data and the screen has failed its
+    own placebo. And report `J*` for the region-narrowed pool separately from the full
+    cross-section, since `n` differs by nearly 2x between them and `J ∝ n^(1/3)` is the only part of
+    the formula this repo can check by construction. **Known in advance**: the source's asymptotic
+    regime does not exist at `n ≈ 140` (its two rate conditions want `J ≪ 21` and `J ≫ 45`), so the
+    grid minimum is a finite-sample number without an asymptotic warranty — which is a reason to use
+    it as a prior on band width, not as a target to optimise toward, and is exactly why the placebo
+    rider is not optional.
+    → `notes/2026-09-06-number-of-portfolios-as-tuning-parameter.md`
+
+83. **[Added 2026-09-06] The assumption every book in this repo rests on, tested for the first
+    time, for one bootstrap.** Every strategy here ranks a score and holds a band, which asserts
+    that expected return is **monotone** in the score; the evidence ever offered for that is a
+    top-minus-bottom or top-`k`-excess statistic that uses two numbers and cannot see the interior.
+    Run the source's MR test on the train split — bin the score, form adjacent differences
+    `Δ̂_i`, statistic `min_i Δ̂_i`, `p`-value from a studentized stationary bootstrap that resamples
+    the **date index shared across bins** (geometric block length, mean ≈ 10 months, `B = 1,000`),
+    plus the Up and Down statistics — for the champion's score and for each seated family lead.
+    Free: train returns and a score, no trial, no holdout. **The four outcomes are all
+    informative.** MR rejects → the band construction is justified and the lab can stop wondering
+    whether its shape assumption holds. MR fails while top-`k` excess is significant → the score is
+    not a ranking of expected return but a picker of one corner, and band *width* is not the lever
+    the lab has been treating it as, which would reinterpret the whole 2026-09-05 bracket. A large
+    **Down** statistic concentrated in the low bins with a flat top → the information is at the bad
+    end, which is candidate #84's construction. Up and Down both weak → a flat relation rather than
+    a powerful one, and the source's own diagnostic for distinguishing that from low power.
+    **Preconditions and limits, stated up front.** `J` must be fixed *before* the test and never
+    searched for a `p`-value; with `J` in this repo's 4–7 range there are only 3–6 adjacent
+    differences, so run the "all pairs" variant for power and read Up/Down alongside every
+    non-rejection; and the bootstrap must resample dates, not names, or this universe's regional
+    block correlation will make every `p`-value far too small. The source's own most transferable
+    result is a warning about this universe specifically: in its two-way sorts the momentum ordering
+    is established in the smaller size quintiles and **not** in the largest.
+    → `notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`
+
+84. **[Added 2026-09-06] The half of every score this lab has never looked at, and the construction
+    shape it has never built.** For an equal-weight long-only book holding `k` of `n` names, active
+    weights against the equal-weight universe are `+(1/k − 1/n)` on a held name and `−1/n` on an
+    excluded one, so `active return = mean(held) − mean(all)` and **the shortfall of the bottom band
+    below the universe mean enters the book with exactly the same standing as the excess of the top
+    band above it**. The lab reports top-`k` excess only. The measurement is the demeaned profile
+    across bins on train — bottom-band shortfall against top-band excess for each seated score —
+    and it costs no trial. **If the bottom carries more than the top**, the construction that
+    follows is an **exclusion book**: hold the entire scoreable universe equally *except* the worst
+    quantile. That is not shorting, needs no leverage, and is the widest possible book — the limit
+    of the axis the 2026-09-05 bracket found monotone in the helpful direction outside
+    `price-trend`. **The tension this proposal exists to settle is inside `SUMMARY.md` itself.**
+    The cost section's standing rule — expect a long-only version of a long-short effect to capture
+    roughly a third — comes from a source measuring the split against the untraded middle portfolio;
+    this session's source measures it against the market and gets about half the alpha and more than
+    all of the raw return from the long side. The split is defined by the benchmark, and for this
+    repo the benchmark is neither of theirs, so the rule cannot be inherited from either and has to
+    be measured here. **Two honest limits.** The lab has declared the `liquidity-volume` breadth
+    axis closed with no fourth point, and an exclusion book on that family's lead sits on that axis
+    — so run the diagnostic first and only propose the book if the bottom genuinely carries the
+    score, in which case it is a different object rather than a fourth bracket point. And the
+    source's raw-return result is partly a beta effect (its long-only legs run beta > 1), so the
+    market-adjusted share, not the raw one, is the number whose *shape* transfers.
+    → `notes/2026-09-06-long-side-share-of-anomaly-profits.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -4224,8 +4385,76 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-03 (session 21) | **The first session in three whose aim was not set by the lab overnight — every item on the standing list had been answered, all of them negatively, so the focus was chosen by asking which *live* families the lab could still act in.** The 2026-09-02 nightly ran #66, #67 and #69 and closed all three (the seasonal leg's identification repaired but the demeaning shown not to be what supplies it; the calendar half closed a second time on cost; the ETF-only seasonal dead on its own precondition — 5 of 42 ETFs reach a 20-year lookback), and declined `range-variance` a fourth time on the tail statistic its defence rested on. That leaves `statistical-learning` and `statistical-arbitrage` as the two families that are neither closed by the lab nor over-covered here, and the session took two notes in the first and one in the second. The shape is *one correction, one discount, one mechanism.* The correction: "how few predictors matter" has been asked in the wrong space — characteristic-space sparsity fails, PC-space sparsity works, and the estimator that exploits it shrinks unequally across eigenvalue directions, which is **not** what the lab's uniform ridge-on-features tested, so the design rule drawn from that trial targets a different failure (#70). The discount: the *incremental value of nonlinearity* was measured and found to live in microcaps and distressed names, which this universe does not contain — an anti-candidate for learned model classes that stacks with #68 (#73). The mechanism: the distance method, a relative-value construction that estimates nothing, whose execution lag, overlapping monthly tranches and total-return inputs are already this repo's conventions, and which comes with its own placebo control (#72). Three notes, five sources; **full text read directly for all three primaries**, two supporting sources recorded **from their abstracts only** (both closed access, SSRN 403 as documented). | Kozak–Nagel–Santosh 2020 (JFE; the authors' accepted manuscript read in full from Nagel's university page) (`2026-09-03-shrinking-the-cross-section-sdf-shrinkage.md`); Avramov–Cheng–Metzker 2023 (Management Science; the typeset INFORMS article read in full from the second author's own site) (`2026-09-03-machine-learning-economic-restrictions.md`); Gatev–Goetzmann–Rouwenhorst 2006 (RFS; the NBER WP 7032 version read in full) with Do–Faff 2010 (FAJ) and 2012 (Journal of Financial Research) recorded **from their published abstracts only** (`2026-09-03-pairs-trading-distance-method.md`) |
 | 2026-09-04 (session 22) | **The first session aimed by a lab result that *opened* rather than closed something, and the first in six whose three notes all serve one family.** The 2026-09-03 nightly answered the whole standing list — #70 declined on its own placebo, #72 declined with its pool precondition passing, `portfolio-learning` closed on three independent controls — and produced the exception: #71's region-relative `ILLIQ` at 1.2x turnover, the lab's first leg improvement from a stated *measurement* mechanism. That reverses the 2026-09-02 reasoning that retired the liquidity-proxy horserace from this list ("a horserace cannot change a null measured on this universe"), because the family no longer rests on a null. Focus: the measurement literature the lab's own account implies. Three primaries read in full — the international successor to the horserace this folder dropped, the 40-country Amihud panel that states the non-comparability as a design constraint, and the one range construction built to cancel the width level. | Fong–Holden–Trzcinka 2017 (RoF) (`2026-09-04-global-liquidity-proxy-horserace.md`); Karolyi–Lee–van Dijk 2012 (JFE) (`2026-09-04-commonality-in-liquidity-across-countries.md`); Corwin–Schultz 2012 (JF) (`2026-09-04-high-low-spread-estimator.md`) |
 | 2026-09-05 (session 23) | **The standing list was spent on arrival for the fifth session running — every 2026-09-04 proposal was decided overnight, four of them for free — and the one surviving instruction pointed at a family the folder had covered three times without ever recording its *null*.** The 2026-09-04 nightly declined #74 on its own pre-registered threshold (`spearman(CS spread, Parkinson range vol)` = +0.788 against a 0.7 kill line, with the FX escape closed at +0.769 on USD-quoted names alone), declined #75 on content after confirming its holiday filter was necessary, recorded #76(a) as not expressible and #77 as agreed, and ran #76(b) — the lab's first control designed to break one of its own passing results, which the venue-unit account survived twice. That leaves `liquidity-volume` closed by the lab's own account and `lead-lag-spillover` as the live family with the fewest trials (2) and the weakest identification. **Focus: the identification, not another mechanism** — the shape is *one identity, one null, one measure*, and the null is the finding. Three primaries, all Tier 1 venues, **all read in full**; one of them (BRW) is a scanned PDF with no text layer, read by rendering pages to PNG and reading them visually, which is a new capability for this folder and is written up below. The session's central result is that the lab's own family lead #58 and its null follow-up #62 are *exactly* what the skeptical literature predicts with no lead-lag mechanism present at all, and that a two-matrix screen (#78) decides it either way without a trial. | Lo–MacKinlay 1990 (RFS; NBER WP 2977 read in full) (`2026-09-05-contrarian-profit-decomposition.md`); Boudoukh–Richardson–Whitelaw 1994 (RFS; the published article read in full from the third author's NYU Stern page, page-images) (`2026-09-05-cross-serial-correlation-as-restatement.md`); Hou–Moskowitz 2005 (RFS; the authors' 2003 manuscript read in full from a university mirror) (`2026-09-05-price-delay-market-frictions.md`) |
+| 2026-09-06 (session 24) | **The first session in six that did not arrive to a spent list — and the reason is that no nightly ran.** `experiments/journal.md` records a 2026-09-04 nightly and then nothing but the 2026-09-05 research pointer, so **#78, #79 and #80 are unrun and still stand**; this session deliberately did not re-cover `lead-lag-spillover` on top of them. With every family either closed by the lab or carrying a live proposal, the focus was taken from the lab's own next-idea list instead: roughly twenty-five non-`price-trend` books inherited `hold-30/enter-20` from a construction designed on the full cross-section, and the 2026-09-05 bracket was the first evidence the band is too narrow. The shape is *three design choices of one object* — every strategy this repo has ever run ranks a score and holds a band, and the folder had never covered how many bins that implies, whether the ranking is monotone, or which end a long-only book uses. Three primaries, all tier-1 venues, **all read in full** from author or public mirrors. The session's two most useful outputs are both negative-shaped: the sorting-as-nonparametric-estimation theory says its own **asymptotic regime does not exist at `n ≈ 140`** (the two rate conditions want `J ≪ 21` and `J ≫ 45`), which converts band width from a tuning problem into a design decision; and the long/short decomposition **contradicts a standing rule in this file** — the "expect roughly a third" discount is benchmark-specific, and for an equal-weight long-only book the right benchmark is the equal-weight universe, under which the bottom band enters a book's return with the same standing as the top. Three free measurements follow (#82, #83, #84), and #84 proposes a construction shape the lab has never built: an exclusion book. | Cattaneo–Crump–Farrell–Schaumburg 2020 (REStat; the typeset article read in full from `maxhfarrell.com`) (`2026-09-06-number-of-portfolios-as-tuning-parameter.md`); Patton–Timmermann 2010 (JFE; the published article read in full from the first author's Duke page) (`2026-09-06-monotonicity-tests-for-portfolio-sorts.md`); Israel–Moskowitz 2013 (JFE; the typeset article read in full from a public mirror) (`2026-09-06-long-side-share-of-anomaly-profits.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-06] Read this first: the standing list was NOT spent, because no nightly ran.**
+  `experiments/journal.md` goes from the 2026-09-04 session summary straight to the 2026-09-05
+  research pointer with no trials in between, so **#78, #79 and #80 are unrun and remain the
+  highest-priority items on this list**, in the order the 2026-09-05 entry gives them. Nothing in
+  tonight's work replaces them: this session stayed out of `lead-lag-spillover` precisely so that
+  three unrun proposals in a live family would not be buried under three more. If a session arrives
+  and finds the journal still stops at 2026-09-04, the right conclusion is that the bottleneck is
+  the lab's execution, not this folder's supply of ideas, and the right response is **not** to write
+  more proposals.
+- **[2026-09-06] What should aim the next session, in order.**
+  - **#78, #79, #80 first** — unchanged, unrun, and all three free. See the 2026-09-05 entry for
+    what each decides and why both answers are findings in each case.
+  - **Then #82/#83/#84 as one screen, not three.** They compose: fix `J` (#82), test whether the
+    ranking is monotone at that `J` (#83), read which end carries it (#84). Run in that order on
+    one score, they cost one afternoon of train-split computation and no trial, and they audit an
+    assumption that roughly thirty books in this repo share. #83 is the one to run if only one is
+    run: it tests the shape assumption underneath every book the lab has ever built.
+  - **#84 is the only one that ends in a new construction**, and its precondition is designed to
+    stop it if the lab's `liquidity-volume` closure already covers it. Do not skip the diagnostic
+    and build the exclusion book directly.
+  - **The literature vein this session opened is now thin, and should not be re-worked.** Three
+    sources cover the three design choices of a sorted book; a fourth would be another paper about
+    sorting rather than about anything this lab can trade. If the screens above come back
+    uninformative, the honest next survey is **not** more construction methodology.
+- **[2026-09-06] Two embargo boundaries were crossed deliberately, and both are recorded so a
+  future session can overrule the judgement rather than discover it.**
+  - **The inference embargo.** Patton–Timmermann is a bootstrap test and sits next to the six
+    multiple-testing sources this file has embargoed. It was taken because it adds no haircut, no
+    correction and no `t`-statistic adjustment — it is a train-split statement about the *shape* of
+    a sort, on the same footing as the lab's existing free IC and top-`k` screens. If that
+    reasoning is wrong, the conclusion is that the embargo should have covered it, not that the
+    test is unsound.
+  - **The size/microcap embargo.** The 2026-09-05 entry said #79 was "the last reading this vein
+    gets". Israel–Moskowitz touches firm size, and was taken as a *long/short decomposition* whose
+    size conditioning is a by-product. It earns the exception by **narrowing a claim this folder
+    has been applying uniformly**: the large-cap discount that `2026-09-02-anomalies-by-size-group`
+    and `2026-09-01-nonparametric-characteristic-selection-large-stocks` support for
+    characteristic-level sorts does **not** extend to momentum-type signals, which show no reliable
+    size relation over an 86-year panel and eight other markets. That is the first source in this
+    folder to put a boundary on the size discount rather than another instance of it. The vein is
+    now genuinely closed.
+- **[2026-09-06] A correction to this file, not a tension between two outside papers.** The cost
+  section's standing expectation — a long-only version of a long-short effect captures "roughly a
+  third" — rests on a 53–70% short-leg share measured against the **untraded middle portfolio**.
+  Israel–Moskowitz measure the same split against the **market** on a far longer panel and get about
+  half the alpha and more than all of the raw return from the long side. Neither is wrong; the split
+  is *defined* by the benchmark. For an equal-weight long-only book the benchmark is neither of
+  theirs but the equal-weight universe, under the identity `active return = mean(held) − mean(all)`.
+  **The "roughly a third" figure should not be quoted again without naming its benchmark**, and #84
+  is the measurement that replaces it with this repo's own number.
+- **[2026-09-06] Access and index behaviour, for the recipe.** Three tier-1 primaries, three
+  author-or-public mirrors, no page-image rendering needed: **`maxhfarrell.com/research/`** serves
+  the typeset REStat article, **`public.econ.duke.edu/~ap172/`** the published JFE article, and a
+  public mirror served the second JFE article in typeset form. `pypdf` extracted all three cleanly.
+  **One target was confirmed unreachable rather than merely unread**: Clarke–de Silva–Thorley 2002
+  (FAJ), the transfer-coefficient primary that `2026-08-19-fundamental-law-breadth-and-strategy-risk`
+  has flagged as secondhand since it was written, resolves as `oa_status: closed` with
+  `any_repository_has_fulltext: false` in OpenAlex; SSRN returned the documented 403 and the
+  author's institutional directory 404'd. **Stop trying: the TC primary is not obtainable from this
+  environment**, and the note's secondhand flag should stand permanently rather than be re-attempted
+  each session. Index behaviour: **Semantic Scholar returns "not found" for `10.1016/j.jfineco.2012.11.005`**,
+  a JFE article with 163 Crossref and 200 OpenAlex citations — an **eighth** instance of the
+  standing "disbelieve a lone count" rule and the second consecutive session where the missing index
+  is S2 on a tier-1 finance DOI. Where all three indexes answered (REStat 2020) they returned 40 /
+  35 / 19, the widest three-way spread this folder has recorded on a single DOI; the paper's own
+  arXiv vintage explains part of it.
 
 - **[2026-09-05] The lab has now closed every family whose object is a cross-sectional
   characteristic *level*, and tonight is the first session to propose something that is not one.**

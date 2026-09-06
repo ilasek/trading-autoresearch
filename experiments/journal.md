@@ -6730,3 +6730,4 @@ region gain. Real in principle, absent in magnitude.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-05 (learning agent): 3 notes added, see research/SUMMARY.md
+## Research session — 2026-09-06 (learning agent): 3 notes added, see research/SUMMARY.md
