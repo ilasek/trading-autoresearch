@@ -6731,3 +6731,35 @@ region gain. Real in principle, absent in magnitude.
 
 ## Research session — 2026-09-05 (learning agent): 3 notes added, see research/SUMMARY.md
 ## Research session — 2026-09-06 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-06T23:20:44+00:00 — pl_signal_intersection — **SCOUT**
+- Candidate: `strategies/candidates/pl_signal_intersection.py` (family: portfolio-learning, track: scout, trial #83)
+- Hypothesis: An intersection of the champion's four-horizon momentum score with the seated `liquidity-volume` lead's region-relative Amihud ILLIQ score -- each leg keeping its top third of the joint pool, the overlap held with the family's usual 1.5x buffer -- scores near 1.00 on validation, above the ILLIQ leg's 0.942 and near the seated `portfolio-learning` lead's 1.008, because the two scores are cross-sectionally orthogonal (mean spearman -0.0120) and pay in structurally different ways: `SUMMARY.md` #83's monotonic-relation test does not reject for momentum (p = 0.698, Up = 17.16 at p = 0.002), so it picks one corner rather than ranking expected return, while it rejects for region-relative ILLIQ (p = 0.004, Down = 0.00 exactly), the one perfectly monotone score in the repo. At a book size matched at ~14 names the intersection carries +7.55%/yr of train tail excess (t = +3.68) against +6.47 for momentum alone and +5.76 for ILLIQ alone, while the union of the same two tails carries only +4.21. Unlike the union operator this lab closed on nine trials, an intersection cannot be inert to leg content -- a content-free partner can only cut the base book -- and the built-in placebo confirms it: intersecting either leg with a hash of (rebalance date, ticker) that reads no market data collapses to -0.96%/yr (t = -0.47) and +0.92%/yr (t = +0.58). The candidate pays 4.33x annual churn against the ILLIQ leg's 0.93x, so the standing turnover confound runs against it, and it sits at the 0.587 percentile of pool volatility, so it is not the closed low-vol tilt in disguise. Below 0.942 the operator fails to beat its own better leg and `portfolio-learning` closes on all three aggregation operators rather than two.
+- Verdict: SCOUT — scouted family 'portfolio-learning': validation sharpe 0.804 <= the family's best 1.008 (DSR 0.8184, 83 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.67, ann_ret +6.7%, maxDD -39.1%, turnover 1.4x
+- Validation: sharpe +0.80, ann_ret +15.7%, maxDD -37.0%, turnover 5.5x
+- Deflated Sharpe prob: 0.8184 (bar from 83 trials, 24 effective)
+- Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
+- Lesson: Pre-registered 1.00, scored **0.804** — the falsifying branch I named at "< 0.942" fired, and
+  on its face the intersection fails to beat its own better leg. But the run is **confounded and I am
+  not reading it as the operator's verdict**: it reported `avg_pos` **9.1** on validation against the
+  **13.9** its band was profiled at, so selection and breadth moved together, which `learnings.md` says
+  cannot answer a mechanism question. The cause is mechanical and now measured. An intersection of two
+  orthogonal scores, each keeping the top `m` of a pool of `n`, holds about **`m^2/n`** names: breadth
+  is quadratic in the band and **inverse in the pool**. Every book in this repo uses an absolute band
+  (top-20, top-30) because for a single sort book size is `m` and does not depend on `n` — for an
+  intersection it does. Measured on realised holdings, the core falls **14.0 → 6.0 names** from 2000 to
+  2025 while the pool grows **55 → 126**, tracking `900/n` closely (train pool 104.5, core 9.88,
+  predicted 8.61; validation pool 125.7, core 6.67, predicted 7.16). So the band was profiled on a
+  104-name train pool and traded on a 126-name validation pool, where it buys a third fewer names — and
+  the liquidity-volume half of this book sits in the one family where de-concentration has been measured
+  to help monotonically across a 3x span. **General rule, and it is the transferable half: book size is
+  a property of the operator, not of the band. Any non-linear set operator — intersection, k-of-m
+  agreement, conditional double sort — must have its breadth pinned by construction, because an
+  absolute band inherited from a single-sort book silently de-broadens as the universe grows.** The
+  paired repair is #84, which changes the band rule and nothing else. Two things do stand independent of
+  the confound, both pre-trial and free: the operator **passed its built-in placebo** (intersecting
+  either leg with a hash of date and ticker that reads no market data collapses to −0.96%/yr, t = −0.47
+  and +0.92%/yr, t = +0.58, against the intersection's +7.55%/yr, t = +3.68 at matched book size), which
+  is the falsification the union machinery failed on nine trials; and the union of the same two tails
+  scores **+4.21%/yr, below both its legs**, another instance of the 2026-08-30 aggregation bound.
+
