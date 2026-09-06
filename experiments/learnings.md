@@ -2245,3 +2245,141 @@ across experiments; prune entries that later evidence contradicts.
   it is also the cheapest book ever recorded in this repo (0.14%/yr of drag). The gap between
   what the gate would accept and what is distinguishable from noise is unchanged at roughly a
   factor of 1.5 in required leg Sharpe. Nothing here has moved the standing recommendation.
+
+- **[Measured 2026-09-06, nightly] `portfolio-learning` closes on its third and last aggregation
+  operator, and the intersection's epitaph is not the union's — which is what makes the closure
+  worth more than the previous two.** Every combiner this lab has built aggregates over
+  whole-universe rank scores, and it had used exactly two operators: the **mean**, bounded between
+  its components by construction (five vintage axes, the 2026-08-30 ensemble arithmetic, #67), and
+  the **max**, which escapes that bound (#68/#69) and was then measured **inert to leg content**
+  across #71–#79. The **intersection** is the third, and the reason it was worth a trial is that it
+  *cannot fail the way the union failed*: a union adds an ordering, so a content-free partner still
+  contributes names; an intersection can only **cut** the base book, so a content-free partner must
+  degrade it. **The operator carries its own placebo, it was run before the file was written, and it
+  passed** — at a book matched at ~14 names on train, the intersection of the champion's momentum
+  score with the seated region-relative `ILLIQ` score carries **+7.55%/yr (t = +3.68)** against
+  +6.47 for momentum alone and +5.76 for `ILLIQ` alone, while intersecting either leg with a hash of
+  (rebalance date, ticker) that reads **no market data** collapses to −0.96%/yr (t = −0.47) and
+  +0.92%/yr (t = +0.58). The union of the same two tails carries **+4.21%/yr, below both its legs** —
+  the 2026-08-30 aggregation bound again. Mean cross-sectional `spearman(momentum, region-ILLIQ)`
+  is **−0.0120**, as close to orthogonal as anything measured here.
+  **And the book still fails, at two book sizes 2.4x apart.** #83 scored 0.804 and #84 0.789,
+  against `lv_illiq_region_wide30`'s 0.942 (gaps −0.138 and −0.153, t = −0.96) and the seated max
+  operator's 1.008 (−0.204 and −0.219, t = −0.90). No single gap is individually resolvable; what is
+  established is that both arms land in the same place across a wide breadth span. **Eleven trials,
+  three operators, three closures, and the epitaphs differ: the union fails because it does not read
+  its legs; the intersection fails *though it does*.** That is the stronger closure, because it
+  removes the obvious repair. **Do not propose a fourth operator over these legs.**
+
+- **[Measured 2026-09-06, nightly] Book size is a property of the operator, not of the band — and
+  every book in this repo inherits a band rule that only works for single sorts.** #83 reported
+  `avg_pos` 9.1 against the 13.9 its band was profiled at. The cause is mechanical: an intersection
+  of two orthogonal scores, each keeping the top `m` of a pool of `n`, holds about **`m^2/n`** names,
+  so breadth is **quadratic in the band and inverse in the pool**. For a single sort, book size is
+  `m` and does not depend on `n`, which is why an absolute band (top-20, top-30) has always been
+  safe here. Measured on realised holdings, the core falls **14.0 → 6.3 names** from 2000 to 2025
+  while the pool grows **55 → 126**, tracking `900/n` closely (train pool 104.5 / core 9.88 /
+  predicted 8.61; validation 125.7 / 6.67 / 7.16). So a band profiled on the train split traded a
+  third smaller on validation. **Rule: any non-linear set operator — intersection, k-of-m agreement,
+  conditional double sort — must have its breadth pinned by construction (`m = sqrt(TARGET*n)`), and
+  its buffer set at book level, because a per-leg 1.5x hysteresis *squares* through the operator into
+  2.25x.**
+  **The repair then refuted the account that motivated it, which is the more useful half.** Pinning
+  breadth moved validation `avg_pos` 6.7 → 16.1 (**+109%**) and Sharpe **0.804 → 0.789**:
+  `d = −0.016`, paired `SE = 0.102`, `t = −0.15`, `rho = 0.9675`. A null. The confound was real and
+  worth removing and was **not** the explanation. **Corollary that bites one family over: the
+  2026-09-04 concentration bracket does not transfer.** There, a 3x breadth span moved
+  `liquidity-volume` monotonically (0.874 / 0.917 / 0.942); here a 2.4x span moves it −0.016 — same
+  universe, same split, **one of the two legs literally the same score**. A concentration
+  calibration is a property of a **construction**, not of a family or a score. `CLAUDE.md`'s scope
+  rule holds at a finer grain than it is written at.
+
+- **[Measured 2026-09-06, nightly] The champion's score is not a ranking of expected return, and
+  the test that says so comes with the control that stops it being over-read.** `SUMMARY.md` #83's
+  Patton–Timmermann monotonic-relation test, train split, `J = 5` fixed in advance and never
+  searched, all-pairs variant, studentized stationary bootstrap resampling the **shared date index**
+  (geometric blocks, mean 10 months, B = 1000):
+
+      score                       bin means (%/yr, demeaned)         MR p    Up (p)         Down (p)
+      champion 4-horizon mom      +8.02 -0.78 -2.82 -3.96 -0.45      0.698   17.16 (0.002)  2.46 (0.58)
+      region-relative ILLIQ       +8.56 +1.00 -2.36 -2.78 -4.41      0.004   24.26 (0.000)  0.00 (0.99)
+      same-minus-other month      +6.70 +0.97 -0.95 -3.59 -3.15      0.035   21.04 (0.000)  0.18 (0.97)
+      21d reversal                +2.34 -0.18 -0.87 -2.96 +1.67      0.931    7.28 (0.14)   3.84 (0.37)
+      Garman-Klass 21d vol level  +5.58 +1.78 +1.59 -1.26 -7.68      0.004   25.57 (0.000)  0.00 (0.99)
+
+  **MR does not come close to rejecting for the incumbent (p = 0.698) while its top bin is +8.02%/yr
+  at t = +3.76** — #83's outcome (b): the champion's score **picks one corner**, and Up = 17.16
+  (p = 0.002) says there are increasing *segments* without an increasing *relation*, which is the
+  source's own term-premia failure mode. The seated `liquidity-volume` lead is the one perfectly
+  monotone object here (Down = 0.00 exactly); 21-day reversal is flat rather than powerful
+  (Up p = 0.14), consistent with being the weakest lead. **The control, and it is why five scores
+  were tested rather than two: the MOST monotone score in this repo — Up 25.57, Down 0.00 — is
+  21-day Garman-Klass volatility, the identified survivorship artifact. Monotonicity is not evidence
+  of content, and an MR rejection is never a reason to build.**
+
+- **[Measured 2026-09-06, nightly] `SUMMARY.md` #84's exclusion book is declined on its own
+  precondition, and the precondition fails on every score in the repo.** The note's identity is
+  correct — for an equal-weight book holding `k` of `n`, `active return = mean(held) − mean(all)`, so
+  a bottom band's shortfall counts exactly as a top band's excess, and this lab had only ever
+  reported the top. Measured on train at `J = 5`, `|bottom shortfall| / |top excess|` is **0.055**
+  (champion momentum), **0.511** (region-relative `ILLIQ`), **0.669** (raw `ILLIQ`), **0.483**
+  (seasonal) and **0.717** (21-day reversal, where both ends carry the *same* sign and neither is
+  significant). **Not one score has a bottom carrying more than its top.** The leverage term settles
+  it: excluding the worst quintile levers the shortfall by only `k/(n−k)` ≈ 0.25, converting
+  region-`ILLIQ`'s −4.39%/yr shortfall into **+1.12%/yr** of active return against the top band's
+  **+8.58%/yr** — the widest possible book gives up ~87% of the active return by construction. Zero
+  trials. **The transferable half is the identity, not the verdict:** a long-only band book is
+  already a two-sided bet against the equal-weight universe, so the bottom band should be reported
+  alongside the top in every future screen, and this repo's habit of quoting top-`k` excess alone
+  has been hiding half of every score it has ever measured.
+
+- **[Measured 2026-09-06, nightly] `SUMMARY.md` #78 does not close `lead-lag-spillover` on the
+  branch it expected, and the decomposition that resolves it is the transferable part.** The AR(1)
+  identity `corr(R_i,t, R_j,t−1) = corr(R_i,t, R_j,t) × rho_i(1)` was computed against the actual
+  weekly cross-serial matrix for all five week-ending weekdays. `actual` is systematically **larger**
+  than `implied` (mean |act| 0.062 vs |imp| 0.039 on sectors) and the signed residual is stable
+  across weekdays (rank correlation +0.72 sector, +0.80 region; pooled t = +2.96 and +6.42) — the
+  note's "residual survives" branch. **But a residual uniformly positive over every *ordered* pair
+  names no pairs: that is a common lagged factor, and it is symmetric in (i,j). Genuine lead-lag is
+  ANTISYMMETRIC.** Splitting each pair's residual into a common level, a symmetric part and an
+  antisymmetric part:
+
+      partition                 groups  common    symmetric (stab)   ANTISYM (stab)   strongest antisym pairs
+      sector, US-listed only       9    +0.008    0.0263 (0.906)     0.0297 (0.680)   financials/tech/comm -> BONDS
+      region, all members          6    +0.031    0.0232 (0.728)     0.0399 (0.833)   US/GLOBAL/DE/UK -> JP; GLOBAL -> HK
+
+  The region partition's antisymmetric content is **every region leading Japan**, plus GLOBAL leading
+  Hong Kong — exactly the pairs a **session offset** produces, since JP and HK close first. That is
+  `SUMMARY.md` #80's spot-versus-futures diagnostic arriving on the object #78 leaves standing, and
+  it finally puts a number on the time-zone artifact this repo has warned about qualitatively: the
+  region residual runs **4x** the US-only sector benchmark. **The account was then tested rather than
+  assumed** — rebuilding the *same sector partition* from **US-listed members only**, where no offset
+  can enter, leaves the residual essentially unchanged (+0.0080, t = +2.99, stability +0.824, against
+  +0.0059 and +2.96 mixed), so the sector residual is **not** a session artifact; its antisymmetric
+  content is equities leading **bonds** at weekly frequency — running opposite to the sub-mechanism
+  `program.md` names, and sitting at exactly the horizon the cost model forbids. Rider (a) honoured:
+  adding the follower's own lag barely moves the leader's coefficient (mean |t| 1.58 → 1.62 sectors,
+  2.00 → 2.02 regions). **Net: the family neither closes on a null nor opens — its residual is
+  measurement in one partition and a forbidden-horizon cross-asset effect in the other. General rule:
+  before reading any cross-serial or lead-lag statistic as a leader, remove the common level and the
+  symmetric part; only the antisymmetric residual can name a direction, and on this universe the
+  antisymmetric part of a *regional* statistic is the trading calendar.**
+
+- **[2026-09-06, nightly] The 2026-09-03 exemption to the over-prediction rule is withdrawn.** That
+  session suspended the standing "a cross-sectional screen over-predicts the book it motivates by
+  roughly an order of magnitude" rule for operators that change *which names are in the tail* rather
+  than the ranking inside it, on one reading (region-demeaning, where the screen under-predicted).
+  The intersection is exactly such an operator — it changes tail membership wholesale — and its
+  screen said +7.55%/yr against its legs' +6.47 and +5.76 at matched book size, while the book came
+  in **below both legs on validation, twice**. **The exemption was one observation, not a class.
+  Restore the over-prediction rule as the default and record region-demeaning as its single known
+  exception.** Second instance this file has had to narrow a scope claim made from one reading; the
+  first was "breadth from a decorrelated vintage is free", restated as a half-price discount.
+
+- **[2026-09-06, nightly] The train-Sharpe-as-prediction record is held at n = 26, deliberately.**
+  Both of tonight's trials need 45 scoreable names across two legs while the momentum leg needs
+  252+21 days of history, so only **225 of 666** train month-ends are scoreable and the first is in
+  the mid-1990s. Their train Sharpes (0.67, 0.61) sit on a window excluding almost everything the
+  champion is charged for. Both would have read "under" (0.67 → 0.804, 0.61 → 0.789) and neither is
+  recorded — the 2026-09-04 sample rule applied prospectively for the first time, rather than
+  discovered after the fact.
