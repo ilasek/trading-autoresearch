@@ -118,8 +118,23 @@ snippets. Three practical limits to plan around:
   ```
 
   Then `Read`/`Grep` the `.txt`. Author-hosted and institutional PDFs (NBER, AQR, university
-  pages, `thierry-roncalli.com`) work well as sources. Beware silent 404s that still write a
-  file — check `curl -w '%{http_code}'` and `file` the result before parsing.
+  pages, `thierry-roncalli.com`, author GitHub Pages sites) work well as sources. Beware silent
+  404s that still write a file — check `curl -w '%{http_code}'` and `file` the result before
+  parsing.
+
+- **`econstor.eu` is a reliable channel and worth trying early** (added 2026-09-07). It hosts
+  German-institution discussion papers *and* mirrors of open-access journal articles, so it has
+  twice served files the publisher's own site refused — including a **gold open-access MDPI
+  article** whose `mdpi.com` PDF endpoint 403s an automated client. OpenAlex's
+  `locations[].landing_page_url` list is how to find the handle (`hdl.handle.net/10419/...`);
+  fetch the landing page and read the `bitstream` link out of it.
+
+- **When a paywalled paper's contribution *is* an algorithm, look for the author's own published
+  reference implementation** (added 2026-09-07). It is a complete and unambiguous primary for the
+  construction recipe, and reading it can settle evidentiary questions the prose would have
+  answered — a synthetic `generateData` call in a reference implementation tells you the paper's
+  "out-of-sample" test used no market data. Say in the note that the algorithm was read from the
+  code and the argument was not read.
 
 ## Anti-lookahead policy (hard rules)
 

@@ -770,6 +770,30 @@ or is volume. See candidates #74 and #75, both of which lead with a free precond
 → `notes/2026-09-04-global-liquidity-proxy-horserace.md`,
 `notes/2026-09-04-high-low-spread-estimator.md`
 
+**[Added 2026-09-07] The family's *shock* branch, covered for the first time — every previous note
+here is about a volume or illiquidity *level*.** A stock that has just traded an unusual amount is
+a stock more investors have just looked at, and Merton's investor-recognition equilibrium makes a
+widening investor base a one-off revaluation rather than a risk premium; short-sale constraints
+supply the asymmetry that lets a sign-free quantity predict a signed return. The construction is
+what makes it fit this universe better than anything else in the family: the classification is a
+**within-name time-series rank** — top decile of a name's own 50-day volume distribution on a
+single formation day — so it never compares one name's volume to another's and is therefore immune
+to differing share units, currencies, and the absent shares-outstanding data that made the turnover
+sort uncomputable here. The authors' own strongest variant *removes* names whose formation-period
+return was also extreme, which is the evidence that the signal is not a return move in costume; a
+parallel classification on absolute returns does not reproduce it. The risk evidence runs the
+favourable way for a long-only book — the high-volume side carries **lower** systematic risk than
+the low-volume side, and its bid-ask spreads narrow rather than widen — and the effect replicates
+independently across 41 developed and emerging markets, unexplained by risk or liquidity
+differences. **Tier A, and the only volume object considered in this lab with an independent
+multi-country replication behind it.** Two hard limits, both from the source itself: the authors
+decline to claim market-order exploitability (their stated arithmetic is that a one-week return
+below 1% is consumed by 20 bps one-way) and build a limit-order version this repo cannot run; and
+the effect is not large. **The tension with this lab's own two relative-volume nulls is real and is
+handled in candidate #85, which turns on the fact that both prior screens graded a continuous score
+while this source's claim is about a corner.**
+→ `notes/2026-09-07-high-volume-return-premium.md`
+
 ### 10. `range-variance`
 
 **This family is a measurement result, not a premium, and the measurement gain is large, analytical
@@ -1252,6 +1276,28 @@ the cost-surviving profit sits**, and the effect should be expected smaller than
 literature implies. Neither Do–Faff paper could be read in full (SSRN 403; both publisher pages
 closed), so nothing above rests on their internals.
 
+**[Added 2026-09-07] Cointegration, the family's other named `program.md` sub-mechanism, had zero
+coverage across the folder's first 76 notes; it now has some, and the finding is a closure.** The
+distance method never tests its own assumption — it measures how closely two normalised price
+series have tracked and bets on reversion. Cointegration makes the assumption testable: two `I(1)`
+series are cointegrated when some `X2 − βX1` is stationary, which by Granger's theorem means an
+error-correction term actively pulls deviations back, so spurious pairs are filtered rather than
+merely under-weighted. The field's own survey names exactly this as the promising repair, and gives
+the reason: minimising sum-of-squared-deviations selects for **low spread variance**, which is not
+the same as selecting for **strong mean reversion**. **The repair has been run, on a 52-year US
+sample under a time-varying cost model whose modern-era per-side charge is roughly twice this
+repo's, and it is a wash**: the cointegration method matches the distance method on economic and
+risk-adjusted measures with very similar pair properties and risk profiles, is ahead of it on
+drawdown measures before costs, and is slightly **behind** it after them. Costs consume roughly
+three-fifths of the gross return for both. The survey adds the standing decay and low
+factor-exposure picture for the whole family. **For this lab the long-only constraint is not a
+discount but a structural refutation of this sub-mechanism**: a pairs trade's P&L is *identically*
+the change in the spread, so removing the short leg leaves a plain single-name reversal bet with no
+stationary object in it — the same wall `2026-08-30-pca-residual-statistical-arbitrage-long-only`
+hits from the residual side. The transferable lesson survives the closure: **a selection metric can
+be optimising the wrong moment of the object it selects.**
+→ `notes/2026-09-07-cointegration-pairs-versus-distance-method.md`
+
 ---
 
 ### 14. `portfolio-learning`
@@ -1336,6 +1382,33 @@ cross-cutting entry below. The short version for this family: the equivalence ex
 about inference, the selection of four family leads from a screened pool of order 20–30 sits in
 the paper's `n^k` regime, and **a composite containing no mediocre legs is the paper's stated
 signature of selection bias.** A composite of family *leads* is by construction exactly that.
+
+**[Added 2026-09-07] The family's *weighting* sub-mechanism, distinct from every operator the lab
+has closed.** `program.md` names "hierarchical risk parity, clustering-based allocation" here, and
+the folder had no coverage of either while the lab closed the family three times — on the mean, the
+max and the intersection, all of them **signal-aggregation** operators over rank scores. HRP has no
+signal in it at all: cluster the assets on `d = sqrt((1−corr)/2)` with single linkage, reorder the
+covariance matrix into dendrogram order so similar assets sit adjacent, then split capital top-down
+between halves of that ordering in inverse proportion to each half's cluster variance. The problem
+it targets is real — a Markowitz optimizer's covariance matrix becomes worst-conditioned exactly
+when correlations are highest and diversification is most needed — and the answer is to never
+invert anything. It is long-only and fully invested by construction, deterministic, and well
+defined when assets outnumber observations. **The evidence behind it is far weaker than its
+citation count.** The primary source's out-of-sample demonstration is a **Monte Carlo on generated
+data**, benchmarked against a critical-line optimizer and inverse-variance weighting; **1/N is not
+among the benchmarks and no historical prices appear**. An analytical result shows HRP is
+approximate hierarchical *variance minimisation* with the cross-cluster covariance blocks
+discarded, with a continuous interpolation back to full minimum variance once they are restored —
+so it is a degraded optimizer, not a separate objective, and its stability is bought by discarding
+information. The one carefully-executed independent evaluation read here finds inverse-volatility
+weighting the most robust under crude covariance estimates, with the hierarchical portfolios
+behind it, on a sample too small to settle anything. **For this repo the question is close to
+already answered**: a long-only constraint plus a position cap *is* covariance shrinkage
+(`notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`) and the engine imposes both
+regardless, 1/N is the benchmark the primary never tested against, and recursive bisection is a
+variance-based split between sleeves — the operation `learnings.md` records failing here twice. See
+anti-candidate #86, including the free holdings-only measurement that would close it with a number.
+→ `notes/2026-09-07-hierarchical-risk-parity-clustering-allocation.md`
 
 ---
 
@@ -4357,6 +4430,95 @@ hypothesis fodder, then anti-candidates.
     market-adjusted share, not the raw one, is the number whose *shape* transfers.
     → `notes/2026-09-06-long-side-share-of-anomaly-profits.md`
 
+85. **[Added 2026-09-07] A free diagnostic that decides whether the `liquidity-volume` family's
+    *shock* branch is alive, on the statistic the claim is actually about — and it is aimed
+    squarely at a null this lab has already recorded.** The mechanism: a name that has just traded
+    an unusual amount is a name more investors have just looked at, and a widening investor base is
+    a one-off revaluation (Merton's investor-recognition equilibrium), asymmetric in sign because
+    short-sale constraints let good news be expressed by trading while bad news is partly
+    suppressed. The construction is a **within-name time-series rank**, never a cross-sectional one:
+    split history into non-overlapping 50-trading-day intervals (skip a day between them so the
+    last day is not always the same weekday), call days 1–49 the reference period and day 50 the
+    formation day, and flag a name *high-volume* when its formation-day dollar volume is in the top
+    decile of that interval's 50 values. Hold 20 trading days. **The reason this is not a re-import
+    of a refuted idea**: `learnings.md` records the lab's relative-volume score as a well-identified
+    null on **IC** (`|t| ≤ 1.06` at every horizon), and 2026-09-06 established on this repo's own
+    champion that IC is blind to a corner-picker — the champion's monotonic-relation `p` is 0.698
+    while its top bin runs +8 %/yr. The source's claim is *literally* a corner claim about the top
+    decile of a within-name distribution and is **not** a claim that relative volume ranks expected
+    return. **So the diagnostic is: top-`k` excess of the high-volume state against the pool, on
+    train, with the paper's own strongest filter applied (drop names whose formation-period return
+    was itself extreme — the effect is stronger on the rest, which is what makes it not a return
+    signal in costume).** Free, no trial, and decisive either way: a null here is a **third** null
+    in this class, measured on the right statistic for the first time, and closes the branch
+    properly. Two riders. Pin breadth by construction — take the top `k` by formation-day rank, not
+    a fixed decile threshold, because a decile rule classifies a binomial count out of a pool that
+    grows from ~55 to ~126 names (the 2026-09-06 rule). And screen the classification's hit rate by
+    region first: volume is not forward-filled, so the first traded day after a foreign holiday is
+    a genuine one-day volume against multi-day information — the mirror image of the stale-volume
+    asymmetry that already inflated `ILLIQ` here. Tier A, no validation overlap, 41-country
+    independent replication behind it — the only volume object screened in this lab that has one.
+    → `notes/2026-09-07-high-volume-return-premium.md`
+
+86. **[Added 2026-09-07] An anti-candidate that closes a named `program.md` sub-mechanism without a
+    trial, and a free measurement that would close it with one number instead of an argument.**
+    `portfolio-learning` has been closed three times — mean, max, intersection — but all three are
+    **signal-aggregation** operators over rank scores, while `program.md` also names "hierarchical
+    risk parity, clustering-based allocation", which is a **weighting** object with no signal in it
+    and had never been covered here. The mechanism is real: a Markowitz optimizer must invert an
+    estimated covariance matrix whose conditioning degrades exactly as correlations rise, so HRP
+    substitutes a hierarchy — cluster on `d = sqrt((1−corr)/2)`, reorder the covariance matrix into
+    dendrogram order, then split capital top-down by inverse cluster variance — and never inverts
+    anything. **Three reasons not to spend a trial, in increasing force.** (a) The primary source's
+    out-of-sample evidence is a **Monte Carlo on generated data** against a critical-line optimizer
+    and inverse-variance weighting; **1/N is not among its benchmarks and no historical price
+    series is used**, in a paper titled "…that Outperform Out of Sample". (b) An analytical result
+    shows HRP is *approximate hierarchical variance minimisation with the cross-cluster covariance
+    blocks discarded* — restoring them interpolates continuously to full minimum variance — so it
+    is a degraded optimizer rather than a different objective, and its stability is bought by
+    throwing information away. (c) **This repo already holds the shrinkage HRP is selling**: a
+    long-only constraint plus a position cap *is* covariance shrinkage
+    (`notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`), and the engine imposes both
+    regardless; meanwhile HRP's recursive bisection is a variance-based
+    capital split between sleeves, which `learnings.md` records failing here twice. **The free
+    version, if a session wants a measurement rather than an argument**: compute HRP weights over
+    the seated champion's own train-date holdings and report the mean absolute deviation from equal
+    weight, the incremental turnover a rolling refit adds, and how often the 25% cap binds. Over a
+    book holding ~45% of the universe those weights should sit within a few percent of equal
+    weight, which answers it for free. **One salvageable half**: the *clustering* is a data-driven
+    partition that needs no region or sector label — but build its distance matrix on **weekly**
+    returns, because a daily correlation dendrogram across 15 time zones clusters by trading
+    session, the artifact measured at 4x on 2026-09-06. Tier B; the primary has a tier-1-list venue
+    and a large citation count and almost no evidence behind it, which is the whole point.
+    → `notes/2026-09-07-hierarchical-risk-parity-clustering-allocation.md`
+
+87. **[Added 2026-09-07] An anti-candidate that forecloses the obvious next move in
+    `statistical-arbitrage`, and the first coverage this folder has ever had of cointegration — a
+    named `program.md` sub-mechanism with zero notes across the previous 76.** The lab refuted the
+    distance method. The natural repair is the econometrically sound version: instead of assuming
+    that two closely-tracking price series will keep tracking, *test* it — two `I(1)` series are
+    cointegrated when some `X2 − βX1` is stationary, which by Granger's theorem means an
+    error-correction term actively pulls deviations back. A survey of the field names precisely
+    this as the promising fix, because minimising sum-of-squared-deviations selects for **low
+    spread variance**, which is not the same as selecting for **strong mean reversion**, and admits
+    spurious pairs. **It has already been run, on a 52-year US sample with a cost model roughly
+    twice this repo's per-side charge: the cointegration method performs about as well as the
+    distance method on economic and risk-adjusted measures, with very similar pair properties and
+    risk profiles, and after costs the distance method is slightly ahead.** Costs consume roughly
+    three-fifths of the gross return for both. **Do not spend a trial re-deriving that.** The
+    long-only wall is structural rather than a discount: the P&L of a pairs trade is *identically*
+    the change in the spread, so dropping the short leg leaves "buy the cheaper member of a
+    diverged pair" — a plain single-name reversal bet with no `I(0)` property and nothing the
+    cointegration test certifies, landing on the horizon `learnings.md` says a 15 bps/side book is
+    on the wrong side of. Same wall the PCA-residual note hits from the other direction. **If
+    `statistical-arbitrage` is revisited, it should be on a different branch** — the survey's
+    time-series and stochastic-control approaches, or the multivariate constructions it reports
+    outperforming the univariate ones — not on the cointegration filter. **The one transferable
+    construction lesson, which generalises well past pairs**: a selection metric can be optimising
+    the wrong moment of the object it selects; "closest tracking" is a variance criterion wearing a
+    mean-reversion label. Tier B (single market for the comparison itself). No validation overlap.
+    → `notes/2026-09-07-cointegration-pairs-versus-distance-method.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -4386,9 +4548,73 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-04 (session 22) | **The first session aimed by a lab result that *opened* rather than closed something, and the first in six whose three notes all serve one family.** The 2026-09-03 nightly answered the whole standing list — #70 declined on its own placebo, #72 declined with its pool precondition passing, `portfolio-learning` closed on three independent controls — and produced the exception: #71's region-relative `ILLIQ` at 1.2x turnover, the lab's first leg improvement from a stated *measurement* mechanism. That reverses the 2026-09-02 reasoning that retired the liquidity-proxy horserace from this list ("a horserace cannot change a null measured on this universe"), because the family no longer rests on a null. Focus: the measurement literature the lab's own account implies. Three primaries read in full — the international successor to the horserace this folder dropped, the 40-country Amihud panel that states the non-comparability as a design constraint, and the one range construction built to cancel the width level. | Fong–Holden–Trzcinka 2017 (RoF) (`2026-09-04-global-liquidity-proxy-horserace.md`); Karolyi–Lee–van Dijk 2012 (JFE) (`2026-09-04-commonality-in-liquidity-across-countries.md`); Corwin–Schultz 2012 (JF) (`2026-09-04-high-low-spread-estimator.md`) |
 | 2026-09-05 (session 23) | **The standing list was spent on arrival for the fifth session running — every 2026-09-04 proposal was decided overnight, four of them for free — and the one surviving instruction pointed at a family the folder had covered three times without ever recording its *null*.** The 2026-09-04 nightly declined #74 on its own pre-registered threshold (`spearman(CS spread, Parkinson range vol)` = +0.788 against a 0.7 kill line, with the FX escape closed at +0.769 on USD-quoted names alone), declined #75 on content after confirming its holiday filter was necessary, recorded #76(a) as not expressible and #77 as agreed, and ran #76(b) — the lab's first control designed to break one of its own passing results, which the venue-unit account survived twice. That leaves `liquidity-volume` closed by the lab's own account and `lead-lag-spillover` as the live family with the fewest trials (2) and the weakest identification. **Focus: the identification, not another mechanism** — the shape is *one identity, one null, one measure*, and the null is the finding. Three primaries, all Tier 1 venues, **all read in full**; one of them (BRW) is a scanned PDF with no text layer, read by rendering pages to PNG and reading them visually, which is a new capability for this folder and is written up below. The session's central result is that the lab's own family lead #58 and its null follow-up #62 are *exactly* what the skeptical literature predicts with no lead-lag mechanism present at all, and that a two-matrix screen (#78) decides it either way without a trial. | Lo–MacKinlay 1990 (RFS; NBER WP 2977 read in full) (`2026-09-05-contrarian-profit-decomposition.md`); Boudoukh–Richardson–Whitelaw 1994 (RFS; the published article read in full from the third author's NYU Stern page, page-images) (`2026-09-05-cross-serial-correlation-as-restatement.md`); Hou–Moskowitz 2005 (RFS; the authors' 2003 manuscript read in full from a university mirror) (`2026-09-05-price-delay-market-frictions.md`) |
 | 2026-09-06 (session 24) | **The first session in six that did not arrive to a spent list — and the reason is that no nightly ran.** `experiments/journal.md` records a 2026-09-04 nightly and then nothing but the 2026-09-05 research pointer, so **#78, #79 and #80 are unrun and still stand**; this session deliberately did not re-cover `lead-lag-spillover` on top of them. With every family either closed by the lab or carrying a live proposal, the focus was taken from the lab's own next-idea list instead: roughly twenty-five non-`price-trend` books inherited `hold-30/enter-20` from a construction designed on the full cross-section, and the 2026-09-05 bracket was the first evidence the band is too narrow. The shape is *three design choices of one object* — every strategy this repo has ever run ranks a score and holds a band, and the folder had never covered how many bins that implies, whether the ranking is monotone, or which end a long-only book uses. Three primaries, all tier-1 venues, **all read in full** from author or public mirrors. The session's two most useful outputs are both negative-shaped: the sorting-as-nonparametric-estimation theory says its own **asymptotic regime does not exist at `n ≈ 140`** (the two rate conditions want `J ≪ 21` and `J ≫ 45`), which converts band width from a tuning problem into a design decision; and the long/short decomposition **contradicts a standing rule in this file** — the "expect roughly a third" discount is benchmark-specific, and for an equal-weight long-only book the right benchmark is the equal-weight universe, under which the bottom band enters a book's return with the same standing as the top. Three free measurements follow (#82, #83, #84), and #84 proposes a construction shape the lab has never built: an exclusion book. | Cattaneo–Crump–Farrell–Schaumburg 2020 (REStat; the typeset article read in full from `maxhfarrell.com`) (`2026-09-06-number-of-portfolios-as-tuning-parameter.md`); Patton–Timmermann 2010 (JFE; the published article read in full from the first author's Duke page) (`2026-09-06-monotonicity-tests-for-portfolio-sorts.md`); Israel–Moskowitz 2013 (JFE; the typeset article read in full from a public mirror) (`2026-09-06-long-side-share-of-anomaly-profits.md`) |
+| 2026-09-07 (session 25) | **The first session in seven aimed by neither the lab nor the standing list, and deliberately so: the 2026-09-06 nightly *did* run, so the list was not spent — it was answered — and what it left behind was an instruction not to write more construction methodology.** The 2026-09-06 nightly closed `portfolio-learning` on its third operator, killed #84's exclusion book on its own precondition (no score in the repo has a bottom band carrying more than its top), ran #83's monotonicity test in full, and resolved #78 into "measurement in one partition, forbidden-horizon cross-asset effect in the other" — and its own next-idea list says the sorted-book vein is thin and should not be re-worked. So the focus was chosen the only way left: **by asking which sub-mechanisms `program.md` names that this folder has never covered at all.** Two were found by direct search across all 76 prior notes, and they are the session's spine: **cointegration** (named under `statistical-arbitrage`, **zero** notes) and **hierarchical risk parity / clustering-based allocation** (named under `portfolio-learning`, **zero** notes, and untouched by all three of that family's closures because those are signal-aggregation operators and this is a weighting object). The third note is the family's *shock* branch, where every previous `liquidity-volume` note is about a *level*. **The shape of the session is two closures and one contested lead.** Both closures are cheap and both foreclose a move the lab would plausibly have made: cointegration is the obvious repair to the refuted distance method and has already been measured as a wash against it, and HRP is the obvious "we haven't tried a clustering allocator" move whose primary evidence turns out to be a Monte Carlo that never benchmarks 1/N. **The contested one is the point of the session.** The high-volume return premium is a third object in a class this lab has twice measured as null — and the case for one more look is not that the source is famous but that 2026-09-06's own monotonicity result showed IC is blind to a corner, while both prior screens graded a continuous score and this source's claim is explicitly about the top decile of a within-name distribution. Candidate #85 is that diagnostic, pre-registered, free, and closes the branch on the right statistic if it comes back null. **Access and index behaviour**: full text read directly for four of six sources — a Wharton Rodney L. White working-paper PDF carried the complete JF argument, an author's GitHub Pages copy (`randlow.github.io`) the *Quantitative Finance* article, **EconStor** two separate items (an MDPI gold-OA article whose own site 403s an automated client, and the FAU discussion-paper version of a *Journal of Economic Surveys* survey), and arXiv a preprint. **EconStor is the session's new reliable channel and belongs on the README's list** — it served a gold-OA paper the publisher itself refused. Two sources are recorded as **not read**: a closed JFE replication (its finding taken from the publisher's abstract via RePEc, flagged in-note) and a closed *Future Generation Computer Systems* article recorded as a bare pointer with no finding relied on, precisely so a later session does not re-find it and mistake a search snippet for evidence. The HRP algorithm itself was read from **the author's own published reference implementation** rather than the paywalled JPM prose — a channel worth remembering for method papers. Index limits, both documented ones in one session: **Semantic Scholar's DOI endpoint worked for four DOIs and then 429'd**, and **OpenAlex's daily budget was exhausted mid-session** (`Insufficient budget`), so the last two counts are Crossref-only. Two more instances of the standing "disbelieve a lone count": S2 returns *not found* for `10.1111/0022-1082.00280`, a JF article with 1086 Crossref and 1559 OpenAlex citations (a **ninth** instance, and the third consecutive session where the missing index is S2 on a tier-1 finance DOI), and the HRP primary returns 225 / 292 / 222 across S2 / OpenAlex / Crossref. | Gervais–Kaniel–Mingelgrin 2001 (JF; the Wharton working paper carrying the published argument, read in full) + Kaniel–Ozoguz–Starks 2012 (JFE; **abstract only**, closed access) (`2026-09-07-high-volume-return-premium.md`); López de Prado 2016 (JPM; **algorithm read from the author's own reference implementation**, prose closed) + Cotton 2024 (arXiv, read in full) + Jain–Jain 2019 (Risks, read in full via EconStor) + Raffinot 2017 (JPM, metadata only) (`2026-09-07-hierarchical-risk-parity-clustering-allocation.md`); Rad–Low–Faff 2016 (Quantitative Finance; author-hosted copy read in full) + Krauss 2017 (J. Econ. Surveys; the IWQW discussion-paper version read in full) (`2026-09-07-cointegration-pairs-versus-distance-method.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-09-07] Read this first: the 2026-09-06 entry immediately below is superseded on its
+  central point.** That entry told the next session to run #78, #79 and #80 first because no
+  nightly had run. **A nightly did run on 2026-09-06.** It answered #78 in full (the AR(1) identity
+  fails, the residual survives, and its decomposition names a session artifact in one partition and
+  an equities-lead-bonds effect at a forbidden horizon in the other — so `lead-lag-spillover`
+  neither closes nor opens), absorbed #80 into that decomposition, ran #83 in full, and killed #84
+  on its own precondition. **Of the pre-2026-09-07 list, exactly two items are still unrun: #79
+  (`DELAY`, and the nightly's own instruction is to run it US-only or not at all) and #82 (`J*`
+  bandwidth, free, with the placebo rider that gives it a kill switch).** Everything else on that
+  list is decided.
+- **[2026-09-07] What should aim the next session, in order.**
+  - **#85 first, and it is the only item here that could open something.** Free, train-only, and
+    designed so that both answers are findings: a null is the third in the relative-volume class
+    and closes the `liquidity-volume` shock branch on the right statistic, while a pass is the
+    first live object outside the `ILLIQ` level this family has produced. Run its two riders (pin
+    breadth by construction; screen the classification's hit rate by region for the post-holiday
+    volume asymmetry) *before* reading the excess, not after.
+  - **Then #79 and #82**, both unrun and both free.
+  - **#86 and #87 are anti-candidates and are done unless someone disagrees with them.** #86
+    carries a free holdings-only measurement if a session wants a number rather than an argument;
+    #87 carries none, because its refutation is structural (the long-only wall) rather than
+    empirical and no measurement here would change it.
+- **[2026-09-07] The rule this session followed, offered as the one to follow next.** Every family
+  in `program.md` has had a section in this file since 2026-08-31, which made "cover an uncovered
+  family" look spent. It was not: `program.md` names **sub-mechanisms** inside each family, and two
+  of them had zero notes across 76 — cointegration and hierarchical risk parity — while the lab was
+  closing their families on entirely different objects. **When the family list looks exhausted,
+  re-read `program.md`'s sub-mechanism clauses rather than the family headings.** Both remaining
+  gaps found this way turned out to be closures rather than leads, which is the expected yield and
+  is still worth the session: each foreclosed a move the lab would plausibly have spent a trial on.
+  A quick audit of what remains named-but-thin after tonight: `statistical-learning`'s
+  gradient-boosting and small-neural-net clause (covered only through the comparative-method
+  literature, and the folder's own standing conclusion is that this universe cannot support a heavy
+  learner); `range-variance`'s HAR-RV and vol-of-vol clause (the family is closed thirteen times
+  over and this should **not** be re-opened); `portfolio-learning`'s **stacking / meta-labelling**
+  clause, which is now the last sub-mechanism in the program with neither a note nor a lab result.
+  That is the honest next gap if one is wanted, and it should be approached knowing the family has
+  closed four times.
+- **[2026-09-07] One embargo boundary was tested and held, and it is worth stating so it is not
+  re-tested.** The high-volume premium's authors report a cost break-even (a one-week return below
+  1% is consumed by 20 bps one-way) and the pairs-trading comparison reports what fraction of a
+  gross return its cost model consumes. Both are recorded, as *cost arithmetic* and as a *ratio*
+  respectively, and no dated performance level from either source appears anywhere in this file or
+  its notes. The line drawn: **a break-even threshold or a cost-consumed fraction is a property of
+  the cost model and is decision-relevant here; a return level attached to a window is not, and
+  neither is any statement of the form "opportunities became scarcer after year Y"** — the
+  pairs-trading source contains one of those and it was deliberately not carried across.
+- **[2026-09-07] Access notes for the recipe.** **`econstor.eu` is the session's find and should be
+  added to the README's reliable-channel list**: it served a *gold open-access* MDPI article whose
+  own site returns 403 to an automated client, and separately the FAU discussion-paper version of a
+  *Journal of Economic Surveys* survey. Also confirmed working first try: the Wharton Rodney L.
+  White working-paper archive, an author's GitHub Pages site (`randlow.github.io`), and arXiv.
+  **A new channel for method papers**: where a paywalled article's contribution *is* an algorithm,
+  the author's own published reference implementation can be a complete and unambiguous primary —
+  `quantresearch.org` served the HRP code, from which the algorithm was read exactly, and reading
+  it also settled the paper's evidentiary weakness (its `generateData` call confirms the
+  out-of-sample demonstration is synthetic). Both index limits bit in one session: Semantic
+  Scholar's DOI endpoint served four lookups then 429'd, and OpenAlex's daily budget hit
+  `Insufficient budget` mid-session.
+
+- **[2026-09-06] Superseded in part by the 2026-09-07 entry above — a nightly did run on 2026-09-06,
+  so the claim below that #78/#79/#80 are all unrun is stale; only #79 still stands. The rest of
+  this entry is unaffected. Original text follows.**
 - **[2026-09-06] Read this first: the standing list was NOT spent, because no nightly ran.**
   `experiments/journal.md` goes from the 2026-09-04 session summary straight to the 2026-09-05
   research pointer with no trials in between, so **#78, #79 and #80 are unrun and remain the
