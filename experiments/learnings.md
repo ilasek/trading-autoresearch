@@ -2383,3 +2383,120 @@ across experiments; prune entries that later evidence contradicts.
   champion is charged for. Both would have read "under" (0.67 → 0.804, 0.61 → 0.789) and neither is
   recorded — the 2026-09-04 sample rule applied prospectively for the first time, rather than
   discovered after the fact.
+
+- **[Measured 2026-09-07, nightly] An arbitrary sampling phase is a free parameter, and
+  shuffling it is a free pre-trial screen with its own placebo calibration. It killed a
+  proposal that three other free screens had passed.** `research/SUMMARY.md` #85's
+  within-name volume state — the first `liquidity-volume` object here that is not a
+  cross-sectional level — was measured on the source's own design (50-day non-overlapping
+  interval, one-day formation, 20-day hold, top-20 excess over the scoreable pool, train).
+  It read **+3.98%/yr (t = +2.13)** against controls of +6.83 (region-relative `ILLIQ`),
+  +5.16 (12-1 momentum) and **-1.29 (placebo hash)** in the same harness, so the harness had
+  power. Then the only thing varied was the **grid phase** — 51 phases at the same
+  51-trading-day spacing, same score, same breadth, same statistic, same horizon:
+
+      score                              phase mean   SD     min      max    t>2      monthly grid
+      region-relative ILLIQ (lead)          +6.70    1.82   +3.33   +11.21   42/51   +6.00 (t=+4.13)
+      Garman-Klass 21d vol (artifact)       +5.02    1.16   +2.13    +7.78   33/51   +6.12 (t=+3.84)
+      12-1 momentum (champion leg)          +4.34    2.35   +0.23    +8.49   10/51   +3.78 (t=+1.56)
+      within-name volume state (#85)        +1.54    2.27   -3.12   +11.10    5/51   -1.24 (t=-0.89)
+      placebo hash(date, ticker)            +0.53    1.94   -4.36    +5.72    3/51   +0.63 (t=+0.50)
+
+  Phase 0 — the source's own design, and the phase taken first — read **+5.59%/yr (t = +2.70)**,
+  a **top-6% draw** (3/51 at or above) from a distribution centred at +1.54.
+  **Three riders, and the second is load-bearing.** *(i)* The placebo calibrates the screen: an
+  object reading **no market data** still reaches `t` > 2 on **3 of 51** phases, so the volume
+  state's 5 of 51 is inside the placebo's own range. *(ii)* **Phase stability is not evidence
+  of content** — the second most phase-stable score here is 21-day Garman-Klass volatility,
+  the identified survivorship artifact, at the *lowest* phase SD of any score tested. Same
+  rider the monotonic-relation test needed on 2026-09-06, on an independent statistic: **use
+  the screen to kill or to corroborate a level, never to establish content.** *(iii)* Momentum
+  has the widest phase dispersion of the live scores but is **positive on all 51 phases**
+  (min +0.23) — this does *not* license "momentum pays only on some dates". **General form,
+  and it is a new class rather than a new instance: the repo's oldest habit has always asked
+  what a component's code reads or whether a statistic is invariant; this asks whether an
+  arbitrary choice in the *design* — a grid, a phase, an anchor date — was a free parameter
+  the source silently fixed. Shuffle it before believing the reading.** The one positive thing
+  it establishes is about the incumbent's rival: the seated `liquidity-volume` lead is
+  phase-stable at 42/51 and **never negative on any phase**.
+
+- **[Measured 2026-09-07, nightly] `research/SUMMARY.md` #85's shock branch is declined on
+  five independent grounds, one of which is that it is *not* the artifact this repo would
+  have blamed.** *(a)* The note's literal recipe is a null (+0.28%/yr, t = +0.17) and is
+  degenerate: a percentile rank over 50 values ties heavily at 1.0, so the top-20 of ~96 names
+  is partly broken alphabetically. *(b)* The continuous repair is **not the formation return
+  in costume** — mean `spearman(state, |formation return|) = +0.043`, and residualising the
+  state's rank on it leaves **+4.11%/yr (t = +2.38)**, unchanged. Recorded because it rules
+  out the account close-location value and 52-week-high both fell to. *(c)* It **fails the
+  source's own strongest identifying filter**: trimming extreme formation-period returns is
+  meant to make the effect stronger and makes it weaker, +3.98 -> +2.00 (t = +1.28).
+  *(d)* It does not survive this repo's **monthly grid** — -0.39 / -0.03 / +0.38 / +2.15 %/yr
+  at 1/3/5/10-day formation windows, all `|t|` <= 1.48. *(e)* Churn is **~16x annual L1 at
+  every specification** (~2.4%/yr of drag) against a largest-measured effect of +2.15%/yr.
+  **And the obvious explanation for (d) was refuted rather than assumed**: a month-end is a
+  high-volume day for every name, but the elevation is a **common level** (+7.0% against the
+  name's own 50-day median, versus +4.0% on other days) with a cross-sectional **SD ratio of
+  1.002** — no dispersion compression — and excluding the month-end day from the formation
+  window moves nothing. The gradient is in *window length*, and a 10-day mean against a
+  50-day median is the relative-volume level already closed in 2026-08-30. `liquidity-volume`'s
+  live content remains `ILLIQ`'s price-impact numerator and nothing else.
+
+- **[Measured 2026-09-07, nightly] `SUMMARY.md` #79's `DELAY` closes with its precondition
+  PASSING and the pass turning out to be the statistic's own small-sample bias — the second
+  imported statistic here that is not estimable at this sample length.** The note's kill line
+  is the source's: a top-minus-bottom quintile spread near 0.03 (largest stocks) closes the
+  per-name branch, near 0.26 (smallest) opens it. Measured US-only as required (73 names, 37
+  annual fits, ~49 names each, weekly returns on the contemporaneous equal-weight index plus
+  four weekly lags): spread **0.2494**, mean level 0.1935, p90/p10 20.3 — the *smallest*-stock
+  figure on a universe of mega-caps. `D1 = 1 - R2_r/R2_u` is a ratio of two `R2`s from ~49
+  observations with four extra regressors, so it was simulated under its own null, each name's
+  contemporaneous fit preserved and **no lag structure at all**:
+
+      statistic                        observed    null      
+      mean D1 level                     0.1931    0.1919
+      top-minus-bottom quintile spread  0.2494    0.2664   -> observed = 0.94x the null
+      year-over-year rank persistence   +0.371    +0.373
+
+  The null reproduces level, dispersion **and persistence** — the last to three decimals, and
+  persistence was the one statistic that still looked like content. `spearman(D1, own
+  contemporaneous market R2) = -0.769`: on this sample `D1` is an inverse market-`R2` ranking,
+  i.e. an idiosyncratic-volatility ranking, i.e. this universe's identified survivorship
+  artifact wearing a delay label. **Eighth instance of "check the statistic is invariant to the
+  thing it is not supposed to measure", and the second after `eta(q)` where the answer is that
+  the statistic cannot be estimated on the sample at all.** With 2026-09-06's decomposition of
+  the group branch, **`lead-lag-spillover` has no live branch left.**
+
+- **[Measured 2026-09-07, nightly] HRP is declined, and the free measurement the note proposed
+  refutes the note's own prediction while making its verdict stronger — which is the useful
+  direction.** `SUMMARY.md` #86 predicted HRP weights over the champion's ~45%-of-universe book
+  "should sit within a few percent of equal weight, which answers it for free". Holdings-only
+  on the seated champion's train weight matrix (75 sampled dates, 252-day covariance,
+  single-linkage on `d = sqrt((1-corr)/2)`, recursive bisection by inverse cluster variance):
+
+      distance built on   names/date   mean |HRP-equal|/equal   25% cap binds   refit turnover
+      daily returns          53.3             0.787             21 of 75 dates   ~10.4x annual L1
+      weekly returns         44.2             0.743             15 of 75 dates    ~9.4x annual L1
+
+  Three-quarters of the equal weight, not a few percent — recursive bisection down an
+  unbalanced dendrogram hands a small cluster half the capital at each split. So the decline is
+  stronger than argued: the engine's own 25% cap would clip HRP on **28% of dates**, and a
+  rolling refit adds ~9-10x of annual L1 **on top of** the champion's 3.11x — ~1.4-1.6%/yr of
+  drag for a weighting scheme with no signal in it, on a book already priced as having no drag
+  left to save. **The note's salvageable half is confirmed and sized**: same-region minus
+  different-region mean pairwise correlation is **+0.144 daily against +0.030 weekly**, a 4.8x
+  ratio independently reproducing the 4x session-offset artifact 2026-09-06 measured on
+  regional cross-serial residuals. **Build any clustering here on weekly returns**; a daily
+  dendrogram across 15 time zones clusters by trading session.
+
+- **[2026-09-07, nightly] `range-variance` now has TWO passing robustness tests on its
+  artifact, which is worse news than fourteen nulls.** 2026-09-06 recorded that 21-day
+  Garman-Klass volatility is the most monotone score in the repo (MR `p` = 0.004, Up 25.57,
+  Down 0.00 exactly). Tonight's phase screen agrees independently: it is the **second most
+  phase-stable** score on the board (33/51 phases at `t` > 2, never negative, and the *lowest*
+  phase SD of any score tested, 1.16). Two unrelated robustness statistics both flatter the one
+  object every one of the family's fourteen mechanism screens identifies as the survivorship
+  artifact. **A trial there would build on the most persuasive wrong answer available.** This
+  strengthens rather than changes the standing recommendation: the family is unreachable on
+  this universe rather than unexplored, `program.md`'s cold-family allocation rule cannot be
+  honestly satisfied here, and amending the rule or retiring the family are both edits to a
+  frozen file. Seventh consecutive session unsatisfied.
