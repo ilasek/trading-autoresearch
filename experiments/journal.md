@@ -7345,3 +7345,31 @@ candidate to satisfy a count. The lab has correctly spent zero trials once befor
   the seat is +0.046 at `rho` 0.9497, paired `SE` 0.127, **t = +0.36 — not resolvable**, and it is
   not the designed comparison anyway. HHI 0.0529 vs the champion's 0.0618 remains an unmatched axis.
 
+## 2026-09-08T23:29:03+00:00 — pt_depth_breadth_pinned — **SCOUT**
+- Candidate: `strategies/candidates/pt_depth_breadth_pinned.py` (family: price-trend, track: scout, trial #86)
+- Hypothesis: Repeating #85's depth control with its band pinned on the split that matters — CORE_N/BAND_N 22/37 -> 30/50, the single expression that changes, giving 62.50 names against the champion's 62.71 on a profiler that reproduces the engine's champion avg_positions to 0.03 names, where #85 matched on train (41.59 vs 41.36) and missed on validation (49.22 vs 62.71) — scores near 1.12, indistinguishable from the champion's 1.120, because the three recorded K=1 books fall monotonically in breadth (30.3 names 1.229, 35.1 names 1.201, 49.2 names 1.166, about -0.033 of Sharpe per 10 names) and that slope extrapolates to 1.122 at 62.5 names. Landing between 1.06 and 1.18 says depth and timing buy the SAME breadth, so the six-tranche overlap supplies names rather than better names and the journal's 'breadth is justified by timing' reading is not supported; below 1.06 says depth-bought breadth is genuinely worse and the overlap earns its keep; above 1.18 says the overlap is a cost at every breadth on this split and its only defence is the holdout behaviour behind the human rollback. HHI stays unmatched at 0.0392 against 0.0618 because breadth and concentration are linked through the operator and cannot both be pinned, though #85's post-mortem shows the two books' cores are alike (72.5% vs 70.1% of capital in the top 15 names) and the HHI gap is a tail effect.
+- Verdict: SCOUT — scouted family 'price-trend': validation sharpe 1.135 <= the family's best 1.166 (DSR 0.9566, 86 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.92, ann_ret +13.4%, maxDD -48.6%, turnover 2.7x
+- Validation: sharpe +1.14, ann_ret +22.9%, maxDD -25.7%, turnover 6.6x
+- Deflated Sharpe prob: 0.9566 (bar from 86 trials, 24 effective)
+- Scout track: family best before this trial +1.17; the champion was not compared and the holdout was not read
+- Lesson: **Pre-registered 1.12, delivered 1.135, and the breadth pin held exactly (62.5 predicted,
+  62.5 realised, against the champion's 62.69) — so this is the designed comparison #85 failed to
+  run.** At matched breadth the gap to the seat is **+0.015 at `rho` 0.9500, paired `SE` 0.127,
+  t = +0.12**: depth-bought and timing-bought breadth are **indistinguishable**. That is the
+  1.06-1.18 branch, named in advance. **The finding is the decomposition it licenses.** The K=1
+  depth axis is now four points and near-linear — 30.3 names 1.229, 35.1 1.201, 49.2 1.166, 62.5
+  1.135; fit `sharpe = 1.306 - 0.00278*names`, **R² = 0.975**, slope **-0.0278 per 10 names** —
+  and it splits the -0.109 the lab has read as the six-tranche overlap's cost into a **breadth term
+  of -0.097** (walking K=1 from 30.3 to 62.69 names) and a **vintage term of -0.012** (K=6 against
+  K=1 at that breadth). Breadth is 89% of it; the vintage residual is an order of magnitude inside
+  the resolution floor and is **not distinguishable from zero**. So the overlap is a
+  breadth-generating device and, on this split, essentially nothing else — the narrow K=1 books
+  beat the champion because they are **narrow**, not because they are **fresh**, and the journal's
+  twice-flagged "the incumbent's breadth is justified by timing" reading is **refuted**: timing and
+  depth buy the same names at the same price. **GUARD-RAIL, and it is not optional.** This is a
+  validation-split statement only. The human's rollback to K=6 was made on **holdout** (K=6 holdout
+  1.292 against the K=1 successors' collapse to 0.691), which no trial tonight read and none may.
+  Nothing here licenses a K=1 challenger; it says the overlap's *validation* cost was mis-attributed,
+  not that the overlap is worthless. Train 0.92 -> validation 1.135 reads **under**, as predicted.
+
