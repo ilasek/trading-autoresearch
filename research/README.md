@@ -129,6 +129,28 @@ snippets. Three practical limits to plan around:
   `locations[].landing_page_url` list is how to find the handle (`hdl.handle.net/10419/...`);
   fetch the landing page and read the `bitstream` link out of it.
 
+- **The Internet Archive's OCR text is the cheapest route to a scanned working paper, and it beats
+  the institutional repository that holds the same scan** (added 2026-09-08). Many pre-1990 working
+  papers exist only as scans with no text layer. Before rendering page images, check
+  `https://archive.org/metadata/<identifier>` for a `<identifier>_djvu.txt` file and fetch it
+  directly from the `server`/`dir` the metadata names. Both MIT Sloan working papers behind
+  Merton's market-timing pair came back this way in seconds, while **`dspace.mit.edu` returned HTTP
+  429 to every attempt including five retries with exponential backoff** — a rate limit, not an
+  egress block, and it should be reported as such rather than as an unreachable source. Find the
+  identifier with `archive.org/advancedsearch.php?q=title:("...")&output=json`.
+
+- **`pymupdf` renders a text-layerless scan to PNG, which removes the missing-`pdftoppm`
+  dependency** (added 2026-09-08). Install it into the scratchpad `pylibs` exactly like `pypdf`
+  (`--target ./pylibs pymupdf`), then `page.get_pixmap(dpi=140).save(...)` per page and `Read` the
+  images. Always check `page.get_text()` first: a PDF that extracts 38 characters from 39 pages is
+  a scan, and no amount of `pypdf` tuning will fix it.
+
+- **`pm-research.com` (Portfolio Management Research: JPM, JFDS, JOI …) refuses an automated client
+  by redirecting into an OpenID authorization flow** (added 2026-09-08) rather than returning a
+  Cloudflare challenge. That is a third distinct refusal mode after the 403 bot challenge and
+  OpenAlex's metered budget; the article is closed, not blocked, and the honest response is to
+  record the source as *not read* and rely on nothing from it.
+
 - **When a paywalled paper's contribution *is* an algorithm, look for the author's own published
   reference implementation** (added 2026-09-07). It is a complete and unambiguous primary for the
   construction recipe, and reading it can settle evidentiary questions the prose would have

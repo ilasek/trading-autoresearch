@@ -7313,3 +7313,5 @@ candidate to satisfy a count. The lab has correctly spent zero trials once befor
    there is no drag to re-time.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-08 (learning agent): 3 notes added, see research/SUMMARY.md
