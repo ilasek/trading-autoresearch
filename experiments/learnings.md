@@ -2500,3 +2500,136 @@ across experiments; prune entries that later evidence contradicts.
   this universe rather than unexplored, `program.md`'s cold-family allocation rule cannot be
   honestly satisfied here, and amending the rule or retiring the family are both edits to a
   frozen file. Seventh consecutive session unsatisfied.
+
+- **[Measured 2026-09-08, nightly] The champion's six-tranche overlap is a breadth-generating
+  device and, on validation, essentially nothing else — 89% of the gap the lab has read as its
+  cost is the plain price of holding more names.** Twenty trials have read the −0.094 between the
+  seat (K=6, 1.120, 62.7 names) and the narrow K=1 books (1.229 at 30.3, 1.201 at 35.1) as the
+  overlap axis, i.e. as the price of holding six-month-old formations. Both K=1 books hold the
+  champion's **narrow** 15/25 band, so switching the overlap off moved selection and breadth
+  together. Two controls at K=1 and wider bands complete the axis:
+
+      K=1 book                          names   validation      fit residual
+      mom_hzn_avg4_nobuffer              30.3      1.229            +0.007
+      mom_hzn_avg4_k1_cohort_trim        35.1      1.201            -0.007
+      #85 pt_depth_vs_vintage_breadth    49.2      1.166            -0.003
+      #86 pt_depth_breadth_pinned        62.5      1.135            +0.003
+      champion, K=6                      62.7      1.120
+
+      fit  sharpe = 1.306 - 0.00278*names    R2 = 0.975    -0.0278 per 10 names
+
+  At **matched** breadth (62.5 against 62.69) the gap to the seat is **+0.015, `rho` 0.9500,
+  paired `SE` 0.127, t = +0.12** — indistinguishable. Decomposed: **breadth term −0.097 (89%),
+  vintage term −0.012 (11%, inside the floor and not distinguishable from zero)**. The narrow K=1
+  books beat the champion because they are **narrow**, not because they are **fresh**. This
+  refutes the journal's twice-flagged "the incumbent's breadth is justified by timing" reading:
+  timing and depth buy the same names at the same price.
+  **GUARD-RAIL, and it is the half that matters. This is a VALIDATION-SPLIT statement only.** The
+  human's rollback to K=6 was made on **holdout** — K=6 holds 1.292 there while the four K=1-ward
+  successors collapsed 1.377 → 0.691. Nothing here licenses a K=1 challenger. It says the
+  overlap's validation cost was mis-attributed for twenty trials; it says nothing about whether
+  the overlap belongs on the seat, and a session that reads it as an opening has read it wrong.
+
+- **[Measured 2026-09-08, nightly] Profile a score's DEPTH before choosing a band — it is free, it
+  is one pass, and it supplies the mechanism 2026-09-06 recorded without one.** That session found
+  a concentration calibration is "a property of a construction, not of a family or a score"
+  (widening monotonically good in `liquidity-volume`, every HHI-lowering vintage axis losing in
+  `price-trend`) and could not say why. The why is each score's marginal excess by rank slice —
+  train, forward 21 days, over the scoreable pool of ~96:
+
+      score                          1-15         16-30         31-45         46-62
+      champion momentum         +5.55(+1.94)  -0.34(-0.18)  -0.32(-0.25)  -0.75(-0.55)
+      region-relative ILLIQ     +7.80(+4.31)  +2.96(+1.76)  +1.75(+1.20)  -0.99(-0.70)
+      same-minus-other month    +4.54(+2.09)  -0.78(-0.48)  -0.87(-0.56)  -1.74(-1.40)
+      21d reversal              +2.22(+0.84)  +1.75(+0.95)  -2.75(-1.82)  -1.35(-0.99)
+      [ctl] GK 21d vol          -5.63(-2.15)  -3.10(-1.71)  -3.70(-2.09)  +0.27(+0.19)
+      [ctl] placebo hash        +0.98(+0.64)  -1.17(-0.81)  +2.09(+1.45)  -1.90(-1.43)
+
+  **Momentum is dead past ~15 names; `ILLIQ` carries to ~45.** So the `liquidity-volume` lead's
+  hold-45/enter-30 band sits exactly where its score's content stops, and the champion cannot buy
+  breadth from depth at all and takes it from tranches. Both incumbents are already matched to
+  their own score's profile — found by two separate empirical brackets over ~20 trials, readable
+  free in one pass. **General rule: breadth beyond where a score's marginal slices go flat is
+  dilution; the only way past that ceiling is vintage structure, and the entry above prices that
+  at −0.028 of Sharpe per 10 names, the same price depth pays.** Carry the placebo: it shows no
+  structure, which is what licenses reading the others as shapes rather than noise.
+
+- **[Measured 2026-09-08, nightly] A rank-slice screen prices an EQUAL-WEIGHT book, and this
+  repo's main line is magnitude-weighted — so the standing over-prediction rule inverts, for a
+  mechanical reason.** #85 pre-registered 0.95 and delivered 1.166, a +0.216 miss. Its screen said
+  names 16-62 carry −0.34/−0.32/−0.75 %/yr and it read that as pricing ~47 of 62 names. Capital
+  share by rank slice, holdings-only on validation month-ends:
+
+      book                            1-15    16-30   31-45   46-62    63+
+      champion  K=6 core15/band25    72.5%    17.8%    6.9%    2.6%   0.2%
+      #85 depth K=1 core22/band37    70.1%    21.2%    7.9%    0.8%   0.0%
+
+  **~71% of capital is in the top 15 in both**; the "dead" slices carry ~29-30%, not 76%, so the
+  screen over-weighted them ~2.5x. **Scope the standing rule accordingly: "a cross-sectional
+  screen over-predicts the book it motivates by roughly an order of magnitude" holds when the
+  screen's weighting matches the book's. An equal-weight slice screen applied to a
+  magnitude-weighted book is biased the OTHER way.** Second recorded exception after
+  region-demeaning, and the first with a mechanism rather than a single reading.
+
+- **[Measured 2026-09-08, nightly] `research/SUMMARY.md` #90's attenuation worry is refuted with a
+  calibrated instrument, and the eight-session blend decline does not rest on a biased number.**
+  `rho` at `q` = 1/5/10/21 on stored validation series (q=1 reproduces every leaderboard figure
+  exactly) is **flat** for all seven leads: the seated `lv_illiq_region_wide30` moves +0.7146 →
+  +0.7242, `d` = +0.0096. **Power calibration on train, synthetic equal-weight regional baskets:**
+  a known session offset moves `rho` by **+0.24 to +0.27** (US vs ASIA +0.367 → +0.639), a
+  no-offset control by **+0.012 to +0.029**. Every real pair sits in the no-offset range.
+  **The note's premise is correct and its conclusion still fails, which is the useful direction**:
+  the books *are* regionally different (champion 79.6% US, LV lead 66.6%, L1 0.423), but a
+  dose-response curve prices that gap — attenuation is **quadratic in the capital-weighted
+  regional gap**, and 13.0pp predicts `d` = +0.0031 against +0.0096 observed. Moving a
+  required-gain table whose scale is ~0.44 of Sharpe would need a 50-80pp gap, i.e. a book
+  essentially non-US against an essentially-US seat. Both books are drawn from the same
+  predominantly-US universe, so whatever staleness each carries they carry equally and it cancels
+  pairwise. **General form: a nonsynchronous-trading correction between two books over one
+  universe is second-order in their composition difference — check the difference before assuming
+  the correction.**
+
+- **[Measured 2026-09-08, nightly] Breiman's Theorem 1 (`SUMMARY.md` #88) cannot be estimated on
+  this pool — third imported statistic to fail that way, and the placebo is what says so.** The
+  screen is necessary and sufficient, so a pass would have closed `portfolio-learning` a fifth
+  time with a proof. Run on train with target and horizon fixed in advance, its `k` — the "best
+  single predictor" — comes back as the **survivorship artifact** (GK 21d vol, |IC| 0.0645, the
+  largest of any score here), and the condition **fails for a placebo hash reading no market
+  data** by a margin of 1e-6. Under a within-date permutation null with no predictability at all,
+  the condition fails for at least one rival in **200/200** screens naming **4.86 of 6** on
+  average, against **4 of 6** observed — the reading is *below* its own null — and the null picks
+  each of six scores as `k` 26-39 times out of 200, so the identification of `k` is itself noise.
+  **The mechanism, derived not guessed:** specialised to single-signal linear predictors the
+  condition is exactly `IC_i * (IC_k * c_ik − IC_i) >= 0` with `c_ik` the correlation of the
+  **signals** (verified against the residual form 6/6; with both ICs positive it reduces to
+  `c_ik >= IC_i/IC_k`). It carries a factor `IC_i`, so the margin vanishes **quadratically** as an
+  IC goes to zero — at this repo's magnitudes (all `|IC| <= 0.065`) every margin is O(1e-6…1e-3).
+  **`portfolio-learning` keeps the four closures it earned empirically and does not get a fifth.**
+  Ninth instance of "check the statistic is invariant to what it is not supposed to measure";
+  second after `eta(q)`/`DELAY` where an imported statistic is simply not estimable here.
+
+- **[2026-09-08, nightly] `range-variance` now has THREE independent statistics flattering its
+  artifact, and the eighth consecutive session declines it.** To 2026-09-06's monotonic-relation
+  pass (most monotone score in the repo) and 2026-09-07's phase-stability pass (second most
+  phase-stable, lowest phase SD), tonight adds — incidentally, from the Theorem 1 pool — that
+  **21-day Garman-Klass volatility has the largest |IC| of any score in this repo, 0.0645, against
+  the seated `liquidity-volume` lead's 0.0416 and the champion's 0.0198**, with the sign saying
+  high volatility predicts high forward return. Fourteen mechanism screens identify it as the
+  survivorship artifact and three unrelated robustness statistics rank it first. **A trial there
+  would put a knowingly-artifactual book at the top of the non-`price-trend` leaderboard, where a
+  later session would be entitled to build on it — which is worse than leaving the count
+  unsatisfied.** The recommendation is unchanged and now carries three passes: the family is
+  unreachable on this universe rather than unexplored, and `program.md`'s cold-family rule should
+  be amended or the family retired. Both are edits to a frozen file and need a human.
+
+- **[2026-09-08, nightly] Pin a breadth control on the split it will be READ on, and check both
+  sides of the comparison.** #85 matched breadth on train to 0.6% (41.59 against 41.36) and missed
+  on validation by 21% (49.22 against 62.71), so its designed comparison did not happen and cost a
+  trial to discover. The error was not the rule but its application: the file argued "a single
+  sort's book size is `m` and does not depend on pool size", which is true of the *candidate* and
+  false of the *incumbent* — the champion is a union of four horizon legs across six tranches, and
+  the union of a set operator grows with the pool (55 → 126 names). 2026-09-06's rule ("any
+  non-linear set operator must have its breadth pinned by construction") was applied to one side
+  only. **Restated so it cannot be half-applied: before matching breadth, ask of BOTH books
+  whether they are single sorts or set operators, and pin on the split the comparison will be read
+  on.** #86 re-pinned on validation and hit 62.5 against 62.69.

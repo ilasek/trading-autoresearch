@@ -7373,3 +7373,274 @@ candidate to satisfy a count. The lab has correctly spent zero trials once befor
   Nothing here licenses a K=1 challenger; it says the overlap's *validation* cost was mis-attributed,
   not that the overlap is worthless. Train 0.92 -> validation 1.135 reads **under**, as predicted.
 
+
+## Session summary — 2026-09-08 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged from the last nine
+  sessions.** `git fetch origin --prune` clean; `git branch -r --no-merged origin/main`
+  returned **nothing**, so no previous session's work is stranded off `main`. The session
+  opened on a per-run branch (`main-ecm39t`) pointing at exactly `origin/main` (`b44bcb3`);
+  as on 2026-09-06 and 2026-09-07 the session-start hook printed "integrity check OK — on
+  main" while `git status -sb` said `main-ecm39t`, so **the hook still does not detect
+  this** — third session running. Corrected to `main` before any work, per the standing
+  instruction never to run trials from a per-run branch. Engine tests green (**33 passed**)
+  before the first trial. Store fresh through **2026-09-08**.
+- Experiments run: **2 of the 8-trial budget.** Trial count **84 → 86**. Both on the
+  **scout** track, so the champion was untouched and **the holdout was not read**.
+
+      #85  pt_depth_vs_vintage_breadth  price-trend  FAMILY_LEAD  val 1.166  turn 7.0x  pos 49.2
+      #86  pt_depth_breadth_pinned      price-trend  SCOUT        val 1.135  turn 6.6x  pos 62.5
+
+  Pre-registered point estimates before either file was written: 0.95 → **1.166** (missed by
+  +0.216, the largest miss in the recent record) and 1.12 → **1.135** (hit, and the branch it
+  landed in was named in advance).
+- **Three further ideas were decided on free measurements**, all train-split or
+  holdings-only. Two are the research folder's own current proposals (#88, #90).
+
+### The night in one line
+
+The lab has spent twenty trials reading a −0.094 validation gap as the price of the
+champion's six-tranche formation-date overlap. Two matched-breadth controls say **89% of it
+is the plain price of holding more names**, and the vintage residual is not distinguishable
+from zero.
+
+### Best finding: the six-tranche overlap is a breadth-generating device and, on validation, essentially nothing else
+
+The journal has carried the same idea as its #2/#3 ranked next-idea for two sessions and no
+session had run it. 2026-09-06 measured that the incumbent's score **fails** the
+monotonic-relation test (`p` = 0.698) while its top bin carries +8.02%/yr — it picks one
+corner rather than ranking — yet the book holds ~62.7 names, ~45% of the universe. The
+standing reading was that "the incumbent's breadth is justified by timing rather than by its
+own current score". **It is not.**
+
+The two K=1 books already on the board both beat the champion (1.229 at 30.3 names, 1.201 at
+35.1) but both hold the champion's **narrow** 15/25 band, so switching the overlap off moved
+selection and breadth together — the exact error 2026-09-06 named. #85 and #86 supply K=1 at
+49.2 and at 62.5 names, the latter pinned to the champion's own 62.69:
+
+    K=1 book                          names   validation      fit residual
+    mom_hzn_avg4_nobuffer              30.3      1.229            +0.007
+    mom_hzn_avg4_k1_cohort_trim        35.1      1.201            -0.007
+    #85 pt_depth_vs_vintage_breadth    49.2      1.166            -0.003
+    #86 pt_depth_breadth_pinned        62.5      1.135            +0.003
+    champion, K=6                      62.7      1.120
+
+    fit  sharpe = 1.306 - 0.00278 * names     R2 = 0.975     -0.0278 per 10 names
+
+At matched breadth the gap to the seat is **+0.015 at `rho` 0.9500, paired `SE` 0.127,
+t = +0.12** — indistinguishable. Decomposing the −0.109 from narrow K=1 to the champion:
+
+    breadth term  (K=1 walked 30.3 -> 62.69 names)     -0.097     89%
+    vintage term  (K=6 vs K=1 at 62.69 names)          -0.012     11%, inside the floor
+
+**The narrow K=1 books beat the champion because they are narrow, not because they are
+fresh.** The overlap supplies names, not better names.
+
+**GUARD-RAIL, stated as prominently as the finding, because the finding invites exactly one
+wrong move.** This is a **validation-split statement only**. The human's rollback to K=6 was
+made on **holdout** — K=6 holds 1.292 there while the four K=1-ward successors collapsed
+1.377 → 0.691 — and no trial tonight read holdout, nor may one. Nothing here licenses a K=1
+challenger. It says the overlap's *validation* cost has been mis-attributed to staleness for
+twenty trials; it says nothing whatever about whether the overlap should be on the seat.
+
+### Second finding: `SUMMARY.md` #90's attenuation worry is refuted, and refuted with power
+
+Eight consecutive sessions of blend declines rest on one number — `rho` between a leg's and
+the champion's daily return series, which sets the paired `SE` and hence the required-gain
+table. #90 argues that daily `rho` across fifteen trading sessions is attenuated by
+nonsynchronous trading, that the attenuation grows with the difference in two books'
+effective staleness, and that the seated `liquidity-volume` lead is regionally tilted
+relative to the seat by design. The correction could only ever make a blend look *better*,
+which is why it was worth running.
+
+`rho` at `q` = 1, 5, 10, 21 (non-overlapping compounded), stored validation series. `q` = 1
+reproduces every leaderboard figure exactly, so the measurement is anchored:
+
+    leg                                q=1      q=5      q=10     q=21      d
+    lv_illiq_region_wide30 (LV lead)  +0.7146  +0.7248  +0.7065  +0.7242  +0.0096
+    pl_maxleg_signal_blend            +0.7316  +0.7423  +0.6912  +0.6792  -0.0524
+    sc_seasonal_matched_control       +0.7476  +0.7685  +0.7177  +0.7240  -0.0236
+    sl_ridge_nontrend_block           +0.6104  +0.6257  +0.5801  +0.6689  +0.0585
+
+Flat. **The reading only means something if the instrument has power, so it was calibrated
+against pairs with a known session offset** (train split, synthetic equal-weight regional
+baskets):
+
+    pair                                  q=1      q=21       d
+    US vs ASIA   (known offset)          +0.3666  +0.6386  +0.2720
+    EU vs ASIA   (known offset)          +0.4064  +0.6450  +0.2385
+    US vs EU     (partial offset)        +0.4962  +0.6409  +0.1446
+    US half vs US half   (no offset)     +0.8481  +0.8600  +0.0119
+    ASIA half vs ASIA half (no offset)   +0.7568  +0.7853  +0.0286
+
+A real offset moves `rho` by +0.24 to +0.27; a no-offset control by +0.01 to +0.03. **Every
+champion-versus-leg pair sits in the no-offset range, an order of magnitude below.**
+
+**The note's premise is right and its conclusion still does not follow, which is the useful
+direction.** The two books *are* regionally different — holdings-only on train, the champion
+is 79.6% US and the LV lead 66.6%, L1 distance 0.423. But a dose-response curve built from
+synthetic books at controlled US/non-US splits prices that gap exactly:
+
+    US-weight gap (pp)   0.0    4.6    9.6   13.0   19.6   29.6   49.6   69.6   79.6
+    predicted d        +0.000 +0.000 +0.002 +0.003 +0.007 +0.017 +0.045 +0.076 +0.090
+                                            ^ the champion-vs-LV-lead gap
+
+A 13.0pp gap predicts `d` = **+0.0031**; the observed is **+0.0096**. Attenuation is
+**quadratic in the capital-weighted regional gap**, so moving the required-gain table (whose
+own scale is ~0.44 of Sharpe) would need a 50–80pp gap — a book essentially non-US while the
+seat is essentially US. No book in this repo is remotely like that, and both are drawn from
+the same predominantly-US universe, so whatever staleness each carries they carry equally and
+it cancels pairwise. **The blend arithmetic is clean. Eight sessions of declines do not rest
+on a biased number.**
+
+### Third finding: Breimans Theorem 1 (`SUMMARY.md` #88) is not estimable on this pool — the third imported statistic to fail that way
+
+The note offers a necessary-and-sufficient screen: the best single predictor is also the best
+*stacked* predictor iff `R_kk <= R_ik` for every `i`. Target and horizon were fixed before
+computing, per the note's own rider: forward 21-day return, cross-sectionally demeaned, on
+train month-ends, with each score's best pooled linear predictor. **Two controls were carried
+throughout — the identified survivorship artifact and a placebo hash reading no market data.**
+
+    score                          IC        c_ik     (*) margin   condition
+    champion 4-horizon momentum   +0.0198   -0.1293   -2.28e-04      fails
+    region-relative ILLIQ         +0.0416   -0.0980   -1.47e-03      fails
+    same-minus-other month        +0.0030   -0.1334   +1.69e-05      holds
+    21d reversal                  -0.0250   +0.0502   -5.42e-04      fails
+    [ctl] GK 21d vol (artifact)   -0.0645   +1.0000       —          k
+    [ctl] placebo hash            -0.0007   -0.0113   -9.74e-07      fails
+
+**Two things kill it.** The screen's `k` — its "best single predictor" — is the **survivorship
+artifact**. And the condition **fails for the placebo**, which reads no market data, by a
+margin of 1e-6. Simulated under a within-date permutation null with no cross-sectional
+predictability at all, the condition fails for at least one rival in **200 of 200** screens,
+naming **4.86 of 6** on average; the observed data names **4 of 6**, i.e. *below* its own
+null, and the null picks each of the six scores as `k` between 26 and 39 times out of 200 —
+the identification of `k` is itself noise.
+
+**The mechanism was derived rather than guessed**, and the derivation is the transferable
+part. Specialising Theorem 1 to single-signal linear predictors, the condition is exactly
+
+    IC_i * ( IC_k * c_ik  -  IC_i )  >=  0
+
+where `c_ik` is the correlation of the **signals** — verified against the residual form on
+6/6 rows. (With both ICs positive it reduces to the interpretable `c_ik >= IC_i/IC_k`; the
+general form is needed here because the winner's IC is negative.) The expression carries a
+factor `IC_i`, so the margin vanishes **quadratically** as a score's IC goes to zero. At this
+repo's IC magnitudes — all `|IC| <= 0.065` — every margin is O(1e-6 … 1e-3) and decided by
+noise. **Third instance, after `eta(q)` and `DELAY`, of an imported statistic that simply
+cannot be estimated at this sample's signal level, and the ninth instance of the standing
+"check the statistic is invariant to what it is not supposed to measure".** `portfolio-learning`
+does **not** get its fifth closure with a proof; it keeps the four it earned empirically.
+
+### Fourth finding: a per-score depth profile explains a puzzle two sessions left open, and it is free
+
+2026-09-06 found that a concentration calibration is "a property of a construction, not of a
+family or a score" — widening was monotonically good in `liquidity-volume` (0.874/0.917/0.942)
+and every vintage axis that lowered HHI lost in `price-trend` — and recorded it **without a
+mechanism**. The mechanism is each score's own depth profile: marginal excess of each rank
+slice over the scoreable pool, train, forward 21 days, one grid for all scores.
+
+    score                          1-15         16-30         31-45         46-62
+    champion momentum         +5.55(+1.94)  -0.34(-0.18)  -0.32(-0.25)  -0.75(-0.55)
+    region-relative ILLIQ     +7.80(+4.31)  +2.96(+1.76)  +1.75(+1.20)  -0.99(-0.70)
+    same-minus-other month    +4.54(+2.09)  -0.78(-0.48)  -0.87(-0.56)  -1.74(-1.40)
+    21d reversal              +2.22(+0.84)  +1.75(+0.95)  -2.75(-1.82)  -1.35(-0.99)
+    [ctl] GK 21d vol          -5.63(-2.15)  -3.10(-1.71)  -3.70(-2.09)  +0.27(+0.19)
+    [ctl] placebo hash        +0.98(+0.64)  -1.17(-0.81)  +2.09(+1.45)  -1.90(-1.43)
+
+**Momentum is dead past ~15 names of a ~96-name pool; `ILLIQ` carries content out to ~45.**
+That is why the `liquidity-volume` lead's hold-45/enter-30 band was found on a monotone
+widening slope and stops right where its score's content stops, while the champion cannot buy
+breadth from depth at all and gets it from tranches instead. Both incumbent constructions are
+already matched to their own score's depth profile — arrived at by two separate empirical
+brackets over ~20 trials, and readable free in one pass. The placebo shows no structure, which
+is what licenses reading the others as shapes.
+
+### Fifth finding: a rank-slice screen prices an EQUAL-WEIGHT book, and this repo's main line is magnitude-weighted
+
+#85 missed by +0.216 and the cause is mechanical, not statistical. Its screen said names 16-62
+carry −0.34/−0.32/−0.75 %/yr and it read that as pricing ~47 of the book's 62 names. Measured
+holdings-only on validation month-ends, capital share by rank slice of each book's own score:
+
+    book                            1-15    16-30   31-45   46-62    63+
+    champion  K=6 core15/band25    72.5%    17.8%    6.9%    2.6%   0.2%
+    #85 depth K=1 core22/band37    70.1%    21.2%    7.9%    0.8%   0.0%
+
+**~71% of capital sits in the top 15 names in both.** The dead slices carry ~29-30% of capital,
+not 76%, so the screen over-weighted them by ~2.5x. The standing rule is that a cross-sectional
+screen **over**-predicts the book it motivates by about an order of magnitude; tonight it
+**under**-predicted, and the reason is a weighting-scheme mismatch rather than anything about
+the signal. **Scope the rule: it holds when the screen's weighting matches the book's. An
+equal-weight slice screen applied to a magnitude-weighted book is biased the other way.** This
+is the second recorded exception after region-demeaning, and unlike that one it has a mechanism.
+
+### Protocol and allocation notes, stated plainly
+
+- **The cold-family rule was not satisfied, for the eighth session running, and I am not
+  overturning seven sessions of evidence to satisfy a count.** `range-variance` remains the
+  only family with no recorded trial, on fourteen screened mechanisms with one identified
+  cause, two *passing* robustness tests on the artifact (most monotone score in the repo,
+  second most phase-stable), and — new tonight, incidentally, from the Theorem 1 pool —
+  **the largest |IC| of any score in this repo, 0.0645 against the seated `liquidity-volume`
+  lead's 0.0416 and the champion's 0.0198**, with the sign saying high volatility predicts
+  high forward return. That is a third independent statistic flattering the identified
+  survivorship artifact. A trial there would put a knowingly-artifactual book at the top of
+  the non-`price-trend` leaderboard, where a later session would be entitled to build on it.
+  **The recommendation is unchanged and now carries three independent passes: the family is
+  unreachable on this universe rather than unexplored, and the rule should be amended or the
+  family retired.** Both are edits to a frozen file and need a human.
+- **The `price-trend` cap of 2 was used in full, for the first time in five sessions**, and
+  the two trials are a designed pair rather than a sweep: the second changes one expression
+  (`CORE_N` 22 → 30) and exists solely to remove the first's measured confound. That is the
+  same justification the 2026-09-06 pair carried. No third `price-trend` trial was available
+  and none was taken.
+- **The per-family cap did not otherwise bind** — eight families have recorded leads.
+- **The train-as-prediction record moves 26 → 28.** #85 train 0.939 → validation 1.166 and
+  #86 train 0.92 → 1.135, both **under**. Both are admissible: unlike the 2026-09-06 pair,
+  these score on the champion's own month-ends and history requirement.
+- **The blend is declined for the ninth consecutive session, and tonight is the first time
+  that decline has been *stress-tested* rather than restated.** #90 was the live objection to
+  the number the decline rests on; it is refuted with a calibrated instrument. No new leg was
+  produced, so the 2026-09-04 arithmetic stands unchanged (`lv_illiq_region_wide30`: `rho`
+  0.7146, own Sharpe 0.942 against a two-SE requirement of 1.385–1.470).
+- **The standing ⚠ concern is unchanged at four points.** No promotion, so no fifth data point
+  and no sixth holdout look; the count since 2026-08-17 stands at five.
+- **No new lib file was added and nothing frozen was touched.** All free measurement ran from
+  the session scratchpad. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and every existing `strategies/lib/` file are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **Do not run a K=1 `price-trend` challenger on the strength of tonight's decomposition.**
+   The finding is that the overlap's *validation* cost was mis-attributed, not that the
+   overlap is unjustified — its justification is holdout, which tonight did not read. A
+   session arriving here should say so rather than re-run the path the human rolled back.
+   (Lab's own result, tonight.)
+2. **Profile a score's depth before choosing any band, and report the placebo alongside it.**
+   Free, one pass, and it now explains both of the lab's concentration brackets. The rule it
+   yields: breadth beyond where a score's marginal slices go flat is dilution, and the only
+   way past that ceiling is vintage structure — which tonight prices at −0.028 of Sharpe per
+   10 names, the same price depth pays. (Lab's own result, tonight.)
+3. **`SUMMARY.md` #91's Henriksson–Merton four-count test is the strongest unrun free screen**
+   and it is an anti-candidate's screen: it prices any hold/sit-out overlay exactly, before it
+   is built, with no distributional assumption. Worth running against the lab's *already
+   refuted* regime-switching and drawdown-braking candidates as a retrospective calibration —
+   if it would have killed them free, it earns standing use. (`research/SUMMARY.md` #91.)
+4. **`SUMMARY.md` #89's overidentifying restriction test** is the one remaining folder proposal
+   that can *fail*, and 2026-09-06's decomposition plus 2026-09-07's HRP correlation ratio give
+   it two independent priors to check against. Its rider is mandatory: simulate under a no-lag
+   null first, exactly as `DELAY` required. (`research/SUMMARY.md` #89.)
+5. **`SUMMARY.md` #82's `J*` bandwidth formula is still unrun**, carried for a third session.
+   Tonight's depth profiles are a cheaper answer to the same band question, so #82 is now worth
+   running mainly as a check on whether the formula responds to data at all — its own placebo
+   rider. (`research/SUMMARY.md` #82.)
+6. **Do not extend** `range-variance` (fourteen mechanisms, one cause, three passing robustness
+   tests on the artifact), the `calendar` half of `seasonality-calendar`, the distance method or
+   cointegration, union or intersection books of any leg count, `SUMMARY.md` #84's exclusion
+   book, the `DELAY` per-name branch, HRP, or a fourth aggregation operator over these legs —
+   and note that tonight's Theorem 1 result does **not** add a fifth closure, because the screen
+   could not be estimated.
+7. **`SUMMARY.md` #49's execution overlay** — carried unspent for a tenth session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.93x a year.
+
+**No engine issues encountered.**
