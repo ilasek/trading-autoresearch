@@ -7315,3 +7315,33 @@ candidate to satisfy a count. The lab has correctly spent zero trials once befor
 **No engine issues encountered.**
 
 ## Research session — 2026-09-08 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-08T23:22:00+00:00 — pt_depth_vs_vintage_breadth — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/pt_depth_vs_vintage_breadth.py` (family: price-trend, track: scout, trial #85)
+- Hypothesis: A book that buys the champion's breadth from the DEPTH of one fresh momentum ranking — K=1 with CORE_N/BAND_N widened 15/25 -> 22/37 so it holds 41.59 names against the champion's 41.36 on one holdings-only profiler, every other element of `strategies/champion.py` bit-identical — scores near 0.95 on validation, materially below the champion's 1.120 and far below the narrow K=1 pair's 1.201/1.229, because the incumbent's score fails the monotonic-relation test (p = 0.698) and its marginal train excess by rank slice is +5.55%/yr for names 1-15 and then -0.34/-0.32/-0.75%/yr for 16-30/31-45/46-62: the score carries everything in its top ~15 of a ~96-name pool and nothing after, so ~47 of this book's 62 names are filled from slices with negative marginal excess while the six-tranche overlap fills the same breadth with six draws from the top slice at six different formation dates. This is the missing cell of a comparison whose other three are recorded — both existing K=1 books hold the champion's narrow 15/25 band, so switching the overlap off moved selection and breadth together. Below ~1.00 says breadth-by-timing beats breadth-by-depth and the overlap earns its keep as a breadth mechanism; 1.00-1.12 says the two are inside the resolution floor and the timing story is unresolvable here; above ~1.12 says depth wins at matched breadth and the incumbent's mechanism is mis-described.
+- Verdict: FAMILY_LEAD — best result yet in family 'price-trend': validation sharpe 1.166 > 0.701 (DSR 0.9635, 85 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.94, ann_ret +15.6%, maxDD -52.9%, turnover 3.3x
+- Validation: sharpe +1.17, ann_ret +25.6%, maxDD -26.5%, turnover 7.0x
+- Deflated Sharpe prob: 0.9635 (bar from 85 trials, 24 effective)
+- Scout track: family best before this trial +0.70; the champion was not compared and the holdout was not read
+- Lesson: **Pre-registered 0.95, delivered 1.166 — the largest pre-registration miss in the recent
+  record, and BOTH of its causes are mechanical rather than statistical.** *(a) The breadth control
+  failed on the split that matters, and it failed by my own error.* The file claimed "a single
+  sort's book size is `m` and does not depend on pool size, so the match carries to validation".
+  The champion is **not** a single sort — it is a union of 4 horizon legs x 6 date tranches, and
+  the union of a set operator grows with the pool (55 -> 126 names). Measured holdings-only on one
+  profiler: train 41.36 (champion) vs 41.59 (this book), **validation 62.71 vs 49.22** — a 21%
+  shortfall, so the designed matched-breadth comparison did not happen. That is 2026-09-06's own
+  rule ("any non-linear set operator must have its breadth pinned by construction") applied to the
+  side I did not check: I verified my book would not de-broaden and never asked whether the
+  *incumbent's* would broaden. *(b) The rank-slice screen under-predicted by +0.216 because it
+  prices the wrong weighting scheme.* The screen said names 16-62 carry -0.34/-0.32/-0.75 %/yr and
+  I read that as pricing ~47 of 62 names. Both books are **magnitude weighted**, and measured on
+  validation month-ends **72.5% (champion) and 70.1% (this book) of capital sits in the top 15
+  names**; the negative slices carry ~29% and ~30% of capital, not 76%. **What the trial does
+  establish**: the "below 1.00" branch is refuted decisively, and with the two recorded K=1 cells
+  the depth axis is now a three-point bracket — 30.3 names 1.229, 35.1 names 1.201, 49.2 names
+  1.166 — monotonically decreasing at roughly -0.033 per 10 names. Extrapolated (extrapolation, not
+  measurement) to the champion's 62.7 that is ~1.12, i.e. the middle branch. The measured gap to
+  the seat is +0.046 at `rho` 0.9497, paired `SE` 0.127, **t = +0.36 — not resolvable**, and it is
+  not the designed comparison anyway. HHI 0.0529 vs the champion's 0.0618 remains an unmatched axis.
+
