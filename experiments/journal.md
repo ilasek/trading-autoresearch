@@ -7644,3 +7644,5 @@ is the second recorded exception after region-demeaning, and unlike that one it 
    unattractive for the same reason: the cheapest book on the board trades 0.93x a year.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-09 (learning agent): 3 notes added, see research/SUMMARY.md

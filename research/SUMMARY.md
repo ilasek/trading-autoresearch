@@ -52,6 +52,14 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > see the 2026-09-08 open questions for why, and for what should aim a session now that breadth is
 > genuinely exhausted.
 >
+> **Status after session 27 (2026-09-09): the coverage claim above is unchanged, because this
+> session covered no family.** It took the one method 2026-09-02 deferred *with an explicit
+> precondition* — "only if a session finds itself with no mechanism-note candidate in a thin
+> family" — which 2026-09-08 established had arrived. The result is a new cross-family section,
+> **how much of a measured result is the construction rather than the idea**, and it is
+> methodology rather than mechanism: it changes the scale on which the lab reads its own Sharpe
+> differences and proposes no new book. See candidates #92–#94, all free.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -2446,6 +2454,86 @@ measured on this universe instead — which is candidate #84 and costs no trial.
 compose into one screen rather than three: fix `J` on the grounds in the first, test the ranking's
 shape with the second, and read which end carries it with the third.
 
+### How much of a measured result is the construction rather than the idea (cross-family)
+
+**There is a second source of uncertainty in every number this lab reports, it is roughly the size
+of the first, and no gate in this repo prices it.** Menkveld et al. name the distinction: a
+*data*-generating process makes a sample random, and a standard error prices that; an
+*evidence*-generating process turns a hypothesis into a statistic, and the choices it requires —
+which measure operationalises the construct, which observations to drop, which window, which
+estimator — vary across competent researchers and add **non-standard error**, defined as the
+standard deviation across researchers of the result they report *for the same hypothesis on the
+same sample*. Handing 164 research teams one dataset and six hypotheses, they find NSE is **on par
+with SE**; that its size co-varies only weakly with team merit, code reproducibility or peer rating
+(a one-SD rise in workflow quality buys ~12%, in team quality ~8%); that peer feedback cuts it
+(~8.5% raw, ~53.5% winsorized, across four stages — the gap is extreme-result teams not moving);
+and that participants **underestimate** their own dispersion, by 9.0%–99.5% depending on the
+hypothesis, in an incentivized belief survey. The finding that should stop a reader is that the
+disagreement reaches the verdict, not just the magnitude: on the most abstract of the six
+hypotheses, 23.8% of teams reported a significant effect one way, 8.5% a significant effect the
+*other* way, and 67.7% no significance — same data, same hypothesis, each team's own `t` at a
+conventional 5%. The more abstract the construct, the wider the garden. Tier A;
+`validation_overlap: true` (sample touches 2018), `published_post_2018: true`. Nothing about the
+market the teams studied is recorded here or in the note.
+→ `notes/2026-09-09-nonstandard-errors-evidence-generating-process.md`
+
+**The same quantity, measured mechanically on portfolio sorts, is where it becomes this lab's
+problem.** Soebhag–van Vliet–Verwijmeren enumerate eleven binary construction choices drawn from a
+survey of 323 published asset-pricing studies — breakpoint level, breakpoint universe,
+negative-book-equity, microcaps, price filter, utilities, financials, industry neutralization,
+value versus equal weighting, independent versus dependent double sorts, and which market-cap date
+— build all 2,048 versions of each factor, and take the SD of the resulting statistic across them.
+**The average ratio of non-standard error to standard error across factors exceeds one**: 1.18 with
+every choice equally likely, and still 1.08 when each option is weighted by how often the surveyed
+literature actually picks it, because the literature's choices are genuinely split rather than
+concentrated on a convention. For several factors the NSE exceeds the SE outright. The dispersion
+propagates upward: which factor model wins a maximum-squared-Sharpe comparison, the optimal
+weights inside a model, and the economic gain to a mean-variance investor all move with the
+choices. The consequential nodes they name are the **breakpoint universe**, **microcap
+exclusion**, **industry adjustment** and **weighting scheme**, with **rebalancing frequency** added
+in the published abstract. Walter–Weber–Weiss corroborate independently across **14** decision
+nodes and 40 sorting variables (69,120 combinations for one variable, public code): NSEs on average
+larger than SEs, node importance varying widely by sorting variable, and — the reassuring half —
+premiums and alphas **pervasively positive** almost everywhere, so the *size* of an effect is
+design-dependent while its **sign is remarkably stable**. Two remedies: report the whole
+distribution rather than one path, or fix a conservative convention and hold it — the latter cuts
+the average NSE by about **70%**. Tier B (peer-reviewed and independently corroborated, but
+single-market US, and the full text read is the working-paper version); `validation_overlap: true`,
+`published_post_2018: true`. No Sharpe level, range or before/after from either paper is recorded;
+only ratios and proportional reductions, on the footing the 2026-09-07 and 2026-09-08 entries set.
+→ `notes/2026-09-09-nonstandard-errors-in-portfolio-sorts.md`
+
+**Two of the four nodes they name as consequential are the two this lab found consequential on its
+own, which is the strongest form this kind of agreement takes.** Region-demeaning is one of the two
+recorded exceptions to the lab's cross-sectional screen rule (their node 8, industry
+neutralization); and 2026-09-08's fifth finding — an equal-weight rank-slice screen mis-prices a
+magnitude-weighted book by ~2.5× — is their node 9, weighting scheme, discovered from the opposite
+direction. 2026-09-06's "a concentration calibration is a property of a construction, not of a
+family or a score" is the same statement in the lab's own vocabulary, and this literature says what
+that vocabulary was missing: it is a property of the construction *in general*, it has a name, and
+it is measurable.
+
+**The method for measuring it as one researcher rather than 164 teams is specification curve
+analysis, and this folder imports two of its three steps.** Simonsohn–Simmons–Nelson: (1)
+**identify** the set — enumerate the analytic decisions, enumerate each one's defensible settings,
+take the exhaustive combination, delete invalid and redundant ones, and random-subsample if the
+survivor set is too big to estimate (never prune by judgement, which reintroduces the selection the
+method exists to remove); a specification qualifies only if it is a sensible test, statistically
+valid, and non-redundant, and the authors explicitly reject padding the set with variants nobody
+would defend. (2) **Display** — estimates sorted by magnitude in a top panel, and beneath it a
+dashboard with one row per decision node, which localises *which* decision the variation covaries
+with, without assuming that dependence is linear. Two summaries fall out with no inference at all:
+the SD across the set (the non-standard error) and the share of specifications with the predicted
+sign. (3) **Joint inference** — a bootstrap that imposes the null per specification and resamples
+**the same rows across all specifications**, with the median effect, the share significant, or the
+average Stouffer `Z` as the statistic. **Step 3 is not imported**: it is a `p`-value on a family of
+tests and sits inside the standing inference embargo; steps 1–2 yield a dispersion measured on
+train, the same object as the lab's free IC, monotonicity and depth-profile screens. The paper is
+discriminating rather than universally reassuring — applied to three published findings it calls
+one robust, one weak and one not robust at all. Tier A; no validation overlap;
+`published_post_2018: true`.
+→ `notes/2026-09-09-specification-curve-analysis.md`
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -2975,6 +3063,32 @@ statistic at `q = 1, 5, 10, 21` and let the trend say whether it is real. One co
 carrying: **range-based estimators are within-day and immune to close-staleness**, which is a point
 in their favour this file had not previously stated.
 → `notes/2026-09-08-nonsynchronous-trading-econometrics.md`
+
+**[2026-09-09] A difference between two books is a difference between two constructions as much as
+between two ideas, and the gates price only one of those.** Every candidate this lab runs is one
+path through a garden — a score, plus the pool ranks are taken over, plus `CORE_N`, `BAND_N`, the
+tranche count, the lookback, the skip, the min-history filter, the weighting scheme and the cap.
+`sharpe_diff_se` and the deflator price the sampling error *inside* that path. In the two settings
+where the dispersion *across* defensible paths has been measured — 164 research teams on one
+dataset, and thousands of enumerated factor constructions — it comes out **at least as large as the
+sampling error**, it is not removed by trimming low-quality work, and practitioners underestimate
+it. Three consequences that hold across every family here. **(a)** The scale on which a Sharpe
+*difference* should be read is the dispersion of the incumbent's own construction, and that
+dispersion is measurable free on train (candidate #92) — not assumed, in either direction.
+**(b)** A signal's **sign** is the durable object and its **level** is design-dependent; this is
+the literature's own reassuring finding, and it argues for weighting the lab's free directional
+screens more heavily when deciding *what to build*, and for nothing at all in the promotion rule,
+which is frozen and belongs to the human. **(c)** The cure that is actually supported is a
+**fixed, written, uniformly-applied convention** — worth ~70% of the dispersion in the one place it
+was measured. This lab has such a convention, implicitly, through `strategies/lib/` reuse, and has
+never written it down; an unwritten convention is exactly what an autonomous agent varies without
+noticing. **The one way this principle does damage** is if a session enumerates a specification set
+through `run_experiment.py`: hundreds of construction variants are a *measurement*, free and
+train-only in the scratchpad, and putting them in `trials.jsonl` would raise the deflated-Sharpe
+bar permanently for everything after.
+→ `notes/2026-09-09-nonstandard-errors-evidence-generating-process.md`,
+`notes/2026-09-09-nonstandard-errors-in-portfolio-sorts.md`,
+`notes/2026-09-09-specification-curve-analysis.md`
 
 ## Candidate ideas for the strategy agent
 
@@ -4790,6 +4904,69 @@ hypothesis fodder, then anti-candidates.
     Tier A for the pricing theory, C for the construction.
     → `notes/2026-09-08-meta-labeling-and-the-value-of-a-filter.md`
 
+92. **[Added 2026-09-09] The champion's own non-standard error — the scale on which every Sharpe
+    difference this lab acts on should be read, measurable free on train, and both answers are
+    findings.** The lab's live decisions all turn on Sharpe *gaps*: seven promotions, the
+    required-gain table, nine consecutive blend declines. `sharpe_diff_se` prices the sampling
+    error inside one construction and nothing about the dispersion the other defensible settings of
+    the same knobs would have produced. **The measurement**: take the seated champion **unchanged
+    in signal**, enumerate the defensible settings of the nodes its own journal shows the lab
+    moving — pool the ranks are taken over, `CORE_N`, `BAND_N`, tranche count `K`, lookback, skip,
+    min-history, weighting scheme — delete invalid combinations (`BAND_N < CORE_N`), random-
+    subsample if it does not fit the compute budget, and score every survivor **on train only, in
+    the scratchpad**. Report two things: the **SD of train Sharpe across the set** (the champion's
+    NSE) and the **dashboard** — which node the variation localises on. Then compare that SD to the
+    promotion margins in `trials.jsonl`. **Small relative to the margins** → the lab's rankings are
+    about signals, the challenge is answered, and this closes. **Comparable** → a share of the
+    repo's recorded history is a ranking of construction paths, and the response is a written house
+    convention (#93), not another candidate. **Two preconditions, both mandatory.** *(i)* Nothing
+    goes through `run_experiment.py` — hundreds of variants in `trials.jsonl` would raise the
+    deflated-Sharpe bar for every future candidate and read validation; if the variants cannot be
+    scored free, the diagnostic is not available. *(ii)* **Pre-commit**: write the node list and
+    each node's settings into the journal entry *before* scoring anything, and treat a node added
+    after seeing results as a finding about the agent rather than about the strategy — the method's
+    own authors name motivated set-shaping as its residual failure mode, and a nightly agent
+    enumerating, scoring and reporting alone is that failure mode with nobody in the loop. Note
+    what this is **not**: no haircut, no correction, no adjustment to any `t` — a train-split
+    dispersion, on the same footing as the lab's IC, monotonicity and depth-profile screens, which
+    is why it is takeable one step from the standing inference embargo. Free, no trial. Tier A.
+    → `notes/2026-09-09-specification-curve-analysis.md`,
+    `notes/2026-09-09-nonstandard-errors-evidence-generating-process.md`
+
+93. **[Added 2026-09-09] Write down the house construction — the only remedy the literature
+    actually supports, and it costs nothing.** Fixing a small number of conservative construction
+    choices and holding them uniformly across candidates cut the average non-standard error by
+    about **70%** in the one setting where it was measured; *which* convention was chosen mattered
+    far less than that one was fixed. This repo has such a convention implicitly, via
+    `strategies/lib/` reuse, and it exists nowhere in writing. **The action**: a strategy session
+    appends to `experiments/learnings.md` a short block naming the defaults — which pool ranks are
+    computed over, equal versus magnitude weighting, the min-history filter, whether region-
+    demeaning is applied, the rebalance cadence — and the rule that a candidate varying one of them
+    is varying a *construction*, not testing a *signal*, and must say so in its hypothesis line.
+    Two riders. *(a)* Do **not** import the published conventions: their consequential nodes are
+    dominated by microcap and exchange filters on a several-thousand-name US cross-section, and on
+    a ~145-name large-cap global universe with no microcaps those nodes partly collapse while
+    `CORE_N` — a far coarser lever on a ~96-name scoreable pool than a quintile breakpoint on 3,000
+    names — has *more* room. Re-measure the ranking here; `CLAUDE.md` already requires exactly this
+    of constants carried across families. *(b)* The min-history filter belongs in the list as an
+    explicit node, not as a fixed background: on a current-constituents universe, concentrating the
+    book on the longest histories concentrates it on the identified survivorship artifact. Free, no
+    trial, no frozen file touched. Tier B.
+    → `notes/2026-09-09-nonstandard-errors-in-portfolio-sorts.md`
+
+94. **[Added 2026-09-09] A cheap standing discipline: when a candidate differs from an existing
+    book at more than one node, score the intermediates free on train first.** The full curve of
+    #92 is an afternoon; this is minutes, and it is the same idea at `K = 8`. A proposal that
+    changes both a signal and a construction knob cannot be attributed after the fact, and the
+    lab's own record shows both outcomes of that confusion — 2026-09-08's `price-trend` pair was
+    deliberately designed as two trials differing in a *single* expression (`CORE_N` 22 → 30)
+    precisely to remove the first's confound, which is a two-point specification curve arrived at
+    by instinct. Generalise it: enumerate the intermediate combinations, score them on train in the
+    scratchpad, and spend the trial only on the variant whose gain survives holding every other
+    node at the house default. This converts the lab's most common self-inflicted ambiguity into a
+    free measurement, and it is the cheapest item on this list. Free, no trial. Tier A.
+    → `notes/2026-09-09-specification-curve-analysis.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -4821,8 +4998,118 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-06 (session 24) | **The first session in six that did not arrive to a spent list — and the reason is that no nightly ran.** `experiments/journal.md` records a 2026-09-04 nightly and then nothing but the 2026-09-05 research pointer, so **#78, #79 and #80 are unrun and still stand**; this session deliberately did not re-cover `lead-lag-spillover` on top of them. With every family either closed by the lab or carrying a live proposal, the focus was taken from the lab's own next-idea list instead: roughly twenty-five non-`price-trend` books inherited `hold-30/enter-20` from a construction designed on the full cross-section, and the 2026-09-05 bracket was the first evidence the band is too narrow. The shape is *three design choices of one object* — every strategy this repo has ever run ranks a score and holds a band, and the folder had never covered how many bins that implies, whether the ranking is monotone, or which end a long-only book uses. Three primaries, all tier-1 venues, **all read in full** from author or public mirrors. The session's two most useful outputs are both negative-shaped: the sorting-as-nonparametric-estimation theory says its own **asymptotic regime does not exist at `n ≈ 140`** (the two rate conditions want `J ≪ 21` and `J ≫ 45`), which converts band width from a tuning problem into a design decision; and the long/short decomposition **contradicts a standing rule in this file** — the "expect roughly a third" discount is benchmark-specific, and for an equal-weight long-only book the right benchmark is the equal-weight universe, under which the bottom band enters a book's return with the same standing as the top. Three free measurements follow (#82, #83, #84), and #84 proposes a construction shape the lab has never built: an exclusion book. | Cattaneo–Crump–Farrell–Schaumburg 2020 (REStat; the typeset article read in full from `maxhfarrell.com`) (`2026-09-06-number-of-portfolios-as-tuning-parameter.md`); Patton–Timmermann 2010 (JFE; the published article read in full from the first author's Duke page) (`2026-09-06-monotonicity-tests-for-portfolio-sorts.md`); Israel–Moskowitz 2013 (JFE; the typeset article read in full from a public mirror) (`2026-09-06-long-side-share-of-anomaly-profits.md`) |
 | 2026-09-07 (session 25) | **The first session in seven aimed by neither the lab nor the standing list, and deliberately so: the 2026-09-06 nightly *did* run, so the list was not spent — it was answered — and what it left behind was an instruction not to write more construction methodology.** The 2026-09-06 nightly closed `portfolio-learning` on its third operator, killed #84's exclusion book on its own precondition (no score in the repo has a bottom band carrying more than its top), ran #83's monotonicity test in full, and resolved #78 into "measurement in one partition, forbidden-horizon cross-asset effect in the other" — and its own next-idea list says the sorted-book vein is thin and should not be re-worked. So the focus was chosen the only way left: **by asking which sub-mechanisms `program.md` names that this folder has never covered at all.** Two were found by direct search across all 76 prior notes, and they are the session's spine: **cointegration** (named under `statistical-arbitrage`, **zero** notes) and **hierarchical risk parity / clustering-based allocation** (named under `portfolio-learning`, **zero** notes, and untouched by all three of that family's closures because those are signal-aggregation operators and this is a weighting object). The third note is the family's *shock* branch, where every previous `liquidity-volume` note is about a *level*. **The shape of the session is two closures and one contested lead.** Both closures are cheap and both foreclose a move the lab would plausibly have made: cointegration is the obvious repair to the refuted distance method and has already been measured as a wash against it, and HRP is the obvious "we haven't tried a clustering allocator" move whose primary evidence turns out to be a Monte Carlo that never benchmarks 1/N. **The contested one is the point of the session.** The high-volume return premium is a third object in a class this lab has twice measured as null — and the case for one more look is not that the source is famous but that 2026-09-06's own monotonicity result showed IC is blind to a corner, while both prior screens graded a continuous score and this source's claim is explicitly about the top decile of a within-name distribution. Candidate #85 is that diagnostic, pre-registered, free, and closes the branch on the right statistic if it comes back null. **Access and index behaviour**: full text read directly for four of six sources — a Wharton Rodney L. White working-paper PDF carried the complete JF argument, an author's GitHub Pages copy (`randlow.github.io`) the *Quantitative Finance* article, **EconStor** two separate items (an MDPI gold-OA article whose own site 403s an automated client, and the FAU discussion-paper version of a *Journal of Economic Surveys* survey), and arXiv a preprint. **EconStor is the session's new reliable channel and belongs on the README's list** — it served a gold-OA paper the publisher itself refused. Two sources are recorded as **not read**: a closed JFE replication (its finding taken from the publisher's abstract via RePEc, flagged in-note) and a closed *Future Generation Computer Systems* article recorded as a bare pointer with no finding relied on, precisely so a later session does not re-find it and mistake a search snippet for evidence. The HRP algorithm itself was read from **the author's own published reference implementation** rather than the paywalled JPM prose — a channel worth remembering for method papers. Index limits, both documented ones in one session: **Semantic Scholar's DOI endpoint worked for four DOIs and then 429'd**, and **OpenAlex's daily budget was exhausted mid-session** (`Insufficient budget`), so the last two counts are Crossref-only. Two more instances of the standing "disbelieve a lone count": S2 returns *not found* for `10.1111/0022-1082.00280`, a JF article with 1086 Crossref and 1559 OpenAlex citations (a **ninth** instance, and the third consecutive session where the missing index is S2 on a tier-1 finance DOI), and the HRP primary returns 225 / 292 / 222 across S2 / OpenAlex / Crossref. | Gervais–Kaniel–Mingelgrin 2001 (JF; the Wharton working paper carrying the published argument, read in full) + Kaniel–Ozoguz–Starks 2012 (JFE; **abstract only**, closed access) (`2026-09-07-high-volume-return-premium.md`); López de Prado 2016 (JPM; **algorithm read from the author's own reference implementation**, prose closed) + Cotton 2024 (arXiv, read in full) + Jain–Jain 2019 (Risks, read in full via EconStor) + Raffinot 2017 (JPM, metadata only) (`2026-09-07-hierarchical-risk-parity-clustering-allocation.md`); Rad–Low–Faff 2016 (Quantitative Finance; author-hosted copy read in full) + Krauss 2017 (J. Econ. Surveys; the IWQW discussion-paper version read in full) (`2026-09-07-cointegration-pairs-versus-distance-method.md`) |
 | 2026-09-08 (session 26) | **The session arrived to a list that was neither spent nor answered but *declined* — the 2026-09-07 nightly ran and spent zero trials, screening all three of this file's live proposals against the idea rather than a candidate file, and its own message was that the bottleneck is not idea supply.** #85's within-name volume-state book was killed outright (pooled phase effect far below the seated lead's, churn an order of magnitude larger than any effect measured); #79's `DELAY` closed with its statistic at **0.94x its own null in level, spread and persistence**, leaving `lead-lag-spillover` with no live branch; #86's HRP was declined and the free measurement **refuted the note's own prediction by an order of magnitude** (74–79% deviation from equal weight against the "few percent" predicted) while strengthening the verdict. Only #82 is still unrun. **So the focus was taken the same way 2026-09-07 took it — from `program.md`'s sub-mechanism clauses rather than its family headings — and the one remaining clause with zero notes was `portfolio-learning`'s "stacking or meta-labelling", which this file's own 2026-09-07 audit had named as the honest next gap.** Both halves are covered, and covering them turned out to supply the *structural* reason four empirical closures in that family were inevitable: a fully-invested long-only book sits on the simplex (`α ≥ 0`, `Σα = 1`), which is exactly Breiman's interpolating-predictor condition, so the "gain is bounded by the components' disagreement" result recorded five times in `learnings.md` is a theorem rather than a regularity — and the only linear escape, dropping `Σα = 1`, means holding cash, which the second note prices exactly as a market-timing bet worth `Δ·g·(p1+p2−1)`. **The third note is a measurement note aimed at an artifact the lab has now measured twice without a generator** (a ~4x regional cross-serial offset on 2026-09-06, a 4.8x daily-versus-weekly correlation ratio on 2026-09-07): the non-trading model produces both in closed form, and a corollary derived here from its own equations says the observed cross-group correlation is `√((1−p_a²)(1−p_b²))/(1−p_a p_b)` — unity when two groups share a staleness, attenuated only by the difference. That lands on the `rho` every blend decision in this repo is priced on (#90). **Four free screens follow (#88, #89, #90, #91), three of them tests that can fail**, and two of the three notes end in anti-candidates. **Access and index behaviour**: all four Tier-A primaries **read in full**. The Berkeley statistics tech-report archive served the typeset *Machine Learning* article; NBER served the working-paper version of the *Journal of Econometrics* article as a **scan with no text layer** (38 characters from 39 pages), read by rendering to PNG with **`pymupdf`** — which also removes the missing-`pdftoppm` dependency the README notes. **The session's new channel is the Internet Archive's OCR text**: MIT DSpace, which holds the same two Merton scans, returned HTTP 429 to every attempt including five retries with backoff, while `archive.org` served both items' `_djvu.txt` full text instantly — check `archive.org/metadata/<id>` for a `_djvu.txt` before rendering anything. Three sources recorded **not read**: the two *Journal of Financial Data Science* meta-labelling articles (publisher redirects an automated client into an OpenID flow) and the López de Prado book, with the construction taken instead from the authors' **own published reference implementation** and **no finding relied on from any of the three**. Index behaviour, two more instances of "disbelieve a lone count" and both of new kinds: Breiman's article carries **two separate Crossref DOI registrations** for the identical pages (923+464 Crossref, 1414+452 Semantic Scholar), so any single lookup understates it by a third to a half; and the Lo–MacKinlay *Journal of Econometrics* DOI is **not found by Semantic Scholar at all** while OpenAlex holds it merged into the NBER working paper with a count of 3, leaving Crossref's 588 as the only usable figure. | Breiman 1996 (Machine Learning; the typeset article read in full from `statistics.berkeley.edu`) with Le Blanc–Tibshirani 1996 (JASA, **not read**, its conclusion quoted from Breiman's own description) (`2026-09-08-stacked-regressions-nonnegative-weights.md`); Merton 1981 (Journal of Business, Part I) + Henriksson–Merton 1981 (Part II), **both read in full via Internet Archive OCR of the MIT Sloan working papers**, with López de Prado 2018 (book), Joubert 2022 and Meyer–Joubert–Alfeus 2022 (JFDS) all **not read** and used only for the construction (`2026-09-08-meta-labeling-and-the-value-of-a-filter.md`); Lo–MacKinlay 1990 (Journal of Econometrics; NBER WP 2960 read in full by page-image rendering) (`2026-09-08-nonsynchronous-trading-econometrics.md`) |
+| 2026-09-09 (session 27) | **The first session aimed by this file's own conditional rather than by a gap: 2026-09-08 declared breadth genuinely exhausted ("the next session should not look for an uncovered mechanism; there is not one") and 2026-09-02 had gated one last method on exactly that condition — the literature on how much of a measured result is the *construction* rather than the idea.** Taken tonight: the concept and its magnitude (164 teams, one dataset), its mechanical measurement on portfolio sorts (2,048 and 69,120 enumerated constructions, two independent teams), and the single-researcher method for enumerating and displaying it. The session's shape is one measurement the lab can run free on train, one convention it can write down for nothing, and one standing discipline — plus an explicit declaration of which third of the method is *not* imported, because it is inference. | Menkveld, Dreber, Holzmeister, Huber, Johannesson, Kirchler, Neusüss, Razen, Weitzel et al. 2024 (JF; Bank of England Staff WP 955 read in full) (`2026-09-09-nonstandard-errors-evidence-generating-process.md`); Soebhag–van Vliet–Verwijmeren 2024 (J. Empirical Finance; FoFI 2022 working-paper copy read in full, published abstract read via OpenAlex) with Walter–Weber–Weiss 2022/2024 (SSRN, **not read in full** — abstract, authors' blog and public code only) (`2026-09-09-nonstandard-errors-in-portfolio-sorts.md`); Simonsohn–Simmons–Nelson 2020 (Nature Human Behaviour; Wharton-hosted published article read in full), with Steegen–Tuerlinckx–Gelman–Vanpaemel 2016 cited as the acknowledged predecessor and **not read** (`2026-09-09-specification-curve-analysis.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-09] Read this first: the 2026-09-08 nightly ran, spent its full `price-trend` cap and
+  a great deal of free measurement, and answered two of this file's three live proposals.** #88 is
+  decided and negatively — Breiman's Theorem 1 margin carries a factor `IC_i` and vanishes
+  quadratically as IC goes to zero, so at this repo's signal level (`|IC| <= 0.065`) every margin
+  is O(1e-6…1e-3) and decided by noise; it is the third imported statistic that simply cannot be
+  estimated on this sample, after `eta(q)` and `DELAY`. #90 is decided and **refuted**: the
+  attenuation objection to the `rho` every blend decline rests on was tested with a calibrated
+  instrument and did not survive, so the 2026-09-04 arithmetic stands unchanged and the ninth
+  consecutive decline is the first that was stress-tested rather than restated. **Still unrun from
+  the pre-tonight list: #89, #91 and #82** — #82 now carried for a fourth session, and the nightly's
+  own ranking puts #91 first of the three. Two of tonight's three additions are deliberately not
+  more of the same: #93 needs no compute at all, and #94 is a discipline rather than a proposal.
+- **[2026-09-09] What should aim the next session, in order.**
+  - **#93 first, because it is the only item on this list that costs nothing — not a trial, not an
+    afternoon of compute, not a frozen file.** Write the house construction into
+    `learnings.md`. The 70% figure behind it is the one remedy in this literature with a measured
+    size, and the finding is that *fixing* a convention matters far more than which convention is
+    fixed. This lab has the convention and has never written it down.
+  - **Then #92, and it is the one that could change how every other number in this repo is read.**
+    It is an afternoon of train-split computation and it prices the scale of the Sharpe differences
+    seven promotions and nine blend declines have turned on. Both answers are findings, and its two
+    preconditions — nothing through `run_experiment.py`, and the node list pre-committed in the
+    journal before anything is scored — are not optional garnish: without the second the diagnostic
+    is the failure mode it exists to detect.
+  - **#94 needs no session of its own.** It is a standing rule to apply the next time a candidate
+    differs from an existing book at more than one node, and the lab has already followed it once
+    by instinct.
+  - **Then the lab's own standing three, in its own order: #91, #89, #82.** Nothing tonight
+    displaces them, and tonight's items are screens on the lab's *existing* books rather than
+    proposals for new ones, so they compose with rather than compete against that list.
+- **[2026-09-09] The 2026-09-08 warning was taken seriously and is worth restating for whoever
+  arrives next.** That entry said: when a session declines every constructible idea, the bottleneck
+  is not this folder's supply of proposals, and the correct response is not to write more of them.
+  Tonight added **no candidate construction**. #92 and #94 are measurements on books the lab already
+  owns, #93 is a documentation action, and the whole session is aimed at the *scale* the lab reads
+  its own results on rather than at anything to build. If the next nightly declines everything
+  again, that is still the right call and this file should still not answer it with more mechanisms.
+- **[2026-09-09] The rule this session followed, and it was this file's own conditional rather than
+  a discovery.** 2026-09-02 named "pre-registration and specification-curve/multiverse reporting"
+  as *the one genuinely uncovered thing left*, declined it as sitting under the inference embargo,
+  and gated it on "a session finding itself with no mechanism-note candidate in a thin family —
+  which was not the case tonight and is unlikely to be next time either." 2026-09-08 then
+  established that the precondition had arrived: every named family and sub-mechanism covered,
+  breadth genuinely exhausted, "the next session should not look for an uncovered mechanism; there
+  is not one." Tonight is the first session where those two entries met, and the conditional fired.
+  **The durable lesson: a deferral written with an explicit precondition is a live instruction, not
+  a closed one, and it should be re-read whenever the standing situation changes** — this one sat
+  unread for six sessions because it was filed as a refusal. A quick audit of what is still deferred
+  with a precondition attached: nothing else, as far as a search of this section finds. **What
+  should aim a session after tonight is therefore still open**, and the honest candidates are
+  unchanged from 2026-09-08: deepen the measurement vein, or escalate the cold-family rule — which
+  is an edit to a frozen file and needs a human. This folder still cannot make that edit.
+- **[2026-09-09] The embargo boundary this session ran closest to, and exactly where it was drawn.**
+  All three sources sit adjacent to the standing multiple-testing and inference embargo, and the
+  line taken is the one 2026-09-06 set for Patton–Timmermann: **a dispersion measured on train is
+  admissible; a correction, haircut or threshold adjustment is not.** Concretely, three things were
+  declined and one boundary was tested.
+  - **Declined: step 3 of specification curve analysis.** Its joint test — median effect, share
+    significant, or average Stouffer `Z`, against a bootstrap null imposed per specification — is a
+    `p`-value on a family of tests, and it is described in the note only so a future session can
+    overrule this judgement rather than rediscover it. The argument to beat, if one wants to: it
+    yields a *decision rule*, and this lab's decision rules live in a frozen file that belongs to
+    the human. Note that its bootstrap resamples **the same rows across all specifications**, the
+    same dependence device as the studentized stationary bootstrap the lab already accepts in
+    2026-09-06's monotonicity screen — so the objection is to what the test *outputs*, not to how
+    it handles dependence.
+  - **Declined: the p-hacking framing.** Both sorts papers motivate themselves partly as a
+    multiple-testing story — construction ambiguity is what *enables* p-hacking, and the natural
+    next step is "the deflator's denominator should be the size of the design space, not the number
+    of trials run." That is a haircut argument, it is embargoed, and it is not recorded anywhere in
+    this file or its notes. What is recorded is the dispersion itself.
+  - **Declined: every performance level.** Both sorts papers report Sharpe levels, ranges and
+    before/after figures for named factors over dated samples, and none appear here. Recorded
+    instead: the **ratio** NSE/SE (1.18 uniform, 1.08 popularity-weighted), the **proportional**
+    reduction a fixed convention buys (~70%), and the dispersion of researcher *verdicts*
+    (23.8%/8.5%/67.7%). The first two are properties of a design space on the same footing as the
+    2026-09-07 cost-consumed fraction; the third is a property of the evidence-generating process,
+    not of any market.
+  - **Tested and held:** the multi-analyst study's underlying subject is trends in market-quality
+    measures on a real market over 2002–2018. Nothing about that market — no direction, no
+    magnitude, not even which hypothesis concerned what — is recorded in the note or here. Only the
+    shape of the distribution of answers.
+- **[2026-09-09] Access notes for the recipe, including two new channels and one new refusal.**
+  - **A central bank's staff working-paper series is a reliable open route to a paper published in
+    a top-tier journal** — the *Journal of Finance* article was read in full as Bank of England
+    Staff Working Paper No. 955, served first try, while SSRN 403'd as always. Worth trying
+    whenever a paper has policy-institution co-authors: BoE, ECB, Fed, BIS and IMF all host the
+    working-paper version openly.
+  - **A conference programme's own file server is a second such route.** The `Journal of Empirical
+    Finance` article was read in full as the FoFI 2022 conference copy hosted at
+    `wp.lancs.ac.uk/fofi2022/`, which ScienceDirect refuses to serve an automated client (and which
+    SSRN also 403s) — a *gold-OA-adjacent* article reachable only through the conference that
+    accepted it. Search the paper's title plus "conference" or a programme site before giving up.
+  - **OpenAlex's `abstract_inverted_index` reconstructs a published abstract when the publisher
+    refuses the page**, and it is how the *published* version of a paper read as a working paper
+    was checked against the version read. It cost one metered call and settled a real discrepancy:
+    the published choice set names rebalancing frequency, which the working paper does not vary.
+    Reconstruct with `{pos: word}` over the index and join in key order.
+  - **New refusal mode: `urisohn.com` returned HTTP 406 to `curl`** — not a Cloudflare challenge,
+    not an OpenID redirect, not a metered budget, but a plain content-negotiation refusal. The same
+    published article came back first try from the **Wharton faculty platform**
+    (`faculty.wharton.upenn.edu/wp-content/uploads/`), which is now a confirmed channel. That makes
+    four distinct refusal modes on record; an author's personal site is not automatically the
+    easiest copy.
+  - **Semantic Scholar behaved exactly as the README documents**: four DOI lookups served, then the
+    `/paper/search` title endpoint 429'd immediately. Look up by DOI, space the calls, and do not
+    spend one on a title search.
+
 
 - **[2026-09-08] Read this first: the 2026-09-07 nightly ran and declined everything, which is a
   different situation from a spent list or an answered one.** It spent **zero trials** and screened
