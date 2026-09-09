@@ -7706,3 +7706,234 @@ is the second recorded exception after region-demeaning, and unlike that one it 
   concentration account did not predict and which no risk-contribution reading would have
   caught. **No fourth point** — that would be the sweep the manual forbids.
 
+
+## Session summary — 2026-09-09 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged from the last ten
+  sessions.** `git fetch origin --prune` clean; `git branch -r --no-merged origin/main`
+  returned **nothing**, so no previous session's work is stranded off `main`. The session
+  opened on a per-run branch (`main-n625bx`) pointing at exactly `origin/main` (`2d4f534`)
+  while local `main` was 5 behind; as on 2026-09-06, -07 and -08 the session-start hook
+  printed "integrity check OK — on main" while `git status -sb` said `main-n625bx`, so **the
+  hook still does not detect this** — fourth session running. Corrected to `main` before any
+  work, per the standing instruction never to run trials from a per-run branch. Engine tests
+  green (**33 passed**) before the first trial. Store fresh through **2026-09-09**.
+- Experiments run: **2 of the 8-trial budget.** Trial count **86 → 88**. Both on the
+  **scout** track, so the champion was untouched and **the holdout was not read**.
+
+      #87  sc_seasonal_depth_narrow  seasonality-calendar  FAMILY_LEAD  val 0.846  turn 20.6x  pos 10.4
+      #88  sc_seasonal_depth_wide    seasonality-calendar  SCOUT        val 0.705  turn 17.1x  pos 33.0
+
+  Pre-registered point estimates, with ranges, before either file was written: 0.89
+  (0.80-0.98) → **0.846**, and 0.72 (0.65-0.80) → **0.705**. Both inside their ranges; the
+  second time this lab has hit a two-sided pre-registration.
+- **Three further ideas were decided on free measurements** — one of them a band trial killed
+  outright. All train-split or holdings-only; nothing scored a candidate return series.
+
+### The night in one line
+
+The lab's newest mechanism — 2026-09-08's per-score depth profile — had been fitted on the two
+concentration brackets that already existed and had never predicted one. Asked to predict a
+third, in a family whose band was never chosen but inherited, **it named the sign in advance
+and the bracket came back monotone**.
+
+### Best finding: the depth-profile mechanism passes its first prospective test, and the two families' brackets point in opposite directions
+
+2026-09-06 found that a concentration calibration is "a property of a construction, not of a
+family or a score" — widening monotonically **good** in `liquidity-volume`, every HHI-lowering
+axis **losing** in `price-trend` — and recorded it without a mechanism. 2026-09-08 supplied one:
+each score's marginal excess by rank slice, with the rule **breadth beyond where a score's
+marginal slices go flat is dilution**. Fitted on both existing brackets; never asked to forecast.
+
+`seasonality-calendar` is the clean prospective case, because its seated lead
+`sc_seasonal_matched_control` (0.782, 21.14 names) never chose its band: `CORE_N`=20/`BAND_N`=30
+was inherited verbatim from the union book's machinery, as that file's own docstring says. The
+profile, measured free on **that book's own union-joint pool** before either candidate was
+written (train, forward 21d, equal-weight slice excess, placebo = hash of (date, ticker) reading
+no market data):
+
+    score                     1-10        11-15       16-20       21-30       31-45       46-62
+    same-minus-other month  +11.48(5.75) +1.70(0.81) -0.08(-.04) -3.77(-2.05) +0.17(0.13) -1.62(-1.25)
+    [ctl] placebo hash       -0.89(-.59) -2.49(-1.12) +4.07(1.74) +1.44(0.87) +0.08(0.06) -2.24(-1.77)
+
+**The content is over by rank 15 and the 21-30 slice the inherited band reaches into is
+significantly negative.** Two arms, each moving that single node in one direction, everything
+else bit-identical:
+
+    val names   validation Sharpe
+      10.41         0.846      #87 narrow (10/15)
+      21.16         0.782      seated     (20/30)
+      32.96         0.705      #88 wide   (30/45)
+
+    fit  sharpe = 0.912 - 0.00624*names     R2 0.999     **-0.0624 per 10 names**
+
+Recomputed from the stored validation series, which reproduce all three `run_experiment`
+figures exactly. Against the other two families on the same axis: `price-trend` **-0.0278** per
+10 names, `liquidity-volume` **+0.0277**. **The sign flips across families and was called in
+advance from the marginal slices alone.** The quantile contrast rules out "narrower is simply
+better": `ILLIQ` still pays at **48%** of its own (~77-name) pool while the seasonal score
+already dilutes at **16%** of its larger (~134-name) one.
+
+**Read the shape, never the levels**, per 2026-09-04. Pairwise `rho` 0.936-0.987, closed-form
+paired SE 0.065-0.144, |t| **0.53-1.20** — not one gap is individually resolvable. What is
+established is an ordering across a 3.17x span, and **no fourth point** was taken.
+
+Two riders. **Costs work against the hypothesis on both arms** — narrowing paid +1.73x of annual
+turnover, widening *saved* 1.94x — so the ordering cannot be a broker artifact in either
+direction, which is the failure mode `learnings.md` records swamping four consecutive
+non-`price-trend` trials. And **validation maxDD is flat across the whole span** (-33.2% /
+-34.2% / -32.6%): halving or tripling this book bought no drawdown protection at all. That is
+not what the concentration account predicts and not something a risk-contribution reading would
+have caught — the statistic is blind to anything not cross-sectional and contemporaneous, and
+this is a *membership* change.
+
+**Train Sharpe was withheld from the train-as-prediction record prospectively**, not discovered
+after the fact: a band change silently changes the train sample here (2026-09-04), and the joint
+pool averages 73.1 names on train against 133.8 on validation, so month-ends scoreable at band
+15 / 30 / 45 are **318 / 253 / 202** — three arms, three train windows. Validation is **72 of 72
+at every band**, which is why the bracket is quoted there alone. The record holds at n = 28.
+
+### Second finding: `SUMMARY.md` #91's four-count test is a kill switch whose green light does not transfer — and the reason is not the one the note gives
+
+The journal's #3 next-idea asked for exactly this: run Henriksson-Merton against overlays the
+lab has **already adjudicated with real trials**, and let it earn standing use only if it would
+have called them free. Train split, non-overlapping monthly holding periods, the bet being the
+equal-weight universe return (a market statistic the calendar screens already compute, not a
+candidate's P&L). `p1` = P(off | the bet would have lost), `p2` = P(on | it would have won);
+worth exactly zero iff `p1 + p2 = 1`; exact hypergeometric conditioning on the number of "off"
+calls, which is what catches the stopped clock:
+
+    overlay                              N1   N2  n_off     p1     p2   p1+p2  p(exact)  value/yr
+    champion cohort vol trim (SEATED)   235  424      8  0.021  0.993   1.014     0.112    +0.27%
+    200d trend switch      (REFUTED)    235  424    127  0.243  0.835   1.077     0.011    +3.63%
+    drawdown hysteresis brake (REFUTED) 235  424     61  0.089  0.906   0.995     0.634    -0.09%
+    [ctl] stopped clock, 5% off-rate    235  424     16  0.021  0.974   0.995     0.732    -0.09%
+
+**One hit, one miss, one unreadable.** The hit is real and is what earns the screen its place:
+the drawdown brake — which cost this lab a trial and made 2022 worse — reads `p1 + p2` = 0.995
+at p = 0.634, **a null the test would have called for free**. The miss is in the dangerous
+direction: the 200d trend switch reads **1.077 at p = 0.011**, a green light, on a mechanism the
+lab refuted.
+
+**The obvious rescue is wrong and was checked rather than assumed.** #91 warns that a long-only
+gate's swings to cash carry turnover the frictionless model does not charge, and
+`learnings.md` prices a monthly boundary-crossing overlay here at -3.565%/yr — which would wipe
+out +3.63%. It does not apply: the trend switch toggles **1.46 times a year**, not monthly, for
+a transition cost of **-0.44%/yr**. Costs do not explain the miss.
+
+**What does explain it is that the answer is a property of the bet, and the bet a session can
+compute for free is not the bet that decides the trial.** The same overlay, the same 70
+validation months, priced against two different bets (champion series read from
+`experiments/trial_returns/`, no re-run):
+
+    bet the overlay is applied to              n_off     p1     p2   p1+p2  p(exact)  value/yr
+    equal-weight universe (the free proxy)        15  0.185  0.767   0.953     0.777    -2.24%
+    champion's own book (what it de-risks)        15  0.161  0.744   0.905     0.897    -6.26%
+
+The train green light (1.077) does not survive out of sample (0.953), and holding the split
+fixed, the free proxy reads **higher** than the book the overlay would actually sit on (0.953 vs
+0.905). Both validation readings are nulls, n = 70, and neither gap is significant — so what is
+established is that **the free reading did not transfer**, not a calibrated size for the
+bet-dependence.
+
+**And the test cannot price the one overlay this lab kept.** The champion's cohort trim fires on
+**8 of 659** month-ends, so the hypergeometric has no power on it (p = 0.112) — but that is the
+wrong cadence in the first place: it is a *daily* overlay, firing **155 of 14,009 train days**.
+Run at its own cadence the holding periods overlap, which is precisely the independence the
+hypergeometric conditions on. The 2026-08 cadence lesson, arriving on an imported statistic.
+
+**Standing rule earned, and it is narrower than the note's own:** run the four-count test on any
+proposed hold/sit-out overlay, **act on a failure and never on a pass**. #91 reaches "kill switch
+and not a green light" from an objective mismatch (squared error versus Sharpe); the measured
+reason here is different and stronger — the pass is neither split-stable nor bet-invariant, and
+the bet that matters costs a trial to compute.
+
+### Third finding: the reversal score has no depth profile, which kills a band trial for free
+
+Tonight's mechanism makes an *opposite-signed* prediction that would be worth a trial if it were
+sharp: 2026-09-08's table has 21-day reversal carrying content to ~30 names while
+`pt_raw_reversal_control` holds 21.8, i.e. **under**-broad, so widening should help. Profiled on
+the score's own unrestricted pool before writing anything:
+
+    score                     1-10        11-15       16-20       21-30       31-45       46-62
+    21d reversal             +2.02(1.45) -0.71(-.38) +1.43(0.73) -1.34(-.95) -2.65(-1.86) -1.03(-.76)
+    [ctl] placebo hash       -0.62(-.63) +2.04(1.12) +1.63(0.87) -3.05(-2.32) +2.82(2.01) -1.78(-1.30)
+
+**Not one reversal slice reaches |t| = 2, and the placebo reaches it twice** — the control is
+*more* structured than the signal. Cumulative top-k excess never exceeds +2.02%/yr (t = +1.45)
+and decays monotonically to zero by k = 40. There is no depth profile here to match a band to,
+so any band change is predicted at ~zero against a floor of ~0.10, which is the pre-registered
+effect inside the resolution floor the manual forbids spending a trial on. **Trial not spent.**
+
+The rider is a calibration and it is the reason to record this rather than just skip: at these
+sample sizes an object reading **no market data** produces slice `|t|` up to 2.3, so a single
+significant slice is not evidence of a profile — only an ordered shape across slices, with the
+placebo flat, is. Tonight's seasonal profile has that (placebo max |t| 1.77, sign-inconsistent);
+reversal does not. Note also the sample confound the 2026-09-04 rule predicts: `n` falls 665 →
+260 across the cumulative table as `k` grows.
+
+### Protocol and allocation notes, stated plainly
+
+- **The cold-family rule was not satisfied, for the ninth session running, and I am not
+  overturning eight sessions of evidence to satisfy a count.** `range-variance` remains the only
+  family with no recorded trial, on fourteen screened mechanisms with one identified cause (the
+  survivorship-inflated volatility *level*) and **three independent robustness statistics that
+  all flatter that artifact** — most monotone score in the repo (MR p = 0.004), second most
+  phase-stable with the lowest phase SD of any score tested, and the largest |IC| in the repo at
+  0.0645. A trial there would put a knowingly-artifactual book at the top of the
+  non-`price-trend` leaderboard, where a later session would be entitled to build on it. **The
+  recommendation is unchanged: the family is unreachable on this universe rather than
+  unexplored, and `program.md`'s cold-family rule should be amended or the family retired.**
+  Both are edits to a frozen file and need a human.
+- **The per-family cap bound tonight and was respected**: `seasonality-calendar` took its full 2
+  and no third arm was taken, which would have been the sweep the manual forbids. Eight families
+  have recorded leads, so the four-family clause does not bind.
+- **The `price-trend` cap of 2 went unused.** The journal's own #1 next-idea forbids a K=1
+  challenger on the strength of 2026-09-08's decomposition, and the reversal band idea — the only
+  other `price-trend` candidate that had a stated mechanism — was killed free above.
+- **The train-as-prediction record is held at n = 28**, deliberately and prospectively; see the
+  best-finding section.
+- **The blend is declined for the tenth consecutive session.** The new family lead is
+  `sc_seasonal_depth_narrow` at 0.846, `rho` to the champion not yet on the board; by the solved
+  break-even table a leg needs its own Sharpe at **1.34-1.47** for a two-SE blend and 0.846 is
+  not close. No blend candidate was written.
+- **The standing ⚠ concern is unchanged at four points.** No promotion, so no fifth data point
+  and no sixth holdout look; the count since 2026-08-17 stands at five.
+- **No new lib file was added and nothing frozen was touched.** All free measurement ran from
+  the session scratchpad. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and every existing `strategies/lib/` file are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **The depth-profile rule has now predicted once and should be asked to predict again, in the
+   direction it has never been tested — that widening a book whose score still has live slices
+   *gains*.** Tonight's seasonal test and `price-trend`'s history are both the narrowing
+   direction; `liquidity-volume`'s bracket is the widening one but was fitted, not forecast. The
+   obstacle is that no un-bracketed book on the board has both a live profile and an open
+   family — reversal is flat (tonight), group-lead's family has no live branch, the learned
+   block reproduces its own best input. **A session should check that list before assuming a
+   candidate exists.** (Lab's own result, tonight.)
+2. **Profile the score before choosing the band, and always print the placebo beside it.** The
+   free screen killed one trial tonight and sized two others. The placebo is not decoration: it
+   reached |t| = 2.3 on a score reading no market data. (Lab's own result, tonight.)
+3. **`SUMMARY.md` #92's non-standard error / specification curve is the strongest unrun free
+   diagnostic**, and its two preconditions are what make it worth doing properly: nothing through
+   `run_experiment.py`, and the node list written into the journal *before* anything is scored.
+   Tonight's bracket is a two-node instance of exactly that object arrived at by hand, so the
+   machinery is already understood. (`research/SUMMARY.md` #92, with #94 as its cheap version.)
+4. **`SUMMARY.md` #93's written house convention** is the only remedy the literature supports for
+   what #92 measures, costs nothing, and this repo has such a convention implicitly via
+   `strategies/lib/` reuse while it exists nowhere in writing. Tonight is a live argument for it:
+   the seated seasonal lead's band was inherited from a *different book's* machinery and nobody
+   had noticed for eight sessions. (`research/SUMMARY.md` #93.)
+5. **`SUMMARY.md` #89's overidentifying restriction test** remains the one folder proposal that
+   can *fail*, with its mandatory no-lag-null rider. (`research/SUMMARY.md` #89.)
+6. **Do not extend** `range-variance`, the `calendar` half of `seasonality-calendar`, the distance
+   method or cointegration, union or intersection books of any leg count, `SUMMARY.md` #84's
+   exclusion book, the `DELAY` per-name branch, HRP, a fourth aggregation operator over these
+   legs — and, new tonight, **do not take a fourth point on the seasonal band bracket**, and do
+   not act on a *pass* of the four-count test.
+7. **`SUMMARY.md` #49's execution overlay** — carried unspent for an eleventh session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.93x a year.
+
+**No engine issues encountered.**

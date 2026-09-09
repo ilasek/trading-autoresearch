@@ -2633,3 +2633,81 @@ across experiments; prune entries that later evidence contradicts.
   only. **Restated so it cannot be half-applied: before matching breadth, ask of BOTH books
   whether they are single sorts or set operators, and pin on the split the comparison will be read
   on.** #86 re-pinned on validation and hit 62.5 against 62.69.
+
+- **[Measured 2026-09-09, nightly] The depth-profile mechanism passes its first PROSPECTIVE
+  test, and the concentration axis now points in opposite directions in two families for a
+  stated reason rather than as a puzzle.** 2026-09-06 recorded that a concentration calibration
+  is "a property of a construction, not of a family or a score" without a mechanism; 2026-09-08
+  supplied one — each score's marginal excess by rank slice, with the rule **breadth beyond
+  where a score's marginal slices go flat is dilution** — fitted on the two brackets that
+  already existed. Asked to forecast a third, in `seasonality-calendar`, whose seated lead
+  never *chose* its band (`CORE_N`=20/`BAND_N`=30 was inherited verbatim from the union book's
+  machinery), the profile on that book's own pool read **+11.48 (1-10) / +1.70 (11-15) / -0.08
+  (16-20) / -3.77 at t = -2.05 (21-30)** %/yr — content over by rank 15, the inherited band
+  reaching into a significantly negative slice. Two arms moving that single node in opposite
+  directions, everything else bit-identical:
+
+      val names   validation Sharpe        per-10-name slope, three families
+        10.41         0.846  #87 narrow    seasonality-calendar   **-0.0624**  (R2 0.999)
+        21.16         0.782  seated        price-trend              -0.0278
+        32.96         0.705  #88 wide      liquidity-volume         **+0.0277**
+
+  Both pre-registrations landed inside their stated ranges (0.89 → 0.846; 0.72 → 0.705) — the
+  second two-sided pre-registration hit in this repo. **The sign flips across families and was
+  called in advance from the marginal slices alone.** It is not "narrower is better": `ILLIQ`
+  still pays at **48%** of its ~77-name pool while the seasonal score dilutes at **16%** of its
+  ~134-name one. Three riders. *(a)* **Read the shape, never the levels** — pairwise `rho`
+  0.936-0.987, closed-form paired SE 0.065-0.144, |t| 0.53-1.20, not one gap resolvable; no
+  fourth point was taken and none should be. *(b)* Costs work **against** the hypothesis on
+  both arms (narrowing paid +1.73x of turnover, widening saved 1.94x), so the ordering cannot
+  be the broker — the failure mode that swamped four consecutive non-`price-trend` trials.
+  *(c)* Validation maxDD is **flat across the whole 3.17x span** (-33.2% / -34.2% / -32.6%):
+  breadth bought no drawdown protection at all, which the concentration account does not
+  predict and which the risk-contribution statistic could not have caught, being blind to
+  anything that is not cross-sectional and contemporaneous while this is a *membership* change.
+
+- **[Measured 2026-09-09, nightly] A depth profile needs its placebo printed beside it, because
+  at these sample sizes an object reading no market data produces significant slices — and that
+  is what killed a band trial for free.** The mechanism above makes an opposite-signed
+  prediction worth a trial if it were sharp: 21-day reversal was recorded as carrying content to
+  ~30 names while `pt_raw_reversal_control` holds 21.8, i.e. under-broad. Profiled on its own
+  pool first: **not one reversal slice reaches |t| = 2 (max +2.02%/yr at t = +1.45) and the
+  placebo hash reaches it twice (-3.05 at t = -2.32, +2.82 at t = +2.01)** — the control is more
+  structured than the signal, and cumulative top-`k` excess decays to zero by `k` = 40. There is
+  no profile to match a band to, so the effect is ~zero against a ~0.10 floor and the trial was
+  not spent. **Operational rule: a single significant slice is not a profile. Only an ordered
+  shape across slices, with a flat placebo beside it, licenses reading one** — tonight's
+  seasonal profile qualifies (placebo max |t| 1.77, sign-inconsistent), reversal does not. Same
+  shape as the 2026-09-02 placebo-partner lesson and the 2026-09-07 phase screen: the placebo is
+  the calibration, not decoration.
+
+- **[Measured 2026-09-09, nightly] `research/SUMMARY.md` #91's Henriksson-Merton four-count test
+  earns standing use as a KILL SWITCH and its pass is worthless here — for a measured reason
+  different from and stronger than the one the note gives.** Run retrospectively against
+  overlays this lab already adjudicated with real trials (train, non-overlapping monthly holding
+  periods, bet = equal-weight universe return; `p1 + p2 = 1` is worth exactly zero; exact
+  hypergeometric conditioning on the number of "off" calls):
+
+      overlay                                n_off     p1     p2   p1+p2   p(exact)   value/yr
+      champion cohort vol trim  (SEATED)         8   0.021  0.993   1.014     0.112      +0.27%
+      200d trend switch         (REFUTED)      127   0.243  0.835   1.077     0.011      +3.63%
+      drawdown hysteresis brake (REFUTED)       61   0.089  0.906   0.995     0.634      -0.09%
+      [ctl] stopped clock, 5% off-rate          16   0.021  0.974   0.995     0.732      -0.09%
+
+  **One hit, one miss, one unreadable.** The hit earns the screen its place: the drawdown brake,
+  which cost a trial and made 2022 worse, is a null the test would have called free. The miss is
+  in the dangerous direction — a **green light at p = 0.011** on a refuted mechanism. **The
+  turnover rescue #91 itself offers is wrong and was checked, not assumed**: the switch toggles
+  1.46x/yr for -0.44%/yr, not the -3.565%/yr a monthly boundary-crossing overlay costs here.
+  What explains it is that **the four-count answer is a property of the BET, and the bet a
+  session can compute for free is not the bet that decides the trial.** Same overlay, same 70
+  validation months, champion series read from `experiments/trial_returns/` with no re-run:
+  equal-weight proxy `p1 + p2` = **0.953**, the champion's own book **0.905** — the train green
+  light does not survive out of sample and the free proxy reads *higher* than the book the
+  overlay would sit on. (Both validation readings are nulls at n = 70; what is established is
+  that the free reading did not transfer, not a size for the bet-dependence.) **And the test
+  cannot price the one overlay the lab kept**: the cohort trim fires 8 of 659 month-ends, but it
+  is a *daily* overlay (155 of 14,009 train days), and at its own cadence the holding periods
+  overlap — exactly the independence the hypergeometric conditions on. The 2026-08 cadence
+  lesson arriving on an imported statistic. **Standing rule, narrower than the note's: run it on
+  any proposed hold/sit-out overlay, act on a failure, never on a pass.**
