@@ -7646,3 +7646,63 @@ is the second recorded exception after region-demeaning, and unlike that one it 
 **No engine issues encountered.**
 
 ## Research session — 2026-09-09 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-09T23:12:11+00:00 — sc_seasonal_depth_narrow — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sc_seasonal_depth_narrow.py` (family: seasonality-calendar, track: scout, trial #87)
+- Hypothesis: Narrowing the seated seasonal lead's inherited band from core-20/band-30 to core-10/band-15, with the signal, the union-joint coverage test, the warmup and the equal weighting all bit-identical, scores ABOVE its 0.782 on validation (registered at 0.89), because a free train depth profile on that book's own pool puts the score's marginal excess at +11.48%/yr in ranks 1-10, +1.70 in 11-15, -0.08 in 16-20 and -3.77 (t = -2.05) in 21-30 — so the inherited band reaches into slices that subtract — and this is the first prospective test of the 2026-09-08 rule that breadth beyond where a score's marginal slices go flat is dilution, predicting here the OPPOSITE bracket ordering to the one that rule was fitted on in `liquidity-volume`, despite a +1.73x turnover handicap against the hypothesis.
+- Verdict: FAMILY_LEAD — best result yet in family 'seasonality-calendar': validation sharpe 0.846 > 0.782 (DSR 0.8445, 87 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.85, ann_ret +12.0%, maxDD -53.6%, turnover 8.2x
+- Validation: sharpe +0.85, ann_ret +17.2%, maxDD -33.2%, turnover 20.6x
+- Deflated Sharpe prob: 0.8445 (bar from 87 trials, 24 effective)
+- Scout track: family best before this trial +0.78; the champion was not compared and the holdout was not read
+- Lesson: Pre-registered **0.89** (range 0.80-0.98), landed **0.846** — inside the range, and
+  the sign the trial was actually asked for is the one the depth profile predicted: narrowing
+  the inherited band **gains** (+0.064 over the seated 0.782) in the family whose score dies at
+  rank 15, which is the opposite direction to the `liquidity-volume` bracket where widening
+  gained across a 3x span. The arithmetic that produced 0.89 over-shot by 0.044, i.e. the
+  standing "a cross-sectional screen over-predicts the book it motivates" rule held in its
+  usual direction but at nothing like an order of magnitude — the screen's weighting matched
+  the book's (both equal-weight), which is the 2026-09-08 scope condition. Note one thing the
+  concentration account did not predict: validation maxDD is **-33.2%** against the seated
+  book's **-34.2%**, so halving the book (21.16 -> 10.41 names) did not cost drawdown at all.
+  Carry that to the wide arm. Read the shape, not this level: at `rho` ~0.96 to the
+  seated book one paired SE is ~0.11, so +0.064 is ~0.6 SE and individually unresolvable. The
+  wide arm is what makes it a bracket.
+
+## 2026-09-09T23:14:20+00:00 — sc_seasonal_depth_wide — **SCOUT**
+- Candidate: `strategies/candidates/sc_seasonal_depth_wide.py` (family: seasonality-calendar, track: scout, trial #88)
+- Hypothesis: Widening the seated seasonal lead's inherited band from core-20/band-30 to core-30/band-45 — the identical single node the narrow arm moved, in the opposite direction, with signal, union-joint coverage test, warmup and equal weighting bit-identical — scores BELOW its 0.782 on validation (registered at 0.72), because the free train depth profile on that book's own pool puts the marginal excess of the slices this arm adds at -3.77%/yr (t = -2.05, ranks 21-30), +0.17 (31-45) and -1.62 (46-62), so the added names subtract mean the concentration credit cannot repay; a landing at or above 0.782 would break the bracket's monotonicity and record the 2026-09-08 depth-profile mechanism as having failed its first prospective test.
+- Verdict: SCOUT — scouted family 'seasonality-calendar': validation sharpe 0.705 <= the family's best 0.846 (DSR 0.7476, 88 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.44, ann_ret +4.1%, maxDD -51.3%, turnover 3.8x
+- Validation: sharpe +0.70, ann_ret +11.8%, maxDD -32.6%, turnover 17.1x
+- Deflated Sharpe prob: 0.7476 (bar from 88 trials, 24 effective)
+- Scout track: family best before this trial +0.85; the champion was not compared and the holdout was not read
+- Lesson: Pre-registered **0.72** (range 0.65-0.80), landed **0.705** — a hit, and it closes the
+  bracket monotone in the direction the depth profile named before either arm was written:
+
+      val names   validation Sharpe
+        10.41          0.846        narrow arm  (#87)
+        21.16          0.782        seated
+        32.96          0.705        this arm    (#88)
+
+      fit  sharpe = 0.912 - 0.00624*names    R2 0.999    **-0.0624 per 10 names**
+
+  Recomputed from the stored validation series, which reproduce all three run_experiment
+  figures exactly, so the reading is anchored. **This is the 2026-09-08 depth-profile
+  mechanism's first prospective test and it passes**: the same axis that is monotone
+  *increasing* in `liquidity-volume` (+0.0277 per 10 names, 0.874 -> 0.942 across a 3x span)
+  is monotone *decreasing* here at **2.25x the `price-trend` rate** (-0.0278), and the sign
+  was predicted from nothing but each score's marginal rank slices. The quantile contrast
+  sharpens it: `ILLIQ` still pays at 48% of its own pool while the seasonal score already
+  dilutes at 16% of its (larger) one, so this is not "narrower is better", it is
+  score-specific depth. Both pre-registrations landed inside their stated ranges (0.89 ->
+  0.846; 0.72 -> 0.705), the second time this lab has hit a two-sided pre-registration.
+  **Read the shape, not the levels**: pairwise `rho` 0.936-0.987, closed-form paired SE
+  0.065-0.144, |t| 0.53-1.20 — no single gap is resolvable, exactly as 2026-09-04 says of a
+  concentration bracket. Two riders. Costs work *against* the hypothesis on both arms
+  (narrowing paid +1.73x of turnover, widening saved 1.94x), so the ordering cannot be a
+  broker artifact in either direction — the failure mode that swamped four consecutive
+  non-`price-trend` trials. And validation maxDD is **flat** across the whole 3.17x span
+  (-33.2% / -34.2% / -32.6%): breadth bought no drawdown protection at all here, which the
+  concentration account did not predict and which no risk-contribution reading would have
+  caught. **No fourth point** — that would be the sweep the manual forbids.
+
