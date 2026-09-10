@@ -8032,3 +8032,244 @@ this line. Any trial tonight is `liquidity-volume`, scout track, and at most one
   rule was applied prospectively and the two books are scoreable on 215 and 227 train month-ends
   first reaching 2000-02 and 1999-02, a twelve-month offset on a twenty-year window. n = 29.
 
+
+## Session summary — 2026-09-10 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged for an eleventh session.**
+  `git fetch origin --prune` clean; `git branch -r --no-merged origin/main` returned
+  **nothing**, so no previous session's work is stranded off `main`. As on 2026-09-06 through
+  -09 (and as the research agent recorded on 2026-09-10), the session-start hook printed
+  "integrity check OK — on main" while `git status -sb` reported a per-run branch
+  (`main-a2tfle`) — **the hook still does not detect this, fifth session running.** Unlike
+  those sessions the per-run branch was verified to be *bit-identical* to `origin/main`
+  (`2bc89d7`, zero commits ahead or behind), and the harness governing this session requires
+  the push to go there, so work proceeded on it rather than being moved. **The one thing a
+  reader must know: tonight's commits land on `origin/main-a2tfle`, not directly on
+  `origin/main`, and they are only safe from the split-history failure of 2026-08-16 once that
+  branch is merged.** Engine tests green (**33 passed**) before the first trial. Store fresh
+  through **2026-09-10**.
+- **A pre-registration block was committed BEFORE the first score was computed** (`d61513b`),
+  naming the node list, the ETF-handling and `MIN_REGION` choices `SUMMARY.md` #95 requires,
+  #96's kill line, and the expected direction — so the ordering is verifiable in git rather
+  than asserted in prose. This is the first time this lab has done that.
+- Experiments run: **1 of the 8-trial budget.** Trial count **88 → 89**. Scout track, so the
+  champion was untouched and **the holdout was not read**.
+
+      #89  lv_illiq_stocks_only  liquidity-volume  SCOUT  val 0.921  turn 0.66x  pos 36.9
+
+  Pre-registered 0.99 (range 0.88-1.12) → **0.921**. Inside the range, below the point
+  estimate, and below the seated lead's 0.942.
+- **Five further ideas were decided on free measurements** — `SUMMARY.md` #93 written,
+  #95 closed, #96 declined without a trial, #97 measured, and `range-variance` declined on new
+  evidence. All train-split or holdings-only; nothing scored a candidate return series.
+
+### The night in one line
+
+The lab's newest measurement win — the region demean — was put to the literature's own test and
+**came back vindicated for a reason the literature does not predict**: on this universe the
+between-region half of a score is never priced, and for `ILLIQ` it carries the *wrong sign*. The
+same night's trial then showed the lab a screen it trusts missing by a full sign change on its
+own split.
+
+### Best finding: the region demean deletes a negatively-signed component, which is why it worked — and that closes #95 and #96 together
+
+`lv_illiq_region_relative` (2026-09-03) is the only leg improvement in this repo that came from a
+stated mechanism, and `SUMMARY.md` #95 put a question to it: Hou-Karolyi-Kho find **both** halves
+of a group-split characteristic priced, with the group-mean half *larger*, so the between-region
+half of `ILLIQ` should have been worth something and demeaning should have thrown it away.
+
+Split on train, fwd 21d, `MIN_REGION` 4 and ETFs in the mean exactly as pre-registered, reported
+on the top-20 excess a book is scored on (the IC is given where it sharpens the reading):
+
+    score                     raw                  m(X)                 dm(X)
+    ILLIQ 63d            +2.94%/yr(t=+2.04)   +0.37%/yr(t=+0.21)   +5.18%/yr(t=+3.90)
+    seasonal same-other  +5.72%/yr(t=+3.86)   +2.09%/yr(t=+1.26)   +5.03%/yr(t=+3.66)
+    21d reversal         +2.04%/yr(t=+1.00)   -0.23%/yr(t=-0.13)   +2.94%/yr(t=+1.49)
+    12-1 momentum        +3.78%/yr(t=+1.74)   +0.44%/yr(t=+0.27)   +4.92%/yr(t=+2.31)
+    [ctl] GK 21d vol     +5.95%/yr(t=+4.30)   +5.57%/yr(t=+3.93)   +6.35%/yr(t=+4.42)
+    [ctl] placebo hash   -0.35%/yr(t=-0.29)   -0.08%/yr(t=-0.05)   +0.05%/yr(t=+0.04)
+
+**Not one live score has a priced `m` half, and the only strongly priced one in the table belongs
+to the survivorship artifact.** On IC the `ILLIQ` split is sharper: `m` **-0.0201 (t = -1.48)**
+against `dm` **+0.0301 (t = +3.77)**, and with ETFs out of the pool, `m` **-0.0365 (t = -2.35)**
+against `dm` **+0.0638 (t = +6.50)** — the largest live-score IC in this repo. So the seated
+operator is not discarding a neutral component, it is **deleting a negatively-signed one**, which
+is a stronger account of the 2026-09-03 result than the one that trial shipped with.
+
+The pre-registered breadth discount is why the source does not replicate — 49 countries there,
+**4.6 qualifying groups of 15** here — and it was written into the journal before anything was
+measured, which is what makes the null informative rather than excused.
+
+**The same fact declines #96 without a trial, and the screen passed its own precondition.**
+Bekaert-Hodrick-Zhang argue a demean is a factor model with **unit loadings** that loses to freely
+varying betas. The two objects genuinely differ here — rank correlation **0.1887**, top-20 overlap
+**0.395**, nowhere near the pre-committed `spearman >= 0.98` kill line — and the free beta is
+simply worse: IC **+0.0088 (t = +0.90)** against the demean's **+0.0351 (t = +4.55)**, and the
+rank of *what the residual adds* has IC **-0.0234 (t = -2.64)**, significantly negative. The
+reason is the finding above: a unit loading removes **100%** of a wrong-signed component while a
+free beta removes only `beta_i` of it, at median `beta` +0.874, IQR **0.944**, and **48.8%** of
+names further than 0.5 from unity. **The source's argument presupposes the group factor is
+priced; here it is priced with the wrong sign, so the flexible model is worse.** `SUMMARY.md`
+#1's parameter-count triage rule — the demean estimates zero parameters, the residual one per
+name per date — would have said so before the screen was written, and this session did not think
+to apply it first.
+
+**And the planning corollary closes the item rather than extending it.** The `m` half's sign is
+what says whether a demean helps; it is a null for momentum and reversal and mildly *positive*
+for the seasonal score, which is exactly why 2026-09-03 measured region-demeaning as **hurting**
+the two unit-free legs. The operator is indicated where the lab applies it and contra-indicated
+everywhere else. **There is no second score in this repo to apply it to.**
+
+### Second finding: a screen this lab trusts missed by a sign change, on its own split, with every confound controlled
+
+`SUMMARY.md` #95's second pre-committed node — whether ETFs enter the region mean — turned up
+something nobody had looked at: the seated `liquidity-volume` lead does not only put ETFs in its
+*mean*, it puts them in its *book*. Over 260 train month-ends its top-20 holds **8.3 ETFs**, and
+its most-held name is **`EWU`, the UK country ETF, in the book on 87% of month-ends**, ahead of
+BLK (84%) and SPGI (73%). The mechanism argument is clean: `ILLIQ` is a price-impact ratio, and an
+ETF's **numerator is inherited from a basket it does not trade** while its denominator is its own
+secondary-market volume, so the ratio does not describe that instrument class at all. The region
+demean is what makes them selectable, since the `GLOBAL` bucket is nine ETFs and nothing else.
+
+The screens were emphatic and every control passed **before** the file was written:
+
+    top-20 train excess, region-demeaned   ETFs holdable      ETFs excluded       delta
+    region-rel ILLIQ                      +5.18%/yr(t=+3.90)  +10.29%/yr(t=+5.77)  +5.11pp
+    seasonal same-other                   +5.03%/yr(t=+3.66)   +4.23%/yr(t=+2.95)  -0.80pp
+    21d reversal                          +2.94%/yr(t=+1.49)   +2.43%/yr(t=+1.26)  -0.51pp
+    12-1 momentum                         +4.92%/yr(t=+2.31)   +2.21%/yr(t=+1.16)  -2.71pp
+    [ctl] GK 21d vol (the artifact)       +6.35%/yr(t=+4.42)   +4.97%/yr(t=+2.93)  -1.38pp
+    [ctl] placebo hash                    +0.05%/yr(t=+0.04)  -0.46%/yr(t=-0.31)   -0.50pp
+
+**The exclusion helps `ILLIQ` and hurts every other score, including the survivorship artifact,
+which moves 1.38pp the other way** — the exact control that would catch "this is a stock-for-ETF
+survivorship swap", pointing the wrong way for that story. Re-screened at the book's own breadth
+it was **+2.14pp**, not +5.11pp (the standing rule applied to my own screen). Breadth matched
+36.9 against 36.1 without pinning; churn *fell* 0.93x → 0.66x, worth ~0.08%/yr on the cheapest
+book in the repo, so the broker could not carry it in either direction; and a vol-neutral
+construction retained two thirds of the gain (**+2.06pp, t = +5.45**) against the tilt the book
+does pay (volatility percentile 0.496 → **0.619**).
+
+**It returned a null, and the miss is the finding.** Train annual return **5.83% against 5.96%**,
+validation **16.18% against 16.43%** — the promised +2.14pp/yr did not shrink by an order of
+magnitude, it **changed sign, on both splits**. `d` = **-0.021**, `rho` **0.9908**, closed-form
+paired SE **0.0545**, **t = -0.39**. Four things carry:
+
+1. **The over-prediction rule holds for a POOL change.** 2026-09-06 restored it as the default
+   after the intersection over-predicted; region-demeaning stays its single known exception, now
+   with two failed attempts to widen it.
+2. **The mechanism of the miss is general: an excess screen prices a numerator and is blind to a
+   denominator, and this candidate moved the denominator by construction.** On validation the
+   -0.021 splits about evenly — -0.014 of return, -0.011 of variance. **Print the book's
+   volatility percentile beside any tail-excess screen.**
+3. **"The score does not describe those names" and "those names cost the book" are different
+   claims and only the first is established.** The mechanism argument is untouched; the claim
+   worth a trial was the second one and it is refuted.
+4. **Dropping 42% of a book's names moved its return series almost not at all** — `rho` 0.9908
+   against a pre-registered 0.85-0.90. That is 2026-08-29's "mechanism diversity does not become
+   return diversity" arriving *inside* one construction. My pre-registered conclusion ("no
+   outcome here is resolvable") survived its own wrong input only by arithmetic luck: at SE 0.055
+   the +0.05 I expected would have been t = +0.9.
+
+**Every control passed and the trial still returned a null. Passing controls bound the
+explanations for an effect; they do not establish that it exists.**
+
+### Third finding: #97 sizes what a demean removes, and it is smaller and far more lopsided than anyone here assumed
+
+The nested identity `R_j = R_MKT + (R_REG - R_MKT) + (R_j - R_REG)` needs no estimation:
+
+    returns   global/market   region deviation   name deviation   (cross terms |.| <= 1.5%)
+    daily         25.85%           14.53%            61.29%
+    weekly        28.96%            8.97%            62.34%
+
+    region-deviation share by region, weekly:
+    HK 36.8%   JP 25.1%   GLOBAL 15.6%   DE 14.3%   UK 11.7%   US 1.8%
+
+**Quote 9%, not 15%** — the daily reading is inflated 1.6x by the session offset, the same artifact
+2026-09-06 measured at 4x on cross-serial residuals and 2026-09-07 at 4.8x on pairwise
+correlations; three statistics, one artifact, three magnitudes. And **for US names the region
+deviation is 1.8%**, so for the 52% of this universe that is US the operator is nearly a market
+demean; whatever `lv_illiq_region_relative` gained, it gained on the other 48%.
+
+The currency half comes with **two placebos the universe supplies free**. Daily `R2` on the name's
+own currency: **EUR 20.98% (beta +1.18), GBX 14.90% (+1.20), JPY 5.86% (+0.73), HKD 0.68%** — and
+HKD is **pegged**, so that row reads zero as it must. The second placebo is the USD-quoted line of
+the same regions: **UK 0.00%** against its GBX names' 14.90%, DE 0.00%, JP 0.00%; a cross-currency
+control puts JPY names at 0.09% against EUR. **102 of 140 instruments — 73% — are USD-quoted and
+carry it identically zero**, so the average name's currency share is **~3.3%**, a quarter of the
+region term and confined to 27% of the book. Two riders: the EUR/GBX betas exceed 1, which is
+Campbell et al.'s mechanism seen directly (currency exposure is correlated with global equity, so
+a score partly ranking currencies partly makes a levered market bet); and **the region label is
+not a currency label here** — UK is 10 GBX names plus 4 USD lines, DE is 12 EUR plus 1 — so a
+region demean subtracts a mean of mixed exposure from names of pure exposure.
+
+### Protocol and allocation notes, stated plainly
+
+- **`SUMMARY.md` #93 is done.** The house construction is written into `learnings.md` as a table
+  of nodes with their defaults, plus the rule that a candidate varying one is varying a
+  *construction* and must say so. Tonight is its third independent argument: last session found
+  the seated seasonal lead's band inherited from a different book's machinery, and tonight found
+  an entire **instrument-class node** — all 140 instruments holdable, ETFs included — that had
+  never been written anywhere and that the seated `liquidity-volume` lead had been silently
+  taking a 42% position on for six sessions.
+- **The cold-family rule was not satisfied, for the tenth session running**, and for the first
+  time the decline rests on new evidence rather than a restatement. The one repair never tried in
+  `range-variance` was the region demean; tonight's split shows 21-day Garman-Klass volatility is
+  the **only score in the repo with a strongly priced `m` half** (+5.57%/yr, t = +3.93) *and*
+  carries +6.35%/yr (t = +4.42) in its `dm` half, so the artifact is both a between-region and a
+  within-region effect and the operator removes neither. Fifteen screened mechanisms, one
+  identified cause, and now **four** independent statistics that all flatter the artifact.
+  Recommendation unchanged and still needs a human: amend the rule or retire the family; both are
+  edits to a frozen file.
+- **The per-family cap did not bind**: `liquidity-volume` took 1 of its 2. The `price-trend` cap
+  of 2 went unused — the journal's standing #1 next-idea forbids a K=1 challenger on 2026-09-08's
+  decomposition, and no other `price-trend` candidate had a stated mechanism tonight.
+- **Seven trials of budget went unspent, deliberately.** Every idea tonight's free work generated
+  was screened before being written, and the ones that survived screening were the ones that ran.
+  The strongest remaining thread — that `ILLIQ`'s `m` half is *negatively* signed, so a book could
+  tilt against it — is declined because its sign comes from the same screen that would motivate
+  it, which is the screen-overfitting shape `learnings.md` records, and because tonight's own
+  trial just demonstrated what a screen of that size is worth.
+- **The train-as-prediction record moves to n = 29**: #89 train 0.588 → val **0.921**, "under".
+  The 2026-09-04 sample rule was applied prospectively and the reading is **admissible** — 215
+  against 227 scoreable train month-ends, first reaching 2000-02 against 1999-02, a twelve-month
+  offset on a twenty-year window rather than the twenty-seven-year gap that rule was written for.
+- **The blend is declined for the eleventh consecutive session.** No new lead was set; the seated
+  `lv_illiq_region_wide30` is unchanged at 0.942 against a solved break-even requiring **1.34-1.47**
+  for a two-SE blend. No blend candidate was written.
+- **The standing ⚠ concern is unchanged at four points.** No promotion, so no fifth data point and
+  no sixth holdout look; the count since 2026-08-17 stands at five.
+- **No new lib file was added and nothing frozen was touched.** All free measurement ran from the
+  session scratchpad. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and every existing `strategies/lib/` file are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **Print the book's volatility percentile beside every tail-excess screen, and stop reading a
+   mean statistic as a Sharpe prediction.** Tonight's trial is the cleanest case the lab has: a
+   screen right about the mean's direction on both splits was wrong about the book because the
+   construction moved the variance. This is cheap, general, and applies to every family.
+   (Lab's own result, tonight.)
+2. **`SUMMARY.md` #92's non-standard error / specification curve is now the strongest unrun free
+   diagnostic**, and tonight removed its last excuse: #93's node table is exactly the enumeration
+   #92 needs, so the list no longer has to be invented. Its two preconditions stand — nothing
+   through `run_experiment.py`, and the node list committed to the journal before anything is
+   scored, which tonight demonstrated is practical. (`research/SUMMARY.md` #92, #93; #94 is the
+   cheap version and was used tonight.)
+3. **`SUMMARY.md` #89's overidentifying restriction test** remains the one folder proposal that
+   can *fail*, with its mandatory no-lag-null rider. (`research/SUMMARY.md` #89.)
+4. **The unexamined nodes are now visible, and the interesting one is the pool.** #93's table has
+   only one node the lab has never bracketed anywhere: which instruments are holdable. Tonight
+   tested it on one score and got a null; the honest next question is whether any *other* seated
+   book is silently taking an instrument-class position, which is a holdings-only measurement and
+   free. (Lab's own result, tonight.)
+5. **Do not extend**: `range-variance`, the `calendar` half of `seasonality-calendar`, the distance
+   method, cointegration, union or intersection books of any leg count, `SUMMARY.md` #84's
+   exclusion book, the `DELAY` per-name branch, HRP, a fourth aggregation operator, a fourth point
+   on the seasonal or the `liquidity-volume` band bracket — and, new tonight, **do not re-run
+   #95 or #96 on another score** (the `m`-half table covers every score the lab owns) and **do not
+   propose a second ETF-handling arm**; the axis returned a null with every confound controlled.
+6. **`SUMMARY.md` #49's execution overlay** — carried unspent for a twelfth session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
+
+**No engine issues encountered.**
