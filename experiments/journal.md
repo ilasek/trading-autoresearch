@@ -7990,3 +7990,45 @@ is discarding signal and the two halves are candidates to be separate legs. If o
 the cold-family clause is expected to go unsatisfied for a tenth session; the reasons
 are recorded in the last four session summaries and are not re-litigated by writing
 this line. Any trial tonight is `liquidity-volume`, scout track, and at most one.
+## 2026-09-10T23:23:42+00:00 — lv_illiq_stocks_only — **SCOUT**
+- Candidate: `strategies/candidates/lv_illiq_stocks_only.py` (family: liquidity-volume, track: scout, trial #89)
+- Hypothesis: Removing ETFs from the holdable set of the seated `liquidity-volume` lead — one node, with the 63-day ILLIQ window, the region demean at MIN_REGION=4, the 30/45 band, equal weighting and the monthly grid all bit-identical to `lv_illiq_region_wide30`, and ETFs still counted in the region mean — scores near 0.99 on validation against that lead's 0.942, because ILLIQ is a price-impact ratio whose numerator an ETF inherits from a basket it does not trade while its denominator is the ETF's own secondary-market volume, so the ratio does not describe the 8.3 of 20 names the seated book currently draws from that class. The exclusion is worth +2.14pp/yr of train book excess at this candidate's own breadth (+5.11pp at top-20), and it is ILLIQ-specific rather than a pool effect: the same exclusion costs the seasonal leg 0.80pp, momentum 2.71pp, a placebo hash 0.50pp and this universe's identified survivorship artifact 1.38pp, so the one control that would catch a stock-for-ETF survivorship swap points the other way. About a third of the gain is a volatility tilt — the book moves from percentile 0.496 to 0.619 — and two thirds survives holding the volatility profile fixed by construction (+2.06pp, t = +5.45). Breadth is matched at 36.9 against 38.1 and churn falls 0.62x to 0.43x, worth 0.06%/yr on the cheapest book in the repo, so the trial cannot be measuring either breadth or the broker. No outcome in the 0.88-1.12 range is resolvable against a paired SE near 0.18-0.22; what the trial decides is whether the seated family lead is misspecified, which is a statement about the leaderboard rather than a knob.
+- Verdict: SCOUT — scouted family 'liquidity-volume': validation sharpe 0.921 <= the family's best 0.942 (DSR 0.8847, 89 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.59, ann_ret +5.8%, maxDD -50.0%, turnover 0.1x
+- Validation: sharpe +0.92, ann_ret +16.2%, maxDD -34.8%, turnover 0.7x
+- Deflated Sharpe prob: 0.8847 (bar from 89 trials, 24 effective)
+- Scout track: family best before this trial +0.94; the champion was not compared and the holdout was not read
+- Lesson: **Pre-registered 0.99 (range 0.88-1.12), landed 0.921 — inside the range, below the
+  point estimate, and below the seated lead. The transferable half is not the verdict but the
+  fact that the screen missed on its OWN split.** The train book-excess screen promised
+  **+2.14pp/yr** of book return at this candidate's own breadth; train annual return came in at
+  **5.83% against the seated lead's 5.96%** and validation at **16.18% against 16.43%**. The
+  effect did not shrink by an order of magnitude, it **changed sign, on both splits, at matched
+  breadth (36.9 vs 36.1), with costs favouring the candidate** (turnover 0.93x -> 0.66x). This
+  is the standing "a cross-sectional screen over-predicts the book it motivates" rule holding for
+  a **pool** change and vindicating 2026-09-06's restoration of it as the default; the
+  2026-09-03 region-demean exception did not repeat, and it remains the single known exception.
+  **The mechanism of the miss is that an excess screen prices a numerator and is blind to a
+  denominator, and this candidate moved the denominator by construction.** Decomposed on
+  validation: return -0.25pp is worth -0.014 of Sharpe and volatility +1.2% (0.1786 -> 0.1807,
+  the vol-percentile tilt 0.496 -> 0.619 arriving as predicted in direction and far smaller in
+  size) is worth -0.011 — the -0.021 deficit is about half return and half variance, and the
+  screen could see neither the second channel nor, as it turns out, the first.
+  **Two things this does and does not establish about the seated lead.** It does *not* rescue
+  the ETFs: the mechanism argument stands, `ILLIQ` is a price-impact ratio whose numerator an
+  ETF inherits from a basket it does not trade, and the seated book still holds 8.3 of 20 names
+  from that class with `EWU` in it on 87% of train month-ends. What it establishes is that
+  **"the score does not describe those names" and "those names cost the book" are different
+  claims and only the first is true here** — the second was the one worth a trial and it is
+  refuted. **And the pre-registered `rho` was wrong in the informative direction**: I predicted
+  0.85-0.90 and the two books correlate **0.9908**, so dropping 42% of the book's names moved
+  its return series almost not at all. That is 2026-08-29's "mechanism diversity does not become
+  return diversity on a long-only book over one universe" arriving inside a single construction,
+  and it means the closed-form paired SE is **0.0545**, not the 0.18-0.22 I registered: `d` =
+  -0.021 at **t = -0.39**, a null. The conclusion I pre-registered ("no outcome in this range is
+  resolvable") survives its own wrong input, because at SE 0.055 the +0.05 I expected would have
+  been t = +0.9. No year carries the gap (2018 -1.4 vs -0.0, 2019 +40.6 vs +39.3, 2022 -6.3 vs
+  -8.6). **Train-as-prediction: 0.588 -> 0.921, "under", and admissible** — the 2026-09-04 sample
+  rule was applied prospectively and the two books are scoreable on 215 and 227 train month-ends
+  first reaching 2000-02 and 1999-02, a twelve-month offset on a twenty-year window. n = 29.
+
