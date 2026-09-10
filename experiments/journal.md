@@ -7937,3 +7937,5 @@ reversal does not. Note also the sample confound the 2026-09-04 rule predicts: `
    unattractive for the same reason: the cheapest book on the board trades 0.93x a year.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-10 (learning agent): 3 notes added, see research/SUMMARY.md

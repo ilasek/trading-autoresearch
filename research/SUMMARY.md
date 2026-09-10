@@ -60,6 +60,22 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > methodology rather than mechanism: it changes the scale on which the lab reads its own Sharpe
 > differences and proposes no new book. See candidates #92–#94, all free.
 >
+> **Correction after session 28 (2026-09-10): "breadth is genuinely exhausted" was too strong, and
+> the unit-of-check lesson bit for a second time.** 2026-09-08 declared that "the next session
+> should not look for an uncovered mechanism; there is not one", and 2026-09-09 repeated it. A
+> direct search across all 85 notes then in the folder found **zero** hits for `country effect` or
+> `industry effect` and no note anywhere on the **country/industry/global variance decomposition**
+> of a return, or on the **currency component inside a USD-converted price** — while the lab's one
+> recent measurement win (`lv_illiq_region_relative`, 2026-09-03) *is* a country demean and nobody
+> had written down what a demean assumes or what it removes. The coverage claim was true of every
+> family *heading* and every sub-mechanism *clause* in `program.md`, and false of the construction
+> operator the lab was already using. **The durable lesson, restated once more and now with two
+> instances: a coverage claim is only as fine-grained as the unit it was checked at — and after
+> families and clauses, the third unit is the *operator*.** Session 28 covered it (new cross-family
+> section below, candidates #95–#97). This is not a licence to resume breadth hunting: all three
+> notes are measurement mechanisms, none proposes a book, and the 2026-09-08 warning about idea
+> supply stands.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -2534,6 +2550,89 @@ one robust, one weak and one not robust at all. Tier A; no validation overlap;
 `published_post_2018: true`.
 → `notes/2026-09-09-specification-curve-analysis.md`
 
+### The grouping axis — what a demean assumes, what it removes, and what a USD conversion adds (cross-family)
+
+**Why this section exists, and it is a correction.** Region-demeaning is an operator this lab
+*already uses* and it produced the only leg improvement ever obtained here from a stated
+measurement mechanism (`lv_illiq_region_relative`, 2026-09-03). It is also one of the two recorded
+exceptions to the lab's cross-sectional screen rule. Until session 28 this folder had no note on
+what the operator assumes, what it discards, or how large the thing it removes is — the search
+that established that returned zero hits for `country effect` and `industry effect` across all 85
+notes. Everything here is a **measurement** mechanism: none of the three sources proposes a book,
+and all three are pre-2018 samples in pre-2018-sample journals, so the whole section carries
+`validation_overlap: false` and `published_post_2018: false`.
+
+**A group demean is a factor model with unit loadings, and the unit loadings are what is wrong
+with it.** Bekaert–Hodrick–Zhang (JF, Tier A, 23 developed markets × 26 industries, weekly) audit
+the Heston–Rouwenhorst dummy decomposition — `R[j,t] = alpha[t] + country[c,t] + industry[i,t] +
+eps`, one cross-sectional regression per date under cap-weighted zero-sum restrictions — and show
+it is a linear factor model in which every stock in a country is *assumed* to load on that
+country with a coefficient of exactly one. Scored by average absolute error against the sample
+correlation matrix, the ordering is unambiguous and is the sentence to carry: **the dummy model
+beats any risk model built from global factors alone (0.123 against 0.162 for a global CAPM with
+freely varying betas, 0.284 with unit betas) and loses to every parsimonious risk model that adds
+regional factors (0.081 and 0.076).** Both time-variation *and* cross-sectional variation in the
+betas are needed; either alone buys little. Within the dummy model, country membership matters
+more than industry membership for describing comovement (0.195 against 0.239 when the other is
+switched off) — the older Heston–Rouwenhorst and Griffin–Karolyi result, taken here second-hand
+since neither predecessor was readable. The failure mode is sharpest exactly where a demean is
+applied, at the name level: the dummy model **over-predicts** comovement for pairs sharing a
+country or an industry, while a free-beta regional model tracks level and dynamics far better.
+The transferable claim: **group membership is real information; a unit loading on it is not the
+best way to use it, and it over-corrects the names that are loosely attached to the group.**
+→ `notes/2026-09-10-country-industry-global-return-decomposition.md`
+
+**Demeaning discards a component that is itself priced, and for most scores it is the larger
+one.** Hou–Karolyi–Kho (RFS, Tier A, ~29,000 stocks in 49 countries) split each firm
+characteristic into its country mean `m(X)` and the country-demeaned residual `dm(X)` — orthogonal
+by construction, so a joint Fama–MacBeth regression reads as two independent tests. **Both halves
+are priced.** The `dm` half keeps the sign and rough magnitude of the undecomposed regression, so
+demeaning does not destroy a signal; but the **country-mean half is significant too and larger in
+magnitude for every characteristic tested except book-to-market** (about twice, for one valuation
+ratio). The qualification matters more than the point estimate: the mean half is far less
+precisely estimated (`t = 2.21` against `t = 5.53` on that same characteristic), because there are
+only as many distinct values of `m(X)` per date as there are groups — **a between-group bet is a
+low-breadth bet**, and this repo has ~15 regions against the paper's 49 countries, so expect the
+`m` half to be *less* attractive here, not more. **The industry-mean half is a null for almost
+everything, with one loud exception: momentum**, where the group-level coefficient is several
+times the firm-level one. The portfolio evidence agrees score by score — country-neutralizing
+costs premium exactly for the characteristics whose country mean was priced, and costs almost
+nothing for the one whose was not — and it cuts volatility much harder by country than by
+industry (to roughly 55% of the global factor's volatility versus roughly 93%, on one valuation
+ratio). **So neutralization moves premium and volatility in the same direction and the Sharpe
+effect has no a-priori sign; it is an empirical question with a different answer per score.**
+→ `notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`
+
+**On this universe, "region" is very nearly "currency", and a currency is a risk factor with a
+beta on global equity rather than a units conversion.** Campbell–Serfaty-de Medeiros–Viceira (JF,
+Tier A, seven developed markets, quarterly, 1975–2005) decompose a global portfolio's excess
+return into a fully hedged component plus a pure currency-exposure component, and derive the
+risk-minimizing currency exposure as **the multiple-regression coefficients of the hedged
+portfolio's return on currency excess returns, negated**. The sign rule needs no numbers and is
+the part to keep: zero correlation between asset returns and the exchange rate → hold no currency
+exposure, it is uncompensated variance; positive correlation → over-hedge; negative correlation
+(the currency rises when the market falls) → keep the exposure, it hedges. Currency-equity
+covariance is emphatically **not** zero for equities — and *is* close to zero for bonds, which the
+paper reports as its own internal control. The authors document that the ordering across
+currencies **moved between their two subsamples** and offer a structural reason, so *which*
+currency is defensive is not a constant and is not recorded here; the mechanism is that the
+exposure is signed and non-zero. Two consequences for a lab holding USD-converted foreign closes
+unhedged: a score that partly ranks currencies is partly making a **levered or de-levered global
+equity bet, not an orthogonal one** — a direct prediction about a leg's `rho` to the champion — and
+**the longer the window and the more a statistic is a difference of prices at different times, the
+more currency it contains**, which is the general form of the FX artifact the lab tested and
+closed on Corwin–Schultz (2026-09-04). The paper's own recommendation is a currency overlay and is
+**out of scope**: no trading, no forwards, long-only equity weights only.
+→ `notes/2026-09-10-currency-component-in-usd-converted-returns.md`
+
+**Read together, the three notes say something none of them says alone.** A region demean
+simultaneously (a) imposes a unit loading, which over-corrects loosely-attached names, (b)
+discards a between-group component that is priced but low-breadth, and (c) removes a currency
+exposure that is correlated with global equity. The lab's region demean *worked*. This section
+does not dispute that; it says the lab does not currently know **which of the three channels it
+worked through**, and that all three are separable on the train split for free. That is the
+content of candidates #95–#97.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -4967,6 +5066,82 @@ hypothesis fodder, then anti-candidates.
     free measurement, and it is the cheapest item on this list. Free, no trial. Tier A.
     → `notes/2026-09-09-specification-curve-analysis.md`
 
+95. **[Added 2026-09-10] Split every score the lab owns into its region-mean and region-demeaned
+    halves and IC each half separately — free, train-only, and it can fail.** Hou–Karolyi–Kho
+    decompose a characteristic into `m(X)` (the group mean) and `dm(X)` (the deviation), which are
+    orthogonal by construction, and find **both halves priced**, with the country-mean half larger
+    in magnitude for every characteristic but one — while being far less precisely estimated,
+    because a between-group regressor has as many distinct values per date as there are groups.
+    **The measurement**: for `ILLIQ`, the same-minus-other-month seasonal score, 21-day reversal,
+    trailing-return momentum and the learned block, form `m` over region and `dm`, and measure IC
+    for each half at the horizons already in use, with the placebo-hash control beside them that
+    2026-09-09 showed reaches `|t|` up to 2.3 on this sample. **Three outcomes and all three are
+    findings.** Only `dm` carries content → demeaning is free and correct, and the operator is
+    vindicated on the lab's own data rather than by analogy. Both carry content → a demean is
+    *discarding signal*, and the two halves are candidates to be separate legs rather than one
+    score. Only `m` carries content → the "signal" is a region bet in costume, which is the exact
+    failure mode `learnings.md` records for close-location value being reversal in costume.
+    **This is the item that puts a question to the lab's own best measurement result**:
+    `lv_illiq_region_relative` beat raw `ILLIQ`, and this literature predicts the between-region
+    half of `ILLIQ` should have been priced too. If it was not, that is a fact about this universe
+    that also predicts what a region demean will do to every *other* score here. **Carry the
+    breadth discount into the hypothesis, not out of it**: ~15 regions against the paper's 49
+    countries means the `m` half should be expected to look *worse* here, and saying so in advance
+    is what makes a null informative. Two construction nodes to pre-commit (#94, #93): the
+    minimum names per region for a region mean to exist — the paper uses 15 stocks per country and
+    several of this repo's regions carry far fewer — and whether ETFs enter the mean at all, since
+    a region mean containing that region's own ETF reads the ETF's score back into itself. Free,
+    no trial, no holdout. Tier A.
+    → `notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`
+
+96. **[Added 2026-09-10] Replace the region demean with a free-beta regional residual — the one
+    item here that could license a trial, and it has a free screen that must come first.**
+    Bekaert–Hodrick–Zhang show the dummy decomposition a demean implements is a factor model with
+    **unit loadings**, that it loses to any parsimonious risk model carrying regional factors with
+    freely varying betas, and that it fails hardest at the name level by **over-predicting**
+    comovement for pairs sharing a group. This universe carries **42 ETFs across 15 regions** —
+    an unusually clean set of regional factor proxies most labs have to build. **The construction**:
+    for each name, a rolling beta on its regional ETF, and the residual of that regression as the
+    score input, in place of subtracting the regional mean. The paper is explicit that betas must
+    vary **both** across names and over time — a static per-name beta recovers only a small part of
+    the gain — so the rolling window is not a nuisance parameter but the mechanism. **The free
+    screen before any trial**, and it is what #94 asks for: the demean and the residual disagree
+    most on names whose true regional beta is far from one, so compute both scores on train,
+    measure the rank correlation between them and the holdings overlap of the resulting books, and
+    check the IC of the difference. If the two rankings agree at the level the lab's other
+    near-duplicate pairs do (`rho` 0.98 on two recorded pairs), there is nothing to test and the
+    trial is not spent. **Only if they genuinely differ** is this a `liquidity-volume` challenge
+    arm at one node against the seated `lv_illiq_region_relative`, with everything else
+    bit-identical. Riders: the estimation window is a specification node to pre-commit; beta noise
+    concentrates in the short-history names, which is where the survivorship artifact already
+    lives; and a region demean applied to a regional ETF is close to subtracting the object from
+    itself, so ETF handling must be stated in advance either way. Screen free; at most one trial.
+    Tier A.
+    → `notes/2026-09-10-country-industry-global-return-decomposition.md`
+
+97. **[Added 2026-09-10] Measure how large the region component and the currency component
+    actually are on this universe — the cheapest item on this list, and it prices the other two.**
+    Two decompositions, neither of which scores a candidate or touches a return series belonging
+    to one. *(a)* **The nested variance split**, which needs no estimation at all and telescopes:
+    `R[j] = R[MKT] + (R[REGION] - R[MKT]) + (R[j] - R[REGION])`, giving a three-way split of the
+    average name's variance into global, region-deviation and name-deviation. That number *is* the
+    size of what a demean removes, measured here rather than imported from a 23-country developed
+    panel. *(b)* **The currency share**, using the control the lab has already built: regress USD
+    returns on a currency-group return and compare against the **USD-quoted-names subset, where
+    the currency component is identically zero** — the same placebo design the 2026-09-04
+    Corwin–Schultz screen used to close the FX-artifact escape, applied to the score rather than to
+    the estimator. Campbell–Serfaty-de Medeiros–Viceira's mechanism says what is at stake: currency
+    exposure is **correlated with global equity** and signed, so a score partly ranking currencies
+    is partly making a levered or de-levered market bet — a prediction about the leg's `rho` to the
+    champion, which is the number every blend decision here is priced on and which has now been
+    declined ten sessions running. **Bekaert–Hodrick–Zhang's `ABSECORR` is the natural companion
+    statistic** and is affordable: cap-weighted mean absolute error between a model-implied and the
+    sample pairwise correlation, computed per period, which compares *covariance models* — global
+    factor only, region dummy, region beta — without scoring a strategy. Free, train-only, no
+    trial, no holdout. Tier A.
+    → `notes/2026-09-10-country-industry-global-return-decomposition.md`,
+    `notes/2026-09-10-currency-component-in-usd-converted-returns.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -4999,8 +5174,121 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-07 (session 25) | **The first session in seven aimed by neither the lab nor the standing list, and deliberately so: the 2026-09-06 nightly *did* run, so the list was not spent — it was answered — and what it left behind was an instruction not to write more construction methodology.** The 2026-09-06 nightly closed `portfolio-learning` on its third operator, killed #84's exclusion book on its own precondition (no score in the repo has a bottom band carrying more than its top), ran #83's monotonicity test in full, and resolved #78 into "measurement in one partition, forbidden-horizon cross-asset effect in the other" — and its own next-idea list says the sorted-book vein is thin and should not be re-worked. So the focus was chosen the only way left: **by asking which sub-mechanisms `program.md` names that this folder has never covered at all.** Two were found by direct search across all 76 prior notes, and they are the session's spine: **cointegration** (named under `statistical-arbitrage`, **zero** notes) and **hierarchical risk parity / clustering-based allocation** (named under `portfolio-learning`, **zero** notes, and untouched by all three of that family's closures because those are signal-aggregation operators and this is a weighting object). The third note is the family's *shock* branch, where every previous `liquidity-volume` note is about a *level*. **The shape of the session is two closures and one contested lead.** Both closures are cheap and both foreclose a move the lab would plausibly have made: cointegration is the obvious repair to the refuted distance method and has already been measured as a wash against it, and HRP is the obvious "we haven't tried a clustering allocator" move whose primary evidence turns out to be a Monte Carlo that never benchmarks 1/N. **The contested one is the point of the session.** The high-volume return premium is a third object in a class this lab has twice measured as null — and the case for one more look is not that the source is famous but that 2026-09-06's own monotonicity result showed IC is blind to a corner, while both prior screens graded a continuous score and this source's claim is explicitly about the top decile of a within-name distribution. Candidate #85 is that diagnostic, pre-registered, free, and closes the branch on the right statistic if it comes back null. **Access and index behaviour**: full text read directly for four of six sources — a Wharton Rodney L. White working-paper PDF carried the complete JF argument, an author's GitHub Pages copy (`randlow.github.io`) the *Quantitative Finance* article, **EconStor** two separate items (an MDPI gold-OA article whose own site 403s an automated client, and the FAU discussion-paper version of a *Journal of Economic Surveys* survey), and arXiv a preprint. **EconStor is the session's new reliable channel and belongs on the README's list** — it served a gold-OA paper the publisher itself refused. Two sources are recorded as **not read**: a closed JFE replication (its finding taken from the publisher's abstract via RePEc, flagged in-note) and a closed *Future Generation Computer Systems* article recorded as a bare pointer with no finding relied on, precisely so a later session does not re-find it and mistake a search snippet for evidence. The HRP algorithm itself was read from **the author's own published reference implementation** rather than the paywalled JPM prose — a channel worth remembering for method papers. Index limits, both documented ones in one session: **Semantic Scholar's DOI endpoint worked for four DOIs and then 429'd**, and **OpenAlex's daily budget was exhausted mid-session** (`Insufficient budget`), so the last two counts are Crossref-only. Two more instances of the standing "disbelieve a lone count": S2 returns *not found* for `10.1111/0022-1082.00280`, a JF article with 1086 Crossref and 1559 OpenAlex citations (a **ninth** instance, and the third consecutive session where the missing index is S2 on a tier-1 finance DOI), and the HRP primary returns 225 / 292 / 222 across S2 / OpenAlex / Crossref. | Gervais–Kaniel–Mingelgrin 2001 (JF; the Wharton working paper carrying the published argument, read in full) + Kaniel–Ozoguz–Starks 2012 (JFE; **abstract only**, closed access) (`2026-09-07-high-volume-return-premium.md`); López de Prado 2016 (JPM; **algorithm read from the author's own reference implementation**, prose closed) + Cotton 2024 (arXiv, read in full) + Jain–Jain 2019 (Risks, read in full via EconStor) + Raffinot 2017 (JPM, metadata only) (`2026-09-07-hierarchical-risk-parity-clustering-allocation.md`); Rad–Low–Faff 2016 (Quantitative Finance; author-hosted copy read in full) + Krauss 2017 (J. Econ. Surveys; the IWQW discussion-paper version read in full) (`2026-09-07-cointegration-pairs-versus-distance-method.md`) |
 | 2026-09-08 (session 26) | **The session arrived to a list that was neither spent nor answered but *declined* — the 2026-09-07 nightly ran and spent zero trials, screening all three of this file's live proposals against the idea rather than a candidate file, and its own message was that the bottleneck is not idea supply.** #85's within-name volume-state book was killed outright (pooled phase effect far below the seated lead's, churn an order of magnitude larger than any effect measured); #79's `DELAY` closed with its statistic at **0.94x its own null in level, spread and persistence**, leaving `lead-lag-spillover` with no live branch; #86's HRP was declined and the free measurement **refuted the note's own prediction by an order of magnitude** (74–79% deviation from equal weight against the "few percent" predicted) while strengthening the verdict. Only #82 is still unrun. **So the focus was taken the same way 2026-09-07 took it — from `program.md`'s sub-mechanism clauses rather than its family headings — and the one remaining clause with zero notes was `portfolio-learning`'s "stacking or meta-labelling", which this file's own 2026-09-07 audit had named as the honest next gap.** Both halves are covered, and covering them turned out to supply the *structural* reason four empirical closures in that family were inevitable: a fully-invested long-only book sits on the simplex (`α ≥ 0`, `Σα = 1`), which is exactly Breiman's interpolating-predictor condition, so the "gain is bounded by the components' disagreement" result recorded five times in `learnings.md` is a theorem rather than a regularity — and the only linear escape, dropping `Σα = 1`, means holding cash, which the second note prices exactly as a market-timing bet worth `Δ·g·(p1+p2−1)`. **The third note is a measurement note aimed at an artifact the lab has now measured twice without a generator** (a ~4x regional cross-serial offset on 2026-09-06, a 4.8x daily-versus-weekly correlation ratio on 2026-09-07): the non-trading model produces both in closed form, and a corollary derived here from its own equations says the observed cross-group correlation is `√((1−p_a²)(1−p_b²))/(1−p_a p_b)` — unity when two groups share a staleness, attenuated only by the difference. That lands on the `rho` every blend decision in this repo is priced on (#90). **Four free screens follow (#88, #89, #90, #91), three of them tests that can fail**, and two of the three notes end in anti-candidates. **Access and index behaviour**: all four Tier-A primaries **read in full**. The Berkeley statistics tech-report archive served the typeset *Machine Learning* article; NBER served the working-paper version of the *Journal of Econometrics* article as a **scan with no text layer** (38 characters from 39 pages), read by rendering to PNG with **`pymupdf`** — which also removes the missing-`pdftoppm` dependency the README notes. **The session's new channel is the Internet Archive's OCR text**: MIT DSpace, which holds the same two Merton scans, returned HTTP 429 to every attempt including five retries with backoff, while `archive.org` served both items' `_djvu.txt` full text instantly — check `archive.org/metadata/<id>` for a `_djvu.txt` before rendering anything. Three sources recorded **not read**: the two *Journal of Financial Data Science* meta-labelling articles (publisher redirects an automated client into an OpenID flow) and the López de Prado book, with the construction taken instead from the authors' **own published reference implementation** and **no finding relied on from any of the three**. Index behaviour, two more instances of "disbelieve a lone count" and both of new kinds: Breiman's article carries **two separate Crossref DOI registrations** for the identical pages (923+464 Crossref, 1414+452 Semantic Scholar), so any single lookup understates it by a third to a half; and the Lo–MacKinlay *Journal of Econometrics* DOI is **not found by Semantic Scholar at all** while OpenAlex holds it merged into the NBER working paper with a count of 3, leaving Crossref's 588 as the only usable figure. | Breiman 1996 (Machine Learning; the typeset article read in full from `statistics.berkeley.edu`) with Le Blanc–Tibshirani 1996 (JASA, **not read**, its conclusion quoted from Breiman's own description) (`2026-09-08-stacked-regressions-nonnegative-weights.md`); Merton 1981 (Journal of Business, Part I) + Henriksson–Merton 1981 (Part II), **both read in full via Internet Archive OCR of the MIT Sloan working papers**, with López de Prado 2018 (book), Joubert 2022 and Meyer–Joubert–Alfeus 2022 (JFDS) all **not read** and used only for the construction (`2026-09-08-meta-labeling-and-the-value-of-a-filter.md`); Lo–MacKinlay 1990 (Journal of Econometrics; NBER WP 2960 read in full by page-image rendering) (`2026-09-08-nonsynchronous-trading-econometrics.md`) |
 | 2026-09-09 (session 27) | **The first session aimed by this file's own conditional rather than by a gap: 2026-09-08 declared breadth genuinely exhausted ("the next session should not look for an uncovered mechanism; there is not one") and 2026-09-02 had gated one last method on exactly that condition — the literature on how much of a measured result is the *construction* rather than the idea.** Taken tonight: the concept and its magnitude (164 teams, one dataset), its mechanical measurement on portfolio sorts (2,048 and 69,120 enumerated constructions, two independent teams), and the single-researcher method for enumerating and displaying it. The session's shape is one measurement the lab can run free on train, one convention it can write down for nothing, and one standing discipline — plus an explicit declaration of which third of the method is *not* imported, because it is inference. | Menkveld, Dreber, Holzmeister, Huber, Johannesson, Kirchler, Neusüss, Razen, Weitzel et al. 2024 (JF; Bank of England Staff WP 955 read in full) (`2026-09-09-nonstandard-errors-evidence-generating-process.md`); Soebhag–van Vliet–Verwijmeren 2024 (J. Empirical Finance; FoFI 2022 working-paper copy read in full, published abstract read via OpenAlex) with Walter–Weber–Weiss 2022/2024 (SSRN, **not read in full** — abstract, authors' blog and public code only) (`2026-09-09-nonstandard-errors-in-portfolio-sorts.md`); Simonsohn–Simmons–Nelson 2020 (Nature Human Behaviour; Wharton-hosted published article read in full), with Steegen–Tuerlinckx–Gelman–Vanpaemel 2016 cited as the acknowledged predecessor and **not read** (`2026-09-09-specification-curve-analysis.md`) |
+| 2026-09-10 (session 28) | **The first session in three aimed by a gap rather than by a method — and the gap was one two consecutive sessions had declared did not exist.** 2026-09-08 wrote "the next session should not look for an uncovered mechanism; there is not one" and 2026-09-09 repeated it; a direct search across all 85 notes returned **zero** hits for `country effect` or `industry effect`, and no note anywhere on the country/industry/global variance decomposition or on the currency component inside a USD-converted price — while region-demeaning is an operator the lab *already uses* and the source of its only leg improvement from a stated measurement mechanism. The unit-of-check lesson bit a second time: after families and clauses, the third unit is the **operator**. Three Tier-A sources, all read in full, all pre-2018 samples in Tier-1 journals, so the whole session is `validation_overlap: false` / `published_post_2018: false`. Taken tonight: what a demean *assumes* (unit loadings, and they over-correct at the name level), what it *discards* (a between-group component that is priced but low-breadth), and what a USD conversion *adds* (a signed currency exposure correlated with global equity). New cross-family section; candidates #95–#97, two of them free and the third with a mandatory free screen. | Bekaert–Hodrick–Zhang 2009 (JF), read as NBER WP 11906, with Heston–Rouwenhorst 1994 and Griffin–Karolyi 1998 second-hand and **unread** (`2026-09-10-country-industry-global-return-decomposition.md`); Hou–Karolyi–Kho 2011 (RFS), read as the Dec-2006 working paper via a third-party document mirror (`2026-09-10-country-demeaned-versus-country-mean-characteristics.md`); Campbell–Serfaty-de Medeiros–Viceira 2010 (JF), read as NBER WP 13088 (`2026-09-10-currency-component-in-usd-converted-returns.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-10] Read this first: the 2026-09-09 nightly ran, spent 2 of its 8 trials on the scout
+  track, and *answered* this file's #91 rather than leaving it — but the standing list is otherwise
+  untouched.** #91's four-count Henriksson–Merton screen was run against three overlays the lab had
+  already adjudicated with real trials, and it came back **one hit, one miss, one unreadable**: it
+  would have called the refuted drawdown brake a null for free, but gave a *green light* to the
+  refuted 200-day trend switch, and the rescue this file offered (a long-only gate's uncharged
+  cash-swing turnover) was checked and does not apply. The nightly's measured reason is stronger
+  than the note's own: the pass is neither split-stable nor bet-invariant, and the bet that decides
+  a trial costs a trial to compute. **The standing rule is now narrower than #91 as written — run
+  it on any proposed hold/sit-out overlay, act on a failure and never on a pass.** #91 above should
+  be read through that. **Still unrun: #82 (fourth session carried), #89, #92, #93, #94** — the
+  whole 2026-09-09 addition survives untouched, which is the first time this file has added three
+  items and had none of them reached.
+- **[2026-09-10] What should aim the next session, in order.**
+  - **#93 first, and tonight is a second independent argument for it.** It was already the only
+    zero-cost item and the lab's own #4 next-idea. Tonight sharpens it: #93's proposed list of
+    house defaults explicitly names *"whether region-demeaning is applied"* as one node — and the
+    new cross-family section shows that single node is doing **at least three separable things at
+    once** (imposing a unit loading, discarding a priced between-group component, removing a
+    currency exposure). A convention that bundles three mechanisms under one boolean is exactly
+    what a written house construction is for. Still free, still a documentation action.
+  - **Then #97, because it is the cheapest measurement on the list and it prices the other two.**
+    The nested `market / region / name` variance split needs no estimation at all, and the
+    USD-quoted-names subset is a placebo the lab has already built and used once. It answers, on
+    this universe rather than on a borrowed panel, how big the thing a demean removes actually is.
+  - **Then #95, which is the one that can fail and the one that questions a seated result.**
+    `lv_illiq_region_relative` is the lab's only leg improvement from a stated measurement
+    mechanism, and this literature predicts the between-region half it throws away should have
+    been priced. Three outcomes, all findings. Pre-register the breadth discount (~15 regions here
+    against 49 countries there) *before* measuring, so a null is informative rather than excused.
+  - **Then #92**, unchanged in rank from 2026-09-09 and unchanged in its two mandatory
+    preconditions. **#94 still needs no session of its own**, and #96 sits behind its own free
+    screen — it is the only item added tonight that could ever cost a trial, and it should not be
+    reached until that screen says the two rankings genuinely differ.
+  - **Then the lab's own remaining two, in its order: #89, #82.**
+- **[2026-09-10] The 2026-09-08 warning was honoured, and the way it constrained tonight is worth
+  stating.** That entry said the bottleneck is not this folder's supply of proposals. Tonight
+  found a genuine coverage gap anyway — and answered it with **three measurement mechanisms and no
+  book**. Every one of #95–#97 is a screen on a construction the lab *already runs*; two are free;
+  the third is gated behind a free screen. If the next nightly declines all three, that is still
+  the right call, and this file should still not answer it with more mechanisms.
+- **[2026-09-10] The coverage-claim correction, and what it says about how to check next time.**
+  Two consecutive sessions declared breadth exhausted. The object found tonight was not hiding in
+  an obscure family — it is the operator behind the lab's own best measurement result, and a
+  two-term grep across the whole folder found it in one call. Sessions 25 and 26 learned that a
+  coverage claim is only as fine-grained as the unit it was checked at, and checked *clauses*
+  after *headings*; tonight adds the third unit. **The checklist that would have caught this: for
+  every operator the lab applies to a score — demean, rank, winsorize, standardize, neutralize,
+  blend, band — is there a note on what that operator assumes?** As of tonight the answer is yes
+  for blending (2026-08-31), banding (2026-08-17), the number of bins (2026-09-06), weighting
+  (2026-08-17) and now group-demeaning; it is **not obviously yes for cross-sectional
+  standardization or winsorization**, and that is the first place a future session short of a
+  target should look. This is a narrower and more honest form of "breadth is exhausted" than the
+  two sessions before it managed.
+- **[2026-09-10] The embargo boundary, and it was not close tonight.** All three sources are
+  covariance and measurement papers; none yields a decision rule, a haircut or a threshold, so the
+  standing inference embargo was never approached. One boundary *was* applied, and it is the
+  2026-09-07/-08/-09 line: **ratios and proportional effects are admissible, levels are not.**
+  Concretely, Hou–Karolyi–Kho report factor premia and volatilities over a dated sample and
+  **none appear here**; what is recorded is that country-neutralizing takes one factor's volatility
+  to roughly 55% of its global counterpart against roughly 93% for industry-neutralizing, and that
+  premia fall precisely for the characteristics whose group mean was priced. Bekaert–Hodrick–Zhang's
+  `ABSECORR` figures are recorded as *levels* deliberately and the distinction is worth stating:
+  they are errors of a **covariance model against a sample correlation matrix**, not returns of any
+  portfolio, on the same footing as an IC or a monotonicity statistic. Campbell et al.'s currency
+  ordering was **declined entirely** — the paper's own two subsamples disagree, and a named
+  defensive currency would have been a period claim.
+- **[2026-09-10] Access notes: two silent-success failures, one new mirror channel, and the
+  largest lone-low-count discrepancy on record.**
+  - **NBER working-paper PDFs remain the most reliable channel in this folder's experience** — two
+    of tonight's three primaries came from `nber.org/system/files/working_papers/wNNNNN/wNNNNN.pdf`
+    on the first try, complete and text-extractable, for articles whose published versions are
+    closed in *The Journal of Finance*.
+  - **New failure mode, and it is more dangerous than a 403: HTTP 200 with the wrong content.**
+    AQR's `?aqrPDF=1` endpoint returned a valid, parseable 32KB PDF for a working paper — containing
+    **only a two-page legal disclosure wrapper and no paper at all**. Separately,
+    `terpconnect.umd.edu/~sheston/` returned 200 on an author directory that is **empty**. Neither
+    is caught by `curl -w '%{http_code}'` or by `file`; both are caught by checking page count and
+    reading the first page. **Add to the recipe: verify content, not just status and file type.**
+  - **A third-party document-mirror host served a working paper SSRN itself 403s**
+    (`gyanresearch.wdfiles.com/local--files/alpha/SSRN-id908345.pdf`, 54pp, complete). This is the
+    same channel class session 13 recorded. Two cautions worth attaching: it is an
+    **unauthoritative** copy, so the note says which version was read and checks it against the
+    publisher's abstract; and it is a *working-paper* version, which here differed from the
+    published one in sample size and span — caught only because the check was made.
+  - **OpenAlex's `abstract_inverted_index` earned its place twice**, for exactly the job the
+    2026-09-09 entry named: checking a published version against the working paper actually read.
+    On one source it confirmed the headline claim verbatim; on the other it surfaced a **real
+    discrepancy** (published: ~27,000 stocks over "a three-decade period"; working paper: ~29,000
+    over 1981–2003), which is now flagged in that note rather than papered over.
+  - **The largest lone-low-count discrepancy this folder has recorded**: OpenAlex reports **32**
+    citations for `10.1111/j.1540-6261.2009.01512.x` against Crossref's 650 and Semantic Scholar's
+    827, for a *Journal of Finance* article. Session 7's rule — disbelieve a lone low count that
+    disagrees with the venue — holds, and the tell here was a two-index agreement against one.
+  - **Semantic Scholar served 3 of 4 DOI lookups** and missed `10.1093/rfs/hhr013` (RFS) and
+    `10.1111/j.1540-6261.2009.01524.x` (JF) — the same Oxford/Wiley finance-DOI miss pattern
+    sessions 11–15 record. **Crossref answered every lookup**, including recovering a published DOI
+    by `query.bibliographic` after a plausible guessed DOI 404'd. No title-search call was spent.
+  - **Two sources are recorded `unread`, not summarised from abstracts**: Heston–Rouwenhorst 1994
+    and Griffin–Karolyi 1998 are both `oa_status: closed` with no repository copy in OpenAlex, and
+    every claim of theirs used tonight is taken as restated inside the primary and flagged in-note.
+    Asness–Porter–Stevens, the origin of the `m`/`dm` decomposition, is likewise **unread** (it is
+    the AQR disclosure-wrapper case above) and nothing is taken from it.
+- **[2026-09-10] Protocol note, fifth session running: the session-start hook still does not detect
+  the branch.** The hook printed `integrity check OK — on main` while `git status -sb` reported
+  `claude/tender-galileo-rzm2ct` — a per-run branch pointing at exactly `origin/main`, with local
+  `main` 31 commits behind. Corrected to `main` before any work, per the standing instruction never
+  to work from a per-run branch. This is the same divergence the 2026-09-06, -07, -08 and -09
+  nightly summaries record, now observed by the research agent as well, so it is not specific to
+  the strategy session. `git branch -r --no-merged origin/main` is the check that confirms nothing
+  is stranded; it was clean.
 
 - **[2026-09-09] Read this first: the 2026-09-08 nightly ran, spent its full `price-trend` cap and
   a great deal of free measurement, and answered two of this file's three live proposals.** #88 is
