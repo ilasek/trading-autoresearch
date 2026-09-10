@@ -7939,3 +7939,54 @@ reversal does not. Note also the sample confound the 2026-09-04 rule predicts: `
 **No engine issues encountered.**
 
 ## Research session — 2026-09-10 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-10 (nightly), written before any measurement was run
+
+`research/SUMMARY.md` #95 makes pre-commitment mandatory ("two construction nodes to
+pre-commit"), #94 asks for the intermediate node list up front, and #92's second
+precondition is that a node added after seeing results is a finding about the agent
+rather than about the strategy. This block is committed *before* the first score is
+computed so that the ordering is verifiable in git, not asserted in prose.
+
+**Tonight's plan, in the order `SUMMARY.md`'s own 2026-09-10 open question ranks it:**
+#93 (write the house construction — free, documentation), then #97 (the nested
+variance split and the currency share — free, train-only), then #95 (region-mean
+versus region-demeaned halves of every score the lab owns — free, train-only, and it
+can fail), then #96's free screen, which is the only gate to a trial tonight.
+
+**Nodes pre-committed for #95 and #96 (values fixed now, not chosen later):**
+
+- **Split**: train only (`None .. 2017-12-31`). No validation-scored screen, no
+  holdout of any kind.
+- **Forward horizon**: 21 trading days, the repo's standard, single horizon. No
+  horizon search.
+- **Region map**: `strategies/lib/groups.REGION_OF`, static metadata from
+  `data/universe.yaml`. No re-grouping.
+- **`MIN_REGION` = 4** — the seated `liquidity-volume` lead's own constant, inherited
+  rather than chosen, so the reading is about the operator the lab actually runs.
+- **ETF handling**: ETFs **included** in the region mean, again matching the seated
+  lead exactly. An ETF-excluded arm is reported as a secondary check; the primary
+  reading is the inclusive one whatever the two say.
+- **Scores measured**: 63-day Amihud `ILLIQ`, same-minus-other-calendar-month
+  seasonal, 21-day reversal, 12-1 momentum, plus two controls — 21-day Garman-Klass
+  volatility (this repo's identified survivorship artifact) and a placebo hash of
+  (date, ticker) reading no market data.
+- **#96 estimation window**: 252 trading days for the rolling regional-ETF beta,
+  fixed now. The screen's kill line is also fixed now: if the region-demeaned and
+  regional-residual rankings agree at the level this repo's other near-duplicate
+  pairs do — `spearman >= 0.98`, the value `learnings.md` records for two recorded
+  pairs — there is nothing to test and **no trial is spent**.
+
+**Pre-registered expectation for #95, stated so a null is informative.** The source
+panel has 49 countries; this universe has ~15 regions, several below `MIN_REGION`,
+and the between-group regressor takes as many distinct values per date as there are
+groups. The `m` half should therefore be expected to read **worse here than in the
+source**, and I am predicting the seated result survives: **`dm` carries the content
+and `m` is at or near a null for `ILLIQ`**. If both halves carry content, the demean
+is discarding signal and the two halves are candidates to be separate legs. If only
+`m` carries content, the lab's best measurement result is a region bet in costume.
+
+**Budget note.** `range-variance` remains the only family with no recorded trial and
+the cold-family clause is expected to go unsatisfied for a tenth session; the reasons
+are recorded in the last four session summaries and are not re-litigated by writing
+this line. Any trial tonight is `liquidity-volume`, scout track, and at most one.
