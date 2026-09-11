@@ -8275,3 +8275,83 @@ region demean subtracts a mean of mixed exposure from names of pure exposure.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-11 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-11 (nightly), written before any candidate was scored
+
+Committed before the first `run_experiment.py` call, so the ordering is verifiable in git
+rather than asserted in prose (the discipline adopted 2026-09-10). Every number quoted below
+comes from train-split or holdings-only measurement; nothing has been scored through the
+engine and nothing has touched validation or holdout.
+
+**The idea.** `research/SUMMARY.md` #98, the parametric portfolio policy
+(Brandt-Santa-Clara-Valkanov): the first construction shape in this repo's history that ranks
+nothing and holds no band. `w[i,t] = 1/N_t + (1/N_t)*theta' xhat[i,t]`, long-only by
+`max(0,w)/sum(max(0,w))`, where `xhat` are cross-sectionally standardized characteristics and
+`theta` is a 3-vector.
+
+**The nodes, pre-committed under the #93 house-construction rule.** Characteristics: the
+champion's four-horizon momentum z-score, region-relative Amihud `ILLIQ` (the seated
+`liquidity-volume` lead's score), and the same-minus-other-calendar-month seasonal (the seated
+`seasonality-calendar` lead's score) — three scores the lab already owns, each z-scored.
+Pool: the `common` intersection of the three eligibilities, the house default, which is ~68 of
+140 names. Grid: house default. Utility: **quadratic, gamma = 5**, chosen before anything was
+fitted; it is the choice that makes the fit a closed-form 3x3 linear solve, so there is no
+optimizer and no non-determinism for `causality_check` to read as a peek. Horizon 21 days.
+`theta` refit walk-forward at every rebalance on rows whose forward target was already
+realized (`t + 21 <= d`), minimum 60 month-ends before the first fit. Family:
+**`statistical-learning`**, stated deliberately per #98's instruction — `theta` is estimated
+from data, and the object is NOT a fourth aggregation operator over the union legs (which
+`learnings.md` forbids): its parameter is fitted to the *portfolio's* utility, and its output
+is a weight vector, not a ranking.
+
+**The free screen that motivates it** (train, forward 21d, book excess over its own scoreable
+pool **weighted by the book's own weights** per 2026-09-10's lesson, one common 334-date
+sample, churn and the book's volatility percentile printed beside every arm):
+
+    arm                                        names   excess %/yr     t    volpct   churn
+    PPP, walk-forward theta (3 chars)           41.4      +10.70     +6.83   0.581   13.2x
+    band on the SAME theta'x, magnitude wt      41.2       +7.46     +7.24   0.547   10.6x
+    band on the SAME theta'x, equal wt          41.2       +4.08     +5.52   0.512    7.6x
+    PPP, hand-set theta=(1,0,0)  [#98's ctl]    61.3       +1.92     +1.42   0.545    3.6x
+    PPP, theta=(0,0,0)  [= equal weight]        68.2        0.00     +0.65   0.510    0.1x
+    [ctl] PPP on a PLACEBO characteristic       66.2       -0.32     -0.74   0.509    7.6x
+    band: momentum top 20% of pool, mag wt      13.7       +8.34     +2.82   0.672    7.4x
+    band: region-ILLIQ top 40% of pool, eq wt   27.3       +4.80     +4.11   0.544    1.3x
+
+**#98's own decision rule is satisfied.** The note says to fix `theta` by hand first and, if
+the hand-set version carries the result, not to spend a trial. It does not: hand-set
+`theta=(1,0,0)` reads +1.92%/yr (t = +1.42) against the fitted +10.70, a paired difference of
+**+8.78%/yr at t = +5.21**. The placebo policy — same machinery, a characteristic that reads no
+market data — reads **-0.32%/yr**, so the harness has no free lunch in it.
+
+**What is being predicted, and what is NOT.**
+1. `sl_ppp_walkforward` validation Sharpe **0.95, range 0.75-1.15.** The reference points on
+   the same statistic are the seated `liquidity-volume` lead (+4.80%/yr screen -> 0.942
+   recorded) and the best non-`price-trend` result ever (1.008, quoted as the 0.88-1.01 range).
+   The point estimate is deliberately **below** what the screen's +10.70%/yr would imply,
+   because the standing over-prediction rule (restored as the default 2026-09-06) applies, and
+   because 13.2x churn costs ~2.0%/yr against the seated lead's 0.14%/yr.
+2. **Train Sharpe as a prediction of validation Sharpe**, per the standing instruction; n = 29
+   outside `price-trend`. Admissibility under the 2026-09-04 sample rule is checked after the
+   run, since a ~68-name common pool starts later than a single sort's.
+3. **No drawdown call is made.** The risk-contribution statistic is blind to anything that is
+   not cross-sectional and contemporaneous, its K=6 residual scatter is +-1.2pp, and this is a
+   membership-and-weighting change on a different base; per 2026-09-09, an effect inside a
+   diagnostic's error bar is an absent prediction, not a small one.
+4. **The A-vs-B contrast is deliberately NOT bought with a second trial.** Rank-and-band on the
+   same `theta'x` is the arm that would isolate the policy shape on the gate's axis, and the
+   free screen already puts that difference at +3.23%/yr (t = +4.68) at matched breadth (41.4
+   vs 41.2) and near-matched churn. Converted at this book's volatility it is ~+0.16 of Sharpe
+   against a paired SE of ~0.08-0.13 at the `rho` such a pair would carry — inside the family's
+   resolution floor, i.e. exactly the unresolvable margin the 2026-08-24 rule says not to pay a
+   permanent DSR increment for. It would also be a linear combiner over the union legs, which
+   `learnings.md` closes. One trial, not two.
+
+**Named in advance.** Above ~1.0: the policy shape is the first construction in this repo to
+beat the rank-and-band house default outside `price-trend`, and the band node — the one node
+#93 refuses to give a single value — has an alternative that sets breadth from a utility rather
+than from a profile. Between 0.75 and 1.0: a competitive but not leading first reading of a new
+shape, recorded as the family's lead if it beats `sl_ridge_nontrend_block`'s 0.634. Below 0.75:
+the shape does not survive the variance its tilt buys, and the +10.70%/yr screen is the
+over-prediction rule arriving on a construction rather than on a score.
+
