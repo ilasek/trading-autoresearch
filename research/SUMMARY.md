@@ -1561,6 +1561,22 @@ fully-invested long-only combination, the only linear escape is to hold cash, an
 market-timing bet priced at `Δ · g · (p1 + p2 − 1)` — which `learnings.md`'s standing "blending
 beats switching" finding is the measured instance of.
 
+**[Added 2026-09-11] A sixth object in this family, and the first that is neither a
+signal-aggregation operator nor a covariance allocator.** Every closure above — mean, max, union,
+intersection, and the stacking/meta-labelling pair — is an operator applied *over family leads*,
+and HRP (2026-09-07, declined 2026-09-08) is an allocator that uses no characteristics and fits no
+objective. **A parametric portfolio policy** (Brandt–Santa-Clara–Valkanov 2009, RFS; Tier A,
+`validation_overlap: false`, `published_post_2018: false`) is the missing third kind: a *weighting
+function of standardized characteristics*, with a handful of coefficients fitted against the
+**portfolio's own utility** rather than against 140 return series. It ranks nothing and holds no
+band, which makes it the first structurally new construction shape proposed here since 2026-09-06
+observed that every strategy this repo has run does both. Its long-only form is three lines
+(`w⁺ = max(0,w)/Σmax(0,w)`), its parameter count grows with the number of characteristics rather
+than assets, and its one fatal import hazard is that the source fits `θ` **once over the full
+sample** — walk-forward refit is mandatory here. Candidate #98, gated behind a free hand-set-`θ`
+control that can make the trial unnecessary.
+→ `notes/2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`
+
 ---
 
 ### Portfolio construction & rebalance mechanics (cross-family)
@@ -2632,6 +2648,92 @@ exposure that is correlated with global equity. The lab's region demean *worked*
 does not dispute that; it says the lab does not currently know **which of the three channels it
 worked through**, and that all three are separable on the train split for free. That is the
 content of candidates #95–#97.
+
+### The score's own distribution — what standardizing assumes, what trimming decides (cross-family)
+
+**[Added 2026-09-11] This section closes the operator-checklist gap the 2026-09-10 entry named.**
+That entry proposed asking, for every operator the lab applies to a score — demean, rank,
+winsorize, standardize, neutralize, blend, band — whether a note exists on what it assumes, and
+answered "not obviously yes for cross-sectional standardization or winsorization". A direct grep
+across all 88 prior notes confirms it: `standardi` appears in 12 notes and `winsoriz` in six,
+always incidentally, and in none is either operator the subject. The gap is not academic. The
+lab's champion family is named `mom_zscore_*`; `learnings.md` records the
+equal-weight → rank-weight → **z-score-magnitude-weight** ladder (validation 0.90 → 0.93 → 0.98
+→ 1.03) as the largest within-basket lever ever found here; and a candidate with `_daily_trim` in
+its name sits in the trial history. Both operators are load-bearing and neither has ever been
+examined.
+
+**Standardizing does three separable things, and this lab's single boolean bundles them.**
+Brandt–Santa-Clara–Valkanov (2009, RFS; Tier A, `validation_overlap: false`,
+`published_post_2018: false`) build a portfolio policy in which cross-sectional standardization is
+load-bearing rather than cosmetic, and say what it buys: *(a)* **stationarity** — the
+cross-sectional distribution of a standardized characteristic is stationary through time while the
+raw one may not be, which is what makes a constant coefficient coherent across periods;
+*(b)* **budget** — zero cross-sectional mean makes the deviations sum to zero, so weights sum to
+one with no renormalization; and *(c)* — a **separate operator they attach to the same formula**, a
+`1/N_t` term, without which *doubling the number of stocks without otherwise changing the
+cross-sectional distribution of the characteristics results in twice as aggressive allocations,
+even though the investment opportunities are fundamentally unchanged.* **(c) is the one this lab
+most needs and least obviously has.** A z-score is invariant to the *scale* of a score but not to
+the *size* of the cross-section it was computed over, and this lab's pool size moves — `learnings.md`
+(2026-09-04) records region-demeaning narrowing the scoreable pool from ~84 to ~77 names, with
+`MIN_REGION=4` gating which names are scoreable at all. **Two riders.** Under a long-only
+constraint, (b) stops applying: truncating negatives at zero breaks the sum-to-one property, and it
+is the renormalization, not the standardization, that enforces the budget — so the lab should claim
+only (a) for its z-scores. And the lab has already met the scale-invariance issue from the other
+side: the 2026-09-01 retraction in `learnings.md` established that "tail depth" measured in each
+operator's own raw score units is **not scale-free**, and that standardized, every book reached the
+same 1.46–1.56 SDs because they all buy the same quantile by construction.
+→ `notes/2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`
+
+**Winsorizing and truncating do not do what they are believed to do, and the two biases point in
+opposite directions.** Leone–Minutti-Meza–Wasley (2019, *The Accounting Review*; Tier A,
+`validation_overlap: false`, `published_post_2018: true`) compare winsorization, truncation,
+influence diagnostics and robust regression by simulation and by replicating published studies.
+Both standard treatments are applied **variable by variable on marginal distributions**, while
+influence is a property of the **joint fit** — leverage combined with a large residual — so they are
+addressing a different object from the one they are reached for, and are ineffective at identifying
+influential observations. The directions: **truncation biases coefficients toward zero**; **winsorizing
+the independent variable but not the dependent biases away from zero** — and their census of practice
+finds 55% of studies winsorize but only 33% do so on both sides, 40% truncate but only 30% on both.
+When contamination is random, 1%/99% winsorization is near-harmless; when it is *correlated with a
+predictor* — the realistic case — winsorization does not mitigate the bias and robust MM-estimation
+removes about 80% of it. Their earnings-response illustration is the cleanest demonstration this
+folder holds of a construction node swamping the effect estimated: the same regression on the same
+data gives a slope of ≈0.00002 raw, ≈0.408 winsorized at 1/99, and ≈1.618 at 5/95. **Recorded as
+coefficient magnitudes, on the same footing as an IC or a monotonicity statistic — not returns, no
+period claim.** Their own reading is that extreme observations in financial panels are often *real
+low-frequency events* rather than errors, so the treatment deletes signal and the cutoff silently
+decides how much; their recommended alternatives are robust loss functions and, explicitly, the
+**rank transform**, which bounds influence without altering any observation.
+→ `notes/2026-09-11-influential-observations-winsorization-versus-robust-regression.md`
+
+**What the choice is worth, in the most-replicated cross-sectional result there is: the whole
+effect.** Knez–Ready (1997, JF; Tier A, `validation_overlap: false`) re-run the Fama–French (1992)
+cross-sectional regressions with a robust estimator and report that **the size premium completely
+disappears when the 1 percent most extreme observations are trimmed each month**, and that the
+negative average of the monthly size coefficients **is entirely explained by the 16 months with the
+most extreme coefficients** — a low-single-digit percentage of the periods carrying all of the
+result. The authors explicitly do *not* read this as debunking the premium; they read the
+concentration as where the economics lives. **This note is abstract-only** (the article is closed;
+Unpaywall reports zero OA locations) and is flagged as such — it is recorded for the magnitude of
+the stake, not as support for any construction choice.
+→ `notes/2026-09-11-trimming-and-the-size-premium.md`
+
+**Read together, the three say something none says alone, and most of it is a narrowing.** A rank
+is invariant to any monotone transform, so **winsorizing a score before ranking it changes
+nothing** — every pure sorted-band book in this repo is immune to this literature by construction.
+The lab's exposure is confined to exactly three places: **magnitude weighting** (where one extreme
+score takes capital from every held name, and the 25% cap is the only current defence);
+**fitted models** (`statistical-learning`, and the policy proposed as #98, where a squared-error
+objective is dominated by the cross-section's extremes and a Huber-type loss is the cheap fix —
+the same recommendation `notes/2026-08-29-machine-learning-cross-section-comparative.md` reached
+from the ML side); and **any per-period mean the lab reads as evidence**, including IC. And one
+constraint governs all of it: **1% of 140 names is one name.** A percentage rule that removes a
+stable tail from a cross-section of thousands removes a coin-flip from this one, so any trimming or
+concentration rule here must be specified in **names and periods, never in percent** — which is
+also why the lab should expect its version of the Knez–Ready check to be materially noisier than
+the literature's. That is the content of candidates #98–#100.
 
 ## Cross-cutting principles
 
@@ -5142,6 +5244,79 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-10-country-industry-global-return-decomposition.md`,
     `notes/2026-09-10-currency-component-in-usd-converted-returns.md`
 
+98. **[Added 2026-09-11] A parametric portfolio policy — the first construction shape in this
+    repo's history that ranks nothing and holds no band.** The 2026-09-06 session observed that
+    *every strategy this repo has ever run ranks a score and holds a band*; this is the alternative.
+    **The construction**: `w[i,t] = wbar[i,t] + (1/N_t)·θᵀ·xhat[i,t]`, where `wbar` is a benchmark
+    weight (equal weight here), `xhat` is the vector of that name's characteristics **standardized
+    cross-sectionally at each date**, and `θ` is a short coefficient vector chosen to maximize the
+    sample average of a **pre-committed** utility of the *portfolio's* return. Long-only is three
+    lines and is given exactly in the source: `w⁺ = max(0,w) / Σ max(0,w)`, with the 25% cap as a
+    second clip-and-renormalize. Parameter count grows with the number of **characteristics**, not
+    assets — a 3–4 characteristic policy over 140 names is a 3–4 parameter model, which is about as
+    close to `CLAUDE.md`'s *"prefer few features and a penalised linear model first"* as a learned
+    construction gets, and it is the one shape whose objective is the book's own utility rather than
+    140 noisy return series. Available daily-computable characteristics with standing here: the
+    champion's momentum z-score, region-relative Amihud `ILLIQ` (the seated family lead), a range
+    volatility measure, a seasonal score. **Two mandatory riders, and the first is fatal if ignored.**
+    *(a)* The source's `θ` is a **single full-sample fit** — its split-half swap is an evaluation
+    design, not an estimation one — and applied here as written it would fail `causality_check`
+    outright. `θ` must be refit walk-forward via `strategies/lib/walkforward.py`. *(b)* **The source's
+    low turnover must not be inherited**: it rests on `θ` being constant, and a refit `θ` moves every
+    rebalance and adds turnover the paper never measured. Measure it here or say you have not.
+    **The free control to run first**: fix `θ` by hand at `(1,0,0,…)`. That reproduces a
+    magnitude-weighted single-signal book *with* a breadth correction, so it separates the gain due
+    to the policy shape from the gain due to estimation — and if the hand-set version carries the
+    result, the estimated one is not worth a trial. Family choice (`portfolio-learning` vs
+    `statistical-learning`) should be made deliberately and stated, since it decides which cap binds;
+    the utility function is a specification node to pre-commit under #93. Also note the source's own
+    large-cap discount: on its 500-largest subset the value coefficient is **about half** the
+    full-cross-section value, a third independent arrival at the finding that this universe is where
+    characteristics work least. One free control, then at most one trial. Tier A.
+    → `notes/2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`
+
+99. **[Added 2026-09-11] Two free measurements on the operator the champion's best lever depends
+    on — breadth and weight concentration — plus a one-line house-convention entry.** Neither scores
+    a candidate; both are train-split diagnostics. *(a)* **The breadth audit.** A z-score is
+    invariant to a score's scale but **not** to the size of the cross-section it was computed over,
+    and the lab's pool size moves (region-demeaning ~84 → ~77 names; `MIN_REGION=4` gating
+    scoreability). Measure how much the effective bet size of each magnitude-weighted book moves
+    with its pool size, and whether a `1/N_t` normalization — one multiplication — removes it. This
+    is the cheapest item on this list. *(b)* **The concentration check.** For each held date, what
+    share of the book's weight sits in the single most extreme name, and how does that share move if
+    the score is winsorized at 1/99 **before** weighting? Under z-score-magnitude weighting the most
+    extreme names *are* the largest positions, so this is the one place the outlier literature
+    reaches the champion; the 25% cap is a cap, not a treatment, and the answer decides whether any
+    of it is live. *(c)* **The convention line, which costs nothing and belongs in #93's list**:
+    when a candidate trims, **state which side is trimmed**, because the two sides bias in opposite
+    directions — truncation toward zero, winsorizing the predictor but not the outcome away from
+    zero — and the lab already has a `_daily_trim` trial with no recorded rationale for which it
+    did. **The governing constraint on all three: 1% of 140 names is one name**, so every rule here
+    must be specified in names, not percent. Free, train-only, no trial, no holdout. Tier A.
+    → `notes/2026-09-11-influential-observations-winsorization-versus-robust-regression.md`,
+    `notes/2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`
+
+100. **[Added 2026-09-11] The period-concentration check — a free diagnostic that can fail, run on
+    every score already on the board.** Knez–Ready report that the negative average of the monthly
+    size coefficients in the most-replicated cross-sectional result in the literature is **entirely
+    explained by the 16 months with the most extreme coefficients**. The lab grades candidates on IC
+    and on top-band excess return, and **both are means of a period-by-period series**, so the
+    translation is exact and needs no new machinery: for each score, sort the per-period
+    contributions and ask **how many periods deliver the whole mean**. If a family lead's IC comes
+    from a handful of months, that is a concentration finding about that lead, obtained for free —
+    nothing through `run_experiment.py`, no trial, no holdout. It is the time-series counterpart of
+    the 2026-09-06 monotonicity work (which asked whether the *cross-sectional* ranking hides its own
+    structure) and it composes with #92's specification curve. **What makes it worth doing is that it
+    can fail**, which this file has said repeatedly it should be producing more of. **Riders**: specify
+    the rule in periods and names, never in percent, and expect it noisier than the literature's
+    version by roughly the ratio of the cross-section sizes; and do **not** read a concentrated result
+    as a refuted one — the source's own authors read concentration as where the economics lives, not
+    as evidence of an artifact. The supporting note is **abstract-only** and flagged; the magnitude is
+    what is imported, not a threshold. Free, train-only, no trial. Tier A (venue and citation record;
+    evidentiary weight bounded by the four abstract sentences that were read).
+    → `notes/2026-09-11-trimming-and-the-size-premium.md`,
+    `notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -5175,8 +5350,130 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-08 (session 26) | **The session arrived to a list that was neither spent nor answered but *declined* — the 2026-09-07 nightly ran and spent zero trials, screening all three of this file's live proposals against the idea rather than a candidate file, and its own message was that the bottleneck is not idea supply.** #85's within-name volume-state book was killed outright (pooled phase effect far below the seated lead's, churn an order of magnitude larger than any effect measured); #79's `DELAY` closed with its statistic at **0.94x its own null in level, spread and persistence**, leaving `lead-lag-spillover` with no live branch; #86's HRP was declined and the free measurement **refuted the note's own prediction by an order of magnitude** (74–79% deviation from equal weight against the "few percent" predicted) while strengthening the verdict. Only #82 is still unrun. **So the focus was taken the same way 2026-09-07 took it — from `program.md`'s sub-mechanism clauses rather than its family headings — and the one remaining clause with zero notes was `portfolio-learning`'s "stacking or meta-labelling", which this file's own 2026-09-07 audit had named as the honest next gap.** Both halves are covered, and covering them turned out to supply the *structural* reason four empirical closures in that family were inevitable: a fully-invested long-only book sits on the simplex (`α ≥ 0`, `Σα = 1`), which is exactly Breiman's interpolating-predictor condition, so the "gain is bounded by the components' disagreement" result recorded five times in `learnings.md` is a theorem rather than a regularity — and the only linear escape, dropping `Σα = 1`, means holding cash, which the second note prices exactly as a market-timing bet worth `Δ·g·(p1+p2−1)`. **The third note is a measurement note aimed at an artifact the lab has now measured twice without a generator** (a ~4x regional cross-serial offset on 2026-09-06, a 4.8x daily-versus-weekly correlation ratio on 2026-09-07): the non-trading model produces both in closed form, and a corollary derived here from its own equations says the observed cross-group correlation is `√((1−p_a²)(1−p_b²))/(1−p_a p_b)` — unity when two groups share a staleness, attenuated only by the difference. That lands on the `rho` every blend decision in this repo is priced on (#90). **Four free screens follow (#88, #89, #90, #91), three of them tests that can fail**, and two of the three notes end in anti-candidates. **Access and index behaviour**: all four Tier-A primaries **read in full**. The Berkeley statistics tech-report archive served the typeset *Machine Learning* article; NBER served the working-paper version of the *Journal of Econometrics* article as a **scan with no text layer** (38 characters from 39 pages), read by rendering to PNG with **`pymupdf`** — which also removes the missing-`pdftoppm` dependency the README notes. **The session's new channel is the Internet Archive's OCR text**: MIT DSpace, which holds the same two Merton scans, returned HTTP 429 to every attempt including five retries with backoff, while `archive.org` served both items' `_djvu.txt` full text instantly — check `archive.org/metadata/<id>` for a `_djvu.txt` before rendering anything. Three sources recorded **not read**: the two *Journal of Financial Data Science* meta-labelling articles (publisher redirects an automated client into an OpenID flow) and the López de Prado book, with the construction taken instead from the authors' **own published reference implementation** and **no finding relied on from any of the three**. Index behaviour, two more instances of "disbelieve a lone count" and both of new kinds: Breiman's article carries **two separate Crossref DOI registrations** for the identical pages (923+464 Crossref, 1414+452 Semantic Scholar), so any single lookup understates it by a third to a half; and the Lo–MacKinlay *Journal of Econometrics* DOI is **not found by Semantic Scholar at all** while OpenAlex holds it merged into the NBER working paper with a count of 3, leaving Crossref's 588 as the only usable figure. | Breiman 1996 (Machine Learning; the typeset article read in full from `statistics.berkeley.edu`) with Le Blanc–Tibshirani 1996 (JASA, **not read**, its conclusion quoted from Breiman's own description) (`2026-09-08-stacked-regressions-nonnegative-weights.md`); Merton 1981 (Journal of Business, Part I) + Henriksson–Merton 1981 (Part II), **both read in full via Internet Archive OCR of the MIT Sloan working papers**, with López de Prado 2018 (book), Joubert 2022 and Meyer–Joubert–Alfeus 2022 (JFDS) all **not read** and used only for the construction (`2026-09-08-meta-labeling-and-the-value-of-a-filter.md`); Lo–MacKinlay 1990 (Journal of Econometrics; NBER WP 2960 read in full by page-image rendering) (`2026-09-08-nonsynchronous-trading-econometrics.md`) |
 | 2026-09-09 (session 27) | **The first session aimed by this file's own conditional rather than by a gap: 2026-09-08 declared breadth genuinely exhausted ("the next session should not look for an uncovered mechanism; there is not one") and 2026-09-02 had gated one last method on exactly that condition — the literature on how much of a measured result is the *construction* rather than the idea.** Taken tonight: the concept and its magnitude (164 teams, one dataset), its mechanical measurement on portfolio sorts (2,048 and 69,120 enumerated constructions, two independent teams), and the single-researcher method for enumerating and displaying it. The session's shape is one measurement the lab can run free on train, one convention it can write down for nothing, and one standing discipline — plus an explicit declaration of which third of the method is *not* imported, because it is inference. | Menkveld, Dreber, Holzmeister, Huber, Johannesson, Kirchler, Neusüss, Razen, Weitzel et al. 2024 (JF; Bank of England Staff WP 955 read in full) (`2026-09-09-nonstandard-errors-evidence-generating-process.md`); Soebhag–van Vliet–Verwijmeren 2024 (J. Empirical Finance; FoFI 2022 working-paper copy read in full, published abstract read via OpenAlex) with Walter–Weber–Weiss 2022/2024 (SSRN, **not read in full** — abstract, authors' blog and public code only) (`2026-09-09-nonstandard-errors-in-portfolio-sorts.md`); Simonsohn–Simmons–Nelson 2020 (Nature Human Behaviour; Wharton-hosted published article read in full), with Steegen–Tuerlinckx–Gelman–Vanpaemel 2016 cited as the acknowledged predecessor and **not read** (`2026-09-09-specification-curve-analysis.md`) |
 | 2026-09-10 (session 28) | **The first session in three aimed by a gap rather than by a method — and the gap was one two consecutive sessions had declared did not exist.** 2026-09-08 wrote "the next session should not look for an uncovered mechanism; there is not one" and 2026-09-09 repeated it; a direct search across all 85 notes returned **zero** hits for `country effect` or `industry effect`, and no note anywhere on the country/industry/global variance decomposition or on the currency component inside a USD-converted price — while region-demeaning is an operator the lab *already uses* and the source of its only leg improvement from a stated measurement mechanism. The unit-of-check lesson bit a second time: after families and clauses, the third unit is the **operator**. Three Tier-A sources, all read in full, all pre-2018 samples in Tier-1 journals, so the whole session is `validation_overlap: false` / `published_post_2018: false`. Taken tonight: what a demean *assumes* (unit loadings, and they over-correct at the name level), what it *discards* (a between-group component that is priced but low-breadth), and what a USD conversion *adds* (a signed currency exposure correlated with global equity). New cross-family section; candidates #95–#97, two of them free and the third with a mandatory free screen. | Bekaert–Hodrick–Zhang 2009 (JF), read as NBER WP 11906, with Heston–Rouwenhorst 1994 and Griffin–Karolyi 1998 second-hand and **unread** (`2026-09-10-country-industry-global-return-decomposition.md`); Hou–Karolyi–Kho 2011 (RFS), read as the Dec-2006 working paper via a third-party document mirror (`2026-09-10-country-demeaned-versus-country-mean-characteristics.md`); Campbell–Serfaty-de Medeiros–Viceira 2010 (JF), read as NBER WP 13088 (`2026-09-10-currency-component-in-usd-converted-returns.md`) |
+| 2026-09-11 (session 29) | **Aimed by the checklist 2026-09-10 wrote for exactly this situation, and it worked on the first try.** That entry's rule — *for every operator the lab applies to a score (demean, rank, winsorize, standardize, neutralize, blend, band), is there a note on what that operator assumes?* — named **cross-sectional standardization and winsorization** as the two with no note, and a grep across all 88 prior notes confirmed it: `standardi` in 12 notes, `winsoriz` in six, subject of none. This is the second consecutive session where a coverage gap was found by checking a *finer unit* than the previous session used (families → clauses → operators), and the first where the unit was supplied in advance rather than discovered after the fact. The gap was load-bearing: the champion family is named `mom_zscore_*`, the equal → rank → **z-score-magnitude** ladder is the largest within-basket lever `learnings.md` records, and a `_daily_trim` trial sits in the history with no rationale for which side it trimmed. Three sources, all Tier A; **two read in full, one recorded from its published abstract only and flagged throughout**. The shape is *one construction, one correction, one magnitude* — and the correction is mostly a **narrowing**: a rank is invariant to any monotone transform, so winsorizing before ranking changes nothing, and the lab's entire exposure to this literature is three places (magnitude weighting, fitted models, and any per-period mean read as evidence). New cross-family section; candidates #98–#100, **two of them free and the third gated behind a free hand-set-`θ` control**. #98 is the first construction shape proposed here that ranks nothing and holds no band. **Access and index behaviour**: NBER served the BSV working paper first try, complete and text-extractable — the channel this folder has now recorded as its most reliable, three sessions running. A personal academic page served the Leone et al. working draft, **checked against the published abstract via OpenAlex** (every claim relied on appears there; the published version adds a replication emphasis the draft's abstract lacks). Knez–Ready is **genuinely closed**: Unpaywall reports `is_oa: false` with **zero** OA locations, OpenAlex `oa_status: closed` with `any_repository_has_fulltext: false` and only two locations (the Wiley DOI and a JSTOR SICI), and CORE returned a Cloudflare redirect shell. Recorded abstract-only rather than guessed at — the robust estimator's specification is deliberately left blank in the note. **A third instance of the two-DOI registration pattern** first recorded for Breiman on 2026-09-08: Knez–Ready is registered both as `10.1111/j.1540-6261.1997.tb01113.x` (S2 274, OpenAlex 287, Crossref 131) and as `10.2307/2329439` (S2 **not found**, OpenAlex 69, Crossref 35) — a single lookup against the JSTOR DOI understates it by roughly 4×, and S2's miss on that DOI is the same Wiley/JSTOR finance-DOI pattern sessions 11–15 record. Counter-instance worth recording too: **BSV's three counts agree within ~15%** (OpenAlex 492, S2 434, Crossref 415), which is unusual enough in this folder to note. | Brandt–Santa-Clara–Valkanov 2009 (RFS), read in full as NBER WP 10996 (`2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`); Leone–Minutti-Meza–Wasley 2019 (The Accounting Review), the August 2013 working draft read in full and checked against the published abstract (`2026-09-11-influential-observations-winsorization-versus-robust-regression.md`); Knez–Ready 1997 (JF), **not read — published abstract only, flagged in-note** (`2026-09-11-trimming-and-the-size-premium.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-11] READ THIS FIRST — and the first item is not about research. The 2026-09-10
+  nightly's entire session was stranded on a per-run branch and was recovered by this agent at the
+  start of tonight's session.** Three commits on `origin/main-a2tfle` — a pre-registration entry
+  written before any measurement, trial #89 (`lv_illiq_stocks_only`, SCOUT) with its
+  `trial_returns/` parquet and leaderboard update, the session summary and 182 lines of distilled
+  learnings — were never on `main`. This is the **fourth** recorded stranding after 2026-08-31
+  (`main-rdlknw`), 2026-09-02 (`main-ymqquw`) and 2026-09-03 (`main-al9y2f`), and the failure mode
+  is the one the 2026-08-12..15 precedent names: a trial that never reaches `main` leaves every
+  later trial scored against an **understated deflated-Sharpe bar**. Merged and verified as purely
+  additive before anything else was done: the stranded side touches only `experiments/` and
+  `strategies/candidates/`, the intervening `main` commit only `data/store/`, so the merge was
+  conflict-free; `trials.jsonl` goes **88 → 89 rows with zero deletions**; the merged tree's
+  `data/store/` is byte-identical to pre-merge `main`; `engine/`, `scripts/`, `tests/`, `data/`,
+  `program.md` and `CLAUDE.md` are untouched; and `git branch -r --no-merged HEAD` is now **empty**.
+  **The trial count on `main` is complete through 2026-09-10 and the DSR bar is honest again.** As
+  in 2026-09-04, nothing was wrong with the strategy session's work — only its push landed on the
+  wrong ref. **This is now four strandings in eleven nights, every one caught by the learning
+  agent, and that is not a control anyone should rely on**: a night when this session does not run,
+  or runs before the strategy session, leaves the split in place. The fix belongs in the harness.
+  Flagged for the human for the fourth time.
+  - **Two protocol notes attach, and one of them is good news.** *(a)* **The session-start check has
+    improved and it is the reason this was caught immediately**: where the 2026-09-06..-10 entries
+    record a hook that printed `integrity check OK — on main` while the session sat on a per-run
+    branch, tonight it printed an explicit warning naming `origin/main-a2tfle` as holding commits
+    absent from `main`. That is exactly the detection the last five entries asked for, and it
+    worked. *(b)* **The per-run branch divergence itself is unchanged, sixth session running**:
+    `git status -sb` reported `claude/tender-galileo-sw4r4b` with local `main` 33 commits behind.
+    Corrected to `main` before any work, per the standing instruction never to work from a per-run
+    branch. The detection improved; the branch behaviour that causes the strandings did not.
+- **[2026-09-11] The research state of the list: the 2026-09-10 nightly ran and *answered the whole
+  2026-09-10 addition*, which is the first time this file has added three items and had all three
+  reached in one night.** #93 is **done** — the house construction is now a node table in
+  `learnings.md` with the rule that a candidate varying a node is varying a *construction*; #95 is
+  closed (the region demean deletes a negatively-signed component, which is why it worked); #96 is
+  declined without a trial on the same fact; #97 is measured. The night's one trial found an
+  *undocumented* node in the process — all 140 instruments holdable, ETFs included, which the
+  seated `liquidity-volume` lead had been taking a 42% position on for six sessions. **Still unrun:
+  #82 (fifth session carried), #89, #92, and #94 as a standing discipline.** The nightly's own
+  ranking puts **#92 first and says its last excuse is gone**: #93's node table is exactly the
+  enumeration #92 needs, so the specification list no longer has to be invented.
+- **[2026-09-11] What should aim the next session, in order.**
+  - **#92 first, unchanged from the lab's own ranking and now unblocked.** Nothing tonight
+    displaces it, and its two preconditions still stand: nothing through `run_experiment.py`, and
+    the node list pre-committed in the journal before anything is scored. The 2026-09-10 nightly
+    demonstrated that pre-registration is practical here by doing it.
+  - **Then #99, because it is two multiplications and it adds the two rows #93's table is
+    missing.** The table records *that* `price-trend` books are z-score-magnitude weighted. It has
+    no node for **whether the score is standardized over the pool and whether any breadth
+    correction is applied**, and none for **whether and which side a score is trimmed** — and the
+    lab has a `_daily_trim` trial in its history with no recorded answer to the second. Adding two
+    rows costs a sentence each, and #92 then enumerates over a more complete list.
+  - **Then #100, which is the one that can fail.** It is a per-period concentration statistic on
+    scores the lab already owns, it needs no new machinery, and both answers are findings.
+  - **Then #98, and only behind its own free control.** It is the single item added tonight that
+    could cost a trial. The hand-set-`θ` version is free and separates policy shape from
+    estimation; if it carries the result, the estimated version is not worth a trial.
+  - **Then the lab's own remaining two, in its order: #89, #82.**
+- **[2026-09-11] The checklist 2026-09-10 wrote fired on the first session that used it, and the
+  honest report is that it also over-promised.** The rule — *for every operator the lab applies to
+  a score, is there a note on what that operator assumes?* — named standardization and
+  winsorization, and both turned out to be genuine, load-bearing gaps. That is the third
+  consecutive session in which a coverage claim was corrected by checking a **finer unit** than the
+  session before used (families → clauses → operators), and the first where the unit was supplied
+  in advance rather than discovered afterwards. **But the yield was smaller than the gap suggested,
+  and the reason should be recorded before a future session over-invests in the same vein**: a rank
+  is invariant to any monotone transform, so the winsorization literature simply does not reach a
+  sorted band, and `#93`'s table shows magnitude weighting is used in `price-trend` **only** —
+  equal weight everywhere else. So the lab's entire exposure is the seat plus fitted models plus
+  any per-period mean read as evidence. **Two operators remain unchecked on the 2026-09-10 list —
+  `neutralize` (beyond group-demeaning, which 2026-09-10 covered) and `rank` itself** — and on
+  tonight's evidence a session should expect them to be *narrowings* too, not new mechanisms.
+- **[2026-09-11] The 2026-09-08 warning held for a fourth session and constrained tonight
+  visibly.** Tonight added **one** construction (#98), and it is gated behind a free control that
+  can make it unnecessary; the other two candidates are measurements on books the lab already owns.
+  Two of the three notes end in explicit anti-candidates ("do not treat 'use robust regression' as
+  a portable instruction"; "there is nothing to build"). If the next nightly declines all three,
+  that is still the right call and this file should still not answer it with more mechanisms.
+- **[2026-09-11] The embargo boundary, and one line was genuinely close tonight.** Two of the three
+  sources yield decision rules, so the line was live rather than theoretical. **What was recorded**:
+  bias *directions* (truncation toward zero, asymmetric winsorization away from zero), a
+  coefficient sequence across winsorization cutoffs (≈0.00002 / 0.408 / 1.618) recorded as
+  *coefficient magnitudes on the same footing as an IC or a monotonicity statistic*, a turnover
+  *ratio* (≈4× a value-weighted benchmark's own listings-and-delistings turnover), and a large-cap
+  coefficient *ratio* (about half). **What was declined**: BSV report an average return for the
+  optimized portfolio and a certainty-equivalent comparison, and **none of it appears anywhere** —
+  those are performance figures and the note says so rather than trimming them quietly. The close
+  call was Knez–Ready's "16 months": it is a count of periods within a sample, not a return, so it
+  is recorded as a *concentration proportion* with no dates attached and with an explicit rider not
+  to use it as a threshold. The 2026-09-07/-08/-09 rule — **ratios and proportional effects
+  admissible, levels are not** — decided every one of these and did not need extending.
+- **[2026-09-11] Access and index behaviour: one reliable channel confirmed again, one genuine
+  dead end reported honestly, and a third instance of the two-DOI pattern.**
+  - **NBER remains this folder's most reliable channel**, three sessions running:
+    `nber.org/system/files/working_papers/wNNNNN/wNNNNN.pdf` served BSV's 51-page working paper
+    first try, complete and text-extractable, for an article whose RFS version is closed.
+  - **A closed paper that is *actually* closed, and the right way to say so.** Knez–Ready returns
+    `is_oa: false` with **zero** OA locations from Unpaywall, `oa_status: closed` with
+    `any_repository_has_fulltext: false` from OpenAlex, only two locations (the Wiley DOI and a
+    JSTOR SICI), and CORE returned a Cloudflare redirect shell rather than results. It is recorded
+    **abstract-only and flagged in every section**, and the robust estimator's specification is
+    **left visibly blank** in the note rather than filled in from plausible memory. That blank is
+    the point: the 2026-09-07 lesson was that a search snippet must not be mistaken for evidence,
+    and an unfilled field is how a later session can tell.
+  - **Third instance of the two-DOI registration pattern** (after Breiman, 2026-09-08). Knez–Ready
+    is registered as both `10.1111/j.1540-6261.1997.tb01113.x` (S2 274, OpenAlex 287, Crossref 131)
+    and `10.2307/2329439` (S2 **not found**, OpenAlex 69, Crossref 35). **A single lookup against
+    the JSTOR DOI understates the article roughly 4×**, and the S2 miss on it is the same
+    Wiley/JSTOR finance-DOI pattern sessions 11–15 record. The practical rule this hardens:
+    **for a pre-2000 JF/RFS/JFE article, look the DOI up both ways before believing a low count.**
+    Note also that a *plausible guessed* Wiley DOI (`…tb01115.x`) resolved to a **different
+    article entirely** — a silent wrong answer, not an error, and the reason a guessed DOI must be
+    confirmed against the title it returns.
+  - **The counter-instance is worth recording precisely because it is rare here**: BSV's three
+    counts agree within ~15% (OpenAlex 492, S2 434, Crossref 415). Most of this folder's index
+    notes are about disagreement; agreement is evidence too.
+  - **A working draft checked against its published abstract, per the 2026-09-09/-10 practice, and
+    it paid off mildly.** The Leone et al. draft read in full is the August 2013 version; OpenAlex's
+    published abstract confirms every claim relied on and adds a replication emphasis the draft's
+    abstract lacks, which is now noted in-note. A metadata wrinkle worth knowing: Crossref and
+    OpenAlex both stamp that DOI **2016** while the volume/issue and Semantic Scholar say **2019**.
 
 - **[2026-09-10] Read this first: the 2026-09-09 nightly ran, spent 2 of its 8 trials on the scout
   track, and *answered* this file's #91 rather than leaving it — but the standing list is otherwise
