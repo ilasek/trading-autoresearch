@@ -8355,3 +8355,289 @@ shape, recorded as the family's lead if it beats `sl_ridge_nontrend_block`'s 0.6
 the shape does not survive the variance its tilt buys, and the +10.70%/yr screen is the
 over-prediction rule arriving on a construction rather than on a score.
 
+## 2026-09-11T23:22:51+00:00 — sl_ppp_walkforward — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sl_ppp_walkforward.py` (family: statistical-learning, track: scout, trial #90)
+- Hypothesis: A parametric portfolio policy — weights affine in three standardized characteristics (the champion's four-horizon momentum, region-relative Amihud ILLIQ, and the same-minus-other-month seasonal), `w = 1/N + (1/N) theta'xhat` clipped long-only, with theta refit walk-forward at every month-end by maximizing average quadratic utility (gamma = 5) of the unconstrained policy's realized return — scores near 0.95 on validation (range 0.75-1.15), because it is the first construction in this repo that ranks nothing and holds no band, and on a free train screen at one common 334-date sample it carries +10.70%/yr of own-weight book excess over its scoreable pool (t = +6.83) against +7.46%/yr for rank-and-band on the identical theta'x composite at matched breadth (41.4 against 41.2 names), +1.92%/yr for #98's own hand-set theta=(1,0,0) control (t = +1.42, so the control does not carry the result and the estimation is what is being tested), and -0.32%/yr for the same policy driven by a placebo characteristic that reads no market data. The point estimate sits far below what that screen implies because the standing over-prediction rule is the default again since 2026-09-06, and because the policy's measured 13.2x annual train churn costs ~2.0%/yr against the seated liquidity lead's 0.14%/yr, and because the book's trailing-volatility percentile of 0.581 against the equal-weight pool's 0.510 says it buys part of its mean with variance an excess screen structurally cannot price. Above ~1.0 says the policy shape beats the rank-and-band house default outside `price-trend` and the band node has a utility-chosen alternative; below 0.75 says the shape does not survive the variance its tilt buys, and the screen is the over-prediction rule arriving on a construction rather than on a score.
+- Verdict: FAMILY_LEAD — best result yet in family 'statistical-learning': validation sharpe 0.875 > 0.634 (DSR 0.8612, 90 trials, 24 effective after clustering at rho 0.95)
+- Train: sharpe +0.93, ann_ret +12.9%, maxDD -47.0%, turnover 6.5x
+- Validation: sharpe +0.88, ann_ret +15.2%, maxDD -33.6%, turnover 12.0x
+- Deflated Sharpe prob: 0.8612 (bar from 90 trials, 24 effective)
+- Scout track: family best before this trial +0.63; the champion was not compared and the holdout was not read
+- Lesson: Inside the pre-registered range (0.75-1.15) and below the 0.95 point estimate, at
+  0.875 — the second-best non-`price-trend` result ever recorded here and a new
+  `statistical-learning` lead by +0.241 over `sl_ridge_nontrend_block`. Three things carry.
+  (a) **The over-prediction rule held, and hard, on a construction rather than a score**: the
+  free train screen put this book 2.2x above the seated `liquidity-volume` lead (+10.70 against
+  +4.80 %/yr of own-weight pool excess) and it landed *below* it on validation (0.875 against
+  0.942), so the screen's ordering inverted, not merely shrank. The validation-split screen
+  read +5.39%/yr (t = +2.61) against train's +10.67%/yr, so half the screened mean simply was
+  not there out of sample. (b) **The construction's headline claim is false, and the reason is
+  arithmetic rather than empirical** — see the entry below; breadth is not chosen by the
+  utility. (c) Train 0.929 -> validation 0.875, the train-as-prediction record's 30th reading
+  outside `price-trend` and an **over**-prediction; admissible, since the ~68-name common pool
+  is scoreable from 1990-03 and the reading is not a band-induced sample change. Churn was
+  pre-registered from holdings at 13.2x and came in at 12.0x on validation, so the mandatory
+  #98 rider (the source's low turnover rests on a constant `theta` and must not be inherited)
+  was honoured and roughly right.
+
+
+## Session summary — 2026-09-11 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged for a twelfth session.**
+  `git fetch origin --prune` clean; `git branch -r --no-merged origin/main` returned
+  **nothing**, so no previous session's work is stranded off `main`. As on 2026-09-06 through
+  -10, the session-start hook printed "integrity check OK — on main" while `git status -sb`
+  reported a per-run branch (`main-w3dt4y`) — **the hook still does not detect this, sixth
+  session running.** As on 2026-09-10 the per-run branch was verified **bit-identical** to
+  `origin/main` (`a9235b8`, zero ahead, zero behind) before any work began. Tonight's commits
+  are pushed to **both** `origin/main-w3dt4y` (the branch the harness governing this session
+  requires) **and** `origin/main`, so the split-history failure of 2026-08-16 cannot recur
+  through this session. Engine tests green (**33 passed**) before the first trial. Store fresh
+  through **2026-09-11**.
+- **A pre-registration block was committed BEFORE the first score was computed** (`2ff10cc`),
+  naming every node, the utility and its `gamma`, the expected range, and — explicitly — the
+  second trial the session was declining to buy and why. Second session running.
+- Experiments run: **1 of the 8-trial budget.** Trial count **89 → 90**. Scout track, so the
+  champion was untouched and **the holdout was not read**.
+
+      #90  sl_ppp_walkforward  statistical-learning  FAMILY_LEAD  val 0.875  turn 12.0x  pos 78.3
+
+  Pre-registered 0.95 (range 0.75-1.15) → **0.875**. Inside the range, below the point estimate.
+- **A second candidate was written, measured, and deleted without being scored**, which is the
+  night's best result. See the third finding below.
+
+### The night in one line
+
+The lab ran the first construction in its history that ranks nothing and holds no band, and it
+works — second-best non-`price-trend` result ever — but a free measurement taken *after* the
+trial shows its advertised feature does not exist: a long-only affine policy's breadth is set
+by an arithmetic floor, not by its utility.
+
+### Best finding: the parametric portfolio policy's breadth is an arithmetic floor, and no rescaling can go below it
+
+`research/SUMMARY.md` #98's selling point is that
+`w = 1/N + (1/N)*theta'xhat`, clipped long-only, "ranks nothing and holds no band" — so breadth
+follows from the utility instead of from another book's machinery. `learnings.md`'s house table
+calls the band the one node that must never be inherited, so this was the most interesting
+structural claim the folder has ever supplied. It is false, and the refutation needs no trial.
+
+*(a)* **Breadth is a fixed SHARE, not a fixed NUMBER.** Holdings-only:
+
+    split         pool   names held   share    HHI      spearman(pool, names) = +0.942
+    train         68.2      41.4      0.605   0.0564    spearman(pool, share) = +0.151
+    validation   125.1      78.3      0.626   0.0210
+
+A fixed-N rule gives the first ~0 and the second strongly negative. This universe's pool grew
+68 → 125 between the splits, so the book doubled with nothing about the signal changing.
+
+*(b)* **And the share is not chosen either.** A name survives the clip iff `1/N + s*v/N > 0`,
+i.e. `s*v > -1`, which holds for **every name with a non-negative composite, at every positive
+tilt scale `s`**. So the policy's breadth has a floor equal to the count of above-average names,
+and no rescaling of the tilt can go below it:
+
+    split        pool    names with composite > 0 (the FLOOR)    actually held
+    train        68.2            32.2  (0.464 of pool)           41.4  (0.605)
+    validation  125.1            63.9  (0.511 of pool)           78.3  (0.626)
+
+Roughly four fifths of this book's breadth is that floor. **The long-only clip IS a band — it is
+just a band nobody gets to choose**, pinned near half the pool by the arithmetic of an affine
+weight function. Getting below it requires subtracting a threshold from the composite before the
+affine map, and a threshold on a composite is a rank cut, i.e. the rank-and-band construction the
+shape was supposed to replace. So the node closes: **on a long-only book there is no such thing as
+a breadth-free policy; #98's alternative to the band is a band with its width removed from your
+control.**
+
+*(c)* **What makes this bite is the depth profile.** Run on the policy's own walk-forward
+composite — train, forward 21d, marginal excess by rank slice, on the lab's own inherited
+1-15/16-30/31-45/46-60 grid, with the placebo printed beside it as 2026-09-09 requires:
+
+    ranks    1-15    +9.47 %/yr (t = +6.79)     [ctl] placebo  +0.13 (t = +0.13)
+    ranks   16-30    -2.36 %/yr (t = -2.02)                    +1.56 (t = +1.45)
+    ranks   31-45    -0.84 %/yr (t = -0.46)                    -1.67 (t = -1.25)
+    ranks   46-60    -4.26 %/yr (t = -2.88)                    +1.54 (t = +1.00)
+    ranks   61-80    -1.28 %/yr (t = -0.80)                    -1.82 (t = -1.62)
+
+The placebo is flat and sign-inconsistent (max |t| 1.45), so the profile is readable. Content
+stops at rank ~15 and every slice past it is negative. The policy held 41 names on train and 78
+on validation — 2.8x and 5.2x past its own score's content — **because it had no choice.**
+
+### Second finding: the over-prediction rule inverted an ordering rather than shrinking it
+
+The free screen that motivated the trial (train, own-weight book excess over the scoreable pool,
+one common 334-date sample, churn and volatility percentile beside every arm) was emphatic and
+every control passed before the file was written:
+
+    arm                                        names   excess %/yr     t    volpct   churn
+    PPP, walk-forward theta (3 chars)           41.4      +10.70     +6.83   0.581   13.2x
+    band on the SAME theta'x, magnitude wt      41.2       +7.46     +7.24   0.547   10.6x
+    PPP, hand-set theta=(1,0,0)  [#98's ctl]    61.3       +1.92     +1.42   0.545    3.6x
+    PPP, theta=(0,0,0)  [= equal weight]        68.2        0.00     +0.65   0.510    0.1x
+    [ctl] PPP on a PLACEBO characteristic       66.2       -0.32     -0.74   0.509    7.6x
+    band: region-ILLIQ top 40% of pool, eq wt   27.3       +4.80     +4.11   0.544    1.3x
+
+The seated `liquidity-volume` lead screens at +4.80%/yr and scores **0.942**; this book screens
+at **+10.70%/yr, 2.2x more**, and scores **0.875**. The rule this repo restored as its default on
+2026-09-06 says a cross-sectional screen over-predicts the book it motivates by roughly an order
+of magnitude; tonight it did not merely over-predict, it **reversed the ranking between two
+books**. The mechanism is visible for free: re-run on validation the same screen reads
+**+5.39%/yr (t = +2.61)** against train's +10.67%/yr, so half the screened mean was a train
+phenomenon, and the book's trailing-volatility percentile (0.581 train, 0.567 validation, against
+the equal-weight pool's 0.510) says the rest is paid in a denominator the screen cannot see —
+exactly the channel `lv_illiq_stocks_only` missed by a full sign change last session.
+**Standing instruction, sharpened: an own-weight excess screen may be used to rank arms WITHIN one
+construction; it may not be used to rank one construction against another.** All five arms above
+share a construction and their ordering is informative; the cross-construction comparison with the
+`ILLIQ` lead is the one that broke.
+
+### Third finding: a second trial was designed, screened, and killed by its own arithmetic
+
+The obvious follow-up was to pin the policy's breadth at the profile's flat point (15 names) by
+rescaling the tilt, everything else bit-identical — a one-node change with a non-arbitrary target
+read off *this* construction's own profile rather than imported from another family, and with a
+two-sided pre-registration (0.90, range 0.65-1.20) because the mean channel and the variance
+channel point opposite ways and this repo's brackets run in both directions. The file was written
+in full and then measured before being scored: it emitted **76 rows in total and none at all on
+validation**, because the scale it needs exists only on dates where fewer than 15 names have a
+positive composite. That is finding (b) above, discovered by building the repair rather than by
+arguing about it. **The candidate was deleted rather than run**; it is not a trial, it did not
+touch `trials.jsonl`, and it did not raise anyone's bar.
+
+**This is the fifth instance of the repo's oldest habit and the first on a construction the lab
+invented tonight.** Prior instances checked what a component's code reads (the `dropna` trim
+cohort, the forward-fill drift claim, the `MonthEnd` alignment) or whether a statistic is
+estimable (`eta(q)`, `DELAY`). This one asks what a *weight function's algebra* permits, and the
+answer was available on paper before any data was loaded.
+
+### Free results that cost no trial
+
+- **`SUMMARY.md` #99(a), the breadth audit: declined, and the repair it proposes is the
+  identity.** The worry is that a z-score is invariant to a score's scale but not to the size of
+  the cross-section it was computed over, and that a `1/N_t` normalization would fix it. On the
+  seated champion, holdings-only over train, effective bets move **22.1 → 25.5 (+15%) across a
+  4.2x pool span** (33 → 136 names), `spearman(pool, effective bets) = +0.331`. The champion's
+  band is absolute (top-15/top-25 per leg) and the magnitude transform is applied only within the
+  held set, so pool size reaches the book only through the union of four legs; and `1/N_t` is a
+  single per-row constant on a vector that is renormalized to sum to one, i.e. **literally the
+  identity on this construction**. Note what the same audit says about tonight's policy, where the
+  worry was live all along and much larger than the note imagined.
+- **`SUMMARY.md` #99(b), the winsorization check: declined with a number, and the premise is
+  structurally wrong for this book.** The note's argument is that under z-score-magnitude
+  weighting the most extreme names *are* the largest positions, so this is where the outlier
+  literature reaches the champion. It is true of the ordering and false of the magnitudes: the
+  champion's weights come from `(s - min)/(max - min) + 0.25` over the **held** set, a bounded
+  affine rescaling whose largest weight is exactly **5x** its smallest by construction, so an
+  unbounded z-score never reaches the weight vector. Measured, clipping in NAMES per the note's
+  own rider:
+
+      winsorized per leg    mean top weight   max top weight    HHI      eff bets   L1 from base
+      none                      0.0971            0.163        0.0436     23.37         —
+      1 name each end           0.0885            0.137        0.0434     23.54       0.057
+      2 names each end          0.0829            0.112        0.0423     24.16       0.085
+      3 names each end          0.0785            0.096        0.0414     24.72       0.106
+
+  HHI moves **-0.5%** at one name and **-5%** at three. At this repo's own de-concentration price
+  (~0.05 Sharpe per 30% of HHI) that is ~**0.001** of Sharpe against a resolution floor of 0.057
+  at `rho > 0.99` — roughly fifty times below what the split can resolve. No drawdown call was
+  made: +0.7% of effective bets predicts +0.05pp, inside the ±1.2pp unfalsifiability floor, and
+  per 2026-09-09 an effect inside a diagnostic's error bar is an absent prediction rather than a
+  small one. **The whole outlier-treatment axis is closed on this construction, for a stated
+  structural reason rather than by a null.**
+- **`SUMMARY.md` #100, the period-concentration check: run on every score on the board, and it
+  neither fails a live score nor flatters the artifact.** Train, top-20 band excess and IC as
+  per-period series; the rule is stated in periods and names, never percent:
+
+      score                      mean %/yr     t      top-16 periods carry   trim-8-each-way t
+      champion 4-horizon mom       +3.77     +2.31          93.4%                  +2.90
+      region-relative ILLIQ        +4.38     +4.36          49.4%                  +4.89
+      same-minus-other month       +6.71     +5.77          42.4%                  +6.93
+      21d reversal                 +1.89     +1.33         163.6%                  +1.52
+      [ctl] GK 21d vol level       +8.20     +3.59          66.3%                  +4.24
+      [ctl] placebo hash           +0.44     +0.51         368.3%                  +0.55
+
+  Read the ordering, not the levels. The two **least** period-concentrated scores are exactly the
+  two seated non-`price-trend` leads; the **most** concentrated live score is 21-day reversal, the
+  weakest lead, whose top 16 of 409 months carry 164% of its total mean (the rest is net
+  negative); and the placebo's 368% is what the statistic must read on an object with no content.
+  So it separates content from noise in the right direction. Two things worth carrying. The
+  champion's own score is the **second-most period-concentrated live score in the repo** — 16 of
+  397 train months carry 93% of its top-20 band excess — which is a concentration finding about
+  the incumbent, reported as concentration and not as refutation, exactly as the note's rider
+  demands. And **this is the first robustness statistic of five on which 21-day Garman-Klass
+  volatility does not rank first**: it sits mid-table at 66.3%, behind both seated leads. That
+  neither rescues `range-variance` nor weakens its closure, which rests on fifteen mechanism
+  screens and not on robustness statistics; it is recorded so the "four statistics all flatter the
+  artifact" line is not quoted as five.
+- **The blend is declined for the twelfth consecutive session, and the new leg is a *worse* blend
+  leg than the seated `liquidity-volume` lead despite a similar Sharpe.** Priced on stored
+  validation series, no re-run: `rho` **0.7828**, `k` 0.793, own Sharpe 0.875 against solved
+  break-evens of 0.894 / 0.914 / 0.934 / 0.957 at 10/20/30/40%. It is **short at every weight**
+  (-0.020 to -0.082), where `lv_illiq_region_wide30` clears at every weight — because its `rho` is
+  0.783 against that leg's 0.715. Blend deltas **-0.0016 / -0.0066 / -0.0158 / -0.0298** at
+  t = -0.08 / -0.16 / -0.24 / -0.33; a two-SE blend would need the leg's own Sharpe at
+  **1.394-1.460**. And the leg is not a new return stream: it correlates **+0.944** with the seated
+  `liquidity-volume` lead, whose score is one of its three characteristics. That is 2026-08-29's
+  "mechanism diversity does not become return diversity on a long-only book over one universe",
+  arriving between a *construction* and a *score* this time.
+
+### Protocol and allocation notes, stated plainly
+
+- **The cold-family rule was not satisfied, for the eleventh session running.** `range-variance`
+  still has zero recorded trials. Tonight adds no new mechanism screen there — the honest position
+  is unchanged from 2026-09-10 and is now fifteen screened mechanisms with one identified cause.
+  The one thing tonight adds is *negative* evidence about the robustness argument (see #100 above,
+  where the artifact ranks mid-table for the first time), which slightly narrows the case without
+  touching it: the family is closed on its mechanism screens, not on its robustness statistics.
+  **Recommendation unchanged and still needs a human: amend `program.md`'s cold-family allocation
+  rule or retire the family. Both are edits to a frozen file.**
+- **The per-family cap did not bind**: `statistical-learning` took 1 of its 2, and the second was
+  killed by measurement rather than by the cap. The `price-trend` cap of 2 went unused — the
+  standing #1 next-idea still forbids a K=1 challenger on 2026-09-08's decomposition, and no other
+  `price-trend` candidate had a stated mechanism tonight; #99(b) was the one that might have and it
+  was declined above with a number.
+- **Seven trials of budget went unspent, deliberately**, and one of the seven was declined in the
+  pre-registration *before* the first was run: rank-and-band on the identical `theta'x` composite
+  is the arm that isolates the policy shape on the gate's axis, and the free screen already put
+  that difference at +3.23%/yr (t = +4.68) at matched breadth and near-matched churn, which
+  converts to ~+0.16 of Sharpe against a paired SE of ~0.08-0.13 — the unresolvable margin the
+  2026-08-24 rule says not to pay a permanent DSR increment for. It would also have been a linear
+  combiner over the union legs, which `learnings.md` closes.
+- **The standing ⚠ concern is unchanged at four points.** No promotion, so no fifth data point and
+  no sixth holdout look; the count since 2026-08-17 stands at five.
+- **The train-as-prediction record moves to n = 30**: #90 train 0.929 → val **0.875**, "over".
+  Admissible under the 2026-09-04 sample rule — the common pool is scoreable from 1990-03 and no
+  band-induced sample change is involved.
+- **No new lib file was added and nothing frozen was touched.** All free measurement ran from the
+  session scratchpad. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and every existing `strategies/lib/` file are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **Do not propose another parametric-portfolio-policy variant without first saying what sets its
+   breadth.** The shape is worth keeping — 0.875 at `rho` 0.78 to the seat is the second-best
+   non-`price-trend` result here — but its breadth is an arithmetic floor near half the pool, and
+   every repair that gets below the floor is a rank cut. If a session wants the shape *and* a
+   chosen breadth, the honest framing is "rank-and-band with affine weights", and it must be
+   argued as a weighting scheme, not as an alternative to the band. (Lab's own result, tonight.)
+2. **The one live node the policy still has is its characteristic set, and it is the cheap one.**
+   `theta` is three numbers; adding or swapping a characteristic changes the composite whose depth
+   profile is now measurable for free, and the profile is what predicts the book. A characteristic
+   whose own profile carries past rank 45 (only `ILLIQ` does) is the only kind that could make the
+   floor's breadth appropriate rather than merely unavoidable. (Lab's own result, tonight;
+   `research/SUMMARY.md` #98, #99.)
+3. **`SUMMARY.md` #92's non-standard error / specification curve** remains the strongest unrun free
+   diagnostic, and tonight strengthens the case: the lab now has two constructions differing at one
+   node whose ordering the screen got backwards, which is exactly the dispersion #92 exists to
+   quantify. (`research/SUMMARY.md` #92, #93.)
+4. **`SUMMARY.md` #89's overidentifying restriction test** remains the one folder proposal that can
+   *fail*, with its mandatory no-lag-null rider. (`research/SUMMARY.md` #89.)
+5. **Do not extend**: `range-variance`, the `calendar` half of `seasonality-calendar`, the distance
+   method, cointegration, union or intersection books of any leg count, HRP, a fourth aggregation
+   operator, a fourth point on the seasonal or `liquidity-volume` band brackets, #95/#96 on another
+   score, a second ETF-handling arm — and, new tonight, **do not re-run the winsorization or
+   breadth-audit checks on another `price-trend` book** (the 5:1 weight bound closes the first for
+   the whole family and the absolute band closes the second) and **do not price one construction
+   against another with an own-weight excess screen**.
+6. **`SUMMARY.md` #49's execution overlay** — carried unspent for a thirteenth session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
+
+**No engine issues encountered.**

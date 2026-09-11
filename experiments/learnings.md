@@ -2893,3 +2893,108 @@ across experiments; prune entries that later evidence contradicts.
   entitled to build on it. The recommendation is unchanged and needs a human: **the family is
   unreachable on this universe rather than unexplored, and `program.md`'s cold-family allocation
   rule should be amended or the family retired.** Both are edits to a frozen file.
+
+- **[Measured 2026-09-11, nightly] A long-only affine portfolio policy cannot choose its own
+  breadth, and this closes `research/SUMMARY.md` #98's structural claim on arithmetic rather
+  than on evidence.** The parametric portfolio policy (`w = 1/N + (1/N)*theta'xhat`, clipped
+  long-only) was sold as the first construction that "ranks nothing and holds no band", i.e.
+  one whose breadth follows from a utility instead of from another book's machinery — which
+  matters because `learnings.md`'s own house table names the band as the one node that must
+  never be inherited. Trial #90 ran it and it works (validation **0.875**, a new
+  `statistical-learning` lead, second-best non-`price-trend` result ever), but the claim is
+  false twice over. *(a)* Breadth is a fixed **share**, not a fixed **number**: `spearman(pool,
+  names held) = +0.942` against `spearman(pool, share held) = +0.151`, share 0.605 on train and
+  0.626 on validation, so this universe's pool growing 68 → 125 between the splits doubled the
+  book 41 → 78 names with nothing about the signal changing. *(b)* And the share is not chosen
+  either. A name survives the clip iff `1/N + s*v/N > 0`, i.e. `s*v > -1`, **which holds for
+  every name with a non-negative composite at every positive tilt scale `s`** — so breadth has
+  an arithmetic **floor** at the count of above-average names (train 32.2 of 68.2; validation
+  63.9 of 125.1, about half the pool and about four fifths of what the book actually holds),
+  and no rescaling can go below it. Getting below the floor means subtracting a threshold from
+  the composite before the affine map, and a threshold on a composite **is a rank cut**.
+  **The long-only clip is a band with its width removed from your control.** The consequence
+  bites because the policy's own composite, depth-profiled on the lab's inherited slice grid
+  with a flat placebo beside it, carries **+9.47%/yr (t = +6.79) over ranks 1-15 and is negative
+  in every slice past 15** (-2.36 at t = -2.02, -0.84, -4.26 at t = -2.88): the book held 2.8x
+  and 5.2x past its own score's content because it had no choice. **Standing rule: an
+  affine-weight proposal must state what sets its breadth before it is written; if the answer is
+  "the clip", the answer is "about half the pool".** The shape itself is worth keeping and its
+  one remaining live node is the characteristic set — only a characteristic whose own profile
+  carries past rank ~45 (`ILLIQ` is the sole one measured here) could make the floor's breadth
+  appropriate rather than merely unavoidable.
+  *Method note, and it is the transferable half:* the repair was **written in full and measured
+  before being scored**, and it emitted 76 rows in total and none on validation, which is how
+  the floor was found. The candidate was deleted rather than run, so it is not a trial and
+  raised nobody's bar. Fifth instance of this repo's oldest habit — check what a component
+  actually permits — and the first on a *weight function's algebra* rather than on a line of
+  code or an imported statistic; the answer was available on paper before any data was loaded.
+
+- **[Measured 2026-09-11, nightly] An own-weight excess screen ranks arms WITHIN a construction
+  and must not rank one construction against another — the first case where the
+  over-prediction rule inverted an ordering instead of shrinking a margin.** The screen that
+  motivated #90 was run in the corrected form this file asks for (weighted by the book's own
+  weights per 2026-09-10, one common 334-date train sample, churn and the book's
+  trailing-volatility percentile beside every arm) and every control passed: the policy read
+  **+10.70%/yr (t = +6.83)** against +7.46 for rank-and-band on the identical `theta'x` at
+  matched breadth, +1.92 for #98's own hand-set `theta=(1,0,0)` control, and **-0.32%/yr for the
+  same machinery driven by a characteristic that reads no market data**. Within the
+  construction that ordering is informative. Across constructions it is not: the seated
+  `liquidity-volume` lead screens at **+4.80%/yr and scores 0.942**, this book screens at
+  **2.2x that and scores 0.875**. Two free readings say where it went. The same screen re-run on
+  **validation** gives **+5.39%/yr (t = +2.61)** against train's +10.67, so half the screened
+  mean was a train phenomenon; and the book sits at a trailing-volatility percentile of
+  0.567-0.581 against the equal-weight pool's 0.510, so the rest is paid in the denominator the
+  screen structurally cannot see. This is the `lv_illiq_stocks_only` lesson (2026-09-10) at a
+  coarser grain: **print the volatility percentile, and never convert a screened mean into a
+  cross-construction Sharpe ranking.**
+
+- **[Measured 2026-09-11, nightly] `SUMMARY.md` #99 is closed in both halves, each for a
+  structural reason rather than a null, and neither half survives on `price-trend`.**
+  *(a)* **The breadth audit's repair is the identity here.** The worry — a z-score is invariant
+  to a score's scale but not to the size of the cross-section it was computed over — is real,
+  but on the seated champion effective bets move only **22.1 → 25.5 (+15%) across a 4.2x pool
+  span** (33 → 136 names, `spearman` +0.331), because the band is absolute (top-15/top-25 per
+  leg) and the magnitude transform is applied only within the held set; and a `1/N_t` factor is
+  one constant per row on a vector that is renormalized to sum to one, i.e. **literally the
+  identity**. The worry was live all along on the affine policy above, and far larger than the
+  note imagined. *(b)* **The winsorization check dies on the champion's own weight bound.** The
+  note's premise is that under z-score-magnitude weighting the most extreme names *are* the
+  largest positions; true of the ordering, false of the magnitudes, because the weights come
+  from `(s - min)/(max - min) + 0.25` over the **held** set — a bounded affine rescaling whose
+  largest weight is exactly **5x** its smallest by construction, so an unbounded z-score never
+  reaches the weight vector. Clipping in NAMES per the note's own rider moves HHI **-0.5%** at
+  one name each end and **-5%** at three (top weight 0.0971 → 0.0885 → 0.0785, effective bets
+  23.4 → 23.5 → 24.7), worth ~**0.001** of Sharpe at this file's own de-concentration price
+  against a **0.057** resolution floor — fifty times below what the split can resolve. No
+  drawdown call was made (+0.7% of effective bets predicts +0.05pp, inside the ±1.2pp
+  unfalsifiability floor). **The outlier-treatment axis is closed for the whole `price-trend`
+  family, and the reason generalises: ask what a weighting transform's RANGE is before asking
+  what its input's tails do.**
+
+- **[Measured 2026-09-11, nightly] `SUMMARY.md` #100's period-concentration check separates
+  content from noise in the right direction, finds the incumbent to be the repo's most
+  period-concentrated live score, and is the first robustness statistic of five on which the
+  `range-variance` artifact does NOT rank first.** Train, top-20 band excess as a per-period
+  series, rule stated in periods and names:
+
+      score                      mean %/yr     t      top-16 periods carry   trim-8-each-way t
+      champion 4-horizon mom       +3.77     +2.31          93.4%                  +2.90
+      region-relative ILLIQ        +4.38     +4.36          49.4%                  +4.89
+      same-minus-other month       +6.71     +5.77          42.4%                  +6.93
+      21d reversal                 +1.89     +1.33         163.6%                  +1.52
+      [ctl] GK 21d vol level       +8.20     +3.59          66.3%                  +4.24
+      [ctl] placebo hash           +0.44     +0.51         368.3%                  +0.55
+
+  Read the ordering, never the levels. The two **least** concentrated scores are exactly the two
+  seated non-`price-trend` leads; the **most** concentrated live score is 21-day reversal, the
+  weakest lead, whose top 16 of 409 months carry 164% of its mean (the rest is net negative);
+  and the placebo's 368% is what the statistic must read on an object with no content, which is
+  what calibrates it. Two things carry. **The champion's own score is the second-most
+  period-concentrated live score in the repo** — 16 of 397 train months carry 93% of its top-20
+  band excess — recorded as concentration and *not* as refutation, per the source's own rider
+  that concentration is where the economics lives. And **21-day Garman-Klass volatility sits
+  mid-table**, behind both seated leads, so the standing "four independent robustness statistics
+  all flatter the artifact" line must not be quoted as five. That neither rescues
+  `range-variance` nor weakens its closure: **the family is closed on fifteen mechanism screens
+  with one identified cause, not on robustness statistics** — which is the right way round, and
+  worth saying explicitly now that one of them has come back neutral.
