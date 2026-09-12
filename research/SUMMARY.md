@@ -2735,6 +2735,88 @@ concentration rule here must be specified in **names and periods, never in perce
 also why the lab should expect its version of the Knez–Ready check to be materially noisier than
 the literature's. That is the content of candidates #98–#100.
 
+### The last two operators — what a rank preserves, and what a pool rule selects (cross-family)
+
+**[Added 2026-09-12] This section finishes the 2026-09-10 operator checklist.** That entry listed
+seven operators the lab applies to a score — demean, rank, winsorize, standardize, neutralize,
+blend, band — and asked, for each, whether a note existed on what it assumes. 2026-09-11 took
+standardize and winsorize and named the two survivors: **`rank` itself and `neutralize` beyond
+group demeaning.** A grep across all 91 prior notes confirmed both: `rank` appears in 70 notes and
+is the subject of none, and `orthogonaliz`, `mimicking portfolio` and `pure play` return **zero**
+hits each. Tonight takes both, plus the node they both sit on top of — the **pool**, where
+`complete case` and `unbalanced panel` also returned zero. 2026-09-11 predicted these would be
+*narrowings* rather than new mechanisms. Two of the three are; the third is not.
+
+**A rank has four properties and this lab has been using all four without writing them down.**
+Conover–Iman (1981, *The American Statistician*; Tier A, 3948 citations, no sample, so neither
+flag applies) define the rank transform as "replace each observation by its rank, then run the
+ordinary parametric procedure" — which is exactly what a cross-sectional sort is. *(1)* **It
+preserves order and nothing else**, so it is invariant to every strictly monotone transform: log,
+affine rescaling, z-scoring, symmetric winsorizing, tail clipping are all **identities** on a
+ranked book. That is the general theorem behind what 2026-09-11 measured on one construction, and
+it retires a whole class of proposals rather than one. *(2)* **It destroys spacing**, so
+everything a rank-and-band book can earn comes from the depth profile and from nothing else —
+which is why the 2026-09-08 "profile the score, then set the band" rule is the correct order of
+operations rather than a convenience. *(3)* **It is nonlinear, so it does not commute with
+combining variables**: `rank(a·x + b·y)` is not any combination of `rank(x)` and `rank(y)`. This
+is not a subtlety — it is the reason the rank transform was withdrawn as a general recommendation
+for factorial designs (Wobbrock et al. 2011, ACM CHI; Tier A, 3079 citations), and
+Headrick–Sawilowsky's simulations state it at its sharpest: **"the nonlinear nature of the RT
+reversed the absence of interaction in the original scores when both main effects were present"**
+— ranking *manufactured* structure that was not in the levels — and **the distortion grows with
+the correlation between the inputs.** The lab's legs correlate 0.71–0.94. *(4)* **A rank is
+defined only relative to a pool**, so a pool rule is a scoring decision: changing eligibility
+moves the rank of every name whose score did not move. The repair the statistics literature
+adopted is the aligned rank transform, whose entire content is **strip the other effects first,
+then rank the residual** — the same instruction as "residualize, then rank", reached from a
+different literature.
+
+**Neutralizing by regression is a variance mechanism, and this lab graded it as a return
+mechanism.** Blitz–Huij–Martens (2011, *Journal of Empirical Finance*; Tier A,
+`validation_overlap: false`, `published_post_2018: false`, eight decades, independently followed
+up across developed and emerging markets) give the operator its cleanest published form. The
+argument: a score built from realized returns inherits whatever the common factors did *during its
+own formation window*, so ranking on raw returns partly ranks on formation-window factor exposure,
+and the resulting book carries a time-varying factor bet nobody chose. Replacing the return with
+the residual of a rolling factor regression removes it. The paper's own account of where the
+improvement comes from is unambiguous and is what this folder takes: **the gain is a variance
+reduction, not a bigger spread** — the book stops making an unintended bet; it does not find
+better names. Two construction details are load-bearing and easy to get wrong: the residual sum is
+**standardized by the same name's residual volatility over the same window** (this is where the
+risk reduction is bought, per the paper's own unstandardized comparison), and the estimated
+**`α̂` is deliberately excluded**, because most of the observations behind it lie outside the
+formation window and folding it in turns the score into a partial long-term-reversal bet. **This
+collides with a lab result and the collision is recorded rather than smoothed**: 2026-09-10
+screened a free-beta regional residual against the plain region demean and it lost on IC, on
+top-band excess, and on the increment. The reconciliation is that the lab measured a *score*
+statistic where the source makes a *book variance* claim — and, separately, that the source's
+premise (the removed exposure is unwanted risk) fails for this universe's region factor, which
+2026-09-10 measured as priced with the **wrong sign**. Both readings are in candidate #104, which
+is gated behind two free preconditions.
+
+**And the pool rule is complete-case analysis, which is the one genuinely new mechanism here.**
+Bryzgalova–Lerner–Lettau–Pelger (2025, *RFS*; Tier A, `validation_overlap: true`,
+`published_post_2018: true`) document that missingness in a characteristic panel is not
+missing-completely-at-random: it clusters in blocks cross-sectionally and over time, part of it is
+mechanical (a short history cannot support a long lookback), **more extreme characteristic
+realizations are more likely to be unobserved**, and — the fact that matters — **returns depend on
+whether a characteristic is observed at all.** Dropping unscoreable names is therefore not "using
+less data"; it is conditioning the return distribution, i.e. selection on the outcome. The effect
+on a sorted book runs through **two channels at once**, which the paper states directly:
+*requiring more observations often lowers expected returns, while the smaller pool lowers
+diversification and raises volatility* — the ratio falls from both ends. **This repo runs that
+operator on every trial** ("the `common` intersection of their eligibilities"), and it has already
+been bitten by the breadth channel twice without naming the mechanism: the 2026-09-04 finding that
+a band-width change silently changed the *train* sample, and the 2026-09-02 finding that 5 of 42
+ETFs reach a 20-year lookback. The selection channel has never been measured here at all, and
+measuring it is free (#103). Two riders travel with it. The paper's own evidence blocks the
+obvious dismissal — missingness is **not** confined to small caps in its sample — and the folk
+repairs both fail in the shape this repo actually has: a cross-sectional median fill incurs both an
+omitted-variable and a selection bias, and a stale-value fill degrades exactly where missingness
+comes in **blocks**, which is precisely the shape of this repo's un-forward-filled volume on
+foreign holidays (a block, clustered by country, perfectly correlated across every name sharing a
+calendar).
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -5317,6 +5399,92 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-11-trimming-and-the-size-premium.md`,
     `notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`
 
+101. **[Added 2026-09-12] An anti-candidate with a proof, which retires a class of proposals rather
+    than opening one: every monotone repair of a score is an identity on a ranked book.** A rank is
+    invariant under any strictly monotone transform, so logging, affine rescaling, z-scoring,
+    symmetric winsorizing and tail clipping change **no rank** and therefore **no rank-and-band
+    book**. 2026-09-11 reached the winsorization instance of this by measurement, on one
+    construction, and correctly warned the vein was narrow; the general statement is that the vein
+    is **empty** for every ranked construction in this repo. The lab's entire remaining exposure to
+    monotone score repairs is the three places a rank does not intervene: `price-trend`'s
+    magnitude weighting, fitted models, and any per-period mean read as evidence (including IC).
+    The one free thing attached: **print pool size beside every rank-based statistic**, because a
+    rank is defined only relative to a pool and a band of 20 in a pool of 96 is a different
+    exposure from a band of 20 in a pool of 140. Costs nothing, decides nothing, and would have
+    caught the 2026-09-04 sample change at the time. Free. Tier A.
+    → `notes/2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`,
+    `notes/2026-09-11-influential-observations-winsorization-versus-robust-regression.md`
+
+102. **[Added 2026-09-12] The identity screen the 2026-09-11 pre-registration needed: is
+    rank-of-blend the same book as blend-of-ranks?** Because ranking is **nonlinear**, the rank of a
+    composite is not any combination of the ranks of its parts, and the factorial literature shows
+    the distortion is worst exactly where the inputs are **correlated** — which is this lab's
+    situation (legs at 0.71–0.94). The screen is two lines on train and needs nothing through
+    `run_experiment.py`: build `rank(mean(rank(x1), rank(x2)))` and `rank(a·x1 + b·x2)` on the same
+    dates, and report the Spearman correlation between them and the top-20 overlap, in the same
+    format the 2026-09-10 session used to price demean-versus-residual. **Both answers are
+    findings.** High correlation retires permanently a class of "same score, different combination
+    order" proposals — including the arm 2026-09-11 declined in pre-registration, whose declining
+    argument assumed the two were the same object differing only in policy shape. Low correlation
+    means the lab has been treating two different books as one, and the depth profile of each is
+    then the thing to compare. **Rider**: this is a statement about the *operator*, not about any
+    particular pair of legs, so run it once on the pair that matters and do not re-run it per
+    candidate. Free, train-only, no trial. Tier A.
+    → `notes/2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`,
+    `notes/2026-08-31-signal-blending-vs-portfolio-blending.md`
+
+103. **[Added 2026-09-12] A free diagnostic that can fail, on the one construction node this repo
+    applies to every single trial and has never measured: the `common` intersection.** The house
+    pool rule is complete-case analysis, and the literature's finding is that complete-case
+    selection is **selection on the outcome** — returns differ according to whether a characteristic
+    is observed — with the cost arriving through **two** channels, lower expected return *and* lower
+    breadth. This lab has already been bitten by the breadth channel twice (2026-09-04's silent
+    train-sample change; 2026-09-02's 5-of-42 ETFs) without naming the mechanism, and has **never**
+    tested the selection channel. The test is direct and train-only: for a pair of legs, pool over
+    rebalance dates and compare the forward returns of the names the intersection **excludes**
+    against those it keeps. A material difference means every statistic computed after the
+    intersection is conditional on a self-selected population; a null retires a standing worry for
+    the price of two lines. Print, alongside it, each leg's pool size over time and the
+    intersection's. **Two riders.** Do not dismiss this as a small-cap problem — the source's own
+    evidence is that missingness is not confined to small caps. And do **not** answer a positive
+    result with an imputation module: the fill rules available here both fail in this repo's actual
+    missingness shape (a cross-sectional median fill would push a global median into an entire
+    region's names on one date; a stale fill degrades exactly on blocks), and the un-forward-filled
+    holiday volume in `aux` is a country-clustered block. The defensible answer to a daily-bar gap
+    is a signal robust to it, not an invented value. **One naming rule regardless of the outcome**:
+    if a candidate fills anything, the fill rule goes in its hypothesis line and in #93's house
+    table, because two books differing only in their fill rule are two constructions. Free,
+    train-only, no trial. Tier A (`validation_overlap: true` — nothing timed is imported).
+    → `notes/2026-09-12-missing-data-and-complete-case-pools.md`,
+    `notes/2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`
+
+104. **[Added 2026-09-12] The `neutralize` operator, reopened only behind two free preconditions —
+    and closed on evidence if either fails.** 2026-09-10 screened a free-beta regional residual
+    against the plain region demean and it lost on IC, on top-band excess, and on the increment,
+    with a stated structural reason. That result stands and this candidate does not contest it.
+    What it observes is that the screen and the source measure different things: the lab graded a
+    **score** statistic (IC), while the source's claim is about **book variance** — smaller and less
+    time-varying factor exposure, hence lower volatility at an unchanged spread. Three differences
+    have to be repaired before the operator can be called tested here, and **two of them are free**.
+    *(a)* **Change the factor.** The source's premise is that the removed exposure is unwanted
+    risk; 2026-09-10 measured this universe's region factor as carrying a component priced with the
+    **wrong sign**, which inverts the premise. Do not re-run against the region factor; the untested
+    leg is the **market** one. *(b)* **Add the standardization.** The residual sum divided by the
+    same name's residual volatility over the same window is where the source says the risk
+    reduction is bought; a residual score without it is not this construction. *(c)* **Grade it on
+    the right statistic** — the book's realized volatility and its formation-window-conditional
+    factor exposure, pre-committed, not the score's IC. Only if (a) and (b) clear a free screen on
+    the (c) statistic is a trial warranted, and the parameter-count triage rule applies first: a
+    per-name rolling regression at every month-end estimates one parameter per name per date, and
+    the source's own answer to that problem — replace many group returns with the **first few
+    principal components** of their residuals — is the cheap shape. **Two construction traps**: the
+    estimated `α̂` must be excluded from the score or it smuggles in a long-term-reversal bet, and
+    the regression window must end at `t−1`. **If the free screen fails, the `neutralize` operator
+    is closed here on evidence rather than by omission, which is itself the finding.** Free to
+    screen; one trial at most, and only behind the screen. Tier A.
+    → `notes/2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`,
+    `notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -5351,8 +5519,122 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-09 (session 27) | **The first session aimed by this file's own conditional rather than by a gap: 2026-09-08 declared breadth genuinely exhausted ("the next session should not look for an uncovered mechanism; there is not one") and 2026-09-02 had gated one last method on exactly that condition — the literature on how much of a measured result is the *construction* rather than the idea.** Taken tonight: the concept and its magnitude (164 teams, one dataset), its mechanical measurement on portfolio sorts (2,048 and 69,120 enumerated constructions, two independent teams), and the single-researcher method for enumerating and displaying it. The session's shape is one measurement the lab can run free on train, one convention it can write down for nothing, and one standing discipline — plus an explicit declaration of which third of the method is *not* imported, because it is inference. | Menkveld, Dreber, Holzmeister, Huber, Johannesson, Kirchler, Neusüss, Razen, Weitzel et al. 2024 (JF; Bank of England Staff WP 955 read in full) (`2026-09-09-nonstandard-errors-evidence-generating-process.md`); Soebhag–van Vliet–Verwijmeren 2024 (J. Empirical Finance; FoFI 2022 working-paper copy read in full, published abstract read via OpenAlex) with Walter–Weber–Weiss 2022/2024 (SSRN, **not read in full** — abstract, authors' blog and public code only) (`2026-09-09-nonstandard-errors-in-portfolio-sorts.md`); Simonsohn–Simmons–Nelson 2020 (Nature Human Behaviour; Wharton-hosted published article read in full), with Steegen–Tuerlinckx–Gelman–Vanpaemel 2016 cited as the acknowledged predecessor and **not read** (`2026-09-09-specification-curve-analysis.md`) |
 | 2026-09-10 (session 28) | **The first session in three aimed by a gap rather than by a method — and the gap was one two consecutive sessions had declared did not exist.** 2026-09-08 wrote "the next session should not look for an uncovered mechanism; there is not one" and 2026-09-09 repeated it; a direct search across all 85 notes returned **zero** hits for `country effect` or `industry effect`, and no note anywhere on the country/industry/global variance decomposition or on the currency component inside a USD-converted price — while region-demeaning is an operator the lab *already uses* and the source of its only leg improvement from a stated measurement mechanism. The unit-of-check lesson bit a second time: after families and clauses, the third unit is the **operator**. Three Tier-A sources, all read in full, all pre-2018 samples in Tier-1 journals, so the whole session is `validation_overlap: false` / `published_post_2018: false`. Taken tonight: what a demean *assumes* (unit loadings, and they over-correct at the name level), what it *discards* (a between-group component that is priced but low-breadth), and what a USD conversion *adds* (a signed currency exposure correlated with global equity). New cross-family section; candidates #95–#97, two of them free and the third with a mandatory free screen. | Bekaert–Hodrick–Zhang 2009 (JF), read as NBER WP 11906, with Heston–Rouwenhorst 1994 and Griffin–Karolyi 1998 second-hand and **unread** (`2026-09-10-country-industry-global-return-decomposition.md`); Hou–Karolyi–Kho 2011 (RFS), read as the Dec-2006 working paper via a third-party document mirror (`2026-09-10-country-demeaned-versus-country-mean-characteristics.md`); Campbell–Serfaty-de Medeiros–Viceira 2010 (JF), read as NBER WP 13088 (`2026-09-10-currency-component-in-usd-converted-returns.md`) |
 | 2026-09-11 (session 29) | **Aimed by the checklist 2026-09-10 wrote for exactly this situation, and it worked on the first try.** That entry's rule — *for every operator the lab applies to a score (demean, rank, winsorize, standardize, neutralize, blend, band), is there a note on what that operator assumes?* — named **cross-sectional standardization and winsorization** as the two with no note, and a grep across all 88 prior notes confirmed it: `standardi` in 12 notes, `winsoriz` in six, subject of none. This is the second consecutive session where a coverage gap was found by checking a *finer unit* than the previous session used (families → clauses → operators), and the first where the unit was supplied in advance rather than discovered after the fact. The gap was load-bearing: the champion family is named `mom_zscore_*`, the equal → rank → **z-score-magnitude** ladder is the largest within-basket lever `learnings.md` records, and a `_daily_trim` trial sits in the history with no rationale for which side it trimmed. Three sources, all Tier A; **two read in full, one recorded from its published abstract only and flagged throughout**. The shape is *one construction, one correction, one magnitude* — and the correction is mostly a **narrowing**: a rank is invariant to any monotone transform, so winsorizing before ranking changes nothing, and the lab's entire exposure to this literature is three places (magnitude weighting, fitted models, and any per-period mean read as evidence). New cross-family section; candidates #98–#100, **two of them free and the third gated behind a free hand-set-`θ` control**. #98 is the first construction shape proposed here that ranks nothing and holds no band. **Access and index behaviour**: NBER served the BSV working paper first try, complete and text-extractable — the channel this folder has now recorded as its most reliable, three sessions running. A personal academic page served the Leone et al. working draft, **checked against the published abstract via OpenAlex** (every claim relied on appears there; the published version adds a replication emphasis the draft's abstract lacks). Knez–Ready is **genuinely closed**: Unpaywall reports `is_oa: false` with **zero** OA locations, OpenAlex `oa_status: closed` with `any_repository_has_fulltext: false` and only two locations (the Wiley DOI and a JSTOR SICI), and CORE returned a Cloudflare redirect shell. Recorded abstract-only rather than guessed at — the robust estimator's specification is deliberately left blank in the note. **A third instance of the two-DOI registration pattern** first recorded for Breiman on 2026-09-08: Knez–Ready is registered both as `10.1111/j.1540-6261.1997.tb01113.x` (S2 274, OpenAlex 287, Crossref 131) and as `10.2307/2329439` (S2 **not found**, OpenAlex 69, Crossref 35) — a single lookup against the JSTOR DOI understates it by roughly 4×, and S2's miss on that DOI is the same Wiley/JSTOR finance-DOI pattern sessions 11–15 record. Counter-instance worth recording too: **BSV's three counts agree within ~15%** (OpenAlex 492, S2 434, Crossref 415), which is unusual enough in this folder to note. | Brandt–Santa-Clara–Valkanov 2009 (RFS), read in full as NBER WP 10996 (`2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`); Leone–Minutti-Meza–Wasley 2019 (The Accounting Review), the August 2013 working draft read in full and checked against the published abstract (`2026-09-11-influential-observations-winsorization-versus-robust-regression.md`); Knez–Ready 1997 (JF), **not read — published abstract only, flagged in-note** (`2026-09-11-trimming-and-the-size-premium.md`) |
+| 2026-09-12 (session 30) | **The second consecutive session aimed by the 2026-09-10 operator checklist, and it takes the last two names on it — plus the node underneath them that the checklist did not list.** 2026-09-11 named `rank` and `neutralize` as the survivors; a grep across all 91 prior notes confirmed both (`rank` in 70 notes, subject of none; `orthogonaliz`, `mimicking portfolio`, `pure play` at **zero** each) and turned up a third with the same zero reading — the **pool** (`complete case`, `unbalanced panel`, `missing data`, `imputation`, all zero), which is the operator every trial here runs and none has measured. Three notes, six sources; **full text read directly for four** (Blitz–Huij–Martens's accepted manuscript from the Erasmus repository; Bryzgalova et al.'s accepted version from the LBS repository; Wobbrock et al.'s CHI paper; Headrick–Sawilowsky's ERIC document), **two recorded from abstracts only** (Conover–Iman, closed at Taylor & Francis with no open copy resolved; the 2020 idiosyncratic-momentum companion, closed at Elsevier). The shape is *two narrowings and one new mechanism*: `rank` and `neutralize` behave as 2026-09-11 predicted — they mostly tell the lab which proposals are identities and which statistic a past screen used — while the pool rule is a genuine uncovered mechanism with a two-channel cost and a free test that can fail. Candidates #101–#104; #101 is an anti-candidate with a proof rather than a measurement. | Conover–Iman 1981 + Wobbrock et al. 2011 + Headrick–Sawilowsky 2000 + Sawilowsky–Blair–Higgins 1989 (`2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`); Blitz–Huij–Martens 2011 + Blitz–Hanauer–Vidojevic 2020 (`2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`); Bryzgalova–Lerner–Lettau–Pelger 2025 (`2026-09-12-missing-data-and-complete-case-pools.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-12] Read this first: the 2026-09-11 nightly ran, answered both of this file's
+  reachable additions, and left the standing list almost exactly where it was.** #99 is **closed in
+  both halves**; #100 is **run on every score on the board** and did what it was built to do —
+  it separates content from noise in the right direction (the two least period-concentrated scores
+  are the two seated non-`price-trend` leads; the most concentrated live score is the weakest lead;
+  the placebo reads as an object with no content), and it returned one finding about the incumbent
+  that should be carried as stated: **the champion's own score is the second-most
+  period-concentrated live score in the repo**, reported as concentration and not as refutation.
+  #98's structural claim was **closed on arithmetic**: a long-only affine policy cannot choose its
+  own breadth — the floor is near half the pool — so the shape survives only as "rank-and-band with
+  affine weights", which must be argued as a weighting scheme. One trial spent (`sl_ppp_walkforward`,
+  FAMILY_LEAD 0.875), and the blend was declined for a twelfth consecutive session. **Still unrun:
+  #92 (the lab's own #1, now unblocked by #93's node table), #89, #82 (sixth session carried), and
+  #94 as a standing discipline.**
+- **[2026-09-12] What should aim the next session, in order.**
+  - **#92 first, unchanged from the lab's own ranking for a second session, and the case got
+    stronger overnight.** The 2026-09-11 session produced two constructions differing at one node
+    whose ordering its own screen got backwards — which is the dispersion #92 exists to quantify —
+    and #93's node table is the enumeration it needs. Its two preconditions are unchanged: nothing
+    through `run_experiment.py`, and the node list pre-committed in the journal before anything is
+    scored.
+  - **Then #103, because it is the only item on this list that can fail and it sits under every
+    trial the lab runs.** It is two lines on train, it needs no new machinery, and both answers are
+    findings. It also has the property this file keeps asking for and rarely gets: a positive
+    result would say something about *every* multi-leg book in the repo's history, not about one
+    candidate.
+  - **Then #102, which is two constructions and a Spearman**, and which retroactively checks the
+    reasoning by which 2026-09-11 declined an arm in pre-registration.
+  - **Then #101, which costs nothing at all**: it is an anti-candidate plus one line of printing.
+    Adopt it as a standing rule rather than running it.
+  - **Then #104, and only behind its own two free preconditions.** It is the single item added
+    tonight that could cost a trial, and it contests nothing the lab has measured — it says which
+    statistic a past screen used and what would have to change before the operator counts as
+    tested here. If the free screen fails, `neutralize` closes on evidence, which is the outcome
+    this file should prefer.
+  - **Then the lab's own remaining two, in its order: #89, #82.**
+- **[2026-09-12] The operator checklist is now spent, and the honest accounting is that it
+  delivered three sessions of aim and one genuine mechanism.** 2026-09-10 wrote the rule (*for
+  every operator the lab applies to a score, is there a note on what that operator assumes?*),
+  2026-09-11 took two names off it and warned the yield would shrink, and tonight took the last
+  two. The warning was right about `rank` and `neutralize`: both notes end mostly in constraints —
+  which proposals are identities, which statistic a screen should have used — and neither proposes
+  a book. But the checklist **under-specified its own unit** for the fourth time in this file's
+  history: it listed operators applied *to a score* and therefore missed the operator applied to
+  the *pool*, which is where the one new mechanism was. **Families → clauses → operators → the
+  pool the operator runs on.** The durable form of the lesson is now stable enough to state
+  without the escalation: *a coverage claim is only as fine-grained as the unit it was checked at,
+  and the unit is almost always one level coarser than the thing that turns out to matter.* What
+  this does **not** license is another breadth hunt; see the next item.
+- **[2026-09-12] The 2026-09-08 warning held for a fifth session and should now be read as
+  permanent.** Tonight added **one** construction (#104), it is gated behind two free screens that
+  can make it unnecessary, and it explicitly does not contest the lab result that already went
+  against it. The other three candidates are an anti-candidate, a two-line identity check, and a
+  free diagnostic on a node the lab already runs. Two of the three notes contain an explicit
+  "nothing here proposes a book" line. If the next nightly declines all four, that remains the
+  right call, and this file should still not answer it with more mechanisms.
+- **[2026-09-12] The embargo boundary, and it was live in one note.** Blitz–Huij–Martens is full of
+  exactly what this folder must not carry — decade-labelled returns, expansion/recession splits, a
+  named market episode — and **none of it is recorded**. What *is* recorded, under the standing
+  2026-09-07/-08/-09 rule (**ratios and proportional effects admissible, levels are not**): the
+  direction of the mechanism (variance reduction, not a wider spread), the volatility relationship
+  between the two constructions stated as a ratio with no dates, and a calendar count (**8 of 12
+  months versus 3 of 12** clearing a `t > +2` bar) recorded as a dispersion proportion with an
+  explicit rider not to use it as a threshold — the same treatment 2026-09-11 gave Knez–Ready's
+  "16 months". The 2020 companion is abstract-only and everything taken from it is qualitative and
+  untimed, because its sample was not read. The `Missing Financial Data` note carries
+  `validation_overlap: true` (sample to end-2020) and imports no magnitude at all: its riders say
+  twice that its numbers are properties of a several-thousand-name US accounting panel and have no
+  standing on 140 global price series.
+- **[2026-09-12] Access and index behaviour: two institutional repositories did the work, one
+  guessed identifier returned the wrong paper silently, and the two-DOI pattern now has an Elsevier
+  form.**
+  - **Institutional repositories were the whole story tonight.** `repub.eur.nl` served the accepted
+    manuscript of a closed Elsevier article, and `lbsresearch.london.edu` served the accepted
+    version of a closed Oxford/RFS article — the second time this file has recorded LBS as a
+    working channel. Both were reached the same way: find the repository's *landing page* by search,
+    read the PDF link out of it, then fetch. **Do not guess repository item IDs.** A guessed
+    `repub.eur.nl/pub/<id>` returned HTTP 200 and a perfectly well-formed PDF **of an unrelated
+    medical study protocol** — a silent wrong answer, not an error, and the exact failure mode this
+    file recorded for a guessed Wiley DOI on 2026-09-11. Check the title of what came back before
+    parsing it.
+  - **Third distinct refusal mode, now with Elsevier's own site**: `sciencedirect.com` and
+    `papers.ssrn.com` both returned HTTP 403 to every attempt, and `tandfonline.com` did the same
+    for *The American Statistician*. None of these is an egress block; they are origins refusing an
+    automated client, and Conover–Iman is genuinely closed with no open copy anywhere — recorded
+    abstract-only, with its definitional content taken from three later papers that restate it,
+    and said so in the note.
+  - **The two-DOI registration pattern has an Elsevier form, and it inverts the Wiley one.** For
+    both Elsevier articles tonight, Semantic Scholar returns **not found** on the *journal* DOI and
+    resolves the paper under its **SSRN** DOI (`10.2139/…`): residual momentum reads 145 there
+    against Crossref's 190 on the journal DOI, and the idiosyncratic-momentum companion reads 72
+    against 45. The RFS article behaves the same way (41 under the SSRN DOI, 42 at Crossref on the
+    journal DOI). **The practical rule, now generalized: for any article with a working-paper life,
+    look it up under both the journal DOI and the preprint DOI before believing a "not found" or a
+    low count** — the pre-2000 JF/RFS/JFE rule from 2026-09-11 is the same rule with a different
+    registry.
+  - **OpenAlex was unavailable for the whole session**: `Insufficient budget` from the first call,
+    which per this file's own note is the daily allowance being spent rather than a rate limit.
+    Every count tonight therefore rests on Semantic Scholar plus Crossref, and the notes say so.
+    Semantic Scholar's unauthenticated endpoint also returned a 429 twice under light use; spacing
+    calls across tool invocations rather than sleeping inside one worked.
+- **[2026-09-12] Protocol note, sixth session running: the session-start hook reported "integrity
+  check OK — on main, level with origin/main, no stray branches", and `git status -sb` then showed
+  the session sitting on `claude/tender-galileo-su4cos`.** The branch's tip was identical to
+  `origin/main`, so nothing was stranded and no recovery was needed — this is the benign form of the
+  divergence, not the 2026-09-11 form. Corrected to `main` before any work, per the standing
+  instruction never to work from a per-run branch. Worth recording precisely because it is the
+  benign case: the hook's claim "on main" was **false** while its conclusion "level with
+  origin/main" was **true**, so a session that trusted the first clause would have committed to a
+  per-run branch with no warning. The detection improved on 2026-09-11 for the case where commits
+  are missing; it still does not detect the case where the *branch name* is wrong and the content
+  happens to match. Flagged for the human for the fifth time.
 
 - **[2026-09-11] READ THIS FIRST — and the first item is not about research. The 2026-09-10
   nightly's entire session was stranded on a per-run branch and was recovered by this agent at the
