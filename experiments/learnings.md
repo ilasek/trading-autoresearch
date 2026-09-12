@@ -2998,3 +2998,123 @@ across experiments; prune entries that later evidence contradicts.
   `range-variance` nor weakens its closure: **the family is closed on fifteen mechanism screens
   with one identified cause, not on robustness statistics** — which is the right way round, and
   worth saying explicitly now that one of them has come back neutral.
+
+- **[Measured 2026-09-12, nightly] A cumulative top-`k` statistic cannot locate a band,
+  because its t-statistic RISES with `k` under pure dilution. Only the marginal profile
+  can.** Profiling every characteristic `strategies/lib` can build out to rank 80 (171
+  train dates, pool >= 90), the seated `liquidity-volume` lead's score reads cumulative
+  top-`k` excess **+9.16 (t = 4.84) / +5.47 (4.60) / +4.41 (5.10) / +3.19 (4.98) / +2.49
+  (t = 5.92)** at k = 15/30/45/60/80 — a t-statistic climbing monotonically to the deepest
+  slice measured, which reads exactly like a score whose content reaches 80 names and which
+  nearly bought a proposal to widen that lead from its ~36. **It is an artifact.** The
+  marginal slices on the same sample are **+9.16 (4.84) / +1.78 (1.08) / +2.29 (1.53) /
+  -0.47 (-0.33) / +0.39 (0.30)** — flat past rank 45 — and the cumulative *mean* falls
+  monotonically throughout, which is what dilution looks like; the t rises only because
+  averaging more names shrinks the estimator's standard error faster than it shrinks the
+  mean. So the existing rule is intact and was right: **breadth beyond where a score's
+  MARGINAL slices go flat is dilution**, the seated lead is already near its indicated
+  breadth, and the standing instruction not to take a fourth point on the
+  `liquidity-volume` band bracket is vindicated rather than overridden. Sixth instance of
+  this repo's oldest habit — check what a thing actually measures before crediting it — and
+  the first on a *statistic's own asymptotics* rather than on a line of code (the `dropna`
+  trim cohort), an imported screen (the Henriksson-Merton bet), or a weight function's
+  algebra (the affine breadth floor). **Never read a cumulative profile as a depth profile.**
+  What the same table does establish at this depth: of everything the lib can build,
+  region-relative `ILLIQ` is the **only** characteristic with positive marginal content past
+  rank 30, and `rev21`, `volume_shock` and `unexplained_volume` have none anywhere (placebo
+  flat and sign-inconsistent, max |t| 1.52, so the table is readable).
+
+- **[Measured 2026-09-12, nightly] The house `common` intersection is NOT selection on the
+  outcome: at matched pool size it costs no leg anything, and the one alarming reading it
+  produced was breadth in disguise.** `research/SUMMARY.md` #103 imported the complete-case
+  literature's two-channel claim — lower expected return *and* lower breadth — onto the one
+  construction node every trial here applies and none had measured. On 393 train dates the
+  raw readings looked like a hit: names the ppp3 intersection excludes earn **more**, not
+  less (+2.48%/yr, t = 1.37; +7.05 at t = 2.92 on `mom+seasonal`), the mechanism is listing
+  age (kept names average **20.97 years** against the excluded set's **6.87**, with 62.6% of
+  excluded names younger than five years against 0.0% of kept ones), and the momentum leg
+  loses **70% of its top-20 band excess** inside the intersection (+3.53 at t = 2.11 -> +1.04
+  at t = 0.76, paired -2.49 at **t = -3.38**, placebo -0.13 at t = -0.18) while `illiq_rr`
+  (-0.36, t = -0.47) and the seasonal score (-0.63, t = -1.75) lose nothing. **The decisive
+  control dissolves all of it**: measured against a random draw of the intersection's own
+  size, so the breadth channel is differenced out exactly, the momentum loss is **-0.65 at
+  t = -1.38**, `illiq_rr` -0.14 (t = -0.27), the seasonal +0.12 (t = +0.43), placebo -0.29
+  (t = -0.55). A standing worry is retired: no statistic computed after the intersection is
+  conditional on a self-selected population in any way that reaches a book. **Two things
+  survive.** *(a)* The breadth cost is real and is a property of the **leg, not the pool
+  rule** — a random 20-name reduction costs momentum -1.69%/yr and `illiq_rr` -0.26%/yr
+  (t = -0.52) — which composes with the depth-profile mechanism and agrees with it: the
+  steep-profile leg is the fragile one, so **a multi-leg book pays its pool tax on whichever
+  leg has the steepest profile.** *(b)* Separately from the pool rule, **listing age does
+  select on momentum content**: dropping names younger than five years costs momentum
+  -1.10%/yr at matched n (**t = -2.41**) against a placebo's -0.34 (t = -0.68). That is an
+  **anti-candidate**, not an idea — in a current-constituents universe the young names are
+  the ones added to the store late because they grew into it, so tilting toward them is
+  tilting into the survivorship bias, and it must not be traded. Carry it as a caution on
+  every momentum reading in this repo. No imputation module was written, per #103's own rider.
+
+- **[Measured 2026-09-12, nightly] `rank(blend)` and `blend(ranks)` are genuinely different
+  books, and the class of proposals comparing them is retired anyway — as unresolvable, not
+  as an identity.** 453 train dates, equal weights, top-20 bands on each pair's own
+  intersection: `spearman(A, B)` = **0.946-0.951** with minima as low as 0.798 and top-20
+  overlap 0.86-0.89, so the pre-committed `spearman >= 0.98 AND overlap >= 0.95` identity
+  line is **not met**. This falsifies the *premise* of 2026-09-11's pre-registration, which
+  declined an arm partly because it and the policy were "the same object differing only in
+  policy shape" — they are two objects. The *conclusion* survives on the other argument and
+  that is what to carry: of three live pairs only one reaches |t| = 2 on band excess and the
+  signs disagree (+1.08, -0.42, +0.61; placebo controls +0.10 and -0.32), so **no ordering
+  between the two combination orders is established** and a trial would pay a permanent DSR
+  increment for a margin the split cannot resolve. Note the shape of the screen's own answer:
+  the placebo *pair* agrees at 0.9746, i.e. **more** closely than any live pair, so ~0.95 is
+  roughly what the operator reads on noise at this cross-section size — the divergence is not
+  where the content is. Run once per pair that matters; never per candidate.
+
+- **[Measured 2026-09-12, nightly] The `neutralize` operator is closed here on evidence: it
+  passes the source's own book-variance screen and is then disqualified by the placebo.**
+  `SUMMARY.md` #104's case was that 2026-09-10 screened a *regional* residual on a **score**
+  statistic (IC) while the source's claim is about **book variance**, and it named three
+  repairs. All three were made — the **market** factor rather than the region one, **with**
+  the residual-volatility standardization, graded on the **book's** realized volatility and
+  formation-window beta — plus both construction traps (alpha excluded from the score,
+  regression windows ending at `t-1`). On 211 train dates the precondition clears easily
+  (`spearman(plain, residual)` 0.7221, top-20 overlap 0.611) and the pre-committed PASS line
+  is met: top-20 book volatility **0.1696 -> 0.1476, -13.0% at t = -4.60**, band excess
+  unchanged (+3.24 -> +3.17, paired -0.06 at **t = -0.03**), beta **1.103 -> 0.835**. The
+  standardization is load-bearing exactly as claimed: without it the score has more spread
+  (+5.91, t = 3.20) and **no** volatility benefit (+3.0%). **Then two things kill it.** *(a)*
+  A score reading **no market data** also builds a lower-volatility book than plain momentum
+  (**-7.9%, t = -2.60**), because plain momentum selects volatile names — so over half the
+  headline -13.0% is not neutralization, and book volatility falls **monotonically** in band
+  size (0.1608 at k=10 to 0.1418 at k=40), which is diversification available to any score.
+  *(b)* Decisively, the residual score **has no readable depth profile**: not one marginal
+  slice reaches |t| = 2 (max +4.23 at t = 1.66) while the **placebo reaches it twice**
+  (-3.73 at t = -2.25, -3.47 at t = -1.96). That is the `pt_raw_reversal_control` signature
+  of 2026-09-09 — the control more structured than the signal — so by the house rule no band
+  can be set, and therefore there is no candidate to write. The triage rule is confirmed on
+  the way past: one parameter per name per date, median trailing beta 1.002 with **IQR
+  0.621** and **29.1%** of names further than 0.5 from unity. The archived residual-momentum
+  attempts of 2026-08-12..14 neither pre-empt nor contradict this; none graded the book
+  statistic or used the standardization, and their numbers may not be quoted as established.
+  **General lesson, now on its second independent confirmation: a pass on a book-variance
+  statistic means nothing until a placebo book is priced beside it, because diversification
+  and low-volatility selection both lower book volatility without any operator at all.**
+
+- **[Measured 2026-09-12, nightly] The parametric portfolio policy's last live node is empty,
+  so the shape is structurally finished on this universe.** #90 established that a long-only
+  affine policy's breadth is an **arithmetic floor** near half the pool that no rescaling can
+  lower, and the lab's standing next-idea was the one repair left: choose characteristics
+  whose content reaches that breadth, `ILLIQ` being the only one then measured past rank 45.
+  Two free measurements close it. *(a)* **There is no deep SET available** — region-relative
+  `ILLIQ` and an inverted dollar-volume (size) rank correlate **+0.825** pooled over train
+  rebalance dates, so a policy on both is a one-characteristic policy, and nothing else the
+  lib builds has marginal content past rank 30. *(b)* **The screen orders the arms against the
+  hypothesis**, on the one comparison an own-weight excess screen is still allowed to make
+  (every arm the same construction, only the characteristic set varying; 334 common dates):
+  #90's set **+10.45%/yr (t = 6.42)**, `mom+seasonal` **+8.57 (5.83)**, `illiq_rr` alone
+  **+4.68 (4.28)**, `illiq_rr+size_inv` **+4.14 (4.14)**, `size_inv` alone +0.52 (0.63),
+  placebo -0.04 (-0.18). The content driving this policy comes from the characteristics whose
+  profiles die by rank 30, so matching the set to the floor's breadth throws the content away.
+  **Both of the shape's nodes are now closed in opposite directions — breadth cannot be
+  lowered and characteristics cannot be deepened — so do not propose another PPP variant.**
+  (The harness reproduced the lab's own screen to within 0.25%/yr on #90's set, +10.45 against
+  the recorded +10.70, which is what licenses reading the other rows.)

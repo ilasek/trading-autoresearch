@@ -8643,3 +8643,403 @@ answer was available on paper before any data was loaded.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-12 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Free measurement — 2026-09-12 (nightly), no trial spent
+
+Everything below is train-split or holdings-only. Nothing went through
+`run_experiment.py`, `trials.jsonl` is untouched at **90 trials**, the champion was not
+compared, and **the holdout was not read**. The session is aimed by
+`research/SUMMARY.md`'s own ordering for tonight (#103, then #102, then #101 as a
+standing rule, then #104 behind its two free preconditions), which also matches the
+lab's own next-idea list.
+
+Four items were screened. **All four returned a null or a structural kill, and the
+fourth was killed by the repo's own 2026-09-09 placebo rule at the step the folder's
+precondition chain did not list.** No candidate was scored. One reading I was about to
+build on turned out to be a variance artifact and is corrected below rather than acted
+on.
+
+### #103 — the `common` intersection is NOT selection on the outcome. The cost is breadth, and it is leg-specific.
+
+The house pool rule is complete-case analysis. The literature's claim is that
+complete-case selection is selection **on the outcome**, with a two-channel cost —
+lower expected return *and* lower breadth. The lab had been bitten by the breadth
+channel twice and had never tested the selection channel.
+
+One common sample of **393 rebalance dates (1985-03-29 .. 2017-11-30)**, forward 21d,
+`MIN_POOL` 20 on both the tradeable set and the intersection.
+
+*(a) Pool sizes* — #101's free rider, printed from here on beside every rank statistic:
+
+    series                                mean    min    max   1990   2017
+    tradeable (price + realized fwd)      85.1     32    139   37.5  139.0
+    leg: mom                              81.6     30    139   36.0  139.0
+    leg: illiq_rr                         75.1     28    125   32.8  125.0
+    leg: seasonal                         68.3     25    137   32.0  136.5
+    common: mom+illiq_rr+seasonal         61.6     23    124   28.0  123.6
+
+*(b) The selection channel, and its sign is the OPPOSITE of the source's:*
+
+    leg set                    kept  excl  kept %/yr  excl %/yr    diff      t    rand      t
+    ppp3 (the #90 pool)        61.6  23.5      17.77      20.25   +2.48   1.37   -0.01  -0.04
+    mom+illiq_rr               72.7  12.4      18.17      18.66   +0.49   0.19   -0.62  -1.87
+    mom+seasonal               67.2  17.1      17.62      24.67   +7.05   2.92   +0.11   0.29
+    illiq_rr+seasonal          61.6  23.5      17.77      20.25   +2.48   1.37   +0.06   0.19
+
+`rand` is a same-size random exclusion from the same tradeable set, 25 draws per date,
+and it reads ~zero everywhere — so the statistic is calibrated. The excluded names earn
+**more**, not less: the intersection keeps the *lower*-returning names. On the pool the
+lab actually uses it is a null (t = 1.37); it is resolvable only on `mom+seasonal`.
+
+*(c) The mechanism is listing age, not missingness as such:*
+
+    set        mean age (yrs)   share younger than 5y
+    kept              20.97                     0.000
+    excluded           6.87                     0.626
+
+*(d) The consequence channel — does the intersection change the BOOK a leg holds?*
+Each leg's top-20 band excess over its pool, ranked in its own pool versus in the ppp3
+intersection, same dates, same band size:
+
+    leg           own pool  own %/yr     t | isect   isect %/yr     t |   diff      t  overlap
+    mom               82.8     +3.53  2.11 |  62.5        +1.04  0.76 |  -2.49  -3.38    0.743
+    illiq_rr          76.2     +4.32  4.34 |  62.5        +3.96  4.18 |  -0.36  -0.47    0.701
+    seasonal          69.3     +6.50  6.01 |  62.5        +5.86  5.60 |  -0.63  -1.75    0.902
+    [ctl] placebo     86.3     -0.73 -0.81 |  62.5        -0.86 -1.08 |  -0.13  -0.18    0.724
+
+The momentum leg loses **70% of its measured band excess** inside the intersection, at
+t = -3.38, with the placebo at t = -0.18. Note the benchmark shift works *against* this
+reading: by (b) the intersection's pool mean is lower, which inflates an excess measured
+over it, so -2.49 is conservative.
+
+*(e) The decisive control — breadth or selection?* Each restriction against a random draw
+of **its own size**, so the breadth channel is differenced out exactly (40 draws/date):
+
+    leg         restriction                 pool   excess   vs random-same-n      t  -> reading
+    mom         ppp3 `common` intersection  62.5    +1.04              -0.65  -1.38  breadth only
+    mom         drop names younger than 5y  68.8    +1.37              -1.10  -2.41  SELECTION
+    illiq_rr    ppp3 `common` intersection  62.5    +3.96              -0.14  -0.27  breadth only
+    illiq_rr    drop names younger than 5y  62.7    +3.85              -0.28  -0.56  breadth only
+    seasonal    ppp3 `common` intersection  62.5    +5.86              +0.12  +0.43  breadth only
+    [ctl] plcb  ppp3 `common` intersection  62.5    -0.86              -0.29  -0.55  breadth only
+    [ctl] plcb  drop names younger than 5y  68.8    -0.77              -0.34  -0.68  breadth only
+
+**#103 is answered and it is a null on the channel it was built to test.** At matched n
+the intersection costs no leg anything beyond breadth — not even the momentum leg, whose
+apparent -2.49 collapses to -0.65 (t = -1.38) once the pool size is held. So every
+statistic computed after the intersection is **not** conditional on a self-selected
+population in any way that reaches a book; a standing worry is retired for the price of
+two lines, which is the outcome the note names as the cheap one.
+
+Two things survive as findings rather than nulls. First, **the breadth channel is real
+and it is a property of the leg, not of the pool rule**: a random 20-name reduction costs
+the momentum leg -1.69%/yr and the `illiq_rr` leg -0.26%/yr (t = -0.52). Second, and
+separately from the pool rule, **listing age does select on momentum content**: removing
+names younger than five years costs momentum -1.10%/yr at matched n (t = -2.41) against a
+placebo's -0.34 (t = -0.68). That is an anti-candidate, not an idea — in a universe of
+today's constituents the young names are precisely the ones that were added to the store
+late because they grew into it, so a deliberate tilt toward them is a tilt into the
+survivorship bias `learnings.md` warns about, and it must not be traded. It is recorded
+as a caution on every momentum reading in this repo.
+
+Riders honoured: no imputation module was written and no fill rule was invented, per
+#103's explicit instruction.
+
+### #102 — rank-of-blend and blend-of-ranks are different books, but their difference is not resolvable and is sign-inconsistent
+
+453 dates (1962-07-31 .. 2017-12-29), equal weights, top-20 bands, both objects built on
+the `common` intersection of the pair. `A = rank(mean(rank(x1), rank(x2)))`,
+`B = rank(z(x1) + z(x2))` — the lab's own composite.
+
+    pair                           pool  spearman(A,B)    min  overlap   A %/yr   B %/yr    A-B      t
+    mom x illiq_rr                 68.5         0.9491  0.798    0.863    +5.02    +3.93  +1.08   2.02
+    mom x seasonal                 68.3         0.9460  0.853    0.876    +4.54    +4.97  -0.42  -0.76
+    illiq_rr x seasonal            62.5         0.9507  0.832    0.892    +7.37    +6.77  +0.61   1.35
+    [ctl] mom x placebo            75.9         0.9575  0.861    0.869    +1.80    +1.70  +0.10   0.20
+    [ctl] placebo x placebo2       77.6         0.9746  0.847    0.901    -1.16    -0.84  -0.32  -0.74
+
+The pre-committed reading was `spearman >= 0.98 AND overlap >= 0.95` to retire the class
+as an identity. **It is not met: the two combination orders are genuinely different
+books** (0.946-0.951, overlap 0.86-0.89, minimum daily Spearman as low as 0.798). So the
+2026-09-11 pre-registration's *premise* — that rank-and-band on the same composite and the
+policy were "the same object differing only in policy shape" — was **wrong**.
+
+Its *conclusion* survives anyway, on the other argument, and that is the finding. Of three
+live pairs only one reaches |t| = 2 and the signs disagree (+1.08, -0.42, +0.61); per the
+repo's own rule that a single significant cell is not a readable shape, **no ordering
+between the two combination orders is established**. A trial comparing them would pay a
+permanent DSR increment for a margin the split cannot resolve, which is what 2026-08-24
+forbids. The class is retired — not as an identity, but as unresolvable.
+
+Rider honoured: run once on the pairs that matter, not per candidate.
+
+### #101 — adopted as a standing rule rather than run
+
+Every monotone repair of a score is an identity on a ranked book, so the whole class of
+"log it / rescale it / winsorize it" proposals is empty for every rank-and-band
+construction here. Nothing to measure; the free half — **print pool size beside every
+rank-based statistic** — is done above and in every table tonight.
+
+### #104 — `neutralize` passes the folder's stated screen and is then killed by the lab's own placebo rule. Closed on evidence.
+
+#104's case is that 2026-09-10 screened a *regional* residual and graded it on a **score**
+statistic (IC), while the source's claim is about **book variance**. Its three repairs were
+followed exactly: *(a)* the **market** factor, not the region one; *(b)* **with** the
+residual-volatility standardization; *(c)* graded on the book's realized volatility and its
+formation-window beta. Both construction traps honoured — the estimated alpha is excluded
+from the score, and every regression window ends at `t-1`. Market = equal-weight
+cross-section; trailing beta over 252 days; 211 dates (2000-05-31 .. 2017-11-30).
+
+*Precondition (are they different objects?)* `spearman(plain, residual) = 0.7221`,
+top-20 overlap 0.611 — nowhere near the 0.98 kill line. Cleared.
+
+*The (c) statistic, top-20 equal weight:*
+
+    score                                    band %/yr      t   book vol   beta   vol vs plain
+    plain 12-1 momentum                          +3.24   1.34     0.1696  1.103           0.0%
+    market-resid 12-1, standardized  [#104]      +3.17   1.69     0.1476  0.835         -13.0%
+    market-resid 12-1, NOT standardized          +5.91   3.20     0.1746  1.033          +3.0%
+    [ctl] placebo hash                           -1.30  -1.18     0.1562  1.003          -7.9%
+
+    paired vs plain momentum          d(band excess)      t   d(book vol)      t
+    market-resid standardized  [#104]          -0.06  -0.03      -0.02200  -4.60
+    market-resid NOT standardized              +2.67   1.56      +0.00504   1.07
+    [ctl] placebo hash                         -4.53  -1.66      -0.01337  -2.60
+
+On the pre-committed PASS line — book volatility at least 5% lower, spread not materially
+worse, beta lower — **this passes**: -13.0% of volatility at t = -4.60, spread unchanged at
+t = -0.03, beta 1.103 -> 0.835. The standardization is load-bearing exactly as #104 claims:
+without it the score has *more* spread and *no* volatility benefit (+3.0%).
+
+**And then the placebo disqualifies it.** A score that reads no market data also builds a
+lower-volatility book than plain momentum (-7.9%, t = -2.60), because plain momentum
+selects volatile names — so more than half the headline -13.0% is not the neutralization.
+The beta reduction is specific (0.835 against the placebo's 1.003) but on a long-only book
+capped at leverage 1.0 a lower beta lowers return too, so the claim reduces to whether the
+return side holds. It does not. Profiling the score to set its band, which
+`learnings.md`'s house table requires rather than inheriting one:
+
+    score                            pool      r1-10     r11-15     r16-20     r21-30     r31-45     r46-60
+    market-resid 12-1 standardized  116.5  +4.23(1.66) +1.50(0.49) +2.72(1.03) -1.23(-.61) +0.57(.39) -0.54(-.37)
+    [ctl] placebo hash              121.8  -3.73(-2.25)+1.29(0.58) +0.98(0.36) -3.47(-1.96)+1.14(.71) +0.38(.26)
+
+**Not one slice of the live score reaches |t| = 2, and the placebo reaches it twice.** This
+is the `pt_raw_reversal_control` signature of 2026-09-09 exactly — "the control is more
+structured than the signal" — and that session's rule is explicit: only an ordered shape
+across slices with a flat placebo beside it licenses reading a profile, and there the trial
+was not spent. There is no readable profile here, therefore **no band can be set by the
+house rule**, therefore there is no candidate to write. By band size:
+
+    k    excess %/yr      t   book vol    beta     [ctl] placebo excess      t
+    10         +4.23   1.66     0.1608   0.795                    -3.73  -2.25
+    15         +3.32   1.52     0.1531   0.824                    -2.05  -1.61
+    20         +3.17   1.69     0.1476   0.835                    -1.30  -1.18
+    25         +1.95   1.18     0.1455   0.851                    -2.43  -2.44
+    30         +1.70   1.12     0.1435   0.863                    -2.02  -2.23
+    40         +1.39   1.12     0.1418   0.886                    -1.56  -2.11
+
+Excess never reaches |t| = 2 at any `k`, and book volatility falls **monotonically** in `k`
+— which is diversification, available to any score including the placebo, not
+neutralization. The triage rule's warning is confirmed on the way past: the residual score
+estimates **one parameter per name per date** against zero for plain momentum, median
+trailing beta 1.002 with **IQR 0.621** and **29.1%** of names further than 0.5 from unity.
+
+**`neutralize` is therefore closed here on evidence rather than by omission**, which #104
+itself names as the outcome this file should prefer. The prior residual-momentum attempts
+do not contradict or pre-empt this: all of them are in the archived off-branch sessions of
+2026-08-12..14, their numbers may not be quoted as established, and none graded the book
+statistic or used the standardization.
+
+### The PPP characteristic-set node: the lab's own #2 next idea, killed for free
+
+The standing idea was that trial #90's policy held 2.8x-5.2x past its composite's content
+because a long-only affine policy's breadth is an **arithmetic floor** near half the pool,
+and that the fix is a characteristic set whose content reaches that breadth — `ILLIQ` being
+the only one measured to rank 45. Two free measurements close it.
+
+*(a) There is no deep SET to build, because this universe supplies one deep characteristic
+and a near-duplicate of it.* Pooled train Spearman between the scores:
+
+                   mom   illiq_rr   size_inv   seasonal
+    mom          1.000     -0.037     -0.082     -0.046
+    illiq_rr    -0.037      1.000     +0.825     +0.007
+    size_inv    -0.082     +0.825      1.000     +0.008
+    seasonal    -0.046     +0.007     +0.008      1.000
+
+`illiq_rr` and an inverted dollar-volume (size) rank correlate **+0.825**, so a policy on
+both is a one-characteristic policy.
+
+*(b) And the screen orders the arms the wrong way for the hypothesis.* Identical #90
+machinery, only the characteristic set varying — the one comparison an own-weight excess
+screen is still allowed to make after 2026-09-11, because every arm is the same
+construction. One common sample of 334 dates (1990-03-30 .. 2017-12-29):
+
+    arm                                  pool  floor   held   excess %/yr      t    churn
+    #90's set: mom+illiq_rr+seasonal     68.0   32.1   41.4        +10.45   6.42   13.22x
+    SHALLOW set: mom+seasonal            75.4   36.9   48.4         +8.57   5.83   14.96x
+    illiq_rr alone                       83.1   38.8   61.5         +4.68   4.28    1.14x
+    DEEP set: illiq_rr+size_inv          83.1   38.8   61.0         +4.14   4.14    1.17x
+    size_inv alone                       93.9   47.2   63.7         +0.52   0.63    0.93x
+    [ctl] placebo alone                  94.1   47.4   93.2         -0.04  -0.18    4.13x
+
+(The harness reproduces the lab's own screen: #90's set reads +10.45 here against the
++10.70 recorded on 2026-09-11.) **The deep arms screen at under half the shallow ones.**
+The content that drives this policy comes from the characteristics whose profiles die by
+rank 30, and matching the set to the floor's breadth throws it away. The floor-matching
+repair is refuted before a trial, and the honest position on the PPP shape is that it is
+**structurally stuck**: its breadth cannot be lowered (arithmetic, #90) and its
+characteristics cannot be deepened (tonight), so there is nothing left at that node.
+
+*Method note:* the volatility-percentile column this file normally requires was computed on
+a non-comparable definition (the book's volatility against the distribution of individual
+*name* volatilities rather than against the equal-weight pool *portfolio*), so it is
+omitted rather than quoted beside 2026-09-11's 0.510/0.581. The volatility channel was
+priced directly where it mattered — as realized book volatility in #104 above.
+
+### Correction: a cumulative top-k t-statistic that RISES with k is a variance artifact, not content depth
+
+Profiling every characteristic the lib can build, out to rank 80 (171 dates,
+2003-09-30 .. 2017-11-30, pool >= 90), the cumulative table looked like it had found
+something:
+
+    characteristic                       top-15       top-30       top-45       top-60       top-80
+    mom (4-horizon, champion)       +7.21(2.29)  +4.28(2.04)  +2.61(1.64)  +1.83(1.38)  +0.59(0.58)
+    illiq_rr (seated lv lead)       +9.16(4.84)  +5.47(4.60)  +4.41(5.10)  +3.19(4.98)  +2.49(5.92)
+    illiq raw (no demean)           +7.72(3.98)  +5.04(3.22)  +3.05(2.52)  +2.66(2.78)  +1.67(2.71)
+    seasonal (seated sc lead)       +8.45(3.22)  +4.04(2.39)  +2.57(2.15)  +1.59(1.84)  +0.67(1.12)
+    rev21 (weakest lead)            +0.03(0.01)  +0.27(0.16)  -0.54(-.41)  -0.24(-.22)  -0.46(-.56)
+    size_inv (dollar-vol rank)      +3.65(2.38)  +3.47(3.18)  +1.90(2.21)  +1.13(1.57)  +1.14(2.36)
+    volume_shock 63d                +0.36(0.19)  +0.23(0.20)  -0.75(-.85)  -0.91(-1.22) -1.00(-2.01)
+    unexplained_volume              +1.21(0.71)  +1.52(1.39)  +0.38(0.48)  +0.26(0.42)  +0.26(0.56)
+    [ctl] gkvol 21d (artifact)      -1.58(-.26)  -2.63(-.45)  -2.61(-.57)  +0.17(0.06)  -2.15(-1.02)
+    [ctl] placebo hash              -0.79(-.59)  -1.49(-1.52) -0.62(-.76)  -0.45(-.71)  -0.53(-1.13)
+
+`illiq_rr`'s cumulative t **rises** with depth, 4.84 -> 5.92, all the way to k = 80 on a
+~119-name pool, and I was an inch from reading that as "content reaches 80 names" and
+proposing to widen the seated `liquidity-volume` lead from its 36. **That reading is
+wrong.** The marginal slices on the same sample are
+
+    illiq_rr   r1-15 +9.16(4.84)  r16-30 +1.78(1.08)  r31-45 +2.29(1.53)  r46-60 -0.47(-0.33)  r61-80 +0.39(0.30)
+
+— flat past rank 45. The cumulative mean declines monotonically
+(9.16 -> 5.47 -> 4.41 -> 3.19 -> 2.49), which is exactly what dilution looks like; the t
+rises only because averaging more names shrinks the estimator's standard error faster than
+it shrinks the mean. So the repo's existing rule is intact and was right —
+**breadth beyond where a score's MARGINAL slices go flat is dilution** — the seated lead's
+~36 names is already near the indicated breadth, and the standing instruction not to take a
+fourth point on the `liquidity-volume` band bracket is **vindicated, not overridden**.
+General rule to carry: *a cumulative top-k statistic must never be used to locate a band;
+only the marginal profile can, because the cumulative t-statistic rises with k under pure
+dilution.*
+
+What the table does establish, cleanly and for the first time at this depth: of everything
+this lib can build, **`illiq_rr` is the only characteristic with any positive marginal
+content past rank 30**, and `rev21`, `volume_shock` and `unexplained_volume` have none
+anywhere. The placebo is flat and sign-inconsistent (max |t| 1.52), so the table is
+readable.
+
+## Session summary — 2026-09-12 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged for a thirteenth
+  session.** `git fetch origin --prune` clean; `git branch -r --no-merged origin/main`
+  returned **nothing**, so no previous session's work is stranded off `main`. As on
+  2026-09-06 through -11, the session-start hook printed "integrity check OK — on main"
+  while `git status -sb` reported a per-run branch (`main-olyv6f`) — **the hook still does
+  not detect this, seventh session running.** The per-run branch was verified
+  **bit-identical** to `origin/main` (`86a6762`, zero ahead, zero behind) before any work
+  began, and the session then moved onto `main` itself per step 0 of the standing prompt,
+  which forbids running trials from a per-run branch. Tonight's commits are pushed to
+  **both** `origin/main` and `origin/main-olyv6f`, so the split-history failure of
+  2026-08-16 cannot recur through this session. Engine tests green (**33 passed**) before
+  any measurement. Store fresh through **2026-09-12**.
+- **Experiments run: 0 of the 8-trial budget.** Trial count stays at **90**;
+  `trials.jsonl`, `leaderboard.json`, `champion.py` and `champion_card.json` are
+  untouched. No champion comparison, **no holdout read**. Four free items screened, each
+  with a pre-committed reading and a placebo control, all four returning a null or a
+  structural kill — so no candidate had a surviving mechanism to justify a permanent DSR
+  increment for every future challenger.
+
+### The night in one line
+
+Four standing items closed for free — the house pool rule is innocent, the two
+combination orders are unresolvable rather than identical, `neutralize` dies on the
+placebo rule, and the parametric policy's last live node has nothing in it — and the
+night's most useful result is a correction to a statistic I was about to act on.
+
+### Best finding: the `common` intersection is innocent, and the momentum leg's apparent loss was breadth
+
+#103 was the one item on the board that could fail and it sits under every trial the lab
+runs. Its headline reading looked alarming — the momentum leg loses 70% of its band excess
+inside the ppp3 intersection at t = -3.38 with a placebo at t = -0.18 — and the decisive
+control dissolves it: against a **random draw of the intersection's own size**, the same
+loss is -0.65 at t = -1.38. The pool rule costs no leg anything beyond breadth. What is
+real is that the breadth cost is a property of the *leg* (momentum -1.69%/yr for 20 names
+removed, `illiq_rr` -0.26%/yr at t = -0.52), which composes with the depth-profile
+mechanism the lab already owns, and the two agree: the steep-profile leg is the fragile one.
+
+### Second finding: the methodological correction, which is worth more than the item that produced it
+
+A cumulative top-k excess whose t-statistic **rises** with k reads like deepening content
+and is the signature of pure dilution — the mean falls monotonically while the standard
+error falls faster. I nearly proposed widening a seated lead on it. Only the **marginal**
+profile can locate a band. This is the sixth instance of the repo's oldest habit (check
+what the thing actually measures before crediting it) and the first on a *statistic's own
+asymptotics* rather than on a line of code, an imported screen or a weight function's
+algebra.
+
+### Protocol and allocation notes, stated plainly
+
+- **Zero trials is within the budget** ("up to 8"), and the per-family caps cannot bind at
+  zero. The `price-trend` cap of 2 went unused: the standing #1 next-idea still forbids a
+  K=1 challenger, and the one `price-trend`-shaped candidate tonight could have produced
+  (residual momentum, #104) was killed by its own profile.
+- **The cold-family rule was not satisfied, for the twelfth session running.**
+  `range-variance` still has zero recorded trials. Tonight adds one datum and it is
+  *negative* for the family rather than for its closure: in the rank-80 profile above, 21-day
+  Garman-Klass volatility is sign-inconsistent and reaches |t| = 2 nowhere (max 1.02),
+  behind both seated non-`price-trend` leads — a sixth robustness statistic on which the
+  artifact does not rank first. The family remains closed on fifteen mechanism screens with
+  one identified cause, not on robustness statistics. **Recommendation unchanged and still
+  needs a human: amend `program.md`'s cold-family allocation rule or retire the family.
+  Both are edits to a frozen file and no agent may make them.**
+- **The blend is declined for a thirteenth consecutive session.** No new leg was produced,
+  so nothing changed: the seated `liquidity-volume` lead at `rho` 0.715 / Sharpe 0.942 is
+  still the best available partner and still short of the solved break-evens.
+- **The standing ⚠ concern is unchanged at four points.** No promotion, no fifth data
+  point, no sixth holdout look; the count since 2026-08-17 stands at five.
+- **The train-as-prediction record is unchanged at n = 30.** No candidate was scored.
+- **No new lib file was added and nothing frozen was touched.** All measurement ran from
+  the session scratchpad. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/` and every existing `strategies/lib/` file are untouched, as are
+  `strategies/candidates/`, `trials.jsonl` and the leaderboard.
+
+### Next ideas, in order, with provenance
+
+1. **`SUMMARY.md` #92's non-standard error / specification curve is now the only unrun free
+   item the folder ranks, and it is the lab's own #1 for a third session.** Tonight
+   strengthens the case twice over: #102 found two books the lab had been treating as one
+   object, and the PPP screen found an ordering that reverses between a construction's
+   shallow and deep characteristic sets. Both are the dispersion #92 exists to quantify, and
+   #93's node table is the enumeration it needs. Its two preconditions stand: nothing through
+   `run_experiment.py`, and the node list pre-committed in the journal before anything is
+   scored. (`research/SUMMARY.md` #92, #93.)
+2. **`SUMMARY.md` #89's overidentifying restriction test** — still the one folder proposal
+   that can *fail*, with its mandatory no-lag-null rider. Carried. (`research/SUMMARY.md` #89.)
+3. **A momentum candidate must now carry a listing-age caveat, and nobody should trade the
+   age tilt.** Tonight's one resolvable selection effect is that removing names younger than
+   five years costs the momentum leg -1.10%/yr at matched n (t = -2.41, placebo -0.34). In a
+   current-constituents universe that is survivorship bias with a clean t-statistic on it, so
+   it is a caution on every momentum reading here and an anti-candidate, not an idea.
+   (Lab's own result, tonight.)
+4. **Do not extend**: the PPP's characteristic set (closed tonight — one deep characteristic
+   and a +0.825 duplicate), `neutralize` in any form (closed tonight on evidence), the
+   monotone-score-repair class (#101, empty by proof), rank-versus-blend combination order
+   (#102, unresolvable), the `liquidity-volume` or seasonal band brackets (a fourth point,
+   and tonight's dilution correction removes the one argument that looked like it licensed
+   widening), `range-variance`, the `calendar` half of `seasonality-calendar`, the distance
+   method, cointegration, union or intersection books of any leg count, HRP, a fourth
+   aggregation operator, and a fourth vintage axis without a rotation-speed rationale.
+5. **`SUMMARY.md` #49's execution overlay** — carried unspent for a fourteenth session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
+
+**No engine issues encountered.**
