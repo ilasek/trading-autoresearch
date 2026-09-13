@@ -3118,3 +3118,68 @@ across experiments; prune entries that later evidence contradicts.
   lowered and characteristics cannot be deepened — so do not propose another PPP variant.**
   (The harness reproduced the lab's own screen to within 0.25%/yr on #90's set, +10.45 against
   the recorded +10.70, which is what licenses reading the other rows.)
+
+- **[Measured 2026-09-13, nightly] `range-variance` was closed on fifteen screens of ONE object,
+  and a different object in the same family survives the control that killed it. Before recording
+  a family as closed, name the object the screens actually ranked.** Every one of the thirteen
+  consecutive declines — the fifteen mechanism screens, the one identified cause (a
+  current-constituents universe in which the high-volatility survivors did well), the four
+  robustness statistics that flatter it — is a statement about ranking names by a volatility
+  **level**, which is the same bet as the refuted high-vol side of `low-volatility / quality
+  tilts`. Two unit-free objects were profiled against it tonight on train, marginal slices only.
+  *(a)* A unit-free **ratio** of two volatility estimators is also empty: `RVR` =
+  `parkinson_vol(21)/realized_vol(21)` reaches |t| = 2 in no marginal slice, its signs alternate,
+  and the **hash placebo's deepest slice (t = -1.65) is more significant than any `RVR` slice
+  (max 1.68)** — the `pt_raw_reversal_control` signature, so no band can be set. At a 63-day
+  window it is flat everywhere (max |t| 0.94), which settles that this is a **content** null and
+  not an estimator-noise null, since `RVR` is a ratio of two noisy estimates and a short-window
+  null would otherwise be ambiguous. **`RVR` is closed.** *(b)* A unit-free **second moment** of
+  one estimator is not: vol-of-vol (`std(RV21,252)/mean(RV21,252)`) carries **+4.85%/yr
+  (t = +2.46) over ranks 1-15 and nothing past 15** (-1.19, +0.00, -2.05, -0.51), placebo clean,
+  and its cumulative series falls in **both** mean and t past the band (top-5 +9.10 t=2.64,
+  top-10 +8.45 t=3.33, top-15 +4.85 t=2.46, top-20 +3.28 t=1.94, top-25 +2.78 t=1.80) rather than
+  rising under dilution. **The decisive control is the one this family has never passed**:
+  `spearman(vol-of-vol, GK 21d level)` = **+0.0915** at 0.216 top-15 overlap, and measured inside
+  the **high-GK half**, with the level differenced out, the effect **strengthens to +5.59%/yr
+  (t = +2.75)** against the placebo's -1.93 (t = -1.14) on the identical restriction. It is also
+  not a re-labelling of anything seated (`spearman` -0.0935 to `ILLIQ`, +0.0039 to 12-1 momentum,
+  +0.0769 to the volatility level; 0.164 top-15 overlap with momentum; +3.96%/yr at t = +2.11
+  inside the high-`ILLIQ` half). Two weaknesses recorded with it: the **stock sleeve alone** reads
+  +4.40%/yr at **t = +1.79**, and inside the **high-momentum** half it fades to +1.29 (t = +0.84),
+  so the effect is weaker among past winners. **Seventh instance of this repo's oldest habit
+  (check what a thing actually measures before crediting it) and the first in which it reopened
+  something rather than retiring it** — the previous six all closed an axis.
+  *Method note, and it is the transferable half:* the object was **not traded the night it was
+  found**. Tonight's screen looked at three objects and five band sizes before this one was
+  picked, so the sign and band a trial would carry are **selected from that search**, and the
+  deflated-Sharpe machinery cannot see within-trial selection (`SUMMARY.md` #60). The correction
+  available is to write the whole search path into the journal and pre-register the trial with
+  nothing left to choose, which is done. **A pre-commitment that is abandoned the first time it
+  costs something was never a pre-commitment**; this one bound, and the delay is one day.
+
+- **[Measured 2026-09-13, nightly] `SUMMARY.md` #105 closes: the lab's short-history number is not
+  an age-conditioning effect, the uncertainty conditioning that IS here runs through volatility,
+  and it lives in the magnitudes rather than the ordering.** On the stock sleeve over 666 train
+  dates the age band is too thin to cut at five years (mean 6.9 names under 5y in a mean pool of
+  43.9; only 172 of 666 dates hold ten), so the screen ran on terciles — which is also #107's rule,
+  adopted tonight. Momentum top-20 within each tercile, excess over that tercile's own mean so any
+  level bet is differenced out: **history length is a null and non-monotone** (+2.23 / -0.97 /
+  +1.35, gradient **-0.88 at t = -0.71**), **trailing 252d vol is monotone** (+0.07 / +0.76 /
+  +3.63, gradient **+3.56 at t = +2.09**), **placebo flat** (gradient +0.47, t = +0.34). So the
+  2026-09-12 number is **not** an age-conditioned underreaction effect and has no competing
+  conditional mechanism through vintage to be confused with. **The confound control splits the
+  surviving half in two and is the transferable part**: a fixed IC yields a bigger band excess in
+  a more dispersed cross-section for free, and the high-`SIGMA` tercile is **2.0x** the low one's
+  dispersion — normalising by it, the gradient survives (+0.0357, t = +2.16), but the **Spearman
+  IC within each tercile is a null** (+0.0167 / +0.0212 / +0.0303, gradient +0.0136 at
+  **t = +0.57**). **Momentum is no better at ranking high-uncertainty names; the names it ranks
+  highly simply run further.** Recorded as consistent-with rather than evidence-for: two correlated
+  statistics at t ≈ 2.1 with a null IC beside them, at n = 156, is a weak identification. **Standing
+  rule from it: normalise a band excess by its cell's own cross-sectional dispersion before
+  comparing cells, and print the IC beside it — the two disagree, and which one moves says whether
+  an effect is in the ordering or in the tails.**
+  **#106's level leg, printed whatever it said, came back POSITIVE and that is precisely why it
+  must not be traded**: the youngest-20 tilt earns +3.53%/yr at **t = +2.18** (n = 299). In a
+  current-constituents universe a short-history name both listed recently *and* survived into
+  today's index — the most selected slice in the pool. Anti-candidate, and a caution on every
+  momentum reading in this repo.
