@@ -9186,3 +9186,158 @@ deliberately over the alternative, which is to spend a permanent deflated-Sharpe
 paid by every future challenger in this repo — on a score this repo cannot distinguish from a
 hash. The recommendation to the human is unchanged in substance and stronger in evidence; it is
 restated in tonight's session summary.
+
+## Free measurement — 2026-09-13 (nightly), no trial spent
+
+Three screens, all train-only, none through `run_experiment.py`. `trials.jsonl`,
+`leaderboard.json`, `champion.py` and `champion_card.json` are untouched; no champion
+comparison was made and **the holdout was not read**. Every reading below was pre-committed in
+the two pre-registration blocks above before the numbers existed.
+
+### Screen 1 — `SUMMARY.md` #105: the short-history penalty is not an age-conditioning effect, and the conditioning that IS here runs through volatility
+
+**Precondition (a), the pool count, and it changes the measurement.** On the stock sleeve (98 of
+140 columns) over 666 train rebalance dates, the mean pool is **43.9 names** carrying a mean of
+**6.9** names under five years of history and **15.3** under ten; only **172 of 666** dates hold
+even ten names in the under-five band. The 2026-09-12 cut is therefore too thin to condition on
+directly, and the screen was run on **terciles** of history length instead — which is also
+`SUMMARY.md` #107's rule, adopted tonight: a band chosen to maximise one book's excess is the
+wrong band for a comparison of books, and the comparison's band is set by its thinnest cell.
+
+**The screen** (n = 156 dates, momentum top-20 within each of three terciles, forward 21d,
+excess over that tercile's own equal-weight mean, so any level bet is differenced out by
+construction — the construction trap #105 named, avoided as pre-registered):
+
+      conditioning variable        low tercile      mid          high        GRADIENT (high-low)
+      history length             +2.23 (t=+1.47)  -0.97(-0.76)  +1.35(+1.18)   -0.88  (t=-0.71)
+      trailing 252d vol (SIGMA)  +0.07 (t=+0.10)  +0.76(+0.83)  +3.63(+2.11)   +3.56  (t=+2.09)
+      [placebo] hash pseudo-age  -0.84 (t=-0.67)  +1.68(+0.98)  -0.37(-0.32)   +0.47  (t=+0.34)
+
+**This is a fourth case, and the pre-registration did not enumerate it.** The block above named
+three outcomes — a gradient on both, a gradient on age only, or neither reaching |t| = 2. What
+came back is a gradient on **`SIGMA` only**, with age flat and non-monotone and the placebo
+clean. The reading that follows is narrower than any of the three and is stated as such: **the
+age axis carries no conditional continuation gradient at all here**, so the 2026-09-12 number is
+not an age-conditioned underreaction effect, and there is no competing conditional mechanism
+running through vintage for it to be confused with. What Zhang's information-uncertainty story
+predicts *is* visible, but on the proxy that is not a vintage.
+
+**The confound control, run before reading any of it, and it splits the result in half.** A
+fixed information coefficient produces a larger band excess in a more dispersed cross-section
+with no extra content whatever, and the high-`SIGMA` tercile is **2.0x** the low one's
+dispersion (21-day cross-sectional sd 0.0443 / 0.0565 / 0.0891). Normalising each tercile's
+excess by its own dispersion, the gradient **survives**: +0.0039 / +0.0142 / +0.0396, gradient
+**+0.0357 at t = +2.16**. But the **Spearman IC of momentum within each tercile is a null**:
++0.0167 / +0.0212 / +0.0303, gradient **+0.0136 at t = +0.57**.
+
+**So the effect is in the magnitudes and not in the ordering** — momentum is no better at
+*ranking* high-uncertainty names, the names it ranks highly simply run further. That is the
+shape Zhang's account predicts (uncertainty amplifies the size of a drift, not the accuracy of a
+signal) and it is recorded as *consistent with* rather than *evidence for*, because at n = 156
+two correlated statistics at t ≈ 2.1 with a null IT beside them is a weak identification. **No
+conditioned momentum book is written**: #105 licenses one only on a same-signed placebo-clean
+gradient on **both** proxies, and age is a null.
+
+**`SUMMARY.md` #106's level leg, printed whatever it said, and it came back positive.** The
+youngest-20 tilt earns **+3.53%/yr at t = +2.18** (n = 299) on its own. **This is the
+anti-candidate, and the positive sign is exactly why it must not be traded**: in a
+current-constituents universe a short-history name is one that both listed recently *and*
+survived into today's index, which is the most selected slice in the pool. Recorded as a
+caution on every momentum reading here, per #106 and per the lab's own 2026-09-12 entry.
+
+### Screen 2 — the `range-variance` depth profiles: the pre-committed object is a null, and a different one is not
+
+**`RVR` = Parkinson(21) / close-to-close(21), the pre-committed object, long high.** Marginal
+slices on 170 train dates with pool >= 90, against two controls:
+
+      score                       1-15          16-30        31-45        46-60        61-80
+      RVR 21d                  +0.37(+0.23) -1.21(-0.68) +2.11(+1.37) -2.47(-1.68) -0.44(-0.33)
+      [placebo] hash           -1.03(-0.62) -1.22(-0.99) -1.36(-1.12) +1.13(+0.59) -2.04(-1.65)
+      [control] GK 21d LEVEL   +9.55(+2.26) +4.62(+2.26) -1.63(-1.13) -1.42(-1.10) -0.31(-0.26)
+
+**`RVR` fails its pre-committed kill line**: no marginal slice reaches |t| = 2, the signs
+alternate, and the placebo's deepest slice (t = -1.65) is **more** significant than any `RVR`
+slice (max |t| = 1.68). That is the `pt_raw_reversal_control` signature of 2026-09-09 — the
+control more structured than the signal — so no band can be set and no book is written. The GK
+level column behaves exactly as thirteen sessions of screens describe and is present only to
+show the table is readable: the one thing in it with content is the known artifact.
+
+**The noise check, pre-committed as unable to license anything.** `RVR` is a ratio of two noisy
+estimators, so a 21-day null is consistent with "no content" or "too noisy to see content". At
+63 days it is flat everywhere — +0.52 / +0.49 / -1.69 / +0.79 / +1.07, max |t| **0.94**. **The
+`RVR` null is a content null, not an estimator-noise null.** The object is closed.
+
+**Vol-of-vol, profiled in both directions and unable to license a book tonight by its own
+pre-commitment — and it is the first object in this family to survive the control that killed
+the other fifteen.**
+
+      vol-of-vol (CV of 21d RV      1-15          16-30        31-45        46-60        61-80
+        over 252d), LONG HIGH    +4.85(+2.46) -1.19(-0.73) +0.00(+0.00) -2.05(-1.45) -0.51(-0.42)
+        LONG LOW                 -3.10(-1.60) +0.93(+0.60) +0.82(+0.56) -0.11(-0.08) -1.46(-1.21)
+
+Content in the top slice, nothing past rank 15, placebo clean. The cumulative series behaves the
+way 2026-09-12's dilution lesson says a *real* band should — mean **and** t both falling past the
+band (top-5 +9.10 t=+2.64, top-10 +8.45 t=+3.33, top-15 +4.85 t=+2.46, top-20 +3.28 t=+1.94,
+top-25 +2.78 t=+1.80) — rather than the t rising under dilution. The band is read off the
+**marginal** profile at ~15 regardless, per the house rule.
+
+**The decisive control, and it is the one this family has never passed.** Every previous
+`range-variance` decline rests on the volatility *level* being a survivorship artifact. Vol-of-vol
+is **not that object**: `spearman(vol-of-vol, GK level)` = **+0.0915** with a top-15 name overlap
+of **0.216**, and measured **inside the high-GK half**, where the level is differenced out, the
+effect does not merely survive, it **strengthens to +5.59%/yr at t = +2.75** with the placebo on
+the identical restriction at **-1.93 (t = -1.14)**.
+
+**And it is not a re-labelling of anything seated**: `spearman` **-0.0935** to `ILLIQ` 63d,
+**+0.0039** to 12-1 momentum, **+0.0769** to the 21-day volatility level; top-15 overlap with the
+momentum top-15 is **0.164**; it holds **+3.96%/yr (t = +2.11)** inside the high-`ILLIQ` half.
+Book shape: ~2.7 of 15 names replaced per month (~4.3x annual two-way turnover, the same order as
+the champion's 3.1x), pool ~131 at rebalance. **Two honest weaknesses, recorded now rather than
+discovered later**: on the stock sleeve alone it is **+4.40%/yr at t = +1.79** — same magnitude,
+n falls 164 -> 127, so it is not an ETF artifact but the sleeve reading does not clear |t| = 2 on
+its own — and inside the **high-momentum** half it fades to **+1.29%/yr (t = +0.84)**, so the
+effect is weaker among past winners.
+
+**No trial was spent on it tonight, by tonight's own pre-commitment, and the delay is
+substantive rather than ceremonial.** Tonight's screen looked at three objects (`RVR` at two
+windows, vol-of-vol in two directions) and five band sizes before this one was picked. The sign
+and the band a trial would carry are therefore **selected from that search**, and the
+deflated-Sharpe machinery cannot see it — the within-a-single-trial bias `SUMMARY.md` #60 names.
+Writing the search path down in full, as this entry does, is the only correction available for
+it. The trial is pre-registered below with nothing left to choose.
+
+**Lesson.** The `range-variance` family was closed on fifteen screens of one object — a
+volatility **level** — and the closure was correct about that object and was never tested against
+another. A unit-free *ratio* of two volatility estimators (`RVR`) is also empty, but a unit-free
+*second moment* of one of them is not, is orthogonal to the level at `spearman` +0.09, and
+strengthens when the level is conditioned away. **Before recording a family as closed, name the
+object the screens actually ranked** — this is the seventh instance of this repo's oldest habit,
+and the first in which it reopened something rather than retiring it.
+
+## Pre-registration for the NEXT session — 2026-09-13, the `range-variance` trial, fully specified
+
+Written tonight so that the session running it chooses nothing. Everything below is fixed.
+
+- **Family** `range-variance`. **Track** `scout` (so the champion is untouched, the holdout is
+  unreachable, and the session running it need not stop).
+- **Slug** `rv_volofvol_top15`. **Score**: `std(RV21, 252) / mean(RV21, 252)` where
+  `RV21 = features.realized_vol(prices, 21)`, min_periods 126, computed on closes only — so the
+  one-argument contract suffices and no aux panel is needed.
+- **Sign: LONG HIGH.** Taken from tonight's train profile, not from the literature, and declared
+  as such: `SUMMARY.md` #106's contested-sign rule applies to the *level* of a listing-age tilt
+  and to vol-of-vol as the literature leaves it; the repair for a contested sign is to measure it
+  on train, which is what the table above is, and a train-set sign applied to a
+  validation-scored book is the same operation as a train-set band.
+- **Band: top 15, equal weight, monthly.** The house default everywhere outside `price-trend` is
+  equal weight; the band is the marginal profile's, not an inherited one.
+- **Pool**: every name scoreable on the date, ETFs included — the house default, stated because
+  `learnings.md`'s house table makes it a node and not a background fact, and because the stock
+  sleeve alone reads t = +1.79.
+- **Expected validation Sharpe: 0.55, range 0.30-0.90.** No non-`price-trend` scout in this repo
+  has cleared 1.01 and this is a single-characteristic equal-weight book on a weakly-priced
+  score; a reading above 1.01 should be treated as suspicious rather than as a win.
+- **What would falsify it**: a validation Sharpe below 0.30, or an `avg_positions`/turnover
+  profile far from the 15 names / ~4.3x the train screen implies.
+- **What it must NOT become**: no second band, no second window, no magnitude weighting, no
+  demean, no blend with a seated lead. Any of those is a second object and needs its own night.
+- **It discharges `program.md`'s cold-family allocation rule**, unmet for fourteen sessions.
