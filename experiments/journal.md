@@ -9156,3 +9156,33 @@ under pure dilution.
 
 **Budget intended: at most 2 trials**, both scouts, both in families the allocation rule points
 at. The holdout is not reachable from the scout track and will not be read.
+
+## Pre-registration addendum — 2026-09-13, written after screen 2's first object and before its next two
+
+Screen 2's pre-committed object (`RVR` at 21 days) returned a null: no marginal slice reaches
+|t| = 2, the signs alternate, and the hash placebo's deepest slice is *more* significant than
+any `RVR` slice. Under the pre-committed kill line no book is written on it.
+
+Before the family's fourteenth decline rests on a single object, two more free profiles, with
+their status fixed **now, before the numbers exist**:
+
+1. **Vol-of-vol** (coefficient of variation of 21-day realized volatility over 252 days),
+   profiled in **both** directions. It is named by `program.md`'s family description, and it was
+   declined as a *candidate* in tonight's pre-registration under `SUMMARY.md` #106's
+   contested-sign rule. **That decline is not reopened by this profile**: whatever it reads, it
+   is recorded as a datum for the human's decision about the family and **cannot license a
+   book tonight.** Reporting both directions is the reason it cannot — an object whose sign is
+   chosen after seeing the table is a sweep, not a hypothesis.
+2. **`RVR` at a 63-day window**, run for one stated purpose only: `RVR` is a **ratio of two
+   noisy estimators**, so a 21-day null is consistent with either "no content" or "the
+   estimator is too noisy to see content". The 63-day reading separates those. **It cannot
+   license a book either, whatever it says** — the object was pre-committed at 21 days, and
+   promoting a second window after seeing the first is the knob-sweep the manual forbids. Its
+   only job is to tell the human which kind of null the family has.
+
+**Consequence, fixed in advance: `range-variance` gets no trial tonight and the allocation rule
+goes unmet a fourteenth time.** That is a worse outcome than discharging it, and it is chosen
+deliberately over the alternative, which is to spend a permanent deflated-Sharpe increment —
+paid by every future challenger in this repo — on a score this repo cannot distinguish from a
+hash. The recommendation to the human is unchanged in substance and stronger in evidence; it is
+restated in tonight's session summary.
