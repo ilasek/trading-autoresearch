@@ -9356,7 +9356,7 @@ Written tonight so that the session running it chooses nothing. Everything below
   green (**33 passed**) before any measurement. Store fresh through **2026-09-11**, the last
   trading day before tonight.
 - **A pre-registration block was committed BEFORE the first number existed** (`25cad9e`), and a
-  second **addendum** block (`f0a1a4e`'s parent) was committed mid-screen, before the two extra
+  second **addendum** block (`826bd57`) was committed mid-screen, before the two extra
   profiles it authorised were run, fixing in advance that neither could license a book. Third
   session running for the first habit; first for the second.
 - **Experiments run: 0 of the 8-trial budget.** Trial count stays at **90**; `trials.jsonl`,
