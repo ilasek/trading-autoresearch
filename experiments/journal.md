@@ -9045,3 +9045,114 @@ algebra.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-13 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-13 (nightly), written before any measurement was run
+
+**Integrity.** `git fetch origin --prune` clean. `git branch -r --no-merged origin/main`
+returned **nothing** — no previous session's work is stranded off `main`, fourteenth session
+running. The session-start hook printed "integrity check OK — on main, level with origin/main,
+no stray branches" while `git status -sb` reported the per-run branch `main-r3cceo` — **the
+hook's "on main" clause is false for an eighth consecutive session and its "level with
+origin/main" clause is true.** The branch tip was verified **bit-identical** to `origin/main`
+(`2a4af47`, zero ahead, zero behind) before any work began, so this is again the benign form.
+Flagged for the human for the seventh time. Engine tests **33 passed**. Store fresh through
+**2026-09-11** (the last trading day before tonight).
+
+**The session's shape, decided before anything was scored.** Two free screens first, then
+trials only on what survives them. The allocation decision is stated up front because it is the
+one thing thirteen consecutive sessions have deferred.
+
+### The allocation decision, stated and not deferred
+
+`program.md`'s budget rule says **"at least 1 in a family with no recorded trial at all, while
+any such family remains"**, and `CLAUDE.md` says it is "a rule, not advice". `range-variance`
+has had **zero recorded trials for thirteen consecutive sessions**, each of which declined it
+and recommended that a human amend or retire the rule. No human has. **This session discharges
+the rule instead of deferring it a fourteenth time**, and the reason is not that the previous
+decisions were wrong on their own terms — they were right about the object they screened.
+
+What those thirteen declines screened, every time, is a **volatility LEVEL**: the fifteen
+mechanism screens, the one identified cause (a current-constituents universe in which the
+high-volatility names that survived into today's index did well), and the four robustness
+statistics that flatter the artifact are all statements about ranking names by how volatile
+they are. That is the same bet as the refuted high-vol side of `low-volatility / quality tilts`,
+and it should stay declined.
+
+**Tonight's object is not a level.** It is the ratio of a range-based volatility estimate to a
+close-to-close one on the same window — a **unit-free** quantity that is invariant to how
+volatile a name is, so the survivorship account that closes the level bet does not reach it. It
+is also squarely inside the family as `program.md` defines it ("Parkinson / Garman-Klass range
+volatility"). If its own depth profile is unreadable it does not get built, and the rule is
+discharged by an honest null rather than by a knowingly artefactual book.
+
+**Vol-of-vol is declined in advance**, even though `program.md` names it, under
+`research/SUMMARY.md` #106's rule adopted tonight: a mechanism whose sign the literature has not
+settled is not hypothesis fodder. High vol-of-vol as a standalone cross-sectional long is a
+contested-sign level bet and buys a coin flip at the price of a permanent DSR increment.
+
+### Screen 1 (free, train only) — `research/SUMMARY.md` #105: is the short-history penalty selection or uncertainty?
+
+The 2026-09-12 nightly measured that removing names with under five years of price history
+costs the momentum leg −1.10%/yr at matched `n` (t = −2.41, placebo −0.34) and filed it as
+survivorship bias. #105's point is that three Tier-A sources predict the same sign from causes
+that are not bias, so one arm identifies nothing.
+
+- **Preconditions, both free and both first**: (a) pool count in the short-history band, since
+  this universe's age distribution is compressed and the band may be too thin to read;
+  (b) the age variable is built on the **stock sleeve only** — for an ETF "first available
+  price" is fund inception and says nothing about an information environment.
+- **The measurement**: on train rebalance dates, the 12−1 momentum leg's top-band forward-21d
+  excess over the equal-weight pool, computed **separately within terciles of history length**
+  and, on the same dates and the same pool, **within terciles of trailing 252-day realized
+  volatility** (Zhang's `SIGMA`, the only other of his six uncertainty proxies this repo can
+  build). Placebo: a hash-based pseudo-age on the identical machinery.
+- **Pre-committed reading, written before the numbers exist**: a same-signed conditional
+  gradient on **both** ⇒ an uncertainty-conditioning effect that merely correlates with vintage,
+  and the survivorship reading is **not identified**; a gradient on history length **only** ⇒ it
+  is about how names entered this universe and the survivorship reading **stands**; neither
+  reaching |t| = 2 with a flat placebo ⇒ the band is too thin here and the original number
+  should be carried with a width caveat rather than a cause.
+- **Construction trap named in advance** (#105's own): `SIGMA` enters as a *conditioning*
+  variable on the momentum band, graded as a difference of conditional excesses. It is **not**
+  a volatility level bet; if it were read as one it would be a fourth look at a refuted family.
+- Per #106, one extra line is printed whatever it says: the **level** leg — does a
+  short-history tilt earn anything at all here, on its own.
+
+### Screen 2 (free, train only) — the depth profile that decides whether `range-variance` gets a book
+
+House rule (`learnings.md`, 2026-09-08/-09-12): profile the score, then set the band; never
+inherit it; and read **marginal** slices, never cumulative ones, because a cumulative t rises
+under pure dilution.
+
+- **Object**: `RVR` = `parkinson_vol(high, low, 21) / realized_vol(close, 21)`, cross-sectionally
+  ranked. Unit-free by construction.
+- **Pre-committed sign, from mechanism and not from the data**: **long high `RVR`**. A name whose
+  intraday range is large relative to its close-to-close move traverses ground it gives back
+  within the day — transitory price pressure absorbed by whoever supplies liquidity — which is
+  the same side of the same economics as Amihud price impact, and `ILLIQ` is the one
+  positively-priced non-`price-trend` characteristic measured on this universe.
+- **Grid**: marginal slices 1–15 / 16–30 / 31–45 / 46–60 / 61–80 on train rebalance dates with
+  pool ≥ 90, forward 21d, equal weight, excess over the equal-weight pool. Two controls beside
+  it: a **hash placebo** (must be flat and sign-inconsistent, or the table is unreadable) and
+  **GK 21-day volatility level** (the known artifact, present only to calibrate the column).
+- **Pre-committed kill line**: if no marginal slice of `RVR` reaches |t| = 2 with a consistent
+  sign, **no book is written** and the family's trial is discharged by the null. If slices are
+  readable, the band is set where they go flat and a **scout** is run at that band.
+- **Expected range, stated before the run**: validation Sharpe **0.4–0.9**, point estimate
+  **0.65**. `RVR` is a slow, weakly-priced characteristic if it is priced at all, and no
+  non-`price-trend` scout in this repo has cleared 1.01.
+
+### What this session is NOT buying, and why
+
+- **No blend.** Declined for a fourteenth consecutive session on unchanged arithmetic: the best
+  decorrelated partner remains the seated `liquidity-volume` lead at `rho` 0.715 / Sharpe 0.942,
+  short of the solved break-evens, and nothing measured since changes either number.
+- **No `price-trend` trial.** The cap is 2 and would go unused: the standing #1 next-idea still
+  forbids a K=1 challenger, and every axis the family has left is on the do-not-extend list.
+- **No listing-age tilt.** `SUMMARY.md` #106 and the lab's own 2026-09-12 result agree it is an
+  anti-candidate; screen 1 reads the variable, it does not trade it.
+- **No fourth vintage axis, no PPP variant, no `neutralize`, no union/intersection book, no
+  band-bracket point** — all on the standing do-not-extend list and none is revisited.
+
+**Budget intended: at most 2 trials**, both scouts, both in families the allocation rule points
+at. The holdout is not reachable from the scout track and will not be read.
