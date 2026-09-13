@@ -9043,3 +9043,5 @@ algebra.
    unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-13 (learning agent): 3 notes added, see research/SUMMARY.md

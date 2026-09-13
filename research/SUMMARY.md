@@ -76,6 +76,18 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > notes are measurement mechanisms, none proposes a book, and the 2026-09-08 warning about idea
 > supply stands.
 >
+> **Status after session 31 (2026-09-13): the unit-of-check lesson has a fifth instance and a
+> sixth unit, and this one was found from the lab's side rather than this file's.** Sessions 29–30
+> worked an *operator* checklist and ended it by finding the operator applied to the **pool**.
+> Tonight's gap was not audited into existence at all: the 2026-09-12 nightly measured a listing-age
+> effect on its own momentum leg, and a grep across all 94 notes then in the folder returned
+> **zero** for `firm age`, `listing age`, `new list`, `age effect` and `IPO`. **Families → clauses →
+> operators → the pool → an attribute of the pool's members.** The detector worth keeping is the
+> cheap one: *after each nightly, take the one variable it measured that has no note here, and
+> check.* Session 31 covered it (new cross-family section below, candidates #105–#107). As with
+> sessions 28–30, this is not a licence to resume breadth hunting — one of the three candidates is
+> gated behind a free screen, one is an anti-candidate, and one is a convention.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -2817,6 +2829,58 @@ comes in **blocks**, which is precisely the shape of this repo's un-forward-fill
 foreign holidays (a block, clustered by country, perfectly correlated across every name sharing a
 calendar).
 
+### What conditions a continuation effect, and what a name's vintage does to it (cross-family)
+
+*Added 2026-09-13. Three sources, all Tier-1 venues, all read in full except one recorded
+abstract-only and flagged as such; all pre-2018 samples, so the whole subsection is
+`validation_overlap: false` / `published_post_2018: false`. The gap this fills was found by
+grepping all 94 prior notes for `firm age`, `listing age`, `new list`, `age effect` and `IPO` —
+**zero hits on every one** — after the 2026-09-12 nightly measured a listing-age effect on its own
+momentum leg and had no literature to read it against.*
+
+**Continuation is not a constant of the cross-section; it is a function of how fast information
+about a name reaches the price, and both sources that measure this agree on the direction and on
+which half of it a long-only book can have.** Zhang (JF 2006, Tier A,
+`notes/2026-09-13-information-uncertainty-and-price-continuation.md`) frames it as *information
+uncertainty* — ambiguity about what a signal implies for value — and shows the drift after news
+rising monotonically in six independent proxies for it, one of which, **`AGE` = years since the
+name first appears in the return database**, is exactly the length of price history in
+`data/store/`. Hong–Lim–Stein (JF 2000, Tier A,
+`notes/2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`) frame the same thing as *gradual
+information diffusion* and measure it with analyst coverage residualised on size. The identification
+in Zhang is what makes it more than a factor claim: uncertainty predicts returns **with opposite
+signs conditional on the direction of the news**, which no risk premium can do. Two riders travel
+with the family and both are discounts on this repo: the conditioning effect is **concentrated on
+the bad-news / past-loser side**, which a long-only book cannot hold (both sources, independently),
+and the good-news-side differential **decays within about a month** of the formation date, so the
+tradeable half is also the expensive half at 15 bps a side.
+
+**The single most consequential sentence for this lab is not about age at all.** Hong–Lim–Stein's
+first result is that, past the very smallest names, **momentum profitability declines sharply with
+market capitalisation**, and is weakest at the top of the size distribution — which is where all
+~140 instruments in this universe live. The champion works anyway; that is a fact about this
+universe and not a refutation. But it sets the prior for every "more momentum, better measured"
+proposal, and it is the second Tier-A source to say so, after Fama–French's dissection by size
+group (`notes/2026-09-02-anomalies-by-size-group.md`).
+
+**The *level* effect of listing vintage, by contrast, is contested between two Tier-A sources and
+should not be traded.** Barry–Brown's "period of listing" effect (JFE 1984, abstract only, **not
+read**) prices short listing history as estimation risk and therefore as *higher* required return;
+Ritter (JF 1991, Tier A, read in full,
+`notes/2026-09-13-listing-age-as-a-level-effect.md`) finds aftermarket performance rising
+**monotonically** with age at listing — younger listings do worse — with the initial return running
+monotonically the other way, and reads age as a proxy for ex ante uncertainty *and* investor
+optimism at once. Nothing this folder has read resolves the sign.
+
+**What this changes about the lab's own overnight result.** The 2026-09-12 nightly measured that
+removing short-history names costs its momentum leg, with a passing placebo, and filed it as
+survivorship bias. Each of the three sources above predicts **that same sign from a different
+cause** — uncertainty-conditioned underreaction, slow diffusion, and post-listing drift. The
+measurement is therefore consistent with at least three mechanisms and identifies none; the
+caution it implies is *stronger* for holding under all of them, but the number is not "the size of
+the survivorship bias", and should not be carried as one. A free screen that separates the causes is
+#105 below.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -5485,6 +5549,72 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`,
     `notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`
 
+105. **[Added 2026-09-13] A free diagnostic that can fail, on the number the lab measured last
+    night and named: does the short-history penalty on the momentum leg come from *selection* or
+    from *information uncertainty*?** The 2026-09-12 nightly found that removing names with less
+    than five years of history costs the momentum leg, with a placebo that stayed flat, and
+    recorded it as survivorship bias. Three Tier-A sources predict **that same sign from causes
+    that are not bias** — high information uncertainty amplifies underreaction (Zhang), slow
+    information diffusion amplifies continuation (Hong–Lim–Stein), and post-listing drift puts
+    young names at the loser end (Ritter). So the measurement is consistent with at least three
+    mechanisms and separates none. **The screen**: on train only, with no `run_experiment.py` call,
+    measure the momentum leg's band excess conditioned on *history length*, and on the same dates
+    and the same pool conditioned on *trailing volatility* — Zhang's `SIGMA`, the only other one of
+    his six uncertainty proxies this repo can build — with a hash-based pseudo-age as the placebo.
+    **Pre-commit the reading**: same-signed conditional gradient on both ⇒ an
+    uncertainty-conditioning effect that merely correlates with vintage, and the survivorship
+    reading is not identified; gradient on history length only ⇒ it is about how names entered this
+    universe, and the survivorship reading stands. Two preconditions, both free and both first:
+    **check the pool count in the short-history band** (this universe's age distribution is
+    compressed and the band may be too thin to read — the repo's own dilution rule applies: only a
+    *marginal* profile locates a band), and **build the age variable on the stock sleeve only**,
+    because for the 42 ETFs "first available price" is fund inception and says nothing about the
+    information environment of the underlying. One construction trap: `SIGMA` here is an
+    *interaction* with news direction, not the low-vol level bet `learnings.md` has already closed
+    on this universe — grade it as a difference of conditional slopes or it is a fourth look at a
+    refuted family. **Only if the screen comes back with a same-signed, placebo-clean gradient is a
+    conditioned momentum book worth one trial**, and then in Zhang's cheap shape: rank on the
+    existing momentum score, re-rank the top band on the uncertainty proxy, sequential not
+    independent, equal-weighted, with the cost arithmetic done *before* the trial because the
+    good-news-side differential decays within about a month of formation. Free to screen; at most
+    one trial, and only behind the screen. Tier A.
+    → `notes/2026-09-13-information-uncertainty-and-price-continuation.md`,
+    `notes/2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`,
+    `notes/2026-09-13-listing-age-as-a-level-effect.md`
+
+106. **[Added 2026-09-13] An anti-candidate, and a general screening rule that comes free with it:
+    do not build a listing-age tilt, and do not build anything whose direction the literature
+    disagrees about.** Two Tier-1 sources price the same observable with **opposite signs** —
+    Barry–Brown's "period of listing" effect treats short history as estimation risk and therefore
+    as higher required return, Ritter finds aftermarket performance rising monotonically with age
+    at listing. Neither paper's variable is even measurable here (one needs founding dates, the
+    other needs offer dates), and the only measurable analogue — length of price history — is
+    partly a data-vendor artifact and, in a current-constituents universe, marks the most selected
+    slice in the pool: a short-history name both listed recently *and* survived into today's index.
+    The general rule worth keeping past this candidate: **a mechanism whose sign the literature has
+    not settled is not hypothesis fodder**, because a trial on it buys a coin flip at the price of a
+    permanent deflated-Sharpe increment for every future challenger. The one thing worth printing,
+    at the cost of a single extra line while #105's machinery is already up, is the level leg —
+    does a short-history tilt earn anything at all here — recorded whatever it comes back as. Costs
+    nothing; proposes no book. Tier A.
+    → `notes/2026-09-13-listing-age-as-a-level-effect.md`
+
+107. **[Added 2026-09-13] A free convention for the lab's own screens: when the object of a
+    measurement is the *difference between two subsamples*, widen the bands.** Hong–Lim–Stein cut
+    their cross-section into 30/40/30 rather than deciles and say exactly why: their object is
+    comparing momentum *across* subsamples, and once the sample is also cut by size and coverage
+    there are a dozen cells, so extreme deciles leave too few names per cell to compare anything.
+    This repo runs that shape constantly — an arm-versus-arm screen on a top band, then an argument
+    about pool counts — and has had at least two readings turn on band-induced sample changes
+    (the 2026-09-04 band-width/train-sample finding; the 2026-09-02 count of ETFs reaching a
+    20-year lookback). Adopt it as a standing rule rather than running it: **a band chosen to
+    maximise a single book's excess is the wrong band for a comparison of books, and the
+    comparison's band should be set by the thinnest cell it has to support.** Note the boundary —
+    this says nothing about which band a *live* book should hold, where the repo's marginal-profile
+    rule governs and the seated leads' widths are already calibrated. Free; no trial. Tier A.
+    → `notes/2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`,
+    `notes/2026-09-06-number-of-portfolios-as-tuning-parameter.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -5520,8 +5650,93 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-10 (session 28) | **The first session in three aimed by a gap rather than by a method — and the gap was one two consecutive sessions had declared did not exist.** 2026-09-08 wrote "the next session should not look for an uncovered mechanism; there is not one" and 2026-09-09 repeated it; a direct search across all 85 notes returned **zero** hits for `country effect` or `industry effect`, and no note anywhere on the country/industry/global variance decomposition or on the currency component inside a USD-converted price — while region-demeaning is an operator the lab *already uses* and the source of its only leg improvement from a stated measurement mechanism. The unit-of-check lesson bit a second time: after families and clauses, the third unit is the **operator**. Three Tier-A sources, all read in full, all pre-2018 samples in Tier-1 journals, so the whole session is `validation_overlap: false` / `published_post_2018: false`. Taken tonight: what a demean *assumes* (unit loadings, and they over-correct at the name level), what it *discards* (a between-group component that is priced but low-breadth), and what a USD conversion *adds* (a signed currency exposure correlated with global equity). New cross-family section; candidates #95–#97, two of them free and the third with a mandatory free screen. | Bekaert–Hodrick–Zhang 2009 (JF), read as NBER WP 11906, with Heston–Rouwenhorst 1994 and Griffin–Karolyi 1998 second-hand and **unread** (`2026-09-10-country-industry-global-return-decomposition.md`); Hou–Karolyi–Kho 2011 (RFS), read as the Dec-2006 working paper via a third-party document mirror (`2026-09-10-country-demeaned-versus-country-mean-characteristics.md`); Campbell–Serfaty-de Medeiros–Viceira 2010 (JF), read as NBER WP 13088 (`2026-09-10-currency-component-in-usd-converted-returns.md`) |
 | 2026-09-11 (session 29) | **Aimed by the checklist 2026-09-10 wrote for exactly this situation, and it worked on the first try.** That entry's rule — *for every operator the lab applies to a score (demean, rank, winsorize, standardize, neutralize, blend, band), is there a note on what that operator assumes?* — named **cross-sectional standardization and winsorization** as the two with no note, and a grep across all 88 prior notes confirmed it: `standardi` in 12 notes, `winsoriz` in six, subject of none. This is the second consecutive session where a coverage gap was found by checking a *finer unit* than the previous session used (families → clauses → operators), and the first where the unit was supplied in advance rather than discovered after the fact. The gap was load-bearing: the champion family is named `mom_zscore_*`, the equal → rank → **z-score-magnitude** ladder is the largest within-basket lever `learnings.md` records, and a `_daily_trim` trial sits in the history with no rationale for which side it trimmed. Three sources, all Tier A; **two read in full, one recorded from its published abstract only and flagged throughout**. The shape is *one construction, one correction, one magnitude* — and the correction is mostly a **narrowing**: a rank is invariant to any monotone transform, so winsorizing before ranking changes nothing, and the lab's entire exposure to this literature is three places (magnitude weighting, fitted models, and any per-period mean read as evidence). New cross-family section; candidates #98–#100, **two of them free and the third gated behind a free hand-set-`θ` control**. #98 is the first construction shape proposed here that ranks nothing and holds no band. **Access and index behaviour**: NBER served the BSV working paper first try, complete and text-extractable — the channel this folder has now recorded as its most reliable, three sessions running. A personal academic page served the Leone et al. working draft, **checked against the published abstract via OpenAlex** (every claim relied on appears there; the published version adds a replication emphasis the draft's abstract lacks). Knez–Ready is **genuinely closed**: Unpaywall reports `is_oa: false` with **zero** OA locations, OpenAlex `oa_status: closed` with `any_repository_has_fulltext: false` and only two locations (the Wiley DOI and a JSTOR SICI), and CORE returned a Cloudflare redirect shell. Recorded abstract-only rather than guessed at — the robust estimator's specification is deliberately left blank in the note. **A third instance of the two-DOI registration pattern** first recorded for Breiman on 2026-09-08: Knez–Ready is registered both as `10.1111/j.1540-6261.1997.tb01113.x` (S2 274, OpenAlex 287, Crossref 131) and as `10.2307/2329439` (S2 **not found**, OpenAlex 69, Crossref 35) — a single lookup against the JSTOR DOI understates it by roughly 4×, and S2's miss on that DOI is the same Wiley/JSTOR finance-DOI pattern sessions 11–15 record. Counter-instance worth recording too: **BSV's three counts agree within ~15%** (OpenAlex 492, S2 434, Crossref 415), which is unusual enough in this folder to note. | Brandt–Santa-Clara–Valkanov 2009 (RFS), read in full as NBER WP 10996 (`2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`); Leone–Minutti-Meza–Wasley 2019 (The Accounting Review), the August 2013 working draft read in full and checked against the published abstract (`2026-09-11-influential-observations-winsorization-versus-robust-regression.md`); Knez–Ready 1997 (JF), **not read — published abstract only, flagged in-note** (`2026-09-11-trimming-and-the-size-premium.md`) |
 | 2026-09-12 (session 30) | **The second consecutive session aimed by the 2026-09-10 operator checklist, and it takes the last two names on it — plus the node underneath them that the checklist did not list.** 2026-09-11 named `rank` and `neutralize` as the survivors; a grep across all 91 prior notes confirmed both (`rank` in 70 notes, subject of none; `orthogonaliz`, `mimicking portfolio`, `pure play` at **zero** each) and turned up a third with the same zero reading — the **pool** (`complete case`, `unbalanced panel`, `missing data`, `imputation`, all zero), which is the operator every trial here runs and none has measured. Three notes, six sources; **full text read directly for four** (Blitz–Huij–Martens's accepted manuscript from the Erasmus repository; Bryzgalova et al.'s accepted version from the LBS repository; Wobbrock et al.'s CHI paper; Headrick–Sawilowsky's ERIC document), **two recorded from abstracts only** (Conover–Iman, closed at Taylor & Francis with no open copy resolved; the 2020 idiosyncratic-momentum companion, closed at Elsevier). The shape is *two narrowings and one new mechanism*: `rank` and `neutralize` behave as 2026-09-11 predicted — they mostly tell the lab which proposals are identities and which statistic a past screen used — while the pool rule is a genuine uncovered mechanism with a two-channel cost and a free test that can fail. Candidates #101–#104; #101 is an anti-candidate with a proof rather than a measurement. | Conover–Iman 1981 + Wobbrock et al. 2011 + Headrick–Sawilowsky 2000 + Sawilowsky–Blair–Higgins 1989 (`2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`); Blitz–Huij–Martens 2011 + Blitz–Hanauer–Vidojevic 2020 (`2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`); Bryzgalova–Lerner–Lettau–Pelger 2025 (`2026-09-12-missing-data-and-complete-case-pools.md`) |
+| 2026-09-13 (session 31) | **The first session in three aimed by a gap, and the gap was named by the lab's own overnight number rather than by a checklist.** The 2026-09-12 nightly spent zero trials, closed four standing items for free, and produced one result it filed as an anti-candidate: removing names with less than five years of price history costs the momentum leg, placebo clean. A grep across all 94 prior notes for `firm age`, `listing age`, `new list`, `age effect` and `IPO` returned **zero on every one** — the variable the lab had just measured had no literature behind it anywhere in this folder. The unit lesson holds and is the fifth instance: after families, clauses, operators and the pool, the sixth unit is **an attribute of the pool's members**. Three sources, all Tier-1 venues, all pre-2018 samples; **two read in full** (Zhang's typeset JF article from a university course reading-list directory; Ritter's JF article rendered page-by-page with `pymupdf` because it is a text-layerless scan), one read in full as the published JF article from the lead author's own university page after the NBER working-paper PDF turned out to be a scan, and **one recorded abstract-only and flagged throughout** (Barry–Brown, closed at Elsevier with the abstract elided by the publisher in Semantic Scholar, recovered verbatim from an institutional research portal). The shape is *one mechanism, one discount, one anti-candidate*: continuation is conditioned by how fast information reaches a name and the only measurable proxy here is history length; momentum is weakest at the top of the size distribution, which is the whole of this universe; and the *level* sign of a listing-age tilt is contested between two Tier-A sources, so the tilt is an anti-candidate while the conditioning is not. The night's most useful output is negative in the same way last night's was: the lab's own number is consistent with three mechanisms and identifies none, so it should stop being reported as the size of the survivorship bias. | Zhang 2006 (JF) (`2026-09-13-information-uncertainty-and-price-continuation.md`); Hong–Lim–Stein 2000 (JF) (`2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`); Ritter 1991 (JF) + Barry–Brown 1984 (JFE, not read) (`2026-09-13-listing-age-as-a-level-effect.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-13] Read this first: the 2026-09-12 nightly ran, spent zero trials, and closed four
+  of the five items this file had ranked — so the standing list is nearly spent again, and what it
+  left behind is one unrun free item and one number that needs re-reading.** #103 came back with
+  the house pool rule **innocent** (the momentum leg's apparent loss inside the `common`
+  intersection dissolves against a random draw of the same size); #102 is **unresolvable** rather
+  than an identity; #101 was adopted as a rule; #104's `neutralize` is **closed on evidence**, which
+  is the outcome this file said it should prefer. **#92 is still unrun and is still the lab's own
+  #1, for a fourth session.** Also carried, unchanged: #89, #82, #94, #49.
+- **[2026-09-13] What should aim the next session, in order.**
+  - **#92 first, for a fourth session and with the case stronger again.** The 2026-09-12 nightly
+    added a third instance of the dispersion #92 exists to quantify: a screen whose arm ordering
+    reversed between a construction's shallow and deep characteristic sets. Preconditions unchanged
+    — nothing through `run_experiment.py`, node list pre-committed in the journal before anything is
+    scored.
+  - **Then #105, because it re-reads a number the lab has already recorded and can fail.** It is
+    train-only, needs no new machinery, and both answers are findings; it is the only item on this
+    list that bears directly on a result already in the journal. Its two preconditions (pool count
+    in the short-history band, stock sleeve only) are free and come first.
+  - **Then #107 and #106, which cost nothing at all.** Both are conventions plus at most one extra
+    printed line — adopt them rather than running them.
+  - **Then the lab's own remaining two, in its order: #89, #82.**
+- **[2026-09-13] The lab's overnight listing-age number should stop being reported as the size of a
+  bias, and this is the session's single most transferable output.** Three Tier-A sources each
+  predict the same sign from a different cause, so a placebo-clean t-statistic on "removing young
+  names costs the momentum leg" separates none of them. The general form, and it is a sharper
+  version of the repo's oldest habit: **a placebo control establishes that an effect is not noise;
+  it does not establish which of several mechanisms produced it, and a screen with one arm cannot
+  identify a cause no matter how clean its control is.** The repair is #105's second arm, not a
+  better placebo.
+- **[2026-09-13] The unit lesson has a sixth level, and this time it was reached from the lab's
+  side rather than from this file's.** Families → clauses → operators → the pool the operator runs
+  on → **an attribute of the pool's members**. The gap was not found by auditing this folder; it
+  was found because the nightly measured something and this folder had nothing to read it against.
+  That is a better detector than a checklist and costs nothing to repeat: **after each nightly, take
+  the one variable it measured that has no note here, and check.** It also does not license a
+  breadth hunt — the 2026-09-08 warning holds for a sixth session, and tonight's three notes contain
+  one gated construction, one anti-candidate and one free convention between them.
+- **[2026-09-13] The embargo boundary, and it was live in two notes.** Ritter is full of exactly
+  what this folder must not carry — cohort-year tables, wealth relatives by industry, a named
+  market narrative — and **none of it is recorded**; what is recorded is the *monotone direction* of
+  two age patterns and the construction that produced them. Zhang's conditional returns and Hong–
+  Lim–Stein's subsample profits are likewise omitted in level, with one exception taken under the
+  standing 2026-09-07/-08/-09 rule (**ratios and proportional effects admissible, levels are not**):
+  Hong–Lim–Stein's "momentum profits roughly 60% greater in the lowest-coverage third than the
+  highest", recorded as a proportion with an explicit rider that it has no standing as a threshold
+  on 140 global names. Zhang's t-statistics were deliberately *not* recorded even though they are
+  not returns, because the sign and significance are what the claim needs and the numbers are
+  properties of one US sample. All three sources are pre-2018 samples, so the whole session is
+  `validation_overlap: false` / `published_post_2018: false`.
+- **[2026-09-13] Access and index behaviour: two scans, one channel inversion, and the two-DOI
+  pattern again.**
+  - **The NBER working-paper PDF — this folder's most-used channel — was the wrong one**, and an
+    author's own university page was right. `w6553` is a text-layerless scan (58 characters from 59
+    pages) while `columbia.edu/~hh2679/` serves the typeset *Journal of Finance* article complete.
+    Generalise it: **for a pre-2000 NBER paper, check `page.get_text()` before committing to the
+    channel**, and try the authors' university pages first.
+  - **The parent-page `href` trick is now four for four, and works on a publication list, not just a
+    directory listing.** A guessed `site.warrington.ufl.edu/ritter/files/YYYY/MM/…` path 404'd;
+    fetching the author's `/published-articles/` page and grepping its `href`s produced the correct
+    URL — which lives at `/files/<name>.pdf` with no date segment, i.e. unguessable.
+  - **`pymupdf` page rendering earned its place a second time.** Ritter's JF article extracts 24
+    characters from 25 pages; rendered at 130 dpi it is fully legible, including the table that
+    carries the paper's age result.
+  - **The two-DOI registration pattern held for a Wiley article this time.** Zhang resolves in
+    Semantic Scholar **only under its SSRN DOI** (`10.2139/ssrn.535783`, 1758) and returns *not
+    found* on the journal DOI, while Crossref answers the journal DOI (1563) and OpenAlex reports
+    1916. The rule from 2026-09-12 generalises cleanly across registries: **look an article up
+    under both its journal DOI and its preprint DOI before believing a "not found".**
+  - **One more for the "disbelieve a lone low count" list, and it is an extreme one**: OpenAlex
+    returns **4** citations for Hong–Lim–Stein against Semantic Scholar's 2638 and Crossref's 2094.
+    OpenAlex had budget this session and answered every query; the number is simply wrong.
+  - **Closed is closed**: Barry–Brown 1984 is `oa_status: closed` with no repository copy, Semantic
+    Scholar's abstract field is *elided by the publisher*, and ScienceDirect 403s an automated
+    client. Its abstract was taken verbatim from an institutional research portal and the source is
+    recorded **unread**, with nothing resting on it beyond its own abstract's words.
+- **[2026-09-13] Protocol note, seventh session running: the session-start hook printed "integrity
+  check OK — on main, level with origin/main, no stray branches" while `git status -sb` showed the
+  session on `claude/tender-galileo-ixacmq`.** The branch tip was **bit-identical** to
+  `origin/main` (`2172f33`, zero ahead, zero behind), so this is again the benign form — nothing
+  stranded, no recovery needed — and the session moved to `main` before any work, per step 0 of the
+  standing prompt. Recorded precisely because it is benign: the hook's "on main" clause is **false**
+  while its "level with origin/main" clause is **true**, so a session trusting the first clause
+  would commit to a per-run branch with no warning. Flagged for the human for the sixth time.
 
 - **[2026-09-12] Read this first: the 2026-09-11 nightly ran, answered both of this file's
   reachable additions, and left the standing list almost exactly where it was.** #99 is **closed in
