@@ -9341,3 +9341,125 @@ Written tonight so that the session running it chooses nothing. Everything below
 - **What it must NOT become**: no second band, no second window, no magnitude weighting, no
   demean, no blend with a seated lead. Any of those is a second object and needs its own night.
 - **It discharges `program.md`'s cold-family allocation rule**, unmet for fourteen sessions.
+
+## Session summary — 2026-09-13 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged for a fourteenth session.**
+  `git fetch origin --prune` clean; `git branch -r --no-merged origin/main` returned
+  **nothing**, so no previous session's work is stranded off `main`. As on 2026-09-06 through
+  -12, the session-start hook printed "integrity check OK — on main, level with origin/main,
+  no stray branches" while `git status -sb` reported a per-run branch (`main-r3cceo`) —
+  **the hook still does not detect this, eighth session running.** The per-run branch was
+  verified **bit-identical** to `origin/main` (`2a4af47`, zero ahead, zero behind) before any
+  work began. Tonight's commits are pushed to **both** `origin/main` and `origin/main-r3cceo`,
+  so the split-history failure of 2026-08-16 cannot recur through this session. Engine tests
+  green (**33 passed**) before any measurement. Store fresh through **2026-09-11**, the last
+  trading day before tonight.
+- **A pre-registration block was committed BEFORE the first number existed** (`25cad9e`), and a
+  second **addendum** block (`f0a1a4e`'s parent) was committed mid-screen, before the two extra
+  profiles it authorised were run, fixing in advance that neither could license a book. Third
+  session running for the first habit; first for the second.
+- **Experiments run: 0 of the 8-trial budget.** Trial count stays at **90**; `trials.jsonl`,
+  `leaderboard.json`, `champion.py` and `champion_card.json` are untouched. No champion
+  comparison, **no holdout read**. Three free screens, each with a pre-committed reading and a
+  placebo control.
+
+### The night in one line
+
+The family thirteen sessions closed is not closed — it was screened fifteen times on one object
+(a volatility *level*) and never on another, and a unit-free second moment of the same estimator
+is orthogonal to that object at `spearman` +0.09 and **strengthens** when the level is
+conditioned away — and the night's second-best result is that the trial it earns was **not** run
+tonight, because tonight's own pre-commitment said it could not be.
+
+### Best finding: `range-variance` reopens, on an object the closure never tested
+
+`RVR` (Parkinson/close-to-close, unit-free ratio) is empty at both 21 and 63 days — a *content*
+null, not an estimator-noise one — and its placebo is more structured than it is. Vol-of-vol is
+not: **+4.85%/yr (t = +2.46) over ranks 1-15, nothing past 15**, placebo clean, and inside the
+high-GK half where the survivorship artifact is differenced out it goes to **+5.59%/yr
+(t = +2.75)** against the placebo's -1.93. It is orthogonal to everything seated (`spearman`
+-0.09 `ILLIQ`, +0.004 momentum, +0.08 volatility level). Two weaknesses recorded with it and not
+after it: stock sleeve alone t = +1.79, and it fades to t = +0.84 among past winners.
+
+### Second finding: the methodological one, and it outranks the first in transferable value
+
+A band excess and an IC can disagree, and which one moves is the finding. The `SIGMA`-conditioned
+momentum gradient is **+3.56%/yr (t = +2.09)** raw, **survives** normalisation by each cell's own
+cross-sectional dispersion (+0.0357, t = +2.16) — and the **Spearman IC within each cell is a
+null** (gradient +0.0136, **t = +0.57**). Momentum is no better at *ranking* high-uncertainty
+names; the names it ranks highly simply run further. **Normalise by the cell's dispersion and
+print the IC beside any conditional band-excess claim.**
+
+### Third finding: the pre-commitment bound, and that is the result
+
+Tonight's addendum fixed, before the numbers existed, that vol-of-vol could not license a book
+tonight. It then returned the strongest non-`price-trend` screen the lab has produced. It was not
+traded. The reason is substantive, not ceremonial: three objects and five band sizes were looked
+at before this one was picked, so the sign and band a trial would carry are **selected from that
+search**, and the DSR machinery cannot see within-trial selection (`SUMMARY.md` #60). The
+correction available is to write the whole search path down and pre-register the trial with
+nothing left to choose — done above, slug `rv_volofvol_top15`, sign, band, pool, expected range
+and falsifier all fixed. **A pre-commitment abandoned the first time it costs something was never
+a pre-commitment.**
+
+### Protocol and allocation notes, stated plainly
+
+- **Zero trials is within the budget** ("up to 8"), and the per-family caps cannot bind at zero.
+  The `price-trend` cap of 2 went unused by design, per tonight's pre-registration.
+- **The cold-family rule was not satisfied, for the fourteenth session running — and for the
+  first time the recommendation attached to it REVERSES.** Thirteen sessions recommended that a
+  human amend `program.md`'s cold-family rule or retire `range-variance`. **Withdraw that
+  recommendation.** The family is not unreachable; it was screened on one object. The rule should
+  stand, and it is discharged by the pre-registered `rv_volofvol_top15` scout on the next
+  session's first trial. No frozen file needs editing after all.
+- **The blend is declined for a fourteenth consecutive session** on unchanged arithmetic: the
+  seated `liquidity-volume` lead at `rho` 0.715 / Sharpe 0.942 is still the best available partner
+  and still short of the solved break-evens. Note for later: vol-of-vol's `spearman` of **+0.004**
+  to momentum is the lowest any live characteristic here has posted, so if its scout lands a
+  readable Sharpe it is the most promising blend leg on the board — but that is two nights away
+  and must be argued from the leaderboard's `rho`, never from this line.
+- **The standing ⚠ concern is unchanged at four points.** No promotion, no fifth data point, no
+  sixth holdout look; the count since 2026-08-17 stands at five.
+- **The train-as-prediction record is unchanged at n = 30.** No candidate was scored.
+- **No new lib file was added and nothing frozen was touched.** All measurement ran from the
+  session scratchpad. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and every existing `strategies/lib/` file are untouched, as are
+  `strategies/candidates/`, `trials.jsonl` and the leaderboard.
+
+### Next ideas, in order, with provenance
+
+1. **Run `rv_volofvol_top15` first, exactly as pre-registered above, changing nothing.** It is a
+   scout, it cannot reach the holdout, and it discharges a `program.md` allocation rule unmet for
+   fourteen sessions. Everything it needs — sign, band, pool, expected range, falsifier — is
+   already fixed; the value of the pre-registration is entirely in not revisiting it. (Lab's own
+   result, tonight; the family heading is `program.md`'s.)
+2. **Only then, and only if it lands inside its pre-registered range, the vol-of-vol leg's two
+   recorded weaknesses become the next questions** — the stock-sleeve t of +1.79 and the fade
+   among past winners — in that order, and as *diagnostics* rather than as a second band.
+   (Lab's own result, tonight.)
+3. **`SUMMARY.md` #92's non-standard error / specification curve, the folder's #1 for a fifth
+   session and still unrun.** Its two preconditions stand: nothing through `run_experiment.py`,
+   and the node list pre-committed in the journal before anything is scored. Tonight adds a fourth
+   instance of the dispersion it exists to quantify — a family whose verdict inverts between two
+   objects inside one family heading. (`research/SUMMARY.md` #92, #93.)
+4. **`SUMMARY.md` #89's overidentifying restriction test** — still the one folder proposal that
+   can *fail*, with its mandatory no-lag-null rider. Carried, unchanged.
+   (`research/SUMMARY.md` #89.)
+5. **Adopted tonight as standing rules, not run**: #107 (a comparison's band is set by its
+   thinnest cell — used in screen 1 and it changed the measurement) and #106's contested-sign rule
+   (used to decline vol-of-vol as a *candidate* before it was ever profiled). Both cost nothing.
+   (`research/SUMMARY.md` #106, #107.)
+6. **Do not extend**: `RVR` in any window (closed tonight, content null with a more-structured
+   placebo), the listing-age tilt (closed tonight, positive and therefore *more* dangerous —
+   it is survivorship with a t-statistic), a conditioned momentum book on `SIGMA` (#105's licence
+   requires a gradient on both proxies and age is a null), plus everything on the 2026-09-12 list:
+   the PPP's characteristic set, `neutralize` in any form, the monotone-score-repair class,
+   rank-versus-blend order, the `liquidity-volume` and seasonal band brackets, the `calendar` half
+   of `seasonality-calendar`, the distance method, cointegration, union or intersection books,
+   HRP, a fourth aggregation operator, and a fourth vintage axis without a rotation-speed
+   rationale.
+7. **`SUMMARY.md` #49's execution overlay** — carried unspent for a fifteenth session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
+
+**No engine issues encountered.**
