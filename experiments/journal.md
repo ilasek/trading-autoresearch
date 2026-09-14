@@ -9503,3 +9503,90 @@ a pre-commitment.**
   sample rule). Four of the last seven readings now over-predict; the standing sign question is
   no closer to resolved and remains free to keep recording.
 
+
+## Pre-registration — 2026-09-14 (nightly), `SUMMARY.md` #92's specification curve, written before anything was scored
+
+`research/SUMMARY.md` #92 has been the folder's top-ranked unrun proposal for five sessions. It
+carries **two mandatory preconditions** and this block is the second of them. Both are honoured
+here in full, and the node list below is fixed: **a node added, dropped or re-valued after seeing
+a number is a finding about the agent, not about the strategy**, which is the method's own stated
+residual failure mode and the reason a nightly agent enumerating, scoring and reporting alone must
+bind itself in advance.
+
+**Precondition (i) — nothing through `run_experiment.py`, and nothing outside the train split.**
+Every variant is scored by calling `engine.protocol.evaluate_split(gw, prices, "train")`, which
+sets `visible = prices.loc[:"2017-12-31"]` and scores returns on that window only. So the engine's
+own cost, lag, cap and sanitisation conventions are used **bit-identically** — my scorer is not a
+source of dispersion — while the validation split is never scored, the holdout is never loaded,
+`trials.jsonl` is not written and no candidate's deflated-Sharpe bar moves. This is the same
+free-screen boundary fifteen sessions of this journal have used (train-only Sharpes appear in the
+2026-09-01 calendar closure, the 2026-09-02 boundary-crossing pricing and elsewhere); it is stated
+explicitly here because the count of variants is large enough that leaving it implicit would be
+careless.
+
+**The question, restated so the answer can be read.** Every live decision in this lab is a Sharpe
+*gap*: seven promotions, the required-gain table, fourteen consecutive blend declines.
+`sharpe_diff_se` prices the sampling error **inside one construction** and says nothing about the
+dispersion the *other defensible settings of the same knobs* would have produced. #92 asks for
+that second number.
+
+### The node list, fixed. Champion signal unchanged throughout (momentum z-score, portfolio-level leg averaging).
+
+    node          settings (house default starred)                              n
+    bracket       (252,) | (252,126) | (252,189,126,63)* | (252,159,100,63)      4
+    skip          0 | 21* | 42                                                   3
+    core_n        10 | 15* | 20 | 30                                             4
+    band_mult     1.0 (no band) | 1.5* | 2.0   [band_n = round(core_n*mult)]      3
+    K (tranches)  1 | 3 | 6* | 12                                                 4
+    weighting     equal | rank | magnitude*                                       3
+    trim          on* | off                                                       2
+    pool          `common` leg intersection* | each leg its own eligibility       2
+    min_history   0* (whatever the lookback needs) | 756 days                     2
+
+Full grid **13,824**. Every setting is one the journal shows this lab either using or explicitly
+arguing about; the four brackets are #42, #41, the baseline and #44's geometric spacing, and
+`min_history` is in the list because #93's rider says it must be (on a current-constituents
+universe, concentrating on the longest histories concentrates on the identified survivorship
+artifact).
+
+**`skip = 0` is included deliberately although the lab argues against it.** Excluding a setting
+because it is expected to score badly is exactly the set-shaping #92 warns about. Both readings
+will be reported: the SD over the **full** sampled set, and the SD over the **defensible subset**
+(`skip > 0`), with the difference between them stated rather than chosen between.
+
+### What will be run, and it is fixed now
+
+1. **Dashboard — one node at a time.** Hold every node at its house default and move one node
+   through all its settings: 1 + 18 = **19 variants**. This is the localisation report — *which
+   node the variation lives on*.
+2. **Curve — the NSE.** A uniform random subsample of the full grid, **160 draws, seed 0**,
+   deduplicated and unioned with the dashboard. #92 authorises subsampling explicitly when the
+   grid does not fit the compute budget; at ~15s a variant the full 13,824 does not.
+
+### Pre-committed readings, both of which are findings
+
+- **Report**: the SD of train Sharpe across the sampled set (the champion's non-standard error),
+  its range, the house default's percentile within it, and a per-node breakdown of how much of the
+  variance each node carries.
+- **The comparison that decides it**: that SD against the promotion margins recorded in
+  `trials.jsonl` (the seven promotions' validation steps, the largest of which is +0.067) and
+  against `learnings.md`'s own required-gain table (+0.044 at `rho` 0.999 to +0.438 at `rho` 0.90).
+- **Small relative to the margins** → the lab's rankings are about signals, #92's challenge is
+  answered, and the item closes.
+- **Comparable or larger** → a share of this repo's recorded history is a ranking of construction
+  paths rather than of signals, and the response is the written house convention (#93, already
+  written down on 2026-09-10) rather than another candidate.
+
+**What this is NOT**, stated because it will be tempting to over-read: no haircut, no correction,
+no adjustment to any recorded `t`, and **no licence to select a construction**. The curve is
+scored on **train**, and this file's own ⚠ standing concern is that the split that ranks is not
+the split that resolves; picking a high-scoring cell out of this table would be selection on a
+screen, which is the failure mode `SUMMARY.md` #22 names and which the lab has re-learned four
+times. The deliverable is a dispersion, not a winner. No candidate file will be written from it.
+
+### Falsifier
+
+If the house default does not reproduce its recorded train Sharpe of **0.970** to within rounding,
+the harness is wrong and **the whole table is discarded rather than reported** — the same
+discipline the 2026-09-12 entry used when it reproduced the lab's own screen to 0.25%/yr before
+reading the other rows.
