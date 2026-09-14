@@ -9776,3 +9776,121 @@ have a second candidate, and the reason is measured rather than asserted.**
 by printing something the original screen had left out — an `n`, a bottom band, a low-side control,
 a volatility percentile. **Neither weakness was resolved by a trial, and the one repair that looked
 strongest on the statistic the screen reports is the one the statistic cannot see.**
+
+## Session summary — 2026-09-14 (nightly)
+
+- **Integrity check — clean, and the branch situation is unchanged for a fifteenth session.**
+  `git fetch origin --prune` clean; `git branch -r --no-merged origin/main` returned **nothing**,
+  so no previous session's work is stranded off `main`. As on 2026-09-06 through -13, the
+  session-start hook printed "integrity check OK — on main, level with origin/main, no stray
+  branches" while `git status -sb` reported a per-run branch (`main-mjxmvp`) — **the hook still
+  does not detect this, ninth session running.** The per-run branch was verified **bit-identical**
+  to `origin/main` (`2358fa7`, zero ahead, zero behind) before any work began, and tonight's
+  commits are pushed to **both** `origin/main` and `origin/main-mjxmvp`, so the split-history
+  failure of 2026-08-16 cannot recur through this session. Engine tests green (**33 passed**)
+  before any measurement. Store fresh through **2026-09-11**.
+- **Experiments run: 1 of the 8-trial budget.** Trial count **90 → 91**. One `FAMILY_LEAD`, no
+  champion comparison, **no holdout read**. Two free measurement blocks, each with a
+  pre-committed or standing reading and a placebo control.
+
+### The night in one line
+
+The family that reopened last night was scored and landed at the equal-weight floor; then the
+folder's top-ranked unrun proposal was run and returned a number that reframes the lab's whole
+recorded history — **the champion's construction dispersion is 0.079, five of the six recorded
+promotion steps are smaller than that, and 69% of the dispersion sits on the single node this
+file already refused to give a default value to.**
+
+### Best finding: the champion's non-standard error, and what it is made of
+
+`SUMMARY.md` #92, carried unrun for five sessions, run to a node list committed before any number
+existed. 178 variants, 0 failures, falsifier passed at +0.969 against the recorded 0.970. Train
+NSE **0.079** (0.075 on the defensible subset; including `skip = 0` on purpose changed nothing,
+which is the only way to find out). Promotion steps on record: +0.242 / +0.005 / +0.008 / +0.067 /
++0.014 / +0.028 — **five of six inside it**, and the NSE is the same size as the paired sampling SE
+at this family's own correlations (0.076-0.080 at `rho` 0.997-0.98). #92's "comparable" branch
+fires; the response it specifies is the written house convention (#93, done 2026-09-10), not a
+candidate. The boundary is conservative: a train dispersion is a **lower bound** on what the gate's
+own shorter split would show.
+**And the composition is the finding.** `core_n` carries `eta^2` **0.694**; no other node exceeds
+0.042; `band_mult` is **0.000**. So the "membership band" is two nodes — core depth carries
+69% of the dispersion, the hysteresis ratio carries none — which **measures the K=6 band's marginal
+value for the first time**, a gap this file explicitly flagged as open. `core_n` is not breadth
+(0.572 after residualising; the train breadth slope of −0.0266 per 10 names independently
+replicates the −0.0278 fitted on validation) and not cost (narrow cells trade *more*). It is depth,
+which confirms the 2026-09-08 rank-slice mechanism at book level.
+**The embargo is part of the result**: `core_n = 10` is the best train cell and is not a candidate
+— train screen, same direction as #51's holdout collapse, and unresolvable against a 0.079
+dispersion by construction. No candidate file was written from the table.
+
+### Second finding: `range-variance` is scored, and its one repair is killed for free
+
+`rv_volofvol_top15` — validation **0.494**, `avg_positions` **15.0** against 15 predicted, turnover
+**4.62x** against ~4.3x. **The construction falsifier passed exactly and the performance estimate
+did not**, which is the informative combination: the trial measured the mechanism, not the broker.
+The family has its first recorded trial and a lead at the equal-weight floor, and
+**`program.md`'s cold-family rule is discharged after fourteen sessions with no frozen file
+needing amendment** — last night's reversal of the standing recommendation is confirmed.
+Three free follow-ups: the ETF-sleeve weakness **dissolves in the opposite direction** (stock
+sleeve +6.66 at t = +3.14 against the full pool's +5.85; the recorded weakness was `n`, not sleeve;
+the bottom band shows the short side is where the ETFs are, and long-only never trades it); the
+fade among past winners is **confirmed with its pool-halving confound differenced out** (+1.01 at
+t = +0.68 inside the high-momentum half against +5.70 at t = +2.87 inside the identically-halved
+high-GK half); and the conditional repair is **killed for free** on the book's volatility
+percentile (0.542 → 0.727 against a 1.93x pool vol spread, for at most +0.8%/yr of screened gain).
+
+### Third finding: the cross-construction rule survives without its mechanism
+
+The seated `liquidity-volume` lead screens at +4.80%/yr and scores 0.942; tonight's book screens at
++4.85%/yr and scores 0.494. The volatility percentile — which explained the previous two instances
+— **exonerates the denominator here** (0.457 validation, 0.536 train, against a pool ~0.51). So the
+rule is a property of the screen, not of the books it happened to be measured on. Third instance,
+first prospective one.
+
+### Protocol and allocation notes, stated plainly
+
+- **Budget: 1 of 8.** `price-trend` cap of 2 unused. At most 2 in any one family: `range-variance`
+  has 1. **The cold-family rule is satisfied for the first time in fifteen sessions**, by the
+  trial it was discharged by.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look; the count since 2026-08-17 stands at five. Tonight **sharpens** it rather
+  than adding to it: the gate adjudicates margins five of whose six recorded instances are smaller
+  than the dispersion the same signal produces across defensible settings of its own knobs.
+- **The blend is declined for a fifteenth consecutive session.** Vol-of-vol's `spearman` of +0.004
+  to momentum was flagged last night as potentially the most promising leg on the board *if* its
+  scout landed a readable Sharpe. It landed at **0.494** with `rho_to_champion` **0.7035**, against
+  solved break-evens that need ~0.87 at that `rho` and ~1.39 for a two-SE blend. **The condition
+  was stated in advance and it was not met**; the note is discharged negatively rather than left
+  hanging.
+- **Train-as-prediction: n = 30 → 31.** 0.90 → 0.494, a large **over**-prediction (coverage 541 of
+  ~666 train month-ends, 81%, admissible under the 2026-09-04 sample rule).
+- **No new lib file was added and nothing frozen was touched.** `engine/`, `scripts/`, `tests/`,
+  `data/`, `program.md`, `CLAUDE.md`, `research/` and every existing `strategies/lib/` file are
+  untouched; `trials.jsonl` and the leaderboard were written only by `run_experiment.py`. All free
+  measurement ran from the session scratchpad, train-split only.
+
+### Next ideas, in order, with provenance
+
+1. **Do NOT write a `core_n` candidate.** Tonight's strongest-looking number is under an embargo
+   stated in advance and for three independent recorded reasons. A session that arrives, reads the
+   dashboard and proposes narrowing has misread the measurement. (Lab's own result, tonight.)
+2. **`SUMMARY.md` #89's overidentifying restriction test** — still the one folder proposal that can
+   *fail*, with its mandatory no-lag-null rider. Carried unchanged for a sixth session and now the
+   folder's highest-ranked unrun item, #92 having been spent tonight.
+   (`research/SUMMARY.md` #89.)
+3. **The NSE has a natural and cheap second reading nobody has taken**: tonight's curve is one
+   *construction* varied over its nodes; the same machinery applied to the **seated
+   `liquidity-volume` lead** would say whether the 69%-on-one-node shape is a property of
+   `price-trend` or of this lab's construction style generally — and `CLAUDE.md`'s scope rule says
+   the constant must be re-measured rather than carried. Free, train-only, same harness.
+   (Lab's own result tonight, extending `research/SUMMARY.md` #92.)
+4. **Do not extend**: vol-of-vol in any conditioned, re-banded, re-windowed or demeaned form
+   (killed free tonight on the denominator); `RVR` in any window; the listing-age tilt; plus
+   everything on the 2026-09-13 list — the PPP's characteristic set, `neutralize` in any form,
+   rank-versus-blend order, the `liquidity-volume` and seasonal band brackets, the `calendar` half
+   of `seasonality-calendar`, the distance method, cointegration, union or intersection books, HRP,
+   a fourth aggregation operator, and a fourth vintage axis without a rotation-speed rationale.
+5. **`SUMMARY.md` #49's execution overlay** — carried unspent for a sixteenth session, and
+   unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
+
+**No engine issues encountered.**
