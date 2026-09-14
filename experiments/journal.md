@@ -9463,3 +9463,43 @@ a pre-commitment.**
    unattractive for the same reason: the cheapest book on the board trades 0.66x a year.
 
 **No engine issues encountered.**
+## 2026-09-14T23:06:39+00:00 — rv_volofvol_top15 — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/rv_volofvol_top15.py` (family: range-variance, track: scout, trial #91)
+- Hypothesis: An equal-weight monthly book holding the top 15 names by vol-of-vol — the coefficient of variation of 21-day realized volatility over a trailing 252 days, long HIGH — scores a validation Sharpe of 0.55 (range 0.30-0.90), above the 0.49 equal-weight floor, because vol-of-vol is the first `range-variance` object that is not the volatility LEVEL the family's fifteen previous screens all ranked: it correlates only +0.0915 with the 21-day Garman-Klass level at 0.216 top-15 name overlap, carries +4.85%/yr (t = +2.46) over train ranks 1-15 with nothing past rank 15 and a clean placebo, and STRENGTHENS to +5.59%/yr (t = +2.75) when measured inside the high-Garman-Klass half where the survivorship artifact is differenced away — which is the control every previous object in this family failed.
+- Verdict: FAMILY_LEAD — first recorded result in family 'range-variance': validation sharpe 0.494, DSR 0.5566 (91 trials, 25 effective after clustering at rho 0.95)
+- Train: sharpe +0.90, ann_ret +15.0%, maxDD -54.8%, turnover 2.6x
+- Validation: sharpe +0.49, ann_ret +7.7%, maxDD -31.4%, turnover 4.6x
+- Deflated Sharpe prob: 0.5566 (bar from 91 trials, 25 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The pre-registration's construction falsifier passed exactly and its performance
+  point estimate did not, which is the informative combination: the trial measured the
+  mechanism rather than the broker, and the mechanism is worth about the equal-weight floor.**
+  `avg_positions` **15.0** against the 15 the screen implied and validation turnover **4.62x**
+  against ~4.3x (holdings-only month-over-month name retention 0.865 train / 0.796 validation,
+  i.e. ~2.0 and ~3.1 of 15 names replaced) — so the book is the one the screen described, and
+  the 2026-08-29 failure mode that swamped four consecutive non-`price-trend` trials (a
+  selection change and a turnover change confounded in one reading) is ruled out by
+  construction. Validation **0.494** sits inside the pre-registered 0.30-0.90 but below the 0.55
+  point estimate and level with the 0.49 equal-weight floor, so `range-variance` gets a recorded
+  trial and a family lead and **does not get a lead worth chasing**.
+  **The free diagnostic the 2026-09-10 rule demands was run and it exonerates the denominator,
+  which narrows where the deficit can be.** Capital-weighted trailing-21d-volatility percentile
+  of the held book: **0.536 train / 0.457 validation**, against the equal-weight pool's
+  0.512 / 0.504 and the champion's 0.635 / 0.738. This book is at or *below* the pool median on
+  volatility — it is not the high-volatility survivorship tilt every previous object in this
+  family turned out to be, now confirmed from the **book** side as well as from the score side
+  (`spearman` +0.0915 to the GK level, effect strengthening inside the high-GK half). So the
+  0.494 is not a variance story: the screen's +4.85%/yr of train tail excess simply did not
+  become validation return (+7.7%/yr at ~15.6% ann vol).
+  **Third confirmed instance of 2026-09-11's cross-construction rule, and the first prospective
+  one.** The seated `liquidity-volume` lead screens at **+4.80%/yr** of own-weight tail excess
+  and scores **0.942**; this book screens at **+4.85%/yr** and scores **0.494**. Two nearly
+  identical screened means, a factor of 1.9 apart in Sharpe. **Never convert a screened mean into
+  a cross-construction Sharpe ranking** — and note that printing the volatility percentile, which
+  is what explained the previous two instances, does *not* explain this one, so the rule holds
+  with its stated mechanism removed.
+  **Train-as-prediction: 0.90 -> 0.494, a large OVER-prediction**, n = 31 outside `price-trend`
+  (coverage 541 of ~666 train month-ends, 81%, so the reading is admissible under the 2026-09-04
+  sample rule). Four of the last seven readings now over-predict; the standing sign question is
+  no closer to resolved and remains free to keep recording.
+
