@@ -9590,3 +9590,189 @@ If the house default does not reproduce its recorded train Sharpe of **0.970** t
 the harness is wrong and **the whole table is discarded rather than reported** — the same
 discipline the 2026-09-12 entry used when it reproduced the lab's own screen to 0.25%/yr before
 reading the other rows.
+
+## Free measurement — 2026-09-14 (nightly), no trial spent
+
+Two blocks, both train-only, neither through `run_experiment.py`. `trials.jsonl`,
+`champion.py` and `champion_card.json` are untouched by everything below; no champion
+comparison was made and **the holdout was not read**. Block A was pre-committed in the
+block above before any number existed.
+
+### Block A — `SUMMARY.md` #92's specification curve: the champion's non-standard error is 0.079, and 69% of it sits on ONE node
+
+**Falsifier passed first, per the pre-registration.** The parameterised harness at the house
+default returns train Sharpe **+0.969** against the recorded **0.970** — within rounding — so the
+table is readable and my re-implementation is not a source of dispersion. Scoring went through
+`engine.protocol.evaluate_split(gw, prices, "train")`, so the engine's own cost, lag, cap and
+sanitisation conventions are bit-identical to the protocol's. **178 variants, 0 failures.**
+
+**THE NUMBER.**
+
+    set                              n     mean      SD      min      max     IQR   default's pct
+    full sampled curve (seed 0)     159   +0.947   0.079   +0.785   +1.160   0.101      67th
+    defensible subset (skip > 0)    108   +0.939   0.075   +0.785   +1.149   0.092      69th
+
+The `skip = 0` cells were included deliberately to avoid set-shaping and they **changed nothing**
+(0.079 against 0.075) — the pre-registration's worry about that particular knife-edge was empty,
+which is worth recording because it is the only way to find out. **The house default sits at the
+67th percentile, not at the maximum**, which is the reassuring direction: the lab's construction is
+a good cell rather than the argmax of a curve, and the argmax of a curve is what overfitting looks
+like from outside.
+
+**THE COMPARISON #92 SAYS DECIDES IT, and it fires on the second branch.**
+
+    recorded promotion validation steps    +0.242  +0.005  +0.008  +0.067  +0.014  +0.028
+    the champion's construction NSE (train)                        0.079
+    required-gain table, rho 0.999 / 0.997 / 0.99                 +0.044 / +0.076 / +0.138
+    resolution floor SE = 0.568*sqrt(1-rho) at rho 0.98             0.080
+
+**Five of the six recorded promotion steps are smaller than the dispersion the same signal
+produces across defensible settings of its own knobs**, and the NSE is the same size as the paired
+sampling SE at the correlations this family's candidates actually sit at (0.076-0.080 at
+`rho` 0.997-0.98). Only the first promotion (+0.242, baseline → #32) is clearly outside it. So
+#92's "comparable" branch fires: **a share of this repo's recorded history is a ranking of
+construction paths rather than of signals**, and by the note's own decision rule the response is
+the written house convention — #93, already written down on 2026-09-10 — and **not** another
+candidate.
+
+**The split mismatch, stated because it is the reading's one real boundary, and it goes the
+helpful way.** The NSE is a **train** dispersion (14,261 days) and the promotion margins are
+**validation** (1,562 days). A validation-scored curve would carry this construction dispersion
+*plus* the extra sampling noise of a window a ninth as long, so **0.079 is a lower bound** on what
+the gate's own split would have shown. The conclusion is therefore conservative, not overstated.
+
+**WHERE THE VARIANCE LIVES — and this is the finding, not the SD.**
+
+    node          dashboard range     eta^2 (sampled curve)    eta^2 after residualising breadth
+    core_n            0.139                 0.694                        0.572
+    min_history       0.001                 0.042                        0.058
+    bracket           0.044                 0.035                        0.096
+    trim              0.039                 0.025                        0.026
+    skip              0.020                 0.022                        0.038
+    pool              0.041                 0.019                        0.018
+    weighting         0.022                 0.004                        0.005
+    K (tranches)      0.045                 0.003                        0.022
+    band_mult         0.003                 0.000                        0.002
+
+**One node carries 69% of the whole curve's variance and every other node carries 4% or less.**
+That node is `core_n` — how deep into each leg's ranking the book buys — and it is precisely the
+node `learnings.md`'s house table already refuses to give a single value to, on the grounds that
+it is "the one node this repo has measured as construction-specific". **The curve confirms that
+refusal was right and prices it: the band is not merely construction-specific, it is where the
+construction dispersion lives.** Everything the lab has spent trials arguing about for six weeks
+— the horizon bracket (#41/#42/#44), the tranche count (#32/#43/#46), the within-leg weighting
+(#52/#53/#54), the trim (#37-#40/#45), the pool rule (2026-09-12) — carries **0.086 of eta^2
+between all seven of them.**
+
+**And it is NOT breadth.** Residualising the curve on `avg_positions` leaves `core_n` at 0.572 and
+moves the curve's SD only 0.079 → 0.077. The fitted breadth slope is **-0.0266 per 10 names on
+train**, an independent replication of the **-0.0278 per 10 names** the 2026-09-08 entry fitted on
+validation — same constant, different split, 159 books instead of 5. But `core_n` moves Sharpe
+**1.053 → 0.877** across its 3x span while moving breadth only 23.3 → 32.6 names, worth ~0.025 at
+that slope: **the node does something about seven times larger than its own breadth effect.** Cost
+does not explain it either, and works the wrong way — the narrow cells trade *more* (2.72x against
+1.34x annual turnover). What is left is **depth**: the 2026-09-08 profile puts momentum's marginal
+content at +5.55%/yr in ranks 1-15 and ~0 past 15, so a narrower core buys only the slice that
+pays. That mechanism is now confirmed at **book** level, on train, across a 3x span, independent
+of breadth and against a turnover handicap.
+
+**`band_mult` is a measured zero, and this fills a gap the file explicitly flags as open.**
+`learnings.md` records that the membership band was deleted on the K=1 base (#51) and says in
+terms: "The band is *present* in the reinstated K=6 champion and its marginal value there has
+never been measured." Measured here for free: the hysteresis ratio's dashboard range on the K=6
+base is **0.003** (1.0 / 1.5 / 2.0 → 0.968 / 0.969 / 0.971) and its `eta^2` across the sampled
+curve is **0.000**, the only node that rounds to zero. So **the "band" splits cleanly into two
+things the lab has discussed as one**: the *core depth* carries 69% of the construction dispersion
+and the *hysteresis ratio* carries none.
+
+**THE EMBARGO, stated as forcefully as the pre-registration promised.** `core_n = 10` is the
+best single dashboard cell on train (+1.077) and **this is not a candidate and must not become
+one.** Three independent reasons, all already on record. (i) The curve is scored on **train**, and
+this file's ⚠ standing concern is that the split that ranks is not the split that resolves;
+selecting a cell out of a screen is `SUMMARY.md` #22's named failure mode and the one this lab has
+re-learned four times. (ii) Narrowing is the **same direction** as #51, whose validation gain of
++0.109 came with a holdout collapse 0.875 → 0.691 and the destruction of 1.8 effective risk bets —
+and `learnings.md` records that choosing it "means reading the holdout replay table to pick
+something the veto will not catch", which the post-#43 corollary forbids. (iii) The whole point of
+this measurement is that a 0.079 dispersion makes such a choice *unresolvable by construction*.
+**The deliverable is a dispersion, not a winner. No candidate file was written from this table,
+and none should be.**
+
+Two smaller readings, recorded without being acted on. `pool = perleg` reads +1.010 against
+`common`'s +0.969 at the default — not a contradiction of 2026-09-12's finding that the `common`
+intersection "costs no leg anything", which was measured on band excess at matched pool rather
+than on book Sharpe, and in any case +0.041 is half an NSE. And `min_history = 756` averages
++0.033 higher across the curve while being a dashboard null (+0.001): an interaction rather than a
+main effect, in the **survivorship direction**, exactly as #93's rider warns — concentrating a
+current-constituents book on the longest histories concentrates it on the identified artifact.
+
+### Block B — the vol-of-vol leg's two recorded weaknesses, and the obvious repair killed for free
+
+Idea 2 of last session's list, licensed because tonight's trial landed inside its pre-registered
+range. Train only, forward 21 days, top-15 against the scoreable pool, with a placebo hash reading
+no market data beside every row and — per `SUMMARY.md` #84's identity — **the bottom band printed
+beside the top**, which this repo's screens have historically hidden.
+
+    cell                       n    pool    top-15 %/yr    bottom-15 %/yr     IC        [placebo]
+    full pool (the book)      255   108.0  +5.85 (+3.21)  -4.12 (-2.52)  +0.0146(+1.54)  +0.73(+0.51)
+    stock sleeve only         220    83.3  +6.66 (+3.14)  -2.13 (-1.22)  +0.0075(+0.74)  +0.41(+0.23)
+    ETF sleeve only             —      —   not measurable (42 ETFs < 3x15)
+    inside HIGH-momentum half 164    64.8  +1.01 (+0.68)  +0.28 (+0.15)  +0.0066(+0.50)  -0.77(-0.60)
+    inside LOW-momentum half  158    65.0  +2.40 (+1.27)  -0.56 (-0.36)  +0.0191(+1.26)  +0.65(+0.54)
+    inside HIGH-GK half       170    65.0  +5.70 (+2.87)  -0.46 (-0.24)  +0.0076(+0.60)  -0.19(-0.11)
+    inside LOW-GK half        164    65.1  -0.49 (-0.39)  -2.67 (-1.94)  +0.0261(+1.74)  -0.02(-0.02)
+
+*(Levels are not comparable to last night's screen, which ran 170 dates at pool >= 90 against this
+harness's 255 at pool >= 45. Read the shape, never the levels — and every comparison drawn below
+is between rows of this table at matched pool and matched n.)*
+
+**(a) The sleeve weakness dissolves, in the opposite direction to the one recorded.** The stock
+sleeve carries **+6.66%/yr (t = +3.14)**, *more* than the full pool's +5.85, and the ETF sleeve
+cannot be measured at all because 42 ETFs will not fill a top-15 against a 45-name pool. So last
+night's weaker stock-sleeve `t` was **`n`, not sleeve**. Holdings agree: the traded book holds
+**11.0% ETFs against a 30.0% pool share**, so it was already a stock book. What the bottom band
+adds is the mechanism — the full pool's bottom is −4.12 (t = −2.52) and the stock sleeve's is only
+−2.13 (t = −1.22), i.e. **the short side is where the ETFs are**, which is what a creation-and-
+redemption-arbitraged basket should do to the *stability* of its own realized volatility. The
+long-only book never trades that side. **Recorded weakness retired.**
+
+**(b) The fade among past winners is confirmed and is sharper than recorded — and the pool-halving
+confound is differenced out.** Inside the high-momentum half the effect is **+1.01%/yr
+(t = +0.68)**, a null. The obvious objection is that halving the pool turns a top-14% tail into a
+top-23% one, which the 2026-09-04 bracket says should dilute — but the **high-GK half is the same
+halving** (pool 65.0, n = 170) and there the effect is **fully intact at +5.70 (t = +2.87)**. So
+the dilution is not what kills it; conditioning on momentum is. Momentum percentile of the held
+names is **0.504** against a pool mean of 0.500, so this is not momentum in costume (`spearman`
++0.004) — the score is momentum-neutral in what it *holds* and momentum-dependent in what it
+*pays*.
+
+**(c) The conditional repair the table invites is KILLED FOR FREE, on this repo's own standing
+rule.** The low-GK half reads **−0.49 (t = −0.39)** — the control last night did not print — so
+the entire effect lives among already-volatile names, and the obvious candidate is vol-of-vol
+inside the high-GK half. Its depth profile is genuinely *better* than the unconditional one
+(marginal slices **+6.77 (t = +3.24) / −5.94 (t = −3.00) / −0.10 / −0.32**, placebo clean and
+sign-inconsistent — a sharp step at 15 with a significantly negative next slice, where the
+unconditional profile reads +6.01 / −0.87 / −1.06 / −1.81). **And then the denominator answers
+it.** Per the 2026-09-10 rule — *an excess screen prices a NUMERATOR and is blind to a DENOMINATOR*
+— the held book's trailing-21-day-volatility percentile:
+
+    book                                    vol percentile     pool reference
+    rv_volofvol_top15 (unconditional)           0.542               0.500
+    conditional, high-GK half only              0.727               0.500
+    universe's top-half mean 21d vol / bottom-half mean:  0.360 / 0.187 = 1.93x
+
+Conditioning moves the book from the 54th to the **73rd** volatility percentile in a universe
+whose top half is **1.93x** the volatility of its bottom half. Against that, the screened gain is
+at most **+0.8%/yr** of tail excess — worth roughly **+0.05** of Sharpe at the traded book's ~15.6%
+validation volatility — while a denominator move of that size costs multiples of it. **Predicted
+net negative, trial not spent**, which is the same arithmetic that killed the fixed-anchor idea on
+2026-08-25 and the same failure `lv_illiq_stocks_only` walked into on 2026-09-10. It is also worth
+saying plainly what the conditional book *is*: a deliberate tilt into the high-volatility half of a
+current-constituents universe, i.e. into the identified survivorship artifact that fifteen screens
+closed this family on. **`range-variance` has its recorded trial and its family lead; it does not
+have a second candidate, and the reason is measured rather than asserted.**
+
+**Lesson.** Two recorded weaknesses, opposite fates, and the useful half is that both were resolved
+by printing something the original screen had left out — an `n`, a bottom band, a low-side control,
+a volatility percentile. **Neither weakness was resolved by a trial, and the one repair that looked
+strongest on the statistic the screen reports is the one the statistic cannot see.**
