@@ -9972,3 +9972,159 @@ the engine's count and `P` the participation ratio. "Materially" = a factor of *
       pre-filtered them, and nearly every mechanism this lab tests arrives from
       `research/SUMMARY.md`. So this repo's correction is a **lower bound** overall and a low
       effective-`N` reading is not a reason to relax anything.
+
+## Free measurement — 2026-09-15 (nightly), no trial spent
+
+Three blocks, all from stored per-trial **validation** return series and the frozen engine's own
+functions. Nothing went through `run_experiment.py`; `trials.jsonl`, `champion.py`,
+`champion_card.json` and the leaderboard are untouched; **the holdout was not read.** Block A's
+node list, statistics, controls and reading rule were committed in the block above before any
+number existed.
+
+### Block A — `SUMMARY.md` #108: the effective number of independent trials is ~1.6, the engine counts 24, and #108's premise about this repo was false
+
+**The premise check comes first, because it inverts the note.** #108 says "the deflated-Sharpe bar
+takes `N` to be the raw count in `trials.jsonl`". It does not. `engine/protocol.py:343`
+(`effective_n_trials`) clusters validation return series by single linkage at
+`TRIAL_CLUSTER_RHO = 0.95` and `engine/metrics.py:127` passes that count to `deflated_sharpe` in
+place of the raw one. The lab has been correcting for dependence since before the note was
+written. **Eighth instance of this repo's oldest habit — check what a component's code actually
+reads — and the first applied to a criticism arriving from `research/` rather than to a claim from
+inside the lab.** The question that survives is the sharper one: *is single linkage at 0.95 the
+right estimator?*
+
+**The controls ran first and two of them changed what may be reported.**
+
+    control                                    engine SL@0.95    kaiser    participation    n95
+    (i)  90 i.i.d. series, 1,562 days               90.0           44           85.1         83
+    (ii) one-factor null, pairwise 0.49             90.0            1            4.0         77
+    (ii) one-factor null, pairwise 0.80             90.0            1            1.6         60
+    (iii) chaining ladder (neighbours 0.96,
+          ends 0.03)                                 1.0            9            4.3         15
+
+*(a)* **The Kaiser count is disqualified** by the pre-registered rule: it reads **44** on 90
+genuinely independent series, because at `N = 90`, `T = 1562` sampling noise alone spreads the
+eigenvalues (Marchenko–Pastur). Its live reading is discarded, as committed. *(b)* **The chaining
+prediction was right** — single linkage reads **1.0** on a ladder whose ends correlate 0.03. *(c)*
+**Control (ii) is the one that matters and it was the lesser-flagged failure mode**: single linkage
+is *completely blind* to any dependence below its threshold, reading **90** on 90 series that share
+a factor at pairwise 0.80.
+
+**THE LIVE READING**, 90 stored validation series:
+
+    pairwise correlation   median 0.784   mean 0.786   p10 0.627   p90 0.945
+    share of pairs >= 0.95   8.6%       >= 0.80   47.1%       >= 0.50   96.8%
+
+    (a) engine single-linkage @ 0.95          24.0
+    (b) kaiser                                 4      [DISQUALIFIED by control (i)]
+    (c) participation ratio (sum L)^2/sum L^2  1.56   (iid control 85.1/90; bias-corrected 1.66)
+    (d) components carrying 95% of variance    8
+
+    top eigenvalues  71.44  7.97  1.97  1.33  0.96 ...      PC1 = 79.4% of total variance
+
+**The pre-committed `P < E/1.5` branch fires by a factor of 15**, ten times past the threshold.
+The live universe is almost exactly control (ii) at 0.80: median pairwise 0.784 against 0.800,
+participation 1.56 against 1.6. **Ninety recorded trials are, in eigenvalue terms, one and a half
+independent bets.** The mechanism is not chaining — the engine's largest cluster (n = 45) has its
+own participation ratio of 1.14, so counting it as 1 is nearly exact. It is the *other* 23 clusters,
+mutually correlated at ~0.78 and counted as 23 independent trials.
+
+**The decomposition, because "every book here is a long-only equity book" is a real confound.**
+Removing PC1 and re-reading: participation **4.12**, against **84.07** for the identical pipeline on
+90 i.i.d. series — so on a like-for-like scale the six weeks of search is worth **~4.4 of 90**
+independent trials even after granting the common equity component. Residual pairwise correlation
+is then median **-0.046**, i.e. PC1 *is* essentially the whole dependence. The constraint set
+explains why and no candidate can escape it: long-only with gross ≤ 1.0 makes every book a
+near-fully-invested global equity portfolio.
+
+**MY PRE-REGISTERED READING RULE ATTACHED THE WRONG LABEL TO THIS BRANCH, AND THE CORRECTION FLIPS
+WHICH WAY THE FINDING CUTS.** I wrote that `P < E/1.5` means the engine "under-deflates ... the bar
+is easier than intended". That is backwards. `deflated_sharpe` passes `n_effective` into
+`expected_max_sharpe`, so a **larger** count means a **higher** benchmark and a **harder** bar. The
+branch that fired therefore says the engine **over**-deflates: it charges the search as 24
+independent shots when the dependence structure says ~1.6 raw, ~4.4 after PC1. The pre-committed
+branch and its 1.5 threshold stand exactly as written; only the economic label was wrong, and it is
+corrected here rather than quietly restated.
+
+    champion's stored validation series, 91 trial Sharpes, var fixed:
+    n_effective =  1.56  ->  E[max SR] 0.113 ann   DSR 0.9933
+    n_effective =  4.40  ->  (between)                  ~0.985
+    n_effective = 12     ->  E[max SR] 0.363 ann   DSR 0.9686
+    n_effective = 24     ->  E[max SR] 0.432 ann   DSR 0.9546   <- what the engine uses today
+    n_effective = 90     ->  E[max SR] 0.544 ann   DSR 0.9215
+
+**This is not an engine bug and this session is not stopping.** `effective_n_trials`'s docstring
+says it is "deliberately conservative" and that "the result is never below the number of distinct
+return series" — the behaviour matches the documentation exactly. What tonight adds is the
+*magnitude* of that conservatism on this universe: 24 against a measured 1.6–4.4. The threshold is
+not wrong in kind, it is placed above the mass of this repo's correlation distribution (median
+0.784), so the entire mid-correlation range where the lab's breadth actually lives is scored as
+fully independent.
+
+### Block B — the incentive the estimator creates, measured on this repo's own history
+
+`effective_n_trials`'s docstring states its purpose: deflating at the raw count "punishes breadth
+and rewards fine-tuning the incumbent". **Measured, it produces that incentive rather than removing
+it.** Marginal cost of one hypothetical new trial, appended to the real 90:
+
+    new trial's max correlation to anything already stored     ->  change in effective_n_trials
+    0.999 / 0.990 / 0.970 / 0.961                                          +0
+    0.938 / 0.901 / 0.805 / 0.710 / 0.693                                  +1
+
+And on the recorded history itself:
+
+    price-trend legacy families   13 of 58 trials raised the effective count   (22%)
+    the seven newer families      13 of 32 trials raised the effective count   (41%)
+
+**A breadth trial is 1.9x as likely to raise the bar for every future candidate as another variant
+of the incumbent, and a variant closer than 0.95 to anything already run is free.** Stated fairly,
+the *sign* is statistically correct and unavoidable — a decorrelated candidate genuinely is a new
+independent shot and a 21st variant is not, which is what a multiple-testing correction is *for*.
+What Block A shows is that the *magnitude* is mis-calibrated on this universe: a scout at `rho`
+0.78 is charged as one full independent trial when the eigenvalue reading prices the whole
+90-trial set at 1.6. **Recommendation for the human, and it needs one because
+`TRIAL_CLUSTER_RHO` lives in frozen `engine/`:** the threshold is the knob, not the clustering, and
+0.95 sits at the 91st percentile of this repo's own pairwise correlation distribution. No session
+may touch it and none should try; this is a number for a human to rule on.
+
+**Rider (ii) from the pre-registration is binding and is stated in the same breath.**
+Sullivan–Timmermann–White require the correction to span the universe the winner was plausibly
+drawn from, *including* candidates nobody here ran because the literature pre-filtered them — and
+nearly every mechanism this lab tests arrives from `research/SUMMARY.md`. So the repo
+over-deflates against its own recorded history and **under**-deflates against the literature
+universe. The two errors point in opposite directions, there is no basis here for netting them,
+and **a low effective-`N` reading is not a licence to relax anything.** That is why the
+recommendation above is "a human should rule", not "the bar should fall".
+
+### Block C — the whole blend board priced in one table, and it is declined for a sixteenth session
+
+Fifteen sessions have declined the blend one lead at a time. Tonight it is priced exhaustively from
+stored series, with the blend weight swept 5–50% and the **best** weight reported per leg — i.e.
+every number below is an ex-post cherry-pick on the very split the gate scores, and therefore an
+optimistic upper bound on any honest a-priori choice.
+
+    lead (family)                                  Sharpe    rho    paired SE | best w   delta      t
+    pl_maxleg_signal_blend  (portfolio-learning)    1.008   0.732     0.295   |  0.40   +0.0337  +0.33
+    lv_illiq_region_wide30  (liquidity-volume)      0.942   0.715     0.304   |  0.30   +0.0181  +0.24
+    sc_seasonal_depth_narrow (seasonality)          0.846   0.734     0.294   |  0.05   +0.0006  +0.04
+    sl_ppp_walkforward      (statistical-learning)  0.875   0.783     0.265   |  0.05   -0.0004  -0.04
+    ll_group_lastmonth_lead (lead-lag)              0.688   0.698     0.313   |  0.05   -0.0037  -0.36
+    rv_volofvol_top15       (range-variance)        0.494   0.703     0.310   |  0.05   -0.0127  -1.07
+    sa_pca_residual_excursion (stat-arb)            0.468   0.692     0.316   |  0.05   -0.0137  -1.10
+
+Every multi-leg combination of the top four was also priced (2-, 3- and 4-way, best weight each):
+the best is **+0.0284 at t = +0.29**, and the gain falls monotonically as legs are added — the same
+shape the 2026-08-25 cross-specification result found, for the same reason. **The board's best
+available blend is +0.034 at t = +0.33**, against this family's measured resolution floor of
+0.076–0.080 and its 0.079 construction NSE. Not one cell on the board reaches a third of a standard
+error, with the weight and the partner both chosen ex-post. **The blend is declined for a
+sixteenth consecutive session, now exhaustively rather than lead-by-lead**, and the next session
+should read this table rather than re-deriving it.
+
+**One dead end closed on the way, so it is not proposed later.** Block A's PC1 decomposition invites
+the thought that the required-gain table is read off the wrong correlation — that two books at raw
+`rho` 0.73 might be far more decorrelated in market-residual terms, which they are (residual
+pairwise median -0.046). **It does not help and must not be used.** A blend earns the *total*
+returns of its legs, and Memmel's paired SE is a statement about those total returns; removing the
+market changes what the correlation describes but not one dollar of what the blended book earns.
+Raw `rho` is the correct input and the table stands as written.
