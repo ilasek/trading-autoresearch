@@ -3299,3 +3299,88 @@ across experiments; prune entries that later evidence contradicts.
   property of the screen rather than of the books it has so far been applied to. Never convert a
   screened mean into a cross-construction Sharpe ranking, and do not assume the volatility
   percentile will explain why.
+
+- **[Measured 2026-09-15, nightly] Ninety recorded trials are worth ~1.6 independent bets, the
+  engine counts 24, and the estimator's threshold sits above the entire mass of this repo's
+  correlation distribution.** `research/SUMMARY.md` #108 asked for an effective-trial count and
+  asserted the lab deflates at the raw count; **it does not, and checking that is the finding's
+  first half.** `engine/protocol.py:343` has clustered validation return series by single linkage
+  at `TRIAL_CLUSTER_RHO = 0.95` all along, and `engine/metrics.py:127` passes that count to
+  `deflated_sharpe`. **Eighth instance of this repo's oldest habit, and the first applied to a
+  criticism from `research/` rather than to a claim from inside.**
+  **The live reading**, 90 stored validation series: median pairwise correlation **0.784**, with
+  **96.8%** of pairs above 0.50 and only **8.6%** above 0.95; PC1 carries **79.4%** of total
+  variance; participation ratio `(ΣL)²/ΣL²` = **1.56** against the engine's **24.0**. Removing PC1
+  — because long-only at gross ≤ 1.0 makes every book a near-fully-invested equity portfolio, which
+  is a constraint-set artifact and not a search property — leaves **4.12**, against **84.07** for
+  the identical pipeline on 90 i.i.d. series: **~4.4 of 90 on a like-for-like scale.** Residual
+  pairwise correlation is then median **-0.046**, so PC1 is essentially the whole dependence.
+  **Two controls decided what may be reported and both earned their place.** The **Kaiser count is
+  disqualified** — it reads **44** on 90 genuinely independent series at `N=90, T=1562`, which is
+  Marchenko–Pastur spread, not structure. And the failure mode that actually bites was the one
+  flagged second: single linkage is **blind below its threshold**, reading **90** on 90 series
+  sharing a factor at pairwise 0.80. (Chaining is real — 1.0 on a ladder whose ends correlate 0.03
+  — but it is *not* what happens here: the engine's largest cluster, n = 45, has its own
+  participation ratio of 1.14, so counting it as 1 is nearly exact. The error is the other 23
+  clusters, mutually correlated at ~0.78 and counted as 23.)
+  **The direction, stated carefully because the session's own pre-registration got the label
+  backwards and the correction flips the finding.** A **larger** `n_effective` means a higher
+  `expected_max_sharpe` and a **harder** bar, so counting 24 where the structure says 1.6–4.4 means
+  the engine **over**-deflates, not under. On the champion's stored series the bar moves DSR
+  0.9933 (n=1.56) / 0.9686 (12) / **0.9546 (24, today)** / 0.9215 (90). **This is not a bug and no
+  session should treat it as one**: `effective_n_trials`'s docstring says it is "deliberately
+  conservative" and the behaviour matches exactly. What is new is the magnitude — 0.95 sits at the
+  **91st percentile** of this repo's own pairwise correlations, so the whole mid-correlation range
+  where the lab's breadth lives is scored as fully independent. The threshold is the knob, it is in
+  frozen `engine/`, and it is a human's to rule on.
+  **The binding rider, and it is why none of this licenses relaxing anything.**
+  Sullivan–Timmermann–White require the correction to span the universe the winner was plausibly
+  drawn from, including candidates nobody ran because the literature pre-filtered them — and nearly
+  every mechanism here arrives from `research/SUMMARY.md`. **The repo over-deflates against its own
+  history and under-deflates against the literature universe; the two errors oppose each other and
+  must never be netted.**
+
+- **[Measured 2026-09-15, nightly] The deflator's dependence correction produces the exact
+  incentive its own docstring says it exists to remove, and this is measured on the repo's
+  history rather than argued.** Appending one hypothetical trial to the real 90: a candidate whose
+  **maximum** correlation to anything already stored is 0.961 or above costs **+0** effective
+  trials; at 0.938 and below it costs **+1**. On the recorded history, **13 of 58 (22%)**
+  `price-trend`-legacy trials raised the effective count against **13 of 32 (41%)** in the seven
+  newer families — **a breadth trial is 1.9x as likely to raise the bar for every future candidate
+  as another variant of the incumbent, and a variant closer than 0.95 to anything already run is
+  free.** Stated fairly: the **sign** is statistically correct and unavoidable, since a decorrelated
+  candidate genuinely is a new independent shot and a 21st variant is not — that is what the
+  correction is *for*. It is the **magnitude** that is mis-calibrated, because the entry above
+  prices the whole 90-trial set at 1.6 while a single `rho`-0.78 scout is charged as one full
+  independent trial. Carry it as a standing caution when reading any DSR here, never as a reason to
+  avoid breadth: `program.md` mandates breadth and its own table already shows the deflator is not
+  what was stopping it.
+
+- **[Measured 2026-09-15, nightly] The blend board is priced exhaustively and closed: the best cell
+  available anywhere is +0.034 at t = +0.33, with the partner and the weight both chosen ex-post.**
+  Fifteen sessions declined the blend one lead at a time; tonight all seven seated family leads were
+  priced against the champion from stored series with the weight swept 5–50% and the **best** weight
+  reported, which makes every number an optimistic upper bound on any honest a-priori choice. Best
+  single leg `pl_maxleg_signal_blend` **+0.0337 (t = +0.33)** at w = 0.40; then
+  `lv_illiq_region_wide30` +0.0181; the other five are at or below +0.001, three of them negative.
+  Every 2-, 3- and 4-way combination of the top four was priced too: best **+0.0284 (t = +0.29)**,
+  falling monotonically in leg count — the 2026-08-25 cross-specification shape, for the same
+  reason. Against a resolution floor of 0.076–0.080 and a 0.079 construction NSE, **nothing on the
+  board reaches a third of a standard error.** Read this table; do not re-derive it.
+  **One dead end closed with it, so it is not rediscovered.** The PC1 decomposition above shows the
+  leads are near-uncorrelated once the market is removed (residual median -0.046), which invites the
+  thought that the required-gain table uses the wrong correlation. **It does not and must not be
+  used**: a blend earns its legs' *total* returns and Memmel's paired SE describes those total
+  returns, so removing the market changes what the number describes and not one dollar of what the
+  book earns. Raw `rho` is the correct input.
+
+- **[2026-09-15, nightly] A trial was declined on the strength of the night's own measurement, and
+  the reasoning is the transferable part.** No candidate was scored: every seated lead was priced
+  and none clears a third of a standard error; every extension of every lead sits on the standing
+  do-not-extend list; and `price-trend` is under the ⚠ concern that a candidate clearing the gate is
+  evidence about the gate. **Block B then supplies the argument the lab has never had in this form:
+  a decorrelated candidate costs +1 effective trial and permanently raises the bar for every future
+  one, so spending a trial to reach a budget number is not neutral — it is charged to every later
+  session.** The budget is a ceiling, not a quota, and `CLAUDE.md` already says a well-documented
+  negative result is a success of the system. **The general form: when a session's own measurement
+  prices the cost of a trial, that price is part of the decision to spend it.**
