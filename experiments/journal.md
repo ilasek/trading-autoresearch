@@ -10128,3 +10128,145 @@ pairwise median -0.046). **It does not help and must not be used.** A blend earn
 returns of its legs, and Memmel's paired SE is a statement about those total returns; removing the
 market changes what the correlation describes but not one dollar of what the blended book earns.
 Raw `rho` is the correct input and the table stands as written.
+
+## Session summary — 2026-09-15 (nightly)
+
+- **Integrity check — clean, and the branch situation needed correcting for the first time in
+  sixteen sessions.** `git fetch origin --prune` clean; `git branch -r --no-merged origin/main`
+  returned **nothing**, so no previous session's work is stranded off `main`. As on 2026-09-06
+  through -14 the session-start hook printed "integrity check OK — on main, level with origin/main,
+  no stray branches" while `git status -sb` reported a per-run branch (`main-nwg7bz`) — **the hook
+  still does not detect this, tenth session running.** Unlike previous sessions the per-run branch
+  was not merely verified and worked from: it was confirmed to hold **zero commits absent from
+  `origin/main`** (`a75d2bb`, identical tip) and the session then ran `git checkout main && git
+  reset --hard origin/main` as step 0 of the schedule requires, so tonight's work is on `main`
+  only and there is no second head to reconcile. Engine tests green (**33 passed**) before any
+  measurement. Store fresh through **2026-09-14**.
+- **Experiments run: 0 of the 8-trial budget.** Trial count unchanged at **91**. No candidate
+  scored, no champion comparison, **no holdout read** — the count of holdout looks since
+  2026-08-17 stands at five. Three free measurement blocks, the first pre-committed in full
+  before any number existed.
+
+### The night in one line
+
+The folder asked for a multiple-testing diagnostic the lab supposedly lacked; the lab already had
+one, and measuring it properly says **ninety recorded trials are worth about one and a half
+independent bets** — so the search has converged far harder than its counter reports, and the
+estimator that reports it charges breadth 1.9x what it charges another variant of the incumbent.
+
+### Best finding: the effective trial count, and the premise that had to be checked first
+
+`SUMMARY.md` #108's premise — "the bar takes `N` to be the raw count in `trials.jsonl`" — is
+**false about this repo**. `engine/protocol.py:343` has clustered validation return series at
+`rho >= 0.95` all along and `engine/metrics.py:127` passes that count to the DSR. Eighth instance
+of checking what a component's code actually reads, first one aimed at `research/` rather than at
+the lab. The surviving question is whether single linkage at 0.95 is the right estimator, and the
+answer is a factor of 15.
+
+Median pairwise correlation across the 90 stored series is **0.784**; 96.8% of pairs exceed 0.50
+and only 8.6% exceed 0.95; PC1 carries **79.4%** of variance. Participation ratio **1.56** against
+the engine's **24.0** — the pre-committed `P < E/1.5` branch, fired ten times over. Removing PC1
+(long-only at gross ≤ 1.0 forces every book to be a near-fully-invested equity portfolio, so that
+component is the constraint set, not the search) leaves **4.12** against **84.07** for the same
+pipeline on 90 i.i.d. series: **~4.4 of 90 like-for-like**, with residual pairwise correlation then
+median **-0.046**.
+
+Two controls earned their keep. **Kaiser was disqualified by the pre-registered rule** — 44 on 90
+independent series, which is Marchenko–Pastur spread — and the live failure mode turned out to be
+the second one flagged, not chaining: single linkage reads **90** on a one-factor null at pairwise
+0.80. The engine's own largest cluster (n = 45) has participation 1.14, so counting *it* as 1 is
+nearly exact; the error is the 23 other clusters, mutually correlated at 0.78 and counted as 23.
+
+**The pre-registration's reading rule attached the wrong label to the branch that fired, and the
+correction inverts the finding — recorded rather than restated.** A larger `n_effective` raises
+`expected_max_sharpe` and makes the bar **harder**, so counting 24 where the structure says 1.6–4.4
+means the engine **over**-deflates. On the champion's series: DSR 0.9933 at n = 1.56, 0.9686 at 12,
+**0.9546 at 24 (today)**, 0.9215 at 90. The branch and its 1.5 threshold stand as written.
+
+**This is explicitly not an engine bug and the session did not stop.** The docstring says
+"deliberately conservative" and the code does exactly that. What is new is the magnitude: **0.95
+sits at the 91st percentile of this repo's own correlation distribution**, so the mid-correlation
+range where all the lab's breadth lives is scored as fully independent.
+
+### Second finding: the deflator charges breadth 1.9x what it charges tuning
+
+Appending one hypothetical trial to the real 90: max correlation ≥ 0.961 to anything stored costs
+**+0** effective trials; ≤ 0.938 costs **+1**. On the recorded history, **22%** of `price-trend`
+legacy trials raised the effective count against **41%** in the seven newer families. That is the
+incentive `effective_n_trials`'s own docstring says it exists to remove ("punishes breadth and
+rewards fine-tuning the incumbent"). Stated fairly, the **sign** is correct and unavoidable — a
+decorrelated candidate *is* a new independent shot — and only the **magnitude** is wrong, because
+Block A prices the whole set at 1.6 while one `rho`-0.78 scout is charged as a full trial.
+
+### Third finding: the blend board, priced exhaustively and closed
+
+All seven seated leads against the champion, weight swept 5–50%, **best** weight reported, so every
+number is an ex-post upper bound. Best single leg `pl_maxleg_signal_blend` **+0.0337 at t = +0.33**
+(w = 0.40); `lv_illiq_region_wide30` +0.0181; the rest at or below +0.001, three negative. Best of
+all 2-, 3- and 4-way combinations **+0.0284 at t = +0.29**, falling monotonically in leg count.
+Against a 0.076–0.080 resolution floor and a 0.079 NSE, **nothing reaches a third of a standard
+error.** Declined for a sixteenth session, now exhaustively rather than lead-by-lead. The tempting
+repair — that the required-gain table should use market-residual `rho`, which is near zero — is
+closed in the block above: a blend earns its legs' total returns, so raw `rho` is the correct input.
+
+### Why no trial was run, stated plainly rather than as an omission
+
+Every seated lead was priced and none clears a third of a standard error. Every extension of every
+lead is on the standing do-not-extend list. `price-trend` is under the ⚠ concern that a candidate
+clearing the gate is evidence about the gate. And Block B prices the decision itself: **a
+decorrelated candidate costs +1 effective trial and permanently raises the bar for every future
+session**, so spending one to reach a budget number is not free — it is charged to everyone who
+comes after. The budget is a ceiling, not a quota.
+
+### Protocol and allocation notes
+
+- **Budget: 0 of 8.** `price-trend` cap of 2 unused; no family cap approached; the cold-family rule
+  has no remaining cold family (discharged 2026-09-14).
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look. Tonight sharpens it a third way: the gate's deflator prices the lab's
+  90-trial history as 24 independent shots when its own return series say 1.6.
+- **Train-as-prediction: n = 31, unchanged.** No candidate was scored.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/` and every existing `strategies/lib/` file are untouched, as are
+  `strategies/candidates/`, `trials.jsonl` and the leaderboard. All measurement ran from the
+  session scratchpad against stored validation series and the engine's own read-only functions.
+
+### For the human — one decision that no agent may make
+
+`TRIAL_CLUSTER_RHO = 0.95` in frozen `engine/protocol.py` is the single knob behind both of
+tonight's first two findings. It sits at the **91st percentile** of this repo's pairwise
+correlation distribution, which is why 90 trials score as 24 rather than as the 1.6–4.4 the
+eigenvalues give. **This is a calibration question, not a bug report, and it is deliberately not
+filed under `## Engine issue`** — that heading is reserved for bugs and requires stopping the
+experiment, and there is no bug: the code matches its documentation. Two things must be weighed
+together and neither alone: the repo **over**-deflates against its own recorded history, and it
+**under**-deflates against the literature universe its hypotheses are drawn from
+(Sullivan–Timmermann–White), because the correction must span candidates nobody here ran because
+the literature had already filtered them. **The two errors oppose each other, nothing here nets
+them, and a low effective-`N` reading is not a reason to lower any bar.**
+
+### Next ideas, in order, with provenance
+
+1. **`SUMMARY.md` #89's overidentifying restriction test** — still the one folder proposal that can
+   *fail*, with its mandatory no-lag-null rider. Carried unchanged for a seventh session and now
+   the folder's highest-ranked unrun item, #108 having been spent tonight.
+   (`research/SUMMARY.md` #89.)
+2. **`SUMMARY.md` #109's winner-to-runner-up discount on the 2026-09-14 specification curve** —
+   the one number that would put the `core_n = 10` embargo on a quantitative footing rather than on
+   judgement. It needs the curve re-run (it was not stored), which is the only reason it did not
+   happen tonight; a session with budget for the harness should take it.
+   (`research/SUMMARY.md` #109.)
+3. **Do NOT shrink the leaderboard.** #110's James–Stein anti-candidate is now doubly supported:
+   tonight's PC1 decomposition shows the 90 series are one factor plus noise, which is exactly the
+   non-exchangeability Efron's relevance section warns about. If a session proposes it, the
+   relevance set must be argued in the journal first. (`research/SUMMARY.md` #110, tonight.)
+4. **Do not re-derive the blend board** — it is a table in Block C above, exhaustive and ex-post
+   optimistic, and re-deriving it is the sixteenth session's work done a seventeenth time.
+5. **Do not extend**: everything on the 2026-09-14 list, unchanged — a `core_n` candidate (under
+   embargo), vol-of-vol in any form, `RVR`, the listing-age tilt, the PPP's characteristic set,
+   `neutralize`, rank-versus-blend order, the `liquidity-volume` and seasonal band brackets, the
+   `calendar` half of `seasonality-calendar`, the distance method, cointegration, union or
+   intersection books, HRP, a fourth aggregation operator, and a fourth vintage axis without a
+   rotation-speed rationale.
+
+**No engine issues encountered.**
