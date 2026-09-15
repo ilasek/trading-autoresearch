@@ -9896,3 +9896,79 @@ first prospective one.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-15 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-15 (nightly), written before any number was computed
+
+`research/SUMMARY.md` #108 asks for the effective number of independent trials in this repo's
+history, via Sullivan–Timmermann–White's scree diagnostic, and frames it as a correction the
+lab is missing. **Its premise is false about this repo, and checking that is the reason this
+block exists.** `engine/protocol.py:343` already computes `effective_n_trials` — single-linkage
+clustering on validation return correlations at `TRIAL_CLUSTER_RHO = 0.95` — and
+`engine/metrics.py:110` already passes it to `deflated_sharpe` in place of the raw count. The
+champion card records `n_effective_trials_now = 12.0` against `n_trials_now = 54`. So the
+question is **not** "should the lab correct for dependence" (it does) but **"is single linkage
+at 0.95 the right estimator, and what does the eigenvalue route say instead?"** This is the
+eighth instance of the repo's oldest habit — check what a component's code actually reads —
+and the first applied to a criticism from `research/` rather than to a claim from inside.
+
+**Why the estimator could be wrong in either direction, stated before measuring.** Single
+linkage merges `i` and `j` whenever *some* path of `>= 0.95` links connects them, so it
+**chains**: a ladder of near-duplicates each 0.96-correlated with its neighbour collapses to one
+cluster even if its ends correlate 0.3, under-counting the search. Symmetrically, a family whose
+members all sit at 0.94 stays at full count, over-counting it. The eigenvalue route has neither
+failure mode because it reads the whole covariance structure at once.
+
+**Object.** The 90 stored per-trial **validation** return series in `experiments/trial_returns/`
+(91 recorded trials; one has no stored series). Note the deviation from #108's rider, which asks
+for train series: the stored series are validation, the split the DSR is computed on and the one
+the engine's own clustering uses, so validation is the correct sample for this question.
+Validation is the selection split and is read on every trial; **the holdout is not touched by
+anything in this block.**
+
+**Normalisation, pre-committed.** The **correlation** matrix (each series standardised to unit
+variance). Rationale fixed in advance: the DSR is a statement about Sharpe ratios, which are
+scale-free, so the dependence that matters is correlation and not covariance. The covariance
+reading is a knob and is not taken.
+
+**Statistics, all four reported whatever they say.**
+  (a) the engine's own `effective_n_trials` (single linkage, 0.95), recomputed as a falsifier
+      against the 12.0 on the champion card;
+  (b) **Kaiser count** — the number of eigenvalues of the correlation matrix above 1, i.e.
+      components explaining more than one series' worth of variance;
+  (c) **participation ratio** `N_eff = (sum L)^2 / sum L^2`, threshold-free and continuous, so
+      it cannot be shaped by a cut chosen after the fact;
+  (d) the number of components carrying 95% of total variance.
+
+**Calibration is mandatory and runs BEFORE the live numbers are read**, per this repo's standing
+rule that an imported statistic must be simulated under its own null first. Three controls, each
+with its prediction written here:
+  (i) **90 i.i.d. series**, 1,562 days — every statistic must return ~90. Any statistic that
+      does not is broken and its live reading is discarded.
+  (ii) **one-factor null** at the live median pairwise correlation — the eigenvalue statistics
+      should collapse toward 1.
+  (iii) **the chaining construction** — a ladder whose neighbours correlate ~0.96 and whose ends
+      do not. Prediction, stated in advance: **single linkage reads 1 and the participation
+      ratio reads many.** This is the control that can convict the engine's estimator, and it is
+      the reason the block is worth running.
+
+**Reading rule, pre-committed so the conclusion is not chosen after the numbers.** Let `E` be
+the engine's count and `P` the participation ratio. "Materially" = a factor of **1.5**.
+  - `P < E/1.5` → the engine **under-deflates**: the search is more redundant than its counter
+    says and the DSR bar is easier than intended. This is the reading that displeases the lab
+    most and it is pre-committed here so it cannot be quietly dropped.
+  - `P > 1.5E` → single linkage is **chaining**: the engine over-merges and the bar is harsher
+    on genuine breadth than intended, which would be an argument *for* the exploration
+    `program.md` already mandates.
+  - otherwise → the two independent estimators agree and the engine's choice is vindicated as
+    written.
+
+**Two riders, both binding.**
+  (i) **This is a measurement, not a licence.** `engine/` is frozen. Whatever this reads, no
+      candidate is scored differently tonight, no threshold is touched, and the output is a
+      journal number plus — only if stark — an `## Engine issue` write-up for a human.
+  (ii) **The universe cuts the other way and is stated in the same breath.**
+      Sullivan–Timmermann–White require the correction to span the universe the winner was
+      plausibly drawn from, *including* candidates nobody here ran because the literature
+      pre-filtered them, and nearly every mechanism this lab tests arrives from
+      `research/SUMMARY.md`. So this repo's correction is a **lower bound** overall and a low
+      effective-`N` reading is not a reason to relax anything.
