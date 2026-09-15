@@ -88,6 +88,22 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > sessions 28–30, this is not a licence to resume breadth hunting — one of the three candidates is
 > gated behind a free screen, one is an anti-candidate, and one is a convention.
 >
+> **Status after session 32 (2026-09-15): a seventh unit, found on the detector's first use, and a
+> distinction this file had been blurring for nine notes.** 2026-09-13's detector (*after each
+> nightly, take the one variable it measured that has no note here, and check*) pointed at the
+> 2026-09-14 nightly's central act — selecting `core_n = 10` as the argmax of a 178-variant
+> specification curve and then embargoing it. A grep across all 97 notes returned **zero** for
+> `post-selection`, `regression to the mean`, `James–Stein`, `argmax` and `reality check`.
+> **Families → clauses → operators → the pool → an attribute of the pool's members → the rule by
+> which a result is selected out of a set of results.** The gap was load-bearing because of a
+> distinction this file had not drawn: its nine multiple-testing notes all ask whether the best of
+> `N` is *significant*, and none asks what the best of `N` is *worth* — while the repo's promotion
+> rule compares point estimates every night. Session 32 covered it (new cross-family section below,
+> candidates #108–#110). As with sessions 28–31 this is not a licence to resume breadth hunting:
+> all three candidates are free diagnostics, one is an anti-candidate, and none proposes a book.
+> One finding is a **stated tension** with `notes/2026-08-24-deflated-sharpe-ratio.md` rather than
+> an addition to it — see the 2026-09-15 open questions.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -2881,6 +2897,108 @@ caution it implies is *stronger* for holding under all of them, but the number i
 the survivorship bias", and should not be carried as one. A free screen that separates the causes is
 #105 below.
 
+### What a selected maximum is worth — post-selection estimation, and the dependence among candidates (cross-family)
+
+**[Added 2026-09-15.]** The lab selected an argmax on 2026-09-14 — 178 variants of the champion's
+own construction, a train dispersion of 0.079, `core_n = 10` as the best single cell, embargoed on
+three arguments from this repo's history — and this folder had **no note anywhere on what a selected
+maximum is worth.** A grep across all 97 prior notes returned zero for `post-selection`, `regression
+to the mean`, `James–Stein`, `argmax` and `reality check`, one apiece for `winner's curse`, `order
+statistic` and `empirical Bayes`, and none of those three is the subject of the note it sits in.
+The unit lesson holds and this is its **seventh** instance, found by the cheap detector 2026-09-13
+proposed (*after each nightly, take the one variable it measured that has no note here*): after
+families, clauses, operators, the pool and an attribute of the pool's members, the seventh unit is
+**the rule by which a result is selected out of a set of results.**
+
+**The gap was load-bearing, and the reason is a distinction this folder had blurred.** Everything
+here on the winner's curse — the deflated Sharpe, the multiple-testing haircut, the prior-weighted
+correction, the critical-`t` for multi-signal search — is about **testing**: given `N` candidates,
+is the best one significantly better than nothing? None of it is about **estimation**: given `N`
+candidates and a pick, what is that one *worth*? A repo whose gate compares a challenger's point
+estimate to an incumbent's point estimate asks the second question every night, and had no source
+on it.
+
+**The estimation answer, and it is sharper than "discount it".** Andrews–Kitagawa–McCloskey (QJE
+2024, Tier A, read in full,
+`notes/2026-09-15-inference-on-winners-post-selection-estimation.md`) prove that `X(θ̂)` for
+`θ̂ = argmax X(θ)` has positive **median** bias both conditional on which candidate won and
+unconditionally, for every true parameter vector — no independence assumption, no large-`N`
+requirement. Two structural facts govern the size: the bias grows with the number of candidates,
+and **it vanishes when one candidate is far clear of the field**, where their corrected procedure
+coincides exactly with the conventional one. The mechanism behind both is the conditioning event:
+the winner's estimate is a normal *truncated below at the runner-up*, so **the correction is
+governed by the winner-to-runner-up gap measured against the standard error of their difference**,
+and nothing else. That is computable here from two return series and the `sharpe_diff_se` the repo
+already runs in its holdout veto. The full conditional procedure (invert the truncated-normal CDF
+for a median-unbiased point estimate and an equal-tailed interval) needs only the candidate
+estimates and their covariance, both of which a specification curve produces as a by-product.
+
+**Two things this source settles that the lab has been arguing from instinct.** First, the
+`core_n = 10` embargo is **right for a reason the lab did not state**: a cell selected as the
+maximum of a curve is biased upward by construction, and the bias is largest exactly in the regime
+the curve is in — many candidates, small gaps. Second, the repo's three-split protocol *is* the
+sample-splitting alternative, and this is the first source here to price it honestly: selecting on
+train and scoring on validation **is valid**, and the costs are that the split-sample selection is
+noisier than a full-data selection would be and the estimate is noisier too. The split is not a
+substitute for the correction; it is a different, weaker version of it.
+
+**The ensemble answer, and its limit.** Efron (JASA 2011, Tier A, read in full,
+`notes/2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`) gives the empirical-Bayes
+route: `E{µ|z} = z + σ²·(d/dz) log f(z)`, where `f` is the *marginal* density of all the estimates —
+so the prior never has to be estimated, only the observed spread. At two degrees of freedom this
+collapses to the **James–Stein** shrink, one scalar computed from the ensemble's own dispersion.
+Efron's own framing of why selection bias exists is the best one-line version in this folder: the
+selected extremes are large both because their true values are large and because they were lucky,
+and **"the evanescence of the luck factor"** is the whole effect. Correlation among the estimates
+does not break the algorithm — it costs variance, not unbiasedness. What *does* break it is
+**relevance**: the correction is only as good as the claim that the other cases are exchangeable
+with the selected one, and Efron shows the estimate moving materially with the choice of relevance
+set. **So the estimator transfers to one specification curve and does not transfer to the
+leaderboard**, where 91 trials span eight families, two tracks and six weeks of deliberate design
+change. And Andrews et al. add the binding external caveat: empirical-Bayes corrections of this
+family reduce but do not eliminate the bias, because they amount to a normal prior on the true
+effects and are right only when that prior is. The `J = 2` James–Stein form is *exactly* the case
+whose implicit prior is normal, so it is exactly the case that inherits the limitation.
+
+**The testing answer, and the tension it opens with a note already in this file — stated, not
+smoothed.** White (Econometrica 2000, Tier A, read in full) and Sullivan–Timmermann–White (JF 1999,
+Tier A, read in full), `notes/2026-09-15-reality-check-max-statistic-under-dependence.md`, test
+`H₀: max_k E[f*_k] ≤ 0` by bootstrapping the max statistic with the candidates' **joint**
+dependence preserved (same resampling indexes across all candidates; recentered by each candidate's
+own mean to impose the null). The recipe is incremental, stores two scalars per candidate rather
+than an `n × l` matrix, and is reproducible from a seed — which makes it unusually well suited to a
+lab that accumulates candidates over months. **But the finding that matters most here is White's
+observation about how the corrected p-value evolves**: it drops when a new best appears and
+otherwise creeps up only gradually, staying *flat* for stretches "due to the relatively high
+correlation among the forecasts", so that "consideration of even a large number of models need not
+lead to dramatic erosion of the Reality Check p-value."
+
+**That is in tension with how this repo deflates, and the tension is resolvable by measurement.**
+`notes/2026-08-24-deflated-sharpe-ratio.md` carries a winner's-curse haircut derived for `N`
+**independent** trials, and `run_experiment.py` takes `N` to be the raw count in `trials.jsonl`.
+White says a correlated search erodes far more slowly than a count-based penalty implies. The two
+agree on the direction and disagree on the **scale**, and Sullivan–Timmermann–White supply the
+instrument that decides it: the **scree diagnostic** — form the covariance matrix of the candidates'
+return series, read the eigenvalue decay, and the number of components above a threshold is the
+**effective number of independent candidates**, which is the `N` the closed form actually wants.
+Pending that measurement the honest statement is that this repo's deflated-Sharpe bar is
+**conservative in the count and optimistic in the universe**: too many effective trials assumed from
+its own correlated history, too few assumed from the published literature its hypotheses come from.
+That second half is Sullivan–Timmermann–White's other point, and it is uncomfortable and specific —
+the correction must span the universe the winner was plausibly drawn from, *including candidates
+nobody here ran because the literature had already filtered them*. Almost every mechanism this lab
+tests arrives from this file. The repo's multiple-testing correction is therefore a **lower bound**,
+which is not a reason to stop and is a reason never to treat a marginal deflated-Sharpe pass as
+decisive. It is also the clearest statement yet that this and
+`notes/2026-08-17-mclean-pontiff-publication-decay.md` are one problem seen from two ends.
+
+**Free diagnostics this section produces, all on data the lab already has.** White's
+**naive-versus-corrected p-value gap** is a direct estimate of the data-mining bias, with his own
+ordering rule to save the work (if the naive p-value is already large, stop — the corrected one can
+only be larger). The **scree** is the effective-`N` measurement above. The **winner-to-runner-up
+gap over the paired SE** is the first-order read on how much of any argmax is selection. None of
+the three scores a return, writes a candidate, or touches the holdout. See #108–#110.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -5615,6 +5733,82 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`,
     `notes/2026-09-06-number-of-portfolios-as-tuning-parameter.md`
 
+108. **[Added 2026-09-15] Measure the effective number of independent trials in this repo's
+    history — it can fail, it is free, and it sits under every gate the lab runs.** The deflated-
+    Sharpe bar takes `N` to be the raw count in `trials.jsonl`; the closed form it comes from was
+    derived for `N` **independent** trials; and White shows that with correlated candidates the
+    correctly-computed p-value erodes far more slowly than a count implies, staying flat for
+    stretches. **The measurement**, from Sullivan–Timmermann–White: take the stored return series
+    of the recorded trials, form their covariance matrix, take its eigenvalues, and count how many
+    stand above a threshold fixed **before looking** (they use a fixed small absolute cut and read
+    the scree; pre-commit the cut and the normalisation in the journal first, because both are
+    knobs and this file's own non-standard-error result says knobs carry dispersion). **Both
+    answers are findings and they point opposite ways**: fast decay ⇒ this repo has run far fewer
+    independent experiments than its counter says, its exploration is narrower than it believes,
+    and the deflator is over-penalising honest breadth; slow decay ⇒ the raw count is defensible
+    and the trial-count discipline stands as written. The second reading is the one that would
+    please the lab least and is therefore worth pre-committing to. Two riders. **(i) This is a
+    measurement, not a licence**: nothing here authorises reinterpreting the deflator, which lives
+    in frozen `engine/` and is a human's to change — the output is a number for the journal and, if
+    it is stark, an `## Engine issue` write-up. **(ii) The universe cuts the other way and must be
+    said in the same breath**: Sullivan–Timmermann–White insist the correction span the universe
+    the winner was plausibly drawn from, including candidates nobody here ran because the
+    literature pre-filtered them — and nearly every mechanism this lab tests arrives from this
+    file. So the repo's correction is conservative in its own count *and* a lower bound overall,
+    and a low effective-`N` reading is not a reason to relax anything. Free; no trial; train-split
+    series only. Tier A.
+    → `notes/2026-09-15-reality-check-max-statistic-under-dependence.md`,
+    `notes/2026-08-24-deflated-sharpe-ratio.md`,
+    `notes/2026-08-17-mclean-pontiff-publication-decay.md`
+
+109. **[Added 2026-09-15] A standing convention, plus one cheap number: every maximum this lab
+    selects gets discounted by its winner-to-runner-up gap, and the discount is computable.**
+    Andrews–Kitagawa–McCloskey prove that the argmax of a set of noisy estimates is median-biased
+    upward conditional on the selection *and* unconditionally, with no independence assumption; and
+    that the bias vanishes when one candidate is far clear of the field, where the corrected
+    procedure coincides with the conventional one. The mechanism is that the winner's estimate is a
+    normal truncated below at the runner-up, so the whole correction is carried by
+    **(winner − runner-up) / SE(difference)** — and this repo already computes that denominator
+    (`metrics.sharpe_diff_se`, Memmel's correction, used by the holdout veto). **Adopt as a rule
+    rather than running it**: any time a number is reported because it was the best of a set —
+    the best cell of a specification curve, the best of a session's candidates, a promotion margin
+    — print the runner-up and the paired SE beside it, and read the margin against that gap. **The
+    one number worth computing now**, while the 2026-09-14 curve is still reproducible: the gap
+    between its best cell and its second-best, over their paired SE. If that ratio is small — and
+    on 178 nearly collinear variants it will be — it is the quantitative form of the embargo the
+    lab imposed on judgement alone. **Two boundaries, both real.** The correction conditions on the
+    selection being an argmax; this repo's house defaults are *not* argmaxes (the 2026-09-14 curve
+    put the default at its 67th percentile, which is the evidence), so they must not be discounted
+    as if they were. And the full conditional estimator assumes normal estimates, which Sharpe
+    ratios are not in small samples — use it for the ordering and the magnitude, not as an exact
+    interval. Free; no trial; no holdout. Tier A.
+    → `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`,
+    `notes/2026-08-24-testing-differences-of-sharpe-ratios.md`,
+    `notes/2026-08-23-statistics-of-sharpe-ratios.md`
+
+110. **[Added 2026-09-15] Decompose the 0.079 non-standard error into luck and construction with a
+    one-line James–Stein shrink — and, attached to it, an anti-candidate: do not shrink the
+    leaderboard.** Efron's Tweedie correction at two degrees of freedom is a single scalar computed
+    from an ensemble's own dispersion, `µ̂ = (1 − (N−2)/Σz²)·z`, and applying it to the 2026-09-14
+    curve's 178 train Sharpes costs one line. The interesting output is **not the shrunk argmax but
+    the shrink factor**, which says what fraction of the curve's spread the ensemble itself attributes
+    to noise rather than to real differences between constructions — a decomposition of the NSE the
+    lab has no other route to, and one that bears directly on how the 0.079 should be read against
+    promotion margins. Two conditions on doing it honestly: apply the same operator to both sides of
+    any comparison (a shrunk challenger against an unshrunk incumbent is worse than shrinking
+    nothing), and state that the `J = 2` form carries an implicit normal prior, which
+    Andrews–Kitagawa–McCloskey show is exactly the assumption under which this family of correction
+    is valid. **The anti-candidate is the more important half.** The same machinery applied across
+    `trials.jsonl` is *not* legitimate: Efron's relevance section is precisely about which other
+    cases may be treated as exchangeable with the selected one, and he shows the estimate moving
+    materially with that choice. Ninety-one trials spanning eight families, two tracks and six weeks
+    of deliberate design change are not an exchangeable ensemble, and shrinking a
+    `statistical-learning` result toward a pool dominated by `price-trend` variants is a modelling
+    assertion dressed as a correction. **If a future session ever proposes it, the relevance set has
+    to be argued in the journal first.** Free; no trial; no holdout. Tier A.
+    → `notes/2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`,
+    `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -5651,8 +5845,129 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-11 (session 29) | **Aimed by the checklist 2026-09-10 wrote for exactly this situation, and it worked on the first try.** That entry's rule — *for every operator the lab applies to a score (demean, rank, winsorize, standardize, neutralize, blend, band), is there a note on what that operator assumes?* — named **cross-sectional standardization and winsorization** as the two with no note, and a grep across all 88 prior notes confirmed it: `standardi` in 12 notes, `winsoriz` in six, subject of none. This is the second consecutive session where a coverage gap was found by checking a *finer unit* than the previous session used (families → clauses → operators), and the first where the unit was supplied in advance rather than discovered after the fact. The gap was load-bearing: the champion family is named `mom_zscore_*`, the equal → rank → **z-score-magnitude** ladder is the largest within-basket lever `learnings.md` records, and a `_daily_trim` trial sits in the history with no rationale for which side it trimmed. Three sources, all Tier A; **two read in full, one recorded from its published abstract only and flagged throughout**. The shape is *one construction, one correction, one magnitude* — and the correction is mostly a **narrowing**: a rank is invariant to any monotone transform, so winsorizing before ranking changes nothing, and the lab's entire exposure to this literature is three places (magnitude weighting, fitted models, and any per-period mean read as evidence). New cross-family section; candidates #98–#100, **two of them free and the third gated behind a free hand-set-`θ` control**. #98 is the first construction shape proposed here that ranks nothing and holds no band. **Access and index behaviour**: NBER served the BSV working paper first try, complete and text-extractable — the channel this folder has now recorded as its most reliable, three sessions running. A personal academic page served the Leone et al. working draft, **checked against the published abstract via OpenAlex** (every claim relied on appears there; the published version adds a replication emphasis the draft's abstract lacks). Knez–Ready is **genuinely closed**: Unpaywall reports `is_oa: false` with **zero** OA locations, OpenAlex `oa_status: closed` with `any_repository_has_fulltext: false` and only two locations (the Wiley DOI and a JSTOR SICI), and CORE returned a Cloudflare redirect shell. Recorded abstract-only rather than guessed at — the robust estimator's specification is deliberately left blank in the note. **A third instance of the two-DOI registration pattern** first recorded for Breiman on 2026-09-08: Knez–Ready is registered both as `10.1111/j.1540-6261.1997.tb01113.x` (S2 274, OpenAlex 287, Crossref 131) and as `10.2307/2329439` (S2 **not found**, OpenAlex 69, Crossref 35) — a single lookup against the JSTOR DOI understates it by roughly 4×, and S2's miss on that DOI is the same Wiley/JSTOR finance-DOI pattern sessions 11–15 record. Counter-instance worth recording too: **BSV's three counts agree within ~15%** (OpenAlex 492, S2 434, Crossref 415), which is unusual enough in this folder to note. | Brandt–Santa-Clara–Valkanov 2009 (RFS), read in full as NBER WP 10996 (`2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`); Leone–Minutti-Meza–Wasley 2019 (The Accounting Review), the August 2013 working draft read in full and checked against the published abstract (`2026-09-11-influential-observations-winsorization-versus-robust-regression.md`); Knez–Ready 1997 (JF), **not read — published abstract only, flagged in-note** (`2026-09-11-trimming-and-the-size-premium.md`) |
 | 2026-09-12 (session 30) | **The second consecutive session aimed by the 2026-09-10 operator checklist, and it takes the last two names on it — plus the node underneath them that the checklist did not list.** 2026-09-11 named `rank` and `neutralize` as the survivors; a grep across all 91 prior notes confirmed both (`rank` in 70 notes, subject of none; `orthogonaliz`, `mimicking portfolio`, `pure play` at **zero** each) and turned up a third with the same zero reading — the **pool** (`complete case`, `unbalanced panel`, `missing data`, `imputation`, all zero), which is the operator every trial here runs and none has measured. Three notes, six sources; **full text read directly for four** (Blitz–Huij–Martens's accepted manuscript from the Erasmus repository; Bryzgalova et al.'s accepted version from the LBS repository; Wobbrock et al.'s CHI paper; Headrick–Sawilowsky's ERIC document), **two recorded from abstracts only** (Conover–Iman, closed at Taylor & Francis with no open copy resolved; the 2020 idiosyncratic-momentum companion, closed at Elsevier). The shape is *two narrowings and one new mechanism*: `rank` and `neutralize` behave as 2026-09-11 predicted — they mostly tell the lab which proposals are identities and which statistic a past screen used — while the pool rule is a genuine uncovered mechanism with a two-channel cost and a free test that can fail. Candidates #101–#104; #101 is an anti-candidate with a proof rather than a measurement. | Conover–Iman 1981 + Wobbrock et al. 2011 + Headrick–Sawilowsky 2000 + Sawilowsky–Blair–Higgins 1989 (`2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`); Blitz–Huij–Martens 2011 + Blitz–Hanauer–Vidojevic 2020 (`2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`); Bryzgalova–Lerner–Lettau–Pelger 2025 (`2026-09-12-missing-data-and-complete-case-pools.md`) |
 | 2026-09-13 (session 31) | **The first session in three aimed by a gap, and the gap was named by the lab's own overnight number rather than by a checklist.** The 2026-09-12 nightly spent zero trials, closed four standing items for free, and produced one result it filed as an anti-candidate: removing names with less than five years of price history costs the momentum leg, placebo clean. A grep across all 94 prior notes for `firm age`, `listing age`, `new list`, `age effect` and `IPO` returned **zero on every one** — the variable the lab had just measured had no literature behind it anywhere in this folder. The unit lesson holds and is the fifth instance: after families, clauses, operators and the pool, the sixth unit is **an attribute of the pool's members**. Three sources, all Tier-1 venues, all pre-2018 samples; **two read in full** (Zhang's typeset JF article from a university course reading-list directory; Ritter's JF article rendered page-by-page with `pymupdf` because it is a text-layerless scan), one read in full as the published JF article from the lead author's own university page after the NBER working-paper PDF turned out to be a scan, and **one recorded abstract-only and flagged throughout** (Barry–Brown, closed at Elsevier with the abstract elided by the publisher in Semantic Scholar, recovered verbatim from an institutional research portal). The shape is *one mechanism, one discount, one anti-candidate*: continuation is conditioned by how fast information reaches a name and the only measurable proxy here is history length; momentum is weakest at the top of the size distribution, which is the whole of this universe; and the *level* sign of a listing-age tilt is contested between two Tier-A sources, so the tilt is an anti-candidate while the conditioning is not. The night's most useful output is negative in the same way last night's was: the lab's own number is consistent with three mechanisms and identifies none, so it should stop being reported as the size of the survivorship bias. | Zhang 2006 (JF) (`2026-09-13-information-uncertainty-and-price-continuation.md`); Hong–Lim–Stein 2000 (JF) (`2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`); Ritter 1991 (JF) + Barry–Brown 1984 (JFE, not read) (`2026-09-13-listing-age-as-a-level-effect.md`) |
+| 2026-09-15 (session 32) | **Aimed by the detector 2026-09-13 wrote, on its first use, and it found a gap under the lab's single biggest overnight number.** The 2026-09-14 nightly spent one trial, discharged `range-variance` and `program.md`'s cold-family rule after fourteen sessions, and ran this file's #92 to produce the result of the week: the champion's construction non-standard error is **0.079**, five of six recorded promotion steps sit inside it, 69% of the dispersion sits on `core_n`, and the best cell `core_n = 10` was **embargoed on three arguments from the repo's own history**. The detector — *after each nightly, take the one variable it measured that has no note here, and check* — pointed at the selection rule itself. A grep across all 97 prior notes returned **zero** for `post-selection`, `regression to the mean`, `James–Stein`, `argmax`, `reality check` and `active share`, and one apiece for `winner's curse`, `order statistic` and `empirical Bayes` — none of the three the subject of the note it sits in. **Seventh instance of the unit lesson**: after families, clauses, operators, the pool and an attribute of the pool's members, the seventh unit is **the rule by which a result is selected out of a set of results**. The load-bearing distinction the folder had blurred: all nine of its multiple-testing notes are about **testing** (is the best significant?), none about **estimation** (what is the best *worth*?) — and the repo's gate compares point estimates every night. Three notes, five sources, **full text read directly for all four Tier-A primaries**. The shape is *three corrections for one object*: condition on the selection (assumption-free, needs the covariance), shrink toward the ensemble (needs exchangeability, carries a normal prior), or bootstrap the max with dependence preserved (tests rather than estimates). Two outputs are the session's point. **(a) The `core_n` embargo is right for a reason the lab did not state** — a truncated-normal argument makes the winner's estimate a normal truncated below at the runner-up, so the bias is largest exactly in the many-candidates/small-gaps regime the curve is in, and the discount is computable from `sharpe_diff_se`, which the repo already runs. **(b) A stated tension with `2026-08-24-deflated-sharpe-ratio.md`**: that note's haircut assumes `N` independent trials and the engine deflates by the raw count, while White finds a correlated search erodes the corrected p-value far more slowly — resolvable by measurement (#108's scree), and pending it the bar is **conservative in the count and optimistic in the universe**. Candidates #108–#110: one that can fail, one convention, one decomposition with an anti-candidate attached; all three free, none proposing a book. **Access and index behaviour**: two hosts died at the **transport layer** with `http=000` and no HTTP status — `efron.ckirby.su.domains` (the author's own page; the agent proxy reported `ws_closed_mid_exchange`) and `cdr.lib.unc.edu` including its repository DOI, five attempts across two URL forms. That is a **fourth distinct refusal mode** for this folder, after the Cloudflare 403 challenge, OpenAlex's metered budget and `pm-research.com`'s OpenID redirect, and it is host-specific: NBER, Stanford `stacks`, two instructors' teaching directories, Crossref and arXiv all answered in the same session. Efron was recovered instantly from the **Stanford `stacks` mirror of the same technical report** — generalise it. Hansen 2005 is **not read** and recorded as a pointer with **nothing relied on**; a later session wanting the SPA refinement must read it. Index behaviour: **Semantic Scholar returns *not found* for Andrews–Kitagawa–McCloskey on both its QJE DOI and its NBER DOI**, and OpenAlex's record is merged with the 2019 working paper and returns 6 against Crossref's 30 — so the tier rests on venue and documented downstream use, per the README's own instruction not to downgrade on an index miss. Counterpoint worth recording: the other four DOIs agreed across all three registries to within the usual spread. | Andrews–Kitagawa–McCloskey 2024 (QJE; NBER WP 25456 revised Sept 2021 read in full) (`2026-09-15-inference-on-winners-post-selection-estimation.md`); Efron 2011 (JASA; Stanford Biostatistics TR 256 read in full via `stacks.stanford.edu` after the author's own page died at the transport layer) (`2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`); White 2000 (Econometrica, typeset article read in full from a university course directory) + Sullivan–Timmermann–White 1999 (JF, read in full from a teaching directory) + Hansen 2005 (JBES, **not read**, pointer only) (`2026-09-15-reality-check-max-statistic-under-dependence.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-15] Read this first: the 2026-09-14 nightly ran, spent one trial, and spent this
+  file's #1 — so the standing list turned over at the top for the first time in six sessions.**
+  **#92 is done**, and its answer is the largest single number this folder has ever caused: the
+  champion's construction NSE is **0.079**, five of six recorded promotion steps are inside it,
+  69% of it sits on `core_n`, and `band_mult` is a measured zero — which closes this file's own
+  standing open question about the K=6 band's marginal value. `range-variance` was scored and
+  `program.md`'s cold-family rule is **discharged**. Still unrun and carried unchanged: **#89
+  (now the folder's highest-ranked unrun item, seventh session), #82 (seventh session), #94 as a
+  standing discipline, #49 (seventeenth session)**, and from 2026-09-13: **#105, #106, #107**.
+- **[2026-09-15] What should aim the next session, in order.**
+  - **#108 first, because it is the only item on this list that can fail and it sits under every
+    gate the lab runs.** It is a covariance and an eigendecomposition of series already stored, it
+    needs no new machinery, and both answers are findings that point opposite ways. Pre-commit the
+    threshold and the normalisation in the journal before looking — they are knobs, and this file's
+    own NSE result is what says knobs carry dispersion. Read its two riders as part of the item,
+    not as caveats: the deflator is frozen engine code and a stark reading is an `## Engine issue`
+    write-up, not a reinterpretation; and the universe argument cuts the other way, so a low
+    effective-`N` never licenses relaxing anything.
+  - **Then #109 and #110, which cost almost nothing and both attach to the curve the lab just
+    built.** #109 is a convention plus one ratio (best cell minus second-best, over their paired
+    SE) that puts a number on an embargo currently resting on judgement; #110 is one line that
+    splits the 0.079 into luck and construction. Adopt #109 rather than running it; run #110's
+    shrink and **not** its anti-candidate.
+  - **Then the lab's own #3 from 2026-09-14** — the same specification curve applied to the seated
+    `liquidity-volume` lead, to find out whether the 69%-on-one-node shape is a property of
+    `price-trend` or of this lab's construction style. It is free, train-only, same harness, and
+    `CLAUDE.md`'s scope rule requires the constant be re-measured rather than carried. **#109 and
+    #110 should be computed on that second curve too if it is built** — the whole point of a second
+    curve is a comparison, and a discount applied to one argmax and not the other is worse than
+    neither.
+  - **Then the lab's own remaining two, in its order: #89, #82.**
+- **[2026-09-15] The single most transferable output, and it is a correction to this folder's own
+  vocabulary.** For nine notes this file has treated "the winner's curse" as one thing. It is two.
+  **Testing** asks whether the best of `N` is significantly better than nothing, and is what the
+  deflated Sharpe, the multiple-testing haircut and the critical-`t` all do. **Estimation** asks
+  what the best of `N` is *worth*, and nothing here did it. The distinction is not academic for
+  this repo: its promotion rule compares a challenger's **point estimate** to an incumbent's, which
+  is the second question, and its whole apparatus answers the first. The general form to carry:
+  **a correction that establishes a maximum is not noise says nothing about how much of that
+  maximum is real.** It is the same shape as the 2026-09-13 lesson about placebo controls — a clean
+  control establishes existence, not magnitude and not cause — and the two should be read together.
+- **[2026-09-15] A tension with a note in this folder, recorded as the README requires rather than
+  resolved.** `2026-08-24-deflated-sharpe-ratio.md` carries a winner's-curse haircut derived for
+  `N` **independent** trials; `run_experiment.py` deflates by the raw count. White finds that a
+  search over *correlated* candidates erodes the correctly-computed p-value far more slowly than a
+  count implies — flat for stretches. Direction agreed, **scale disputed**, and #108 is the
+  measurement that settles it rather than another argument. Until it is run, the honest statement
+  is the two-sided one: the bar is **conservative in the count** (this repo's own trials are highly
+  correlated) and **optimistic in the universe** (nearly every hypothesis it tests arrives from a
+  literature that published its winners, and Sullivan–Timmermann–White insist the correction span
+  *that* universe). Neither half is a reason to relax a gate; together they say a marginal
+  deflated-Sharpe pass is not decisive evidence in either direction.
+- **[2026-09-15] The detector works, and this is its first use — but the honest accounting includes
+  what it does not do.** 2026-09-13 proposed *after each nightly, take the one variable it measured
+  that has no note here, and check*. Applied once, it found a genuine zero-coverage gap under the
+  lab's biggest number, on the first try, in about ten minutes of grepping. **Keep it.** What it
+  does not do is supply ideas: all three of tonight's candidates are free diagnostics and none
+  proposes a book, which is the seventh consecutive session with that shape. The 2026-09-08 warning
+  that **the bottleneck is not idea supply** holds, and a session that finds no gap by this detector
+  should not go breadth-hunting — it should take the lab's own next-idea list, which on 2026-09-14
+  supplied a good item (the second specification curve) with no help from this file.
+- **[2026-09-15] The embargo boundary, and it was live in all three notes.** Two of the three
+  primaries carry empirical illustrations on US equity index data, and **no performance figure from
+  any of them is recorded** — not White's naive-versus-corrected p-values, not
+  Sullivan–Timmermann–White's rule returns, not their subperiod tables, not Ritter-style cohort
+  narrative. What is recorded is the *direction and possibility* of a reversal (a naive p-value
+  small enough to look decisive while the corrected one is not significant at all), which is a
+  qualitative robustness statement of the kind the README permits. Andrews–Kitagawa–McCloskey and
+  Efron contain **no market data at all**, so the only flag that fires anywhere tonight is
+  `published_post_2018: true` on the QJE article — whose sample is a 2007 charitable-giving trial
+  and US census-tract mobility estimates, nothing this lab could overfit to. All three notes are
+  `validation_overlap: false`.
+- **[2026-09-15] Access and index behaviour: a fourth refusal mode, one channel inversion, and an
+  index miss on a top-five journal.**
+  - **`http=000` with no HTTP status is a fourth distinct refusal mode** and belongs on the
+    README's list beside the Cloudflare 403 challenge, OpenAlex's metered budget and
+    `pm-research.com`'s OpenID redirect. Two hosts did it tonight — `efron.ckirby.su.domains`
+    (three attempts; the agent proxy named it `ws_closed_mid_exchange`, a tunnel that closed
+    mid-exchange) and `cdr.lib.unc.edu` including its repository DOI `10.17615/wehz-da64` (five
+    attempts, two URL forms). **It is a dead tunnel, not a paywall and not an egress block**, and
+    it must not be reported as either: the same session reached NBER, Stanford `stacks`, two
+    instructors' teaching directories, Crossref, Semantic Scholar and arXiv without incident.
+  - **The channel inversion, and it is the useful half**: when an author's own page dies without a
+    status, look for the **institutional repository's copy of the same technical report**.
+    `stacks.stanford.edu` served Efron's Biostatistics TR 256 — the working-paper version of the
+    JASA article, complete and text-extractable — on the first try.
+  - **University *teaching* directories are now this folder's second-most reliable channel**, at
+    five for five. An instructor's course reading list served the typeset *Econometrica* article
+    and another served the *Journal of Finance* article, both of which are closed at their
+    publishers. Worth trying before a preprint mirror for a canonical pre-2005 methods paper.
+  - **Semantic Scholar returns *not found* for a QJE article on both of its DOIs** — the journal
+    DOI and `10.3386/w25456` — while Crossref answers the journal DOI with 30 and OpenAlex merges
+    the record into the 2019 working paper and returns **6**. Neither number is usable for a paper
+    whose results already carry three named follow-up papers by its own authors. Per the README's
+    rubric, the tier was set on **venue and replication/downstream use, not on the count**, and the
+    discrepancy is recorded in the note's frontmatter rather than hidden behind a single figure.
+    This is a **tenth** instance of "disbelieve a lone count" and the fourth consecutive session in
+    which the missing index is Semantic Scholar on a tier-1 DOI.
+  - **Counter-instance, recorded because it is rarer than the failures**: the other four DOIs
+    (Efron, White, Sullivan–Timmermann–White, Hansen) resolved in all three registries with the
+    usual Crossref-low spread and no contradictions.
+  - **`pypdf`'s `fontTools` warning is noise, not a failure.** Three of tonight's PDFs emitted
+    "fontTools is required to fully parse the encoding of a CFF Type1 font" on every page and
+    extracted cleanly regardless. Do not treat it as a signal to switch to page rendering — check
+    `len(text)` instead. (Separately: a `/GNN` glyph-index encoding is **not** the `/xHH` escape the
+    README's decoder handles, and a file full of `/G37/G28/…` needs rendering or a different
+    channel, not the regex.)
+- **[2026-09-15] Protocol note, eighth session running and now with a worked instance: the
+  session-start hook printed "integrity check OK — on main, level with origin/main, no stray
+  branches" while `git status -sb` showed the session on `claude/tender-galileo-n1cj2v`.** As on
+  2026-09-06 through -14, this is the **benign** form — the branch tip was bit-identical to
+  `origin/main` (`a99cfce`, zero ahead, zero behind) — and the session moved to `main` before any
+  work, per step 0 of the standing prompt. Recorded again precisely because it is benign: **the
+  hook's "on main" clause is false while its "level with origin/main" clause is true**, so a
+  session that trusted the first clause would commit to a per-run branch with no warning. Note also
+  that this session's own harness instructions named that per-run branch as its development target,
+  while `research/README.md` step 6 and the standing prompt's step 0 both require `main` — the
+  repo's own rules governed and the work is on `main`. **Flagged for the human for the seventh
+  time.**
 
 - **[2026-09-13] Read this first: the 2026-09-12 nightly ran, spent zero trials, and closed four
   of the five items this file had ranked — so the standing list is nearly spent again, and what it
