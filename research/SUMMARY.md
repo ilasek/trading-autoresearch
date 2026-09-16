@@ -2999,6 +2999,80 @@ only be larger). The **scree** is the effective-`N` measurement above. The **win
 gap over the paired SE** is the first-order read on how much of any argmax is selection. None of
 the three scores a return, writes a candidate, or touches the holdout. See #108–#110.
 
+### What a count of correlated trials is worth — and what a plug-in effective count does not buy (cross-family)
+
+**[Added 2026-09-16, and this section exists because the lab produced a number last night that this
+folder had no literature for.]** The 2026-09-15 nightly measured a participation ratio of **1.56** on
+90 stored trial-return series against the engine's clustered count of **24**, and asked a human to
+rule on the threshold behind the gap. The question *"given `m` correlated tests, how many independent
+tests is that worth, and may I substitute the answer into a formula derived for independent tests?"*
+has been asked and answered in another field for twenty-five years. Its vocabulary is **`M_eff`, the
+effective number of independent tests**, and the answer is not the reassuring one.
+
+**Finding 1 — the lab's 1.56 belongs to a named estimator family, and the family disagrees with
+itself.** Cheverud (2001) proposed correcting correlated tests as if there were `M_eff` independent
+ones; Nyholt (2004) restated it; Li–Ji (2005), Gao et al. (2008) and Galwey (2009) each proposed a
+different functional of the same eigenvalue spectrum. All five are peer-reviewed, three are cited
+1,400–1,800 times, and the family has been re-evaluated repeatedly by independent groups. The
+participation ratio `(Σλ)²/Σλ²` the lab computed is a sixth member of the same species — Galwey's is
+`(Σ√λ)²/Σλ`, an algebraic sibling. **They coincide at the two anchors (all tests independent, all
+tests identical) and differ everywhere between**, and the middle is where every real correlation
+matrix lives. Li–Ji's own analytic result is the one to carry: for `m` tests that are `c` exact
+copies of `m/c` independent ones, Cheverud's formula returns `m + 1 − c` against a truth of `m/c`, an
+over-statement by a factor `c(m+1−c)/m` that is large exactly in the regime of **many moderately
+correlated tests** — which is the regime a six-week trial history occupies. Tier A, no overlap.
+→ `notes/2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`
+
+**Finding 2 — and it is the load-bearing one — no member of that family is known to control any
+error rate, and the reason is definitional before it is empirical.** `M_eff` is *defined* by
+inverting Šidák, `M_eff = log(1−α)/log(1−α_loc)`: it is a function of **the target familywise error
+rate and the per-test cut-off**, not of a correlation matrix. The eigenvalue estimators "are not
+related to the statistical test used" — nothing in their derivations mentions an error rate, so
+nothing in them can control one. Halle–Djurovic–Andreassen–Langaas compare all five head to head
+against exactly-computed error rates on compound-symmetry, AR(1) and tridiagonal structures and
+conclude flatly that the methods **"in general do not control the familywise error rate"**: no
+estimator was safe across all three structures, the conservative ones were conservative by a factor
+of three, and summing per-block estimates broke the one estimator that was otherwise safe. Two
+earlier peer-reviewed sources say the same independently — Salyakina et al. found a nominal 5%
+procedure realising anywhere from under 3% to over 7% and concluded it "is not an adequate
+substitute for permutation tests"; Moskvina–Schmidt showed the effective count depends **nonlinearly
+on the per-test significance level**, a dependence no plug-in accounts for. Tier B (the head-to-head
+table is from an uncited preprint; the conclusion is carried by two peer-reviewed sources).
+→ `notes/2026-09-16-does-meff-control-the-familywise-error-rate.md`
+
+**Finding 3 — finance has its own plug-in, it is the closest published relative of the engine's
+clustering step, and it is the least-validated of the three.** López de Prado–Lewis's **ONC**
+estimates `E[K]` by clustering the trials themselves: correlation → proper metric `√(½(1−ρ))` →
+Euclidean distance-of-distances → k-means swept over `k = 2…N−1` and over initialisations, scored by
+the **t-statistic of the silhouette** rather than its mean, then one recursive re-clustering of the
+below-average clusters. Its argument against a constant average correlation is the right one and
+applies verbatim to a constant threshold: a trial family is hierarchical — variants of one idea
+correlate tightly, different ideas loosely — and neither a single average nor a single cutoff
+represents that. But its entire validation is **Monte Carlo on synthetic block correlation matrices
+with planted `K`**; there is no market data in the paper, no permutation benchmark, no realised error
+rate, and no independent replication at 26 citations. It also supplies something the lab may be
+missing: the DSR needs `V[{SR_k}]` computed **across cluster-level series** (minimum-variance
+aggregates, annualised, rescaled to the candidate's own frequency), not across raw trial Sharpes.
+Tier B, `published_post_2018: true` (no sample, so the flag is metadata only).
+→ `notes/2026-09-16-clustering-trials-onc-effective-number-of-trials.md`
+
+**What the three say together, and it is a correction to how last night's number should be read.**
+The 2026-09-15 arithmetic — a smaller `N` lowers `expected_max_sharpe`, so counting 24 where the
+structure says 1.6 means the engine **over**-deflates — is not contested. What this literature adds
+is that **its premise fails**: the structural number is not the `N` the formula wants, because the
+effective count at a deep tail cut-off is larger than the one implied by bulk correlation
+(Moskvina–Schmidt), and because a spectrum functional has no argument for the error rate at all
+(Halle et al.). So the 24-versus-1.6 gap **overstates** the over-deflation, in the conservative
+direction. That is a **second and independent** reason — alongside the Sullivan–Timmermann–White
+universe argument already recorded — why a low effective-`N` reading is not a licence to relax
+anything. Two arguments, different mechanisms, same direction.
+
+**And the one that costs the lab nothing to act on.** The computational case for `M_eff` is a
+three-orders-of-magnitude speed-up over permutation on hundreds of thousands of tests. **This repo has
+ninety.** The route that does carry a guarantee — max-statistic resampling, already in this folder as
+White's Reality Check — is affordable here. The shortcut's whole justification does not apply at this
+scale. See #111–#113.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -5809,6 +5883,63 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`,
     `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`
 
+111. **[Added 2026-09-16] The effective-count spread, with a null control on every estimator — and
+    the anti-candidate that must be pre-committed with it: nothing gets selected from the table.**
+    The lab now holds two numbers for the same quantity (the engine's single-linkage count at
+    `ρ ≥ 0.95`, and the participation ratio) and the literature supplies four more functionals of the
+    same spectrum: Cheverud/Nyholt `m(1 − (m−1)Var(λ)/m²)`, Li–Ji `Σ f(|λ|)` with
+    `f(x) = I(x≥1) + frac(x)`, Gao `min k : (1/m)Σ_{i≤k} λ_i ≥ 0.995`, Galwey `(Σ√λ)²/Σλ`. One
+    `eigvalsh` call on the stored validation-return correlation matrix produces all of them. **Run
+    each one twice — on the real matrix and on `m` i.i.d. series of the same length** — because the
+    estimators are functionals of an *estimated* spectrum and Marchenko–Pastur dispersion alone
+    inflates them; Li–Ji is the most exposed, counting every `λ ≥ 1` as a full independent test when
+    noise pushes roughly half the spectrum above 1. The lab has already met this failure mode from
+    the other side and has the control built: its pre-registered rule disqualified Kaiser for
+    returning 44 on 90 independent series. **The output is the spread, not a number.** That spread is
+    the honest error bar on any sentence of the form "this repo has run `K` independent trials", and
+    the anti-candidate is the half that matters: **pre-commit in the journal that no estimator will
+    be adopted after the table is seen.** Picking the member that gives the most convenient `K` is
+    the specification search this repo measures elsewhere, run on its own gate. Free; no trial; no
+    holdout; nothing frozen touched. Tier A for the estimators, Tier B for the verdict on them.
+    → `notes/2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`,
+    `notes/2026-09-16-does-meff-control-the-familywise-error-rate.md`
+
+112. **[Added 2026-09-16] ONC as the like-for-like control on the engine's threshold rule, run on the
+    one-factor null the lab already built — and it can close the clustering route entirely.** The
+    engine counts trials by single-linkage clustering at a fixed `ρ ≥ 0.95`; ONC is the published
+    alternative that chooses its own `k` by an objective (silhouette t-statistic) instead of by a
+    threshold, on a distance-of-distances rather than on the correlation itself. The 2026-09-15
+    nightly already generated the decisive test material: **single linkage reads 90 clusters on a
+    one-factor null at pairwise 0.80.** Run ONC on that same null and on the real matrix. **Both
+    answers are findings and one of them is a closure**: if ONC also reads ~`N` on the null, the
+    clustering family is no better than the threshold and the lab can stop looking there; if it reads
+    near 1, the threshold's failure is specific and fixable. Preconditions, because k-means is
+    stochastic by design: fix the seed and report `n_init`, cluster on `D̃_ij = √(Σ_k (D_ik − D_jk)²)`
+    with `D_ij = √(½(1−ρ_ij))` and not on `D`, and rewrite rather than copy the paper's Python-2
+    snippets. **A fourth estimate does not resolve the spread in #111 — it widens it**, and the value
+    here is the null control, not the count. Free; no trial; no holdout. Tier B (synthetic validation
+    only; no published test of its error control).
+    → `notes/2026-09-16-clustering-trials-onc-effective-number-of-trials.md`
+
+113. **[Added 2026-09-16] The deflator's two inputs may be computed on two different populations —
+    one read-only check, and it bears on every trial this repo has ever scored.** The deflated Sharpe
+    needs **both** an effective trial count `K` **and** the dispersion `V[{SR_k}]` across those
+    trials, and `SR*` rises with each; the source that supplies the clustering route is explicit that
+    the variance must be taken **across cluster-level series** — minimum-variance aggregates of each
+    cluster's members, annualised by `√(T_k/Years_k)`, then rescaled to the *candidate's* own
+    frequency — not across the raw trial Sharpes. If the engine clusters to obtain `K` but takes the
+    dispersion over all recorded trials, the two inputs describe different populations and the
+    benchmark is internally inconsistent. This is checkable from the journal and the engine's own
+    read-only functions **without editing anything frozen**, it costs nothing, and both answers are
+    findings; if the inconsistency is present, the direction of its effect depends on whether
+    within-cluster dispersion exceeds between-cluster dispersion, which is itself the thing to report.
+    The frequency bookkeeping is not decoration in a repo that mixes monthly and higher-cadence
+    books. **If this turns out to be a genuine defect rather than a calibration choice, it is an
+    `## Engine issue` write-up for a human, not a fix** — the same boundary the 2026-09-15 session
+    drew around `TRIAL_CLUSTER_RHO`. Free; no trial; no holdout. Tier B.
+    → `notes/2026-09-16-clustering-trials-onc-effective-number-of-trials.md`,
+    `notes/2026-08-24-deflated-sharpe-ratio.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -5846,8 +5977,140 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-12 (session 30) | **The second consecutive session aimed by the 2026-09-10 operator checklist, and it takes the last two names on it — plus the node underneath them that the checklist did not list.** 2026-09-11 named `rank` and `neutralize` as the survivors; a grep across all 91 prior notes confirmed both (`rank` in 70 notes, subject of none; `orthogonaliz`, `mimicking portfolio`, `pure play` at **zero** each) and turned up a third with the same zero reading — the **pool** (`complete case`, `unbalanced panel`, `missing data`, `imputation`, all zero), which is the operator every trial here runs and none has measured. Three notes, six sources; **full text read directly for four** (Blitz–Huij–Martens's accepted manuscript from the Erasmus repository; Bryzgalova et al.'s accepted version from the LBS repository; Wobbrock et al.'s CHI paper; Headrick–Sawilowsky's ERIC document), **two recorded from abstracts only** (Conover–Iman, closed at Taylor & Francis with no open copy resolved; the 2020 idiosyncratic-momentum companion, closed at Elsevier). The shape is *two narrowings and one new mechanism*: `rank` and `neutralize` behave as 2026-09-11 predicted — they mostly tell the lab which proposals are identities and which statistic a past screen used — while the pool rule is a genuine uncovered mechanism with a two-channel cost and a free test that can fail. Candidates #101–#104; #101 is an anti-candidate with a proof rather than a measurement. | Conover–Iman 1981 + Wobbrock et al. 2011 + Headrick–Sawilowsky 2000 + Sawilowsky–Blair–Higgins 1989 (`2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`); Blitz–Huij–Martens 2011 + Blitz–Hanauer–Vidojevic 2020 (`2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`); Bryzgalova–Lerner–Lettau–Pelger 2025 (`2026-09-12-missing-data-and-complete-case-pools.md`) |
 | 2026-09-13 (session 31) | **The first session in three aimed by a gap, and the gap was named by the lab's own overnight number rather than by a checklist.** The 2026-09-12 nightly spent zero trials, closed four standing items for free, and produced one result it filed as an anti-candidate: removing names with less than five years of price history costs the momentum leg, placebo clean. A grep across all 94 prior notes for `firm age`, `listing age`, `new list`, `age effect` and `IPO` returned **zero on every one** — the variable the lab had just measured had no literature behind it anywhere in this folder. The unit lesson holds and is the fifth instance: after families, clauses, operators and the pool, the sixth unit is **an attribute of the pool's members**. Three sources, all Tier-1 venues, all pre-2018 samples; **two read in full** (Zhang's typeset JF article from a university course reading-list directory; Ritter's JF article rendered page-by-page with `pymupdf` because it is a text-layerless scan), one read in full as the published JF article from the lead author's own university page after the NBER working-paper PDF turned out to be a scan, and **one recorded abstract-only and flagged throughout** (Barry–Brown, closed at Elsevier with the abstract elided by the publisher in Semantic Scholar, recovered verbatim from an institutional research portal). The shape is *one mechanism, one discount, one anti-candidate*: continuation is conditioned by how fast information reaches a name and the only measurable proxy here is history length; momentum is weakest at the top of the size distribution, which is the whole of this universe; and the *level* sign of a listing-age tilt is contested between two Tier-A sources, so the tilt is an anti-candidate while the conditioning is not. The night's most useful output is negative in the same way last night's was: the lab's own number is consistent with three mechanisms and identifies none, so it should stop being reported as the size of the survivorship bias. | Zhang 2006 (JF) (`2026-09-13-information-uncertainty-and-price-continuation.md`); Hong–Lim–Stein 2000 (JF) (`2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`); Ritter 1991 (JF) + Barry–Brown 1984 (JFE, not read) (`2026-09-13-listing-age-as-a-level-effect.md`) |
 | 2026-09-15 (session 32) | **Aimed by the detector 2026-09-13 wrote, on its first use, and it found a gap under the lab's single biggest overnight number.** The 2026-09-14 nightly spent one trial, discharged `range-variance` and `program.md`'s cold-family rule after fourteen sessions, and ran this file's #92 to produce the result of the week: the champion's construction non-standard error is **0.079**, five of six recorded promotion steps sit inside it, 69% of the dispersion sits on `core_n`, and the best cell `core_n = 10` was **embargoed on three arguments from the repo's own history**. The detector — *after each nightly, take the one variable it measured that has no note here, and check* — pointed at the selection rule itself. A grep across all 97 prior notes returned **zero** for `post-selection`, `regression to the mean`, `James–Stein`, `argmax`, `reality check` and `active share`, and one apiece for `winner's curse`, `order statistic` and `empirical Bayes` — none of the three the subject of the note it sits in. **Seventh instance of the unit lesson**: after families, clauses, operators, the pool and an attribute of the pool's members, the seventh unit is **the rule by which a result is selected out of a set of results**. The load-bearing distinction the folder had blurred: all nine of its multiple-testing notes are about **testing** (is the best significant?), none about **estimation** (what is the best *worth*?) — and the repo's gate compares point estimates every night. Three notes, five sources, **full text read directly for all four Tier-A primaries**. The shape is *three corrections for one object*: condition on the selection (assumption-free, needs the covariance), shrink toward the ensemble (needs exchangeability, carries a normal prior), or bootstrap the max with dependence preserved (tests rather than estimates). Two outputs are the session's point. **(a) The `core_n` embargo is right for a reason the lab did not state** — a truncated-normal argument makes the winner's estimate a normal truncated below at the runner-up, so the bias is largest exactly in the many-candidates/small-gaps regime the curve is in, and the discount is computable from `sharpe_diff_se`, which the repo already runs. **(b) A stated tension with `2026-08-24-deflated-sharpe-ratio.md`**: that note's haircut assumes `N` independent trials and the engine deflates by the raw count, while White finds a correlated search erodes the corrected p-value far more slowly — resolvable by measurement (#108's scree), and pending it the bar is **conservative in the count and optimistic in the universe**. Candidates #108–#110: one that can fail, one convention, one decomposition with an anti-candidate attached; all three free, none proposing a book. **Access and index behaviour**: two hosts died at the **transport layer** with `http=000` and no HTTP status — `efron.ckirby.su.domains` (the author's own page; the agent proxy reported `ws_closed_mid_exchange`) and `cdr.lib.unc.edu` including its repository DOI, five attempts across two URL forms. That is a **fourth distinct refusal mode** for this folder, after the Cloudflare 403 challenge, OpenAlex's metered budget and `pm-research.com`'s OpenID redirect, and it is host-specific: NBER, Stanford `stacks`, two instructors' teaching directories, Crossref and arXiv all answered in the same session. Efron was recovered instantly from the **Stanford `stacks` mirror of the same technical report** — generalise it. Hansen 2005 is **not read** and recorded as a pointer with **nothing relied on**; a later session wanting the SPA refinement must read it. Index behaviour: **Semantic Scholar returns *not found* for Andrews–Kitagawa–McCloskey on both its QJE DOI and its NBER DOI**, and OpenAlex's record is merged with the 2019 working paper and returns 6 against Crossref's 30 — so the tier rests on venue and documented downstream use, per the README's own instruction not to downgrade on an index miss. Counterpoint worth recording: the other four DOIs agreed across all three registries to within the usual spread. | Andrews–Kitagawa–McCloskey 2024 (QJE; NBER WP 25456 revised Sept 2021 read in full) (`2026-09-15-inference-on-winners-post-selection-estimation.md`); Efron 2011 (JASA; Stanford Biostatistics TR 256 read in full via `stacks.stanford.edu` after the author's own page died at the transport layer) (`2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`); White 2000 (Econometrica, typeset article read in full from a university course directory) + Sullivan–Timmermann–White 1999 (JF, read in full from a teaching directory) + Hansen 2005 (JBES, **not read**, pointer only) (`2026-09-15-reality-check-max-statistic-under-dependence.md`) |
+| 2026-09-16 (session 33) | **The detector's second use, and it found the gap under the lab's newest number on the first try again — this time the gap was a whole vocabulary rather than a variable.** The 2026-09-15 nightly spent zero trials, priced the blend board exhaustively and closed it for a sixteenth session, and produced the number of the week: 90 recorded trials are worth about **1.56** independent bets by participation ratio against the engine's clustered **24**, with the decision handed to a human. A grep across all 100 prior notes returned **zero** for `M_eff`, `Nyholt`, `effective rank`, `participation ratio`, `false strategy` and `ONC` — the lab had computed a member of a named estimator family with twenty-five years of peer-reviewed literature behind it and this folder had none of that literature. Three notes, nine sources; full text read directly for three primaries (Li–Ji, Halle et al., López de Prado–Lewis), the remaining estimator definitions taken from two independent restatements that agree, and three sources recorded from **published abstracts only** (Salyakina et al., Moskvina–Schmidt, Galwey). The session's shape is **one family definition, one verdict on the family, and one finance-side member that is the closest published relative of the engine's own step** — and the verdict is negative: no plug-in effective count is known to control any error rate, because `M_eff` is defined by inverting Šidák and is therefore a function of the error rates, not of a correlation matrix. **Nothing here proposes a book.** The three candidates are a pre-committed spread table with an anti-candidate attached, a null control that can close the clustering route, and a read-only consistency check on the deflator's two inputs. The transferable correction: the 2026-09-15 reading that the engine over-deflates is arithmetically right and rests on a premise this literature breaks, so the 24-versus-1.6 gap **overstates** the over-deflation — a second independent reason, alongside Sullivan–Timmermann–White, why a low effective-`N` is not a licence. All three notes `validation_overlap: false`; not one contains a market-performance figure, because two of the three sources contain no market data at all. | Halle, Djurovic, Andreassen & Langaas 2016 + Salyakina et al. 2005 + Moskvina & Schmidt 2008 (`2026-09-16-does-meff-control-the-familywise-error-rate.md`); Cheverud 2001 + Nyholt 2004 + Li & Ji 2005 + Gao et al. 2008 + Galwey 2009 (`2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`); López de Prado & Lewis 2019 (`2026-09-16-clustering-trials-onc-effective-number-of-trials.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-16] Read this first: the 2026-09-15 nightly ran, spent zero trials, and spent this
+  file's #1 for the second session running — so the standing list turned over at the top again.**
+  **#108 is done** and its answer is the number this session exists to interpret: 90 recorded trials
+  are worth **1.56** independent bets by participation ratio (4.12 with the market component removed)
+  against the engine's clustered **24**, PC1 carries 79.4% of variance, and the deflator charges a
+  decorrelated candidate 1.9x what it charges another variant of the incumbent. The nightly also
+  **closed the blend board exhaustively** — best available blend +0.034 at `t = +0.33`, every weight
+  and partner chosen ex-post — so it is a table to read, not a thing to re-derive, for a seventeenth
+  session. `#110`'s anti-candidate half was strengthened and its shrink half is unrun. Still unrun and
+  carried unchanged: **#89 (the folder's highest-ranked unrun item, eighth session), #82 (eighth
+  session), #94 as a standing discipline, #49 (eighteenth session)**, plus **#105, #106, #107** from
+  2026-09-13 and **#109, #110** from 2026-09-15.
+- **[2026-09-16] What should aim the next session, in order.**
+  - **#111 first, because it is the only way to read last night's number honestly and because the
+    anti-candidate attached to it expires the moment the table is computed.** One `eigvalsh` on the
+    stored correlation matrix produces six effective-count estimators; run each on the real matrix
+    *and* on `m` i.i.d. series of the same length, because these are functionals of an estimated
+    spectrum and the lab has already caught one estimator (Kaiser) failing exactly that control.
+    **Pre-commit in the journal that no estimator will be adopted after the table is seen** — the
+    output is the spread, and selecting the convenient member is this repo's own specification search
+    run on its own gate.
+  - **Then #113, because it is read-only, it costs nothing, and it bears on every trial ever
+    scored.** The deflator needs `K` *and* `V[{SR_k}]`, and the published clustering route says the
+    dispersion must be taken across cluster-level series, not raw trial Sharpes. If the two inputs
+    are computed on different populations the benchmark is internally inconsistent. Read the engine's
+    read-only functions; **do not fix anything** — if it is a defect rather than a calibration choice
+    it is an `## Engine issue` write-up, the same boundary 2026-09-15 drew around `TRIAL_CLUSTER_RHO`.
+  - **Then #112, and only for its null control.** ONC's value here is not a fourth count — a fourth
+    count widens the spread rather than resolving it — it is that the lab already built the material
+    for a decisive test (single linkage reads 90 clusters on a one-factor null at pairwise 0.80). If
+    ONC also reads ~`N` there, the clustering family closes.
+  - **Then the lab's own #1, #89**, unchanged for an eighth session, with its no-lag-null rider.
+  - **Then #109**, which still needs the 2026-09-14 curve rebuilt, and **#82**.
+- **[2026-09-16] The single most transferable output, and it is one equation.**
+  `M_eff = log(1−α) / log(1−α_loc)`. The effective number of independent tests is **defined** by
+  inverting Šidák, which makes it a function of **the familywise error rate you are targeting and the
+  per-test cut-off you are using** — not of a correlation matrix. Every eigenvalue estimator in the
+  literature, and the participation ratio the lab computed, is a functional of a spectrum alone; none
+  of their derivations mentions an error rate, so none of them can control one. The general form to
+  carry, and it is the same shape as the two corrections this file recorded on 2026-09-15: **an
+  effective count is a property of a set of tests *at a stated significance level*, not a property of
+  the set.** Moskvina–Schmidt's finding is the operational half — the dependence on that level is
+  *nonlinear*, so the count implied by bulk correlation is not the count that applies deep in the
+  tail where a deflator operates.
+- **[2026-09-16] A correction to how last night's number should be read, and it is this session's
+  main result rather than a caveat.** The 2026-09-15 arithmetic — a smaller `N` lowers
+  `expected_max_sharpe`, so counting 24 where the structure says 1.6 means the engine
+  **over**-deflates — is correct and is not contested. Its **premise** is what this literature
+  breaks: the structural number is not the `N` the formula wants. Both corrections run the same way
+  (the tail-relevant effective count exceeds the bulk-correlation one; a spectrum functional has no
+  argument for `α` at all), so **the 24-versus-1.6 gap overstates the over-deflation**, conservatively.
+  This is a **second, mechanically independent** reason — alongside the Sullivan–Timmermann–White
+  universe argument already recorded — why a low effective-`N` reading licenses nothing. Two
+  arguments, different mechanisms, same direction, and neither is a reason to move a bar.
+- **[2026-09-16] A tension with this file's own previous entry, recorded as the README requires
+  rather than smoothed over.** The 2026-09-15 entry wrote that the disputed scale of the deflator's
+  winner's-curse haircut is *"resolvable by measurement rather than argument"* and named the scree as
+  the measurement that would settle it. **It is not, and this is the correction.** The scree produces
+  another plug-in effective count, and the literature that has been testing plug-in effective counts
+  against exactly-computed error rates for twenty-five years has never certified one. What settles a
+  familywise error rate is a max-statistic resampling procedure, which this folder already holds
+  (`notes/2026-09-15-reality-check-max-statistic-under-dependence.md`) and which is **affordable at
+  this scale**: the three-orders-of-magnitude speed-up that justifies the shortcut in genomics is an
+  argument about 700,000 tests, and this repo has ninety. The measurement was still worth running —
+  it produced the dispersion finding and the 1.9x breadth charge — but it answered a different
+  question than the one it was commissioned for.
+- **[2026-09-16] The detector's second use, and the honest accounting of what it found.** 2026-09-13
+  proposed *after each nightly, take the one variable it measured that has no note here, and check*.
+  Applied a second time it worked again and found something larger than a variable: a grep across all
+  100 prior notes returned **zero** for `M_eff`, `Nyholt`, `effective rank`, `participation ratio`,
+  `false strategy` and `ONC`, while `effective number` hit only the *diversification* note — i.e. the
+  folder had the effective number of **bets** and not the effective number of **tests**, which are
+  different quantities sharing an algebraic ancestry. **Keep the detector.** What it still does not do
+  is supply ideas: all three of tonight's candidates are free diagnostics and none proposes a book,
+  which is the eighth consecutive session with that shape, and two of the three notes say in as many
+  words that nothing in them proposes one. The 2026-09-08 warning that **the bottleneck is not idea
+  supply** holds for an eighth session and should be treated as permanent.
+- **[2026-09-16] The embargo boundary, and it was barely live at all — which is itself worth
+  recording.** Two of tonight's three primaries contain **no market data of any kind**: the genomics
+  cluster runs on genotype correlation matrices and simulated panels, and López de Prado–Lewis's only
+  empirical section is a Monte Carlo on synthetically generated block correlation matrices. The
+  numbers recorded from Halle et al. and Salyakina et al. (realised familywise error rates against a
+  nominal 5%) are **properties of estimators on known correlation structures**, not returns, not
+  dated, and not attached to any market or period — the same category as the Sharpe-ratio sampling
+  algebra this folder has recorded since 2026-08-23. All three notes are `validation_overlap: false`.
+  The only flag that fires anywhere is `published_post_2018: true` on the Quantitative Finance
+  article, whose sample is **empty**, so the flag is metadata and carries no discount.
+- **[2026-09-16] Access and index behaviour: a fifth refusal mode, one channel that should go on the
+  README, and a preprint the indexes do not see.**
+  - **An HTTP 500 from a *working* API is a fifth distinct refusal mode**, beside the Cloudflare 403
+    challenge, OpenAlex's metered budget, `pm-research.com`'s OpenID redirect and last session's
+    `http=000` dead tunnel. Europe PMC's REST full-text endpoint answered
+    `{"status":500,"error":"Internal Server Error"}` for a PMC identifier that OpenAlex lists as
+    bronze open access. It is a server fault on one route, not a paywall and not an egress block, and
+    the same host's other routes were not tried before moving on — which is the lesson.
+  - **`eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=pubmed&id=…&rettype=abstract` is a clean,
+    fast, batch channel for the published abstracts of closed biomedical sources, and it belongs on
+    the README.** Four abstracts in one unauthenticated call, including the two Wiley/Karger articles
+    that carry this session's peer-reviewed support and are otherwise `oa_status: closed`. For a
+    source this folder will record abstract-only anyway, it beats fighting the publisher.
+  - **`nature.com`'s own article PDF endpoint served a *Heredity* article to an automated client on
+    the first try** (`/articles/6800717.pdf`), while `cell.com`'s `showPdf` route 403'd for the
+    *American Journal of Human Genetics* article. Publisher-by-publisher, not paywall-by-paywall.
+  - **The published version of the finance paper is unreachable from here**: `tandfonline.com` 403
+    and `papers.ssrn.com` 403. The working paper was read from a third-party mirror carrying the SSRN
+    watermark; the note says so and grades its tier for the version uncertainty. **A mirror is a
+    provenance statement, not a citation** — record which version was read.
+  - **An uncited preprint needs support that is not its own authors', and it had it.** Halle et al.
+    reads **0** citations at OpenAlex and Semantic Scholar's arXiv endpoint returned HTTP 429 on two
+    attempts twenty seconds apart. Per the rubric the tier was set on **venue and independent
+    corroboration**, not on the count: its central claim is stated independently and earlier by two
+    peer-reviewed sources (68 and 269 citations), and the note grades its *conclusion* Tier B while
+    grading its *comparison table* Tier C. Eleventh instance of "do not read a tier off a lone count".
+  - **Counter-instance, recorded because it is rarer than the failures**: all five genomics DOIs plus
+    the finance DOI resolved in Semantic Scholar and OpenAlex/Crossref with the usual small spread and
+    no contradictions. One guessed DOI returned the **wrong paper silently** — `10.1046/j.1365-2540.2001.00865.x`
+    is a moor-frog population-genetics article, not Cheverud's correction — which is the third
+    instance of a well-formed wrong answer from a guessed identifier. **Check the title that comes
+    back before using the record.**
+- **[2026-09-16] Protocol note, eleventh session running: the session-start hook printed "integrity
+  check OK — on main, level with origin/main, no stray branches" while `git status -sb` showed the
+  session on `claude/tender-galileo-6s9akh`.** As on 2026-09-06 through -15 this is the **benign**
+  form — the branch tip was bit-identical to `origin/main` (`43c0c12`, zero ahead, zero behind) — and
+  the session ran `git checkout main && git reset --hard origin/main` before any work, per step 0 of
+  the standing prompt, so tonight's work is on `main` only. Recorded again precisely because it is
+  benign: **the hook's "on main" clause is false while its "level with origin/main" clause is true**,
+  so a session that trusted the first clause would commit to a per-run branch with no warning. As on
+  2026-09-15, this session's own harness instructions named that per-run branch as its development
+  target while `research/README.md` step 6 and the standing prompt's step 0 both require `main`; the
+  repo's own rules governed. **Flagged for the human for the eighth time.**
 
 - **[2026-09-15] Read this first: the 2026-09-14 nightly ran, spent one trial, and spent this
   file's #1 — so the standing list turned over at the top for the first time in six sessions.**

@@ -10270,3 +10270,5 @@ them, and a low effective-`N` reading is not a reason to lower any bar.**
    rotation-speed rationale.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-16 (learning agent): 3 notes added, see research/SUMMARY.md
