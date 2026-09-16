@@ -10272,3 +10272,110 @@ them, and a low effective-`N` reading is not a reason to lower any bar.**
 **No engine issues encountered.**
 
 ## Research session — 2026-09-16 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-16 (nightly), written before any number was computed
+
+Three free blocks, in the order `research/SUMMARY.md`'s open-questions list ranks them (#113,
+then #111 + #112 merged, then the lab's own #1, #89). No trial is spent by any of them. Every
+reading rule below is fixed **now**, before the first array is allocated.
+
+### Block A — #113: are the deflator's two inputs computed on the same population?
+
+`deflated_sharpe(returns, trial_sharpes_daily, n_effective)` takes a **count** and a
+**dispersion**. `engine/protocol.py:343` supplies the count from single-linkage clustering at
+`TRIAL_CLUSTER_RHO = 0.95` (24 on last night's reading). `engine/metrics.py:128-131` computes the
+dispersion as `np.var(trial_sharpes_daily, ddof=1)` over **every recorded trial**. López de
+Prado–Lewis (`SUMMARY.md` #113) say `V[{SR_k}]` must be taken across **cluster-level** series when
+`K` is a cluster count. So the two inputs are on different populations by construction.
+
+**This is not a discovery and must not be written up as one.** `metrics.py:122-125` states the
+choice in as many words — "The dispersion term still uses every recorded trial ... only the count
+is affected by redundancy" — so the code matches its documentation and the question is whether the
+choice is conservative, not whether it is intended.
+
+- **Prediction, committed now.** By the law of total variance
+  `Var(all trials) = E[Var within cluster] + Var(cluster means)`, so `Var(cluster means) <= Var(all)`,
+  so the engine's raw dispersion gives the **larger** `var`, hence the larger `expected_max_sharpe`,
+  hence the **harder** bar. Direction: conservative.
+- **Falsification.** If the measured cluster-level dispersion comes out **larger** than the raw
+  dispersion, the prediction is wrong and the block is reported as a failed prediction, not
+  quietly restated. (The law of total variance is exact for the variance of a finite set of
+  numbers under a partition, so the only way this fires is if "cluster-level series" is not the
+  same object as "cluster mean of Sharpes" — which is exactly why both are computed below.)
+- **Two cluster-level series are computed, and the primary is fixed now.** Primary is the
+  **equal-weight** average of each cluster's daily validation return series — parameter-free, and
+  `SUMMARY.md` #1's triage rule says a scheme estimating nothing carries no estimation error.
+  Secondary is the **minimum-variance** aggregate the source actually prescribes, reported as a
+  robustness reading only, because it estimates a covariance matrix per cluster on a sample the
+  triage rule says cannot support one.
+- **Engine-issue boundary, drawn before the number exists.** Whatever the magnitude, this is **not**
+  filed under `## Engine issue` and nothing in `engine/` is touched. That heading is for bugs and
+  requires stopping the experiment; documented behaviour that matches its docstring is a
+  calibration note for the human, the same boundary 2026-09-15 drew around `TRIAL_CLUSTER_RHO`.
+  The single exception, stated in advance: if the direction comes out **anti**-conservative it is
+  still a calibration note, not a bug, and it is flagged to the human in the session summary.
+
+### Block B — #111 + #112 merged: the effective-count estimator spread, with two null controls
+
+Seven estimators of the effective number of independent trials, each run on **three** matrices.
+Estimators: participation ratio `(Sum L)^2/Sum L^2`; Galwey `(Sum sqrt L)^2/Sum L`;
+Cheverud–Nyholt `1 + (m-1)(1 - Var(L)/m)`; Li–Ji `Sum [I(L>=1) + (L - floor L)]`; Gao et al.
+(smallest `k` with cumulative variance share `>= 0.995`); the engine's single linkage at 0.95; and
+ONC (correlation -> `sqrt(0.5(1-rho))` -> Euclidean distance-of-distances -> k-means over
+`k = 2..N-1`, scored by the **t-statistic** of the silhouette, one recursive re-clustering pass).
+
+Matrices: **(a)** the real stored validation series; **(b)** `m` i.i.d. Gaussian series of the same
+length — the control that disqualified Kaiser on 2026-09-15, and these are functionals of an
+**estimated** spectrum so every one of them must be shown to read `~m` here before its reading on
+(a) means anything; **(c)** `m` one-factor series at pairwise 0.80 — the control on which single
+linkage already reads `m`, and #112's decisive test: **if ONC also reads `~m` on (c), the
+clustering family closes and a fourth count is not worth having.**
+
+- **Pre-commitment, and it is the whole point of running the table.** **No estimator will be
+  adopted, before or after the numbers are seen.** The output is the **spread**. Selecting the
+  convenient member of a family that "coincides at the two anchors and differs everywhere between"
+  is this repo's own specification search, turned on its own gate.
+- **A low reading licenses nothing**, and this is not a new caution tonight — two mechanically
+  independent arguments are already recorded: Sullivan–Timmermann–White's universe requirement
+  (the correction must span candidates the literature pre-filtered, and nearly every mechanism here
+  arrives from `research/`), and Moskvina–Schmidt's nonlinear dependence of the effective count on
+  the per-test cut-off (the tail-relevant count exceeds the bulk-correlation one). Both say the
+  1.56-versus-24 gap **overstates** the over-deflation.
+- **Disqualification rule, fixed now**: any estimator reading below `0.8m` on control (b) is
+  reported as disqualified on that control and its reading on (a) is not interpreted.
+
+### Block C — #89: the overidentifying restriction test on the regional cross-covariance
+
+The folder's highest-ranked unrun item, carried unchanged for an eighth session, and the only one
+on the board that can **fail**. Under Lo–MacKinlay non-trading, `N_p` groups generate their whole
+lagged cross-covariance structure from `N_p` censoring probabilities, so `Gamma_n` is
+overidentified. On the **train split only**, form regional group return series, estimate each
+group's `p` two independent ways — the `n`-th root of its own `n`-th order autocorrelation, and the
+pairwise asymmetry ratio `(p_b/p_a) = [gamma_ab(n)/gamma_ba(n)]^(1/n)` — and check (i) the two
+agree, (ii) the `n = 2` asymmetry ratio is the square of the `n = 1` ratio, (iii) the chain
+restrictions hold across groups.
+
+- **The rider is not optional and is written down before the measurement**: `p` is estimated from
+  an autocorrelation, and 2026-09-07 killed a `DELAY` statistic that reproduced its own null in
+  level, dispersion *and* persistence. **Simulate under a no-lag null first** — groups with the
+  real contemporaneous covariance and zero true lead-lag — and report every statistic beside its
+  null band. A statistic that does not separate from its own null is reported as uninformative,
+  whatever it reads on the real data.
+- **Both answers are findings, and the readings are fixed now.** Consistency (real indistinguishable
+  from a non-trading-generated structure, and chain restrictions holding) converts 2026-09-06's
+  "we think the regional partition is measurement" into a claim that survived a test built to break
+  it, and closes the regional half of `lead-lag-spillover` on a positive result rather than a null.
+  **Violation names which pairs violate it**, and those pairs — and only those — become the object
+  a later session may propose a book on.
+- **One honest limit, recorded in advance**: the model's `p` is an i.i.d. censoring probability
+  while a time-zone offset is a deterministic lag, so any `p` here means "the censoring parameter
+  reproducing these second moments", never a trading probability.
+
+### Trials
+
+No candidate is scored by any block above. Whether a trial is spent tonight is decided **after**
+Block C, and only by it: nothing in Blocks A and B proposes a book, and every extension of every
+seated lead is on the 2026-09-14 do-not-extend list. If Block C names violating pairs that survive
+their own null, that is a pre-specified object and a scout trial in `lead-lag-spillover` is
+justified; if it does not, the session spends no trial and says so plainly, per 2026-09-15's rule
+that a session's own measurement pricing the cost of a trial is part of the decision to spend it.
