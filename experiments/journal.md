@@ -10538,3 +10538,155 @@ information is in the price before the book could trade it. Partition B's violat
 direction at all. `lead-lag-spillover`'s regional half therefore **closes on a rejection**, and the
 family's sector half was already closed on 2026-09-06 (its antisymmetric content is equities leading
 bonds at a horizon the cost model forbids).
+
+## Session summary — 2026-09-16 (nightly)
+
+- **Integrity check — clean, and the branch situation was verified rather than assumed.**
+  `git fetch origin --prune` clean; `git branch -r --no-merged origin/main` returned **nothing**, so
+  no previous session's work is stranded off `main`. As on 2026-09-06 through -15 the session-start
+  hook printed "integrity check OK — on main, level with origin/main, no stray branches" while
+  `git status -sb` reported a per-run branch (`main-j7bcow`) — **the hook still does not detect this,
+  eleventh session running.** The branch was confirmed to hold **zero commits absent from
+  `origin/main`** (`4d83653`, identical tip, `git rev-list --left-right --count` = `0 0`), so the
+  trial history is not split and no second head exists to reconcile. Engine tests green
+  (**33 passed**) before any measurement. Store fresh through **2026-09-16** — same day, not stale.
+- **Experiments run: 0 of the 8-trial budget.** Trial count unchanged at **91**. No candidate scored,
+  no champion comparison, **no holdout read** — the count of holdout looks since 2026-08-17 stands at
+  **five**. One pre-registration block, written and committed in full before the first array was
+  allocated, and three free measurement blocks.
+
+### The night in one line
+
+All three pre-registered blocks landed, and the largest is that the folder's eight-session
+top-ranked item finally ran and **failed**: Lo–MacKinlay non-trading is rejected at its signature
+moment on **every** partition of this universe — including two where no time-zone offset can
+exist — so the regional lead-lag pattern is still the trading calendar but i.i.d. censoring is not
+what makes it, and `lead-lag-spillover`'s regional half closes on a rejection rather than a null.
+
+### Best finding: #89 rejected, and the control is what makes it a finding
+
+The restriction was fitted division-free (`Gamma_n[a,b] = Sigma[a,b]·q_b`, which implies the note's
+ratio form exactly because `Sigma` is symmetric, and is strictly more forgiving than requiring the
+ratios, so a rejection is conservative). Every statistic was reported beside a simulated **no-lag
+null**, per the rider that 2026-09-07's dead `DELAY` statistic made mandatory.
+
+The model requires **positive** own autocorrelation in portfolio returns. **Twenty of twenty-one
+groups are negative** — including **9 of 9** US sector ETFs, one session, one currency, where no
+offset is possible — so `p` as the `n`-th root of an autocorrelation is not even real-valued. The
+overidentifying fit sits at the **1.6th percentile** of its own null on the region partition and the
+**8.6th** on US sectors: *worse* than no lead-lag at all. And the rider earned its place a second
+way — the US broad/bond partition's `R² = +0.565` would have read as a comfortable pass against a
+null median of **+0.617**.
+
+The violating pairs separate cleanly and that separation is the transferable part. Region partition:
+**antisymmetric and calendar-aligned**, the West leading JP and HK at `z` **+14.7 to +27.2** with the
+reverse direction inside noise. Offset-free sector partition: **row-uniform**, positive or negative
+against *every* column, which is a property of the follower alone and names no direction — exactly
+the common level 2026-09-06's rule says to strip before reading any lead-lag statistic as a leader.
+**A model rejected on the offset-free partition cannot explain the offset-bearing one**, which is
+why the control is worth more than the rejection.
+
+### Second finding: the estimator spread, and a family that closes on complementary failures
+
+Seven effective-trial-count estimators on the 90 stored series span **1.56 to 39.00 — a factor of
+25** — with the engine's 24 straddled on both sides. **No estimator was adopted, and that was
+pre-committed before the table existed.** Two readings that do transfer: **ONC is disqualified on the
+i.i.d. control at 49 of 90**, the second estimator this lab has caught there after Kaiser; and
+**single linkage and ONC fail *opposite* controls** — single linkage is blind to a one-factor null at
+`rho = 0.80` (reads 90), ONC hallucinates structure in pure noise (reads 49) — so no member of the
+clustering family is safe on both anchors. `SUMMARY.md` #112 asked whether ONC reads ~`N` on the
+one-factor null, which would close the family; it does not, and the family closes anyway for the
+stronger reason.
+
+**A direct caution on last night's headline.** The participation ratio reads **1.56** on the real
+matrix and **1.59** on a synthetic one-factor null containing no search structure at all. The
+statistic cannot distinguish this lab's ninety-trial history from one factor plus noise, so it is
+close to a restatement of the long-only gross ≤ 1.0 constraint. Quote the PC1-removed **4.12**, not
+the 1.56. **A low effective-`N` reading licenses nothing, now for a third independent reason.**
+
+### Third finding: #113 answered, with a failed prediction that indicts the source
+
+The engine's two deflator inputs **are** on different populations — count from clustering (**25**),
+dispersion from all **91** raw trial Sharpes. Under every parameter-free reading of "cluster-level
+series" the mismatch is **conservative**: cluster means give var ratio 0.851, equal-weight cluster
+series 0.891, worth **+0.006 DSR** on the champion (**0.9537** live against 0.9593). The
+**minimum-variance** aggregate the source prescribes reads **1.405** and reverses the sign — the
+pre-registered falsification, reported as one. It reverses because the 45-member cluster's
+minimum-variance aggregate is a **gross-leverage-22.9** long-short book (weights −2.46 to +2.24)
+whose Sharpe is **−0.00007**, against member Sharpes of 0.0405–0.0774 and an equal-weight aggregate
+of 0.0672. `SUMMARY.md` #1's parameter-count triage rule predicts this before any code is written.
+**Not an engine issue**, held as pre-registered: `metrics.py:122-125` documents the choice and the
+code matches it.
+
+### Why no trial was run, and the pre-registration is what decided it
+
+The trial rule was fixed in writing before any measurement: a trial would be spent **only** if Block
+C named violating pairs that survived their own null and constituted a pre-specified object. Pairs
+did survive — the West leading JP and HK at `z` up to 30 — and they are **not an object**. Those
+markets close ~13 hours before the US session, so the first JP or HK print that can contain a day-`t`
+US move is the day-`t+1` close, which is **exactly the bar the engine's 1-day execution lag fills
+at**: the information is in the price before the book could trade it. The offset-free partition's
+violations name no direction at all. Blocks A and B propose no book by construction, and every
+extension of every seated lead is on the 2026-09-14 do-not-extend list. Honouring a pre-registration
+after the numbers are in is the whole discipline; overriding it to reach a budget number would be
+the specification search this lab exists to avoid.
+
+### For the human — one thing to weigh, stated because hiding it would be the wrong call
+
+**This is the third consecutive session with zero or near-zero trials** (2026-09-14 spent one,
+2026-09-15 and tonight none), and the eighth consecutive session in which `research/SUMMARY.md`'s
+new material is entirely free diagnostics that propose no book. Each individual decline is
+well-argued and I stand behind tonight's. But the pattern is now long enough to name: **the lab is
+spending its nights auditing its own gate rather than searching for strategies**, and three of
+tonight's three blocks were about the deflator, the estimator family behind it, and a model of
+market microstructure — none about a portfolio. `program.md`'s mission is finding strategies that
+beat the champion; its budget is a ceiling and 2026-09-15 correctly priced a trial as a cost charged
+to every future session, but those two facts together can rationalise an indefinite stall. **The
+decision that would break it is not an agent's**: either the universe gains the data that would open
+a genuinely new family (fundamentals, point-in-time constituents, intraday), or `program.md`'s
+agenda is edited to say what the lab should do once its families are exhausted. Both are edits to
+frozen files. The standing `TRIAL_CLUSTER_RHO` calibration question from 2026-09-15 is unchanged and
+tonight's factor-25 spread makes it **less** urgent, not more: there is no defensible estimator to
+replace 24 with.
+
+### Protocol and allocation notes
+
+- **Budget: 0 of 8.** `price-trend` cap of 2 unused; no family cap approached; the cold-family rule
+  has no remaining cold family (discharged 2026-09-14).
+- **`lead-lag-spillover` is now closed in both halves** — the sector half on 2026-09-06 (its
+  antisymmetric content is equities leading bonds at a horizon the cost model forbids), the regional
+  half tonight (the surviving violations are the trading calendar, unreachable behind the execution
+  lag). It joins `range-variance` as a family closed on evidence rather than unexplored.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look.
+- **Train-as-prediction: n = 31, unchanged.** No candidate was scored.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/` and every existing `strategies/lib/` file are untouched, as are
+  `strategies/candidates/`, `trials.jsonl` and the leaderboard. All measurement ran from the session
+  scratchpad against stored series and the engine's own read-only functions.
+
+### Next ideas, in order, with provenance
+
+1. **`SUMMARY.md` #109's winner-to-runner-up discount on the 2026-09-14 specification curve** — now
+   the folder's highest-ranked unrun item, #89 having been spent tonight. It still needs the curve
+   rebuilt (it was not stored), which remains the only reason it has not run; a session with harness
+   budget should take it. (`research/SUMMARY.md` #109.)
+2. **`SUMMARY.md` #82**, carried unchanged for a ninth session, and **#49** for a nineteenth.
+3. **Do NOT re-run the effective-count table.** Block B above is seven estimators against two null
+   controls and its output is a factor-25 spread with a pre-committed non-adoption. A fourth or
+   eighth count widens the spread; it does not resolve it. The route that carries a guarantee is
+   White's max-statistic resampling, already in the folder and affordable at `m = 90` — that, not
+   another plug-in, is the thing worth a session. (`research/SUMMARY.md` #111–#113, tonight.)
+4. **Do NOT re-derive the blend board** — exhaustive and ex-post optimistic as of 2026-09-15, and
+   re-deriving it is the sixteenth session's work done an eighteenth time.
+5. **Do NOT propose a staleness-based construction on this universe.** Tonight's Block C measures
+   daily bounce beating staleness at every grouping tried, 20 groups of 21 with negative own
+   autocorrelation, so nothing built on stale prices can identify here.
+6. **Do not extend**: everything on the 2026-09-14 list, unchanged — a `core_n` candidate (under
+   embargo), vol-of-vol in any form, `RVR`, the listing-age tilt, the PPP's characteristic set,
+   `neutralize`, rank-versus-blend order, the `liquidity-volume` and seasonal band brackets, the
+   `calendar` half of `seasonality-calendar`, the distance method, cointegration, union or
+   intersection books, HRP, a fourth aggregation operator, and a fourth vintage axis without a
+   rotation-speed rationale. **Add to it: the regional lead-lag pairs**, closed tonight.
+
+**No engine issues encountered.**

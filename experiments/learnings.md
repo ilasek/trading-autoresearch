@@ -3384,3 +3384,76 @@ across experiments; prune entries that later evidence contradicts.
   session.** The budget is a ceiling, not a quota, and `CLAUDE.md` already says a well-documented
   negative result is a success of the system. **The general form: when a session's own measurement
   prices the cost of a trial, that price is part of the decision to spend it.**
+
+- **[Measured 2026-09-16, nightly] The deflator's two inputs really are on different populations,
+  the departure is conservative under every parameter-free reading, and the published prescription
+  that reverses the sign is disqualified by this repo's own triage rule.** `engine/protocol.py:343`
+  supplies the **count** from single-linkage clustering (25 tonight: 24 clusters plus 1 unstored
+  trial) while `engine/metrics.py:128` takes the **dispersion** over all 91 raw trial Sharpes.
+  `SUMMARY.md` #113 says `V[{SR_k}]` must be taken across cluster-level series when `K` is a cluster
+  count. Measured: cluster **means** of raw Sharpes give var ratio **0.851**, **equal-weight**
+  cluster series **0.891** — both below the engine, so the engine's mismatch makes the bar *harder*,
+  worth **+0.006 DSR** on the champion (0.9537 live against 0.9593). The **minimum-variance**
+  aggregate the source prescribes reads **1.405**, the other way. **It flips for a reason that
+  indicts the prescription, not the engine**: the 45-member cluster's members run daily Sharpe
+  0.0405-0.0774 and its equal-weight aggregate 0.0672, but its minimum-variance aggregate is
+  **-0.00007** — handed 45 books correlated at ~0.95 the optimiser returns a **gross-leverage-22.9**
+  long-short position (weights -2.46 to +2.24) that cancels the signal to zero. `SUMMARY.md` #1's
+  parameter-count triage rule calls this before any code is written. **General form, and it is the
+  part to carry: when a source prescribes an aggregate, check what the aggregate estimates before
+  believing what it measures — a "better" cluster representative that estimates an n x n covariance
+  on near-collinear members is an outlier generator, and dispersion computed over outliers is not
+  dispersion.** Not an engine issue: `metrics.py:122-125` documents the choice and the code matches it.
+
+- **[Measured 2026-09-16, nightly] Seven effective-trial-count estimators span a factor of 25 on
+  this repo's own matrix, the two clustering members fail OPPOSITE controls, and the headline 1.56
+  cannot tell the lab's history from a synthetic one-factor null.** On the 90 stored validation
+  series (`T = 1562`, median pairwise `rho` 0.784): participation **1.56**, ONC **2.00**, Galwey
+  **10.87**, Li-Ji **14.00**, engine single linkage **24.00**, Cheverud-Nyholt **33.49**, Gao
+  **39.00**. **No estimator was adopted and the non-adoption was pre-committed before the table
+  existed** — picking the convenient member of a family that agrees only at the two anchors is this
+  repo's own specification search aimed at its own gate. Three readings worth keeping. *(a)* **ONC is
+  disqualified on the i.i.d. control**, reading **49 of 90** on genuinely independent series — second
+  estimator caught by that control after Kaiser, so its reading on the real matrix is not
+  interpreted. *(b)* **The clustering family closes, but not the way `SUMMARY.md` #112 expected**:
+  single linkage reads 90 on a one-factor null at `rho = 0.80` (blind below threshold) and 90 on
+  i.i.d. (correct); ONC reads 2 on the one-factor null (correct) and 49 on i.i.d. (structure in pure
+  noise). **Complementary failure modes, so no member is safe on both anchors** — Halle et al.'s
+  head-to-head conclusion reproduced on a different family and on this repo's material. *(c)* **The
+  participation ratio reads 1.56 on the real matrix and 1.59 on the one-factor null**, so the number
+  is close to a restatement of the long-only gross <= 1.0 constraint and says little about the search;
+  quote the PC1-removed 4.12 instead. **A low effective-`N` reading still licenses nothing, now for a
+  third independent reason: the "structural number" is not a number but a range straddling the
+  engine's 24 on both sides.**
+
+- **[Measured 2026-09-16, nightly] Lo-MacKinlay non-trading is rejected at its signature moment on
+  every partition of this universe, including two where no session offset can exist — so the
+  regional lead-lag pattern is still the calendar, but i.i.d. censoring is not its generator, and
+  `lead-lag-spillover`'s regional half closes on a rejection.** `SUMMARY.md` #89, the folder's
+  highest-ranked unrun item for eight sessions and the only one that could fail. Train split only,
+  restriction fitted division-free as `Gamma_n[a,b] = Sigma[a,b] * q_b` (which implies the note's
+  ratio form exactly and is strictly more forgiving, so rejection is conservative), each statistic
+  reported beside a simulated **no-lag null** as the mandatory rider requires:
+
+      partition                        groups  own rho(1) med  rho<0   R^2(n=1)   null median     pct    |z|>3
+      A regions (mixed sessions)          6        -0.0280      4/6     -0.1885      +0.3029       1.6   23/30
+      B nine US SECTOR ETFs (1 session)   9        -0.0403      9/9     +0.2102      +0.4416       8.6   31/72
+      C six US broad/bond ETFs (1 sess)   6        -0.0698      5/6     +0.5649      +0.6168      43.0    7/30
+
+  **The model requires POSITIVE own autocorrelation in portfolio returns; 20 of 21 groups are
+  negative**, 9 of 9 among US sector ETFs where no time-zone lag is possible, so `p` as the `n`-th
+  root of an autocorrelation is not real-valued. The overidentifying fit is **worse than a no-lag
+  null** (1.6th and 8.6th percentiles), and partition C's apparently healthy `R^2 = +0.565` sits at
+  the 43rd percentile of its own null — **the rider is what stopped that reading from being called a
+  pass.** The violating pairs separate cleanly: partition A's are **antisymmetric and
+  calendar-aligned** (West leads JP/HK at `z` +14.7 to +27.2, the reverse direction inside noise),
+  partition B's are **row-uniform** — a property of the follower alone, which names no direction and
+  is exactly the common level 2026-09-06 said to remove first. **Two general forms.** First: *a model
+  rejected on the offset-free partition cannot explain the offset-bearing one either* — the control
+  that localises a failure is worth more than the failure. Second: *the competing mechanism the
+  non-trading model omits is daily bounce, which drives autocorrelation negative while staleness
+  drives it positive; on this universe bounce wins at every grouping, so no staleness-based
+  construction should be expected to identify anything here.* **No trial follows**: the surviving
+  pairs are the West leading JP/HK, and since those markets close ~13 hours earlier the first print
+  that can contain a day-`t` US move is the day-`t+1` close — **exactly the bar the engine's 1-day
+  execution lag fills at**, so the information is in the price before the book could trade it.
