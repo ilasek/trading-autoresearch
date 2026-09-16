@@ -10379,3 +10379,162 @@ seated lead is on the 2026-09-14 do-not-extend list. If Block C names violating 
 their own null, that is a pre-specified object and a scout trial in `lead-lag-spillover` is
 justified; if it does not, the session spends no trial and says so plainly, per 2026-09-15's rule
 that a session's own measurement pricing the cost of a trial is part of the decision to spend it.
+
+## Free measurement — 2026-09-16 (nightly), no trial spent
+
+All three pre-registered blocks ran. Nothing in `engine/`, `scripts/`, `tests/`, `data/`,
+`program.md`, `CLAUDE.md`, `research/`, `strategies/lib/`, `trials.jsonl` or the leaderboard was
+touched; every number below comes from the engine's own read-only functions and the stored series.
+Engine tests green (**33 passed**) before the first array was allocated. Store fresh through
+**2026-09-16**. Trial count unchanged at **91**; **no holdout read** — the count of holdout looks
+since 2026-08-17 stands at five.
+
+### Block A — #113: the deflator's two inputs, and the prediction that half-failed
+
+The engine's live numbers tonight: `n_effective` = **25** (24 clusters among the 90 stored series,
+plus 1 trial whose returns were never stored), `var` = **1.8917e-04** over all **91** raw daily
+trial Sharpes. Confirmed by reimplementing `effective_n_trials` read-only and matching it exactly.
+
+Dispersion recomputed on the population the count is defined over, with the consequence for the
+champion's stored validation series at that same `K = 25`:
+
+    dispersion population                       var        ann sd   E[maxSR] ann   DSR   ratio to engine
+    ALL 91 raw trial Sharpes (engine, live)  1.8917e-04   0.2183      0.4360      0.9537      1.000
+    cluster MEANS of raw Sharpes (the LTV)   1.6101e-04   0.2014      0.4023      0.9612      0.851
+    EQUAL-WEIGHT cluster series (primary)    1.6854e-04   0.2061      0.4116      0.9593      0.891
+    MIN-VARIANCE cluster series (secondary)  2.6585e-04   0.2588      0.5169      0.9310      1.405
+
+**The pre-registered prediction holds on the primary and is falsified on the secondary, and the
+falsification is the finding.** Equal-weight cluster series and the pure law-of-total-variance
+object both come in **below** the engine's raw dispersion (0.891 and 0.851), so the engine's
+mismatched populations make the bar **harder** — conservative, as predicted, by about **+0.006 DSR**
+on the champion. The **minimum-variance** aggregate the source actually prescribes goes the other
+way at **1.405**, which the pre-registration named as the falsifying outcome and which is therefore
+reported as a failed prediction rather than restated.
+
+**Why it flips, and this is the transferable half.** The largest cluster has **n = 45** near-identical
+books. Its members' daily Sharpes run 0.0405 to 0.0774 and its equal-weight aggregate is **0.0672**,
+squarely inside. Its minimum-variance aggregate is **-0.00007** — the optimiser, handed 45
+constructions correlated at ~0.95, returns a gross-leverage-**22.9** long-short book with weights from
+**-2.46 to +2.24** that cancels the signal to zero. The dispersion does not rise because the
+cluster-level estimate is better; it rises because a handful of aggregates are wild. **`SUMMARY.md`
+#1's own triage rule calls this before the code is written**: the equal-weight aggregate estimates
+zero parameters, the minimum-variance aggregate estimates a 45x45 covariance, and a 22.9x gross
+long-short book is that estimation error made visible. **So the source's prescription is the thing
+that fails here, not the engine's departure from it** — and the honest statement is that the engine's
+two inputs *are* on different populations, that the departure is conservative under every
+parameter-free reading of "cluster-level series", and that the one reading under which it is not is
+disqualified by a rule this repo already carries.
+
+**Engine-issue boundary, held as pre-registered.** Not filed under `## Engine issue`, nothing in
+`engine/` touched. `metrics.py:122-125` states the choice in as many words and the code does exactly
+what it documents.
+
+### Block B — #111 + #112: the estimator spread, and two estimators that fail opposite controls
+
+Seven estimators x three matrices, `m = 90` stored validation series, `T = 1562`. Controls realised
+as intended: null (b) mean off-diagonal `rho` **-0.0006**, null (c) **+0.7898**, real median **+0.7835**.
+
+    estimator                            (a) REAL 90      (b) i.i.d. null   (c) one-factor 0.80
+    participation (SumL)^2/SumL^2             1.56              85.29              1.59
+    Galwey (Sum sqrtL)^2/SumL                10.87              88.74             26.63
+    Cheverud-Nyholt                          33.49              89.94             34.48
+    Li-Ji                                    14.00              90.00             20.00
+    Gao et al. (C = 0.995)                   39.00              90.00             87.00
+    engine single linkage @ 0.95             24.00              90.00             90.00
+    ONC (Lopez de Prado-Lewis)                2.00              49.00              2.00
+
+    spectra: REAL PC1 = 79.4% (top-5: 71.44, 7.97, 1.97, 1.33, 0.96)
+             (b)  PC1 =  1.7% (top-5: 1.50, 1.46, 1.44, 1.42, 1.39)
+             (c)  PC1 = 79.2% (top-5: 71.29, 0.33, 0.31, 0.31, 0.30)
+
+**Finding 1 — the spread on the real matrix is a factor of 25, from 1.56 to 39.00.** The literature's
+own warning — the family coincides at the two anchors and differs everywhere between — is confirmed
+on this repo's own correlation matrix, and the middle is exactly where a six-week trial history
+lives. **The pre-commitment not to adopt any of them was the right call and is honoured: none is
+adopted, and the spread is the output.**
+
+**Finding 2 — ONC is DISQUALIFIED on control (b), reading 49 on 90 genuinely independent series.**
+Second estimator this lab has caught failing the i.i.d. control, after Kaiser on 2026-09-15, and the
+pre-registered rule fires: its reading of 2.00 on the real matrix is **not interpreted**. Every other
+estimator passes (b) at or above 85.
+
+**Finding 3, and it answers #112 better than #112 expected — the two clustering estimators fail
+OPPOSITE controls, so no member of the family is safe on both anchors.** Single linkage reads **90**
+on the one-factor null (blind below its threshold, confirming 2026-09-15) and **90** on i.i.d.
+(correct). ONC reads **2** on the one-factor null (correct, and the one thing it does well) and **49**
+on i.i.d. (hallucinating structure in pure noise). **#112 asked whether ONC also reads ~N on (c),
+which would close the clustering family; it does not — but the family closes anyway, for the stronger
+reason that its two members' failure modes are complementary rather than shared.** This reproduces
+Halle et al.'s head-to-head conclusion — no estimator safe across all structures — on a different
+estimator family and on this repo's own material, which is independent support for a Tier B source.
+
+**Finding 4, and it is a direct caution on last night's headline number.** The participation ratio
+reads **1.56** on the real matrix and **1.59** on a synthetic one-factor null with no search
+structure in it whatsoever. **The statistic cannot distinguish this lab's ninety-trial history from
+one common factor plus noise**, so 1.56 is very close to a restatement of "long-only at gross <= 1.0
+makes every book an equity portfolio" and carries little information about the search itself. That is
+the same conclusion 2026-09-15 reached by removing PC1, arrived at independently, and it argues the
+PC1-removed reading (4.12) is the only one of the two worth quoting.
+
+**A low reading still licenses nothing**, unchanged and now for a third reason: the two already
+recorded (Sullivan-Timmermann-White's universe requirement; Moskvina-Schmidt's nonlinear dependence
+of the count on the cut-off) plus tonight's factor-25 spread, which means "the structural number" is
+not a number at all but a range spanning the engine's 24 on both sides.
+
+### Block C — #89: the overidentifying restriction test, and it FAILS on every partition
+
+The folder's highest-ranked unrun item for eight sessions, the only one on the board that could fail.
+Train split only (through 2017-12-31). The restriction is implemented division-free as
+`Gamma_n[a,b] = Sigma[a,b] * q_b` fitted by least squares over the off-diagonal ordered pairs, which
+implies the note's ratio form exactly — `Gamma[a,b]/Gamma[b,a] = q_b/q_a` because `Sigma` is
+symmetric — while being strictly more forgiving than requiring the ratios to hold exactly, so a
+rejection is conservative. Convention: `Gamma_n[a,b] = Cov(R_a,t, R_b,t-n)`, so **row = the following
+series, column = the lagged/leading one**.
+
+    partition                                  groups  days   own rho(1) median  n rho<0   R^2(n=1)   null median [5,95]        pct   |z|>3
+    A regions (MIXED sessions)                    6    4256       -0.0280          4/6      -0.1885   +0.3029 [-0.067,+0.644]   1.6    23/30  max 30.20
+    B nine US SECTOR ETFs (ONE session)           9    4950       -0.0403          9/9      +0.2102   +0.4416 [+0.159,+0.688]   8.6    31/72  max  6.90
+    C six US broad/bond ETFs (ONE session)        6    2790       -0.0698          5/6      +0.5649   +0.6168 [+0.009,+0.911]  43.0     7/30  max  9.97
+
+**The model is rejected at the first moment it constrains, and it is rejected where no session offset
+can exist.** Lo-MacKinlay non-trading induces **positive** own autocorrelation in portfolio returns —
+that is the model's signature prediction, and every group here is a portfolio (partition A's baskets
+and partitions B and C's ETFs alike). **Twenty of the twenty-one groups have negative daily own
+autocorrelation**, including **9 of 9** US sector ETFs, which trade one session in one currency where
+no time-zone lag is possible. `p` estimated as the `n`-th root of an autocorrelation is therefore not
+even real-valued: `sqrt(rho(2))` is `nan` for all six regions.
+
+**The overidentifying fit is worse than a no-lag null, not better.** Partition A sits at the **1.6th
+percentile** of its own null band and partition B at the **8.6th**; partition C is at the 43rd, i.e.
+uninformative rather than passing. The mandatory rider did its job: had the null not been simulated,
+partition C's `R^2 = +0.565` would have read as a comfortable pass when its null median is +0.617.
+
+**What the z-map says, and it is a clean separation between the two partitions.** In partition A the
+23 violating pairs are overwhelmingly **antisymmetric and calendar-aligned**: rows JP and HK against
+columns US/GLOBAL/DE/UK run **+14.7 to +27.2** (the West leading JP and HK), while the reverse
+direction — columns JP/HK against Western rows — sits at **-1.59 to +0.71**, inside noise. In the
+offset-free partition B the violations are **row-uniform, not pairwise**: XLI, XLB, XLV and XLY are
+positive against every column, XLF, XLP, XLK and XLU negative against every column. **A row-uniform
+residual is a property of the follower alone and names no direction** — it is precisely the common
+level that 2026-09-06's rule says must be removed before any lead-lag statistic can be read as a
+leader, and once it is removed nothing antisymmetric survives in B.
+
+**Verdict, and the pre-registered limit is what fired.** The test does **not** convert 2026-09-06's
+"the regional partition is measurement" into a claim that survived a test built to break it. It does
+something more specific: it **rejects i.i.d. censoring as the generator of any partition on this
+universe**, while leaving the regional pattern exactly as calendar-shaped as it was. That is the
+"honest limit" the note recorded in advance — the model's `p` is an i.i.d. censoring probability and a
+time-zone offset is a **deterministic** lag — now confirmed by measurement rather than asserted.
+The universal negative own autocorrelation points at the obvious competing mechanism the model omits:
+daily bounce, which pushes autocorrelation negative, dominates staleness, which pushes it positive.
+
+**No trial follows, and the pre-registration decides it.** The rule fixed before the measurement was
+that violating pairs surviving their own null become a pre-specified object a scout may build on.
+The surviving pairs are the West leading JP and HK — and they are not an object: JP and HK close
+~13 hours before the US session, so the first JP or HK print that can contain a day-`t` US move is the
+day-`t+1` close, which is **exactly the bar the engine's 1-day execution lag fills at**. The
+information is in the price before the book could trade it. Partition B's violations name no
+direction at all. `lead-lag-spillover`'s regional half therefore **closes on a rejection**, and the
+family's sector half was already closed on 2026-09-06 (its antisymmetric content is equities leading
+bonds at a horizon the cost model forbids).
