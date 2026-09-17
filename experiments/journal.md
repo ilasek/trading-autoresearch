@@ -10918,3 +10918,148 @@ every weight, so no blend candidate follows and the next session need not re-der
 The untimed leg is **0.076 short** of its own break-even — the closest any leg on this board
 has come — and still an order of magnitude below the 1.34-1.42 that would make a 20% blend
 *resolvable* rather than merely positive.
+
+## Session summary — 2026-09-17 (nightly)
+
+- **Integrity check — clean, and verified rather than assumed.** `git fetch origin --prune`
+  clean; `git branch -r --no-merged origin/main` returned **nothing**, so no previous
+  session's work is stranded off `main`. As on 2026-09-06 through -16 the session-start hook
+  printed "integrity check OK — on main, level with origin/main, no stray branches" while
+  `git status -sb` reported a per-run branch (`main-e92pzk`) — **the hook still does not
+  detect this, twelfth session running.** That branch held **zero commits absent from
+  `origin/main`** (identical tip `1f41355`), so the trial history is not split and no second
+  head exists to reconcile; the session was moved onto `main` before any measurement. Engine
+  tests green (**33 passed**). Store fresh through **2026-09-17** — same day, not stale.
+- **Experiments run: 2 of the 8-trial budget.** Trial count 91 → **93**. Two `SCOUT`
+  verdicts, **no champion comparison, no holdout read** — the count of holdout looks since
+  2026-08-17 stands at **five**, unchanged. One pre-registration block committed in full
+  before the first array was allocated, and one free-measurement block.
+
+### The night in one line
+
+The lab searched for a strategy again after three sessions of auditing its own gate, and the
+answer is a **negative with a mechanism**: timing a sub-portfolio on its own past return —
+the one form of switching every previous refutation here left open, because all of them timed
+on an *external* state variable — loses to holding all of them, on a designed pair built so
+that nothing else could move.
+
+### Best finding: "blending beats switching" now covers internal state too
+
+Twelve long-only sleeves (both legs of six pre-registered characteristics), bit-identical at
+every node except whether a sleeve is dropped when its own universe-demeaned trailing
+12-month return is negative:
+
+    book                     train screen (gross)     validation (net, engine)
+    untimed #93              +18.13%/yr  Sh 1.109           0.867
+    TIMED   #92              +19.68%/yr  Sh 1.180           0.755
+    paired difference        +1.55%/yr   t = +2.25         -0.112, t = -1.58 / -1.74
+
+**The train screen was as clean as this lab knows how to build one and it still did not
+transfer.** Hash placebo matched at the same 0.521 hold rate: -0.00%/yr, and the observed gain
+sat at the **100th percentile of 40 independent draws** (mean +0.07, sd 0.49). Sign survived
+**all six** leave-one-characteristic-out drops — which is exactly the "a quarter of factors
+carry all of it" selection the published reexamination complains about. The pre-registered
+un-demeaned control read **below** the untimed book, as #114 predicts, so the load-bearing
+step was working. Fourth consecutive instance of the 2026-08-30 anti-prediction record, and
+the cleanest member of it rather than the weakest.
+
+**Cost is ruled out, which is rare outside `price-trend`.** 1.5x of extra turnover ~ 0.23%/yr
+against a 2.10pp annual-return gap: **cost explains 11%**. The year decomposition says what
+does — the deficit is **2021/2022/2023**, with 2018-2020 near ties. A twelve-month sign rule
+re-arms after the turn it needed to see, which is the rotation-year signature this repo has
+recorded for every slow-responding construction, arriving for the first time on a rule that
+*switches* rather than one that blurs.
+
+**The published reexamination's central result reproduces here, and it was re-measured rather
+than imported** — the train screen disagreed with it and validation did not. The always-on
+control at **0.867** is now the second-best non-`price-trend` result the lab has recorded, on
+a book that reads six characteristics and times none of them.
+
+### Second finding: `beta-minus` is the volatility level wearing a risk label
+
+`SUMMARY.md` #117's identity `beta- = rho- * sigma-_i / sigma-_m` confirmed term by term:
+`beta-` correlates **+0.603** with the 252-day volatility level at **0.655** top-15 name
+overlap and carries half the level sort's own excess (+5.23%/yr against +11.42%/yr), while
+`rho-` correlates **-0.016** and is flat — and collapses to noise inside a single volatility
+tercile, the control this family has now failed **ten times**. The sign flip against the
+published replication needs no amendment: on a current-constituents universe the
+high-volatility names are the survivors. #117's own closure condition is met and the axis
+closes **on evidence, without a trial**.
+
+### Third finding: coskewness is a null, and the incumbent is not short skew
+
+Wrong sign in every subperiod (-1.82 / -2.64 / -1.87 %/yr at 1968+/1998+/2008+, all
+insignificant) against a theory that *pins* the sign positive; flatter than its own placebo;
+and the **pre-registered directional falsifier failed** — US -1.49%/yr against non-US
+-1.04%/yr, where the call written down beforehand was "stronger outside the US". The free
+diagnostic that #118 says must come first changes what its second half licenses: the
+champion's realised coskewness is **+0.0018** and its own skew **-0.254 against the
+universe's -0.754**, so the incumbent is materially *less* negatively skewed than the market
+it trades. Harvey-Siddique's "a high Sharpe on a skewed book is partly compensation" warning
+does not bite on this champion; on this universe it bites on the equal-weighted benchmark.
+
+### Why two trials and not four, and not zero
+
+The pre-registration fixed a two-sided rule per block before any number existed. Block A's
+rule was met, so the trial was spent — and spent as a **pair**, because the object under test
+is a contrast and `learnings.md` says a train contrast in this family is precisely the thing
+not to extrapolate; the paired difference is resolvable (`rho` 0.9843, SE 0.065-0.071) where
+neither level is. Blocks B and C failed their rules and no trial followed. Honouring a
+pre-registration after the numbers are in is the whole discipline, in both directions: last
+session it meant declining to spend, tonight it meant spending twice. No candidate was
+designed after seeing a validation number, and nothing on the 2026-09-14 do-not-extend list
+was touched.
+
+### For the human — the stall reading, updated
+
+2026-09-16 told you plainly that the lab had spent eight sessions producing diagnostics that
+propose no portfolio. That is no longer true of tonight: the research folder supplied a book,
+the book was built, and it lost to its own control for a legible reason. **The underlying
+concern is unchanged and should not be read as resolved.** Tonight's best result, 0.867, is
+still 0.25 below the seat and 0.076 short of its own blend break-even, and the two screens
+that closed did so by finding this universe's survivorship artifact for the tenth and
+eleventh time. The decision that would change the trajectory is still not an agent's: either
+the universe gains data that opens a genuinely new family (fundamentals, point-in-time
+constituents, intraday), or `program.md` says what the lab should do once its families are
+exhausted. Both are edits to frozen files.
+
+### Protocol and allocation notes
+
+- **Budget: 2 of 8.** `price-trend` cap of 2 **unused — zero trials there**. Both trials in
+  `portfolio-learning`; the "at most 2 per family" cap is discharged (eight families carry a
+  lead) and would have been satisfied anyway. Cold-family rule discharged 2026-09-14.
+- **A new `strategies/lib/` file was added** — `sleeve_book.py`, the construction the designed
+  pair shares so the two candidates differ at exactly one expression. Adding is permitted;
+  it is frozen from this commit and no existing lib file was touched.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point,
+  no sixth holdout look.
+- **Train-as-prediction: n = 33** (was 31). Both of tonight's scouts recorded a train Sharpe
+  before scoring; both landed their pre-registered validation *level* (0.755 and 0.867 against
+  a 0.75 call with a 0.45-1.10 band) and the timed one missed its *contrast*.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/`, `trials.jsonl` and every pre-existing `strategies/lib/` file are
+  untouched; the leaderboard was rewritten by `run_experiment.py` alone.
+
+### Next ideas, in order, with provenance
+
+1. **`SUMMARY.md` #109's winner-to-runner-up discount on the 2026-09-14 specification curve**
+   — the folder's highest-ranked unrun item, carried from 2026-09-16. Still needs the curve
+   rebuilt, which is the only reason it has not run. (`research/SUMMARY.md` #109.)
+2. **`SUMMARY.md` #82**, carried for a tenth session, and **#49** for a twentieth.
+3. **Do NOT re-derive the blend board.** Exhaustive as of 2026-09-15 and extended tonight with
+   two more legs; both negative at every weight. (`learnings.md`, tonight.)
+4. **Do NOT propose a second factor-momentum variant.** The mechanism lost to its own control
+   on a pair designed so nothing else could move, with the cost channel measured out at 11%
+   and the deficit localised to the rotation years. A different formation length, a different
+   sleeve count or a different demeaning target is the knob-tuning the manual forbids, and
+   would additionally be designed after seeing a validation number. (Tonight, #92/#93.)
+5. **Do NOT propose `beta-minus`, `rho-minus` or coskewness.** #116 was an anti-candidate
+   before tonight; `rho-` and `beta_SKD` are now measured nulls on this universe with their
+   volatility-tercile controls and placebos on record. (`research/SUMMARY.md` #116-#118,
+   closed tonight.)
+6. **Do not extend**: everything on the 2026-09-14 list, unchanged, plus the regional lead-lag
+   pairs added 2026-09-16, plus items 4 and 5 above. **Also do not extend tonight's untimed
+   control** despite its 0.867 — it is the second-best non-`price-trend` result on the board
+   and any variant of it would be specification search on the split that scored it.
+
+**No engine issues encountered.**
