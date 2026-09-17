@@ -3457,3 +3457,131 @@ across experiments; prune entries that later evidence contradicts.
   pairs are the West leading JP/HK, and since those markets close ~13 hours earlier the first print
   that can contain a day-`t` US move is the day-`t+1` close — **exactly the bar the engine's 1-day
   execution lag fills at**, so the information is in the price before the book could trade it.
+
+- **[Measured 2026-09-17, nightly] "Blending beats switching" extends from external state
+  variables to a component's own past return, and the designed pair is what makes that a
+  finding rather than a level.** Every de-risking overlay this lab has refuted timed the book
+  on an *external* state variable (trend, vol spike, drawdown depth, SPY regime), which left
+  open the one case `research/SUMMARY.md` #114/#115 proposes: timing each component on *its
+  own* trailing return, where the literature says a characteristic sort is positively
+  autocorrelated. Twelve long-only sleeves (both legs of six pre-registered characteristics —
+  trend, 21-day reversal, Amihud `ILLIQ`, Garman-Klass range vol, volume shock, dollar-volume
+  rank; top 20 each, monthly), held always (#93) against held only when their own
+  universe-demeaned trailing 12-month return was positive (#92), bit-identical at every other
+  node:
+
+      book                              train screen (gross)   validation (net, engine)
+      untimed, all twelve               +18.13%/yr  Sh 1.109        0.867
+      TIMED on own demeaned trailing    +19.68%/yr  Sh 1.180        0.755
+      paired difference                 +1.55%/yr   t = +2.25      -0.112, t = -1.58/-1.74
+
+  **The train screen was as clean as this lab knows how to make one and it still did not
+  transfer.** A hash placebo matched to the same 0.521 hold rate landed at -0.00%/yr and the
+  observed gain sat at the **100th percentile of 40 independent placebo draws** (mean +0.07,
+  sd 0.49); the sign survived **all six** leave-one-characteristic-out drops (+0.99 to +1.96,
+  t = +1.38 to +2.98), which is the selection the published reexamination's "a quarter of
+  factors carry all of it" complaint is about; and the pre-registered un-demeaned control
+  read **below** the untimed book (Sh 1.047), exactly as #114 predicts, so the load-bearing
+  step was doing its job. **Fourth consecutive instance of the 2026-08-30 reading that
+  outside `price-trend` a train advantage anti-predicts a validation advantage — and the
+  cleanest member of that record, not the weakest.**
+  **The cost channel is ruled out, which is rare here.** The timing rule costs 1.5x of extra
+  annual turnover (6.2x against 4.7x), ~0.23%/yr at this repo's constant, against a 2.10pp
+  gap in annual return: **cost explains 11%**. Four consecutive trials had previously found
+  turnover dominating every mechanism comparison outside the incumbent's family; this one is
+  the exception and the year decomposition says why. The deficit is **2021/2022/2023**
+  (+14.2/-17.1/+27.2 against the control's +20.9/-13.3/+30.1) with 2018-2020 near ties — the
+  rotation-year signature, arriving on a rule that *switches* rather than one that blurs.
+  A twelve-month sign rule re-arms after the turn it needed to see.
+  **Two riders.** The published reexamination's central result (timing does not beat
+  buy-and-hold of the same factors, on mean or Sharpe, in either of two samples) **reproduces
+  here**, and it was re-measured rather than imported — the train screen disagreed with it and
+  the validation split did not. And the always-on control at **0.867** is now the second-best
+  non-`price-trend` result the lab has recorded, on a book that reads six characteristics and
+  times none of them.
+
+- **[Measured 2026-09-17, nightly] The closed-form paired SE transfers outside `price-trend`,
+  measured for the first time on a family it was not fitted in.** `SE ~ 0.568*sqrt(1-rho)`
+  was calibrated on the four-horizon momentum family and `learnings.md` claimed it transfers
+  because it is a property of the 1,562-day window rather than of the construction. On
+  tonight's `portfolio-learning` pair (`rho` 0.9843) it reads **0.071** against a paired
+  stationary-block bootstrap's **0.065** — the same close agreement recorded inside
+  `price-trend`. The claim is now tested rather than asserted. Keep using it as the pre-trial
+  screen in any family, and keep carrying it as a **floor** rather than a significance test.
+
+- **[Measured 2026-09-17, nightly] `beta-minus` is the volatility level wearing a risk label
+  on this universe, the identity that predicts it is confirmed term by term, and
+  `research/SUMMARY.md` #117's own closure condition is met — so the downside-comovement axis
+  closes without a trial.** #116 files the raw `beta-minus` sort as an anti-candidate on the
+  strength of a replication that reads its high-minus-low spread negative in all eight
+  specifications, and #117 says the identity `beta- = rho- * sigma-_i / sigma-_m` names the
+  reason: the sort mixes the priced downside **correlation** with the asset's own downside
+  **volatility**. Both halves measured on train against the equal-weighted universe (never a
+  US index, per #117's non-optional rider), 252-day window:
+
+      statistic     mean spearman to 252d vol   top-15 overlap with the vol sort
+      beta-                  +0.603                        0.655
+      rho-                   -0.016                        0.310
+
+  **The volatility term is essentially the whole of `beta-` here.** Its train profile is
+  +5.23%/yr (t = +2.04) over ranks 1-15 long-high, against the plain 252-day volatility level
+  sort's **+11.42%/yr (t = +3.84)** on the same grid — `beta-` is a *diluted* version of the
+  level sort, at 0.655 name overlap. Note the sign: the replication finds high-`beta-`
+  **losing**, this universe finds it winning, and the identity explains the flip without
+  amendment, because a current-constituents universe is where the high-volatility names are
+  the survivors (the +19.4%/yr high-minus-low vol spread already on record).
+  **`rho-`, the term with the volatility divided out, is flat.** Unconditionally its profile
+  is non-monotone and asymmetric (long-high ranks 1-15 -3.24%/yr t = -2.97, long-low ranks
+  1-15 -0.71%/yr t = -0.38, i.e. the two sides do not mirror), and **inside a single trailing
+  volatility tercile — the control this family has now failed ten times — it collapses to
+  -1.54%/yr (t = -0.98) against a placebo at -1.23%/yr (t = -0.93) on the identical
+  restriction.** That is #117's stated closure condition in the form this universe can
+  deliver it: the confound explanation holds, and the family closes on evidence.
+  **Free diagnostic nobody had run, reported whatever the screen said:** the champion's own
+  `beta- - beta` is **-0.101** and `beta+ - beta-` is **-0.054** against the equal-weighted
+  universe. The incumbent is **not** loaded on downside comovement; if anything its beta falls
+  slightly on down days. So this was never a diversification opportunity for the seat either.
+
+- **[Measured 2026-09-17, nightly] Coskewness is a null on this universe in every subperiod,
+  its theory-pinned sign is absent, its pre-registered directional falsifier failed, and the
+  incumbent turns out not to be short systematic skewness — which retires the scoreboard
+  worry `SUMMARY.md` #118 attaches to it.** All four knobs were pre-registered before
+  measurement because the source's own authors report the estimate moving by a factor of two
+  across that grid: `beta_SKD = E[eps_i*eps_M^2]/sqrt(E[eps_i^2]*E[eps_M^2])` from **60
+  monthly** returns (never daily returns inside one month, which is the specification the
+  standard replication reads as a null), **30/70** breakpoints, **equal** weighting,
+  missing-value limit **12**. The theory pins the sign: the most-negative-coskewness third
+  must be *paid*, so its excess must be positive.
+
+      most-negative third   1968+ -1.82%/yr (t=-1.40)   1998+ -2.64 (t=-1.70)   2008+ -1.87 (t=-1.21)
+      most-positive third   1968+ +0.19%/yr (t=+0.16)   placebo bottom third -0.02 (t=-0.02)
+
+  **Wrong sign in every subperiod, significant in none**, and the marginal rank profile is
+  flatter than its own placebo (live |t| <= 0.76 across four slices; placebo reaches 1.56).
+  Inside the middle volatility tercile it reads +0.44%/yr (t = +0.28) against the placebo's
+  +0.61%/yr (t = +0.53) — the live score weaker than noise. The early-sample power caveat does
+  **not** rescue it: scoreable names run 11 in the 1960s but **131.8 in the 2010s**, and the
+  modern, well-populated subsample is where the point estimate is *most* negative.
+  **The pre-registered directional falsifier failed and is reported as one.**
+  Jensen-Kelly-Pedersen find the effect in developed-ex-US and marginally at best in the US,
+  so the call written down before the run was "stronger outside the US names". Observed: US
+  **-1.49%/yr (t = -1.02)**, non-US **-1.04%/yr (t = -0.59)** — same sign, non-US *weaker*.
+  **And the free diagnostic that was to come first did come first, and it changes what #118's
+  second half licenses.** The champion's realised coskewness against the equal-weighted
+  universe is **+0.0018**, i.e. zero, and its own return skew is **-0.254 against the
+  universe's -0.754** — the incumbent is materially *less* negatively skewed than the market
+  it trades. Harvey-Siddique's warning that a high Sharpe on a negatively skewed book is
+  partly compensation rather than skill therefore **does not bite on this champion**; on this
+  universe it bites on the equal-weighted benchmark instead. That is worth carrying, and it
+  licenses no change to any frozen threshold, exactly as #118 says.
+
+- **[2026-09-17, nightly] Two new legs priced against the seat on the standing rule, both
+  negative at every weight, so no blend candidate follows.** `pl_factor_momentum_untimed`
+  (own Sharpe 0.867, `rho` 0.8148, vol ratio `k` 0.761) blends at **-0.005 / -0.013 / -0.024 /
+  -0.040** at 10/20/30/40%, and `pl_factor_momentum_timed` (0.755, `rho` 0.8469) at
+  **-0.016 / -0.036 / -0.060 / -0.088**. The solved break-even leg Sharpe at 20% weight is
+  **0.943** and **0.975** respectively, so the better of the two is **0.076 short** — the
+  closest any leg has come, and still short, and still an order of magnitude below the
+  1.34-1.42 that would make a 20% blend *resolvable* rather than merely positive. Recorded so
+  the next session does not re-derive it: the 2026-09-15 blend board is unchanged in its
+  conclusion and now covers two more legs.
