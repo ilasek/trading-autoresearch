@@ -10692,3 +10692,119 @@ replace 24 with.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-17 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-17 (nightly), written before any number was computed
+
+Committed before the first array was allocated. Every node below is fixed here so that the
+session running the measurements cannot revisit it after seeing them.
+
+**Why this shape.** `research/SUMMARY.md`'s 2026-09-17 additions are the first in nine
+sessions that propose a book, and the 2026-09-16 summary told the human plainly that the lab
+has been auditing its own gate rather than searching. This session takes that as its
+instruction: three free screens, each with a **pre-committed two-sided decision rule**, and a
+trial spent on every screen that passes its own rule. Budget ceiling 8; expected 0-3.
+
+### Allocation, checked against `program.md` before writing
+
+- `price-trend`: **0 planned**, cap 2, unused.
+- "at most 2 in any single family until four families have a lead": **discharged** — eight
+  families carry a recorded lead.
+- "at least 1 in a family with no recorded trial": **discharged** 2026-09-14; no cold family.
+- Planned homes: `range-variance` (Blocks B and C — `program.md` names "cross-sectional
+  dispersion and **correlation regimes**" in that family, and both objects are comovement
+  statistics, not the volatility level fifteen screens kept rediscovering), and
+  `portfolio-learning` (Block A — an allocation rule over sub-portfolios).
+
+### Block A — `SUMMARY.md` #114, the factor-momentum screen. Train split only, gross.
+
+**`F` is fixed here, before looking, as twelve sleeves: both legs of six characteristics.**
+The characteristics are (1) 12-1 trend, (2) 21-day reversal, (3) Amihud `ILLIQ` 63d,
+(4) Garman-Klass 21d range volatility, (5) 63-day volume shock, (6) 63-day dollar-volume
+rank. Each leg is the **top 20** names by that characteristic, equal weight, formed on the
+last trading day of each month, held one month. Twelve sleeves rather than six because the
+source's construction is model-free — it takes the long side after the spread has been
+positive and the short side after it has been negative — and the long-only analogue of
+"take the short side" is **hold the other leg**, not sit out.
+
+Each sleeve's monthly return is **demeaned against the equal-weighted universe monthly
+return**, per #114's load-bearing rider. Two books on train:
+
+- **(a) untimed**: equal weight over all twelve sleeves, always on.
+- **(b) timed**: equal weight over the subset whose own *demeaned* trailing 12-month return
+  was positive at formation; reported twice, once falling back to cash and once to the
+  untimed book when the subset is empty.
+
+**Mandatory control**: the identical timed rule on **un-demeaned** sleeve returns, which
+#114 predicts reads as a null because a long-only sleeve return is mostly the market.
+
+**Decision rule, two-sided and fixed now.** Spend the #115 trial **only if** the timed book
+beats the untimed one on train Sharpe **and** on mean, **and** the un-demeaned control does
+not beat it by more than the demeaned version does. Otherwise record the negative: the
+reexamination's central result reproduces here, `learnings.md`'s "blending beats switching"
+becomes stronger and more general, and no trial is spent. No performance expectation is
+imported from the source; only the ordering is at issue.
+
+### Block B — `SUMMARY.md` #117, downside correlation with the volatility term divided out.
+
+Market proxy is the **equal-weighted universe daily return**, never a US index (#117's
+non-optional rider; a US proxy makes "downside days" US downside days and hands every
+non-US name the time-zone artifact on which `lead-lag-spillover` closed). Window 252
+trading days, `mu_m` the market's own mean over that same window.
+`beta_minus = Cov(r_i, r_m | r_m < mu_m) / Var(r_m | r_m < mu_m)`;
+`rho_minus = corr(r_i, r_m | r_m < mu_m)`.
+
+Screens, train only, forward 21 days, house marginal-excess-by-rank-slice profile with the
+standing **hash placebo** (a hash of (rebalance date, ticker), reading no market data):
+`beta_minus` long-high and `rho_minus` long-high and long-low; the ETF/stock split; and
+**the control this family has failed nine times — the effect measured inside a single
+trailing-volatility tercile**, so the survivorship-driven level is differenced out.
+
+**Free diagnostic first, and it is reported whatever the screen says**: the champion's own
+`beta_minus - beta` and `beta_plus - beta_minus` against the equal-weighted universe, which
+nobody here has measured.
+
+**Decision rule, fixed now.** `beta_minus` is an **anti-candidate** (#116) and will not be
+proposed whatever it reads. Spend a `range-variance` trial on `rho_minus` **only if** its
+top or bottom rank slice carries |t| >= 2.0 on train, the placebo on the identical
+restriction does not, **and** the effect survives inside a single volatility tercile at the
+same sign. If `rho_minus` reads flat while `beta_minus` reads negative, that is #117's own
+stated closure — the confound explanation holds, the family closes honestly on evidence, and
+no trial is spent.
+
+### Block C — `SUMMARY.md` #118, a long-only coskewness tercile.
+
+All four knobs pre-registered, because the authors' own follow-up moves the estimate by
+roughly a factor of two across this grid: **window 60 monthly returns**, **breakpoints
+30/70**, **equal weighting**, **missing-value limit 12 months**. Market proxy is again the
+equal-weighted universe, monthly. `beta_SKD = E[eps_i * eps_M^2] / sqrt(E[eps_i^2] * E[eps_M^2])`
+with `eps_i` the market-model residual and `eps_M` the demeaned market excess return. The
+tradeable bucket is the **most-negative-coskewness third, held long** — a sign the theory
+pins, so the hypothesis is falsifiable in sign as well as size. **Do not shorten the window
+to daily returns inside one month**; that is the specification the standard replication reads
+as a null.
+
+**Two free pre-registered falsifiers, stated now.** Jensen-Kelly-Pedersen find the effect in
+developed-ex-US and marginally at best in the US, so on a 15-region universe the prediction
+is **directional: stronger outside the US names than inside them**. And the champion's own
+realised coskewness against the universe is measured first — if the incumbent is already
+short systematic skewness, this is not diversification but more of the same exposure, and
+that is reported as a finding either way.
+
+**Decision rule, fixed now.** Spend a `range-variance` trial **only if** the most-negative
+third carries a positive train excess at |t| >= 2.0 with a clean placebo **and** survives the
+volatility-tercile control. The directional US/non-US prediction is recorded as a
+pre-registered call, not as a gate.
+
+### What ends the session, and what does not
+
+A `scout` verdict never reaches the holdout and never ends the session. Any `challenge`
+candidate that reaches the holdout gate ends it immediately, promoted or vetoed. Block A's
+#115, if it runs, is the only candidate that could be a challenger, and it will be filed as
+a **scout** unless Block A's own screen puts it above the seated `portfolio-learning` lead —
+`learnings.md`'s blend board is exhaustive and closed, and nothing on it reaches a third of a
+standard error, so a challenger needs its own reason and this one does not have it yet.
+
+**Standing constraints acknowledged:** nothing on the 2026-09-14 do-not-extend list is
+proposed; no seated lead is extended; no holdout number is read; `engine/`, `scripts/`,
+`tests/`, `data/`, `program.md`, `CLAUDE.md`, `research/` and every existing
+`strategies/lib/` file stay untouched.
