@@ -10828,3 +10828,93 @@ proposed; no seated lead is extended; no holdout number is read; `engine/`, `scr
 - Scout track: family best before this trial +1.01; the champion was not compared and the holdout was not read
 - Lesson: **The published reexamination's central result reproduces on this universe, and the designed pair is what makes that a finding rather than a level.** Always-on equal weighting of the same twelve sleeves scores 0.867 against the timed book's 0.755 — the contrast the pair exists to measure, resolvable in a way neither level is (`rho` 0.9843, paired SE 0.065-0.071). This is the **fourth consecutive instance** of `learnings.md`'s 2026-08-30 reading that outside `price-trend` a train advantage anti-predicts a validation advantage, and the first of the four with a placebo, a leave-one-out and a cost decomposition all pointing the other way on train — so it is the cleanest member of that record, not the weakest. Two riders. The control is also the **cheaper** book (4.7x against 6.2x), so the standing "turnover dominates every mechanism comparison outside `price-trend`" caveat applies in the direction that favours it; the year decomposition and the 11% cost share are what rule it out as the explanation. And at 0.867 this is now the **second-best non-`price-trend` result the lab has recorded** (behind `pl_maxleg_signal_blend`'s 0.877-1.008 range) on a book that reads six characteristics and times none of them.
 
+
+## Free measurement — 2026-09-17 (nightly), no trial spent
+
+Blocks B and C of the pre-registration. Both train split only, both gross, both decided by
+the rule written down before any number existed. Neither reads validation or holdout for
+selection; the two champion diagnostics use the champion's already-stored validation return
+series, which is the only series it has, and neither informs a candidate's selection rule.
+
+### Block B — `SUMMARY.md` #117, downside correlation. **Screen failed its rule. No trial.**
+
+Free diagnostic first, as pre-registered and reported whatever the screen said. The
+champion against the equal-weighted universe: `beta` +1.090, `beta-` +0.990, `beta+` +0.936,
+so **`beta- - beta` = -0.101** and **`beta+ - beta-` = -0.054**. The incumbent is **not**
+loaded on downside comovement — its beta *falls* slightly on down days — so there was never a
+diversification case here for the seat either. Nobody had measured this.
+
+The identity `beta- = rho- * sigma-_i / sigma-_m` then confirmed term by term on train,
+252-day window, equal-weighted universe proxy (never a US index, per #117's non-optional
+rider — a US proxy makes "downside days" US downside days and hands every non-US name the
+time-zone artifact `lead-lag-spillover` closed on):
+
+    statistic   mean spearman to 252d vol   top-15 overlap with the vol sort
+    beta-                +0.603                       0.655
+    rho-                 -0.016                       0.310
+
+    train marginal excess, forward 21d, over the scoreable pool
+    beta- LONG HIGH   1-15 +5.23%/yr (t=+2.04)   16-30 -0.75   31-45 -1.33   46-80 -3.17
+    rho-  LONG HIGH   1-15 -3.24%/yr (t=-2.97)   16-30 +0.35   31-45 +0.32   46-80 +0.84
+    rho-  LONG LOW    1-15 -0.71%/yr (t=-0.38)   16-30 +4.24 (t=+3.26)   31-45 -0.74   46-80 -2.59
+    placebo LONG HIGH 1-15 +1.00%/yr (t=+0.90)   16-30 -1.59   31-45 +1.98   46-80 -2.77
+    252d VOL LEVEL LONG HIGH  1-15 +11.42%/yr (t=+3.84)
+
+`beta-` is a **diluted volatility-level sort**: 0.655 top-15 overlap with the level, half the
+level's own excess. Its sign is *positive* here where the published replication reads it
+negative, and the identity explains the flip without amendment — on a current-constituents
+universe the high-volatility names are the survivors. It remains an **anti-candidate** (#116)
+and was never going to be proposed.
+
+`rho-` is the live object and it is flat. Its unconditional profile is non-monotone and
+asymmetric — the two sides do not mirror — and **inside a single trailing-volatility tercile,
+the control this family has now failed ten times, it collapses to -1.54%/yr (t = -0.98)
+against a placebo at -1.23%/yr (t = -0.93) on the identical restriction.** The pre-registered
+rule required |t| >= 2 on a top or bottom slice, a clean placebo, *and* survival inside one
+volatility tercile at the same sign. The third clause fails. **No trial**, and this is #117's
+own stated closure in the form this universe can deliver it: the confound explanation holds.
+
+### Block C — `SUMMARY.md` #118, coskewness tercile. **Screen failed its rule. No trial.**
+
+All four knobs fixed in the pre-registration before measurement, because the source's own
+authors report the estimate moving by a factor of two across that grid: 60 **monthly**
+returns, 30/70 breakpoints, equal weighting, missing-value limit 12. The theory pins the
+sign — the most-negative-coskewness third must be paid — so the hypothesis was falsifiable in
+sign as well as size, and it is falsified in sign.
+
+    most-negative third   1968+ -1.82%/yr (t=-1.40)  1998+ -2.64 (t=-1.70)  2008+ -1.87 (t=-1.21)
+    most-positive third   1968+ +0.19%/yr (t=+0.16)  placebo bottom third -0.02 (t=-0.02)
+    marginal rank profile, LONG LOW: all four slices |t| <= 0.76; the PLACEBO reaches |t| 1.56
+    inside the middle volatility tercile: +0.44%/yr (t=+0.28) vs placebo +0.61%/yr (t=+0.53)
+
+Wrong sign in every subperiod, significant in none, and flatter than its own placebo. The
+early-sample power caveat does not rescue it — scoreable names run 11.0 in the 1960s but
+**131.8 in the 2010s**, and the modern, well-populated subsample carries the *most* negative
+point estimate.
+
+**The pre-registered directional falsifier failed and is reported as one.** The call written
+down before the run, from Jensen-Kelly-Pedersen, was "stronger outside the US names".
+Observed: US **-1.49%/yr (t = -1.02)**, non-US **-1.04%/yr (t = -0.59)** — same sign, non-US
+*weaker*, not stronger.
+
+**And the free diagnostic that #118 says must come first did come first.** The champion's
+realised coskewness against the equal-weighted universe is **+0.0018**, i.e. zero, and its own
+return skew is **-0.254 against the universe's -0.754**. The incumbent is materially *less*
+negatively skewed than the market it trades, so Harvey-Siddique's warning that a high Sharpe
+on a negatively skewed book is partly compensation rather than skill **does not bite on this
+champion** — on this universe it bites on the equal-weighted benchmark instead. Reported
+because it was pre-registered as reportable either way, and it licenses no change to any
+frozen threshold, exactly as #118 says.
+
+### Blend pricing for the two new legs, on the standing rule
+
+Priced from stored validation series, no strategy re-run, no trial spent. Both negative at
+every weight, so no blend candidate follows and the next session need not re-derive it:
+
+    leg                            own Sh   rho      k       10%      20%      30%      40%    break-even@20%
+    pl_factor_momentum_untimed     0.867   0.8148  0.761   -0.005   -0.013   -0.024   -0.040      0.943
+    pl_factor_momentum_timed       0.755   0.8469  0.770   -0.016   -0.036   -0.060   -0.088      0.975
+
+The untimed leg is **0.076 short** of its own break-even — the closest any leg on this board
+has come — and still an order of magnitude below the 1.34-1.42 that would make a 20% blend
+*resolvable* rather than merely positive.
