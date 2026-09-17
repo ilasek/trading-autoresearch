@@ -10690,3 +10690,5 @@ replace 24 with.
    rotation-speed rationale. **Add to it: the regional lead-lag pairs**, closed tonight.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-17 (learning agent): 3 notes added, see research/SUMMARY.md

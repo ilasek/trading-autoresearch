@@ -104,6 +104,23 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > One finding is a **stated tension** with `notes/2026-08-24-deflated-sharpe-ratio.md` rather than
 > an addition to it — see the 2026-09-15 open questions.
 >
+> **Status after session 34 (2026-09-17): the eighth unit is the *shape of the output*, and this time
+> the lab named the gap itself.** Sessions 28–33 each found a finer unit to check coverage at
+> (families → clauses → operators → the pool → an attribute of its members → the selection rule →
+> the vocabulary). Tonight's gap was of a different kind: the 2026-09-16 nightly declined a trial for
+> the third session running and told the human in as many words that **"the lab is spending its
+> nights auditing its own gate rather than searching for strategies"**, with eight consecutive
+> research sessions supplying only free diagnostics. The 2026-09-13 detector was still run and still
+> worked — a grep across all 103 prior notes returned **zero** for `factor momentum`, `trend factor`,
+> `coskew`, `downside beta` and `semivariance` — but what aimed the session was the escalation, and
+> the acceptance criterion was *does this end in a portfolio*. It does: **factor momentum** (new
+> cross-family section below, candidates #114–#115) is a mechanism with a construction recipe and a
+> one-trial challenger, and **asymmetric comovement** (second new section, #116–#118) supplies one
+> anti-candidate, one salvage and one long-only tercile. **The 2026-09-08 claim that "the bottleneck
+> is not idea supply" held for eight sessions and should now be treated as falsified.** The durable
+> addition to the unit-of-check lesson: *a coverage claim says nothing about whether the covered
+> material can be acted on — check the shape of the output, not only the subject.*
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -3073,6 +3090,117 @@ ninety.** The route that does carry a guarantee — max-statistic resampling, al
 White's Reality Check — is affordable here. The shortcut's whole justification does not apply at this
 scale. See #111–#113.
 
+### Timing a component on its own past return — factor momentum and its untimed benchmark (cross-family)
+
+**The mechanism, and it is the first thing this folder has added in nine sessions that proposes a
+book.** A *factor* — the return series of a long/short characteristic sort — is positively
+autocorrelated in its own past return. Ehsani–Linnainmaa's central regression is deliberately crude
+and is the one to copy: regress a factor's month-`t` return on a 0/1 indicator for whether that same
+factor's own trailing twelve-month return was positive. Pooled across their twenty non-momentum
+factors the slope is large and strongly significant and, economically, **the intercept is
+indistinguishable from zero** — the average factor earns nothing after a down year and its whole
+premium after an up year. The strategy that follows is *model-free* in a sense worth taking
+seriously: you harvest the autocorrelation **without needing to know which leg of the sort is
+supposed to pay**, taking the long side after the spread has been positive and the short side after
+it has been negative. Their headline is a reduction rather than a new book — individual-asset
+momentum *is* the aggregation of all the other factors' autocorrelations, so momentum "is not a
+distinct risk factor" — and the reduction is the half that matters here, because **if the champion
+works because factors are autocorrelated, a factor-momentum construction is a more direct expression
+of the family the lab is already in, not a new one.** The authors say in as many words that they do
+not know why factors are autocorrelated. Tier A, `validation_overlap: false`.
+→ `notes/2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`
+
+**Three construction facts, and one of them is not a free parameter.** Formation horizon is robust
+across one month to two years. **Holding period is one month and only one month** — every formation
+length degrades monotonically as the hold lengthens, the stated reason being that a longer hold
+cannot rebalance away from a factor whose premium has turned. Weighting across factors is equal, with
+the long/short counts floating, and the time-series construction (sign against **zero**) *spans* the
+cross-sectional one (sign against the **median**) while the reverse does not hold. That spanning
+result is not a curiosity: the Lo–MacKinlay/Lewellen decomposition this folder already holds says
+cross-sectional momentum profits decompose into own autocorrelation, minus cross-serial covariances,
+**plus the cross-sectional variance of unconditional means** — and that third, Conrad–Kaul term
+contains no predictability at all. A cross-sectional factor-momentum number can therefore be entirely
+an artifact of some sorts simply being better on average; the time-series version does not collect
+that term.
+
+**And the finding that decides whether it is worth a trial here, which is a negative one.** The
+peer-reviewed reexamination (Fan et al., two samples, one of 22 factors and one of 187) reports that
+**the factor-momentum strategy does not beat buy-and-hold of the same factors** — not on mean return
+and not on Sharpe ratio, in either sample — and that the effect is weak at the individual-factor
+level, with roughly a quarter of factors carrying essentially all of it. The same ordering is visible
+in Ehsani–Linnainmaa's own table in the row nobody quotes: the equal-weighted portfolio of all their
+factors has a **higher** Sharpe ratio than the long/short timed spread. What *does* beat the
+equal-weighted portfolio is the **winners-only leg** — which is the only leg a long-only book can
+hold, so the long-only restriction bites less here than usual. Two further readings transfer: the
+single largest contributor in the reexamination's sample is betting-against-beta, and its continuation
+is attributed to its **rank-weighting scheme** rather than its stock selection, raising the
+unresolved question of whether factor momentum is a property of the weighting scheme; and the
+Momentum group of factors shows a weak effect while Value-Growth shows a stronger one. Tier B for
+the verdict, `validation_overlap: true` (its 187-factor sample runs to Dec 2020). See #114, #115.
+
+### Asymmetric comovement — the down half of the market and the third moment (cross-family)
+
+**Two statistics, both computable from daily closes, both never sorted on in this repo, and they
+replicate in opposite directions.** Ang–Chen–Xing establish empirically that they are *distinct*
+loadings: a downside-beta sort produces almost no spread in realised coskewness and a coskewness sort
+produces almost flat future downside beta. Keeping them apart is the point of filing them as two
+notes.
+
+**Downside beta: refuted as a sort, and the identity says why.** `β⁻ = Cov(r_i, r_m | r_m < μ_m) /
+Var(r_m | r_m < μ_m)` from twelve months of daily returns, with `μ_m` the mean market excess return
+*over that same window*. The economic story is disappointment aversion: an asset that comoves with
+the market precisely when the market falls fails you when diversification is worth most, so `β⁻`
+should be paid over and above ordinary beta — and `β⁺` should not be, which is what the data say
+(past `β⁺` is a flat null). Ang–Chen–Xing find the contemporaneous pattern robustly and are then
+unusually honest about the tradeable version: past `β⁻` forecasts future `β⁻` only weakly, the
+persistence is far worse for high-volatility names, and **the return pattern rises from Q1 to Q4 and
+then inverts at Q5**. Hou–Xue–Zhang's decile implementation — the same formula, no volatility
+exclusion — reads the high-minus-low spread as **negative in all three holding horizons and all eight
+specifications**, insignificant under value weighting and *significantly negative* under equal
+weighting and FM-OLS. The reconciliation is the identity `β⁻ = ρ⁻ · σ⁻_i / σ⁻_m`: a high `β⁻` comes
+either from high **downside correlation** `ρ⁻`, which is the priced content, or from the asset's own
+**downside volatility** `σ⁻_i`, which carries the opposite-signed volatility effect and dominates the
+extreme bucket. **So the raw `β⁻` sort is a refuted construction and must not be proposed here; what
+has never been measured is the correlation with the volatility term divided out.** Tier A evidence,
+negative net verdict, `validation_overlap: false`. See #116 (anti-candidate), #117.
+→ `notes/2026-09-17-downside-beta-and-the-volatility-confound.md`
+
+**Coskewness: right-signed everywhere, and the disagreement is about the estimation window.**
+`β_SKD,i = E[ε_i ε²_M] / √(E[ε²_i]·E[ε²_M])`, with `ε_i` the market-model residual and `ε_M` the
+demeaned market excess return — unit-free, and built from residuals orthogonal to the market by
+construction. Extend utility to the third moment and an asset that makes a diversified portfolio's
+distribution more left-skewed must be paid for; the premium on coskewness is therefore **negative**,
+and the tradeable bucket is the most-negative-coskewness third, held long. The original recipe is
+coarse in exactly the way this universe wants: rolling **monthly** returns over 36–72 months,
+**30/70 breakpoints**, three portfolios, hold the post-ranking month. The replication chain does not
+point one way — independent reproductions recover it in sample; Jensen–Kelly–Pedersen find it in
+developed-ex-US, marginally at best in the US and **not in emerging markets**; an independent
+extension confirms it is priced but finds the *original estimator dominated by better ones*; and
+Hou–Xue–Zhang read it as a **right-signed but insignificant** null in all eight specifications. The
+most parsimonious reconciliation — an inference from the two papers' methods, not a claim either
+makes — is that Hou–Xue–Zhang estimate the same third moment from **one month of daily returns**,
+and Harvey–Siddique are explicit that odd moments are not persistent and that noise in a third moment
+is amplified by a cube rather than a square. Tier A mechanism, Tier B effect size. See #118.
+→ `notes/2026-09-17-coskewness-and-the-third-moment-estimation-window.md`
+
+**The most transferable thing in either note is not a strategy, and it is about the scoreboard.**
+Harvey–Siddique's framing: *the highest-Sharpe-ratio styles often have the most negative skew, which
+is part of why their Sharpe ratios are high.* A Sharpe ratio computed on a negatively skewed book is
+partly compensation being mistaken for skill. Their original paper also reports that the momentum
+effect is related to systematic skewness, with low-expected-return momentum portfolios carrying
+*higher* skewness than high-expected-return ones — so a momentum book may already be short systematic
+skewness, and part of the incumbent's measured premium may be a skew risk premium. This is an
+addition to this folder's growth-optimal / utility material (2026-08-23), **not** to its
+multiple-testing material, and it licenses no change to any frozen threshold. See #118's second half.
+
+**And the second most transferable thing is a specification curve published by a paper's own
+authors.** Harvey–Siddique's own follow-up holds the formula fixed and varies only weighting scheme,
+window length (36/48/60/72) and the maximum number of missing months allowed (0/12/24); the premium
+estimate moves by roughly a factor of two across that grid, with the **missing-value limit** — the
+choice least likely to be pre-registered by anyone — among the more influential. That is a
+non-standard-error result reported by the original authors about their own paper, which is rarer than
+the finding itself, and it is a ready-made pre-registration checklist for anyone implementing this.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -5940,6 +6068,109 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-16-clustering-trials-onc-effective-number-of-trials.md`,
     `notes/2026-08-24-deflated-sharpe-ratio.md`
 
+114. **FREE SCREEN, and it must come before #115 rather than after it: does timing a sub-portfolio
+    on its own past return beat holding all of them untimed?** Build `F` pre-registered
+    characteristic-sorted long-only sub-portfolios from daily OHLCV (trend, one-month reversal,
+    Amihud illiquidity, range volatility, volume shock, dollar-volume rank — fix the list in the
+    journal *before* looking), compute each one's monthly return series causally, and **demean each
+    against the equal-weighted universe return** so the signal is formed on the tilt rather than on
+    the market. Then compare two books on the train split only: (a) equal-weighted, always-on,
+    untimed; (b) the same sub-portfolios held only when their own demeaned trailing return was
+    positive, re-signed monthly. The published reexamination's central result is that the timed
+    version **does not beat the untimed one** on mean or Sharpe, and the original paper's own table
+    shows the same ordering for the long/short spread while showing the **opposite** ordering for the
+    winners-only leg — which is the only leg this repo can hold. So this screen has a genuinely
+    two-sided prior and either answer is a finding. **Two riders that decide whether the number means
+    anything**: the demeaning step is load-bearing (an un-demeaned long-only sub-portfolio return is
+    mostly the market, and the 2026-09-16 nightly measured negative daily own-autocorrelation in 20
+    of 21 such portfolios, so the un-demeaned version should read as a null — run it as the control);
+    and holding period is **one month** in the source, not a knob, which collides head-on with the
+    champion's overlapping-tranche machinery, so report the un-overlaid version. Free; no trial; no
+    holdout. Tier A mechanism / Tier B verdict.
+    → `notes/2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`
+
+115. **Then, and only if #114's timed leg wins: a long-only factor-momentum challenger.** One
+    candidate file; `F` sub-portfolios as pre-registered in #114; each held at its equal weight when
+    its own demeaned trailing 12-month return was positive and dropped to cash or the equal-weighted
+    universe otherwise; monthly rebalance; 25% cap. The mechanism's appeal is that it is *model-free*
+    — it needs no belief about which characteristic is priced, only persistence in whatever the sort
+    produces. **Three things to state in the hypothesis rather than discover afterwards.** First,
+    this is plausibly *not* a new family: the source's own headline is that asset momentum **is** the
+    aggregation of factor autocorrelations, so measure the correlation to the champion before
+    claiming breadth. Second, the source's one exception is the **momentum factor itself**, whose
+    own-return slope is ~zero in both its US and global sets — the incumbent here is a momentum book,
+    so the literature predicts the champion is the one component you should not expect to time this
+    way. Third, `learnings.md`'s **"blending beats switching"** is a direct tension: every overlay the
+    lab has refuted timed the book on an *external* state variable, whereas this times each component
+    on *its own* past return, and that distinction is a hypothesis rather than a finding — if this
+    loses, "blending beats switching" becomes stronger and more general, which is itself worth having.
+    Costs matter: monthly re-signing of `F` sleeves at 15 bps/side, and outside `price-trend` turnover
+    differences have dominated everything the lab has measured. Pre-register `F` and the sort list;
+    "which sorts continued" is exactly the quarter-of-the-factors selection the reexamination caught.
+    One trial. Tier A/B.
+    → `notes/2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`,
+    `notes/2026-09-05-contrarian-profit-decomposition.md`
+
+116. **ANTI-CANDIDATE, and it is worth stating precisely because the mechanism is attractive: do not
+    propose a long-high-downside-beta book.** `β⁻` from twelve months of daily returns is cheap,
+    in scope, and has a clean disappointment-aversion story, and the contemporaneous evidence for it
+    is Tier A. The tradeable version is refuted: the standard replication reads the high-minus-low
+    decile spread as **negative in every one of eight specifications at all three holding horizons**,
+    significantly so under equal weighting, and the original paper's own quintile pattern **inverts at
+    the top**. The reason is an identity, not an accident — `β⁻ = ρ⁻ · σ⁻_i / σ⁻_m` mixes the priced
+    downside *correlation* with the asset's own downside *volatility*, whose return effect runs the
+    other way and dominates the extreme bucket. Proposing this would be re-testing a refuted
+    construction, which `CLAUDE.md` forbids absent a stated reason. Also note that the one
+    volatility-excluded variant the source itself endorses is a **double sort with a volatility
+    filter**, which is the exact shape `learnings.md` records as actively harmful on this universe.
+    Free; it saves a trial.
+    → `notes/2026-09-17-downside-beta-and-the-volatility-confound.md`
+
+117. **What #116 leaves live, and it is one line of code past the refuted version: sort on downside
+    *correlation* `ρ⁻ = corr(r_i, r_m | r_m < μ_m)` rather than downside beta.** This is the
+    identity's wanted component with the volatility term divided out, no paper in this folder has
+    tested it standalone, and it is the cleanest available test of whether the replication's negative
+    sign is the volatility confound or the mechanism: **if `ρ⁻` sorts flat while `β⁻` sorts negative,
+    the confound explanation holds and this family closes honestly.** Start with the free half — a
+    holdings-only diagnostic of the champion's own `β⁺ − β⁻` and `β⁻ − β` against the universe, which
+    nobody has measured and which would say whether the incumbent is already loaded on downside
+    comovement. **Two universe cautions that are not optional.** The market proxy must be the
+    **equal-weighted universe return**, not a US index: `β⁻` is defined relative to that proxy's own
+    mean, so a US proxy makes "downside days" US downside days and hands every non-US instrument the
+    time-zone artifact on which the lab closed `lead-lag-spillover`. And 42 of ~145 instruments are
+    ETFs whose `ρ⁻` is near one almost mechanically, so run it within-type or demean by type. Use
+    coarse buckets: a decile here is ~15 names and the top bucket is precisely where the estimate
+    inverts. Free diagnostic first; at most one trial after. Tier A evidence for the object, no
+    evidence either way for this construction.
+    → `notes/2026-09-17-downside-beta-and-the-volatility-confound.md`,
+    `notes/2026-09-06-number-of-portfolios-as-tuning-parameter.md`
+
+118. **A long-only coskewness tercile, which is the rare case where the literature's own
+    construction is already the long-only, coarse-bucket, low-turnover one this repo wants.**
+    `β_SKD,i = E[ε_i ε²_M] / √(E[ε²_i]·E[ε²_M])` from rolling **monthly** returns; 30/70 breakpoints;
+    hold the most-negative-coskewness third long; rebalance monthly. The premium's sign is
+    theoretically pinned (negative coskewness must be paid for), so the hypothesis is falsifiable in
+    sign as well as size. **Do not shorten the window to daily returns inside one month** — that is
+    precisely the specification the standard replication reads as a null, and the source is explicit
+    that noise in a third moment is amplified by a cube. Check the store's span first: the base recipe
+    needs 60 monthly observations of burn-in, and 36 is the source-sanctioned short option. **Free
+    pre-registration that makes it falsifiable twice**: Jensen–Kelly–Pedersen find the effect in
+    developed-ex-US and marginally at best in the US, so on a 15-region universe the prediction is
+    directional — state before running that it should be stronger outside the US names. **And one
+    free diagnostic that should come first**: measure the champion's realised coskewness against the
+    universe, because the original paper reports the momentum effect is related to systematic
+    skewness, and if the incumbent is already short skew then this is not diversification but more of
+    the same exposure. Pre-register all four knobs (weighting, window, missing-value limit,
+    breakpoints) — the authors' own follow-up moves the estimate by roughly a factor of two across
+    that grid, with the missing-value limit among the most influential. **Second half, free and
+    pointed at the scoreboard rather than a book**: if a negatively skewed book earns a higher Sharpe
+    ratio *because* it is negatively skewed, the deflator does not correct for Sharpe ratio being the
+    wrong currency for a skewed payoff. That is an addition to this folder's growth-optimal material,
+    not to its multiple-testing material, and it licenses no change to a frozen threshold. Tier A
+    mechanism, Tier B effect size.
+    → `notes/2026-09-17-coskewness-and-the-third-moment-estimation-window.md`,
+    `notes/2026-09-09-specification-curve-analysis.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -5978,8 +6209,157 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-13 (session 31) | **The first session in three aimed by a gap, and the gap was named by the lab's own overnight number rather than by a checklist.** The 2026-09-12 nightly spent zero trials, closed four standing items for free, and produced one result it filed as an anti-candidate: removing names with less than five years of price history costs the momentum leg, placebo clean. A grep across all 94 prior notes for `firm age`, `listing age`, `new list`, `age effect` and `IPO` returned **zero on every one** — the variable the lab had just measured had no literature behind it anywhere in this folder. The unit lesson holds and is the fifth instance: after families, clauses, operators and the pool, the sixth unit is **an attribute of the pool's members**. Three sources, all Tier-1 venues, all pre-2018 samples; **two read in full** (Zhang's typeset JF article from a university course reading-list directory; Ritter's JF article rendered page-by-page with `pymupdf` because it is a text-layerless scan), one read in full as the published JF article from the lead author's own university page after the NBER working-paper PDF turned out to be a scan, and **one recorded abstract-only and flagged throughout** (Barry–Brown, closed at Elsevier with the abstract elided by the publisher in Semantic Scholar, recovered verbatim from an institutional research portal). The shape is *one mechanism, one discount, one anti-candidate*: continuation is conditioned by how fast information reaches a name and the only measurable proxy here is history length; momentum is weakest at the top of the size distribution, which is the whole of this universe; and the *level* sign of a listing-age tilt is contested between two Tier-A sources, so the tilt is an anti-candidate while the conditioning is not. The night's most useful output is negative in the same way last night's was: the lab's own number is consistent with three mechanisms and identifies none, so it should stop being reported as the size of the survivorship bias. | Zhang 2006 (JF) (`2026-09-13-information-uncertainty-and-price-continuation.md`); Hong–Lim–Stein 2000 (JF) (`2026-09-13-analyst-coverage-and-the-speed-of-bad-news.md`); Ritter 1991 (JF) + Barry–Brown 1984 (JFE, not read) (`2026-09-13-listing-age-as-a-level-effect.md`) |
 | 2026-09-15 (session 32) | **Aimed by the detector 2026-09-13 wrote, on its first use, and it found a gap under the lab's single biggest overnight number.** The 2026-09-14 nightly spent one trial, discharged `range-variance` and `program.md`'s cold-family rule after fourteen sessions, and ran this file's #92 to produce the result of the week: the champion's construction non-standard error is **0.079**, five of six recorded promotion steps sit inside it, 69% of the dispersion sits on `core_n`, and the best cell `core_n = 10` was **embargoed on three arguments from the repo's own history**. The detector — *after each nightly, take the one variable it measured that has no note here, and check* — pointed at the selection rule itself. A grep across all 97 prior notes returned **zero** for `post-selection`, `regression to the mean`, `James–Stein`, `argmax`, `reality check` and `active share`, and one apiece for `winner's curse`, `order statistic` and `empirical Bayes` — none of the three the subject of the note it sits in. **Seventh instance of the unit lesson**: after families, clauses, operators, the pool and an attribute of the pool's members, the seventh unit is **the rule by which a result is selected out of a set of results**. The load-bearing distinction the folder had blurred: all nine of its multiple-testing notes are about **testing** (is the best significant?), none about **estimation** (what is the best *worth*?) — and the repo's gate compares point estimates every night. Three notes, five sources, **full text read directly for all four Tier-A primaries**. The shape is *three corrections for one object*: condition on the selection (assumption-free, needs the covariance), shrink toward the ensemble (needs exchangeability, carries a normal prior), or bootstrap the max with dependence preserved (tests rather than estimates). Two outputs are the session's point. **(a) The `core_n` embargo is right for a reason the lab did not state** — a truncated-normal argument makes the winner's estimate a normal truncated below at the runner-up, so the bias is largest exactly in the many-candidates/small-gaps regime the curve is in, and the discount is computable from `sharpe_diff_se`, which the repo already runs. **(b) A stated tension with `2026-08-24-deflated-sharpe-ratio.md`**: that note's haircut assumes `N` independent trials and the engine deflates by the raw count, while White finds a correlated search erodes the corrected p-value far more slowly — resolvable by measurement (#108's scree), and pending it the bar is **conservative in the count and optimistic in the universe**. Candidates #108–#110: one that can fail, one convention, one decomposition with an anti-candidate attached; all three free, none proposing a book. **Access and index behaviour**: two hosts died at the **transport layer** with `http=000` and no HTTP status — `efron.ckirby.su.domains` (the author's own page; the agent proxy reported `ws_closed_mid_exchange`) and `cdr.lib.unc.edu` including its repository DOI, five attempts across two URL forms. That is a **fourth distinct refusal mode** for this folder, after the Cloudflare 403 challenge, OpenAlex's metered budget and `pm-research.com`'s OpenID redirect, and it is host-specific: NBER, Stanford `stacks`, two instructors' teaching directories, Crossref and arXiv all answered in the same session. Efron was recovered instantly from the **Stanford `stacks` mirror of the same technical report** — generalise it. Hansen 2005 is **not read** and recorded as a pointer with **nothing relied on**; a later session wanting the SPA refinement must read it. Index behaviour: **Semantic Scholar returns *not found* for Andrews–Kitagawa–McCloskey on both its QJE DOI and its NBER DOI**, and OpenAlex's record is merged with the 2019 working paper and returns 6 against Crossref's 30 — so the tier rests on venue and documented downstream use, per the README's own instruction not to downgrade on an index miss. Counterpoint worth recording: the other four DOIs agreed across all three registries to within the usual spread. | Andrews–Kitagawa–McCloskey 2024 (QJE; NBER WP 25456 revised Sept 2021 read in full) (`2026-09-15-inference-on-winners-post-selection-estimation.md`); Efron 2011 (JASA; Stanford Biostatistics TR 256 read in full via `stacks.stanford.edu` after the author's own page died at the transport layer) (`2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`); White 2000 (Econometrica, typeset article read in full from a university course directory) + Sullivan–Timmermann–White 1999 (JF, read in full from a teaching directory) + Hansen 2005 (JBES, **not read**, pointer only) (`2026-09-15-reality-check-max-statistic-under-dependence.md`) |
 | 2026-09-16 (session 33) | **The detector's second use, and it found the gap under the lab's newest number on the first try again — this time the gap was a whole vocabulary rather than a variable.** The 2026-09-15 nightly spent zero trials, priced the blend board exhaustively and closed it for a sixteenth session, and produced the number of the week: 90 recorded trials are worth about **1.56** independent bets by participation ratio against the engine's clustered **24**, with the decision handed to a human. A grep across all 100 prior notes returned **zero** for `M_eff`, `Nyholt`, `effective rank`, `participation ratio`, `false strategy` and `ONC` — the lab had computed a member of a named estimator family with twenty-five years of peer-reviewed literature behind it and this folder had none of that literature. Three notes, nine sources; full text read directly for three primaries (Li–Ji, Halle et al., López de Prado–Lewis), the remaining estimator definitions taken from two independent restatements that agree, and three sources recorded from **published abstracts only** (Salyakina et al., Moskvina–Schmidt, Galwey). The session's shape is **one family definition, one verdict on the family, and one finance-side member that is the closest published relative of the engine's own step** — and the verdict is negative: no plug-in effective count is known to control any error rate, because `M_eff` is defined by inverting Šidák and is therefore a function of the error rates, not of a correlation matrix. **Nothing here proposes a book.** The three candidates are a pre-committed spread table with an anti-candidate attached, a null control that can close the clustering route, and a read-only consistency check on the deflator's two inputs. The transferable correction: the 2026-09-15 reading that the engine over-deflates is arithmetically right and rests on a premise this literature breaks, so the 24-versus-1.6 gap **overstates** the over-deflation — a second independent reason, alongside Sullivan–Timmermann–White, why a low effective-`N` is not a licence. All three notes `validation_overlap: false`; not one contains a market-performance figure, because two of the three sources contain no market data at all. | Halle, Djurovic, Andreassen & Langaas 2016 + Salyakina et al. 2005 + Moskvina & Schmidt 2008 (`2026-09-16-does-meff-control-the-familywise-error-rate.md`); Cheverud 2001 + Nyholt 2004 + Li & Ji 2005 + Gao et al. 2008 + Galwey 2009 (`2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`); López de Prado & Lewis 2019 (`2026-09-16-clustering-trials-onc-effective-number-of-trials.md`) |
+| 2026-09-17 (session 34) | **The first session in nine aimed at supplying a book rather than a diagnostic, and the aim was set by the lab's own escalation rather than by a gap.** The 2026-09-16 nightly spent zero trials, rejected the folder's eight-session top item (#89) on every partition, produced the effective-count spread (#111) and answered #113, and then told the human plainly that **"the lab is spending its nights auditing its own gate rather than searching for strategies"** — the eighth consecutive session whose new research material proposed no portfolio. This session took that as its instruction. The 2026-09-13 detector was still run first and found the gaps by grep across all 103 prior notes: **zero** hits for `factor momentum`, `trend factor`, `coskew`, `downside beta` and `semivariance`. Two mechanisms, three notes, all four primaries read in full. **Factor momentum** is the book-proposing half — a factor is positively autocorrelated in its own past return, the construction is model-free (no belief about which leg pays), formation is robust from one month to two years, **holding period is one month and is not a knob**, and the time-series version spans the cross-sectional one because the latter collects the Conrad–Kaul mean-dispersion term. Its peer-reviewed reexamination supplies the honest counterweight and the free screen that must precede any trial: **the timed book does not beat buy-and-hold of the same factors**, on mean or Sharpe, in either of two samples — while the original paper's own table shows the **winners-only leg**, the only leg a long-only repo can hold, ordering the other way. **Asymmetric comovement** is the second half and splits cleanly in two: downside beta is **refuted as a sort** (negative high-minus-low in all eight replication specifications at all three horizons, and the identity `β⁻ = ρ⁻·σ⁻_i/σ⁻_m` says why, which leaves `ρ⁻` alone as the untested object), while coskewness is **right-signed and underpowered** in the same replication, most parsimoniously because that replication estimates a third moment from one month of daily returns. Candidates #114–#118: one free two-sided screen, one challenger gated behind it, one anti-candidate, one salvage, one long-only tercile. Flags: two of the five sources carry `validation_overlap: true` and both are named in the notes; **no dated performance figure from any source is recorded anywhere**, only orderings and signs. | Ehsani–Linnainmaa 2022 + Fan, Li, Liao & Liu 2022 + Arnott, Clements, Kalesnik & Linnainmaa 2018 WP (`2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`); Ang, Chen & Xing 2006 + Hou, Xue & Zhang 2020 (`2026-09-17-downside-beta-and-the-volatility-confound.md`); Harvey & Siddique 2000 + Harvey & Siddique 2023 + Hou, Xue & Zhang 2020 (`2026-09-17-coskewness-and-the-third-moment-estimation-window.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-17] Read this first: the 2026-09-16 nightly ran, spent zero trials, spent this file's
+  top three items, and then escalated a pattern to the human. This session was aimed by the
+  escalation, not by the list.** **#89 is done and rejected** — the Lo–MacKinlay non-trading
+  restriction fails at its signature moment on every partition, including two where no time-zone
+  offset can exist, so `lead-lag-spillover` is now **closed in both halves** and the regional pairs
+  join the do-not-extend list. **#111 is done**: seven effective-trial-count estimators span a factor
+  of 25 with the engine's 24 straddled, no estimator adopted (pre-committed), ONC disqualified on the
+  i.i.d. control and single linkage blind to a one-factor null — so **#112 is answered and the whole
+  clustering family closes**, and the participation ratio's 1.56 reads 1.59 on a synthetic one-factor
+  null and should be quoted as the PC1-removed 4.12 or not at all. **#113 is answered**: the two
+  deflator inputs *are* on different populations, every parameter-free reading of the mismatch is
+  conservative, the minimum-variance reading reverses the sign and does so because it is a
+  gross-leverage-23 long/short book, and it is **not an engine issue**. Still unrun and carried
+  unchanged: **#109 (now the folder's highest-ranked unrun item, and it still needs the 2026-09-14
+  specification curve rebuilt), #82 (tenth session), #94 as a standing discipline, #49 (twentieth
+  session)**, plus **#105–#107** and **#110**'s shrink half. New tonight: **#114–#118**.
+- **[2026-09-17] What should aim the next session, in order — and the ordering is deliberately not
+  this file's usual one.**
+  - **#114 first, and it is the only item on this list that proposes a portfolio.** It is free, it is
+    two-sided (the published reexamination says the timed book loses to buy-and-hold; the original
+    paper's own table says the winners-only leg wins, and the winners-only leg is what a long-only
+    repo holds), and it gates #115 rather than merely preceding it. **Pre-register `F` and the exact
+    sort list in the journal before computing anything** — "which sorts continued" is precisely the
+    quarter-of-the-factors selection the reexamination caught, and this file already holds the note on
+    what a selected maximum is worth. **Run the un-demeaned version as the control**, because the
+    2026-09-16 nightly's negative own-autocorrelation result predicts it reads null and that
+    prediction is the check on whether the demeaning step was done right.
+  - **Then #118's two free halves, in either order, because neither needs a trial and one of them is
+    about the incumbent.** The champion's realised coskewness against the universe is a holdings-only
+    diagnostic nobody has run, and the original paper's momentum/skewness result predicts a specific
+    sign for it. If the incumbent is already short systematic skewness, #118's book is not
+    diversification and #115's breadth claim needs re-reading too.
+  - **Then #117's free half** — the champion's own `β⁻ − β` and `β⁺ − β⁻` — and only then #117's
+    `ρ⁻` sort, which is the one construction in tonight's material that the literature has neither
+    confirmed nor refuted.
+  - **Then the lab's own #109**, which is unchanged and still blocked only on rebuilding a curve that
+    was not stored, and **#82**.
+  - **Do not spend a session on #116.** It is an anti-candidate and its whole value is that it costs
+    nothing.
+- **[2026-09-17] The single most transferable output, and it is a benchmark rather than a mechanism.**
+  For any proposal of the form *"time the components of a book on their own past returns"*, the
+  honest benchmark is **not the champion — it is buy-and-hold of the same components, equal-weighted
+  and untimed.** The reexamination's central finding is that factor momentum clears statistical
+  significance and still fails that comparison, on mean and on Sharpe, in both of its samples. The
+  general form to carry: **a timing rule must be scored against the always-on portfolio of the things
+  it times, not against the incumbent**, because beating the incumbent while losing to your own
+  untimed baseline means the components were the finding and the timing was overhead. This is the
+  same shape as `#1`'s parameter-count triage — a free screen that kills a family of proposals before
+  any of them is built — and it applies to every future ensemble, blend-timing or sleeve-rotation
+  idea this lab entertains, not only to factor momentum.
+- **[2026-09-17] A second transferable output, and it is an identity rather than a result.**
+  `β⁻ = ρ⁻ · σ⁻_i / σ⁻_m`. A statistic that looks like a single risk exposure is a **product of a
+  comovement term and a level term**, and when the two have opposite-signed return effects the sort
+  on the product inverts wherever the level term dominates — which is the extreme bucket, which is
+  exactly where a long-only top-`k` book lives. The general rule: **before sorting on any ratio or
+  beta, factor it and ask whether every factor has the sign you want.** This is the cleanest
+  available explanation for a Tier-A contemporaneous result that reads *significantly negative* in
+  replication, and it generalises past this note — the lab's own magnitude-weighting decomposition
+  (concentration versus information) and its `RVR` work are the same operation on different objects.
+- **[2026-09-17] A tension recorded rather than resolved, and it is between a source and this lab's
+  own learnings file.** `experiments/learnings.md` records **"blending beats switching"** — every
+  regime overlay the lab has tried (SPY-trend switch, drawdown braking, vol gating) lost to an
+  always-on blend, and the file's own conclusion is that combination ideas keeping both legs always-on
+  look more promising than regime-timing. Factor momentum **is** a switching rule, and a Tier-A
+  source says the switch is where the premium is. The distinction that keeps it alive is narrow but
+  real: every refuted overlay timed the book on an **external state variable**, whereas factor
+  momentum times each component on **its own** past return, and the lab has never screened that
+  object. **This is a hypothesis, not a reconciliation.** Recorded here rather than smoothed over
+  because if #114 says the timed book loses, "blending beats switching" stops being a
+  `price-trend`-specific overlay result and becomes a general statement about this universe — which
+  is a more valuable finding than the candidate would have been.
+- **[2026-09-17] A second tension, and this one is internal to tonight's sources.** The Arnott et al.
+  working paper says factor momentum is *pervasive* — a random subset of factors works nearly as well
+  as all of them, and even two randomly chosen factors is typically significant. Fan et al. say the
+  opposite in as many words: about a quarter of factors carry essentially all of it, and a strategy
+  on the rest cannot span asset momentum. Both are peer-reviewed lines (RFS and The Financial Review),
+  the samples overlap heavily, and **the disagreement is not adjudicated by anything this folder
+  holds.** It matters operationally rather than academically: if pervasiveness holds, the sort list in
+  #114 is not a tuning knob; if it does not, the sort list is the entire result and #114's
+  pre-registration is the only thing standing between this lab and a specification search. **Pick the
+  conservative branch** — pre-register the list — and note that doing so costs nothing if
+  pervasiveness turns out to be true.
+- **[2026-09-17] The embargo boundary, and it was live tonight in a way it has not been for several
+  sessions.** Two of the five sources have samples touching 2018–2023: Fan et al.'s 187-factor sample
+  runs to Dec 2020, and Harvey–Siddique's follow-up is explicitly an out-of-sample continuation
+  reaching into the validation window. Both are flagged `validation_overlap: true` in their notes and
+  in the coverage row. **What was taken from them is qualitative only**: from Fan et al., the
+  *ordering* (timed loses to untimed) and the *fraction* of factors carrying the effect, with no
+  return or Sharpe figure transcribed; from Harvey–Siddique's follow-up, the replication verdicts, the
+  estimator definition and the *shape* of the sensitivity grid, with no out-of-sample performance
+  number. The three pre-2018-sample sources (Ehsani–Linnainmaa to Dec 2015, Arnott et al. to Dec 2016,
+  Ang–Chen–Xing to Dec 2001, Hou–Xue–Zhang to Dec 2016) are `validation_overlap: false`. **One
+  deliberate omission worth naming**: the Arnott et al. working paper contains a dated claim about
+  when industry momentum stopped working; that is an event narrative and was not recorded. Nothing in
+  any of tonight's three notes describes the world after 2023-12-31.
+- **[2026-09-17] Access and index behaviour: one channel that belongs on the README, one new failure
+  mode that is silent, and two confirmed refusals.**
+  - **`people.duke.edu/~charvey/Research/Published_Papers/` served both Harvey–Siddique papers on the
+    first try, including the 2023 Critical Finance Review article that OpenAlex lists `oa: closed`.**
+    An author's own faculty page beat the publisher for a closed article, and the naming scheme is
+    sequential (`P56_...`, `P157_...`). **This belongs on the README** alongside `econstor.eu` and
+    the Internet Archive route: *for a prolific author, try the faculty page before the publisher.*
+    Similarly, `theinvestmentcapm.com` served the full Hou–Xue–Zhang RFS article and
+    `pureadmin.qub.ac.uk` served the version of record of the Financial Review paper.
+  - **A silent new failure mode: OpenAlex's `select=` parameter with a retired field name returns
+    HTTP 200 and a record whose every requested field is `null`.** Passing `host_venue` (removed from
+    the schema) made four consecutive lookups read as "paper not indexed" when all four were in fact
+    indexed with healthy citation counts. This is a sixth distinct refusal mode and the most dangerous
+    of them, because unlike a 403, a 429 or a 500 it looks like an answer. **Query OpenAlex without
+    `select` and filter client-side.**
+  - **Semantic Scholar's DOI endpoint has real gaps, not just rate limits.** `10.1111/jofi.13131`
+    (Journal of Finance), `10.1093/rfs/hhj035` (RFS) and `10.3905/jpm.2019.45.3.013` (JPM) all return
+    `"not found"` on the reliable DOI route while resolving cleanly in OpenAlex and Crossref. Do not
+    read "not indexed" off a single index; the rubric's instruction to record the API tried is doing
+    real work here.
+  - **Crossref's `query.bibliographic` is the right way to *find* a DOI and should be used before
+    guessing one.** Two DOIs guessed from memory tonight were wrong in the last character
+    (`jpm.2019.45.3.13` versus the correct `...45.3.013`) and simply 404'd — better than the
+    2026-09-16 case where a guessed DOI returned the wrong paper silently, but the same lesson:
+    **resolve, don't guess, and check the title that comes back.**
+  - **Confirmed refusals, no news**: `papers.ssrn.com` 403 for a delivery URL, and `pm-research.com`
+    unreachable — which is why Gupta–Kelly's "Factor Momentum Everywhere" is **recorded as not read**
+    and nothing in tonight's notes rests on it.
+- **[2026-09-17] The detector's third use, and an honest note on what it did and did not do.**
+  2026-09-13's rule — *after each nightly, take the one variable it measured that has no note here,
+  and check* — was run, and a grep across all 103 prior notes returned **zero** for `factor
+  momentum`, `trend factor`, `coskew`, `downside beta` and `semivariance`. But that is not what aimed
+  this session: the nightly's own escalation was. **The detector finds gaps; it does not find books,
+  and tonight's gaps were book-shaped by luck rather than by the detector's design.** Keep the
+  detector, and add a second, blunter one for the situation the 2026-09-16 nightly described: *if the
+  last `n` sessions have added only free diagnostics, spend the next one looking specifically for a
+  mechanism that ends in a portfolio, and accept a lower tier to get one.* Tonight that rule produced
+  a Tier-A mechanism with a Tier-B negative verdict attached, which is a better trade than a ninth
+  diagnostic. **The 2026-09-08 claim that "the bottleneck is not idea supply" was true for eight
+  sessions and should now be treated as falsified**: the nightly said in as many words that it
+  declined every night for want of an object, and this file had none to give it.
+- **[2026-09-17] Protocol note, twelfth session running: the session-start hook printed "integrity
+  check OK — on main, level with origin/main, no stray branches" while `git status -sb` showed the
+  session on `claude/tender-galileo-uww4ws`.** As on 2026-09-06 through -16 this is the **benign**
+  form — the branch tip was bit-identical to `origin/main` (`28609db`, zero ahead, zero behind) — and
+  the session ran `git checkout main && git reset --hard origin/main` before any work, per step 0 of
+  the standing prompt, so tonight's work is on `main` only. Recorded again because it is benign:
+  **the hook's "on main" clause is false while its "level with origin/main" clause is true**, so a
+  session trusting the first clause would commit to a per-run branch with no warning. As on
+  2026-09-15 and -16, this session's own harness instructions named that per-run branch as its
+  development target while `research/README.md` step 6 and the standing prompt's step 0 both require
+  `main`; the repo's own rules governed. **Flagged for the human for the ninth time.**
 
 - **[2026-09-16] Read this first: the 2026-09-15 nightly ran, spent zero trials, and spent this
   file's #1 for the second session running — so the standing list turned over at the top again.**
