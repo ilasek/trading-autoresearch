@@ -11471,3 +11471,136 @@ coverage check before any number was believed; it moved the scoreable train date
 226**. The first version of the Block A extension table also carried the broken `garman_klass_vol`
 call copied from `sleeve_book.py`, and was re-run before anything was recorded. **Tenth instance of
 this repo's oldest habit, and the first found in a `strategies/lib/` file the lab itself wrote.**
+
+## Session summary — 2026-09-18 (nightly)
+
+- **Integrity check — clean, and verified rather than assumed.** `git fetch origin --prune` clean;
+  `git branch -r --no-merged origin/main` returned **nothing**, so no previous session's work is
+  stranded off `main`. As on 2026-09-06 through -17 the session-start hook printed "integrity check
+  OK — on main, level with origin/main, no stray branches" while `git status -sb` reported a
+  per-run branch (`main-3ang03`) — **the hook still does not detect this, thirteenth session
+  running.** That branch sat at exactly `origin/main` (`ca3e1f3`, zero commits absent from it), so
+  the trial history is not split; the session was moved onto `main` before any measurement. Engine
+  tests green (**33 passed**). Store fresh through **2026-09-18** — same day, not stale.
+- **Experiments run: 1 of the 8-trial budget.** Trial count 93 → **94**, effective 25. One `SCOUT`
+  verdict, **no champion comparison, no holdout read** — the count of holdout looks since
+  2026-08-17 stands at **five**, unchanged. One pre-registration block and one addendum committed
+  before the numbers existed, and one free-measurement block.
+
+### The night in one line
+
+The lab opened the one column of its own data panel it had used for nineteen days without a note
+on it — the close→open leg of the daily bar — and found that **the incumbent's entire advantage
+over an equal-weight book is earned overnight and loses money intraday**, that the imported map
+predicting this replicates 4 of 5 on validation, and that the one book the literature leaves
+reachable here scores **0.822 at 1.9x turnover** while failing its own source's identifying test.
+
+### Best finding: the incumbent is an overnight strategy
+
+Excess over an equal-weight universe, decomposed: **+9.16%/yr overnight (t = +5.24) against
+−1.75%/yr intraday on train, and +16.36 (t = +4.96) against −2.18 on validation.** The controls are
+what make it readable — a placebo book reading no market data also earns more at night on this
+universe (+3.57%/yr), so most of the champion's *raw* night/day split is a universe-level fact and
+only the excess is its own. Five pre-registered calls from the Lou-Polk-Skouras map came back 4/5
+on validation with a flat placebo, `region-relative ILLIQ` correctly landing **intraday** as the
+discriminating row. **None of it is tradeable**: this engine holds close-to-close and collects the
+sum, and the sources' own advice is order timing, which this lab cannot do.
+
+The sharpest by-product is a distinction the folder does not draw. Measured as a *score* rather
+than as a *premium*, 21-day reversal's content sits entirely in the **intraday** leg (IC +0.0123)
+while its **overnight leg is a clean zero** (+0.0007). Where a book's premium accrues and where its
+signal is measurable are different questions with opposite answers here.
+
+### Trial #94: `lv_overnight_sentiment_reversal` — SCOUT, validation 0.822
+
+The first signal this lab has built from a *component* of a return rather than from the return.
+Validation **0.822**, 28.8 names, **1.9x** turnover (0.29%/yr of drag), against the family's seated
+0.942. Both pre-registrations land: the pre-measurement call of 0.55 (band 0.25-0.90) contains it,
+and the train-based call of 0.851 over-predicts by 0.029.
+
+**The result that matters is not the level — it is that the source's identifying test fails here.**
+At the book's own 12-month horizon the top band earns +3.96%/yr (t = +3.67) and the **bottom band
+earns +8.28%/yr (t = +5.75)**, where Aboody et al. claim the long leg carries the effect alone.
+Both ends positive is a U-shape, i.e. a dispersion object, and on this universe dispersion is the
+survivorship artifact: `spearman(mean |overnight|, 252d vol) = +0.706` and the plain |overnight|
+sort's top-10 earns **+9.75%/yr (t = +5.87)**, more than the signed score ever does. Inside
+volatility terciles the source's sign returns on both sides in the low and mid cells and only the
+high-vol cell keeps the U-shape. The candidate therefore ranks **within** volatility terciles —
+the one deviation from the source, adopted after the unconditional version failed, with the whole
+search path written into tonight's free-measurement block so it can be read as selected.
+
+### Why one trial and not four, and not zero
+
+The pre-registration allotted exactly one, to Block B, and Blocks A and C were declared free with
+no trial following either way. The two obvious second trials were both declined on measurement
+rather than on taste: the source's own annual-formation shape differs from the overlapping one by
+**0.011 of train Sharpe**, far inside any floor; and the raw-versus-vol-neutral pair is
+**confounded by breadth** (68.8 against 26.0 names, worth ~0.12 at this repo's fitted −0.028 per
+10 names), so it would measure the breadth price rather than the repair. Per 2026-09-15, a
+decorrelated trial costs +1 effective trial charged to every later session, and the budget is a
+ceiling rather than a quota.
+
+### For the human — two things needing a decision
+
+1. **A mis-specified call in a committed `strategies/lib/` file.** `sleeve_book.py:41` passes four
+   positional arguments to `garman_klass_vol(open_, high, low, close, window)`, binding
+   **`close = 21`, the integer**. It does not raise, and the object it produces rank-correlates
+   **+0.0586** with correctly-called Garman-Klass volatility. It supplies two of the twelve sleeves
+   in trials #92/#93, so the **0.867 untimed control — the second-best non-`price-trend` result on
+   the board — is ten characteristic sleeves plus two driven by a mis-specified one.** That
+   session's conclusion is untouched (the timed/untimed contrast carries identical sleeves and
+   differences the error out exactly). **Deliberately not fixed**: `CLAUDE.md` forbids editing an
+   existing lib file and the reason binds precisely here, since a repair would silently change two
+   recorded trials. A human may want to retire the file by name.
+2. **The stall reading is unchanged.** Tonight produced a portfolio and a genuine new measurement
+   axis, and the portfolio still lands 0.30 below the seat and 0.002 short of a break-even that
+   buys nothing. Nine of the ten families are now closed or mapped, and the decision that would
+   change the trajectory remains not an agent's: either the universe gains data that opens a new
+   family (fundamentals, point-in-time constituents, intraday bars — the last of which tonight's
+   decomposition makes a much more concrete ask than before), or `program.md` says what the lab
+   should do once its families are exhausted. Both are edits to frozen files.
+
+### Protocol and allocation notes
+
+- **Budget: 1 of 8.** `price-trend` cap of 2 **unused — zero trials there**. The single trial is in
+  `liquidity-volume`; the "at most 2 per family" cap is discharged (nine families carry a lead) and
+  would have been satisfied anyway. Cold-family rule discharged 2026-09-14.
+- **No new `strategies/lib/` file was added** and no existing one was touched.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look.
+- **Train-as-prediction: held at n = 33.** Trial #94's train Sharpe (+0.48) is **inadmissible** per
+  the 2026-09-04 sample rule — the pool rule leaves the book uninvested for two thirds of the train
+  split (avg_pos 8.3 over the split against 26.0 on invested days), so it is a sample statement,
+  not a prediction. Recorded prospectively rather than discovered afterwards.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/`, `trials.jsonl` and every `strategies/lib/` file are untouched; the
+  leaderboard was rewritten by `run_experiment.py` alone.
+
+### Next ideas, in order, with provenance
+
+1. **`SUMMARY.md` #109's winner-to-runner-up discount on the 2026-09-14 specification curve** —
+   the folder's highest-ranked unrun item, carried from 2026-09-16 for a third session. Still needs
+   the curve rebuilt, which remains the only reason it has not run.
+2. **`SUMMARY.md` #82**, carried for an eleventh session, and **#49** for a twenty-first.
+3. **The intraday-bar ask is now concrete and worth putting to the human in those terms.** Tonight
+   measured that this universe pays a broad overnight premium, that the incumbent's whole excess is
+   overnight, and that the sources' own remedy is *order timing* — which is precisely the thing a
+   close-to-close engine cannot express. That is the first time `program.md`'s "intraday bars"
+   upgrade has a measured, specific payoff attached rather than a general hope.
+   (`research/SUMMARY.md` #119-#121, tonight.)
+4. **Do NOT re-derive the blend board.** Exhaustive as of 2026-09-15, extended 2026-09-17 and again
+   tonight; the best cell anywhere is +0.034 at t = +0.33 and tonight's leg, the closest ever to
+   break-even, is +0.0017 at t = +0.08.
+5. **Do NOT propose `TugOfWar` timing (`SUMMARY.md` #122).** Anti-candidate; the same operation
+   #92/#93 refuted on a designed pair, differing only in which function of past returns it uses.
+6. **Do NOT extend tonight's candidate.** A different formation window, tranche count, per-tercile
+   count or neutralisation target would be knob-tuning on a book whose validation number is now
+   known. The one genuinely open question it leaves — whether the vol-tercile repair is load-bearing
+   on the gate's axis — needs a **breadth-matched** designed pair, and is pre-priced as
+   unresolvable against a ~0.13 floor, so it should be declined unless the floor changes.
+7. **Do not extend**: everything on the 2026-09-14 list, plus the regional lead-lag pairs, plus
+   `beta-minus`/`rho-minus`/coskewness, plus a second factor-momentum variant, plus the 0.867
+   untimed control — which additionally now carries the `sleeve_book.py` caveat above.
+
+**No engine issues encountered.** The one mis-specification found tonight is in `strategies/lib/`,
+not `engine/`, and is written up above rather than fixed, per the file-permission rule.
