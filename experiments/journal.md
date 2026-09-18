@@ -11224,3 +11224,250 @@ one has had to be retracted four times in this file.
 **This changes no decision.** Block B's gate is Block A's own rule, which is already met; Block C
 is unchanged. The extension is a measurement, no trial follows from it either way, and it is
 recorded here so that its predictions cannot be read off the answers.
+## 2026-09-18T23:23:51+00:00 — lv_overnight_sentiment_reversal — **SCOUT**
+- Candidate: `strategies/candidates/lv_overnight_sentiment_reversal.py` (family: liquidity-volume, track: scout, trial #94)
+- Hypothesis: A long-only book holding the lowest average daily overnight return of the trailing month, ranked within trailing-volatility terciles so the survivorship-inflated volatility level is differenced out, held twelve months as twelve overlapping monthly tranches, beats the 0.49 equal-weight floor on validation — because the overnight leg carries firm-specific sentiment whose non-informational part unwinds over the following year, which is a mechanism orthogonal to the incumbent's trend family (measured spearman to 12-1 momentum: -0.024).
+- Verdict: SCOUT — scouted family 'liquidity-volume': validation sharpe 0.822 <= the family's best 0.942 (DSR 0.8326, 94 trials, 25 effective after clustering at rho 0.95)
+- Train: sharpe +0.48, ann_ret +4.3%, maxDD -42.6%, turnover 0.6x
+- Validation: sharpe +0.82, ann_ret +12.9%, maxDD -30.1%, turnover 1.9x
+- Deflated Sharpe prob: 0.8326 (bar from 94 trials, 25 effective)
+- Scout track: family best before this trial +0.94; the champion was not compared and the holdout was not read
+- Lesson: **The first signal this lab has ever built out of a *component* of a return rather than
+  out of the return, and it lands mid-board at the cheapest turnover on record — but its source's
+  identifying claim is inverted here and only a vol-tercile repair rescues it.** Validation
+  **0.822** at **1.9x** turnover (0.29%/yr of drag) and 28.8 names, against the family's seated
+  0.942 and the 0.49 equal-weight floor. Both pre-registrations land: the pre-measurement call of
+  0.55 (band 0.25-0.90) contains it, and the train-based call of 0.851 taken from the invested-days
+  screen over-predicts by 0.029. The finding is not the level. It is that the *unconditional*
+  score fails Aboody et al.'s own identification — at the book's own 12-month horizon the top band
+  earns +3.96%/yr (t = +3.67) but the bottom band earns **+8.28%/yr (t = +5.75)**, both ends
+  positive and the "short" leg stronger, which is a U-shape and therefore a dispersion object, not
+  a signed sentiment one. `spearman(mean |overnight|, 252d vol) = +0.706` and the plain
+  |overnight| sort's top-10 earns **+9.75%/yr (t = +5.87)**, larger than anything the signed score
+  produces: this universe's identified survivorship artifact, reached through a new door. Inside
+  volatility terciles the source's sign returns on both sides in the low and mid cells
+  (low-overnight +0.59, +1.24; high-overnight -0.37, **-1.47 at t = -2.22**) and only the high-vol
+  cell keeps the U-shape. So the signed effect is real, small and vol-conditional, and the headline
+  is the artifact sitting on top of it. **The construction cannot reach the score's own depth and
+  that is arithmetic, not a choice**: a twelve-month hold with monthly formation *is* twelve
+  overlapping tranches, whose distinct-name count runs 28.8 / 49.1 / 65.0 / 78.8 at 1/2/3/4 names
+  per tercile, while the score's marginal slices go flat after rank ~10 of a ~118-name pool — one
+  per tercile is the tightest the construction allows and was taken for that reason, not because
+  it scored best. Train Sharpe (+0.48) is **inadmissible to the train-as-prediction record** per
+  the 2026-09-04 sample rule: the pool rule leaves the book uninvested for two thirds of train
+  (avg_pos 8.3 over the split against 26.0 on invested days), so it is a sample statement.
+
+
+## Free measurement — 2026-09-18 (nightly), no trial spent
+
+Everything below is holdings-only weights times a decomposition of the data, or stored return
+series. No strategy was scored through the engine except trial #94, and the holdout was never
+read: every frame is truncated at the validation end or earlier, and each screen states its split.
+
+### Block A — where the incumbent's premium accrues. **LIVE, and the rule was met on the first reading.**
+
+**P1 (basis) PASSES.** Over 1,018,290 traded name-days to the validation end, `close/open - 1` has
+median |.| of **0.00692**, pooled mean **+1.90 bps**, 1st/99th percentiles **-4.50% / +4.80%**, and
+0.0000% of observations beyond ±50%. That is a daily return distribution, not an exchange rate, so
+`aux["open"]` is on the same adjusted USD basis as `prices` and the kill lines (median > 5%, mean
+beyond ±20 bps) are nowhere near binding.
+
+**P2 (estimator)** is the imputed decomposition as required: `r_day = close/open - 1`,
+`r_night = (1 + r_cc)/(1 + r_day) - 1`. The identity `(1+night)(1+day) = 1+r_cc` therefore holds to
+2.2e-16 **by construction and is not evidence of anything** — it is a tautology of how the night leg
+is backed out, and is recorded as a tautology rather than as a passing check. What is evidence is
+P1 plus the legs' behaviour: pooled night mean **+4.38 bps** (sd 124.6), day **+1.90 bps** (sd 163.8),
+`corr(night, day) = -0.0052`. Days the instrument did not trade are masked with the non-forward-filled
+volume panel.
+
+**The champion's own decomposition**, annualised, against two controls:
+
+    train split (14,261 days)          night %/yr   day %/yr   total    night-day   t
+    champion (K=6 four-horizon mom)      +15.22       +3.74    +19.24     +11.48   +4.73
+    [ctl] equal-weight universe          +10.70       +6.70    +17.71      +4.00   +2.21
+    [ctl] placebo hash top-20            +10.45       +6.87    +17.66      +3.57   +1.87
+
+    validation split (1,562 days)
+    champion                             +25.44       +0.85    +25.90     +24.58   +2.77
+    [ctl] equal-weight universe           +9.08       +3.04    +11.85      +6.04   +1.10
+    [ctl] placebo hash top-20             +8.94       +4.15    +12.92      +4.79   +0.80
+
+**The pre-registered rule is met** — the paired night-minus-day difference is `t = +4.73` on train
+and `+2.77` on validation with the predicted sign — so Blocks B and C proceeded. **But read the
+controls before reading the incumbent**: a night-over-day premium of +3.6 to +6.0%/yr exists for a
+book that reads *no market data at all*, so "this universe pays overnight" is a universe-level fact
+and most of the champion's raw split is not its own. What is its own is the excess over the
+equal-weight universe, and that is the striking number: **+9.16%/yr overnight (t = +5.24) against
+-1.75%/yr intraday on train, and +16.36 (t = +4.96) against -2.18 on validation.** The incumbent's
+entire advantage over an equal-weight book is an overnight phenomenon, and it *loses* money
+intraday on both splits.
+
+### Block A extension — the LPS strategy map, five pre-registered calls
+
+Every book on the house monthly grid, top-20, equal weight, same pool, no band; excess over the
+equal-weight universe so the universe-wide night premium above is differenced out; common
+invested-days mask (first 2001-04-02) so no row is charged for months it sat in cash.
+
+    train (4,362 days)              exc night     t    exc day      t   exc tot   verdict   call
+    champion 4-horizon momentum        +9.16   +5.24     -1.75   -0.70    +7.86  OVERNIGHT   ok
+    12-1 momentum (top-20)             +4.91   +3.49     -2.78   -1.49    +2.36  OVERNIGHT   ok
+    21d reversal (top-20)              +6.88   +4.40     -5.89   -2.88    +1.22  OVERNIGHT   ok
+    seasonal same-minus-other          +1.03   +0.81     +3.62   +2.16    +4.60   INTRADAY   MISS
+    region-relative ILLIQ              +2.41   +2.31     +3.62   +2.64    +5.77   INTRADAY   ok
+    [ctl] GK 21d vol level            +11.35   +5.72     -1.54   -0.54   +10.21  OVERNIGHT   MISS
+    [ctl] placebo hash top-20          +0.64   +0.72     -0.97   -0.81    -0.75      flat    —
+
+    validation (1,562 days)
+    champion 4-horizon momentum       +16.36   +4.96     -2.18   -0.44   +14.05  OVERNIGHT   ok
+    12-1 momentum (top-20)            +10.65   +4.47     -4.59   -1.27    +5.70  OVERNIGHT   ok
+    21d reversal (top-20)              +6.52   +2.56     +1.14   +0.37    +7.29  OVERNIGHT   ok
+    seasonal same-minus-other          +5.69   +2.94     -0.42   -0.17    +6.02  OVERNIGHT   ok
+    region-relative ILLIQ              +1.62   +0.97     +3.53   +1.52    +5.16   INTRADAY   ok
+    [ctl] GK 21d vol level             +8.94   +3.07     -0.80   -0.19    +8.24  OVERNIGHT   MISS
+    [ctl] placebo hash top-20          -0.73   -0.51     +1.83   +1.01    +0.90      flat    —
+
+**Four of five on validation, three of five on train, and the placebo is flat on both.** The
+pre-registered refutation condition was a conjunction — *if `ILLIQ` **and** GK volatility both land
+overnight the map does not replicate* — and it is **not met**, because `ILLIQ` lands intraday on
+both splits, with the *only* positive day-leg `t` of any live row. So the map is not refuted. It is
+also not a clean replication: the two discriminating rows split 1-1.
+
+**The GK miss, stated with its post-hoc status attached.** The mapping of "21-day Garman-Klass
+volatility" onto Hendershott-Livdan-Rösch's *idiosyncratic volatility* class was mine, and it is
+probably the wrong class: fifteen screened mechanisms identify this object here not as a vol
+anomaly but as a **current-constituents survivorship artifact**, i.e. a level bet on names that
+survived, and there is no reason such a bet should obey a clientele decomposition. That is an
+explanation offered after the fact and is recorded as one. The seasonal miss is smaller and
+disagrees across splits (intraday on train, overnight on validation, both weak), which is this
+file's ⚠ standing concern arriving inside a designed screen.
+
+### Block B — the search path, written out because the vol repair was adopted after a failure
+
+Stated in full per the 2026-09-13 rule, so that the sign and band trial #94 carried can be read as
+selected from this search rather than pre-ordained. All train, forward returns over the scoreable
+pool, hash placebo beside every reading.
+
+1. **Pre-registered momentum kill line PASSES**: mean `spearman(score, 12-1 momentum) = -0.024`
+   against a +0.30 kill line. Not trend in costume. Against 21-day reversal it is **+0.384** — a
+   related but distinct object, far under the 0.98 this repo uses as an identity line.
+2. **The horizon was wrong in the first screen and the source predicts that it should be.** At
+   forward 21 days the *high*-overnight end earns (continuation) and no marginal slice reaches
+   |t| = 2. At forward 6 and 12 months the ranking inverts and the low end earns. The sign flip
+   across horizons is Aboody et al.'s own signature, and it is why the book holds twelve months.
+3. **At the book's own horizon the identifying test FAILS**: top band +3.96%/yr (t = +3.67),
+   bottom band **+8.28%/yr (t = +5.75)** — the source's claim is that the long leg carries the
+   effect alone and the short leg's alpha is insignificant. Both ends positive and the short leg
+   stronger is a U-shape, i.e. a dispersion object.
+4. **The dispersion object is the artifact.** `spearman(mean |overnight|, 252d vol) = +0.706`; the
+   plain |overnight| sort's top-10 earns **+9.75%/yr (t = +5.87)**, larger than the signed score's
+   best reading.
+5. **Vol terciles split it** (excess over each tercile's own mean, so any level bet is differenced
+   out; placebo max |t| = 0.89):
+
+       tercile    LOW-overnight top-5         HIGH-overnight bottom-5
+       LOW vol    +0.59%/yr (t = +1.31)       -0.37%/yr (t = -0.78)
+       MID vol    +1.24%/yr (t = +1.77)       -1.47%/yr (t = -2.22)
+       HIGH vol   +3.66%/yr (t = +2.77)       +6.24%/yr (t = +4.45)
+
+   In the low and mid cells **both sides carry the source's sign**; only the high-vol cell keeps
+   the U-shape. Pooling the picks across terciles gives +2.10%/yr (t = +3.31) at 12 names and
+   +1.16%/yr (t = +2.36) at 21, at a volatility percentile of **0.526** against the pool's ~0.51.
+6. **The breadth pin, measured before the file was written.** Twelve overlapping tranches give
+   book breadth **28.8 / 49.1 / 65.0 / 78.8** distinct names at 1/2/3/4 per tercile, against a
+   score whose marginal slices go flat after rank ~10 of ~118. One per tercile is the floor the
+   construction allows.
+7. **The book itself, net of the engine's costs, on train invested days** — screening on the
+   statistic the trial is scored on, per the standing rule:
+
+       book                                   excess/yr      t     Sharpe   vs EW   names  turn
+       vol-neutral, 1/tercile, 12 tranches      +1.99     +1.20     0.851   0.744    26.0  0.57x
+       vol-neutral, 2/tercile                   +1.28     +0.95     0.823   0.744    45.1  0.56x
+       vol-neutral, 4/tercile                   +0.53     +0.48     0.785   0.744    71.2  0.51x
+       RAW (no vol neutralisation), 12/tranche  +2.19     +1.73     0.806   0.744    68.8  0.51x
+       [ctl] placebo, 1/tercile                 -0.78     -0.66     0.664   0.744    31.2  0.60x
+       [ctl] placebo, 4/tercile                 -0.98     -1.25     0.679   0.744    84.4  0.55x
+
+   **Not one excess reaches |t| = 2**, which is why this was filed as a scout and not a challenger.
+   The placebo does not merely fail to work — it *loses* to the equal-weight benchmark, which is
+   what separates the live book from it. Worth recording against the standing over-prediction rule:
+   the screen said +2.10%/yr at 12 names and the book delivered **+1.99%/yr at 26**, i.e. the rule's
+   usual order-of-magnitude discount **did not apply**, because the screen was already the book's
+   own equal-weight tail statistic at near-matched breadth rather than a quintile spread.
+
+### Block C — `SUMMARY.md` #121, computing a signal on the component it lives in
+
+Train, monthly grid, IC against the forward 21-day return.
+
+    arm (a) 21-day REVERSAL           IC          t       spearman to close-to-close version
+    close-to-close (incumbent)      +0.0115     +0.84                 —
+    INTRADAY legs only              +0.0123     +1.01               +0.684
+    OVERNIGHT legs only             +0.0007     +0.06               +0.385
+
+    arm (b) 21-day VOLATILITY
+    close-to-close 21d vol          +0.0368     +2.00                 —
+    OPEN-TO-CLOSE 21d vol           +0.0387     +2.26               +0.864
+    OVERNIGHT 21d vol               +0.0195     +1.12               +0.766
+
+**Arm (a) is the interesting one and it cuts against the folder.** The decomposition's claim is
+that past-return signals are *overnight* objects; measured as a **score**, reversal's entire
+content sits in the **intraday** leg (+0.0123, reproducing the close-to-close reading at
+`spearman` 0.684) while the **overnight leg is a clean zero** (+0.0007). That is not a
+contradiction of Block A, and the distinction is the transferable part: Block A asks where a
+book's **premium accrues**, arm (a) asks which component the **score** should be measured on, and
+on this universe the answers are opposite. All three are nulls, so no candidate follows.
+
+**Arm (b) passes its pre-registered gate on the letter and is declined anyway.**
+`spearman(o2c vol, c2c vol) = +0.864`, under the +0.90 line, so it is nominally "a distinct
+object" — and it carries the same sign (high volatility predicts high forward return) at a
+slightly *larger* IC, which is the survivorship artifact fifteen screens have identified. An
+orthogonality gate bounds an object's breadth, not its sign; the gate was the wrong instrument and
+is recorded as such. 37.6% of 21-day close-to-close variance is overnight.
+
+### Standing blend rule, run for tonight's new leg
+
+`lv_overnight_sentiment_reversal`: own Sharpe **0.822**, `rho` to the seat **0.6947**, vol ratio
+`k` **0.724**. Blend deltas **+0.0017 / -0.0003 / -0.0073 / -0.0205** at 10/20/30/40%, at
+`t = +0.08 / -0.01 / -0.10 / -0.20`. The solved break-even leg Sharpe at w = 0.20 is **0.824**, so
+the leg is **0.002 short of its own break-even** — by a wide margin the closest any leg has come
+(the previous best was 0.076 short, `pl_factor_momentum_untimed`, 2026-09-17) — and it buys
+**nothing**, because break-even was never the bar: a two-SE blend at `rho` 0.993 still needs the
+leg's own Sharpe at 1.34-1.42. **The blend board's conclusion is unchanged and should not be
+re-derived; it now covers one more leg.**
+
+### ⚠ A mis-specified call in a committed `strategies/lib/` file — for human attention
+
+`strategies/lib/sleeve_book.py:41` reads
+
+    "gkvol": F.garman_klass_vol(aux["high"], aux["low"], prices, 21),
+
+and `features.garman_klass_vol`'s signature is `(open_, high, low, close, window=21)` — **five
+parameters, four of them panels.** The call passes four positional arguments, so it binds
+`open_ = high`, `high = low`, `low = close`, and **`close = 21`, the integer**, leaving `window` at
+its default. The estimator's second term becomes `log(21 / high)**2` — the logarithm of a
+dimensionless 21 divided by a price. It does not raise, it returns finite numbers, and it is not
+Garman-Klass volatility: the object it produces rank-correlates **+0.0586** with a correctly-called
+`garman_klass_vol` over the dates where both are computable. The two are unrelated.
+
+**What it affects.** `sleeve_book.py` was added 2026-09-17 and is used by trials **#92
+`pl_factor_momentum_timed`** and **#93 `pl_factor_momentum_untimed`**, where `gkvol` supplies
+**two of the twelve sleeves** (both legs). Those trials' verdicts stand as recorded — they were
+honestly run and the file is frozen from its commit — but the 0.867 untimed control, currently the
+second-best non-`price-trend` result on the board, is a book over **ten characteristic sleeves plus
+two driven by a mis-specified one**, and it should be described that way from now on. Nothing in
+2026-09-17's conclusion turns on it: the timed-versus-untimed contrast is a designed pair in which
+both arms carry the identical sleeves, so the contrast differences the error out exactly.
+
+**Not fixed, deliberately.** `CLAUDE.md` forbids editing an existing `strategies/lib/` file, and
+the reason applies here precisely — #92 and #93 are already measured against this code, and
+repairing it in place would silently change two recorded trials. Any future candidate needing a
+range-volatility characteristic must carry its own corrected call. **A human may want to decide
+whether a lib file with a mis-specified call should be retired by name.**
+
+**And the same bug class bit this session's own screens twice**, which is why it was found:
+`rolling(FORM).mean()` left at its default `min_periods` requires *all* `FORM` observations and
+silently restricted the overnight score to names with a complete trading calendar — the
+`dropna`-cohort artifact that cost this repo four trials on the champion's trim. Caught by a
+coverage check before any number was believed; it moved the scoreable train dates from **76 to
+226**. The first version of the Block A extension table also carried the broken `garman_klass_vol`
+call copied from `sleeve_book.py`, and was re-run before anything was recorded. **Tenth instance of
+this repo's oldest habit, and the first found in a `strategies/lib/` file the lab itself wrote.**
