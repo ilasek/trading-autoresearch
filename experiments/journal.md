@@ -11065,3 +11065,124 @@ exhausted. Both are edits to frozen files.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-18 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-18 (nightly), written before any number was computed
+
+Committed before the first array was allocated. Three blocks, each with a two-sided rule
+fixed in advance, so that honouring it after the numbers are in is mechanical rather than a
+judgement. Provenance for all three is `research/SUMMARY.md` #119-#122 (session 35, the
+overnight/intraday decomposition), whose sources all end before 2018 and therefore carry
+`validation_overlap: false` — the first block of notes in several sessions with no soft
+lookahead to discount. No performance expectation is imported from any of them; only signs,
+orderings and the stated weakness discount.
+
+### Block A — `SUMMARY.md` #119, FREE. Where does the incumbent's premium accrue?
+
+The folder ranks this first because a single number can retire the whole vein. A daily
+close-to-close return factors exactly into a close→open (**overnight**) and an open→close
+(**intraday**) leg, and two independent Tier-A sources make opposite-signed, pre-registerable
+claims about a book like this one held 24 hours.
+
+**Two preconditions, both mandatory, both cheap, both checked before anything else.**
+
+- **P1 — basis.** `aux["open"]` must be on the same adjusted, USD-converted basis as `prices`.
+  Test: the cross-sectional distribution of `close/open - 1` must look like a daily return.
+  **Kill line, fixed now: if the median of |close/open - 1| exceeds 5%, or the pooled mean is
+  further than 20 bps from zero, treat it as a data-handling problem, write it up under
+  `## Data issue`, and run neither #119 nor #120.**
+- **P2 — estimator.** Use the **imputed** decomposition, never the direct `open_t/close_{t-1}`
+  ratio, which breaks on ex-dates and on any adjustment-convention mismatch:
+  `r_day = close_t/open_t - 1`, and `r_night` backed out of the adjusted close-to-close return
+  as `(1 + r_cc)/(1 + r_day) - 1`. Mask days the instrument did not trade; the non-forward-filled
+  volume panel is the mask.
+
+**The pre-registered signs, written before computing.** Lou-Polk-Skouras: *every* past-return
+strategy earns its premium **overnight**. Hendershott-Livdan-Rösch: any book with a beta tilt is
+**paid** for that tilt overnight and **charged** for it intraday. Both therefore predict, for the
+seated four-horizon momentum champion, a **positive night leg and a weaker (possibly negative)
+day leg**, i.e. `night - day > 0`.
+
+**The decision rule, two-sided.**
+
+- The statistic is the champion's own realised book return decomposed into `w_t · r_night` and
+  `w_t · r_day`, annualised, on the **train** split, reported beside an equal-weight-universe
+  control and a hash-placebo book (the placebo is what calibrates it; this file records four
+  separate occasions where a screen was read without one and had to be retracted).
+- **Live** iff the paired night-minus-day difference reaches `|t| >= 2` **and** its sign is the
+  predicted one (night > day). Block B then proceeds.
+- **Dead** iff the difference is inside `|t| < 2`, or reaches significance with the *wrong*
+  sign. **In that case #120 and #121 are both declined, no candidate file is written, and the
+  vein closes for the price of one diagnostic.** A wrong-signed significant reading is recorded
+  as a refutation of the imported claim on this universe, not as an opening.
+- No third branch. In particular a reading that is significant, correctly signed, but small is
+  **live** — the folder's own discount says to expect weak effects here, and moving the bar
+  after seeing the number is the thing this block exists to prevent.
+
+### Block B — `SUMMARY.md` #120, ONE TRIAL, gated behind Block A
+
+The one book in this literature a long-only close-to-close lab can hold: rank the universe on
+the **average daily overnight return** over a formation month (average, not compounded — robust
+to a name trading fewer days than its peers, which matters on a 15-region calendar), hold the
+**lowest** end, equal-weighted, for **twelve months**, as overlapping monthly tranches. The
+mechanism is firm-specific sentiment: persistent attention-driven demand lifts a name overnight
+and the non-informational part unwinds over the following year, so the *low* end is the cheap
+side, and the cheap side is the side long-only can hold.
+
+- **Family: `liquidity-volume`, track `scout`.** Not `price-trend`: the folder is explicit that
+  this is a *component of a return*, not a trend signal, and paying the `price-trend` cap for it
+  would be paying for nothing. `liquidity-volume` is the honest home because the economic object
+  is **non-informational demand pressure and its unwinding** — the same object Amihud's
+  price-impact ratio measures through volume, measured here at the session boundary instead.
+  This is stated so that a later session can disagree with the filing without re-deriving it.
+- **Construction, declared now.** Overlapping tranches are preferred to the source's
+  December-only rule, **and the overlapping version is untested in the source** — December-only
+  inherits a tax-loss-selling and turn-of-year confound the paper never disentangles, while
+  overlapping formation dates are this lab's strongest recorded mechanism. Twelve monthly
+  tranches, each holding the bottom `CORE_N` on its own formation date, averaged at equal weight.
+  Every other node is the house default (`learnings.md` 2026-09-10): last trading day of the
+  month, all 140 instruments holdable, equal weight within the book, no group demeaning.
+- **The band is NOT inherited.** Per the house table's one explicit refusal, `CORE_N` is set from
+  the score's own marginal rank-slice profile measured on train, with a hash placebo printed
+  beside it. **If no ordered shape survives beside the placebo — the `pt_raw_reversal_control`
+  signature of 2026-09-09 — there is no band to set and the trial is not spent.**
+- **Free screen first, and it is a kill line.** Rank-correlate the score against the champion's
+  12-1 momentum and against the trailing total return. The source predicts a *negative* momentum
+  loading. **If mean `spearman(score, 12-1 momentum) >= +0.30`, the object is trend in costume —
+  the lab has caught exactly that twice (close-location value, 52-week-high proximity) — and the
+  trial is not spent.**
+- **Pre-registered expectation, weak by construction.** The effect is strongest in small, young,
+  unprofitable, high-volatility names and is insignificant in four of five easiest-to-value
+  subsamples; this universe is 140 large, current, surviving names at the easy end. Validation
+  Sharpe is pre-registered at **0.55, band 0.25-0.90**. **A strong reading is grounds for
+  suspicion, not celebration**; anything above 0.95 is to be reported with the survivorship
+  caution attached rather than as a lead.
+- **Also print, per this file's own standing rules**: the book's trailing-volatility percentile
+  (2026-09-10 — an excess screen prices a numerator and is blind to a denominator), the bottom
+  band as well as the top (2026-09-06, `SUMMARY.md` #84), `n` per date, and the ETF share.
+
+### Block C — `SUMMARY.md` #121, FREE, gated behind Block A
+
+A measurement move rather than a book: compute an existing signal on the component it actually
+lives in. Two arms, both scored as IC comparisons against the close-to-close version of the same
+score, train only: **(a)** a 21-day reversal score built from **intraday legs only**, and
+**(b)** a 21-day volatility estimate from **open-to-close** returns only, which discards
+overnight gaps and is a genuinely different estimator from anything in the range-volatility note.
+**Rule: expect small effects and treat a large one as a data-handling bug until proven
+otherwise.** Arm (b) is additionally gated by this repo's fifteen-screen closure of
+`range-variance` on the volatility *level* — if the open-to-close estimator rank-correlates above
+`+0.90` with the plain close-to-close level it is the same artifact and is recorded as such, not
+as a new object. **No trial follows from Block C either way**; it is a measurement and its whole
+output is a number in this journal.
+
+### What is NOT on the table tonight, restated so it cannot drift
+
+- **`SUMMARY.md` #122 (`TugOfWar` timing) is an anti-candidate and will not be proposed.** It is
+  the same operation #92/#93 refuted on 2026-09-17 on a designed pair, with cost measured out at
+  11% of the gap; it differs only in *which* function of past returns it uses.
+- **Everything on the 2026-09-14 do-not-extend list**, plus the regional lead-lag pairs, plus
+  `beta-minus`/`rho-minus`/coskewness, plus a second factor-momentum variant, plus any extension
+  of the 0.867 untimed control.
+- **The blend board will not be re-derived.** Exhaustive as of 2026-09-15 and extended
+  2026-09-17; every cell is negative or under a third of a standard error.
+- **No `price-trend` trial is planned.** The cap is 2 and the family's construction is fully
+  mapped on its own base; a candidate clearing the gate there is evidence about the gate.
