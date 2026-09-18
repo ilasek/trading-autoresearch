@@ -151,6 +151,25 @@ snippets. Three practical limits to plan around:
   OpenAlex's metered budget; the article is closed, not blocked, and the honest response is to
   record the source as *not read* and rely on nothing from it.
 
+- **For a prolific author, try the faculty page before the publisher** (added 2026-09-18; first
+  observed 2026-09-17). `personal.lse.ac.uk/<name>/research/`, `faculty.haas.berkeley.edu/<name>/` and
+  `people.duke.edu/~<name>/Research/Published_Papers/` have each served a typeset, parseable PDF of a
+  closed journal article on the first try. Naming schemes are often sequential or title-derived, so a
+  single web search scoped to the author's institution usually finds it. **A business school's
+  *magazine* or review site is the same trick one step out**: `anderson-review.ucla.edu/wp-content/uploads/`
+  served the version of record of a JFQA article whose publisher endpoint is closed. Worth trying for
+  any author at a school with a review publication.
+
+- **`cambridge.org/core` returns an HTML bot page in place of its PDF endpoint** (added 2026-09-18),
+  even when a search index lists a direct `.../<article>.pdf/<slug>.pdf` URL and the request returns
+  HTTP 200. `file` the result before parsing.
+
+- **Imperva/Incapsula is a seventh refusal mode and it returns HTTP 200** (added 2026-09-18).
+  `ink.library.smu.edu.sg` answered a repository landing-page request with **200** and a 212-byte body
+  containing only an `_Incapsula_Resource` script tag. Like OpenAlex's retired-`select=` behaviour, it
+  *looks like an answer*, and the careless reading is "no PDF on that page" rather than "blocked".
+  **Check the body length before concluding anything from a page's contents.**
+
 - **When a paywalled paper's contribution *is* an algorithm, look for the author's own published
   reference implementation** (added 2026-09-07). It is a complete and unambiguous primary for the
   construction recipe, and reading it can settle evidentiary questions the prose would have

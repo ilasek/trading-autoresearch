@@ -121,6 +121,22 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > addition to the unit-of-check lesson: *a coverage claim says nothing about whether the covered
 > material can be acted on — check the shape of the output, not only the subject.*
 >
+> **Status after session 35 (2026-09-18): the ninth unit is a column of the data panel, and the
+> detector was pointed at the input side for the first time.** Sessions 28–34 each found a finer unit
+> to check coverage at, all of them on the *output* side — what the lab measured, selected, or
+> produced. Tonight's sweep asked the opposite question: *what was the lab handed, and does each piece
+> of it have a note?* A grep across all 106 prior notes returned **zero** for `overnight`,
+> `tug of war`, `close-to-open` and `intraday decomposition`, while strategies have received an
+> **`open`** panel since 2026-08-29 and the 2026-08-30 nightly had already computed overnight return
+> sums with it. **Families → clauses → operators → the pool → an attribute of its members → the
+> selection rule → the vocabulary → the shape of the output → a column of the input.** The durable
+> addition: *after any change to what strategies receive, sweep the new fields for coverage* — nineteen
+> days passed here. Session 35 covered it (new cross-family section below, candidates #119–#122), and
+> the session-34 acceptance criterion was carried over and met: **#120 is a portfolio**, not a
+> diagnostic. One result deserves flagging up here because it reads backwards at first glance: the
+> lab's own 2026-08-30 null on overnight sums is **what this literature predicts**, not a refutation of
+> it — see the 2026-09-18 open question on that tension.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -3201,6 +3217,72 @@ choice least likely to be pre-registered by anyone — among the more influentia
 non-standard-error result reported by the original authors about their own paper, which is rarer than
 the finding itself, and it is a ready-made pre-registration checklist for anyone implementing this.
 
+### The session boundary inside the daily bar — overnight versus intraday (cross-family)
+
+**The gap, and how long it had been open.** A grep across all 106 notes in this folder before tonight
+returned **zero** for `overnight`, `tug of war`, `close-to-open`, `intraday decomposition` and for
+every author central to this literature — while `program.md` has passed strategies an **`open`** panel
+since 2026-08-29 and the 2026-08-30 nightly *computed overnight return sums and screened them*. The
+lab used the object for nineteen days without a note on it. This is the ninth instance of the
+unit-of-check lesson and the ninth unit: **a column of the data panel**. The detector that found it is
+the cheap 2026-09-13 one, run against the input side rather than the output side.
+
+**The primitive.** A daily close-to-close return factors exactly into a close→open (**overnight**) and
+an open→close (**intraday**) leg. Lou–Polk–Skouras (JFE, Tier A, 235 citations) argue these are the
+footprints of two different clienteles — retail-leaning flow reacting to news at the open, institutional
+flow through the day and into the close — and document the signature that follows: **own-period
+continuation** (past overnight forecasts future overnight, past intraday forecasts future intraday)
+together with **cross-period reversal** (past overnight forecasts future intraday *negatively*, and
+vice versa). Both halves hold in every one of nine non-US markets, and both survive lagging the signal
+five years, which is what rules out a microstructure reading.
+
+**The second finding is a map of the lab's own signal space.** Decomposing 14 standard characteristic
+strategies, the premium is almost never split evenly. **Every past-return strategy earns its premium
+overnight** — price momentum, industry momentum, earnings momentum, time-series momentum, short-term
+reversal. **Everything else earns it intraday** — size, value, profitability, investment, market beta,
+idiosyncratic volatility, issuance, accruals, share turnover — and each of those carries an
+opposite-signed overnight component, so the side that looks riskier is *paid* at night and *punished*
+by day. Hendershott–Livdan–Rösch (JFE, Tier A) make the systematic version of this the object: the
+security market line is **positively** sloped overnight and **negatively** sloped intraday, in the US
+and in 39 other countries, for industry portfolios, book-to-market portfolios, cash-flow and
+discount-rate betas separately, and robust to closure length and to estimating beta from close-to-close
+returns. The flat 24-hour SML the literature has explained with borrowing constraints for fifty years
+is **two strong opposite relations cancelling**.
+
+**Why almost none of that is tradeable here, and this is the load-bearing sentence.** This engine holds
+close-to-close. A 24-hour holder collects the *sum* of the two legs, which is the thing that already
+nets. Lou–Polk–Skouras say so themselves: what a long-horizon investor gets from the decomposition is
+**order timing** — trade at the open or the close depending on which period your premium accrues in —
+and this lab cannot choose an execution time. **The lab's own 2026-08-30 screen is the confirmation,
+not the refutation**: trailing 63-day overnight sums lost to the plain total return with a null IC
+throughout, which is exactly what the cross-period offset predicts. That screen tested the
+construction the literature says will not work close-to-close.
+
+**What survives the constraint is one paper and one horizon.** Aboody–Even-Tov–Lehavy–Trueman (JFQA,
+Tier A, 188 citations) validate the overnight return as a *firm-specific sentiment* proxy: short-term
+persistence, stronger where firms are hard to value and institutional ownership is low, and — the
+tradeable part — **long-horizon reversal measured on close-to-close buy-and-hold returns over a
+12-month holding period.** Rank on the average daily overnight return in a month, hold the lowest
+decile for a year. Three properties make it reachable where the rest of the literature is not: the
+holding period is close-to-close, the **long leg carries the effect on its own** (its four-factor
+alpha is significant; the short leg's is not), and the long leg's factor loadings are low-beta,
+small-tilted and **negatively loaded on momentum** — a structurally decorrelated leg, which is the
+rarest thing on this lab's leaderboard. The same paper reports the matching negative: its
+*short*-horizon overnight continuation shows **no monotonic close-to-close relation**, independently
+confirming both the offset and the lab's own screen.
+
+**The discount to apply.** The reversal is strongest in small, young, unprofitable, high-volatility
+names and significant in only one of five *easiest*-to-value subsamples — and this universe is 145
+large, current, surviving names sitting at the easy end. The pre-registered expectation must therefore
+be a **weak** effect; a strong one here is grounds for suspicion, not celebration. The construction is
+also single-market, single-sample, unreplicated, with costs unmodelled (mitigated by an annual
+rebalance), and its December-only formation month is entangled with tax-loss selling and the turn of
+the year, which the paper does not disentangle.
+
+→ `notes/2026-09-18-overnight-intraday-return-decomposition.md`,
+`notes/2026-09-18-beta-at-night-versus-day.md`,
+`notes/2026-09-18-overnight-return-as-firm-sentiment.md`. Candidates #119–#122.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -6171,6 +6253,83 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-17-coskewness-and-the-third-moment-estimation-window.md`,
     `notes/2026-09-09-specification-curve-analysis.md`
 
+119. **FREE, and it should come before #120 because a single number can retire this entire
+    literature for this universe: decompose the champion's own realised daily returns into their
+    overnight and intraday legs and ask where its premium accrues.** Holdings-only, no trial, no new
+    strategy file. Two independent Tier-A sources make *opposite-signed*, pre-registerable
+    predictions about a momentum book held 24 hours: Lou–Polk–Skouras say every past-return strategy
+    earns its premium **overnight**, and Hendershott–Livdan–Rösch say any book with a beta tilt is
+    paid for that tilt **overnight** and charged for it **intraday**. So the incumbent should show a
+    positive night leg and a weaker or negative day leg. **If this universe shows no night/day split
+    at all, #120–#122 are dead and the whole vein closes for the price of one diagnostic** — which is
+    the cheapest possible outcome and the reason this is ranked first. Pre-register the sign before
+    computing. Two preconditions, both cheap and both mandatory: confirm the `aux["open"]` panel is on
+    the same adjusted, USD-converted basis as `prices` (the cross-sectional distribution of
+    `close/open − 1` must look like a daily return, not an exchange rate), and use the **imputed**
+    decomposition — `r_intraday = close/open − 1` from same-day prices, `r_overnight` backed out of the
+    adjusted close-to-close return — rather than the direct `open_t / close_{t−1}` ratio, which breaks
+    on ex-dates and on any adjustment-convention mismatch. Mask days the instrument did not trade;
+    the non-forward-filled volume panel is the mask.
+    → `notes/2026-09-18-overnight-intraday-return-decomposition.md`,
+    `notes/2026-09-18-beta-at-night-versus-day.md`
+
+120. **The one book in this literature a long-only close-to-close lab can actually hold: a
+    long-only low-overnight-return tilt, formed on one month of daily overnight returns and held
+    twelve months.** Rank the universe on the **average daily overnight return** over the formation
+    month (average, not compounded — it is robust to a name having fewer trading days than its peers,
+    which matters on a 15-region calendar); hold the lowest decile, equal-weighted, for 12 months.
+    The mechanism is firm-specific sentiment: persistent attention-driven demand lifts a name
+    overnight and the non-informational part unwinds over the following year, so the *low* end is the
+    cheap side — and the cheap side is the side this repo can hold. Three properties make this
+    reachable where the rest of the vein is not: the holding period is close-to-close, the **long leg
+    carries the effect on its own** (its four-factor alpha is significant on its own; the short leg's
+    is not — a documented exception to this folder's usual long-side finding), and the long leg loads
+    **negatively on momentum**, i.e. it is structurally decorrelated from the incumbent's family.
+    **Formation month: prefer overlapping monthly tranches to the source's December-only rule, and say
+    in the hypothesis that the overlapping version is untested in the source.** December-only inherits
+    a tax-loss-selling and turn-of-year confound the paper never disentangles; overlapping tranches
+    remove it and are this lab's strongest recorded mechanism. Run December-only as the control if
+    budget allows. **Pre-register a weak expectation**: the effect is strongest in small, young,
+    unprofitable, high-volatility names and is insignificant in four of five easiest-to-value
+    subsamples, and this universe is the easy end — a strong reading here is grounds for suspicion.
+    **Free screen first**: rank-correlate the score against the champion's holdings and against the
+    trailing total return; the source predicts a negative momentum loading, so a strongly *positive*
+    correlation means trend in costume and the trial should not be spent (the lab has caught exactly
+    that twice). Turnover is about the lowest any candidate here has proposed. Do **not** file it under
+    `price-trend` — it is a component of a return, not a trend signal, and the cap would be paid for
+    nothing. Tier A venue and citation count; Tier B evidence (single market, single sample,
+    unreplicated, costs unmodelled).
+    → `notes/2026-09-18-overnight-return-as-firm-sentiment.md`,
+    `notes/2026-08-17-jegadeesh-titman-overlapping-momentum.md`,
+    `notes/2026-09-06-long-side-share-of-anomaly-profits.md`
+
+121. **A measurement move rather than a book, and free: compute an existing signal on the component
+    it actually lives in.** The strategy decomposition says where each kind of information sits — past
+    return signals are overnight objects, risk-level and turnover signals are intraday objects. The
+    corresponding constructions are *the same book, held close-to-close, with a differently measured
+    score*: a short-term reversal score built from intraday legs only, or a volatility estimate from
+    open-to-close returns only (which discards overnight gaps and is a genuinely different estimator
+    from anything in the range-volatility note). This is cheap to screen as an IC comparison against
+    the close-to-close version of the same score, and it is the only family of ideas the decomposition
+    opens here that does not require holding a position for part of a day. Expect small effects and
+    treat a large one as a data-handling bug until proven otherwise. Gate it behind #119.
+    → `notes/2026-09-18-overnight-intraday-return-decomposition.md`,
+    `notes/2026-08-29-range-based-volatility-estimators.md`
+
+122. **ANTI-CANDIDATE, stated because it is the attractive-looking half of a Tier-A paper: do not
+    propose `TugOfWar` as a timing variable.** Lou–Polk–Skouras's own headline application EWMAs a
+    strategy's overnight and intraday component returns (60-month half-life) and uses the spread to
+    time that strategy's close-to-close return. It is a well-motivated, well-controlled result in the
+    source. It is also **the same operation the lab killed on 2026-09-17** — timing a book on a
+    function of its own past returns — measured on a pair designed so nothing else could move, with
+    cost ruled out at 11% of the gap, and the journal's own next-ideas list says not to propose a
+    second variant. The 2026-09-17 standing benchmark applies unchanged: a timing rule must beat
+    buy-and-hold of the things it times, not the incumbent. `TugOfWar` differs only in *which*
+    function of past returns it uses. **The value of this entry is that it costs nothing.** If a
+    future session revives it, the untimed control comes first and the whole thing is pre-registered.
+    → `notes/2026-09-18-overnight-intraday-return-decomposition.md`,
+    `notes/2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -6210,8 +6369,124 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-15 (session 32) | **Aimed by the detector 2026-09-13 wrote, on its first use, and it found a gap under the lab's single biggest overnight number.** The 2026-09-14 nightly spent one trial, discharged `range-variance` and `program.md`'s cold-family rule after fourteen sessions, and ran this file's #92 to produce the result of the week: the champion's construction non-standard error is **0.079**, five of six recorded promotion steps sit inside it, 69% of the dispersion sits on `core_n`, and the best cell `core_n = 10` was **embargoed on three arguments from the repo's own history**. The detector — *after each nightly, take the one variable it measured that has no note here, and check* — pointed at the selection rule itself. A grep across all 97 prior notes returned **zero** for `post-selection`, `regression to the mean`, `James–Stein`, `argmax`, `reality check` and `active share`, and one apiece for `winner's curse`, `order statistic` and `empirical Bayes` — none of the three the subject of the note it sits in. **Seventh instance of the unit lesson**: after families, clauses, operators, the pool and an attribute of the pool's members, the seventh unit is **the rule by which a result is selected out of a set of results**. The load-bearing distinction the folder had blurred: all nine of its multiple-testing notes are about **testing** (is the best significant?), none about **estimation** (what is the best *worth*?) — and the repo's gate compares point estimates every night. Three notes, five sources, **full text read directly for all four Tier-A primaries**. The shape is *three corrections for one object*: condition on the selection (assumption-free, needs the covariance), shrink toward the ensemble (needs exchangeability, carries a normal prior), or bootstrap the max with dependence preserved (tests rather than estimates). Two outputs are the session's point. **(a) The `core_n` embargo is right for a reason the lab did not state** — a truncated-normal argument makes the winner's estimate a normal truncated below at the runner-up, so the bias is largest exactly in the many-candidates/small-gaps regime the curve is in, and the discount is computable from `sharpe_diff_se`, which the repo already runs. **(b) A stated tension with `2026-08-24-deflated-sharpe-ratio.md`**: that note's haircut assumes `N` independent trials and the engine deflates by the raw count, while White finds a correlated search erodes the corrected p-value far more slowly — resolvable by measurement (#108's scree), and pending it the bar is **conservative in the count and optimistic in the universe**. Candidates #108–#110: one that can fail, one convention, one decomposition with an anti-candidate attached; all three free, none proposing a book. **Access and index behaviour**: two hosts died at the **transport layer** with `http=000` and no HTTP status — `efron.ckirby.su.domains` (the author's own page; the agent proxy reported `ws_closed_mid_exchange`) and `cdr.lib.unc.edu` including its repository DOI, five attempts across two URL forms. That is a **fourth distinct refusal mode** for this folder, after the Cloudflare 403 challenge, OpenAlex's metered budget and `pm-research.com`'s OpenID redirect, and it is host-specific: NBER, Stanford `stacks`, two instructors' teaching directories, Crossref and arXiv all answered in the same session. Efron was recovered instantly from the **Stanford `stacks` mirror of the same technical report** — generalise it. Hansen 2005 is **not read** and recorded as a pointer with **nothing relied on**; a later session wanting the SPA refinement must read it. Index behaviour: **Semantic Scholar returns *not found* for Andrews–Kitagawa–McCloskey on both its QJE DOI and its NBER DOI**, and OpenAlex's record is merged with the 2019 working paper and returns 6 against Crossref's 30 — so the tier rests on venue and documented downstream use, per the README's own instruction not to downgrade on an index miss. Counterpoint worth recording: the other four DOIs agreed across all three registries to within the usual spread. | Andrews–Kitagawa–McCloskey 2024 (QJE; NBER WP 25456 revised Sept 2021 read in full) (`2026-09-15-inference-on-winners-post-selection-estimation.md`); Efron 2011 (JASA; Stanford Biostatistics TR 256 read in full via `stacks.stanford.edu` after the author's own page died at the transport layer) (`2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md`); White 2000 (Econometrica, typeset article read in full from a university course directory) + Sullivan–Timmermann–White 1999 (JF, read in full from a teaching directory) + Hansen 2005 (JBES, **not read**, pointer only) (`2026-09-15-reality-check-max-statistic-under-dependence.md`) |
 | 2026-09-16 (session 33) | **The detector's second use, and it found the gap under the lab's newest number on the first try again — this time the gap was a whole vocabulary rather than a variable.** The 2026-09-15 nightly spent zero trials, priced the blend board exhaustively and closed it for a sixteenth session, and produced the number of the week: 90 recorded trials are worth about **1.56** independent bets by participation ratio against the engine's clustered **24**, with the decision handed to a human. A grep across all 100 prior notes returned **zero** for `M_eff`, `Nyholt`, `effective rank`, `participation ratio`, `false strategy` and `ONC` — the lab had computed a member of a named estimator family with twenty-five years of peer-reviewed literature behind it and this folder had none of that literature. Three notes, nine sources; full text read directly for three primaries (Li–Ji, Halle et al., López de Prado–Lewis), the remaining estimator definitions taken from two independent restatements that agree, and three sources recorded from **published abstracts only** (Salyakina et al., Moskvina–Schmidt, Galwey). The session's shape is **one family definition, one verdict on the family, and one finance-side member that is the closest published relative of the engine's own step** — and the verdict is negative: no plug-in effective count is known to control any error rate, because `M_eff` is defined by inverting Šidák and is therefore a function of the error rates, not of a correlation matrix. **Nothing here proposes a book.** The three candidates are a pre-committed spread table with an anti-candidate attached, a null control that can close the clustering route, and a read-only consistency check on the deflator's two inputs. The transferable correction: the 2026-09-15 reading that the engine over-deflates is arithmetically right and rests on a premise this literature breaks, so the 24-versus-1.6 gap **overstates** the over-deflation — a second independent reason, alongside Sullivan–Timmermann–White, why a low effective-`N` is not a licence. All three notes `validation_overlap: false`; not one contains a market-performance figure, because two of the three sources contain no market data at all. | Halle, Djurovic, Andreassen & Langaas 2016 + Salyakina et al. 2005 + Moskvina & Schmidt 2008 (`2026-09-16-does-meff-control-the-familywise-error-rate.md`); Cheverud 2001 + Nyholt 2004 + Li & Ji 2005 + Gao et al. 2008 + Galwey 2009 (`2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`); López de Prado & Lewis 2019 (`2026-09-16-clustering-trials-onc-effective-number-of-trials.md`) |
 | 2026-09-17 (session 34) | **The first session in nine aimed at supplying a book rather than a diagnostic, and the aim was set by the lab's own escalation rather than by a gap.** The 2026-09-16 nightly spent zero trials, rejected the folder's eight-session top item (#89) on every partition, produced the effective-count spread (#111) and answered #113, and then told the human plainly that **"the lab is spending its nights auditing its own gate rather than searching for strategies"** — the eighth consecutive session whose new research material proposed no portfolio. This session took that as its instruction. The 2026-09-13 detector was still run first and found the gaps by grep across all 103 prior notes: **zero** hits for `factor momentum`, `trend factor`, `coskew`, `downside beta` and `semivariance`. Two mechanisms, three notes, all four primaries read in full. **Factor momentum** is the book-proposing half — a factor is positively autocorrelated in its own past return, the construction is model-free (no belief about which leg pays), formation is robust from one month to two years, **holding period is one month and is not a knob**, and the time-series version spans the cross-sectional one because the latter collects the Conrad–Kaul mean-dispersion term. Its peer-reviewed reexamination supplies the honest counterweight and the free screen that must precede any trial: **the timed book does not beat buy-and-hold of the same factors**, on mean or Sharpe, in either of two samples — while the original paper's own table shows the **winners-only leg**, the only leg a long-only repo can hold, ordering the other way. **Asymmetric comovement** is the second half and splits cleanly in two: downside beta is **refuted as a sort** (negative high-minus-low in all eight replication specifications at all three horizons, and the identity `β⁻ = ρ⁻·σ⁻_i/σ⁻_m` says why, which leaves `ρ⁻` alone as the untested object), while coskewness is **right-signed and underpowered** in the same replication, most parsimoniously because that replication estimates a third moment from one month of daily returns. Candidates #114–#118: one free two-sided screen, one challenger gated behind it, one anti-candidate, one salvage, one long-only tercile. Flags: two of the five sources carry `validation_overlap: true` and both are named in the notes; **no dated performance figure from any source is recorded anywhere**, only orderings and signs. | Ehsani–Linnainmaa 2022 + Fan, Li, Liao & Liu 2022 + Arnott, Clements, Kalesnik & Linnainmaa 2018 WP (`2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`); Ang, Chen & Xing 2006 + Hou, Xue & Zhang 2020 (`2026-09-17-downside-beta-and-the-volatility-confound.md`); Harvey & Siddique 2000 + Harvey & Siddique 2023 + Hou, Xue & Zhang 2020 (`2026-09-17-coskewness-and-the-third-moment-estimation-window.md`) |
+| 2026-09-18 (session 35) | **The ninth unit of the unit-of-check lesson, and it is a column of the data panel.** The 2026-09-13 detector was run against the *input* side this time — take the data the lab was handed and check it has a note — and a grep across all 106 prior notes returned **zero** for `overnight`, `tug of war`, `close-to-open`, `intraday decomposition` and for every author in this literature, while strategies have received an **`open`** panel since 2026-08-29 and the 2026-08-30 nightly had already computed overnight return sums with it. Nineteen days of using a column with no note on it. Three notes, all three primaries read in full, acceptance criterion carried over from session 34 (*does this end in a portfolio*). **Lou–Polk–Skouras** establish the clientele decomposition: own-period continuation plus cross-period reversal, in nine non-US markets, measurable at a five-year lag; and the map of where each premium accrues — **every past-return strategy earns overnight, everything else earns intraday with an opposite-signed overnight leg**. **Hendershott–Livdan–Rösch** make the systematic version the object: the SML is positively sloped overnight and negatively sloped intraday in the US and 39 other countries, robust to closure length and to the beta estimator, so the famously flat 24-hour SML is **two strong opposite relations cancelling**. **The constraint that decides the session**: this engine holds close-to-close and therefore collects the sum, which is the thing that already nets — the authors' own advice to long-horizon investors is *order timing*, which this lab cannot do, and **the lab's own 2026-08-30 overnight-sums null is what that prediction looks like when measured here.** What survives is **Aboody–Even-Tov–Lehavy–Trueman**: overnight return as firm-specific sentiment, with long-horizon reversal measured on **close-to-close buy-and-hold over 12 months**, the **long leg carrying the effect on its own**, and the long leg loading **negatively on momentum**. Candidates #119–#122: one free diagnostic that can retire the whole vein, one long-only book, one free measurement move, one anti-candidate. Flags: **all three sources end before 2018, so `validation_overlap: false` throughout** — the first session in several with no overlap to discount. No dated performance figure from any source is recorded anywhere; signs, orderings and significance only. Two sources named and **recorded as not read** (Berkman et al. 2012, Akbas et al. 2022), with nothing resting on either. | Lou, Polk & Skouras 2019 (`2026-09-18-overnight-intraday-return-decomposition.md`); Hendershott, Livdan & Rösch 2020 (`2026-09-18-beta-at-night-versus-day.md`); Aboody, Even-Tov, Lehavy & Trueman 2018 (`2026-09-18-overnight-return-as-firm-sentiment.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-18] Read this first: the 2026-09-17 nightly spent two trials, closed #116–#118 outright,
+  and left the folder's book supply empty again.** **#114 is done and the mechanism lost**: the timed
+  sleeve book fell below its own untimed control on validation, the hash placebo matched at the same
+  hold rate, the observed train gain sat at the 100th percentile of 40 independent draws, cost
+  explains 11% of the gap, and the pre-registered un-demeaned control read below the untimed book
+  exactly as #114 predicted — so the load-bearing step worked and the mechanism still failed.
+  **#115 is therefore dead** (it was gated behind #114) and so is any second factor-momentum variant.
+  **#117 is closed on evidence without a trial**: `β⁻` correlates +0.603 with the volatility level at
+  0.655 top-15 overlap while `ρ⁻` correlates −0.016, is flat, and collapses inside a single volatility
+  tercile — the control this family has now failed ten times. **#118 is closed too**: coskewness is
+  wrong-signed in every subperiod against a theory that pins the sign, flatter than its own placebo,
+  and its pre-registered directional falsifier failed. Its free half returned something useful anyway
+  — **the champion's realised coskewness is +0.0018 and its own skew −0.254 against the universe's
+  −0.754**, so the incumbent is *less* negatively skewed than the market it trades and the
+  "high Sharpe on a skewed book" warning does not bite on it. Still unrun and carried unchanged:
+  **#109 (the folder's highest-ranked unrun item, tenth session, still blocked only on rebuilding the
+  2026-09-14 specification curve), #82 (eleventh session), #94 as a standing discipline, #49
+  (twenty-first session)**, plus **#105–#107** and **#110**'s shrink half. New tonight: **#119–#122**.
+- **[2026-09-18] What should aim the next session, in order.**
+  - **#119 first, and it is unlike the usual "free item first" because of what a null buys.** Most
+    free items on this list refine how a result is read. This one is a *kill switch*: two Tier-A
+    sources make opposite-signed, pre-registerable predictions about the night and day legs of a
+    momentum book with a beta tilt, and the incumbent is one. If the champion's own returns show no
+    night/day split, **#120 and #121 both die and the vein closes for the price of one holdings-only
+    computation.** That is a better trade than any of them. Pre-register the sign; run the two
+    preconditions (the `open` panel's adjustment/currency basis, and the imputed rather than direct
+    decomposition) *before* the diagnostic, because both are cheap and either one silently poisons it.
+  - **Then #120, which is the only item on this list that proposes a portfolio**, and the first
+    challenger-shaped object this folder has supplied since #115 died. Its free screen — rank
+    correlation against the champion's holdings and against the trailing total return — comes first
+    and is the same shape as the screens that have twice caught trend in costume on this universe.
+  - **Then #121**, which is a measurement comparison rather than a book and should be scored as an IC
+    contrast against the close-to-close version of the same score, not as a trial.
+  - **Then the lab's own #109**, unchanged, and **#82**.
+  - **Do not spend a session on #122.** It is an anti-candidate and its whole value is that it costs
+    nothing.
+- **[2026-09-18] The transferable output, and it is a constraint rather than a mechanism.**
+  **Before importing any effect, ask which *window* it is earned in, not only which characteristic it
+  is sorted on.** This lab's engine holds close-to-close; an effect that lives inside a sub-period of
+  the day is invisible to it *even when the characteristic is perfectly computable from its data*.
+  Tonight's literature is the sharpest case on record — two Tier-A papers, both replicated
+  internationally, both describing effects that are large in their own window and roughly zero over
+  24 hours, because the two windows carry opposite signs. The general form: **a published premium has a
+  holding period attached to it, and a lab whose holding period differs collects a different quantity —
+  possibly the difference of two things rather than either of them.** This is a free screen of the same
+  kind as `#1`'s parameter-count triage and the 2026-09-17 untimed-baseline rule: it kills a family of
+  proposals before any of them is built. It generalises past this literature to anything with an
+  intraday, weekly-banded or event-window flavour.
+- **[2026-09-18] A second output, and it is a data-handling rule the lab will need whichever way #119
+  goes.** The two published conventions for splitting a daily bar are **not** interchangeable here.
+  Aboody et al. take the direct ratio `(O_d − C_{d−1})/C_{d−1}` and can afford to, because their prices
+  are adjusted on a single known basis. Lou–Polk–Skouras compute the **intraday** leg from same-day
+  prices (`close/open − 1`) and **impute** the overnight leg from the adjusted close-to-close return,
+  assuming all corporate-action adjustments land overnight — and they verified it by excluding dividend
+  months. **This repo should use the imputed form**, because `CLAUDE.md` documents `prices` as
+  USD-adjusted closes and says nothing about whether `aux["open"]` is adjusted or FX-converted; the
+  direct ratio would then not be a return at all but a currency or split *level*, wrong by orders of
+  magnitude and wrong systematically by region. The general lesson is the older one in a new place:
+  **a ratio of two panels is only a return if both panels are on the same basis, and the burden is on
+  the user to check.** Same family as the 2026-09-10 currency-component note.
+- **[2026-09-18] A tension recorded and, unusually, resolved in the lab's favour.** `learnings.md`
+  (2026-08-30) records that "the overnight/intraday decomposition loses to not decomposing" — trailing
+  63-day overnight sums produced a weaker spread than the plain total return, IC null throughout. Read
+  cold that looks like a refutation of tonight's whole vein. It is the opposite: **the cross-period
+  reversal in Lou–Polk–Skouras predicts precisely that result**, because an overnight sum used to
+  forecast close-to-close returns collects a positive continuation term and a negative cross-period
+  term at once. Aboody et al. report the same null independently on their own short-horizon sort.
+  **The lab measured the construction the literature says does not work, and got the literature's
+  answer.** That is a rare instance of this folder and `learnings.md` confirming each other rather than
+  colliding, and it is also why #120 is a *different* construction (long horizon, close-to-close hold,
+  low end) rather than a rerun. **It is not a licence to re-run the 63-day overnight-sum screen.**
+- **[2026-09-18] The detector's fourth use, and the refinement worth keeping.** 2026-09-13's rule —
+  *after each nightly, take the one variable it measured that has no note here, and check* — was run
+  against the **input** side rather than the output side: not "what did the nightly measure" but
+  "what was the nightly handed". That found a column of the data panel with no note, nineteen days
+  after it was opened. **Add the input-side sweep to the detector**: after any change to what
+  strategies receive, check that each new field has a note. Two fields from the 2026-08-29 change
+  still have thin coverage — `dollar_volume` is covered through the Amihud material and `open` is
+  covered as of tonight, but nothing in this folder is written specifically about **`high`/`low` as a
+  *pair* outside the range-volatility estimators**, e.g. close-location within the bar (which the lab
+  screened on 2026-08-30 and found wrong-signed) or the high/low *sequence*. Low priority, recorded so
+  the next input-side sweep starts from a known list.
+- **[2026-09-18] Access notes: one clean channel, one new refusal mode, and two confirmed refusals.**
+  - **Author and faculty pages worked on the first try for two of three sources**, confirming the
+    2026-09-17 README recommendation: `personal.lse.ac.uk/polk/research/` served the JFE version of
+    Lou–Polk–Skouras and `faculty.haas.berkeley.edu/hender/` served Hendershott–Livdan–Rösch, both as
+    parseable PDFs. **New and worth adding to the README: a business school's *magazine* site can host
+    the version of record** — `anderson-review.ucla.edu/wp-content/uploads/` served the full JFQA
+    typeset article whose publisher endpoint is closed. Worth trying for any author at a school with a
+    review publication.
+  - **A seventh distinct refusal mode: Imperva/Incapsula.** `ink.library.smu.edu.sg` returned **HTTP
+    200** with a 212-byte HTML stub containing an `_Incapsula_Resource` script and no content. Like
+    the 2026-09-17 OpenAlex `select=` case, it *looks like an answer* — a 200 with a body — and a
+    careless reader would record "no PDF on the page" rather than "blocked". Check the body length.
+  - **Confirmed refusals, no news**: `papers.ssrn.com` 403, and **`cambridge.org/core` returns an HTML
+    bot page in place of its PDF endpoint** even when the search index lists a direct `.pdf` URL —
+    which is why Berkman et al. (2012) is recorded as not read. Akbas et al. (2022) is `oa: closed` in
+    OpenAlex with `any_repository_has_fulltext: false`, so it is closed rather than blocked; nothing
+    in tonight's notes rests on either.
+  - **Semantic Scholar's DOI endpoint resolved four of five DOIs first time** and rate-limited (429)
+    only after several rapid calls — space them by a few seconds. Crossref `query.bibliographic`
+    again found every DOI without guessing, including one whose guessed form would have been wrong.
+- **[2026-09-18] Protocol note, thirteenth session running: the session-start hook printed "integrity
+  check OK — on main, level with origin/main, no stray branches" while `git status -sb` showed the
+  session on `claude/tender-galileo-p8gi9a`.** As on 2026-09-06 through -17 this is the **benign**
+  form — the branch tip was bit-identical to `origin/main` (`36c6b76`, zero ahead, zero behind) — and
+  the session ran `git checkout main && git reset --hard origin/main` before any work, per step 0 of
+  the standing prompt, so tonight's work is on `main` only. Recorded again because it is benign: **the
+  hook's "on main" clause is false while its "level with origin/main" clause is true**, so a session
+  trusting the first clause would commit to a per-run branch with no warning. As on 2026-09-15 through
+  -17, this session's own harness instructions named that per-run branch as its development target
+  while `research/README.md` step 6 and the standing prompt's step 0 both require `main`; the repo's
+  own rules governed. **Flagged for the human for the tenth time.**
+
 
 - **[2026-09-17] Read this first: the 2026-09-16 nightly ran, spent zero trials, spent this file's
   top three items, and then escalated a pattern to the human. This session was aimed by the

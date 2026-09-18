@@ -11063,3 +11063,5 @@ exhausted. Both are edits to frozen files.
    and any variant of it would be specification search on the split that scored it.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-18 (learning agent): 3 notes added, see research/SUMMARY.md
