@@ -11186,3 +11186,41 @@ output is a number in this journal.
   2026-09-17; every cell is negative or under a third of a standard error.
 - **No `price-trend` trial is planned.** The cap is 2 and the family's construction is fully
   mapped on its own base; a candidate clearing the gate there is evidence about the gate.
+
+## Pre-registration addendum — 2026-09-18, written after Block A's first reading and before its extension
+
+Block A's stated rule is met on the incumbent (below), so the vein is live. Before computing
+anything further I am fixing the predictions for an extension the pre-registration did not
+contain, because `SUMMARY.md` #119's own sources make a **five-way, falsifiable call** that this
+repo can settle for free and that is worth more than the single number the block asked for.
+
+**The claim under test.** Lou-Polk-Skouras decompose 14 standard characteristic strategies and
+find the premium is almost never split evenly: **every past-return strategy earns its premium
+overnight** (price momentum, industry momentum, earnings momentum, time-series momentum,
+short-term reversal), while **everything else earns it intraday** — size, value, profitability,
+investment, market beta, idiosyncratic volatility, issuance, accruals, share turnover — each of
+those carrying an *opposite-signed* overnight leg.
+
+**Mapped onto this repo's own seated scores, written down before the numbers exist.** The
+statistic is each book's excess over the equal-weight-universe control, decomposed into its
+night and day legs, so a universe-wide overnight premium is differenced out and what is left is
+the book's own.
+
+| score | LPS class | pre-registered: where the book's EXCESS lands |
+|---|---|---|
+| champion 4-horizon momentum | past return | **overnight**, day leg negative |
+| 21-day reversal | past return | **overnight**, day leg negative |
+| seasonal same-minus-other month | past return | **overnight**, day leg negative |
+| region-relative `ILLIQ` | turnover / liquidity | **intraday**, night leg negative |
+| `[ctl]` 21d Garman-Klass vol level | idiosyncratic volatility | **intraday**, night leg negative |
+
+Five calls, of which the last two are the discriminating ones: a generic "this universe pays
+overnight" story predicts *all five* land overnight, and the equal-weight and placebo controls
+below show that story is not empty here. **If `ILLIQ` and GK volatility also land overnight, the
+LPS map does not replicate on this universe and is recorded as refuted**, whatever the momentum
+rows do. A hash placebo is printed beside every row, per the standing rule that a screen without
+one has had to be retracted four times in this file.
+
+**This changes no decision.** Block B's gate is Block A's own rule, which is already met; Block C
+is unchanged. The extension is a measurement, no trial follows from it either way, and it is
+recorded here so that its predictions cannot be read off the answers.
