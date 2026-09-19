@@ -11956,3 +11956,127 @@ history is a pool rule selecting on listing age, and 2026-09-12 showed that cont
 alarming reading. Against all names priced on the date, the surviving pool earns **+0.32%/yr
 (t = +0.14)** and a random draw of the same size earns **−0.24%/yr (t = −0.20)**, n = 30. Both nulls.
 The ETF question is moot once no file is written, and is recorded as unanswered rather than resolved.
+
+## Session summary — 2026-09-19 (nightly)
+
+- **Integrity check — clean, and verified rather than assumed.** `git fetch origin --prune` clean;
+  `git branch -r --no-merged origin/main` returned **nothing**, so no previous session's work is
+  stranded off `main` and the trial history is not split. As on 2026-09-06 through -18 the
+  session-start hook printed "integrity check OK — on main, level with origin/main, no stray
+  branches" while `git status -sb` reported a per-run branch (`main-av88mw`) — **the hook still does
+  not detect this, fourteenth session running.** That branch sat at exactly `origin/main`
+  (`0b98110`, zero commits absent from it), so nothing is at risk. Engine tests green
+  (**33 passed**). Store fresh **through 2026-09-18**, one day behind — not stale.
+- **Experiments run: 0 of the 8-trial budget.** Trial count held at **94**, effective 25. **No
+  candidate was scored, no champion comparison, no holdout read** — the count of holdout looks since
+  2026-08-17 stands at **five**, unchanged. One pre-registration block and one free-measurement block
+  committed, the first before any array was allocated.
+
+### The night in one line
+
+The lab took the research folder's first challenger-shaped object in a fortnight, built it exactly as
+pre-registered, and closed the **whole reference-point vein** — capital gains overhang, V-shaped
+selling propensity and dynamic reference points alike — on three readings and zero trials, because
+the turnover weighting that is supposed to separate it from trend moves this universe's ranking by
+**two points of rank correlation**, the asymmetry that identifies the mechanism is **absent**, and
+the score's entire tail excess is **momentum plus the volatility level**.
+
+### Best finding: the identification covered the wrong arm
+
+`SUMMARY.md` #124 was ranked first among tonight's books because `VSP = Gain − 0.2·Loss` has a loss
+arm that is anti-momentum **by construction**, which the folder read as making it the rare object the
+lab's standing trend-in-costume screen could not kill. The construction argument is correct about the
+loss arm and was never a claim about the gain arm. Measured: **`spearman(Gain, 12-1 momentum) =
++0.676`** against `−0.507` for the loss arm, and the **gain arm carries the larger band excess**
+(+5.55 at t = +2.27 against +4.38 at t = +1.36). Half the score is the incumbent in costume and it is
+the bigger half.
+
+The rest followed without a trial. **An's V is there and its asymmetry is not**: both arms positive,
+gain/loss slope ratio **1.27** against the 3–6 the source reports and the ≥2 the pre-registration
+required, with the loss arm going *negative* inside the low-volatility tercile. `|g|`, the sign-free
+dispersion collapse, **outscores the signed score it comes from** (+11.74 against +4.27 top-20), the
+plain 252-day volatility level **outscores `VSP`** on the top slice (+14.27 against +12.74), and the
+book sits at a trailing-volatility percentile of **0.733**. That is this universe's identified
+survivorship artifact arriving through a tenth door, and it arbitrates the 2026-09-18 nightly's own
+U-shape reading in the lab's favour and against the literature's — which was the whole point of
+running #125 before #124.
+
+### Why zero trials, stated against the pre-registration rather than in place of it
+
+The trial was **allotted** to Block C and Block A's gate **passed**, so Block C was carried forward
+and its pre-registered score was built rather than argued about. What declined it was the
+pre-registration's own band rule: the band is set from the score's marginal depth profile with a
+placebo beside it, and the **residualised** score the trial was committed to sorting on reads
+**+0.71%/yr (t = +0.43)** over ranks 1-15 with the **residual placebo above it at +1.54**, its only
+significant slice at 23-30. By the house rule adopted 2026-09-09 a single significant slice is not a
+profile, so no band can be set and **there is no candidate to write**. Nothing was left to choose,
+because there was nothing to write.
+
+The residualisation is what makes this a finding rather than a shrug, and it was pre-committed before
+any number existed: two regressors, rank(12−1) and rank(252d vol), carry **R² = 0.562** of the
+score's cross-sectional rank variance, and removing them takes +12.74 to +0.71 while the book's
+volatility percentile falls 0.733 → 0.510. The surviving 44% has ample dispersion (printed before the
+conclusion, per the rule the SUV episode bought) and predicts nothing.
+
+**The pre-registered falsifier is reported as it read.** The loss arm's own top-band excess was
+required to be positive; it is **+4.38%/yr at t = +1.36**, a positive point estimate not
+distinguishable from zero that inverts inside the low-vol tercile. **Strictly it passed.** The
+decline does not rest on it and a later session reading "the falsifier passed" should read what it
+passed by.
+
+### Protocol and allocation notes
+
+- **Budget: 0 of 8.** `price-trend` cap of 2 **unused — zero trials there**. The "at most 2 per
+  family" cap is discharged (nine families carry a lead); the cold-family rule was discharged
+  2026-09-14. Per 2026-09-15 a decorrelated trial costs **+1 effective trial charged to every later
+  session**, and the budget is a ceiling and not a quota — this is the fifth session to spend zero
+  and the first to do it on a *band rule* rather than on a required-gain table.
+- **No new `strategies/lib/` file was added** and no existing one was touched. `sleeve_book.py:41`'s
+  mis-specified `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is
+  still a human's to rule on.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look.
+- **Train-as-prediction: held at n = 33.** No trial, so no reading.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/`, `trials.jsonl` and every `strategies/lib/` file are untouched. The
+  leaderboard is unchanged because `run_experiment.py` was not invoked.
+
+### Next ideas, in order, with provenance
+
+1. **ANTI-CANDIDATE, recorded tonight so it is not rediscovered: do not propose `|g|`.** The
+   sign-free overhang magnitude is the strongest single slice this session measured (+17.10%/yr at
+   t = +3.39 over ranks 1-10, top-20 +11.74 at t = +3.82), it is **not** simply `|momentum|`
+   (`spearman` +0.593) and it **does** survive inside volatility terciles with a clean placebo
+   (+3.80 / +5.25 / +14.76 at top-5). It is still not a candidate, for three reasons that only work
+   together: the **constant-`V` version scores the same or better** (`spearman` 0.9631, +19.22
+   against +17.10), so it is a functional of past returns and belongs to `price-trend` rather than to
+   this vein; the **plain 252-day volatility level outscores it** on ranks 1-10 (+20.03); and it sits
+   at volatility percentile **0.778**. Building it would put a knowingly-artifactual book on the
+   board where a later session would be entitled to build on it — the exact thing fourteen sessions
+   declined to do in `range-variance`. Recorded with its numbers so the decline is auditable.
+2. **`SUMMARY.md` #109**, the folder's highest-ranked unrun item, carried for a **twelfth** session
+   and still blocked only on rebuilding the 2026-09-14 specification curve. It is free and it is the
+   one remaining item whose cost is compute rather than a trial; a session with time and no idea
+   above the floor should spend it there rather than on a candidate.
+3. **`SUMMARY.md` #82**, carried for a thirteenth session, and **#49** for a twenty-second.
+4. **Do NOT re-derive the blend board.** Exhaustive as of 2026-09-15, extended -17, -18. Best cell
+   anywhere is +0.034 at t = +0.33.
+5. **Do NOT propose `CGOCom2` (#126) or `TugOfWar` (#122)**, and **do not extend tonight's vein** —
+   another `v̄`, another asymmetry constant, another reference price or another residualisation set
+   would be knob-tuning on an object whose three identifying readings have all come back negative.
+   `CGOCom1` is closed too, by `RefMax`'s wrong-signed profile above.
+6. **Do not extend**: everything on the 2026-09-18 list, which is unchanged.
+
+### For the human — the stall reading, unchanged and slightly sharper
+
+Tonight is the fifth session to spend zero trials, and it spent zero for a *good* reason: the folder
+supplied a genuine, well-motivated, challenger-shaped object and three pre-registered readings closed
+it before a line of strategy code was written. That is the system working. It is also the tenth
+distinct door onto the same room — **this universe's high-volatility survivors** — and the decision
+that would change the trajectory remains not an agent's. Either the universe gains data that opens a
+family the artifact cannot reach (point-in-time constituents would remove the artifact itself;
+fundamentals and intraday bars would each open genuinely new objects, and 2026-09-18's overnight
+decomposition made the intraday ask concrete), or `program.md` says what the lab should do once its
+families are exhausted. Both are edits to frozen files.
+
+**No engine issues encountered.**
