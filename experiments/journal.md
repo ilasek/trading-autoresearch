@@ -11604,3 +11604,5 @@ ceiling rather than a quota.
 
 **No engine issues encountered.** The one mis-specification found tonight is in `strategies/lib/`,
 not `engine/`, and is written up above rather than fixed, per the file-permission rule.
+
+## Research session — 2026-09-19 (learning agent): 3 notes added, see research/SUMMARY.md

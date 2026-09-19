@@ -137,6 +137,27 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > lab's own 2026-08-30 null on overnight sums is **what this literature predicts**, not a refutation of
 > it — see the 2026-09-18 open question on that tension.
 >
+> **Status after session 36 (2026-09-19): the tenth unit is a *primitive of a theory this folder
+> already cites*, and the detector was pointed at the folder's own reasoning rather than at the
+> lab's.** Sessions 28–35 each found a finer unit to check coverage at, ending with a column of the
+> input panel. Tonight's sweep asked a different question: *the folder cites a behavioural theory —
+> does every primitive of that theory have a note, or only the limb the citing note happened to
+> use?* The MAX/lottery note (2026-09-01) discusses cumulative prospect theory, Tversky–Kahneman
+> probability weighting and Barberis–Huang by name, and a grep across all 109 prior notes returned
+> **zero** for `capital gain`, `overhang`, `disposition` and `reference price` — the theory's
+> **reference point**, its third primitive, was uncovered while two other functionals of the same
+> price path had already been built and refuted. **Families → clauses → operators → the pool → an
+> attribute of its members → the selection rule → the vocabulary → the shape of the output → a
+> column of the input → a primitive of a theory already cited.** Session 36 covered it (new
+> cross-family section below, candidates #123–#126), and the session-34 acceptance criterion was
+> carried over and met: **#124 is a portfolio**, and its identifying test is one the lab's standing
+> trend-in-costume screen cannot kill, because the mechanism's own prediction is that half the
+> signal points *against* trend. Two results deserve flagging up here. First, the vein's
+> **multi-market rubric row is open and stayed open** — the one peer-reviewed international study
+> found could not be read through any channel tried, so every claim below is single-market (US).
+> Second, tonight's literature is in **live tension with the 2026-09-18 nightly's own reading** of
+> its U-shaped result, in a way that is cheaply decidable and is recorded as candidate #125.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -3283,6 +3304,89 @@ the year, which the paper does not disentangle.
 `notes/2026-09-18-beta-at-night-versus-day.md`,
 `notes/2026-09-18-overnight-return-as-firm-sentiment.md`. Candidates #119–#122.
 
+### The reference point — a holder's cost basis, and the price path beyond its sum (cross-family)
+
+**Covered 2026-09-19 (session 36). Three notes, all three primaries read in full.** This vein had
+**zero** coverage: a grep across all 109 prior notes returned nothing for `capital gain`,
+`overhang`, `disposition` or `reference price`, while the folder already carried prospect theory's
+*probability-weighting* limb (the MAX/lottery note) and had refuted two functionals of the price
+path (52-week-high proximity, information discreteness) without ever writing down the third
+primitive of the same theory. The family label is `liquidity-volume` — every construction here is
+a **volume-weighted** function of past prices — with a live and deliberate tension against
+`price-trend`.
+
+**The base mechanism, and it is an explanation of momentum rather than a competitor to it
+(Grinblatt–Han 2005, JFE; tier B; `validation_overlap: false`, `published_post_2018: false`;
+825 citations Crossref).** Disposition investors' demand carries a term in `(R − P)`, where `R` is
+the aggregate cost basis of the holder base. Market clearing makes the price a convex combination
+of fundamental value and reference price, so prices **underreact** to news and the gap `P − R`
+closes predictably afterwards. The predictor is therefore not the past return but the **capital
+gains overhang** `g = (P − R)/P`, with `R` a **turnover-weighted average of past prices**: the
+weight on the price `n` periods back is the probability that a share bought then has not traded
+since, `V_{t−n}·Π(1 − V_{t−n+i})`, truncated at five years and renormalised. Volume is what makes
+this different from trend — it decides how much of the old basis has been washed out of the
+register — and the paper's own decomposition puts it precisely: `g` is increasing in past returns,
+**decreasing in past turnover**, and about 59% of its cross-sectional variation is explained by
+past returns, turnover and size, leaving two fifths that is not. The paper's aggressive claim is
+that with `g` in the regression the intermediate-horizon past-return coefficient goes away. Two
+rubric rows fail and they are the reason for tier B: **single market** (US, NYSE+AMEX) and **costs
+entirely unmodelled**. Two further facts were checked directly and both discount the claim: the
+overhang is **absent from Hou–Xue–Zhang's 452 anomalies** (grep of the full text returns zero for
+`overhang`), and **Birru (2015, RFS)** — recorded as *not read*, publisher closed and OUP's own
+advertised PDF returning 403, so its published abstract is quoted verbatim in the note — reports
+that in a sample of stocks void of the disposition effect, momentum remains robustly present. Read
+the **predictor** claim as intact and the **subsumption** claim as contested.
+→ `notes/2026-09-19-capital-gains-overhang-reference-price.md`
+
+**The functional form is wrong, and the correction is what makes this tradeable here
+(An 2016, RFS; tier B; `validation_overlap: false`, `published_post_2018: false`; 65 citations
+Semantic Scholar; read in the author's 2013 working-paper version, the published article being
+closed).** Investor-level records show the selling schedule is **V-shaped in profit**, not
+monotone: selling rises with the magnitude of a gain *or* a loss, minimum near zero profit, gain
+arm steeper than loss arm — which is consistent with the original stylised fact and contradicts
+the functional form everyone assumed. Aggregate it and the prediction is that **both extremes** of
+the overhang earn more, i.e. a U-shape in the signed overhang. Split the base signal into halves
+on the same weights, `Gain` and `Loss` (their sum is `CGO`), and take the other linear
+combination, `VSP = Gain − 0.2·Loss`; the asymmetry constant is stable over 0.1–0.5 and is **not a
+tuning knob**. Residualise on short-term reversal, momentum, long-term reversal, size, turnover
+and idiosyncratic volatility before sorting — the paper's stated reason for the last of these is
+this lab's own recurring problem, in its author's words, that stocks with large unrealized gains
+and losses are likely to have high price volatility. **The identifying property is what earns this
+a trial: the loss half predicts the *opposite* of momentum**, so unlike almost everything else
+this universe has screened, it cannot be trend in costume on half the cross-section. In a horse
+race `VSP` subsumes `CGO`. **The discount is severe and specific**: in the high-market-cap
+subsample the gain effect *completely disappears*, and this repo's universe is 145 large global
+names.
+→ `notes/2026-09-19-v-shaped-selling-propensity.md`
+
+**The purchase price is not special, and that is the vein's most falsifiable claim
+(Riley–Summers–Duxbury 2020, Management Science; tier B; `validation_overlap: false`,
+`published_post_2018: **true**`; 18 citations).** Keeping the turnover weights and swapping the
+price they are applied to — the path maximum, the path minimum, the 52-week high or low, each
+measured over the cohort's own holding horizon — produces overhang variables reported as **equally
+good predictors** as the cost-basis version, and experiment-weighted composites of them subsume it
+in joint regressions and in double sorts. The same variables predict forward **trading volume**
+more strongly than the base overhang, which is the paper's best robustness row because it is a
+different outcome space. Its moderator results **disagree with An's**: only turnover moderates the
+effect, while size and idiosyncratic volatility are flat — the difference between "absent in a
+large-cap universe" and "fine there", and unresolved. Discounts: the composite weights are the
+winner of a six-model selection run on R² and VIF, and they come from **169 lab participants**
+eliciting a neutral-feeling selling price on 30 real price charts. One component is a direct
+re-run risk: `CGOCom2` puts 0.45 of its weight on a **52-week maximum**, an object this lab has
+already refuted.
+→ `notes/2026-09-19-dynamic-reference-point-composite-cgo.md`
+
+**The transferable constraint.** Every construction in this vein needs **turnover** — share volume
+over shares outstanding — and this repo has volume but no share count, so turnover *levels*, and
+with them all cross-sectional variation in the decay rate, are unavailable. The substitute is
+`V_t = v̄ · vol_t / mean_252(vol_t)` clipped into `(0,1)` with a single pre-registered `v̄` set from
+Grinblatt–Han's own calibration (average holding period ≈ 2 years, so `v̄ ≈ 1/504` per day). This
+is not a fudge: the paper's own Table III shows the **time series** of a stock's volume carries
+predictive power the firm's average turnover does not, and it is exactly the time series this
+substitution preserves. It also hands the vein a free control — set `V_t = v̄` for all `t` and the
+reference price collapses to a **fixed-decay EWMA of past prices**, so `g` becomes a smooth
+distributed lag of past returns and nothing else. Candidates #123–#126.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -6330,6 +6434,84 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-18-overnight-intraday-return-decomposition.md`,
     `notes/2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`
 
+123. **FREE, and it comes first because it decides whether this vein is worth one trial or none:
+    build the overhang three ways and rank-correlate them.** The three are (a) the turnover-weighted
+    reference price with `V_t = v̄·vol_t/mean_252(vol_t)` clipped into `(0,1)`, `v̄ = 1/504`
+    pre-registered from the source's own two-year-holding-period calibration; (b) the same formula
+    with `V_t = v̄` constant, which collapses exactly to a **fixed-decay EWMA of past prices** and is
+    therefore a distributed lag of past returns and nothing more; (c) the path-maximum variant,
+    `RefMax`. Rank-correlate all three against each other, against the trailing 12-month return, and
+    against the champion's holdings. **A high correlation with trailing return is predicted, not
+    disqualifying** — the source's own decomposition puts ~59% of the overhang's cross-sectional
+    variation in past returns, turnover and size — so the number that matters is (a) against (b).
+    **If the volume weighting does not move the ranking, the whole vein is trend in costume and #124
+    should not be run**; that is the cheapest possible close and the reason this is ranked first.
+    Two preconditions, both cheap: fill missing `volume` (foreign holidays; the panel is not
+    forward-filled) to **zero turnover**, which is the economically correct reading as well as the
+    convenient one; and note in the journal that `prices` are split- and FX-adjusted while
+    `aux["volume"]` is a native share count, so a split date misplaces weight — a known, unfixable
+    defect of the available panels, to be recorded rather than repaired.
+    → `notes/2026-09-19-capital-gains-overhang-reference-price.md`,
+    `notes/2026-09-19-dynamic-reference-point-composite-cgo.md`
+
+124. **THE BOOK, and it is the first candidate this folder has supplied whose identifying test the
+    lab's standing screen cannot kill: a long-only tilt on the residual V-shaped selling propensity.**
+    Split the overhang into halves on the same weights —
+    `gain_{t−n} = (P_t − P_{t−n})/P_t · 1{P_{t−n} ≤ P_t}`, `loss_{t−n}` the complementary indicator,
+    both weighted by `ω_{t−n} = (1/k)·V_{t−n}·Π(1 − V_{t−n+i})` over five years of **daily** prices,
+    with both the current price and the purchase prices lagged **10 trading days** against
+    microstructure — and rank on `VSP = Gain − 0.2·Loss`, long the top. **Fix the 0.2 and do not
+    search it**: the source reports the t-statistic essentially unchanged over 0.1–0.5, so a search
+    would buy nothing and cost an effective trial. Residualise the score before sorting; the source
+    uses six regressors (short-term reversal, momentum, long-term reversal, size, turnover, ivol),
+    which is a lot of degrees of freedom on a 145-name cross-section — prefer the reduced set
+    (trailing return, trailing volatility) and **say which was chosen and why in the hypothesis**.
+    **Pre-register the falsifier, because this is the whole reason to spend the trial**: the
+    mechanism says the **loss half carries a sign opposite to momentum**. Run `Gain` and `Loss` as
+    two scores and check the loss half against trailing return; if it simply tracks trend the
+    mechanism has failed here whatever the combined book scores. **Pre-register a weak expectation**:
+    the source reports the gain effect *completely absent* in the high-market-cap subsample, and this
+    universe is that subsample, so a strong reading is grounds for suspicion. Breadth-matched control
+    mandatory — five years of history is a pool rule that selects on listing age. File under
+    `liquidity-volume`, not `price-trend`: the weights are volume, and paying the trend cap for it
+    would buy nothing. Restrict to single names or state why the 42 ETFs, whose share counts move by
+    creation and redemption, are left in.
+    → `notes/2026-09-19-v-shaped-selling-propensity.md`,
+    `notes/2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`,
+    `notes/2026-09-01-nonparametric-characteristic-selection-large-stocks.md`
+
+125. **FREE, and it arbitrates a reading this lab has already made once: test the asymmetry, not
+    the U.** The 2026-09-18 nightly found a U-shape in a gain/loss-flavoured sort — both bands
+    positive — and read it as a dispersion object, since on this universe dispersion is the
+    survivorship artifact. An's mechanism predicts **exactly that U**, so the same observation is
+    this literature's signature and the lab's artifact, and neither reading can be dismissed by
+    assertion. They are separable and the separation is cheap: the **artifact** reading says the U
+    survives collapsing the score to `|score|` and dies inside a volatility tercile; the
+    **mechanism** reading says the two arms are **asymmetric**, with the gain arm steeper than the
+    loss arm by a factor the source puts at three to six, and that the asymmetry survives
+    neutralising volatility. Measure the two arms separately and compare their slopes. This is the
+    single most discriminating free measurement in tonight's notes, it applies retroactively to a
+    result the lab already holds, and it should be run **before** #124 rather than after.
+    → `notes/2026-09-19-v-shaped-selling-propensity.md`,
+    `notes/2026-09-01-max-lottery-extreme-positive-returns.md`
+
+126. **ANTI-CANDIDATE, recorded because it is the most attractive-looking object in tonight's
+    literature: do not propose `CGOCom2`, the 52-week-composite reference point.** Riley et al.'s
+    second composite puts **0.45 of its weight on a 52-week maximum** and 0.11 on a 52-week minimum,
+    and its authors connect their result to George–Hwang explicitly. **This lab has tried 52-week-high
+    proximity and refuted it**, so `CGOCom2` is substantially a re-run of a refuted object wearing a
+    turnover weight, and proposing it would spend a trial on a question already answered. `CGOCom1`
+    (path max/min over each cohort's own turnover-weighted horizon, not a fixed 252-day window) is
+    the genuinely different construction and is the one to reach for if the vein survives #123 — but
+    it ranks behind #124, because it modifies the signal the source's own successor paper subsumes.
+    **The value of this entry is that it costs nothing.** One related note for the next input-side
+    sweep: this is also the folder's first material on **`high`/`low` as a level rather than as a
+    range** (the 2026-09-18 open question), and if it is ever built, use the max of **closes** to
+    match the source and treat the intraday-extreme version as a separate idea — the intraday extreme
+    embeds the bar's range, which is the artifact this universe loads on.
+    → `notes/2026-09-19-dynamic-reference-point-composite-cgo.md`,
+    `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -6370,8 +6552,129 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-16 (session 33) | **The detector's second use, and it found the gap under the lab's newest number on the first try again — this time the gap was a whole vocabulary rather than a variable.** The 2026-09-15 nightly spent zero trials, priced the blend board exhaustively and closed it for a sixteenth session, and produced the number of the week: 90 recorded trials are worth about **1.56** independent bets by participation ratio against the engine's clustered **24**, with the decision handed to a human. A grep across all 100 prior notes returned **zero** for `M_eff`, `Nyholt`, `effective rank`, `participation ratio`, `false strategy` and `ONC` — the lab had computed a member of a named estimator family with twenty-five years of peer-reviewed literature behind it and this folder had none of that literature. Three notes, nine sources; full text read directly for three primaries (Li–Ji, Halle et al., López de Prado–Lewis), the remaining estimator definitions taken from two independent restatements that agree, and three sources recorded from **published abstracts only** (Salyakina et al., Moskvina–Schmidt, Galwey). The session's shape is **one family definition, one verdict on the family, and one finance-side member that is the closest published relative of the engine's own step** — and the verdict is negative: no plug-in effective count is known to control any error rate, because `M_eff` is defined by inverting Šidák and is therefore a function of the error rates, not of a correlation matrix. **Nothing here proposes a book.** The three candidates are a pre-committed spread table with an anti-candidate attached, a null control that can close the clustering route, and a read-only consistency check on the deflator's two inputs. The transferable correction: the 2026-09-15 reading that the engine over-deflates is arithmetically right and rests on a premise this literature breaks, so the 24-versus-1.6 gap **overstates** the over-deflation — a second independent reason, alongside Sullivan–Timmermann–White, why a low effective-`N` is not a licence. All three notes `validation_overlap: false`; not one contains a market-performance figure, because two of the three sources contain no market data at all. | Halle, Djurovic, Andreassen & Langaas 2016 + Salyakina et al. 2005 + Moskvina & Schmidt 2008 (`2026-09-16-does-meff-control-the-familywise-error-rate.md`); Cheverud 2001 + Nyholt 2004 + Li & Ji 2005 + Gao et al. 2008 + Galwey 2009 (`2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`); López de Prado & Lewis 2019 (`2026-09-16-clustering-trials-onc-effective-number-of-trials.md`) |
 | 2026-09-17 (session 34) | **The first session in nine aimed at supplying a book rather than a diagnostic, and the aim was set by the lab's own escalation rather than by a gap.** The 2026-09-16 nightly spent zero trials, rejected the folder's eight-session top item (#89) on every partition, produced the effective-count spread (#111) and answered #113, and then told the human plainly that **"the lab is spending its nights auditing its own gate rather than searching for strategies"** — the eighth consecutive session whose new research material proposed no portfolio. This session took that as its instruction. The 2026-09-13 detector was still run first and found the gaps by grep across all 103 prior notes: **zero** hits for `factor momentum`, `trend factor`, `coskew`, `downside beta` and `semivariance`. Two mechanisms, three notes, all four primaries read in full. **Factor momentum** is the book-proposing half — a factor is positively autocorrelated in its own past return, the construction is model-free (no belief about which leg pays), formation is robust from one month to two years, **holding period is one month and is not a knob**, and the time-series version spans the cross-sectional one because the latter collects the Conrad–Kaul mean-dispersion term. Its peer-reviewed reexamination supplies the honest counterweight and the free screen that must precede any trial: **the timed book does not beat buy-and-hold of the same factors**, on mean or Sharpe, in either of two samples — while the original paper's own table shows the **winners-only leg**, the only leg a long-only repo can hold, ordering the other way. **Asymmetric comovement** is the second half and splits cleanly in two: downside beta is **refuted as a sort** (negative high-minus-low in all eight replication specifications at all three horizons, and the identity `β⁻ = ρ⁻·σ⁻_i/σ⁻_m` says why, which leaves `ρ⁻` alone as the untested object), while coskewness is **right-signed and underpowered** in the same replication, most parsimoniously because that replication estimates a third moment from one month of daily returns. Candidates #114–#118: one free two-sided screen, one challenger gated behind it, one anti-candidate, one salvage, one long-only tercile. Flags: two of the five sources carry `validation_overlap: true` and both are named in the notes; **no dated performance figure from any source is recorded anywhere**, only orderings and signs. | Ehsani–Linnainmaa 2022 + Fan, Li, Liao & Liu 2022 + Arnott, Clements, Kalesnik & Linnainmaa 2018 WP (`2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`); Ang, Chen & Xing 2006 + Hou, Xue & Zhang 2020 (`2026-09-17-downside-beta-and-the-volatility-confound.md`); Harvey & Siddique 2000 + Harvey & Siddique 2023 + Hou, Xue & Zhang 2020 (`2026-09-17-coskewness-and-the-third-moment-estimation-window.md`) |
 | 2026-09-18 (session 35) | **The ninth unit of the unit-of-check lesson, and it is a column of the data panel.** The 2026-09-13 detector was run against the *input* side this time — take the data the lab was handed and check it has a note — and a grep across all 106 prior notes returned **zero** for `overnight`, `tug of war`, `close-to-open`, `intraday decomposition` and for every author in this literature, while strategies have received an **`open`** panel since 2026-08-29 and the 2026-08-30 nightly had already computed overnight return sums with it. Nineteen days of using a column with no note on it. Three notes, all three primaries read in full, acceptance criterion carried over from session 34 (*does this end in a portfolio*). **Lou–Polk–Skouras** establish the clientele decomposition: own-period continuation plus cross-period reversal, in nine non-US markets, measurable at a five-year lag; and the map of where each premium accrues — **every past-return strategy earns overnight, everything else earns intraday with an opposite-signed overnight leg**. **Hendershott–Livdan–Rösch** make the systematic version the object: the SML is positively sloped overnight and negatively sloped intraday in the US and 39 other countries, robust to closure length and to the beta estimator, so the famously flat 24-hour SML is **two strong opposite relations cancelling**. **The constraint that decides the session**: this engine holds close-to-close and therefore collects the sum, which is the thing that already nets — the authors' own advice to long-horizon investors is *order timing*, which this lab cannot do, and **the lab's own 2026-08-30 overnight-sums null is what that prediction looks like when measured here.** What survives is **Aboody–Even-Tov–Lehavy–Trueman**: overnight return as firm-specific sentiment, with long-horizon reversal measured on **close-to-close buy-and-hold over 12 months**, the **long leg carrying the effect on its own**, and the long leg loading **negatively on momentum**. Candidates #119–#122: one free diagnostic that can retire the whole vein, one long-only book, one free measurement move, one anti-candidate. Flags: **all three sources end before 2018, so `validation_overlap: false` throughout** — the first session in several with no overlap to discount. No dated performance figure from any source is recorded anywhere; signs, orderings and significance only. Two sources named and **recorded as not read** (Berkman et al. 2012, Akbas et al. 2022), with nothing resting on either. | Lou, Polk & Skouras 2019 (`2026-09-18-overnight-intraday-return-decomposition.md`); Hendershott, Livdan & Rösch 2020 (`2026-09-18-beta-at-night-versus-day.md`); Aboody, Even-Tov, Lehavy & Trueman 2018 (`2026-09-18-overnight-return-as-firm-sentiment.md`) |
+| 2026-09-19 (session 36) | **The tenth unit of the unit-of-check lesson: a primitive of a theory the folder already cites.** The MAX/lottery note names cumulative prospect theory, probability weighting and Barberis–Huang, and the lab has built and refuted two functionals of the price path (52-week-high proximity, information discreteness) — yet a grep across all 109 prior notes returned **zero** for `capital gain`, `overhang`, `disposition` and `reference price`. The theory's *reference point* had no coverage. Three notes, all three primaries read in full, acceptance criterion carried from session 34 (*does this end in a portfolio*) and met. **Grinblatt–Han** supply the base: prices are a convex combination of fundamental value and a **turnover-weighted average of past prices**, so the predictor is the **capital gains overhang** `(P − R)/P` rather than the past return, and the weight on a past price is the probability a share bought then has not traded since. Volume is what separates it from trend (the overhang is *decreasing* in past turnover), and ~59% of its cross-sectional variation is past returns, turnover and size. **An** shows the assumed functional form is wrong — the investor-level selling schedule is **V-shaped in profit**, so the tradeable combination is `VSP = Gain − 0.2·Loss` rather than their sum, it subsumes the base signal in a horse race, and **its loss half predicts the opposite of momentum**, which is the identification property that earns it a trial here. **Riley–Summers–Duxbury** show the **purchase price is not special**: path max, path min, 52-week high and 52-week low each work as well inside the same weights, composites of them subsume the base, and the same variables predict forward *volume* more strongly than the base. **The constraint that shaped the session**: every construction needs turnover = volume ÷ shares outstanding, and this repo has no share count — resolved by keeping the within-name *time series* of volume and fixing only its level, which the base paper's own robustness table identifies as the half carrying incremental information. Candidates #123–#126: one free screen that can retire the vein, one free measurement that arbitrates a reading the lab has already made, one long-only book, one anti-candidate. Flags: **all three samples end before 2018, so `validation_overlap: false` throughout**; Riley et al. is `published_post_2018: true`. No dated performance figure from any source is recorded anywhere — signs, orderings, subsumption and significance only. **Three rubric findings recorded against the vein rather than buried**: the overhang is absent from Hou–Xue–Zhang's 452 anomalies (checked by grep of the full text); **Birru 2015's adversarial test is recorded as not read** (publisher closed, OUP 403 on its own advertised GREEN PDF) with only its published abstract quoted, and it says momentum survives in stocks void of the disposition effect; and the one peer-reviewed **international** study (Zheng, Li & Li 2024) could not be read — `efmaefm.org` fails TLS verification through the proxy — so the multi-market row is **open** and nothing rests on it. | Grinblatt & Han 2005, JFE, with NBER w8734 (`2026-09-19-capital-gains-overhang-reference-price.md`); An 2016, RFS (`2026-09-19-v-shaped-selling-propensity.md`); Riley, Summers & Duxbury 2020, Management Science (`2026-09-19-dynamic-reference-point-composite-cgo.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-19] Read this first: the 2026-09-18 nightly spent every item this file supplied that
+  night, and the book supply was empty again when tonight started.** **#119 is done and it did not
+  close the vein — it opened it**: the incumbent's excess over an equal-weight book is earned
+  overnight and lost intraday on both splits, with a placebo book showing the universe-level part is
+  not the champion's own, and 4 of 5 pre-registered calls from the imported map landing on
+  validation. **#120 is done**: trial #94 `lv_overnight_sentiment_reversal`, a SCOUT at 0.822 on 1.9x
+  turnover against the family's seated 0.942, and — the part that matters more than the level — **the
+  source's own identifying test failed here**, both bands of the 12-month sort earning positively, a
+  U-shape rather than the long-leg-only effect the paper claims. **#121 is answered as a
+  measurement**: 21-day reversal's IC sits entirely in the intraday leg with a clean zero overnight,
+  so where a premium accrues and where a signal is measurable are different questions with opposite
+  answers on this universe. **#122 was correctly declined.** Still unrun and carried unchanged:
+  **#109 (the folder's highest-ranked unrun item, eleventh session, still blocked only on rebuilding
+  the 2026-09-14 specification curve), #82 (twelfth session), #94 as a standing discipline, #49
+  (twenty-second session)**, plus **#105–#107** and **#110**'s shrink half. New tonight:
+  **#123–#126**.
+- **[2026-09-19] What should aim the next session, in order.**
+  - **#123 first, and it is the ordinary "free item first" for once.** It is a three-way rank
+    correlation that can retire the entire vein before a line of strategy code is written: if the
+    turnover-weighted overhang and the fixed-decay EWMA of past prices rank the universe the same
+    way, the volume weighting does nothing here and there is no candidate. A high correlation with
+    the *trailing return* is predicted by the source itself and is not the test — the test is (a)
+    against (b).
+  - **Then #125, which is free, and which pays a debt rather than opening one.** It arbitrates the
+    2026-09-18 nightly's own reading: that session found a U-shape in a gain/loss-flavoured sort and
+    called it the dispersion artifact, and tonight's literature says a U-shape is exactly what the
+    mechanism predicts. Measure the **asymmetry of the two arms**, not the U. This applies
+    retroactively to a result the lab already holds and it costs one holdings-only computation.
+  - **Then #124, which is the only item here that proposes a portfolio**, and the first
+    challenger-shaped object this folder has supplied since #120 was spent. Its identifying test —
+    the loss half predicting *opposite* to momentum — is the rare case where the lab's standing
+    trend-in-costume screen is not merely a hurdle but the mechanism's own prediction.
+  - **Then the lab's own #109**, unchanged, and **#82**.
+  - **Do not spend a session on #126.** Anti-candidate, and its whole value is that it costs nothing.
+- **[2026-09-19] The transferable output, and it is a data constraint with an unusually clean
+  workaround.** Every construction in tonight's vein is weighted by **turnover** = share volume ÷
+  shares outstanding, and this repo has the numerator and not the denominator. The naive conclusions
+  — "not implementable", or "substitute raw volume" — are both wrong. The right move is to separate
+  what the missing denominator costs from what it does not: shares outstanding is a **slowly-moving
+  per-name constant**, so it sets the *level* of turnover (hence the decay rate, hence the
+  cross-sectional differences in decay) and leaves the *within-name time series* of turnover intact
+  up to that scale. Grinblatt–Han's own Table III then says precisely which half carries the
+  information: replacing each period's actual turnover with the firm's average turnover still
+  predicts, but the actual-turnover version **subsumes** it in a horse race — so the time series is
+  where the incremental content lives, and the time series is the half this repo can have. The
+  general form, worth keeping past this literature: **before declaring a construction unimplementable
+  for a missing field, decompose what the field contributes into a level and a shape, and check which
+  one the source's own robustness table says is load-bearing.** Same family as the 2026-09-18
+  adjusted-basis rule — both are about what a ratio of two panels is actually measuring.
+- **[2026-09-19] A tension recorded in both directions, and unlike 2026-09-18's it does not resolve
+  in the lab's favour — yet.** `learnings.md` records the U-shape in the 2026-09-18 overnight-sentiment
+  sort as evidence of the dispersion artifact, and the repair adopted (ranking within volatility
+  terciles) treats it as one. An (2016) predicts a U-shape in a gain/loss sort as the **signature** of
+  the mechanism. Both cannot be assumed. Recording the discriminating test here so it is not lost:
+  a **symmetric** U that survives collapsing to `|score|` and dies inside a volatility tercile is the
+  artifact; an **asymmetric** V with the gain arm materially steeper, surviving volatility
+  neutralisation, is the mechanism. Note also the second-order tension *within* tonight's sources —
+  An reports the effect concentrated in small, high-volatility, low-institutional-ownership names
+  and **absent in large caps**, while Riley et al. find size and idiosyncratic volatility do **not**
+  moderate it and only turnover does. On a universe of 145 large global names that disagreement is
+  the difference between "absent here" and "fine here", and no source read tonight settles it.
+- **[2026-09-19] The detector's fifth use, and a tenth unit: a theory's *primitives*, not its
+  conclusions.** 2026-09-13's rule (*after each nightly, take the one variable it measured that has
+  no note here, and check*) was run tonight against the **behavioural theory the folder already
+  cites** rather than against a data column or an output. The folder carried prospect theory's
+  probability-weighting limb — the MAX/lottery note, which discusses Tversky–Kahneman weighting and
+  Barberis–Huang by name — and had refuted two functionals of the price path, and yet a grep across
+  all 109 notes returned **zero** for `capital gain`, `overhang`, `disposition` and `reference
+  price`. **Families → clauses → operators → the pool → an attribute of its members → the selection
+  rule → the vocabulary → the shape of the output → a column of the input → a primitive of a theory
+  already cited.** The durable addition: *when a note cites a theory, check that every primitive of
+  that theory has coverage, not only the limb the note used.* The obvious next application, recorded
+  so the next sweep starts from a known list: the folder cites **realization utility**
+  (Barberis–Xiong) and **limits to arbitrage** in passing in several notes, and has a dedicated note
+  on neither.
+- **[2026-09-19] Access notes: the faculty-page channel is now the most reliable one on this list,
+  and an eighth refusal mode is recorded.**
+  - **Faculty and author pages served three of three primaries, all first try**, confirming the
+    2026-09-17 README recommendation for the third session running:
+    `www-2.rotman.utoronto.ca/facbios/` gave the typeset JFE article, `columbia.edu/~<user>/` gave
+    a working-paper version of a closed RFS article, and `pages.stern.nyu.edu/~<user>/pdf/` gave a
+    closed JF article. **`nber.org/system/files/working_papers/` also served the same paper's
+    working-paper version**, which is worth remembering as a second independent copy when a
+    published version's construction details need cross-checking. **White Rose
+    (`eprints.whiterose.ac.uk`) served the accepted version of a closed Management Science article**
+    on the first try — the same green-OA channel class as `openaccess.city.ac.uk`, and worth adding
+    to the reliable list by name.
+  - **An eighth distinct refusal mode: TLS verification failure through the agent proxy.**
+    `efmaefm.org` (a conference mirror holding the full paper of a peer-reviewed international study)
+    returns curl exit "could not verify the legitimacy of the server" and HTTP **000** — with and
+    without `--cacert /root/.ccr/ca-bundle.crt`, and although the proxy's own status endpoint reports
+    `bundleCoversEveryHost: true`. This is distinct from the Cloudflare 403, the OpenID redirect, the
+    Imperva 200-with-a-stub and the metered-budget 429, and it produces **no body at all**, so it
+    cannot be mistaken for an answer. The source (Zheng, Li & Li 2024, *Journal of Financial
+    Research*, `10.1111/jfir.12341`) is recorded as **not read**, its sample period unverified, and
+    the multi-market rubric row for this whole vein therefore stays **open**.
+  - **Confirmed refusals, no news**: `academic.oup.com` returned **403** to the exact `.pdf` URL that
+    Semantic Scholar's own `openAccessPdf` field advertises as GREEN for Birru (2015) — a reminder
+    that the index's OA status is a claim about the article, not about the endpoint — and OpenAlex
+    reports the same DOI `closed` with `any_repository_has_fulltext: false`. Recorded as not read;
+    only its published abstract is used, quoted verbatim.
+  - **Index behaviour worth recording.** Semantic Scholar's DOI endpoint returns **"not found"** for
+    Grinblatt–Han's JFE DOI, which is not a low count but no record at all; Crossref's
+    `is-referenced-by-count` gives **825** and OpenAlex **211** for the same DOI. Per the session-7
+    rule, the lone low count is the one to disbelieve — here it is OpenAlex's, which is the reverse
+    of the usual direction and a reason to check *both* fallbacks rather than assuming Crossref
+    always undercounts. Semantic Scholar's title-search endpoint 429'd as documented.
+- **[2026-09-19] Protocol note, fourteenth session running: the session-start hook printed
+  "integrity check OK — on main, level with origin/main, no stray branches" while `git status -sb`
+  showed the session on `claude/tender-galileo-d2i4et`.** As on 2026-09-06 through -18 this is the
+  **benign** form — the branch tip was bit-identical to `origin/main` (`b592bc6`, zero ahead, zero
+  behind) — and the session ran `git checkout main && git reset --hard origin/main` before any work,
+  per step 0 of the standing prompt, so tonight's work is on `main` only. Recorded again because it
+  is benign: **the hook's "on main" clause is false while its "level with origin/main" clause is
+  true**, so a session trusting the first clause would commit to a per-run branch with no warning.
+  As on 2026-09-15 through -18, this session's own harness instructions named that per-run branch as
+  its development target while `research/README.md` step 6 and the standing prompt's step 0 both
+  require `main`; the repo's own rules governed. **Flagged for the human for the eleventh time.**
+
 
 - **[2026-09-18] Read this first: the 2026-09-17 nightly spent two trials, closed #116–#118 outright,
   and left the folder's book supply empty again.** **#114 is done and the mechanism lost**: the timed
