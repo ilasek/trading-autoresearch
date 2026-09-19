@@ -11606,3 +11606,154 @@ ceiling rather than a quota.
 not `engine/`, and is written up above rather than fixed, per the file-permission rule.
 
 ## Research session — 2026-09-19 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-19 (nightly), written before any number was computed
+
+Committed before the first array was allocated. Three blocks, each with a two-sided rule fixed in
+advance so that honouring it after the numbers are in is mechanical rather than a judgement.
+Provenance is `research/SUMMARY.md` #123–#126 (session 36, the reference-point vein: Grinblatt–Han's
+capital gains overhang, An's V-shaped selling propensity, Riley–Summers–Duxbury's dynamic reference
+points). All three primary samples end before 2018, so `validation_overlap: false` throughout;
+Riley et al. is `published_post_2018: true` and nothing in Block A or C rests on it. **No performance
+figure is imported from any source** — signs, orderings, subsumption and significance only. The
+folder's own severe discount is carried into the pre-registration rather than discovered later: An
+reports the gain effect **completely absent in the high-market-cap subsample**, and this universe is
+145 large global survivors, i.e. exactly that subsample.
+
+### The construction, fixed now so that nothing in it is chosen after a number
+
+The vein needs **turnover** = share volume ÷ shares outstanding and this repo has the numerator
+only. The substitution is the folder's and is pre-committed here with its constant:
+
+    V_t = v̄ · vol_t / mean_252(vol_t),  clipped into (0,1),  v̄ = 1/504
+
+`v̄` comes from Grinblatt–Han's own calibration (average holding period ≈ 2 years ⇒ ≈ 1/504 per
+trading day) and **is not searched**. Missing `volume` (foreign holidays; the panel is deliberately
+not forward-filled) is read as **zero turnover** — economically the correct reading, not merely the
+convenient one. `mean_252` carries an explicit `min_periods`; left at the pandas default it silently
+restricts every score to names with a complete trading calendar, which is the `dropna`-cohort
+artifact that cost this repo four trials and bit it again on 2026-09-18.
+
+    ω_{t−n} = (1/k) · V_{t−n} · Π_{i=1..n−1} (1 − V_{t−n+i}),  n = 1..1260 (five years), k normalises
+    R_t = Σ_n ω_{t−n} · P_{t−n}          g_t = (P_t − R_t)/P_t
+
+**Recorded, not repaired:** `prices` are split- and FX-adjusted while `aux["volume"]` is a **native
+share count**, so a split date misplaces weight inside ω. It is a known defect of the panels this
+repo has, it cannot be fixed from a candidate file, and it is written down here rather than
+discovered in a later retraction.
+
+### Block A — `SUMMARY.md` #123, FREE, and it comes first because it can retire the vein
+
+Build the overhang three ways and rank-correlate them, on **train** rebalance dates only:
+
+  (a) the turnover-weighted `g` above;
+  (b) the identical formula with `V_t = v̄` **constant**, which collapses exactly to a fixed-decay
+      EWMA of past prices, i.e. a smooth distributed lag of past returns **and nothing else**;
+  (c) `RefMax` — the same ω applied to each cohort's own path maximum of closes,
+      `max(P_{t−n..t−1})`, per Riley et al.
+
+**The test is (a) against (b) and nothing else.** A high correlation of either with the trailing
+12-month return is **predicted by the source** (~59% of the overhang's cross-sectional variation is
+past returns, turnover and size) and is therefore not disqualifying; it is reported for the record.
+
+**Decision rule, two-sided, fixed now.**
+
+- **Dead** iff mean cross-sectional `spearman(a, b) ≥ 0.98` **and** top-20 book overlap `≥ 0.95` —
+  this repo's own pre-committed identity line (2026-09-12). In that case the volume weighting does
+  nothing on this universe, the vein is a distributed lag of returns wearing a turnover label,
+  **Block C is not written**, and the vein closes for the price of one diagnostic.
+- **Live** otherwise, and Blocks B and C proceed.
+- **No third branch**, and in particular a separation that is real but modest is **live** — moving
+  the bar after seeing the number is the thing this block exists to prevent.
+
+**Mandatory placebo, because separation is exactly the statistic noise inflates.** A fourth variant
+(d) rebuilds (a) with a **hash-derived pseudo-volume** reading no market data. Separation of (d)
+from (b) is what random weights buy. **This screen may only KILL**: per this file's own six-axis
+record, liveness is a precondition with no predictive content, so a pass licenses running Block B,
+never belief.
+
+### Block B — `SUMMARY.md` #125, FREE. Test the asymmetry, not the U
+
+This pays a debt rather than opening one. The 2026-09-18 nightly found **both bands positive** in a
+gain/loss-flavoured sort and read the U as a dispersion object, since on this universe dispersion is
+the identified survivorship artifact. An's mechanism predicts **exactly that U**, so the same
+observation is this literature's signature and this lab's artifact and neither reading may be
+dismissed by assertion. They separate cheaply.
+
+Split `g` into halves on the same ω — `Gain = Σ ω·gain`, `Loss = Σ ω·loss`, their sum is `g` — and
+measure each arm's **marginal rank-slice profile** against the forward 21-day return on train, with
+a hash placebo printed beside every row (a single significant slice is not a profile;
+2026-09-09), then repeat **inside trailing-252d-volatility terciles**.
+
+- **Mechanism reading supported** iff both arms carry positive top-band excess, the **gain arm's
+  slope exceeds the loss arm's by ≥ 2x** (the source puts the ratio at 3–6), and the asymmetry
+  survives inside volatility terciles.
+- **Artifact reading supported** iff the arms are symmetric (ratio inside 0.5–2.0) **or** both
+  collapse inside volatility terciles while `|score|` keeps the U.
+- **Neither** is an admissible outcome and will be recorded as such rather than forced.
+
+This block **does not gate Block C** — Block C carries its own falsifier — it conditions how Block
+C's result may be read, and it settles a reading the lab already holds.
+
+### Block C — `SUMMARY.md` #124, ONE TRIAL, gated behind Block A
+
+A long-only tilt on the residual **V-shaped selling propensity**, `VSP = Gain − 0.2·Loss`, long the
+top. **The 0.2 is fixed and will not be searched**: the source reports its t-statistic essentially
+unchanged over 0.1–0.5, so a search would buy nothing and cost an effective trial. Both the current
+price and the purchase prices are lagged **10 trading days** against microstructure.
+
+**Residualisation, chosen now and for a stated reason.** The source uses six regressors (short-term
+reversal, momentum, long-term reversal, size, turnover, ivol). This repo's own triage rule says a
+per-name-per-date parameter count is what estimation error looks like on a ~140-name cross-section,
+and the lab has already closed a free-beta residual on exactly that ground (2026-09-10). **The
+reduced set is taken: rank(trailing 12−1 return) and rank(trailing 252d volatility), two
+regressors**, because those two are the confounds this repo has itself identified — trend in costume,
+and the survivorship-inflated volatility level that has closed `range-variance` on fifteen screens.
+The choice is recorded here, before any number, and will be stated in the candidate's hypothesis.
+
+**The falsifier, and it is the whole reason to spend the trial.** The mechanism says the **loss arm
+predicts the opposite of momentum**: names carrying the largest unrealized losses should earn
+*more*, where momentum predicts they earn less. `−0.2·Loss` is anti-momentum **by construction**, so
+a correlation test is not the falsifier and would be circular. The falsifier is on the **forward
+return**: the Loss arm's own top-band excess, measured alone on train, must be **positive**. If it
+is zero or negative — i.e. the loss half merely reproduces momentum's own prediction for losers —
+**the mechanism has failed on this universe whatever the combined book scores**, and that is what
+will be recorded.
+
+**Pre-registered weak expectation:** per An's high-market-cap subsample, a *strong* reading here is
+grounds for suspicion, not celebration.
+
+**Mandatory controls, all fixed now.** (i) The band is set from the score's **own marginal depth
+profile with a placebo beside it**, never inherited — the house table (2026-09-10) refuses
+`BAND_N`/`CORE_N` a default and the 2026-09-14 specification curve puts **69% of this repo's whole
+construction dispersion** on that one node. The profile is written into the journal **before** the
+candidate file, with nothing left to choose after it. (ii) **Breadth-matched control against a
+random draw of the same pool size**: five years of history is a pool rule selecting on listing age,
+and 2026-09-12 showed that control dissolves an alarming reading. (iii) The book's **trailing
+volatility percentile** is printed beside every excess screen, because an excess screen prices a
+numerator and is blind to the denominator a Sharpe comparison will read (2026-09-10). (iv) ETFs:
+their share counts move by creation and redemption, so the turnover proxy's denominator is not a
+fixed float for them; the candidate states its choice and its reason.
+
+**Track: `scout`, family `liquidity-volume`.** Not `price-trend` — the weights are volume, and
+paying the trend cap for a non-trend object would buy nothing. Scout because the blend board is
+exhaustively priced and closed (2026-09-15, extended -17 and -18: the best cell anywhere is +0.034 at
+t = +0.33), the required-gain table demands +0.44 at the correlations a decorrelated challenger sits
+at, and this file's ⚠ standing concern says a `price-trend` candidate clearing the gate is evidence
+about the gate. **No holdout will be read and the session does not have to stop.**
+
+### Budget and allocation, declared in advance
+
+Up to **three** trials are contemplated and **one** is allotted, to Block C; Blocks A and B are
+free and no trial follows either of them in either direction. `price-trend` cap of 2: **unused, zero
+planned**. The "at most 2 per family" cap is discharged (nine families carry a lead) and would be
+satisfied anyway at one. The cold-family rule was discharged 2026-09-14. Per 2026-09-15 a
+decorrelated trial costs **+1 effective trial charged to every later session**, so the budget is a
+ceiling and not a quota.
+
+### Anti-candidates, restated so they are not rediscovered tonight
+
+- **#126 `CGOCom2`** — 0.45 of its weight is a 52-week maximum, an object this lab has refuted.
+  Not proposed.
+- **#122 `TugOfWar`** — the same operation #92/#93 refuted on a designed pair. Not proposed.
+- **Do not re-derive the blend board** (2026-09-15/-17/-18), and do not extend trial #94.
