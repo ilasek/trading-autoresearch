@@ -12375,3 +12375,117 @@ this is reported for completeness and nothing is inferred from it.**
 
 Its pre-registered gate was Block A LIVE **and** Block D setting a band. Block A passed; **Block D
 did not set a band**, and Block B had already failed. The trial was allotted and was not spent.
+
+## Session summary — 2026-09-20 (nightly)
+
+- **Integrity check — a real flag, investigated, and RESOLVED rather than recorded.** The
+  session-start banner reported `origin/main-av88mw` holding commits absent from `origin/main`, and
+  it was correct: four commits from the 2026-09-19 strategy session, exactly the ones the
+  2026-09-20 learning agent's `## Protocol issue` entry diagnosed and handed forward. Verified
+  before acting — that session spent **zero trials**, the commits touch only `experiments/journal.md`
+  and `experiments/learnings.md`, `trials.jsonl` is **not** split, and no deflated-Sharpe bar was
+  understated. It was **not** a fast-forward (`origin/main` carried `046a22a`, the learning agent's
+  own research commit, which `av88mw` lacked), so it was merged with `--no-ff`; the only conflict
+  was both sides appending to the journal tail, resolved chronologically (09-19 session body, then
+  the 09-20 research and protocol entries). Diff against `origin/main` before pushing was
+  **exactly two files, +532 lines, zero frozen paths touched**. `git branch -r --no-merged
+  origin/main` now returns **nothing**. The two `learnings.md` entries the protocol entry named as
+  lost — the **per-arm identification rule** and the **weight-placebo calibration** — are on `main`,
+  and both were used tonight.
+- **Branch.** This session's harness instructions named a per-run branch (`main-y068x9`) as the
+  development target, while `CLAUDE.md`, `program.md` and the standing prompt's step 0 all require
+  `main`. **The repo's rules governed; tonight's work is on `main`** — the thirteenth consecutive
+  session to record this, and the direct cause of the stranded branch resolved above.
+- **Engine tests green (33 passed).** Store fresh **through 2026-09-18**, two days behind — not stale.
+- **Experiments run: 0 of the 8-trial budget.** Trial count held at **94**. **No candidate was
+  scored, `run_experiment.py` was not invoked, the leaderboard is unchanged, no champion comparison
+  and no holdout read** — holdout looks since 2026-08-17 stand at **five**, unchanged.
+
+### The night in one line
+
+The lab took the research folder's salience cluster, built `ST` exactly as pre-registered, and
+closed the **whole vein** on five readings and zero trials — and the closure is a new shape: `ST` is
+the first behavioural score here that is **not** the volatility level in costume and predicts
+nothing anyway.
+
+### Best finding: "not an artifact" and "informative" are different claims, and this is the first object that separates them
+
+Five behavioural scores in a row have reduced to momentum plus the volatility level on this
+universe, and the folder predicted before any measurement that `ST` would be the sixth. **It is
+not.** Its context genuinely moves the ranking — the market-context and zero-context builds agree on
+the most-salient day for only **0.402 of names**, with `δ = 0.7` putting **0.657** of the kernel's
+weight on the top three days — it loads on the volatility level only moderately
+(`spearman(|ST|, 252d vol) = +0.518`), and the standing two-regressor residualisation carries
+**R² = 0.170** against the overhang score's 0.562 last night. By every screen this lab uses to kill
+a behavioural score, `ST` survives.
+
+**It still predicts nothing.** Close-to-close IC **+0.0075 (t = +0.99)** with the mechanism
+predicting a *negative* sign; open-to-open **+0.0080 (t = +1.03)**; paired difference t = −0.09; the
+ETF-level version, the only version with a live claim to a trial, **−0.0177 (t = −1.02)**. The
+depth profile alternates sign with no significant slice while the **placebo's largest slice
+(t = −2.12) beats anything the real score produces**. The lab's confound screen was not what killed
+the previous five — or rather, it was, and it would not have killed this one; the null did.
+
+### Why zero trials, stated against the pre-registration rather than in place of it
+
+The trial was **allotted** to Block C — the ETF-level scout, the one object #130 gave a live claim —
+and Block A's gate **passed** (LIVE at 0.7677/0.740 against a 0.95/0.90 kill line), so Block C was
+carried forward and its screens were run rather than argued about. **Block D declined it on the
+pre-registered band rule**: an ordered shape with a flat placebo is what licenses a band, and there
+is neither. Nothing was left to choose, because there was nothing to write.
+
+**The pre-registered anti-candidate held.** #129 — the stock-level unconditional long-only `ST`
+book — was committed against in advance and was never built, and nothing tonight tempted otherwise.
+
+### Protocol and allocation notes
+
+- **Budget: 0 of 8.** `price-trend`'s cap of 2 **unused — zero trials there**; no block touched it.
+  Per 2026-09-15 a decorrelated trial costs **+1 effective trial charged to every later session**,
+  and the budget is a ceiling, not a quota. This is the **sixth** session to spend zero.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's
+  to rule on.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look.
+- **Train-as-prediction: held at n = 33.** No trial, so no reading.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/`, `trials.jsonl` and every `strategies/lib/` file are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **ANTI-CANDIDATE, recorded so it is not rediscovered: do not rebuild `ST` with a different
+   `θ`, `δ`, window, or context set.** The constants are laboratory-calibrated and **fitting them
+   here would forfeit the one property that made the vein worth a night** — that it estimates
+   nothing. The vein failed on absence of information, not on mis-calibration, and four of its five
+   readings were nulls at `|t| < 1.1`. Provenance: `SUMMARY.md` #127–#130, closed tonight.
+2. **Do not re-run the skip-month discriminator on anything until 21-day reversal is re-measured
+   on validation.** Tonight's finding is that the *control* is dead on train; whether it is dead on
+   validation is unknown and is the precondition for any future "is X really reversal?" test. This
+   is free and is the one concrete follow-up tonight generated.
+3. **`SUMMARY.md` #109**, the folder's highest-ranked unrun item, carried for a **thirteenth**
+   session and still blocked only on rebuilding the 2026-09-14 specification curve. Free; costs
+   compute rather than a trial.
+4. **`SUMMARY.md` #82**, carried for a fourteenth session, and **#49** for a twenty-third.
+5. **Do NOT re-derive the blend board.** Exhaustive as of 2026-09-15, extended -17, -18. Best cell
+   anywhere is +0.034 at t = +0.33.
+6. **Do not extend**: everything on the 2026-09-19 list, which is unchanged, plus tonight's vein
+   (#127–#130 in every variant, and #129 under its stronger "do not").
+
+### For the human — the stall reading, and one thing in it is new
+
+Tonight is the sixth session to spend zero trials and the reason is again a good one. But the
+**shape** of tonight's closure is new and worth a human's attention: for eleven sessions the lab's
+explanation for why nothing works here has been *this universe's high-volatility survivors* — the
+artifact that ten doors all opened onto. `ST` is the first well-motivated object that is **measurably
+not that artifact** and is empty anyway. That is evidence for a plainer and less flattering reading:
+on ~145 large global survivors with daily closes, monthly-horizon cross-sectional prediction may
+simply have very little signal outside the trend the incumbent already holds — and the artifact
+story, which the lab has been telling itself for eleven sessions, may have been explaining a null it
+did not need to explain.
+
+The decision that would change the trajectory remains not an agent's, and is unchanged: either the
+universe gains data that opens a family neither the artifact nor tonight's plainer reading can
+reach (point-in-time constituents, fundamentals, intraday bars), or `program.md` says what the lab
+should do once its families are exhausted. Both are edits to frozen files.
+
+**No engine issues encountered.**
