@@ -3697,3 +3697,61 @@ across experiments; prune entries that later evidence contradicts.
   this session's scoreable train dates from **76 to 226** when fixed. **Set `min_periods`
   explicitly on every rolling window, and print the scoreable-name count per date over time before
   believing any screen** — a bimodal count (here 33 against 113) is the signature.
+
+- **[Measured 2026-09-19, nightly] The reference-point vein closes on three pre-registered readings
+  and zero trials, and the general lesson is about identification rather than about overhangs: a
+  construction argument that identifies one arm of a two-armed score says nothing about the other
+  arm, and the other arm can be the larger one.** `research/SUMMARY.md` #123–#126 supplied
+  Grinblatt–Han's capital gains overhang `g = (P − R)/P` with `R` a turnover-weighted average of past
+  prices, An's `VSP = Gain − 0.2·Loss`, and Riley et al.'s claim that the purchase price is not
+  special. The folder ranked #124 as the first challenger-shaped object it had supplied in a session,
+  **because `−0.2·Loss` is anti-momentum by construction and therefore cannot be trend in costume.**
+  That is true of the loss arm and it was never a claim about the gain arm: measured here,
+  `spearman(Gain, 12-1 momentum) = +0.676` against `spearman(−Loss, 12-1) = −0.507`, and the **gain
+  arm carries the larger band excess** (+5.55 at t = +2.27 against +4.38 at t = +1.36). **The
+  identification covered the half that was not the problem.** Generalise it as a checklist item:
+  when a score is a signed combination of two arms, run the trend/artifact screen on **each arm
+  separately** — an argument that one arm is orthogonal by construction is not an argument about
+  their sum.
+  **Three readings, each with its rule fixed before the number.** *(a)* **The volume weighting is
+  nearly inert.** The turnover-weighted `g` against the identical formula with `V_t` held constant —
+  which collapses exactly to a fixed-decay EWMA of past prices, i.e. a distributed lag of returns and
+  nothing else — reads `spearman` **0.9773** and top-20 overlap **0.919** against a pre-registered
+  kill line of 0.98/0.95. Live by the rule, honoured, and **two points of rank correlation is the
+  whole of what turnover buys on this universe**. On the *magnitude* object it buys nothing at all:
+  `|g|` turnover-weighted against `|g|` constant-`V` is `spearman` **0.9631** at 0.892 overlap, with
+  the constant version scoring slightly *better* (+19.22 against +17.10 on ranks 1-10). *(b)* **An's
+  V is present and its identifying asymmetry is absent.** The mechanism predicts both arms positive
+  with the gain arm steeper by 3–6x; observed both positive at a ratio of **1.27** (1.12 on the top
+  slice), inside the 0.5–2.0 window pre-registered as the artifact condition, with the `−Loss` arm
+  going **negative in the low-volatility tercile**. *(c)* **Raw `VSP`'s entire tail excess is
+  momentum plus the volatility level.** Residualising on rank(12−1) and rank(252d vol) — two
+  regressors, pre-committed before any number, chosen over the source's six on the parameter-count
+  triage rule — carries **R² = 0.562** and takes the top-15 excess from **+12.74%/yr (t = +3.57) to
+  +0.71 (t = +0.43)** with the residual **placebo above it at +1.54**, while the book's
+  trailing-volatility percentile falls **0.733 → 0.510**. By the house rule that only an ordered
+  shape with a flat placebo licenses a band, **no band could be set and there was no candidate to
+  write**; the trial was allotted and was not spent.
+  **Two riders worth more than the closure.** `RefMax` — the one genuinely decorrelated member at
+  `spearman` 0.60 to both others and 0.43 to momentum — is **dead and wrong-signed** (marginal slices
+  −3.14 / −1.69 / −4.48 / +0.95, `spearman` to the volatility level **−0.535**, book volatility
+  percentile 0.322), which closes `SUMMARY.md` #126's `CGOCom1` branch for free and replicates Riley
+  et al.'s "the purchase price is not special" in the direction that kills the vein rather than the
+  one that broadens it. And the residual was **not** a degenerate object — dispersion printed before
+  the conclusion, per the rule the SUV episode bought: 44% of the score's rank variance survives the
+  two regressors and predicts nothing.
+
+- **[Measured 2026-09-19, nightly] To find out whether a time-varying weighting scheme does anything,
+  replace its weights with NOISE OF THE SAME MEAN — if the noise reproduces the constant-weight
+  object, then whatever separation the real weights produce is their systematic component and not
+  estimation error.** Tonight's placebo was a hash-derived pseudo-turnover reading no market data,
+  substituted into the overhang's decay weights. It reproduces the **constant-`V`** ranking at
+  `spearman` **0.9999** and top-20 overlap **0.996**, because 1,260 independent draws around `v̄`
+  average back to the constant — so the 0.977 that real volume buys is autocorrelated volume
+  structure, not noise injected into the weights. **This is the first placebo in this repo built to
+  calibrate a *weighting scheme* rather than a *score*,** and it is cheap and general: any
+  construction here with a time-varying kernel (the tranche overlap, the horizon bracket, any
+  EWMA-with-a-state decay) can be screened the same way before its kernel is credited. Note which
+  direction it runs — a weight placebo that *fails* to separate is what licenses reading the real
+  separation as content; the usual score placebo is read the opposite way. **Say which kind of
+  placebo you have run before quoting it.**
