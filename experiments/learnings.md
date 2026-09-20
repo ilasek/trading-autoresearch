@@ -3755,3 +3755,58 @@ across experiments; prune entries that later evidence contradicts.
   direction it runs — a weight placebo that *fails* to separate is what licenses reading the real
   separation as content; the usual score placebo is read the opposite way. **Say which kind of
   placebo you have run before quoting it.**
+
+- **[Measured 2026-09-20, nightly] The salience vein closes on five pre-registered readings and zero
+  trials, and it is the FIRST behavioural score here to close as a clean null rather than as the
+  volatility level in costume — which means the lab's standing screen was not the thing that killed
+  it.** `research/SUMMARY.md` #127–#130 supplied Cosemans–Frehen's `ST` — rank a month's daily
+  returns by `σ(r, r̄) = |r − r̄|/(|r| + |r̄| + 0.1)`, weight `∝ 0.7^k`, subtract the plain mean —
+  with laboratory-calibrated constants that **fit nothing**, the best grade available under the
+  parameter-count triage. Five readings: the context ablation is **LIVE** (a-vs-c `spearman`
+  **0.7677**, bottom-20 overlap 0.740, against a 0.95/0.90 kill line); the open-to-open falsifier
+  **fails in the "neither" branch** (close-to-close IC **+0.0075 at t = +0.99**, open-to-open
+  **+0.0080 at t = +1.03**, paired difference t = −0.09, and the predicted sign was **negative**);
+  the ETF-level version is the only place the sign appears (**IC −0.0177, t = −1.02**) and is not
+  distinguishable from zero; the depth profile **alternates sign with no significant slice while the
+  placebo's largest slice (t = −2.12) beats anything the score produces**; and the two-regressor
+  residualisation carries **R² = 0.170**, *lower* than the overhang score's 0.562.
+  **The transferable half is the shape of the closure, not the score.** The previous five
+  behavioural scores — 52-week-high proximity, information discreteness, overnight sentiment,
+  `VSP`/overhang, and by construction `ST` — were all expected to reduce to momentum plus the
+  volatility level, and four did. This one **does not**: its context genuinely moves the ranking, it
+  loads on the volatility level only moderately (`spearman(|ST|, 252d vol) = +0.518`), and its
+  residual R² is the lowest of the group. It still predicts nothing. **A score can fail this lab's
+  confound screen and still be empty, and a score can pass it and still be empty — "not an artifact"
+  was never the same claim as "informative", and this is the first object here that separates them.**
+  Carry it as a reading rule: when an ablation says LIVE, that licenses the *next* test, never the
+  band.
+
+- **[Measured 2026-09-20, nightly] A claim about a ranking INSIDE a window is not a claim about the
+  cross-sectional score built from that window, and reading them as the same would have retired a
+  live instrument tonight.** `SUMMARY.md` #127 states that zeroing the salience context "collapses
+  the function to a monotone function of `|r|`", i.e. a pure magnitude ranking — this repo's
+  standing confound. Checked at the **score** level it looks false: `spearman(ST_c, −mean|r|)` is
+  only **−0.164**. Checked at the **day** level, where the claim actually lives, it is true and
+  consequential: the market context and the zero context pick a **different most-salient day for
+  0.598 of names**, and `δ = 0.70` concentrates **0.657 of the kernel's weight on the top three
+  days**, so the day-ranking change propagates to the score. Both numbers are right; they are about
+  different objects. `ST` is a **difference of two means over the ranked days**, and a monotone day
+  ranking does not make a monotone cross-sectional score. **Rule, and it composes with the
+  2026-09-19 per-arm rule: before testing a source's claim, say which object the claim quantifies
+  over — the within-name ordering, the arm, or the cross-section — and measure it there. Three
+  different objects have been confused in this repo in two nights.**
+
+- **[Measured 2026-09-20, nightly] A discriminating test is worth nothing when its BENCHMARK is a
+  null, and this is now the second free test the lab ran whose value was destroyed by its control
+  rather than by its subject.** The folder recorded a live tension between two Tier-1 JFE papers —
+  Cosemans–Frehen devote three tests to showing `ST` is distinct from short-term reversal,
+  Cakici–Zaremba's first limitation is that it substantially *is* reversal — and ranked the
+  skip-month test as the free discriminator. It is free; it is not a discriminator here. `ST`
+  through month `t−1` orders month `t+1` at **IC +0.0038, t = +0.48**, and the plain 21-day reversal
+  control against which the whole question is posed is **itself a null on this universe's train
+  split (t = +0.82, and wrong-signed for reversal)**. "Is X really Y?" carries no information when
+  Y pays nothing. **Rule: before running a test whose output is a comparison to a named alternative,
+  measure the alternative FIRST and confirm it is alive on this universe — otherwise the test can
+  only return the alternative's own absence wearing the subject's name.** The literature could not
+  have supplied this: both papers' samples have a live reversal effect and this universe's ~145
+  large global survivors do not.
