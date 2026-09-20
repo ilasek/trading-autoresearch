@@ -12125,3 +12125,130 @@ per-run branch (`claude/tender-galileo-78t34j`) as its development target while 
 step 6 and the standing prompt's step 0 both require `main`. The repo's own rules governed; tonight's
 work is on `main`. The two facts are related: per-run branches are how the unmerged work above came
 to exist.
+
+## Pre-registration — 2026-09-20 (nightly), written before any number was computed
+
+Committed before the first array was allocated. Provenance is `research/SUMMARY.md` #127–#130
+(session 37, the salience vein: Bordalo–Gennaioli–Shleifer's salience theory, Cosemans–Frehen's
+`ST` implementation, Cakici–Zaremba's 49-country replication). The folder's own ordering is
+adopted verbatim — #127, then #128, then #130 as a scout gated behind #127 — and so is its
+anti-candidate: **#129, the stock-level unconditional long-only `ST` book, will not be built
+tonight under any reading of the numbers below.** That is a pre-commitment, not a conclusion.
+
+**Flags and the discount they earn.** Cosemans–Frehen is `published_post_2018: true` (sample
+1926–2015, US only); Cakici–Zaremba is `validation_overlap: true` and **was not read** — only its
+abstract, quoted in the folder's note. Bordalo et al. is the decision theory and carries no market
+sample. **No performance figure is imported from any of the three.** Signs, orderings, subsumption
+and significance only. The replication's scope limitation (*"outside of microcaps and extreme
+market conditions, the salience effect does not exist"*) is carried into the pre-registration as a
+prior against the stock-level book rather than discovered after a measurement.
+
+### The construction, fixed now so that nothing in it is chosen after a number
+
+Cosemans–Frehen's recipe, laboratory constants and all, over a one-month window of daily returns:
+
+    sigma(r_is, rbar_s) = |r_is - rbar_s| / (|r_is| + |rbar_s| + theta),   theta = 0.10
+    rank the window's days by sigma DESCENDING, k = 1 .. S
+    w_s  proportional to  delta^k,  delta = 0.70,  normalised to sum 1
+    ST_i = sum_s w_s * r_is  -  mean_s(r_is)
+
+`theta = 0.1` and `delta = 0.7` are **experimentally calibrated in the source and are not fitted
+here**; under candidate #1's parameter-count triage `ST` estimates nothing, which is the best
+grade available and the reason this vein is worth a night at all. Window `S = 21` trading days.
+House nodes, per the 2026-09-10 table, fixed here rather than inherited silently: rebalance grid
+is `walkforward.rebalance_dates` (last trading day of each month, warmup 6); pool is every
+instrument scoreable on the date; **`min_periods` is set explicitly on every rolling window**
+(2026-09-18's rule — the `dropna`-cohort artifact is reachable in one line of pandas) and the
+scoreable-name count per date is printed before any screen is believed.
+
+The predicted sign is **negative**: salient upsides are overpriced, so the long-only-tradeable leg
+is the **LOW-`ST`** leg. Recorded now because it is unusual and because forgetting it later would
+let a positive top band be read as a confirmation.
+
+### Block A — #127, the context ablation. Free. The gate for everything after it.
+
+Three builds differing **only** in what each day's return is compared against:
+
+    (a) rbar_s = cross-sectional mean return on day s   <- the theory
+    (b) rbar_s = a constant (daily risk-free proxy, 0.0002)
+    (c) rbar_s = 0                                      <- collapses sigma to a monotone
+                                                           function of |r_is|: a pure magnitude
+                                                           ranking, i.e. this lab's standing
+                                                           volatility-level confound
+
+The theory requires a **strict ordering**: (a) must carry more cross-sectional information than
+(c). Two-sided kill line, fixed before any number, in the 2026-09-19 style:
+
+- **KILL** if `spearman(ST_a, ST_c)` pooled over train rebalance dates is **>= 0.95** *and* mean
+  top-20 overlap is **>= 0.90**. The context is then inert on this universe, what `ST` measures is
+  the magnitude of daily moves, and **the whole vein retires for zero trials** — no Block C.
+- **LIVE** if `spearman(ST_a, ST_c) <= 0.85` *and* top-20 overlap `<= 0.80`. Block C is then
+  reachable, subject to Blocks B and D.
+- Between the two lines: **LIVE but degraded** — Block C is reachable only if Block B *and* Block D
+  both pass cleanly, and the session says so explicitly rather than rounding in its own favour.
+
+Read on **train only**. Validation is not touched by any block tonight.
+
+### Block B — #128, the open-to-open falsifier. Free. Confirmation is a NULL.
+
+Build `ST` on close-to-close daily returns and on **open-to-open** daily returns over the same
+window and the same names. The mechanism predicts the close-to-close version orders the
+cross-section and the **open-to-open version does not**; a risk or news-overreaction story predicts
+no difference. Metric is the rank information coefficient against the next month's return, pooled
+over train rebalance dates with a Newey-West-free paired `t` on the per-date IC series.
+
+- **PASS (mechanism survives)**: `IC_cc` distinguishable from zero in the predicted (negative)
+  direction at `|t| >= 2`, *and* `IC_oo` not distinguishable from zero at `|t| < 2`, *and* the
+  paired difference `IC_cc - IC_oo` itself at `|t| >= 1.5`.
+- **FAIL**: both legs light up together (the artifact signature — volatility level, reversal and
+  dispersion all live in both conventions), or neither does.
+- The asymmetry is the finding either way. Note the direction of this placebo: it is a **score**
+  placebo, read the usual way (a leg that fails to separate is the confirmation *only* because the
+  mechanism predicted that specific leg would fail). Per 2026-09-19, said before it is quoted.
+
+### Block C — #130, the ETF-level `ST` scout. ONE trial, `track: "scout"`, gated.
+
+Runs **only** if Block A is LIVE and Block D sets a band. States are an ETF's daily returns over
+the past month; the context `rbar_s` is the mean across the **ETF cross-section** on that day —
+42 ETFs across 15 regions, a population where "microcap" is not a meaningful objection and where
+this repo's survivorship bias is weakest. Family slug is **`lead-lag-spillover`**, per the folder's
+own honesty note: the signal is one region's return against the global cross-section on the same
+day. Track is **scout**, so no champion comparison and `holdout_gate` is unreachable.
+
+Its honest status, stated now: **no source read tests salience at the index or ETF level.** This is
+a mechanism with no empirical support, not a replication.
+
+### Block D — the band, and the standing house screens it must pass first
+
+No band is inherited (2026-09-10 rider (b): profile the score, then set the band). Before any
+candidate file exists:
+
+1. **Depth profile with a placebo printed beside it** (2026-09-09): marginal rank slices of the
+   low-`ST` leg over train, against a hash-derived placebo reading no market data. By the house
+   rule a **single** significant slice is not a profile; an ordered shape with a flat placebo is
+   what licenses a band.
+2. **Both ends printed** (2026-09-18 / `SUMMARY.md` #84): if the top and bottom bands are *both*
+   positive, stop and correlate `|ST|` with the 252-day volatility level before writing anything.
+3. **Two-regressor residualisation** (standing): rank(12−1 momentum) and rank(252d vol). If the
+   band excess does not survive with a flat placebo beneath it, **no candidate is written.**
+4. **Per-arm rule** (2026-09-19): `ST` is a weighted mean minus a plain mean, i.e. a signed
+   difference of two arms. Screen **each arm separately**; an argument about one arm is not an
+   argument about their sum.
+5. **What sets breadth** (2026-09-18): stated before the file is written. A 42-name ETF pool with a
+   monthly grid sets its own ceiling, and the turnover gate is the first one likely to bite.
+
+### Block E — the free skip-month discriminator, if time remains
+
+The folder records a live tension between two Tier-1 JFE papers: Cosemans–Frehen argue `ST` is
+distinct from short-term reversal, Cakici–Zaremba's first limitation is that it substantially *is*
+reversal. **The discriminating test is free here**: build `ST` through month `t−1` and ask whether
+it still orders month `t+1`. Survives → Cosemans–Frehen's defence transfers; collapses →
+Cakici–Zaremba's limitation does. Reported either way, and it spends no trial.
+
+### Budget, stated in advance
+
+**At most one trial tonight**, and only Block C. `price-trend`'s cap of 2 is not approached — no
+block touches it, and #130's own folder note warns that a *stock-level* `ST` would have to be filed
+there. Per 2026-09-15 a decorrelated trial costs **+1 effective trial charged to every later
+session**, so the budget is a ceiling and not a quota: if Block A kills, the session spends zero
+and says so. No holdout read is reachable from a scout.
