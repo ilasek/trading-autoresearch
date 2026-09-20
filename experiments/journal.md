@@ -12252,3 +12252,126 @@ block touches it, and #130's own folder note warns that a *stock-level* `ST` wou
 there. Per 2026-09-15 a decorrelated trial costs **+1 effective trial charged to every later
 session**, so the budget is a ceiling and not a quota: if Block A kills, the session spends zero
 and says so. No holdout read is reachable from a scout.
+
+## Free measurement — 2026-09-20 (nightly), no trial spent
+
+Five blocks, all holdings-only or score-only, **train split exclusively** (`None` → 2017-12-31).
+No book was scored, `run_experiment.py` was not invoked, the leaderboard is unchanged, and no
+holdout number was read. Every rule below was fixed in the pre-registration committed above,
+before the first array was allocated.
+
+### Block A — #127, the context ablation: **LIVE**, and the reading needed a second measurement
+
+Three builds of `ST` over a 21-day window, differing only in the context each day is compared
+against. 666 train rebalance dates, 453 with ≥20 scoreable names.
+
+    comparison                        spearman   bottom-20 overlap   top-20 overlap
+    (a) market  vs (c) zero            0.7677          0.740              0.761
+    (a) market  vs (b) constant        0.7691          0.739              0.759
+    (b) constant vs (c) zero           0.9908          0.964              0.966
+
+Pre-registered LIVE line was `spearman ≤ 0.85` **and** overlap `≤ 0.80`; observed **0.7677 / 0.740**,
+inside both. **The context is not inert on this universe.** (b)-vs-(c) at 0.991 is the arithmetic
+check it should be — a 2 bp constant is nearly zero — and it confirms the ablation's contrast is
+market-context-versus-none rather than anything about the constant.
+
+**The score-level confound reading came back far weaker than the folder predicted, so it was
+checked at the level the claim actually lives.** `SUMMARY.md` #127 says (c) "collapses the salience
+function to a monotone function of `|r_is|`", i.e. a pure magnitude ranking. At the **score** level
+that does not show up: `spearman(ST_c, −mean|r|) = −0.164` and `spearman(ST_a, −mean|r|) = −0.129`.
+The reason is that the folder's claim is about the **day ranking** inside the window, not about the
+cross-sectional score, and `ST` is a *difference of two means* over those days — monotone day
+ranking, non-monotone score. Measured at the day level over the panel's deep last 240 dates,
+complete-window names only: **(a) and (c) pick the same most-salient day for only 0.402 of names**,
+while `δ = 0.70` puts **0.657 of the kernel's weight on the top three days**. So a day-ranking
+change does propagate, Block A's separation is real, and **the claim and the measurement were about
+different objects** — recorded because reading them as the same would have made a live ablation look
+like a dead one.
+
+### Block B — #128, the open-to-open falsifier: **FAIL**, and the failure mode is the informative one
+
+Precondition first (2026-09-18's rule): open-to-open looks like a daily return — median `|.|`
+**0.0085** against close-to-close's 0.0086, mean +6.45 bps against +6.39, 1st/99th −5.63%/+6.10%
+against −5.57%/+6.03%, n = 826,083 each. The two conventions are comparable objects.
+
+Rank IC against the next month's return, 452 usable train dates. **The predicted sign is negative.**
+
+    close-to-close ST      IC +0.0075    t +0.99
+    open-to-open   ST      IC +0.0080    t +1.03
+    paired difference      -0.0005       t -0.09
+    spearman(ST_cc, ST_oo) across names: 0.6682
+
+Pre-registered PASS required `t_cc ≤ −2`, `|t_oo| < 2` and `|t_diff| ≥ 1.5`. **Observed: neither leg
+lights up, and the close-to-close point estimate carries the wrong sign.** This is the
+pre-registered "neither" branch, not the "both" branch — the artifact signature (volatility level,
+reversal, dispersion light up in *both* conventions) is **absent**, because there is nothing lit in
+either. The two conventions are far from identical (`spearman` 0.668), so the null is not the
+trivial one where the falsifier had no room to discriminate.
+
+**Which kind of placebo this is, said before it is quoted** (2026-09-19): a **score** placebo, read
+the usual way. Its confirmation would have been a null in one specific leg the mechanism named in
+advance. It is not licensed to read tonight's null-in-both as any kind of confirmation.
+
+### Block E — the free skip-month discriminator: **the tension cannot be settled here**
+
+    ST formed through t-1, ordering month t+1     IC +0.0038   t +0.48
+    contemporaneous (no skip)                     IC +0.0075   t +0.99
+    plain 21d reversal (-r21)                     IC +0.0081   t +0.82
+    spearman(ST_cc, 21d return) = +0.5957
+
+Cosemans–Frehen argue `ST` survives a skip-month and is therefore distinct from short-term reversal;
+Cakici–Zaremba's first limitation is that it substantially *is* reversal. **Neither claim is
+testable here, and the reason is the benchmark rather than the score:** the plain 21-day reversal
+control is **itself a null on this universe's train split** (t = +0.82, wrong sign for reversal).
+A discriminator between "X is Y" and "X is not Y" carries no information when Y is absent. Reported
+as it read; the folder's ranking of this test as free and decisive was right about free and wrong
+about decisive, for a reason nothing in the literature could have supplied. `ST` is +0.596 rank
+correlated with the contemporaneous monthly return, so the folder's structural point stands —
+**low-`ST` tilts toward recent losers**, the fifth behavioural score in a row whose tradeable leg is
+reversal-adjacent — it simply has no consequence when reversal pays nothing.
+
+### Block D — #130's ETF population, screened before any candidate file existed: **no band**
+
+The one version with a live claim to a trial. ETF-only pool, context = the ETF cross-section's mean
+return that day. 42 names, 294 dates, **228 with ≥15 scoreable ETFs** — the per-date count deciles
+run `1, 1, 6, 20, 26, 33, 38, 40, 42, 42, 42`, so this pool is genuinely shallow before ~2000 and
+that is a limitation of the test, stated rather than buried.
+
+    ETF-level ST            IC -0.0177   t -1.02
+    arm1 salience-wtd mean  IC -0.0139   t -0.72    spearman to ST +0.9622
+    arm2 plain mean         IC +0.0068   t +0.29    spearman to ST +0.4905
+
+**The sign is right here and it is the only place tonight it was** — the ETF cross-section is where
+the mechanism's prediction (negative) shows up as a point estimate — but at `t = −1.02` it is not
+distinguishable from zero. **Per-arm rule applied** (2026-09-19): the score is dominated by its
+weighted-mean arm (`spearman` +0.962), and neither arm predicts, so there is no repeat of the `VSP`
+episode where one arm was momentum in costume and the larger one at that.
+
+Depth profile of the low-`ST` leg, %/yr excess over the equal-weight pool, **placebo printed beside
+it and the bottom band printed too**, per the standing house rules:
+
+    slice         ST_low            placebo           ST_high (bottom band)
+    ranks 1-5     +3.70 (t +1.70)   +0.73 (t +0.50)   -0.27 (t -0.12)
+    ranks 6-10    -0.64 (t -0.39)   -3.06 (t -2.12)   +0.91 (t +0.55)
+    ranks 11-15   -1.61 (t -0.99)   +1.98 (t +1.63)   -0.39 (t -0.23)
+    ranks 16-20   +0.94 (t +0.53)   +0.63 (t +0.47)   -4.03 (t -2.22)
+    ranks 21-25   -3.39 (t -1.93)   -1.59 (t -1.17)   +2.41 (t +1.30)
+
+**No slice of the real score is significant, the profile alternates sign rather than ordering, and
+the placebo's largest slice (t = −2.12) is larger in `|t|` than anything `ST` produces.** By the
+house rule adopted 2026-09-09 — an ordered shape with a flat placebo is what licenses a band, and a
+single significant slice is not a profile — **no band can be set, and there is no candidate file to
+write.** The bottom band is not positive alongside the top, so the 2026-09-18 both-ends
+dispersion check does not trigger; `spearman(|ST|, 252d vol) = +0.5175` is recorded anyway, a
+moderate loading on the standing confound but not the object that decides this.
+
+Residualisation on rank(12−1) and rank(252d vol) carries **R² = 0.170** — notably *lower* than the
+0.562 the overhang score carried on 2026-09-19, i.e. `ST` really is less of a momentum-plus-volatility
+restatement than its five predecessors — and the residualised profile is equally unordered
+(+2.37 / +1.59 / −2.05 / −1.87 / −0.24, all `|t| < 1.4`). **Residualising a null produces a null;
+this is reported for completeness and nothing is inferred from it.**
+
+### Block C — not run
+
+Its pre-registered gate was Block A LIVE **and** Block D setting a band. Block A passed; **Block D
+did not set a band**, and Block B had already failed. The trial was allotted and was not spent.
