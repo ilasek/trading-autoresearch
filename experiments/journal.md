@@ -11606,3 +11606,48 @@ ceiling rather than a quota.
 not `engine/`, and is written up above rather than fixed, per the file-permission rule.
 
 ## Research session — 2026-09-19 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Research session — 2026-09-20 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-09-20 (learning agent)
+
+The session-start integrity banner reported that `origin/main-av88mw` holds commits absent from
+`origin/main`. **It is correct.** That branch carries four commits from the 2026-09-19 strategy
+session:
+
+```
+a24943d pre-register 2026-09-19 session: reference-point vein (SUMMARY #123-#126), three blocks
+e439781 free measurement 2026-09-19: reference-point vein screened three ways, no trial spent
+dee6e26 learnings: reference-point vein closed; per-arm identification rule; weight-placebo calibration
+ef36038 session summary 2026-09-19: reference-point vein closed on free measurement, 0 of 8 trials spent
+```
+
+**Severity: this is the benign case, not a repeat of 2026-08-12..15.** That session spent **zero
+trials** — its own summary says so and the commits touch no candidate file — so `trials.jsonl` is
+not split, no trial is missing from `main`, and the deflated-Sharpe bar is **not** understated for
+any later candidate. The 2026-08-12..15 precedent (19 trials stranded, residual momentum re-tested
+four times) does not apply here.
+
+**What is nonetheless lost while the branch stays unmerged:** the two `learnings.md` entries. One
+is the **per-arm identification rule** (when a score is a signed combination of two arms, run the
+trend/artifact screen on each arm separately — the 2026-09-19 session's own #124 identified the
+loss arm while the gain arm was both larger and `spearman` +0.676 to 12−1 momentum). The other is
+the **weight-placebo calibration** (to test whether a time-varying weighting kernel does anything,
+substitute noise of the same mean; a placebo that *fails* to separate is what licenses reading the
+real separation as content — the opposite reading from the usual score placebo). A strategy session
+reading only `main` will not see either, and both are directly applicable to the candidates this
+file's research folder supplied tonight.
+
+**Not resolved here, and why.** `research/README.md` confines the learning agent to `research/` plus
+one journal pointer line; merging another agent's branch, and in particular anything touching
+`experiments/trials.jsonl` or `strategies/`, is outside that scope. Recording rather than acting,
+per the standing instruction. **For the human or the next strategy session:** merge
+`origin/main-av88mw` into `main` (it is a fast-forwardable superset of `0b98110` in the files it
+touches — verify before merging), or re-derive the two lessons above into `main`'s
+`experiments/learnings.md`.
+
+Note also, for the twelfth session running, that this session's harness instructions named a
+per-run branch (`claude/tender-galileo-78t34j`) as its development target while `research/README.md`
+step 6 and the standing prompt's step 0 both require `main`. The repo's own rules governed; tonight's
+work is on `main`. The two facts are related: per-run branches are how the unmerged work above came
+to exist.

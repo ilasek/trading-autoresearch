@@ -158,6 +158,31 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > Second, tonight's literature is in **live tension with the 2026-09-18 nightly's own reading** of
 > its U-shaped result, in a way that is cheaply decidable and is recorded as candidate #125.
 >
+> **Status after session 37 (2026-09-20): the eleventh unit is the *reference* a measurement is
+> taken against, and it is the first unit the previous ten structurally could not see.** Sessions
+> 28–36 each found a finer unit to check coverage at — families, clauses, operators, the pool, an
+> attribute of its members, the selection rule, the vocabulary, the shape of the output, a column
+> of the input, a primitive of a cited theory. Every one of those is a property of *what is being
+> measured*. Tonight's sweep asked instead what a score is measured **against**: the folder's
+> behavioural scores are all functionals of a name's **own** price path — 52-week-high proximity,
+> information discreteness, overnight sentiment, capital-gains overhang, `VSP` — and the lab has
+> now reduced five of them to the same two regressors, momentum and the volatility level. A grep
+> across all 112 prior notes returned **zero** for `salience`, `Bordalo`, `Gennaioli`, `Cosemans`
+> and `salience theory`, and zero across this file, while the rival to the prospect theory this
+> folder has cited since 2026-09-01 — the theory whose entire content is that perception is
+> **context-dependent** — sat uncovered. **Families → … → a primitive of a theory already cited →
+> the reference the measurement is taken against.** The durable addition: *when a class of
+> constructions keeps collapsing into the same confound, check whether they all share an argument
+> you never varied.* Session 37 covered it (new cross-family section below, candidates #127–#130).
+> **The session-34 acceptance criterion is met only conditionally, and this file says so rather
+> than dressing it up**: the stock-level book is an **anti-candidate** (#129) — refused by an
+> independent Tier-1 replication across 49 countries, not by this lab's priors — and what survives
+> is two free *ordered* falsifiers that are the sources' own identifying tests (#127, #128) plus
+> one ETF-level **scout** with a mechanism and no empirical support (#130). One result deserves
+> flagging up here: tonight's two empirical sources are **two Tier-1 JFE papers that contradict
+> each other** about whether this measure is short-term reversal, and the discriminating test is
+> free on this repo's data — see the 2026-09-20 open question on that tension.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -3387,6 +3412,55 @@ substitution preserves. It also hands the vein a free control — set `V_t = v̄
 reference price collapses to a **fixed-decay EWMA of past prices**, so `g` becomes a smooth
 distributed lag of past returns and nothing else. Candidates #123–#126.
 
+### What a past return is measured *against* — salience, and the choice context (cross-family)
+
+Three notes, 2026-09-20, one tightly-coupled cluster: a decision theory, its cross-sectional
+implementation, and the independent multi-market replication that largely refuses it.
+
+**The mechanism.** Salience theory (Bordalo–Gennaioli–Shleifer 2012, *QJE*, Tier A; 735 S2 / 1178
+Crossref) says attention is drawn to outcomes that **stand out against the alternatives on offer**,
+and that objective probabilities are replaced by decision weights favouring those states. The
+salience of a state is `σ(x, x̄) = |x − x̄| / (|x| + |x̄| + θ)` — a *difference* from the context,
+damped by the absolute level (diminishing sensitivity), indifferent to sign (reflection). States
+are then ranked by salience, `k = 1` most salient, and weighted `∝ δ^k`, normalised to mean one.
+**The theory's experimental calibration is `θ = 0.1`, `δ = 0.7`, and these are fixed constants, not
+estimated on market data.** The distinction from cumulative prospect theory is the whole content:
+CPT distorts by the *rank of payoffs*, so tails are **always** overweighted; salience theory
+distorts by *magnitude and context*, so a tail payoff shared by every alternative gets **no** extra
+weight at all. → `notes/2026-09-20-salience-theory-choice-under-risk.md`
+
+**The implementation.** Cosemans–Frehen (2021, *JFE*, Tier A; 159 S2 / 223 Crossref;
+`published_post_2018: true`, sample 1926–2015 in the version read, US only) map the states onto a
+stock's **daily returns over the past month** and the context onto **the market's return on that
+same day**. Rank the month's days by `σ(r_is, r̄_s)`, weight `∝ 0.7^k`, and define
+`ST = (salience-weighted mean daily return) − (equal-weighted mean daily return)` — a weighted mean
+minus a plain mean, computable from closes alone, estimating nothing. The predicted relation to
+next-month returns is **negative**: salient upsides are overpriced, salient downsides underpriced.
+**The long-only-tradeable leg is therefore the LOW-`ST` leg**, which is unusual and is half the
+reason this cluster is here. Two of the paper's own identifying tests are free and ordered, and are
+the other half: (i) the **context ablation** — replace `r̄_s` with the risk-free rate (weaker) or
+with **zero** (weakest, because `σ` then collapses to a monotone function of `|r|`, a pure
+magnitude ranking, which is this lab's standing volatility confound); (ii) the **open-to-open
+falsifier** — investors watch close-to-close returns, so `ST` built on open-to-open returns should
+**not** predict while the close-to-close version does, a prediction a news-overreaction or risk
+story cannot make. → `notes/2026-09-20-salience-theory-stock-prices.md`
+
+**The replication, and it governs.** Cakici–Zaremba (2022, *JFE*, Tier A; 103 Crossref / 109
+OpenAlex; 49 countries, `validation_overlap: true`) take the identical measure abroad. The **sign
+replicates**; the **scope collapses**. Their abstract's three limitations: a substantial part of
+the anomaly is short-term return reversal; it is priced primarily among **microcaps**; the premium
+is realised predominantly following severe down markets and volatility spikes — *"outside of
+microcaps and extreme market conditions, the salience effect does not exist."* Both exclusions bind
+on a ~145-name large-cap universe. **This paper was not read** — hybrid OA whose only OA location
+is a publisher endpoint that 403s automated clients, with no green copy anywhere — so only its
+abstract is used, quoted verbatim in the note. → `notes/2026-09-20-salience-international-replication.md`
+
+**The live tension, recorded in both directions because nothing read settles it.**
+Cosemans–Frehen spend a section and three tests arguing `ST` is *distinct* from short-term
+reversal; Cakici–Zaremba's first limitation is that it substantially *is* reversal. Two Tier-1 JFE
+papers, same measure, opposite conclusions. The discriminating test is the **skip-month** one and
+it is free here. Candidates #127–#130.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -6511,6 +6585,87 @@ hypothesis fodder, then anti-candidates.
     embeds the bar's range, which is the artifact this universe loads on.
     → `notes/2026-09-19-dynamic-reference-point-composite-cgo.md`,
     `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`
+127. **FREE, and it comes first because it is a source's OWN identifying test rather than a screen
+    this lab invented — and because it is the tenth attempt to separate a behavioural score from
+    the volatility level, run for once on a construction that predicts its own ablation.** Build
+    the salience measure `ST` three ways over a one-month window of daily closes, differing **only**
+    in what each day's return is compared against: (a) `r̄_s` = the cross-sectional mean return on
+    day `s` (the theory); (b) `r̄_s` = a risk-free proxy or simply a constant; (c) `r̄_s = 0`, which
+    collapses the salience function to a monotone function of `|r_is|` and makes the score a pure
+    **magnitude ranking**. Construction, identical in all three: `σ(r_is, r̄_s) = |r_is − r̄_s| /
+    (|r_is| + |r̄_s| + 0.1)`; rank the month's days by `σ` descending, `k = 1 … S`; weight
+    `∝ 0.7^k` normalised to sum 1; `ST = Σ_s w_s r_is − mean(r_i)`. **The theory predicts a strict
+    ordering — (a) must carry more cross-sectional information than (c).** Pre-register the kill
+    line in the 2026-09-19 style before computing anything: if (a) and (c) rank the universe the
+    same way (rank correlation above the line, top-N overlap above the line), the context is inert
+    here and what is being measured is the volatility level — the confound this family has now
+    failed ten times — and the whole vein retires for zero trials. **The reason this is worth
+    running even though #129 declares the book an anti-candidate: the ablation is a general
+    instrument.** It prices how much of *any* day-weighting kernel's content on this universe is
+    just `|r|`, and this repo has several such kernels. Note also that `θ = 0.1` and `δ = 0.7` are
+    **laboratory-calibrated constants, not fitted**, so under candidate #1's parameter-count triage
+    `ST` estimates nothing — the best possible grade, and a genuinely rare property among the
+    behavioural scores this lab has built. Tier A, no overlap on the measure's source.
+    → `notes/2026-09-20-salience-theory-stock-prices.md`,
+    `notes/2026-09-20-salience-theory-choice-under-risk.md`
+128. **FREE, second, and it is the rare falsifier whose CONFIRMATION is a null.** Cosemans–Frehen
+    predict that `ST` works because investors *perceive* close-to-close daily returns. So: build
+    `ST` on **open-to-open** daily returns and on **close-to-close** daily returns over the same
+    window and the same names, and compare their cross-sectional information. The mechanism
+    predicts the close-to-close version ranks and the **open-to-open version does not**. A risk
+    story or a news-overreaction story predicts no difference between the two. This repo has had
+    the `open` panel since 2026-08-29 on exactly the same index and columns, so the test costs one
+    holdings-only computation. **Two reasons it earns its place ahead of any book.** First, it is
+    not passable by accident — most artifacts (volatility level, reversal, dispersion) are present
+    in both conventions and would show up in *both* legs, so a clean asymmetry is hard to fake.
+    Second, it is a **second, independent use of the session boundary** the 2026-09-18 cluster
+    opened, and it asks the opposite question of #119–#121: those asked where a *premium accrues*
+    inside the bar, this asks which convention a *signal is measurable in*. The 2026-09-18 nightly
+    already established that those two questions have opposite answers on this universe, which is
+    precisely why this one should not be assumed. Tier A. → `notes/2026-09-20-salience-theory-stock-prices.md`
+129. **ANTI-CANDIDATE, and the strongest one this folder has recorded, because it is refused by an
+    independent Tier-1 replication rather than by this lab's own priors: do not spend a trial on a
+    stock-level, unconditional, long-only `ST` book.** Cakici–Zaremba take the identical measure to
+    49 countries and conclude, in their abstract's own words, that *"outside of microcaps and
+    extreme market conditions, the salience effect does not exist"* — it is priced primarily among
+    microcaps, a substantial part of it is short-term reversal, and the premium is realised
+    predominantly following severe down markets and volatility spikes. This universe is **~145
+    large global names**; both exclusions bind. Cosemans–Frehen's own value-weighted results are
+    materially weaker than their equal-weighted ones and they give the reason — large stocks have
+    lower retail ownership and smaller limits to arbitrage — so the two papers agree about the
+    *direction* of the size gradient and disagree only about whether what is left at the large-cap
+    end is anything. **Spending a trial here would permanently raise the deflated-Sharpe bar for
+    every later candidate to re-ask a question answered on a sample vastly larger than this one.**
+    Its value, as with every anti-candidate here, is that it costs nothing. Note the standing
+    pattern it fits: `ST` is positively correlated with the contemporaneous monthly return by
+    construction, so **low-`ST` tilts toward recent losers** — the fifth behavioural score in a row
+    whose tradeable leg is reversal-adjacent, after 52-week-high proximity, information
+    discreteness, overnight sentiment and `VSP`. Apply the 2026-09-19 per-arm rule and the standing
+    two-regressor residualisation before believing any excess.
+    → `notes/2026-09-20-salience-international-replication.md`,
+    `notes/2026-09-20-salience-theory-stock-prices.md`
+130. **The only version with a live claim to a trial, and it is a SCOUT with no empirical support —
+    stated that way on purpose.** #129's objection is about the **population**, not the measure:
+    "microcap" is an objection to where the effect was found, and the salience construction is
+    defined for any choice set. This universe contains **42 ETFs across 15 regions**. Set the
+    states to an ETF's daily returns over the past month and the context `r̄_s` to the average
+    across the **ETF cross-section** on that day; everything else is #127's recipe unchanged. That
+    moves the construction onto a population where microcap is not a meaningful objection, where
+    this repo's survivorship bias is weakest (`program.md`: "ETF-level strategies suffer least"),
+    and where a monthly-rebalanced book of 42 names has a chance against the turnover gate — which
+    is the first gate likely to bite, since no source read models costs at all. **Be explicit about
+    what this is: no source read tonight tests salience at the index or ETF level.** The nearest
+    thing to support is Cosemans–Frehen's industry-context variant, which shows only that changing
+    the choice set is a legitimate move within the theory, not that this particular choice set
+    works. So: `track: "scout"`, and gate it behind #127 — if the context ablation shows the
+    context is inert at the stock level, there is no reason to expect it to be live at the ETF
+    level either. **Family slug honesty**, since it decides the budget: a stock-level `ST` is a
+    short-horizon cross-sectional score on closes, i.e. `price-trend` (legacy, capped at 2 trials
+    per session), and should be filed there rather than somewhere more flattering; the ETF-level
+    version is the one with a defensible claim to `lead-lag-spillover`, because its signal is
+    defined by one region's return against the global cross-section on the same day.
+    → `notes/2026-09-20-salience-theory-stock-prices.md`,
+    `notes/2026-09-20-salience-international-replication.md`
 
 ## Coverage log
 
@@ -6553,8 +6708,149 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-17 (session 34) | **The first session in nine aimed at supplying a book rather than a diagnostic, and the aim was set by the lab's own escalation rather than by a gap.** The 2026-09-16 nightly spent zero trials, rejected the folder's eight-session top item (#89) on every partition, produced the effective-count spread (#111) and answered #113, and then told the human plainly that **"the lab is spending its nights auditing its own gate rather than searching for strategies"** — the eighth consecutive session whose new research material proposed no portfolio. This session took that as its instruction. The 2026-09-13 detector was still run first and found the gaps by grep across all 103 prior notes: **zero** hits for `factor momentum`, `trend factor`, `coskew`, `downside beta` and `semivariance`. Two mechanisms, three notes, all four primaries read in full. **Factor momentum** is the book-proposing half — a factor is positively autocorrelated in its own past return, the construction is model-free (no belief about which leg pays), formation is robust from one month to two years, **holding period is one month and is not a knob**, and the time-series version spans the cross-sectional one because the latter collects the Conrad–Kaul mean-dispersion term. Its peer-reviewed reexamination supplies the honest counterweight and the free screen that must precede any trial: **the timed book does not beat buy-and-hold of the same factors**, on mean or Sharpe, in either of two samples — while the original paper's own table shows the **winners-only leg**, the only leg a long-only repo can hold, ordering the other way. **Asymmetric comovement** is the second half and splits cleanly in two: downside beta is **refuted as a sort** (negative high-minus-low in all eight replication specifications at all three horizons, and the identity `β⁻ = ρ⁻·σ⁻_i/σ⁻_m` says why, which leaves `ρ⁻` alone as the untested object), while coskewness is **right-signed and underpowered** in the same replication, most parsimoniously because that replication estimates a third moment from one month of daily returns. Candidates #114–#118: one free two-sided screen, one challenger gated behind it, one anti-candidate, one salvage, one long-only tercile. Flags: two of the five sources carry `validation_overlap: true` and both are named in the notes; **no dated performance figure from any source is recorded anywhere**, only orderings and signs. | Ehsani–Linnainmaa 2022 + Fan, Li, Liao & Liu 2022 + Arnott, Clements, Kalesnik & Linnainmaa 2018 WP (`2026-09-17-factor-momentum-timing-a-portfolio-on-its-own-past-return.md`); Ang, Chen & Xing 2006 + Hou, Xue & Zhang 2020 (`2026-09-17-downside-beta-and-the-volatility-confound.md`); Harvey & Siddique 2000 + Harvey & Siddique 2023 + Hou, Xue & Zhang 2020 (`2026-09-17-coskewness-and-the-third-moment-estimation-window.md`) |
 | 2026-09-18 (session 35) | **The ninth unit of the unit-of-check lesson, and it is a column of the data panel.** The 2026-09-13 detector was run against the *input* side this time — take the data the lab was handed and check it has a note — and a grep across all 106 prior notes returned **zero** for `overnight`, `tug of war`, `close-to-open`, `intraday decomposition` and for every author in this literature, while strategies have received an **`open`** panel since 2026-08-29 and the 2026-08-30 nightly had already computed overnight return sums with it. Nineteen days of using a column with no note on it. Three notes, all three primaries read in full, acceptance criterion carried over from session 34 (*does this end in a portfolio*). **Lou–Polk–Skouras** establish the clientele decomposition: own-period continuation plus cross-period reversal, in nine non-US markets, measurable at a five-year lag; and the map of where each premium accrues — **every past-return strategy earns overnight, everything else earns intraday with an opposite-signed overnight leg**. **Hendershott–Livdan–Rösch** make the systematic version the object: the SML is positively sloped overnight and negatively sloped intraday in the US and 39 other countries, robust to closure length and to the beta estimator, so the famously flat 24-hour SML is **two strong opposite relations cancelling**. **The constraint that decides the session**: this engine holds close-to-close and therefore collects the sum, which is the thing that already nets — the authors' own advice to long-horizon investors is *order timing*, which this lab cannot do, and **the lab's own 2026-08-30 overnight-sums null is what that prediction looks like when measured here.** What survives is **Aboody–Even-Tov–Lehavy–Trueman**: overnight return as firm-specific sentiment, with long-horizon reversal measured on **close-to-close buy-and-hold over 12 months**, the **long leg carrying the effect on its own**, and the long leg loading **negatively on momentum**. Candidates #119–#122: one free diagnostic that can retire the whole vein, one long-only book, one free measurement move, one anti-candidate. Flags: **all three sources end before 2018, so `validation_overlap: false` throughout** — the first session in several with no overlap to discount. No dated performance figure from any source is recorded anywhere; signs, orderings and significance only. Two sources named and **recorded as not read** (Berkman et al. 2012, Akbas et al. 2022), with nothing resting on either. | Lou, Polk & Skouras 2019 (`2026-09-18-overnight-intraday-return-decomposition.md`); Hendershott, Livdan & Rösch 2020 (`2026-09-18-beta-at-night-versus-day.md`); Aboody, Even-Tov, Lehavy & Trueman 2018 (`2026-09-18-overnight-return-as-firm-sentiment.md`) |
 | 2026-09-19 (session 36) | **The tenth unit of the unit-of-check lesson: a primitive of a theory the folder already cites.** The MAX/lottery note names cumulative prospect theory, probability weighting and Barberis–Huang, and the lab has built and refuted two functionals of the price path (52-week-high proximity, information discreteness) — yet a grep across all 109 prior notes returned **zero** for `capital gain`, `overhang`, `disposition` and `reference price`. The theory's *reference point* had no coverage. Three notes, all three primaries read in full, acceptance criterion carried from session 34 (*does this end in a portfolio*) and met. **Grinblatt–Han** supply the base: prices are a convex combination of fundamental value and a **turnover-weighted average of past prices**, so the predictor is the **capital gains overhang** `(P − R)/P` rather than the past return, and the weight on a past price is the probability a share bought then has not traded since. Volume is what separates it from trend (the overhang is *decreasing* in past turnover), and ~59% of its cross-sectional variation is past returns, turnover and size. **An** shows the assumed functional form is wrong — the investor-level selling schedule is **V-shaped in profit**, so the tradeable combination is `VSP = Gain − 0.2·Loss` rather than their sum, it subsumes the base signal in a horse race, and **its loss half predicts the opposite of momentum**, which is the identification property that earns it a trial here. **Riley–Summers–Duxbury** show the **purchase price is not special**: path max, path min, 52-week high and 52-week low each work as well inside the same weights, composites of them subsume the base, and the same variables predict forward *volume* more strongly than the base. **The constraint that shaped the session**: every construction needs turnover = volume ÷ shares outstanding, and this repo has no share count — resolved by keeping the within-name *time series* of volume and fixing only its level, which the base paper's own robustness table identifies as the half carrying incremental information. Candidates #123–#126: one free screen that can retire the vein, one free measurement that arbitrates a reading the lab has already made, one long-only book, one anti-candidate. Flags: **all three samples end before 2018, so `validation_overlap: false` throughout**; Riley et al. is `published_post_2018: true`. No dated performance figure from any source is recorded anywhere — signs, orderings, subsumption and significance only. **Three rubric findings recorded against the vein rather than buried**: the overhang is absent from Hou–Xue–Zhang's 452 anomalies (checked by grep of the full text); **Birru 2015's adversarial test is recorded as not read** (publisher closed, OUP 403 on its own advertised GREEN PDF) with only its published abstract quoted, and it says momentum survives in stocks void of the disposition effect; and the one peer-reviewed **international** study (Zheng, Li & Li 2024) could not be read — `efmaefm.org` fails TLS verification through the proxy — so the multi-market row is **open** and nothing rests on it. | Grinblatt & Han 2005, JFE, with NBER w8734 (`2026-09-19-capital-gains-overhang-reference-price.md`); An 2016, RFS (`2026-09-19-v-shaped-selling-propensity.md`); Riley, Summers & Duxbury 2020, Management Science (`2026-09-19-dynamic-reference-point-composite-cgo.md`) |
+| 2026-09-20 (session 37) | **The eleventh unit of the unit-of-check lesson, and it is the one place the previous ten could not look: not what a score is computed FROM, but what it is computed AGAINST.** Sessions 28–36 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a theory already cited. Every one of those units is a property of the *subject* of a measurement. Tonight's sweep asked about its *reference*: the folder's behavioural scores are all functionals of a name's **own** price path — 52-week-high proximity, information discreteness, overnight sentiment, capital-gains overhang, `VSP` — and the lab has now refuted five of them into the same two regressors. A grep across all 112 prior notes returned **zero** for `salience`, `Bordalo`, `Gennaioli`, `Cosemans` and `salience theory`, and zero in the 9,315-line SUMMARY, while the adjacent theory — the one whose entire content is that perception is **context-dependent**, i.e. that the comparison set is the signal — sat uncovered next to the prospect-theory material the folder has cited since 2026-09-01. **Families → … → a primitive of a theory already cited → the reference the measurement is taken against.** The durable addition: *when a class of constructions keeps collapsing into the same confound, check whether they all share an argument you never varied.* Session 37 covered it. The session-34 acceptance criterion (does this end in a portfolio?) is met **only conditionally and the note says so plainly**: the book is an anti-candidate on this universe, refused by an independent Tier-1 replication rather than by this lab's priors, and what survives is two free ordered falsifiers that are the sources' own identifying tests plus one ETF-level scout with a mechanism and no empirical support. | Bordalo–Gennaioli–Shleifer 2012 (QJE) (`2026-09-20-salience-theory-choice-under-risk.md`); Cosemans–Frehen 2021 (JFE) (`2026-09-20-salience-theory-stock-prices.md`); Cakici–Zaremba 2022 (JFE, hostile multi-market replication, **not read** — abstract only) (`2026-09-20-salience-international-replication.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-20] Read this first: the 2026-09-19 nightly closed the vein this file supplied and
+  spent zero of its eight trials doing it, so the book supply is empty for the second session
+  running — and tonight does not refill it with a book either.** #123–#126 are all done, on free
+  measurement: the turnover weighting is nearly inert (rank correlation 0.9773 against a
+  constant-`V` EWMA, under a pre-registered 0.98 kill line, honoured), An's identifying asymmetry
+  is absent (arm ratio 1.27 against a predicted 3–6x, inside the pre-registered artifact window),
+  raw `VSP`'s entire tail excess is momentum plus the volatility level (`R²` 0.562; top-15 excess
+  +12.74 → +0.71 with the placebo above it at +1.54), and `RefMax` is dead and wrong-signed, which
+  closes #126's `CGOCom1` branch for free. **The lab's own generalisation from it is the most
+  useful thing either side produced last night**: when a score is a signed combination of two arms,
+  run the trend/artifact screen on **each arm separately** — #124's identification covered the
+  loss arm, and the gain arm was both the larger one and `spearman` +0.676 to 12−1 momentum. Still
+  unrun and carried unchanged: **#109 (the folder's highest-ranked unrun item, twelfth session,
+  still blocked only on rebuilding the 2026-09-14 specification curve), #82 (thirteenth session),
+  #94 as a standing discipline, #49 (twenty-third session)**, plus **#105–#107** and **#110**'s
+  shrink half. New tonight: **#127–#130**.
+- **[2026-09-20] What should aim the next session, in order — and read the ordering itself as the
+  finding, because for the first time the anti-candidate is the ranked conclusion rather than a
+  footnote.**
+  - **#127 first.** It is free, it is an *ordered* prediction rather than a threshold, and it is
+    the **source's own** identifying test rather than a screen this lab invented — which matters,
+    because the lab has now run some version of the volatility-level control ten times and this is
+    the first construction that predicts what its own ablation should look like. Three builds of
+    one measure differing only in what each day is compared against; the theory requires the
+    market-context version to beat the zero-context version, and the zero-context version *is*
+    a magnitude ranking on `|r|`. A null here retires the vein for zero trials, and the instrument
+    generalises to every other day-weighting kernel in this repo.
+  - **Then #128, also free, and it is the unusual case where the confirmation is a NULL.** `ST` on
+    open-to-open returns should *not* predict while close-to-close does. Most of this universe's
+    artifacts — volatility level, reversal, dispersion — live in both conventions and would light
+    up both legs, so a clean asymmetry is genuinely hard to fake. It is also the second independent
+    use of the session boundary the 2026-09-18 cluster opened, asking the mirror-image question:
+    #119–#121 asked where a *premium accrues* inside the bar; this asks which convention a *signal
+    is measurable in*. The 2026-09-18 nightly already found those two questions have opposite
+    answers here, so do not assume this one.
+  - **Then #130, and only as a scout, and only if #127 leaves the context alive.** It is the ETF/
+    region version, and its honest status is a mechanism with **no empirical support from any
+    source read** — the microcap objection is about the population, and moving population is not
+    evidence that the effect moves with it.
+  - **Do not spend a trial on #129**, and note that this is a stronger "do not" than the folder's
+    usual anti-candidate: it is refused by an independent Tier-1 replication on 49 countries, not
+    by this lab's priors.
+  - **Then the lab's own #109**, unchanged, and **#82**.
+- **[2026-09-20] The transferable output, and it is about a class rather than a signal.** Five
+  behavioural scores in a row have now reduced to momentum plus the volatility level here —
+  52-week-high proximity, information discreteness, overnight sentiment, `VSP`/overhang, and (on
+  the evidence of its construction, before any measurement) `ST`. The cheap conclusion is "this
+  lab's universe kills behavioural scores". The more useful one is structural: **every one of them
+  is a functional of the name's OWN price path, and a functional of one series has very few degrees
+  of freedom that are not the level and the trend of that series.** Salience theory is the first
+  construction in this folder whose signal is defined by a *comparison* — the same daily return is
+  salient or not depending on what the rest of the cross-section did that day — and that is why its
+  ablation is informative even when its book is not. Carry the general form past this literature:
+  **before adding another functional of a name's own path to the queue, ask what argument it varies
+  that the refuted ones did not.** If the answer is "none", the two-regressor residualisation will
+  find that out, and it will cost a trial to learn it.
+- **[2026-09-20] A tension recorded in both directions, and this one is between two Tier-1 papers
+  in the same journal rather than between literature and lab.** Cosemans–Frehen devote a section
+  and three separate tests (sequential sort on reversal then `ST`, reversal-factor alpha, and the
+  skip-month test) to establishing that `ST` is **distinct** from short-term reversal.
+  Cakici–Zaremba's first stated limitation is that **a substantial part of the anomaly can be
+  attributed to short-term return reversal**. Same measure, same journal, opposite conclusions, and
+  nothing read tonight settles it. **The discriminating test is the skip-month one and it is free
+  here**: build `ST` through month `t−1` and ask whether it still orders month `t+1`. If the
+  ordering survives, Cosemans–Frehen's defence transfers to this universe; if it collapses,
+  Cakici–Zaremba's limitation does, and the vein closes for the same reason the reference-point vein
+  closed on 2026-09-19. Either outcome is worth more than the book was. Note also the second-order
+  disagreement about **size**: Cosemans–Frehen report their value-weighted spread as still
+  significant while Cakici–Zaremba find the effect priced primarily among microcaps. Both agree on
+  the *direction* of the size gradient; they disagree about whether anything is left at the
+  large-cap end, and on a universe of ~145 large names that disagreement is the whole question.
+- **[2026-09-20] The detector's sixth use, and an eleventh unit: the *reference* of a measurement,
+  not its subject.** 2026-09-13's rule (*after each nightly, take the one variable it measured that
+  has no note here, and check*) was pointed at last night's whole **class** rather than at one
+  variable. Every unit the folder has found so far — families, clauses, operators, the pool, an
+  attribute of its members, the selection rule, the vocabulary, the shape of the output, a column
+  of the input, a primitive of a cited theory — is a property of what is being measured. None of
+  them can see a gap in what a measurement is taken *against*. A grep across all 112 prior notes
+  returned **zero** for `salience`, `Bordalo`, `Gennaioli`, `Cosemans` and `salience theory`, and
+  zero across the 9,315-line SUMMARY — while the folder had cited cumulative prospect theory since
+  2026-09-01 and salience theory is its principal rival, differing on exactly the axis the lab's
+  failures run along. **The obvious next application, recorded so the next sweep starts from a
+  known list**: the folder still cites **realization utility** (Barberis–Xiong) and **limits to
+  arbitrage** in passing with a dedicated note on neither — carried forward unchanged from
+  2026-09-19, with one caveat added tonight. Realization utility is a functional of the holder's
+  own position in the name, i.e. the same reference-point vein the 2026-09-19 nightly closed on
+  measurement across three readings; a session taking it must say what argument it varies that
+  `g`, `VSP` and `RefMax` did not, or it is re-testing a refuted idea. **Limits to arbitrage has no
+  such problem and is the better of the two** — it is a *conditioning* variable rather than a
+  score, both papers in tonight's cluster lean on it, and this repo has the Amihud and volatility
+  machinery to proxy it.
+- **[2026-09-20] Access notes: a hybrid-OA article can be unreadable, and that is a distinct
+  failure from a paywall.**
+  - **The finding worth generalising.** Cakici–Zaremba (JFE 2022) reports `is_oa: true`,
+    `oa_status: hybrid` in **both** OpenAlex and Unpaywall — and `any_repository_has_fulltext:
+    false`, with the **publisher as the only OA location**. That publisher is ScienceDirect, which
+    403s automated clients. So the article is *open access* and *unreadable here*, with no green
+    copy to fall back on. This is not the 2026-09-19 lesson that "an index's OA status is a claim
+    about the article, not the endpoint" — the index was right, the article is open. **The new
+    rule: check `any_repository_has_fulltext` before planning to read a hybrid-OA paper. When it is
+    false, the publisher endpoint is the only door, and if that publisher is a known refuser the
+    source should be planned as abstract-only from the start** rather than after six channels.
+    Channels tried and refused for this one: ScienceDirect (403, article and `pdfft`), SSRN
+    delivery (403), `api.core.ac.uk` (redirect into a bot check), HAL (nothing by title), the
+    author's own site (DOI link only, no PDF), econstor (503).
+  - **Faculty and institutional mirrors served two of three primaries, confirming the 2026-09-17
+    README recommendation for a fourth session running** — but with a correction to it.
+    `scholar.harvard.edu/files/<author>/files/` **403'd** the typeset QJE PDF it hosts, and
+    `dash.harvard.edu`'s bitstream endpoint returned **405**, so the Harvard channel failed both
+    ways; `nber.org/system/files/working_papers/` served the same paper on the first try, as it did
+    on 2026-09-19. **A conference-series mirror is a channel worth adding by name**:
+    `cfr-cologne.de/download/kolloquium/<year>/` served a full 54-page working-paper version of a
+    closed JFE article that SSRN and ScienceDirect both refuse. Research-centre seminar and
+    colloquium archives are the same trick as the business-school review site added 2026-09-18 —
+    a venue that hosted the author, one step out from the publisher.
+  - **Index behaviour, second instance in two sessions.** Semantic Scholar's DOI endpoint returned
+    **"not found"** for Cakici–Zaremba's JFE DOI — no record at all, as it did for Grinblatt–Han on
+    2026-09-19 — while Crossref (103) and OpenAlex (109) agree closely. Two JFE DOIs missing from
+    S2 in two nights is a pattern, not a coincidence: **for a JFE article, resolve the count in
+    Crossref and OpenAlex first and treat an S2 miss as an index gap rather than a signal.** S2's
+    title-search endpoint 429'd again, as documented.
+- **[2026-09-20] Protocol note, fifteenth session running, and this session also found unmerged
+  strategy work on a per-run branch.** The session-start hook again printed the integrity banner
+  while `git status -sb` showed the session on `claude/tender-galileo-78t34j`; as on 2026-09-06
+  through -19 the branch tip was bit-identical to `origin/main` (`0b98110`), and this session ran
+  `git checkout main && git reset --hard origin/main` before any work, so tonight's notes are on
+  `main` only. **Flagged for the human for the twelfth time**, with the same reading: the hook's
+  "on main" clause is false while its "level with origin/main" clause is true, so a session
+  trusting the first clause commits to a per-run branch with no warning. **New tonight and worse:
+  the environment's own integrity banner reported that `origin/main-av88mw` holds commits absent
+  from `origin/main`, and it does** — four commits from the 2026-09-19 strategy session
+  (pre-registration, the free measurement, the learnings, the session summary). That session spent
+  **zero trials**, so `trials.jsonl` is not split and the deflated-Sharpe bar is not understated —
+  this is the benign case of the 2026-08-12..15 failure, not a repeat of it. But the **learnings**
+  from it, including the per-arm identification rule and the weight-placebo calibration quoted in
+  tonight's first open question, are **not on `main`** and a strategy session reading only `main`
+  will not see them. A research agent cannot resolve this: merging another agent's work is outside
+  `research/README.md`'s write scope. See the `## Protocol issue` entry appended to
+  `experiments/journal.md` tonight.
 
 - **[2026-09-19] Read this first: the 2026-09-18 nightly spent every item this file supplied that
   night, and the book supply was empty again when tonight started.** **#119 is done and it did not
