@@ -12631,3 +12631,135 @@ with no recorded trial" rule is satisfied vacuously and does not force a second 
 2026-09-15 a decorrelated trial costs **+1 effective trial charged to every later session**, so the
 budget is a ceiling and not a quota: **if Block A kills, the session spends zero and says so.**
 No holdout read is reachable from a scout.
+
+## Free measurement — 2026-09-21 (nightly), no trial spent
+
+Three blocks, all forecast-only or holdings-only, **train split exclusively** (`None` →
+2017-12-31). No book was scored, `run_experiment.py` was not invoked, the leaderboard is
+unchanged, and no holdout number was read. Every rule below was fixed in the pre-registration
+committed above, before the first array was allocated.
+
+### Block 0 — #133's engine precondition: **PASS**, with a cost the literature never models
+
+`engine/backtest.py` scales a weight row **only** when gross exceeds the cap
+(`np.where(gross > max_leverage, ...)`), and `run_backtest` forms the day's return as
+`(w_eff * rets).sum(axis=1)`. A row summing to 0.6 stays at 0.6 and the unallocated 0.4
+contributes exactly zero. **De-levering is reachable and is not inert** — #133's precondition is
+satisfied, and this is worth having settled independently of tonight's verdict, because it is the
+question any future exposure-scaling candidate has to answer first.
+
+**The rider, recorded because it will matter to whoever builds that candidate: cash earns 0%,
+not the risk-free rate.** The engine has no cash leg. Every source in this vein prices a de-levered
+position against a positive short rate; here it is parked at zero, and the drag is charged entirely
+to the de-levering half of the rule.
+
+### Block A — #131, the realized-utility ranking: **KILL**, and it took a correction to read
+
+**The first implementation was wrong and is recorded rather than quietly replaced.** Fitting HAR
+and HExp in **raw variance** by OLS produces negative and near-zero fitted values; clipped to a
+floor they make the metric's `− 4%·RV/E` term explode, and the first run returned utilities near
+**−29,000 %/yr**. Model (d) had 2.4% of its cells at the floor and `RV/E` reached 2.6e7. Those
+numbers are an artifact of the parameterisation, not a property of the models — Corsi and
+Bollerslev et al. both fit in logs or square roots for exactly this reason. **Refitted in log
+variance** (with the `+½σ²` log-to-level correction) and floored identically for all four models
+at the 1st percentile of each instrument's own **expanding** `RV` history, so no model can be
+destroyed by a single degenerate cell and the floor is causal.
+
+132 instruments with ≥2000 Garman–Klass days, 704,382 commonly scored cells, rolling 5-year
+estimation re-fitted annually. Utility is the source's
+`mean_t[ 8%·√RV/√Ê − 4%·RV/Ê ]`, which **takes no return data**.
+
+    model                 gross %/yr   net %/yr      QLIKE   RMSE(logRV)
+    (a) trailing 21d          2.976       1.659     0.4486        0.9151
+    (b) HAR(3)                3.101      -1.721     0.4061        0.8899
+    (c) HExp                  3.072      -0.795     0.4177        0.8993
+    (d) HExp panel            3.075      -1.243     0.4078        0.8741
+
+    paired margin over (a)    net %/yr      t    win      gross %/yr      t
+    (b) HAR(3)                  -3.380  -7.88   0.02          +0.126   +4.86
+    (c) HExp                    -2.454  -8.41   0.02          +0.096   +2.79
+    (d) HExp panel              -2.902  -5.63   0.00          +0.100   +4.47
+
+**The literature's forecasting claim replicates and its economic claim does not.** All three
+challengers beat the trailing window **gross**, and two independent accuracy metrics agree
+without reference to the utility rule at all: QLIKE prefers HAR (0.406 vs 0.449) and RMSE on log
+variance prefers the pooled panel (0.874 vs 0.915). The cascade is real on this universe. **Net of
+costs all three lose decisively**, and model (d) loses on **0 of 132 instruments**.
+
+**The mechanism, measured rather than asserted:** the better forecasts are more *responsive*, and
+responsiveness is traded.
+
+    implied exposure turnover, annualized mean |dx|
+    (a) trailing 21d   8.78      (b) HAR(3)  32.15
+    (c) HExp          25.78      (d) panel   28.80
+
+A 3–3.7× turnover multiple at 15 bps/side costs ~3.5 %/yr against a gross accuracy advantage of
++0.10 to +0.13 %/yr — a **27× mismatch**. The sources say costs *reorder* these models rather than
+shifting them; on this universe costs reorder them all the way past the incumbent.
+
+**The source's own named mitigation was tested before the kill was accepted, and does not rescue
+it.** Gårleanu–Pedersen partial adjustment (trade a fixed fraction `φ` toward target each day):
+
+    phi      (a) trailing   (b) HAR(3)   (c) HExp   (d) panel     best margin over (a)
+    1.00            1.659       -1.721     -0.795      -1.243     -2.454  (t -8.41)
+    0.50            1.980       +0.794     +1.000      +0.783     -0.980  (t -8.22)
+    0.25            2.140       +1.774     +1.828      +1.716     -0.313  (t -6.72)
+    0.10            2.322       +2.337     +2.338      +2.291     +0.016  (t +0.66)
+    0.05            2.445       +2.506     +2.491      +2.468     +0.061  (t +5.23)
+    0.02            2.522       +2.562     +2.539      +2.528     +0.040  (t +3.92)
+
+**Verdict: KILL, and robust to the most generous reading available.** The pre-registered bar was
+`margin ≥ +0.10 %/yr` **and** `t ≥ 2.0`, both required. At the pre-registered configuration
+(`φ = 1`) the best challenger is **−2.454 %/yr at t = −8.41**. Across the entire `φ` grid — which
+is an extension run in the models' favour, not part of the gate — the best cell anywhere is
+**+0.061 %/yr**, which clears the `t` bar and **misses the margin bar**. The vein closes for zero
+trials, Block C does not run, and the lab has learned that its equal-weight trailing window was
+not the thing costing it anything.
+
+**The finding that outranks the verdict, and it is in the table above rather than in the gate.**
+Smoothing the *exposure* is worth roughly fourteen times choosing the *model*. Moving the
+incumbent estimator alone from `φ = 1` to `φ = 0.02` buys **+0.86 %/yr** (1.659 → 2.522); the best
+model-choice margin at any `φ` is **+0.061**. All four models converge as `φ → 0`, because heavy
+smoothing destroys precisely the responsiveness that distinguished them. **The risk estimator was
+never the lever; the trading of the scale was.**
+
+### Block B — #132, Harvey et al.'s own instrument: **LOW**, and it contradicts the source
+
+`spearman(past 21-day return, 1/σ̂)` per instrument, train split, 139 instruments.
+
+    estimator          ALL median    frac>0        ETFs      stocks      IQR (all)
+    20d half-life          +0.057      0.76      +0.109      +0.033   [+0.001, +0.102]
+    90d half-life          +0.008      0.53      +0.006      +0.008   [-0.027, +0.045]
+
+Pre-registered line was `>= +0.20` for "scaling is trend". Observed **+0.057 and +0.008**, both
+far below it, on the source's own statistic with the sign it predicted but a twentieth of the
+magnitude its argument needs.
+
+**This is a correction to the research folder's proposed reconciliation, and it is the
+session's second real output.** `SUMMARY.md` (2026-09-21) argues that the lab's three backfired
+de-risking overlays are *predicted* by Harvey et al. — that roughly half the benefit of volatility
+scaling on risk assets is a short-horizon trend overlay a `price-trend` champion already holds —
+and names this the second instance of "the lab's null is the literature's prediction". **On this
+universe that reconciliation does not hold.** The instrument the source itself supplies for
+measuring the overlap reads essentially zero, so volatility scaling here is *not* trend in costume,
+and the overlap cannot be what made those three overlays backfire.
+
+**Tonight's Block A supplies a better-evidenced replacement**: the overlays backfired on the
+**turnover of the scale**. That explanation is measured on 132 instruments at `t = −7.9` to
+`−8.4`, it is about a mechanism all three refuted overlays shared, and it does not require the
+trend-overlap the data declines to show. Recorded as a correction rather than an addition, because
+a session reading only the folder would carry the wrong mechanism forward.
+
+### Block C — not run
+
+Its pre-registered gate was Block A LIVE **and** Block B below +0.20. **Block B passed and Block A
+killed**, and the gate required both. The trial was allotted and was not spent. Note the shape,
+since it is unusual: the block that failed is the one the folder ranked as most likely to
+succeed, and the block that passed is the one it expected to do the killing.
+
+### Block D — the anti-candidate held
+
+**#134 was not built.** No cross-sectional ranking on forecast volatility, in either direction, at
+any point tonight. Block A's gross result makes the temptation *larger* rather than smaller — the
+pooled panel is a materially better forecast of the exact variable that carries this universe's
+survivorship artifact — which is why the commitment was written down in advance.
