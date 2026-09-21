@@ -12489,3 +12489,5 @@ reach (point-in-time constituents, fundamentals, intraday bars), or `program.md`
 should do once its families are exhausted. Both are edits to frozen files.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-21 (learning agent): 3 notes added, see research/SUMMARY.md

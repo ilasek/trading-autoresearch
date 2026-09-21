@@ -183,6 +183,31 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > each other** about whether this measure is short-term reversal, and the discriminating test is
 > free on this repo's data — see the 2026-09-20 open question on that tension.
 >
+> **Status after session 38 (2026-09-21): the twelfth unit is the *dependent variable*, and it is
+> the first one that is not a property of a return prediction at all.** Sessions 28–37 each found a
+> finer unit to check coverage at — families, clauses, operators, the pool, an attribute of its
+> members, the selection rule, the vocabulary, the shape of the output, a column of the input, a
+> primitive of a cited theory, the reference a measurement is taken against. Every one of those
+> describes *how* the lab predicts returns. The 2026-09-20 nightly closed its vein on five readings
+> and zero trials and told the human the plainest reading of eleven sessions: on ~145 large global
+> survivors with daily closes, **monthly-horizon cross-sectional prediction of returns may simply
+> have very little signal** outside the trend the incumbent holds. Tonight's sweep took that at face
+> value and asked what *else* in the same data is forecastable. A grep across all 115 prior notes
+> returned **zero** for `Corsi`, `heterogeneous autoregressive`, `HAR-RV`, `long memory`,
+> `Andersen`, `Bollerslev` and `volatility forecast` — the realized-volatility forecasting
+> literature, which `research/README.md` itself named as a thin spot and this file argued against
+> reopening (2026-09-08). **Families → … → the reference a measurement is taken against → the
+> quantity being forecast.** Session 38 covered it (new cross-family section below, candidates
+> #131–#134). Two results deserve flagging up here. First, **the session-34 acceptance criterion is
+> met conditionally and the ordering is built so the vein can close for zero trials**: #131 scores
+> volatility forecasts using *no return data at all*, with a pre-registered kill; the book (#133) is
+> a scout gated behind two free screens; #134 forbids the obvious misuse. Second, and more useful
+> than any candidate: **the lab's three backfired de-risking overlays are what this literature
+> predicts, not a refutation of it** — Harvey et al. show that on risk assets roughly half the
+> benefit of volatility scaling *is* a short-horizon trend overlay, which a price-trend champion
+> already holds. That is the second instance of "the lab's null is the literature's prediction"
+> after 2026-09-18, and the 2026-09-21 open questions state it as a rule.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -3461,6 +3486,107 @@ reversal; Cakici–Zaremba's first limitation is that it substantially *is* reve
 papers, same measure, opposite conclusions. The discriminating test is the **skip-month** one and
 it is free here. Candidates #127–#130.
 
+### Forecasting the variance instead of the mean — the cascade, pooling across instruments, and what a scaling overlay actually buys (cross-family)
+
+**Why this section exists.** The 2026-09-20 nightly closed its vein and wrote the plainest reading
+of eleven sessions: *"on ~145 large global survivors with daily closes, monthly-horizon
+cross-sectional prediction may simply have very little signal outside the trend the incumbent
+already holds."* Every unit this folder has checked coverage at — families, clauses, operators, the
+pool, an attribute of its members, the selection rule, the vocabulary, the shape of the output, a
+column of the input, a primitive of a cited theory, the reference a measurement is taken against —
+is a unit of a *return* prediction. The twelfth unit is the **dependent variable**: the lab has
+only ever tried to forecast the cross-section of returns, and there is a second quantity in the
+same data that the literature says is strongly forecastable. A grep across all 115 prior notes
+returned **zero** for `Corsi`, `heterogeneous autoregressive`, `HAR-RV`, `long memory`,
+`Andersen`, `Bollerslev` and `volatility forecast` — `research/README.md` had named
+`range-variance`'s *"HAR-RV / vol-of-vol clause"* as one of two remaining thin spots and argued
+against reopening it. That argument was made when the lab still had a book supply; it does not
+survive two consecutive sessions with none.
+
+**The honest framing before any of it: this vein forecasts risk, not return.** Nothing below
+predicts a return, and none of it may be turned into a cross-sectional score. `experiments/
+learnings.md` (2026-09-08) records that 21-day Garman–Klass volatility has the **largest |IC| of
+any score in this repo**, with the sign saying high volatility predicts high forward return, and
+fourteen mechanism screens identify that as this universe's survivorship artifact. **A better
+volatility forecast is a better estimate of the artifact-carrying variable.** Its only legitimate
+use here is as a denominator, a covariance input, or a scaling.
+
+**1. Volatility is a cascade across horizons, and three coefficients capture it.** Corsi's
+Heterogeneous Market Hypothesis argument: agents differ by trading horizon, long-horizon volatility
+matters to short-horizon traders (it sets the expected size of future trends) while the converse is
+false, so volatility propagates asymmetrically from low frequencies to high. Written literally as
+an additive cascade of daily, weekly and monthly components it collapses to one OLS regression of
+tomorrow's realized volatility on the daily, 5-day-average and 22-day-average realized volatility.
+Three free coefficients reproduce the long-memory autocorrelation, fat tails and self-similarity
+that motivate ARFIMA, and match it out-of-sample while being stable to re-estimate on a rolling
+window. All three horizons carry weight and none dominates — **which is exactly the information an
+equal-weight trailing window throws away, and every risk estimate in this repo is an equal-weight
+trailing window.** The transferable diagnostic: where the *daily* coefficient collapses, that is
+evidence the daily volatility proxy is noisy, not that daily dynamics are absent. Tier A, no
+overlap. → `notes/2026-09-21-har-rv-volatility-cascade.md`
+
+**2. Volatility dynamics are common across instruments, so pool — and there is a global factor on
+top.** Bollerslev–Hood–Huss–Pedersen, on 58 instruments across four asset classes: normalise each
+instrument's realized volatility by its own sample mean and the normalised series have nearly
+identical distributions and nearly identical persistence, across asset classes and countries. **The
+level is idiosyncratic; the dynamics are common.** Three consequences, all implementable here.
+(a) **Centering**: replace the intercept with an expanding-window mean of the instrument's own
+`RV` and subtract it from every term including the target, which eliminates the level and makes the
+dynamic coefficients estimable in a *panel* across instruments of wildly different volatility.
+(b) **Pooling**: one model fitted on `N × T` rows rather than `N` models — **this is the structural
+answer to `research/README.md`'s "140 instruments cannot support a learned model"**: you do not fit
+140 models, you fit one model on 140 instruments' worth of rows, and it stays a handful of OLS
+coefficients. (c) **A global volatility factor** — the cross-sectional average of normalised `RV`,
+lagged per instrument so no session overlap leaks — carries information about an instrument's future
+volatility beyond its own history. Their HExp specification replaces HAR's step function with four
+EWMAs at **fixed** centers of mass {1, 5, 25, 125} days and has **no tuning parameters**; they
+report that MIDAS polynomials and other decay families did not systematically beat it, so the
+smoothing family does not need searching. Tier A, no overlap, published 2018.
+→ `notes/2026-09-21-panel-volatility-models-and-risk-targeting.md`
+
+**3. A volatility forecast can be scored with no return data at all, and this is the free item.**
+The same paper's realized-utility metric evaluates a risk model as
+`mean_t [ 8%·sqrt(RV_{t+1})/sqrt(Ê_t) − 4%·RV_{t+1}/Ê_t ]` under a stated calibration
+(`SR = 0.4`, `γ = 2`, 20% target). **Expected returns do not enter it.** It ranks competing
+volatility forecasts using only the repo's own realized variance series and the forecasts
+themselves — no champion comparison, no `run_experiment.py`, no trial — and because it is already
+in return units, transaction costs subtract directly as `cost × |x_t − x_{t-1}|`. Costs reorder the
+models, not merely shift them: the fastest model trades most, the smoothest least, and the authors'
+mitigation is Gårleanu–Pedersen partial adjustment (trade a fixed fraction toward target each day).
+
+**4. And the counterweight, which is why this is not a book yet.** Harvey et al., across 60+ assets
+and nine decades of US equity data: the Sharpe-ratio benefit of volatility scaling is **confined to
+risk assets** (equities, credit) and is negligible for bonds, currencies and commodities;
+extrapolating the equity result is "a mistake". The reason is the leverage effect — a negative
+return/variance relation present in risk assets and absent elsewhere — and the consequence is the
+finding that matters most here: **scaling by `1/σ̂` on a risk asset is partly a short-horizon
+time-series momentum overlay**, because volatility rises after losses so the position shrinks after
+losses. Their own instrument, `corr(past 21-day return, 1/σ̂)`, explains about half the
+cross-sectional variation in how much volatility scaling helps each asset. One effect is *not*
+asset-specific: volatility targeting thins both tails, cuts the volatility of volatility, and
+reduces drawdown everywhere. Tier B — tier-1 venue, very long multi-market sample, costs modeled,
+central claim is a negative one; no independent replication and the authors manage this strategy.
+→ `notes/2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`
+
+**The tension with this lab's own results, and it resolves in the literature's favour without
+overturning the lab.** `experiments/learnings.md` records that de-risking overlays on the champion
+"reliably backfire out-of-sample" — three attempts, including inverse-vol basket weighting with
+volatility targeting — and that true inverse-vol risk parity on an ETF sleeve did **worse** than
+equal weight. Tonight's literature does not contradict either result; **it predicts them.** If half
+the benefit of volatility scaling on equities is a trend overlay, then applying it to a book that
+already holds trend adds turnover and dilutes. This is the same shape as the 2026-09-18 overnight
+finding — the lab's null is what the literature predicts, not a refutation of it — and it is the
+second instance, which makes it a pattern worth naming: **when a lab null matches a literature
+mechanism, check whether the mechanism was already held by the incumbent before concluding the
+universe is empty.**
+
+**What is left unclaimed, and it is narrow.** Two things in this vein are untouched by the
+resolution above. First, every one of the lab's three refutations used a **trailing** or fixed-EWMA
+volatility estimate — the estimator this literature says is wrong — and whether a cascade/pooled
+forecast changes the verdict is a different question from the one the lab answered. Second, the
+part of volatility targeting that is *not* the momentum overlay is the **tail**, and this repo's
+Sharpe-led gates score a thinner left tail as nothing. Candidates #131–#134.
+
 ## Cross-cutting principles
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
@@ -6667,6 +6793,73 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-20-salience-theory-stock-prices.md`,
     `notes/2026-09-20-salience-international-replication.md`
 
+131. **FREE, and it goes first because it is the only item in this folder that scores a model
+    using NO return data at all.** Bollerslev–Hood–Huss–Pedersen's realized-utility metric,
+    `mean_t [ 8%·sqrt(RV_{t+1})/sqrt(Ê_t) − 4%·RV_{t+1}/Ê_t ]`, depends only on the realized
+    variance and the forecast — expected returns do not enter — so it ranks competing volatility
+    forecasts on this repo's own data with no champion comparison, no `run_experiment.py` and no
+    trial. Build daily `RV` from a range estimator (Garman–Klass per
+    `notes/2026-08-29-range-based-volatility-estimators.md`, `h`/`l`/`c` measured **from the
+    open**) and score four forecasts against each other: (a) the trailing 21-day window this repo
+    uses everywhere, (b) HAR(3) on the {1, 5, 22}-day averages, (c) HExp on the four fixed centers
+    of mass {1, 5, 25, 125}, (d) (c) estimated as a **centered panel** pooled across all ~145
+    instruments. Expand `RV_t^LR` causally; re-estimate on a rolling window; everything is OLS and
+    deterministic. **Pre-register the kill: if (b)–(d) do not beat (a) by a margin the metric can
+    resolve, the whole vein is closed for zero trials** and the lab has learned that its
+    equal-weight trailing window was not the thing costing it anything. Add the cost term
+    (`15 bps × |x_t − x_{t-1}|`, both sides) in the same pass, because the sources are explicit
+    that costs reorder the models rather than merely shifting them. Tier A, no overlap.
+    → `notes/2026-09-21-panel-volatility-models-and-risk-targeting.md`,
+    `notes/2026-09-21-har-rv-volatility-cascade.md`
+
+132. **FREE, second, and it is a source's own instrument for the screen this lab already runs by
+    instinct.** Harvey et al. show that volatility scaling on risk assets is partly a short-horizon
+    time-series momentum overlay, and they measure how much with
+    `corr(past 21-day return, 1/σ̂_t)` per asset — a statistic that explains about half the
+    cross-sectional variation in how much scaling helps. Compute it on this universe, per
+    instrument and per candidate estimator (20-day and 90-day half-life), before building anything.
+    **This is the standing "trend in costume" screen with a published instrument and a published
+    prediction attached**, which is the same property that made #127 worth running: the source says
+    in advance what the screen should show. If the correlation is strongly positive across this
+    universe, a scaling overlay is trend the champion already holds, `experiments/learnings.md`'s
+    three backfired de-risking overlays are **explained rather than merely repeated**, and no trial
+    is owed. If it is near zero or negative, those three nulls mean something different than they
+    look and #133 becomes live. Tier B, no overlap. → `notes/2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`
+
+133. **THE BOOK, and it is gated behind both screens above and pitched as a SCOUT on purpose.**
+    If #131 says a pooled multi-horizon forecast is materially better than the trailing window
+    *and* #132 says the momentumness here is low, then the construction is: an **ETF-level sleeve
+    whose gross exposure is scaled by `min(1, σ_target / σ̂_t)`**, with `σ̂_t` the centered, pooled
+    HExp forecast of the sleeve's own variance and the unallocated weight held as cash. ETF-level
+    because this repo's survivorship bias is weakest there (`program.md`) and because the
+    volatility artifact is a single-name phenomenon; `min(1, ·)` because `program.md` caps gross
+    leverage at 1.0, so only the **de-levering half** of the rule is reachable and the candidate
+    must say so. Two honesty requirements, both of which the lab should hold this candidate to.
+    First, **state which effect is being claimed**: per Harvey et al. the Sharpe half of the
+    benefit is the momentum overlay and the unconditional half is the tail — so the claim is
+    thinner left tail and lower volatility-of-volatility, measured on mean shortfall/exceedance and
+    vol-of-vol, *not* on Sharpe. Second, **verify before building that the engine treats a weight
+    row summing below 1.0 as cash rather than renormalising it**; if it renormalises, the entire
+    construction is inert and that is worth knowing before a file is written. `track: "scout"`,
+    family `range-variance`. Note the standing objection this does *not* trigger: the 2026-09-08
+    recommendation against `range-variance` trials was about seating a **cross-sectional sort on
+    trailing volatility**, the identified artifact; a time-series exposure scale is a different
+    object and the objection does not transfer unexamined. Tier A/B mixed, no overlap.
+    → all three of tonight's notes.
+
+134. **ANTI-CANDIDATE, and it is the obvious thing to do with a better volatility forecast, which
+    is why it is written down.** Do **not** rank names cross-sectionally by forecast volatility, in
+    either direction, and do not build a low-vol or high-vol book on the back of #131. 21-day
+    Garman–Klass volatility already has the largest |IC| of any score in this repo with the *wrong*
+    sign (high volatility predicts high forward return), fourteen mechanism screens identify it as
+    this universe's survivorship artifact, and three independent robustness statistics rank it
+    first — see `experiments/learnings.md`, 2026-09-06 onward. **A better forecast of that variable
+    is a better estimate of the artifact**, and a trial there would seat a knowingly-artifactual
+    book at the top of a non-`price-trend` family where a later session would be entitled to build
+    on it. The whole of tonight's vein is a risk input — a denominator, a covariance term, a
+    scaling — and never a score. Tier A on the lab's side, and the lab's own evidence is stronger
+    here than the literature's.
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -6709,9 +6902,76 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-18 (session 35) | **The ninth unit of the unit-of-check lesson, and it is a column of the data panel.** The 2026-09-13 detector was run against the *input* side this time — take the data the lab was handed and check it has a note — and a grep across all 106 prior notes returned **zero** for `overnight`, `tug of war`, `close-to-open`, `intraday decomposition` and for every author in this literature, while strategies have received an **`open`** panel since 2026-08-29 and the 2026-08-30 nightly had already computed overnight return sums with it. Nineteen days of using a column with no note on it. Three notes, all three primaries read in full, acceptance criterion carried over from session 34 (*does this end in a portfolio*). **Lou–Polk–Skouras** establish the clientele decomposition: own-period continuation plus cross-period reversal, in nine non-US markets, measurable at a five-year lag; and the map of where each premium accrues — **every past-return strategy earns overnight, everything else earns intraday with an opposite-signed overnight leg**. **Hendershott–Livdan–Rösch** make the systematic version the object: the SML is positively sloped overnight and negatively sloped intraday in the US and 39 other countries, robust to closure length and to the beta estimator, so the famously flat 24-hour SML is **two strong opposite relations cancelling**. **The constraint that decides the session**: this engine holds close-to-close and therefore collects the sum, which is the thing that already nets — the authors' own advice to long-horizon investors is *order timing*, which this lab cannot do, and **the lab's own 2026-08-30 overnight-sums null is what that prediction looks like when measured here.** What survives is **Aboody–Even-Tov–Lehavy–Trueman**: overnight return as firm-specific sentiment, with long-horizon reversal measured on **close-to-close buy-and-hold over 12 months**, the **long leg carrying the effect on its own**, and the long leg loading **negatively on momentum**. Candidates #119–#122: one free diagnostic that can retire the whole vein, one long-only book, one free measurement move, one anti-candidate. Flags: **all three sources end before 2018, so `validation_overlap: false` throughout** — the first session in several with no overlap to discount. No dated performance figure from any source is recorded anywhere; signs, orderings and significance only. Two sources named and **recorded as not read** (Berkman et al. 2012, Akbas et al. 2022), with nothing resting on either. | Lou, Polk & Skouras 2019 (`2026-09-18-overnight-intraday-return-decomposition.md`); Hendershott, Livdan & Rösch 2020 (`2026-09-18-beta-at-night-versus-day.md`); Aboody, Even-Tov, Lehavy & Trueman 2018 (`2026-09-18-overnight-return-as-firm-sentiment.md`) |
 | 2026-09-19 (session 36) | **The tenth unit of the unit-of-check lesson: a primitive of a theory the folder already cites.** The MAX/lottery note names cumulative prospect theory, probability weighting and Barberis–Huang, and the lab has built and refuted two functionals of the price path (52-week-high proximity, information discreteness) — yet a grep across all 109 prior notes returned **zero** for `capital gain`, `overhang`, `disposition` and `reference price`. The theory's *reference point* had no coverage. Three notes, all three primaries read in full, acceptance criterion carried from session 34 (*does this end in a portfolio*) and met. **Grinblatt–Han** supply the base: prices are a convex combination of fundamental value and a **turnover-weighted average of past prices**, so the predictor is the **capital gains overhang** `(P − R)/P` rather than the past return, and the weight on a past price is the probability a share bought then has not traded since. Volume is what separates it from trend (the overhang is *decreasing* in past turnover), and ~59% of its cross-sectional variation is past returns, turnover and size. **An** shows the assumed functional form is wrong — the investor-level selling schedule is **V-shaped in profit**, so the tradeable combination is `VSP = Gain − 0.2·Loss` rather than their sum, it subsumes the base signal in a horse race, and **its loss half predicts the opposite of momentum**, which is the identification property that earns it a trial here. **Riley–Summers–Duxbury** show the **purchase price is not special**: path max, path min, 52-week high and 52-week low each work as well inside the same weights, composites of them subsume the base, and the same variables predict forward *volume* more strongly than the base. **The constraint that shaped the session**: every construction needs turnover = volume ÷ shares outstanding, and this repo has no share count — resolved by keeping the within-name *time series* of volume and fixing only its level, which the base paper's own robustness table identifies as the half carrying incremental information. Candidates #123–#126: one free screen that can retire the vein, one free measurement that arbitrates a reading the lab has already made, one long-only book, one anti-candidate. Flags: **all three samples end before 2018, so `validation_overlap: false` throughout**; Riley et al. is `published_post_2018: true`. No dated performance figure from any source is recorded anywhere — signs, orderings, subsumption and significance only. **Three rubric findings recorded against the vein rather than buried**: the overhang is absent from Hou–Xue–Zhang's 452 anomalies (checked by grep of the full text); **Birru 2015's adversarial test is recorded as not read** (publisher closed, OUP 403 on its own advertised GREEN PDF) with only its published abstract quoted, and it says momentum survives in stocks void of the disposition effect; and the one peer-reviewed **international** study (Zheng, Li & Li 2024) could not be read — `efmaefm.org` fails TLS verification through the proxy — so the multi-market row is **open** and nothing rests on it. | Grinblatt & Han 2005, JFE, with NBER w8734 (`2026-09-19-capital-gains-overhang-reference-price.md`); An 2016, RFS (`2026-09-19-v-shaped-selling-propensity.md`); Riley, Summers & Duxbury 2020, Management Science (`2026-09-19-dynamic-reference-point-composite-cgo.md`) |
 | 2026-09-20 (session 37) | **The eleventh unit of the unit-of-check lesson, and it is the one place the previous ten could not look: not what a score is computed FROM, but what it is computed AGAINST.** Sessions 28–36 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a theory already cited. Every one of those units is a property of the *subject* of a measurement. Tonight's sweep asked about its *reference*: the folder's behavioural scores are all functionals of a name's **own** price path — 52-week-high proximity, information discreteness, overnight sentiment, capital-gains overhang, `VSP` — and the lab has now refuted five of them into the same two regressors. A grep across all 112 prior notes returned **zero** for `salience`, `Bordalo`, `Gennaioli`, `Cosemans` and `salience theory`, and zero in the 9,315-line SUMMARY, while the adjacent theory — the one whose entire content is that perception is **context-dependent**, i.e. that the comparison set is the signal — sat uncovered next to the prospect-theory material the folder has cited since 2026-09-01. **Families → … → a primitive of a theory already cited → the reference the measurement is taken against.** The durable addition: *when a class of constructions keeps collapsing into the same confound, check whether they all share an argument you never varied.* Session 37 covered it. The session-34 acceptance criterion (does this end in a portfolio?) is met **only conditionally and the note says so plainly**: the book is an anti-candidate on this universe, refused by an independent Tier-1 replication rather than by this lab's priors, and what survives is two free ordered falsifiers that are the sources' own identifying tests plus one ETF-level scout with a mechanism and no empirical support. | Bordalo–Gennaioli–Shleifer 2012 (QJE) (`2026-09-20-salience-theory-choice-under-risk.md`); Cosemans–Frehen 2021 (JFE) (`2026-09-20-salience-theory-stock-prices.md`); Cakici–Zaremba 2022 (JFE, hostile multi-market replication, **not read** — abstract only) (`2026-09-20-salience-international-replication.md`) |
+| 2026-09-21 (session 38) | **The twelfth unit is the dependent variable, and it was named by the lab rather than audited into existence.** Sessions 28–37 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measurement is taken against. **Every one of those is a unit of a return prediction.** The 2026-09-20 nightly closed its vein on five readings and zero trials and wrote the plainest reading of eleven sessions — *"monthly-horizon cross-sectional prediction may simply have very little signal outside the trend the incumbent already holds"* — which is a statement about **what the lab has been trying to forecast**, and the same data contains a second quantity the literature says is strongly forecastable. A grep across all 115 prior notes returned **zero** for `Corsi`, `heterogeneous autoregressive`, `HAR-RV`, `long memory`, `Andersen`, `Bollerslev` and `volatility forecast`; `research/README.md` had named this exact clause as a thin spot and argued against reopening it, an argument made when the lab still had a book supply. **Families → … → the reference a measurement is taken against → the quantity being forecast.** The session-34 acceptance criterion is met **conditionally and the ordering says so**: two free screens come first, one of which (#131) can close the vein for zero trials, the book (#133) is gated behind both and is a scout, and one anti-candidate (#134) forbids the obvious misuse. The session's most useful output is not a book but a **reconciliation**: the lab's three backfired de-risking overlays are what this literature *predicts*, not a refutation of it — second instance of that shape after 2026-09-18. | Corsi 2009 (JFEC) (`2026-09-21-har-rv-volatility-cascade.md`); Bollerslev–Hood–Huss–Pedersen 2018 (RFS) (`2026-09-21-panel-volatility-models-and-risk-targeting.md`); Harvey–Hoyle–Korgaonkar–Rattray–Sargaison–van Hemert 2018 (JPM) (`2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`) — all three read in full text |
 
 ### Open questions for future sessions
 
+- **[2026-09-21] Read this first: the book supply was empty for a third consecutive session and
+  tonight changes the question rather than refilling it.** The 2026-09-20 nightly spent zero of
+  eight trials for the sixth time and told the human that on this universe *"monthly-horizon
+  cross-sectional prediction may simply have very little signal outside the trend the incumbent
+  already holds"*. That is a claim about the **dependent variable**, and this folder had never
+  covered the other one: the realized-volatility forecasting literature had zero notes. Tonight's
+  three sources say the variance is forecastable where the mean is not, that the forecast can be
+  pooled across instruments rather than fitted 145 times, and — the counterweight — that a large
+  part of what a volatility-scaling overlay buys on equities is **trend the champion already
+  holds**. New tonight: **#131–#134**. Still unrun and carried unchanged: **#109** (the folder's
+  highest-ranked unrun item, fourteenth session, still blocked only on rebuilding the 2026-09-14
+  specification curve), **#82** (fifteenth), **#94** as a standing discipline, **#49**
+  (twenty-fourth), plus **#105–#107** and **#110**'s shrink half. The 2026-09-20 items #127–#130
+  are **all closed** by that nightly's five readings.
+- **[2026-09-21] What should aim the next session, in order — and note that the ordering is
+  designed so the vein can close for zero trials.**
+  - **#131 first**, because it is the only scoring rule in this folder that uses **no return
+    data**. It ranks volatility forecasts against each other on this repo's own realized variance,
+    with costs, with no champion comparison and no trial. It has a pre-registered kill: if a
+    cascade/pooled forecast does not beat the trailing 21-day window the repo uses everywhere, the
+    whole vein closes and the lab has learned that its risk estimator was not costing it anything.
+  - **Then #132**, also free, and it is the standing "trend in costume" screen handed a published
+    instrument and a published prediction — the same property that made #127 worth running. It
+    decides in advance whether a scaling overlay here is the incumbent's trend, and either way it
+    produces an explanation for three of the lab's existing nulls.
+  - **Then #133, and only as a scout, and only if both screens survive.** It is ETF-level, it is
+    `min(1, σ_target/σ̂)` because gross leverage is capped at 1.0, and its claim is the **tail**,
+    not the Sharpe ratio — which this repo's gates do not score. The candidate must say so rather
+    than hope.
+  - **Do not spend a trial on #134**, and note it is the obvious use of a better volatility
+    forecast: a cross-sectional sort on it. The lab's own evidence against that is stronger than
+    the literature's for it.
+  - **Then the lab's own #109**, unchanged, and **#82**.
+- **[2026-09-21] The transferable output, and it is a reconciliation rather than a finding.**
+  `experiments/learnings.md` records three de-risking overlays on the champion that "reliably
+  backfire out-of-sample" and an inverse-vol risk parity sleeve that lost to equal weight. Harvey
+  et al. show that on risk assets roughly half the Sharpe benefit of volatility scaling **is** a
+  short-horizon time-series momentum overlay. Applied to a book that already holds trend, such an
+  overlay should be expected to add turnover and dilute — so **the literature predicts the lab's
+  nulls rather than contradicting them.** This is the second instance of that shape (the first was
+  the 2026-09-18 overnight cluster) and it is now worth stating as a rule: **when a lab null
+  matches a literature mechanism, check whether the incumbent already holds that mechanism before
+  concluding the universe is empty.** Eleven sessions of "this universe's high-volatility
+  survivors" may have been doing some of the work that "the champion already holds this" would
+  have done more cheaply.
+- **[2026-09-21] A tension between this file and `research/README.md`, recorded rather than
+  quietly resolved.** The README names `range-variance`'s HAR-RV / vol-of-vol clause as a thin spot
+  "covered by analogy only" and this file argued against reopening it (2026-09-08). Tonight
+  reopened it anyway. The justification is not that the earlier judgement was wrong on its own
+  terms — it was made when the lab had a book supply and the marginal survey looked worthless — but
+  that **the precondition changed**: three consecutive sessions with no book, and a nightly
+  explicitly asking for a family that "neither the artifact nor the plainer reading can reach". The
+  durable point is about deferral records generally: *a decision not to cover something should
+  carry the condition under which it was made, so a later session can tell whether the condition
+  still holds.* The 2026-09-08 entry did carry one for a different item ("only if a session finds
+  itself with no mechanism-note candidate in a thin family") and that is why 2026-09-09 could act
+  on it; this one did not.
+- **[2026-09-21] An unresolved question tonight's sources raise and do not answer, flagged because
+  it is cheap and nobody has asked it here.** The lab has measured **return** lead-lag across this
+  universe and found it null (2026-08-31, ETF versus constituent). Bollerslev et al. document
+  **volatility** spillover — a global volatility factor carrying information about an individual
+  instrument's future volatility beyond its own history — across 58 instruments, four asset classes
+  and many countries. These are different claims about different moments and the null on one does
+  not settle the other. If #131 runs, the global-factor term (model (d)) answers it as a by-product
+  at no extra cost, and the answer is informative either way: a live global volatility factor on a
+  universe where return lead-lag is dead would be the first asymmetry of that kind found here.
 - **[2026-09-20] Read this first: the 2026-09-19 nightly closed the vein this file supplied and
   spent zero of its eight trials doing it, so the book supply is empty for the second session
   running — and tonight does not refill it with a book either.** #123–#126 are all done, on free
