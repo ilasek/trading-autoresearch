@@ -12491,3 +12491,143 @@ should do once its families are exhausted. Both are edits to frozen files.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-21 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-21 (nightly), written before any number was computed
+
+Committed before the first array was allocated. Provenance is `research/SUMMARY.md` #131–#134
+(session 38, the volatility-forecasting vein: Corsi's HAR cascade, Bollerslev–Hood–Huss–Pedersen's
+panel/HExp models and realized-utility metric, Harvey et al. on what volatility scaling actually
+buys). The folder's own ordering is adopted verbatim — #131 first because it scores models with
+**no return data at all**, then #132, then #133 as a scout gated behind both — and so is its
+anti-candidate: **#134, ranking names cross-sectionally by forecast volatility in either
+direction, will not be built tonight under any reading of the numbers below.** That is a
+pre-commitment, not a conclusion, and the lab's own evidence for it is stronger than the
+literature's: 21-day Garman–Klass volatility already has the largest |IC| of any score in this
+repo with the *wrong* sign, and fourteen mechanism screens call it this universe's survivorship
+artifact. A better forecast of that variable is a better estimate of the artifact.
+
+**The framing, before any of it: this vein forecasts risk, not return.** Nothing below predicts a
+return and none of it may become a cross-sectional score. The only legitimate use of a volatility
+forecast here is as a denominator, a covariance input, or a time-series exposure scale.
+
+**Flags and the discount they earn.** Corsi 2009 carries no overlap flag and no market sample
+beyond realized-volatility series. Bollerslev et al. is `published_post_2018: true` (sample runs
+through 2017, 58 instruments, four asset classes). Harvey et al. is Tier B — the authors manage
+this strategy commercially and there is no independent replication — and its central claim is a
+*negative* one, which is the direction that needs the least discounting. **No performance figure
+is imported from any of the three.** Signs, orderings, and which-model-beats-which only.
+
+### Block 0 — the precondition #133 names, verified before anything else. **PASS.**
+
+`SUMMARY.md` #133 requires verifying *before a file is written* that the engine treats a weight row
+summing below 1.0 as cash rather than renormalising it; if it renormalises, the whole construction
+is inert. Read from `engine/backtest.py` (read-only, nothing touched):
+
+    gross = w.abs().sum(axis=1)
+    scale = np.where(gross > max_leverage, max_leverage / gross.replace(0, np.nan), 1.0)
+
+The scale is applied **only when gross exceeds the cap** — a row summing to 0.6 is left at 0.6 —
+and `run_backtest` forms the day's return as `(w_eff * rets).sum(axis=1)`, so the unallocated
+fraction contributes exactly zero. **De-levering is reachable and is not inert.**
+
+**The cost of that, stated now rather than discovered later: cash earns 0%, not the risk-free
+rate.** The engine has no cash leg. Every source in this vein prices a de-levered position against
+a positive short rate; here it is parked at zero. Over a validation split containing 2022 — high
+volatility and a ~4-5% policy rate — this is a structural drag the literature never models, and it
+is charged entirely to the de-levering half of the rule. Any Sharpe this construction posts is
+therefore a *lower* bound on the published mechanism and an *honest* number for this engine. It is
+not an excuse to be spent afterwards.
+
+### Block A — #131, the realized-utility ranking of four volatility forecasts. FREE. The gate.
+
+Daily `RV` from Garman–Klass (`h`/`l`/`c` measured from the open, per
+`notes/2026-08-29-range-based-volatility-estimators.md`). Four forecasts of next-day variance,
+each causal, each re-estimated on a rolling window, all OLS and deterministic:
+
+    (a) trailing 21-day equal-weight window          <- what this repo uses everywhere
+    (b) HAR(3) on the {1, 5, 22}-day averages        <- Corsi's cascade
+    (c) HExp, four EWMAs at fixed centers of mass {1, 5, 25, 125}   <- no tuning parameters
+    (d) (c) as a CENTERED PANEL pooled across all ~145 instruments  <- one model, N x T rows
+
+Centering per (a) of the source: subtract an expanding-window mean of the instrument's own `RV`
+from every term including the target, which removes the level and makes the dynamic coefficients
+estimable across instruments of wildly different volatility.
+
+Scored by the source's realized-utility metric, which takes no return data:
+
+    U = mean_t [ 8% * sqrt(RV_{t+1}) / sqrt(E_t)  -  4% * RV_{t+1} / E_t ]
+
+under the source's stated calibration (`SR = 0.4`, `gamma = 2`, 20% target). Because `U` is already
+in return units, **costs subtract directly** as `15 bps * |x_t - x_{t-1}|` where `x_t` is the
+implied exposure, and they are computed in the same pass — the sources are explicit that costs
+*reorder* the models rather than merely shifting them.
+
+**Pre-registered kill, fixed now, two-sided:**
+
+- **KILL** if the best of (b)/(c)/(d) does not beat (a) **net of costs** by at least **10 bp/yr**
+  of realized utility, or if the margin is not at least **2 paired standard errors** across
+  instruments. The whole vein then closes for zero trials, and the lab has learned that its
+  equal-weight trailing window was not costing it anything — which is a real finding, since that
+  window is in every risk estimate in the repo.
+- **LIVE** if the best challenger clears **both** bars.
+- **Read on train only** (`None` -> 2017-12-31). Validation is not touched by any block tonight.
+
+A by-product worth naming in advance: model (d) carries the **global volatility factor** term, so
+if Block A runs it answers as a free side-effect whether cross-instrument pooling adds anything on
+this universe — a question the folder flags separately.
+
+### Block B — #132, Harvey et al.'s own "trend in costume" instrument. FREE.
+
+`corr(past 21-day return, 1/sigma_hat_t)` per instrument, for two estimators (20-day and 90-day
+half-life), pooled across the universe and reported separately for the 42 ETFs. The source says in
+advance what this should show and that it explains about half the cross-sectional variation in how
+much volatility scaling helps each asset.
+
+- **Strongly positive** (pooled median `>= +0.20`): a scaling overlay *is* short-horizon trend, the
+  three backfired de-risking overlays in `experiments/learnings.md` are **explained rather than
+  merely repeated**, and the folder's own rule says no trial is owed on that ground.
+- **Near zero or negative** (pooled median `< +0.20`): those three nulls mean something other than
+  what they look like, and #133 becomes live.
+
+This is a **score placebo read the usual way**, and the direction is stated before the number
+(2026-09-19 rule): the source named in advance which statistic should light up and in which
+direction, so a positive reading is a confirmation of *its* mechanism and a kill for *our* book.
+
+### Block C — #133, the ETF-level volatility-scaled sleeve. ONE trial, `track: "scout"`, gated.
+
+Runs **only** if Block A is LIVE **and** Block B reads below the +0.20 line. Construction fixed now:
+an equal-weight ETF sleeve whose gross exposure is scaled by `min(1, sigma_target / sigma_hat_t)`,
+with `sigma_hat_t` the best forecast Block A selected, applied to the **sleeve's own** realized
+variance (a time-series object, not a cross-sectional sort — #134 is not touched). Unallocated
+weight is held as cash at 0%. Family slug **`range-variance`**; track **scout**, so no champion
+comparison and `holdout_gate` is unreachable.
+
+**Two honesty requirements, held to in advance.**
+
+1. **Which effect is claimed.** Per Harvey et al. the Sharpe half of volatility scaling's benefit
+   is the momentum overlay and the unconditional half is the **tail**. The claim here is therefore
+   a thinner left tail and lower vol-of-vol — *not* Sharpe. The engine scores Sharpe, so this
+   candidate is expected to be judged on a statistic it is not optimising, and saying so afterwards
+   does not count. The family lead it would have to beat is `rv_volofvol_top15` at **0.494**, and
+   the standing ETF-sleeve floor in `learnings.md` is **0.49 equal-weight / 0.35 inverse-vol**.
+2. **The standing objection it does not trigger**, checked rather than assumed: the 2026-09-08
+   recommendation against `range-variance` trials was about seating a **cross-sectional sort on
+   trailing volatility**, the identified artifact. A time-series exposure scale is a different
+   object. The objection does not transfer unexamined — and it does not transfer here.
+
+### Block D — the anti-candidate, restated as a commitment
+
+**#134 will not be built.** No cross-sectional ranking on forecast volatility, in either
+direction, at any point tonight, whatever Block A returns. If Block A finds (d) sharply better than
+(a), that is a better estimate of the survivorship artifact and the temptation is *larger*, not
+smaller. Recorded here so that a later session reading only the result cannot mistake the
+improvement for a signal.
+
+### Budget, stated in advance
+
+**At most one trial tonight**, and only Block C. `price-trend`'s cap of 2 is not approached — no
+block touches it. All eight families already carry a recorded trial, so the "at least 1 in a family
+with no recorded trial" rule is satisfied vacuously and does not force a second file. Per
+2026-09-15 a decorrelated trial costs **+1 effective trial charged to every later session**, so the
+budget is a ceiling and not a quota: **if Block A kills, the session spends zero and says so.**
+No holdout read is reachable from a scout.
