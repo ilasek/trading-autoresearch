@@ -12763,3 +12763,159 @@ succeed, and the block that passed is the one it expected to do the killing.
 any point tonight. Block A's gross result makes the temptation *larger* rather than smaller — the
 pooled panel is a materially better forecast of the exact variable that carries this universe's
 survivorship artifact — which is why the commitment was written down in advance.
+
+## Pre-registration for the NEXT session — 2026-09-21, fully specified before its numbers exist
+
+Tonight produced one object that is genuinely new and is **not** holdout-informed: exposure
+smoothing dominates estimator choice by ~14x on a risk input. Turning that into a book *tonight*
+would be post-hoc — the `φ` grid was run after Block A's numbers were seen — so it is specified
+here instead, completely, so that the next session can run it without choosing anything after a
+measurement. **If the next session runs it, it must use the constants below and not re-sweep `φ`.**
+
+- **Candidate**: equal-weight ETF sleeve (42 names, monthly rebalance), gross exposure scaled by
+  `min(1, σ_target / σ̂_t)` on the **sleeve's own** realized variance — a time-series scale, never a
+  cross-sectional sort, so #134 stays untouched. Unallocated weight is cash at 0%.
+- **`σ̂_t` is the trailing 21-day window**, i.e. the incumbent estimator, **not** HAR/HExp/panel.
+  Tonight killed the fancy forecasts net of costs on 132 instruments at `t` ≤ −5.6; using one
+  anyway would be ignoring the session's own result.
+- **`φ = 0.05`**, fixed now. It is tonight's argmax and that is a known weakness, stated rather
+  than hidden; the defence is that the `φ` curve is **monotone and flat below 0.10** (2.322 /
+  2.445 / 2.522 at 0.10 / 0.05 / 0.02), so the choice is not perched on a spike. Do not re-sweep.
+- **`σ_target = 0.15`**, fixed now, not tuned: it is near the ETF sleeve's own historical level,
+  so `min(1, ·)` binds sometimes rather than always or never.
+- **Family `range-variance`, `track: "scout"`.** The lead to beat is `rv_volofvol_top15` at 0.494
+  and the standing ETF-sleeve floor is 0.49 equal-weight / 0.35 inverse-vol.
+- **The claim, stated in advance and against the objective**: per Harvey et al. the unconditional
+  half of volatility targeting's benefit is the **tail**, not Sharpe — and tonight showed the
+  trend-overlap half is absent on this universe (Block B, +0.057). The engine scores Sharpe. **So
+  this candidate is expected to be judged on a statistic it is not optimising, and a mediocre
+  Sharpe with a thinner left tail is the predicted outcome, not an excuse to be produced
+  afterwards.** Report max drawdown and vol-of-vol beside the Sharpe either way.
+- **Anti-candidate, carried**: #134 stands. No cross-sectional ranking on forecast volatility.
+
+## Session summary — 2026-09-21 (nightly)
+
+- **Integrity check — a discrepancy found and corrected before any work.** The session-start hook
+  reported "on main, level with origin/main"; `git status -sb` reported **`main-e6tneb`**. The hook
+  was wrong. The branch was level with `origin/main` and carried **no unique commits**, and
+  `git branch -r --no-merged origin/main` returned **nothing**, so no previous session's work was
+  stranded and `trials.jsonl` is not split — the benign case, verified rather than assumed. Moved
+  to `main` per the standing prompt's step 0 ("never run trials from a per-run branch") and reset
+  to `origin/main` (local `main` was 31 behind). **This session's harness instructions named
+  `main-e6tneb` as the development target while `CLAUDE.md`, `program.md` and the standing prompt
+  all require `main`; the repo's rules governed** — the fourteenth consecutive session to record
+  this, and per 2026-09-20 the direct cause of the stranded-branch incident it resolved.
+- **Engine tests green (33 passed).** Store fresh **through 2026-09-18**, one trading day behind —
+  not stale.
+- **Experiments run: 0 of the 8-trial budget.** Trial count held at **94**. **No candidate was
+  scored, `run_experiment.py` was not invoked, the leaderboard is unchanged, no champion comparison
+  and no holdout read** — holdout looks since 2026-08-17 stand at **five**, unchanged.
+
+### The night in one line
+
+The lab took the research folder's volatility-forecasting vein, replicated the literature's
+forecasting claim cleanly, and killed the vein anyway on the one thing the literature does not
+price — and the kill came with a bigger finding than the book would have been.
+
+### Best finding: the risk estimator was never the lever; the trading of the scale was
+
+HAR(3), HExp and a centered cross-instrument panel all beat the repo's 21-day trailing window
+**gross** (+0.096 to +0.126 %/yr), and QLIKE and RMSE — computed independently of the scoring rule
+— agree. **Net of 15 bps/side all three lose by −2.45 to −3.38 %/yr**, the pooled panel on **0 of
+132 instruments**, because a 3–3.7x turnover multiple on the implied exposure is charged against a
+gross edge two orders of magnitude smaller. Then the `φ` grid: smoothing the exposure on the
+*incumbent* estimator buys **+0.86 %/yr**, against a best model-choice margin of **+0.061** — a 14x
+ratio, with all four models converging as `φ → 0`.
+
+**The consequence for this repo is not about volatility forecasting at all.** `learnings.md`'s
+standing entry says de-risking overlays on momentum reliably backfire; all three refuted overlays
+traded their scale at `φ = 1`. That is a shared, measured and fixable property of the three
+constructions, and it is a different diagnosis from the one the lab has carried for a month.
+
+### Second finding: a literature reconciliation checked on its own instrument, and withdrawn
+
+`research/SUMMARY.md` proposed last night that those three backfired overlays are *predicted* by
+Harvey et al. — that half of volatility scaling's benefit on risk assets is trend the champion
+already holds — and named it the second instance of "the lab's null is the literature's
+prediction". Block B ran the source's own instrument: **+0.057** and **+0.008** against the
+folder's own `+0.20` line. Predicted sign, a twentieth of the needed magnitude. **The
+reconciliation does not hold on this universe**, and tonight's turnover explanation replaces it.
+The rule generalised into `learnings.md`: run the source's instrument before adopting the source's
+explanation for your null.
+
+### Why zero trials, stated against the pre-registration rather than in place of it
+
+The single allotted trial was Block C, gated on **Block A LIVE and Block B below +0.20**. Block B
+passed; **Block A killed** — best challenger −2.454 %/yr at `t` = −8.41 against a required
+`+0.10 %/yr` and `t ≥ 2.0`. Before accepting it, the source's own named mitigation
+(Gårleanu–Pedersen partial adjustment) was tested in the models' favour and outside the gate: its
+best cell anywhere is **+0.061 %/yr**, which clears the `t` bar and misses the margin bar. **The
+kill is robust to the most generous reading available.** Nothing was left to choose. Note the
+shape, which is unusual: the block the folder ranked most likely to succeed is the one that failed.
+
+**One implementation error is recorded rather than quietly fixed.** The first Block A run returned
+utilities near **−29,000 %/yr** — an artifact of fitting HAR/HExp in raw variance, where OLS
+produces near-zero fits and the metric's `−4%·RV/Ê` term is unbounded below. It would have read as
+a kill for the right reason by accident. Refitted in log variance with the `+½σ²` correction and a
+causal common floor; the corrected numbers are the ones above.
+
+### Protocol and allocation notes
+
+- **Budget: 0 of 8.** `price-trend`'s cap of 2 **unused — zero trials there**; no block touched it.
+  All eight families already carry a recorded trial, so the "at least 1 in a family with no
+  recorded trial" floor is satisfied vacuously. This is the **seventh** session to spend zero.
+- **Engine precondition settled for future work**: a weight row summing below 1.0 is **held as
+  cash, not renormalised** (`engine/backtest.py`), so exposure scaling is reachable. Rider: **cash
+  earns 0%, not the risk-free rate** — a drag no source in this vein models.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's
+  to rule on.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no
+  sixth holdout look.
+- **Train-as-prediction: held at n = 33.** No trial, so no reading.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/`, `trials.jsonl` and every `strategies/lib/` file are untouched.
+
+### Next ideas, in order, with provenance
+
+1. **The pre-registered next-session candidate above** — EW ETF sleeve, `min(1, σ_target/σ̂)` on the
+   *trailing* estimator at `φ = 0.05`, `σ_target = 0.15`, `range-variance`, scout. Fully specified
+   tonight so it is not chosen after a number. Provenance: tonight's Block A, `SUMMARY.md` #133.
+2. **The genuinely new free question tonight raises, and it is about the champion rather than this
+   vein**: all three refuted de-risking overlays traded their scale at `φ = 1`. Re-screening one of
+   them at `φ = 0.05` is free (holdings-only, train). This does **not** license a `price-trend`
+   trial — it licenses a measurement that would say whether a month-old refutation was about the
+   mechanism or about its implementation.
+3. **ANTI-CANDIDATE, #134, carried and strengthened**: do not rank names cross-sectionally by
+   forecast volatility. Tonight makes the temptation larger — the pooled panel is a materially
+   better forecast of the exact variable carrying this universe's survivorship artifact.
+4. **ANTI-CANDIDATE, new tonight**: do not rebuild HAR/HExp/panel with different horizons, decay
+   families or refit cadences. The vein died on **cost of responsiveness**, which every variant in
+   that family shares and a faster one worsens; and Bollerslev et al. report that alternative decay
+   families do not systematically beat HExp, so the search is unpromising at the source too.
+5. **`SUMMARY.md` #109**, the folder's highest-ranked unrun item, carried for a **fourteenth**
+   session and still blocked only on rebuilding the 2026-09-14 specification curve. Free.
+6. **`SUMMARY.md` #82**, carried for a fifteenth session, and **#49** for a twenty-fourth.
+7. **Do NOT re-derive the blend board.** Exhaustive as of 2026-09-15, extended -17, -18.
+8. **Do not extend**: everything on the 2026-09-20 list, unchanged, plus tonight's vein
+   (#131–#134 in every variant).
+
+### For the human — the stall is now seven sessions, and tonight sharpens why
+
+Seven consecutive zero-trial sessions, each for a defensible reason, is no longer a run of
+individually-correct decisions — it is a description of the search. Tonight is the second session
+running in which the lab's most useful output was a **correction to a proposed explanation** rather
+than a strategy, and the corrections are getting better while the book supply stays at zero.
+
+What is new tonight is that the lab found a lever it had been mis-attributing for a month. The
+de-risking refutations in `learnings.md` may be refutations of `φ = 1` rather than of de-risking,
+and idea #2 above would settle that for free. **That is the first time in seven sessions that an
+existing refutation has looked reopenable on measured grounds**, and it is worth a human knowing
+before deciding anything larger.
+
+The larger decision remains unchanged and is not an agent's: either the universe gains data that
+opens a family the survivorship artifact cannot reach (point-in-time constituents, fundamentals,
+intraday bars), or `program.md` says what the lab should do once its families are exhausted. Both
+are edits to frozen files.
+
+**No engine issues encountered.**
