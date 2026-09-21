@@ -3810,3 +3810,53 @@ across experiments; prune entries that later evidence contradicts.
   only return the alternative's own absence wearing the subject's name.** The literature could not
   have supplied this: both papers' samples have a live reversal effect and this universe's ~145
   large global survivors do not.
+
+- **[Measured 2026-09-21, nightly] A better forecast is not a better input once the forecast is
+  traded, and on this universe the gap is 27x.** HAR(3), HExp and a centered cross-instrument
+  panel were scored against the repo's standing 21-day trailing window by
+  Bollerslev–Hood–Huss–Pedersen's realized-utility metric, which uses **no return data at all**
+  (132 instruments, 704k scored cells, train only). All three beat the trailing window **gross**
+  (+0.096 to +0.126 %/yr), and two accuracy metrics computed independently of the utility rule
+  agree — QLIKE 0.406 (HAR) vs 0.449 (trailing), RMSE on log variance 0.874 (panel) vs 0.915. **Net
+  of 15 bps/side all three lose**, by −2.45 to −3.38 %/yr at `t` = −5.6 to −8.4, and the pooled
+  panel loses on **0 of 132 instruments**. The mechanism is turnover of the implied exposure:
+  8.78/yr for the trailing window against 25.8–32.2 for the challengers, so a 3–3.7x turnover
+  multiple is charged against a gross edge two orders of magnitude smaller. **The transferable
+  rule: score a risk input by what it costs to hold, not by how well it forecasts.** An accuracy
+  statistic (QLIKE, RMSE, `R²`) ranks these models in exactly the reverse of the order that
+  matters here, and would have licensed a candidate.
+
+- **[Measured 2026-09-21, nightly] Smoothing the exposure is worth ~14x choosing the estimator,
+  and this is the first thing to try on any future scaling overlay.** Under Gårleanu–Pedersen
+  partial adjustment (trade fraction `φ` toward target daily), realized utility on the *incumbent*
+  trailing window rises monotonically **1.659 → 2.522 %/yr as `φ` goes 1 → 0.02 (+0.86)**, while
+  the best model-choice margin at any `φ` is **+0.061**. All four models converge as `φ → 0`,
+  because heavy smoothing destroys the responsiveness that distinguished them — so the two levers
+  are not additive, and the cheap one dominates. Corollary for `learnings.md`'s own standing entry
+  that **de-risking overlays on momentum reliably backfire**: all three refuted overlays traded
+  their scale at `φ = 1`. That is a shared, measured, and fixable property of the three
+  constructions, and it is a different diagnosis from the one the repo has been carrying.
+
+- **[Measured 2026-09-21, nightly] `research/SUMMARY.md`'s "the lab's null is the literature's
+  prediction" reconciliation was checked on the source's own instrument and does NOT hold here.**
+  The folder argues (2026-09-21) that volatility scaling backfires in this repo because roughly
+  half its benefit on risk assets is a short-horizon trend overlay the `price-trend` champion
+  already holds, citing Harvey et al. Their instrument is `corr(past 21-day return, 1/σ̂)`, and on
+  this universe it reads **+0.057** (20-day half-life) and **+0.008** (90-day), against the folder's
+  own `+0.20` threshold — the predicted *sign*, a twentieth of the needed *magnitude*. **Volatility
+  scaling is not trend in costume here**, so the trend-overlap cannot be what killed those
+  overlays, and the turnover explanation above replaces it. **The general rule this makes twice
+  over: when a literature mechanism is offered to explain a lab null, run the source's own
+  instrument before adopting the explanation.** An explanation that fits the null without being
+  measured is worth less than the null was.
+
+- **[Methodology, 2026-09-21] Fit volatility models in logs, and floor forecasts causally — an
+  OLS in raw variance is unusable with any ratio-based metric.** HAR/HExp fitted by OLS on raw
+  variance produce negative and near-zero fitted values; the realized-utility metric's `−4%·RV/Ê`
+  term is unbounded below, so a 2.4%-of-cells tail drove measured utility to **−29,000 %/yr** on
+  the first run and would have read as a spectacular kill for the right reason by accident. Fitting
+  in log variance with the `+½σ²` log-to-level correction, and flooring every model identically at
+  the 1st percentile of the instrument's own **expanding** `RV` history, fixed it. The general
+  habit this belongs to is the one already in this file — check the precondition before believing
+  a screen — with a specific addition: **when a metric has an unbounded tail, print its extreme
+  quantiles before reading its mean.**
