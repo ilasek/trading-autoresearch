@@ -13064,9 +13064,15 @@ challenger, so it can reach the holdout gate and end the session; that is why it
   cost.** +0.111 over the seated lead from one added term, at **lower** turnover (1.0x vs the lead's
   0.93x band — unchanged in practice) and with the pool, band, weighting and region operator
   bit-identical, so the difference is attributable to the term and to nothing else in the
-  construction. Size check against the family's own resolution floor: the 2026-09-04 bracket read
-  ±0.05 as indistinguishable inside this family, and **+0.111 is about twice that**, which is the
-  reason this is being written up as a channel rather than as noise — while noting it is one trial.
+  construction.
+  **CORRECTION, written the same night after trial #97 supplied the paired standard errors, and it
+  cuts against this entry.** The sentence originally here read the +0.111 against the family's ±0.05
+  construction floor and called it "about twice that, which is the reason this is being written up as
+  a channel rather than as noise". **That was wrong, and the right instrument says so**: Memmel's
+  paired SE between this book and the seated lead is **0.142, so the +0.112 is t = +0.79 — not
+  resolvable.** The ±0.05 construction floor is not the error bar on a Sharpe *difference* and should
+  not have been used as one. The claim this entry supports is that the term is **directional** (see
+  #97), not that its gain over the one-term lead is measurable. Left visible rather than rewritten.
   **The two free gates are what make it readable.** Had gate (b) failed, 1.053 would have been the
   survivorship artifact in a new costume and worth nothing; because `|ρ(E/Var, GK vol)| = 0.148` and
   `|ρ(E/Var, rank 12−1)| = 0.015` were fixed and measured *before* the book, the number means what it
@@ -13208,4 +13214,36 @@ noise, in which case the arbitrage story is decoration.
   term is the same dimensionless ratio, not a volatility level, so #134/#138 are untouched whichever
   way it lands. That is why this falsifier was chosen over that one.
 - It is a scout, so no champion comparison and no holdout read; the session does not have to stop.
+
+## 2026-09-22T23:29:59+00:00 — lv_illiq_evar_signflip — **SCOUT**
+- Candidate: `strategies/candidates/lv_illiq_evar_signflip.py` (family: liquidity-volume, track: scout, trial #97)
+- Hypothesis: Reversing the sign of trial #96's type-demeaned hedgeable-fraction term — so the book tilts toward names that are EASY to hedge, and therefore cheap to arbitrage — while holding the window, band, pool, weighting, region operator, type demean and rebalance grid bit-identical, scores materially below the seated family lead's 0.942, because if the arbitrage-risk mechanism is what #96 measured then the term must carry direction, and if instead both signs improve the lead then #96's gain was the added dispersion of a second term rather than arbitrage risk at all.
+- Verdict: SCOUT — scouted family 'liquidity-volume': validation sharpe 0.725 <= the family's best 1.053 (DSR 0.7554, 97 trials, 27 effective after clustering at rho 0.95)
+- Train: sharpe +0.38, ann_ret +3.7%, maxDD -50.9%, turnover 0.3x
+- Validation: sharpe +0.72, ann_ret +13.4%, maxDD -35.8%, turnover 1.0x
+- Deflated Sharpe prob: 0.7554 (bar from 97 trials, 27 effective)
+- Scout track: family best before this trial +1.05; the champion was not compared and the holdout was not read
+- Lesson: **The pre-registered branch that fires is the first one: the term carries direction, and the
+  dispersion explanation is dead.** Reversing one sign, with every other byte of the construction
+  identical, moves validation Sharpe 1.053 → **0.725**, a spread of **0.328**. Decisively, the
+  reversed book is **worse than the one-term lead it was built from** (0.725 against 0.942): if a
+  second standardized term helped mechanically by spreading ties, the reversed one would have helped
+  too. It hurt. **`E/Var` enters this book as direction, not as dispersion.**
+  **The paired standard errors, and they force a correction to trial #96's entry rather than a
+  victory lap.** Memmel against the seated lead: `riskcost` **+0.112, t = +0.79**; `signflip`
+  **−0.217, t = −2.38**; the two signs against each other **+0.328, t = +1.70**. **The only reading
+  tonight that resolves at |t| > 2 is the negative one.** The headline +0.111 does not resolve, and
+  #96's lesson line has been corrected in place to say so.
+  **The asymmetry is the finding, and it is the transferable part.** A term whose correct sign is
+  worth an unresolvable +0.11 is worth a resolvable −0.22 when mis-signed — the damage is twice the
+  gain and it is what the split can actually see. That shape is what you get when the correct sign
+  points roughly where the base score already leans while the wrong sign actively fights it, and it
+  says something about how to test a conditioning variable on this repo's splits generally: *a sign
+  falsifier resolves where a magnitude comparison does not, so run the reversal rather than the
+  extension when a one-trial improvement needs checking.* One trial bought a result the one-sided
+  comparison could not have delivered at any Sharpe.
+  **What this does and does not license.** It does not make #96 a book worth seating: free measurement
+  D priced its blend cell at +0.059, t = +0.44, below the resolution floor, and that stands. It does
+  establish `E/Var` as the first conditioning variable in this repo to pass an orthogonality gate and
+  a sign falsifier both, which is a better-evidenced object than anything else outside `price-trend`.
 
