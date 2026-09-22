@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-22T23:18:41+00:00",
+  "generated_at": "2026-09-22T23:25:00+00:00",
   "champion": "mom_zscore_overlap6_hzn_avg4",
   "families": {
     "cross-sectional momentum": {
@@ -70,6 +70,23 @@
       },
       "train_sharpe": 0.939
     },
+    "liquidity-volume": {
+      "name": "lv_illiq_evar_riskcost",
+      "candidate": "strategies/candidates/lv_illiq_evar_riskcost.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-09-22T23:24:46+00:00",
+      "n_trials": 9,
+      "rho_to_champion": 0.7077,
+      "validation": {
+        "sharpe": 1.053,
+        "ann_return": 0.1468,
+        "max_drawdown": -0.2841,
+        "ann_turnover": 1.03,
+        "avg_positions": 35.97
+      },
+      "train_sharpe": 0.613
+    },
     "portfolio-learning": {
       "name": "pl_maxleg_signal_blend",
       "candidate": "strategies/candidates/pl_maxleg_signal_blend.py",
@@ -84,23 +101,6 @@
         "max_drawdown": -0.276,
         "ann_turnover": 14.05,
         "avg_positions": 22.57
-      },
-      "train_sharpe": 0.624
-    },
-    "liquidity-volume": {
-      "name": "lv_illiq_region_wide30",
-      "candidate": "strategies/candidates/lv_illiq_region_wide30.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-09-04T23:29:47+00:00",
-      "n_trials": 8,
-      "rho_to_champion": 0.7146,
-      "validation": {
-        "sharpe": 0.942,
-        "ann_return": 0.1643,
-        "max_drawdown": -0.3346,
-        "ann_turnover": 0.93,
-        "avg_positions": 36.11
       },
       "train_sharpe": 0.624
     },

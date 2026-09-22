@@ -13052,3 +13052,37 @@ challenger, so it can reach the holdout gate and end the session; that is why it
   -25.7% is better than the champion's -27.8%, but with no like-for-like unscaled sleeve there is no
   baseline to claim a thinner tail against. Stated as unresolved rather than read favourably.
 
+## 2026-09-22T23:24:46+00:00 — lv_illiq_evar_riskcost — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/lv_illiq_evar_riskcost.py` (family: liquidity-volume, track: scout, trial #96)
+- Hypothesis: Adding a type-demeaned hedgeable-fraction term (-E/Var, the residual share of a name's variance against its 4 most-correlated substitutes over a 250-day window lagged 20 days) to the seated family lead's region-relative Amihud score — window, band, weighting, pool, region operator and rebalance grid otherwise bit-identical to lv_illiq_region_wide30 — beats that lead's 0.942 validation Sharpe, because Amihud measures the trading cost of arbitrage and E/Var measures its risk cost, and Wurgler-Zhuravskaya's claim is that the second is a distinct limit rather than a restatement of the first.
+- Verdict: FAMILY_LEAD — best result yet in family 'liquidity-volume': validation sharpe 1.053 > 0.942 (DSR 0.929, 96 trials, 27 effective after clustering at rho 0.95)
+- Train: sharpe +0.61, ann_ret +5.3%, maxDD -44.2%, turnover 0.3x
+- Validation: sharpe +1.05, ann_ret +14.7%, maxDD -28.4%, turnover 1.0x
+- Deflated Sharpe prob: 0.929 (bar from 96 trials, 27 effective)
+- Scout track: family best before this trial +0.94; the champion was not compared and the holdout was not read
+- Lesson: **The risk cost of arbitrage is a second channel here, not a restatement of the trading
+  cost.** +0.111 over the seated lead from one added term, at **lower** turnover (1.0x vs the lead's
+  0.93x band — unchanged in practice) and with the pool, band, weighting and region operator
+  bit-identical, so the difference is attributable to the term and to nothing else in the
+  construction. Size check against the family's own resolution floor: the 2026-09-04 bracket read
+  ±0.05 as indistinguishable inside this family, and **+0.111 is about twice that**, which is the
+  reason this is being written up as a channel rather than as noise — while noting it is one trial.
+  **The two free gates are what make it readable.** Had gate (b) failed, 1.053 would have been the
+  survivorship artifact in a new costume and worth nothing; because `|ρ(E/Var, GK vol)| = 0.148` and
+  `|ρ(E/Var, rank 12−1)| = 0.015` were fixed and measured *before* the book, the number means what it
+  says. The generalisable form, and it is the counterpart to the last three sessions' kills: *a
+  pre-registered orthogonality gate is what converts a positive result from a suspicion into a
+  finding — it costs no trial and it is the difference between this entry and `beta-minus`.*
+  **The identification move is the transferable part.** Gate (a)'s success was also the confound:
+  low `E/Var` means "single stock" (ETF 0.741 vs stock 0.430, AUC 0.815), and single stocks are
+  where survivorship bias is worst. Demeaning `E/Var` **within instrument type** removes that axis by
+  construction, which is the same operator as the family's `lv_illiq_region_relative` win applied to
+  the axis this variable actually loads on. *When a new variable passes a precondition by separating
+  two groups sharply, that separation is the next confound — demean on it before scoring.*
+  **What this does to the board, and it is the reason the session continues.** `rho_to_champion`
+  **0.708** at validation Sharpe **1.053**: the most decorrelated leg the lab has ever had above 1.0,
+  displacing `pl_maxleg_signal_blend` (1.008 at ρ 0.732). `program.md`'s stated route from scout to
+  seat is a blend of the incumbent with a decorrelated lead, argued from the leaderboard's ρ. That
+  input changed tonight for the first time since the blend board was declared exhaustive, which is
+  the one thing that makes a blend challenger not a re-derivation of it.
+
