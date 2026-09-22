@@ -13086,3 +13086,126 @@ challenger, so it can reach the holdout gate and end the session; that is why it
   input changed tonight for the first time since the blend board was declared exhaustive, which is
   the one thing that makes a blend challenger not a re-derivation of it.
 
+
+## Free measurements — 2026-09-22 (nightly), no trial spent
+
+Four measurements, all pre-registered above before they ran, none of them scoring a strategy.
+
+### A — `SUMMARY.md` #136, the IVOL sign-flip falsifier. **The vein closes for zero trials.**
+
+Train only, 363 month-ends (1987-09 → 2017-11), avg 86 names. Mispricing proxy: 12−1 momentum,
+top/bottom 30%. IVOL: residual SD against a **market + own-region** pair over 126 days — stated
+explicitly because this repo has no `SMB`/`HML` and the candidate must say so. High-minus-low IVOL
+third within each band, forward 21 days.
+
+| band | H−L IVOL fwd 21d | t | months > 0 | sign |
+|---|---|---|---|---|
+| overpriced (losers) | **+0.646%** | +1.94 | 0.545 | **+** |
+| underpriced (winners) | **+1.486%** | +4.60 | 0.614 | **+** |
+
+**Pre-registered reading, applied without reinterpretation: same sign in both bands → the artifact.**
+Stambaugh–Yu–Yuan's sign flip requires the overpriced band to be **negative**; here it is positive at
+t = +1.94. The whole vein closes for zero trials and **anti-candidate #138 is confirmed on measured
+grounds rather than carried on argument.**
+
+**The one thing that must not be read favourably, and is not.** The *magnitude* ordering
+(underpriced stronger, difference +0.840%, t = +2.20) is in SYY's direction. It identifies nothing:
+the survivorship artifact is unbounded in strength and can produce any magnitude ordering, which is
+exactly why the sign, not the gap, was the pre-registered statistic. Recording the temptation next to
+the refusal, because a later session will feel it again.
+
+### B — `SUMMARY.md` #137's two gates. **Both pass, sharply.** (Detail in the trial #96 entry.)
+
+Gate (a) precondition: ETF `E/Var` 0.741 vs single-name 0.430, Cohen's d +1.59, rank-AUC **0.815**
+over 133 quarters — baskets are the easiest things here to hedge with baskets, as predicted.
+Gate (b) artifact screen: `|ρ(E/Var, 21d Garman–Klass vol)| = 0.148`, `|ρ(E/Var, rank 12−1)| =
+0.015`, both far under the 0.50 threshold fixed in advance; the 250-day realized-vol **level** comes
+in at 0.238 for contrast, so the ratio is the part that escapes the artifact, as the source says.
+
+### C — the φ re-screen of the de-risking overlay. **The pre-registered gate FAILS; the refutation stands.**
+
+Champion book, train only, holdings-only — binding frequency, mean gross exposure and the scale's own
+turnover; no Sharpe, no annual return, no drawdown, because scoring an overlay outside
+`run_experiment.py` is what the manual forbids.
+
+First, the overlay **does** bind here, unlike on trial #95's sleeve: the champion's 21-day realized
+vol is above the 0.15 target on **50.6%** of train days (sleeve: the constraint was nearly inert).
+
+| φ | mean scale | frac at full | scale turnover/yr | cost @15bps | exposure sd |
+|---|---|---|---|---|---|
+| 1.00 | 0.813 | 0.377 | 3.924 | 0.59% | 0.206 |
+| 0.20 | 0.813 | 0.293 | 1.901 | 0.29% | 0.198 |
+| **0.05** | **0.813** | 0.179 | **0.921** | **0.14%** | 0.178 |
+| 0.02 | 0.814 | 0.105 | 0.486 | 0.07% | 0.158 |
+
+**The mean scale is 0.813 at every φ from 1.00 to 0.02 — identical to three decimals.** φ changes the
+churn and not the exposure path. Smoothing from φ = 1 to φ = 0.05 saves **0.45%/yr** of cost, worth
+about **0.02 of Sharpe** at this book's volatility. The refutation it was proposed to reopen is a gap
+of **0.15 to 0.35 of Sharpe** (0.71 / 0.51 / 0.51 against 0.86). **φ = 0.05 recovers roughly 7–15% of
+what would be needed, so the gate — "materially better at φ = 0.05" — is not met and no `price-trend`
+trial is run tonight.**
+
+**What it was instead, and the number was there the whole time**: the overlay permanently surrenders
+**18.7% of average exposure to cash at 0%**, which on the champion's ~25.7% annual return is roughly
+**4.9%/yr of foregone return — about eleven times the 0.45%/yr the smoothing saves.** The month-old
+refutation is about the **mechanism**, not its implementation. The 2026-09-21 φ finding is real and
+its 14x ratio is real; it is simply an order of magnitude too small to matter against a de-risking
+overlay's first-order cost. **`learnings.md`'s de-risking entry stands as written, and the "first
+reopenable refutation in seven sessions" flagged on 2026-09-21 is closed, negatively, for zero
+trials.**
+
+### D — the ONE blend-board cell whose input changed tonight. **Not a re-derivation; the board's conclusion holds.**
+
+The 2026-09-15 board is closed and was not rebuilt. It priced seven leads; tonight created an eighth
+that did not exist then, and `program.md` names the blend as the route from scout to seat, so the one
+new cell was priced from **stored** validation series — no re-run, no trial. Same protocol as the
+board: sweep the weight, report the **best** cell, which is an optimistic upper bound on any honest
+a-priori choice.
+
+| leg | standalone | ρ to champion | best w | blend | Δ | paired SE | t |
+|---|---|---|---|---|---|---|---|
+| `lv_illiq_region_wide30` | 0.942 | 0.715 | 0.30 | 1.138 | +0.018 | 0.076 | +0.24 |
+| `pl_maxleg_signal_blend` | 1.008 | 0.732 | 0.40 | 1.154 | +0.034 | 0.101 | +0.33 |
+| **`lv_illiq_evar_riskcost`** | **1.053** | **0.708** | 0.55 | **1.179** | **+0.059** | **0.134** | **+0.44** |
+
+**Tonight's leg nearly doubles the best cell on the board — and the blend challenger is still declined.**
++0.059 is below the board's own resolution floor of 0.076–0.080, at t = +0.44, with the weight chosen
+ex-post. `learnings.md` (2026-09-15): *when a session's own measurement prices the cost of a trial,
+that price is part of the decision to spend it.* It does, and it says no.
+
+**The new and transferable part, which the board could not see with three cells this close together.**
+Going up the decorrelation axis buys gain **and error bar at nearly the same rate**: as Δ goes
++0.018 → +0.034 → +0.059, the paired SE goes 0.076 → 0.101 → 0.134, and **t barely moves: +0.24 →
++0.33 → +0.44.** Memmel's SE is dominated by its `(1 − ρ)` term, so a more decorrelated leg widens
+the error bar on the very comparison it was supposed to win. **A better decorrelated leg does not make
+the blend route more resolvable — it moves along a ray, not toward significance.** That is a
+structural statement about why this route is closed on this split, and it is stronger than "nothing
+clears the floor": it says what would be needed is a leg that is decorrelated **and** much better on
+its own, not one that is merely more decorrelated.
+
+## Pre-registration addendum — 2026-09-22, written after the free measurements and before trial #97
+
+Two of the three planned trials are now **declined on measured grounds**, both by gates fixed in
+advance: the `price-trend` challenger (free measurement C failed its gate) and the blend challenger
+(free measurement D, below the floor at t = +0.44). Neither is being replaced by a substitute in the
+same family to use up budget — the budget is a ceiling, not a quota.
+
+**One trial is added, and it exists to attack tonight's own positive result rather than to extend it.**
+Trial #96 is the session's find and it rests on a mechanism claim: *low `E/Var` = hard to hedge =
+costly to arbitrage = mispricing persists*. The alternative explanation is that any second
+standardized term added to a one-term score improves it by spreading ties and reducing the sort's
+noise, in which case the arbitrage story is decoration.
+
+- **Trial #97 — `liquidity-volume`, scout. The sign falsifier.** Bit-identical to #96 in every
+  respect — same window, band, pool, weighting, region operator, type demean, rebalance grid, same
+  `E/Var` computed by the same code — with **the `E/Var` term's sign reversed**, so the book tilts
+  toward names that are *easy* to hedge.
+- **Pre-registered reading, both branches, fixed before the run.** Materially **below** the 0.942
+  seated lead → the term carries direction, the mechanism claim survives, and #96 means what it says.
+  **At or above 0.942** → both signs improve the lead, the gain is the added dispersion rather than
+  arbitrage risk, and **#96 must be read down to "a second term helps" regardless of its Sharpe.**
+- **Why this cannot seat an artifact**, which the level-versus-ratio ablation could: the reversed
+  term is the same dimensionless ratio, not a volatility level, so #134/#138 are untouched whichever
+  way it lands. That is why this falsifier was chosen over that one.
+- It is a scout, so no champion comparison and no holdout read; the session does not have to stop.
+
