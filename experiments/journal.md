@@ -12921,3 +12921,134 @@ are edits to frozen files.
 **No engine issues encountered.**
 
 ## Research session — 2026-09-22 (learning agent): 4 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-22 (nightly), written before any number was computed
+
+**Integrity check.** `git fetch origin --prune` clean. The session-start hook reported "on main,
+level with origin/main"; `git status -sb` reported **`main-x4uc6p`** — the hook was wrong again, for
+the fifteenth consecutive session. The branch was level with `origin/main` (both at `3ef587b`) and
+carried **no unique commits**; `git branch -r --no-merged origin/main` returned **nothing**, so no
+previous session's work is stranded and `trials.jsonl` is not split. Moved to `main` per step 0 of
+the standing prompt. As on 2026-09-21, the harness instructions named a per-run branch while
+`CLAUDE.md`, `program.md` and the standing prompt all require `main`; **the repo's rules governed.**
+
+**Engine tests: 33 passed.** Store fresh through **2026-09-21**, the latest trading day — not stale.
+
+**The thing this session is being written against.** Seven consecutive zero-trial sessions. Each was
+individually defensible and the 2026-09-21 summary says plainly that seven in a row is no longer a
+run of correct decisions but a description of the search. This session is planned to **spend trials**,
+and the plan below is written in full before the first measurement so that the mix is not chosen
+family-by-family after seeing numbers.
+
+**Budget allocation, checked against `program.md` before writing hypothesis 1.** All eight families
+carry a recorded trial, so the "at least 1 in a family with no recorded trial" floor is satisfied
+vacuously and the "at most 2 in any single family until four families have leads" clause is lifted
+(eight have leads). The binding cap is **at most 2 in `price-trend`**. Planned mix: 1 ×
+`range-variance`, 1 × `liquidity-volume`, 1 × `price-trend` (at most, and gated on a free
+measurement), leaving headroom. Challenge candidates are ordered **last** because a challenger that
+clears validation reaches the holdout gate and ends the session.
+
+### Trial 1 — `range-variance`, scout. Carried verbatim from the 2026-09-21 pre-registration.
+
+Last session specified this completely so that tonight would not choose anything after a
+measurement, and instructed that its constants **not** be re-swept. They are not.
+
+- **Candidate**: equal-weight ETF sleeve (the universe's 42 ETFs, monthly rebalance), gross exposure
+  scaled by `min(1, σ_target/σ̂_t)` on the **sleeve's own** realized variance. Unallocated weight is
+  cash at 0%.
+- **`σ̂_t` = trailing 21-day window** — the incumbent estimator, not HAR/HExp/panel, because
+  2026-09-21 killed those net of costs at `t ≤ −5.6`.
+- **`φ = 0.05`** (exposure smoothing, `s_t = φ·raw_t + (1−φ)·s_{t−1}`), fixed, not re-swept.
+- **`σ_target = 0.15`**, fixed, not tuned.
+- **Hypothesis, falsifiable**: smoothing the *traded* exposure at `φ = 0.05` rather than the
+  estimator makes a volatility-targeted equal-weight ETF sleeve beat the standing ETF-sleeve floor
+  of 0.49 (equal-weight) / 0.35 (inverse-vol) on validation Sharpe net of 15 bps/side.
+- **The prediction stated against the objective, in advance**: per Harvey et al. the unconditional
+  half of volatility targeting's benefit is the **tail**, not Sharpe, and 2026-09-21 showed the
+  trend-overlap half is absent on this universe (+0.057 against a needed +0.20). **A mediocre Sharpe
+  with a thinner left tail is the predicted outcome, not an excuse produced afterwards.** Max
+  drawdown and realized turnover are reported beside the Sharpe either way.
+
+### Free measurement A — `SUMMARY.md` #136, the IVOL sign-flip falsifier. No trial, no score.
+
+Stambaugh–Yu–Yuan (2015): the IVOL–return relation is **negative among overpriced names and positive
+among underpriced names** — a sign flip. This universe's survivorship artifact predicts a *positive*
+volatility–return relation **everywhere**, both bands alike, because every constituent is a survivor.
+Split the pool on a score the lab already holds, sort on idiosyncratic volatility within each band,
+compare the **sign** of high-minus-low IVOL forward return across bands, **train only**.
+**Pre-registered reading: same sign in both bands → the artifact, and the vein closes for zero
+trials. Opposite signs → the first evidence here that something other than survivorship moves with
+volatility.** This is an ordered falsifier, not a screen: the confound cannot produce the ordering by
+being stronger.
+
+### Free measurement B — `SUMMARY.md` #137's two gates. No trial, no score.
+
+Arbitrage risk as a **hedgeable fraction** `E/Var = 1 − A/Var` (Wurgler–Zhuravskaya): residual
+variance of a name against its best `k`-name substitute basket, correlations measured on a rolling
+250-day window **lagged 20 days**. The *level* of arbitrage risk is near-collinear with total
+variance and therefore dead on arrival here; the ratio is dimensionless in volatility.
+- **Gate (a), precondition**: 42 of 140 instruments are ETFs, i.e. baskets, and should be the easiest
+  things here to hedge with other baskets. **If `E/Var` does not separate ETFs from single names
+  sharply, the measure is not working and the vein closes for free.**
+- **Gate (b), artifact screen**: `spearman(E/Var, 21-day Garman–Klass vol)` and
+  `spearman(E/Var, rank 12−1)` on train. **A large |ρ| against either means the artifact in a new
+  costume, and the honest response is to say so and stop**, as with `beta-minus` (2026-09-17) and
+  `VSP` (2026-09-19). Threshold fixed now: **|ρ| ≥ 0.50 fails.**
+
+### Trial 2 — `liquidity-volume`, scout. Runs **only if both gates above pass.**
+
+`E/Var` as a **conditioning variable on an existing score**, never a standalone sort — the source
+makes no claim about average returns, only about price response to flow, and a candidate claiming
+otherwise claims more than the paper does.
+
+### Free measurement C — the φ re-screen of a refuted overlay. No trial, no score.
+
+2026-09-21's best finding was that exposure smoothing dominates estimator choice ~14x, and that all
+three de-risking overlays `learnings.md` refuted traded their scale at **`φ = 1`**. Re-screen one of
+them at `φ = 0.05`, holdings-only, **train only**. **Pre-registered reading: this decides whether a
+month-old refutation was about the mechanism or about its implementation.** It licenses a
+`price-trend` challenge only if the train-side reading is materially better at `φ = 0.05`; if it is
+not, no `price-trend` trial is run tonight and the refutation stands as written.
+
+### Trial 3 — `price-trend`, challenge. Runs **only if free measurement C is supportive.** Ordered last.
+
+If run, it is the champion with its exposure smoothed at `φ = 0.05` and nothing else changed. It is a
+challenger, so it can reach the holdout gate and end the session; that is why it is last.
+
+### Anti-candidates carried, unchanged
+
+- **#134 / #138**: no cross-sectional ranking on forecast volatility, and **not** the literal
+  long-only reading of Stambaugh–Yu–Yuan (2015) — the literature's predicted sign and this universe's
+  survivorship artifact are the same sign, so that test is **unidentified**, not merely noisy.
+- **2026-09-21's new anti-candidate**: no HAR/HExp/panel rebuilds at other horizons, decay families
+  or refit cadences. The vein died on cost of responsiveness, which every variant shares.
+- **Do not re-derive the blend board** (exhaustive as of 2026-09-15, extended -17, -18).
+
+## 2026-09-22T23:18:37+00:00 — rv_sleeve_voltarget_phi05 — **SCOUT**
+- Candidate: `strategies/candidates/rv_sleeve_voltarget_phi05.py` (family: range-variance, track: scout, trial #95)
+- Hypothesis: Scaling an equal-weight 42-ETF sleeve's gross exposure by min(1, 0.15 / sigma_hat) on its own trailing 21-day realized volatility, with the traded exposure smoothed at phi = 0.05 rather than traded raw, beats the standing ETF-sleeve floor of 0.49 (equal-weight) / 0.35 (inverse-vol) on validation Sharpe net of 15 bps per side, because the 2026-09-21 result was that smoothing the exposure — not choosing a better variance estimator — is what pays for itself after costs.
+- Verdict: SCOUT — scouted family 'range-variance': validation sharpe 0.39 <= the family's best 0.494 (DSR 0.449, 95 trials, 26 effective after clustering at rho 0.95)
+- Train: sharpe +0.27, ann_ret +1.8%, maxDD -36.2%, turnover 0.2x
+- Validation: sharpe +0.39, ann_ret +4.4%, maxDD -25.7%, turnover 0.4x
+- Deflated Sharpe prob: 0.449 (bar from 95 trials, 26 effective)
+- Scout track: family best before this trial +0.49; the champion was not compared and the holdout was not read
+- Lesson: **The overlay was nearly inert, and that — not the Sharpe — is the result.** A
+  holdings-only diagnostic (no returns scored) on the same weight frame: mean gross exposure
+  **0.952** on validation with the median at **0.999** and **64% of validation days at full
+  exposure** (train: 0.915 / 51%). `min(1, 0.15/σ̂)` on a *diversified* sleeve almost never binds,
+  because a 42-ETF equal-weight basket's own realized volatility sits near or below the 0.15 target
+  most of the time. So `φ` had roughly 5% of exposure to smooth, and this trial is **not a test of
+  the 2026-09-21 smoothing finding** — that finding was measured on instrument-level exposures,
+  where the scale binds far more often. The generalisable form: *a de-risking overlay can only be
+  tested where the constraint binds; calibrate the target against the book's own volatility level
+  before spending a trial on the smoothing of it.*
+  **Second, and it is a defect in the pre-registration rather than in the run**: the 0.49 floor this
+  hypothesis named was measured on `ew_global_etf`, a **~10-asset** sleeve. This candidate changed
+  the sleeve to **42 names** *and* added the overlay, so 0.39 vs 0.49 is a two-factor comparison and
+  attributes to neither. The unscaled 42-ETF sleeve has never been measured here and was **not**
+  measured tonight, because an ad-hoc backtest of it is exactly what the manual forbids. Recorded as
+  a limitation, not worked around.
+  **Third, the pre-registered tail prediction is unresolved, not confirmed.** Validation maxDD
+  -25.7% is better than the champion's -27.8%, but with no like-for-like unscaled sleeve there is no
+  baseline to claim a thinner tail against. Stated as unresolved rather than read favourably.
+
