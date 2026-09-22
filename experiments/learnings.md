@@ -3836,6 +3836,18 @@ across experiments; prune entries that later evidence contradicts.
   that **de-risking overlays on momentum reliably backfire**: all three refuted overlays traded
   their scale at `φ = 1`. That is a shared, measured, and fixable property of the three
   constructions, and it is a different diagnosis from the one the repo has been carrying.
+  **CORRECTION [Measured 2026-09-22, nightly]: the corollary in the last three lines is WRONG and
+  the standing de-risking entry stands as written.** Re-screened on the champion's own book, train
+  only, holdings-only. The overlay does bind here (its 21-day vol is above a 0.15 target on 50.6% of
+  train days), but **mean gross exposure is 0.813 at every `φ` from 1.00 to 0.02 — identical to three
+  decimals.** `φ` changes the churn, not the exposure path. Smoothing 1 → 0.05 saves **0.45%/yr** of
+  cost, about **0.02 of Sharpe**, against a refutation gap of **0.15–0.35**. What the overlay
+  actually costs is the **18.7% of average exposure permanently surrendered to cash at 0%** — about
+  **4.9%/yr of foregone return, eleven times the saving.** The `φ` result above is real and its 14x
+  ratio is real; it is simply an order of magnitude too small to reach a first-order dilution cost.
+  **General form, and it is why this correction is worth its space: a ratio between two levers says
+  nothing about whether either lever is large enough to matter. Price the dominant lever in the units
+  of the thing you are trying to fix before concluding a refutation is reopenable.**
 
 - **[Measured 2026-09-21, nightly] `research/SUMMARY.md`'s "the lab's null is the literature's
   prediction" reconciliation was checked on the source's own instrument and does NOT hold here.**
@@ -3860,3 +3872,68 @@ across experiments; prune entries that later evidence contradicts.
   habit this belongs to is the one already in this file — check the precondition before believing
   a screen — with a specific addition: **when a metric has an unbounded tail, print its extreme
   quantiles before reading its mean.**
+
+- **[Measured 2026-09-22, nightly] A sign falsifier resolves where a magnitude comparison does not —
+  run the reversal, not the extension, when a one-trial improvement needs checking.** Trial #96 added
+  a type-demeaned hedgeable-fraction term to the seated `liquidity-volume` lead and gained +0.112.
+  Trial #97 reversed that one sign with every other byte identical and **lost 0.217**. Memmel's paired
+  SE on all three comparisons: the gain is **t = +0.79** (not resolvable), the mis-signed loss is
+  **t = −2.38** (resolvable), the two signs against each other **t = +1.70**. **The only reading that
+  clears |t| = 2 is the negative one.** The asymmetry — damage roughly twice the gain — is what you
+  get when the correct sign points roughly where the base score already leans while the wrong sign
+  fights it, and it means **a conditioning variable's direction is testable on this repo's splits
+  even when its contribution is not.** The reversal also kills the dull alternative for free: if a
+  second standardized term helped mechanically by spreading ties, the reversed one would have helped
+  too; it came in **below the one-term lead it was built from**, so the term is direction, not
+  dispersion. Two trials bought a result no number of one-sided comparisons could have delivered.
+
+- **[Measured 2026-09-22, nightly] The ±0.05 construction floor is NOT the error bar on a Sharpe
+  difference, and this repo has now made that mistake in writing once.** Trial #96's lesson line was
+  first written reading +0.111 against the family's ±0.05 construction noise and calling it "about
+  twice that". Memmel's paired SE for that comparison is **0.142**. The construction floor answers
+  "how much of a result is the construction rather than the idea" (2026-09-09) — a different question
+  from "can this split resolve a difference between two books". **Use `metrics.sharpe_diff_se` for the
+  second; it is already in the engine and it is what the holdout veto uses.** The correction is left
+  visible in the journal rather than rewritten.
+
+- **[Measured 2026-09-22, nightly] The blend route does not become more resolvable as the leg becomes
+  more decorrelated — it moves along a ray.** The 2026-09-15 board is unchanged and was not
+  re-derived; the one cell whose input changed tonight was priced from stored series. As the best cell
+  goes **+0.018 → +0.034 → +0.059** (ρ 0.715 → 0.732 → 0.708, standalone 0.942 → 1.008 → 1.053), the
+  paired SE goes **0.076 → 0.101 → 0.134** and **t barely moves: +0.24 → +0.33 → +0.44.** Memmel's SE
+  is dominated by its `(1 − ρ)` term, so a more decorrelated leg widens the error bar on the very
+  comparison it was supposed to win. **What the blend route needs is a leg that is decorrelated AND
+  much better standalone — not one that is merely more decorrelated.** Tonight's leg nearly doubled
+  the best cell on the board and the challenger was still declined at t = +0.44, below the floor, with
+  the weight chosen ex-post. This strengthens rather than reopens the board's conclusion.
+
+- **[Measured 2026-09-22, nightly] A pre-registered orthogonality gate is what converts a positive
+  result from a suspicion into a finding, and it costs no trial.** `E/Var` (the hedgeable fraction of
+  a name's variance against its 4 most-correlated substitutes) was screened on train before any book
+  was built, against thresholds fixed in the journal in advance: `|ρ(E/Var, 21d Garman–Klass vol)| =
+  0.148` and `|ρ(E/Var, rank 12−1)| = 0.015`, both far under the 0.50 bar; the 250-day realized-vol
+  **level** reads 0.238 for contrast. Because those numbers existed first, trial #96's 1.053 means
+  what it says instead of being the survivorship artifact in a new costume. This is the difference
+  between that entry and `beta-minus` (2026-09-17) and `VSP` (2026-09-19). **Rider, and it is the
+  part that generalises: when a new variable passes a precondition by separating two groups sharply,
+  that separation is the next confound.** `E/Var` separates ETFs from single names at rank-AUC 0.815 —
+  and single names are where survivorship bias is worst — so it must be demeaned **within instrument
+  type** before scoring, exactly as `lv_illiq_region_relative` demeans within region.
+
+- **[Measured 2026-09-22, nightly] A de-risking overlay can only be tested where its constraint
+  binds; calibrate the target against the book's own volatility before spending a trial on it.**
+  Trial #95 put a `min(1, 0.15/σ̂)` overlay on an equal-weight 42-ETF sleeve and the overlay was
+  **nearly inert**: mean gross exposure **0.952**, median 0.999, **64% of validation days at full
+  exposure**, because a diversified basket's own volatility sits near or below a 0.15 target most of
+  the time. The same overlay on the champion's book binds on half of all days at mean exposure 0.813.
+  A trial spent on the smoothing of a scale that never moves measures nothing about the smoothing.
+
+- **[2026-09-22, nightly] The survivorship artifact predicts the same sign in BOTH bands, which is
+  what makes an ordered test worth more than a stronger one.** `SUMMARY.md` #136's falsifier ran the
+  Stambaugh–Yu–Yuan sign flip on train: high-minus-low idiosyncratic volatility, forward 21 days,
+  within each half of a 12−1 mispricing split. **Overpriced (losers) +0.646% (t = +1.94), underpriced
+  (winners) +1.486% (t = +4.60) — both POSITIVE.** SYY require the overpriced band to be negative. The
+  vein closes for zero trials and anti-candidate #138 is now measured rather than argued. **The
+  magnitude ordering came out in SYY's direction and identifies nothing**, because the artifact is
+  unbounded in strength and can produce any magnitude ordering — which is precisely why the sign, not
+  the gap, was pre-registered. Do not let a later session read the gap as support.

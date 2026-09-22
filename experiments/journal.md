@@ -13247,3 +13247,170 @@ noise, in which case the arbitrage story is decoration.
   establish `E/Var` as the first conditioning variable in this repo to pass an orthogonality gate and
   a sign falsifier both, which is a better-evidenced object than anything else outside `price-trend`.
 
+
+## Pre-registration for the NEXT session — 2026-09-22, fully specified before its numbers exist
+
+Tonight's `E/Var` term is the first conditioning variable in this repo to pass **both** a
+pre-registered orthogonality gate and a sign falsifier. One of its gate numbers points somewhere
+tonight deliberately did not go, and specifying it here keeps it from being chosen after a
+measurement.
+
+- **The number that licenses it**: `|spearman(E/Var, rank 12−1)| = 0.015` on train — essentially
+  zero. `E/Var` is very nearly orthogonal to the incumbent's own score, which is a stronger statement
+  than it being orthogonal to the volatility level. Wurgler–Zhuravskaya's mechanism says mispricing
+  persists where arbitrage is costly; momentum **is** a mispricing-continuation signal; so the
+  predicted interaction is with the champion's score specifically, and the measured orthogonality says
+  the term would be adding information rather than restating it.
+- **Candidate**: the seated champion `mom_zscore_overlap6_hzn_avg4`, unchanged in every respect —
+  same four lookbacks, same skip, same hold-25/enter-15 band, same `c − c.min() + FLOOR` weighting,
+  same six-tranche overlap, same daily vol-spike trim — with the per-leg score replaced by
+  `zscore(momentum) + zscore(type-demeaned −E/Var)` and **nothing else touched**.
+- **`E/Var` constants fixed now, transcribed from tonight and not to be re-swept**: 250-day window,
+  20-day lag, `K = 4` substitutes, equal-weight basket, closed form `corr²`, demeaned within
+  `groups.TYPE_OF` with `MIN_TYPE = 4`.
+- **Family `price-trend`, `track: "challenge"`.** It modifies the incumbent, so it is `price-trend`
+  whatever its new term's provenance, and it counts against that family's cap of 2. **It is a
+  challenger and can reach the holdout gate, so it must be run FIRST in its session**, before any
+  candidate whose design would then be holdout-informed.
+- **The falsifier, fixed in advance, both branches.** Validation Sharpe at or below the champion's
+  1.120 → the interaction is absent on the incumbent's own score and the `E/Var` vein is a
+  `liquidity-volume` object only, which closes `SUMMARY.md` #137 at its most favourable reading.
+  Above 1.120 → it goes to the DSR bar and the holdout veto on its own merits, and **the session ends
+  there** whichever way the gate lands.
+- **Stated in advance against the objective**: tonight's own evidence is that this term's gain is
+  **not resolvable** (t = +0.79 on the `liquidity-volume` book) while its mis-signed damage is. The
+  honest prior is therefore a small, unresolvable move, and a large one would be the surprise. Report
+  the paired `t` against the champion, not just the Sharpe.
+- **Anti-candidate attached, so the obvious variant is not tried**: do **not** substitute total
+  variance for the ratio. A variance level on this universe is the survivorship artifact, and a good
+  score there would seat a knowingly-artifactual book. That is `SUMMARY.md` #137's own warning and
+  tonight's gate (b) contrast number (0.238 for the level against 0.148 for the ratio) supports it.
+
+## Session summary — 2026-09-22 (nightly)
+
+- **Integrity check — the same discrepancy as the last fifteen sessions, verified rather than
+  assumed.** The session-start hook reported "on main, level with origin/main"; `git status -sb`
+  reported **`main-x4uc6p`**. Both were at `3ef587b` with **no unique commits**, and
+  `git branch -r --no-merged origin/main` returned **nothing**, so nothing was stranded and
+  `trials.jsonl` is not split. Moved to `main` per step 0. The harness instructions again named a
+  per-run branch while `CLAUDE.md`, `program.md` and the standing prompt all require `main`; **the
+  repo's rules governed.**
+- **Engine tests green (33 passed).** Store fresh **through 2026-09-21**, the latest trading day.
+- **Experiments run: 3 of the 8-trial budget** — trials **#95, #96, #97**. Trial count 94 → **97**.
+  **This ends a run of seven consecutive zero-trial sessions.**
+- **Holdout: NOT read. No challenge candidate was run**, so the champion was never compared and
+  `holdout_gate` was never reachable. Holdout looks since 2026-08-17 stand at **five, unchanged**.
+  The champion seat did not move.
+
+### The night in one line
+
+The lab took the research folder's limits-to-arbitrage vein, closed half of it for free with an
+ordered falsifier, and found in the other half the first conditioning variable it has ever had that
+survives both an orthogonality gate and a sign reversal — then declined to seat it, because the same
+night's free measurement priced the route to the seat and the route is still shut.
+
+### Verdicts
+
+| # | candidate | family | track | verdict | val Sharpe |
+|---|---|---|---|---|---|
+| 95 | `rv_sleeve_voltarget_phi05` | `range-variance` | scout | SCOUT | 0.390 |
+| 96 | `lv_illiq_evar_riskcost` | `liquidity-volume` | scout | **FAMILY_LEAD** | **1.053** |
+| 97 | `lv_illiq_evar_signflip` | `liquidity-volume` | scout | SCOUT | 0.725 |
+
+### Best finding: arbitrage *risk* cost is a second channel, and the evidence for it is a sign, not a level
+
+Adding a type-demeaned hedgeable fraction `E/Var = 1 − A/Var` — a name's variance share spanned by its
+4 most-correlated substitutes, dimensionless in volatility — to the seated `liquidity-volume` lead's
+region-relative Amihud score takes the family lead **0.942 → 1.053** at `ρ_to_champion` **0.708**, the
+most decorrelated leg above 1.0 the lab has ever held. Amihud is the *trading* cost of arbitrage;
+`E/Var` is its *risk* cost, and Wurgler–Zhuravskaya's claim is that the second is distinct.
+
+**What makes it a finding and not a number**: two free gates fixed before the book existed
+(`|ρ(E/Var, GK vol)| = 0.148`, `|ρ(E/Var, rank 12−1)| = 0.015`, both against a 0.50 bar set in
+advance), plus a sign falsifier with both branches pre-registered. **What keeps it honest**: the
+paired standard errors say the **+0.112 gain does not resolve (t = +0.79)** while the mis-signed
+**−0.217 does (t = −2.38)**. The claim carried forward is therefore *directional*, and trial #96's
+lesson line was **corrected in place** where it had first read the gain against the wrong error bar.
+
+### Second finding: the blend route is shut for a structural reason, not a contingent one
+
+Tonight's leg nearly doubled the best cell on the closed 2026-09-15 board (+0.034 → **+0.059**) — and
+the challenger was still declined. Across the three cells, Δ rises +0.018 → +0.034 → +0.059 **and the
+paired SE rises with it** 0.076 → 0.101 → 0.134, so `t` barely moves: **+0.24 → +0.33 → +0.44.**
+Memmel's SE is dominated by `(1 − ρ)`. **A more decorrelated leg buys gain and error bar at the same
+rate.** What the route needs is a leg that is decorrelated *and* much better standalone.
+
+### Third finding: last session's one reopenable refutation is closed, negatively
+
+2026-09-21 flagged that all three refuted de-risking overlays traded their scale at `φ = 1` and called
+it "the first time in seven sessions that an existing refutation has looked reopenable on measured
+grounds". Re-screened tonight on the champion's book: **mean gross exposure is 0.813 at every `φ` from
+1.00 to 0.02.** Smoothing saves 0.45%/yr; the overlay's real cost is **18.7% of exposure surrendered
+to cash at 0%, about 4.9%/yr — eleven times larger.** The gate failed, no `price-trend` trial was run,
+and `learnings.md`'s de-risking entry stands as written with last night's corollary corrected.
+
+### And one vein closed for zero trials
+
+`SUMMARY.md` #136's ordered falsifier: high-minus-low IVOL forward returns are **positive in both**
+mispricing bands (+0.646%, t = +1.94 overpriced; +1.486%, t = +4.60 underpriced). Stambaugh–Yu–Yuan
+need the overpriced band negative. **Same sign in both bands → the artifact**, exactly as
+pre-registered, and anti-candidate #138 is now measured rather than argued.
+
+### Protocol and allocation notes
+
+- **Budget: 3 of 8, and the five unspent were declined on measured grounds, not skipped.** Two planned
+  trials were killed by gates fixed in advance (the `price-trend` φ challenger, the blend challenger);
+  neither was replaced by a substitute to use up budget. `price-trend`'s cap of 2 is **unused — zero
+  trials there**. Two trials in `liquidity-volume`, which is permitted: eight families carry leads, so
+  the "at most 2 per family until four have leads" clause is lifted and the "at least 1 in a family
+  with no recorded trial" floor is vacuous. The second was a falsifier of the first, not a second shot
+  at it.
+- **Effective trial count 26 → 27** across three trials, so two of tonight's three were near-duplicates
+  in the deflator's eyes — expected, since #96 and #97 differ by one sign.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's to
+  rule on.
+- **The standing ⚠ concern is unchanged at four points** — no promotion, no fifth data point, no sixth
+  holdout look.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and `trials.jsonl` are untouched.
+- **No engine issues encountered.**
+
+### Next ideas, in order, with provenance
+
+1. **The pre-registered next-session candidate above** — the champion's score conditioned on
+   type-demeaned `−E/Var`, `price-trend`, **challenge, run first**. Provenance: tonight's gate (b)
+   number `ρ(E/Var, rank 12−1) = 0.015`, and `SUMMARY.md` #137.
+2. **`SUMMARY.md` #135**, tonight's one unrun free item: the long-leg/short-leg decomposition of
+   scores the lab already holds, to quantify what long-only costs this universe. Free, re-reads
+   results already paid for, and tonight's #136 result makes it more interesting rather than less —
+   the artifact showed up in both bands, so the *reachable* half is the question that remains.
+3. **ANTI-CANDIDATE, new tonight**: do not substitute a variance **level** for the `E/Var` ratio, and
+   do not sweep its `K`, window or lag. The ratio passed a gate the level fails by construction, and
+   the knobs are knobs.
+4. **ANTI-CANDIDATE, #134 and #138, carried and now both measured**: no cross-sectional ranking on
+   forecast volatility, and not the literal long-only reading of Stambaugh–Yu–Yuan (2015).
+5. **ANTI-CANDIDATE, carried from 2026-09-21**: no HAR/HExp/panel rebuilds at other horizons, decay
+   families or refit cadences — **and now also no `φ` variants of a de-risking overlay**, which
+   tonight priced at an order of magnitude too small.
+6. **Do NOT re-derive the blend board.** Exhaustive as of 2026-09-15, extended -17, -18, and tonight's
+   one new cell is now on it with the reason it changes nothing.
+7. **`SUMMARY.md` #109**, the folder's highest-ranked unrun item, carried for a **fifteenth** session;
+   **#82** for a sixteenth and **#49** for a twenty-fifth.
+
+### For the human — the stall broke, and what it cost is worth knowing
+
+Three trials, one new family lead, two veins closed, and the champion untouched. The seven-session
+zero-trial run is over and it ended on a positive result rather than on a decision to spend budget.
+
+The honest caveat is in the same paragraph: **the headline gain does not resolve on this split**
+(t = +0.79), and the session's own free measurement says the route from a decorrelated lead to the
+champion's seat is shut for a structural reason — decorrelation widens the error bar as fast as it
+widens the gain. So the lab now has its best-evidenced non-`price-trend` object and a measured reason
+why that object cannot reach the seat by the route `program.md` specifies. Those two facts together
+are the state of the search, and the second is the one that needs a human.
+
+The larger decision is unchanged and is not an agent's: either the universe gains data that opens a
+family the survivorship artifact cannot reach (point-in-time constituents, fundamentals, intraday
+bars), or `program.md` says what the lab should do when its best decorrelated leg is demonstrably
+unable to clear a paired standard error. Both are edits to frozen files.
