@@ -208,6 +208,31 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > already holds. That is the second instance of "the lab's null is the literature's prediction"
 > after 2026-09-18, and the 2026-09-21 open questions state it as a rule.
 >
+> **Status after session 39 (2026-09-22): the thirteenth unit is the *precondition* of a
+> prediction — not what predicts returns, but why anything would — and it is the first unit this
+> file had already named and then failed to pick up twice.** Sessions 28–38 each found a finer
+> unit to check coverage at, ending with the quantity being forecast. Tonight's gap needed no
+> audit: the 2026-09-19 and 2026-09-20 open questions both closed by naming **limits to
+> arbitrage** as the better of two carried-forward targets, and 2026-09-21 was aimed elsewhere,
+> so it survived unspent. A grep across all 118 prior notes returned **zero** dedicated coverage
+> for `limits of arbitrage`, `arbitrage asymmetry`, `noise trader`, `holding cost` and `arbitrage
+> cost`. **Families → … → the quantity being forecast → why anything would be forecastable at
+> all.** Session 39 covered it with four Tier-A primaries, all read in full (new cross-family
+> section below, candidates #135–#138). The durable addition to the unit-of-check lesson: *a
+> deferral this file records with a named target and no precondition should be picked up by the
+> next session that is not aimed by the lab, or it will be carried indefinitely.* Three results
+> deserve flagging up here. First, **the session's headline is a discount factor rather than a
+> mechanism**: this lab is long-only, and for every one of eleven anomalies decomposed leg by leg
+> the benchmark-adjusted profit sits substantially more on the **short** leg — so the
+> literature's effect size is not the reachable effect size, and the gap is most of the effect.
+> That applies on *any* universe, unlike the two explanations for the stall already on the table.
+> Second, **the vein's central conditioning variable collides head-on with this lab's strongest
+> measured fact** — the literature says idiosyncratic volatility is where mispricing survives,
+> `learnings.md` says the volatility level is this universe's survivorship artifact, and both are
+> well-evidenced, which makes the natural test *unidentified* rather than merely noisy (#138).
+> Third, **the 2026-09-21 reconciliation in the entry above was withdrawn by the lab overnight**,
+> on the source's own instrument; see the 2026-09-22 open questions.
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -3587,7 +3612,85 @@ forecast changes the verdict is a different question from the one the lab answer
 part of volatility targeting that is *not* the momentum overlay is the **tail**, and this repo's
 Sharpe-led gates score a thinner left tail as nothing. Candidates #131–#134.
 
-## Cross-cutting principles
+### Why an effect survives at all — arbitrage cost, and which side of the sort it lives on (cross-family)
+
+*Sources: Shleifer–Vishny 1997 (JF, Tier A); Wurgler–Zhuravskaya 2002 (JB, Tier A);
+Stambaugh–Yu–Yuan 2012 (JFE, Tier A); Stambaugh–Yu–Yuan 2015 (JF, Tier A). All four
+`validation_overlap: false`, all four `published_post_2018: false`, all four read in full.
+Candidates #135–#138.*
+
+Every other section of this file asks **what predicts returns**. This one asks the prior
+question — **why would anything predict returns, and where** — and it is the vein
+`SUMMARY.md` itself named as the next target on 2026-09-19 and again on 2026-09-20
+("limits to arbitrage has no such problem and is the better of the two") without a session
+taking it. It had zero dedicated notes across 118.
+
+**The mechanism.** Shleifer–Vishny replace the textbook arbitrageur — many, diversified,
+own capital — with the one that exists: a few **specialists trading other people's money**,
+whose capital is allocated on their own recent returns. Two consequences. A specialist is
+undiversified by construction, so **total risk deters them, not just systematic risk** —
+"idiosyncratic risk as well deters arbitrageurs". And an adverse move both deepens the
+mispricing and triggers withdrawals, so arbitrage is weakest exactly where mispricing is
+largest. Their conclusion is a claim about which effects survive: **anomalies reflect "high
+idiosyncratic return volatility of arbitrage trades needed to eliminate the anomalies"**,
+not exposure to a hidden macro factor. Two riders sharpen it. The **horizon** rider: where
+uncertainty resolves slowly, the long-run alpha-to-volatility ratio can be high while the
+one-year ratio is low, and a career-constrained manager declines the trade — so the
+surviving effects are the ones whose payoff horizon exceeds the arbitrageur's evaluation
+horizon. And the **volatility** rider, which is counter-intuitive and usually misquoted:
+volatility alone does *not* deter entry, because an arbitrageur simply halves the position;
+it deters entry only when **expected alpha does not rise in proportion to it**.
+
+**The measurement.** Wurgler–Zhuravskaya define **arbitrage risk** as the variance of a $1
+long in the name against $1 short in the best available substitute basket — a residual
+variance, estimated on daily excess returns over a trailing window lagged away from the
+measurement date. Three of their construction facts matter more here than their
+demand-curve result: elaborate matching buys nothing (the residual against **three
+industry/size/book-to-market-matched stocks** correlates ≈ **0.98** with the residual
+against the **market alone**); substitutes remove only about **a fifth** of a typical
+stock's variance, so arbitrage risk is the same order of magnitude as total variance; and
+arbitrage risk is strongly **decreasing in size**. The derived quantity worth having is not
+the level but the **hedgeable fraction** `E/Var = 1 − A/Var` — dimensionless in volatility,
+and a property of the correlation structure *around* a name rather than of the name's own
+price path.
+
+**Which side of the sort the effect lives on, and this is the part that reframes the
+stall.** Stambaugh–Yu–Yuan (2012) combine market-wide sentiment with Miller's (1977)
+short-sale asymmetry — pessimists express their view by not holding, so overpricing is
+possible and underpricing much less so — and decompose eleven anomalies leg by leg. For
+**every one of the eleven**, the benchmark-adjusted spread sits substantially more on the
+**short** leg; the long leg is the quiet side and is essentially insensitive to the
+sentiment state. The general form: **an anomaly is usually a statement about names an
+arbitrageur cannot cheaply sell.** `program.md` makes this lab long-only at gross ≤ 1.0, so
+it is structurally confined to the minority side of every published cross-sectional effect
+— before costs, before this universe's handicaps, before publication decay. That is a
+discount factor this file has never written down, and it changes what a null means here: a
+long-only null is much weaker evidence against an effect than a long–short null would be.
+
+**The sign, and the collision with this lab's own strongest fact.** Stambaugh–Yu–Yuan
+(2015) resolve the idiosyncratic-volatility puzzle by conditioning on the *direction* of
+relative mispricing: among overpriced names the IVOL–return relation is **negative**, among
+underpriced names it is **positive**, the negative branch is the stronger one (arbitrage
+asymmetry), and pooling them produces the observed negative aggregate. Their asymmetry
+argument is instrument mechanics rather than data — margin ratio `m = equity / position
+size` deteriorates faster for a short because the position *grows* into the loss, stricter
+maintenance requirements for shorts, compounding skewness giving the short a fatter
+evaluation-horizon tail, and recall/squeeze risk with no long-side counterpart. The literal
+long-only instruction that falls out — *inside your long leg, overweight high-IVOL names* —
+**is forbidden here**, and not by prejudice: `experiments/learnings.md` (2026-09-06 onward,
+fourteen mechanism screens) identifies the volatility level as this universe's dominant
+survivorship artifact with the same sign. **The literature's conditioning variable and this
+universe's known bias channel coincide**, which makes the obvious test unidentified rather
+than merely noisy. #138 states that as a standing rule; #136 is the salvage that survives
+it, because the sign *flip* is something the artifact cannot imitate.
+
+**The transferable output, and it is a correction to a habit rather than a new mechanism.**
+This lab writes hypotheses that cite a published long–short spread and then judges the
+resulting long-only book against a champion. Those two numbers are not the same number, and
+per Stambaugh–Yu–Yuan the gap is not a rounding error — it is most of the effect. Carry the
+rule past this literature: **when a hypothesis cites a published cross-sectional result,
+state which leg the source attributes it to; if the source does not say, treat the
+reachable size as the minority share.**
 
 **Published predictors decay by roughly half, and the surviving half lives largely where this
 repo cannot trade.** McLean–Pontiff (2016), across 97 published cross-sectional predictors:
@@ -6860,6 +6963,84 @@ hypothesis fodder, then anti-candidates.
     scaling — and never a score. Tier A on the lab's side, and the lab's own evidence is stronger
     here than the literature's.
 
+135. **FREE, first, and it is a retroactive measurement on results the lab already holds — no new
+    score, no candidate file, no trial.** Stambaugh–Yu–Yuan (2012) decompose eleven anomalies leg
+    by leg and find, for **every one**, that the benchmark-adjusted spread sits substantially more
+    on the **short** leg than on the long leg. This repo is long-only at gross ≤ 1.0 and has never
+    measured what that costs it. Take three to five scores the lab has already refuted or seated
+    (12−1 momentum, 21-day reversal, region-relative `ILLIQ`, `VSP`, `ST` — whichever have stored
+    holdings), and for each compute, on **train only**, the top band's mean excess over the
+    universe mean and the bottom band's mean shortfall below it, as two separately-reported
+    numbers rather than a spread. **The pre-registered question is the ratio, not the level**:
+    the literature predicts the reachable (top-band) half is the minority. If it is, the lab has
+    a *quantified* haircut to apply to every future long-only hypothesis and a mechanism for
+    twelve sessions of nulls that is not "the universe is empty"; if the two arms are
+    symmetric here, that is a genuine departure from the US large-cap literature and worth more
+    than the haircut would have been. Either way it costs one holdings-only computation and it
+    re-reads results already paid for. Tier A, no overlap.
+    → `notes/2026-09-22-anomaly-profits-short-leg-asymmetry.md`
+
+136. **FREE, second, and it is an *ordered* falsifier of the one thing this universe's artifact
+    cannot imitate.** Stambaugh–Yu–Yuan (2015) show the IVOL–return relation is **negative among
+    overpriced names and positive among underpriced names** — a sign flip, not a level. This
+    repo's survivorship artifact predicts a *positive* volatility–return relation **everywhere in
+    the pool**, top band and bottom band alike, because every constituent is a survivor. So:
+    split the universe into bands on a score the lab already holds; within each band sort on
+    idiosyncratic volatility (residual SD against an equal-weight universe return, or a
+    market-plus-region pair — this repo has no `SMB`/`HML` and the candidate must say so); compare
+    the **sign** of the high-minus-low IVOL forward return in the top band against the bottom
+    band, train only. **Same sign in both bands → the artifact, and the whole vein closes for
+    zero trials.** Opposite signs → the first evidence on this universe that something other than
+    survivorship moves with volatility, which is worth more than any book here could be. Same
+    shape as the lab's own per-arm identification rule (2026-09-19) and the 2026-09-20 ordered
+    ablation: a prediction the confound cannot clear by being stronger. Tier A, no overlap.
+    → `notes/2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md`
+
+137. **THE BOOK, gated behind a cheap precondition, and its whole claim to novelty is that it is a
+    RATIO rather than a level.** Wurgler–Zhuravskaya's arbitrage risk is the residual variance of
+    a name against its best substitute basket. The **level** of that quantity is nearly collinear
+    with total variance — the paper says so — and on this universe a volatility level is the
+    survivorship artifact, so the level is dead on arrival. The **hedgeable fraction**
+    `E/Var = 1 − A/Var` is not: it is dimensionless in volatility and it is a property of the
+    correlation structure *around* a name, which is an argument **no functional of a name's own
+    price path can vary** — precisely what the 2026-09-20 open question demanded of any new score.
+    Construction: for each instrument, pick the `k ≈ 3–5` names with highest trailing correlation
+    over a rolling ~250-day window **lagged ~20 days** from the measurement date (the source's own
+    `[−365, −20]` template, and a causality convenience here), regress the subject's daily excess
+    return on the basket, take `A = Var(residual)` and `E/Var = 1 − A/Var`. Closes only; no volume,
+    so no foreign-holiday NaN. The paper's 0.98 correlation between market-matched and
+    fundamentals-matched substitutes is what licenses dropping the industry/size/B-M matching this
+    repo cannot do. **Two pre-registered gates, both before any book.** (a) **Precondition**: 42
+    of ~145 instruments are ETFs, i.e. baskets, and should be the easiest things here to hedge
+    with other baskets; if `E/Var` does not separate ETFs from single names sharply, the measure
+    is not working and the vein closes for free. (b) **Artifact screen**: `spearman(E/Var, 21-day
+    Garman–Klass vol)` and `spearman(E/Var, rank 12−1)` on train — the entire claim is that this
+    is not the volatility level, so a large |spearman| against it means the artifact in a new
+    costume, and the honest response is to say so and stop, as with `beta-minus` (2026-09-17) and
+    `VSP` (2026-09-19). Only if both pass: `track: "scout"`, family `liquidity-volume` (it is an
+    arbitrage-cost proxy, next to the `ILLIQ` work), as a **conditioning variable on an existing
+    score** rather than as a standalone sort — the source makes no claim about average returns,
+    only about price response to flow, and a candidate claiming otherwise is claiming more than
+    the paper does. Tier A, no overlap.
+    → `notes/2026-09-22-arbitrage-risk-substitute-portfolios.md`,
+    `notes/2026-09-22-limits-of-arbitrage-performance-based.md`
+
+138. **ANTI-CANDIDATE, and it is a second independent reason to hold #134 rather than a new
+    prohibition.** Do **not** build the literal long-only reading of Stambaugh–Yu–Yuan (2015) —
+    *inside the long leg, overweight high-idiosyncratic-volatility names*. It is the natural
+    instruction from the paper and it is **unidentified here**, because the literature's predicted
+    sign and this universe's survivorship artifact are the same sign; a positive result would mean
+    nothing and a negative one would be evidence against the artifact rather than against the
+    mechanism. The durable form, worth carrying past this vein: **when a literature's conditioning
+    variable coincides with a universe's known bias channel, the test is not merely noisy — it is
+    unidentified, and no care in construction fixes it. Change the variable (#137) or test the
+    ordering the confound cannot produce (#136).** Note also what is *not* claimed: this does not
+    say arbitrage risk is irrelevant here, only that the level of it is unmeasurable on this pool.
+    Tier A on the literature's side, and the lab's own evidence on the artifact is the stronger of
+    the two.
+    → `notes/2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md`,
+    `notes/2026-09-22-limits-of-arbitrage-performance-based.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -6903,8 +7084,148 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-19 (session 36) | **The tenth unit of the unit-of-check lesson: a primitive of a theory the folder already cites.** The MAX/lottery note names cumulative prospect theory, probability weighting and Barberis–Huang, and the lab has built and refuted two functionals of the price path (52-week-high proximity, information discreteness) — yet a grep across all 109 prior notes returned **zero** for `capital gain`, `overhang`, `disposition` and `reference price`. The theory's *reference point* had no coverage. Three notes, all three primaries read in full, acceptance criterion carried from session 34 (*does this end in a portfolio*) and met. **Grinblatt–Han** supply the base: prices are a convex combination of fundamental value and a **turnover-weighted average of past prices**, so the predictor is the **capital gains overhang** `(P − R)/P` rather than the past return, and the weight on a past price is the probability a share bought then has not traded since. Volume is what separates it from trend (the overhang is *decreasing* in past turnover), and ~59% of its cross-sectional variation is past returns, turnover and size. **An** shows the assumed functional form is wrong — the investor-level selling schedule is **V-shaped in profit**, so the tradeable combination is `VSP = Gain − 0.2·Loss` rather than their sum, it subsumes the base signal in a horse race, and **its loss half predicts the opposite of momentum**, which is the identification property that earns it a trial here. **Riley–Summers–Duxbury** show the **purchase price is not special**: path max, path min, 52-week high and 52-week low each work as well inside the same weights, composites of them subsume the base, and the same variables predict forward *volume* more strongly than the base. **The constraint that shaped the session**: every construction needs turnover = volume ÷ shares outstanding, and this repo has no share count — resolved by keeping the within-name *time series* of volume and fixing only its level, which the base paper's own robustness table identifies as the half carrying incremental information. Candidates #123–#126: one free screen that can retire the vein, one free measurement that arbitrates a reading the lab has already made, one long-only book, one anti-candidate. Flags: **all three samples end before 2018, so `validation_overlap: false` throughout**; Riley et al. is `published_post_2018: true`. No dated performance figure from any source is recorded anywhere — signs, orderings, subsumption and significance only. **Three rubric findings recorded against the vein rather than buried**: the overhang is absent from Hou–Xue–Zhang's 452 anomalies (checked by grep of the full text); **Birru 2015's adversarial test is recorded as not read** (publisher closed, OUP 403 on its own advertised GREEN PDF) with only its published abstract quoted, and it says momentum survives in stocks void of the disposition effect; and the one peer-reviewed **international** study (Zheng, Li & Li 2024) could not be read — `efmaefm.org` fails TLS verification through the proxy — so the multi-market row is **open** and nothing rests on it. | Grinblatt & Han 2005, JFE, with NBER w8734 (`2026-09-19-capital-gains-overhang-reference-price.md`); An 2016, RFS (`2026-09-19-v-shaped-selling-propensity.md`); Riley, Summers & Duxbury 2020, Management Science (`2026-09-19-dynamic-reference-point-composite-cgo.md`) |
 | 2026-09-20 (session 37) | **The eleventh unit of the unit-of-check lesson, and it is the one place the previous ten could not look: not what a score is computed FROM, but what it is computed AGAINST.** Sessions 28–36 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a theory already cited. Every one of those units is a property of the *subject* of a measurement. Tonight's sweep asked about its *reference*: the folder's behavioural scores are all functionals of a name's **own** price path — 52-week-high proximity, information discreteness, overnight sentiment, capital-gains overhang, `VSP` — and the lab has now refuted five of them into the same two regressors. A grep across all 112 prior notes returned **zero** for `salience`, `Bordalo`, `Gennaioli`, `Cosemans` and `salience theory`, and zero in the 9,315-line SUMMARY, while the adjacent theory — the one whose entire content is that perception is **context-dependent**, i.e. that the comparison set is the signal — sat uncovered next to the prospect-theory material the folder has cited since 2026-09-01. **Families → … → a primitive of a theory already cited → the reference the measurement is taken against.** The durable addition: *when a class of constructions keeps collapsing into the same confound, check whether they all share an argument you never varied.* Session 37 covered it. The session-34 acceptance criterion (does this end in a portfolio?) is met **only conditionally and the note says so plainly**: the book is an anti-candidate on this universe, refused by an independent Tier-1 replication rather than by this lab's priors, and what survives is two free ordered falsifiers that are the sources' own identifying tests plus one ETF-level scout with a mechanism and no empirical support. | Bordalo–Gennaioli–Shleifer 2012 (QJE) (`2026-09-20-salience-theory-choice-under-risk.md`); Cosemans–Frehen 2021 (JFE) (`2026-09-20-salience-theory-stock-prices.md`); Cakici–Zaremba 2022 (JFE, hostile multi-market replication, **not read** — abstract only) (`2026-09-20-salience-international-replication.md`) |
 | 2026-09-21 (session 38) | **The twelfth unit is the dependent variable, and it was named by the lab rather than audited into existence.** Sessions 28–37 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measurement is taken against. **Every one of those is a unit of a return prediction.** The 2026-09-20 nightly closed its vein on five readings and zero trials and wrote the plainest reading of eleven sessions — *"monthly-horizon cross-sectional prediction may simply have very little signal outside the trend the incumbent already holds"* — which is a statement about **what the lab has been trying to forecast**, and the same data contains a second quantity the literature says is strongly forecastable. A grep across all 115 prior notes returned **zero** for `Corsi`, `heterogeneous autoregressive`, `HAR-RV`, `long memory`, `Andersen`, `Bollerslev` and `volatility forecast`; `research/README.md` had named this exact clause as a thin spot and argued against reopening it, an argument made when the lab still had a book supply. **Families → … → the reference a measurement is taken against → the quantity being forecast.** The session-34 acceptance criterion is met **conditionally and the ordering says so**: two free screens come first, one of which (#131) can close the vein for zero trials, the book (#133) is gated behind both and is a scout, and one anti-candidate (#134) forbids the obvious misuse. The session's most useful output is not a book but a **reconciliation**: the lab's three backfired de-risking overlays are what this literature *predicts*, not a refutation of it — second instance of that shape after 2026-09-18. | Corsi 2009 (JFEC) (`2026-09-21-har-rv-volatility-cascade.md`); Bollerslev–Hood–Huss–Pedersen 2018 (RFS) (`2026-09-21-panel-volatility-models-and-risk-targeting.md`); Harvey–Hoyle–Korgaonkar–Rattray–Sargaison–van Hemert 2018 (JPM) (`2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`) — all three read in full text |
+| 2026-09-22 (session 39) | **The thirteenth unit is the *precondition* of a prediction, and unlike the previous twelve it was not audited into existence or named by the lab — it was this file's own twice-carried instruction, finally taken.** Sessions 28–38 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measurement is taken against → the quantity being forecast. Every one of those asks **what predicts returns**. The 2026-09-19 and 2026-09-20 open questions both ended by naming **limits to arbitrage** as the better of two carried-forward targets — *"it is a conditioning variable rather than a score, both papers in tonight's cluster lean on it, and this repo has the Amihud and volatility machinery to proxy it"* — and 2026-09-21 was aimed elsewhere, so it survived unspent. A grep across all 118 prior notes returned **zero** dedicated coverage for `limits of arbitrage`, `arbitrage asymmetry`, `noise trader`, `holding cost` and `arbitrage cost`, with Shleifer–Vishny cited in passing in four notes and the subject of none. **Families → … → the quantity being forecast → why anything would be forecastable at all.** The durable addition: *a deferral this file records with a named target and no precondition should be picked up by the next session that is not aimed by the lab, or it will be carried indefinitely* — this one survived two sessions and a nightly. The session-34 acceptance criterion is met **conditionally and the ordering says so**: two free items first (#135 re-reads results already paid for, #136 is an ordered falsifier that can close the vein for zero trials), the book (#137) is a scout behind two pre-registered gates, and #138 forbids the paper's own obvious long-only reading because it is **unidentified** on this pool. The session's most useful output is a discount factor rather than a mechanism: **this lab is long-only, and the literature says the long leg is the minority side of every anomaly it has been citing.** | Shleifer–Vishny 1997 (JF) (`2026-09-22-limits-of-arbitrage-performance-based.md`); Wurgler–Zhuravskaya 2002 (JB) (`2026-09-22-arbitrage-risk-substitute-portfolios.md`); Stambaugh–Yu–Yuan 2012 (JFE) (`2026-09-22-anomaly-profits-short-leg-asymmetry.md`); Stambaugh–Yu–Yuan 2015 (JF) (`2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md`) — all four read in full text |
 
 ### Open questions for future sessions
+
+- **[2026-09-22] Read this first: the 2026-09-21 nightly spent zero of eight trials for the
+  seventh time, closed the volatility-forecasting vein, and — the part that matters more than the
+  kill — **withdrew a reconciliation this file proposed the night before**. #131 ran and the
+  literature's forecasting claim replicated cleanly (HAR, HExp and a pooled panel all beat the
+  repo's 21-day window gross, on QLIKE and RMSE alike); #133 was gated on Block A and never
+  reached; #134 held. But #132 was the block this file ranked most likely to succeed, and it
+  **failed in this file's favour and against it at once**: the trend-overlap instrument read
+  +0.057 and +0.008 against the +0.20 line, predicted sign, a twentieth of the needed magnitude.
+  **The 2026-09-21 "the lab's null is the literature's prediction" entry is therefore withdrawn
+  on this universe**, and the nightly's replacement — all three refuted de-risking overlays traded
+  their scale at `φ = 1`, and smoothing the exposure on the *incumbent* estimator buys ~14x what
+  the best model choice does — is better evidenced than anything this file proposed. The rule that
+  survives, and it is the nightly's: **run the source's own instrument before adopting the source's
+  explanation for your null.** Still unrun and carried unchanged: **#109** (the folder's
+  highest-ranked unrun item, fifteenth session, still blocked only on rebuilding the 2026-09-14
+  specification curve), **#82** (sixteenth), **#94** as a standing discipline, **#49**
+  (twenty-fifth), plus **#105–#107** and **#110**'s shrink half. Also live and *pre-registered by
+  the lab itself*: the EW ETF sleeve at `φ = 0.05`, `σ_target = 0.15` on the trailing estimator,
+  fully specified in `experiments/journal.md` before its numbers existed. New tonight:
+  **#135–#138**.
+- **[2026-09-22] What should aim the next session, in order — and note that the first item is the
+  only one on this list that spends nothing and re-reads results the lab has already paid for.**
+  - **#135 first**, because it is a measurement on stored holdings and because it prices a
+    constraint this file has never quantified. Eleven anomalies, every one of them, put most of
+    the benchmark-adjusted spread on the leg this lab cannot hold. If that shape reproduces on the
+    lab's own refuted scores, twelve sessions of nulls acquire a mechanism that is **not** "the
+    universe is empty" — and every future hypothesis acquires a haircut it should have been
+    carrying all along. If the two arms are symmetric here, that is a real departure from the
+    large-cap literature and worth more than the haircut.
+  - **Then #136**, also free, and it is the tonight's-vein version of the ordered falsifier that
+    made #127 worth running: the literature predicts a **sign flip** between bands, the
+    survivorship artifact predicts one sign **everywhere**, and no amount of artifact strength
+    produces a flip. A null retires the vein for zero trials.
+  - **Then #137, and only as a scout, and only if both of its own pre-registered gates pass.**
+    It is the one candidate in this folder whose novelty claim is structural rather than
+    empirical: it varies the **correlation structure around a name**, which is an argument no
+    functional of the name's own price path can reach, and it is a **ratio**, so it is not the
+    volatility level in costume by construction. Its ETF-versus-single-name precondition is the
+    cheapest kill in the vein and should be run before anything is written.
+  - **Do not spend a trial on #138**, and note why this one is unusual: the prohibition is not
+    that the effect is absent but that the test is **unidentified** on this pool. That is a
+    different kind of "do not" from #134's, and it can be lifted by a universe change that
+    #134's cannot.
+  - **Then the lab's own pre-registered ETF sleeve**, then **#109** and **#82**.
+- **[2026-09-22] The transferable output, and it is a discount factor rather than a mechanism.**
+  This lab is long-only at gross ≤ 1.0. Stambaugh–Yu–Yuan decompose eleven anomalies leg by leg
+  and find, for **every one**, that the benchmark-adjusted profit sits substantially more on the
+  **short** leg — the mechanism being Miller's asymmetry, that pessimists express their view by
+  not holding rather than by selling. So **the literature's effect size is not the reachable
+  effect size**, and the gap is most of the effect rather than a rounding error. Carry the rule
+  past this vein: *when a hypothesis cites a published cross-sectional result, state in the
+  hypothesis line which leg the source attributes it to; if the source does not say, treat the
+  reachable size as the minority share.* This does not excuse a null — it calibrates one. It also
+  sits alongside, not instead of, the two explanations already on the table (the survivorship
+  artifact; thin monthly-horizon cross-sectional signal), and it is the only one of the three that
+  would apply on **any** universe.
+- **[2026-09-22] A tension this file is recording rather than resolving, and it is the sharpest
+  one yet because both sides are strong.** The limits-to-arbitrage literature's central
+  conditioning variable is **idiosyncratic volatility** — it is what an arbitrageur cannot hedge,
+  it is what deters the correcting trade, and it is where mispricing is therefore permitted to
+  survive. `experiments/learnings.md` (2026-09-06 onward, fourteen mechanism screens, three
+  independent robustness statistics) establishes that on **this** universe the volatility level is
+  the dominant **survivorship artifact**, with the largest |IC| of any score in the repo and the
+  wrong sign. Both claims are well-evidenced and they point the same regressor in the same
+  direction for opposite reasons, which means the natural test cannot distinguish them. **The
+  general lesson is worth more than this instance: when a literature's conditioning variable
+  coincides with a universe's known bias channel, the test is unidentified, not merely noisy.**
+  Two responses exist and this file proposes both — change the variable to something scale-free
+  in volatility (#137's hedgeable fraction), or test an **ordering** the confound cannot produce
+  (#136's sign flip). A third response, running it anyway and reporting the level, is what #138
+  forbids.
+- **[2026-09-22] A source deliberately not written up, recorded so a later session does not
+  re-find it and assume it was missed.** Chordia, Subrahmanyam & Tong, *Have capital market
+  anomalies attenuated in the recent era of high liquidity and trading activity?* (JAE 2014,
+  430 citations on Semantic Scholar, checked 2026-09-22) was located and read in full from
+  `warwick.ac.uk/fac/soc/wbs/subjects/finance/events/seminars/cst.pdf` — the accepted version,
+  editor and referees acknowledged. It is directly on tonight's topic and it was **not** given a
+  note, because its content is almost entirely of the shape `research/README.md` bans outright:
+  claims that named effects were larger before a dated structural change and smaller after it.
+  Its sample ends well before this repo's validation window, so the lookahead risk is nil in
+  substance — but the rule is stated absolutely and a note faithful to the paper would have had
+  to break it, while a note stripped of the time dimension would have had almost nothing left.
+  **The one thing worth carrying, in permitted form**: the paper's mechanism is that anomaly
+  magnitude is decreasing in the liquidity and trading activity of the names it is measured on,
+  identified off tick size, hedge-fund capital, aggregate short interest and turnover. On a
+  universe of ~145 of the most liquid names on earth, that is the same prediction tonight's four
+  Tier-A sources make, from a fifth independent team. Recorded as **read, not noted, by policy.**
+- **[2026-09-22] Access notes: one new reliable channel, one hard refusal, and a fourth
+  consecutive index gap.**
+  - **A university department's seminar-series archive is a channel worth adding by name.**
+    `warwick.ac.uk/fac/soc/wbs/subjects/finance/events/seminars/` served the full accepted
+    version of a closed JAE article on the first try. This is the same class as the CFR-Cologne
+    colloquium archive added 2026-09-20 and the business-school review site added 2026-09-18 —
+    *a venue that hosted the author, one step out from the publisher* — and it is now three
+    independent instances. **Try a finance-department seminar archive before the institutional
+    repository.**
+  - **A faculty page can refuse at the transport layer, which looks like nothing else on this
+    list.** `www2.bc.edu` (Jeffrey Pontiff's page, which does host the PDF of *Costly arbitrage
+    and the myth of idiosyncratic risk*, JAE 2006) returned **curl exit 56, connection reset by
+    peer, HTTP 000** on every attempt; `www.bc.edu`'s content path returned **406**. Two distinct
+    refusals from one institution. OpenAlex reports the DOI `closed` with
+    `any_repository_has_fulltext: false` and Semantic Scholar's `openAccessPdf` is `CLOSED`, so
+    per the 2026-09-20 rule this should have been planned as unreadable from the start. **Pontiff
+    (2006) is recorded as not read**; its argument enters tonight's notes only where
+    Stambaugh–Yu–Yuan and Wurgler–Zhuravskaya cite it explicitly, and it is attributed to them.
+    `ink.library.smu.edu.sg` also returned exit 000 — the same host that returned the Imperva
+    200-with-a-stub on 2026-09-18, now failing differently.
+  - **Index behaviour, fourth instance in four sessions.** Semantic Scholar's DOI endpoint
+    returned **"not found"** for Stambaugh–Yu–Yuan's JF DOI (`10.1111/jofi.12286`), as it did for
+    Grinblatt–Han (2026-09-19) and Cakici–Zaremba (2026-09-20); Crossref gives 924 and OpenAlex
+    1022 for the same DOI. Separately, S2 reports **1198** for the JFE paper where Crossref gives
+    1808 and OpenAlex 1862 — the session-7 rule applies and the lone low count is S2's. And
+    OpenAlex reports only **565** for Shleifer–Vishny against S2's 5189 and Crossref's 4344,
+    because the work is split across three DOIs (Wiley, JSTOR, NBER). **Generalised: for a
+    top-three finance journal, resolve in Crossref *and* OpenAlex and treat a lone outlier in
+    either direction as an index artifact — a split work undercounts in OpenAlex exactly as a
+    missing record undercounts in S2.**
+  - **NBER working-paper versions served two of four primaries** (`w16898`, `w18560`), and are
+    the same papers. Note the counter-case: `w5167`, the 1995 working-paper version of
+    Shleifer–Vishny, is a **scan whose text layer extracts as mirrored gibberish** — a failure
+    mode distinct from the no-text-layer scan documented 2026-09-08, and one that `pypdf` reports
+    as success. `file` and a glance at the first 500 characters catch it; the published version
+    from a course-page mirror (`web.stanford.edu/~piazzesi/Reading/`) was clean.
+- **[2026-09-22] Protocol note, sixteenth session running, and the stranded-branch item from
+  2026-09-20 appears resolved.** The session-start hook again printed "integrity check OK — on
+  main, level with origin/main, no stray branches" while `git status -sb` reported
+  **`claude/tender-galileo-afgzdw`**. As on 2026-09-06 through -21 this is the benign form — the
+  branch tip was bit-identical to `origin/main` (`85c1a10`) — and this session ran
+  `git checkout main && git reset --hard origin/main` before any work, so tonight's notes are on
+  `main` only. **Flagged for the human for the thirteenth time**, same reading: the hook's "on
+  main" clause is false while its "level with origin/main" clause is true, so a session trusting
+  the first clause commits to a per-run branch with no warning. This session's own harness
+  instructions again named the per-run branch as the development target while `research/README.md`
+  step 6 and the standing prompt's step 0 both require `main`; the repo's rules governed.
+  **Good news on the 2026-09-20 escalation**: `origin/main-av88mw`'s four stranded commits from
+  the 2026-09-19 strategy session are no longer absent — `main` at `85c1a10` carries the
+  2026-09-19 learnings and session summary, so the per-arm identification rule quoted in that
+  entry *is* readable from `main`. No further action needed and the item can be closed.
 
 - **[2026-09-21] Read this first: the book supply was empty for a third consecutive session and
   tonight changes the question rather than refilling it.** The 2026-09-20 nightly spent zero of

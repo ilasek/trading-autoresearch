@@ -12919,3 +12919,5 @@ intraday bars), or `program.md` says what the lab should do once its families ar
 are edits to frozen files.
 
 **No engine issues encountered.**
+
+## Research session — 2026-09-22 (learning agent): 4 notes added, see research/SUMMARY.md
