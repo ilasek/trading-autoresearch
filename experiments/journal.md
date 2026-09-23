@@ -13416,3 +13416,60 @@ bars), or `program.md` says what the lab should do when its best decorrelated le
 unable to clear a paired standard error. Both are edits to frozen files.
 
 ## Research session — 2026-09-23 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-09-23T23:18:24+00:00 — pt_mom_evar_arbrisk — **PROMOTE**
+- Candidate: `strategies/candidates/pt_mom_evar_arbrisk.py` (family: price-trend, track: challenge, trial #98)
+- Hypothesis: Replacing the champion's per-leg score with zscore(momentum) + zscore(type-demeaned -E/Var) — the hedgeable fraction of a name's variance against its 4 most-correlated substitutes over a 250-day window lagged 20 days, demeaned within instrument type — while leaving every other node of mom_zscore_overlap6_hzn_avg4 byte-identical, raises validation Sharpe above 1.120, because momentum is a mispricing-continuation signal and Wurgler-Zhuravskaya's arbitrage-risk channel says continuation should persist further where a name's variance is least hedgeable, a quantity measured at rank correlation 0.015 to the momentum score and therefore not a restatement of it.
+- Verdict: PROMOTE — beats champion (1.269 > 1.12) with DSR 0.9781 (98 trials, 27 effective after clustering at rho 0.95); holdout gate passed: holdout 1.411 vs champion 1.393 (delta +0.018, paired SE 0.201 at rho 0.943, t +0.09)
+- Train: sharpe +1.07, ann_ret +18.9%, maxDD -48.1%, turnover 1.8x
+- Validation: sharpe +1.27, ann_ret +23.8%, maxDD -22.8%, turnover 3.0x
+- Holdout: sharpe +1.41, ann_ret +27.4%, maxDD -15.2%, turnover 2.8x
+- Deflated Sharpe prob: 0.9781 (bar from 98 trials, 27 effective)
+- Champion validation sharpe at the time: +1.12
+- Champion re-deflated at the same bar: 0.9505
+- Holdout gate: candidate +1.41 vs champion +1.39, delta +0.018, paired SE 0.2012, rho 0.9435, **t +0.09** (veto below -2.0)
+- Lesson: **The hypothesis was right about the term and wrong about the channel, and the
+  channel it actually won on is the one this repo's gate is not supposed to reward.** The
+  pre-registration argued a *mean* channel — continuation persists further where arbitrage is
+  risky — and predicted "a small move the split cannot resolve". The move is +0.149, the
+  second-largest promotion step in this repo's history, and **it is not in the mean at all**.
+  On the free year decomposition the new book earns **less than the champion in every one of
+  the six validation years** (2018 -3.48 vs -5.74, 2019 +38.3 vs +41.0, 2020 +112.8 vs +126.9,
+  2021 +12.9 vs +18.6, 2022 -7.3 vs -10.2, 2023 +26.2 vs +28.4): ann_ret falls 25.65% → 23.79%
+  while ann_vol falls 22.71% → 18.12%. **Every basis point of the gain is denominator.**
+  Holdings-only, 75 sampled validation dates, 252-day trailing covariance, the mechanism is
+  unambiguous and is none of the four this repo would have guessed:
+
+      book                            positions   HHI      eff risk bets   mean pairwise corr   ex-ante vol
+      mom_zscore_overlap6_hzn_avg4      62.3     0.0614        8.43              0.242             0.220
+      pt_mom_evar_arbrisk               48.0     0.0618        8.45              0.174             0.171
+
+  The book holds **23% FEWER names at bit-equal weight concentration (HHI +0.7%) and bit-equal
+  effective risk bets (+0.2%)**, and its volatility falls 22% because **the names it holds
+  co-move 28% less with each other**. That is exactly what selecting on a low *hedgeable
+  fraction* must do and it was not foreseen: `E/Var` is by construction the share of a name's
+  variance its four closest substitutes span, so ranking it downward selects names the rest of
+  the universe cannot replicate — decorrelation by definition rather than by estimate. This is
+  the first construction in this repo to lower book volatility **without** lowering exposure,
+  without de-concentrating, and without holding more names.
+- Lesson (second half, on the statistics): **the risk-contribution count records its third
+  miss and this one names a new blind spot precisely.** Effective risk bets moved 8.43 → 8.45,
+  a prediction of **+0.01pp** of drawdown, while validation maxDD improved **-27.8% → -22.8%,
+  5.0pp** — four times the ±1.2pp unfalsifiability floor, so this is a real miss and not
+  scatter. The shape: effective risk bets is a Herfindahl over *normalised* risk shares, so it
+  is scale-free in the correlation **level** — a uniform fall in pairwise correlation cuts
+  total variance without redistributing risk shares, and the statistic cannot see it. Add that
+  to its two recorded blind spots (exposure scalars, formation-date diversity): **it measures
+  how risk is DIVIDED, never how much there is.** Print mean pairwise correlation beside it.
+  And the standing de-concentration price (~0.05 Sharpe per 30% of HHI) is simply not engaged
+  here — HHI moved 0.7% — which is the first time a large drawdown improvement in this family
+  has arrived with the concentration dial untouched.
+- Lesson (third half, on the gate): **read this promotion's margin honestly.** Paired against
+  the champion on validation: `rho` 0.9583, `metrics.sharpe_diff_se` **0.1164** (closed form
+  0.1160, agreeing to three decimals), `d` +0.1492, **t = +1.28** — the second-largest
+  promotion `t` ever recorded here after the baseline→#32 step's +1.62, and **still short of
+  |t| = 2**, and short of the +0.283 the required-gain table asks at this `rho`. By this file's
+  own standing rule the step is a point estimate the split cannot resolve. What corroborates it
+  is not the gate: **train 0.970 → 1.073 and holdout 1.393 → 1.411 both move UP with it**, and
+  this is the first promotion since #43 for which that is true. The ⚠ concern's signature was
+  validation up / holdout down; this step does not have it.
+

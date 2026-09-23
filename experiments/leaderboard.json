@@ -1,7 +1,24 @@
 {
-  "generated_at": "2026-09-22T23:30:13+00:00",
-  "champion": "mom_zscore_overlap6_hzn_avg4",
+  "generated_at": "2026-09-23T23:20:09+00:00",
+  "champion": "pt_mom_evar_arbrisk",
   "families": {
+    "price-trend": {
+      "name": "pt_mom_evar_arbrisk",
+      "candidate": "strategies/candidates/pt_mom_evar_arbrisk.py",
+      "track": "challenge",
+      "verdict": "PROMOTE",
+      "ts": "2026-09-23T23:18:24+00:00",
+      "n_trials": 5,
+      "rho_to_champion": 1.0,
+      "validation": {
+        "sharpe": 1.269,
+        "ann_return": 0.2379,
+        "max_drawdown": -0.2277,
+        "ann_turnover": 3.01,
+        "avg_positions": 48.27
+      },
+      "train_sharpe": 1.073
+    },
     "cross-sectional momentum": {
       "name": "mom_hzn_avg4_nobuffer",
       "candidate": "strategies/candidates/mom_hzn_avg4_nobuffer.py",
@@ -9,7 +26,7 @@
       "verdict": "PROMOTE",
       "ts": "2026-08-21T23:11:47+00:00",
       "n_trials": 34,
-      "rho_to_champion": 0.9393,
+      "rho_to_champion": 0.9005,
       "validation": {
         "sharpe": 1.229,
         "ann_return": 0.3096,
@@ -26,7 +43,7 @@
       "verdict": "PROMOTE",
       "ts": "2026-08-18T23:15:13+00:00",
       "n_trials": 5,
-      "rho_to_champion": 0.9466,
+      "rho_to_champion": 0.9091,
       "validation": {
         "sharpe": 1.201,
         "ann_return": 0.2859,
@@ -43,7 +60,7 @@
       "verdict": "REJECT",
       "ts": "2026-08-19T23:15:28+00:00",
       "n_trials": 8,
-      "rho_to_champion": 0.9507,
+      "rho_to_champion": 0.9162,
       "validation": {
         "sharpe": 1.18,
         "ann_return": 0.2548,
@@ -53,23 +70,6 @@
       },
       "train_sharpe": 0.944
     },
-    "price-trend": {
-      "name": "pt_depth_vs_vintage_breadth",
-      "candidate": "strategies/candidates/pt_depth_vs_vintage_breadth.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-09-08T23:22:00+00:00",
-      "n_trials": 4,
-      "rho_to_champion": 0.9497,
-      "validation": {
-        "sharpe": 1.166,
-        "ann_return": 0.2558,
-        "max_drawdown": -0.2648,
-        "ann_turnover": 7.0,
-        "avg_positions": 49.24
-      },
-      "train_sharpe": 0.939
-    },
     "liquidity-volume": {
       "name": "lv_illiq_evar_riskcost",
       "candidate": "strategies/candidates/lv_illiq_evar_riskcost.py",
@@ -77,7 +77,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-09-22T23:24:46+00:00",
       "n_trials": 10,
-      "rho_to_champion": 0.7077,
+      "rho_to_champion": 0.7417,
       "validation": {
         "sharpe": 1.053,
         "ann_return": 0.1468,
@@ -94,7 +94,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-08-31T23:18:36+00:00",
       "n_trials": 15,
-      "rho_to_champion": 0.7316,
+      "rho_to_champion": 0.7029,
       "validation": {
         "sharpe": 1.008,
         "ann_return": 0.1764,
@@ -111,7 +111,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-09-11T23:22:51+00:00",
       "n_trials": 3,
-      "rho_to_champion": 0.7828,
+      "rho_to_champion": 0.7675,
       "validation": {
         "sharpe": 0.875,
         "ann_return": 0.1516,
@@ -128,7 +128,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-09-09T23:12:11+00:00",
       "n_trials": 5,
-      "rho_to_champion": 0.7335,
+      "rho_to_champion": 0.7114,
       "validation": {
         "sharpe": 0.846,
         "ann_return": 0.1718,
@@ -145,7 +145,7 @@
       "verdict": "REJECT",
       "ts": "2026-08-04T01:16:01+00:00",
       "n_trials": 2,
-      "rho_to_champion": 0.6817,
+      "rho_to_champion": 0.6546,
       "validation": {
         "sharpe": 0.82,
         "ann_return": 0.1793,
@@ -162,7 +162,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-08-29T23:11:22+00:00",
       "n_trials": 2,
-      "rho_to_champion": 0.6981,
+      "rho_to_champion": 0.6822,
       "validation": {
         "sharpe": 0.688,
         "ann_return": 0.1001,
@@ -179,7 +179,7 @@
       "verdict": "REJECT",
       "ts": "2026-08-02T19:24:35+00:00",
       "n_trials": 2,
-      "rho_to_champion": 0.5496,
+      "rho_to_champion": 0.5898,
       "validation": {
         "sharpe": 0.685,
         "ann_return": 0.0866,
@@ -196,7 +196,7 @@
       "verdict": "REJECT",
       "ts": "2026-08-02T19:23:42+00:00",
       "n_trials": 2,
-      "rho_to_champion": 0.4884,
+      "rho_to_champion": 0.5088,
       "validation": {
         "sharpe": 0.505,
         "ann_return": 0.0353,
@@ -213,7 +213,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-09-14T23:06:39+00:00",
       "n_trials": 2,
-      "rho_to_champion": 0.7035,
+      "rho_to_champion": 0.6786,
       "validation": {
         "sharpe": 0.494,
         "ann_return": 0.0769,
@@ -230,7 +230,7 @@
       "verdict": "REJECT",
       "ts": "2026-08-02T19:16:48+00:00",
       "n_trials": 2,
-      "rho_to_champion": 0.6413,
+      "rho_to_champion": 0.6512,
       "validation": {
         "sharpe": 0.492,
         "ann_return": 0.0445,
@@ -247,7 +247,7 @@
       "verdict": "FAMILY_LEAD",
       "ts": "2026-08-30T23:16:55+00:00",
       "n_trials": 1,
-      "rho_to_champion": 0.6922,
+      "rho_to_champion": 0.6765,
       "validation": {
         "sharpe": 0.468,
         "ann_return": 0.0733,
