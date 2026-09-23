@@ -13414,3 +13414,5 @@ The larger decision is unchanged and is not an agent's: either the universe gain
 family the survivorship artifact cannot reach (point-in-time constituents, fundamentals, intraday
 bars), or `program.md` says what the lab should do when its best decorrelated leg is demonstrably
 unable to clear a paired standard error. Both are edits to frozen files.
+
+## Research session — 2026-09-23 (learning agent): 3 notes added, see research/SUMMARY.md

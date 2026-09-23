@@ -4246,6 +4246,89 @@ bar permanently for everything after.
 `notes/2026-09-09-nonstandard-errors-in-portfolio-sorts.md`,
 `notes/2026-09-09-specification-curve-analysis.md`
 
+### Whether a new leg belongs in the book at all — spanning, its power, and the long-only version (cross-family)
+
+**Covered 2026-09-23 (session 40). Three sources, all read in full, all Tier A.** The folder has
+sixteen sessions of material on *how to compare two books* — Jobson–Korkie/Memmel's paired
+standard error, Ledoit–Wolf's bootstrap, the deflated Sharpe ratio, the construction non-standard
+error — and had **zero** notes on the other question the literature asks in this situation:
+*does the incumbent's frontier already contain the candidate?* A grep across all 122 prior notes
+returned nothing for `spanning` as a subject, `appraisal ratio`, `GRS`, `Kan–Zhou` or `de Roon`.
+
+**The framework.** Regress the candidate's return series on the incumbent's,
+`r = α + βR + ε`, and set `δ = 1 − β1`. Huberman–Kandel prove that the incumbent's
+minimum-variance frontier coincides with the combined frontier **iff `α = 0` and `δ = 0`** —
+and Kan–Zhou show what each restriction *is*: the candidate's weight in the tangency portfolio is
+`∝ Σ⁻¹α` and its weight in the global-minimum-variance portfolio is `∝ Σ⁻¹δ`, with `Σ` the
+candidate's residual variance against the incumbent. So `α` is the **mean channel** and `δ` the
+**variance channel**, and with one candidate the optimal tilt toward it is `α/σ²_ε` — never a
+fixed blend weight. A weaker and cheaper hypothesis, *intersection*, asks only whether one
+particular investor can improve, and reduces to `α = 0` in excess-return form.
+
+**The result that matters, and it is a second explanation of the lab's own structural blocker.**
+Kan–Zhou derive the exact power of the single-test-asset spanning `F`, whose noncentrality is
+`ω = (Θ'Ĝ⁻¹Θ)/σ²` and splits cleanly into a GMV term and a tangency term. The two are wildly
+unequal: in their stylised illustration a test asset that barely shifts the global-minimum-variance
+point produces `ω = 0.161`, while one that **doubles the tangency slope** — an enormous economic
+improvement — produces `ω = 0.0299`, a fifth as much. The reason is Merton's: `δ` depends on
+covariances, which are estimated accurately; `α` depends on means, which are not. Their own
+conclusion is that a low p-value need not mean an economically important shift and **a high
+p-value need not mean the candidate adds little**. Applied here: `experiments/learnings.md`
+(2026-09-22) records that the blend route "moves along a ray" — gain and paired standard error
+rise together with decorrelation and `t` barely moves, +0.24 → +0.33 → +0.44. The spanning
+literature says the ray is not a property of Memmel's `(1 − ρ)` term specifically but of **the
+tangency channel itself**: a difference of Sharpe ratios is a difference of estimated means, and
+that quantity is close to unresolvable at any sample this lab will ever have. The lab is scoring
+on the channel its data cannot resolve, and the channel that *is* resolvable (variance reduction)
+is not what `engine/protocol.py` scores. **This is the third instance of the shape
+`SUMMARY.md` named on 2026-09-21 — the literature predicting the lab's null rather than
+contradicting it — and it is the most general of the three, because it does not depend on this
+universe at all.**
+
+**Three construction facts to carry.** *(a)* The widely-used spanning `F` is **wrong for a single
+test asset** — the correct form is `(1/U − 1)(T−K−1)/2 ~ F(2, T−K−1)`, and Kan–Zhou open the
+paper by flagging its misuse. *(b)* The **step-down test** splits the joint null into `F₁` (tests
+`α = 0`; this is the GRS statistic, and with one test asset it is the square of the ordinary
+`t` on `α̂`) and `F₂` (tests `δ = 0 | α = 0`), which are independent under the null, so you learn
+*which* channel rejected and can size the two differently by economic importance rather than
+letting sampling accuracy decide. *(c)* Fat tails hit the `δ` channel hard and the `α` channel
+barely; the non-robust Wald test of spanning is badly oversized under Student-`t` returns (bias
+≈ `1/(ν−4)`), far more so than a test of `α` alone, and for daily data the elliptical GMM
+correction behaves much better than the general one.
+
+**What the long-only constraint does, and it cuts in the lab's favour for once.** De
+Roon–Nijman–Werker replace the equalities with **inequalities**: when the candidate cannot be
+shorted, spanning requires only `v·α(v) + (β(v)1 − 1) ≤ 0`, tested with a Kodde–Palm
+mixture-of-`χ²` Wald statistic which for one candidate is `½χ²₀ + ½χ²₁` — **a one-sided test,
+which halves the p-value of a positive alpha.** That is a power gain bought by the constraint, a
+rare direction in this folder. The same result has a second, less comfortable edge: **a negative
+alpha is no longer evidence against spanning at all** — you would have wanted to short it and you
+cannot. Read the lab's own trial #97 (`lv_illiq_evar_signflip`, −0.217 at `t = −2.38`) under
+this: as a *sign falsifier* it did its identification job, but as a statement about the frontier
+it is **the long-only null holding**, not a rejection. Two further mechanics: under the
+constraint the pricing kernel is linear only in the benchmark positions whose constraints do
+*not* bind (for a lab that uses the champion's realised net return series as a single benchmark
+this is automatic, and the single-segment simplification applies, with simulation evidence that
+the asymptotic test is then well-sized even at five years of monthly data); and **transaction
+costs are handled by splitting each asset into a long-position return `τˡR` and a
+short-position return `τˢR`** and constraining each, which is the doubled-asset trick that makes
+costs a short-sale problem. Their headline in permitted form: **a frontier improvement that is
+clear frictionlessly can vanish once the investor cannot short, and vanish again under even
+small proportional costs.** The unconstrained rejection is an upper bound on what a long-only,
+cost-paying book can take.
+
+**The boundary, stated because the next session will be tempted past it.** A spanning test and
+the lab's gate are **different nulls**. The gate compares two specific books at a weight fixed
+in advance and Memmel/Ledoit–Wolf is the right statistic for it; the spanning test compares two
+*frontiers* at whatever weight is optimal. A leg can be spanning-rejected and still fail the gate,
+and both statements can be true. **This does not reopen the 2026-09-15 learning** that raw `ρ`,
+not market-residual `ρ`, is the correct input to the required-gain table — the spanning
+regression's residual is the object of a different hypothesis, not a substitute input to
+Memmel's formula.
+→ `notes/2026-09-23-mean-variance-spanning-and-intersection.md`,
+`notes/2026-09-23-spanning-test-power-and-step-down.md`,
+`notes/2026-09-23-spanning-under-short-sales-and-costs.md`
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -7040,6 +7123,72 @@ hypothesis fodder, then anti-candidates.
     the two.
     → `notes/2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md`,
     `notes/2026-09-22-limits-of-arbitrage-performance-based.md`
+139. **FREE, first, and it partitions a null the lab has carried for sixteen sessions without
+    being able to split it.** Run the **step-down spanning decomposition** of the seated
+    `liquidity-volume` lead (`lv_illiq_evar_riskcost`) against the champion, on stored daily net
+    return series. `K = 1` (champion), `N = 1` (lead). One OLS regression, no trial, no new data,
+    **no holdout**. Report two numbers: `F₁ = (T−K−1)·(â − â₁)/(1 + â₁) ~ F(1, T−K−1)`, which
+    tests `α = 0` and is the square of the ordinary `t` on `α̂`; and
+    `F₂ = ((T−K)/1)·(|Σ̃|/|Σ̄| − 1) ~ F(1, T−K)`, which tests `δ = 0` given `α = 0`. They are
+    independent under the null. **Use the `N = 1` form throughout** — the `N ≥ 2` spanning `F`
+    that appears in most applied work is invalid for a single test asset and Kan–Zhou open their
+    paper by flagging exactly that misuse. **Pre-register both branches before running it.**
+    Neither rejects → the champion's frontier already contains the lead, the twelve-session null
+    is a real null, and `liquidity-volume` is closed as a source of *additive* value whatever its
+    standalone Sharpe. `F₁` rejects → the tangency channel is live and the blend board's `t`
+    understates it, which is a reason to keep the family open, **not** a promotion argument
+    (see #141). `F₂` alone rejects → the leg is a variance-channel object, which this repo's
+    Sharpe gate does not score, and the honest conclusion is that the lab found something its
+    objective cannot reward. Tier A, no validation overlap. Do it on **train only**, and if the
+    daily series is used, prefer the elliptical GMM covariance over normal theory — the `δ` half
+    is the one fat tails break.
+    → `notes/2026-09-23-spanning-test-power-and-step-down.md`,
+    `notes/2026-09-23-mean-variance-spanning-and-intersection.md`
+140. **FREE, second, and it is a standing reporting change rather than a one-off measurement.**
+    Two lines, both cheap, both applying to every future leg:
+    **(a) Report the appraisal ratio `α̂/σ̂_ε` against the champion next to every
+    `ρ_to_champion`.** This is the quantity the incremental test is actually powered on — the
+    noncentrality is `ω = (Θ'Ĝ⁻¹Θ)/σ²` with `σ²` the residual variance — and for a leg with
+    `β ≈ 0` it collapses to the leg's **standalone** Sharpe. That is the frontier-geometry
+    derivation of the lab's own 2026-09-22 conclusion ("decorrelated **and** much better
+    standalone, not merely more decorrelated"), and it means the lab's reading is correct rather
+    than pessimistic: decorrelation on its own moves `ω` not at all.
+    **(b) Test `α ≤ 0`, not `α = 0`.** This book is long-only, so de Roon–Nijman–Werker's
+    inequality form applies and the null distribution for one candidate is `½χ²₀ + ½χ²₁` — the
+    p-value of a positive alpha halves. The direction must be fixed in advance, which is a
+    discipline this lab already has. The same rule's other edge is a **reinterpretation of a
+    result already on the books**: trial #97's mis-signed leg at `t = −2.38` is, under the
+    long-only reading, *the null holding* rather than a strong rejection. It remains a valid
+    sign falsifier; it is not evidence about the frontier. Tier A, no overlap.
+    → `notes/2026-09-23-spanning-under-short-sales-and-costs.md`,
+    `notes/2026-09-23-spanning-test-power-and-step-down.md`
+141. **ANTI-CANDIDATE, and it is a guardrail on #139 rather than a prohibition on an idea.** Do
+    **not** treat a spanning rejection as a promotion argument, and do **not** substitute the
+    spanning regression's residual correlation into the required-gain table. Two separate errors
+    with one root — confusing two nulls. The gate compares two *specific books at a
+    pre-registered weight* and Memmel/Ledoit–Wolf is the correct statistic for that; spanning
+    compares two *frontiers at the optimal weight* `α/σ²_ε`, which is itself an estimate carrying
+    every instability `notes/2026-08-17-naive-vs-optimized-weighting.md` documents. A leg can be
+    spanning-rejected and correctly fail the gate. **`experiments/learnings.md` [2026-09-15] is
+    not reopened by any of this**: a blend earns its legs' total returns, raw `ρ` is the right
+    input to Memmel, and removing the market from that correlation still changes what the number
+    describes and not one dollar of what the book earns. A spanning verdict is a diagnostic about
+    whether to keep working in a family; it licenses no seat. Tier A on both sides.
+    → `notes/2026-09-23-mean-variance-spanning-and-intersection.md`
+142. **ANTI-CANDIDATE, and it is the trap #139's third branch opens.** Do **not** build a
+    candidate designed to win the **variance** channel — a leg chosen because it reduces the
+    combined book's global-minimum-variance point — and expect this repo's gate to reward it.
+    The channel is real, it is the one a spanning test can actually detect, and the folder's
+    de-risking material already says what happens when it meets a Sharpe objective: a variance
+    reduction raises a Sharpe ratio only if the mean does not fall in proportion, and on this
+    book it has not (`learnings.md`: three de-risking overlays "reliably backfire out-of-sample";
+    2026-09-22 priced the exposure surrendered to cash at ~11× the smoothing gain). The durable
+    form, and it generalises past this vein: **the statistically detectable channel and the
+    scored channel are different channels here, and a candidate must say which one it is aiming
+    at in its hypothesis line.** Tier A on the literature; the lab's own overlay evidence is the
+    stronger half.
+    → `notes/2026-09-23-spanning-test-power-and-step-down.md`,
+    `notes/2026-09-23-spanning-under-short-sales-and-costs.md`
 
 ## Coverage log
 
@@ -7085,8 +7234,143 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-20 (session 37) | **The eleventh unit of the unit-of-check lesson, and it is the one place the previous ten could not look: not what a score is computed FROM, but what it is computed AGAINST.** Sessions 28–36 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a theory already cited. Every one of those units is a property of the *subject* of a measurement. Tonight's sweep asked about its *reference*: the folder's behavioural scores are all functionals of a name's **own** price path — 52-week-high proximity, information discreteness, overnight sentiment, capital-gains overhang, `VSP` — and the lab has now refuted five of them into the same two regressors. A grep across all 112 prior notes returned **zero** for `salience`, `Bordalo`, `Gennaioli`, `Cosemans` and `salience theory`, and zero in the 9,315-line SUMMARY, while the adjacent theory — the one whose entire content is that perception is **context-dependent**, i.e. that the comparison set is the signal — sat uncovered next to the prospect-theory material the folder has cited since 2026-09-01. **Families → … → a primitive of a theory already cited → the reference the measurement is taken against.** The durable addition: *when a class of constructions keeps collapsing into the same confound, check whether they all share an argument you never varied.* Session 37 covered it. The session-34 acceptance criterion (does this end in a portfolio?) is met **only conditionally and the note says so plainly**: the book is an anti-candidate on this universe, refused by an independent Tier-1 replication rather than by this lab's priors, and what survives is two free ordered falsifiers that are the sources' own identifying tests plus one ETF-level scout with a mechanism and no empirical support. | Bordalo–Gennaioli–Shleifer 2012 (QJE) (`2026-09-20-salience-theory-choice-under-risk.md`); Cosemans–Frehen 2021 (JFE) (`2026-09-20-salience-theory-stock-prices.md`); Cakici–Zaremba 2022 (JFE, hostile multi-market replication, **not read** — abstract only) (`2026-09-20-salience-international-replication.md`) |
 | 2026-09-21 (session 38) | **The twelfth unit is the dependent variable, and it was named by the lab rather than audited into existence.** Sessions 28–37 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measurement is taken against. **Every one of those is a unit of a return prediction.** The 2026-09-20 nightly closed its vein on five readings and zero trials and wrote the plainest reading of eleven sessions — *"monthly-horizon cross-sectional prediction may simply have very little signal outside the trend the incumbent already holds"* — which is a statement about **what the lab has been trying to forecast**, and the same data contains a second quantity the literature says is strongly forecastable. A grep across all 115 prior notes returned **zero** for `Corsi`, `heterogeneous autoregressive`, `HAR-RV`, `long memory`, `Andersen`, `Bollerslev` and `volatility forecast`; `research/README.md` had named this exact clause as a thin spot and argued against reopening it, an argument made when the lab still had a book supply. **Families → … → the reference a measurement is taken against → the quantity being forecast.** The session-34 acceptance criterion is met **conditionally and the ordering says so**: two free screens come first, one of which (#131) can close the vein for zero trials, the book (#133) is gated behind both and is a scout, and one anti-candidate (#134) forbids the obvious misuse. The session's most useful output is not a book but a **reconciliation**: the lab's three backfired de-risking overlays are what this literature *predicts*, not a refutation of it — second instance of that shape after 2026-09-18. | Corsi 2009 (JFEC) (`2026-09-21-har-rv-volatility-cascade.md`); Bollerslev–Hood–Huss–Pedersen 2018 (RFS) (`2026-09-21-panel-volatility-models-and-risk-targeting.md`); Harvey–Hoyle–Korgaonkar–Rattray–Sargaison–van Hemert 2018 (JPM) (`2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`) — all three read in full text |
 | 2026-09-22 (session 39) | **The thirteenth unit is the *precondition* of a prediction, and unlike the previous twelve it was not audited into existence or named by the lab — it was this file's own twice-carried instruction, finally taken.** Sessions 28–38 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measurement is taken against → the quantity being forecast. Every one of those asks **what predicts returns**. The 2026-09-19 and 2026-09-20 open questions both ended by naming **limits to arbitrage** as the better of two carried-forward targets — *"it is a conditioning variable rather than a score, both papers in tonight's cluster lean on it, and this repo has the Amihud and volatility machinery to proxy it"* — and 2026-09-21 was aimed elsewhere, so it survived unspent. A grep across all 118 prior notes returned **zero** dedicated coverage for `limits of arbitrage`, `arbitrage asymmetry`, `noise trader`, `holding cost` and `arbitrage cost`, with Shleifer–Vishny cited in passing in four notes and the subject of none. **Families → … → the quantity being forecast → why anything would be forecastable at all.** The durable addition: *a deferral this file records with a named target and no precondition should be picked up by the next session that is not aimed by the lab, or it will be carried indefinitely* — this one survived two sessions and a nightly. The session-34 acceptance criterion is met **conditionally and the ordering says so**: two free items first (#135 re-reads results already paid for, #136 is an ordered falsifier that can close the vein for zero trials), the book (#137) is a scout behind two pre-registered gates, and #138 forbids the paper's own obvious long-only reading because it is **unidentified** on this pool. The session's most useful output is a discount factor rather than a mechanism: **this lab is long-only, and the literature says the long leg is the minority side of every anomaly it has been citing.** | Shleifer–Vishny 1997 (JF) (`2026-09-22-limits-of-arbitrage-performance-based.md`); Wurgler–Zhuravskaya 2002 (JB) (`2026-09-22-arbitrage-risk-substitute-portfolios.md`); Stambaugh–Yu–Yuan 2012 (JFE) (`2026-09-22-anomaly-profits-short-leg-asymmetry.md`); Stambaugh–Yu–Yuan 2015 (JF) (`2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md`) — all four read in full text |
+| 2026-09-23 (session 40) | **The fourteenth unit is the *null* — not what the lab measures, but what it is measuring against — and it was named by the lab's own structural finding rather than audited into existence.** Sessions 28–39 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction. The 2026-09-22 nightly ended a seven-session zero-trial run, produced the lab's best-evidenced decorrelated leg, and then priced the route to the seat as **structurally shut**: as a leg gets more decorrelated the blend gain and Memmel's paired SE rise together and `t` barely moves. That is a statement about the *test*, and a grep across all 122 prior notes returned **zero** for `spanning` as a subject, `appraisal ratio`, `GRS`, `Kan–Zhou` and `de Roon` — the folder has six notes on comparing two books and none on the literature's own question, *does the incumbent's frontier already contain the candidate?* Three sources, all Tier A, **all read in full text**. The session's shape is one **framework** (the `α`/`δ` decomposition and the step-down test, both free to run on stored series), one **independent explanation of the lab's blocker** (the tangency channel is intrinsically near-unresolvable because it is a difference of estimated means — the third and most general instance of "the literature predicts the lab's null"), and one **correction that runs in the lab's favour** (a long-only spanning test is one-sided, which halves the p-value of a positive alpha — and which re-reads trial #97's `t = −2.38` as the null holding rather than a rejection). New tonight: **#139–#142**. | Huberman–Kandel 1987 (JF) (`2026-09-23-mean-variance-spanning-and-intersection.md`); Kan–Zhou 2012 (AEF) (`2026-09-23-spanning-test-power-and-step-down.md`); de Roon–Nijman–Werker 2001 (JF) (`2026-09-23-spanning-under-short-sales-and-costs.md`) — all three read in full text |
 
 ### Open questions for future sessions
+
+- **[2026-09-23] Read this first: the lab's seven-session stall broke, and what it broke on is a
+  finding about the *test* rather than about the universe — so tonight went after the test.** The
+  2026-09-22 nightly spent 3 of 8 trials, took the `liquidity-volume` lead from 0.942 to **1.053**
+  at `ρ_to_champion` **0.708** by adding a type-demeaned hedgeable fraction `E/Var` (two
+  pre-registered orthogonality gates, a pre-registered sign falsifier, both branches specified in
+  advance), closed `SUMMARY.md` #136's vein for zero trials, and killed the reopenable `φ`
+  corollary. It then priced the route to the seat and found it shut for a **structural** reason:
+  across three cells the blend gain goes +0.018 → +0.034 → +0.059 while Memmel's paired SE goes
+  0.076 → 0.101 → 0.134, so `t` moves only +0.24 → +0.33 → +0.44. **A more decorrelated leg buys
+  gain and error bar at the same rate.** That is a claim about the statistic, and the folder had
+  six notes on *comparing two books* and none on the literature's own question — *does the
+  incumbent's frontier already contain the candidate?* Tonight's three Tier-A sources say: the
+  question is a two-restriction regression (`α = 0` for the mean channel, `δ = 0` for the variance
+  channel); its power against the **mean** channel is intrinsically tiny because a difference of
+  Sharpe ratios is a difference of estimated means; and the long-only version of the test is
+  **one-sided**, which gives some of that power back. New tonight: **#139–#142**. Still unrun and
+  carried unchanged: **#109** (the folder's highest-ranked unrun item, **sixteenth** session, still
+  blocked only on rebuilding the 2026-09-14 specification curve), **#82** (seventeenth), **#94** as
+  a standing discipline, **#49** (twenty-sixth), plus **#105–#107** and **#110**'s shrink half.
+  Also live and pre-registered by the lab itself: the `E/Var`-conditioned champion challenger
+  written into `experiments/journal.md` on 2026-09-22 with its falsifier fixed at val Sharpe
+  1.120, **to be run first in its session because it can reach the holdout**; and #135, still the
+  one unrun free item from that night. #136 and #138 are **closed**, measured rather than argued.
+- **[2026-09-23] What should aim the next session, in order — and note that the first two items
+  together cost nothing and could split a null the lab has carried for twelve sessions.**
+  - **The lab's own pre-registered `E/Var` challenger still goes first if a session runs it**,
+    because it is a challenger, it can reach the holdout gate, and anything designed after a
+    holdout look is holdout-informed. That ordering is the lab's, not this file's, and nothing
+    tonight changes it.
+  - **Then #139**, and it is the item this file would put first among its own. It is one OLS
+    regression on two stored series, train only, no trial, no holdout — and its three branches
+    are three *different* diagnoses of the lab's standing null. If neither `F₁` nor `F₂` rejects,
+    the champion's frontier genuinely contains the lead and `liquidity-volume` closes as a source
+    of additive value however good its standalone number. If `F₁` rejects, the tangency channel is
+    live and the blend board's `t` is understating it. If only `F₂` rejects, the lab has found a
+    variance-channel object its own objective cannot reward — which is a finding about
+    `program.md`, not about the family. **Pre-register all three readings before computing
+    anything**, and use the `N = 1` `F` form; the `N ≥ 2` form that appears in most applied work
+    is invalid here and Kan–Zhou open their paper flagging the misuse.
+  - **Then #140**, also free, and it is a permanent reporting change rather than a measurement:
+    report `α̂/σ̂_ε` beside every `ρ_to_champion`, and test `α ≤ 0` rather than `α = 0`. The
+    second half re-reads a number already on the books (#97's `t = −2.38`) and the first half
+    gives the lab's own 2026-09-22 conclusion a derivation instead of an observation.
+  - **Do not spend a trial on #142**, and note the prohibition's unusual shape: the forbidden
+    thing is not a *mechanism* but an *aim*. A candidate built to win the variance channel is
+    aimed at a channel this repo does not score, and the lab's de-risking evidence says what
+    happens when it meets the Sharpe gate.
+  - **Then #135**, unchanged and still free, then **#109** and **#82**.
+- **[2026-09-23] The transferable output, and it is a reconciliation strong enough to change how
+  a null is written.** Kan–Zhou decompose the power of the incremental test into a
+  global-minimum-variance term that depends on covariances and a tangency term that depends on
+  means, and show the second is worth a fraction of the first: in their illustration an
+  alternative that **doubles the tangency slope** yields a noncentrality a fifth the size of one
+  that barely moves the minimum-variance point. Their own summary is that a high p-value "does not
+  always imply that the test assets do not add much". The lab has been reading twelve sessions of
+  unresolvable `t`s as evidence that this universe is empty. **The literature says a difference of
+  tangency Sharpe ratios is close to unresolvable at any sample length anyone has**, whatever the
+  universe. Carry the rule: *before attributing a null to the universe, ask whether the statistic
+  the null is written in has the power to have found anything.* This is the **third** instance of
+  the 2026-09-21 shape (the literature predicting the lab's null rather than contradicting it)
+  and the first that does not depend on this universe's particulars at all. It sits alongside —
+  not instead of — the survivorship artifact and the short-leg discount factor from 2026-09-22.
+- **[2026-09-23] A tension this file is recording rather than resolving, and unlike the last one
+  both sides are this folder's own.** `experiments/learnings.md` [2026-09-15] establishes that the
+  market-residual correlation among the seated leads is near zero, that this "invites the thought
+  that the required-gain table uses the wrong correlation", and that **it does not and must not be
+  used** — a blend earns total returns and Memmel's SE describes total returns. Tonight's sources
+  put a *residual* quantity (`α/σ_ε`) at the centre of the incremental question. **These do not
+  conflict and the reason must be written down so a later session does not "fix" one with the
+  other**: the residual enters a different null. Memmel answers "is this fixed-weight book better
+  than that one"; the spanning `F` answers "would an optimiser hold any of this at all". The first
+  is what `engine/protocol.py` scores and the 2026-09-15 entry governs it completely. The second
+  is a diagnostic that licenses no seat (#141). **The general form: two correct statistics can
+  disagree about a leg without either being wrong, when they are testing different hypotheses —
+  and the cheap error is to import the more flattering one into the gate.**
+- **[2026-09-23] A source deliberately not written up, recorded so a later session does not
+  re-find it and assume it was missed.** Gibbons, Ross & Shanken, *A Test of the Efficiency of a
+  Given Portfolio* (Econometrica 1989, DOI `10.2307/1913625`; 2147 citations on Semantic Scholar,
+  1912 on Crossref, both checked 2026-09-23) is the origin of the `F₁` statistic in #139 and was
+  **not read** — JSTOR is closed and ResearchGate's author-hosted copy returned HTTP 403. Its
+  identity (`F₁ = ((T−K−N)/N)(â − â₁)/(1 + â₁)`, the incremental squared Sharpe) is taken from
+  Kan–Zhou, who derive it in full, and is attributed to them in the note. **Recorded as
+  not read**; nothing in this file rests on its prose.
+- **[2026-09-23] Access notes: one new reliable channel with a precise rule, one http-only host,
+  and a fifth consecutive index gap.**
+  - **`pure.uvt.nl/ws/portalfiles/portal/<id>/<file>` serves what
+    `research.tilburguniversity.edu/files/<id>/<file>` refuses.** Both are the same Pure
+    repository and a search index gives the second URL; the second returned a **Cloudflare
+    "Just a moment…" HTML body under HTTP 403** while the first returned the typeset version of
+    record on the first try. Note the discriminator, because it is not the hostname alone:
+    `pure.uvt.nl/portal/files/...` (the legacy path) **also** 403s, and only the
+    `/ws/portalfiles/portal/` path works. **Generalised: for a Pure-based repository, rewrite a
+    refused `<institution>/files/<id>/<name>` URL to `<pure-host>/ws/portalfiles/portal/<id>/<name>`
+    before concluding the file is unreachable.** This is the same class as the seminar-archive
+    channel added 2026-09-22 and the faculty-page channel added 2026-09-18 — *the same file, one
+    hop off the front door*.
+  - **`aeconf.com` serves over plain `http` and fails TLS on `https`** (`SSL_ERROR_SYSCALL`,
+    curl exit 35, HTTP 000). A seventh distinct refusal mode after the Cloudflare 403, the
+    OpenAlex metered budget, the pm-research OpenID redirect, the Imperva 200-with-a-stub, the
+    transport-layer reset, and the Cambridge HTML-in-place-of-PDF. **Also a filename trap worth
+    one line**: a search result gave `aef130106.pdf` for Kan–Zhou; that file downloads cleanly,
+    is a valid 22-page PDF, and is **a completely different article**. The correct file is
+    `aef130105.pdf`. `file` and a `head` of the extracted text catch it in seconds — the 2026-09-22
+    mirrored-gibberish lesson generalised: *check that the parsed text is the paper you asked
+    for, not merely that it parsed.*
+  - **Index behaviour, fifth instance in five sessions, and this one is a genuinely unindexable
+    work.** Kan–Zhou's published version (Annals of Economics and Finance 13(1), 139–187) carries
+    **no registered DOI**; Crossref and Semantic Scholar resolve only the SSRN working-paper
+    record (`10.2139/ssrn.231522`), at **15** and **32** respectively, and both undercount the
+    article badly. OpenAlex, which is where a split work is normally reconciled, returned
+    **HTTP 429 "Insufficient budget"** (the documented daily-allowance exhaustion, not rate
+    limiting) and Semantic Scholar's `/paper/search` title endpoint returned **HTTP 429** as
+    documented. Per the rubric, tier was **not** downgraded on that basis; the paper is graded A
+    on content (theorems with exact finite-sample distributions plus a 100,000-path simulation
+    study) with its venue tier stated honestly as 2 in the note. Separately, Huberman–Kandel reads
+    **605** on Semantic Scholar against **286** on Crossref for the same JF DOI — the
+    session-7 rule applies and the lone low count is Crossref's, which is expected for a 1987
+    article whose citing literature largely predates DOI registration.
+- **[2026-09-23] Protocol note, seventeenth session running, unchanged and still a human's to
+  fix.** The session-start hook printed "integrity check OK — on main, level with origin/main, no
+  stray branches" while `git status -sb` reported **`claude/tender-galileo-u457l3`**. As on
+  2026-09-06 through -22 this is the benign form — the branch tip was bit-identical to
+  `origin/main` (`37cff8e`) — and this session ran `git checkout main && git reset --hard
+  origin/main` before any work, so tonight's notes are on `main` only. **Flagged for the human for
+  the fourteenth time**, same reading: the hook's "on main" clause is false while its "level with
+  origin/main" clause is true, so a session that trusts the first clause commits to a per-run
+  branch with no warning. This session's own harness instructions again named the per-run branch
+  as the development target while `research/README.md` step 6 and the standing prompt's step 0
+  both require `main`; **the repo's rules governed.** Verified rather than assumed, as on
+  2026-09-22: `origin` still carries **13** `main-*` per-run branches, and
+  `git branch -r --no-merged origin/main` returned **nothing** — every one of them is an ancestor
+  of `main`, so no work is stranded and `trials.jsonl` is not split. They are clutter, not risk,
+  and that command is the check to re-run before anyone deletes them.
 
 - **[2026-09-22] Read this first: the 2026-09-21 nightly spent zero of eight trials for the
   seventh time, closed the volatility-forecasting vein, and — the part that matters more than the
