@@ -3937,3 +3937,78 @@ across experiments; prune entries that later evidence contradicts.
   magnitude ordering came out in SYY's direction and identifies nothing**, because the artifact is
   unbounded in strength and can produce any magnitude ordering — which is precisely why the sign, not
   the gap, was pre-registered. Do not let a later session read the gap as support.
+
+- **[Measured 2026-09-23, nightly] A book can be de-risked by choosing names that REPLICATE EACH
+  OTHER LESS, and that lever is neither de-concentration nor breadth — the two this repo has
+  priced. First construction here to cut book volatility without cutting exposure.** Trial #98
+  added a type-demeaned hedgeable fraction `−E/Var` to the seated champion's per-leg score, every
+  other node byte-identical, and **promoted: validation 1.120 → 1.269, train 0.970 → 1.073,
+  holdout 1.393 → 1.411**, validation maxDD −27.8% → **−22.8%**, turnover 3.11x → 3.01x.
+  Holdings-only, 75 sampled validation dates, 252-day trailing covariance:
+
+      book                            positions   HHI      eff risk bets   mean pairwise corr   ex-ante vol
+      mom_zscore_overlap6_hzn_avg4      62.3     0.0614        8.43              0.242             0.220
+      pt_mom_evar_arbrisk               48.0     0.0618        8.45              0.174             0.171
+
+  **23% fewer names at bit-equal HHI (+0.7%) and bit-equal effective risk bets (+0.2%), and 28%
+  less co-movement.** The de-concentration price (~0.05 Sharpe per 30% of HHI) is not engaged at
+  all — the dial did not move. The mechanism is definitional rather than estimated: `E/Var` is
+  the share of a name's variance its four closest substitutes span, so ranking it downward
+  selects names the rest of the universe cannot replicate. Note what this is **not**: it is not
+  an exposure overlay (the three refuted de-risking overlays all worked on scale, and 2026-09-22
+  priced their real cost at 18.7% of exposure surrendered to cash); it is a **membership**
+  change, and it is the first de-risking mechanism to survive here.
+  **The hypothesis was right about the variable and wrong about the channel, and saying so is the
+  point.** The pre-registration argued a *mean* channel (continuation persists where arbitrage is
+  risky) and pre-registered "a small move the split cannot resolve". The book earns **less than
+  the incumbent in every one of the six validation years** (2020 +112.8% against +126.9%):
+  ann_ret 25.65% → 23.79% while ann_vol 22.71% → 18.12%. **Every basis point is denominator.**
+  **Rider that must travel with this entry.** `research/SUMMARY.md` #142 — written the same
+  morning — forbids building for the variance channel and expecting this gate to reward it. This
+  candidate was aimed at the mean channel and won on the variance channel by accident, so it is a
+  lucky instance of the forbidden shape, **not a refutation of it**. The durable reading stays
+  the folder's: the statistically detectable channel and the scored channel are different
+  channels, and here they happened to agree. Do not aim at variance on the strength of this.
+
+- **[Measured 2026-09-23, nightly] The risk-contribution count records a third miss and this one
+  names its blind spot exactly: it measures how risk is DIVIDED, never how much there is.**
+  Effective risk bets moved **8.43 → 8.45** across #98, predicting **+0.01pp** of drawdown at the
+  re-fitted K=6 slope; observed **+5.0pp** (−27.8% → −22.8%), four times the ±1.2pp
+  unfalsifiability floor, so this is a real miss and not scatter. The shape is structural: the
+  statistic is a Herfindahl over **normalised** risk shares, hence scale-free in the correlation
+  **level** — a uniform fall in pairwise correlation cuts total variance without redistributing
+  risk shares at all. Third recorded blind spot, and it composes with the two already on file
+  (exposure scalars; formation-date diversity), which have the same root — the statistic reads a
+  normalised, single-date weight vector. **Operational rule: print the held set's mean pairwise
+  correlation beside effective risk bets on every concentration or drawdown claim from now on.**
+  The two answer different questions and #98 is the case that separates them maximally.
+
+- **[Measured 2026-09-23, nightly] The ⚠ standing concern acquires its first contrary data point,
+  on a candidate designed without reading the holdout table — and one point does not retire a run
+  of four.** The ladder, extended:
+
+      #    promotion                          train    validation   holdout
+      42   mom_zscore_overlap6_hzn_avg4       0.970      1.120       1.393*
+      43   mom_zscore_hzn_avg4_k1             0.935      1.187       0.875
+      45   mom_hzn_avg4_k1_cohort_trim        0.942      1.201       0.813
+      51   mom_hzn_avg4_nobuffer              0.931      1.229       0.691
+      98   pt_mom_evar_arbrisk                1.073      1.269       1.411
+
+  (*#42 re-scored on the 2026-09-23 store, 709 holdout days; its card's 1.292 was scored on 689.)
+  **All three columns move up together for the first time since #42**, and the concern's
+  signature — validation monotone up, holdout monotone down — is absent. The corroboration runs
+  through the column this file already identified as the one that tracks holdout
+  (`corr(train, holdout) = +0.887`): train is the best of the magnitude-weighted era.
+  **What this does and does not license.** It does **not** retire the concern: four points raised
+  it and one contrary point does not undo them, and the two levers that would fix it still live
+  in frozen files. It does mean the standing advice — *in this family, a candidate that clears
+  the gate is evidence about the gate rather than about the strategy* — now has a counterexample
+  and should be quoted with it.
+  **And the margin itself is still unresolvable, which is the honest half.** Paired against the
+  seat: `rho` **0.9583**, `metrics.sharpe_diff_se` **0.1164** against the closed form's **0.1160**
+  (a third confirmation that `SE ≈ 0.568·sqrt(1−rho)` transfers, now on the promotion the lab
+  most wanted to believe), `d` **+0.1492**, **t = +1.28** — second-largest promotion `t` ever
+  recorded here after the baseline→#32 step's +1.62, and short of both `|t| = 2` and the
+  required-gain table's **+0.283** at that `rho`. **A result can be credible on three agreeing
+  splits and unresolvable on the one that decides it; those are compatible statements and both
+  belong in the record.**

@@ -13473,3 +13473,168 @@ unable to clear a paired standard error. Both are edits to frozen files.
   this is the first promotion since #43 for which that is true. The ⚠ concern's signature was
   validation up / holdout down; this step does not have it.
 
+
+## Session summary — 2026-09-23 (nightly)
+
+- **Integrity check — the same discrepancy as the last sixteen sessions, verified rather than
+  assumed.** The session-start hook reported "on main, level with origin/main"; `git status -sb`
+  reported **`main-7h5wus`**. Both were at `bebfe3e` with **no unique commits**, and
+  `git branch -r --no-merged origin/main` returned **nothing**, so nothing was stranded and
+  `trials.jsonl` is not split. Moved to `main` per step 0 of the standing prompt. The harness
+  instructions again named a per-run branch while `CLAUDE.md`, `program.md` and the standing
+  prompt all require `main`; **the repo's rules governed**, as in every prior session.
+- **Engine tests green (33 passed).** Store fresh **through 2026-09-22**, the latest trading day.
+- **Experiments run: 1 of the 8-trial budget** — trial **#98**. Trial count 97 → **98**,
+  effective 27 → **27** (the new book clusters with the incumbent at `rho` 0.958).
+- **Holdout: READ ONCE, by the gate, automatically.** Holdout looks since 2026-08-17 go
+  **five → six**. **The session stopped there**, per `CLAUDE.md` and `program.md`, with seven
+  trials of budget unspent.
+- **The champion seat MOVED** for the first time since the human's 2026-08-26 rollback.
+
+### The night in one line
+
+The pre-registered challenger promoted on a margin its own pre-registration said would not
+appear — and then the free decomposition showed the hypothesis was right about the variable and
+wrong about the channel: the book earns *less* than the incumbent in all six validation years and
+wins anyway, because ranking on a hedgeable fraction selects names the rest of the universe
+cannot replicate.
+
+### Verdicts
+
+| # | candidate | family | track | verdict | val Sharpe |
+|---|---|---|---|---|---|
+| 98 | `pt_mom_evar_arbrisk` | `price-trend` | challenge | **PROMOTE** | **1.269** |
+
+### Best finding: a decorrelation lever that is neither de-concentration nor breadth
+
+`E/Var` — the share of a name's variance spanned by its four most-correlated substitutes — was
+introduced last session as a `liquidity-volume` conditioning term. Tonight it was added to the
+champion's own per-leg score, with every other node byte-identical, on the strength of one number
+measured *before* any book existed: `|spearman(E/Var, rank 12−1)| = 0.015`.
+
+|                              | positions | HHI    | eff risk bets | mean pairwise corr | ann_ret | ann_vol | maxDD  | Sharpe |
+|---|---|---|---|---|---|---|---|---|
+| `mom_zscore_overlap6_hzn_avg4` | 62.3    | 0.0614 | 8.43          | 0.242              | 25.65%  | 22.71%  | −27.8% | 1.120  |
+| `pt_mom_evar_arbrisk`          | 48.0    | 0.0618 | 8.45          | **0.174**          | 23.79%  | **18.12%** | **−22.8%** | **1.269** |
+
+**Fewer names, identical weight concentration, identical effective risk bets, 28% less
+co-movement.** Every previous drawdown improvement in this family came from moving the
+concentration dial or from adding formation vintages, and both were priced. This one moves
+neither: it changes *which* names are held so that they replicate each other less. It is the
+first construction here to cut book volatility without cutting exposure, without
+de-concentrating, and without widening breadth.
+
+### Second finding: the risk-contribution statistic's third miss, and its shape
+
+Effective risk bets 8.43 → 8.45 predicted **+0.01pp** of drawdown; observed **+5.0pp**, four
+times the ±1.2pp unfalsifiability floor. The statistic is a Herfindahl over *normalised* risk
+shares and is therefore scale-free in the correlation **level** — it sees how risk is divided,
+never how much of it there is. Third recorded blind spot, alongside exposure scalars and
+formation-date diversity. **Print mean pairwise correlation beside it from now on.**
+
+### Third finding, and it is the one that bears on the ⚠ concern
+
+The step is **not resolvable on the gate's own split**: `rho` 0.9583, paired SE 0.1164
+(closed form 0.1160 — the formula reproducing the engine's statistic to three decimals in a
+family it was not fitted in), `d` +0.1492, **t = +1.28**, against a required gain of +0.283 at
+that `rho`. Second-largest promotion `t` in this repo's history and still short of 2.
+
+What corroborates it is the other two columns. Extending the standing table:
+
+| # | promotion | train | validation | holdout |
+|---|---|---|---|---|
+| 42 | `mom_zscore_overlap6_hzn_avg4` | 0.970 | 1.120 | 1.393* |
+| 43 | `mom_zscore_hzn_avg4_k1` | 0.935 | 1.187 | 0.875 |
+| 45 | `mom_hzn_avg4_k1_cohort_trim` | 0.942 | 1.201 | 0.813 |
+| 51 | `mom_hzn_avg4_nobuffer` | 0.931 | 1.229 | 0.691 |
+| **98** | **`pt_mom_evar_arbrisk`** | **1.073** | **1.269** | **1.411** |
+
+(*re-scored on tonight's store, 709 holdout days; the card's 1.292 was scored on 689.)
+
+**Train, validation and holdout all move up together, for the first time since #42.** The ⚠
+concern's signature is validation-up/holdout-down and this step does not have it; `corr(train,
+holdout) = +0.887` on the ladder, and train moved up 0.970 → 1.073, the best train Sharpe of the
+magnitude-weighted era. The concern is **not** retired by one point — it was raised on a run of
+four and one contrary point does not undo four — but this is the first evidence *against* it
+the lab has produced, and it arrived on a candidate designed without reading the holdout table.
+
+### An honest caveat, recorded because it cuts against the result
+
+`research/SUMMARY.md` #142, written this morning, is an anti-candidate: *do not build a
+candidate designed to win the variance channel and expect this repo's gate to reward it.* This
+candidate was **not** designed for the variance channel — it was pitched at the mean channel and
+said so — and it won on the variance channel anyway. That makes it a lucky instance of the thing
+#142 forbids, not a refutation of #142. The durable reading is the folder's own: **the
+statistically detectable channel and the scored channel are different channels, and tonight they
+happened to agree.** A future session must not read this as a licence to aim at variance.
+
+### Protocol and allocation notes
+
+- **Budget: 1 of 8, and the seven unspent were forbidden, not skipped.** The trial reached the
+  holdout gate, which ends the session under `CLAUDE.md` and `program.md` whatever the verdict.
+- **Allocation:** one trial, in `price-trend`, against a cap of 2 — within budget. The "at most 2
+  per family until four have leads" clause is lifted (nine families carry leads) and the "at
+  least 1 in a family with no recorded trial" floor is vacuous. The session ended before any
+  breadth trial could be run, which is the allocation cost of a first-run challenger promoting.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a
+  human's to rule on.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/` and `trials.jsonl` are untouched; `champion_card.json`,
+  `leaderboard.json` and `trials.jsonl` were written by `run_experiment.py` only.
+- **No engine issues encountered.**
+
+### Next ideas, in order, with provenance
+
+1. **`research/SUMMARY.md` #139, the step-down spanning decomposition** — free, allotted tonight
+   and **not run** because the session ended at the gate. It is now *more* interesting, not
+   less: tonight's result is a variance-channel win, and #139's `F₂` is the only test the lab
+   has that can detect one. Run it on train only, `N = 1` form, both branches pre-registered.
+   Provenance: `SUMMARY.md` #139, added 2026-09-23.
+2. **`SUMMARY.md` #140, the standing reporting change** — report the appraisal ratio
+   `α̂/σ̂_ε` against the champion next to every `ρ_to_champion`, and test `α ≤ 0` rather than
+   `α = 0` under the long-only inequality form. Free, applies to every future leg.
+   Provenance: `SUMMARY.md` #140.
+3. **`SUMMARY.md` #135**, unrun for a second session: the long-leg/short-leg decomposition of
+   scores the lab already holds, to quantify what long-only costs this universe. Free.
+4. **The mechanism question tonight opened, and it is a SCOUT not a challenger.** Mean pairwise
+   correlation of the held set is now a measured lever worth ~0.15 of Sharpe on this book, and
+   nothing in `strategies/lib` ranks names on it. Whether a *direct* low-co-movement score is a
+   better object than `E/Var` is a real question — but note `SUMMARY.md` #1's triage rule kills
+   the obvious form (a covariance-matrix objective), and `E/Var` is attractive precisely because
+   it estimates one correlation per name rather than an `n × n` matrix.
+5. **ANTI-CANDIDATE, carried and now load-bearing**: do not sweep `E/Var`'s `K`, window or lag,
+   and do not substitute a variance **level** for the ratio. The ratio passed a gate the level
+   fails by construction. Tonight's promotion makes these knobs tempting; they are still knobs,
+   and the term is now in the seat where tuning it would be tuning the champion.
+6. **ANTI-CANDIDATE, new tonight**: do not build for the variance channel on purpose — see the
+   caveat above and `SUMMARY.md` #142.
+7. **Do NOT re-derive the blend board** (exhaustive as of 2026-09-15, extended -17, -18, -22).
+   Note it is now **stale against a different seat** and every cell would have to be re-priced;
+   that is a reason to leave it alone, not to redo it.
+8. **`SUMMARY.md` #109** carried for a **sixteenth** session; **#82** for a seventeenth and
+   **#49** for a twenty-sixth.
+
+### For the human — the seat moved, and the reason it moved is not the reason it was proposed
+
+Four things are worth your attention.
+
+**(a) The rollback is vindicated in an unexpected direction.** You rolled the seat back to #42 on
+2026-08-26 because the four promotions after it bought validation with holdout. Tonight's
+candidate was built on #42 and beat it on all three splits at once. The reinstated base was the
+right base to build from.
+
+**(b) The result is real but its margin is not resolvable, and those are compatible.** t = +1.28
+on validation. What makes it credible is the agreement of three splits, not the gate. If you
+ever add a second scored quantity, this trial is a clean worked example of why: the gate said yes
+on a margin it cannot resolve, and the corroboration came from columns the gate does not read.
+
+**(c) The mechanism is a genuine finding and it is transferable beyond this seat.** A book can be
+de-risked by *selecting names that replicate each other less*, measured by one correlation per
+name rather than by a covariance matrix. Every de-risking overlay this lab refuted worked on
+exposure; this one works on membership, and it is the first to survive.
+
+**(d) The larger decision is unchanged.** The mission's remaining constraint is still the
+universe — current constituents, no fundamentals, no intraday — and the standing recommendation
+that `program.md`'s `range-variance` cold-family rule be amended or the family retired is
+unchanged after fifteen mechanism screens. Both are edits to frozen files.
