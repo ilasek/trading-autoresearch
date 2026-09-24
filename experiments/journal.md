@@ -13872,3 +13872,54 @@ this with an inverse-*total*-volatility arm. That is the volatility level, which
 is the survivorship artifact (`learnings.md` 2026-09-17), and a good score there would seat a
 knowingly-artifactual book. The two arms run tonight are the two the triage rule grades, and the
 family is then closed for weighting-scheme work.
+## 2026-09-24T23:33:30+00:00 — rv_minvar_equalweight — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/rv_minvar_equalweight.py` (family: range-variance, track: scout, trial #100)
+- Hypothesis: Keeping the closed-form long-only minimum-variance MEMBERSHIP rule (beta_i < beta_L, with beta_L = (C + 1/var(r_m))/B iterated to its own fixed point) byte-identical to rv_minvar_closedform and replacing only its 1/s2_i sizing with equal weight raises validation Sharpe above that book's 0.313, because the two arms differ by exactly the n estimated residual variances that SUMMARY.md #1's parameter-count triage rule says are paid for out-of-sample — a rule this repo has only ever measured inside price-trend.
+- Verdict: FAMILY_LEAD — best result yet in family 'range-variance': validation sharpe 0.734 > 0.494 (DSR 0.7403, 100 trials, 29 effective after clustering at rho 0.95)
+- Train: sharpe +1.05, ann_ret +13.9%, maxDD -50.5%, turnover 2.0x
+- Validation: sharpe +0.73, ann_ret +8.1%, maxDD -27.3%, turnover 2.7x
+- Deflated Sharpe prob: 0.7403 (bar from 100 trials, 29 effective)
+- Scout track: family best before this trial +0.49; the champion was not compared and the holdout was not read
+- Lesson: **`research/SUMMARY.md` #1's parameter-count triage rule transfers out of `price-trend`,
+  and the price it puts on `n` estimated residual variances is +0.421 of validation Sharpe.**
+  T2 → T4 changes exactly one node: `w_i ∝ (1/σ²_εi)(1 − β_i/β_L)` becomes equal weight over the
+  **identical** long set. Validation Sharpe **0.313 → 0.734**, and `range-variance` has its first
+  lead above 0.5 after sixteen sessions of screens. Every other constant — the single-factor
+  model, the `β_L = (C + 1/var(r_m))/B` fixed point, the 250-day window, the 20-day lag, the 25%
+  cap — is byte-identical, and the measured long set confirms it: **52.33 names against 52.31**.
+  `CLAUDE.md` requires a `price-trend` constant to be re-measured before it is carried into a new
+  family; it is now measured here, and it holds with a larger gap than any reading inside the
+  incumbent's family.
+- Lesson (second half, and it is the mechanism rather than the verdict): **the `1/σ²_ε` sizing term
+  is a concentration device in disguise, which is not how this repo has been reading the triage
+  rule.** The rule is usually paraphrased as "estimated weights are noisy". Holdings only, 75
+  sampled validation dates, 252-day trailing covariance, with the `SUMMARY.md` #144 identity
+  printed in full and reconciling to **4.44e-16**:
+
+      book                            n      HHI     eff risk bets   rho_bar(volwtd)   CR       DR      ex-ante vol
+      rv_minvar_closedform  (T2)    52.31   0.1926       9.40            0.2960       0.0669   1.7952     0.0334
+      rv_minvar_equalweight (T4)    52.33   0.0269      42.25            0.1718       0.0320   2.3042     0.0888
+      pt_mom_evar_arbrisk  (SEAT)   48.08   0.0626       8.55            0.1719       0.1045   2.0315     0.1724
+      mom_zscore_overlap6  (#42)    62.36   0.0618       8.40            0.2761       0.1009   1.7262     0.2224
+
+  Same names, and `1/σ²_ε` sizing raises **HHI 7.2x** (0.0269 → 0.1926) and cuts **effective risk
+  bets 4.5x** (42.25 → 9.40). The estimation error does not arrive as scatter around a sensible
+  weight vector; it arrives as weight piled onto the few names whose residual variance estimate
+  came out smallest, which is the same failure mode as an unshrunk inverse-covariance weight and is
+  why the standing de-concentration price is the right lens on it. Read the drawdown the same way:
+  T2's −10.4% versus T4's −27.3% is **not** T2 being safer at equal return — its ann_ret is +1.1%
+  against +8.1%.
+- Lesson (third half, on what the identity buys that `ρ̄` alone does not): **T4 and the seat have
+  bit-equal volatility-weighted `ρ̄` (0.1718 vs 0.1719) and are not remotely the same kind of
+  book** — `DR` 2.304 vs 2.032, because `CR` is 0.0320 against 0.1045. So the 2026-09-23 resolution
+  to "print mean pairwise correlation beside effective risk bets" is necessary but **not
+  sufficient**: neither term ranks books on its own, and `DR = [ρ̄(1−CR)+CR]^(−1/2)` is what
+  combines them. Two further readings from the same table, both free. (i) **The `DR` statistic sees
+  what the risk-bet count could not**: across the #42 → #98 promotion effective risk bets moved
+  8.40 → 8.55 (+1.8%) while `DR` moved 1.726 → 2.032 (**+17.7%**), so the lab now has one number
+  that captures last night's promotion mechanism. (ii) **#144's insistence on the
+  volatility-weighted `ρ̄` is load-bearing and now has a measured cost**: for T2 the unweighted
+  mean pairwise correlation reads 0.1771 against the weighted 0.2960, and reading the unweighted
+  number would have had this session calling T2 a low-co-movement book when it is the
+  highest-co-movement book of the four.
+

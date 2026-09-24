@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T23:24:12+00:00",
+  "generated_at": "2026-09-24T23:33:36+00:00",
   "champion": "pt_mom_evar_arbrisk",
   "families": {
     "price-trend": {
@@ -155,6 +155,23 @@
       },
       "train_sharpe": 0.753
     },
+    "range-variance": {
+      "name": "rv_minvar_equalweight",
+      "candidate": "strategies/candidates/rv_minvar_equalweight.py",
+      "track": "scout",
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-09-24T23:33:30+00:00",
+      "n_trials": 4,
+      "rho_to_champion": 0.6612,
+      "validation": {
+        "sharpe": 0.734,
+        "ann_return": 0.0805,
+        "max_drawdown": -0.2728,
+        "ann_turnover": 2.68,
+        "avg_positions": 52.27
+      },
+      "train_sharpe": 1.047
+    },
     "lead-lag-spillover": {
       "name": "ll_group_lastmonth_lead",
       "candidate": "strategies/candidates/ll_group_lastmonth_lead.py",
@@ -205,23 +222,6 @@
         "avg_positions": 8.65
       },
       "train_sharpe": 0.511
-    },
-    "range-variance": {
-      "name": "rv_volofvol_top15",
-      "candidate": "strategies/candidates/rv_volofvol_top15.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-09-14T23:06:39+00:00",
-      "n_trials": 3,
-      "rho_to_champion": 0.6786,
-      "validation": {
-        "sharpe": 0.494,
-        "ann_return": 0.0769,
-        "max_drawdown": -0.3136,
-        "ann_turnover": 4.62,
-        "avg_positions": 15.0
-      },
-      "train_sharpe": 0.9
     },
     "volatility targeting / risk parity": {
       "name": "ew_global_etf",
