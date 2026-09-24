@@ -13640,3 +13640,148 @@ that `program.md`'s `range-variance` cold-family rule be amended or the family r
 unchanged after fifteen mechanism screens. Both are edits to frozen files.
 
 ## Research session — 2026-09-24 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-24 (nightly), written before any number was computed
+
+Tonight's agenda is the **co-movement channel** opened by `research/SUMMARY.md` #143–#147 (learning
+agent, this morning) plus the one carried free item the last session could not run because it ended
+at the holdout gate (#139). Nothing below was chosen after a measurement; the gates, the branches and
+the anti-candidates are fixed here first.
+
+**Why this vein and not another.** Trial #98 promoted on a mechanism nobody designed for: ranking on
+a *hedgeable fraction* selected names that replicate each other less, and the book's mean pairwise
+correlation fell 0.242 → 0.174 while weight concentration and effective risk bets did not move at
+all. The lab wrote down two open items that night — whether a *direct* low-co-movement score is a
+better object than `E/Var`, and the fact that the risk-bet statistic cannot see the correlation
+*level*. The research folder independently covered exactly that object the next morning and supplied
+three free screens and one gated scout. That convergence is the reason, and it is recorded so a later
+session can tell it from hindsight.
+
+### Free measurements, no trial spent, train split or holdings-only throughout
+
+**F1 — `SUMMARY.md` #143, the non-synchronous-close objection to a seated term.** Every correlation
+this repo computes uses **one-day** returns on a universe spanning 15 regions whose closes are not
+contemporaneous; two independent sources (a Tier-A factor paper, a Tier-C practitioner pair) treat
+that estimate as biased downward and region-dependent, and correct it with overlapping multi-day
+returns. Recompute `E/Var` with the seated constants held **byte-identical** (250-day window, 20-day
+lag, `K = 4`, equal-weight basket, closed-form `corr²`) and change **only** the return horizon, to
+overlapping **3-day log returns**. Train split only, month-end sample dates. Report (a) the mean
+cross-sectional Spearman between the two rankings, (b) the ETF-versus-single-name rank-AUC of each,
+(c) the per-region mean of each and the **change** by region.
+
+*Branches, fixed now.* The identifying claim is that the bias is a **calendar** artifact, so it must
+be **region-ordered**: the regions whose closes are least synchronous with this universe's
+US-dominated mass must move most and US must move least.
+- Mean Spearman **≥ 0.90** → the estimators are the same object, the standing objection is retired
+  for free, and no trial is owed. This is the cheapest good outcome and is stated first on purpose.
+- Mean Spearman **< 0.90 AND** the by-region change is ordered with US smallest → the seated term is
+  partly measuring the trading calendar, the correction is owed to every co-movement number this repo
+  prints, and **T3 below is licensed**.
+- Mean Spearman **< 0.90 WITHOUT** the region ordering → the two estimators differ but the difference
+  is **not identified as calendar**, so changing the horizon would be a fourth knob on `E/Var` under
+  the standing anti-candidate. **No trial**, and the disagreement is recorded as unexplained.
+
+**F2 — `SUMMARY.md` #145, three orthogonality gates before any co-movement book.** The score to be
+gated, defined now and not to be redefined after seeing a number: `mc_i` = the correlation of name
+`i`'s returns with the equal-weight universe return over a **250-day window lagged 20 days**,
+**negated** (high = low co-movement) and **demeaned within `groups.TYPE_OF`** at `MIN_TYPE = 4` per
+the 2026-09-22 rider, because a raw co-movement score separates ETFs from single names by
+construction and single names are where this universe's survivorship bias is worst. Mean
+cross-sectional Spearman over train month-ends, against the existing **0.50** bar:
+- `|spearman(mc, 250d realised vol level)|` — the lab's standing artifact gate;
+- `|spearman(mc, rank 12−1)|` — against the incumbent's own score;
+- `|spearman(mc, β̂)|` — **the new third gate**, and the one #145 exists for: `β = ρσ/σ_m`, so a
+  co-movement score can pass the volatility gate while being a **low-beta bet**, a family this repo
+  has already refused.
+Also printed, not a gate, because the repo has never measured it: `spearman(mc, type-demeaned
+−E/Var)` — the relationship between the seated term and the direct object. And the sources' own
+identifying test, also free: the **conditional double sort** — quintile on the 250-day volatility
+level, split high/low on `mc` *within* quintile, and check that the ex-ante sort produces an ex-post
+spread in **realised 21-day correlation to the market** with volatility held flat.
+
+*Branches, fixed now.* All three gates **< 0.50** and the double sort producing a correctly-signed
+ex-post correlation spread in a **majority of vol quintiles** → **T1 is licensed as a scout**. Any
+gate **≥ 0.50** → **T1 is not built**, `SUMMARY.md` #146 closes for zero trials, and the finding is
+that on this universe of ~145 large global survivors the correlation and volatility halves of beta
+cannot be separated the way the Tier-A source separates them — which is #147's prediction and would
+be the second measured instance of this universe's size band killing an imported cross-section.
+
+**F3 — `SUMMARY.md` #144, the diversification-ratio identity.** For the seated champion and every
+book built tonight, from a 252-day trailing sample covariance on ~75 sampled validation dates,
+holdings only: `ρ̄` (volatility-**weighted** average pairwise correlation), `CR` (Herfindahl on risk
+contributions) and `DR = [ρ̄(1−CR)+CR]^(−1/2)`, with the free correctness check that `DR` from the
+identity equals `Σw_iσ_i / σ(w)` computed directly. This is the closed form of the resolution last
+night's entry wrote in words, and the identity is why the risk-bet count missed #98: it is the `CR`
+half only, and `ρ̄` is the half that moved.
+
+**F4 — `SUMMARY.md` #139, the step-down spanning decomposition.** Carried from 2026-09-23, where it
+was allotted and not run. Seated `liquidity-volume` lead `lv_illiq_evar_riskcost` (`N = 1`) against
+the champion (`K = 1`), **train only**, `N = 1` form throughout, on daily net returns of two books
+that are both already recorded results. Report `F₁` (tests `α = 0`) and `F₂` (tests `δ = 0` given
+`α = 0`), independent under the null.
+
+*Branches, fixed now, transcribed from #139.* Neither rejects → the champion's frontier already
+contains the lead, the twelve-session null is a real null, and `liquidity-volume` is closed as a
+source of *additive* value whatever its standalone Sharpe. `F₁` rejects → the tangency channel is
+live and the blend board's `t` understates it, which is a reason to keep the family open and **not**
+a promotion argument (#141). `F₂` alone rejects → the leg is a **variance-channel** object, which
+this repo's Sharpe gate does not score, and the honest conclusion is that the lab found something its
+objective cannot reward. Per #140(b) the long-only inequality form applies, so the alpha test is
+one-sided on a pre-fixed direction.
+
+### Trials, in run order, with the allocation stated before the first one
+
+Allocation: `price-trend` is capped at **2** and tonight plans **at most 1**. The "at most 2 per
+family until four have leads" clause is lifted (nine families carry leads) and the "at least one
+family with no recorded trial" floor is vacuous. Scouts run **first** and the single challenger runs
+**last**, because a challenger that reaches the holdout gate ends the session and the scouts' designs
+are fixed here in advance anyway — so running them first costs no independence and preserves budget.
+
+**T1 — SCOUT, `range-variance`, gated behind F2.** `SUMMARY.md` #146's long-only market-correlation
+leg: one number per name, `mc` exactly as defined in F2, low-co-movement side only, rank-weighted,
+monthly. Family `range-variance` because `program.md` names "correlation regimes" there and nowhere
+else. **Scout, not challenger**, because it is aimed at the variance channel and #142 forbids
+expecting this gate to reward that. *Falsifier*: a validation Sharpe at or below the family's
+standing lead of **0.494** says a direct co-movement score is not a better object than `E/Var` even
+on its own terms.
+
+**T2 — SCOUT, `range-variance`, the control T1 must beat to mean anything.** The closed-form
+long-only minimum-variance book of Clarke–de Silva–Thorley: `w_i ∝ (1/σ²_εi)(1 − β_i/β_L)` for
+`β_i < β_L` and **zero otherwise**, under a single-factor risk model on the equal-weight universe
+return, same 250-day window and 20-day lag. It has **no free parameters to sweep**, `O(n)`
+estimation and no matrix inversion — which is exactly why it is the right control under the standing
+parameter-count triage (#1). *Falsifier, and it is the one that matters*: if a hand-built
+co-movement score (T1) cannot beat a closed-form book on the same information, **the score is not the
+contribution** and the vein closes. T2 is run even if F2 kills T1, because its own claim — that a
+long-only variance objective excludes most of the universe on its own — is independent of the score.
+
+**T3 — CHALLENGE, `price-trend`, gated behind F1's middle branch only.** If and only if F1 returns
+Spearman < 0.90 **with** the region ordering: the seated champion `pt_mom_evar_arbrisk` with every
+node byte-identical and the **single** change that `E/Var`'s input returns become overlapping 3-day
+log returns. *Falsifier*: validation Sharpe at or below **1.269** says the seated one-day estimator
+is not materially a calendar artifact where it is scored, and the objection is closed against the
+gate rather than against a rank correlation. Report the paired `t` under `metrics.sharpe_diff_se`,
+not the Sharpe difference alone; at the `rho` a one-estimator change to the champion will sit at, the
+required-gain table asks roughly +0.04 to +0.14 and the family's resolution floor is 0.03–0.08, so
+**the honest prior is a small move this split cannot resolve.**
+
+### Anti-candidates carried into tonight, so they are not rediscovered as ideas
+
+- **Do not sweep `E/Var`'s `K`, window or lag, and do not substitute a variance level for the
+  ratio** (2026-09-23). T3 changes the return horizon and **only** if F1 identifies that horizon as a
+  calendar bias rather than a knob; the middle branch of F1 exists precisely to keep that distinction
+  enforceable.
+- **Do not build for the variance channel and expect this gate to reward it** (`SUMMARY.md` #142).
+  Both T1 and T2 are aimed at the variance channel, which is **why they are scouts**. #98 won on that
+  channel by accident and is a lucky instance of the forbidden shape, not a refutation of it.
+- **Do not import the low-correlation cross-section's expected spread** (`SUMMARY.md` #147): the
+  Tier-A source says that holding volatility constant, low-correlation names tend to be small
+  undiversified firms, and this universe is ~145 large global survivors — the band where that
+  dispersion does not exist.
+- **Do not widen the co-movement work beyond a within-type demean** without saying which portfolio
+  invariance is being broken (#147, second half): 42 of ~140 instruments are ETFs, and an ETF **is** a
+  positive linear combination of names already in the pool.
+- **Do not treat a spanning rejection as a promotion argument** (`SUMMARY.md` #141). F4 licenses no
+  seat in either branch.
+- **Do not re-derive the blend board.** It is exhaustive as of 2026-09-15 and now stale against a
+  different seat; that is a reason to leave it alone, not to redo it.
