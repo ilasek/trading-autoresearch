@@ -3982,6 +3982,11 @@ across experiments; prune entries that later evidence contradicts.
   normalised, single-date weight vector. **Operational rule: print the held set's mean pairwise
   correlation beside effective risk bets on every concentration or drawdown claim from now on.**
   The two answer different questions and #98 is the case that separates them maximally.
+  **[RULE SUPERSEDED IN FORM 2026-09-24 — the substance stands, the statistic was underspecified.
+  Read the diversification-ratio entry below before applying it.]** The correlation to print is the
+  **volatility-weighted** `ρ̄`, not an unweighted mean pairwise correlation (the unweighted version
+  does not satisfy the identity and misread a book by 0.12 on its first use), and neither term
+  ranks books on its own — `DR = [ρ̄(1−CR)+CR]^(−1/2)` is what combines them.
 
 - **[Measured 2026-09-23, nightly] The ⚠ standing concern acquires its first contrary data point,
   on a candidate designed without reading the holdout table — and one point does not retire a run
@@ -4012,3 +4017,116 @@ across experiments; prune entries that later evidence contradicts.
   required-gain table's **+0.283** at that `rho`. **A result can be credible on three agreeing
   splits and unresolvable on the one that decides it; those are compatible statements and both
   belong in the record.**
+
+- **[Measured 2026-09-24, nightly] `research/SUMMARY.md` #1's parameter-count triage rule transfers
+  outside `price-trend`, its price there is +0.421 of validation Sharpe, and the mechanism is
+  CONCENTRATION rather than the scatter the rule is usually paraphrased with.** Trials #99 and #100
+  are the same book with one node changed: the Clarke-de Silva-Thorley long-only minimum-variance
+  sizing `w_i ∝ (1/σ²_εi)(1 − β_i/β_L)` against **equal weight** over the identical long set
+  (measured 52.31 vs 52.33 names — the membership rule is byte-identical and the diagnostic
+  confirms it). Validation Sharpe **0.313 → 0.734**; `range-variance`'s lead goes 0.494 → 0.734
+  after sixteen sessions of screens. `CLAUDE.md` forbids carrying this file's constants into a new
+  family by analogy, and this is the re-measurement it asks for: the rule holds, with a **larger**
+  gap than any reading of it inside the incumbent's family. **What is new is the failure mode.**
+  Holdings only, 75 sampled validation dates, 252-day trailing covariance:
+
+      book                            n      HHI     eff risk bets   rho_bar(volwtd)   CR       DR      ex-ante vol
+      rv_minvar_closedform  (#99)   52.31   0.1926       9.40            0.2960       0.0669   1.7952     0.0334
+      rv_minvar_equalweight (#100)  52.33   0.0269      42.25            0.1718       0.0320   2.3042     0.0888
+
+  `1/σ²_ε` sizing raises **HHI 7.2x** and cuts **effective risk bets 4.5x** on the same names. The
+  estimation error is not noise around a sensible weight vector; it is weight piled onto the few
+  names whose residual-variance estimate came out smallest, so the **de-concentration price is the
+  right lens on any estimated weighting scheme**, not a separate consideration from the triage rule.
+  Do not read #99's −10.4% drawdown as safety bought at equal return: ann_ret is +1.1% vs +8.1%.
+
+- **[Measured 2026-09-24, nightly] The diversification-ratio identity reconciles exactly, it sees
+  the promotion the risk-bet count missed, and it replaces a rule this file wrote one day earlier.**
+  `DR(w) = Σw_iσ_i/σ(w)` decomposes **exactly** into `[ρ̄(1−CR)+CR]^(−1/2)` with `ρ̄` the
+  volatility-weighted average pairwise correlation of the holdings and `CR` a Herfindahl on risk
+  contributions. Measured on four books, 75 sampled validation dates: `max |DR_identity −
+  DR_direct| = 4.44e-16`. Three durable readings.
+  **(i) It captures #98.** Across the #42 → #98 promotion effective risk bets moved 8.40 → 8.55
+  (+1.8%) while `DR` moved 1.726 → **2.032 (+17.7%)**. The count is the `CR` half alone and `CR`
+  barely moved (0.1009 → 0.1045); `ρ̄` is what moved (0.2761 → 0.1719).
+  **(ii) The weighting is load-bearing and its cost is measured.** For #99 the unweighted mean
+  pairwise correlation reads 0.1771 against the weighted **0.2960** — reading the unweighted number
+  would have called the highest-co-movement book of four a low-co-movement book.
+  **(iii) Neither term ranks books alone.** #100 and the seat have bit-equal `ρ̄` (0.1718/0.1719)
+  and are not remotely the same book: `DR` 2.304 vs 2.032 on `CR` 0.0320 vs 0.1045.
+  **Operational rule, superseding the 2026-09-23 wording: report `DR` with `ρ̄` and `CR` beside it
+  on every concentration or drawdown claim.** And carry the caution the table already supplies:
+  `DR` is scale-free in the volatility **level** exactly as the risk-bet count is scale-free in the
+  correlation level — #99 has the second-lowest `DR` and by far the best drawdown — so `DR` is a
+  composition descriptor and has **not** been shown to predict drawdown. Do not let it acquire that
+  status by repetition the way the risk-bet count did over three misses.
+
+- **[Measured 2026-09-24, nightly] The seated `E/Var` term and a direct market-correlation score
+  are ONE object at different locality, locality is a single monotone dial, and it is what keeps the
+  seat out of a family this repo has refused.** `research/SUMMARY.md` #145 added a third
+  orthogonality gate — `|ρ(score, β̂)|` against the standing 0.50 bar — on the argument that
+  `β = ρσ/σ_m`, so a co-movement score can pass the volatility gate while being a **low-beta bet**.
+  216 train month-ends, type-demeaned scores throughout:
+
+      K in the substitute basket    1      2      4(SEAT)   8      16     32     64    all
+      |rho(score, beta-hat)|      0.379  0.380   0.395   0.485  0.557  0.608  0.635  0.660
+      |rho(score, vol level)|     0.157  0.146   0.141   0.134  0.133  0.147  0.164  0.153
+      rho(score, K=4 score)       0.922  0.968   1.000   0.934  0.863  0.800  0.715  0.675
+
+  **Monotone, crossing the 0.50 bar between `K = 8` and `K = 16`, and converging at the global limit
+  to 0.660 — which is the standalone market-correlation score's 0.675 to within 0.015.** The
+  volatility gate never moves at any `K`, so locality is the only thing changing. Consequences:
+  the direct co-movement book (`SUMMARY.md` #146) **closes for zero trials**; the seat passes a gate
+  that did not exist when it was seated (0.395) while its apparent successor fails it (0.675); and
+  `spearman(mc, −E/Var) = +0.629` says the two are relatives sharing ~40% of rank variance, not the
+  same variable. **The general form: when two scores differ by a neighbourhood size, measure the
+  gate along that dial before treating them as separate ideas — one of them may be the other's
+  limit.** **Anti-candidate that must travel with this entry: no `K` may be chosen off this curve.**
+  An eight-name basket looks like free margin under the beta gate; it is a champion parameter
+  selected on a screen, and `K = 4` was fixed before any of these numbers existed.
+
+- **[Measured 2026-09-24, nightly] `liquidity-volume` is closed on the mean channel by a direct
+  measurement, and the `δ` half of a spanning test needs `K ≥ 2` or it is a volatility-level
+  comparison in disguise.** `SUMMARY.md` #139's step-down decomposition, `K = 1` (champion),
+  `N = 1` (`lv_illiq_evar_riskcost`), train only, T = 14,261, `ρ = +0.509`.
+  **`F₁` does not reject and is nowhere near it**: 0.346, p = 0.557 (0.045, p = 0.831 after the
+  elliptical correction at `κ̂ = 6.63`); at the **optimal** weight chosen with 56 years of hindsight
+  the lead moves the tangency Sharpe **1.0727 → 1.0755, +0.0028**, and the appraisal ratio is
+  **+0.078** annualised. That is `SUMMARY.md` #140(a) holding exactly — a leg with no alpha moves
+  the noncentrality not at all however decorrelated it is — and it means six declined blends across
+  six sessions were declining a leg with nothing additive to give. **`F₂` rejects at p ≈ 0 and the
+  rejection is degenerate**: with one benchmark asset the benchmark's global minimum variance *is*
+  its own variance, so the test asks only whether the test asset is less volatile (9.03% vs
+  17.55%); the GMV puts **99.6%** of its weight on the lead and that book earns train Sharpe 0.619
+  against the champion's 1.073. Both solutions are long-only feasible, so this is not an
+  attainability objection — the "variance channel" here is *hold the lower-volatility book*, and on
+  this universe the volatility level is the survivorship artifact. **Never read a `K = 1` spanning
+  `δ` as evidence about diversification.**
+
+- **[2026-09-24, nightly] Two free rules of the kind that remove a trial from a plan before it is
+  written.** Both were used tonight and both generalise past their vein.
+  **(i) A bias in a LEVEL need not survive into a RANK, and this repo scores ranks.** `SUMMARY.md`
+  #143's non-synchronous-close objection to every correlation the lab computes is real in the level
+  — recomputing `E/Var` from overlapping 3-day log returns raises it in **all 15 regions without
+  exception** (mean +0.030, largest HK/AU/DK/NL/UK, US second-smallest) — and **invisible in the
+  rank**: cross-sectional `spearman(1d, 3d) = 0.955` mean, 1 of 216 dates below 0.90. The objection
+  is retired for the scores and **still owed to any correlation LEVEL the lab prints** (a `ρ̄`, a
+  `DR`, a covariance figure), which should be assumed biased low by ~0.03 of `E/Var` units and more
+  outside the US. The calendar route itself stays closed: `learnings.md` 2026-09-16 rejects
+  non-trading at its signature moment and the surviving West→JP/HK pairs are already filled by the
+  engine's 1-day execution lag.
+  **(ii) A THRESHOLD on a variable IS a rank slice on that variable — check the algebra before
+  building the rank-slice control.** The minimum-variance long set is `{i : β̂_i < β_L}`, so a
+  same-sized bottom-`k`-by-`β̂` control is byte-identical rather than merely similar, and the trial
+  was cancelled on paper. What that leaves is the honest description of trial #100: **equal-weight
+  the low-beta ~37% of the universe**, with Clarke-de Silva-Thorley contributing only *where the
+  cutoff falls* from a parameter-free fixed point. It also falsifies the source's own composition
+  prediction — CdST say the threshold sits inside the **lowest-beta quintile**; measured here it
+  sits at the **36.4th percentile on validation and 41.7th on train**, so the book holds 37–43% of
+  available names rather than under 20%. The likely cause is this universe: 42 of ~140 instruments
+  are ETFs and an ETF is a positive linear combination of names already in the pool, which
+  compresses the low-beta tail the derivation assumes is sparse. **Corollary for the leaderboard:
+  `range-variance`'s lead is now held by a book that is arguably not a `range-variance` object at
+  all; the family's genuine content (range volatility, HAR-RV, vol-of-vol, dispersion) is still at
+  0.494 after fifteen screens, and the standing recommendation to amend or retire it is unchanged
+  in substance.**
