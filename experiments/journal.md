@@ -13831,3 +13831,44 @@ required-gain table asks roughly +0.04 to +0.14 and the family's resolution floo
   caution for every `train_sharpe` this repo quotes on a book whose membership rule is a
   cross-sectional threshold.
 
+
+## Pre-registration addendum — 2026-09-24, written after T2 and the free screens and before trial #100
+
+T2 (`rv_minvar_closedform`) returned validation **0.313** against the `range-variance` lead of
+0.494, and F3 then decomposed *why* its ex-ante volatility is so low (3.34%): its `CR` is the
+lowest of the three books measured (0.0669, i.e. the most evenly divided risk) and its effective
+risk-bet count the highest (9.40), yet its volatility-weighted `ρ̄` is the **highest** (0.2960).
+It got small by holding low-volatility **names**, not by holding names that replicate each other
+less. That leaves one question T2 cannot answer about itself, and it is a question about a
+standing rule rather than about this book.
+
+**T4 — SCOUT, `range-variance`, the sizing ablation of T2 and nothing else.** Same long set, same
+`beta_i < beta_L` fixed point, same 250-day window and 20-day lag, same 25% cap — with
+`w_i ∝ (1/σ²_εi)` replaced by **equal weight** over the surviving set. One node changes.
+
+**Why it is worth a trial rather than an argument.** `research/SUMMARY.md` #1's triage rule says a
+scheme that estimates nothing carries no estimation error while one needing a per-asset variance
+pays for it out-of-sample. `experiments/learnings.md` reproduces both of this repo's weighting
+verdicts with that rule — **and every one of those measurements was made inside `price-trend`.**
+`CLAUDE.md` is explicit that this file's constants may not be carried into a new family by
+analogy and must be re-measured there. T2 and T4 differ by exactly the quantity the rule grades
+(`n` estimated residual variances against zero estimated parameters) with the membership rule held
+fixed, so the pair is the cleanest test of that rule this repo can construct outside the
+incumbent's family.
+
+**Branches, fixed before the run.**
+- **T4 > T2 (0.313)** → the triage rule transfers out of `price-trend`, and the honest reading of
+  T2's failure is that its *sizing* term was the estimation error rather than its objective being
+  wrong. The gap `T4 − T2` is then the first price this repo has put on the rule in a second
+  family.
+- **T4 ≤ T2** → the triage rule takes its **first recorded miss**, and CdST's claim that
+  idiosyncratic risk should decide position size survives a test designed to break it. Either way
+  the number is informative, which is the condition for spending the trial.
+- **Not a promotion argument either way.** It is a `scout`, it is aimed at the variance channel,
+  and `SUMMARY.md` #142 stands.
+
+**Anti-candidate attached, so the third arm is not tried later by accident.** Do **not** follow
+this with an inverse-*total*-volatility arm. That is the volatility level, which on this universe
+is the survivorship artifact (`learnings.md` 2026-09-17), and a good score there would seat a
+knowingly-artifactual book. The two arms run tonight are the two the triage rule grades, and the
+family is then closed for weighting-scheme work.
