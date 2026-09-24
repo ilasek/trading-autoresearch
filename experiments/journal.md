@@ -13785,3 +13785,49 @@ required-gain table asks roughly +0.04 to +0.14 and the family's resolution floo
   seat in either branch.
 - **Do not re-derive the blend board.** It is exhaustive as of 2026-09-15 and now stale against a
   different seat; that is a reason to leave it alone, not to redo it.
+## 2026-09-24T23:24:04+00:00 — rv_minvar_closedform — **SCOUT**
+- Candidate: `strategies/candidates/rv_minvar_closedform.py` (family: range-variance, track: scout, trial #99)
+- Hypothesis: The Clarke-de Silva-Thorley closed-form long-only minimum-variance book — w_i proportional to (1/s2_i)(1 - beta_i/beta_L) for beta_i < beta_L and zero otherwise, under a single-factor model on the equal-weight universe return estimated over the seated term's own 250-day window lagged 20 days, with beta_L fixed by its own first-order conditions and no free parameter anywhere — reaches a validation Sharpe above the range-variance family lead of 0.494 while holding fewer than a quintile of the universe, because a long-only variance objective excludes most names by itself.
+- Verdict: SCOUT — scouted family 'range-variance': validation sharpe 0.313 <= the family's best 0.494 (DSR 0.3551, 99 trials, 28 effective after clustering at rho 0.95)
+- Train: sharpe +0.92, ann_ret +10.6%, maxDD -55.6%, turnover 1.6x
+- Validation: sharpe +0.31, ann_ret +1.1%, maxDD -10.4%, turnover 0.6x
+- Deflated Sharpe prob: 0.3551 (bar from 99 trials, 28 effective)
+- Scout track: family best before this trial +0.49; the champion was not compared and the holdout was not read
+- Lesson: **Both halves of the pre-registered hypothesis are falsified, and the second half is
+  the one worth keeping, because it is a published closed form's own prediction missing on this
+  universe by a factor of two.** (i) *Sharpe*: 0.313 against the family lead of 0.494 — a
+  parameter-free variance objective does not beat `range-variance`'s hand-built vol-of-vol book,
+  so the family's floor is not raised and the low-risk vein is closed here at the family level
+  rather than at the level of any one construction. (ii) *Composition, and this is the finding*:
+  Clarke–de Silva–Thorley derive that a long-only variance objective excludes most of the
+  universe **by itself**, with the threshold typically inside the **lowest-beta quintile**.
+  Measured here, holdings only, at the same month-ends the book rebalances on:
+
+      split        long set          of available     beta_L percentile of beta
+      train         50.8               116.7  = 42.6%          41.7%
+      validation    51.8               139.7  = 37.1%          36.4%
+
+  **`beta_L` sits at the 36th–42nd percentile, not inside the lowest quintile, and the book holds
+  roughly two quintiles rather than under one.** The algebra is not in question — `beta_L =
+  (C + 1/var(r_m))/B` is a fixed point of its own first-order conditions with nothing to tune —
+  so the miss is a statement about *this universe*: 42 of ~140 instruments are ETFs and an ETF is
+  a positive linear combination of names already in the pool, which compresses the low-beta tail
+  the derivation assumes is sparse. That is `research/SUMMARY.md` #147's invariance warning
+  showing up as a measured number rather than as an argument.
+- Lesson (second half, on what the book actually did): **it de-risked exactly as advertised and
+  earned nothing for it, which is the cleanest instance yet of `SUMMARY.md` #142's channel
+  split.** Validation maxDD **−10.4%** against the champion's −22.8% and turnover **0.6x**
+  against 3.01x — the best drawdown and the lowest turnover of any book this repo has recorded —
+  on ann_ret **+1.1%**. The variance channel was won outright and the scored channel was not
+  touched. A future session must not read the drawdown as a partial success: this gate scores
+  Sharpe, and a variance reduction raises it only if the mean does not fall in proportion. Here
+  the mean fell further.
+- Lesson (third half, on the train–validation gap): train 0.92 → validation 0.31 is the
+  **twenty-seventh** reading in the standing train-Sharpe-as-prediction record and it
+  over-predicts, in a family outside `price-trend`, exactly as the 2026-08-30 rule says. Note the
+  train number is flattered by composition and not only by luck: over 1962–2017 the engine's
+  train split averages 24.6 positions because the universe is thin before 2000, while over
+  2000–2017 the same book holds 50.8 — the book is a different object early in train, which is a
+  caution for every `train_sharpe` this repo quotes on a book whose membership rule is a
+  cross-sectional threshold.
+
