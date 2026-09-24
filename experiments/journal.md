@@ -13638,3 +13638,5 @@ exposure; this one works on membership, and it is the first to survive.
 universe — current constituents, no fundamentals, no intraday — and the standing recommendation
 that `program.md`'s `range-variance` cold-family rule be amended or the family retired is
 unchanged after fifteen mechanism screens. Both are edits to frozen files.
+
+## Research session — 2026-09-24 (learning agent): 3 notes added, see research/SUMMARY.md
