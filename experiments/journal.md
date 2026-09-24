@@ -13923,3 +13923,225 @@ family is then closed for weighting-scheme work.
   number would have had this session calling T2 a low-co-movement book when it is the
   highest-co-movement book of the four.
 
+
+## Free measurements — 2026-09-24 (nightly), no trial spent
+
+Six items. F1–F4 were pre-registered above; F2b and F5 were measured *after* F2 returned a
+failure and are labelled as such, and F6 is an algebraic kill that removed a trial from tonight's
+plan. All of it is train-split or holdings-only. Nothing here reads the holdout.
+
+### F1 — the non-synchronous-close objection to a seated term is RETIRED, and it cost nothing
+
+`SUMMARY.md` #143's claim: every correlation this repo computes uses one-day returns on a universe
+spanning 15 regions whose closes are not contemporaneous, and two independent sources correct that
+with overlapping multi-day returns. `E/Var` recomputed with the seated constants byte-identical
+(250-day window, 20-day lag, `K = 4`, equal-weight basket, closed-form `corr²`) and **only** the
+return horizon changed to overlapping 3-day log returns. 216 train month-ends, 2000-01 → 2017-12,
+mean 116.7 names per date.
+
+    (a) cross-sectional spearman(E/Var_1d, E/Var_3d)
+        mean 0.9548   median 0.9593   min 0.8821   max 0.9778   frac below 0.90 = 0.005
+    (b) ETF-versus-single-name rank-AUC      1-day 0.8442     3-day 0.8636
+    (c) per-region mean E/Var, and the change
+
+        region  1-day   3-day   delta        region  1-day   3-day   delta
+        JP      0.4332  0.4416  +0.0084      BR      0.6065  0.6368  +0.0303
+        US      0.5560  0.5726  +0.0167      TW      0.5942  0.6288  +0.0346
+        FR      0.6934  0.7118  +0.0184      UK      0.5067  0.5449  +0.0383
+        KR      0.6751  0.6947  +0.0196      NL      0.4847  0.5243  +0.0396
+        IN      0.3722  0.3967  +0.0244      DK      0.2191  0.2618  +0.0427
+        CN      0.7629  0.7883  +0.0254      AU      0.6317  0.6777  +0.0459
+        GLOBAL  0.7794  0.8056  +0.0262      HK      0.3773  0.4259  +0.0485
+        DE      0.5878  0.6142  +0.0264
+
+**Verdict: the pre-registered first branch.** Mean Spearman **0.9548 ≥ 0.90**, and only 1 of 216
+dates falls below 0.90, so the two estimators rank this cross-section the same way and **no trial
+is owed** — T3 was not built. The standing objection is retired for zero cost.
+
+**What is nonetheless real, and worth separating from the verdict.** The *level* bias the sources
+predict is there and it is **downward in all 15 regions without exception** (every delta positive,
+mean +0.030), and it is broadly region-ordered in the predicted direction: US is second-smallest
+of 15, and the largest movers are HK, AU, DK, NL and UK. JP at +0.0084 is the one clear
+counterexample to a strict ordering. **The distinction that matters here and generalises**: a bias
+in a *level* need not survive into a *cross-sectional rank*, and this repo scores ranks. Every
+number it prints from a correlation is a rank, so the correction is owed to none of them — but a
+future session that wants a correlation *level* (a `ρ̄`, a `DR`, a covariance-based risk figure)
+should assume it is biased downward by about +0.03 of `E/Var` units and by more outside the US.
+
+### F2 — the direct co-movement score FAILS its new gate, and #146 closes for zero trials
+
+`SUMMARY.md` #145's three gates on `mc` = type-demeaned negated correlation of a name to the
+equal-weight universe return, 250-day window lagged 20 days. 216 train month-ends, bar 0.50.
+
+    gate                                    mean |spearman|   median   verdict
+    |rho(mc, 250d realised vol level)|          0.1753        0.1297    pass
+    |rho(mc, rank 12-1 momentum)|               0.1794        0.1671    pass
+    |rho(mc, beta-hat)|   <- the new third      0.6746        0.6534    FAIL
+
+**Verdict: the pre-registered kill branch. T1 was not built and `SUMMARY.md` #146 closes for zero
+trials.** A direct market-correlation score on this universe is a **low-beta bet in costume** — a
+family this repo has already refused — and it passes the lab's *existing* artifact gate while
+doing so, which is precisely the hole #145 was written to close. Note what this vindicates: the
+gate was added by the research folder this morning and it killed the folder's own candidate on the
+first night it existed. That is the screen working as designed.
+
+**And the sort itself is not the problem — it works.** The sources' own identifying test, the
+conditional double sort (quintile on the volatility level, split on `mc` within quintile, ex-post
+realised 21-day correlation to the equal-weight market):
+
+    vol quintile   ex-post rho, low-comove half   high-comove half   spread    fwd-vol ratio
+    0 (lowest)              0.1635                     0.7338        -0.5703       0.775
+    1                       0.4364                     0.6905        -0.2541       1.009
+    2                       0.4295                     0.6521        -0.2225       1.015
+    3                       0.3749                     0.6324        -0.2575       0.987
+    4 (highest)             0.3893                     0.6048        -0.2156       1.076
+
+**5 of 5 quintiles correctly signed, with forward volatility held flat (mean ratio 0.972).** So
+co-movement *is* forecastable cross-sectionally on this universe with the volatility level
+controlled — the Tier-A source's answer to "correlation is too noisy to sort on" replicates here.
+The reason not to build is not that the sort fails; it is that what the sort selects cannot be
+told apart from beta. **Those are different objections and only the second one bites.**
+
+### F2b — NOT pre-registered. The same gate applied to the SEATED term, which has never faced it
+
+The beta gate is one morning old, so no term in this repo has ever been run against it, the seat
+included. Same 216 train month-ends. Licenses no build either way; it is reported because a gate
+that kills a candidate and is never turned on the incumbent is not a gate.
+
+    score                              mean |spearman(., beta-hat)|   verdict
+    type-demeaned -E/Var  (SEATED)                0.3948              pass
+    raw -E/Var (no demean)                        0.3124              pass
+    raw -rho_mkt (no demean)                      0.6407              FAIL
+    (seated term against the volatility level, for contrast:  0.1414)
+
+**The seat clears the gate its direct competitor fails, by 0.105 on one side and 0.175 on the
+other.** This answers, for zero trials and before any book existed, the open question the
+2026-09-23 session wrote down as its fourth next idea — *is a direct low-co-movement score a
+better object than `E/Var`?* **No**, and the reason is structural rather than empirical.
+
+Printed for the first time, because the repo has never measured it: `spearman(mc, type-demeaned
+−E/Var)` = **+0.6287**. The two objects share about 40% of rank variance. They are relatives, not
+the same variable, and the relative that survives is the local one.
+
+### F5 — NOT pre-registered. The two-point contrast turned into a curve, DIAGNOSTIC ONLY
+
+What separates `E/Var` from `mc` is *locality*: `E/Var` asks what a name's **four closest
+substitutes** span, `mc` asks what the **whole cross-section** spans. If locality is the active
+ingredient, widening the substitute basket must walk the score into the beta family. 216 train
+month-ends, everything else identical, `all` = every other name.
+
+    K      |rho(score, beta)|   |rho(score, vol)|   |rho(score, 12-1)|   rho(score, K=4)
+    1           0.3790 pass          0.1567 pass         0.1390 pass          +0.9224
+    2           0.3800 pass          0.1464 pass         0.1406 pass          +0.9683
+    4           0.3948 pass          0.1414 pass         0.1433 pass          +1.0000  <- SEATED
+    8           0.4853 pass          0.1337 pass         0.1626 pass          +0.9339
+    16          0.5572 FAIL          0.1334 pass         0.1789 pass          +0.8631
+    32          0.6077 FAIL          0.1465 pass         0.1751 pass          +0.7999
+    64          0.6349 FAIL          0.1639 pass         0.1690 pass          +0.7149
+    all         0.6596 FAIL          0.1525 pass         0.1770 pass          +0.6753
+
+**Monotone in `K`, crossing the 0.50 bar between 8 and 16, and converging at the global limit to
+0.6596 — which is F2's market-correlation score (0.6746) to within 0.015.** The two objects are
+the *same object* in the limit, so F2's kill and F2b's pass are two points on one dial rather than
+two facts. The volatility gate meanwhile never moves (0.133–0.164 at every `K`) and neither does
+the momentum gate: **locality is the only thing changing**, which is what identifies it.
+
+**This licenses nothing and no `K` may be read off it.** The standing anti-candidate against
+sweeping `E/Var`'s `K` is unchanged and is now *more* load-bearing, because the curve makes an
+eight-name basket look like a free 0.09 of margin. It is not: the seated `K = 4` was fixed before
+any of this was measured, and choosing `K` from this table would be selecting a champion parameter
+on a screen, which is the thing pre-registration exists to prevent.
+
+### F3 — `SUMMARY.md` #144's diversification-ratio identity, and it RECONCILES
+
+Holdings only, 75 sampled validation dates, 252-day trailing plain sample covariance (per #1's
+boundary note: once no-short is imposed, a fancier estimator stops mattering for a diagnostic).
+
+    book                            n      HHI     eff risk bets   rho_bar(volwtd)   rho(unwtd)   CR       DR      ex-ante vol
+    pt_mom_evar_arbrisk  (SEAT)   48.08   0.0626       8.55            0.1719          0.1718    0.1045   2.0315     0.1724
+    rv_minvar_closedform  (T2)    52.31   0.1926       9.40            0.2960          0.1771    0.0669   1.7952     0.0334
+    rv_minvar_equalweight (T4)    52.33   0.0269      42.25            0.1718          0.1772    0.0320   2.3042     0.0888
+    mom_zscore_overlap6  (#42)    62.36   0.0618       8.40            0.2761          0.2394    0.1009   1.7262     0.2224
+
+    identity check: max |DR from [rho_bar(1-CR)+CR]^(-1/2)  -  DR from sum(w_i s_i)/sigma(w)| = 4.44e-16
+
+**Three readings, all free.**
+1. **`DR` sees the #98 promotion that the risk-bet count could not.** #42 → the seat: effective
+   risk bets 8.40 → 8.55 (**+1.8%**), `DR` 1.726 → 2.032 (**+17.7%**). The lab now has one number
+   that captures last night's mechanism, and the identity says why: the count is the `CR` half
+   only, and `CR` barely moved (0.1009 → 0.1045) while `ρ̄` did (0.2761 → 0.1719).
+2. **#144's insistence on the volatility-WEIGHTED `ρ̄` is load-bearing, with a measured cost.** For
+   T2 the unweighted mean pairwise correlation reads **0.1771** against the weighted **0.2960**.
+   Reading the unweighted number would have had this session calling T2 a low-co-movement book when
+   it is the *highest*-co-movement book of the four. The 2026-09-23 resolution said "print mean
+   pairwise correlation"; it must be the weighted one or the identity does not close.
+3. **Neither term ranks books on its own.** T4 and the seat have bit-equal `ρ̄` (0.1718 / 0.1719)
+   and are not remotely the same book — `DR` 2.304 against 2.032, on `CR` 0.0320 against 0.1045.
+   **Report `DR` from now on, with `ρ̄` and `CR` beside it, on every concentration or drawdown
+   claim.** That supersedes the 2026-09-23 wording, which was necessary but not sufficient.
+
+### F4 — `SUMMARY.md` #139's step-down spanning decomposition: the THIRD branch, with a caveat that partly disarms it
+
+`K = 1` benchmark (the seated champion), `N = 1` test asset (the seated `liquidity-volume` lead
+`lv_illiq_evar_riskcost`), **train only**, `N = 1` form throughout. T = 14,261 daily observations,
+1962-01-02 → 2017-12-29, `rho(champ, lead) = +0.5086`. Both books are already-recorded results; no
+candidate was scored.
+
+    OLS        alpha = +0.609%/yr    beta = +0.2617    delta = 1 - beta = +0.7383
+               daily alpha +2.418e-05, se 4.112e-05, t = +0.588   (White-robust t = +0.575)
+
+    F1  (alpha = 0)              =      0.346   ~ F(1, 14259)   p = 0.5565
+        identity checks: t_alpha^2 = 0.346, max-squared-Sharpe form = 0.346  (all three agree)
+    F2  (delta = 0 | alpha = 0)  =  39768.485   ~ F(1, 14260)   p = 0.0000
+
+    elliptical kurtosis parameter kappa-hat = 6.628   (normal theory assumes 0)
+        F1/(1+kappa) =     0.045   p = 0.8314
+        F2/(1+kappa) =  5213.218   p = 0.0000
+
+    #140(a) appraisal ratio alpha/sigma_eps = +0.0784 annualised
+            (champion standalone train Sharpe +1.0727, lead standalone +0.6130)
+    #140(b) one-sided long-only p-value for alpha <= 0 = 0.2826
+    tangency max squared Sharpe   benchmark 1.1506  ->  benchmark+lead 1.1567
+    global minimum variance       benchmark 17.554%/yr  ->  benchmark+lead 9.032%/yr
+
+**`F₁` does not reject and it is not close.** The twelve-session `liquidity-volume` null is a
+**real null on the mean channel**: at the *optimal* weight, chosen with full hindsight over 56
+years of train data, the lead moves the tangency Sharpe from 1.0727 to **1.0755** — **+0.0028**.
+The appraisal ratio is +0.078 annualised, which is #140(a)'s prediction holding exactly: a leg
+with no alpha contributes nothing to the test's noncentrality however decorrelated it is. The
+family is closed as a source of **additive** value whatever its standalone Sharpe, and that is now
+measured rather than inferred from six declined blends.
+
+**`F₂` rejects at p ≈ 0, and the rejection is uninformative BY CONSTRUCTION at `K = 1`.** This is
+the caveat, and it is a correction to #139's own prescription rather than to its arithmetic. With
+one benchmark asset the benchmark's "global minimum variance" **is** that asset's own variance, so
+`F₂` degenerates into asking whether the test asset is less volatile than the benchmark. It is:
+train ann vol **9.03% against 17.55%**. The GMV combination puts **99.6% of its weight on the
+lead** and earns train Sharpe **0.619** — essentially the lead's own standalone 0.613 — against
+the champion's 1.073. Both the GMV and tangency solutions are long-only feasible, so this is not an
+attainability objection; the "variance channel" here is simply *hold the lower-volatility book*,
+which the gate correctly refuses. **The general form, which is the finding: the step-down's `δ`
+half needs `K ≥ 2` to say anything about diversification. At `K = 1` it is a volatility-level
+comparison in disguise, and on this universe the volatility level is the survivorship artifact.**
+Per #141 neither branch licenses a seat, and this one does not even license keeping the family
+open.
+
+### F6 — an algebraic kill that removed a trial from tonight's plan, derived on paper, no data
+
+After T4 took the `range-variance` lead, the obvious next control was: *is the closed form's
+`β_L` membership rule doing anything, or would an equal-weight book over a same-sized low-beta
+rank slice do as well?* The lab's 2026-09-08 rule ("a rank-slice screen prices an EQUAL-WEIGHT
+book") makes that the right comparison, and a positive result without it would be unidentified.
+
+**It needs no trial, because the two are the same set.** Membership in the closed form is
+`live = (beta < beta_L)` — a **threshold on `β̂`** — so the long set *is* the bottom-`k` names by
+`β̂`, where `k = |{i : β̂_i < β_L}|`. A rank slice at the same count is byte-identical by
+construction, not approximately so. **Therefore T4 is exactly "equal-weight the low-beta
+~37% of the universe", and the only thing Clarke–de Silva–Thorley contribute to it is *where the
+cutoff falls* — 36.4th percentile on validation, 41.7th on train — supplied by a fixed point with
+no parameter to choose.** That is a real contribution and a modest one, and it is now stated
+rather than left for a later session to discover after spending a trial on it. It also means T4's
+0.734 must be read beside this repo's refuted `lowvol_equity_tilt` (0.685): a **beta** slice, not
+a volatility slice, and the one place tonight where the Tier-A source's "the correlation half is
+the half that pays" is weakly consistent with this universe's own numbers. It licenses nothing —
+0.734 against a seated 1.269 — and is recorded for the shape, not the margin.
