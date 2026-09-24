@@ -14145,3 +14145,201 @@ rather than left for a later session to discover after spending a trial on it. I
 a volatility slice, and the one place tonight where the Tier-A source's "the correlation half is
 the half that pays" is weakly consistent with this universe's own numbers. It licenses nothing —
 0.734 against a seated 1.269 — and is recorded for the shape, not the margin.
+
+## Pre-registration for the NEXT session — 2026-09-24, fully specified before its numbers exist
+
+Two items, both cheap, both pointed at holes tonight opened rather than at anything tonight liked.
+
+**(1) FREE, and it is the control F4 could not run.** F4's `F₂` half is uninformative at `K = 1`
+because one benchmark asset has no frontier. Re-run the step-down spanning decomposition with
+**`K = 2`** — the champion **and** the now-seated `range-variance` lead `rv_minvar_equalweight`
+(`ρ_to_champion` 0.6612) as the benchmark pair — against `N = 1` = `lv_illiq_evar_riskcost`, train
+only, and report `F₁`, `F₂` and the kurtosis-corrected pair as tonight did. **Branches fixed now.**
+`F₂` still rejecting with a GMV weight vector that is *not* concentrated on one leg → the variance
+channel is a real multi-asset finding and #139's third branch stands on its own. `F₂` rejecting
+again with the GMV again piling onto the least volatile leg → the `δ` half of a spanning test is a
+volatility-level comparison on this universe at every `K`, and the lab should stop running it.
+Provenance: `SUMMARY.md` #139 plus tonight's F4 caveat.
+
+**(2) FREE, and it is the identity's first prospective use rather than a retrospective print.**
+`DR = [ρ̄(1−CR)+CR]^(−1/2)` reconciled to 4.44e-16 tonight and separated two books that `ρ̄` alone
+could not. **Pre-register the prediction before the next drawdown claim is made**: fit the
+`DR`-to-validation-maxDD slope across the four books already measured (`DR` 1.726/1.795/2.032/2.304
+against maxDD −27.8%/−10.4%/−22.8%/−27.3%) and state the predicted drawdown for the *next*
+candidate book **before** running it. Tonight's table already warns the fit will be poor — T2 has
+the second-lowest `DR` and by far the best drawdown, because `DR` is scale-free in the volatility
+**level** exactly as the risk-bet count is scale-free in the correlation level. **If the slope is
+flat or wrong-signed, say so and retire `DR` as a drawdown predictor while keeping it as a
+composition descriptor.** That distinction is the one the risk-bet count was allowed to blur for
+three misses, and it should not be blurred again for a statistic introduced one day ago.
+
+**Anti-candidates carried forward, unchanged.** No `E/Var` knob (`K`, window, lag, and now the
+return **horizon**, which F1 closed on a rank correlation of 0.955); no variance **level**
+substituted for the ratio; no `K` chosen off F5's curve; no inverse-total-volatility arm in
+`range-variance`, which is closed for weighting-scheme work; no building for the variance channel
+and expecting this gate to reward it (`SUMMARY.md` #142); no re-derivation of the blend board.
+
+## Session summary — 2026-09-24 (nightly)
+
+- **Integrity check — the same discrepancy as the last seventeen sessions, verified rather than
+  assumed.** The session-start hook reported "on main, level with origin/main"; `git status -sb`
+  reported **`main-75raus`**. Both were at `a8a54b2` with **no unique commits**, and
+  `git branch -r --no-merged origin/main` returned **nothing**, so nothing was stranded and
+  `trials.jsonl` is not split. Moved to `main` per step 0 of the standing prompt. The harness
+  instructions again named a per-run branch while `CLAUDE.md`, `program.md` and the standing prompt
+  all require `main`; **the repo's rules governed**, as in every prior session.
+- **Engine tests green (33 passed).** Store fresh **through 2026-09-24**, the latest trading day.
+- **Experiments run: 2 of the 8-trial budget** — trials **#99** and **#100**. Trial count 98 →
+  **100**, effective 27 → **29**.
+- **Holdout: NOT READ. Zero looks tonight.** Both trials were scouts, so `holdout_gate` was
+  unreachable; the running total of holdout looks since 2026-08-17 stays at **six**. The session did
+  not have to stop early and did not.
+- **The champion seat did not move and was never challenged.** Both candidates the night planned
+  for the seat were killed by their own pre-registered free screens before a file was written.
+
+### The night in one line
+
+The research folder's new beta gate killed the research folder's own candidate on the first night it
+existed — and the trial that kept the budget honest instead priced a *screening rule* outside the
+family it was measured in, at +0.421 of validation Sharpe for deleting `n` estimated variances.
+
+### Verdicts
+
+| # | candidate | family | track | verdict | val Sharpe |
+|---|---|---|---|---|---|
+| 99 | `rv_minvar_closedform` | `range-variance` | scout | SCOUT | 0.313 |
+| 100 | `rv_minvar_equalweight` | `range-variance` | scout | **FAMILY_LEAD** | **0.734** |
+
+`range-variance` had been screened for sixteen sessions without a lead above 0.5; its lead goes
+**0.494 → 0.734**, which also lifts it past `lead-lag-spillover` (0.688) on the board.
+
+### Best finding: a screening rule's price, measured outside the family it was fitted in
+
+`research/SUMMARY.md` #1 says a weighting scheme estimating nothing carries no estimation error
+while one needing a per-asset variance pays for it out-of-sample. `experiments/learnings.md`
+reproduces both of this repo's weighting verdicts with that rule — and **every one of those
+measurements was inside `price-trend`**, which `CLAUDE.md` explicitly forbids generalising from.
+T2 and T4 differ by exactly that one node, with the membership rule held fixed (long set **52.31
+vs 52.33 names**):
+
+| | val Sharpe | ann_ret | maxDD | HHI | eff risk bets | `ρ̄` | `CR` | `DR` |
+|---|---|---|---|---|---|---|---|---|
+| `rv_minvar_closedform` — `1/σ²_ε` sizing | 0.313 | +1.1% | −10.4% | 0.1926 | 9.40 | 0.2960 | 0.0669 | 1.795 |
+| `rv_minvar_equalweight` — equal weight | **0.734** | +8.1% | −27.3% | **0.0269** | **42.25** | 0.1718 | 0.0320 | **2.304** |
+
+**+0.421 of validation Sharpe for deleting `n` estimated residual variances**, a larger gap than
+any reading of the rule inside the incumbent's family. And the *mechanism* is not the one the rule
+is usually paraphrased with: the estimation error does not arrive as scatter around a sensible
+weight vector, it arrives as **concentration** — HHI up 7.2x, effective risk bets down 4.5x, weight
+piled onto the few names whose residual-variance estimate came out smallest.
+
+### Second finding: locality is what keeps the seated term out of a refused family, and it is one dial
+
+F2 killed `SUMMARY.md` #146's direct market-correlation score on a new gate
+(`|ρ(score, β̂)| = 0.675` against a 0.50 bar). F2b then turned that gate on the **seat**, which had
+never faced it, and it passes at **0.395**. F5 turned the two points into a curve in the substitute
+basket size: **0.379 → 0.660, monotone, crossing the bar between `K = 8` and `K = 16`, converging
+at the global limit on F2's own number to within 0.015** — while the volatility gate never moves
+(0.133–0.164 at every `K`). So the seated `E/Var` and the killed `mc` are the **same object at
+different locality**, and locality is the only thing that changes. This answers the 2026-09-23
+session's fourth next-idea — *is a direct low-co-movement score a better object than `E/Var`?* —
+**for zero trials and before any book existed: no.** `spearman(mc, −E/Var)` = +0.629, printed here
+for the first time: relatives, not the same variable, and the local relative is the one that
+survives.
+
+### Third finding: the twelve-session `liquidity-volume` null is a real null on the channel that counts
+
+F4's `F₁` does not reject (p = 0.557; 0.831 kurtosis-corrected at `κ̂ = 6.63`). At the **optimal**
+weight, chosen with full hindsight over 56 years of train data, the seated family lead moves the
+tangency Sharpe **1.0727 → 1.0755**, **+0.0028**; the appraisal ratio is **+0.078** annualised,
+which is `SUMMARY.md` #140(a) holding exactly. Six declined blends across six sessions were
+declining a leg that has nothing additive to give, and that is now measured instead of inferred.
+`F₂` rejects at p ≈ 0 but **degenerately**: at `K = 1` the benchmark's global minimum variance *is*
+its own variance, so the test reduces to "is the test asset less volatile" (9.03% vs 17.55%), the
+GMV puts **99.6%** of its weight on the lead, and that book earns train Sharpe 0.619 against the
+champion's 1.073. **The `δ` half of a spanning test needs `K ≥ 2` to mean anything**, and next
+session's pre-registration runs it at `K = 2`.
+
+### Fourth finding, free and algebraic: what the closed form actually contributes
+
+Membership in the minimum-variance book is `β̂_i < β_L`, a **threshold on `β̂`**, so the long set
+*is* the bottom-`k` by `β̂` and a same-sized rank-slice control is byte-identical rather than
+merely similar. **T4 is therefore exactly "equal-weight the low-beta ~37% of the universe", and
+Clarke–de Silva–Thorley contribute only *where the cutoff falls*** — 36.4th percentile on
+validation, 41.7th on train — from a fixed point with no parameter to choose. That removed a trial
+from tonight's plan on paper, and it also falsifies the source's own composition prediction: CdST
+say the threshold sits **inside the lowest-beta quintile**, and here it sits at two quintiles, with
+the book holding 37–43% of available names rather than under 20%. The likely reason is this
+universe: 42 of ~140 instruments are ETFs, and an ETF is a positive linear combination of names
+already in the pool, which compresses the low-beta tail the derivation assumes is sparse.
+
+### Protocol and allocation notes
+
+- **Budget: 2 of 8, and the six unspent were declined rather than skipped.** T1 was killed by its
+  own pre-registered gate (F2), T3 by its own (F1), and a fifth candidate by algebra (F6). Every
+  remaining idea reachable tonight is either a knob under a standing anti-candidate, a challenger
+  the blend arithmetic already declines (`ρ` 0.661 and standalone 0.734 against a seated 1.269, on
+  a board closed 2026-09-15 and now stale against a different seat), or refuted — including the
+  regional-calendar lead-lag that F1's region ordering makes tempting and that
+  `learnings.md` 2026-09-16 closes on a rejection, with the surviving West→JP/HK pairs already
+  filled by the engine's own 1-day execution lag.
+- **Allocation:** **zero** trials in `price-trend` against a cap of 2, and both trials in
+  `range-variance`, the coldest family on the board. The "at most 2 per family until four have
+  leads" clause is lifted (nine families carry leads) and the "at least 1 in a family with no
+  recorded trial" floor is vacuous.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's
+  to rule on.
+- **Nothing frozen was touched.** `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+  `CLAUDE.md`, `research/` and `trials.jsonl` are untouched; `champion_card.json` (unchanged, no
+  promotion), `leaderboard.json` and `trials.jsonl` were written by `run_experiment.py` only.
+- **No engine issues encountered.**
+
+### Next ideas, in order, with provenance
+
+1. **The `K = 2` spanning re-run** — free, fully pre-registered above, both branches fixed. It is
+   the only way to find out whether F4's `F₂` rejection was a finding or an artifact of `K = 1`.
+   Provenance: `SUMMARY.md` #139 plus tonight's F4.
+2. **The `DR`-as-drawdown-predictor test** — free, pre-registered above with its likely failure
+   stated in advance. Provenance: `SUMMARY.md` #144 plus tonight's F3.
+3. **`SUMMARY.md` #135**, unrun for a **third** session: the long-leg/short-leg decomposition of
+   scores the lab already holds, to quantify what long-only costs this universe. Free.
+4. **A genuinely cold family, and the honest note is that tonight did not find one.**
+   `statistical-arbitrage` still has **one** recorded trial and a 0.468 lead; `lead-lag-spillover`
+   has two and its regional half is closed on a rejection. A session that wants breadth should
+   start from `statistical-arbitrage`'s long-only handling of the short leg, which
+   `program.md` names as the open question there, rather than from anything in tonight's vein.
+5. **ANTI-CANDIDATE, new tonight and the most tempting thing in this entry**: do **not** choose
+   `E/Var`'s `K` from F5's curve. An eight-name basket looks like free margin under the beta gate;
+   it is a champion parameter selected on a screen, and the seated `K = 4` was fixed before any of
+   tonight's numbers existed.
+6. **ANTI-CANDIDATE, new tonight**: do **not** add an inverse-total-volatility arm to
+   `range-variance`. The two arms the triage rule grades were both run; the family is closed for
+   weighting-scheme work, and the volatility level on this universe is the survivorship artifact.
+7. **`SUMMARY.md` #109** carried for a **seventeenth** session; **#82** for an eighteenth and
+   **#49** for a twenty-seventh.
+
+### For the human — three things, and none of them is about the seat
+
+**(a) A screen the research folder wrote this morning killed the research folder's own candidate
+tonight.** `SUMMARY.md` #145 added a third orthogonality gate (against `β̂`) and #146 proposed a
+market-correlation book. The gate refused the book at 0.675 against a 0.50 bar, and #147 — written
+by the same session — had predicted exactly that outcome for exactly the right reason. That is the
+first time the folder's screens and its candidates have been adversarial in the same night, and it
+is worth more than a passing candidate would have been.
+
+**(b) The seat is better identified than it was last night, and not by anything that touched it.**
+`E/Var` passed two gates before it was seated; it has now passed a third that did not exist then,
+while the object that looked like its natural successor fails that gate by 0.175. F5 makes the
+difference a single monotone dial rather than a coincidence. Nothing was promoted and the seat's
+justification improved, which is the cheapest kind of progress available here.
+
+**(c) The standing recommendation on `range-variance` should be reconsidered rather than repeated.**
+Fifteen mechanism screens across sixteen sessions produced a 0.494 lead and a recommendation that
+`program.md`'s cold-family rule be amended or the family retired. Two trials tonight took it to
+**0.734** — but read the fourth finding first: the book is *equal-weight the low-beta 37% of the
+universe*, which is arguably not a `range-variance` object at all, and the family's genuine content
+(range volatility, HAR-RV, vol-of-vol, dispersion) remains at 0.494 after fifteen screens. **The
+recommendation is unchanged in substance; what changed is that the family's lead is now held by a
+book filed there on a slug technicality, and a human may prefer that recorded than tidy.** Both the
+amendment and the retirement are still edits to frozen files.
