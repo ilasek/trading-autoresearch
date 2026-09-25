@@ -14345,3 +14345,98 @@ book filed there on a slug technicality, and a human may prefer that recorded th
 amendment and the retirement are still edits to frozen files.
 
 ## Research session — 2026-09-25 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-25 (nightly), written before any number was computed
+
+Tonight is aimed at **`statistical-arbitrage`**, the coldest family on the board (one recorded
+trial, lead 0.468, seated 2026-08-30), following the 2026-09-24 session's own next-idea #4 and the
+research folder's `SUMMARY.md` #148–#152, written this morning against exactly that target. Two
+free items pre-registered by the *previous* session are carried unchanged and run first, so that a
+night aimed at a new family still discharges what the last one promised.
+
+### Free screens, train only, no trial, no holdout
+
+**F1 — `SUMMARY.md` #148, the discriminating test of a refutation the lab has carried since
+2026-08-30.** `learnings.md` records residualisation making 5-day reversal *monotonically worse*
+here (raw IC +0.0455 → one-factor +0.0375 → PCA k=3 +0.0331 ≈ k=5 +0.0336), while both Tier-B
+sources added this morning find the opposite ordering. The proposed reconciliation is that a raw
+reversal sort loads on **volatility by selection** — a volatile name's short-horizon return is
+drawn from a wider distribution and reaches the extreme buckets more often — and on this universe
+the volatility level is the measured survivorship artifact (high-minus-low vol spread +19.4%/yr on
+train). Re-run the identical IC ladder **within trailing-volatility terciles**, train only.
+
+*Branches fixed now, before any number exists.* Let `G_pooled` = (raw IC − best residual IC) on the
+unconditioned ladder, and `G_within` = the tercile-count-weighted mean of the same gap computed
+inside each trailing-vol tercile.
+- `G_within < 0.5 · G_pooled` → the refutation was reading the artifact; the vein reopens on a
+  corrected construction and F2 becomes load-bearing.
+- `G_within >= 0.5 · G_pooled` → the refutation stands, is about **this universe** rather than
+  about residualisation, and `statistical-arbitrage` can be closed for residual-reversal work on
+  measured grounds rather than on one ladder.
+The 0.5 threshold is fixed here and is not to be moved after seeing the table.
+
+**F2 — `SUMMARY.md` #149, the construction node, separable from F1 by design.** F1 conditions the
+*comparison* on volatility; F2 removes volatility from the *construction*. Re-run the ladder with
+(a) each residual divided by its own trailing residual volatility before ranking (Blitz et al.'s
+stated reason), and (b) PCA eigen-portfolios built with weights `v_m^i / sigma_i` on
+volatility-standardised returns (Avellaneda–Lee, and Yeo–Papanicolaou after them). *Branch:* if
+either restores residual ≥ raw, the artifact enters through the **construction**; if neither does
+while F1 says the gap is conditional, it enters through the **comparison**. They can disagree, and
+the disagreement is the point — it localises the artifact.
+
+**F3 — carried verbatim from the 2026-09-24 pre-registration: the `K = 2` spanning re-run.** F4's
+`F₂` half was uninformative at `K = 1` because one benchmark asset has no frontier. Re-run the
+step-down decomposition with the champion **and** `rv_minvar_equalweight` as the benchmark pair
+against `N = 1` = `lv_illiq_evar_riskcost`, train only, reporting `F₁`, `F₂` and the
+kurtosis-corrected pair. Branches as fixed last night: a non-degenerate GMV → the variance channel
+is a real multi-asset finding; a GMV again piling onto the least volatile leg → the `δ` half is a
+volatility-level comparison at every `K` and the lab should stop running it.
+
+**F4 — carried verbatim: the `DR`-as-drawdown-predictor test.** Fit the `DR`-to-validation-maxDD
+slope across the four books already measured (`DR` 1.726/1.795/2.032/2.304 against maxDD
+−27.8%/−10.4%/−22.8%/−27.3%) and state the predicted drawdown for tonight's first scored book
+**before** running it. Last night stated the likely failure in advance; if the slope is flat or
+wrong-signed, say so and **retire `DR` as a drawdown predictor** while keeping it as a composition
+descriptor.
+
+### Trial plan, gated on the screens above
+
+- **T1 — gated behind F1/F2.** Only if either reopens the vein: a scout in `statistical-arbitrage`
+  whose membership is set by a **volatility-rescaled residual reversal s-score**. If both screens
+  close it, T1 is not written and the closure is the result.
+- **T2 — `SUMMARY.md` #150, a new operator class rather than a new score.** Every score this lab
+  computes is used at face value once computed; nothing refuses to act on a per-name number because
+  the estimate behind it is poorly determined. Attach the per-name regression `R²` to a
+  regression-derived score and hold only the well-estimated half. **`η` is fixed at the
+  cross-sectional median, here, before any curve is seen** — a cutoff chosen after seeing the curve
+  is a fitted parameter, and the gate is itself a selection on an estimate, so it inherits the
+  post-selection problem of 2026-09-15.
+- **T3 — `SUMMARY.md` #151, gated behind F1.** Rank by AR(1) reversion speed `κ̂` time-averaged
+  over the window and hold the fast-reverting fraction. Scout only, never a challenger: `κ̂` is
+  biased by every standard estimator and the bias grows as the window shortens, which is precisely
+  the shape that produced this lab's train-advantage-anti-predicts-validation readings. A null is
+  informative — it says the effect is not the mechanism the family is named for.
+
+### Anti-candidates in force tonight
+
+**New and binding: `SUMMARY.md` #152.** No factor-neutral residual book, and no long-only residual
+candidate described as neutralised. A neutrality constraint needs both legs and dies under a
+long-only budget; the reachable part of any statistical-arbitrage construction here is the part
+that decides **membership**, the unreachable part is the part that decides **hedging**. A long-only
+`PCA K = 5 residual` book carries four unchosen factor bets and its `K` is a knob that *adds*
+unhedged exposures.
+
+**Carried forward, unchanged:** no `E/Var` knob (`K`, window, lag, return horizon); no variance
+**level** substituted for the ratio; no `K` chosen off the 2026-09-24 F5 curve; no
+inverse-total-volatility arm in `range-variance`; no building for the variance channel and
+expecting this gate to reward it (`SUMMARY.md` #142); no re-derivation of the blend board; and the
+2026-08-30 anti-candidates from Avellaneda–Lee (no estimated-drift term, no bang-bang sizing under
+a 15 bps/side cost model).
+
+### Allocation declared in advance
+
+`price-trend` gets **zero** trials tonight against its cap of 2 — the seat was promoted two nights
+ago and every reachable idea in it is under a standing anti-candidate. The "at most 2 per family
+until four have leads" clause is lifted (nine families carry leads) and the "at least 1 in a family
+with no recorded trial" floor is vacuous. Every trial tonight is a **scout** in
+`statistical-arbitrage`, so `holdout_gate` is unreachable and the session spends **no holdout look**.
