@@ -14585,3 +14585,75 @@ failure was written down *before* the fit, and it is being retired on the first 
 the third. **That is the difference the 2026-09-24 entry asked for, and the general rule is: a
 statistic's predictive claim should be pre-registered separately from its descriptive one, because
 the descriptive one survives and the predictive one usually does not.**
+
+## Pre-registration addendum — 2026-09-25, written after F1–F4 and before F5/F6 returned, and before any trial file existed
+
+**Why an addendum is owed.** The pre-registration aimed tonight at `statistical-arbitrage` and
+gated T1 behind F1/F2. **Both screens closed the vein**, so T1 is not written and the night's
+declared family has no reachable trial left in it: per `SUMMARY.md` #152 the family's reachable
+content is *membership from local correlation structure*, and the seat already holds the one
+instance of that this repo has found. Recording this rather than re-labelling a book into the slug
+is the point — last night's entry complained about exactly that move and it should not be repeated
+one session later.
+
+**Where the budget goes instead, and why not `price-trend`.** The matched-pair design this repo gets
+its resolvable results from (#96/#97, #99/#100) needs a baseline and a one-node variant. Both
+`price-trend` slots are unspent and legal, and the two objects tonight's screens leave standing —
+residual momentum and 5-day reversal — are both `price-trend` objects. **Spending the session's only
+trials there would be a whole session inside the champion's family, which `program.md` calls a
+protocol violation rather than a judgement call**, cap or no cap. So the pair goes to
+`lead-lag-spillover`: **two recorded trials, a 0.688 lead, and a named `program.md` sub-mechanism
+with no measurement against it** — network momentum. Its regional half is closed
+(`learnings.md` 2026-09-16); its peer-network half has never been run here.
+
+### The object, with every constant fixed here
+
+`peer_ret[i,t]` = equal-weight mean of the trailing 21-day returns of the `K = 4` names most
+correlated with `i`, the neighbourhood estimated on a 250-day window **lagged 20 days**. The
+hypothesis is transmission: a name's *peers'* last month predicts the name, at a horizon where the
+name's *own* last month is reversal.
+
+**`K = 4`, the window and the lag are inherited verbatim from the seated `E/Var` neighbourhood and
+are chosen nowhere tonight.** This matters because of 2026-09-24's F5: locality is a single monotone
+dial and a `K` read off a curve is a fitted champion parameter. No curve in `K` will be computed,
+and the standing anti-candidate is honoured by *not choosing* rather than by choosing carefully.
+
+### F6 — free orthogonality screen, run BEFORE any book is written, bar fixed at the house 0.50
+
+Train month-ends. `peer_ret` must clear all three or no book is built:
+1. `|spearman(peer_ret, own trailing 21-day return)|` < 0.50 — else it is own reversal in costume.
+2. `|spearman(peer_ret, own 4-horizon momentum z-score)|` < 0.50 — else it is own momentum in costume.
+3. `|spearman(peer_ret, 250-day realised volatility level)|` < 0.50 — the standing artifact gate.
+A fourth number is reported but gates nothing: the IC of `peer_ret` against the forward 21-day
+return, and the same IC after projecting own momentum out, so that "does it predict at all" and
+"does it predict anything own momentum does not" are separate readings.
+
+### T1 and T2 — the matched pair, both SCOUT, both `lead-lag-spillover`
+
+- **T1 `ll_peer_momentum`** — long-only book on `peer_ret`, house rank-and-band construction.
+- **T2 `ll_peer_momentum_evargate`** — byte-identical except that the pool is first restricted to
+  names whose **`E/Var` is at or above its cross-sectional median on that date**. `η` = the median,
+  fixed here, per `SUMMARY.md` #150's own instruction to fix it before seeing any curve.
+
+**Why `E/Var` is the correct quality variable here and is not a knob on the seated term.** `E/Var`
+*is* the `R²` of a name against its four most-correlated substitutes — that is its definition. So the
+`E/Var` of the very neighbourhood that produced `peer_ret` is exactly #150's "the `R²` of the
+regression behind the score", and the gate reads: **act on a peer signal only where the peer
+relationship is estimable at all.** No `E/Var` constant is altered; the variable is reused in a
+different role, which is the one use of it no standing anti-candidate forbids. T2 minus T1 is the
+operator and nothing else.
+
+**Sign convention stated in advance, because #98's lesson was that the seat uses `E/Var` with the
+opposite sign.** The seat scores **`−E/Var`** (hold names the universe *cannot* replicate, a variance
+argument). T2 gates on **high `E/Var`** (trust a peer signal where the peers *do* span the name, an
+estimability argument). These are opposite directions on the same variable for different reasons,
+and that is a prediction the pair can falsify: if T2 beats T1 it is estimability; if T2 loses it may
+be the seat's variance channel reasserting itself, and the reversed gate is then the free next test
+rather than a new idea.
+
+### Prediction, before the numbers
+
+T1 near the family's existing 0.688 lead, **range 0.45–0.85** — the over-prediction rule is the
+default since 2026-09-06 and a peer-mean signal is a smoothed object with a diversified sort. T2
+within ±0.10 of T1, because a median gate halves breadth and this repo's de-concentration price is
+real. **No drawdown call is made: F4 retired the statistic that would have made one, tonight.**
