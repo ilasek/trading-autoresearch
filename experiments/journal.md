@@ -14440,3 +14440,148 @@ ago and every reachable idea in it is under a standing anti-candidate. The "at m
 until four have leads" clause is lifted (nine families carry leads) and the "at least 1 in a family
 with no recorded trial" floor is vacuous. Every trial tonight is a **scout** in
 `statistical-arbitrage`, so `holdout_gate` is unreachable and the session spends **no holdout look**.
+
+## Free measurements — 2026-09-25 (nightly), no trial spent
+
+Five items. F1–F4 were pre-registered above (F1/F2 tonight, F3/F4 carried verbatim from the
+2026-09-24 session). F5 is labelled as not-pre-registered-as-free: `SUMMARY.md` #150 was
+pre-registered tonight as a **trial**, and running its screen first is strictly more conservative
+than spending one. All of it is train-split or arithmetic on numbers already recorded. **Nothing
+here reads the holdout.**
+
+### F1 — the vein does NOT reopen, and the gap goes the wrong way for the proposed mechanism
+
+`SUMMARY.md` #148's reconciliation of the lab's 2026-08-30 refutation with two Tier-B sources that
+find the opposite ordering: a raw reversal sort loads on **volatility by selection**, and on this
+universe the volatility level is the measured survivorship artifact. Train only, 1962-01 → 2017-12,
+139 names, non-overlapping 5-day dates, IC = cross-sectional Spearman of the signal against the
+forward 5-day return.
+
+    rung                    pooled IC      t     lo-vol tercile   mid    hi-vol tercile
+    raw 5-day reversal        +0.0479   +10.59       +0.0265    +0.0510    +0.0429
+    one-factor residual       +0.0431   +10.29       +0.0168    +0.0447    +0.0335
+    PCA k=3 residual          +0.0361    +8.93       +0.0170    +0.0393    +0.0284
+    PCA k=5 residual          +0.0342    +9.15       +0.0227    +0.0383    +0.0272
+
+    G_pooled = +0.0048    G_within = +0.0065    (per tercile +0.0037 / +0.0063 / +0.0094)
+
+**Verdict: the pre-registered second branch, and it is not close.** `G_within >= 0.5·G_pooled`
+(+0.0065 against a +0.0024 bar), so the refutation stands and is about **this universe** rather
+than about residualisation. **`statistical-arbitrage` is closed for residual-reversal work on
+measured grounds.**
+
+**The mechanism is falsified rather than merely unsupported, and that is the part worth keeping.**
+#148's story predicts the gap *shrinks* when volatility is held fixed. It **grew** — +0.0048 pooled
+to +0.0065 within — and it grew **monotonically in the volatility tercile** (+0.0037 → +0.0063 →
++0.0094), i.e. raw's advantage over every residual is *largest* exactly where the artifact is
+supposed to be strongest and the conditioning is supposed to have removed it. A selection channel
+cannot produce that shape: conditioning on the selecting variable is what removes a selection
+effect. **General form, and it is the reason this screen was worth running rather than arguing: a
+conditioning test can falsify a proposed mechanism even when it confirms the original ordering, and
+the two outcomes are different results.** The 2026-08-30 refutation is now a statement about the
+universe with a named alternative ruled out, not a one-ladder null.
+
+**Replication note, stated because the numbers are not identical.** The 2026-08-30 ladder read
++0.0455 / +0.0375 / +0.0331 / +0.0336; tonight's reads +0.0479 / +0.0431 / +0.0361 / +0.0342 on a
+different sampling (non-overlapping 5-day dates, 63-day vol window, PCA refit every 21 days on a
+252-day window). **The ordering replicates exactly and monotonically; the levels differ by 0.002 to
+0.006.** That difference is the construction non-standard error (2026-09-09) doing what it does,
+and it is smaller than the ordering it would have to overturn.
+
+### F2 — the artifact is not in the construction either, and one node of the sources' advice does work
+
+F1 conditions the *comparison* on volatility; F2 removes volatility from the *construction*. Two
+nodes, both from the sources' own stated reasons: Blitz et al. divide each residual by its trailing
+residual volatility; Avellaneda–Lee (and Yeo–Papanicolaou) build eigen-portfolios with weights
+`v_m^i / sigma_i` on volatility-standardised returns. Same train split, same IC convention.
+
+    construction                          IC        t
+    raw                                +0.0479   +10.59
+    raw, vol-rescaled                  +0.0453   +10.60
+    one-factor residual                +0.0431   +10.29
+    one-factor residual, vol-rescaled   +0.0409    +9.75
+    PCA k=3                            +0.0361    +8.93
+    PCA k=3, eigen v/sigma             +0.0374    +9.74
+    PCA k=3, vol-rescaled              +0.0343    +8.35
+    PCA k=3, v/sigma + vol-rescaled    +0.0348    +9.18
+    PCA k=5                            +0.0342    +9.15
+    PCA k=5, eigen v/sigma             +0.0370   +10.12
+    PCA k=5, vol-rescaled              +0.0324    +8.49
+    PCA k=5, v/sigma + vol-rescaled    +0.0350    +9.87
+
+**Verdict: the pre-registered kill branch. No residual construction reaches raw** — the best is the
+plain one-factor residual at +0.0431 against raw's +0.0479 — so the artifact is in neither the
+comparison (F1) nor the construction (F2), and **T1 was not written.** Taken with F1 the vein
+closes on two independent screens that were pre-registered to disagree with each other.
+
+**What nonetheless replicates, and it is owed to the sources.** The Avellaneda–Lee `v/sigma`
+eigen-portfolio node **helps, in the predicted direction, on both factor counts**: k=3 goes
++0.0361 → +0.0374 and k=5 goes +0.0342 → +0.0370, with the `t` rising too (+8.93 → +9.74,
++9.15 → +10.12). The effect is real and it is an order of magnitude too small to close a +0.0048
+gap. **Blitz et al.'s trailing-residual-volatility rescaling is the opposite — it hurts every rung
+it is applied to, raw included** (+0.0479 → +0.0453), which is the cleanest available statement
+that the volatility channel this repo keeps finding is not the channel that paper is correcting for.
+Reporting the node that worked next to the node that did not is the difference between a closure and
+a dismissal.
+
+### F3 — the pre-registered `K = 2` branch fires: stop running the `δ` half
+
+Carried verbatim from the 2026-09-24 pre-registration. Step-down spanning decomposition, benchmark
+pair = champion `pt_mom_evar_arbrisk` **and** `rv_minvar_equalweight`, test asset = the
+`liquidity-volume` lead `lv_illiq_evar_riskcost`. Train only, T = 14,261, all three books already
+recorded — no new idea is scored.
+
+    train sharpe / ann vol:  champion 1.073 / 17.55%   rv_minvar 1.047 / 13.25%   lv_illiq 0.613 / 9.03%
+    correlations: champion-rv_minvar 0.656, champion-lv_illiq 0.509, rv_minvar-lv_illiq 0.434
+
+    alpha = +0.061 %/yr      residual vol 7.68 %/yr      appraisal ratio +0.008 annualised
+    F1 (alpha = 0):           t = +0.060   F = 0.004   p = 0.9522   (kurtosis-corrected p = 0.9783)
+    F2 (delta = 0 | alpha=0): delta = +0.6775  t = +138.7  F = 19230   p ~ 0   (corrected F = 3963, p ~ 0)
+    kappa_hat = 7.704
+    tangency Sharpe, benchmarks only 1.16533  ->  with the leg 1.16542   (+0.0001)
+    GMV weights, 3 assets:  champion -0.1158   rv_minvar +0.2701   lv_illiq +0.8458
+
+**Verdict: the pre-registered second branch, with one addition stronger than either branch
+anticipated.** `F₂` rejects again and the GMV **again piles onto the least volatile leg** — 84.6% on
+the 9.03%-vol book, ordered exactly by volatility across all three — so **the `δ` half of a spanning
+test is a volatility-level comparison on this universe at `K = 2` as it was at `K = 1`, and the lab
+should stop running it.** The addition: at `K = 2` the GMV is **not long-only attainable** (it shorts
+the champion at −11.6%), so unlike the `K = 1` case this rejection cannot even be read as an
+economic statement inside this lab's constraint set. Last night's degeneracy objection was that one
+benchmark asset has no frontier; tonight's is that two do have one and the answer is the same
+ranking for the same reason.
+
+**And the `α` half got weaker, which corroborates the twelve-session `liquidity-volume` null
+harder than `K = 1` did.** Adding a second benchmark moved `F₁`'s p from 0.557 to **0.9522**
+(0.9783 corrected), and the **optimal-weight** tangency gain from +0.0028 to **+0.0001** — with 56
+years of hindsight choosing the weight. `SUMMARY.md` #140(a) holds a second time: a leg with no
+alpha moves the noncentrality not at all however decorrelated it is. Six declined blends were
+declining a leg with nothing additive to give, and that now rests on two independent benchmark sets.
+
+### F4 — `DR` is RETIRED as a drawdown predictor, exactly as its own pre-registration predicted
+
+Carried verbatim. Slope of validation max drawdown on the diversification ratio, across the four
+books measured on 2026-09-24.
+
+    book                              DR      maxDD    fitted
+    mom_zscore_overlap6_hzn_avg4    1.726    -27.8%    -19.2%
+    rv_minvar_closedform (#99)      1.795    -10.4%    -20.1%
+    pt_mom_evar_arbrisk (seat)      2.032    -22.8%    -22.9%
+    rv_minvar_equalweight (#100)    2.304    -27.3%    -26.1%
+
+    slope = -11.86 pp of maxDD per 1.0 of DR    pearson r = -0.383    R^2 = 0.147    rank r = +0.20
+
+**Verdict: the pre-registered failure branch. The slope is WRONG-SIGNED** — more diversification
+associates with *deeper* drawdown across these four books — **with `R² = 0.15` on n = 4. `DR` is
+retired as a drawdown predictor and kept as a composition descriptor**, which is what the
+2026-09-24 entry introduced it as and what it should never have been allowed to drift away from.
+No drawdown prediction is issued for tonight's books, because the statistic that would have issued
+one has just failed.
+
+**Why this item was worth its space even though it cost nothing and predicted its own failure.** The
+risk-contribution count was allowed to accumulate three misses before its blind spot was named,
+because each miss was explained away individually. `DR` was introduced one day ago, its likely
+failure was written down *before* the fit, and it is being retired on the first test rather than on
+the third. **That is the difference the 2026-09-24 entry asked for, and the general rule is: a
+statistic's predictive claim should be pre-registered separately from its descriptive one, because
+the descriptive one survives and the predictive one usually does not.**
