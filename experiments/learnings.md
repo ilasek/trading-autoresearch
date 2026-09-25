@@ -4130,3 +4130,113 @@ across experiments; prune entries that later evidence contradicts.
   all; the family's genuine content (range volatility, HAR-RV, vol-of-vol, dispersion) is still at
   0.494 after fifteen screens, and the standing recommendation to amend or retire it is unchanged
   in substance.**
+
+- **[Measured 2026-09-25, nightly] A conditioning test can CONFIRM an ordering and KILL its
+  explanation in the same table, and those are two different results.** `SUMMARY.md` #148 proposed
+  that this file's 2026-08-30 refutation of residual reversal — residualising made 5-day reversal
+  monotonically worse here, against two Tier-B sources finding the opposite — was the volatility
+  survivorship artifact in disguise, because a raw sort reaches the extreme buckets more often for
+  volatile names. The branch was pre-registered numerically: the raw-minus-residual gap must shrink
+  below half its pooled value once trailing volatility is held fixed. Train only, non-overlapping
+  5-day dates, 139 names:
+
+      rung                    pooled IC      t     lo-vol    mid     hi-vol
+      raw 5-day reversal        +0.0479   +10.59   +0.0265  +0.0510  +0.0429
+      one-factor residual       +0.0431   +10.29   +0.0168  +0.0447  +0.0335
+      PCA k=3 residual          +0.0361    +8.93   +0.0170  +0.0393  +0.0284
+      PCA k=5 residual          +0.0342    +9.15   +0.0227  +0.0383  +0.0272
+
+      G_pooled +0.0048   G_within +0.0065   per tercile +0.0037 / +0.0063 / +0.0094
+
+  **The gap GREW, monotonically in the conditioning variable.** A selection channel cannot produce
+  that shape, because conditioning on the selecting variable is exactly what removes a selection
+  effect — so the mechanism is **falsified**, while the ordering **replicates** on a different
+  sampling (levels differ 0.002–0.006, the construction non-standard error doing its job). A second
+  pre-registered screen then removed volatility from the *construction* rather than the comparison
+  (Blitz et al.'s trailing-residual-vol rescaling; Avellaneda–Lee's `v/σ` eigen-portfolios) and no
+  residual construction reached raw either. **`statistical-arbitrage` is closed for residual-reversal
+  work on measured grounds.** Owed to the sources: the `v/σ` node **does** help in the predicted
+  direction on both factor counts (+0.0361 → +0.0374, +0.0342 → +0.0370) and is an order of magnitude
+  too small to matter; Blitz's vol rescaling **hurts every rung including raw**. Report the node that
+  worked beside the node that did not — that is the difference between a closure and a dismissal.
+  **ANTI-CANDIDATE that must travel with this entry:** do not read the monotone tercile ordering as a
+  licence to sort reversal within volatility bands. The monotonicity is what killed a mechanism; it is
+  not evidence for a construction.
+
+- **[Measured 2026-09-25, nightly] The estimate-quality operator is TWO operators with opposite signs,
+  and its global instantiation is a beta bet by identity — locality again, on an unrelated operator.**
+  `SUMMARY.md` #150's class (refuse to act on a per-name score whose regression is poorly determined)
+  screened on train with `η` fixed at the cross-sectional median in advance, quality = `R²` of the
+  252-day rolling market regression:
+
+      score / horizon              pooled IC     well-estimated    poorly-estimated    spread
+      12-1 momentum / fwd 21d        +0.0429        +0.0483            +0.0370         +0.0112
+      residual mom  / fwd 21d        +0.0393        +0.0438            +0.0359         +0.0079
+      5-day reversal / fwd 5d        +0.0487        +0.0319            +0.0566         -0.0247
+
+  Continuation concentrates where the market fits **well**; reversal concentrates where it fits
+  **badly**, at twice the magnitude. **So the operator is a signal-specific conditioner and any future
+  use must name its expected sign before measuring.** And the confound check refuses the global
+  version outright: `spearman(R², |β̂|) = +0.5906` against the 0.50 beta bar added 2026-09-24, while
+  the volatility and momentum gates pass (−0.071, +0.080). **`R² = ρ²` and `β = ρσ/σ_m`, so a quality
+  variable read off the GLOBAL market regression is β̂'s relative by identity; the same variable read
+  off a LOCAL neighbourhood is not** (`E/Var` at `K = 4` reads 0.395). This is the 2026-09-24 locality
+  result on a second operator, and the general form is worth more than either instance: **before
+  trusting a normalised regression statistic as a screen, check it against β̂ — several of them are ρ
+  in costume.**
+
+- **[Measured 2026-09-25, nightly] Estimating a neighbourhood is CHEAP in turnover; the signal you
+  evaluate on it is what you pay for. This corrects a conjecture made the same night.** Trial #101
+  scored names by the mean trailing 21-day return of their `K = 4` most-correlated peers
+  (neighbourhood constants inherited verbatim from the seat's `E/Var`) and turned over **18.6x on
+  validation — 5.58%/yr of cost against +4.5% of net return, so over half of the ~10.1% gross went to
+  turnover.** The natural explanation — a score on an *estimated* neighbourhood churns twice, once
+  from the signal and once from the neighbourhood reshuffling — is **false**. Train month-ends, 299
+  month pairs, holdings-only:
+
+      Jaccard overlap of a name's own K=4 peer set, month to month            0.8252
+      fraction of the 15-name core replaced month to month:
+        both channels move (what the book trades)                            0.7637
+        signal moves, neighbourhood HELD at last month's                      0.7632
+        neighbourhood moves, signal HELD at last month's                      0.1766
+
+  **Freezing the neighbourhood changes the churn by 0.0005.** The seat uses *this same neighbourhood*
+  with 63–252 day signals at 3.01x turnover, so the 6x gap is the **signal horizon**, not the
+  estimation. Do not avoid estimated neighbourhoods on turnover grounds. And the wall this trial hit
+  is `SUMMARY.md` #18's short-horizon cost wall arriving on a **lead-lag** object rather than the
+  reversal object it was first measured on: **the wall is about the 21-day horizon, whoever supplies
+  the signal.**
+
+- **[Measured 2026-09-25, nightly] A gate defined as a FRACTION of the cross-section means something
+  different in every era of a universe that grows — read its validation column and discard its train
+  column.** Trial #102 is #101 with one function changed: the pool is first cut to names whose `E/Var`
+  is at or above its cross-sectional median. Validation barely moves (`d = +0.020`, `ρ = 0.8883`,
+  `sharpe_diff_se = 0.1899`, **`t = +0.106`**, and the closed form `0.568·√(1−ρ)` reads 0.1899 against
+  the engine's 0.1899 — a **fourth** confirmation that it transfers). **Train collapses 0.76 → 0.20**
+  with maxDD −43.3% → −55.1% and avg_pos 10.8 → 6.0. The cause is arithmetic: a median split needs
+  `2 × MIN_NAMES` scoreable names to leave a viable pool, and the early decades of this universe do
+  not have them, so the same gate is a **breadth famine** in 1962–1990 and a clean half-split in
+  2018–2023. **Corollary on what the trial bought: a gate cannot concentrate an IC that is not there.**
+  The base signal was itself a `t = +1.04` null, so #150's operator is a null *on this object* and is
+  not refuted in general — the free screen above learned more about it than the paired trial did.
+  **`lead-lag-spillover`'s network-momentum sub-mechanism is nonetheless closed on a measurement:**
+  `peer_ret` cleared all three orthogonality gates, including `+0.004` against the champion's own
+  momentum score — the most orthogonal object this repo has put beside the seat — and still produced
+  a 0.339 book.
+
+- **[Measured 2026-09-25, nightly] Stop running the `δ` half of a spanning test on this universe, and
+  retire `DR` as a drawdown predictor. Both were pre-registered the night before with their failure
+  branches written down.** (i) The step-down spanning decomposition at `K = 2` (champion **and**
+  `rv_minvar_equalweight` as benchmarks, `lv_illiq_evar_riskcost` as the test asset, train,
+  T = 14,261): `F₁` goes from p = 0.557 at `K = 1` to **p = 0.9522** (0.9783 corrected at `κ̂ = 7.70`)
+  and the **optimal-weight** tangency gain from +0.0028 to **+0.0001** — adding a benchmark
+  corroborated the twelve-session `liquidity-volume` null rather than weakening it. `F₂` rejects at
+  p ≈ 0 and the GMV **again orders purely by volatility** (84.6% on the 9.03%-vol leg), and at `K = 2`
+  it is additionally **not long-only attainable** — it shorts the champion — so unlike `K = 1` the
+  rejection cannot even be read as an economic statement inside this lab's constraints. **The `δ` half
+  is a volatility-level comparison here at every `K`.** (ii) `DR`-to-validation-maxDD across the four
+  books measured 2026-09-24: slope **−11.86 pp per 1.0 of `DR`, wrong-signed**, `R² = 0.15`, n = 4.
+  **`DR` is a composition descriptor and not a drawdown predictor.** The general habit both items
+  belong to: **pre-register a statistic's PREDICTIVE claim separately from its DESCRIPTIVE one** — the
+  descriptive claim usually survives and the predictive one usually does not, and the
+  risk-contribution count was allowed three misses precisely because the two were never separated.
