@@ -14722,3 +14722,93 @@ real. **No drawdown call is made: F4 retired the statistic that would have made 
   the operator and discard the train column; the train-split sanity check is doing its job by
   flagging a book that is nearly inert for half its history.
 
+
+## Free measurements, second block — 2026-09-25 (nightly), no trial spent
+
+F6 was pre-registered in tonight's addendum. F5 is labelled not-pre-registered-as-free
+(`SUMMARY.md` #150 was pre-registered as a **trial**; running its screen first is strictly more
+conservative). F7 was run after T1 returned, to test a conjecture about T1's turnover **which it
+falsified**. All train-split or holdings-only. **Nothing here reads the holdout.**
+
+### F5 — #150's operator has content, its SIGN IS SIGNAL-DEPENDENT, and the global version fails the beta gate
+
+Quality variable = `R²` of each name's 252-day rolling regression on the equal-weight market.
+`η` = the cross-sectional median, fixed in the pre-registration. Train only, IC = cross-sectional
+Spearman against the stated forward horizon.
+
+    score / horizon                pooled IC     t     well-estimated half     poorly-estimated half     spread
+    12-1 momentum   / fwd 21d        +0.0429   +3.45        +0.0483                  +0.0370            +0.0112
+    residual mom    / fwd 21d        +0.0393   +3.71        +0.0438                  +0.0359            +0.0079
+    5-day reversal  / fwd  5d        +0.0487   +9.92        +0.0319                  +0.0566            -0.0247
+
+**The operator is real and it does not have one direction.** Both continuation signals are
+*concentrated in the well-estimated half*; 5-day reversal is concentrated in the **poorly**-estimated
+half, and by **twice the magnitude** of momentum's spread. #150 asks "is the score's IC concentrated
+in the well-estimated half" as though the answer were one number. It is two, and the split is
+continuation-versus-reversal — which is economically the right shape (a name the market explains
+poorly is a name whose idiosyncratic move has more room to revert) but it means **an estimate-quality
+gate is a signal-specific conditioner, not a general improvement operator.** Any future use must
+name its expected sign in advance.
+
+**And the confound check kills the global instantiation, on the lab's own one-day-old bar.**
+
+    spearman(R^2, 250d volatility level)   -0.0713    pass (bar 0.50)
+    spearman(R^2, 12-1 momentum)           +0.0796    pass
+    spearman(R^2, |beta-hat|)              +0.5906    **FAIL**
+
+**`R²` of the market regression is `ρ²`, and `β = ρσ/σ_m`, so the market-regression quality variable
+is β̂'s own relative by identity** — it fails the beta gate added on 2026-09-24 at **0.59 against a
+0.50 bar**, exactly as the direct co-movement score failed it at 0.675. **This is the locality result
+arriving on a second, unrelated operator: a quality variable read off the GLOBAL market regression is
+a beta bet in costume, and the same variable read off a LOCAL neighbourhood is not** — `E/Var` at
+`K = 4` reads 0.395 on that gate (2026-09-24 F5). That is why tonight's T2 gates on `E/Var` rather
+than on market `R²`, and the choice was made on this number rather than on taste.
+
+**One arm produced nothing and is reported rather than quietly dropped.** The `|t(β̂)|` variant of the
+quality variable returned zero usable dates: the screen divided a DataFrame by a Series without an
+explicit axis, so `se(β̂)` aligned on columns instead of the index and came back all-NaN. It was not
+retried, because the confound check above makes the arm's conclusion moot (`|t(β̂)|` is monotone in
+`ρ²` by the same identity), and **nothing in this entry rests on it.**
+
+### F6 — the peer-network object clears all three pre-registered gates; its IC is weak and was pre-declared to gate nothing
+
+`peer_ret[i,t]` = mean trailing 21-day return of `i`'s `K = 4` most-correlated names, neighbourhood on
+a 250-day window lagged 20 days — every constant inherited verbatim from the seat's `E/Var`. 397 train
+month-ends, mean 81.4 names per date.
+
+    |spearman(peer_ret, own trailing 21d return)|      +0.3275   t +29.56   PASS (bar 0.50)
+    |spearman(peer_ret, own 4-horizon momentum z)|     +0.0043   t  +0.35   PASS
+    |spearman(peer_ret, 250d realised vol level)|      +0.0268   t  +1.52   PASS
+    IC(peer_ret, forward 21d return)                   +0.0118   t  +1.04
+    IC(peer_ret, residualised on own momentum)         +0.0142   t  +1.36
+    median E/Var across dates (T2's gate level)         0.4459
+
+**All three gates pass and the middle one passes spectacularly: `+0.0043` against the champion's own
+four-horizon momentum score is the most orthogonal thing this repo has put beside the seat.** So
+`peer_ret` is not own reversal, not own momentum and not the volatility artifact — it is a genuinely
+separate object, which is what made it worth two trials. The IC at `t = +1.04` was pre-registered to
+**gate nothing**, on the stated ground that a scout exists to map a family and a null is the result;
+that commitment is what stopped the weak IC from being rediscovered as an excuse afterwards.
+
+### F7 — the conjecture about T1's turnover is FALSE, and the truth is more useful
+
+Run after T1 returned an 18.6x validation turnover. Conjecture: a score built on an **estimated
+neighbourhood** churns twice, once when the signal moves and once when the neighbourhood reshuffles.
+Decomposed by freezing one channel at a time, train month-ends, holdings-only, 299 month pairs.
+
+    Jaccard overlap of a name's own K=4 peer set, month to month          0.8252   (median 0.8384)
+
+    fraction of the 15-name core replaced from one month to the next:
+      both channels move (what the book actually trades)                  0.7637
+      signal moves, neighbourhood HELD at last month's                    0.7632
+      neighbourhood moves, signal HELD at last month's                    0.1766
+
+**Freezing the neighbourhood changes the churn by 0.0005 — nothing.** The neighbourhood is the
+**stable** part: an 0.825 Jaccard overlap month to month, and on its own it replaces under a fifth of
+the core. **All of the churn is the 21-day return.** The conjecture was exactly backwards, and the
+correct statement generalises further than the wrong one would have: **estimating a neighbourhood is
+cheap in turnover; the signal you evaluate on it is what you pay for.** It also explains a number
+already on file rather than only tonight's — the seat uses *this same neighbourhood* with 63-252 day
+signals and turns over 3.01x, against this book's 18.6x, so the 6x difference is the signal horizon
+and not the estimation. A session tempted to avoid estimated neighbourhoods on turnover grounds
+should not be.
