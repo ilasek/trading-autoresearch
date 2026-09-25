@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T23:33:36+00:00",
+  "generated_at": "2026-09-25T23:35:10+00:00",
   "champion": "pt_mom_evar_arbrisk",
   "families": {
     "price-trend": {
@@ -178,7 +178,7 @@
       "track": "scout",
       "verdict": "FAMILY_LEAD",
       "ts": "2026-08-29T23:11:22+00:00",
-      "n_trials": 2,
+      "n_trials": 4,
       "rho_to_champion": 0.6822,
       "validation": {
         "sharpe": 0.688,

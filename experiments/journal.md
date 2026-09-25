@@ -14657,3 +14657,68 @@ T1 near the family's existing 0.688 lead, **range 0.45–0.85** — the over-pre
 default since 2026-09-06 and a peer-mean signal is a smoothed object with a diversified sort. T2
 within ±0.10 of T1, because a median gate halves breadth and this repo's de-concentration price is
 real. **No drawdown call is made: F4 retired the statistic that would have made one, tonight.**
+## 2026-09-25T23:33:57+00:00 — ll_peer_momentum — **SCOUT**
+- Candidate: `strategies/candidates/ll_peer_momentum.py` (family: lead-lag-spillover, track: scout, trial #101)
+- Hypothesis: Holding the 15 names (25-name hold band) whose four most-correlated peers had the highest mean trailing 21-day return — the neighbourhood estimated on a 250-day window lagged 20 days, K, window and lag all inherited verbatim from the seated champion's E/Var term and chosen nowhere here — scores a validation Sharpe near the lead-lag-spillover family's 0.688 lead (range 0.45-0.85), because the most recent month reverses at the name level but the transmission claim is that it continues when it arrives from a neighbour, and on 397 train month-ends peer_ret clears all three pre-registered orthogonality gates at the house 0.50 bar (+0.328 against the name's own trailing 21-day return, +0.004 against the champion's own four-horizon momentum score, +0.027 against the 250-day volatility level) while carrying a weak and unresolved IC of +0.0118 at t = +1.04, rising only to +0.0142 at t = +1.36 once own momentum is projected out. Network momentum is the one program.md sub-mechanism in this family with no measurement against it and the family has two recorded trials in total; above 0.85 says peer transmission is a real and separable object on this universe and the family's lead moves to a name-level construction, below 0.45 says a t = +1.04 IC does not survive a long-only book and the sub-mechanism is closed on a measurement rather than left open on a slug.
+- Verdict: SCOUT — scouted family 'lead-lag-spillover': validation sharpe 0.339 <= the family's best 0.688 (DSR 0.3635, 101 trials, 30 effective after clustering at rho 0.95)
+- Train: sharpe +0.76, ann_ret +11.2%, maxDD -43.3%, turnover 8.9x
+- Validation: sharpe +0.34, ann_ret +4.5%, maxDD -35.6%, turnover 18.6x
+- Deflated Sharpe prob: 0.3635 (bar from 101 trials, 30 effective)
+- Scout track: family best before this trial +0.69; the champion was not compared and the holdout was not read
+- Lesson: **The pre-registered "below 0.45" branch fires, and `lead-lag-spillover`'s last named
+  `program.md` sub-mechanism is now closed on a measurement rather than left open on a slug.**
+  Network momentum was the one sub-mechanism in this family with nothing measured against it; the
+  object is genuinely there and genuinely separate — all three pre-registered gates passed, and
+  `|spearman(peer_ret, the champion's own four-horizon momentum z)| = +0.004` is the most
+  orthogonal score this repo has ever put next to the seat's — and it still produces a 0.339 book.
+  **What the object is not is the reason it fails, and the reason is priced.** Validation turnover
+  **18.6x** at 15 bps a side is **5.58%/yr** of cost against an `ann_ret` of **+4.5%**, so gross is
+  about **+10.1%** and *more than half the gross return is spent on turnover*. That is
+  `SUMMARY.md` #18's wall — a short-horizon signal is on the wrong side of this cost model —
+  arriving on a **lead-lag** object rather than on the reversal object it was first measured on.
+  The wall is not about reversal; it is about the 21-day horizon, whoever supplies it.
+  **And the conjecture I was about to write is false, which is the part worth keeping (F7, free,
+  holdings-only, train).** The natural story for a score built on an *estimated neighbourhood* is
+  that it churns twice — once when the signal moves and once when the neighbourhood reshuffles.
+  Measured: the `K = 4` peer set's month-to-month **Jaccard overlap is 0.825**, and freezing the
+  neighbourhood at last month's leaves core replacement at **0.7632** against **0.7637** with both
+  channels moving — *identical to three decimals* — while moving the neighbourhood alone gives only
+  **0.177**. **An estimated neighbourhood is the STABLE part of a score built on one; the 21-day
+  return is the churn.** That also explains why the seat, which uses the same neighbourhood with
+  63-252 day signals, turns over 3.01x where this turns over 18.6x — the difference is the signal
+  horizon, not the estimation. Over-prediction rule fires again (0.339 against a 0.45-0.85 band),
+  as it has by default since 2026-09-06.
+
+## 2026-09-25T23:34:50+00:00 — ll_peer_momentum_evargate — **SCOUT**
+- Candidate: `strategies/candidates/ll_peer_momentum_evargate.py` (family: lead-lag-spillover, track: scout, trial #102)
+- Hypothesis: Restricting ll_peer_momentum's scoreable cross-section to the names whose E/Var — the hedgeable fraction against their own four most-correlated peers, i.e. the R^2 of the very regression that defines the peer neighbourhood — is at or above its cross-sectional median on that date, with every other byte of that file identical, moves validation Sharpe within +-0.10 of it, because SUMMARY.md #150's operator class says a signal should not be acted on where the regression behind it is poorly determined and a peer-transmission signal is exactly a signal whose premise is that the peers span the name. eta is the median, fixed in the journal before any curve existed. The gate's direction is the OPPOSITE of the seated champion's use of the same variable — the seat scores -E/Var to hold names the universe cannot replicate, a variance argument, while this gates on high E/Var to trust a signal where the peers do span the name, an estimability argument — so the pair separates the two readings: above T1 says estimate quality is a usable operator on this universe and the class generalises past this family, below T1 says the seat's variance channel dominates the estimability channel on the same variable and the reversed gate is the next free test rather than a new idea.
+- Verdict: SCOUT — scouted family 'lead-lag-spillover': validation sharpe 0.359 <= the family's best 0.688 (DSR 0.3715, 102 trials, 31 effective after clustering at rho 0.95)
+- Train: sharpe +0.20, ann_ret +1.7%, maxDD -55.1%, turnover 4.8x
+- Validation: sharpe +0.36, ann_ret +4.9%, maxDD -39.0%, turnover 15.8x
+- Deflated Sharpe prob: 0.3715 (bar from 102 trials, 31 effective)
+- Scout track: family best before this trial +0.69; the champion was not compared and the holdout was not read
+- Lesson: **`SUMMARY.md` #150's estimate-quality operator is now measured on a matched pair and it
+  is a null: `d = +0.020`, `rho = 0.8883`, `metrics.sharpe_diff_se = 0.1899`, `t = +0.106`.** The
+  pre-registered `+-0.10` band was right, and the closed form `SE ~ 0.568*sqrt(1-rho)` reproduces the
+  engine's SE at **0.1899 against 0.1899** — a **fourth** confirmation that it transfers, after the
+  three on file. Neither pre-registered reading is supported: not estimability (T2 did not win), and
+  not the seat's-variance-channel reading either (T2 did not lose), so **the reversed-gate branch
+  does not fire and no follow-up is owed.**
+  **What limits what this trial bought, stated plainly: a gate cannot concentrate an IC that is not
+  there.** T1's base signal is itself a `t = +1.04` null, so #150's operator is measured as a null
+  *on this object* and is **not** refuted in general. Tonight's free F5 learned more about the
+  operator than this paired trial did — the IC spread is `+0.0112` on 12-1 momentum and `-0.0247`
+  on 5-day reversal, i.e. **the operator's sign is signal-dependent**, and the market-regression
+  version fails the lab's own beta gate at **0.59**. Spend the next look at #150 on a signal that
+  has an IC to concentrate.
+  **The genuinely new finding is on the TRAIN split, and it is methodological.** Train collapses
+  0.76 -> 0.20 with `maxDD -43.3% -> -55.1%`, `avg_pos 10.8 -> 6.0` and turnover 8.9x -> 4.8x, while
+  validation barely moves. The cause is the gate's own construction, not estimate quality: a median
+  split needs `2 x MIN_NAMES = 60` scoreable names to leave a 30-name pool, and the early decades of
+  this universe do not have them, so the gate is a **breadth famine** in 1962-1990 and a clean
+  half-split in 2018-2023. **Rule, and this repo does not have it: a gate defined as a FRACTION of
+  the cross-section means something different in every era of a universe that grows, so its train
+  reading is a statement about the universe and not about the gate.** Read the validation column for
+  the operator and discard the train column; the train-split sanity check is doing its job by
+  flagging a book that is nearly inert for half its history.
+
