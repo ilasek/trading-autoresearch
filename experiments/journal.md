@@ -14343,3 +14343,5 @@ universe*, which is arguably not a `range-variance` object at all, and the famil
 recommendation is unchanged in substance; what changed is that the family's lead is now held by a
 book filed there on a slug technicality, and a human may prefer that recorded than tidy.** Both the
 amendment and the retirement are still edits to frozen files.
+
+## Research session — 2026-09-25 (learning agent): 3 notes added, see research/SUMMARY.md

@@ -1535,6 +1535,67 @@ hits from the residual side. The transferable lesson survives the closure: **a s
 be optimising the wrong moment of the object it selects.**
 → `notes/2026-09-07-cointegration-pairs-versus-distance-method.md`
 
+**[Added 2026-09-25, aimed by the 2026-09-24 nightly's own next-idea #4 — "a session that wants
+breadth should start from `statistical-arbitrage`'s long-only handling of the short leg, which
+`program.md` names as the open question there".] The family's construction has three separable
+nodes, and the long-only constraint kills exactly one of them.** Guijarro-Ordonez, Pelger & Zanotti
+(Management Science; Tier B here for recency and single market, not for venue) decompose every
+strategy in this vein into (i) an **arbitrage portfolio** — a residual, i.e. long a name and short a
+*mimicking portfolio* with the same factor loadings, so the choice of factor model **is** the
+definition of "similar"; (ii) an **arbitrage signal** — a function of the last `L` residual returns,
+i.e. of the residual's *path*; and (iii) a **trading policy** mapping signal to weight under
+constraints written into the objective. Their `K = 0` control — the identical signal and policy run
+on raw returns instead of residuals — is the cleanest available pricing of the residualisation node,
+and residuals lead raw returns in every cell of their grid. Two further shapes transfer: PCA
+residual performance is **non-monotone in the factor count** (an interior optimum, independently
+reproducing Avellaneda–Lee's finding that this section already records, and Yeo–Papanicolaou's
+noise ceiling above ~30 components on 378 names); and **the signal function matters more than the
+residual definition** — the classical Ornstein–Uhlenbeck-plus-threshold rule compresses the whole
+30-day residual path into two numbers (the current deviation and a goodness-of-fit measure) and
+everything else is discarded before the trade. `validation_overlap: false` (sample ends 2016);
+`published_post_2018: true`.
+→ `notes/2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`,
+`notes/2026-09-25-mean-reversion-time-screening-statarb.md`
+
+**The node that dies is the hedge, and the exposure algebra says exactly how.** Blitz, Huij,
+Lansdorp & Verbeek (JFM 2013; Tier B — multi-decade but single market and unreplicated) derive the
+factor loading of a textbook contrarian book in closed form:
+`E[ sum_i w_i beta_i^j | f_t-1^j ] = -sigma2_beta^j * (mu^j + f_t-1^j)`, where `sigma2_beta^j` is
+the **cross-sectional variance of the loadings**. A reversal sort is therefore *unconditionally*
+short every positively-priced factor and *dynamically* short whatever that factor just did — a
+factor-timing bet nobody chose, re-struck each rebalance. Sorting on residuals zeroes it **by
+construction — but only because the book is zero-investment.** In a fully-invested long-only book
+the weights sum to one, so the `K = 1` market leg is financed by the budget constraint by accident
+while every further factor leg is not neutralised at all. **Hence the family's answer to
+`program.md`'s standing question, and it generalises past this family: a neutrality constraint needs
+both legs and dies under a long-only budget; a selection screen does not, because refusing to hold a
+name costs nothing. The reachable part of any statistical-arbitrage construction here is the part
+that decides membership; the unreachable part is the part that decides hedging.** That is why every
+candidate this vein produced (#148–#151) is a screen or a membership rule and none is a book, and
+why #152 is an anti-candidate against the neutral book. It also re-reads the seated `E/Var` term as
+a member of this family's species: a membership rule built from a local correlation structure.
+→ `notes/2026-09-25-short-term-residual-reversal.md`
+
+**Both new sources are in direct tension with the lab's own refutation, and the tension has a free
+discriminating test.** `learnings.md` [2026-08-30] found residualisation *monotonically harmful* to
+5-day reversal here (raw IC +0.0455 → one-factor +0.0375 → PCA k=3 +0.0331 ≈ k=5 +0.0336); both
+sources find the opposite ordering. Four differences, none of them an excuse: the lab's horizon is
+5 days against a one-month formation with a 36-month estimation window; the lab compared
+**unconditional ICs** while the Management Science paper compares **traded policies optimised under
+each residual definition**, and an IC cannot see value that lives in the signal function; the lab's
+`k ∈ {1,3,5}` sits inside the range both sources find worst; and — the sharp one — **neither of the
+lab's constructions rescaled by volatility**, while both sources do, for a stated reason. Blitz et
+al. divide each residual by its trailing residual volatility because a raw sort's extreme deciles
+are systematically the *more volatile, smaller, lower-priced* names purely by selection (a wider
+return distribution reaches the tails more often); Avellaneda–Lee and Yeo–Papanicolaou build
+eigen-portfolios with weights `v_m^i / sigma_i` so the factors are not dominated by their
+constituents' volatility level. On a universe where the volatility level is the measured
+survivorship artifact (`learnings.md`: high-minus-low vol spread **+19.4%/yr on train**),
+**"residualising hurts" is exactly what one would predict if the raw sort's edge were the artifact
+rather than reversal.** That is a prediction, not a defence, and #148 states both of its readings in
+advance.
+→ `notes/2026-09-25-short-term-residual-reversal.md`
+
 ---
 
 ### 14. `portfolio-learning`
@@ -7323,6 +7384,92 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-24-betting-against-correlation-decomposing-beta.md`,
     `notes/2026-09-24-diversification-ratio-most-diversified-portfolio.md`
 
+148. **FREE, and this file ranks it first of tonight's because it is a discriminating test of a
+    refutation the lab has carried since 2026-08-30 — one whose two explanations imply opposite
+    next moves.** `learnings.md` records the `statistical-arbitrage` premise tested and refuted in
+    the wrong direction: on 5-day reversal, residualising made the IC *monotonically worse* (raw
+    +0.0455 → one-factor +0.0375 → PCA k=3 +0.0331 ≈ k=5 +0.0336). Both Tier-B sources added
+    tonight find the opposite ordering, and one of them (the Management Science paper) runs
+    exactly the lab's comparison as a deliberate `K = 0` control and finds residuals ahead of raw
+    returns in **every** cell of a three-factor-family × three-signal-model grid. The mechanism
+    that reconciles them is measurable here and costs no trial: a raw reversal sort loads on
+    **volatility by selection** — a volatile name's short-horizon return is drawn from a wider
+    distribution, so it reaches the extreme buckets more often — and on this universe the
+    volatility level is the measured survivorship artifact (`learnings.md`: high-minus-low vol
+    spread **+19.4%/yr on train**). **Pre-register both readings before computing anything.** Run
+    the same IC ladder *within* trailing-volatility terciles: if the raw-minus-residual gap shrinks
+    toward zero, the lab's refutation was measuring the artifact and the family reopens on a
+    corrected construction; if the gap survives conditioning, the refutation stands and is about
+    the universe rather than about residualisation, and `statistical-arbitrage` can be closed for
+    residual-reversal work on measured grounds. Train only, no holdout, no trial. Tier B on both
+    sources, no validation overlap on either.
+    → `notes/2026-09-25-short-term-residual-reversal.md`,
+    `notes/2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`
+
+149. **FREE, second, and it is a second node the lab's refutation left untested — one that is
+    reachable long-only even though the rest of the construction is not.** Both of tonight's
+    residual constructions rescale before ranking, and for the same stated reason: Blitz et al.
+    divide each residual by that name's **trailing residual volatility**, and Avellaneda–Lee (and
+    Yeo–Papanicolaou after them) build eigen-portfolios with weights `v_m^i / sigma_i` so the
+    factors are not dominated by the volatility level of their constituents. The lab's declined
+    screen did neither. Both are one line of code on an existing score, both are free, and on a
+    universe whose volatility level is a known artifact they are the two places that artifact
+    enters a PCA residual. Note what makes this separable from #148 rather than a duplicate of it:
+    #148 conditions the *comparison* on volatility, #149 removes volatility from the
+    *construction*. They can disagree, and if they do, the disagreement localises the artifact.
+    Tier B, no overlap.
+    → `notes/2026-09-25-short-term-residual-reversal.md`,
+    `notes/2026-09-25-mean-reversion-time-screening-statarb.md`
+
+150. **FREE, third, and it is a new *operator class* rather than a new score — the folder can find
+    no instance of it anywhere in this repo.** Every score this lab computes is used at face value
+    once computed; nothing refuses to act on a per-name number because the estimate behind it is
+    poorly determined. Yeo–Papanicolaou's second screen is exactly that: accept a name's signal
+    only when the regression that produced it clears a goodness-of-fit cutoff (`R^2 > eta`), on
+    the argument that a badly-fit estimate generates trades whose costs are certain and whose edge
+    is not. The generalisation is cheap and family-agnostic — attach the per-name standard error or
+    `R^2` to any of the lab's regression-derived scores (residual momentum, the hedgeable-fraction
+    term, any PCA residual) and test whether the score's IC is concentrated in the well-estimated
+    half. Two honest cautions: the gate is itself a selection on an estimate, so it inherits the
+    post-selection problem in `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`;
+    and a cutoff chosen after seeing the curve is a fitted parameter. Fix `eta` at the median
+    before looking. Tier C source, but the operator does not depend on its evidence.
+    → `notes/2026-09-25-mean-reversion-time-screening-statarb.md`
+
+151. **SCOUT, gated behind #148, and it is a membership rule rather than a book.** Fit an AR(1) on
+    each name's cumulative PCA residual over a trailing window, rank by estimated reversion speed
+    `kappa_hat` (time-averaged over the window, not a single-date estimate), and hold only the
+    fast-reverting fraction. The claim being tested is *not* "reversion speed predicts returns" —
+    it is that the reversal family's measured effect, if any survives #148, is concentrated in the
+    subset where the reversion assumption is estimable at all. A null is informative: it says the
+    effect is not the mechanism the family is named for. Run it as a scout, never a challenger:
+    the construction is a selection on a biased estimate (`kappa_hat` is biased by every standard
+    estimator and the bias grows as the window shortens), which is precisely the shape that has
+    produced this lab's train-advantage-anti-predicts-validation readings. Tier C, no overlap.
+    → `notes/2026-09-25-mean-reversion-time-screening-statarb.md`
+
+152. **ANTI-CANDIDATE, and it is the most important thing this file has to say about the family
+    `program.md` flags as the lab's coldest.** Do **not** propose a *factor-neutral* residual book
+    here, and do not describe a long-only residual candidate as neutralised. Blitz et al. derive
+    the exposure of a contrarian book as `-sigma2_beta^j * (mu^j + f_t-1^j)` — a static short of
+    every positively-priced factor plus a dynamic bet against whatever that factor just did,
+    scaled by the cross-sectional dispersion of loadings — and the residual construction sets it to
+    zero **only because the book is zero-investment**. In a fully-invested long-only book the
+    weights sum to one, so exactly one unit of exposure is always held: the `K = 1` market leg is
+    financed by the budget constraint by accident, and **every further factor leg is not
+    neutralised at all**. A long-only "PCA `K = 5` residual" book therefore carries four unchosen
+    factor bets, and its `K` is a knob that adds unhedged exposures rather than removing them.
+    **The rule to carry past this vein, and it is the honest answer to `program.md`'s standing
+    question about the short leg:** *a neutrality constraint needs both legs and dies under a
+    long-only budget; a selection screen does not, because refusing to hold a name costs nothing.*
+    So when adapting any statistical-arbitrage construction here, the reachable part is the part
+    that decides **membership** and the unreachable part is the part that decides **hedging** —
+    which is why #148–#151 are all membership or screening items and none of them is a book. Tier
+    B on the algebra, Tier A by corroboration with
+    `notes/2026-09-22-anomaly-profits-short-leg-asymmetry.md`.
+    → `notes/2026-09-25-short-term-residual-reversal.md`,
+    `notes/2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -7369,8 +7516,146 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-22 (session 39) | **The thirteenth unit is the *precondition* of a prediction, and unlike the previous twelve it was not audited into existence or named by the lab — it was this file's own twice-carried instruction, finally taken.** Sessions 28–38 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measurement is taken against → the quantity being forecast. Every one of those asks **what predicts returns**. The 2026-09-19 and 2026-09-20 open questions both ended by naming **limits to arbitrage** as the better of two carried-forward targets — *"it is a conditioning variable rather than a score, both papers in tonight's cluster lean on it, and this repo has the Amihud and volatility machinery to proxy it"* — and 2026-09-21 was aimed elsewhere, so it survived unspent. A grep across all 118 prior notes returned **zero** dedicated coverage for `limits of arbitrage`, `arbitrage asymmetry`, `noise trader`, `holding cost` and `arbitrage cost`, with Shleifer–Vishny cited in passing in four notes and the subject of none. **Families → … → the quantity being forecast → why anything would be forecastable at all.** The durable addition: *a deferral this file records with a named target and no precondition should be picked up by the next session that is not aimed by the lab, or it will be carried indefinitely* — this one survived two sessions and a nightly. The session-34 acceptance criterion is met **conditionally and the ordering says so**: two free items first (#135 re-reads results already paid for, #136 is an ordered falsifier that can close the vein for zero trials), the book (#137) is a scout behind two pre-registered gates, and #138 forbids the paper's own obvious long-only reading because it is **unidentified** on this pool. The session's most useful output is a discount factor rather than a mechanism: **this lab is long-only, and the literature says the long leg is the minority side of every anomaly it has been citing.** | Shleifer–Vishny 1997 (JF) (`2026-09-22-limits-of-arbitrage-performance-based.md`); Wurgler–Zhuravskaya 2002 (JB) (`2026-09-22-arbitrage-risk-substitute-portfolios.md`); Stambaugh–Yu–Yuan 2012 (JFE) (`2026-09-22-anomaly-profits-short-leg-asymmetry.md`); Stambaugh–Yu–Yuan 2015 (JF) (`2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md`) — all four read in full text |
 | 2026-09-23 (session 40) | **The fourteenth unit is the *null* — not what the lab measures, but what it is measuring against — and it was named by the lab's own structural finding rather than audited into existence.** Sessions 28–39 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction. The 2026-09-22 nightly ended a seven-session zero-trial run, produced the lab's best-evidenced decorrelated leg, and then priced the route to the seat as **structurally shut**: as a leg gets more decorrelated the blend gain and Memmel's paired SE rise together and `t` barely moves. That is a statement about the *test*, and a grep across all 122 prior notes returned **zero** for `spanning` as a subject, `appraisal ratio`, `GRS`, `Kan–Zhou` and `de Roon` — the folder has six notes on comparing two books and none on the literature's own question, *does the incumbent's frontier already contain the candidate?* Three sources, all Tier A, **all read in full text**. The session's shape is one **framework** (the `α`/`δ` decomposition and the step-down test, both free to run on stored series), one **independent explanation of the lab's blocker** (the tangency channel is intrinsically near-unresolvable because it is a difference of estimated means — the third and most general instance of "the literature predicts the lab's null"), and one **correction that runs in the lab's favour** (a long-only spanning test is one-sided, which halves the p-value of a positive alpha — and which re-reads trial #97's `t = −2.38` as the null holding rather than a rejection). New tonight: **#139–#142**. | Huberman–Kandel 1987 (JF) (`2026-09-23-mean-variance-spanning-and-intersection.md`); Kan–Zhou 2012 (AEF) (`2026-09-23-spanning-test-power-and-step-down.md`); de Roon–Nijman–Werker 2001 (JF) (`2026-09-23-spanning-under-short-sales-and-costs.md`) — all three read in full text |
 | 2026-09-24 (session 41) | **The fifteenth unit is the *variable a promotion turned on* — the detector's cheapest form, run on the one number the lab moved last night.** Sessions 28–40 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null. The 2026-09-23 nightly promoted `pt_mom_evar_arbrisk` — the **first de-risking mechanism ever to survive here**, and a *membership* change rather than an exposure overlay — reporting mean pairwise correlation 0.242 → 0.174 at bit-equal HHI and bit-equal effective risk bets, naming its risk-bet statistic's third consecutive miss and its exact blind spot, and asking in its next-ideas whether a *direct* low-co-movement score beats `E/Var`. A grep across all 125 prior notes returned **zero** for `betting against correlation`, `diversification ratio`, `Choueifaty`, `most diversified`, `minimum correlation` and `correlation forecast`: **co-movement, the variable the promotion turned on, had no note as an object.** Three sources, all read in full, tiers A/B/C and the spread is deliberate — the Tier-A paper supplies the *identification* (`β = ρσ/σ_m`, sorted with volatility held fixed, and the finding that the **correlation** half carries risk-adjusted returns while the **volatility** half does not survive the fuller controls, which is the literature arriving at this lab's survivorship-artifact conclusion by an unrelated route); the Tier-B paper supplies the **closed form** of what a long-only variance objective does with those inputs (`w_i ∝ (1/σ²_εi)(1 − β_i/β_L)`, zero above the threshold — membership decided by systematic risk, ~80% of the universe excluded by the objective alone, which is trial #98's 62 → 48 contraction predicted); the Tier-C papers supply a **proved identity** that closes the named blind spot (`DR = [ρ̄(1−CR)+CR]^(−1/2)` — the risk-bet count is the `CR` half, the correlation the lab resolved to print is the `ρ̄` half) plus an invariance table that bites on a universe where 42 of ~140 instruments are ETFs. The session-34 acceptance criterion is met **conditionally and the ordering says so**: #143 and #144 are free and #143 is a live objection to a seated term, #145 is a free screen the lab's standing one does not cover, the book (#146) is a scout behind both, and #147 forbids importing the literature's effect size into a large-cap-survivor pool. New tonight: **#143–#147**. | Asness–Frazzini–Gormsen–Pedersen 2020 (JFE) (`2026-09-24-betting-against-correlation-decomposing-beta.md`); Clarke–de Silva–Thorley 2011 (JPM) (`2026-09-24-long-only-minimum-variance-composition.md`); Choueifaty–Coignard 2008 (JPM) + Choueifaty–Froidure–Reynier 2013 (JIS) (`2026-09-24-diversification-ratio-most-diversified-portfolio.md`) — all read in full text |
+| 2026-09-25 (session 42) | **The first session in fifteen aimed by the lab's own next-ideas list rather than by a gap detector, and the item it took is the one the 2026-09-24 nightly wrote against its own vein.** That nightly spent 2 of 8 trials, took `range-variance` from 0.494 to 0.734 on a book it then showed was "equal-weight the low-beta 37% of the universe", and ended its next-ideas with an honest admission — "a genuinely cold family, and the honest note is that tonight did not find one" — naming `statistical-arbitrage` (one recorded trial, a 0.468 lead) and pointing at **`program.md`'s standing question for that family: how the short leg's absence is handled**. This file had three notes on the family, all about *which residual* to build (PCA factor count, distance versus cointegration matching), and **none** about what the long-only constraint does to a residual book once it exists. Three sources, all read in full, tiers B/B/C, chosen so that each supplies a different one of the family's three construction nodes: the **residual** (the Management Science framework paper, whose `K = 0` control is the cleanest available pricing of the residualisation node and whose finding that the *signal function* matters more than the residual definition reframes the whole vein), the **signal** (Yeo–Papanicolaou's two screens on the estimate rather than on the deviation — selection by reversion speed, and a goodness-of-fit gate that has **no analogue anywhere in this repo**), and the **exposure** (Blitz et al.'s closed form `-σ²_β(μ^j + f^j_{t-1})` for what a contrarian sort loads on, and why residualising zeroes it *only* for a zero-investment book). The session's transferable output is a rule rather than a book — **membership survives the long-only budget, hedging does not** — and its sharpest result is adversarial to the lab's own refutation: both Tier-B sources find residualisation *helping* where `learnings.md` found it monotonically hurting, and the volatility-rescaling node neither of the lab's constructions used is exactly where this universe's survivorship artifact enters. New tonight: **#148–#152**. | Blitz–Huij–Lansdorp–Verbeek 2013 (JFM) (`2026-09-25-short-term-residual-reversal.md`); Guijarro-Ordonez–Pelger–Zanotti (Management Science; arXiv draft read) (`2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`); Yeo–Papanicolaou 2018 (Risk and Decision Analysis) (`2026-09-25-mean-reversion-time-screening-statarb.md`) — all three read in full text |
 
 ### Open questions for future sessions
+
+- **[2026-09-25] Read this first: tonight took the coldest family on the board, and what it found is
+  that this file has been answering the wrong question about it for three sessions of coverage.**
+  The 2026-09-24 nightly spent 2 of 8 trials (both scouts, **holdout not read**, running total of
+  looks still **six**), lifted `range-variance` 0.494 → 0.734 on a book it then proved was
+  *equal-weight the low-beta 37% of the universe*, priced a screening rule outside the family it
+  was fitted in (**+0.421 val Sharpe for deleting `n` estimated residual variances**, with the
+  mechanism identified as *concentration* rather than scatter — HHI up 7.2x, effective risk bets
+  down 4.5x), closed this file's #146 with its own new beta gate, and answered the 2026-09-23
+  fourth next-idea for zero trials: a direct market-correlation score and the seated `E/Var` are
+  **the same object at different locality**, with locality the only dial. Its next-ideas then
+  admitted it had found no genuinely cold family and pointed at `statistical-arbitrage` —
+  **one recorded trial, a 0.468 lead, and `program.md`'s own open question about the short leg.**
+  This folder had three notes there, all about *which residual to build*; none about what a
+  long-only budget does to a residual book. Tonight covers that. New: **#148–#152**. Still unrun
+  and carried unchanged: the lab's own **`K = 2` spanning re-run** and the **`DR`-as-drawdown
+  predictor** test (both free, both pre-registered by the nightly itself, and both ahead of
+  anything here because they are the lab's), **#139**, **#143**, **#144**, **#145**, **#135**
+  (fourth session), **#109** (**eighteenth**), **#82** (nineteenth), **#94** as standing
+  discipline, **#49** (twenty-eighth), plus **#105–#107** and **#110**'s shrink half. **#146 is
+  closed** — killed 2026-09-24 by #145, the screen written the same morning by the same session.
+- **[2026-09-25] What should aim the next session, in order, and note that the lab's own two
+  pre-registered items come before all of this file's.**
+  - **The nightly's `K = 2` spanning re-run and its `DR` drawdown test go first.** Both are free,
+    both were fully specified before their numbers existed, and one of them (`DR`) was
+    pre-registered *with its own likely failure stated in advance*. Nothing tonight changes that
+    ordering, and this file should not be read as competing with it.
+  - **Then #148**, which is the item this file would put first among its own, because it is the
+    only one that can *reopen* a family the lab closed. It re-runs an IC ladder the lab has already
+    computed, conditioned on volatility terciles, and both readings are written down in advance:
+    gap shrinks → the refutation was measuring the survivorship artifact; gap survives → the
+    refutation stands and `statistical-arbitrage` closes for residual-reversal work on measured
+    grounds rather than on one unconditioned comparison. Train only, no trial.
+  - **Then #149**, free, and separable from #148 in a way worth keeping straight: #148 conditions
+    the *comparison* on volatility, #149 removes volatility from the *construction* (residual
+    standardisation, and the `v_m^i/σ_i` eigen-portfolio rescaling both sources use). If they
+    disagree, the disagreement localises the artifact.
+  - **Then #150**, free, and it is the only genuinely new *operator class* in this batch: a gate on
+    how well a per-name estimate is determined, not on how large its signal is. Fix the cutoff at
+    the median before looking at anything.
+  - **#151 is a scout and goes behind all three**, and it must not be run as a challenger: it
+    selects on the maximum of a biased estimate, which is the exact shape behind this lab's
+    train-advantage-anti-predicts-validation readings.
+  - **Do not spend a trial on #152**, and note the prohibition's shape: it forbids a *description*
+    as much as a book. A long-only residual candidate may not be called neutralised, because it
+    is not.
+- **[2026-09-25] The transferable output, and it is a constraint taxonomy rather than a
+  mechanism.** Every construction in this family has a membership half and a hedging half, and the
+  long-only budget kills precisely one of them: **a neutrality constraint needs both legs and dies;
+  a selection screen does not, because refusing to hold a name costs nothing and requires no
+  short.** The algebra is Blitz et al.'s — a contrarian book's factor loading is
+  `-σ²_β(μ^j + f^j_{t-1})`, and residualising zeroes it *only* because the book is zero-investment;
+  in a fully-invested long-only book the `K = 1` market leg is financed by the budget constraint by
+  accident and every further factor leg is not neutralised at all. Two consequences worth carrying
+  past this family. First, **a long-only "PCA `K = 5` residual" book holds four unchosen factor
+  bets, so `K` adds unhedged exposures rather than removing them** — the opposite of what the
+  parameter means in the source literature. Second, it re-reads the lab's own seated term: the
+  promoted `E/Var` membership rule is a member of this family's species, and the family's reachable
+  content is *more* of that kind of object, not a book. **This is also the fourth instance of the
+  2026-09-21 shape** — the literature explaining a lab null rather than contradicting it — and the
+  second (after Kan–Zhou) that does not depend on this universe's particulars.
+- **[2026-09-25] A tension recorded and, unusually, left with a free test attached that could
+  resolve it either way.** `learnings.md` [2026-08-30] measured residualisation making 5-day
+  reversal monotonically **worse** (raw +0.0455 → 1-factor +0.0375 → PCA k=3 +0.0331 ≈ k=5
+  +0.0336) and the family was declined on it. Both of tonight's Tier-B sources measure the
+  opposite ordering, and one of them runs the lab's exact comparison as a deliberate control
+  (`K = 0`, raw returns through the identical signal and policy) and finds residuals ahead in every
+  cell of a 3×3 grid. **The reconciliation candidate is mechanical and this universe supplies it:**
+  a raw short-horizon sort reaches its extreme buckets more often for volatile names purely because
+  their return distribution is wider — Blitz et al. document the resulting volatility/size/price
+  tilt in the extreme deciles directly — and on ~145 large survivors the volatility level is this
+  lab's measured artifact (**+19.4%/yr high-minus-low on train**). So "residualising hurts" is the
+  *predicted* reading if the raw sort's edge is the artifact. **Neither side is adopted here.**
+  #148 states both outcomes in advance and costs nothing.
+- **[2026-09-25] A rubric row said out loud: none of tonight's three sources is Tier A, and the
+  session chose that deliberately rather than settling for it.** The family's question is about a
+  *constraint*, and the literature that addresses constraints directly is either closed
+  (pm-research) or thin. What was taken instead: a JFM article that is multi-decade and
+  cost-modelled but single-market and unreplicated (**B**); a Management Science paper whose
+  framework and `K = 0` ablation are first-rate but which is recent, single-market, post-dates both
+  replication sweeps, and whose best-performing branch (IPCA) needs 46 firm characteristics this
+  repo cannot see — so **the reachable half of that paper is its weaker half**, and any hypothesis
+  citing it must say so (**B**, `published_post_2018: true`); and a low-venue paper whose empirics
+  are organised into dated regime windows and are therefore **not recorded at all** here, kept only
+  for two construction screens and because a Tier-1 paper implements it as a benchmark (**C**).
+  **Nothing in #148–#152 rests on any of the three performance claims** — they rest on an exposure
+  identity, an ablation design, two screens and a budget constraint, each independent of any
+  backtest.
+- **[2026-09-25] Access notes: a new TLS refusal mode, a new bot-wall vendor, one dead host, and
+  the faculty-page channel working on the first try for the third consecutive session.**
+  - **`efmaefm.org` fails TLS on `https` (curl 60, "unable to get local issuer certificate", with
+    `--cacert` and an explicit proxy both making no difference) and serves the identical file over
+    plain `http`.** This is the `aeconf.com` lesson (2026-09-23) recurring on a different host with
+    a different error class — that one was `SSL_ERROR_SYSCALL`, this one is a chain failure. The
+    proxy's own status endpoint reported `bundleCoversEveryHost: true` and no relay failure, so it
+    is the origin's chain, not egress. **Generalise: when exactly one host fails TLS while others
+    succeed in the same second, try `http://` before concluding the source is unreachable.**
+    Conference-society sites (EFMA, and by extension similar symposium archives) are a real channel
+    for working-paper versions of closed articles.
+  - **`centaur.reading.ac.uk` returns an Anubis proof-of-work challenge** ("Oh noes!" plus the
+    Anubis attribution), an **eighth** distinct refusal mode after the Cloudflare 403, the OpenAlex
+    metered budget, the pm-research OpenID redirect, the Imperva 200-with-a-stub, the
+    transport-layer reset, the Cambridge HTML-in-place-of-PDF, and the plain-`http`-only host.
+    Anubis is spreading across institutional repositories; it is unsolvable by an automated client
+    and should be reported as a refusal, not an egress block.
+  - **`lume.ufrgs.br` reset the connection on every attempt** (curl 35, three tries, proxy logged
+    `ws_closed_mid_exchange`), which cost the session its fourth candidate source — the
+    nonnegative-lasso long-only index-tracking line. **Recorded as not read**; nothing above rests
+    on it, and a later session that wants the long-only *replication* construction should start
+    from Wu–Yang–Liu's nonnegative lasso (CSDA) or Alexander–Dimitriu's cointegration-based
+    enhanced indexation rather than re-trying this host.
+  - **`math.stanford.edu/~papanico/pubftp/` served the author's own manuscript on the first
+    request**, third consecutive session in which the 2026-09-18 faculty-page channel worked
+    first-try. It is now the default first attempt, ahead of the publisher, for any paper with a
+    named academic author.
+  - **Index behaviour, seventh consecutive session, same split-record shape.** Semantic Scholar
+    returns *not found* for the JFM DOI `10.1016/j.finmar.2012.10.005` and indexes only the SSRN
+    preprint (**35**) while Crossref has the article at **41**; the Management Science DOI
+    `10.1287/mnsc.2022.03132` is *not found* on Semantic Scholar and reads **3** on Crossref
+    against **32** for its SSRN record. **Per the rubric no tier moved on either.** Also a fourth
+    consecutive author-metadata warning: several search snippets and Semantic Scholar's own title
+    record give the JFM paper's fourth author as *van Vliet*; Crossref, the publisher record and
+    the paper's own title page give **Verbeek**. Check an author list against the document, not
+    against the index.
+  - Semantic Scholar's DOI endpoint returned one **429** mid-session after several rapid calls, as
+    documented; spacing the calls cleared it. OpenAlex was not needed.
+- **[2026-09-25] Protocol note, nineteenth session running, unchanged and still a human's to fix.**
+  The session-start hook printed "integrity check OK — on main, level with origin/main, no stray
+  branches" while `git status -sb` reported **`claude/tender-galileo-toc252`**. As on 2026-09-06
+  through -24 this is the benign form — the branch tip was bit-identical to `origin/main`
+  (`370fbdc`) — and this session ran `git checkout main && git reset --hard origin/main` before any
+  work, so tonight's notes are on `main` only. **Flagged for the human for the sixteenth time**,
+  same reading: the hook's "on main" clause is false while its "level with origin/main" clause is
+  true, so a session that trusts the first clause commits to a per-run branch with no warning. This
+  session's own harness instructions again named the per-run branch as the development target while
+  `research/README.md` step 6 and the standing prompt's step 0 both require `main`; **the repo's
+  rules governed.**
 
 - **[2026-09-24] Read this first: the lab's first surviving de-risking mechanism was promoted
   last night, and the variable it turned on had no note in this folder.** The 2026-09-23 nightly
