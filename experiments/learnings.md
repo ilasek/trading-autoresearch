@@ -4240,3 +4240,148 @@ across experiments; prune entries that later evidence contradicts.
   belong to: **pre-register a statistic's PREDICTIVE claim separately from its DESCRIPTIVE one** — the
   descriptive claim usually survives and the predictive one usually does not, and the
   risk-contribution count was allowed three misses precisely because the two were never separated.
+
+- **[Measured 2026-09-26, nightly] The seated champion's `E/Var` term has a MEAN-channel reading
+  after all, it is resolvable, and it arrives from an operator proposed in the opposite direction —
+  which also closes `research/SUMMARY.md` #150 for local instantiation.** #150's class (refuse to
+  act on a per-name score whose regression is poorly determined) was measured on 2026-09-25 with the
+  **global** market `R²` and gave 12−1 momentum's IC concentrated in the **well**-estimated half
+  (+0.0112), while failing the beta gate at `spearman(R², |β̂|) = +0.59`. Re-run with the one
+  **local** quality variable this repo has that passes that gate — type-demeaned `E/Var` at the
+  seat's own `K = 4`, 250-day, 20-day-lag constants, `|ρ(E/Var, β̂)| = 0.395` — the sign **flips and
+  resolves**:
+
+      cell                                  IC        t        fixed-count version (top/bottom 20)
+      pooled (all names)                  +0.0074   +0.42
+      HIGH E/Var (well-explained)         -0.0103   -0.50      -0.0007  (t -0.03)
+      LOW  E/Var (poorly explained)       +0.0239   +1.42      +0.0505  (t +2.67)
+      SPREAD (high - low)                 -0.0343   -2.15      -0.0512  (t -1.96)
+      [ctl] placebo spread                +0.0069   +0.56      +0.0123  (t +0.61)
+
+  **Momentum's cross-sectional content on this universe lives almost entirely among the
+  least-replicable names**, and that is the direction `pt_mom_evar_arbrisk` already scores
+  (`zscore(momentum) + zscore(type-demeaned −E/Var)`). #98's own entry recorded the promotion as
+  winning purely on the denominator ("every basis point is denominator", ann_ret 25.65% → 23.79%);
+  the mean channel was never measured, and measured now by an IC split rather than by a book it
+  points the **same** way. The two channels agree on this variable; the pre-registered expectation
+  that they would oppose is refuted.
+  **The control this passes is the one that has closed three veins.** The two halves sit at
+  **identical** trailing-volatility percentiles (0.509 / 0.509) — the type demean makes the split
+  volatility-neutral by construction rather than weakly correlated — and the sign survives in all
+  three volatility terciles (−0.026 / −0.015 / −0.039). `range-variance` (fifteen screens),
+  `beta-minus` and `VSP` all died on that control; this is the first object to pass it with the
+  percentiles *equal*.
+  **What it does NOT license, and the reason is structural rather than a matter of taste.** The
+  mirrored candidate — gate the book onto low-`E/Var` names — is refused three ways. Its direction
+  would be chosen off tonight's screen, which is what the pre-registration existed to forbid. Its
+  score is a component already seated, so a book built on it sits at `rho` ≈ 0.95+ to the seat where
+  the required-gain table asks **+0.283**. And decisively: `E/Var` needs 250 days of complete returns
+  on ≥45 names, so **any construction gated on `E/Var` breadth is a post-1997 object** (the count
+  version reaches 1997-04, the median version only 2000-02) and could be scored only against a
+  champion charged from 1962 — the comparison the gate exists to make does not exist on this train
+  split. Shrinking the count to reach further is an `E/Var` knob and a standing anti-candidate.
+  **Generalise #150 with a second required declaration: the operator is signal-specific in its sign
+  (already on record) AND locality-specific in its sign (new tonight).** A quality variable read off
+  a global regression and the same variable read off a local neighbourhood give *opposite* answers on
+  the same signal, and the local one is three times larger. This is the third instance of the
+  2026-09-24 locality dial and the first in which it flips a sign rather than moving a level. Any
+  future use of the class must name both its expected sign and its neighbourhood before measuring.
+
+- **[Measured 2026-09-26, nightly] `research/SUMMARY.md` #153's spectrum screen cannot close a
+  family, because its input is a modelling choice and not a property of the universe — the folder's
+  flagship theorem-based screen disqualified on the repo's oldest habit, on the first night it ran.**
+  Didisheim et al.'s Theorem 3 makes the sign of complexity's effect depend on
+  `EffRank = (tr A)²/tr(A²)` of the factor second-moment matrix, and #153 sells that as making the
+  answer "a property of the **universe**, not of the model". Measured on the train-window
+  second-moment matrix of characteristic-managed portfolios (293 monthly returns, unit-gross
+  zero-investment rank weights):
+
+      characteristic set                      P    EffRank    / P     [ctl iid / P]
+      all 14                                 14      3.42     0.244       0.775
+      de-duplicated 8 (one per mechanism)      8      5.10     0.638       0.744
+      no trend legs (11)                      11      2.29     0.208       0.754
+      no vol/range family (10)                10      4.33     0.433       0.794
+      [ctl] placebo hash characteristics      14     12.26     0.875         —
+
+  **The reading spans 0.208 to 0.638 of `P` on four defensible sets of the same characteristics and
+  straddles both pre-registered branches** (`≥ 0.5·P` dispersed, `≤ 0.25·P` concentrated). Three
+  nested momentum legs and four volatility/range estimators are near-duplicates and duplicates
+  concentrate a spectrum mechanically; one representative per mechanism lifts the same universe into
+  the dispersed branch. So `EffRank` measures the **redundancy of the feature list** — a candidate
+  can move itself from one branch to the other by de-duplicating its own inputs. **Neither branch
+  fires: `statistical-learning` does not close on measured grounds and #157 is not licensed.**
+  Two riders. The **i.i.d. control reads 0.775·P rather than `P`**, because it inherits the real
+  panel's unequal column SDs, so the **placebo's 0.875·P is the correct ceiling** for "genuinely
+  independent" at this `T` and `P` — a control that would have been read as a ceiling of 1.0 and
+  made the real number look worse than it is. And the eigenvalue shares (0.480 / 0.219 / 0.079,
+  top-3 = 77.9%) are the *same* fact and inherit the *same* dependence on the list, so they are not
+  independent corroboration of the headline. **This is the tenth instance of "check the statistic is
+  invariant to the thing it is not supposed to measure" and the third — after `eta(q)`, `DELAY`,
+  Breiman's Theorem 1, ONC and Kaiser — where the honest verdict is that an imported statistic
+  cannot decide anything on the sample this repo has. The new shape is that it is not the SAMPLE
+  that defeats it but the FREE PARAMETER in its own input.**
+
+- **[Measured 2026-09-26, nightly] A learned candidate's implied weights are FLAT in lag here, the
+  first reading of them was a pooling artifact, and the reason the folder's mechanism fails is the
+  house convention.** `research/SUMMARY.md` #154 files the identity that a `P > T` ridgeless forecast
+  is `a'y` with `a` **independent of `y`**, and predicts declining-in-lag weights (persistence makes
+  similarity temporal proximity) hence an unchosen momentum overlay. Run in dual form
+  `a = 1/n + X_c(X_c'X_c + λI)^{−1}z_c` on the lab's own 2026-08-29 eleven-feature ridge (`P < T`,
+  where the identity still holds because `a` is still return-independent): pooled across prediction
+  dates `corr(|a|, lag) = −0.184`, **DECLINING**. Normalised **within** each prediction date so mean
+  `|a| = 1`, every lag bucket is within **±4%** of flat, the newest-year / oldest-bucket ratio is
+  **0.997**, and the pooled correlation is **+0.048** (negative on 2 of 10 dates). The pooled reading
+  was the `1/n` intercept: early dates have few training rows, so pooling compares **row counts**
+  rather than lags. **Branch fires the second way — `sl_ridge_xs_walkforward`'s `rho = 0.774` to the
+  champion was the three trend features in its block, not the estimator, and the 2026-08-29 design
+  rule ("no single feature that already works alone") stands unchanged.**
+  **The mechanism is the house table, and it generalises past this family:** #154's account needs
+  **persistent raw** features for temporal proximity to become similarity, and the house convention
+  cross-sectionally **ranks** every feature every date, which makes them stationary by construction
+  and leaves the similarity kernel no time dimension. **Cross-sectional ranking removes the unchosen
+  momentum overlay #154 warns about — and removes the diagnostic's power to detect one.** Always
+  normalise a per-training-row statistic within its own fit before reading it against anything.
+
+- **[Measured 2026-09-26, nightly] `research/SUMMARY.md` #155's placebo is vacuous by algebra on
+  exactly the estimator class #154's identity defines, and the two items therefore cannot both be
+  informative about the same object.** #155 calls its branch exact: *a learning estimator's implied
+  weights must change sign under an autocorrelation-reversed target; an estimator that imposes
+  structure leaves them unmoved.* But `a` is a function of the feature matrix alone, so for any
+  **fixed-penalty linear** estimator the second arm is true by construction and the first is
+  unreachable. Confirmed rather than argued: the artificial target's per-name lag-1 autocorrelation
+  moved **+0.004 → −0.499** and `max |Δa|` over **4,491,229** implied weights was **0.000e+00**.
+  **#157's own design node — "ridge with a penalty fixed a priori rather than cross-validated" —
+  is what makes its mandated placebo unable to fire, so the gate protecting the folder's only gated
+  scout cannot return a negative.** The test recovers information only where the estimator has a
+  data-dependent hyperparameter or a non-linear fit. **General rule, and it is the companion to
+  "run the placebo before building on a surprise": before adopting a placebo, check that the object
+  it perturbs can reach the statistic it is read on — a placebo that cannot fail is decoration.**
+
+- **[Measured 2026-09-26, nightly] `SUMMARY.md` #135 is answered, every live score's reachable half
+  is the majority, and the statistic needs a placebo the note did not supply.** Top-band excess and
+  bottom-band shortfall reported separately (%/yr, forward 21d, top/bottom 20, train):
+  `−E/Var` **+7.23 (t +4.40) / −4.10 (t −2.55)**, ratio **0.568**; vol-of-vol +4.20 / −2.60, ratio
+  0.620; `peer_ret` +2.71 / −1.07, ratio 0.394; **[ctl] placebo hash +0.44 / −0.80, ratio 1.831**.
+  With the five scores measured on 2026-09-06 under #84 (0.055 to 0.717) that is **eight scores, not
+  one above 1.0** — a genuine departure from the US large-cap short-leg literature, which #135 itself
+  says is worth more than the haircut would have been. **The addition is the calibration: an object
+  with no content reads 1.831, so "ratio > 1" is simultaneously #135's predicted signature for a
+  short-leg-dominated score AND the null's signature**, and the ratio is uninterpretable unless the
+  top band is significant on its own. The 12−1 momentum row is the worked example: its bottom band is
+  **+2.66, the wrong sign for a sort**, so its 0.962 is not a ratio at all but the 2026-09-18
+  both-bands-positive signature — on this universe momentum's bottom band is the losers that
+  survived, which is the standing caution against every momentum reading here.
+
+- **[Measured 2026-09-26, nightly] The seat is 0.22 paired standard errors clear of the runner-up,
+  which is where the winner's-curse correction is LARGEST — `SUMMARY.md` #109 discharged on the
+  selection that matters rather than the one it named.** #109 asks for `(winner − runner-up) /
+  SE(difference)` and names the 2026-09-14 specification curve; the larger selection this lab
+  performs is over its own 102 recorded trials, and every input is already stored. Winner
+  `pt_mom_evar_arbrisk` **1.269**, runner-up `mom_hzn_avg4_nobuffer` **1.229**, `rho` 0.9005,
+  `metrics.sharpe_diff_se` **0.1797**, **gap/SE = 0.22**. Andrews–Kitagawa–McCloskey's median bias
+  vanishes only when the winner is far clear of the field, so **the seat's 1.269 must be read as a
+  selected maximum and discounted, not as a level** — and the book it is 0.22 SE above is the one
+  whose holdout collapsed to 0.691. This is the ⚠ standing concern arriving on a third axis:
+  unresolvable *steps* (the paired bootstrap), unresolvable *members* (CSCV/PBO at 0.454), and now an
+  unresolvable *maximum*. Fifth confirmation that `SE ≈ 0.568·√(1−ρ)` transfers (0.1792 against the
+  engine's 0.1797), now on the whole leaderboard rather than on a designed pair.
