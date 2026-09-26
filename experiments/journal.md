@@ -15012,3 +15012,58 @@ the merge pipeline, not a fix. **A human should decide which branch this job wri
 hook, the harness and `CLAUDE.md` agree**, because the failure mode is a silently split
 `trials.jsonl`, which corrupts the deflator for every later trial and is what the 2026-08-16 protocol
 issue cost.
+
+## Protocol issue — 2026-09-26 (nightly, post-session), and it corrects what last night's summary claimed
+
+**What fired.** The container running the 2026-09-25 session was restarted after the session had
+finished and pushed. On resume, the session-start integrity hook reported:
+
+    Remote branches hold commits absent from origin/main:
+        origin/main-97y2bd
+
+That branch is **this session's own work** — trials #101 and #102 plus tonight's journal, learnings
+and candidate files — not a lost prior session. But the hook cannot tell those apart, and it is
+right to refuse: an unmerged branch carrying `trials.jsonl` rows understates the deflated-Sharpe bar
+for every later trial, which is what the 2026-08-12..15 incident cost.
+
+**The correction, and it is the reason this entry exists rather than a one-line note.** Last night's
+summary said the fourteen prior `main-*` branches were "fully merged into `origin/main`", and the
+session's closing report to the human inferred from that a **merge pipeline** that would pick this
+branch up automatically. **The first half is true and the inference is false.** Branch forensics run
+on resume:
+
+    per-run branches on the remote                                     14
+    of those, ancestors of origin/main                                 13 (all but this session's)
+    each points at its OWN session's terminal commit, not at a stale base
+    merge commits in main naming a recovery                             4
+
+The four are, verbatim: `merge: recover 2026-09-19 strategy session from origin/main-av88mw`,
+`merge: recover 2026-09-10 nightly strategy session stranded on origin/main-a2tfle`, `merge: recover
+2026-09-03 nightly from origin/main-al9y2f (4 trials)`, `merge: recover 2026-09-01 nightly trials
+stranded on origin/main-ymqquw`. **The words are "recover" and "stranded", and the 2026-09-19
+recovery merge sits in main's history between two 2026-09-20 commits — so the following session did
+it, after its own integrity check fired.** There is **no automatic pipeline**. Nine of the thirteen
+needed no recovery because those sessions pushed to `main` directly as `CLAUDE.md` instructs, and
+the harness's per-run branch merely ended up pointing at the same commit. Four did not, were
+stranded, and cost a later session part of its night.
+
+**So the honest reading of the last eighteen sessions is worse than "a naming discrepancy that has
+never cost anything".** It has cost something four times, and the cost was paid by the *next*
+session each time. Last night's report understated this because it reasoned from "all prior branches
+are in main" to "something merges them", without reading how they got there. The lesson is the
+generic one this repo keeps relearning: **an outcome that looks automatic may be a manual repair
+someone else performed, and the commit messages are where the difference is written.**
+
+**Resolution taken.** `origin/main` had moved one commit ahead (`58c1d8a data: daily refresh
+2026-09-26`, the data bot, touching only `data/store/`), so this was a real merge and not a
+fast-forward. That commit was merged into the session branch — clean, no conflicts, no file this
+session touched is a data file — and the result is pushed to **both** `origin/main-97y2bd` (the
+branch the harness designates) and **`origin/main`** (the branch `CLAUDE.md`, `program.md` and this
+job's own standing prompt all name, the last of which explicitly instructs `git push origin main`
+and requires verifying `HEAD == origin/main`). No history was rewritten and nothing was
+force-pushed.
+
+**Still owed by a human, and now with a price attached.** The session-start hook, the harness's
+branch requirement and `CLAUDE.md` disagree, and the disagreement has stranded four sessions in
+eighteen. Making the three agree is a one-time edit to files an agent may not touch. Until then
+every session ends by choosing between two instructions, and the failure mode is silent.
