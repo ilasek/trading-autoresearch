@@ -15069,3 +15069,142 @@ eighteen. Making the three agree is a one-time edit to files an agent may not to
 every session ends by choosing between two instructions, and the failure mode is silent.
 
 ## Research session — 2026-09-26 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-26 (nightly), written before any number was computed
+
+**Integrity check first, and it fired on the same discrepancy the last nineteen sessions
+recorded.** `git fetch origin --prune` put HEAD on the harness's per-run branch
+**`main-jhhr6j`** at `4ca392e`, **bit-identical to `origin/main`** (`git log origin/main..HEAD`
+empty), and `git branch -r --no-merged origin/main` returned **nothing** — all fifteen prior
+`main-*` remote branches are ancestors of `origin/main`, so `trials.jsonl` is whole and the
+deflated-Sharpe bar is intact. Per this job's standing prompt (`git checkout main && git reset
+--hard origin/main`, "never run trials from a per-run branch") the session was moved onto `main`
+before any work began, and per last night's `## Protocol issue — 2026-09-26` it will be pushed to
+**both** `main` and the harness's branch. Tests green (33 passed); store fresh through 2026-09-26.
+
+**Trial count 102, effective 31. Champion `pt_mom_evar_arbrisk` (#98), validation 1.269, seated
+2026-09-23.** Six holdout looks spent since 2026-08-17; tonight aims to spend none.
+
+**What aims the session.** `experiments/journal.md`'s own next-ideas item 1 (a re-specification of
+`research/SUMMARY.md` #150 on a signal that has an IC to concentrate, with a **local** quality
+variable and its sign named in advance), item 2 (#135, the oldest unspent free item, fifth
+session), then the research folder's own ordering for tonight's new batch: **#153** (the spectrum
+screen that can close `statistical-learning` for big-model work on measured grounds), **#154** (the
+implied-weight print), **#155** (the estimator placebo), **#156** (two design rules). **#157 is a
+scout and is gated behind #153 in the strong sense.**
+
+### F1 — #150 with a LOCAL quality variable, on a signal that has an IC. Free, train only.
+
+The quality variable is **`E/Var` at the seat's own constants** — 250-day window, 20-day lag,
+`K = 4` equal-weight substitute basket, closed-form `corr²`, demeaned within `groups.TYPE_OF` at
+`MIN_TYPE = 4` — which *is* the `R²` of a name's returns on its four most-correlated peers, i.e.
+the local analogue of the global market `R²` that failed the beta gate at **0.59** on 2026-09-25.
+The 2026-09-24 locality curve already reads **0.395** for `K = 4`, so it is the one quality
+variable in this repo that passes that gate. Gates re-printed rather than re-chosen:
+`|ρ(E/Var, |β̂|)| = 0.395`, `|ρ(E/Var, 21d GK vol)| = 0.148`, `|ρ(E/Var, rank 12−1)| = 0.015`.
+`η` is the **cross-sectional median**, fixed before looking, as #150 requires.
+
+**Sign, written down before the number exists.** The 2026-09-25 global reading put 12−1 momentum's
+forward-21d IC at **+0.0483** in the well-estimated half against **+0.0370** in the
+poorly-estimated half, spread **+0.0112**. The local variable is the same construct at `K = 4`, so
+the call is a **positive spread: momentum's IC is higher in the HIGH-`E/Var` half.**
+
+**Kill line.** Spread below **+0.0056** (half the global reading) or wrong-signed ⇒ #150 is closed
+for local instantiation and **no candidate follows from F1**. A placebo hash of (date, ticker) is
+printed beside it; per the 2026-09-09 rule a single significant cell is not a reading.
+
+**Why this is not a repetition, and it is the tension that makes it worth the night.** The seat
+already trades this variable in the **opposite** direction: `pt_mom_evar_arbrisk` scores
+`zscore(momentum) + zscore(type-demeaned −E/Var)`, i.e. it prefers **poorly**-explained names, and
+it won — on the variance channel, by its own journal entry ("every basis point is denominator").
+If F1's spread is positive, the **mean** channel and the seat's **variance** channel point opposite
+ways on one variable and the two uses are separable. If it is negative, #150's operator *is* the
+seat's own term and is already seated, which closes #150 for zero trials.
+
+### F2 — #135, the long-leg/short-leg asymmetry. Free, train only, and it is a COMPLETION.
+
+Pre-registered before computing: #135 asks for the bottom band's shortfall reported beside the top
+band's excess on 3–5 scores and predicts the reachable half is the minority (ratio > 1). **This
+repo already measured exactly that statistic under #84 on 2026-09-06** — momentum **0.055**,
+region-`ILLIQ` **0.511**, raw `ILLIQ` **0.669**, seasonal **0.483**, 21d reversal **0.717**, not
+one above 1.0. So F2 is a completion, not a new measurement: the same statistic on the scores added
+since (**type-demeaned `E/Var`**, **vol-of-vol**, **`peer_ret`**), plus the placebo.
+**Branch:** any ratio above 1.0 reopens the question; all below 1.0 records #135 as **answered**,
+with the 2026-09-06 departure from the US large-cap literature standing on three more scores.
+
+### F3 — #153, the spectrum screen. Free, train only. It scores returns; no split but train is read.
+
+`EffRank = (tr A)² / tr(A²)` on the **train-window second-moment matrix of the managed-portfolio
+returns** built from the characteristics `strategies/lib` can compute — one rank-weighted
+zero-investment portfolio per characteristic — which is the object Didisheim et al.'s Theorem 3
+names. The **instrument return covariance is a different object** and is printed separately so the
+two cannot be confused, exactly as #153 demands.
+
+**Branches, in units of `P` because `EffRank ≤ P` and this repo's `P` is small (the source's own
+calibrations, ~2.5 against ~500, are not transferable levels here):**
+**dispersed if `EffRank ≥ 0.5·P`; concentrated if `EffRank ≤ 0.25·P`; ambiguous between.**
+**Mandatory calibration before reading**, per this repo's own record of imported statistics that
+were not estimable (`eta(q)`, `DELAY`, Breiman's Theorem 1, ONC, Kaiser): the identical statistic
+on (a) i.i.d. columns of the same shape and (b) a placebo characteristic set reading no market
+data. **Concentrated ⇒ `statistical-learning` closes for big-model work on measured grounds and
+#157 MUST NOT be written. Dispersed ⇒ #157 is licensed as a scout.** The folder states its own
+expected reading is *concentrated*, so a concentrated answer is not a surprise and is not evidence
+that the screen lacked power — which is what the placebo rows are for.
+
+### F4 — #154, the implied-weight print. Free.
+
+#154 states the identity for `P > T`. The lab's 2026-08-29 ridge ran at `P < T`, where the dual
+form `r̂_t = a_t' y` with `a_t' = z_t'(Z'Z + λI)^{−1} Z'` is **still linear in the target and still
+return-independent**, so the print transfers exactly and #154's honest boundary can be tightened
+rather than assumed. **Branch as #154 states it:** implied weights **declining in lag** ⇒
+`sl_ridge_xs_walkforward`'s `rho = 0.774` to the champion is the **estimator**, and the lab's
+2026-08-29 design rule ("no single feature that already works alone") must be restated on implied
+weights; **flat in lag** ⇒ the rho was the three trend features and the rule stands unchanged.
+
+### F5 — #155, the estimator placebo, and its verdict is derivable on paper first.
+
+`a_t` above is a function of `Z` alone, so replacing the target with an autocorrelation-reversed
+artificial series **cannot move the implied weights** of a linear estimator with a fixed penalty.
+#155 calls its branch exact; on exactly the class of estimator #154's identity describes it is
+**vacuous**. F5 measures `max |Δa|` to confirm that rather than assert it, and then asks the
+version that can carry information: whether the *forecast* changes, which is a statement about the
+target and not about the estimator. **Branch:** `max |Δa| = 0` ⇒ #155 is closed as written for any
+fixed-penalty linear estimator, and **#157's own "penalty fixed a priori rather than
+cross-validated" node is what makes its mandated placebo unable to fire** — a gate that cannot
+fire is not a gate.
+
+### T1 / T2 — a matched sign pair, gated behind F1. `price-trend`, `track: scout`.
+
+**Written only if F1 clears its kill line.** Base, fixed now and taken from the house table
+(2026-09-10) rather than from the seat, because the seat's four legs and six tranches damp every
+one-node contrast by ~1/N and the question here is a **direction**, not a level: a single 12−1
+momentum leg (252-day lookback, 21-day skip), hold-25/enter-15 band, **equal weight**, monthly
+`walkforward.rebalance_dates`, all 140 instruments holdable, no tranche overlap, no trim.
+
+- **T1** — pool cut to names whose type-demeaned `E/Var` is **at or above** its cross-sectional
+  median, then the identical book on that pool.
+- **T2** — byte-identical to T1 with the comparison operator **reversed** (below the median).
+
+**The deliverable is the paired `t` on T1 − T2 under `metrics.sharpe_diff_se`, not either
+Sharpe.** This is the 2026-09-22 lesson applied deliberately: a sign falsifier resolved
+(`t = −2.38`) where the magnitude comparison it came from did not (`t = +0.79`), and two arms of one
+gate are the most correlated pair this repo can build, so the closed form `0.568·√(1−ρ)` puts the
+SE where a direction is readable even though neither level will be.
+
+**Three cautions fixed in advance.** *(a)* Per 2026-09-25's fourth finding, a gate defined as a
+**fraction** of the cross-section is a breadth famine in the early decades of a growing universe —
+a median split needs `2 × MIN_NAMES` scoreable names — so **the validation column is the reading and
+the train column is a statement about the universe**; scoreable-name counts per era are printed
+before anything is believed. *(b)* Breadth and churn are matched holdings-only before the run;
+if the arms differ by more than ~20% of annual L1 the pair measures the broker (four consecutive
+non-`price-trend` trials were lost that way) and the contrast is reported gross as well as net.
+*(c)* **Scout track on purpose, and not as a loophole.** These arms do not compete for the seat,
+so `holdout_gate` is unreachable and **no holdout look is spent**; the seat is a 1.269 book and the
+required-gain table asks **+0.283** at the `rho` a one-node change to it would sit at, which
+nothing here can supply. `price-trend`'s cap is 2 and this pair is exactly 2.
+
+**Allocation.** At most 2 in `price-trend` (the pair, if licensed). The "at most 2 per family until
+four have leads" clause is lifted (every family carries a lead) and the "at least 1 in a family
+with no recorded trial" floor is vacuous (none remains). **A zero-trial session is an admissible
+outcome and is pre-registered as such**: if F1 misses its kill line and F3 comes back concentrated,
+there is no licensed candidate tonight and the deliverable is five screens and two closures.
