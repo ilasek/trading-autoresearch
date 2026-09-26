@@ -233,6 +233,30 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > Third, **the 2026-09-21 reconciliation in the entry above was withdrawn by the lab overnight**,
 > on the source's own instrument; see the 2026-09-22 open questions.
 >
+> **Status after session 43 (2026-09-26): the sixteenth unit is an *algebraic identity* — what an
+> estimator is when written out — and it closes one of the two "covered by analogy only" thin spots
+> named in the session-26 correction above — or rather half of it, said precisely.** That correction
+> listed `statistical-learning`'s **gradient-boosting / small-neural-net clause** as having no direct
+> coverage, and argued against reopening it. The **neural-net half is now covered**, and from an
+> unexpected direction: the random-Fourier-feature construction read tonight **is** a two-layer
+> neural network whose first layer is random and never fitted, so that half now has a note, a
+> closed-form construction recipe, a cost profile that fits this repo's per-call time budget, and a
+> proved statement about when it can help. **Gradient boosting still has no dedicated note** and this
+> file continues to argue against one: the comparative study in section 8 already reports that the
+> whole nonlinear gain traces to predictor interactions and that its fitted ensembles are tiny, which
+> is the part a boosting note would supply.
+> The substantive finding is that this family's literature is **split**, not settled — section 8's
+> four existing sources all argue few-and-shallow; tonight's three argue the opposite — and that the
+> disagreement resolves into a **measurable property of the universe** (the eigenvalue spectrum of the
+> factor second-moment matrix, #153), not into one side being wrong. Two things flagged up here.
+> First, the transferable output is an identity rather than a mechanism, and it is the strongest single
+> screen this folder has filed on learned models: **an overparameterised regression's forecast is a
+> similarity-weighted average of its own training-window returns, with weights independent of those
+> returns**, so persistence alone makes a learner a momentum rule and heteroskedasticity alone adds a
+> volatility overlay (#154). Second, `range-variance`'s **HAR-RV / vol-of-vol** clause — the other thin
+> spot in that list — was covered on 2026-09-21 and is no longer thin; **no clause named in
+> `program.md` is now covered by analogy only.**
+>
 > Two constraints in this file's coverage assumptions are now wrong:
 >
 > - Strategies receive **full daily OHLCV** (open, high, low, volume, dollar volume), not
@@ -843,6 +867,94 @@ benchmark, the **intra-industry** version (rank within peer group) outperforms b
 unconditional and the industry-rotation versions: the content is in **peer-relative** ranking, which
 is a free rebuild of any existing leg and a different question from the regional-neutralisation
 bracket the lab closed (that was about *weights*, this is about the *scoring benchmark*).
+
+**[2026-09-26] The family's biggest unexamined claim is that MORE parameters can be better, and the
+folder had zero coverage of it — the resolution is that the claim is conditional, and the condition is
+a property of this universe that the lab can compute.** Kelly–Malamud–Zhou (JF, venue tier 1, **215**
+Crossref citations, graded **B** here for one market, one asset, no costs and a contested headline)
+prove with random matrix theory that past the **interpolation boundary** `P = T` the usual overfitting
+logic reverses: the pseudo-inverse ("ridgeless") solution selects the *minimum-norm* interpolant, so
+`z → 0` still regularises, and out-of-sample performance **recovers** at high complexity `c = P/T`
+instead of degrading. Three secondary results are worth more here than the headline. *(i) Out-of-sample
+`R²` is an incomplete measure of a forecast's economic value, and one-directionally so*: MSE splits
+into a scale-free (correlation) part and a scale-dependent part, trading performance depends on the
+first, and a coefficient that is many times too large drives `R²` deeply negative without touching the
+correlation — so **an `R²` screen on a learned candidate would reject good ones and pass bad ones**.
+*(ii) Shrinkage and complexity are complements*, and the gain from shrinkage is largest exactly at
+`P ≈ T`, where the ridgeless estimator is provably at its worst — which makes "never run a learned
+candidate near `P ≈ T`" a design rule checkable before any data is touched. *(iii) The position rule is
+the forecast itself* (`π_t = S_t'β`), so expected return and *leverage* are the two recurring objects,
+and this repo's long-only gross-≤-1.0 budget replaces that map entirely. Construction, for the record,
+is cheap: random Fourier features `[sin(γω'G), cos(γω'G)]` with `ω ~ N(0, I)` are a **two-layer network
+whose first layer is random and never fitted**, so each rebalance is one closed-form ridge solve and
+any `P` is reachable from a handful of raw inputs. `validation_overlap: true`; `published_post_2018: true`.
+→ `notes/2026-09-26-virtue-of-complexity-return-prediction.md`
+
+**And the critique, which is the most useful single item this folder has ever filed on this family,
+because it is an identity rather than a result and it hands the lab a free screen it has no instance
+of.** Nagel (NBER WP, tier 2 venue but a Tier-1 author, **14** Crossref citations on the NBER record,
+graded **B** because the load-bearing part is checkable algebra) shows that for *any* predictive
+regression with `P > T` the ridgeless forecast is
+`r̂ = w'r` with `w' = z_t'Z_{t−1}'(Z_{t−1}Z_{t−1}')^{−1}` — **a weighted average of the training
+window's realised returns, with weights that do not depend on those returns at all.** The weights are
+the coefficients of a regression of today's predictor vector on the lagged ones, so they measure
+similarity, and two ordinary properties of real predictors then fix their shape: **persistence makes
+similarity mostly temporal proximity**, so weights decline with lag and the forecast is a
+recency-weighted average of recent returns — *a momentum rule built with no evidence that momentum
+exists*; and **heteroskedasticity makes all the weights shrink when predictor volatility rises**, so
+the position de-risks mechanically. A high-complexity ridgeless regression on persistent,
+heteroskedastic predictors and a short window therefore **is** a volatility-timed momentum strategy by
+construction, and a hand-built rule (linearly declining lag weights over 12 months scaled by inverse
+predictor variance) reproduces its positions and absorbs most of its abnormal return. Two placebo
+designs settle that it is not learning: on **artificial returns with a strong negative MA(2) component**
+(reversal instead of trend) the implied weights do not move and the strategy then loses; and a **wild
+bootstrap of the predictors** that destroys predictive content while preserving persistence and the
+volatility path leaves out-of-sample performance essentially intact. The geometric reason complexity
+cannot rescue a short window: with `T ≪ P` the fit projects onto a `T`-dimensional *random* subspace of
+the predictor space, so **what can be learned is bounded by `T`, not `P`**. Recorded honestly: the
+author does *not* claim complexity is generally harmful — he claims small training windows cannot
+support it, so the reachable response here is a **longer window with heavier shrinkage**, not
+abandonment of the family. `validation_overlap: true` (inherited sample); `published_post_2018: true`.
+→ `notes/2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`
+
+**The cross-sectional version names the condition under which a big model can pay, and it is
+pre-computable — which is why this vein produced a screen rather than a candidate.** Didisheim–Ke–Kelly–
+Malamud (NBER WP, **33** Crossref citations, graded **B**: not peer-reviewed, single market, **no costs
+or turnover anywhere**, but its Theorem 3 is proved) generalise the theory to a panel of
+characteristic-managed portfolios and decompose "limits to learning" into exactly two terms. **Implicit
+shrinkage `Z*(z;q;c)`, monotone increasing in `c`**: a feasible model with explicit penalty `z` behaves
+out-of-sample like an infeasible one with a *larger* penalty, because holding `z` fixed and adding
+parameters, the ridge constraint can only be met by shrinking the coefficient vector further — so
+**complexity is itself shrinkage, and effective shrinkage is not choosable independently of model
+size**. And **complexity risk `G`**, sampling variation that survives `T → ∞`, zero only at `c = 0`, and
+a function of the factor spectrum alone. The sign of the net effect is then decided by **the eigenvalue
+distribution of the factor second-moment matrix**, measured as
+`EffRank = (tr A)²/tr(A²)` (the inverse-Herfindahl of the eigenvalues): **dispersed spectrum →
+approximation gains dominate → complexity pays; concentrated spectrum → limits to learning dominate →
+"there are no benefits to complexity", and at small ridge penalties a complex model is strictly worse
+than one near zero complexity.** Their two calibrations differ *only* in that spectrum (effective rank
+~500 versus ~2.5). Two asymmetries recorded because they cut the lab's way: with *moderate* shrinkage
+the concentrated case carries no great **cost** either, so a null there is uninformative rather than
+evidence against learning; and the Sharpe-versus-complexity curve is **"double ascent"** — rising, then
+collapsing at `c ≈ 1`, then rising again — so a candidate that lands near the boundary by accident
+measures the boundary and nothing else. `validation_overlap: true`; `published_post_2018: true`.
+→ `notes/2026-09-26-large-factor-models-aipt-complexity.md`
+
+**What the three of them say jointly about this family, and it is a prediction this lab can test for
+free.** The spectrum condition is the variable that reconciles this section's two existing
+positions — the comparative study's "shallow beats deep, few features, dimension reduction beats
+selection" and the complexity literature's "more parameters is better". They are the same claim
+evaluated in different regimes. Three independent things then place *this* universe in the
+concentrated-spectrum regime where complexity is predicted not to pay: this folder's own measurement
+that the count of correlation eigenvalues ≥ 1 saturates long before the instrument count does; the
+Kozak–Nagel–Santosh result that sparsity works in the space of high-variance principal components
+precisely because near-arbitrage puts the premium in a few high-eigenvalue directions (the concentrated
+case by construction); and the large-stock characteristic-selection result that most characteristics
+stop working on a universe of large survivors. **So the folder's expected reading is that a big model
+does not pay here — and the point of #153 is to make that a measurement rather than an inherited
+belief.** Meanwhile the kernel identity supplies, for the first time, a *mechanism* for the lab's own
+2026-08-29 result that a ridge fed the incumbent's features "rediscovers the incumbent, worse": the
+rediscovery need not come through the features at all.
 
 ### 9. `liquidity-volume`
 
@@ -7470,6 +7582,124 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-09-25-short-term-residual-reversal.md`,
     `notes/2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`
 
+153. **FREE, first, and it is the only item this folder has ever written that can settle a whole
+    family's *method* question with one number that already exists in the data.** Didisheim et al.'s
+    Theorem 3 makes "is a large model worth anything here" a property of the **universe**, not of the
+    model: the sign of complexity's effect is decided by the eigenvalue distribution of the factor
+    second-moment matrix, read as `EffRank = (tr A)² / tr(A²)`, the inverse-Herfindahl of its
+    eigenvalues. Dispersed ⇒ approximation gains dominate and complexity pays; concentrated ⇒ limits
+    to learning dominate and *a complex model is strictly worse than a near-zero-complexity one at
+    small ridge penalties*. Compute it on the training-window second-moment matrix of **the managed
+    portfolios a learned candidate would actually use** — the ranked-characteristic sorts the lab
+    already builds are the cheap first pass — and say which matrix was used, because the instrument
+    return covariance is a *different* object and not the one the theory refers to. Both branches are
+    worth writing down in advance and both are informative: a small effective rank places this
+    universe in the source's own APT calibration and **closes `statistical-learning` for big-model
+    work on measured grounds rather than on the lab's three accumulated nulls**; a large one is the
+    first positive evidence this lab has ever had for spending a trial on one. The folder's own
+    expected reading is *concentrated*, for three independent reasons (its eigenvalue-saturation
+    measurement, Kozak–Nagel–Santosh's high-variance-PC sparsity, and the large-survivor
+    characteristic-selection result) — which is exactly why the screen is worth running rather than
+    assumed. Train only, no trial, no holdout. It scores returns, so it is **not** covered by the
+    holdings-only free-diagnostic exemption. Tier B source, proved theorem.
+    → `notes/2026-09-26-large-factor-models-aipt-complexity.md`
+
+154. **FREE, second, and it is a new operator class the way #150 was — a diagnostic of what an
+    estimator *holds*, computable before it is scored, and provably independent of the returns it
+    will be scored on.** For any predictive regression with `P > T` the ridgeless forecast is
+    `r̂ = w'r` with `w' = z_t'Z_{t−1}'(Z_{t−1}Z_{t−1}')^{−1}`: a weighted average of the training
+    window's realised returns whose weights **do not depend on those returns**. So print them. Plot
+    the time-series mean of `w` against lag, and separately the mean of `w` over time. Declining in
+    lag ⇒ the candidate is a momentum book whatever its feature list says, because persistence makes
+    similarity mostly temporal proximity; weight *magnitude* moving inversely with predictor
+    volatility ⇒ it also carries an unchosen volatility-timing overlay. This is
+    `notes/2026-08-17-moving-average-rules-anatomy.md`'s weight-vector screen extended from linear
+    filters to learners, and it is sharper there because the weights are return-independent by
+    construction. Two uses with the branches statable in advance. *(a)* Run it on the lab's own
+    2026-08-29 ridge: if its implied lag weights decay, its `rho = 0.774` to the champion is the
+    **estimator**, and the lab's design rule should be restated on implied weights rather than on
+    feature blocks; if they do not, the rho was the three trend features and the existing rule stands
+    unchanged. *(b)* Run it on any future learned candidate as a precondition of writing the file.
+    Honest boundary: the exact identity is the `P > T` case, and the lab's ridge was fitted at
+    `P < T`, so what transfers to it is the similarity-weighting *intuition* — the print is how to
+    find out whether it transfers. Tier B, no overlap on the algebra.
+    → `notes/2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`
+
+155. **FREE, third, and it is the first *placebo on an estimator* rather than on a label, a vintage or
+    a characteristic.** Build an artificial target by adding a simulated MA(2) component with strong
+    negative autocorrelation to the real return series, so the artificial series reverses where the
+    real one trends, refit the identical estimator, and compare implied weights (#154) before and
+    after. The branch is exact and belongs in a pre-registration: **a learning estimator's weights
+    must change sign; an estimator that imposes structure leaves them unmoved.** The source's own
+    version is stronger than a null — the unchanged weights then produce *negative* abnormal returns
+    on the artificial data, so claiming the estimator learned would require explaining why it
+    mislearns in precisely the wrong direction. A second, cheaper variant if the synthetic target is
+    judged too much machinery: wild-bootstrap the input features to destroy predictive content while
+    preserving their persistence and volatility path; performance surviving intact is the same
+    verdict. Both run on synthetic or resampled data only — no split is read, no market data is
+    fetched, and the holdout is untouched. Tier B.
+    → `notes/2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`
+
+156. **FREE, fourth, two design rules and a re-reading of a null the lab already owns.** *(a) Count
+    fitted parameters against training rows before writing the file, and stay clear of `c = P/T ≈ 1`
+    deliberately.* The interpolation boundary is the one place the estimator is provably at its worst;
+    the Sharpe-versus-complexity curve is **"double ascent"** (rising, collapsing at `c ≈ 1`, rising
+    again), so a candidate that lands near the boundary by accident measures the boundary and gets
+    filed as evidence about learned models. On this repo's monthly cadence and usable history `T` is
+    in the low hundreds, which makes `c ≈ 1` easy to hit without noticing. *(b) Complexity is itself
+    shrinkage.* The implicit-shrinkage term `Z*(z;q;c)` is monotone increasing in `c`, so a feasible
+    model with nominal penalty `z` behaves like an infeasible one with a **larger** penalty — and
+    `Z*` stays bounded away from zero in the high-complexity regime even in the ridgeless limit.
+    Consequence for the lab's 2026-08-29 ridge null: it ran at a heavier *effective* penalty than its
+    nominal one, so that result is evidence about effective shrinkage and not about its feature block,
+    and **a re-run with a lower nominal penalty is a different experiment from a re-run with fewer
+    features**. Corollary that protects the family from a false closure: in the concentrated-spectrum
+    regime with moderate shrinkage the theory predicts no great *cost* to complexity either, so a
+    flat complexity curve is uninformative rather than a refutation. Tier B on both, proved.
+    → `notes/2026-09-26-large-factor-models-aipt-complexity.md`,
+    `notes/2026-09-26-virtue-of-complexity-return-prediction.md`
+
+157. **SCOUT, and it is gated behind #153 in the strong sense — it should not be written at all unless
+    that screen comes back dispersed.** If and only if the spectrum says otherwise, the minimal
+    complexity candidate here is: random Fourier features `[sin(γω'G), cos(γω'G)]`, `ω ~ N(0, I)`,
+    built from the handful of price/volume/range features this repo can compute; **one** seeded draw
+    (never an average across draws); a training window as long as the history allows rather than the
+    literature's short one, because the sample-size objection bites hardest exactly there; ridge with
+    a penalty fixed a priori rather than cross-validated; and the output used as a **membership**
+    score — top-`k` selection under the existing long-only machinery — never as an affine position
+    rule. Its attraction is narrow and worth stating precisely: the first layer is random and never
+    fitted, so the whole model is one closed-form ridge solve per rebalance, deterministic given the
+    seed, which is the only complexity construction this folder has found that fits `CLAUDE.md`'s
+    ~60s-per-call budget and the causality check's 1e-6 determinism requirement at the same time. It
+    must carry #154's weight print and #155's placebo as preconditions; if the implied weights decay
+    in lag, it is a trend book and the trial should not be spent. Run it as a scout, never a
+    challenger. Tier B sources, both `validation_overlap: true`.
+    → `notes/2026-09-26-virtue-of-complexity-return-prediction.md`,
+    `notes/2026-09-26-large-factor-models-aipt-complexity.md`
+
+158. **ANTI-CANDIDATES, four of them, and they are the discipline that makes #157 safe to leave on the
+    list at all.** *(a) Never import a performance number from this literature.* Both complexity
+    papers report metrics **averaged across independent random-feature draws** (1,000 in the
+    time-series paper, 20 in the panel one), which is not one implementable model; this repo
+    evaluates one candidate file producing one weight path, and the honest expectation is a single
+    draw, which the sources themselves call noisy at low `P`. *(b) Never add an out-of-sample `R²`
+    gate to a learned candidate.* `R²` is one-directionally misleading for this purpose: MSE splits
+    into a scale-free correlation part and a scale-dependent part, trading performance depends on the
+    first, and a too-large coefficient drives `R²` deeply negative while leaving the correlation
+    intact — so the gate would reject good candidates and pass bad ones. The lab's net-Sharpe
+    objective is already the right target; the rule is only *not to add the screen*. *(c) Do not
+    describe a long-only complexity book as an SDF or a factor-model portfolio.* The object in the
+    panel paper is the tangency combination of signed characteristic-managed portfolios; under
+    long-only, gross ≤ 1.0 and a 25% cap that object does not exist, and only the **membership** half
+    survives — the same taxonomy as #152, now measured against a second literature. *(d) Do not read
+    "complexity is virtuous" as "big models beat small ones here".* The critique's own conclusion is
+    narrower than its title suggests and must be quoted narrowly: what is refuted is that complexity
+    lets a model **discover** predictability from a very short training window, not that complex
+    models are generally worse than sparse misspecified ones. Tier B throughout.
+    → `notes/2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`,
+    `notes/2026-09-26-virtue-of-complexity-return-prediction.md`,
+    `notes/2026-09-26-large-factor-models-aipt-complexity.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -7517,8 +7747,161 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-23 (session 40) | **The fourteenth unit is the *null* — not what the lab measures, but what it is measuring against — and it was named by the lab's own structural finding rather than audited into existence.** Sessions 28–39 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction. The 2026-09-22 nightly ended a seven-session zero-trial run, produced the lab's best-evidenced decorrelated leg, and then priced the route to the seat as **structurally shut**: as a leg gets more decorrelated the blend gain and Memmel's paired SE rise together and `t` barely moves. That is a statement about the *test*, and a grep across all 122 prior notes returned **zero** for `spanning` as a subject, `appraisal ratio`, `GRS`, `Kan–Zhou` and `de Roon` — the folder has six notes on comparing two books and none on the literature's own question, *does the incumbent's frontier already contain the candidate?* Three sources, all Tier A, **all read in full text**. The session's shape is one **framework** (the `α`/`δ` decomposition and the step-down test, both free to run on stored series), one **independent explanation of the lab's blocker** (the tangency channel is intrinsically near-unresolvable because it is a difference of estimated means — the third and most general instance of "the literature predicts the lab's null"), and one **correction that runs in the lab's favour** (a long-only spanning test is one-sided, which halves the p-value of a positive alpha — and which re-reads trial #97's `t = −2.38` as the null holding rather than a rejection). New tonight: **#139–#142**. | Huberman–Kandel 1987 (JF) (`2026-09-23-mean-variance-spanning-and-intersection.md`); Kan–Zhou 2012 (AEF) (`2026-09-23-spanning-test-power-and-step-down.md`); de Roon–Nijman–Werker 2001 (JF) (`2026-09-23-spanning-under-short-sales-and-costs.md`) — all three read in full text |
 | 2026-09-24 (session 41) | **The fifteenth unit is the *variable a promotion turned on* — the detector's cheapest form, run on the one number the lab moved last night.** Sessions 28–40 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null. The 2026-09-23 nightly promoted `pt_mom_evar_arbrisk` — the **first de-risking mechanism ever to survive here**, and a *membership* change rather than an exposure overlay — reporting mean pairwise correlation 0.242 → 0.174 at bit-equal HHI and bit-equal effective risk bets, naming its risk-bet statistic's third consecutive miss and its exact blind spot, and asking in its next-ideas whether a *direct* low-co-movement score beats `E/Var`. A grep across all 125 prior notes returned **zero** for `betting against correlation`, `diversification ratio`, `Choueifaty`, `most diversified`, `minimum correlation` and `correlation forecast`: **co-movement, the variable the promotion turned on, had no note as an object.** Three sources, all read in full, tiers A/B/C and the spread is deliberate — the Tier-A paper supplies the *identification* (`β = ρσ/σ_m`, sorted with volatility held fixed, and the finding that the **correlation** half carries risk-adjusted returns while the **volatility** half does not survive the fuller controls, which is the literature arriving at this lab's survivorship-artifact conclusion by an unrelated route); the Tier-B paper supplies the **closed form** of what a long-only variance objective does with those inputs (`w_i ∝ (1/σ²_εi)(1 − β_i/β_L)`, zero above the threshold — membership decided by systematic risk, ~80% of the universe excluded by the objective alone, which is trial #98's 62 → 48 contraction predicted); the Tier-C papers supply a **proved identity** that closes the named blind spot (`DR = [ρ̄(1−CR)+CR]^(−1/2)` — the risk-bet count is the `CR` half, the correlation the lab resolved to print is the `ρ̄` half) plus an invariance table that bites on a universe where 42 of ~140 instruments are ETFs. The session-34 acceptance criterion is met **conditionally and the ordering says so**: #143 and #144 are free and #143 is a live objection to a seated term, #145 is a free screen the lab's standing one does not cover, the book (#146) is a scout behind both, and #147 forbids importing the literature's effect size into a large-cap-survivor pool. New tonight: **#143–#147**. | Asness–Frazzini–Gormsen–Pedersen 2020 (JFE) (`2026-09-24-betting-against-correlation-decomposing-beta.md`); Clarke–de Silva–Thorley 2011 (JPM) (`2026-09-24-long-only-minimum-variance-composition.md`); Choueifaty–Coignard 2008 (JPM) + Choueifaty–Froidure–Reynier 2013 (JIS) (`2026-09-24-diversification-ratio-most-diversified-portfolio.md`) — all read in full text |
 | 2026-09-25 (session 42) | **The first session in fifteen aimed by the lab's own next-ideas list rather than by a gap detector, and the item it took is the one the 2026-09-24 nightly wrote against its own vein.** That nightly spent 2 of 8 trials, took `range-variance` from 0.494 to 0.734 on a book it then showed was "equal-weight the low-beta 37% of the universe", and ended its next-ideas with an honest admission — "a genuinely cold family, and the honest note is that tonight did not find one" — naming `statistical-arbitrage` (one recorded trial, a 0.468 lead) and pointing at **`program.md`'s standing question for that family: how the short leg's absence is handled**. This file had three notes on the family, all about *which residual* to build (PCA factor count, distance versus cointegration matching), and **none** about what the long-only constraint does to a residual book once it exists. Three sources, all read in full, tiers B/B/C, chosen so that each supplies a different one of the family's three construction nodes: the **residual** (the Management Science framework paper, whose `K = 0` control is the cleanest available pricing of the residualisation node and whose finding that the *signal function* matters more than the residual definition reframes the whole vein), the **signal** (Yeo–Papanicolaou's two screens on the estimate rather than on the deviation — selection by reversion speed, and a goodness-of-fit gate that has **no analogue anywhere in this repo**), and the **exposure** (Blitz et al.'s closed form `-σ²_β(μ^j + f^j_{t-1})` for what a contrarian sort loads on, and why residualising zeroes it *only* for a zero-investment book). The session's transferable output is a rule rather than a book — **membership survives the long-only budget, hedging does not** — and its sharpest result is adversarial to the lab's own refutation: both Tier-B sources find residualisation *helping* where `learnings.md` found it monotonically hurting, and the volatility-rescaling node neither of the lab's constructions used is exactly where this universe's survivorship artifact enters. New tonight: **#148–#152**. | Blitz–Huij–Lansdorp–Verbeek 2013 (JFM) (`2026-09-25-short-term-residual-reversal.md`); Guijarro-Ordonez–Pelger–Zanotti (Management Science; arXiv draft read) (`2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`); Yeo–Papanicolaou 2018 (Risk and Decision Analysis) (`2026-09-25-mean-reversion-time-screening-statarb.md`) — all three read in full text |
+| 2026-09-26 (session 43) | **The second consecutive session aimed by the lab's own next-ideas list, and it takes that list's item 3 — the narrowing rather than the widening one.** The 2026-09-25 nightly closed `statistical-arbitrage` for residual reversal on two pre-registered screens that were built to be able to disagree, closed `lead-lag-spillover` for want of an unmeasured sub-mechanism, and then named the only two genuinely open families by trial count: `statistical-learning` (3 trials, 0.875 lead, the highest non-`price-trend` result on the board) and `portfolio-learning`. This folder's section 8 covered four sources on that family and **all four argue the same direction — few predictors, shallow models, dimension reduction over selection**; a grep across all 131 prior notes returned **zero** hits for `virtue of complexity`, `random feature`, `ridgeless` and `benign overfitting`, i.e. the family's one literature that argues the *opposite* had never been read here. Three sources, full text read directly for all three, all reached without a publisher paywall (one journal article via a university economics department, one working paper via the author's own faculty page, one from NBER). The session's shape is **one claim, one identity that reinterprets it, and one theorem that makes the disagreement a measurable property of this universe** — and its output is five free screens plus a gated scout, not a candidate. | Kelly–Malamud–Zhou 2024 (JF) (`2026-09-26-virtue-of-complexity-return-prediction.md`); Nagel 2025 (NBER WP w34104) (`2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`); Didisheim–Ke–Kelly–Malamud 2024/2025 (NBER WP 33012) (`2026-09-26-large-factor-models-aipt-complexity.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-26] Read this first: the family the lab named as one of only two still genuinely open had
+  been covered four times, and every one of those four sources argued the same side of a live
+  disagreement.** The 2026-09-25 nightly spent 2 of 8 trials (both scouts, **holdout not read**, running
+  total of looks still **six**), closed `statistical-arbitrage` for residual-reversal work on two
+  pre-registered screens built to be able to disagree with each other — one of which *falsified* this
+  file's #148 mechanism rather than merely failing to support it — closed `lead-lag-spillover` for want
+  of any unmeasured named sub-mechanism, and then named the genuinely open families by trial count:
+  **`statistical-learning` (3 trials, a 0.875 lead, the highest non-`price-trend` result on the board)**
+  and `portfolio-learning`. Tonight took the first. Section 8 held four sources and all four argue
+  *few predictors, shallow models, dimension reduction over selection*; a grep across all 131 prior
+  notes returned **zero** for `virtue of complexity`, `random feature`, `ridgeless` and
+  `benign overfitting`. The literature that argues the opposite had never been read here, and reading it
+  produced **five free screens and one gated scout, no candidate**. New: **#153–#158**. Still unrun and
+  carried unchanged: **#135** (**fifth** session, and still the oldest unspent free item), **#139**,
+  **#143**, **#144**, **#109** (**nineteenth**), **#82** (twentieth), **#94** as standing discipline,
+  **#49** (twenty-ninth), plus **#105–#107** and **#110**'s shrink half. **#148 and #149 are closed** —
+  both run on 2026-09-25, both negative, #148 on its own pre-registered anti-signed branch. **#150 has
+  content and no single sign** and is now the lab's own next-ideas item 1. **#151 is dead by its gate**
+  (it was gated behind #148). **#145 was exercised** inside that session's F5 confound check and
+  behaved as designed. **#152 stands**, and #158(c) is its independent second instance.
+- **[2026-09-26] What should aim the next session, in order — and the lab's own two items still come
+  before all of this file's, as they did last night.**
+  - **The lab's #1 (its re-specification of #150) and its #2 (#135) go first.** Both are free, both are
+    the lab's own, and the first is *already measured to have content* (`+0.0112` on 12-1 momentum, a
+    **signal-dependent sign**) with its own pre-registration rule attached: name the expected sign in
+    advance and use a **local** quality variable, because the global market `R²` failed the beta gate at
+    0.59. Nothing tonight competes with that ordering.
+  - **Then #153**, which is the item this file would put first among its own, and the reason is that it
+    is the only screen here that can *close a family on measured grounds* instead of on accumulated
+    nulls. One number — the inverse-Herfindahl effective rank of the managed portfolios' training-window
+    second-moment matrix — decides, by the source's own theorem, whether a large model can pay in this
+    universe at all. Both branches are written down in advance and both are useful. Say which matrix was
+    computed; the instrument return covariance is not the object the theory names.
+  - **Then #154**, free, and it is the genuinely new *operator class* in this batch, in the same sense
+    #150 was: a diagnostic of what an estimator **holds**, available in closed form and **provably
+    independent of the returns it will be scored on**. Its most valuable single use is retrospective —
+    run it on the lab's own 2026-08-29 ridge and find out whether that result's `rho = 0.774` was the
+    three trend features or the estimator. The two answers imply different design rules, and the lab is
+    currently carrying only one of them.
+  - **Then #155**, free, and note what kind of object it is: this lab has run placebos on region labels,
+    on formation vintages and on characteristics that read no market data, but never on an **estimator**.
+    The branch is exact — reverse the target's autocorrelation and the implied weights of a learning
+    estimator must change sign — which makes it one of the few pre-registrations available here whose
+    failure mode is unambiguous.
+  - **Then #156**, two design rules and a re-reading, all free and all on paper.
+  - **#157 is a scout and it is gated behind #153 in the strong sense: it should not be written unless
+    that screen comes back dispersed.** If the spectrum is concentrated, the trial is forbidden by the
+    same logic that produced the screen, and writing it anyway would be spending a trial to re-measure
+    a theorem.
+  - **#158 is four prohibitions and one of them is about wording**, like #152's: a long-only complexity
+    book may not be called an SDF or a factor-model portfolio, because it is not one.
+- **[2026-09-26] The transferable output, and it is an *identity* rather than a mechanism — the first
+  time this folder has filed one.** For any predictive regression with more parameters than training
+  rows, the forecast is `w'r` with `w' = z_t'Z_{t−1}'(Z_{t−1}Z_{t−1}')^{−1}`: **a weighted average of the
+  training window's own realised returns, with weights that do not depend on those returns**. The
+  weights measure similarity between today's predictor vector and the lagged ones, so two ordinary
+  properties of real features fix their shape without any evidence entering: **persistence makes
+  similarity mostly temporal proximity**, which makes the weights decline with lag and the forecast a
+  momentum rule; and **heteroskedasticity shrinks all the weights when feature volatility rises**, which
+  adds an unchosen volatility-timing overlay. Carry the rule past this family: **a learned candidate's
+  correlation to a trend incumbent is a property of the estimator and the window, not only of the
+  feature list** — which is why #154 screens implied weights rather than inputs, and why the lab's
+  standing design rule (2026-08-29, "no single feature that already works alone") is necessary but not
+  sufficient. The second half of the output is that this is the **sixteenth unit of the unit-of-check
+  lesson and the first that is an algebraic identity**: sessions 28–42 walked families → clauses →
+  operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape
+  of the output → a column of the input → a primitive of a cited theory → the reference a measurement is
+  taken against → the dependent variable → the precondition of a prediction → the null → the variable a
+  promotion turned on → a constraint's two halves. Tonight's unit is **what an estimator is, written
+  out**, and it is checkable on paper with no data at all.
+- **[2026-09-26] A tension recorded, and unusually it is *within* the family's own section rather than
+  between the folder and the lab.** Section 8's four existing sources all point one way — the spline-GLM
+  result that curvature buys nothing, dimension reduction beating selection, shallow beating deep,
+  fifteen of thirty-six characteristics surviving and only seven at the largest size cut, sparsity
+  failing in characteristic space. Tonight's three point the other way, and the resolution is **not**
+  that one side is wrong: Didisheim et al.'s Theorem 3 makes the sign of complexity's effect a function
+  of **the eigenvalue spectrum of the factor second-moment matrix**, so the two literatures are the same
+  claim evaluated in two regimes (their own calibrations differ in *nothing else* — effective rank ~500
+  versus ~2.5). **This file's expected reading is that this universe is the concentrated case**, on three
+  independent grounds already recorded here: the eigenvalue-saturation measurement in
+  `notes/2026-08-21-effective-number-of-bets-diversification-measurement.md`, Kozak–Nagel–Santosh's
+  finding that sparsity works in high-variance PC space precisely because near-arbitrage puts the premium
+  in a few directions, and the large-survivor result that most characteristics stop working on a universe
+  like this one. **Neither side is adopted here**, #153 states both branches in advance and costs
+  nothing, and the honest note is that the folder is predicting its own screen's answer — which is why
+  the screen is worth running rather than skipping.
+- **[2026-09-26] A rubric row said out loud, and tonight's version is about *contestation* rather than
+  about tier.** The headline empirical claim of the flagship source is disputed by **five** independent
+  lines of work, of which this session read one in full and **records the other four as not read**
+  (an attainability objection about averaging across random-feature draws; an implementation objection
+  about a zero-intercept restriction and a cross-draw aggregation scheme, with a published reply from the
+  original authors; a measurement-error limit; and information-theoretic impossibility bounds for windows
+  this short). **Nothing in #153–#158 rests on any of the four**, and nothing rests on any performance
+  claim from any of the three sources read: #153 rests on a proved theorem, #154 on an algebraic
+  identity, #155 on two placebo *designs*, #156 on two closed-form statements, and #158 on a budget
+  constraint plus the sources' own reported methodology. The graded consequence: **the Journal of Finance
+  article is Tier B here despite a Tier-1 venue and 215 citations** — one market, one asset, no costs, and
+  no replication that survived scrutiny — and the two working papers are Tier B because their
+  load-bearing parts (an identity, a theorem) are checkable without their data, not because their
+  empirics are strong. **Neither working paper is peer-reviewed and neither models transaction costs or
+  turnover anywhere**, which for a monthly-rebalanced book built from up to 360,000 managed portfolios is
+  the gap that matters most to this repo.
+- **[2026-09-26] Access notes: the paywall was never reached, the faculty-page channel worked first-try
+  for the fourth consecutive session, and there is a new CDN-redirect wrinkle worth recording.**
+  - **A university *department* page is a fourth member of the 2026-09-18 faculty-page family.**
+    `economics.yale.edu/sites/default/files/...` served the **typeset Journal of Finance version of
+    record** of a closed article on the first request. Generalise: after the author's own domain and a
+    business school's review site, try the department's file uploads.
+  - **`voices.uchicago.edu` returns HTTP 302 to a `bpb-us-w2.wpmucdn.com` CDN path and `curl -L` did not
+    follow it** — the transfer reported code `000` with an empty file on the first attempt and `302` with
+    `size=0` on the second, which reads like a dead host rather than a redirect. `curl -I` showed the
+    `location:` header, and fetching that URL directly worked immediately. **A ninth refusal-shaped
+    behaviour to add to the list, and the cheapest one to misdiagnose**: when a curl reports `000` or a
+    zero-byte 302, print the headers before concluding the host is unreachable. WordPress-multisite
+    faculty pages (`voices.*`, `sites.*`) are the likely family.
+  - **Two hosts genuinely refused and one candidate source was lost to them.** SSRN returned the
+    expected HTTP **403** Cloudflare challenge on the implementation-critique paper, the Aalto seminar
+    path a search index advertised returned **404**, and six guesses at the author's own PDF naming
+    scheme all returned 404. **Recorded as not read**; nothing above rests on it, and a later session
+    that wants it should try a conference-society archive (per 2026-09-25's EFMA note, `http://` included)
+    rather than re-trying SSRN.
+  - **Index behaviour, eighth consecutive session, same split-record shape and now in triplicate.**
+    Semantic Scholar returns *not found* for the JF DOI `10.1111/jofi.13298` and indexes only the
+    working-paper stub at **1**, while Crossref has the article at **215**. The critique exists as
+    **three** Crossref records — an NBER DOI at **14** and two SSRN DOIs at **1** and **0** — for one
+    work. The panel paper reads **33** on Crossref against **5** on Semantic Scholar. **Per the rubric no
+    tier moved on any of this.** Semantic Scholar's DOI endpoint answered four queries and then returned
+    one **429** on a title search, as documented; OpenAlex was not needed and its budget was not spent.
+  - **Author-metadata warning, fifth consecutive session.** A search summary gave the panel paper's
+    author list as *Didisheim, Ke, Kelly, Malamud, Xiu*; the title page gives **Didisheim, Ke, Kelly,
+    Malamud** and no fifth author. Check an author list against the document.
+- **[2026-09-26] Protocol note, twentieth session running — and tonight the *evidence* is better than it
+  has been, while the underlying disagreement is unchanged and still a human's to fix.** The
+  session-start hook printed "integrity check OK — on main, level with origin/main, no stray branches"
+  while `git status -sb` reported **`claude/tender-galileo-3cqgv2`**, and this session ran
+  `git checkout main && git reset --hard origin/main` before any work, so tonight's notes are on `main`
+  only. Two things are new and both should be read by whoever fixes this. **First, the per-run branch
+  namespace has changed**: nineteen sessions were handed `main-<suffix>` branches and this one was handed
+  `claude/<name>-<suffix>`. Any forensics or cleanup script keyed on `main-*` will silently miss the new
+  ones. **Second, the remote is currently clean and verifiably so** — `git branch -r --no-merged
+  origin/main` returns nothing across all 15 remote branches, and the 2026-09-25 session's work is in
+  `main` (`9deeba2`), because that session merged it by hand after its container restarted and its own
+  integrity hook caught the strand. That is the fourth-plus-one instance of the pattern its post-session
+  entry documented: **there is no automatic merge pipeline; four of the previous fourteen per-run branches
+  were stranded and recovered manually by a later session, at the cost of part of that session's night.**
+  So the honest statement after twenty sessions is that the discrepancy has cost real work four times,
+  the cost lands on the *next* session, and the failure mode is a split `trials.jsonl` that understates
+  the deflated-Sharpe bar for every later trial. **A human should make the hook, the harness's branch
+  requirement and `CLAUDE.md` agree**; until then every session ends by choosing between two
+  instructions, and this one chose the repo's rules, as `research/README.md` step 6 and this job's
+  standing prompt both require.
 
 - **[2026-09-25] Read this first: tonight took the coldest family on the board, and what it found is
   that this file has been answering the wrong question about it for three sessions of coverage.**

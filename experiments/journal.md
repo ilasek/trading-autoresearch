@@ -15067,3 +15067,5 @@ force-pushed.
 branch requirement and `CLAUDE.md` disagree, and the disagreement has stranded four sessions in
 eighteen. Making the three agree is a one-time edit to files an agent may not touch. Until then
 every session ends by choosing between two instructions, and the failure mode is silent.
+
+## Research session — 2026-09-26 (learning agent): 3 notes added, see research/SUMMARY.md
