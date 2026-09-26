@@ -15417,3 +15417,186 @@ screen that did resolve did so against the idea it was proposed to support — m
 concentrates in the **least**-replicable names at `t = −2.15` with an equal-volatility control and a
 flat placebo, which is the sign the seat already holds — and that is a component of the incumbent
 measured on the mean channel for the first time, not a candidate.
+
+## Session summary — 2026-09-26 (nightly)
+
+- **Integrity check — clean, and checked rather than assumed.** `git fetch origin --prune` put HEAD
+  on the harness's per-run branch **`main-jhhr6j`** at `4ca392e`, **bit-identical to `origin/main`**
+  (`git log origin/main..HEAD` empty), and `git branch -r --no-merged origin/main` returned
+  **nothing** — all fifteen prior `main-*` remote branches are ancestors of `origin/main`, so
+  `trials.jsonl` is not split and the deflated-Sharpe bar is intact. Per the standing prompt the
+  session was moved onto **`main`** before any work began, and per last night's `## Protocol issue`
+  it is pushed to **both** `main` and the harness's branch. **Twentieth session with the same
+  three-way disagreement between the hook, the harness and `CLAUDE.md`.**
+- **Engine tests green (33 passed).** Store fresh **through 2026-09-26**, the latest trading day.
+- **Experiments run: 0 of the 8-trial budget. Trial count stays 102, effective 31.** Both branches
+  that could have licensed a candidate fired the other way, and the fact is recorded rather than
+  worked around: a decorrelated trial costs +1 effective trial and permanently raises the bar for
+  every later session, so the budget is a ceiling and not a quota.
+- **Holdout: NOT READ. Zero looks.** The running total since 2026-08-17 stays at **six**.
+- **The champion seat did not move and was never challenged.** `pt_mom_evar_arbrisk`, validation
+  1.269, seated 2026-09-23.
+- **Six screens, nine readings, every branch pre-registered before any number existed. Three items
+  closed, one imported screen disqualified, one carried item discharged.**
+
+### The night in one line
+
+The screen the research folder ranked first of its own — the one item it said could close a whole
+family with a single number — **turned out to have a free parameter in its own input**: the same
+universe reads `concentrated` on fourteen characteristics and `dispersed` on eight, so neither
+pre-registered branch could fire and the family neither closed nor opened.
+
+### Verdicts
+
+No candidate files were written, so there is nothing to verdict. `trials.jsonl`,
+`leaderboard.json` and `champion_card.json` are byte-unchanged; only `experiments/journal.md` and
+`experiments/learnings.md` were edited this session.
+
+### Best finding: the seat's own term has a mean-channel reading, and it arrived from an operator pointed the other way
+
+`SUMMARY.md` #150's class was measured on 2026-09-25 with the **global** market `R²` and put 12−1
+momentum's IC in the **well**-estimated half (+0.0112) while failing the beta gate at 0.59. Re-run
+with the one **local** quality variable that passes that gate — type-demeaned `E/Var` at the seat's
+own `K = 4` constants, `|ρ(E/Var, β̂)| = 0.395` — the sign **flips and resolves**: spread
+**−0.0343 at t = −2.15** (fixed-count version **−0.0512 at t = −1.96**), placebo flat, and
+momentum's IC in the bottom 20 by `E/Var` is **+0.0505 (t = +2.67)** against **−0.0007** in the top
+20, on a sample where momentum's pooled IC is a null. **Momentum's cross-sectional content on this
+universe lives almost entirely among the least-replicable names** — which is exactly the direction
+`pt_mom_evar_arbrisk` scores. #98's promotion entry recorded it as winning purely on the denominator
+("every basis point is denominator"); the mean channel was never measured and now points the **same**
+way. The pre-registered expectation that the two channels would *oppose* is refuted.
+It passes the control that has closed three veins, and passes it harder than any predecessor: the
+two halves sit at **identical** trailing-volatility percentiles (0.509 / 0.509) rather than merely
+weakly correlated, and the sign survives in all three volatility terciles.
+**And it licenses no candidate**, for a structural reason rather than a matter of taste: `E/Var`
+needs 250 days of complete returns on ≥45 names, so any book gated on `E/Var` breadth is a
+**post-1997** object and could only be scored against a champion charged from 1962. The comparison
+the gate exists to make does not exist on this train split.
+
+### Second finding: an imported screen disqualified on the free parameter in its own input
+
+`EffRank = (tr A)²/tr(A²)` on the characteristic-managed portfolios: **3.42 = 0.244·P** on all
+fourteen characteristics (the `concentrated` branch, which would have closed `statistical-learning`
+for big-model work) and **5.10 = 0.638·P** on eight de-duplicated ones (the `dispersed` branch,
+which would have licensed the folder's gated scout). Three nested momentum legs and four
+volatility/range estimators are near-duplicates and duplicates concentrate a spectrum mechanically.
+So #153's load-bearing claim — that Theorem 3 makes complexity's sign *a property of the universe,
+not of the model* — **is false for a feasible screen**: a candidate moves itself between branches by
+de-duplicating its own inputs. **Neither branch fires. #157 is not licensed and the family does not
+close.** Picking the 0.638 to license the scout would be choosing a branch off tonight's numbers.
+Two riders kept: the **i.i.d. control reads 0.775·P, not `P`** (it inherits the real panel's unequal
+column SDs), so the **placebo's 0.875·P is the right ceiling**; and the eigenvalue shares are the
+same fact and inherit the same dependence, so they are not independent corroboration.
+
+### Third finding: two more folder items fell to normalisation and to algebra
+
+- **#154 is FLAT.** Pooled across prediction dates the ridge's implied weights read
+  `corr(|a|, lag) = −0.184`, i.e. declining — #154's momentum branch. Normalised **within** each
+  prediction date every bucket is within **±4%** of flat (newest/oldest ratio **0.997**, pooled
+  `+0.048`); the pooled reading was the `1/n` intercept comparing **row counts**, not lags. Branch
+  fires the second way: `sl_ridge_xs_walkforward`'s `rho = 0.774` was **the three trend features**,
+  and the 2026-08-29 design rule stands. The mechanism is the house table itself — #154 needs
+  persistent **raw** features and this repo **ranks** every feature every date, which leaves the
+  similarity kernel no time dimension.
+- **#155 cannot fail.** `max |Δa|` over **4,491,229** implied weights under an
+  autocorrelation-reversed target (per-name lag-1 +0.004 → −0.499) is **0.000e+00**, because `a` is a
+  function of the feature matrix alone. **#157's own "penalty fixed a priori" node is what makes its
+  mandated placebo unable to fire.** A placebo that cannot fail is decoration.
+
+### Two carried items discharged
+
+- **#135, fifth session and the oldest unspent free item, is answered.** Every live score's
+  reachable half is the majority (`−E/Var` 0.568, vol-of-vol 0.620, `peer_ret` 0.394), which with
+  2026-09-06's five scores makes **eight, not one above 1.0**. The addition the note lacked: the
+  **placebo reads 1.831**, so "ratio > 1" is simultaneously #135's predicted signature *and* the
+  null's, and the ratio is uninterpretable unless the top band is significant on its own.
+- **#109, nineteenth session, discharged on the selection that matters.** Winner
+  `pt_mom_evar_arbrisk` 1.269, runner-up `mom_hzn_avg4_nobuffer` 1.229, `rho` 0.9005, paired SE
+  0.1797, **gap/SE = 0.22** — the regime where the Andrews–Kitagawa–McCloskey median bias is
+  *largest*. **The seat's 1.269 is a selected maximum and should be discounted, not quoted as a
+  level**, and the book it is 0.22 SE above is the one whose holdout collapsed to 0.691. Fifth
+  confirmation that `SE ≈ 0.568·√(1−ρ)` transfers (0.1792 against 0.1797).
+
+### Protocol and allocation notes
+
+- **Budget: 0 of 8, and every unspent trial was refused by a pre-registered gate.** F1's kill line
+  was missed on sign (its negative branch was written down as a zero-trial branch before the
+  measurement); #157 was gated behind F3 and F3 returned a range rather than a number; #154, #155
+  and #135 are diagnostics with no candidate attached.
+- **Allocation: zero trials, so no family cap or floor binds.** The "at most 2 per family until four
+  have leads" clause is lifted (every family carries a lead) and the "at least 1 in a family with no
+  recorded trial" floor is vacuous (none remains). `price-trend`'s cap of 2 was not approached.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's
+  to rule on. Tonight's F3 called that function with its correct five-argument signature.
+- **Nothing frozen was touched.** `git diff` against the session's base commit is **two files**:
+  `experiments/journal.md` and `experiments/learnings.md`. `engine/`, `scripts/`, `tests/`, `data/`,
+  `program.md`, `CLAUDE.md`, `research/`, `trials.jsonl`, `leaderboard.json` and
+  `champion_card.json` are all unchanged.
+- **No engine issues encountered.** One bug in tonight's own screen was caught before it reached a
+  conclusion and is recorded in F4: the pooled implied-weight reading inverted the finding, and the
+  within-date normalisation is what fixed it.
+- **A stale-list note for the learning agent, since `research/` is read-only here.** The
+  2026-09-26 open-questions block carries **#139, #143 and #144 as "still unrun"**. All three were
+  run on **2026-09-24** and are in `learnings.md` under that date — #139's step-down spanning at
+  `K = 1` (and again at `K = 2` on 2026-09-25), #143's 3-day-return correlation bias (retired for
+  ranks, still owed to levels), and #144's `DR = [ρ̄(1−CR)+CR]^(−1/2)` identity (reconciled to
+  4.44e-16, and retired as a drawdown predictor on 2026-09-25).
+
+### Next ideas, in order, with provenance
+
+1. **A de-duplicated re-statement of #153, if it is worth anything at all — and say what it decides
+   before running it.** Tonight's finding is that `EffRank` is a property of the feature list, so the
+   only honest version of the screen is *conditional on a specific candidate's feature set, computed
+   as a precondition of writing that candidate's file*, never as a family verdict. Provenance:
+   `SUMMARY.md` #153 plus tonight's F3b. **Anti-candidate attached: do not re-run it on another
+   characteristic list and report the number as a property of this universe.**
+2. **#82**, carried for a twenty-first session: the pre-registered band width from
+   `MSE(J) = V̂⁽¹⁾·J/(nT) + B̂²/J²` rather than from a copy. Free, and it is now the oldest unspent
+   free item on the list after #135's discharge tonight. Provenance: `SUMMARY.md` #82.
+3. **#49**, carried for a **thirtieth** session: the asymmetric, signal-conditional no-trade band
+   that re-times existing turnover rather than adding any. It is the one *build* on the folder's list
+   that is not gated behind a screen that has now failed, and the seat's 3.01x turnover is the base
+   it would sit on. Provenance: `SUMMARY.md` #49.
+4. **#110's shrink half, #105–#107**, unrun. Provenance: `SUMMARY.md`.
+5. **ANTI-CANDIDATE, new tonight and the most tempting thing in this entry**: do **not** build a
+   book gated on low `E/Var` off F1/F1c's `t = −2.15`. The direction would be chosen off tonight's
+   screen; the score is a component already seated at `rho` ≈ 0.95+ where the required-gain table
+   asks **+0.283**; and the construction is a **post-1997 object** that cannot be scored against a
+   champion charged from 1962. Shrinking the name count to reach further is an `E/Var` knob.
+6. **ANTI-CANDIDATE, new tonight**: do not read F1c's `+0.0505 (t = +2.67)` momentum IC in the
+   bottom 20 by `E/Var` as a licence for a narrow momentum book. It is a *conditional* reading on a
+   1997+ sample whose unconditional counterpart is a null, and the 2026-08-30 over-prediction rule
+   applies at full strength (the screen is equal-weight, the seat is magnitude-weighted, and
+   2026-09-08 records that the bias runs the *other* way in that case — which makes the size of the
+   effect unknown rather than merely discounted).
+7. **ANTI-CANDIDATES carried, unchanged**: no `E/Var` knob (`K`, window, lag, horizon); no `K` off
+   the 2026-09-24 locality curve; no variance **level** for the ratio; no fourth aggregation operator
+   over the union legs; no factor-neutral or long-only residual book described as neutralised (#152);
+   no building for the variance channel and expecting this gate to reward it (#142); no re-derivation
+   of the blend board; no 5-day reversal book off the 2026-09-25 `t = +10.59` IC.
+
+### For the human — three things, and none of them is about the seat
+
+**(a) The seat's headline number is a selected maximum 0.22 standard errors clear of its runner-up,
+and that is now measured rather than suspected.** The ⚠ standing concern has been stated three ways
+— unresolvable promotion *steps* (no promotion clears `|t| = 2`), unresolvable family *members*
+(CSCV/PBO 0.454), and as of tonight an unresolvable *maximum* (`gap/SE = 0.22`, the regime of
+maximum winner's-curse bias). The runner-up it sits 0.22 SE above is `mom_hzn_avg4_nobuffer`, whose
+holdout collapsed to 0.691. Nothing here asks for the seat to move; it asks that **1.269 stop being
+quoted as a level**, and the two levers that would let the gate decline to promote on an
+unresolvable margin — a second scored quantity, or a rationed holdout — both live in frozen files.
+
+**(b) The research folder's top-ranked screen failed on the same habit the lab keeps relearning, and
+this is the third consecutive night the folder's own pre-registered numbers killed the folder's own
+candidate.** That is the adversarial shape working, and it is worth saying that the failure here is
+*more* useful than a pass: #153 would have closed a family on a number that a candidate can choose.
+The folder's rubric is good; what tonight adds is that **an imported screen needs its own invariance
+check before its branches are believed**, which the folder could apply to itself.
+
+**(c) The branch disagreement is twenty sessions old and the four stranded sessions it has already
+cost are now documented in main's own commit messages** (last night's `## Protocol issue` entry).
+Tonight cost nothing because HEAD was bit-identical to `origin/main` and the work is pushed to both
+branches — but that is care, not a fix. **A human should make the session-start hook, the harness's
+per-run branch and `CLAUDE.md` agree**, because the failure mode is a silently split `trials.jsonl`,
+which corrupts the deflator for every later trial.
