@@ -16103,6 +16103,35 @@ mission: a `price-trend` candidate's `rho` to the seat is decided almost entirel
 ten weights, which is why decorrelating inside this family has been impossible and why the
 required-gain table's `rho` ~ 0.99 column is the only one this family ever reaches.
 
+### F7 — the cost axis is closed on the SEAT, not on the universe, and the biggest target cannot be fixed
+
+F5's identity applied to the non-`price-trend` leads says the closure is about this seat and not about
+this universe: `sc_seasonal_depth_narrow` leaves **+0.1434** of Sharpe in cost (20.56x turnover on
+0.2150 vol) and `pl_maxleg_signal_blend` **+0.1192** (14.05x on 0.1768) — 3 to 6 times the resolution
+floor. The seasonal lead was therefore the session's obvious second trial, and measuring it first
+killed it. Its own emitted validation rows, 72 month-ends, 10.40 names:
+
+    month-to-month Jaccard of the held set        mean 0.0611   median 0.0526
+    fraction of the book replaced each month      mean 0.8869   min 0.727   max 1.000
+    months replaced COMPLETELY                    16 of 71
+    full rotations implied by 20.56x/yr           10.28        month-end rebalances per year  12
+
+**The book replaces 88.7% of itself every month while already carrying a hold-15/enter-10 hysteresis
+band — so that band is inert.** The churn is the signal rather than the construction: "the name that
+does well in the month about to start" is a different object every month, so a postponement rule has
+nothing to postpone *into* — the name it would retain has no claim on the following month either.
+Heston-Sadka's objection to trading their own signal ("requires rebalancing the entire portfolio every
+month") is confirmed here as a measurement rather than repeated as a quotation, **and it takes their
+own proposed remedy with it.** No trial was written.
+**What stays open, and it is the one live cost target on the board:** `pl_maxleg_signal_blend`'s 14.05x
+is **not** measured. Its +0.1192 is 1.5 to 4 times the resolution floor and the screen that decides it
+is the one above — month-to-month holdings overlap, free, and it must be run before any candidate file.
+
+**The general rule earned here, which is the companion to F5's.** F5 says price the cost axis before
+proposing a cost remedy; F7 says **measure the target book's month-to-month holdings overlap too,
+because a remedy that re-times trades is worthless where the holdings do not persist — and the presence
+of a band in the file is not evidence that the band binds.**
+
 ## Session summary — 2026-09-27 (nightly)
 
 - **Integrity check — clean, and checked rather than assumed.** `git fetch origin --prune` put HEAD on
