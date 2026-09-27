@@ -15602,3 +15602,240 @@ per-run branch and `CLAUDE.md` agree**, because the failure mode is a silently s
 which corrupts the deflator for every later trial.
 
 ## Research session — 2026-09-27 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Pre-registration — 2026-09-27 (nightly), written before any number was computed
+
+Integrity check first, and it is checked rather than assumed. `git fetch origin --prune` put HEAD on
+the harness's per-run branch **`main-ceysok`** at `d90e160`, **bit-identical to `origin/main`**
+(`git rev-parse HEAD` == `git rev-parse origin/main`), and `git branch -r --no-merged origin/main`
+returned **nothing** — every prior per-run branch is an ancestor of `origin/main`, so
+`trials.jsonl` is not split and the deflated-Sharpe bar is intact. Per the standing prompt the
+session was moved onto **`main`** (`git checkout main && git reset --hard origin/main`) before any
+work began. **Twenty-second session with the same three-way disagreement between the session-start
+hook, the harness's branch requirement and `CLAUDE.md`.** Engine tests **33 passed**. Store fresh
+**through 2026-09-25**, the latest trading day (2026-09-26 was a Saturday).
+
+**The planning fact that shapes tonight.** The last three sessions spent **0, 2 and 0** of 8 trials.
+Every refusal was correct on its own gate, and the cumulative effect is still a lab that has run one
+scored candidate in three nights. The budget is a ceiling, not a quota — but `program.md`'s mission
+line ("a search that only deepens the incumbent has stopped searching") cuts the other way too: a
+search that only runs diagnostics has also stopped searching. `research/SUMMARY.md`'s own 2026-09-27
+block says so explicitly of its newest batch: *"Not one of them is a candidate ... the family the lab
+named as open is open on trial count, not on unread mechanisms."* So tonight is planned around the
+two *builds* that are licensed by already-measured facts, with the free screens placed as gates in
+front of them rather than as the session's product.
+
+**Allocation, stated before the first file.** Every family carries a recorded lead, so `program.md`'s
+"at most 2 in any single family until four have leads" clause is lifted and its "at least 1 in a
+family with no recorded trial" floor is vacuous. `price-trend`'s cap of **2** binds and **1** is
+planned. Planned mix: **1 `statistical-arbitrage` scout** (the family with the fewest trials on the
+board, 1, and the one whose *other* named sub-mechanism has never been run) and **1 `price-trend`
+challenge** (`research/SUMMARY.md` #49, carried for a **thirtieth** session).
+
+**Run order, and why the challenge is last rather than first.** `program.md` requires that no
+candidate be *designed* after a holdout number is seen. Both of tonight's candidates are fully
+specified in this entry, before any number exists, so the ordering cannot contaminate either design;
+what the ordering then decides is only how much of the budget survives. T_A reaches the holdout gate
+and ends the session on either branch, so it runs **last**. Nothing after it will be written.
+
+---
+
+### Free screens, run before either candidate file exists. No trial spent.
+
+**F1 — the deferral census, and it is T_A's kill line.** Holdings only, train month-ends, no returns
+scored. Reproduce the seated champion's per-leg membership exactly, then recompute it with T_A's
+overlay, and report: (i) the fraction of the base book's monthly membership *trades* (per-leg
+entries plus exits) that the overlay defers; (ii) the mean absolute weight difference between the two
+books as a fraction of gross; (iii) the breadth drift (`avg_positions` base vs overlay).
+**Kill line, fixed now: the trial is NOT written unless (i) >= 0.05 AND (ii) >= 0.02.**
+The floor is anchored on this repo's own measured precedent rather than on taste:
+`learnings.md` [2026-09-10] dropped **42% of a book's names** and moved its return series only to
+`rho = 0.9908`, so holdings-space distance buys far less return-space distance here than intuition
+suggests. A one-term overlay that moves under 2% of gross cannot deliver the **+0.138** the
+required-gain table asks at the `rho` ~ 0.99 a one-node change to the champion sits at, and writing
+it anyway would be spending a trial to re-measure the resolution floor.
+
+**F2 — does the deferral signal have content where it would actually be read?** The overlay reads
+the same-calendar-month seasonal score (`strategies/lib/signal_blend.seasonal_score`, house
+convention, `MonthBegin(1)`) only for names at the champion's band margin. Measure, on train,
+forward 21-day returns, the seasonal score's IC **restricted to names ranked 15-25 by the
+champion's own per-leg score** — the exact population whose hold/drop decision the overlay changes.
+**Expected sign declared now: POSITIVE.** Kill line: an IC whose `t` is **negative** at any
+magnitude, or positive with `|t| < 1.0`, means the signal is absent in the only cell the overlay
+reads and T_A is not written. The pooled decile profile already on record
+(`learnings.md` [2026-09-01]: flat across deciles 1-9 at -3.1% to +1.0%/yr, **+10.59%/yr at
+t = +4.16 in decile 10**) is a statement about the *whole* cross-section; whether it survives
+conditioning on momentum-band membership is a different claim and is the one T_A needs.
+Control: the same IC for a **placebo** score (a deterministic hash of the ticker, no market data),
+same cells, same dates.
+
+**F3 — the reversal-costume screen for T_B, and it is T_B's kill line.** This repo has twice built a
+score that turned out to be short-horizon reversal wearing a label (52-week-high proximity, IC
+-0.0248 with `spearman(wh52, reversal) = -0.436`; close-location value, IC -0.0208 at +0.384), and
+`learnings.md` [2026-09-01] leaves a standing instruction to screen any price-level proposal against
+reversal *before writing the file*. Measure, on train month-ends, `spearman` of T_B's score against
+(a) the 21-day reversal score, (b) 12-1 momentum, (c) the trailing 63-day return, (d) the trailing
+252-day return. **Kill line, fixed now: any `|spearman| >= 0.70` and T_B is not written** — the object
+is a restatement of a score this repo has already measured, and a fifth reading of relative reversal
+is not worth a trial. Also reported, because it decides whether T_B is a *different-horizon* object
+at all: the first date on which T_B can emit weights.
+
+**F4 — `research/SUMMARY.md` #160, free, and it is a falsifiable prediction about a number this lab
+has already produced.** The 2026-09-26 session's i.i.d. control for `EffRank` read **0.775·P** rather
+than `P`, and that entry attributes the shortfall to the control inheriting "the real panel's unequal
+column SDs". #160 says that is the standardization step of the Marchenko-Pastur recipe being skipped,
+and predicts that **standardizing the control's columns moves its `EffRank` materially toward the
+analytic value**. Both branches are useful and neither licenses a candidate: if it moves, the
+2026-09-26 entry's "the placebo's 0.875·P is the correct ceiling" rider is wrong and the ceiling is
+higher; if it does not, the shortfall has another cause and the folder's own diagnosis is refuted on
+the lab's data. Run with the same `T` and `P` as that session (293 monthly rows, P = 14) and report
+the analytic MP edges at `Q = T/P` alongside. Provenance: `SUMMARY.md` #160, ranked third of its own.
+
+---
+
+### T_B — `sa_price_gap_peer`, scout, `statistical-arbitrage`. Runs first.
+
+**Hypothesis (falsifiable, one sentence).** Equal-weighting the ~15 names whose log price sits
+furthest **below** its own 750-day trailing norm relative to an equal-weight basket of its four
+most-correlated peers produces a validation Sharpe above the family's recorded lead of **0.468**,
+because a cointegrated relative-price level mean-reverts on a horizon of months rather than days and
+is therefore reachable at 15 bps/side, unlike the 5-day residual reversion this family was closed for.
+
+**What licenses it, and it is a scope reading rather than a number.** `learnings.md` [2026-09-25]
+closed `statistical-arbitrage` — but closed it, in its own words, "for **residual-reversal** work on
+measured grounds": every rung it measured (raw 5-day reversal, one-factor residual, PCA `k=3`, PCA
+`k=5`, Blitz vol rescaling, Avellaneda-Lee `v/sigma`) is a function of **returns over 5 days**, and
+the object that beat them all was the raw 5-day sort, which `SUMMARY.md` #18's cost wall makes
+unreachable. `program.md` names **two** other sub-mechanisms in that family — **cointegration** and
+**pairs** — and neither has ever been run here. The distinguishing property is the one that matters
+for cost: a spread measured on price **levels** against a multi-year norm decays over months, so a
+month-end grid is the natural rebalance rather than a concession to the cost wall.
+
+**Construction, every constant fixed now and none of them swept.**
+- Peer set: the **K = 4** most-correlated names over a **250-day** window ending **20 days** before
+  the rebalance date — the seated champion's own `E/Var` neighbourhood constants, transcribed
+  verbatim from `strategies/champion.py` and not re-chosen. `learnings.md` [2026-09-25] measured this
+  neighbourhood as cheap and stable (own-peer-set Jaccard **0.8252** month to month, and freezing it
+  changes book churn by 0.0005), which is why it is reused rather than re-designed.
+- Spread: `s_i(t) = log P_i(t) - mean over peers of log P_j(t)`, equal-weight basket, **no fitted
+  betas**. `SUMMARY.md` #1's triage rule is the reason: a unit-loading basket estimates **zero**
+  parameters, and `learnings.md` [2026-09-10] measured the free-beta version of exactly this
+  substitution as *worse* (IC +0.0088 at t = +0.90 against the demean's +0.0351 at t = +4.55).
+- Norm: **750 trading days** (~3 years). This is the one new constant and it is load-bearing rather
+  than tuned: the repo's longest existing score lookback is 252 days, so a normalisation window at or
+  below that makes the z-score a restatement of a trailing *return* rather than a deviation of a
+  *level*, which is precisely what F3 tests. 750 is the standard pairs-trading formation window and
+  is the shortest round multiple of a year that is comfortably clear of 252. **No other value will be
+  tried, in this session or a later one.**
+- Score: `-z_i(t)` where `z_i = (s_i(t) - mean_750(s_i)) / sd_750(s_i)`; most negative `z` is
+  cheapest relative to its peers and scores highest.
+- Book: **equal weight** over the top **15** names, `walkforward.rebalance_dates` month-end grid,
+  warmup 6. Every one of those is the house default written down in `learnings.md` [2026-09-10]:
+  equal weight is the default everywhere outside `price-trend`, and 15 is the band depth the same
+  entry records for a score whose marginal rank slices are expected to go flat early. **No
+  hold/enter hysteresis band**, because that entry's rider (b) forbids inheriting a band and says to
+  profile the score first — and profiling it is not free, so the honest move is to run the
+  band-free version and say the band is unmeasured.
+- Pool: every name with 750 complete days of spread history and four peers with the same. ETFs are
+  **in** the pool, per the house default; this is recorded rather than defended, and the resulting
+  ETF share of the book is reported.
+
+**What would falsify it, both branches fixed in advance.** A validation Sharpe at or below
+**0.468** says the price-level object is no better than the PCA-residual excursion the family was
+closed on, and `statistical-arbitrage` then closes on its *second* named sub-mechanism rather than on
+one — a stronger closure than the lab currently has. Above 0.468 it takes the family lead and the
+next session owns the question of whether the lead is a `range-variance`-style artifact.
+
+**Stated in advance so the result cannot be read generously.** This is a **scout**: it cannot reach
+the champion comparison or the holdout, and a `FAMILY_LEAD` here is not evidence that the object is
+worth a challenge. The blend arithmetic (`learnings.md` 2026-08-29) puts the Sharpe a new leg needs
+before a blend is worth a trial at **1.34-1.42**; nothing in this family will come near that, and a
+lead of 0.5-0.9 must not be written up as progress toward the seat. Survivorship is worse here than
+for most objects in this repo, because a name that is "cheap relative to its peers" for three years
+and still in today's universe is by construction one that did not delist — the standing caveat
+applies at full strength and the entry will say so whichever way the number falls.
+
+**Anti-candidates attached now.** No second value of the 750-day norm. No fitted betas on the peer
+basket. No volatility rescaling of the spread (`learnings.md` [2026-09-25]: Blitz's rescaling hurt
+**every** rung including raw). No pairing of this score with the 5-day reversal it is designed to be
+distinct from.
+
+---
+
+### T_A — `pt_mom_seasonal_deferral`, challenge, `price-trend`. Runs last; ends the session.
+
+**Hypothesis (falsifiable, one sentence).** Deferring by exactly one month those membership trades
+the seated champion was going to make anyway — retaining a name it would sell when that name's
+same-calendar-month seasonal score is in the **top** decile, and skipping a name it would buy when
+that score is in the **bottom** decile, with every other node of `pt_mom_evar_arbrisk` byte-identical
+— raises validation Sharpe above **1.269** while *lowering* annual turnover below **3.01**, because
+the overlay adds no trade by construction and Heston-Sadka's own recommendation is that a seasonal
+signal is worth using to re-time an existing rebalance rather than to run a book.
+
+**What licenses it.** `research/SUMMARY.md` #49, the folder's one *build*, carried unspent for
+**thirty** sessions and the only item on its list not gated behind a screen that has since failed.
+It is the authors' own suggestion rather than an inference: Heston-Sadka decline to recommend trading
+their seasonal signal because it "requires rebalancing the entire portfolio every month", and observe
+instead that "it is relatively simple to postpone the sale or purchase of a particular stock if it
+has a large positive or negative expected return over the next month". `learnings.md` records cost as
+this lab's live axis and the seat runs **3.01x** validation turnover, which is the base the overlay
+sits on.
+
+**Why this is `price-trend` and why it is a challenger.** It modifies the incumbent, so it is
+`price-trend` whatever the overlay signal's provenance, and it counts against that family's cap of
+two (one is used).
+
+**The change, and it is one function.** `pt_mom_evar_arbrisk` reproduced byte-for-byte in every node
+— the same four lookbacks (252/189/126/63) over the same 21-day skip, the same
+`zscore(momentum) + zscore(type-demeaned -E/Var)` per-leg score with the same `E/Var` constants
+(250/20/K=4/`MIN_TYPE`=4), the same hold-25/enter-15 band, the same `c - c.min() + FLOOR` magnitude
+weighting, the same equal average across legs, the same six-tranche overlap, the same 25% cap and
+the same daily vol-spike trim — with `_leg_target` alone replaced. Nothing else is touched and no
+`E/Var` or momentum knob is moved.
+
+**The overlay, specified exactly.** Per leg, per rebalance date, with `base_held` the set the
+champion's rule returns and `held_prev` last month's set for that leg:
+- `sells = held_prev - base_held`; `buys = base_held - held_prev`.
+- Defer a sell: `n in sells` is **retained** this month if its seasonal score is in the **top
+  `DEFER_Q`** of the date's cross-section and it was not already deferred last month.
+- Defer a buy: `n in buys` is **skipped** this month if its seasonal score is in the **bottom
+  `DEFER_Q`** of the date's cross-section and it was not already skipped last month.
+- `MAX_DEFER = 1`: a name may be deferred at most one consecutive month per leg, which is what makes
+  this a **postponement** rather than a different band. Without the cap a seasonally-strong name
+  could be retained indefinitely and the overlay would silently become a second score.
+
+**`DEFER_Q = 0.10`, and it is read off an existing measurement rather than swept.**
+`learnings.md` [2026-09-01] profiles this exact score on train deciles: flat across deciles 1-9
+(-3.1% to +1.0%/yr) and **+10.59%/yr at t = +4.16 in decile 10**. The decile is therefore the
+score's own measured step, not a chosen quantile. **No other value will be tried.**
+
+**The asymmetry is the point, and its two arms are not equally backed — stated now so the result is
+not read as one effect.** The sell arm sits on the +10.59%/yr top decile and is where any gain must
+come from. The bottom decile's -3.1%/yr is inside the flat region, so the buy arm is included as a
+**breadth neutraliser** (deferred sells grow the book, skipped buys shrink it) and is pre-registered
+as expected to contribute approximately nothing. If the trial gains, the claim is about the sell arm;
+if F1 shows the buy arm doing most of the weight movement, that is a confound and the entry will
+say so.
+
+**What would falsify it, both branches fixed in advance.** Validation Sharpe at or below **1.269**
+says a seasonal signal cannot pay for re-timing a momentum book's existing trades on this universe,
+which retires `SUMMARY.md` #49 after thirty sessions on a measured result rather than on neglect.
+Above 1.269 it goes to the deflated-Sharpe bar and the holdout veto on its own merits. A turnover
+**above** 3.01 would mean the implementation is not a deferral and is a bug, not a finding — it is a
+correctness check on the code, not a branch of the hypothesis.
+
+**Stated in advance against the objective.** A one-node change to the champion sits at `rho` ~ 0.99,
+where `learnings.md`'s required-gain table asks **+0.138** and the family's resolution floor is
+0.03-0.08. F1's kill line exists precisely because the honest prior is that this overlay moves the
+book too little to resolve; the number to read is the paired `t` under `metrics.sharpe_diff_se`, not
+the Sharpe difference. And `learnings.md` [2026-09-10] is on record that a **42%** change in a book's
+names moved its returns only to `rho = 0.9908`, so a few deferred names per leg per month is a small
+prior, not a promising one.
+
+**Anti-candidates attached now.** No second `DEFER_Q`. No `MAX_DEFER` other than 1. No second
+auxiliary signal (the 5-day reversal score has this repo's largest IC at `t = +10.59` and is the
+obvious substitute; substituting it would be choosing the overlay signal off the lab's own table
+rather than off #49's source, and `learnings.md` [2026-09-25] already carries a standing
+anti-candidate against reading that IC as a licence). No widening of the champion's 15/25 band to
+"make room" for deferred names — that is a band knob, and the band is the node this repo has measured
+as construction-specific.
