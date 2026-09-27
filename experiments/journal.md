@@ -16102,3 +16102,188 @@ property of the weighting function, not of any candidate.** Corollary for `progr
 mission: a `price-trend` candidate's `rho` to the seat is decided almost entirely by what it does to
 ten weights, which is why decorrelating inside this family has been impossible and why the
 required-gain table's `rho` ~ 0.99 column is the only one this family ever reaches.
+
+## Session summary — 2026-09-27 (nightly)
+
+- **Integrity check — clean, and checked rather than assumed.** `git fetch origin --prune` put HEAD on
+  the harness's per-run branch **`main-ceysok`** at `d90e160`, **bit-identical to `origin/main`**, and
+  `git branch -r --no-merged origin/main` returned **nothing** — every prior per-run branch is an
+  ancestor of `origin/main`, so `trials.jsonl` is not split and the deflated-Sharpe bar is intact. The
+  session was moved onto **`main`** before any work began, per the standing prompt. **Twenty-second
+  session with the same three-way disagreement between the session-start hook, the harness's branch
+  requirement and `CLAUDE.md`.** Engine tests **33 passed**. Store fresh **through 2026-09-25**, the
+  latest trading day.
+- **Experiments run: 1 of the 8-trial budget.** Trial count 102 -> **103**, effective 31.0.
+- **Holdout: NOT READ. Zero looks.** The running total since 2026-08-17 stays at **six**. The one
+  challenge rejected on the champion comparison, which is before the gate.
+- **The champion seat did not move.** `pt_mom_evar_arbrisk`, validation 1.269, seated 2026-09-23.
+- **Seven measurements, four pre-registered with their kill lines before any number existed and three
+  licensed by the trial afterwards. Two axes closed, one thirty-session item retired, one entry of
+  this file corrected.**
+
+### The night in one line
+
+The research folder's only remaining *build* — carried for thirty sessions, gated behind two screens
+it passed — was run, came back unresolvable, and the two free measurements it licensed showed that
+**the cost axis it exists to work on stopped being worth a trial on 2026-09-23**, the night the
+current seat was promoted: the seat's entire annual cost budget is **+0.0249** of validation Sharpe
+against the **~0.050** the required-gain table asks at the correlation a one-node overlay sits at.
+
+### Verdicts
+
+    trial #103   pt_mom_seasonal_deferral   price-trend / challenge   REJECT
+                 validation 1.258 vs champion 1.269   rho 0.9984   SE 0.0225   t = -0.489
+                 turnover 3.00 against the seat's 3.01   DSR 0.9695 (bar: 103 trials, 31 effective)
+
+T_B (`sa_price_gap_peer`, `statistical-arbitrage` scout) was **specified in full and never written**:
+its pre-registered kill line fired on F3. `trials.jsonl`, `leaderboard.json` and `champion_card.json`
+carry exactly one new row between them.
+
+### Best finding: the cost axis closed when the seat changed, and nobody re-priced it
+
+`engine/backtest.py`'s own identity — `costs = sum|dw| * 15bps`, `ann_turnover = mean(sum|dw|)*252` —
+makes a book's annual drag **exactly** `ann_turnover * 0.0015`, so the Sharpe recoverable by removing
+**all** of it is `drag / ann_vol`. That number had never been printed here. Across all eight
+promotions it runs +0.019 to +0.051, and the shape is the finding: between 2026-08-17 and 2026-09-23
+the seat ran **7.37-8.32x** turnover and left **+0.047 to +0.051** on the table — above the 0.03-0.08
+resolution floor, at the required gain, and the research folder's ranking of its cost-mitigation
+cluster was correct. `pt_mom_evar_arbrisk` then took the seat at **3.01x** *and* with the lowest
+validation volatility of any champion (**0.1812** against 0.2271-0.2438), and the two together cut the
+recoverable amount to **+0.0249** — below the floor and **less than half** the required gain.
+**So every no-trade band, wider band, asymmetric band, reduced rebalance frequency, deferral rule and
+turnover penalty is bounded above by +0.0249 on this seat at perfect efficiency**, and `SUMMARY.md`
+#49 is retired on arithmetic rather than on a null. The rider that keeps it honest: the bound is on the
+**cost** channel only, and #103's `d = -0.011` measures the cost and gross channels together, which is
+one measurement and not an identity.
+
+### Second finding: the seat is a ten-name book with a thirty-eight-name tail, and the number is 0.023
+
+The seat's emitted validation rows hold **61.41%** of gross in their 10 largest weights and **1.43%**
+in the 10 smallest of 48. So when trial #103 moved **8.27% of gross in the daily book on 100% of
+validation days** and still landed at `rho` **0.9984**, that was not a contradiction: it reshuffled an
+eighth of the *notional* among positions carrying a fortieth of the *risk* per name. **To move this
+book you must move its top ten weights; membership at rank 15-25 cannot do it, whatever signal decides
+the membership.** Retrospectively this is the mechanism behind a class of this repo's nulls — the
+buffer bands (0.963 holdings overlap), the 42%-of-names deletion at `rho` 0.9908, the subsample bagging
+at 0.9162, the de-concentration price, the cohort trims. 2026-09-10's rule "do not infer a book's
+return-space distance from its holdings-space distance" was the right warning with no quantity
+attached; **the quantity is 0.023 and it is a property of the weighting function, not of any
+candidate.**
+
+### Third finding: the cost axis is closed on the SEAT, not on the universe — and the biggest target has no retainable holdings
+
+`sc_seasonal_depth_narrow` leaves **+0.1434** of Sharpe in cost (20.56x on 0.2150 vol) and
+`pl_maxleg_signal_blend` **+0.1192** (14.05x on 0.1768) — 3 to 6 times the resolution floor. The
+seasonal lead was therefore the obvious second trial, and measuring it first killed it: month-to-month
+**Jaccard 0.0611**, **88.7%** of the book replaced monthly, **16 of 71** months replaced *completely* —
+**with a hold-15/enter-10 hysteresis band already in the file**, which is therefore inert. The churn is
+the signal, because "the name that does well in the month about to start" is a different object every
+month and there is nothing to postpone *into*. Heston-Sadka's own objection to trading their signal is
+confirmed here as a measurement rather than repeated as a quotation, **and it takes their own proposed
+remedy with it.** `pl_maxleg_signal_blend`'s 14.05x is **not** measured and its +0.1192 stays open —
+the one live cost target left on the board.
+
+### Fourth finding: a screen of this lab's own design had the defect the lab had just diagnosed in the folder's
+
+F3's kill line was written "any `|spearman| >= 0.70`" and the deciding row read **mean 0.6982** (under)
+and **median 0.7046** (over). Mean-versus-median was never committed, so the screen carried a free
+parameter in exactly the shape that disqualified `SUMMARY.md` #153 the night before. **The branch that
+licensed the trial was not chosen.** Eleventh instance of the invariance habit and the **first on a
+screen this lab wrote itself** — the ten prior instances were all imported statistics, which had made
+the habit look like a property of other people's work. The substantive verdict did not depend on the
+tie-break: the score reads **-0.6982** to the trailing 252-day return and **-0.6514** to 12-1
+momentum, making it the **third** "reversal in costume" here and the first at long horizon.
+**`statistical-arbitrage` closes on its second named sub-mechanism, on a free screen rather than a
+trial.**
+
+### Fifth finding: #160 confirmed, and it corrects this file's own rider
+
+Standardizing an `EffRank` i.i.d. control's columns is an **exact** fix, not a partial one (0.9574 to
+0.9576 across an SD spread from equal to lognormal(0, 0.60)), and the analytic null `P/(1+P/T)` =
+**0.9544·P** matches the equal-SD simulation to 0.003. So 2026-09-26's "the placebo's 0.875·P is the
+correct ceiling" is **wrong** — 0.875 is itself depressed by its own column-SD inequality — and the
+real panel's 0.244·P and 0.638·P are **more** concentrated relative to the null than that entry
+recorded. This rescues nothing of #153, whose defect is the free parameter in its input.
+
+### Protocol and allocation notes
+
+- **Budget: 1 of 8.** T_B was refused by its own pre-registered kill line; a second `price-trend`
+  trial was available under the cap and **declined on tonight's own arithmetic** — F5 bounds every
+  cost overlay at +0.0249 and F6 says a membership overlay acts on 1.4% of gross, so no candidate in
+  that design region can resolve, and a candidate outside it would have been designed off tonight's
+  diagnostic with no mechanism in hand.
+- **Allocation: 1 trial in `price-trend` against a cap of 2.** Every family carries a lead, so the
+  "at most 2 per family until four have leads" clause is lifted and the "at least 1 in a family with no
+  recorded trial" floor is vacuous.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's to
+  rule on.
+- **Nothing frozen was touched.** The session's diff against its base commit is
+  `experiments/journal.md`, `experiments/learnings.md`, `experiments/trials.jsonl`,
+  `experiments/leaderboard.json`, one new `experiments/trial_returns/` parquet and one new file in
+  `strategies/candidates/`. `engine/`, `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`,
+  `research/` and `strategies/champion*` are unchanged.
+- **No engine issues encountered.** One defect in tonight's own screen is recorded in F3(b).
+
+### Next ideas, in order, with provenance
+
+1. **`pl_maxleg_signal_blend`'s 14.05x turnover — the one live cost target left, and it is FREE to
+   triage.** F5 prices its recoverable cost at **+0.1192**, 1.5 to 4 times the resolution floor, and F7
+   supplies the screen that decides whether any remedy can reach it: measure that book's
+   month-to-month holdings overlap first. If it replaces itself the way the seasonal lead does, the
+   cost axis is closed on the whole board and the folder's cost-mitigation cluster can be struck
+   entirely; if it persists, there is one real cost trial left in this lab. Provenance: tonight's F5
+   and F7. **No trial until the overlap is measured.**
+2. **The design rule F6 implies, and it needs a mechanism before it needs a file: a `price-trend`
+   candidate that moves the seat's TOP TEN WEIGHTS.** Every rejected variant of the last three weeks
+   moved membership or the tail, which is 1.4% of gross. **Anti-candidate attached: this is not a
+   licence to re-sweep the weighting function** — `mom_hzn_avg4_equalweight`,
+   `mom_hzn_avg4_rankweight` and `mom_zscore_weighted_buffered` already probed that node and all
+   rejected. What is wanted is a score change that reorders the top ten, and nothing on the board
+   supplies one.
+3. **#82**, carried for a twenty-second session: the pre-registered band width from
+   `MSE(J) = V̂⁽¹⁾·J/(nT) + B̂²/J²` rather than from a copy. Free, and now the oldest unspent free item.
+   Provenance: `SUMMARY.md` #82.
+4. **#159 (Porter-Thomas loadings normality) and #161 (the five-estimator factor-count disagreement)**,
+   both free, both unrun. #159 is the only screen the folder has ever filed with **no** free parameter,
+   which after tonight's F3(b) is worth more than it was yesterday. Provenance: `SUMMARY.md`.
+5. **#110's shrink half, #105-#107**, unrun. Provenance: `SUMMARY.md`.
+6. **ANTI-CANDIDATE, new tonight and the most tempting thing in this entry**: do **not** write a second
+   deferral or band candidate on the seat with a different auxiliary signal, a different `DEFER_Q`, or a
+   `MAX_DEFER` above 1. F5 bounds the whole class at +0.0249 and F6 says the channel it acts through
+   carries 1.4% of gross. The 5-day reversal score's `t = +10.59` IC makes it the obvious substitute
+   signal and that is exactly why it is named here.
+7. **ANTI-CANDIDATE, new tonight**: do not read F2's **+0.0510 at t = +2.69** (the seasonal score's IC
+   among band-margin names, placebo +0.0025) as a licence for anything. It is a real conditional IC on a
+   population selected by another score, and trial #103 is the measurement that a membership overlay
+   cannot collect it.
+8. **ANTI-CANDIDATES carried, unchanged**: no `E/Var` knob (`K`, window, lag, horizon); no `K` off the
+   2026-09-24 locality curve; no variance **level** for the ratio; no fourth aggregation operator over
+   the union legs; no factor-neutral or long-only residual book described as neutralised (#152); no
+   building for the variance channel and expecting this gate to reward it (#142); no re-derivation of
+   the blend board; no 5-day reversal book off the 2026-09-25 `t = +10.59` IC; no book gated on low
+   `E/Var` off the 2026-09-26 `t = -2.15`; no second value of tonight's 750-day norm.
+
+### For the human — three things
+
+**(a) A standing framing was four sessions out of date, and the arithmetic that falsifies it costs one
+line.** `research/SUMMARY.md` has ranked cost mitigation as this lab's live axis on the strength of
+`learnings.md`, and it was right while the seat ran 7-8x. It has been wrong since 2026-09-23. The
+general failure is not the mistake but the absence of a **re-pricing step**: `drag / ann_vol` should be
+recomputed and journaled on every promotion, the way `rho` and the required gain already are. Tonight's
+learnings entry asks for exactly that, and a human may want it in `program.md`'s reporting section
+where an agent cannot put it.
+
+**(b) The ⚠ standing concern is unchanged and tonight adds a fourth axis to it.** The seat's 1.269 is a
+selected maximum 0.22 SE clear of its runner-up (2026-09-26); no promotion in this repo's history
+clears `|t| = 2` on validation; CSCV/PBO reads 0.454. Tonight adds that the seat's **risk** lives in
+ten weights while its **identity** lives in 48 names, so the paired `rho` between any two
+`price-trend` candidates is set by a ten-dimensional object — which is a structural reason the family
+cannot produce a resolvable step, not merely an empirical one. Nothing here asks for the seat to move.
+
+**(c) The branch disagreement is twenty-two sessions old.** HEAD was again bit-identical to
+`origin/main`, so tonight cost nothing, and the work is pushed to `main`. That is care, not a fix. **A
+human should make the session-start hook, the harness's per-run branch requirement and `CLAUDE.md`
+agree**, because the failure mode is a silently split `trials.jsonl`, which understates the
+deflated-Sharpe bar for every later trial. The cost is already documented in `main`'s own commit
+messages: four earlier per-run branches were stranded and recovered by hand by a later session.
