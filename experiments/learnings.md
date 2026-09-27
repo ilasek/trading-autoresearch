@@ -4385,3 +4385,130 @@ across experiments; prune entries that later evidence contradicts.
   unresolvable *steps* (the paired bootstrap), unresolvable *members* (CSCV/PBO at 0.454), and now an
   unresolvable *maximum*. Fifth confirmation that `SE ≈ 0.568·√(1−ρ)` transfers (0.1792 against the
   engine's 0.1797), now on the whole leaderboard rather than on a designed pair.
+
+- **[Measured 2026-09-27, nightly] PRICE THE COST AXIS BEFORE PROPOSING A COST REMEDY — it is one
+  line of arithmetic, it has never been printed here, and printed now it retires a whole class of
+  candidates including the research folder's only remaining *build*.** `engine/backtest.py` charges
+  `costs = sum|dw| * (10+5)/1e4` and defines `ann_turnover = mean(daily sum|dw|) * 252`, so a book's
+  annual cost drag is **exactly** `ann_turnover * 0.0015` and the validation Sharpe recoverable by
+  eliminating **all** of it is `drag / ann_vol`. Every promotion in this repo's history:
+
+      date        champion                        val_sh   turn   ann_vol   max recoverable
+      2026-08-02  mom_12m_baseline                 0.865   5.81   0.2224       +0.0392
+      2026-08-16  mom_zscore_overlap6_daily_trim   1.107   3.01   0.2419       +0.0187
+      2026-08-17  mom_zscore_overlap6_hzn_avg4     1.120   3.11   0.2271       +0.0205
+      2026-08-17  mom_zscore_hzn_avg4_k1           1.187   7.37   0.2367       +0.0467
+      2026-08-18  mom_hzn_avg4_k1_cohort_trim      1.201   7.86   0.2319       +0.0508
+      2026-08-21  mom_hzn_avg4_nobuffer            1.229   8.32   0.2438       +0.0512
+      2026-09-23  pt_mom_evar_arbrisk   [SEAT]     1.269   3.01   0.1812       +0.0249
+
+  **The axis was open between 2026-08-17 and 2026-09-23 and has been closed since.** At 7-8x turnover
+  the seat left +0.047 to +0.051 on the table — above the 0.03-0.08 resolution floor and at the
+  required gain — so `research/SUMMARY.md`'s ranking of its cost-mitigation cluster was correct then.
+  `pt_mom_evar_arbrisk` took the seat with turnover back at 3.01x **and** the lowest validation
+  volatility of any champion (0.1812 against 0.2271-0.2438), and the two together cut the recoverable
+  amount to **+0.0249** — below the floor and **less than half** the ~0.050 the required-gain table
+  asks at the `rho` ~ 0.998 a one-node overlay sits at. Four sessions of planning ran without anyone
+  noticing. **So every no-trade band, wider band, asymmetric band, lower rebalance frequency,
+  signal-conditional deferral and turnover penalty is bounded above by +0.0249 on this seat at
+  PERFECT efficiency, and #49 is retired after thirty sessions on arithmetic rather than on a null.**
+  Two riders. The bound is on the **cost** channel only — a deferral's second channel (the retained
+  name earns its own expected return) is not bounded by it, and trial #103 measures the pair together
+  at `d = -0.011`, which is one measurement and not an identity. And **re-price this whenever the seat
+  moves**: `drag / ann_vol` belongs beside the required-gain table as the second quantity a
+  `price-trend` candidate states before it is written, after `rho`.
+
+- **[Measured 2026-09-27, nightly] THE SEAT IS A ~10-NAME BOOK WITH A ~38-NAME TAIL OF DUST, the
+  number is 0.023, and it is the mechanism behind a whole class of this repo's nulls.** The seated
+  champion's *emitted* validation rows, 48.0 positions on average:
+
+      gross in the 10 SMALLEST-weight names   0.0143
+      gross in the 10 LARGEST-weight names    0.6141      ratio 0.023
+
+  `c - c.min() + FLOOR` magnitude weighting does this. The consequence, measured on trial #103: an
+  overlay acting on names at rank 15-25 of each leg moved **8.27% of gross in the daily book on 100%
+  of validation days** and still landed at `rho` **0.9984** with `d = -0.011`. That is not a
+  contradiction — it reshuffles an eighth of the **notional** among positions carrying about a
+  fortieth of the **risk** per name. **To move this book you must move its top ten weights;
+  membership at the band margin cannot do it, whatever signal decides the membership.**
+  **This is retrospectively why a class of trials here came back unresolvable** — the buffer bands
+  (holdings overlap 0.963), the 42%-of-names deletion at `rho` 0.9908 (2026-09-10), the subsample
+  bagging at 0.9162, the de-concentration price, the cohort trims. 2026-09-10's standing rule "do not
+  infer a book's return-space distance from its holdings-space distance" was the right warning with no
+  quantity attached; **the quantity is 0.023, and it is a property of the weighting function rather
+  than of any candidate.** Corollary for `program.md`'s breadth mission: a `price-trend` candidate's
+  `rho` to the seat is decided almost entirely by what it does to ten weights, which is why
+  decorrelating inside this family has been impossible and why the required-gain table's `rho` ~ 0.99
+  column is the only one this family ever reaches.
+
+- **[Measured 2026-09-27, nightly] A cost remedy needs its target to have RETAINABLE holdings, and the
+  book with the largest recoverable cost on the board has none.** `sc_seasonal_depth_narrow` leaves
+  **+0.1434** of Sharpe in cost (20.56x turnover on 0.2150 vol) and `pl_maxleg_signal_blend` **+0.1192**
+  (14.05x on 0.1768) — 3 to 6 times the resolution floor, so F5's closure is about the *seat* and not
+  about the universe. Measured on the seasonal lead's own emitted validation rows: month-to-month
+  **Jaccard 0.0611**, **88.7%** of the book replaced every month, **16 of 71** months replaced
+  *completely* — **and it already carries a hold-15/enter-10 hysteresis band**, which is therefore
+  inert. The churn is the signal: "the name that does well in the month about to start" is a different
+  object every month, so there is nothing to postpone *into*. Heston-Sadka's own objection to trading
+  their signal ("requires rebalancing the entire portfolio every month") is confirmed here as a
+  measurement rather than repeated as a quotation, **and it takes their own proposed remedy with it.**
+  `pl_maxleg_signal_blend`'s 14.05x is **not** measured and its +0.1192 stays open.
+  **General rule: before proposing a band, a buffer or a deferral, measure the target book's
+  month-to-month holdings overlap — a remedy that re-times trades is worthless where the holdings do
+  not persist, and the presence of a band in the file is not evidence that it binds.**
+
+- **[2026-09-27, nightly] A THRESHOLD ON A DISTRIBUTION OF PER-DATE STATISTICS MUST NAME THE SUMMARY IT
+  IS READ ON, in the same sentence that names the number — and this lab broke its own rule on the
+  night it was congratulating the research folder for the same defect.** Tonight's F3 pre-registered
+  "any `|spearman| >= 0.70`" as a kill line and the deciding row read **mean 0.6982** (under) and
+  **median 0.7046** (over). Mean-versus-median was never committed, so the screen had a free parameter
+  in exactly the shape that disqualified `SUMMARY.md` #153 on 2026-09-26. **The branch that licensed
+  the trial was not chosen**, and the substantive verdict did not depend on the tie-break, which is the
+  only reason this is a method note rather than a withdrawn conclusion. Eleventh instance of the
+  invariance habit and the **first on a screen of this lab's own design** — the ten prior instances
+  were all imported statistics, which had made the habit look like a property of other people's work.
+
+- **[Measured 2026-09-27, nightly] Third instance of "the score turned out to be reversal in costume",
+  and the first at LONG horizon.** A log-price spread against an equal-weight basket of a name's `K = 4`
+  most-correlated peers, z-scored over **750** days — proposed as the family's untried cointegration
+  object precisely because a three-year normalisation window should make it a deviation of a *level*
+  rather than a restatement of a trailing *return* — reads, on train month-ends: `spearman` **-0.6982**
+  to the trailing 252-day return, **-0.6514** to 12-1 momentum, -0.4367 to the 63-day return, +0.2704
+  to the 21-day reversal score. **The horizon claim is false because the spread DRIFTS**, so z-scoring
+  it over three years mostly locates the last year of relative return inside that drift. Predecessors:
+  52-week-high proximity (IC -0.0248, `spearman` -0.436 to reversal) and close-location value
+  (IC -0.0208, +0.384 to the 63-day return), both short-horizon. **`statistical-arbitrage` is now
+  closed on its second named sub-mechanism** (cointegration/pairs, after residual reversal on
+  2026-09-25) **on a free screen rather than on a trial**, and 2026-09-01's instruction to screen any
+  price-level proposal against reversal before writing the file has now saved three trials.
+
+- **[Measured 2026-09-27, nightly] The Marchenko-Pastur null for an `EffRank` control is
+  `P/(1 + P/T)`, standardizing the columns is an EXACT fix rather than a partial one, and the
+  2026-09-26 entry's ceiling rider is wrong in the direction that flattered the real panel.**
+  `research/SUMMARY.md` #160 predicted that standardizing that session's i.i.d. control would move it
+  toward the analytic value; confirmed, at `T = 293`, `P = 14`:
+
+      analytic  EffRank = P/(1+P/T) = 13.362 = 0.9544.P     (tr A = P, E[lambda^2] = 1 + P/T)
+      i.i.d. control, EffRank/P, 4000 draws           raw     standardized
+        equal column SDs                            0.9517      0.9574
+        SDs spread linearly 1.0-2.0                 0.8269      0.9575
+        SDs spread linearly 1.0-4.0                 0.6713      0.9575
+        SDs lognormal(0, 0.60)                      0.3900      0.9576
+
+  The equal-SD simulation matches the analytic value to **0.003**, and the standardized column is
+  **invariant** (0.9574-0.9576) across an SD spread from equal to lognormal(0, 0.60). The 2026-09-26
+  entry concluded "the placebo's 0.875·P is the correct ceiling"; **that is wrong — 0.875 is itself
+  depressed by its own column-SD inequality** (0.875 sits at lognormal sigma ~ 0.16 on an averaged
+  ladder, 0.775 at ~ 0.26) and the correct ceiling is the analytic **0.954·P**. The real panel's
+  0.244·P and 0.638·P are therefore **more** concentrated relative to the null than that entry
+  recorded, which does nothing to rescue #153 (its defect is the free parameter in its input, not the
+  level of its ceiling). **General rule: when a simulated control misses its analytic value, suspect a
+  skipped step of the recipe before crediting the data** — and record which columns a screen's panel
+  was built from, because this could only be answered in the abstract: the identity of that session's
+  14 characteristics is nowhere in the record.
+
+- **[Measured 2026-09-27, nightly] `SE ~= 0.568*sqrt(1-rho)` transfers for a SIXTH time.** Trial #103
+  against the seat: `rho` **0.9984**, engine `metrics.sharpe_diff_se` **0.0225**, closed form
+  **0.0224**. The closed form is now confirmed on designed pairs, on the whole leaderboard and at
+  `rho` above 0.998 — the highest correlation it has been checked at — so a candidate can price its own
+  resolvability from its expected `rho` alone, before it is run.
