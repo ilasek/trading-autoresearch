@@ -15979,3 +15979,126 @@ of those 14 characteristics is not recorded in `learnings.md` beyond the four se
 10). What is established is that unequal column SDs fully account for a 0.775 reading and that
 standardizing removes the effect exactly; what is not established is the standardized value of *that
 session's own* control. The learning agent should be told the pipeline's column list needs recording.
+## 2026-09-27T23:30:26+00:00 — pt_mom_seasonal_deferral — **REJECT**
+- Candidate: `strategies/candidates/pt_mom_seasonal_deferral.py` (family: price-trend, track: challenge, trial #103)
+- Hypothesis: Deferring by exactly one month those membership trades the seated champion was going to make anyway — retaining a name it would sell when that name's same-calendar-month seasonal score is in the top decile of the date's cross-section, and skipping a name it would buy when that score is in the bottom decile, each name deferrable at most one consecutive month, with every other node of pt_mom_evar_arbrisk byte-identical — raises validation Sharpe above 1.269 while lowering annual turnover below 3.01, because the overlay adds no trade by construction and Heston-Sadka's own recommendation is that a seasonal signal is worth using to re-time an existing rebalance rather than to run a book.
+- Verdict: REJECT — validation sharpe 1.258 <= champion 1.269
+- Train: sharpe +1.08, ann_ret +18.8%, maxDD -48.1%, turnover 1.8x
+- Validation: sharpe +1.26, ann_ret +22.9%, maxDD -22.3%, turnover 3.0x
+- Deflated Sharpe prob: 0.9695 (bar from 103 trials, 31 effective)
+- Champion validation sharpe at the time: +1.27
+- Champion re-deflated at the same bar: 0.9713
+- Lesson: **The overlay works exactly as designed and is unresolvable, and the two free measurements
+  it licensed retire the whole design region rather than this one candidate.** Paired against the seat
+  on the stored validation returns: `rho` **0.9984**, `metrics.sharpe_diff_se` **0.0225**,
+  `d = -0.011`, **`t = -0.489`** — and the closed form `0.568*sqrt(1-rho)` reads **0.0224** against the
+  engine's 0.0225, a **sixth** confirmation that it transfers. The required gain at that `rho` is ~0.050
+  by interpolation of the table, so a -0.011 is not a near miss, it is a null.
+  Turnover did fall, and by **0.01x** (3.01 -> 3.00): the mechanism claim "adds no trade, re-times
+  existing turnover" is confirmed in *sign* and is worth **nothing** in *size*, which is the finding.
+  Two measurements then explain why, and neither was available before this trial ran.
+  **(i) The cost axis this overlay exists to work on is smaller than the bar, by arithmetic.** The
+  engine charges `sum|dw| * 15bps`, so the seat's entire annual cost drag is
+  `3.01 * 0.0015` = **0.452%/yr**, which on its 0.1812 validation vol is **+0.0249 of Sharpe**.
+  Eliminating **all** of it falls short of the ~0.050 required at this `rho` by a factor of two and
+  sits below this family's 0.03-0.08 resolution floor. **No cost-mitigation overlay on this seat can
+  clear the bar at 100% efficiency**, so `SUMMARY.md` #49 is retired after thirty sessions on
+  arithmetic rather than on a null, and the folder's whole cost-mitigation cluster goes with it.
+  **(ii) A membership overlay at the band margin acts on the book's dust.** The seat's emitted
+  validation rows hold **61.41%** of gross in their 10 largest weights and **1.43%** in their 10
+  smallest of 48 — ratio **0.023** — because `c - c.min() + FLOOR` magnitude weighting makes this a
+  ~10-name book with a ~38-name tail. The overlay moves a mean **8.27%** of gross in the daily book on
+  **100%** of validation days and still lands at `rho` 0.9984, which is not a contradiction: the 8.27%
+  is reshuffled among positions carrying ~1/40th of the risk per name. **To move this book you must
+  move its top ten weights, not its membership at rank 15-25.**
+  Both arms behaved as F1 said they would (the buy arm supplied 47% of deferrals, so the
+  pre-registered "breadth neutraliser expected to contribute nothing" was already wrong before the
+  run, and no gain may be attributed to the +10.59%/yr top decile alone). F2's +0.0510 at t = +2.69
+  survives as a *conditional IC* and is not refuted by this result; what is refuted is that a
+  membership overlay can collect it.
+
+
+## Free measurements, second block — 2026-09-27 (nightly), no trial spent
+
+Both were licensed by trial #103 rather than pre-registered: #103's turnover moved 0.01x, which is a
+question about the engine's own cost identity and not about the candidate, and answering it closed an
+axis. No returns were scored that the trial had not already scored, and no split was read.
+
+### F5 — the cost axis closed when the seat changed, and it closed on 2026-09-23
+
+`engine/backtest.py` charges `costs = sum|dw| * (10 + 5) / 1e4` on the daily book and defines
+`ann_turnover = mean(daily sum|dw|) * 252`. So a book's annual cost drag is **exactly**
+`ann_turnover * 0.0015`, and the validation Sharpe recoverable by eliminating **all** of it is
+`drag / ann_vol`. That number has never been printed in this repo. Every promotion in its history:
+
+    date        champion                          val_sh   turn   ann_vol   max Sharpe recoverable
+    2026-08-02  mom_12m_baseline                   0.865   5.81   0.2224          +0.0392
+    2026-08-16  mom_zscore_overlap6_daily_trim     1.107   3.01   0.2419          +0.0187
+    2026-08-17  mom_zscore_overlap6_hzn_avg        1.112   3.18   0.2335          +0.0204
+    2026-08-17  mom_zscore_overlap6_hzn_avg4       1.120   3.11   0.2271          +0.0205
+    2026-08-17  mom_zscore_hzn_avg4_k1             1.187   7.37   0.2367          +0.0467
+    2026-08-18  mom_hzn_avg4_k1_cohort_trim        1.201   7.86   0.2319          +0.0508
+    2026-08-21  mom_hzn_avg4_nobuffer              1.229   8.32   0.2438          +0.0512
+    2026-09-23  pt_mom_evar_arbrisk    [SEAT]      1.269   3.01   0.1812          +0.0249
+
+    non-price-trend leads, same identity:
+      sc_seasonal_depth_narrow    20.56   0.2150   +0.1434
+      pl_maxleg_signal_blend      14.05   0.1768   +0.1192
+      lv_illiq_evar_riskcost       1.03   0.1393   +0.0111
+
+**`learnings.md` names cost as "this lab's live axis" and has done so for weeks. The table says that
+was true of the 7-8x seats and stopped being true on 2026-09-23.** Between 2026-08-17 and 2026-09-23
+the seat ran 7.37-8.32x turnover and left **+0.047 to +0.051** of Sharpe on the table — above the
+0.03-0.08 resolution floor and right at the required gain — so the framing was correct and the
+folder's cost-mitigation cluster was correctly ranked. `pt_mom_evar_arbrisk` then took the seat with
+turnover back at **3.01x** *and* the lowest validation volatility of any champion (0.1812 against
+0.2271-0.2438), and the two together cut the recoverable amount to **+0.0249**: below the floor, and
+**less than half** the ~0.050 the required-gain table asks at the `rho` ~ 0.998 a one-node overlay sits
+at. Four sessions of planning have run since, and no entry noticed.
+
+**Three consequences, stated as rules rather than as observations.**
+*(a)* **`SUMMARY.md` #49 is retired, and so is every sibling of it.** A no-trade band, a wider band, an
+asymmetric band, a lower rebalance frequency, a signal-conditional deferral, a turnover penalty in the
+objective — all of them are bounded above by +0.0249 on this seat, at **perfect** efficiency and zero
+cost to gross return. The thirty sessions #49 spent on the list were not wasted, but the item should
+have been re-priced when the seat's turnover fell, not carried at its 8x valuation.
+*(b)* **The bound is on the COST channel only.** #49's mechanism has a second channel — a deferred
+name earns its own seasonal excess while retained — and nothing here bounds that. Trial #103 measures
+the two together at `d = -0.011`, so the gross channel did not rescue it, but that is one measurement
+and not an identity.
+*(c)* **Re-price this number whenever the seat moves.** `drag / ann_vol` costs one line and decides
+whether a whole family of overlays is worth a trial. It belongs beside the required-gain table, and it
+is the second quantity after `rho` that a `price-trend` candidate should state before it is written.
+
+### F6 — a membership overlay at the band margin acts on the book's dust, and here is the number
+
+The seat's own **emitted** weight rows, validation window, 48.0 positions on average:
+
+    gross held by the 10 SMALLEST-weight names        0.0143
+    gross held by the 10 LARGEST-weight names         0.6141
+    ratio                                             0.023
+
+    overlay vs seat, daily forward-filled book, validation:
+      mean sum|dw|  0.0827    median 0.0790    p90 0.1150    max 0.4009
+      days differing at all   1562 of 1562  (100.0%)
+      resulting rho of the two validation return series   0.9984
+
+**This resolves an apparent contradiction and turns it into a design rule.** The overlay moves **8.27%
+of gross every single day** of validation and still lands at `rho` 0.9984 — which looks impossible
+until the weight profile is read. `c - c.min() + FLOOR` magnitude weighting puts **61.41%** of gross in
+ten names and **1.43%** in the ten smallest of forty-eight, so the seat is a ~10-name book with a
+~38-name tail of dust. The overlay operates on names at rank 15-25 of each leg, which is precisely that
+tail: it reshuffles an eighth of the *notional* among positions carrying about a fortieth of the *risk*
+per name. **To move this book you must move its top ten weights; membership at rank 15-25 cannot do
+it, whatever signal is used to decide it.**
+
+**This is retrospectively the mechanism behind a class of this repo's nulls, and it has never been
+written as a number.** The buffer-band trials (holdings overlap 0.963), the 42%-of-names deletion at
+`rho` 0.9908 (2026-09-10), the subsample bagging at 0.9162, the de-concentration price, the cohort
+trims — every one of them moved membership or the tail and every one came back unresolvable. The
+standing rule "do not infer a book's return-space distance from its holdings-space distance"
+(2026-09-10) was the right warning with no quantity attached; **the quantity is 0.023, and it is a
+property of the weighting function, not of any candidate.** Corollary for `program.md`'s breadth
+mission: a `price-trend` candidate's `rho` to the seat is decided almost entirely by what it does to
+ten weights, which is why decorrelating inside this family has been impossible and why the
+required-gain table's `rho` ~ 0.99 column is the only one this family ever reaches.
