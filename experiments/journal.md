@@ -15839,3 +15839,143 @@ rather than off #49's source, and `learnings.md` [2026-09-25] already carries a 
 anti-candidate against reading that IC as a licence). No widening of the champion's 15/25 band to
 "make room" for deferred names — that is a band knob, and the band is the node this repo has measured
 as construction-specific.
+
+## Free measurements — 2026-09-27 (nightly), no trial spent
+
+Four screens, every branch fixed in the pre-registration above before any number existed. **Two
+license their candidate, one kills its candidate, and one confirms an imported prediction and
+corrects the lab's own rider in the same table.**
+
+### F1 — the deferral census PASSES both arms of its kill line, and the breadth confound is absent
+
+Train, holdings only, no returns scored. The seated champion's per-leg membership reproduced exactly,
+then recomputed with T_A's overlay:
+
+    rebalance dates used                          534
+    base monthly membership trades (per leg)     7149
+    eligible sells / actually deferred        431 / 383
+    eligible buys  / actually skipped         407 / 341
+    (i)  deferred fraction of all trades       0.1013     [kill line >= 0.05]  PASS
+    (ii) mean sum|dw| as a fraction of gross   0.0403     [kill line >= 0.02]  PASS
+         median / p90 sum|dw|             0.0117 / 0.1265
+    (iii) avg_positions  base / overlay     25.36 / 25.34
+          months with any difference at all    305 of 534
+
+**Three readings, and the third was not predicted.** *(a)* The overlay defers **one trade in ten**,
+which is enough to move a book — the pre-registered floor was set at 0.05 on the precedent that
+holdings-space distance buys little return-space distance here (`learnings.md` [2026-09-10]: 42% of a
+book's names dropped, `rho` 0.9908). *(b)* The weight movement is **fat-tailed rather than uniform**:
+the median month moves 1.2% of gross and the p90 month moves 12.7%, and **229 of 534 months are
+byte-identical to the base book**. So the overlay is not a small constant tilt; it is idle most of the
+time and occasionally moves an eighth of the book, which is the right shape for a re-timing rule and
+the wrong shape for a second score. *(c)* **Breadth is neutral to 0.02 of a position** (25.36 vs
+25.34). The pre-registration named the buy arm a breadth neutraliser and predicted it would
+contribute approximately nothing; it contributes **341 of 724 deferrals, 47%**, which is nearly half
+the weight movement rather than nothing. **That is a confound, stated before the trial runs**: a gain
+cannot be attributed to the sell arm alone, and the honest reading of any gain is "the asymmetric pair
+of arms", not "the +10.59%/yr top decile".
+
+### F2 — the deferral signal has content in the exact cell the overlay reads, and the placebo is flat
+
+Train, forward 21-day returns, restricted to names ranked **15-25** by the champion's own per-leg
+score on the 252-day leg — the population whose hold/drop decision the overlay changes. Expected sign
+declared **positive** in advance.
+
+    cell                                       IC        t       n dates
+    seasonal score, band-margin names       +0.0510    +2.69       412
+    [ctl] placebo hash, same cells          +0.0025    +0.14       412
+
+**PASS on the pre-registered sign and magnitude.** The number worth noting is that the conditional IC
+is *not* weaker than the unconditional profile: `learnings.md` [2026-09-01] has this score flat across
+deciles 1-9 and +10.59%/yr in decile 10 across the **whole** cross-section, and conditioning on
+momentum-band membership leaves an IC of +0.0510 at t = +2.69 — the same order as the largest live
+scores in this repo. The standing caution applies and is recorded now rather than after the result:
+this is a **conditional** reading on a population selected by another score, and 2026-08-30's
+over-prediction rule says an equal-weight screen over-states what a magnitude-weighted book collects.
+
+### F3 — T_B is KILLED, and the object is the THIRD score in this repo to turn out to be reversal in costume
+
+Train month-ends, cross-sectional `spearman` of T_B's score (`-z` of the 750-day-normalised log-price
+spread against the `K = 4` peer basket) against four scores this repo already has. 356 dates, first
+emittable date **1983-03-31**, mean 67.7 names per date.
+
+    reference                  mean      median      min       max
+    21d reversal score       +0.2704    +0.3015    -0.354    +0.665
+    12-1 momentum            -0.6514    -0.6523    -0.900    -0.154
+    trailing 63d return      -0.4367    -0.4646    -0.801    +0.254
+    trailing 252d return     -0.6982    -0.7046    -0.901    -0.320
+
+**The kill line fires and T_B is not written.** Two things must be said about *how* it fires, because
+the second is the more useful.
+
+**(a) The substantive verdict is unambiguous.** The score is the trailing 252-day return **reversed**
+at -0.70 and 12-1 momentum reversed at -0.65. The pre-registration's load-bearing claim was that a
+750-day normalisation window makes the statistic a deviation of a *level* rather than a restatement of
+a trailing *return*; that claim is **false on this universe**, and the mechanism is visible: a
+relative log-price spread against a peer basket **drifts**, so z-scoring it over three years mostly
+measures where the last year of relative return sits inside that drift. This is the **third** instance
+of the repo's standing pattern — 52-week-high proximity (IC -0.0248, `spearman` -0.436 to reversal)
+and close-location value (IC -0.0208, +0.384 to the 63-day return) were the first two — and the first
+where the disguised score is *long-horizon* rather than short-horizon. `learnings.md` [2026-09-01]'s
+instruction to screen any price-level proposal against reversal before writing the file is what saved
+the trial; it has now saved three.
+
+**(b) The kill line itself straddled on a choice the pre-registration did not fix, and that is
+recorded as a defect in tonight's own screen rather than resolved in its favour.** The line was
+written as "any `|spearman| >= 0.70`". The 252-day row reads **mean 0.6982** (under) and **median
+0.7046** (over). Mean-versus-median was never committed, so the screen has a free parameter in
+exactly the shape that disqualified `SUMMARY.md` #153 on 2026-09-26 — *the same universe reading two
+ways on a defensible choice* — and the lab's own message to the research folder that night was that an
+imported screen needs its own invariance check before its branches are believed. **The rule applies to
+a screen this lab wrote itself, so the branch that licenses the trial may not be chosen.** The
+substantive verdict in (a) does not depend on the tie-break, which is the only reason this is a note
+about method rather than a stood-down conclusion. **Standing rule earned tonight: a threshold on a
+distribution of per-date statistics must name the summary it is read on — mean, median or a quantile —
+in the same sentence that names the number.** Eleventh instance of the invariance habit, and the
+first on a screen of this lab's own design.
+
+**What it closes.** `statistical-arbitrage` was closed on 2026-09-25 for **residual-reversal** work.
+`program.md` names **cointegration** and **pairs** as its other sub-mechanisms, and the cheapest
+long-only reading of both — a relative price level against a correlated peer basket — is now measured
+as a re-statement of scores the family's closure already covers. The family is closed on its second
+named sub-mechanism, **on a free screen rather than on a trial**.
+
+### F4 — `SUMMARY.md` #160 is CONFIRMED, and it corrects the 2026-09-26 entry's rider in the wrong direction for that entry
+
+#160 predicts that standardizing an `EffRank` i.i.d. control's columns moves it toward the analytic
+Marchenko-Pastur value, and attributes 2026-09-26's `0.775·P` reading to the standardization step of
+the recipe being skipped. At that session's `T = 293`, `P = 14`:
+
+    Q = T/P = 20.929        MP bulk edges for the CORRELATION matrix [0.6106, 1.4850]
+    analytic  EffRank = P/(1 + P/T) = 13.362 = 0.9544.P
+       (tr A = P and E[lambda^2] = 1 + Var(lambda) = 1 + P/T under MP; no simulation needed)
+
+    i.i.d. control, EffRank / P, mean of 4000 draws        raw     standardized
+    equal column SDs                                     0.9517      0.9574
+    column SDs spread linearly 1.0-2.0                   0.8269      0.9575
+    column SDs spread linearly 1.0-4.0                   0.6713      0.9575
+    column SDs lognormal(0, 0.60)                        0.3900      0.9576
+
+    raw EffRank against SD inequality (300 SD-vector draws x 30 return draws each):
+    lognormal sigma   0.00    0.05    0.10    0.15    0.20    0.30    0.40
+    raw EffRank/P    0.9519  0.9435  0.9198  0.8807  0.8312  0.7293  0.6034
+
+**Three findings, and the third is a correction the lab owes its own record.** *(a)* The analytic
+value and the equal-SD simulation agree to **0.003** (0.9544 against 0.9517), so the law is the right
+reference and needs no calibration. *(b)* **Standardization is an exact fix, not a partial one**: the
+standardized column reads 0.957-0.958 across an SD spread running from equal to lognormal(0, 0.60),
+i.e. it is *invariant* to the thing the raw statistic is confounded by. #160's prediction is confirmed
+in the strongest available form. *(c)* **The 2026-09-26 rider is wrong, and wrong in the direction
+that flatters the real panel.** That entry concluded "the **placebo's 0.875·P is the correct ceiling**
+for genuinely independent at this `T` and `P`" — but the placebo's 0.875 is *itself* depressed by its
+own column-SD inequality (0.875 sits at lognormal sigma ~ 0.16 on the ladder above, and 0.775 at
+~ 0.26). The correct ceiling is the **analytic 0.954·P**. So the real panel's `0.244·P` and `0.638·P`
+should be read against 0.954, not 0.875, which makes both readings **more** concentrated relative to
+the null than that entry recorded — and does nothing whatever to rescue #153, whose defect is the free
+parameter in its input and not the level of its ceiling.
+**Scope stated plainly, because it is a partial answer.** This reproduces #160's algebraic and
+simulational core; it does **not** re-run the 2026-09-26 characteristic pipeline, because the identity
+of those 14 characteristics is not recorded in `learnings.md` beyond the four set sizes (14 / 8 / 11 /
+10). What is established is that unequal column SDs fully account for a 0.775 reading and that
+standardizing removes the effect exactly; what is not established is the standardized value of *that
+session's own* control. The learning agent should be told the pipeline's column list needs recording.
