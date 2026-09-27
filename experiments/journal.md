@@ -15600,3 +15600,5 @@ Tonight cost nothing because HEAD was bit-identical to `origin/main` and the wor
 branches — but that is care, not a fix. **A human should make the session-start hook, the harness's
 per-run branch and `CLAUDE.md` agree**, because the failure mode is a silently split `trials.jsonl`,
 which corrupts the deflator for every later trial.
+
+## Research session — 2026-09-27 (learning agent): 3 notes added, see research/SUMMARY.md

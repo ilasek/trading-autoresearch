@@ -956,6 +956,22 @@ belief.** Meanwhile the kernel identity supplies, for the first time, a *mechani
 2026-08-29 result that a ridge fed the incumbent's features "rediscovers the incumbent, worse": the
 rediscovery need not come through the features at all.
 
+**[2026-09-27] And #153 is now retired rather than measured, on evidence from outside the complexity
+literature.** The lab ran it on 2026-09-26 and found `EffRank` reads `0.244·P` on fourteen
+characteristics and `0.638·P` on eight de-duplicated ones, straddling both pre-registered branches; the
+econometrics literature on counting factors then explains *why no version of the screen can be believed*
+on a panel built like that one. Onatski's own identifying assumption fails precisely when "a handful of
+linear combinations of `ε_t` explain a disproportionately large part of the variation in the
+idiosyncratic term", and Ahn–Horenstein measure that cross-sectionally correlated columns make
+penalty-based counts **overestimate, with more data not helping**. So the eigenvalue spectrum of a
+characteristic-managed-portfolio matrix is not a property of this universe that can decide whether a
+large model pays here — it is a property of the feature list, and the target is not identified when that
+list contains near-duplicates. **The folder's expected reading (a big model does not pay here) therefore
+stays an inherited belief rather than becoming a measurement, and this file says so instead of finding a
+second screen.** The replacements are #161's estimator-disagreement check and #162's design rule, both
+free, neither licensing a trial. See the cross-family section *Reading a spectrum* below.
+→ `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -1708,6 +1724,19 @@ rather than reversal.** That is a prediction, not a defence, and #148 states bot
 advance.
 → `notes/2026-09-25-short-term-residual-reversal.md`
 
+**[2026-09-27] A third strike against `K > 2` in this family, and it is about estimation rather than
+about hedging.** #152 established that under a long-only budget the `K` factor legs of a "PCA residual"
+book are **unhedged rather than removed**. Ahn–Horenstein add the half nobody here had checked: in a
+design with a genuinely weak third factor, **even when a factor-count estimator returns the right
+number, the third principal component is the one most correlated with the true third factor only about a
+quarter of the time** (26% in their run, against 28% for the fourth PC and 44% for the fifth), while the
+first two PCs always matched the two strong factors. So `K = 3` and `K = 5` — the settings
+`learnings.md` [2026-09-25] measured — are not merely unhedged exposures, they are unhedged exposures
+**to directions that are not the ones they are named after**. `K ∈ {1, 2}` is the only range this
+literature's simulations support as identified. Free, no trial, and it is a design rule rather than a
+screen: see #164(a) and the cross-family section *Reading a spectrum* below.
+→ `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
 ---
 
 ### 14. `portfolio-learning`
@@ -1906,6 +1935,28 @@ than assets, and its one fatal import hazard is that the source fits `θ` **once
 sample** — walk-forward refit is mandatory here. Candidate #98, gated behind a free hand-set-`θ`
 control that can make the trial unnecessary.
 → `notes/2026-09-11-parametric-portfolio-policies-standardized-characteristics.md`
+
+**[Added 2026-09-27] A seventh object, the most theoretically decorated allocator input this folder has
+found — and the family's first decline written on the *source's own* measurement against its own
+method.** `program.md` names clustering-based allocation here, and #86 declined HRP partly because a
+long-only constraint plus a position cap already *is* covariance shrinkage. Ledoit–Wolf's nonlinear
+shrinkage is the opposite answer to the same conditioning problem: rather than never inverting anything,
+correct the eigenvalues optimally before you do. It is closed form, ~20 lines, deterministic, valid for
+`p > n`, and optimal by a **characterisation** theorem — in the rotation-equivariant class, the
+minimum-variance optimum sets eigenvalue `i` to `d*_i = u_i' Σ u_i`, if and only if. It is also, on its
+own authors' evidence, the wrong tool for this repo: **impose a lower bound of zero on all weights and
+the plain sample covariance matrix becomes uniformly best among the rotation-equivariant portfolios**;
+disallowing short sales *helps* the sample matrix and *hurts* linear shrinkage, nonlinear shrinkage and
+the factor variant, which the authors attribute to Jagannathan–Ma and qualify in a remark — the method
+helps a long-only manager only where the long-only constraint is **not binding**. Here it binds by
+construction. So #86 and #163 now decline two opposite allocators for the same algebraic reason, from
+two directions, and the simplex bound of `2026-09-08-stacked-regressions-nonnegative-weights.md` is the
+third statement of it. **What survives is the framing, and it is worth more than the estimator**: the
+theorem's answer is continuous in `i`, so "how many factors are real" is a two-level quantisation of a
+continuum — *when a construction's parameter is "how many directions", check whether the decision needs a
+count at all or only a weight*. Tier A, `validation_overlap: false`, costs charged nowhere in the
+literature.
+→ `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`
 
 ---
 
@@ -4565,6 +4616,158 @@ folder produces, and the fix is free to test.
 → `notes/2026-09-24-betting-against-correlation-decomposing-beta.md`,
 `notes/2026-09-24-long-only-minimum-variance-composition.md`,
 `notes/2026-09-24-diversification-ratio-most-diversified-portfolio.md`
+
+### Reading a spectrum — the null it should be read against, the count, and the case for not counting (cross-family)
+
+**Covered 2026-09-27 (session 44). Four sources across three Tier-1 venues, all read in full,
+none of them about returns.** This session was aimed by the 2026-09-26 nightly's own verdict on this
+file's then-top-ranked screen. That screen — the inverse-Herfindahl effective rank
+`EffRank = (tr A)²/tr(A²)` of a characteristic-managed-portfolio second-moment matrix, imported from
+Didisheim et al.'s Theorem 3 — was **disqualified on the free parameter in its own input**: the same
+universe read `0.244·P` on fourteen characteristics and `0.638·P` on eight de-duplicated ones, so a
+candidate can move itself between the two pre-registered branches by de-duplicating its own features.
+The nightly's message to this folder was explicit: *"an imported screen needs its own invariance check
+before its branches are believed, which the folder could apply to itself."* A grep across all 134 prior
+notes returned **zero** for `Laloux`, `Onatski`, `Ahn-Horenstein`, `eigenvalue ratio`,
+`nonlinear shrinkage` and `Porter-Thomas`; one passing mention of `Marchenko-Pastur`, as a pitfall
+in the `M_eff` note; and two matches for `number of factors`, both of which use `K` as a **given**
+construction parameter rather than as something to be estimated. **The literature that spent twenty years on precisely this question had never been read
+here.** It does not rescue the screen. It says something stronger and more useful.
+
+**The headline, and it is a closure rather than a lead: on a panel whose non-factor part is
+cross-correlated, the number of directions is not identified, and no eigenvalue-based estimator
+repairs that.** Onatski names the condition his own method needs and says exactly what breaks it — the
+method "will break down" when "a handful of linear combinations of `ε_t` explain a disproportionately
+large part of the variation in the idiosyncratic term, which makes these combinations look very much
+like common factors". He calls this "a basic identification assumption", because without it one is back
+to the problem Forni et al. state and he quotes: *"there is no way a slowly diverging sequence
+(divergence under the model can be arbitrarily slow) can be told from an eventually bounded sequence
+(for which the bound can be arbitrarily large)."* **Three nested momentum legs and four
+volatility/range estimators in a fourteen-column feature panel are that handful, by construction.** So
+the lab's 2026-09-26 reading generalises past `EffRank`: the defect is not that one functional has a
+free parameter, it is that the object being measured is not identified on a duplicated-column design.
+The honest procedure is to de-duplicate the *design* — one column per mechanism, fixed in writing
+before any spectrum is computed — and then report every count as conditional on that list, which is
+what the nightly's own next-idea 1 already asks for. Tier A, `validation_overlap: false`.
+→ `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
+**What a spectrum should be read against, in closed form, and it replaces a control the lab built by
+hand.** Under the null that a `p × T` panel's entries are i.i.d. with variance `σ²`, the eigenvalues of
+the sample correlation matrix converge to the Marchenko–Pastur density on
+`[σ²(1 + 1/Q − 2√(1/Q)), σ²(1 + 1/Q + 2√(1/Q))]` with `Q = T/p`. Two hard edges, the lower one strictly
+positive, and **nothing at all between zero and the lower edge** — under pure noise. The 2026-09-26
+session needed exactly this reference and simulated it, finding its i.i.d. control at `0.775·P` rather
+than `P` "because it inherits the real panel's unequal column SDs". That is the *standardization step of
+the recipe* being skipped: the law assumes unit-variance columns, and with columns standardized the
+control should land close to the analytic value. **A checkable prediction about the lab's own control,
+for the price of re-running a screen it has already written.** The dimensional reading matters
+independently: at `N = 145` and `T = 250`, `Q = 1.724` and the pure-noise bulk runs from `0.057·σ²` to
+`3.103·σ²` — **a fifty-fold spread with nothing in it** — so no statement of the form "the top three
+PCs hold 78% of variance, therefore this universe is low-dimensional" means anything until it is read
+against that. Tier A, `validation_overlap: false`.
+→ `notes/2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`
+
+**The one test in this cluster with no free parameter at all, and it is the part worth adopting as
+standing discipline.** Normalise an eigenvector so `Σᵢ v²_{α,i} = p`. Under the no-information null its
+components, across `i` for fixed `α`, are **standard normal** (Porter–Thomas) — no `σ²` to fit, no
+`kmax` to choose, no threshold. Laloux et al. report this fitting bulk eigenvectors' component
+histograms "extremely well, with no adjustable parameters" and failing visibly for the top eigenvector.
+It answers a *different* question from a variance share: a direction can hold 8% of variance and still
+have Gaussian loadings, i.e. be empty. It is available for every `K` in every PCA-residual construction
+this repo has run, it reads no returns, and it is the cheapest invariance check this folder has ever
+filed. → `notes/2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`
+
+**The count is estimator-dependent as well as design-dependent, and the literature's own numbers show
+the spread.** Three families exist and they add three *different* identifying restrictions.
+**Bai–Ng** penalise dimension, with the load-bearing insight that when factors are estimated the
+penalty must depend on **both** `N` and `T` (their Theorem 2 gives necessary-and-sufficient rate
+conditions; AIC fails them for all `N,T`). **Onatski** estimates the idiosyncratic edge from the
+`sqrt(u − x)` shape of the spectral density near it and counts what clears `(1+δ)·û`. **Ahn–Horenstein**
+take `ER(k) = μ_k/μ_{k+1}` and its growth-ratio cousin, needing no penalty, no variance estimate and no
+calibration — and show `ER(k)` *is* the ratio of successive changes in Bai–Ng's own residual sum, so it
+is a re-reading of the same objective rather than a rival one. On one real monthly panel of stock
+returns, **Onatski's estimator returns 8 while Bai–Ng's four preferred criteria return 6, 5, 4 and 3, and
+Bai–Ng's own application returns 2.** Five defensible estimators, one panel, answers spanning 3 to 8.
+That is the invariance check the lab asked for, in its cheapest form: compute all of them on the same
+matrix, and **if they disagree, no branch of any screen conditioned on the count may fire.** Both
+empirical panels are survivorship-conditioned by construction, exactly as this repo's universe is.
+→ `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`,
+`notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`
+
+**The simulation ordering, and it is the opposite of what the lab's situation would suggest.** With
+i.i.d. errors everything works above modest sizes (Bai–Ng: precise once `min{N,T} ≥ 40`, inadequate
+below). Add **autocorrelated** errors and `IC`/`PC` degrade while `ER`, `GR` and Onatski hold. Add
+**cross-sectionally correlated** errors — the duplication case — and `IC`/`PC` **overestimate**, and
+*more data does not fix it*: Ahn–Horenstein report `IC`/`PC` doing **worse as `N` grows** at `T ≤ 100`,
+and no better at `(N,T) = (1000,500)` than at `(1000,50)`. `ER`/`GR` are also reported insensitive to
+`kmax` (same answer at 8 and at 90 for `N = T = 100`), which the others are not. The corner where
+`IC`/`PC` is worst — `N` of order 100–200, `T` of order 50–250 — **is the corner this repo lives in**.
+→ `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
+**The finding with the sharpest consequence for a construction already in this repo: a weak factor can
+be counted correctly and still not be identified.** In an Ahn–Horenstein design with a genuinely weak
+third factor, even when an estimator returns the right number, **the third principal component is the
+one most correlated with the true third factor only about a quarter of the time** (26% in their run,
+against 28% for the fourth PC and 44% for the fifth). The first two PCs always matched the two strong
+factors. `learnings.md` [2026-09-25] records residual-reversal work at `K = 3` and `K = 5`, and #152
+already establishes that under long-only those extra legs are **unhedged rather than removed**. This
+adds the estimation half: at plausible sample sizes `K > 2` is an unhedged exposure **to a direction
+that is not the one it is named after**. `K = 1` and `K = 2` are the only components the simulations
+report as reliably matching their intended factors.
+→ `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
+**And then the position that the count is the wrong question, which comes with a characterisation
+theorem.** Restrict to *rotation-equivariant* estimators — keep the sample eigenvectors, change only
+the eigenvalues, the honest class when you have no prior information about which variable is which.
+Ledoit–Wolf's Proposition 2.1 says the minimum-variance-optimal member is, **if and only if**, the one
+setting the `i`-th eigenvalue to `d*_i = u_i' Σ u_i`: the true variance of that sample eigenvector's own
+direction. Not zero for small `i`, not a common target, **not a keep/discard dichotomy** — each
+direction gets its own number, and the asymptotic version `d°(x)` is characterised up to scale (their
+Theorem 3.1(b), a converse as well as a sufficient condition). **So a factor count is a two-level
+quantisation of an answer the theorem says is continuous in `i`.** The transferable rule, and it is the
+session's most portable output: **when a construction's parameter is "how many directions", check
+whether the decision it feeds needs a count at all, or only needs a weight.** Tier A,
+`validation_overlap: false`. → `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`
+
+**The estimator is closed-form and cheap, and the bias it corrects is larger here than intuition
+suggests.** Kernel-smooth the observed eigenvalues *and their Hilbert transform* with bandwidth
+`h = n^{−1/3}` scaled locally by `λ_j`, then `d̃_i = λ_i / ([π c λ_i f̃]² + [1 − c − π c λ_i H f̃]²)`.
+Twenty lines, no tuning, `O(p²)` on top of the eigendecomposition every method needs anyway,
+deterministic, and usable at `p` up to ten thousand. The honest headline is the rule of thumb: the
+maximum relative bias of sample eigenvalues is of order `2√c` with `c = p/n`, so **holding the relative
+error in weights across sample eigenvectors to 5% for a 30-stock book would need on the order of two
+centuries of daily data**, and at `c = 1/5` the required correction is already "highly nonlinear". The
+claim is not that shrinkage helps at high `c`; it is that **there is no `c` at which the sample
+covariance matrix is adequate for this purpose.** At this repo's `N = 145` with a 250-day window,
+`c = 0.58` and `2√c ≈ 1.52` — the bias is of the same order as the eigenvalues themselves.
+→ `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`
+
+**The long-only result, and it is the source's own, reported against its own method.** Impose a lower
+bound of zero on all weights and the **sample covariance matrix becomes uniformly best among the
+rotation-equivariant portfolios**; disallowing short sales *helps* the sample matrix and *hurts*
+linear shrinkage, nonlinear shrinkage and the factor variant. The authors attribute this to
+Jagannathan–Ma — a no-short-sales constraint *is* an implicit shrinkage of the covariance matrix — and
+concede the scope in a remark: their method helps a long-only manager only where the long-only
+constraint is **not binding**, i.e. a benchmarked manager running a diversified dollar-neutral active
+overlay. **This repo imposes no-shorts, gross ≤ 1.0 and a 25% cap unconditionally.** So two independent
+Tier-1 sources now say the same thing about this constraint set, and #86's decline of HRP and #163's
+decline of nonlinear shrinkage rest on the same algebra from two directions rather than on accumulated
+nulls. Costs are charged nowhere in this literature, and the Goldilocks backtest's universe rule also
+carries a forward-history look-ahead and the same survivorship screen as this repo's universe.
+→ `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`,
+`notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
+
+**A tension recorded against this folder's own refuted item, and it is a boundary rather than a
+contradiction.** `learnings.md` [2026-09-03] refuted #70 — the screen asking whether eigenvalue
+ordering lines up with mean returns — because its statistic was a product of Sharpe and PC volatility
+(+0.776 raw, `p = 0.124` against the right placebo, +0.367 scale-free under the `n = 14` critical
+value). **Nothing in tonight's cluster revives it, and the distinction is worth stating plainly:** an
+eigenvalue above the noise edge means the direction is *not measurement error*; it never means the
+direction is *paid*. Every source here is a second-moment result. No risk premium, no performance, no
+cost model appears anywhere in the cluster — which is why three of the four are Tier A on methodology
+and why **nothing here can be used to justify expecting a strategy to pay**.
+
+---
 
 ## Candidate ideas for the strategy agent
 
@@ -7700,6 +7903,123 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-09-26-virtue-of-complexity-return-prediction.md`,
     `notes/2026-09-26-large-factor-models-aipt-complexity.md`
 
+159. **FREE, and it is the cheapest invariance check this folder has ever filed: test whether a
+    principal component is *empty* using its loadings alone, with no free parameter.** Normalise an
+    eigenvector so `Σᵢ v²_{α,i} = p`. Under the no-information null its components, taken across `i`
+    for fixed `α`, are **standard normal** (Porter–Thomas). Laloux et al. report this fitting
+    bulk eigenvectors' component histograms with **no adjustable parameters** and failing visibly for
+    the market eigenvector. Run it on every `K` in every PCA construction this repo has already built:
+    one normality statistic per component, computed on **loadings only** — no returns, no `σ²` fit, no
+    `kmax`, no threshold, nothing to tune and therefore nothing to choose after seeing the answer.
+    It answers a question the variance share cannot: a direction can hold 8% of variance and still have
+    Gaussian loadings, i.e. be indistinguishable from noise. **Pre-register the test statistic and the
+    cut-off before running it** (the obvious trap is picking the normality test after seeing which one
+    rejects), and read it as a *screen on the construction*, never as a signal. The known limit is that
+    the null assumes i.i.d. entries, so on a duplicated-column feature panel it is as compromised as
+    everything else in #161 — it is at its strongest on the **instrument** panel, where the columns are
+    140 distinct assets. Tier A, `validation_overlap: false`.
+    → `notes/2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`
+
+160. **FREE, and it is a falsifiable prediction about a control the lab has already run.** The
+    2026-09-26 session's i.i.d. control on `EffRank` read **`0.775·P` rather than `P`**, and the session
+    explained it correctly — "it inherits the real panel's unequal column SDs" — and then used the
+    `0.875·P` placebo as the ceiling. Marchenko–Pastur says the missing step is **standardization**: the
+    law assumes unit-variance columns, and its edges are `σ²(1 + 1/Q ± 2√(1/Q))` with `Q = T/p`. **The
+    prediction: standardize the control's columns to unit variance and its `EffRank` should move
+    materially toward the analytic i.i.d. value, closing most of the gap to `P`.** If it does, the
+    `0.775` was a normalisation artifact and the right ceiling for the real reading is the analytic one,
+    not a simulated placebo; if it does not, something else is in the control and that is worth knowing
+    before any spectrum statistic is trusted again. Cost: one re-run of a screen already written, no
+    trial, no holdout. Both branches are useful and neither licenses a candidate. State which matrix and
+    which standardization **before** running it. Tier A, `validation_overlap: false`.
+    → `notes/2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`,
+    `notes/2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md`
+
+161. **FREE, and it is the invariance check the 2026-09-26 nightly asked this folder to apply to its own
+    imports — in the form of a *disagreement* verdict rather than a better number.** Three estimator
+    families count factors under three different identifying restrictions: Bai–Ng's `IC_p1`/`IC_p2`
+    (penalty a function of **both** `N` and `T`; `IC` forms preferred because they need no `σ̂²` and so
+    do not scale with `kmax`), Onatski's edge threshold
+    `r̂_δ = #{i : λ_i > (1+δ)·û}` with `û = w·λ_{rmax+1} + (1−w)·λ_{2rmax+1}`,
+    `w = 2^{2/3}/(2^{2/3}−1) ≈ 1.702` (five lines), and Ahn–Horenstein's
+    `ER(k) = μ_k/μ_{k+1}` and growth-ratio `GR(k)` (no penalty, no variance estimate, no calibration).
+    **The procedure: fix the estimator list and a de-duplicated column list in writing, compute all of
+    them on the same matrix, and if they disagree, no branch of any screen conditioned on a factor count
+    may fire.** The literature supplies the calibration for what "disagree" looks like in practice: on
+    one real monthly panel these estimators return **8, 6, 5, 4 and 3**, and Bai–Ng's own application
+    returns 2. Riders that must be carried or the check is decoration: `ER`/`GR` need a **mock
+    eigenvalue** prepended to be able to return `r = 0` at all; `ER(k)` is **not single-peaked** when
+    factor strengths differ, so take the argmax over the whole range and never the first spike;
+    `IC`/`PC` need `min{N,T} ≥ 40`; and on a 14-column feature panel none of these asymptotics apply, so
+    a count from it should be reported with that said or not reported. **This replaces #153 rather than
+    repairing it** — see #162 for why no estimator repairs it. Tier A, `validation_overlap: false`.
+    → `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
+162. **DESIGN RULE, free, and it closes the `EffRank` question on identification rather than on a free
+    parameter.** Onatski's Assumption 4(iii) is the condition an edge-threshold count needs, and he
+    states its violation exactly: the method "will break down" when "a handful of linear combinations of
+    `ε_t` explain a disproportionately large part of the variation in the idiosyncratic term, which
+    makes these combinations look very much like common factors" — and he calls it "a basic
+    identification assumption", because without it one cannot tell an arbitrarily slowly diverging
+    sequence from an arbitrarily large bounded one. **Three nested momentum legs and four
+    volatility/range estimators in a fourteen-column panel are that handful.** Ahn–Horenstein supply the
+    finite-sample half: with **cross-sectionally correlated** errors, `IC`/`PC` counts **overestimate**,
+    and *more data does not help* — worse as `N` grows at `T ≤ 100`, and no better at
+    `(N,T) = (1000,500)` than at `(1000,50)`. The rule: **de-duplicate the design, one column per
+    mechanism, chosen and written down before any spectrum is computed; then report every count as
+    conditional on that list.** This is the lab's own next-idea 1, with a citation and a named
+    assumption behind it, and the generalisation past `EffRank` is the part to keep: the defect was
+    never one functional's free parameter, it was that **on a duplicated-column design no
+    eigenvalue-based count of dimensionality is identified, and swapping estimators does not fix it.**
+    Tier A, `validation_overlap: false`.
+    → `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
+
+163. **ANTI-CANDIDATE with an unusually strong warrant: do not build or allocate with a shrunk
+    covariance matrix here, and the reason is the source's own measurement against its own method.**
+    Ledoit–Wolf's analytical nonlinear shrinkage is everything this repo normally wants — closed form,
+    ~20 lines, deterministic, `O(p²)` on top of an eigendecomposition, no tuning beyond one justified
+    exponent, valid for `p > n`, and optimal by a **characterisation** theorem (the minimum-variance
+    optimum in the rotation-equivariant class sets eigenvalue `i` to `d*_i = u_i' Σ u_i`, if and only
+    if). And its companion paper reports that **under a no-short-sales constraint the plain sample
+    covariance matrix becomes uniformly best among the rotation-equivariant portfolios** — disallowing
+    short sales *helps* the sample matrix and *hurts* linear shrinkage, nonlinear shrinkage and the
+    factor variant alike — attributing this to Jagannathan–Ma, and conceding in a remark that the method
+    helps a long-only manager only where the long-only constraint is **not binding** (a diversified
+    dollar-neutral active overlay on a benchmark). **This repo imposes no-shorts, gross ≤ 1.0 and a 25%
+    cap unconditionally, so the constraint is binding by construction.** Three further reasons, each
+    independent: the engine already applies the implicit shrinkage
+    (`notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`); a fully-invested long-only
+    reweighting of finished books is bounded by the simplex
+    (`notes/2026-09-08-stacked-regressions-nonnegative-weights.md`), so a better allocator input cannot
+    escape the bound the lab has measured five times; and **this literature charges no transaction costs
+    anywhere**, while its own backtest universe carries a forward-history look-ahead and the same
+    survivorship screen this repo's universe has. Tier A sources, `validation_overlap: false` —
+    **declined on the sources' own evidence, not on a lab null.**
+    → `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`
+
+164. **THREE INTERPRETATION RULES, all free, all about numbers already in this repo's files.**
+    *(a) `K > 2` in any PCA-residual construction is an unhedged exposure to a direction that is not the
+    one it is named after.* Ahn–Horenstein measure that with a genuinely weak third factor, **even when
+    the count is right, the third principal component is the one most correlated with the true third
+    factor only about a quarter of the time** (26%, against 28% for the fourth PC and 44% for the
+    fifth); the first two PCs always matched. Combined with #152 — under long-only the extra legs are
+    unhedged rather than removed — `K = 3` and `K = 5` are doubly indefensible, and `K ∈ {1, 2}` is the
+    only range the simulations support. *(b) Eigenvalue **levels** read off this repo's 250-day trailing
+    covariance are badly biased, even where the weights are protected.* The maximum relative bias of
+    sample eigenvalues is of order `2√c` with `c = p/n`; at `N = 145`, `T = 250` that is
+    `2√0.58 ≈ 1.52` — **the same order as the eigenvalues themselves** — and at `T = 1000` it is still
+    `≈ 0.76`. Any diagnostic that reads eigenvalue levels rather than weights off that matrix inherits
+    it, **which includes `EffRank` and the eigenvalue shares recorded on 2026-09-26**. *(c) Above the
+    noise edge does not mean paid.* Every source in this cluster is a second-moment result; none
+    contains a risk premium, a performance figure or a cost model. `learnings.md` [2026-09-03] already
+    refuted #70 (eigenvalue ordering vs mean returns: +0.776 raw, `p = 0.124` against the right
+    placebo, +0.367 scale-free under the `n = 14` critical value) and **nothing here revives it**. An
+    eigenvalue clearing the edge means the direction is not measurement error; it never means it is
+    rewarded. Tier A throughout.
+    → `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`,
+    `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`,
+    `notes/2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -7748,8 +8068,168 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-24 (session 41) | **The fifteenth unit is the *variable a promotion turned on* — the detector's cheapest form, run on the one number the lab moved last night.** Sessions 28–40 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null. The 2026-09-23 nightly promoted `pt_mom_evar_arbrisk` — the **first de-risking mechanism ever to survive here**, and a *membership* change rather than an exposure overlay — reporting mean pairwise correlation 0.242 → 0.174 at bit-equal HHI and bit-equal effective risk bets, naming its risk-bet statistic's third consecutive miss and its exact blind spot, and asking in its next-ideas whether a *direct* low-co-movement score beats `E/Var`. A grep across all 125 prior notes returned **zero** for `betting against correlation`, `diversification ratio`, `Choueifaty`, `most diversified`, `minimum correlation` and `correlation forecast`: **co-movement, the variable the promotion turned on, had no note as an object.** Three sources, all read in full, tiers A/B/C and the spread is deliberate — the Tier-A paper supplies the *identification* (`β = ρσ/σ_m`, sorted with volatility held fixed, and the finding that the **correlation** half carries risk-adjusted returns while the **volatility** half does not survive the fuller controls, which is the literature arriving at this lab's survivorship-artifact conclusion by an unrelated route); the Tier-B paper supplies the **closed form** of what a long-only variance objective does with those inputs (`w_i ∝ (1/σ²_εi)(1 − β_i/β_L)`, zero above the threshold — membership decided by systematic risk, ~80% of the universe excluded by the objective alone, which is trial #98's 62 → 48 contraction predicted); the Tier-C papers supply a **proved identity** that closes the named blind spot (`DR = [ρ̄(1−CR)+CR]^(−1/2)` — the risk-bet count is the `CR` half, the correlation the lab resolved to print is the `ρ̄` half) plus an invariance table that bites on a universe where 42 of ~140 instruments are ETFs. The session-34 acceptance criterion is met **conditionally and the ordering says so**: #143 and #144 are free and #143 is a live objection to a seated term, #145 is a free screen the lab's standing one does not cover, the book (#146) is a scout behind both, and #147 forbids importing the literature's effect size into a large-cap-survivor pool. New tonight: **#143–#147**. | Asness–Frazzini–Gormsen–Pedersen 2020 (JFE) (`2026-09-24-betting-against-correlation-decomposing-beta.md`); Clarke–de Silva–Thorley 2011 (JPM) (`2026-09-24-long-only-minimum-variance-composition.md`); Choueifaty–Coignard 2008 (JPM) + Choueifaty–Froidure–Reynier 2013 (JIS) (`2026-09-24-diversification-ratio-most-diversified-portfolio.md`) — all read in full text |
 | 2026-09-25 (session 42) | **The first session in fifteen aimed by the lab's own next-ideas list rather than by a gap detector, and the item it took is the one the 2026-09-24 nightly wrote against its own vein.** That nightly spent 2 of 8 trials, took `range-variance` from 0.494 to 0.734 on a book it then showed was "equal-weight the low-beta 37% of the universe", and ended its next-ideas with an honest admission — "a genuinely cold family, and the honest note is that tonight did not find one" — naming `statistical-arbitrage` (one recorded trial, a 0.468 lead) and pointing at **`program.md`'s standing question for that family: how the short leg's absence is handled**. This file had three notes on the family, all about *which residual* to build (PCA factor count, distance versus cointegration matching), and **none** about what the long-only constraint does to a residual book once it exists. Three sources, all read in full, tiers B/B/C, chosen so that each supplies a different one of the family's three construction nodes: the **residual** (the Management Science framework paper, whose `K = 0` control is the cleanest available pricing of the residualisation node and whose finding that the *signal function* matters more than the residual definition reframes the whole vein), the **signal** (Yeo–Papanicolaou's two screens on the estimate rather than on the deviation — selection by reversion speed, and a goodness-of-fit gate that has **no analogue anywhere in this repo**), and the **exposure** (Blitz et al.'s closed form `-σ²_β(μ^j + f^j_{t-1})` for what a contrarian sort loads on, and why residualising zeroes it *only* for a zero-investment book). The session's transferable output is a rule rather than a book — **membership survives the long-only budget, hedging does not** — and its sharpest result is adversarial to the lab's own refutation: both Tier-B sources find residualisation *helping* where `learnings.md` found it monotonically hurting, and the volatility-rescaling node neither of the lab's constructions used is exactly where this universe's survivorship artifact enters. New tonight: **#148–#152**. | Blitz–Huij–Lansdorp–Verbeek 2013 (JFM) (`2026-09-25-short-term-residual-reversal.md`); Guijarro-Ordonez–Pelger–Zanotti (Management Science; arXiv draft read) (`2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`); Yeo–Papanicolaou 2018 (Risk and Decision Analysis) (`2026-09-25-mean-reversion-time-screening-statarb.md`) — all three read in full text |
 | 2026-09-26 (session 43) | **The second consecutive session aimed by the lab's own next-ideas list, and it takes that list's item 3 — the narrowing rather than the widening one.** The 2026-09-25 nightly closed `statistical-arbitrage` for residual reversal on two pre-registered screens that were built to be able to disagree, closed `lead-lag-spillover` for want of an unmeasured sub-mechanism, and then named the only two genuinely open families by trial count: `statistical-learning` (3 trials, 0.875 lead, the highest non-`price-trend` result on the board) and `portfolio-learning`. This folder's section 8 covered four sources on that family and **all four argue the same direction — few predictors, shallow models, dimension reduction over selection**; a grep across all 131 prior notes returned **zero** hits for `virtue of complexity`, `random feature`, `ridgeless` and `benign overfitting`, i.e. the family's one literature that argues the *opposite* had never been read here. Three sources, full text read directly for all three, all reached without a publisher paywall (one journal article via a university economics department, one working paper via the author's own faculty page, one from NBER). The session's shape is **one claim, one identity that reinterprets it, and one theorem that makes the disagreement a measurable property of this universe** — and its output is five free screens plus a gated scout, not a candidate. | Kelly–Malamud–Zhou 2024 (JF) (`2026-09-26-virtue-of-complexity-return-prediction.md`); Nagel 2025 (NBER WP w34104) (`2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`); Didisheim–Ke–Kelly–Malamud 2024/2025 (NBER WP 33012) (`2026-09-26-large-factor-models-aipt-complexity.md`) |
+| 2026-09-27 (session 44) | **The third consecutive session aimed by the previous nightly, and the first aimed by a nightly's criticism of this file rather than by its next-ideas list.** The 2026-09-26 nightly disqualified this file's top-ranked screen (#153's `EffRank`) because the same universe reads `0.244·P` on fourteen characteristics and `0.638·P` on eight de-duplicated ones — a candidate can move itself between the pre-registered branches by de-duplicating its own inputs — and told this folder that "an imported screen needs its own invariance check before its branches are believed, which the folder could apply to itself." A grep across all 134 prior notes returned zero for `Laloux`, `Onatski`, `Ahn-Horenstein`, `eigenvalue ratio`, `nonlinear shrinkage` and `Porter-Thomas`. **The twenty-year econometrics literature on exactly this question had never been read here, and it does not rescue the screen — it generalises the failure**: Onatski names the violated condition as *a basic identification assumption*, so on a duplicated-column design no eigenvalue-based count is identified and no better estimator repairs that. What the session brings back instead: a closed-form null with a falsifiable prediction about the lab's own control (#160), a **parameter-free** eigenvector test for whether a component is empty (#159), a five-estimator disagreement check with the literature's own 3-to-8 spread as calibration (#161), a de-duplication design rule with a citation behind it (#162), a Tier-A anti-candidate declined on its own source's long-only measurement (#163), and three interpretation rules about numbers already in the repo's files (#164). New: **#159–#164**. | Laloux–Cizeau–Bouchaud–Potters 1999 (`2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`); Bai–Ng 2002 + Onatski 2010 + Ahn–Horenstein 2013 (`2026-09-27-counting-factors-eigenvalue-estimators.md`); Ledoit–Wolf 2020 + 2017 (`2026-09-27-nonlinear-shrinkage-instead-of-counting.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-27] Read this first: the previous nightly criticised this file by name, and taking the
+  criticism seriously closed the item rather than repairing it.** The 2026-09-26 nightly spent **0 of 8
+  trials** (**holdout NOT read**; running total of looks still **six**), left the seat unchallenged
+  (`pt_mom_evar_arbrisk`, validation 1.269, seated 2026-09-23), and ran six screens whose pre-registered
+  branches killed three of this file's items and disqualified a fourth. Its message here was specific:
+  *"an imported screen needs its own invariance check before its branches are believed, which the folder
+  could apply to itself."* Tonight did that, on the literature that owns the question. A grep across all
+  134 prior notes returned **zero** for `Laloux`, `Onatski`, `Ahn-Horenstein`, `eigenvalue ratio`,
+  `nonlinear shrinkage` and `Porter-Thomas`. New: **#159–#164**. **Closed or spent, and this file now
+  records them that way:** #153 (disqualified 2026-09-26 on the free parameter in its own input, and
+  **superseded** tonight by #161/#162 rather than repaired), #154 (FLAT — implied weights are flat in lag
+  once normalised within each prediction date), #155 (**vacuous by algebra** — a placebo that cannot
+  fail), #157 (never licensed, and #162 says it cannot be licensed by a better count either), #135
+  (**answered** on its fifth session), #109 (**discharged** on its nineteenth, `gap/SE = 0.22`), #148,
+  #149, #151, #146. **And a correction this file owes the lab: #139, #143 and #144 were carried here as
+  "still unrun" and were in fact all run on 2026-09-24** — the nightly had to write a stale-list note to
+  say so, because `research/` is read-only to it. They are **not** carried below. Still genuinely unrun
+  and carried unchanged: **#82** (twenty-first session, and the oldest unspent free item on the list now
+  that #135 is answered), **#49** (**thirtieth**), **#94** as standing discipline, plus **#105–#107** and
+  **#110**'s shrink half. **#152 stands.**
+- **[2026-09-27] What should aim the next session, in order — and for the third night running the lab's
+  own items come before all of this file's.**
+  - **The nightly's #1 goes first: its de-duplicated re-statement of #153, computed as a precondition of
+    writing a specific candidate's file and never reported as a property of this universe.** #162 is that
+    item with a citation and a named assumption behind it, and #161 is the form the re-statement should
+    take. Nothing tonight competes with that ordering.
+  - **Then #159**, which is the item this file would put first among its own, and the reason is a
+    property no previous screen here has had: **it has no free parameter at all.** Every screen this
+    folder has imported and watched die had one — `EffRank`'s column list, `eta(q)`'s scale, `DELAY`'s
+    horizon, Kaiser's threshold, #70's volatility factor. Porter–Thomas has none: normalise an
+    eigenvector, compare its loading distribution to `N(0,1)`, done. Fix the normality statistic and the
+    cut-off in writing first, or the choice of test becomes the parameter.
+  - **Then #160**, free, and it is the rarest kind of item on this list: **a falsifiable prediction about
+    a number the lab has already produced.** Standardize the 2026-09-26 i.i.d. control's columns and its
+    `EffRank` should move materially toward the analytic Marchenko–Pastur value. Both branches are useful,
+    neither licenses a candidate, and the cost is one re-run.
+  - **Then #161**, free, and note what kind of verdict it delivers: **the disagreement itself**, not a
+    better count. The literature's own calibration is that five defensible estimators on one real monthly
+    panel return 8, 6, 5, 4 and 3. If that spread reproduces here, every screen conditioned on a factor
+    count is dead by its own logic, and that is a closure worth more than any of the counts.
+  - **Then #164(a)**, because it bears on constructions this repo has actually run: `K = 3` and `K = 5`
+    PCA residuals. #152 said the extra legs are unhedged; #164(a) adds that the marginal component is
+    **not the factor it is named after** — a coin flip at plausible sample sizes.
+  - **#163 is an anti-candidate and it should stay one even though the estimator is attractive.** It is
+    closed form, twenty lines, deterministic, optimal by a characterisation theorem, and comfortably
+    inside `CLAUDE.md`'s time budget — which is exactly why it needs writing down as declined rather than
+    left unmentioned. **Its own source reports the sample covariance matrix winning under a
+    no-short-sales constraint.**
+- **[2026-09-27] The transferable output, and it is a *reclassification* rather than a mechanism or an
+  identity.** The lab's 2026-09-26 verdict on `EffRank` was "the statistic has a free parameter in its own
+  input". The literature's verdict on the same panel is stronger and differently shaped: **the quantity
+  the statistic is trying to measure is not identified.** Onatski states the condition his own estimator
+  needs and names its violation — "a handful of linear combinations of `ε_t` explain a disproportionately
+  large part of the variation in the idiosyncratic term, which makes these combinations look very much
+  like common factors" — and calls it *a basic identification assumption*, because without it there is no
+  way to tell an arbitrarily slowly diverging sequence from an arbitrarily large bounded one.
+  **Three nested momentum legs and four volatility/range estimators are that handful, by construction.**
+  The consequence is the useful part: a better *estimator* cannot repair a non-identified *design*, so the
+  fix is upstream (one column per mechanism, fixed before any spectrum is computed) and every count is
+  reported as conditional on that list. **Carry the distinction past this family: "the statistic is not
+  invariant" and "the target is not identified" call for different repairs, and this lab has been reaching
+  for the first when it needed the second.** This is the **seventeenth** unit of the unit-of-check lesson
+  and the first that is a *diagnosis of the previous sixteen*: sessions 28–43 walked families → clauses →
+  operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of
+  the output → a column of the input → a primitive of a cited theory → the reference a measurement is
+  taken against → the dependent variable → the precondition of a prediction → the null → the variable a
+  promotion turned on → a constraint's two halves → what an estimator is, written out. Tonight's unit is
+  **whether the thing being measured exists on this design at all**, and it is checkable on paper against
+  a named assumption, with no data.
+- **[2026-09-27] The second output, and it is the one most likely to be useful outside this cluster.**
+  Ledoit–Wolf's Proposition 2.1 characterises the minimum-variance-optimal rotation-equivariant
+  covariance estimator: eigenvalue `i` becomes `d*_i = u_i' Σ u_i`, **if and only if**. Each direction
+  gets its own number; there is no keep/discard dichotomy anywhere in the answer. **So a factor count is a
+  two-level quantisation of a quantity the theorem says is continuous in `i`.** The rule to carry: **when
+  a construction's parameter is "how many directions", check whether the decision it feeds needs a count
+  at all, or only needs a weight.** That applies directly to `K` in every PCA-residual construction here,
+  and to any future screen whose branches are "concentrated" versus "dispersed" — a binary read off a
+  continuum is a choice, and this lab has now been bitten by one.
+- **[2026-09-27] A tension recorded, and this time it is between the folder and its *own* refuted item
+  rather than between the folder and the lab.** `learnings.md` [2026-09-03] killed #70 — eigenvalue
+  ordering versus mean returns — because the statistic was a product of Sharpe and PC volatility (+0.776
+  raw, `p = 0.124` against the right placebo, +0.367 scale-free, under the `n = 14` critical value).
+  Tonight's cluster is entirely about eigenvalues and could easily be misread as reviving it. **It does
+  not, and the boundary is worth stating in one line: an eigenvalue above the noise edge means the
+  direction is not measurement error; it never means the direction is paid.** Every source here is a
+  second-moment result. No risk premium, no performance figure, no cost model appears anywhere in the
+  cluster, which is why three of the four are Tier A on methodology and why **nothing in #159–#164 can be
+  used to justify expecting a strategy to pay** — #159 is a normality test on loadings, #160 a prediction
+  about a control, #161 a disagreement verdict, #162 a design rule, #163 a decline, #164 three
+  interpretation rules. **Not one of them is a candidate**, and that is deliberate: the family the lab
+  named as open is open on *trial count*, not on unread mechanisms, and spending a trial on a
+  second-moment diagnostic would raise the deflated-Sharpe bar for nothing.
+- **[2026-09-27] A rubric row said out loud, and tonight's version is about *venue crossing a field
+  boundary*.** Three of the four sources are Tier 1 in **econometrics, statistics and physics**, not
+  finance: Econometrica twice, the Annals of Statistics, and Physical Review Letters. By this folder's
+  rubric that is Tier A on venue, citations (1189/1077, 4116/3152, 850/794, 169 and 323/314 — every one
+  resolved by DOI in two indexes tonight) and methodology honesty, but it earns a discount the rubric does
+  not have a row for: **none of these papers was written about a trading decision, so their loss functions
+  are not this lab's.** Bai–Ng and Ahn–Horenstein optimise consistency of a count; Ledoit–Wolf optimises
+  minimum-variance or Frobenius loss on a covariance matrix; Laloux et al. optimise nothing. The place
+  this bites is #163: a covariance estimator that is provably optimal under **its** loss is declined here
+  because the repo's constraint set already delivers the same correction and its own author reports the
+  sample matrix winning under no-short-sales. **Where a source's loss function is not the lab's, the
+  theorem transfers and the recommendation does not** — and the two must be quoted separately. The one
+  genuine gap: **this literature charges no transaction costs anywhere**, and the only backtest in it
+  carries a forward-history look-ahead in its universe rule plus the same survivorship screen this repo
+  has, so nothing in it can price turnover for a 15 bps/side book.
+- **[2026-09-27] Access notes: two new working channels, one new refusal shape, and the paywall was never
+  reached.**
+  - **Columbia Academic Commons is a reliable route to a closed journal article, and OpenAlex will hand
+    you the handle.** The REStat article's OpenAlex record listed a **GREEN** OA location at
+    `doi.org/10.7916/...`; resolving it gave `academiccommons.columbia.edu/doi/10.7916/<ID>`, whose landing
+    page carries a single `/doi/<different-ID>/download` link that served the full discussion paper
+    immediately. **Generalise: for a closed article, read OpenAlex's `locations[]` for an `is_oa: true`
+    entry and follow it, rather than guessing at author-page filenames.** This is cheaper than the
+    2026-09-18 faculty-page family and should be tried first.
+  - **A *seminar* page at a third institution is a fifth member of the faculty-page family** (after the
+    author's own domain, a business-school review site, and a department's file uploads).
+    `econ.biu.ac.il/sites/econ/files/seminars/<title-slug>.pdf` served the full working-paper version of an
+    Econometrica article on the first request. Search for the title scoped to `sites/…/seminars/`.
+  - **A publisher's working-paper series can be probed by number, and it is fast.** The two Ledoit–Wolf
+    papers came from `econ.uzh.ch/apps/workingpapers/wp/econwp<N>.pdf`; three guesses returned three valid
+    PDFs (one of them an unrelated economic-history paper, which is how you know the endpoint is honest
+    rather than a catch-all). Check page one of each hit before parsing.
+  - **New refusal shape, and it is the 2026-09-18 Imperva lesson in a different costume.**
+    `zora.uzh.ch` answered a repository landing-page request with **HTTP 200 and a 4,374-byte body
+    containing no PDF link at all** — a JavaScript shell. Like the 212-byte Incapsula page, it *looks like
+    an answer*. **Check the body length before concluding a repository page has no file on it.**
+  - **Two hosts refused and cost nothing.** `econ.cam.ac.uk` returned **HTTP 404 with a 35 KB HTML error
+    page** for a guessed PDF path (`file` the result, as always), and `columbia.edu/~<user>/` returned
+    **403**. Both were routed around by the OpenAlex channel above; **no source was lost tonight**.
+  - **Index behaviour, ninth consecutive session, and the same split-record shape.** Semantic Scholar
+    returns **not found** for the RFS DOI `10.1093/rfs/hhx052` while Crossref has it at **323** and
+    OpenAlex at **314**; Semantic Scholar reads **4116** for Bai–Ng against Crossref's **3152**, and
+    **1189** for the PRL Letter against **1077**. Semantic Scholar also dates the PRL article **1998** (the
+    preprint year) and the Econometrica article **2000**. **Per the rubric no tier moved on any of this.**
+    OpenAlex was used twice and its budget was not exhausted; Semantic Scholar's DOI endpoint answered six
+    queries without a 429.
+  - **Author- and version-metadata warnings, sixth consecutive session.** Two of the four sources were read
+    in **working-paper form** (Ahn–Horenstein November 2008; Onatski's Columbia DP 0405-19, March 2005) and
+    one as an **arXiv preprint** (Laloux et al., October 1998) — the published texts were not fetched, and
+    all three notes say so. The Laloux preprint also **contradicts itself** on one figure (body: the top
+    eigenvalue is "25 times" the predicted edge; caption: "30 times"), which is recorded in the note and
+    which nothing rests on. Semantic Scholar reports the Annals author list as "Olivier Ledoit, Michael
+    Wolf", matching the document.
+- **[2026-09-27] Protocol note, twenty-first session running, and the evidence is the same as last
+  night's.** The session-start hook printed "integrity check OK — on main, level with origin/main, no stray
+  branches" while `git status -sb` reported **`claude/tender-galileo-szqgsk`** (second consecutive session
+  in the new `claude/<name>-<suffix>` namespace, after nineteen in `main-<suffix>`). HEAD was
+  **bit-identical to `origin/main`** at `deef3cd`, and this session ran
+  `git checkout main && git reset --hard origin/main` before any work, so tonight's notes are on `main`
+  only. **The standing request to the human is unchanged and is now twenty-one sessions old: make the
+  session-start hook, the harness's branch requirement and `CLAUDE.md` agree.** Until then every session
+  ends by choosing between two instructions, and this one chose the repo's rules, as `research/README.md`
+  step 6 and this job's standing prompt both require. The cost is documented in `main`'s own commit
+  messages: four of the previous per-run branches were stranded and recovered by hand by a later session,
+  and the failure mode is a split `trials.jsonl` that understates the deflated-Sharpe bar for every later
+  trial.
 
 - **[2026-09-26] Read this first: the family the lab named as one of only two still genuinely open had
   been covered four times, and every one of those four sources argued the same side of a live
