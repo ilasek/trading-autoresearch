@@ -385,6 +385,35 @@ weights; the long-only analogue is the champion's and the equivalence remains th
 inference. Tier A, `validation_overlap: false`.
 → `notes/2026-08-28-value-momentum-everywhere-global-comovement.md`
 
+**A conditioner on the *path* by which a momentum score arrived, rather than on the score —
+and it is the only construction in this section that is explicitly designed not to be a
+restatement of the cumulative return.** Da–Gurun–Warachka's frog-in-the-pan hypothesis models
+limited attention as a magnitude threshold: signals below it are not processed until the payoff
+is realised, so the interim price is short of fundamentals by exactly the sum of the
+sub-threshold signals. The testable consequence is conditional rather than unconditional —
+**holding the 12-1 cumulative return fixed**, continuation should be stronger where that return
+was assembled from many small same-signed days than from a few large jumps. The proxy is one
+line, `ID = sgn(PRET) × [%neg − %pos]` over the formation window, with low ID meaning continuous
+information; the paper documents monotone behaviour across the ID sort in both a sequential and
+an *independent* double sort with `PRET`, survival of Fama–MacBeth controls including turnover,
+idiosyncratic volatility, size, analyst coverage and both capital-gains-overhang variables,
+survival of orthogonalisation against those same controls, and **no long-run reversal** — which
+is what distinguishes underreaction from an overreaction that will be given back. Two facts
+decide how this lab should treat it. First, the horizon: marginal continuation after continuous
+information stays distinguishable from zero out to roughly the eighth month after formation
+against roughly the third after discrete information, so the effect does **not** require fast
+rebalancing — unusual in this section and material where `learnings.md` [2026-09-27] bounds the
+whole cost-remedy class on the current seat at +0.0249. Second, the flag the rubric cannot show:
+**this is the one Tier-A source in the section for which no independent replication was located**
+(a Crossref title search returned one indexed non-US extension, on *earnings* momentum in a
+price-limit market, 9 citations). Tier A, `validation_overlap: false`, `published_post_2018:
+false` — and the repo-specific hazard is severe enough to belong in the family paragraph: this
+panel is **forward-filled across foreign holidays**, which manufactures exact zero returns, and
+Eq. 1 charges zeros against continuity, so a naive ID sort on this universe is partly a sort on
+which region an instrument trades in. The paper's own `ID_Z` variant normalises that away and is
+the only form that should be written here.
+→ `notes/2026-09-28-information-discreteness-frog-in-the-pan.md`
+
 ### 2. Time-series momentum / trend following
 
 **The best-known result in this family is contested in its own literature, and the version this
@@ -4769,6 +4798,77 @@ and why **nothing here can be used to justify expecting a strategy to pay**.
 
 ---
 
+### Where a long-only book's risk actually lives — weight-space distance, revealed alpha, and concentration (cross-family)
+
+Opened 2026-09-28, and it is the first section in this file aimed at a *property of the
+incumbent's weighting function* rather than at a signal, a statistic or an estimator. It exists
+because `experiments/learnings.md` [2026-09-27] measured that the seated champion holds **~61.41%
+of gross in its ten largest weights and ~1.43% in its ten smallest of ~48** — ratio **0.023** —
+and established that this is a property of the `c − c.min() + FLOOR` magnitude weighting rather
+than of any candidate, which retrospectively explains a class of this repo's unresolvable nulls
+(buffer bands at 0.963 holdings overlap, a 42%-of-names deletion at `rho` 0.9908, subsample
+bagging at 0.9162). The lab's next-ideas item 2 asks for a candidate that **moves the top ten
+weights** and rules out re-sweeping the weighting function as the route. This section holds the
+literature that owns the two questions in between: *how do you measure the distance between two
+long-only books*, and *what is a book's tail worth?*
+
+**Weight-space distance is definable, cheap, and — on its own literature's evidence — not
+predictive.** Cremers–Petajisto's Active Share, `½ Σ|w_A,i − w_B,i|`, is the weighted analogue of
+the membership statistics this lab already computes (Jaccard, holdings overlap, "42% of names
+deleted"), and on a book with a 0.023 weight profile the unweighted versions are dominated by
+names carrying a fortieth of the risk each — a Jaccard of 0.0611 and a holdings overlap of 0.963
+are both nearly uninformative about what a book earns. Their substantive contribution is the
+**two-dimensional** framing: a holdings-space distance and a return-space distance (tracking
+error) are not redundant and neither is a function of the other. Frazzini–Friedman–Pomorski then
+re-run the performance claim on the same sample with one control added and it disappears: sorting
+funds on Active Share is close to sorting them on **which benchmark they are measured against**,
+total returns of the high and low groups are not reliably distinguishable, and within a single
+benchmark the relation is as likely to be positive as negative. Their one-line reason is the rule
+to carry — **Active Share measures active *risk*, and taking risk is not itself a source of
+return** — and they extend it by analogy to tracking error and to `R²`-distance-from-index, which
+are equally non-predictive; what does appear is an *interaction*, where independently-likely-
+skilled managers gain from taking more risk. **This is the citable anchor for the lab's own
+standing rule from 2026-09-10** (*do not infer a book's return-space distance from its
+holdings-space distance*), which until tonight had a measured quantity and no external support.
+The usable consequence: adopt Active Share against the seat as the **weighted** replacement for
+Jaccard, use it as a *falsifier* (a candidate near zero cannot resolve, whatever its `rho`), and
+never as evidence of decorrelation — the required-gain table is read off `rho` and stays that
+way. Tier A for the pair (a same-sample, same-method controlled re-examination is the replication
+row being exercised properly), `validation_overlap: false`.
+→ `notes/2026-09-28-active-share-and-its-deactivation.md`
+
+**A weighting function is a revealed alpha forecast, and the inversion is readable off weights
+this engine already emits.** Antón–Cohen–Polk start from `λ = (1/k)Ω⁻¹µ`, invert to `µ = kΩλ`,
+and — assuming all off-diagonal covariance comes from one market factor and the book's beta is
+near the market's — reduce the manager's subjective alpha to `α ∝ σ²_idio,i · (w_i − w_ref,i)`
+with implied information ratio `∝ σ_idio,i · (w_i − w_ref,i)`. The reference is a choice they
+make explicit: market weights, or the value-weighted portfolio of *the names the book actually
+holds* (the right one when a book is a selection followed by a weighting, which is exactly this
+repo's construction). Their empirical claim is that the position a manager reveals as their
+highest-IR idea outperforms the rest of that same manager's book; their normative claim is that
+the rest is dilution, and their explanation for why real books are diversified anyway is entirely
+**agency** — regulatory and fiduciary pressure, fee and asset-gathering incentives à la
+Berk–Green, manager career risk, and client-side judging of a single fund on its own Sharpe
+ratio. **The rule to carry is that one: the observed diversification of a real book is an agency
+artifact, not an estimate of how many good ideas its signal had** — and this lab has no clients,
+no fee schedule and no career risk, so the argument transfers as a prior that a ranked book's
+tail is cheap to lose, never as evidence about any particular tail. Tier B and the flags bind:
+unpublished, no replication located, US mutual funds only, sample to December 2018, so
+`validation_overlap: true` and `published_post_2018: true`.
+→ `notes/2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`
+
+**The tension between the two, stated rather than smoothed.** One source says concentration
+measures do not predict performance; the other says concentration *in the top-ranked names* is
+where the performance is. They are reconcilable — a *level* of concentration is not a *ranking*
+of positions, and the second claim is conditional on the book's own ordering being informative —
+but the reconciliation is exactly the assumption this lab cannot grant itself about its own
+score. **Carry both: concentration per se buys nothing; concentration in the right names is the
+whole claim; and which names are right is the thing in dispute.** Neither source charges
+transaction costs, neither addresses multiple testing, and neither is about a systematic signal,
+so nothing in this section licenses a performance expectation of any kind.
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -8020,6 +8120,123 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`,
     `notes/2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`
 
+165. **FREE, first among tonight's, and it is a data-quality measurement rather than a screen —
+    which is why it comes before the candidate it gates.** This panel is forward-filled across
+    foreign holidays, so an exact **zero daily return** in `prices` can be a calendar artifact
+    rather than a market fact. Measure, per instrument on the visible window: the fraction of
+    daily returns that are exactly zero (`%zero`), split by the ETF cohort (42 of ~145) and by
+    region. Three things turn on it and none costs a trial. *(a)* Any score built from the
+    **signs** of daily returns silently charges those zeros — Da–Gurun–Warachka's `ID` is
+    normalised by `%pos + %neg + %zero = 1`, so an instrument trading on fewer of the panel's
+    days reads as mechanically more "discrete" than an identically-behaved US name, and an ID
+    sort would partly be a sort on which region a name trades in. The paper's own `ID_Z` variant
+    divides by `[%neg + %pos]` and removes it exactly. *(b)* `%zero` **is** the
+    Lesmond–Ogden–Trzcinka illiquidity proxy, so the same measurement is a free `liquidity-volume`
+    diagnostic and a cross-check on the Amihud machinery already in `strategies/lib/features.py`.
+    *(c)* It is the kind of check `learnings.md` [2026-09-26] and [2026-09-27] have twice demanded
+    — name the property of the *input* before believing a statistic computed on it. Tier A source,
+    `validation_overlap: false`.
+    → `notes/2026-09-28-information-discreteness-frog-in-the-pan.md`
+
+166. **FREE, and it replaces a diagnostic this lab uses with its weighted analogue, on the
+    authority of the literature that invented both halves.** `learnings.md` [2026-09-27] measured
+    the seat at ~61.41% of gross in its top ten weights and ~1.43% in its bottom ten of ~48 (ratio
+    **0.023**). Every holdings-space statistic in this repo — month-to-month Jaccard, holdings
+    overlap, "42% of names deleted" — is **unweighted membership**, so on that weight profile it
+    is dominated by names carrying a fortieth of the risk each; a Jaccard of 0.0611 and an overlap
+    of 0.963 are both nearly uninformative. **Active Share, `½ Σ|w_A,i − w_B,i|` against the
+    seated champion, per rebalance date, is the weighted version, costs one line, and is dominated
+    by the same ten weights that dominate `rho`.** Report it alongside `rho`, and name in advance
+    the summary statistic it is read on (`learnings.md` [2026-09-27] on thresholds over per-date
+    distributions). **Pre-register the critique's expectation, not the original's**: the same
+    literature, re-run on the same sample with the benchmark controlled, finds a weight-space
+    distance does **not** predict the return difference. So Active Share is a legitimate
+    *description* of what a candidate changed and a legitimate *falsifier* (near zero ⇒ cannot
+    resolve, whatever `rho` says), and is **never** evidence of decorrelation or a reason to
+    expect a blend gain. Two boundaries: comparing Active Share **across families** is comparing
+    families, not signals (the benchmark confound, directly transposed); and this replaces nothing
+    in the required-gain table, which is read off a return-space quantity and stays that way.
+    Tier A pair, `validation_overlap: false`.
+    → `notes/2026-09-28-active-share-and-its-deactivation.md`
+
+167. **FREE, and it is the rarest item this folder files: a measurement that is expected to
+    *explain a null the lab already owns* rather than to license a new trial.** A weighting
+    function is a revealed alpha forecast. Inverting `λ = (1/k)Ω⁻¹µ` under a one-factor covariance
+    and a book beta near the market's gives `α_i ∝ σ²_idio,i · (w_i − w_ref,i)` and implied
+    information ratio `IR_i ∝ σ_idio,i · (w_i − w_ref,i)`, with `σ_idio` the causal trailing
+    residual volatility against an equal-weight universe factor and `w_ref` **named in advance**
+    (the source's two choices are the neutral universe book, or the neutral weight over the names
+    the candidate actually holds — the latter is the right analogue for a select-then-weight
+    construction like this repo's). Run it on the champion's emitted validation weights and read
+    two things. *(a)* Does the implied-**IR** ranking agree with the **weight** ranking? It can
+    differ only through `σ_idio`, so **pre-register**: the Spearman correlation between the two
+    should be high, and its shortfall should be accounted for by the cross-sectional dispersion of
+    `σ_idio` among the held names. A low correlation would be a finding about this repo's
+    magnitude-weighting step, not about any literature. *(b)* What is the implied alpha of the
+    ~38-name tail? If it is indistinguishable from zero, the lab's own 42%-of-names deletion null
+    (`rho` 0.9908, 2026-09-10) stops being a surprise and becomes a **prediction**. Tier B source,
+    `validation_overlap: true`, `published_post_2018: true` — which is survivable precisely because
+    the item takes an **identity** from it and no magnitude.
+    → `notes/2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`
+
+168. **CANDIDATE — the only one tonight, `challenge` in `price-trend`, and it is written against
+    the lab's own next-ideas item 2: a *score* change that can reorder the seat's top ten
+    weights.** Hypothesis, one sentence: *holding the 12-1 momentum score fixed, names whose
+    formation-period return was assembled from many small same-signed daily moves continue more
+    strongly than names whose identical cumulative return came from a few large moves.* The
+    conditioner is `ID_Z = sgn(PRET)·[%neg − %pos] / [%neg + %pos]` over the 12-1 window — one
+    pass over closes, trivially causal, and computed over a twelve-month window so it is **slow**,
+    with the source's ~eight-month continuation horizon saying the holding period need not
+    shorten. That combination matters: `learnings.md` [2026-09-27] bounds every cost remedy on
+    this seat at **+0.0249**, so a conditioner that *adds* turnover starts behind, and this one
+    should not. **The form is the whole point and it is pre-registered here**: combine the
+    cross-sectional rank of `PRET` with the rank of `−ID_Z` into one score **before** the
+    magnitude-weighting step, so the ten largest weights move. Applying `ID_Z` as a membership
+    filter or a band-margin tiebreak lands in the 1.4%-of-gross channel that trial #103 already
+    measured at `rho` 0.9984 and is not worth a trial (see #169a). **Three gates, all free, all
+    before any file is written:** *(i)* #165's `%zero` diagnostic, since `ID_Z` is the variant
+    that survives it; *(ii)* the lab's standing reversal-in-costume screen (`learnings.md`
+    2026-09-01, credited with saving three trials) — Spearman of `ID_Z` against the trailing
+    252-day return, 12-1 momentum and the 21-day reversal score, on **train month-ends only**,
+    with the threshold **and the summary statistic it is read on** both named in advance, and with
+    the reading taken **within the winner tail** rather than across the whole cross-section,
+    because the source's own simulation says ID carries nothing where `PRET` is near zero;
+    *(iii)* the ETF cohort check — a basket's daily return is an average and therefore
+    mechanically smoother, so ID on an ETF is partly a diversification measure; measure the two
+    cohorts' ID distributions separately or condition within cohort. **Prior, stated honestly:
+    this lab has closed three adjacent veins** — reference point [2026-09-19], salience
+    [2026-09-20], and 52-week-high proximity as the first of three "reversal in costume" findings
+    [2026-09-27] — so a reasonable expectation is that gate *(ii)* kills this for zero trials,
+    which is a perfectly good outcome. What distinguishes `ID_Z` from those three is that it is a
+    **conditioner on `PRET`** rather than a substitute for it, and gate *(ii)* is the exact test of
+    whether that distinction survives on this universe. Tier A, `validation_overlap: false`,
+    `published_post_2018: false`, **no independent replication located** — discount accordingly.
+    → `notes/2026-09-28-information-discreteness-frog-in-the-pan.md`
+
+169. **ANTI-CANDIDATES, four, and the first two are the discipline that makes #168 and #166 safe
+    to leave on this list.** *(a) Do not write `ID_Z` (or any conditioner) as a membership filter,
+    a buffer-band tiebreak or a tail overlay.* `learnings.md` [2026-09-27] measured that an
+    overlay acting at rank 15–25 moved 8.27% of gross on 100% of validation days and still landed
+    at `rho` 0.9984 with `d = −0.011`; the channel carries ~1.4% of gross and cannot resolve,
+    whatever signal decides the membership. *(b) Do not read a weight-space distance as evidence
+    of decorrelation.* Frazzini–Friedman–Pomorski's controlled re-run is the strongest available
+    statement that it predicts nothing, and this lab's `rho ≈ 0.99` results are the same fact from
+    the return side. Active Share enters as a falsifier and a description only. *(c) Do not build
+    a more concentrated candidate on the Best Ideas argument.* Its normative half runs entirely
+    through agency frictions — regulation, fee incentives, career risk, client misreading of
+    portfolio theory — that this lab does not have, its sample ends in 2018 inside the validation
+    window, and the repo's 25% cap and drawdown gate already price concentration. The identity
+    transfers; the recommendation does not, which is the 2026-09-27 rule about a source's loss
+    function being read a second time. *(d) Do not sweep `ID_MAG`'s weights.* The magnitude-aware
+    variant assigns `5/15, 4/15, 3/15, 2/15, 1/15` to absolute-return quintiles and its own authors
+    call the scheme arbitrary; treating those five numbers as tunable would add a free parameter of
+    exactly the shape that disqualified #153 and that `learnings.md` [2026-09-27] caught in a screen
+    of this lab's own design. If the sign-only `ID_Z` does not work, the magnitude variant is not
+    the repair.
+    → `notes/2026-09-28-information-discreteness-frog-in-the-pan.md`,
+    `notes/2026-09-28-active-share-and-its-deactivation.md`,
+    `notes/2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -8069,8 +8286,145 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-25 (session 42) | **The first session in fifteen aimed by the lab's own next-ideas list rather than by a gap detector, and the item it took is the one the 2026-09-24 nightly wrote against its own vein.** That nightly spent 2 of 8 trials, took `range-variance` from 0.494 to 0.734 on a book it then showed was "equal-weight the low-beta 37% of the universe", and ended its next-ideas with an honest admission — "a genuinely cold family, and the honest note is that tonight did not find one" — naming `statistical-arbitrage` (one recorded trial, a 0.468 lead) and pointing at **`program.md`'s standing question for that family: how the short leg's absence is handled**. This file had three notes on the family, all about *which residual* to build (PCA factor count, distance versus cointegration matching), and **none** about what the long-only constraint does to a residual book once it exists. Three sources, all read in full, tiers B/B/C, chosen so that each supplies a different one of the family's three construction nodes: the **residual** (the Management Science framework paper, whose `K = 0` control is the cleanest available pricing of the residualisation node and whose finding that the *signal function* matters more than the residual definition reframes the whole vein), the **signal** (Yeo–Papanicolaou's two screens on the estimate rather than on the deviation — selection by reversion speed, and a goodness-of-fit gate that has **no analogue anywhere in this repo**), and the **exposure** (Blitz et al.'s closed form `-σ²_β(μ^j + f^j_{t-1})` for what a contrarian sort loads on, and why residualising zeroes it *only* for a zero-investment book). The session's transferable output is a rule rather than a book — **membership survives the long-only budget, hedging does not** — and its sharpest result is adversarial to the lab's own refutation: both Tier-B sources find residualisation *helping* where `learnings.md` found it monotonically hurting, and the volatility-rescaling node neither of the lab's constructions used is exactly where this universe's survivorship artifact enters. New tonight: **#148–#152**. | Blitz–Huij–Lansdorp–Verbeek 2013 (JFM) (`2026-09-25-short-term-residual-reversal.md`); Guijarro-Ordonez–Pelger–Zanotti (Management Science; arXiv draft read) (`2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`); Yeo–Papanicolaou 2018 (Risk and Decision Analysis) (`2026-09-25-mean-reversion-time-screening-statarb.md`) — all three read in full text |
 | 2026-09-26 (session 43) | **The second consecutive session aimed by the lab's own next-ideas list, and it takes that list's item 3 — the narrowing rather than the widening one.** The 2026-09-25 nightly closed `statistical-arbitrage` for residual reversal on two pre-registered screens that were built to be able to disagree, closed `lead-lag-spillover` for want of an unmeasured sub-mechanism, and then named the only two genuinely open families by trial count: `statistical-learning` (3 trials, 0.875 lead, the highest non-`price-trend` result on the board) and `portfolio-learning`. This folder's section 8 covered four sources on that family and **all four argue the same direction — few predictors, shallow models, dimension reduction over selection**; a grep across all 131 prior notes returned **zero** hits for `virtue of complexity`, `random feature`, `ridgeless` and `benign overfitting`, i.e. the family's one literature that argues the *opposite* had never been read here. Three sources, full text read directly for all three, all reached without a publisher paywall (one journal article via a university economics department, one working paper via the author's own faculty page, one from NBER). The session's shape is **one claim, one identity that reinterprets it, and one theorem that makes the disagreement a measurable property of this universe** — and its output is five free screens plus a gated scout, not a candidate. | Kelly–Malamud–Zhou 2024 (JF) (`2026-09-26-virtue-of-complexity-return-prediction.md`); Nagel 2025 (NBER WP w34104) (`2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`); Didisheim–Ke–Kelly–Malamud 2024/2025 (NBER WP 33012) (`2026-09-26-large-factor-models-aipt-complexity.md`) |
 | 2026-09-27 (session 44) | **The third consecutive session aimed by the previous nightly, and the first aimed by a nightly's criticism of this file rather than by its next-ideas list.** The 2026-09-26 nightly disqualified this file's top-ranked screen (#153's `EffRank`) because the same universe reads `0.244·P` on fourteen characteristics and `0.638·P` on eight de-duplicated ones — a candidate can move itself between the pre-registered branches by de-duplicating its own inputs — and told this folder that "an imported screen needs its own invariance check before its branches are believed, which the folder could apply to itself." A grep across all 134 prior notes returned zero for `Laloux`, `Onatski`, `Ahn-Horenstein`, `eigenvalue ratio`, `nonlinear shrinkage` and `Porter-Thomas`. **The twenty-year econometrics literature on exactly this question had never been read here, and it does not rescue the screen — it generalises the failure**: Onatski names the violated condition as *a basic identification assumption*, so on a duplicated-column design no eigenvalue-based count is identified and no better estimator repairs that. What the session brings back instead: a closed-form null with a falsifiable prediction about the lab's own control (#160), a **parameter-free** eigenvector test for whether a component is empty (#159), a five-estimator disagreement check with the literature's own 3-to-8 spread as calibration (#161), a de-duplication design rule with a citation behind it (#162), a Tier-A anti-candidate declined on its own source's long-only measurement (#163), and three interpretation rules about numbers already in the repo's files (#164). New: **#159–#164**. | Laloux–Cizeau–Bouchaud–Potters 1999 (`2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`); Bai–Ng 2002 + Onatski 2010 + Ahn–Horenstein 2013 (`2026-09-27-counting-factors-eigenvalue-estimators.md`); Ledoit–Wolf 2020 + 2017 (`2026-09-27-nonlinear-shrinkage-instead-of-counting.md`) |
+| 2026-09-28 (session 45) | **The fourth consecutive session aimed by the previous nightly, and the unit is the *weighting function* — not the score that feeds it, and not the statistic that grades it.** Sessions 28–44 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null → the variable a promotion turned on → a constraint's two halves → what an estimator is → whether the measured thing exists on this design. The 2026-09-27 nightly spent 1 of 8 trials (**holdout NOT read**, running total still six) and produced the quantity this session is about: the seat holds **~61.41% of gross in its ten largest weights and ~1.43% in its ten smallest of ~48**, ratio **0.023**, *a property of the `c − c.min() + FLOOR` magnitude weighting rather than of any candidate* — which retrospectively explains a whole class of this repo's unresolvable nulls and leaves its next-ideas item 2 asking for **a score change that moves the top ten weights**, with the explicit admission that *nothing on the board supplies one*. A grep across all 137 prior notes returned **zero** for `frog in the pan`, `active share`, `Cremers`, `Petajisto`, `best ideas` and `Cohen, Polk`: the two literatures that own the missing pieces — *what reorders the top of a ranked book* and *how you measure the distance between two long-only books* — had never been read here. Three sources, all read in full text, tiers A/A/B, chosen so each supplies one node: the **score** (a conditioner on the path by which a cumulative return arrived, computable from closes alone and explicitly not a restatement of that return), the **distance** (Active Share, plus the same-sample controlled re-run that finds it predicts nothing — the citable anchor for this lab's own 2026-09-10 rule), and the **tail** (a weighting function inverted into the alpha vector it is implicitly asserting). The session's shape is **three free measurements, one gated candidate and a four-part anti-candidate**, and its most useful single output is a reclassification of a diagnostic the lab already runs: Jaccard and holdings overlap are *unweighted* membership statistics on a book whose risk lives in ten weights, and Active Share is their weighted analogue for one line of code. New: **#165–#169**. | Da–Gurun–Warachka 2014 (RFS) (`2026-09-28-information-discreteness-frog-in-the-pan.md`); Cremers–Petajisto 2009 (RFS) + Frazzini–Friedman–Pomorski 2016 (FAJ) (`2026-09-28-active-share-and-its-deactivation.md`); Antón–Cohen–Polk (2021 draft; earlier Cohen–Polk–Silli, FMG DP 624) (`2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`) — all read in full text |
 
 ### Open questions for future sessions
+
+- **[2026-09-28] Read this first: the lab asked for one thing it said nothing on the board could
+  supply, and the two literatures that supply it had never been opened here.** The 2026-09-27
+  nightly spent **1 of 8** trials (**holdout NOT read**; running total of looks still **six**), left
+  the seat unmoved (`pt_mom_evar_arbrisk`, validation 1.269, seated 2026-09-23), retired **#49** on
+  arithmetic rather than on a null, and produced the number this session is built on: the seat holds
+  **~61.41% of gross in its ten largest weights and ~1.43% in its ten smallest of ~48** (ratio
+  **0.023**), a property of the `c − c.min() + FLOOR` magnitude weighting rather than of any
+  candidate. Its next-ideas item 2 then asked for **a score change that moves the top ten weights**
+  and said plainly that *nothing on the board supplies one*. A grep across all 137 prior notes
+  returned **zero** for `frog in the pan`, `active share`, `Cremers`, `Petajisto`, `best ideas` and
+  `Cohen, Polk`. New: **#165–#169**. **Closed since the last entry: #49**, retired
+  2026-09-27 on the lab's own `drag / ann_vol` arithmetic rather than on a null, after thirty
+  carries — this file records it closed and does not carry it again. **#160 is answered, and it
+  corrected this file's own rider**: the column-standardizing fix is *exact*, so 2026-09-26's "the
+  placebo's 0.875·P is the correct ceiling" was wrong, and the real panel is more concentrated
+  relative to the null than that entry recorded. **Carried unchanged and still genuinely unrun:
+  #82** (twenty-third session, and the oldest unspent free item), **#94** as standing discipline,
+  **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**.
+  **#152 stands.** **#163 stays an anti-candidate.**
+- **[2026-09-28] What should aim the next session, in order — and for the first time in four nights
+  the top item is one of this file's, because the lab's own item 1 is a measurement it can run
+  without literature.**
+  - **The lab's #1 stays first and needs nothing from here: triage `pl_maxleg_signal_blend`'s
+    14.05x turnover by measuring that book's month-to-month holdings overlap** before any cost
+    remedy is proposed. It is free, it is the lab's, and F7 already supplies the screen. One
+    amendment tonight, and it is #166: **measure it with Active Share, not Jaccard.** On a book
+    whose risk lives in ten weights, an unweighted membership statistic is nearly uninformative —
+    that is the whole content of the 0.023 ratio — and the weighted analogue is one line.
+  - **Then #165**, and it goes ahead of the candidate it gates for a reason worth stating: it is
+    the only item here that is a property of the **input panel** rather than of a statistic. This
+    universe is forward-filled across foreign holidays, so exact zero returns are manufactured by
+    the calendar, and *every* signed-daily-return construction this repo could write inherits it —
+    including the one in #168. It is also, for free, a `liquidity-volume` diagnostic, because
+    `%zero` **is** the Lesmond–Ogden–Trzcinka illiquidity proxy.
+  - **Then #167**, free, and it is the item this file would defend hardest even though it licenses
+    nothing: it is a measurement whose *expected* outcome is to turn one of the lab's existing nulls
+    (42% of names deleted at `rho` 0.9908) from a surprise into a prediction. A folder that only
+    ever proposes new things is not doing half its job.
+  - **Then #168**, the night's only candidate, and it is gated behind #165 and the lab's own
+    reversal-in-costume screen. **The honest prior is that the screen kills it**, because the three
+    nearest veins this lab has run — reference point, salience, 52-week-high proximity — all closed
+    that way. It is filed anyway because it is the first construction this folder has found that is
+    *designed* to be orthogonal to the cumulative return it conditions on, and because the lab
+    asked for exactly this shape.
+- **[2026-09-28] The transferable output, and it is a *reclassification of a diagnostic the lab
+  already runs* rather than a mechanism, an identity or a screen.** Jaccard, holdings overlap and
+  "42% of names deleted" are **unweighted membership** statistics. Active Share, `½ Σ|w_A − w_B|`,
+  is their weighted analogue, and on a book with a 0.023 top-ten-to-bottom-ten ratio the two answer
+  different questions — the unweighted one is dominated by names carrying a fortieth of the risk
+  each. **The rule to carry past this cluster: when a book's risk is concentrated and its identity
+  is not, every unweighted statistic computed on it is measuring the identity and reporting it as
+  risk.** This is the **eighteenth** unit of the unit-of-check lesson and the first whose subject is
+  a *diagnostic the lab wrote itself and has been reading correctly-computed but wrongly-weighted
+  answers from*: sessions 28–44 walked families → clauses → operators → the pool → an attribute of
+  its members → the selection rule → the vocabulary → the shape of the output → a column of the
+  input → a primitive of a cited theory → the reference a measurement is taken against → the
+  dependent variable → the precondition of a prediction → the null → the variable a promotion
+  turned on → a constraint's two halves → what an estimator is → whether the measured thing exists
+  on this design. Tonight's unit is **the weighting a statistic applies to the objects it
+  summarises**, and it is checkable on stored weights with no data fetch and no trial.
+- **[2026-09-28] The second output, and it is the one most likely to matter outside this cluster: a
+  weighting function is a revealed alpha forecast, and it can be read.** Inverting `λ = (1/k)Ω⁻¹µ`
+  under a one-factor covariance and a unit-beta book gives `α_i ∝ σ²_idio,i·(w_i − w_ref,i)`. So any
+  magnitude-weighting scheme in this repo is **already asserting** a per-name alpha vector, and that
+  vector is computable from emitted weights without touching a signal. **Rule: before arguing about
+  which score should feed a weighting function, read the alpha the weighting function is currently
+  asserting** — the two can disagree, and where they do, the disagreement is a property of the
+  construction rather than of the idea. `w_ref` must be named in advance; the source's own two
+  choices (a neutral universe book, or a neutral weight over the names actually held) answer
+  different questions and the second is the right analogue for a select-then-weight construction.
+- **[2026-09-28] A tension recorded, and this time it is *between tonight's two sources* rather
+  than between this folder and the lab.** Frazzini–Friedman–Pomorski find that Active Share, tracking
+  error and `R²`-distance-from-index all fail to predict performance once the benchmark is
+  controlled, and state the general principle that taking more active risk is not itself a source of
+  return. Antón–Cohen–Polk argue that concentration in a book's *top-ranked* names is precisely
+  where the return is, and that everything below is agency-driven dilution. **The reconciliation is
+  that a level of concentration is not a ranking of positions** — but the reconciliation is
+  conditional on the book's own ordering being informative, which is the one thing this lab cannot
+  grant itself. Both are filed; neither is allowed to be cited alone.
+- **[2026-09-28] A rubric row said out loud, and tonight's version is about the *replication* row
+  going unfilled on a Tier A source.** Da–Gurun–Warachka is Tier 1 venue, eight decades of sample,
+  extensive controls, an orthogonalised residual version of its own conditioner, and an explicit
+  no-long-run-reversal test — every row of the rubric except one. A Crossref title search on
+  2026-09-28 returned exactly **one** indexed non-US extension of the measure (an *earnings*-momentum
+  study in a price-limit market, Pacific-Basin Finance Journal 2016, 9 citations), and **no entry
+  was located in the large replication projects this folder grades against**. The note says so and
+  #168 carries the discount. **The general point: a Tier A source with an unfilled replication row
+  is still Tier A, and the discount belongs on the candidate rather than on the tier** — otherwise
+  the tier stops meaning what the rubric says it means.
+- **[2026-09-28] Access notes: three working channels, one paywall that cost a source, and an index
+  budget that ran out mid-session.**
+  - **`content.money.com` served a full working-paper draft of an RFS article.** A consumer
+    magazine's WordPress uploads directory is a **sixth** member of the faculty-page family (after
+    the author's own domain, a business-school review site, a department's file uploads, a seminar
+    page at a third institution, and a publisher's numbered working-paper series). Worth trying when
+    a paper had press coverage. **It served the 2006 draft, not the 2009 version of record**, and
+    the note says so — this is the seventh consecutive session with a version-metadata warning.
+  - **`academicweb.nd.edu/~zda/` served the *typeset journal PDF*, running headers and all**, which
+    is the cleanest possible primary and better than the usual author-page working paper.
+  - **AQR's own `aqr.com/-/media/AQR/Documents/Insights/Journal-Article/` path served the FAJ article
+    directly.** A practitioner firm hosting its own peer-reviewed article is a reliable route around
+    a publisher, and should be tried before the publisher for any AQR/Robeco/Research-Affiliates
+    author.
+  - **One source was lost to a paywall and the replacement is weaker.** Choi–Fedenia–Skiba–Sokolyk
+    2017 (JFE, 164 Crossref citations, 72 countries) was the intended third note on portfolio
+    concentration: OpenAlex lists **no OA location at all**, SSRN returned the familiar **403**
+    Cloudflare challenge, and a guessed institutional path returned a 27 KB **HTML** error page at
+    HTTP 200 (`file` the result, as always). The substitute — Antón–Cohen–Polk — is an unpublished
+    working paper with a `validation_overlap: true` sample, i.e. **Tier B where the lost source was
+    Tier A, and the multi-market evidence on whether concentration itself pays is therefore still
+    missing from this folder.** Recorded as a gap rather than glossed.
+  - **OpenAlex's daily budget was exhausted partway through** (HTTP 429, `Insufficient budget`,
+    resets midnight UTC), after answering exactly one query. Two of tonight's three notes therefore
+    carry Crossref + Semantic Scholar counts only, and one carries Crossref alone. **Crossref
+    answered every query without a limit and is the better first resort for a count.**
+  - **Index behaviour, tenth consecutive session, same split-record shape and the widest gap yet.**
+    Semantic Scholar reads **30** for the RFS frog-in-the-pan DOI against Crossref's **306** — a
+    record that carries the right title, year and authors and almost none of the citations — and
+    returns **not found** for the RFS Active Share DOI `10.1093/rfs/hhp057` (third consecutive
+    session in which an RFS DOI fails there) while Crossref has **1325** and OpenAlex **1608**. The
+    Best Ideas citations are split across **two** SSRN records. **Per the rubric no tier moved on any
+    of this.**
+- **[2026-09-28] Protocol note, twenty-third session running, and the evidence is identical to the
+  last two nights'.** The session-start hook printed "integrity check OK — on main, level with
+  origin/main, no stray branches" while `git status -sb` reported **`claude/tender-galileo-dljhqp`**
+  (third consecutive session in the `claude/<name>-<suffix>` namespace, after nineteen in
+  `main-<suffix>`). HEAD was **bit-identical to `origin/main`** at `80575bb`, and this session ran
+  `git checkout main && git reset --hard origin/main` before any work, so tonight's notes are on
+  `main` only. **The standing request to the human is unchanged and is now twenty-three sessions
+  old: make the session-start hook, the harness's branch requirement and `CLAUDE.md` agree.** Until
+  then every session ends by choosing between two instructions, and this one chose the repo's rules,
+  as `research/README.md` step 6 and this job's standing prompt both require. The documented cost is
+  the same: four earlier per-run branches were stranded and recovered by hand, and the failure mode
+  is a split `trials.jsonl` that understates the deflated-Sharpe bar for every later trial.
+
 
 - **[2026-09-27] Read this first: the previous nightly criticised this file by name, and taking the
   criticism seriously closed the item rather than repairing it.** The 2026-09-26 nightly spent **0 of 8

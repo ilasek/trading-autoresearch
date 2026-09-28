@@ -16316,3 +16316,5 @@ human should make the session-start hook, the harness's per-run branch requireme
 agree**, because the failure mode is a silently split `trials.jsonl`, which understates the
 deflated-Sharpe bar for every later trial. The cost is already documented in `main`'s own commit
 messages: four earlier per-run branches were stranded and recovered by hand by a later session.
+
+## Research session — 2026-09-28 (learning agent): 3 notes added, see research/SUMMARY.md
