@@ -4512,3 +4512,79 @@ across experiments; prune entries that later evidence contradicts.
   **0.0224**. The closed form is now confirmed on designed pairs, on the whole leaderboard and at
   `rho` above 0.998 — the highest correlation it has been checked at — so a candidate can price its own
   resolvability from its expected `rho` alone, before it is run.
+
+- **[Measured 2026-09-28, nightly] A SCREEN THAT PASSES TELLS YOU THE OBJECT IS REAL AND NOTHING
+  ABOUT WHICH WAY IT POINTS — seventh instance, and the first where the passing screen was the one
+  this file credits with saving three trials.** `research/SUMMARY.md` #168's information
+  discreteness (`ID_Z = sgn(PRET)·[%neg−%pos]/[%neg+%pos]`, Da-Gurun-Warachka's frog-in-the-pan) is
+  the **first score in four adjacent veins to survive the reversal-in-costume screen** — reference
+  point [2026-09-19], salience [2026-09-20] and 52-week-high proximity [2026-09-27] all died on it
+  — and it survived by a wide margin in exactly the cell the source's own simulation names: median
+  `|spearman|` across 215 train month-ends of **0.16–0.19 inside the top-25 winner tail** against
+  **0.31–0.36 across the whole cross-section**, i.e. the conditioning is what makes it orthogonal,
+  which is the paper's prediction observed here rather than quoted. Added as a third term to the
+  seat's per-leg score (trial #104), it lost **d = −0.127 at `rho` 0.9869, SE 0.0651, `t` = −1.946
+  — the largest `|t|` any `price-trend` candidate has recorded against a seated champion here, and
+  it is negative.** Two known confounds are priced and neither accounts for it: turnover 3.01x →
+  3.81x is **−0.007** on the cost identity, HHI **−12.5%** at +8.9 names is **−0.021** at this
+  file's de-concentration price, leaving **~−0.099 for the term itself**. Not a one-year artifact —
+  it loses 2018, 2019, 2020, 2022 and 2023 and wins only 2021. **The transferable claim is about
+  screens, not about `ID_Z`**: this file already records liveness as a precondition with no
+  predictive content at six *averaging* axes; the seventh instance arrives on a **score** axis and
+  on the lab's own best-performing screen, so the rule now covers both classes — *use every screen
+  to kill, never to forecast.* `SUMMARY.md` #168 is closed and the fourth adjacent vein with it.
+  Rider on the prior: the pre-registration's honest prior was "a point estimate inside ±0.05 that
+  this split cannot resolve", and the observed effect is 2.5x that and nearly resolvable — **when a
+  candidate finally reaches the channel that moves this book, the effects stop being small**, which
+  is the same fact as the entry below and is the one encouraging thing in the result.
+
+- **[Measured 2026-09-28, nightly] ACTIVE SHARE AND `rho` ARE A PAIR, and the first calibration
+  point says the seat's top-ten channel is what sets both.** `research/SUMMARY.md` #166 asks for
+  `½Σ|w_A−w_B|` beside `rho` because every holdings statistic in this repo is unweighted
+  membership, which on a book holding 61.41% of gross in 10 of ~48 names is nearly uninformative.
+  Two candidates one night apart, both one-node changes to the same seat, now bracket it: trial
+  #103's band-margin overlay moved **8.27% of gross entirely at rank 15–25** and landed at `rho`
+  **0.9984** with `|t|` 0.49; trial #104's score change moved **Active Share 0.2566** with the
+  **top-ten overlap at 0.705** (three of the seat's ten largest weights displaced) and landed at
+  `rho` **0.9869** with `|t|` **1.95**. **Four times the weight-space distance, an order of
+  magnitude more `t`, and the difference is entirely which names the change reached.** Use the pair
+  as #166 instructs and no further: Active Share is a *description* of what a candidate changed and
+  a *falsifier* (near zero ⇒ cannot resolve, whatever `rho` says), **never** evidence of
+  decorrelation or a reason to expect a blend gain — the same literature's controlled re-run finds
+  weight-space distance predicts no return difference. Summary statistic named with the number, as
+  this file now requires: **median across emitted rebalance dates.**
+
+- **[Measured 2026-09-28, nightly] THE COST AXIS IS NOW CLOSED ON THE WHOLE BOARD, not just on the
+  seat — both of its two large targets are measured and refused.** [2026-09-27] bounded the seat's
+  entire recoverable cost at **+0.0249** (`drag / ann_vol` = `3.01·0.0015 / 0.1812`), below the
+  resolution floor, and killed `sc_seasonal_depth_narrow`'s **+0.1434** for free on holdings
+  persistence (Jaccard 0.0611, 88.7% replaced monthly, 16 of 71 months replaced completely), leaving
+  `pl_maxleg_signal_blend`'s **+0.1192** as the one live target. Measured tonight on its emitted
+  validation rows: median month-to-month **Jaccard 0.2703**, **57%** of the book new every month,
+  **0 of 71** months replaced completely. The reading is genuinely intermediate — 4.4x more
+  persistent than the seasonal lead, never a complete turnover — and it still fails the
+  pre-registered 0.35 line, because a remedy that *re-times* trades cannot reach a book that
+  replaces the majority of itself regardless. **Every no-trade band, wider band, asymmetric band,
+  deferral rule, reduced rebalance frequency and turnover penalty is now bounded or refused on every
+  book the board carries**, and the research folder's cost-mitigation cluster can be struck in full
+  rather than re-ranked. The standing instruction survives it: **re-price `drag / ann_vol` on every
+  promotion**, because this closure is a property of the current seat's 3.01x turnover and 0.1812
+  vol and will reopen the moment either moves.
+
+- **[Measured 2026-09-28, nightly] `%zero` on this panel is the forward-fill calendar, not the
+  Lesmond-Ogden-Trzcinka illiquidity proxy — twelfth instance of the invariance habit, and the
+  first to kill the BY-PRODUCT of an item whose primary use passed the same night.**
+  `research/SUMMARY.md` #165's census gated `ID_Z` correctly (median `%zero` 0.0441 overall,
+  0.0458 etf / 0.0427 stock, worst cohort 0.108 on n = 2, all far under the 0.20 line) and also
+  claimed to double as a `liquidity-volume` diagnostic. It does not. LOT predicts `%zero` rises
+  with illiquidity; measured on train over 139 names, `spearman(%zero, log ADV)` = **+0.030
+  (p = 0.73)** — a null and the wrong sign — `spearman(%zero, log ILLIQ)` = **−0.206 (p = 0.015)** —
+  significant and the wrong sign — and `spearman(%zero, panel coverage)` = **+0.632 (p < 0.001)**.
+  The ten highest-`%zero` names have median ADV rank **81.5 of 139** against the ~134 a liquidity
+  proxy would give, and include BAC (rank 9), WMT (30) and PFE (33). The cause is the panel's own
+  construction: the index is the union of fifteen exchange calendars and `data.load_prices`
+  forward-fills to a limit of 10, so a name priced on **more** of the panel's dates accumulates
+  **more** ffilled zero-return days. **General form, and it is why the census was worth running
+  even though its primary gate merely opened: a statistic imported as a proxy must be checked
+  against the thing it proxies on THIS panel, because a data-layer convention can invert it
+  entirely.** `liquidity-volume`'s 2026-09-24 closure on the mean channel stands.

@@ -16612,3 +16612,167 @@ book with a tail of dust — and did not escape the structure `learnings.md` [20
 
 **Seventh confirmation of `SE ≈ 0.568·√(1−ρ)`.** At `rho` 0.9869 the closed form gives **0.0649**
 against the engine's `metrics.sharpe_diff_se` of **0.0651**.
+
+## Session summary — 2026-09-28 (nightly)
+
+- **Integrity check — clean, and checked rather than assumed.** `git fetch origin --prune` put HEAD
+  on the harness's per-run branch **`main-uf3y4s`** at `78c3ac5`, **bit-identical to `origin/main`**,
+  and `git branch -r --no-merged origin/main` returned **nothing** — every prior per-run branch is an
+  ancestor of `origin/main`, so `trials.jsonl` is not split and the deflated-Sharpe bar is intact.
+  The session was moved onto **`main`** before any work began, per the standing prompt.
+  **Twenty-third session with the same three-way disagreement between the session-start hook, the
+  harness's per-run branch requirement and `CLAUDE.md`.** Engine tests **33 passed**. Store fresh
+  **through 2026-09-25**.
+- **Experiments run: 1 of the 8-trial budget.** Trial count 103 → **104**, effective **31.0**.
+- **Holdout: NOT READ. Zero looks.** The running total since 2026-08-17 stays at **six**. The one
+  challenge was rejected on the champion comparison, which is before the gate.
+- **The champion seat did not move.** `pt_mom_evar_arbrisk`, validation 1.269, seated 2026-09-23.
+- **Eight measurements, five pre-registered with their kill lines before any number existed.** One
+  candidate written and run, one refused by its own gate, one axis closed on the whole board, one
+  imported proxy inverted, one four-session vein closed.
+
+### The night in one line
+
+The research folder's newest score is **the first in four adjacent veins to pass this lab's
+reversal-in-costume screen**, and it then lost by the largest paired `t` a `price-trend` candidate
+has ever recorded against a seated champion — so the screen that has saved three trials is confirmed
+as a killer and refuted as a forecaster, for the seventh time on this board and the first time on a
+screen that passed.
+
+### Verdicts
+
+    trial #104   pt_mom_id_z   price-trend / challenge   REJECT
+                 validation 1.142 vs champion 1.269   rho 0.9869   SE 0.0651   t = -1.946
+                 turnover 3.81 against the seat's 3.01   maxDD -23.3%   avg_pos 56.8
+                 DSR 0.9435 (bar: 104 trials, 31 effective)
+
+T_B (`pl_maxleg_band`, `portfolio-learning` scout) was **specified in full and never written**: its
+pre-registered kill line fired on F4. `trials.jsonl`, `leaderboard.json` and `champion_card.json`
+carry exactly one new row between them, and `champion_card.json` is unchanged.
+
+### Best finding: the screen passed, the object was real, and it was wrong-signed anyway
+
+`ID_Z` cleared gate (ii) by a factor of three (median `|spearman|` 0.16–0.19 inside the winner tail
+against a 0.60 line) and cleared it in the shape the source predicts — the whole-cross-section
+reading is twice the tail reading, which is Da-Gurun-Warachka's own simulated claim that `ID`
+carries nothing where `PRET` is near zero, measured here rather than quoted. It then cost
+**−0.127**. Priced against the two confounds this file already calibrates, turnover explains
+**−0.007** and de-concentration (HHI −12.5% at +8.9 names) **−0.021**, leaving **~−0.099 for the
+term**. It loses in five of six validation years. This file has recorded liveness as "a precondition
+with no predictive content" six times, always on an *averaging* axis; the seventh instance arrives
+on a **score** axis and on the lab's best-performing screen, which generalises the rule to both
+classes: **use every screen to kill, never to forecast.**
+
+### Second finding: the first candidate in three weeks to reach the channel that can move this book
+
+[2026-09-27] established that the seat is a ten-name book with a thirty-eight-name tail (ratio 0.023)
+and that membership overlays cannot move it. Tonight is the paired reading. Trial #103 moved 8.27% of
+gross entirely at rank 15–25 → `rho` 0.9984, `|t|` 0.49. Trial #104 moved **Active Share 0.2566**
+with **top-ten overlap 0.705** — three of the seat's ten largest weights displaced → `rho` 0.9869,
+`|t|` **1.95**. Four times the weight-space distance, an order of magnitude more `t`. The
+constructive half of tonight's negative is therefore a *method* result: `SUMMARY.md` #166's Active
+Share, reported beside `rho` as that item asks, is the statistic that distinguishes a candidate that
+can resolve from one that cannot — and this is its first calibration point on this base. It remains
+a description and a falsifier only; it is never evidence of decorrelation.
+
+### Third finding: the cost axis closes on the whole board
+
+[2026-09-27] bounded the seat's entire recoverable cost at **+0.0249** and killed the seasonal lead's
+**+0.1434** on holdings persistence, leaving `pl_maxleg_signal_blend`'s **+0.1192** as the single live
+target. Measured tonight: median month-to-month **Jaccard 0.2703**, **57%** of the book new monthly,
+**0 of 71** months replaced completely. Genuinely intermediate — 4.4x more persistent than the
+seasonal lead and never a complete turnover — and still under the pre-registered 0.35 line, because a
+remedy that re-times trades cannot reach a book that replaces the majority of itself anyway. **Every
+band, deferral, no-trade rule and frequency reduction is now bounded or refused on every book the
+board carries.** The re-pricing instruction survives: this closure is a property of the seat's 3.01x
+and 0.1812, and reopens if either moves.
+
+### Fourth finding: an imported proxy inverted on this panel's own data layer
+
+`SUMMARY.md` #165's `%zero` census gated tonight's candidate correctly and its advertised by-product
+failed. LOT predicts `%zero` rises with illiquidity; here `spearman(%zero, log ADV)` = **+0.030
+(p = 0.73)**, `spearman(%zero, log ILLIQ)` = **−0.206 (p = 0.015)** — both the wrong sign — and
+`spearman(%zero, panel coverage)` = **+0.632**. The ten highest-`%zero` names have median ADV rank
+81.5 of 139 and include BAC at rank 9. The panel index is the union of fifteen exchange calendars and
+`load_prices` ffills to a limit of 10, so a name priced on *more* dates accumulates *more* ffilled
+zeros. Twelfth instance of the invariance habit and the first to kill a by-product while the primary
+use passed.
+
+### Protocol and allocation notes
+
+- **Budget: 1 of 8.** T_B was refused by its own pre-registered kill line. A second `price-trend`
+  trial was available under the cap and **declined**: every design the night's results suggest would
+  have been chosen *after* seeing tonight's numbers, which is the standard the 2026-09-27 session
+  set and this one keeps. No other family has an unrefuted mechanism on the board.
+- **Allocation: 1 trial in `price-trend` against a cap of 2.** Every family carries a lead, so the
+  "at most 2 per family until four have leads" clause is lifted and the "at least 1 in a family with
+  no recorded trial" floor is vacuous.
+- **No `strategies/lib/` file was added or touched.** `sleeve_book.py:41`'s mis-specified
+  `garman_klass_vol` call (2026-09-18) is **still not fixed**, deliberately, and is still a human's
+  to rule on.
+- **Nothing frozen was touched.** The diff against the base commit is `experiments/journal.md`,
+  `experiments/learnings.md`, `experiments/trials.jsonl`, `experiments/leaderboard.json`, one new
+  `experiments/trial_returns/` parquet and one new file in `strategies/candidates/`. `engine/`,
+  `scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md`, `research/` and `strategies/champion*`
+  are unchanged.
+- **No engine issues encountered.**
+- **Seventh confirmation of `SE ≈ 0.568·√(1−ρ)`**: closed form 0.0649 against the engine's 0.0651 at
+  `rho` 0.9869.
+
+### Next ideas, in order, with provenance
+
+1. **The only constructive thing tonight produced is a TARGETING statistic, and the next
+   `price-trend` candidate should be selected on it before it is written.** Active Share against the
+   seat is computable holdings-only from any candidate's emitted rows, and the two-point calibration
+   (0.026 → `|t|` 0.49; 0.257 → `|t|` 1.95) says a candidate whose median Active Share is under ~0.10
+   cannot resolve whatever its mechanism. **Proposed standing screen, offered rather than adopted
+   because it rests on two points: compute a candidate's Active Share and top-ten overlap before
+   running it, and decline anything under 0.10.** A third point would establish it; tonight is not
+   enough. Provenance: `SUMMARY.md` #166 plus tonight's F5.
+2. **`SUMMARY.md` #167 (implied alpha / Best Ideas), unrun and free, and it is the natural
+   companion to item 1.** Invert the seat's weighting function to read the implied alpha of its
+   ~38-name tail; if that is indistinguishable from zero, the lab's 42%-of-names deletion null
+   (`rho` 0.9908, 2026-09-10) stops being a surprise and becomes a prediction, and item 1's threshold
+   acquires a mechanism instead of two data points. Provenance: `SUMMARY.md` #167.
+3. **#82**, carried for a twenty-third session: the pre-registered band width from
+   `MSE(J) = V̂⁽¹⁾·J/(nT) + B̂²/J²` rather than from a copy. Free, and now the oldest unspent free
+   item — **though tonight's F4 arguably retires the class it belongs to.** Provenance: `SUMMARY.md` #82.
+4. **#159 (Porter-Thomas loadings normality) and #161 (the five-estimator factor-count
+   disagreement)**, both free, both unrun. Provenance: `SUMMARY.md`.
+5. **ANTI-CANDIDATE, new tonight and the most tempting thing in this entry**: do **not** run the
+   fixed-252-day `ID_Z` variant, the `ID_MAG` magnitude-weighted variant, or `ID_Z` with a fitted term
+   weight. All three were named as anti-candidates in the pre-registration *before* the result existed,
+   precisely so that a −0.127 could not license a search for the specification that undoes it. The
+   term lost ~0.099 net of confounds across five of six years; that is a sign, not a tuning problem.
+6. **ANTI-CANDIDATE, new tonight**: do not read F5's Active Share as a reason to build a
+   *deliberately* distant candidate. It is a falsifier and a description — the same literature's
+   controlled re-run finds weight-space distance predicts no return difference, and maximising it
+   would be optimising the proxy (`SUMMARY.md` #169(b)).
+7. **ANTI-CANDIDATES carried, unchanged**: no `E/Var` knob; no `K` off the 2026-09-24 locality curve;
+   no variance **level** for the ratio; no fourth aggregation operator over the union legs; no
+   factor-neutral or long-only residual book described as neutralised (#152); no second deferral or
+   band candidate on the seat (now doubly closed by F4); no 5-day reversal book off the 2026-09-25
+   `t = +10.59` IC; no union book (`learnings.md` [2026-09-03]).
+
+### For the human — three things
+
+**(a) The scouting programme has no unrefuted mechanism left on the board, and tonight is the
+cleanest statement of why.** Seven of the eight families are closed on free screens or on arithmetic;
+the eighth is the incumbent's, where the required-gain table asks +0.138 to +0.310 at the only
+correlations the family reaches. Tonight's candidate did everything the lab asks of a new idea — a
+stated mechanism, three pre-registered gates, a passing orthogonality screen, and a form aimed at the
+one channel that can move the book — and it still lost at `t` = −1.95. **That is not a failure of the
+session; it is the strongest single piece of evidence yet that this universe, with these inputs, has
+been searched out.** `program.md`'s own human-approval-gated list (point-in-time survivorship-free
+constituents, fundamentals, intraday bars) is the only remaining lever, and `SUMMARY.md` #34–#36 put
+up to 8%/yr of overstatement on the first.
+
+**(b) The ⚠ standing concern is unchanged.** No holdout was read. The seat's 1.269 is still a
+selected maximum 0.22 SE clear of its runner-up; no promotion in this repo's history clears `|t| = 2`
+on validation; CSCV/PBO reads 0.454. Nothing here asks for the seat to move.
+
+**(c) The branch disagreement is twenty-three sessions old.** HEAD was again bit-identical to
+`origin/main`, so tonight cost nothing, and the work is pushed to `main`. That is care, not a fix. A
+human should make the session-start hook, the harness's per-run branch requirement and `CLAUDE.md`
+agree; the failure mode is a silently split `trials.jsonl`, which understates the deflated-Sharpe bar
+for every later trial.
