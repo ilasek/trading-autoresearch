@@ -16491,3 +16491,124 @@ spend fewer trials than its budget.
 **Anti-candidate attached.** If F4 passes and T_B is written, the band widths are `N` = the book's
 existing quota and `2N`, transcribed from the hold-25/enter-15 ratio the rest of this repo uses.
 They are not swept, and a second width is not a repair.
+## 2026-09-28T23:26:05+00:00 — pt_mom_id_z — **REJECT**
+- Candidate: `strategies/candidates/pt_mom_id_z.py` (family: price-trend, track: challenge, trial #104)
+- Hypothesis: Adding zscore(-ID_Z) — the sign-only information-discreteness of each leg's own formation window, sgn(PRET)*[%neg-%pos]/[%neg+%pos] — as a third term to the seated champion pt_mom_evar_arbrisk's per-leg score, leaving every other node byte-identical, raises validation Sharpe above 1.269, because a formation-period return assembled from many small same-signed daily moves is absorbed more slowly than an identical cumulative return delivered in a few large jumps, so continuation persists further where the information arrived continuously.
+- Verdict: REJECT — validation sharpe 1.142 <= champion 1.269
+- Train: sharpe +1.08, ann_ret +18.0%, maxDD -48.4%, turnover 1.9x
+- Validation: sharpe +1.14, ann_ret +20.1%, maxDD -23.3%, turnover 3.8x
+- Deflated Sharpe prob: 0.9435 (bar from 104 trials, 31 effective)
+- Champion validation sharpe at the time: +1.27
+- Champion re-deflated at the same bar: 0.9711
+- Lesson: **d = -0.127 against the seat at `rho` 0.9869, `metrics.sharpe_diff_se` 0.0651, `t` = -1.946 — the largest `|t|` any `price-trend` candidate has recorded against a seated champion in this repo's history, and it is negative.** Two known confounds are priced first and neither accounts for it: turnover rose 3.01x -> 3.81x, worth **-0.007** through the cost channel (F5's identity `drag / ann_vol`), and HHI fell **-12.5%** at +8.9 names of breadth, worth **-0.021** at this file's calibrated de-concentration price. That leaves **~-0.099 for the `ID_Z` term itself**, so the conditioner is actively wrong-signed on this universe rather than merely diluting. The year decomposition (free, stored series) says it is not a one-year artifact: the candidate loses in 2018, 2019, 2020, 2022 and 2023 and wins only 2021 (+4.7pp), with the largest single loss in the melt-up year (98.0% vs 112.8%). **What makes this trial worth its place is that its screen PASSED.** `ID_Z` is the first score in four adjacent veins to survive the reversal-in-costume screen — reference point [2026-09-19], salience [2026-09-20] and 52-week-high proximity [2026-09-27] all died on it — and it survived by a wide margin in exactly the cell the source's own simulation names (median `|spearman|` 0.16-0.19 inside the winner tail against 0.31-0.36 across the whole cross-section). It then lost anyway, at the largest margin the family has produced. **Seventh instance of 'live is a precondition with no predictive content': a screen that separates a real object from a restatement still says nothing about which way the real object points.** `research/SUMMARY.md` #168 is closed, and with it the fourth adjacent vein.
+
+
+## Free measurements — 2026-09-28 (nightly), no trial spent
+
+Run in the order below. **F1–F4 ran before `strategies/candidates/pt_mom_id_z.py` existed**; they
+are recorded after the trial entry only because `run_experiment.py` appends its own block. F5 and
+F7 were licensed by the trial and are reported with it.
+
+**F1 — `SUMMARY.md` #165's `%zero` census. PASSES its kill line, and its by-product FAILS.**
+Fraction of exactly-zero daily returns per instrument, train split, 139 instruments:
+
+    cohort        n    median    mean     max
+    etf          42    0.0458   0.0498   0.1143
+    stock        97    0.0427   0.0501   0.1749
+    worst region  2    0.1080   0.1080   0.1293   (AU)
+    overall     139    0.0441
+
+The pre-registered line was a cohort median above **0.20**; the worst cohort reads **0.108** on
+n = 2 and every cohort of meaningful size sits near 0.044, so **T_A's gate opens.** `ID_Z`'s
+denominator `[%neg + %pos]` removes these days exactly, which is the whole reason the sign-only
+variant and not raw `ID` was the object specified.
+
+**F1(b) — the free by-product, and it is a clean negative: `%zero` on THIS panel is not the
+Lesmond–Ogden–Trzcinka illiquidity proxy, it is the forward-fill calendar.** #165's second claim is
+that the same census doubles as a `liquidity-volume` diagnostic. LOT predicts `%zero` rises with
+illiquidity. Measured on train, 139 names: `spearman(%zero, log ADV)` = **+0.030 (p = 0.73)**, a
+null *and* the wrong sign; `spearman(%zero, log ILLIQ)` = **−0.206 (p = 0.015)**, significant and
+the wrong sign; `spearman(%zero, panel coverage)` = **+0.632 (p < 0.001)**. The ten highest-`%zero`
+names have a median ADV rank of **81.5 of 139** where a pure illiquidity proxy would put them near
+134, and the list is BAC (ADV rank 9), PFE (33), WMT (30), HD (41), PEP (55). The mechanism is the
+panel's own construction: the index is the union of fifteen exchange calendars and
+`data.load_prices` forward-fills to a limit of 10, so a name priced on *more* of the panel's dates
+accumulates *more* ffilled zero-return days — which is why coverage, not liquidity, is what the
+statistic tracks. **`%zero` is declined as a `liquidity-volume` object on this universe**, and the
+2026-09-24 closure of that family's mean channel stands. Twelfth instance of the invariance habit,
+and the first to kill a *by-product* of an item whose primary use passed the same night.
+
+**F2 — the reversal-in-costume screen. PASSES, and by more than the pass itself is worth.**
+`spearman(ID_Z, X)` across 215 train month-ends. The deciding row is **within the top-25 winner
+tail of the 252-day leg**, as `SUMMARY.md` #168's gate (ii) specifies and as the pre-registration
+fixed before any number existed; the summary statistic (**median**) was named in the same sentence
+as the threshold, per `learnings.md` [2026-09-27]:
+
+    X                       median    mean    MEDIAN |.|  (kill at >= 0.60)    whole-cross-section median |.|
+    12-1 momentum          -0.0946  -0.1120     0.1639                              0.3572
+    trailing 252d return   -0.0985  -0.1038     0.1873                              0.3098
+    21d reversal score     +0.0112  +0.0084     0.1608                              0.1082
+    trailing 63d return    -0.0115  -0.0321     0.1696                              0.1266
+
+Largest deciding value **0.187** against a 0.60 line. The rider is worth more than the pass: the
+tail reading is roughly **half** the whole-cross-section reading against both trend columns, which
+is the source's own simulated prediction — `ID` carries nothing where `PRET` is near zero —
+observed on this universe rather than quoted from the paper. `ID_Z` is therefore a genuine
+conditioner and **the first score in four adjacent veins to survive this screen.**
+
+**F3 — the ETF-cohort branch. Resolves to RAW, and the number is reported rather than rounded
+away.** Rank-AUC of `ID_Z` separating the 42 ETFs from the single names, train month-ends: median
+**0.387**, mean 0.388, p05–p95 0.206–0.591. Both arms were named before the number was seen
+(`>= 0.80` ⇒ type-demean, as the seat's `E/Var` term was at 0.815; `< 0.80` ⇒ raw), so the term
+enters raw. **Honest caveat, not a clean pass:** 0.387 is a real separation in the direction
+mechanics predict — a basket's daily return is an average and therefore smoother, so ETFs read as
+systematically *more* continuous (mean `ID_Z` −0.0685 against single names' −0.0436) — and it is
+about a third of the way to the line. The threshold was not revisited after the number arrived.
+
+**F4 — the last live cost target on the board. KILL LINE FIRES; T_B was not written.**
+`pl_maxleg_signal_blend`'s emitted validation rows, 71 month-to-month transitions:
+
+    statistic                        pl_maxleg_signal_blend    sc_seasonal_depth_narrow (2026-09-27)
+    median month-to-month Jaccard            0.2703                       0.0611
+    mean                                     0.2638                         —
+    p05 / p95                            0.1136 / 0.4258                    —
+    fraction of the new book that is new     0.5714 (median)              0.887
+    months replaced COMPLETELY                0 of 71                     16 of 71
+    avg positions                              22.57                        10.43
+
+The pre-registered line was a **median Jaccard >= 0.35** and it reads **0.2703**, so the trial is
+refused. The reading is genuinely intermediate and is recorded as such: this book is **4.4x more
+persistent** than the seasonal lead and never turns over completely, so it is not the same object —
+but a book that replaces **57% of itself every month** still has little to postpone into, and the
++0.1192 of recoverable cost `learnings.md` [2026-09-27] prices is not reachable by re-timing what
+turns over anyway. **With the seat's own channel bounded at +0.0249 and both of the board's two
+large cost targets now measured and refused, the cost axis is closed on the whole board rather
+than on the seat alone**, and the research folder's cost-mitigation cluster can be struck in full.
+
+**F5 — `SUMMARY.md` #166's Active Share, reported beside `rho` as that item asks.** Median across
+the 78 shared emitted dates: **0.2566** (mean 0.2469, p05–p95 0.153–0.313), against `rho` **0.9869**
+in return space. Read strictly as the critique's falsifier and never as evidence of decorrelation:
+it is **not** near zero, so the candidate could in principle have resolved, and the 25.7% of gross
+it moved landed where it was aimed — mean overlap of the **top ten names** with the seat is
+**0.705**, i.e. three of the seat's ten largest weights were displaced, against trial #103's overlay
+which moved 8.27% of gross entirely at rank 15–25 and landed at `rho` 0.9984. **This is the first
+`price-trend` candidate in three weeks to move the channel `learnings.md` [2026-09-27] identified as
+the only one that can move this book, and it is the reason tonight's `|t|` is 1.95 rather than 0.5.**
+The pair (Active Share 0.257, `rho` 0.987) is offered as the first calibration point for reading the
+two together on this base.
+
+**F7 — how much of the −0.127 is already-priced confound? About a fifth.** Normalised emitted
+validation rows, so the trim's exposure scalar drops out:
+
+    book    HHI      top-10 gross   bottom-10 gross   avg positions   mean top weight
+    cand   0.0540      0.6022           0.0111            56.93           0.1291
+    seat   0.0618      0.6417           0.0150            47.96           0.1446
+
+HHI **−12.5%** at +8.9 names ⇒ **−0.021** at this file's calibrated ~0.05 Sharpe per −30% of HHI;
+turnover 3.01x → 3.81x ⇒ **−0.007** through F5's cost identity. Total priced confound **−0.028** of
+an observed **−0.127**, leaving **~−0.099 for the `ID_Z` term itself.** The bottom-ten/top-ten gross
+ratio moves 0.0233 → 0.0184, so the candidate is the *same shape* of book as the seat — a ten-name
+book with a tail of dust — and did not escape the structure `learnings.md` [2026-09-27] describes.
+
+**Seventh confirmation of `SE ≈ 0.568·√(1−ρ)`.** At `rho` 0.9869 the closed form gives **0.0649**
+against the engine's `metrics.sharpe_diff_se` of **0.0651**.
