@@ -44,7 +44,10 @@ import argparse
 import importlib.util
 import json
 import multiprocessing as mp
+import os
+import signal
 import subprocess
+import tempfile
 import sys
 import time
 import traceback
@@ -86,12 +89,21 @@ def commit_for(rec: dict) -> str | None:
 
 
 def materialize(sha: str) -> Path:
+    """Extract the commit's strategies/ (+ data/universe.yaml, which
+    strategies.lib.groups reads) once. Extracted into a temp dir and renamed
+    into place, so concurrent callers never see or clobber a half-written tree."""
     tree = SRC_CACHE / sha
-    if not (tree / "data" / "universe.yaml").exists():
-        tree.mkdir(parents=True, exist_ok=True)
-        archive = subprocess.run(["git", "archive", sha, "strategies", "data/universe.yaml"], cwd=ROOT,
-                                 capture_output=True, check=True).stdout
-        subprocess.run(["tar", "-x", "-C", str(tree)], input=archive, check=True)
+    if (tree / "data" / "universe.yaml").exists():
+        return tree
+    SRC_CACHE.mkdir(parents=True, exist_ok=True)
+    tmp = Path(tempfile.mkdtemp(dir=SRC_CACHE, prefix=f".{sha[:12]}-"))
+    archive = subprocess.run(["git", "archive", sha, "strategies", "data/universe.yaml"], cwd=ROOT,
+                             capture_output=True, check=True).stdout
+    subprocess.run(["tar", "-x", "-C", str(tmp)], input=archive, check=True)
+    try:
+        os.rename(tmp, tree)
+    except OSError:          # another process got there first
+        subprocess.run(["rm", "-rf", str(tmp)], check=False)
     return tree
 
 
@@ -213,8 +225,26 @@ def score(gw, variant: str, holdout: bool, draws: int) -> tuple[dict, dict]:
 # Tasks
 # ---------------------------------------------------------------------------
 
-def run_task(task: dict) -> list[dict]:
+def _init_worker() -> None:
+    global _CTX
+    _CTX = build_context()
+
+
+class VariantTimeout(Exception):
+    pass
+
+
+def _alarm(signum, frame):
+    raise VariantTimeout()
+
+
+def run_task(task: dict) -> tuple[list[dict], dict]:
+    """Score one task in a worker. Returns (rows, {filename: returns series});
+    the parent writes the files. Workers never touch Parquet: the parent's
+    pyarrow thread pool does not survive fork, and a child that uses it can
+    hang forever (the first full run lost 4 trials that way)."""
     rows = []
+    series: dict[str, pd.Series] = {}
     try:
         if task["kind"] == "trial":
             tree = materialize(task["sha"])
@@ -225,21 +255,26 @@ def run_task(task: dict) -> list[dict]:
         mod = load_module(path, tree)
     except Exception as e:  # noqa: BLE001
         return [{**task["meta"], "variant": v, "error": f"load: {type(e).__name__}: {e}"}
-                for v in task["variants"]]
+                for v in task["variants"]], {}
+    signal.signal(signal.SIGALRM, _alarm)
     for v in task["variants"]:
+        signal.alarm(task.get("timeout", 0))
         try:
             row, rets = score(mod.generate_weights, v, task["holdout"], task["draws"])
             for split, r in rets.items():
-                p = OUT / "returns" / f"{task['meta']['key']}_{v}_{split}.parquet"
-                p.parent.mkdir(parents=True, exist_ok=True)
-                r.rename("ret").to_frame().to_parquet(p)
+                series[f"{task['meta']['key']}_{v}_{split}.parquet"] = r
             rows.append({**task["meta"], "variant": v, **row})
+        except VariantTimeout:
+            rows.append({**task["meta"], "variant": v,
+                         "error": f"timeout after {task['timeout']}s"})
         except Exception as e:  # noqa: BLE001
             rows.append({**task["meta"], "variant": v,
                          "error": f"{type(e).__name__}: {e}",
                          "trace": traceback.format_exc()[-1500:]})
+        finally:
+            signal.alarm(0)
         print(f"  done {task['meta']['key']} {v}", flush=True)
-    return rows
+    return rows, series
 
 
 def build_tasks(args) -> list[dict]:
@@ -298,12 +333,27 @@ def main() -> int:
     ap.add_argument("--skip-trials", action="store_true")
     ap.add_argument("--skip-extra", action="store_true", help="skip sanity and ported strategies")
     ap.add_argument("--out", default=str(OUT / "rescore.jsonl"))
+    ap.add_argument("--resume", action="store_true",
+                    help="run only (task, variant) pairs without an error-free row in --out")
+    ap.add_argument("--timeout", type=int, default=3600, help="seconds per variant (0 = none)")
     args = ap.parse_args()
 
     tasks = build_tasks(args)
+    for t in tasks:
+        t["timeout"] = args.timeout
+    if args.resume and Path(args.out).exists():
+        done = {(r["key"], r["variant"]) for r in map(json.loads, Path(args.out).read_text().splitlines())
+                if r and not r.get("error")}
+        for t in tasks:
+            t["variants"] = tuple(v for v in t["variants"] if (t["meta"]["key"], v) not in done)
+        tasks = [t for t in tasks if t["variants"]]
+    # extract every commit tree up front, before any worker exists
+    for sha in sorted({t["sha"] for t in tasks if t.get("sha")}):
+        materialize(sha)
     print(f"{len(tasks)} tasks", flush=True)
     global _CTX
-    _CTX = build_context()
+    if args.workers <= 1:
+        _CTX = build_context()
     rows: list[dict] = []
     for t in tasks:
         if t["kind"] == "missing":
@@ -315,18 +365,28 @@ def main() -> int:
     with open(out, "a") as f:
         for r in rows:
             f.write(json.dumps(r, default=str) + "\n")
+        def emit(res):
+            rows_, series = res
+            for name, r in series.items():
+                p = OUT / "returns" / name
+                p.parent.mkdir(parents=True, exist_ok=True)
+                r.rename("ret").to_frame().to_parquet(p)
+            for r in rows_:
+                f.write(json.dumps(r, default=str) + "\n")
+            f.flush()
+
         if args.workers <= 1:
             for t in work:
-                for r in run_task(t):
-                    f.write(json.dumps(r, default=str) + "\n")
-                    f.flush()
+                emit(run_task(t))
         else:
-            ctx = mp.get_context("fork")
-            with ctx.Pool(args.workers, maxtasksperchild=4) as pool:
+            # spawn, not fork: numpy's BLAS here is Apple Accelerate, whose
+            # libdispatch thread pools do not survive fork — forked workers
+            # deadlocked on the first large matrix product (PCA, the E/Var
+            # correlation matrices). Each spawned worker builds its own context.
+            ctx = mp.get_context("spawn")
+            with ctx.Pool(args.workers, initializer=_init_worker) as pool:
                 for res in pool.imap_unordered(run_task, work):
-                    for r in res:
-                        f.write(json.dumps(r, default=str) + "\n")
-                    f.flush()
+                    emit(res)
     print(f"wrote {out}", flush=True)
     return 0
 
