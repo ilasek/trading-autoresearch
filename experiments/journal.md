@@ -16776,3 +16776,5 @@ on validation; CSCV/PBO reads 0.454. Nothing here asks for the seat to move.
 human should make the session-start hook, the harness's per-run branch requirement and `CLAUDE.md`
 agree; the failure mode is a silently split `trials.jsonl`, which understates the deflated-Sharpe bar
 for every later trial.
+
+## Research session — 2026-09-29 (learning agent): 3 notes added, see research/SUMMARY.md

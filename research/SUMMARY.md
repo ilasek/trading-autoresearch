@@ -1147,6 +1147,52 @@ handled in candidate #85, which turns on the fact that both prior screens graded
 while this source's claim is about a corner.**
 → `notes/2026-09-07-high-volume-return-premium.md`
 
+
+**[Added 2026-09-29] The family's *risk* branch, opened at last — and the honest headline is that
+its premium fails a commissioned replication while its measure replicates exactly.** Every prior
+note in this section grades a liquidity *level* or a volume *shock*; two of them
+(`2026-08-29-amihud-illiquidity-measure-and-replication.md`,
+`2026-09-04-commonality-in-liquidity-across-countries.md`) explicitly set the illiquidity-**risk**
+literature aside as a different one. It is now covered, in three notes, and it is a different
+object from the level the lab closed on the mean channel on 2026-09-24. **The mechanism.** If
+liquidity has a systematic component, a security's covariance with *innovations* in aggregate
+liquidity is a candidate priced risk: you want compensation for holding what falls when trading
+gets expensive. Pástor–Stambaugh identify per-name liquidity from **volume-related return
+reversal** — the coefficient on signed dollar volume in a next-day-return regression, expected
+negative and larger in magnitude when liquidity is worse — average it across names, deflate it by
+market size to kill the secular volume trend, and take AR innovations; the whole construction runs
+on nothing but daily closes, a market aggregate and dollar volume, which makes it one of very few
+Tier 1 asset-pricing constructions whose inputs are a literal match for this repo's `aux` panel.
+Acharya–Pedersen derive from an OLG equilibrium what *should* be priced and split it into three
+liquidity betas — commonality in liquidity `cov(c_i, c_M)`, return sensitivity to market
+illiquidity `cov(r_i, c_M)`, and liquidity sensitivity to market returns `cov(c_i, r_M)` — priced
+as `β1 + β2 − β3 − β4`, i.e. **two of the three enter negatively**, so any rank-average of three
+"liquidity risk" scores tests a different model. Brunnermeier–Pedersen supply the mechanism under
+both: a margin/loss spiral in which intermediaries' shadow cost of capital is a **single state
+variable**, which is why a cross-sectional average of noisy per-name liquidity estimates is an
+aggregate rather than an averaging of idiosyncrasies. **Three findings decide what this is worth
+here, and none is an invitation to sort on it.** (i) The Critical Finance Review *commissioned*
+two independent replications: both reproduce the aggregate measure essentially exactly (reported
+correlations 0.989 and 1.000 to five digits), and yet **ten of ten specifications in one of them
+produce no statistically significant risk premium**, while the other finds the traded factor
+significantly weaker at its natural monthly rebalance frequency and the predicted-beta version
+confounded by mechanical relations to other anomalies. (ii) Acharya–Pedersen report in print that
+all three liquidity betas are **strongly collinear with the illiquidity level** — so a risk-sorted
+book on this universe is a noisier version of the score behind the lab's existing null, and
+Brunnermeier–Pedersen predict exactly that collinearity from theory, because the spiral is
+stronger for names that are illiquid on average. (iii) One finding runs the other way and is worth
+carrying: the replication team states that liquidity risk is **essentially unrelated to momentum**,
+contrary to the original's claim — whatever this leg is, it is not the incumbent in costume. With
+`SUMMARY.md` #140(a) already measured on this board (a leg with no alpha moves the noncentrality
+not at all however decorrelated it is), decorrelation without a premium buys nothing here.
+**Tier A for the sources and the replication record; Tier B at best for the priced premium.** No
+validation overlap (every sample ends 1999 or 2017); the replication exchange is
+`published_post_2018: true` but replicates a pre-2018 claim. What the branch supplies to this lab
+is therefore a **state variable, two construction corrections and a falsifier** — candidates
+#170–#172, all free — and an anti-candidate against the sorted book, #173.
+→ `notes/2026-09-29-liquidity-risk-priced-innovations.md`,
+`notes/2026-09-29-liquidity-adjusted-capm-three-betas.md`,
+`notes/2026-09-29-funding-liquidity-and-margin-spirals.md`
 ### 10. `range-variance`
 
 **This family is a measurement result, not a premium, and the measurement gain is large, analytical
@@ -8237,6 +8283,99 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-09-28-active-share-and-its-deactivation.md`,
     `notes/2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`
 
+170. **FREE, first among tonight's, and it is a *state variable* rather than a score — the one thing
+    the liquidity-risk literature supplies that this lab can compute without spending a trial.**
+    Pástor–Stambaugh's construction produces a single monthly time series, not a cross-sectional
+    ranking: per name, regress next-day excess return on the lagged return and on
+    `sign(excess return) × dollar volume` within the month (at least 15 usable days, dollar volume
+    in millions); average the coefficient across names; scale the average by `m_t/m_1`, the ratio of
+    the universe's dollar capitalisation now to its value in the first month, which removes the
+    secular volume trend; then take the residual of `Δγ_t` regressed on its own lag and on the
+    scaled lagged level. The output is a causal, daily-data-only measure of **this universe's own
+    aggregate liquidity innovation**, re-estimated at each formation date exactly as the source
+    prescribes. Two free uses, in order. **(a) As a conditioning diagnostic**: does the seat's
+    paired `t` against a challenger concentrate in the low-innovation months? This is the first
+    external state variable the folder has filed that is computed from the repo's own panel rather
+    than imported, so the [2026-09-17] "blending beats switching" verdict constrains how it may be
+    *used* but does not bear on whether it is worth *measuring*. **(b) As a falsifier for the
+    2026-09-28 `%zero` finding**: `γ_it` and `%zero` are two liquidity proxies on the same panel
+    that should rank names the same way. If `γ_it` also fails to align with ADV and ILLIQ, the
+    conclusion is about the panel, not about either proxy — the same free result-shape as the
+    `%zero` census. **The hard precondition, and it is the whole implementation:** a forward-filled
+    day carries a manufactured zero return and a stale or NaN volume, so non-traded days must be
+    dropped **per name** before the daily `d → d+1` pairs are formed, and the 15-day minimum
+    re-checked afterwards. On a universe that ffills across fifteen exchange calendars this is
+    where the construction will fail if it fails. Tier A construction, premium contested (see
+    #173), no validation overlap.
+    → `notes/2026-09-29-liquidity-risk-priced-innovations.md`
+
+171. **FREE, and it is a construction correction that applies to scores this lab has already run,
+    not to a new idea.** Acharya–Pedersen's empirical section contains a two-step recipe for any
+    *dollar-denominated, persistent* panel characteristic, and both steps are things a candidate
+    here could silently have got wrong. **Step one: deflate before you use it.** Their normalised
+    illiquidity is `min(0.25 + 0.30 · ILLIQ_it · P^M_{t−1}, 30%)`, where `P^M_{t−1}` is the ratio
+    of market capitalisation now to its first-period value; without that factor a raw ILLIQ or
+    volume series rides four decades of growth in dollar volumes, and a cross-sectional score built
+    from it inherits whatever part of that trend is uneven across names. **Step two: when you
+    difference it, hold the deflator fixed.** Their AR(2) innovation regression uses the *same*
+    `P^M_{t−1}` in all three terms precisely so that the residual is an innovation in illiquidity
+    and not in the deflator. **The free audit:** take the `lv_illiq_*` scores and any
+    volume-derived score in this repo's history and ask whether the quantity sorted on was
+    stationary, and whether any differencing mixed a level change with a deflator change. The
+    expected answer is that the cross-sectional standardisation already absorbs most of it — which
+    is itself worth recording, because it would mean the lab has been protected by an operator
+    rather than by design. Tier A, no overlap.
+    → `notes/2026-09-29-liquidity-adjusted-capm-three-betas.md`
+
+172. **FREE, and it is the only genuinely new *construction shape* tonight: a variance ratio as the
+    liquidity-driven share of volatility, plus a dispersion prediction that costs nothing to
+    test.** Brunnermeier–Pedersen's margin mechanism ties illiquidity to volatility and is explicit
+    about the empirical decomposition: *fundamental* volatility is captured by price changes over a
+    **longer** horizon, total (fundamental plus liquidity-driven) volatility by **short-horizon**
+    price changes, "as in the literature on variance ratios". So the short-horizon-over-long-horizon
+    realised-volatility ratio is a candidate proxy for the liquidity-driven component, computable
+    causally from closes alone. **Why this is not already refuted, stated narrowly:** the lab closed
+    `range-variance` on fifteen screens of one object [2026-09-13], showed `beta-minus` was the
+    volatility *level* wearing a risk label [2026-09-17], and measured that a better variance
+    forecast is not a better input once smoothed [2026-09-21] — all three are about a volatility
+    **level** or **forecast**, and a ratio of two horizons is a **shape**. That is the entire claim
+    for it; it is not evidence the shape carries anything. The companion prediction is cheaper still
+    and needs no score: flight to quality says the **cross-sectional dispersion** of illiquidity
+    widens when funding tightens, so the correlation between universe illiquidity dispersion and
+    #170's innovation series is a sign-restricted, one-line test — and [2026-09-18] already
+    establishes that this lab reads a both-ends-beat-the-pool sort as a dispersion effect. Tier A
+    theory, no empirical section, no overlap.
+    → `notes/2026-09-29-funding-liquidity-and-margin-spirals.md`,
+    `notes/2026-09-05-price-delay-market-frictions.md`
+
+173. **ANTI-CANDIDATES, four, and the first is the most important negative this folder has filed in
+    a month: do not spend a trial on a liquidity-beta-sorted challenger.** *(a) No `β_L` book.* The
+    Critical Finance Review commissioned two replications of the founding paper; both reproduce the
+    measure almost exactly, and then one reports that **none of ten specifications** — including
+    five alternative liquidity-risk indices and power-*improving* variations such as value
+    weighting, including zero-volume days and dropping the price filters — produces a statistically
+    significant premium, while the other finds the traded factor significantly weaker at its natural
+    monthly rebalance and the predicted-beta version confounded by mechanical relations to other
+    anomalies. On top of that, this lab has already priced the case: `liquidity-volume` closed on
+    the mean channel [2026-09-24] at an appraisal ratio of +0.078/yr, and #140(a) says a leg with no
+    alpha moves the noncentrality not at all however decorrelated it is. A fashionable mechanism
+    whose premium fails a commissioned replication is exactly the trial this folder exists to
+    prevent. *(b) Do not rank-average the three liquidity betas.* The model prices
+    `β1 + β2 − β3 − β4`; two of the three enter **negatively**, so an equal-weighted composite of
+    three "liquidity risk" scores tests a different and unmotivated model, and should not cite
+    Acharya–Pedersen. *(c) Do not substitute a price-based proxy for funding liquidity.*
+    Brunnermeier–Pedersen's driving state variable is intermediary capital tightness, which this
+    universe cannot observe; building a price or volatility proxy and calling it funding is the
+    imported-proxy inversion the `%zero` census caught [2026-09-28]. *(d) Do not use the mechanism's
+    non-linearity to rescue a failed unconditional premium.* The model does predict that liquidity
+    risk bites only near the constraint, which is a real explanation for why an unconditional linear
+    monthly beta finds nothing — and it is also exactly the shape of argument that makes a dead
+    effect unfalsifiable. It licenses a conditional *diagnostic* (#170a) and never a re-run of a
+    book whose unconditional premium failed.
+    → `notes/2026-09-29-liquidity-risk-priced-innovations.md`,
+    `notes/2026-09-29-liquidity-adjusted-capm-three-betas.md`,
+    `notes/2026-09-29-funding-liquidity-and-margin-spirals.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -8287,9 +8426,78 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-26 (session 43) | **The second consecutive session aimed by the lab's own next-ideas list, and it takes that list's item 3 — the narrowing rather than the widening one.** The 2026-09-25 nightly closed `statistical-arbitrage` for residual reversal on two pre-registered screens that were built to be able to disagree, closed `lead-lag-spillover` for want of an unmeasured sub-mechanism, and then named the only two genuinely open families by trial count: `statistical-learning` (3 trials, 0.875 lead, the highest non-`price-trend` result on the board) and `portfolio-learning`. This folder's section 8 covered four sources on that family and **all four argue the same direction — few predictors, shallow models, dimension reduction over selection**; a grep across all 131 prior notes returned **zero** hits for `virtue of complexity`, `random feature`, `ridgeless` and `benign overfitting`, i.e. the family's one literature that argues the *opposite* had never been read here. Three sources, full text read directly for all three, all reached without a publisher paywall (one journal article via a university economics department, one working paper via the author's own faculty page, one from NBER). The session's shape is **one claim, one identity that reinterprets it, and one theorem that makes the disagreement a measurable property of this universe** — and its output is five free screens plus a gated scout, not a candidate. | Kelly–Malamud–Zhou 2024 (JF) (`2026-09-26-virtue-of-complexity-return-prediction.md`); Nagel 2025 (NBER WP w34104) (`2026-09-26-seemingly-virtuous-complexity-kernel-representation.md`); Didisheim–Ke–Kelly–Malamud 2024/2025 (NBER WP 33012) (`2026-09-26-large-factor-models-aipt-complexity.md`) |
 | 2026-09-27 (session 44) | **The third consecutive session aimed by the previous nightly, and the first aimed by a nightly's criticism of this file rather than by its next-ideas list.** The 2026-09-26 nightly disqualified this file's top-ranked screen (#153's `EffRank`) because the same universe reads `0.244·P` on fourteen characteristics and `0.638·P` on eight de-duplicated ones — a candidate can move itself between the pre-registered branches by de-duplicating its own inputs — and told this folder that "an imported screen needs its own invariance check before its branches are believed, which the folder could apply to itself." A grep across all 134 prior notes returned zero for `Laloux`, `Onatski`, `Ahn-Horenstein`, `eigenvalue ratio`, `nonlinear shrinkage` and `Porter-Thomas`. **The twenty-year econometrics literature on exactly this question had never been read here, and it does not rescue the screen — it generalises the failure**: Onatski names the violated condition as *a basic identification assumption*, so on a duplicated-column design no eigenvalue-based count is identified and no better estimator repairs that. What the session brings back instead: a closed-form null with a falsifiable prediction about the lab's own control (#160), a **parameter-free** eigenvector test for whether a component is empty (#159), a five-estimator disagreement check with the literature's own 3-to-8 spread as calibration (#161), a de-duplication design rule with a citation behind it (#162), a Tier-A anti-candidate declined on its own source's long-only measurement (#163), and three interpretation rules about numbers already in the repo's files (#164). New: **#159–#164**. | Laloux–Cizeau–Bouchaud–Potters 1999 (`2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`); Bai–Ng 2002 + Onatski 2010 + Ahn–Horenstein 2013 (`2026-09-27-counting-factors-eigenvalue-estimators.md`); Ledoit–Wolf 2020 + 2017 (`2026-09-27-nonlinear-shrinkage-instead-of-counting.md`) |
 | 2026-09-28 (session 45) | **The fourth consecutive session aimed by the previous nightly, and the unit is the *weighting function* — not the score that feeds it, and not the statistic that grades it.** Sessions 28–44 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null → the variable a promotion turned on → a constraint's two halves → what an estimator is → whether the measured thing exists on this design. The 2026-09-27 nightly spent 1 of 8 trials (**holdout NOT read**, running total still six) and produced the quantity this session is about: the seat holds **~61.41% of gross in its ten largest weights and ~1.43% in its ten smallest of ~48**, ratio **0.023**, *a property of the `c − c.min() + FLOOR` magnitude weighting rather than of any candidate* — which retrospectively explains a whole class of this repo's unresolvable nulls and leaves its next-ideas item 2 asking for **a score change that moves the top ten weights**, with the explicit admission that *nothing on the board supplies one*. A grep across all 137 prior notes returned **zero** for `frog in the pan`, `active share`, `Cremers`, `Petajisto`, `best ideas` and `Cohen, Polk`: the two literatures that own the missing pieces — *what reorders the top of a ranked book* and *how you measure the distance between two long-only books* — had never been read here. Three sources, all read in full text, tiers A/A/B, chosen so each supplies one node: the **score** (a conditioner on the path by which a cumulative return arrived, computable from closes alone and explicitly not a restatement of that return), the **distance** (Active Share, plus the same-sample controlled re-run that finds it predicts nothing — the citable anchor for this lab's own 2026-09-10 rule), and the **tail** (a weighting function inverted into the alpha vector it is implicitly asserting). The session's shape is **three free measurements, one gated candidate and a four-part anti-candidate**, and its most useful single output is a reclassification of a diagnostic the lab already runs: Jaccard and holdings overlap are *unweighted* membership statistics on a book whose risk lives in ten weights, and Active Share is their weighted analogue for one line of code. New: **#165–#169**. | Da–Gurun–Warachka 2014 (RFS) (`2026-09-28-information-discreteness-frog-in-the-pan.md`); Cremers–Petajisto 2009 (RFS) + Frazzini–Friedman–Pomorski 2016 (FAJ) (`2026-09-28-active-share-and-its-deactivation.md`); Antón–Cohen–Polk (2021 draft; earlier Cohen–Polk–Silli, FMG DP 624) (`2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`) — all read in full text |
+| 2026-09-29 (session 46) | **The first session in five not aimed by the previous nightly, and the first in sixteen aimed by a gap this folder had twice *declared in writing* rather than one a detector found.** The 2026-09-28 nightly spent 1 of 8 trials (**holdout NOT read**; running total of looks still **six**), killed `pt_mom_id_z` at `d = −0.127` with ~−0.099 left for the term after both calibrated confounds, produced the Active Share calibration pair (0.026 → `|t|` 0.49; 0.257 → `|t|` 1.95), closed the cost axis on the whole board, and told the human that seven of eight families are closed and "this universe, with these inputs, has been searched out". Its own next-ideas were three free measurements and an anti-candidate list — nothing this folder could supply. So the aim came from two of this folder's *own* disclaimers: `2026-08-29-amihud-illiquidity-measure-and-replication.md` and `2026-09-04-commonality-in-liquidity-across-countries.md` each set the illiquidity-**risk** literature (naming Pástor–Stambaugh and Acharya–Pedersen by author) aside as "a different literature", and a grep across all 140 prior notes returned **zero** for `liquidity beta`, `funding liquidity` and `flight to quality`, with `Pástor` appearing only inside those two disclaimers and nowhere as a subject. Three notes, one family (`liquidity-volume`), and the session is a **documented negative**: the measure replicates essentially exactly under two Critical-Finance-Review-commissioned replications, and the premium does not survive them — ten of ten specifications without significance in one, a traded factor significantly weaker at its natural monthly rebalance in the other, and the predicted-beta version confounded by construction. Acharya–Pedersen then report that all three of their liquidity betas are strongly collinear with the illiquidity **level** the lab already closed on the mean channel, and Brunnermeier–Pedersen predict that collinearity from theory. New: **#170–#173**, of which three are free and the fourth is the anti-candidate against the sorted book. One finding runs the other way and is carried deliberately: liquidity risk is reported **essentially unrelated to momentum**, so the leg is not the incumbent in costume — it is decorrelated with no premium, which #140(a) already priced at zero. **Carried unchanged and still genuinely unrun: #82** (twenty-fourth session), **#94**, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, **#165**'s second use, **#166**, **#167**. **#152 stands.** **#163 and #169 stay anti-candidates.** Access: Pástor–Stambaugh 2003 read as NBER WP 8462 (a `/GNN`-glyph PDF needing a +29 offset decode, a new extraction shape for this folder); Acharya–Pedersen as the typeset JFE version of record; Brunnermeier–Pedersen as NBER WP 12939; all three CFR replication papers from the journal's own open PDFs. **Not read, and nothing is claimed from them:** Jorion (1986) and Frost–Savarino (1986), the two JFQA primaries for shrinking an estimated *mean vector*, which Semantic Scholar reports `CLOSED` and whose one hosted copy answered with a connection reset — see the open-questions entry. | Pástor–Stambaugh 2003 (JPE) + Li–Novy-Marx–Velikov 2019, Pontiff–Singla 2019 and Pástor–Stambaugh 2019 (CFR) (`2026-09-29-liquidity-risk-priced-innovations.md`); Acharya–Pedersen 2005 (JFE) (`2026-09-29-liquidity-adjusted-capm-three-betas.md`); Brunnermeier–Pedersen 2009 (RFS) (`2026-09-29-funding-liquidity-and-margin-spirals.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-09-29] Read this first: tonight's session is a documented NEGATIVE, and the negative is
+  the deliverable.** The last unopened liquidity literature — liquidity *risk*, which this folder
+  twice set aside in writing as "a different literature" — is now covered in three notes, and the
+  finding is that its **measure replicates essentially exactly while its premium does not survive
+  two Critical-Finance-Review-commissioned replications** (ten of ten specifications without a
+  significant premium in one; a traded factor significantly weaker at its natural monthly rebalance
+  and a confounded predicted-beta version in the other). Acharya–Pedersen state in print that all
+  three of their liquidity betas are strongly collinear with the illiquidity **level** the lab
+  closed on the mean channel [2026-09-24], and Brunnermeier–Pedersen predict that collinearity from
+  theory. **So this folder is not proposing a liquidity-risk candidate, and #173(a) says so
+  explicitly.** What the branch does supply is one state variable and two construction corrections,
+  all free: **#170–#172**. New: **#170–#173**. **Nothing is closed by this entry** — no lab
+  measurement was taken tonight. **Carried unchanged and still genuinely unrun: #82** (twenty-fourth
+  session, still the oldest unspent free item), **#94** as standing discipline, **#105–#107**,
+  **#110**'s shrink half, **#159**, **#161**, **#164(a)**, and the whole of the 2026-09-28 set
+  (**#165**'s second use, **#166**, **#167**, **#168**). **#152 stands.** **#163 and #169 stay
+  anti-candidates.**
+- **[2026-09-29] What should aim the next session, in order — and the honest answer is that the
+  lab's own list still outranks everything here.**
+  - **The lab's #1 and #2 stay first and need nothing from this folder**: the third Active Share
+    calibration point, and #167's implied-alpha read of the seat's ~38-name tail. Both are free,
+    both are the lab's, and tonight added no reason to reorder them.
+  - **Then #170**, and it goes ahead of the other two new items because it is the only one that
+    produces a *new series* rather than an audit of an existing one — and because its by-product is
+    a second falsifier for the 2026-09-28 `%zero` result, which is the one panel-quality finding
+    this lab has that is not yet corroborated by an independent proxy. Its precondition (drop
+    forward-filled days per name before forming the daily pairs) is also the cheapest possible test
+    of whether this panel can support **any** daily-frequency reversal construction, which is a
+    question worth more than the signal.
+  - **Then #171**, free, and it is an audit of scores already run rather than a proposal. The
+    expected outcome is "cross-sectional standardisation already absorbed it", which would mean the
+    lab has been protected by an operator rather than by design — worth knowing either way, and a
+    folder that only ever proposes new things is not doing half its job.
+  - **Then #172**, and it is deliberately ranked last of the three despite being the only new
+    construction *shape*, because three separate lab results stand between it and a candidate and
+    the honest prior is that a variance ratio is a volatility level in costume. Its dispersion half
+    is free and can be run without the ratio.
+- **[2026-09-29] The transferable output, and it is an evidentiary rule rather than a mechanism.**
+  **A source cluster can be Tier A on venue, citations, replication *and* theory while its tradable
+  claim is dead — and the replication row of the rubric is what separates the two.** Tonight is the
+  cleanest instance this folder has produced: a JPE original with >4,000 citations, an
+  equilibrium-model companion in JFE with ~2,900, a mechanism paper in RFS with >5,000, and the
+  commissioned replications say the *measure* is exact and the *premium* is not there. The
+  generalisation for future sessions: **when a literature has commissioned replications, read those
+  first and let them set the tier of the claim, not of the paper.** A note that grades the paper and
+  forgets to grade the claim will hand this lab a trial it has already priced at zero.
+- **[2026-09-29] One gap identified and deliberately left open, with its access finding recorded so
+  the next session does not repeat the search.** The unit this folder could not cover tonight is
+  **shrinkage of an estimated *mean vector* for portfolio construction** — Jorion (1986,
+  "Bayes-Stein Estimation for Portfolio Analysis", JFQA, 789 Crossref / 989 Semantic Scholar
+  citations checked 2026-09-29) and Frost–Savarino (1986, "An Empirical Bayes Approach to Efficient
+  Portfolio Selection", JFQA, 321 / 410). A grep across all 140 prior notes returns **zero** for
+  `Bayes-Stein`, `grand mean`, `Michaud` and `shrinkage of means`; the folder's four shrinkage notes
+  are all about a *covariance*, an *SDF coefficient*, or *inference on a selected maximum*
+  (Tweedie), never about the score vector a book is built from. **Why it is the right next unit:**
+  the lab's live question is what moves the **top ten weights** of a `c − c.min() + FLOOR`
+  magnitude-weighted book (61.41% of gross in ten names, ratio 0.023, [2026-09-27]), and shrinking
+  an estimated mean toward a grand mean with a **data-determined** intensity is the one operator
+  class that moves the extremes *most* and adds no free parameter — which is exactly what
+  #169(b)'s anti-proxy-maximising warning demands. **Why it is not covered: both primaries are
+  genuinely closed.** Semantic Scholar reports `openAccessPdf: CLOSED` for both DOIs; the one hosted
+  copy found (`www.stat.ucla.edu`, a course page) answered with `Recv failure: Connection reset by
+  peer` over HTTPS and a certificate failure over HTTP while the agent proxy reported
+  `bundleCoversEveryHost: true` — the host refusing, not an egress block, and a **ninth** distinct
+  refusal shape for this folder's records. **Nothing is claimed from either paper and neither has a
+  note.** Next session: try the authors' faculty pages and a business-school review site (the
+  2026-09-18 trick), or an institutional repository; if those fail, a Tier-2 review that states the
+  estimator in full is an acceptable substitute *if the note says the primary was not read*.
 - **[2026-09-28] Read this first: the lab asked for one thing it said nothing on the board could
   supply, and the two literatures that supply it had never been opened here.** The 2026-09-27
   nightly spent **1 of 8** trials (**holdout NOT read**; running total of looks still **six**), left
