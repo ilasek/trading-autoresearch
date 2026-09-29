@@ -12,7 +12,7 @@ import pytest
 from engine import data
 
 pytestmark = pytest.mark.skipif(
-    not (data.STORE.exists() and any(data.STORE.glob("*.parquet"))),
+    not (data.STORE.exists() and data.store_ids()),
     reason="data store not present",
 )
 

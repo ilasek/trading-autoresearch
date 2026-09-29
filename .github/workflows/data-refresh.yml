@@ -15,7 +15,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
 
@@ -29,11 +29,22 @@ jobs:
       - name: Refresh price store
         run: python scripts/update_data.py --max-age-bdays 0
 
+      # Weekly (Mondays): apply today's index constituent lists to the
+      # point-in-time membership spells and fetch prices for new members.
+      # Never deletes: a name that leaves an index has its spell closed.
+      - name: Evolve point-in-time membership
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python scripts/build_membership.py
+          else
+            echo "not Monday — membership left unchanged"
+          fi
+
       - name: Commit updated parquet
         run: |
           git config user.name "data-refresh-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/store
+          git add data/store data/membership data/universe_pit.yaml
           if git diff --cached --quiet; then
             echo "store already fresh — nothing to commit"
           else

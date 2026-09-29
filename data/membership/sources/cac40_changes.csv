@@ -1,0 +1,65 @@
+# CAC 40 constituent changes from 2009 on, transcribed from "Historique de la
+# composition" at https://fr.wikipedia.org/wiki/CAC_40 (retrieved 2026-09-24)
+# and mapped to Yahoo symbols. Two short-lived rows are left out: Worldline's
+# seven weeks after the Atos spin-off in 2019 and the 2022 "Aucune / Sanofi"
+# row (Sanofi never left the index). The PSA -> Stellantis ticker change at
+# the January 2021 merger is recorded as an exit and an entry.
+date,action,symbol,name
+2009-09-21,out,AF.PA,Air France-KLM
+2009-09-21,in,TEC.PA,Technip
+2010-09-20,out,DEXB.BR,Dexia
+2010-09-20,in,KN.PA,Natixis
+2010-09-20,out,MMB.PA,Lagardère
+2010-09-20,in,PUB.PA,Publicis
+2011-09-19,out,KN.PA,Natixis
+2011-09-19,in,SAF.PA,Safran
+2011-12-19,out,SEV.PA,Suez Environnement
+2011-12-19,in,LR.PA,Legrand
+2012-09-24,out,UG.PA,PSA Peugeot Citroën
+2012-09-24,in,SOLB.BR,Solvay
+2012-12-24,out,ALU.PA,Alcatel-Lucent
+2012-12-24,in,GTO.AS,Gemalto
+2013-12-23,out,STMPA.PA,STMicroelectronics
+2013-12-23,in,ALU.PA,Alcatel-Lucent
+2014-06-23,out,VK.PA,Vallourec
+2014-06-23,in,FR.PA,Valeo
+2015-03-23,out,GTO.AS,Gemalto
+2015-03-23,in,UG.PA,PSA Peugeot Citroën
+2015-12-21,out,EDF.PA,EDF
+2015-12-21,in,LI.PA,Klépierre
+2016-01-07,out,ALU.PA,Alcatel-Lucent
+2016-01-07,in,NOKIA.HE,Nokia
+2016-03-21,out,ALO.PA,Alstom
+2016-03-21,in,SW.PA,Sodexo
+2017-03-20,out,LI.PA,Klépierre
+2017-03-20,in,ATO.PA,Atos
+2017-09-18,out,NOKIA.HE,Nokia
+2017-09-18,in,STMPA.PA,STMicroelectronics
+2018-06-18,out,HOLN.SW,LafargeHolcim
+2018-06-18,in,RMS.PA,Hermès
+2018-09-24,out,SOLB.BR,Solvay
+2018-09-24,in,DSY.PA,Dassault Systèmes
+2019-06-24,out,FR.PA,Valeo
+2019-06-24,in,HO.PA,Thales
+2020-03-23,out,TEC.PA,TechnipFMC
+2020-03-23,in,WLN.PA,Worldline
+2020-06-22,out,SW.PA,Sodexo
+2020-06-22,in,TEP.PA,Teleperformance
+2020-09-21,out,AC.PA,Accor
+2020-09-21,in,ALO.PA,Alstom
+2021-01-18,out,UG.PA,PSA Peugeot Citroën
+2021-01-18,in,STLAP.PA,Stellantis
+2021-09-17,out,ATO.PA,Atos
+2021-09-17,in,ERF.PA,Eurofins Scientific
+2023-06-19,out,VIV.PA,Vivendi
+2023-06-19,in,EDEN.PA,Edenred
+2023-12-18,out,WLN.PA,Worldline
+2023-12-18,in,VIV.PA,Vivendi
+2024-03-18,out,ALO.PA,Alstom
+2024-03-18,in,AC.PA,Accor
+2024-12-23,out,VIV.PA,Vivendi
+2024-12-23,in,BVI.PA,Bureau Veritas
+2025-09-22,out,TEP.PA,Teleperformance
+2025-09-22,in,ENX.PA,Euronext
+2025-12-22,out,EDEN.PA,Edenred
+2025-12-22,in,FGR.PA,Eiffage

@@ -229,3 +229,84 @@ def test_holdout_is_not_read_before_the_gate(prices, sandbox):
         for line in protocol.TRIALS_FILE.read_text().strip().splitlines()
     ]
     assert [h is not None for h in holdouts] == [True, False, False]
+
+
+# --- protocol v2 --------------------------------------------------------------
+
+def _v2_setup(prices, eligible):
+    types = {c: "stock" for c in prices.columns}
+    return protocol.Setup(version=2, splits=protocol.SPLITS_V2, gates=protocol.GATES_V2,
+                          universe="legacy", eligible=eligible, types=types)
+
+
+LATE_JOINER_PEEKER = '''
+import pandas as pd
+STRATEGY = {"name": "future_member", "family": "bug",
+            "hypothesis": "Buy whatever column exists, including names that join later."}
+def generate_weights(prices):
+    rebal = prices.groupby(pd.Grouper(freq="ME")).tail(1).index
+    # a column's presence is the leak: A7 only joins the universe in 2020
+    return pd.DataFrame(1.0 if "A7" in prices.columns else 0.0, index=rebal, columns=["A0"]) \\
+        .reindex(columns=prices.columns, fill_value=0.0).clip(upper=0.25) \\
+        .assign(A1=0.25, A2=0.25, A3=0.25)
+'''
+
+ELIGIBLE_AWARE = '''
+import pandas as pd
+STRATEGY = {"name": "eligible_equal_weight", "family": "baseline",
+            "hypothesis": "Equal weight the eligible names, monthly."}
+def generate_weights(prices, eligible=None):
+    rebal = prices.groupby(pd.Grouper(freq="ME")).tail(1).index
+    e = eligible.loc[rebal].astype(float)
+    return e.div(e.sum(axis=1), axis=0).fillna(0.0)
+'''
+
+
+def test_v2_hides_columns_until_they_are_eligible(prices):
+    eligible = pd.DataFrame(True, index=prices.index, columns=prices.columns)
+    eligible.loc[:"2019-12-31", "A7"] = False
+    setup = _v2_setup(prices, eligible)
+    seen = []
+
+    def gen(p, eligible=None):
+        seen.append(("A7" in p.columns, eligible is not None and eligible.shape == p.shape))
+        return pd.DataFrame(1.0 / p.shape[1], index=p.index[:1], columns=p.columns)
+
+    protocol.evaluate_split(gen, prices, "train", setup=setup)
+    protocol.evaluate_split(gen, prices, "validation", setup=setup)
+    assert seen == [(False, True), (True, True)]
+
+
+def test_v2_causality_catches_universe_lookahead(prices):
+    eligible = pd.DataFrame(True, index=prices.index, columns=prices.columns)
+    eligible.loc[:"2020-12-31", "A7"] = False
+    setup = _v2_setup(prices, eligible)
+    ns: dict = {}
+    exec(LATE_JOINER_PEEKER, ns)
+    assert protocol.causality_check(ns["generate_weights"], prices, setup=setup) is not None
+    ns = {}
+    exec(ELIGIBLE_AWARE, ns)
+    assert protocol.causality_check(ns["generate_weights"], prices, setup=setup) is None
+
+
+def test_v2_static_check_refuses_reading_membership(sandbox):
+    path = write_candidate(sandbox, "from engine.membership import load_intervals\n", "sneaky")
+    assert protocol.static_check(path) is not None
+    path = write_candidate(sandbox, CAUSAL_STRATEGY, "honest")
+    assert protocol.static_check(path) is None
+
+
+def test_v2_trial_records_null_and_benchmarks(prices, sandbox, monkeypatch):
+    monkeypatch.setattr(protocol, "NULL_DRAWS", 40)
+    eligible = pd.DataFrame(True, index=prices.index, columns=prices.columns)
+    setup = _v2_setup(prices, eligible)
+    path = write_candidate(sandbox, ELIGIBLE_AWARE, "eligible_equal_weight")
+    r = protocol.run_trial(path, prices, setup=setup)
+    rec = json.loads((sandbox / "experiments" / "trials.jsonl").read_text().splitlines()[-1])
+    assert rec["protocol_version"] == 2
+    assert set(rec["null"]) >= {"null_p50", "null_p90", "null_pctile"}
+    # equal-weighting every eligible name IS the equal-weight benchmark: no
+    # selection, so it cannot clear the random-selection null's 90% quantile
+    assert r.verdict == "GATE_FAIL"
+    assert any("random-selection null" in x for x in r.reasons)
+    assert rec["ir_vs_ew"] == pytest.approx(0.0, abs=0.3)

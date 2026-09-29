@@ -1,0 +1,28 @@
+id,action,valid_from,reason
+0300_HK,trimmed,2024-10-03,impossible tick on 2024-10-02
+8303_JP,dropped,2025-12-18,"impossible tick, < 1y after it"
+8766_JP,trimmed,2005-09-30,impossible tick on 2005-09-29
+9201_JP,trimmed,2012-09-20,impossible tick on 2012-09-19
+ABI_BR,trimmed,2008-11-26,impossible tick on 2008-11-25
+ACA_PA,trimmed,2007-01-22,impossible tick on 2007-01-19
+AF_PA,trimmed,2005-07-19,impossible tick on 2005-07-18
+ATO_PA,trimmed,2024-12-09,impossible tick on 2024-12-06
+BA_UK,trimmed,1998-05-06,"34 daily moves beyond 50%, the last on 1998-05-05"
+BGEO_UK,trimmed,2012-02-29,impossible tick on 2012-02-28
+CNE_UK,trimmed,2023-05-17,"352 daily moves beyond 50%, the last on 2023-05-16"
+COMS,dropped,,98 daily moves beyond 50%
+DB1_DE,trimmed,2001-06-04,impossible tick on 2001-06-01
+DEC,trimmed,2023-12-06,impossible tick on 2023-12-05
+DIGI,trimmed,2023-07-24,"104 daily moves beyond 50%, the last on 2023-07-21"
+EHC,trimmed,2003-03-27,impossible tick on 2003-03-26
+EP,trimmed,2021-03-16,"62 daily moves beyond 50%, the last on 2021-03-15"
+FRAS_UK,trimmed,2007-02-28,impossible tick on 2007-02-27
+GR,trimmed,2016-04-12,"21 daily moves beyond 50%, the last on 2016-04-11"
+ITX_MC,trimmed,2002-09-26,impossible tick on 2002-09-25
+LIN_DE,trimmed,2018-10-30,"272 daily moves beyond 50%, the last on 2018-10-29"
+LOGN_SW,trimmed,2001-01-09,impossible tick on 2001-01-08
+MCIC,dropped,,242 daily moves beyond 50%
+PCT_UK,trimmed,2011-05-04,impossible tick on 2011-05-03
+UCG_MI,trimmed,2001-05-22,impossible tick on 2001-05-21
+ULVR_UK,trimmed,1999-05-05,"54 daily moves beyond 50%, the last on 1999-05-04"
+USBC,trimmed,2025-06-10,"48 daily moves beyond 50%, the last on 2025-06-09"

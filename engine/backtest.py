@@ -38,8 +38,17 @@ def sanitize_weights(
     max_weight: float,
     max_leverage: float,
     allow_short: bool,
+    eligible: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
-    """Validate and normalize raw strategy weights onto the price calendar."""
+    """Validate and normalize raw strategy weights onto the price calendar.
+
+    `eligible` (dates x instruments, bool; protocol v2) is the point-in-time
+    universe. On every row the strategy emitted — a rebalance — weight on a
+    name that is not eligible that day is set to zero before forward-filling:
+    a name can only be bought while it is in the universe, and a held name is
+    kept only until the next rebalance after it leaves. Rows the strategy did
+    not emit are untouched, so an index exit between rebalances does not force
+    a sale the strategy never decided."""
     if not isinstance(weights, pd.DataFrame):
         raise TypeError("generate_weights must return a DataFrame")
     unknown = weights.columns.difference(prices.columns)
@@ -51,6 +60,10 @@ def sanitize_weights(
             f"weights contain dates outside the price calendar (first: {future[0]})"
         )
     w = weights.reindex(index=prices.index, columns=prices.columns)
+    if eligible is not None:
+        rows = weights.index
+        ok = eligible.reindex(index=rows, columns=prices.columns).fillna(False).astype(bool)
+        w.loc[rows] = w.loc[rows].where(ok, 0.0)
     w = w.ffill().fillna(0.0)
     if not allow_short:
         w = w.clip(lower=0.0)
@@ -71,8 +84,9 @@ def run_backtest(
     max_weight: float = 0.25,
     max_leverage: float = 1.0,
     allow_short: bool = False,
+    eligible: pd.DataFrame | None = None,
 ) -> BacktestResult:
-    w = sanitize_weights(weights, prices, max_weight, max_leverage, allow_short)
+    w = sanitize_weights(weights, prices, max_weight, max_leverage, allow_short, eligible)
     # Execution lag: positions held during day t's return were decided at t-1.
     w_eff = w.shift(1).fillna(0.0)
     rets = prices.pct_change(fill_method=None).fillna(0.0)

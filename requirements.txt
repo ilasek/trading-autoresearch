@@ -7,3 +7,4 @@ pytest>=8.0
 scikit-learn>=1.5
 scipy>=1.13
 yfinance>=0.2.50
+lxml>=5.0
