@@ -16778,3 +16778,91 @@ agree; the failure mode is a silently split `trials.jsonl`, which understates th
 for every later trial.
 
 ## Research session — 2026-09-29 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-09-29 — unmerged `origin/survivorship-pit-v2`; session halted before trial 105
+
+Recorded by the nightly strategy agent, not by `run_experiment.py`. No trial record was
+added, altered, or removed in writing this entry; `trials.jsonl` remains exactly as
+`run_experiment.py` last wrote it (**104 records**). **No experiment was run tonight and no
+holdout was read.**
+
+### What the integrity check found
+
+`git branch -r --no-merged origin/main` names one non-`archive/*` branch holding commits
+absent from `origin/main`:
+
+  - `origin/survivorship-pit-v2` — 5 commits, all authored 2026-09-29 by Ivo Lasek, all
+    prefixed `[engine-maintenance]`:
+    `1eab516` point-in-time membership + monthly-partitioned store · `ba45341` protocol v2
+    behind `PROTOCOL_VERSION` (default still 1) · `15dc3b2` re-scoring harness ·
+    `0b8b5e0` merge of `origin/main`'s daily refreshes · `d5bc17b` harness fix, completed
+    run, protocol-v2 report.
+
+The session-start hook's stated failure mode is **not** what this branch is. The branch
+changes `engine/`, `scripts/`, `tests/`, `data/` and adds `experiments/protocol_v2/` and
+`reports/protocol-v2-survivorship.md`. It changes **none** of the files that carry trial
+history — verified explicitly:
+
+```
+git diff --stat origin/main...origin/survivorship-pit-v2 -- \
+  experiments/trials.jsonl experiments/journal.md experiments/leaderboard.json \
+  experiments/learnings.md strategies/            # → empty
+```
+
+So the deflated-Sharpe bar is **not** split tonight, and this is not a repeat of 2026-08-16:
+no session's trials are stranded, and `past_trial_sharpes()` on `main` sees the true 104.
+`HEAD` was bit-identical to `origin/main` at session start (`d7cb345`), on `main`, level.
+
+### Why the session stopped anyway
+
+The step-0 rule fired on its literal condition, and on this branch the *substance* is a
+second, stronger reason to hold — so the halt is not merely procedural. Read from the
+branch (`experiments/protocol_v2/assessment.md`, 104 recorded trials re-scored):
+
+- The seated champion **#98 `pt_mom_evar_arbrisk` goes from validation Sharpe 1.27 / CAGR 24%
+  to 0.19 / 2%** when it ranks only point-in-time index members — the 0th percentile of its
+  own random-selection null, and *below* the equal-weight pool (IR −0.30). Every champion
+  since #35 lands at 0.36–0.48 ported, at the 29th–43rd null percentile.
+- Of 104 historical trials, **27 clear the v2 null gate — none of them the momentum lineage
+  this lab spent its search on.** Plain 12-1 momentum survives directionally (IR +0.28) but
+  does not clear the gate.
+- The branch's own recommended cutover order is: add a static guard against hard-coded
+  instrument lists (criterion 1 **FAILED** — a hindsight winners list still passes every v2
+  gate), then **"cut over with a fresh deflated-Sharpe history. v1 trial Sharpes are not on
+  the v2 scale: pooling them would inflate the variance term and the bar."**
+
+Given that, eight more v1 trials tonight would have spent the quality that matters most here
+for nothing: each one permanently raises a deflated-Sharpe bar whose own author's plan is to
+**discard** it, and each would have been scored against an incumbent measured at 1.27 that
+the same branch measures at 0.19. A trial is cheap to run and impossible to un-record. The
+honest move is to record zero.
+
+This is a *hold*, not a finding about any strategy. Nothing here is a verified result on
+`main`: protocol v2 does not exist on `main`, and these numbers are the branch's, re-scored
+by a harness `main`'s tests do not cover.
+
+### For the human — what unblocks the next session
+
+Three states would each let the nightly loop run again; any one of them is enough.
+
+1. **Land or park the branch.** Merge `survivorship-pit-v2` into `main` (v2 stays off while
+   `PROTOCOL_VERSION` defaults to 1, so merging does not by itself change any gate), or move
+   it to `archive/survivorship-pit-v2`, which the integrity check ignores by design.
+2. **Say which protocol the lab is searching under.** If the v1 history is to be discarded
+   per the branch's step 2, then v1 trials run between now and the cutover are waste, and the
+   nightly agent should stay stopped whatever the branch topology says. If v1 continues in
+   parallel, say so in `program.md` and the halt condition is topology-only.
+3. **Settle the branch disagreement, now twenty-four sessions old.** The session-start hook,
+   the harness's per-run-branch requirement (`main-hk81y1` tonight) and `CLAUDE.md`'s
+   `git push origin main` still do not agree. Tonight cost nothing because `HEAD` was already
+   level, and this entry is pushed to `main` and to the per-run branch both. That is care, not
+   a fix.
+
+One note on the re-scoring itself, offered as a reader of the report and not as a result:
+criterion 1 failing is the load-bearing one. A point-in-time universe removes survivorship
+from the *universe*, but the report shows a hard-coded list of today's winners still scoring
+1.12 and the 100th null percentile — so v2, switched on as is, would certify hindsight in
+candidate *code* as cleanly as v1 certified it in the universe. The proposed static guard is
+what makes the rest of the cutover meaningful.
+
+**Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0.**
