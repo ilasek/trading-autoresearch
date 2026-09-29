@@ -1,0 +1,89 @@
+# AEX constituent changes from 2009 on. Which names changed: the constituent
+# tables in the revision histories of https://nl.wikipedia.org/wiki/AEX and
+# https://en.wikipedia.org/wiki/AEX_index (retrieved 2026-09-24). Dates: the
+# dated "Samenstelling" prose of the Dutch article, Euronext review dates
+# (Monday after the third Friday of Mar/Jun/Sep/Dec) and contemporary reports
+# (D.E Master Blenders for TomTom 2012-09-24, NN/Vopak/Aalberts for Fugro/SBM/
+# Corio 2015-03-23, Altice for Ziggo 2014-12-22, Imtech for Boskalis at the
+# March 2013 review, Prosus for Takeaway.com at the September 2019 review).
+# Aperam and TNT Express entered at their spin-offs (index briefly 26 names);
+# DSM -> DSM-Firmenich is recorded as an exit and an entry at the 2023 merger.
+# The index grew to 30 names on 2025-09-22.
+date,action,symbol,name
+2009-03-23,out,FORA.AS,Fortis
+2009-03-23,out,USG.AS,USG People
+2009-03-23,in,AF.PA,Air France-KLM
+2009-03-23,in,BOKA.AS,Boskalis
+2011-01-31,in,APAM.AS,Aperam (approximate)
+2011-03-21,out,BAMNB.AS,Koninklijke BAM Groep
+2011-05-26,in,TNTE.AS,TNT Express (approximate)
+2011-06-20,out,WHA.AS,Wereldhave
+2012-09-24,out,TOM2.AS,TomTom
+2012-09-24,in,DE.AS,D.E Master Blenders 1753
+2013-03-18,out,BOKA.AS,Boskalis
+2013-03-18,in,IM.AS,Imtech
+2013-06-24,out,APAM.AS,Aperam
+2013-06-24,in,GTO.AS,Gemalto
+2013-09-23,out,DE.AS,D.E Master Blenders 1753
+2013-09-23,in,ZIGGO.AS,Ziggo
+2014-03-24,out,AF.PA,Air France-KLM
+2014-03-24,out,IM.AS,Imtech
+2014-03-24,out,PNL.AS,PostNL (formerly TNT)
+2014-03-24,in,BOKA.AS,Boskalis
+2014-03-24,in,DL.AS,Delta Lloyd
+2014-03-24,in,OCI.AS,OCI
+2014-12-22,out,ZIGGO.AS,Ziggo
+2014-12-22,in,ATC.AS,Altice
+2015-03-23,out,CORA.AS,Corio
+2015-03-23,out,FUR.AS,Fugro
+2015-03-23,out,SBMO.AS,SBM Offshore
+2015-03-23,in,AALB.AS,Aalberts
+2015-03-23,in,NN.AS,NN Group
+2015-03-23,in,VPK.AS,Vopak
+2016-03-21,out,DL.AS,Delta Lloyd
+2016-03-21,out,OCI.AS,OCI
+2016-03-21,in,ABN.AS,ABN AMRO
+2016-03-21,in,SBMO.AS,SBM Offshore
+2016-06-20,out,TNTE.AS,TNT Express
+2016-06-20,in,GLPG.AS,Galapagos
+2018-03-19,out,BOKA.AS,Boskalis
+2018-03-19,out,SBMO.AS,SBM Offshore
+2018-03-19,in,ASRNL.AS,ASR Nederland
+2018-03-19,in,LIGHT.AS,Signify (Philips Lighting)
+2019-03-18,out,ATC.AS,Altice
+2019-03-18,out,LIGHT.AS,Signify (Philips Lighting)
+2019-03-18,in,ADYEN.AS,Adyen
+2019-03-18,in,IMCD.AS,IMCD
+2019-03-29,out,GTO.AS,Gemalto
+2019-06-11,in,TKWY.AS,Just Eat Takeaway.com
+2019-09-23,out,TKWY.AS,Just Eat Takeaway.com (approximate)
+2019-09-23,in,PRX.AS,Prosus (approximate)
+2020-03-23,out,AALB.AS,Aalberts
+2020-03-23,out,VPK.AS,Vopak
+2020-03-23,in,ASM.AS,ASM International
+2020-03-23,in,TKWY.AS,Just Eat Takeaway.com
+2021-03-22,out,ABN.AS,ABN AMRO
+2021-03-22,out,GLPG.AS,Galapagos
+2021-03-22,in,BESI.AS,Besi
+2021-03-22,in,LIGHT.AS,Signify (Philips Lighting)
+2021-12-20,out,ASRNL.AS,ASR Nederland
+2021-12-20,in,UMG.AS,Universal Music Group
+2022-12-19,out,TKWY.AS,Just Eat Takeaway.com
+2022-12-19,in,EXO.AS,Exor
+2023-03-20,out,LIGHT.AS,Signify (Philips Lighting) (approximate)
+2023-03-20,out,URW.AS,Unibail-Rodamco-Westfield (approximate)
+2023-03-20,in,ABN.AS,ABN AMRO (approximate)
+2023-03-20,in,ASRNL.AS,ASR Nederland (approximate)
+2023-05-08,out,DSM.AS,DSM (approximate)
+2023-05-08,in,DSFIR.AS,DSM-Firmenich (approximate)
+2025-09-22,in,CVC.AS,CVC Capital Partners
+2025-09-22,in,INPST.AS,InPost
+2025-09-22,in,JDEP.AS,JDE Peet's
+2025-09-22,in,TKWY.AS,Just Eat Takeaway.com
+2025-09-22,in,WDP.BR,Warehouses De Pauw
+2025-12-08,out,TKWY.AS,Just Eat Takeaway.com
+2025-12-08,in,MICC.AS,The Magnum Ice Cream Company
+2026-03-23,out,RAND.AS,Randstad
+2026-03-23,in,SBMO.AS,SBM Offshore
+2026-04-30,out,JDEP.AS,JDE Peet's
+2026-06-22,in,AALB.AS,Aalberts

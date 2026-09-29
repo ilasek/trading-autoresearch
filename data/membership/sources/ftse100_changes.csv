@@ -1,0 +1,373 @@
+# FTSE 100 constituent changes from 2009 on, reconstructed from the revision
+# history of https://en.wikipedia.org/wiki/FTSE_100_Index (retrieved 2026-09-24):
+# the "Constituents" list was parsed at every month end, consecutive lists
+# diffed, and each change located in the first revision that shows it. A change
+# edited within 16 days before / 21 days after a quarterly review is dated to
+# that review's effective date (Monday after the third Friday of Mar/Jun/Sep/Dec);
+# other changes - takeovers, demergers, listing moves - carry the date of the
+# edit and are marked "approximate". Renames map to one symbol and are not
+# changes. Apr-Jun 2017 the page showed a stale revision; the June 2017 review
+# changes it hid (G4S, Segro in; Hikma, Intu out) are dated to 2017-06-19.
+date,action,symbol,name
+2008-12-22,out,BGY.L,British Energy
+2008-12-22,in,PNN.L,Pennon Group
+2009-01-17,out,HBOS.L,HBOS (approximate)
+2009-01-17,in,BBY.L,Balfour Beatty (approximate)
+2009-03-23,out,FERG.L,Ferguson (formerly Wolseley)
+2009-03-23,out,FGP.L,FirstGroup
+2009-03-23,out,III.L,3i
+2009-03-23,out,LSEG.L,London Stock Exchange Group
+2009-03-23,out,TATE.L,Tate & Lyle
+2009-03-23,in,FCIT.L,F & C Investment Trust
+2009-03-23,in,FRES.L,Fresnillo plc
+2009-03-23,in,ITRK.L,Intertek
+2009-03-23,in,LMI.L,Lonmin
+2009-03-23,in,PFC.L,Petrofac
+2009-06-22,out,AML.L,Amlin
+2009-06-22,out,DRX.L,Drax Group
+2009-06-22,out,WTB.L,Whitbread
+2009-06-22,in,FERG.L,Ferguson (formerly Wolseley)
+2009-06-22,in,III.L,3i
+2009-06-22,in,LSEG.L,London Stock Exchange Group
+2009-09-21,out,BBY.L,Balfour Beatty
+2009-09-21,out,FCIT.L,F & C Investment Trust
+2009-09-21,out,PNN.L,Pennon Group
+2009-09-21,out,TRIL.L,Thomson Reuters
+2009-09-21,in,BRBY.L,Burberry
+2009-09-21,in,RTO.L,Rentokil Initial
+2009-09-21,in,SGRO.L,SEGRO
+2009-09-21,in,WTB.L,Whitbread
+2009-11-08,out,FP.L,Friends Provident (approximate)
+2009-11-08,in,FLG.L,Friends Life Group (formerly Resolution) (approximate)
+2009-12-21,out,RTO.L,Rentokil Initial
+2009-12-21,in,AGK.L,Aggreko
+2010-02-10,out,CBRY.L,Cadbury plc (approximate)
+2010-02-10,in,ARM.L,ARM Holdings (approximate)
+2010-03-22,out,CWC.L,Cable & Wireless
+2010-03-22,out,FLG.L,Friends Life Group (formerly Resolution)
+2010-03-22,in,CWW.L,Cable & Wireless Worldwide
+2010-03-22,in,INVP.L,Investec
+2010-06-21,out,LSEG.L,London Stock Exchange Group
+2010-06-21,out,TCG.L,Thomas Cook Group
+2010-06-21,in,ACA.L,African Barrick Gold (Acacia Mining)
+2010-06-21,in,ESSR.L,Essar Energy
+2010-09-20,out,CWW.L,Cable & Wireless Worldwide
+2010-09-20,out,HOME.L,Home Retail Group
+2010-09-20,out,SGRO.L,SEGRO
+2010-09-20,in,FLG.L,Friends Life Group (formerly Resolution)
+2010-09-20,in,GKN.L,GKN
+2010-09-20,in,WEIR.L,Weir Group
+2010-12-20,out,COB.L,Cobham plc
+2010-12-20,in,IMI.L,IMI plc
+2011-01-24,out,BAY.L,British Airways
+2011-01-24,in,IAG.L,International Airlines Group (approximate)
+2011-03-21,out,ACA.L,African Barrick Gold (Acacia Mining)
+2011-03-21,out,ALW.L,Alliance Witan (formerly Alliance Trust)
+2011-03-21,out,BNZL.L,Bunzl
+2011-03-21,in,HL.L,Hargreaves Lansdown
+2011-03-21,in,ITV.L,ITV plc
+2011-03-21,in,WG.L,John Wood Group
+2011-05-25,out,ISYS.L,Invensys (approximate)
+2011-05-25,in,GLEN.L,Glencore (approximate)
+2011-06-20,out,TT.L,TUI Travel
+2011-06-20,in,TATE.L,Tate & Lyle
+2011-09-19,out,III.L,3i
+2011-09-19,out,WG.L,John Wood Group
+2011-09-19,in,ASHM.L,Ashmore Group
+2011-09-19,in,BNZL.L,Bunzl
+2011-10-18,out,AU.L,Autonomy Corporation (approximate)
+2011-10-18,in,MGGT.L,Meggitt (approximate)
+2011-12-19,out,INVP.L,Investec
+2011-12-19,out,ISAT.L,Inmarsat
+2011-12-19,out,LMI.L,Lonmin
+2011-12-19,in,CRH.L,CRH plc
+2011-12-19,in,EVR.L,Evraz
+2011-12-19,in,POLY.L,OJSC Polymetal
+2012-03-19,out,CNE.L,Cairn Energy
+2012-03-19,out,ESSR.L,Essar Energy
+2012-03-19,in,ADN.L,Aberdeen Asset Management
+2012-03-19,in,CRDA.L,Croda International
+2012-06-18,out,EMG.L,Man Group
+2012-06-18,in,BAB.L,Babcock International
+2012-08-20,out,IPR.L,International Power (approximate)
+2012-08-20,in,PNN.L,Pennon Group (approximate)
+2012-09-24,out,ASHM.L,Ashmore Group
+2012-09-24,out,IAP.L,ICAP
+2012-09-24,in,MRO.L,Melrose Industries
+2012-09-24,in,WG.L,John Wood Group
+2012-12-24,out,PNN.L,Pennon Group
+2012-12-24,in,TT.L,TUI Travel
+2013-03-18,out,INTU.L,Intu Properties (formerly Liberty International / Capital Shopping Centres)
+2013-03-18,out,KAZ.L,Kazakhmys
+2013-03-18,in,EZJ.L,EasyJet
+2013-03-18,in,LSEG.L,London Stock Exchange Group
+2013-05-03,out,XTA.L,Xstrata (approximate)
+2013-05-03,in,WMH.L,William Hill (approximate)
+2013-06-24,out,EVR.L,Evraz
+2013-06-24,out,POLY.L,OJSC Polymetal
+2013-06-24,in,PSN.L,Persimmon plc
+2013-06-24,in,TPK.L,Travis Perkins
+2013-09-23,out,ENRC.L,Eurasian Natural Resources Corporation
+2013-09-23,out,SRP.L,Serco Group
+2013-09-23,out,WG.L,John Wood Group
+2013-09-23,in,CCH.L,Coca-Cola HBC
+2013-09-23,in,FRAS.L,Frasers Group (formerly Sports Direct)
+2013-09-23,in,MNDI.L,Mondi
+2013-12-23,out,CRDA.L,Croda International
+2013-12-23,out,VED.L,Vedanta Resources
+2013-12-23,in,AHT.L,Ashtead Group
+2013-12-23,in,IDS.L,International Distribution Services (Royal Mail)
+2014-03-24,out,AMFW.L,Amec
+2014-03-24,out,TATE.L,Tate & Lyle
+2014-03-24,in,BTRW.L,Barratt Redrow (formerly Barratt Developments)
+2014-03-24,in,STJ.L,St. James's Place plc
+2014-06-23,out,MRO.L,Melrose Industries
+2014-06-23,out,WMH.L,William Hill
+2014-06-23,in,III.L,3i
+2014-06-23,in,INTU.L,Intu Properties (formerly Liberty International / Capital Shopping Centres)
+2014-09-22,out,BTRW.L,Barratt Redrow (formerly Barratt Developments)
+2014-09-22,out,REX.L,Rexam
+2014-09-22,in,CURY.L,Currys (formerly Dixons Carphone)
+2014-09-22,in,DLG.L,Direct Line Group
+2014-12-22,out,IMI.L,IMI plc
+2014-12-22,out,PFC.L,Petrofac
+2014-12-22,out,TT.L,TUI Travel
+2014-12-22,in,BTRW.L,Barratt Redrow (formerly Barratt Developments)
+2014-12-22,in,TUI.L,TUI AG
+2014-12-22,in,TW.L,Taylor Wimpey
+2015-03-23,out,TLW.L,Tullow Oil
+2015-03-23,in,HIK.L,Hikma Pharmaceuticals
+2015-04-15,out,FLG.L,Friends Life Group (formerly Resolution) (approximate)
+2015-04-15,in,MERL.L,Merlin Entertainments (approximate)
+2015-06-22,out,AGK.L,Aggreko
+2015-06-22,in,ISAT.L,Inmarsat
+2015-09-21,out,WEIR.L,Weir Group
+2015-09-21,in,BKG.L,Berkeley Group Holdings
+2015-12-21,out,GFS.L,G4S
+2015-12-21,out,MGGT.L,Meggitt
+2015-12-21,out,MRW.L,Morrisons
+2015-12-21,in,DCC.L,DCC Energy
+2015-12-21,in,PFG.L,Provident Financial
+2015-12-21,in,WPG.L,Worldpay
+2016-02-15,out,BG.L,BG Group (approximate)
+2016-02-15,in,REX.L,Rexam (approximate)
+2016-03-21,out,ADN.L,Aberdeen Asset Management
+2016-03-21,out,FRAS.L,Frasers Group (formerly Sports Direct)
+2016-03-21,out,HIK.L,Hikma Pharmaceuticals
+2016-03-21,out,SMIN.L,Smiths Group
+2016-03-21,in,FLTR.L,Flutter Entertainment (formerly Paddy Power Betfair)
+2016-03-21,in,INF.L,Informa
+2016-03-21,in,MDC.L,Mediclinic International
+2016-03-21,in,MRW.L,Morrisons
+2016-06-20,out,ISAT.L,Inmarsat
+2016-06-20,in,HIK.L,Hikma Pharmaceuticals
+2016-07-16,out,REX.L,Rexam (approximate)
+2016-07-16,in,SMIN.L,Smiths Group (approximate)
+2016-09-19,out,ARM.L,ARM Holdings
+2016-09-19,out,BKG.L,Berkeley Group Holdings
+2016-09-19,out,SAB.L,SABMiller
+2016-09-19,in,CRDA.L,Croda International
+2016-09-19,in,MCRO.L,Micro Focus
+2016-09-19,in,POLY.L,OJSC Polymetal
+2016-12-19,out,POLY.L,OJSC Polymetal
+2016-12-19,out,TPK.L,Travis Perkins
+2016-12-19,in,CTEC.L,ConvaTec
+2016-12-19,in,SKG.L,Smurfit Kappa
+2017-03-20,out,CPI.L,Capita
+2017-03-20,out,CURY.L,Currys (formerly Dixons Carphone)
+2017-03-20,in,RTO.L,Rentokil Initial
+2017-03-20,in,SMT.L,Scottish Mortgage Investment Trust
+2017-06-19,out,HIK.L,Hikma Pharmaceuticals
+2017-06-19,out,INTU.L,Intu Properties (formerly Liberty International / Capital Shopping Centres)
+2017-06-19,in,GFS.L,G4S
+2017-06-19,in,SGRO.L,SEGRO
+2017-09-18,out,IDS.L,International Distribution Services (Royal Mail)
+2017-09-18,out,PFG.L,Provident Financial
+2017-09-18,in,BKG.L,Berkeley Group Holdings
+2017-09-18,in,NMC.L,NMC Health
+2017-12-18,out,BAB.L,Babcock International
+2017-12-18,out,CTEC.L,ConvaTec
+2017-12-18,out,MERL.L,Merlin Entertainments
+2017-12-18,in,HLMA.L,Halma plc
+2017-12-18,in,JE.L,Just Eat
+2017-12-18,in,SMDS.L,DS Smith
+2018-01-17,out,WPG.L,Worldpay (approximate)
+2018-01-17,in,EVR.L,Evraz (approximate)
+2018-03-19,out,HMSO.L,Hammerson
+2018-03-19,in,IDS.L,International Distribution Services (Royal Mail)
+2018-05-05,out,GKN.L,GKN (approximate)
+2018-05-05,in,MRO.L,Melrose Industries (approximate)
+2018-06-18,out,GFS.L,G4S
+2018-06-18,out,MDC.L,Mediclinic International
+2018-06-18,out,OML.L,Old Mutual
+2018-06-18,in,ENT.L,Entain (formerly GVC Holdings)
+2018-06-18,in,OCDO.L,Ocado
+2018-06-18,in,RMV.L,Rightmove
+2018-09-24,out,SKY.L,British Sky Broadcasting
+2018-09-24,in,WG.L,John Wood Group
+2018-12-24,out,IDS.L,International Distribution Services (Royal Mail)
+2018-12-24,out,JE.L,Just Eat
+2018-12-24,out,RRS.L,Randgold Resources
+2018-12-24,in,AUTO.L,Auto Trader Group
+2018-12-24,in,HSX.L,Hiscox
+2018-12-24,in,SPX.L,Spirax Group
+2019-01-24,out,SHP.L,Shire (approximate)
+2019-01-24,in,HIK.L,Hikma Pharmaceuticals (approximate)
+2019-03-18,out,ENT.L,Entain (formerly GVC Holdings)
+2019-03-18,out,WG.L,John Wood Group
+2019-03-18,in,JE.L,Just Eat
+2019-03-18,in,SDLF.L,Standard Life (formerly Phoenix Group)
+2019-06-24,out,EZJ.L,EasyJet
+2019-06-24,out,HIK.L,Hikma Pharmaceuticals
+2019-06-24,in,AVV.L,Aveva
+2019-06-24,in,JD.L,JD Sports
+2019-09-23,out,DLG.L,Direct Line Group
+2019-09-23,out,MCRO.L,Micro Focus
+2019-09-23,out,MKS.L,Marks & Spencer
+2019-09-23,in,HIK.L,Hikma Pharmaceuticals
+2019-09-23,in,MGGT.L,Meggitt
+2019-09-23,in,POLY.L,OJSC Polymetal
+2019-10-21,out,JE.L,Just Eat (approximate)
+2019-10-21,in,MNG.L,M&G (approximate)
+2019-12-23,out,FRES.L,Fresnillo plc
+2019-12-23,out,HSX.L,Hiscox
+2019-12-23,in,EZJ.L,EasyJet
+2019-12-23,in,JE.L,Just Eat
+2020-02-29,out,JE.L,Just Eat (approximate)
+2020-02-29,in,JET.L,Just Eat Takeaway.com (approximate)
+2020-03-23,out,KGF.L,Kingfisher plc
+2020-03-23,out,NMC.L,NMC Health
+2020-03-23,out,TUI.L,TUI AG
+2020-03-23,in,FRES.L,Fresnillo plc
+2020-03-23,in,ICG.L,ICG plc
+2020-03-23,in,PNN.L,Pennon Group
+2020-06-22,out,CCL.L,Carnival Corporation & plc
+2020-06-22,out,CNA.L,Centrica
+2020-06-22,out,EZJ.L,EasyJet
+2020-06-22,out,MGGT.L,Meggitt
+2020-06-22,in,AVST.L,Avast
+2020-06-22,in,ENT.L,Entain (formerly GVC Holdings)
+2020-06-22,in,HSV.L,HomeServe
+2020-06-22,in,KGF.L,Kingfisher plc
+2020-09-21,out,ITV.L,ITV plc
+2020-09-21,in,BME.L,B&M
+2020-12-21,out,HSV.L,HomeServe
+2020-12-21,in,PSH.L,Pershing Square Holdings
+2021-03-22,out,MRW.L,Morrisons
+2021-03-22,out,PNN.L,Pennon Group
+2021-03-22,in,RSW.L,Renishaw plc
+2021-03-22,in,WEIR.L,Weir Group
+2021-05-28,out,RSA.L,RSA Insurance Group (approximate)
+2021-05-28,in,IDS.L,International Distribution Services (Royal Mail) (approximate)
+2021-06-21,out,RSW.L,Renishaw plc
+2021-06-21,in,ITV.L,ITV plc
+2021-09-20,out,JET.L,Just Eat Takeaway.com
+2021-09-20,out,WEIR.L,Weir Group
+2021-09-20,in,MGGT.L,Meggitt
+2021-09-20,in,MRW.L,Morrisons
+2021-10-26,out,MRW.L,Morrisons (approximate)
+2021-10-26,in,DARK.L,Darktrace (approximate)
+2021-12-20,out,DARK.L,Darktrace
+2021-12-20,out,JMAT.L,Johnson Matthey
+2021-12-20,in,DPH.L,Dechra Pharmaceuticals
+2021-12-20,in,RS1.L,RS Group (formerly Electrocomponents)
+2022-01-27,out,BHP.L,BHP (approximate)
+2022-01-27,in,AAF.L,Airtel Africa (approximate)
+2022-03-21,out,EVR.L,Evraz
+2022-03-21,out,POLY.L,OJSC Polymetal
+2022-03-21,in,EDV.L,Endeavour Mining
+2022-03-21,in,HWDN.L,Howdens Joinery
+2022-05-13,out,FERG.L,Ferguson (formerly Wolseley) (approximate)
+2022-05-13,in,HBR.L,Harbour Energy (approximate)
+2022-06-20,out,IDS.L,International Distribution Services (Royal Mail)
+2022-06-20,out,ITV.L,ITV plc
+2022-06-20,in,CNA.L,Centrica
+2022-06-20,in,UTG.L,Unite Students
+2022-07-18,out,HBR.L,Harbour Energy
+2022-07-18,in,HLN.L,Haleon
+2022-09-19,out,ABDN.L,Aberdeen Group (formerly Standard Life / abrdn)
+2022-09-19,out,AVST.L,Avast
+2022-09-19,out,HIK.L,Hikma Pharmaceuticals
+2022-09-19,out,HWDN.L,Howdens Joinery
+2022-09-19,out,MGGT.L,Meggitt
+2022-09-19,in,CTEC.L,ConvaTec
+2022-09-19,in,FCIT.L,F & C Investment Trust
+2022-09-19,in,FRAS.L,Frasers Group (formerly Sports Direct)
+2022-09-19,in,HBR.L,Harbour Energy
+2022-09-19,in,HSV.L,HomeServe
+2022-12-19,out,DPH.L,Dechra Pharmaceuticals
+2022-12-19,out,HBR.L,Harbour Energy
+2022-12-19,out,HSV.L,HomeServe
+2022-12-19,out,ICG.L,ICG plc
+2022-12-19,in,ABDN.L,Aberdeen Group (formerly Standard Life / abrdn)
+2022-12-19,in,BEZ.L,Beazley
+2022-12-19,in,JMAT.L,Johnson Matthey
+2022-12-19,in,WEIR.L,Weir Group
+2023-01-18,out,AVV.L,Aveva (approximate)
+2023-01-18,in,HSX.L,Hiscox (approximate)
+2023-06-19,out,BLND.L,British Land
+2023-06-19,in,IMI.L,IMI plc
+2023-09-18,out,ABDN.L,Aberdeen Group (formerly Standard Life / abrdn)
+2023-09-18,out,CRH.L,CRH plc
+2023-09-18,out,HSX.L,Hiscox
+2023-09-18,out,JMAT.L,Johnson Matthey
+2023-09-18,out,PSN.L,Persimmon plc
+2023-09-18,in,DPH.L,Dechra Pharmaceuticals
+2023-09-18,in,DPLM.L,Diploma plc
+2023-09-18,in,HIK.L,Hikma Pharmaceuticals
+2023-09-18,in,HWDN.L,Howdens Joinery
+2023-09-18,in,MKS.L,Marks & Spencer
+2023-12-18,out,HL.L,Hargreaves Lansdown
+2023-12-18,in,ICG.L,ICG plc
+2024-01-15,out,DPH.L,Dechra Pharmaceuticals (approximate)
+2024-01-15,in,PSN.L,Persimmon plc (approximate)
+2024-03-18,out,EDV.L,Endeavour Mining
+2024-03-18,in,EZJ.L,EasyJet
+2024-05-30,out,FLTR.L,Flutter Entertainment (formerly Paddy Power Betfair) (approximate)
+2024-05-30,in,HL.L,Hargreaves Lansdown (approximate)
+2024-06-24,out,OCDO.L,Ocado
+2024-06-24,out,RS1.L,RS Group (formerly Electrocomponents)
+2024-06-24,out,SKG.L,Smurfit Kappa
+2024-06-24,out,STJ.L,St. James's Place plc
+2024-06-24,in,DARK.L,Darktrace
+2024-06-24,in,EDV.L,Endeavour Mining
+2024-06-24,in,LMP.L,LondonMetric Property
+2024-06-24,in,VTY.L,Vistry Group
+2024-09-23,out,BRBY.L,Burberry
+2024-09-23,out,DARK.L,Darktrace
+2024-09-23,in,BLND.L,British Land
+2024-09-23,in,HSX.L,Hiscox
+2024-12-23,out,BME.L,B&M
+2024-12-23,out,FRAS.L,Frasers Group (formerly Sports Direct)
+2024-12-23,out,VTY.L,Vistry Group
+2024-12-23,in,ALW.L,Alliance Witan (formerly Alliance Trust)
+2024-12-23,in,GAW.L,Games Workshop
+2024-12-23,in,STJ.L,St. James's Place plc
+2025-01-31,out,SMDS.L,DS Smith (approximate)
+2025-01-31,in,PCT.L,Polar Capital Technology Trust (approximate)
+2025-03-24,out,BLND.L,British Land
+2025-03-24,out,HL.L,Hargreaves Lansdown
+2025-03-24,in,BAB.L,Babcock International
+2025-03-24,in,CCEP.L,Coca-Cola Europacific Partners
+2025-09-22,out,TW.L,Taylor Wimpey
+2025-09-22,out,UTG.L,Unite Students
+2025-09-22,in,BRBY.L,Burberry
+2025-09-22,in,MTLN.L,Metlen Energy & Metals
+2025-12-22,out,WPP.L,WPP Group
+2025-12-22,in,BLND.L,British Land
+2026-02-27,out,AHT.L,Ashtead Group (approximate)
+2026-02-27,in,BBOX.L,Tritax Big Box REIT (approximate)
+2026-03-23,out,EZJ.L,EasyJet
+2026-03-23,out,HIK.L,Hikma Pharmaceuticals
+2026-03-23,in,BGEO.L,Lion Finance Group
+2026-03-23,in,IGG.L,IG Group
+2026-06-22,out,BKG.L,Berkeley Group Holdings
+2026-06-22,out,MNDI.L,Mondi
+2026-06-22,out,RMV.L,Rightmove
+2026-06-22,in,ABDN.L,Aberdeen Group (formerly Standard Life / abrdn)
+2026-06-22,in,CCC.L,Computacenter
+2026-06-22,in,INVP.L,Investec
+2026-09-21,out,ENT.L,Entain (formerly GVC Holdings)
+2026-09-21,out,PSN.L,Persimmon plc
+2026-09-21,in,EZJ.L,EasyJet
+2026-09-21,in,ITH.L,Ithaca Energy

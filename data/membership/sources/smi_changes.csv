@@ -1,0 +1,41 @@
+# SMI constituent changes from 2009 on. Which names changed: the "History of
+# index constituents" table and the constituent-table revision history of
+# https://en.wikipedia.org/wiki/Swiss_Market_Index (retrieved 2026-09-24), which
+# agree. Effective dates: SIX ordinary reviews take effect the Monday after the
+# third Friday of September; extraordinary changes are dated from contemporary
+# reports (Transocean 2010-06-21, Geberit 2012-06-14, Swiss Life for Transocean
+# 2016-03-21 - not January as the Wikipedia table says -, Lonza 2017-05-03,
+# Sika 2017-05-15, Alcon 2019-04-09 / Julius Baer out 2019-04-10, Kuehne+Nagel
+# for Credit Suisse 2023-06-13, Amrize spin-off 2025-06-23). The 2026-09-21
+# review (Galderma, Sandoz in; Swisscom, Kuehne+Nagel out) is not listed: the
+# constituent table the weekly update reads does not show it yet, and the
+# weekly update applies it once it does.
+date,action,symbol,name
+2009-09-21,out,BALN.SW,Bâloise
+2009-09-21,out,NOBE.SW,Nobel Biocare
+2009-09-21,in,LONN.SW,Lonza Group
+2009-09-21,in,SGSN.SW,SGS
+2010-06-21,out,SLHN.SW,Swiss Life
+2010-06-21,in,RIGN.SW,Transocean
+2011-09-19,out,LONN.SW,Lonza Group
+2011-09-19,in,GIVN.SW,Givaudan
+2012-06-14,out,SYST.SW,Synthes
+2012-06-14,in,GEBN.SW,Geberit
+2016-03-21,out,RIGN.SW,Transocean
+2016-03-21,in,SLHN.SW,Swiss Life
+2017-05-03,out,ATLN.SW,Actelion
+2017-05-03,in,LONN.SW,Lonza Group
+2017-05-15,out,SYNN.SW,Syngenta
+2017-05-15,in,SIKA.SW,Sika AG
+2019-04-09,in,ALC.SW,Alcon
+2019-04-10,out,BAER.SW,Julius Baer Group
+2020-09-21,out,ADEN.SW,Adecco
+2020-09-21,in,PGHN.SW,Partners Group
+2021-09-20,out,UHR.SW,Swatch Group
+2021-09-20,in,LOGN.SW,Logitech
+2022-09-19,out,SGSN.SW,SGS
+2022-09-19,in,SOON.SW,Sonova
+2023-06-13,out,CSGN.SW,Credit Suisse
+2023-06-13,in,KNIN.SW,Kuehne + Nagel
+2025-06-23,in,AMRZ.SW,Amrize
+2025-09-22,out,SOON.SW,Sonova

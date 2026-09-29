@@ -1,0 +1,95 @@
+# EURO STOXX 50 constituent changes from 2009 on. 2012-2023: diffs of STOXX's
+# own monthly selection lists (stoxx.com/document/Reports/SelectionList/<year>/
+# <month>/sl_sx5e_<yyyymm>.pdf, component flag "Y", matched by ISIN), each change
+# dated to the review in the month it appeared (annual review: Monday after the
+# third Friday of September; quarterly fast entries/exits in Mar/Jun/Dec).
+# Before 2012 and after 2023: the constituent tables in the revision histories
+# of https://de.wikipedia.org/wiki/Euro_Stoxx_50 and
+# https://en.wikipedia.org/wiki/EURO_STOXX_50 (retrieved 2026-09-24) plus
+# contemporary reports (Unibail-Rodamco for Volkswagen 2010-02-08, Inditex
+# 2011-09-19, the 2018-09-24 review, Wolters Kluwer for Flutter 2023-12-18).
+# The 2026-09-21 review (Nokia, Engie in; Volkswagen, Wolters Kluwer out) is not
+# listed: the constituent table the weekly update reads does not show it yet.
+date,action,symbol,name
+2009-09-21,out,AGS.BR,Fortis (now Ageas) (approximate)
+2009-09-21,out,RNO.PA,Renault (approximate)
+2009-09-21,in,ABI.BR,Anheuser-Busch InBev (approximate)
+2009-09-21,in,CRG.IR,CRH (approximate)
+2010-02-08,out,VOW.DE,Volkswagen Group
+2010-02-08,in,URW.PA,Unibail-Rodamco-Westfield
+2010-09-20,out,AGN.AS,AEGON (approximate)
+2010-09-20,in,BMW.DE,BMW (approximate)
+2011-09-19,out,ACA.PA,Crédit Agricole
+2011-09-19,out,ALO.PA,Alstom
+2011-09-19,in,ITX.MC,Inditex
+2011-09-19,in,VOW.DE,Volkswagen Group
+2012-06-18,out,DB1.DE,Deutsche Börse
+2012-06-18,out,TIT.MI,Telecom Italia
+2012-06-18,in,ASML.AS,ASML Holding
+2012-06-18,in,EL.PA,Essilor
+2013-03-18,out,NOKIA.HE,Nokia
+2013-03-18,in,AIR.PA,Airbus (EADS)
+2013-09-23,out,MT.AS,ArcelorMittal
+2013-09-23,in,DHL.DE,DHL Group (Deutsche Post)
+2014-09-22,out,CRG.IR,CRH
+2014-09-22,in,NOKIA.HE,Nokia
+2015-09-21,out,REP.MC,Repsol YPF
+2015-09-21,out,RWE.DE,RWE
+2015-09-21,in,FRE.DE,Fresenius SE
+2015-09-21,in,SAF.PA,Safran
+2016-09-19,out,CA.PA,Carrefour
+2016-09-19,out,G.MI,Assicurazioni Generali
+2016-09-19,out,UCG.MI,UniCredit
+2016-09-19,in,AD.AS,Ahold Delhaize
+2016-09-19,in,ADS.DE,Adidas
+2016-09-19,in,CRG.IR,CRH
+2018-09-24,out,DBK.DE,Deutsche Bank
+2018-09-24,out,EOAN.DE,E.ON
+2018-09-24,out,SGO.PA,Compagnie de Saint-Gobain
+2018-09-24,in,AMS.MC,Amadeus IT Group
+2018-09-24,in,KER.PA,Kering
+2018-09-24,in,LIN.DE,Linde
+2019-09-23,out,URW.PA,Unibail-Rodamco-Westfield
+2019-09-23,in,DB1.DE,Deutsche Börse
+2020-09-21,out,BBVA.MC,BBVA
+2020-09-21,out,FRE.DE,Fresenius SE
+2020-09-21,out,GLE.PA,Société Générale
+2020-09-21,out,ORA.PA,Orange
+2020-09-21,out,TEF.MC,Telefonica
+2020-09-21,in,ADYEN.AS,Adyen
+2020-09-21,in,KNEBV.HE,Kone
+2020-09-21,in,PRX.AS,Prosus
+2020-09-21,in,RI.PA,Pernod Ricard
+2020-09-21,in,VNA.DE,Vonovia
+2020-11-30,out,UNA.AS,Unilever (approximate)
+2020-11-30,in,FLTR.IR,Flutter Entertainment (approximate)
+2021-03-22,out,NOKIA.HE,Nokia
+2021-03-22,in,IFX.DE,Infineon Technologies
+2021-09-20,out,AMS.MC,Amadeus IT Group
+2021-09-20,out,ENGI.PA,Engie (GDF Suez)
+2021-09-20,out,VIV.PA,Vivendi
+2021-09-20,in,BBVA.MC,BBVA
+2021-09-20,in,STLAM.MI,Stellantis
+2021-09-20,in,UMG.AS,Universal Music Group (approximate)
+2021-12-20,out,UMG.AS,Universal Music Group
+2021-12-20,in,RMS.PA,Hermès
+2022-09-19,out,KNEBV.HE,Kone
+2022-09-19,out,PHIA.AS,Philips
+2022-09-19,in,NDA-FI.HE,Nordea
+2022-09-19,in,NOKIA.HE,Nokia
+2023-03-01,out,LIN.DE,Linde (approximate)
+2023-03-01,in,UCG.MI,UniCredit (approximate)
+2023-09-18,out,CRG.IR,CRH
+2023-09-18,out,VNA.DE,Vonovia
+2023-09-18,in,RACE.MI,Ferrari
+2023-09-18,in,SGO.PA,Compagnie de Saint-Gobain
+2023-12-18,out,FLTR.IR,Flutter Entertainment
+2023-12-18,in,WKL.AS,Wolters Kluwer
+2025-09-22,out,KER.PA,Kering
+2025-09-22,out,NOKIA.HE,Nokia
+2025-09-22,out,RI.PA,Pernod Ricard
+2025-09-22,out,STLAM.MI,Stellantis
+2025-09-22,in,ARGX.BR,Argenx
+2025-09-22,in,DBK.DE,Deutsche Bank
+2025-09-22,in,ENR.DE,Siemens Energy
+2025-09-22,in,RHM.DE,Rheinmetall

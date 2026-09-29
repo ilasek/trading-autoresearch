@@ -1,0 +1,66 @@
+# DAX constituent changes from 2009 on, transcribed from the "Changes" table at
+# https://en.wikipedia.org/wiki/DAX (retrieved 2026-09-24) and mapped to Yahoo
+# symbols. Effective dates as listed there. Rows marked "approximate" are not in
+# that table and were inferred from the difference between the table and the
+# current constituent list.
+date,action,symbol,name
+2009-03-23,out,DPB.DE,Deutsche Postbank
+2009-03-23,in,HNR1.DE,Hannover Re
+2009-03-23,out,IFX.DE,Infineon Technologies
+2009-03-23,in,FRE.DE,Fresenius
+2009-09-21,out,HNR1.DE,Hannover Re
+2009-09-21,in,IFX.DE,Infineon Technologies
+2010-06-21,out,SZG.DE,Salzgitter
+2010-06-21,in,HEI.DE,HeidelbergCement
+2012-09-24,out,MAN.DE,MAN
+2012-09-24,in,CON.DE,Continental
+2012-09-24,out,CEC.DE,Metro (old Metro AG; Yahoo carries its history as Ceconomy)
+2012-09-24,in,LXS.DE,Lanxess
+2015-09-21,out,LXS.DE,Lanxess
+2015-09-21,in,VNA.DE,Vonovia
+2016-03-21,out,SDF.DE,K+S
+2016-03-21,in,PSM.DE,ProSiebenSat.1 Media
+2018-03-19,out,PSM.DE,ProSiebenSat.1 Media
+2018-03-19,in,1COV.DE,Covestro
+2018-09-24,out,CBK.DE,Commerzbank
+2018-09-24,in,WDI.DE,Wirecard
+2019-09-23,out,TKA.DE,ThyssenKrupp
+2019-09-23,in,MTX.DE,MTU Aero Engines
+2020-06-22,out,LHA.DE,Deutsche Lufthansa
+2020-06-22,in,DWNI.DE,Deutsche Wohnen
+2020-08-24,out,WDI.DE,Wirecard
+2020-08-24,in,DHER.DE,Delivery Hero
+2021-03-22,out,BEI.DE,Beiersdorf
+2021-03-22,in,ENR.DE,Siemens Energy
+2021-09-20,in,AIR.PA,Airbus
+2021-09-20,in,BNR.DE,Brenntag
+2021-09-20,in,HFG.DE,HelloFresh
+2021-09-20,in,PAH3.DE,Porsche SE
+2021-09-20,in,PUM.DE,Puma
+2021-09-20,in,QIA.DE,Qiagen
+2021-09-20,in,SRT3.DE,Sartorius
+2021-09-20,in,SHL.DE,Siemens Healthineers
+2021-09-20,in,SY1.DE,Symrise
+2021-09-20,in,ZAL.DE,Zalando
+2021-10-29,out,DWNI.DE,Deutsche Wohnen
+2021-10-29,in,BEI.DE,Beiersdorf
+2022-03-21,out,BEI.DE,Beiersdorf
+2022-03-21,in,DTG.DE,Daimler Truck
+2022-03-21,out,ENR.DE,Siemens Energy
+2022-03-21,in,HNR1.DE,Hannover Re
+2022-06-20,out,DHER.DE,Delivery Hero
+2022-06-20,in,BEI.DE,Beiersdorf
+2022-09-19,out,HFG.DE,HelloFresh
+2022-09-19,in,ENR.DE,Siemens Energy
+2022-12-19,out,PUM.DE,Puma
+2022-12-19,in,P911.DE,Porsche AG
+2023-02-27,out,LIN.DE,Linde
+2023-02-27,in,CBK.DE,Commerzbank
+2023-03-20,out,FME.DE,Fresenius Medical Care
+2023-03-20,in,RHM.DE,Rheinmetall
+2024-12-23,out,1COV.DE,Covestro
+2024-12-23,in,FME.DE,Fresenius Medical Care
+2025-09-22,out,P911.DE,Porsche AG (approximate)
+2025-09-22,in,G24.DE,Scout24 (approximate)
+2025-09-22,out,SRT3.DE,Sartorius (approximate)
+2025-09-22,in,G1A.DE,GEA Group (approximate)
