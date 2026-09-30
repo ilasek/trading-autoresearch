@@ -2033,6 +2033,42 @@ count at all or only a weight*. Tier A, `validation_overlap: false`, costs charg
 literature.
 → `notes/2026-09-27-nonlinear-shrinkage-instead-of-counting.md`
 
+**[2026-09-30] The shrinkage vocabulary had a hole in it, and the hole was the *mean*.** A grep
+across all 143 prior notes returned zero for `Bayes-Stein`, `grand mean`, `Michaud` and `shrinkage of
+means`: this folder's five shrinkage notes shrink a **covariance**, an **SDF coefficient**, or a
+**selected maximum** (Tweedie), never the score vector a book is actually built from. Three notes
+close it, and the branch's headline is a **free kill rather than a candidate**. The classical
+estimator (Jorion 1986, JFQA, ~1000 citations) returns `(1-phi)*mu + phi*target` with `phi` set by the
+data — `(N+2)/[(N+2) + M*D2]`, falling with sample length, rising with breadth, no tuning constant —
+which is exactly the parameter-free extreme-compressing operator [2026-09-29] asked for. **But compose
+it with this lab's `c - c.min() + FLOOR` weighting and a scalar target cancels identically**, leaving
+`w ∝ d + FLOOR/(1-phi)`: scalar-target score shrinkage *is* the `FLOOR` knob, and so is its
+strictly-more-general non-convex form. That is #174, it is algebra rather than measurement, and it
+should cost zero trials. What survives the cancellation is the **target**, not the coefficient
+structure: a *vector* target re-ranks, which makes a **partial, data-determined group-mean demean**
+(#176) the one live score-space shape — and the folder already holds both its endpoints, the raw score
+and full country-demeaning [2026-09-10], with this literature supplying only the middle. The second
+live shape moves to **weight space** (Bodnar–Okhrin–Parolya 2023, JBES, open access): shrink the
+realised weight vector toward a long-only target, which `FLOOR` cannot reach because the target enters
+*after* the weighting function, and which bites hardest on the ten names holding 61.41% of gross
+[2026-09-27] precisely because they are the ones furthest from `1/N` (#177). Two structural facts come
+free with the branch. **`p/n` near 1 is the worst regime, worse than `p > n`** — the intensity on the
+sample estimator falls to zero as `c -> 1-`, collapsing the book onto its target, then rises again for
+`c > 1` where a pseudo-inverse is better conditioned than a near-singular inverse — and **a sample
+Mahalanobis norm is inflated by a known dimensional amount**, corrected as `y'S^-1 y - p/(n-p)`, which
+every wide-panel distance statistic the lab computes inherits (#175). The claim-level grade is the
+2026-09-29 rule applied again: the *estimator* is Tier A and universally re-implemented, while the
+*tradable claim* that it beats naive diversification fails — DeMiguel–Garlappi–Uppal (2009, Tier 1,
+already held) and an independent sixteen-strategy horserace both report no consistent win over `1/N`
+or minimum-variance, with the stated diagnosis that residual error in expected returns still dominates.
+The sources also state their own boundary: where true cross-sectional dispersion is large relative to
+sampling error, **every** estimator in the class converges to the raw sample mean and shrinkage buys
+nothing. Tier A (Jorion, construction) / B (both modern papers) / C (the tradable claim);
+`validation_overlap` true for the JBES paper and the horserace, false for the 1986 primaries.
+→ `notes/2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`,
+`notes/2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`,
+`notes/2026-09-30-shrinking-portfolio-weights-toward-a-target.md`
+
 ---
 
 ### Portfolio construction & rebalance mechanics (cross-family)
@@ -8376,6 +8412,114 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-09-29-liquidity-adjusted-capm-three-betas.md`,
     `notes/2026-09-29-funding-liquidity-and-margin-spirals.md`
 
+174. **FREE KILL, and it is the most valuable item tonight because it removes a candidate shape
+    rather than adding one: shrinking a score toward a scalar target is exactly a `FLOOR`
+    reparametrisation under this lab's weighting function, so a Bayes-Stein score candidate is a
+    knob the lab already owns.** The classical mean-shrinkage estimator returns
+    `c' = (1-phi)*c + phi*m` for a scalar target `m`. Compose that with the seat's
+    `c - c.min() + FLOOR` magnitude weighting and the target cancels identically:
+    `c' - c'.min() = (1-phi)*(c - c.min())`, so `w ∝ (1-phi)*d + FLOOR ∝ d + FLOOR/(1-phi)` with
+    `d = c - c.min() >= 0`. **Shrinking the score toward any scalar is therefore identical to
+    raising `FLOOR` to `FLOOR/(1-phi)` and changes nothing else**; `phi -> 1` is equal weight,
+    `phi -> 0` is the untouched book, and the whole family was swept whenever `FLOOR` was swept.
+    This is algebra on the lab's own construction, not a measurement, and it should cost **zero
+    trials**. Two riders, both of which sharpen it. *(a)* It also holds for the strictly more
+    general **non-convex** form `alpha*c + beta*m` with `alpha + beta != 1`, because after
+    `c - c.min()` a pure rescale is still absorbed — so the extra generality buys nothing here,
+    which is the opposite of what it suggests. *(b)* Read the other way it says something the lab
+    has not written down: **`FLOOR` *is* a mean-shrinkage intensity**, and the seat's 61.41%-in-ten
+    concentration [2026-09-27] is a statement about where on that shrinkage path the book already
+    sits. Tier A construction, no overlap.
+    → `notes/2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`,
+    `notes/2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`
+
+175. **FREE, an audit of windows rather than a proposal, and it carries a counterintuitive warning
+    worth more than the audit: `p/n` near 1 is the worst regime, worse than `p > n`.** Under
+    large-dimensional asymptotics the shrinkage intensity on a sample-estimated portfolio **falls
+    to zero as `c = p/n` approaches 1 from below** — the book collapses entirely onto its target
+    and the signal is discarded — and then **rises again for `c > 1`**, because the pseudo-inverse
+    of a genuinely rank-deficient sample covariance behaves better than the near-singular inverse
+    at `c ≈ 1`. Anyone choosing an estimation window by "at least as many observations as assets"
+    is steering *toward* the failure point. The audit: for every diagnostic the lab already runs
+    that inverts or conditions on a covariance, compute `p/n` on its actual window and check the
+    distance from 1; the remedy is a window choice (fewer names, longer sample, or the daily panel
+    instead of monthly), never a candidate. **Second free item in the same note and cheaper still:
+    a sample Mahalanobis norm is inflated by a known purely dimensional amount, and the feasible
+    estimator corrects it as `y'S^-1 y - p/(n-p)`.** Any lab statistic reading a Mahalanobis or
+    `t`-like distance off a wide panel inherits that inflation — whether the existing
+    covariance-based diagnostics apply an equivalent correction is a one-pass check of code the lab
+    already has. Tier B, no overlap on the mean-vector note.
+    → `notes/2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`,
+    `notes/2026-09-30-shrinking-portfolio-weights-toward-a-target.md`
+
+176. **CANDIDATE, and it is the one shape in tonight's set that #174 does *not* kill: a partial,
+    data-determined group-mean demean — the missing middle of a map whose two endpoints the lab has
+    already measured.** #174 kills a *scalar* target. A **vector** target does not cancel: shrink
+    each name's score toward its **region (or sector) mean** rather than toward a global constant,
+    and the operator genuinely re-ranks. The folder already holds both endpoints — the raw score
+    (`phi = 0`) and full country-demeaning (`phi = 1`, [2026-09-10]) — and what this literature adds
+    is the middle with **no new free parameter**, because the intensity is set by how dispersed the
+    group means are relative to sampling error: tightly clustered group means shrink hard, genuinely
+    dispersed ones barely. The classical intensity has the form
+    `phi = (N+2) / [ (N+2) + M * D2 ]` with `D2` the (Mahalanobis) dispersion of the scores about
+    the target — so it falls with sample length and rises with breadth. **Honest caveats, both
+    load-bearing.** The distance is Mahalanobis, not Euclidean, so it needs a covariance the lab
+    must first check against #175; a candidate that substitutes Euclidean distance has changed the
+    estimator and must say so. And the whole class carries a documented prior against it: in an
+    independent horserace no Bayes-Stein variant beat `1/N` or minimum-variance, the Tier-1 source
+    agrees, and the stated diagnosis is that shrinking the mean does not rescue an optimiser. **The
+    lab is not an optimiser, which is why this is not an anti-candidate — but nobody has shown it
+    helps a magnitude-weighted long-only book either.** Tier A estimator / Tier C tradable claim,
+    no overlap on the 1986 primaries.
+    → `notes/2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`,
+    `notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`
+
+177. **CANDIDATE, and it is the only operator this folder has found that acts hardest on exactly the
+    weights the lab says decide everything: shrink the realised weight vector, not the score.**
+    Weight-space shrinkage, `w_final = (1-phi)*w_champion + phi*b` with `b` a long-only target (the
+    equal-weighted book over the same holdings, or a long-only minimum-variance book), is **not**
+    absorbed by `FLOOR`, because the target enters *after* the weighting function rather than
+    before it. It preserves the budget and long-only constraints for any `phi` in `[0,1]` when `b`
+    is long-only. And it bites where the lab asked: the ten names holding 61.41% of gross
+    [2026-09-27] are the ones furthest from `1/N`, so they move most per unit of `phi` — which is a
+    direct answer to the standing request for a change that moves the top ten weights, and it needs
+    **no new signal**. The argument for shrinking output rather than input is the source's best:
+    the covariance and the mean are parameters of the return distribution, whereas **the weights are
+    the object the loss is actually measured on**. Worth recording alongside it, because it closes a
+    loop: the equally weighted portfolio is precisely what the Frost–Savarino prior implies (all
+    assets with equal expected returns, equal variances, equal correlations), so `1/N` here is not
+    an atheoretical fallback but the maximally shrunk book. **Two honest costs.** The derived
+    intensity does *not* transfer — it is built from efficient-frontier parameters of an optimiser
+    the lab does not run — so `phi` would have to be calibrated some other way, and a hand-picked
+    `phi` reintroduces exactly the free parameter that made this class attractive. And this is a
+    de-concentration overlay: `experiments/learnings.md` records that de-risking and
+    de-concentration overlays on this base have repeatedly backfired, with constants measured on
+    `price-trend`. **Nothing here says this one differs**; what is new is only that it reaches
+    weights the earlier overlays could not. Tier B, **validation overlap true** (sample runs into
+    early 2018).
+    → `notes/2026-09-30-shrinking-portfolio-weights-toward-a-target.md`
+
+178. **ANTI-CANDIDATES, three, all within tonight's branch.** *(a) Do not build a mean-variance
+    optimiser to use any of this.* The entire measured verdict on shrunk-mean optimisation is
+    negative — Tier 1 and an independent horserace agree that it does not beat naive
+    diversification, and the stated reason is that residual error in expected returns still
+    dominates. The transferable content of this branch is the **operator** (shrink toward a target
+    with a data-determined intensity), never the optimiser it was built for. *(b) Do not import the
+    intensity formula from #177 into a non-optimiser book.* `R_GMV`, `V_GMV` and the frontier slope
+    `s` are properties of an efficient frontier; plugging a long-only magnitude-weighted book into
+    a formula derived for the tangency portfolio produces a number with no interpretation, and is
+    the imported-proxy error the `%zero` census caught [2026-09-28]. *(c) Do not treat shrinkage as
+    free insurance.* The source states its own boundary: when the true cross-sectional dispersion
+    of means is large relative to sampling error, **every** estimator in this class — including the
+    modern optimal one — converges to the raw sample mean and shrinkage buys nothing. Shrinkage pays
+    only where the signal is weak relative to noise, which is a claim about this panel that the lab
+    has not measured and should not assume. A related finite-sample trap: the estimated intensity
+    **can come out negative** even where the oracle value is provably positive, so any candidate
+    must decide in advance whether to clip at zero and say which.
+    → `notes/2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`,
+    `notes/2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`,
+    `notes/2026-09-30-shrinking-portfolio-weights-toward-a-target.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -8427,8 +8571,82 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-27 (session 44) | **The third consecutive session aimed by the previous nightly, and the first aimed by a nightly's criticism of this file rather than by its next-ideas list.** The 2026-09-26 nightly disqualified this file's top-ranked screen (#153's `EffRank`) because the same universe reads `0.244·P` on fourteen characteristics and `0.638·P` on eight de-duplicated ones — a candidate can move itself between the pre-registered branches by de-duplicating its own inputs — and told this folder that "an imported screen needs its own invariance check before its branches are believed, which the folder could apply to itself." A grep across all 134 prior notes returned zero for `Laloux`, `Onatski`, `Ahn-Horenstein`, `eigenvalue ratio`, `nonlinear shrinkage` and `Porter-Thomas`. **The twenty-year econometrics literature on exactly this question had never been read here, and it does not rescue the screen — it generalises the failure**: Onatski names the violated condition as *a basic identification assumption*, so on a duplicated-column design no eigenvalue-based count is identified and no better estimator repairs that. What the session brings back instead: a closed-form null with a falsifiable prediction about the lab's own control (#160), a **parameter-free** eigenvector test for whether a component is empty (#159), a five-estimator disagreement check with the literature's own 3-to-8 spread as calibration (#161), a de-duplication design rule with a citation behind it (#162), a Tier-A anti-candidate declined on its own source's long-only measurement (#163), and three interpretation rules about numbers already in the repo's files (#164). New: **#159–#164**. | Laloux–Cizeau–Bouchaud–Potters 1999 (`2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md`); Bai–Ng 2002 + Onatski 2010 + Ahn–Horenstein 2013 (`2026-09-27-counting-factors-eigenvalue-estimators.md`); Ledoit–Wolf 2020 + 2017 (`2026-09-27-nonlinear-shrinkage-instead-of-counting.md`) |
 | 2026-09-28 (session 45) | **The fourth consecutive session aimed by the previous nightly, and the unit is the *weighting function* — not the score that feeds it, and not the statistic that grades it.** Sessions 28–44 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null → the variable a promotion turned on → a constraint's two halves → what an estimator is → whether the measured thing exists on this design. The 2026-09-27 nightly spent 1 of 8 trials (**holdout NOT read**, running total still six) and produced the quantity this session is about: the seat holds **~61.41% of gross in its ten largest weights and ~1.43% in its ten smallest of ~48**, ratio **0.023**, *a property of the `c − c.min() + FLOOR` magnitude weighting rather than of any candidate* — which retrospectively explains a whole class of this repo's unresolvable nulls and leaves its next-ideas item 2 asking for **a score change that moves the top ten weights**, with the explicit admission that *nothing on the board supplies one*. A grep across all 137 prior notes returned **zero** for `frog in the pan`, `active share`, `Cremers`, `Petajisto`, `best ideas` and `Cohen, Polk`: the two literatures that own the missing pieces — *what reorders the top of a ranked book* and *how you measure the distance between two long-only books* — had never been read here. Three sources, all read in full text, tiers A/A/B, chosen so each supplies one node: the **score** (a conditioner on the path by which a cumulative return arrived, computable from closes alone and explicitly not a restatement of that return), the **distance** (Active Share, plus the same-sample controlled re-run that finds it predicts nothing — the citable anchor for this lab's own 2026-09-10 rule), and the **tail** (a weighting function inverted into the alpha vector it is implicitly asserting). The session's shape is **three free measurements, one gated candidate and a four-part anti-candidate**, and its most useful single output is a reclassification of a diagnostic the lab already runs: Jaccard and holdings overlap are *unweighted* membership statistics on a book whose risk lives in ten weights, and Active Share is their weighted analogue for one line of code. New: **#165–#169**. | Da–Gurun–Warachka 2014 (RFS) (`2026-09-28-information-discreteness-frog-in-the-pan.md`); Cremers–Petajisto 2009 (RFS) + Frazzini–Friedman–Pomorski 2016 (FAJ) (`2026-09-28-active-share-and-its-deactivation.md`); Antón–Cohen–Polk (2021 draft; earlier Cohen–Polk–Silli, FMG DP 624) (`2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`) — all read in full text |
 | 2026-09-29 (session 46) | **The first session in five not aimed by the previous nightly, and the first in sixteen aimed by a gap this folder had twice *declared in writing* rather than one a detector found.** The 2026-09-28 nightly spent 1 of 8 trials (**holdout NOT read**; running total of looks still **six**), killed `pt_mom_id_z` at `d = −0.127` with ~−0.099 left for the term after both calibrated confounds, produced the Active Share calibration pair (0.026 → `|t|` 0.49; 0.257 → `|t|` 1.95), closed the cost axis on the whole board, and told the human that seven of eight families are closed and "this universe, with these inputs, has been searched out". Its own next-ideas were three free measurements and an anti-candidate list — nothing this folder could supply. So the aim came from two of this folder's *own* disclaimers: `2026-08-29-amihud-illiquidity-measure-and-replication.md` and `2026-09-04-commonality-in-liquidity-across-countries.md` each set the illiquidity-**risk** literature (naming Pástor–Stambaugh and Acharya–Pedersen by author) aside as "a different literature", and a grep across all 140 prior notes returned **zero** for `liquidity beta`, `funding liquidity` and `flight to quality`, with `Pástor` appearing only inside those two disclaimers and nowhere as a subject. Three notes, one family (`liquidity-volume`), and the session is a **documented negative**: the measure replicates essentially exactly under two Critical-Finance-Review-commissioned replications, and the premium does not survive them — ten of ten specifications without significance in one, a traded factor significantly weaker at its natural monthly rebalance in the other, and the predicted-beta version confounded by construction. Acharya–Pedersen then report that all three of their liquidity betas are strongly collinear with the illiquidity **level** the lab already closed on the mean channel, and Brunnermeier–Pedersen predict that collinearity from theory. New: **#170–#173**, of which three are free and the fourth is the anti-candidate against the sorted book. One finding runs the other way and is carried deliberately: liquidity risk is reported **essentially unrelated to momentum**, so the leg is not the incumbent in costume — it is decorrelated with no premium, which #140(a) already priced at zero. **Carried unchanged and still genuinely unrun: #82** (twenty-fourth session), **#94**, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, **#165**'s second use, **#166**, **#167**. **#152 stands.** **#163 and #169 stay anti-candidates.** Access: Pástor–Stambaugh 2003 read as NBER WP 8462 (a `/GNN`-glyph PDF needing a +29 offset decode, a new extraction shape for this folder); Acharya–Pedersen as the typeset JFE version of record; Brunnermeier–Pedersen as NBER WP 12939; all three CFR replication papers from the journal's own open PDFs. **Not read, and nothing is claimed from them:** Jorion (1986) and Frost–Savarino (1986), the two JFQA primaries for shrinking an estimated *mean vector*, which Semantic Scholar reports `CLOSED` and whose one hosted copy answered with a connection reset — see the open-questions entry. | Pástor–Stambaugh 2003 (JPE) + Li–Novy-Marx–Velikov 2019, Pontiff–Singla 2019 and Pástor–Stambaugh 2019 (CFR) (`2026-09-29-liquidity-risk-priced-innovations.md`); Acharya–Pedersen 2005 (JFE) (`2026-09-29-liquidity-adjusted-capm-three-betas.md`); Brunnermeier–Pedersen 2009 (RFS) (`2026-09-29-funding-liquidity-and-margin-spirals.md`) |
+| 2026-09-30 (session 47) | **The first session in seventeen aimed by a gap the *previous session named and left open in writing*, with its access findings already recorded — and the branch's headline turned out to be a free kill rather than a candidate.** 2026-09-29 closed liquidity risk as a documented negative and identified the one unit it could not cover: **shrinkage of an estimated mean vector**, with both primaries verified closed. A grep across all 143 prior notes re-confirmed zero hits for `Bayes-Stein`, `grand mean`, `Michaud` and `shrinkage of means`; the folder's five shrinkage notes shrink a covariance, an SDF coefficient or a selected maximum, never the score vector a book is built from. Both 1986 primaries stayed closed on every route tried (see the note's Access section: Merage faculty tree gone, Cambridge bot page again, Frankfurt behind **Anubis at HTTP 200** — a tenth refusal shape — and Kan's Rotman paper directory gone, which matters beyond tonight). The estimator was therefore read from an independent statement of it and the primary is marked not read. New: **#174–#178**. **The session's main output is #174, which removes a candidate shape**: composed with `c - c.min() + FLOOR`, scalar-target score shrinkage cancels to a `FLOOR` reparametrisation, so a Bayes-Stein score candidate is a knob the lab already owns — zero trials. What survives is the *target*: #176 (partial group-mean demean, the missing middle between the raw score and full country-demeaning [2026-09-10]) and #177 (weight-space shrinkage, the only operator found that acts hardest on the top-ten weights). Free with the branch: #175's `p/n ≈ 1`-is-worst warning and the Mahalanobis inflation correction. | Jorion 1986 (JFQA) + Frost–Savarino 1986 (JFQA) + Bock 2018 (`2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`); Bodnar–Okhrin–Parolya 2019 (J. Multivariate Analysis) (`2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`); Bodnar–Okhrin–Parolya 2023 (JBES) (`2026-09-30-shrinking-portfolio-weights-toward-a-target.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-09-30] Read this first: tonight's deliverable is a *subtraction*, and it is worth more than
+  the two candidates beside it.** The unit 2026-09-29 left open — shrinkage of an estimated mean
+  vector — is now covered in three notes, and the first thing it produced is **#174, a free kill**.
+  Composed with this lab's `c - c.min() + FLOOR` weighting, shrinking a score toward **any scalar
+  target** cancels identically to raising `FLOOR` to `FLOOR/(1-phi)`; the strictly more general
+  non-convex form `alpha*c + beta*m` cancels too, because a pure rescale dies in `c - c.min()`. So the
+  entire classical Bayes-Stein score-shrinkage family is **a knob the lab already owns and has already
+  swept**, and it should cost **zero trials**. Read the other way it is also a small positive result:
+  **`FLOOR` is a mean-shrinkage intensity**, and the seat's 61.41%-in-ten concentration [2026-09-27]
+  locates the book on that path. What survives the cancellation is the **target, not the coefficient
+  structure** — which is the opposite of what the extra generality suggests — leaving exactly two live
+  shapes: **#176** (vector target: a partial, data-determined group-mean demean, the missing middle
+  between the raw score and full country-demeaning [2026-09-10]) and **#177** (weight-space shrinkage,
+  which `FLOOR` cannot reach because the target enters after the weighting function). Free with the
+  branch: **#175**. Anti-candidates: **#178**. **Nothing is closed by this entry** — no lab measurement
+  was taken tonight. **Carried unchanged and still genuinely unrun: #82** (twenty-fifth session, still
+  the oldest unspent free item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half,
+  **#159**, **#161**, **#164(a)**, the whole of the 2026-09-28 set (**#165**'s second use, **#166**,
+  **#167**, **#168**) and the whole of the 2026-09-29 set (**#170**, **#171**, **#172**). **#152
+  stands.** **#163, #169 and #173 stay anti-candidates.**
+- **[2026-09-30] What should aim the next session, in order.**
+  - **#174 goes first and costs nothing but a reading.** It is the only item on this file that
+    *removes* work, and it should be applied before any weighting-scheme proposal is written, not
+    after. If the lab has a score-shrinkage idea queued from the 2026-09-29 branch, this retires it.
+  - **Then the lab's own carried items**, unchanged and still ahead of anything new here: the third
+    Active Share calibration point, #167's implied-alpha read of the seat's tail, and #170's
+    innovation series. Tonight added no reason to reorder them.
+  - **Then #175**, free, and an audit of windows rather than a proposal. Its `p/n ≈ 1` warning is the
+    part to act on: the lab's instinct on any covariance-using diagnostic will be "make sure `n >= p`",
+    and that instinct steers **toward** the failure point rather than away from it.
+  - **Then #177 ahead of #176**, and the ordering is deliberate. #177 is the only operator this folder
+    has ever found that acts hardest on the top ten weights *by construction* — which is the lab's own
+    standing request — and it needs no new signal. #176 is ranked second because its intensity needs a
+    covariance that #175 must clear first, and because its endpoints are already measured, so the
+    middle is the only thing it can buy. Both carry a real prior against them (#178a).
+- **[2026-09-30] The transferable output, and for once it is a *method* this folder can reuse rather
+  than an evidentiary rule.** **Before proposing an operator, compose it symbolically with the lab's
+  weighting function and check whether it cancels.** Tonight that one step turned a well-motivated,
+  Tier-A, parameter-free, extreme-compressing estimator — precisely what [2026-09-29] asked for — into
+  a reparametrisation of an existing knob, in four lines of algebra and at zero cost. Sessions 28–46
+  built detectors for *gaps*; this is a detector for **redundancy**, and it runs in the opposite
+  direction. The generalisation: **an operator that acts on the score is only new if it survives
+  `c - c.min()`, which kills every affine map with a scalar offset — so it must either use a vector
+  target, act after the weighting function, or be non-affine.** That is a three-way test, it is cheap,
+  and it would have retired several shapes this folder has proposed in the past.
+- **[2026-09-30] Access findings, recorded so the next session does not repeat the searches.** Four
+  routes died tonight and two of them matter beyond this branch. **(1) `publikationen.ub.uni-frankfurt.de`
+  is now behind an Anubis proof-of-work challenge** returning **HTTP 200** with a 7.4 KB body — a
+  **tenth** distinct refusal shape, and like the Incapsula case of 2026-09-18 it *looks like an answer*,
+  so check body length before concluding a file is absent. **(2) `www-2.rotman.utoronto.ca/~kan/papers/`
+  is gone**, answering every path with a 1.6 KB Rotman 404 handler at HTTP 200; that directory was the
+  standard open route to the Kan–Zhou estimation-risk papers, so **Kan–Zhou (2007, JFQA) is now an
+  uncovered and hard-to-reach source** — it is cited by both modern notes tonight and remains a genuine
+  gap. (3) The 2026-09-18 faculty-page trick fails for Jorion: the `merage.uci.edu/~jorion` tree is 404.
+  (4) `cambridge.org/core` served an 860 KB HTML bot page again, confirming the 2026-09-18 finding.
+  **Working channels re-confirmed:** arXiv (both modern primaries), and a German institutional
+  repository serving a **version of record** under an open licence (`opus.bibliothek.uni-augsburg.de`),
+  which is the 2026-09-07 econstor lesson generalising to a second repository. **Also note: both
+  scholar APIs were exhausted by the end of the session** — Semantic Scholar rate-limits to 429 after a
+  handful of unauthenticated calls and OpenAlex's free daily budget ran out mid-session. Resolve
+  citation counts **early**, and use **Crossref** (`api.crossref.org/works/<doi>`,
+  `is-referenced-by-count`) as the third index; it was never rate-limited tonight and it is the only one
+  of the three that also settles volume, pagination and issue date.
+- **[2026-09-30] One gap identified and deliberately left open.** **Frost–Savarino (1986)** is covered
+  only from its published abstract — the prior that all securities share one expected return, one
+  variance and one pairwise correlation, drawing all three moments toward their cross-sectional
+  averages — and **no intensity formula is claimed for it**. It is closed everywhere OpenAlex indexes
+  (two locations, neither open access). It matters more than its 410 citations suggest, because tonight's
+  JBES note supplies the reason: **the equally weighted portfolio is exactly the book that prior
+  implies**, so `1/N` throughout this folder's horserace literature is not an atheoretical fallback but
+  the maximally shrunk posterior. A session that finds a readable copy should write the estimator out;
+  a Tier-2 review stating it in full is an acceptable substitute on the same terms used tonight.
 
 - **[2026-09-29] Read this first: tonight's session is a documented NEGATIVE, and the negative is
   the deliverable.** The last unopened liquidity literature — liquidity *risk*, which this folder

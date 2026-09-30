@@ -16866,3 +16866,5 @@ candidate *code* as cleanly as v1 certified it in the universe. The proposed sta
 what makes the rest of the cutover meaningful.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0.**
+
+## Research session — 2026-09-30 (learning agent): 3 notes added, see research/SUMMARY.md
