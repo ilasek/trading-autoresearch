@@ -16868,3 +16868,92 @@ what makes the rest of the cutover meaningful.
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0.**
 
 ## Research session — 2026-09-30 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-09-30 — `origin/survivorship-pit-v2` still unmerged; second consecutive halt
+
+Recorded by the nightly strategy agent, not by `run_experiment.py`. No trial record was
+added, altered, or removed in writing this entry; `trials.jsonl` remains exactly as
+`run_experiment.py` last wrote it (**104 records**). **No experiment was run tonight and no
+holdout was read.**
+
+### State check — nothing a human controls has changed since 2026-09-29
+
+The step-0 condition fires on the same single branch as last night, and the diagnosis in the
+2026-09-29 entry above stands unchanged. Rather than restate it, here is what moved:
+
+| Checked | Last night | Tonight |
+|---|---|---|
+| `git branch -r --no-merged origin/main` (non-`archive/*`) | `origin/survivorship-pit-v2` | `origin/survivorship-pit-v2` |
+| Its tip | `d5bc17b` | `d5bc17b` — **identical, no new work** |
+| `archive/*` branches | 0 | 0 — branch not parked |
+| `program.md` | — | **unchanged** (`git diff d7cb345..origin/main -- program.md` empty) |
+| `trials.jsonl` | 104 | 104 |
+| Champion | `pt_mom_evar_arbrisk` (#98) | `pt_mom_evar_arbrisk` (#98) |
+
+New commits on `origin/main` since last night's halt are bot-authored only —
+`d72a860` (last night's own halt entry), `4bf267b` `data-refresh-bot` daily refresh,
+`e06be48` learning-agent research notes. **No human commit, no merge, no archive, no
+`program.md` decision.** So none of the three unblock conditions from last night has been met.
+
+Re-verified tonight, not assumed: the branch still touches none of the trial-history files —
+`git diff --stat origin/main...origin/survivorship-pit-v2 -- experiments/trials.jsonl
+experiments/journal.md experiments/leaderboard.json experiments/learnings.md strategies/`
+is empty. The deflated-Sharpe bar on `main` is therefore still *not* split, and this is still
+not a repeat of 2026-08-16. The halt is not about a corrupted bar.
+
+`main`'s engine is green: `.venv/bin/python -m pytest tests/ -q` → **33 passed** in 35s.
+Whatever is blocking the loop, it is not a broken engine on `main`.
+
+### Why the halt still stands, and what it is now costing
+
+The substantive reason from last night is the binding one and it has not weakened: the branch's
+own report re-scores seated champion #98 from validation Sharpe 1.27 to **0.19** under a
+point-in-time universe, and its recommended cutover order ends with *"cut over with a fresh
+deflated-Sharpe history. v1 trial Sharpes are not on the v2 scale: pooling them would inflate
+the variance term and the bar."* Eight v1 trials tonight would each permanently raise a bar
+whose own author plans to discard it, scored against an incumbent the same harness values at
+one-sixth of its recorded Sharpe. Recording zero remains the honest move, and it is the same
+move tonight as last night for the same reason.
+
+But a halt that repeats is no longer free, and this entry should not be read as a steady state:
+
+- **The lab is now stalled, not paused.** Two consecutive nights have produced zero trials. A
+  third would make "the nightly agent halts" the system's default behaviour rather than an
+  exception, and nothing in the loop escalates on its own — each night writes an entry that
+  only the next agent reads.
+- **The stall is not self-clearing.** Every one of the three unblock conditions requires a
+  human action (merge, archive, or a `program.md` line). No bot commit can satisfy any of them,
+  so the loop cannot recover by waiting, and the data-refresh and learning-agent commits
+  arriving nightly can make `main` *look* active while no research happens.
+- **Cost so far is opportunity only, and that is worth stating plainly.** Nothing has been
+  corrupted, nothing spent, no holdout read on either night. The 104-trial history and the
+  unspent holdout are intact. That is the halt working as designed.
+
+### For the human — unchanged, and now blocking a second night
+
+Any **one** of these restarts the loop; they are the same three as last night.
+
+1. **Land or park the branch.** Merge `survivorship-pit-v2` into `main` (v2 stays off while
+   `PROTOCOL_VERSION` defaults to 1, so merging does not by itself change any gate), or rename
+   it to `archive/survivorship-pit-v2`, which the integrity check ignores by design. Parking is
+   the one-command option if the cutover is not ready.
+2. **Say which protocol the lab searches under.** If the v1 history is to be discarded per the
+   branch's step 2, v1 trials between now and cutover are waste and the agent should stay
+   stopped whatever the branch topology says — in which case please say so in `program.md`, so
+   the halt is a decision on record rather than a topology accident. If v1 continues in
+   parallel, say that instead and the halt condition becomes topology-only.
+3. **Settle the branch disagreement, now twenty-five sessions old.** The session-start hook, the
+   harness's per-run-branch requirement (`main-55jrux` tonight) and `CLAUDE.md`'s
+   `git push origin main` still do not agree. As last night, this entry is committed on `main`
+   and pushed to `main` and to the per-run branch both, as the identical commit, so no history
+   splits either way. That is still care, not a fix.
+
+One addition to the reading offered last night, still as a reader of the branch's report and
+not as a result on `main`: criterion 1 (the static guard against hard-coded instrument lists)
+failing is what makes the cutover order load-bearing rather than cosmetic. Until that guard
+exists, switching `PROTOCOL_VERSION` to 2 would certify hindsight in candidate *code* — the
+report's own `hindsight_winners.py` scores 1.12 at the 100th null percentile — as cleanly as
+v1 certified it in the universe. If the branch lands with v2 still defaulted off, that is fine
+and unblocks condition 1 on its own; the guard matters at cutover, not at merge.
+
+**Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, second night.**
