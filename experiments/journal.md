@@ -16957,3 +16957,5 @@ v1 certified it in the universe. If the branch lands with v2 still defaulted off
 and unblocks condition 1 on its own; the guard matters at cutover, not at merge.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, second night.**
+
+## Research session — 2026-10-01 (learning agent): 3 notes added, see research/SUMMARY.md

@@ -4949,6 +4949,101 @@ whole claim; and which names are right is the thing in dispute.** Neither source
 transaction costs, neither addresses multiple testing, and neither is about a systematic signal,
 so nothing in this section licenses a performance expectation of any kind.
 
+### What the sample itself does to a measured result — survival, the discovery window, and the size of the discount (cross-family)
+
+Opened 2026-10-01, and it is the first section in this file aimed at the **conditioning that put the
+data in front of the lab** rather than at anything computed from it. Sessions 28–47 walked families →
+clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary →
+the shape of the output → a column of the data panel → a primitive of a cited theory → what a score is
+measured against → the dependent variable → the precondition of a prediction → the null → the variable
+a promotion turned on → the weighting function → an estimated moment. Tonight's unit sits underneath
+all of them: **the sample is itself a selected object, and three different selection rules act on it.**
+The section exists because the lab is halted on precisely this question — `experiments/journal.md`
+[2026-09-29, 2026-09-30] records two consecutive nights stopped over an unmerged point-in-time-universe
+branch whose own report re-scores the seated champion's validation Sharpe from 1.27 to 0.19 — and
+because a grep across all 146 prior notes returned **zero** dedicated coverage for `delisting bias`,
+`absorbing barrier`, `pre-sample`, `discovery sample` and `p-hacking`. `2026-08-26`'s look-ahead note
+covers one of the three rules; the other two had none.
+
+**Survivorship adds drift in proportion to variance and leaves variance alone — this is a theorem, and
+it is the theory of the lab's largest measured artifact.** Condition a diffusion `dp = μ dt + σ dz` on
+a survival set `A` and the conditioned process is `dp* = (μ + σ²·π_p/π) dt + σ dz`, where `π` is the
+probability of surviving. Three consequences, all in that one line. The induced drift scales with
+**`σ²`**, so volatile names are pulled up hardest. The diffusion coefficient is **unchanged**, so a
+Sharpe ratio is inflated through its numerator with nothing to net it against. And with a lower
+absorbing barrier `p̲` and zero true drift the drift collapses to **`σ²/(p − p̲)`**, so the inflation is
+largest for the names nearest to the level at which they would have been removed. The mean surviving
+path is then `σ·sqrt((p₀+p̲)²/σ² + 2t)` — increasing, **concave**, with concavity increasing in `σ` —
+so average return is higher early than late, and long-horizon dependence statistics are biased toward
+rejecting a random walk with nothing in the data generating it. This folder has recorded the lab's
+inductive version of that result many times over: `experiments/learnings.md` measures a high-minus-low
+volatility spread of +19.4%/yr on train, a raw Garman–Klass level IC of +0.0766 (t = +5.75), and
+concludes across fourteen mechanism screens that "the level *is* the survivorship artifact." **That
+conclusion now has a derivation, and it predicts two further things the lab has not checked: the
+artifact should be a `σ²` effect rather than a `σ` effect, and it should concentrate in the names
+closest to exit.** The same framework, applied to a conditioning set defined by an *event* rather than
+by survival, says a rise in one period implies a first-order stochastic increase in **later** periods
+within the surviving sample — i.e. survivorship conditioning manufactures a continuation component by
+construction, in a repo whose champion is a momentum rule on a current-constituent universe. Tier A,
+no overlap, and nothing in it decays because none of it is estimated.
+→ `notes/2026-10-01-survival-conditioning-induced-drift.md`
+
+**The discovery window is a second selection rule, and what it distorts most is the quantity this lab
+prices a challenger on.** Hand-collected pre-1963 accounting data make it possible to measure 36
+anomalies in three eras — before discovery, in the discovering study's own window, and after. Average
+returns, Sharpe ratios, alphas and information ratios all fall sharply moving out of the original
+window **in either direction**, with the pre- and post-discovery estimates statistically
+indistinguishable from each other and the in-sample period differing from both by at least four
+standard errors. That **symmetry is the diagnostic**: a backward-looking decline cannot be arbitrage,
+and it is the wrong sign for a limits-to-arbitrage story, which predicts larger profits in the
+higher-cost past. The authors' own summary of the magnitude is that out-of-sample alphas run 40–60% of
+in-sample alphas, so a model should be held to explaining about half. **The second finding is the one
+that bears directly on `program.md`.** Selection acts on second moments too: a candidate is more likely
+to clear review when its correlation with known factors is atypically low, so a *measured*
+decorrelation is partly an artifact of having selected on it. Measured directly, an anomaly loads 0.59
+on the index of other in-sample anomalies and 0.09 on the out-of-sample index while it is in sample;
+out of sample those become 0.17 and 0.54 — and the same pattern appears running **backward** into the
+pre-discovery era, a boundary that means nothing to an arbitrageur, which is what separates this from
+the published-anomaly comovement story. Tier A, no overlap. **This lab selects family leads partly on
+being decorrelated from the incumbent and reads its required-gain table off that correlation.**
+→ `notes/2026-10-01-discovery-sample-and-anomaly-decay.md`
+
+**How large the discovery-window discount actually is, is contested — and this file records the
+contest rather than picking a winner.** Take the pure-selection story completely seriously: assume
+every factor is false, so all t-statistics are standard Normal, and fit an increasing publication
+probability to the observed histogram of published t-statistics. The model fits either of two corpora
+very well, and then implies that the probability of publishing a random t-statistic is around `1e-14`:
+10,000 economists producing one factor per economist-hour would need hundreds of millions of years to
+publish 100 factors, and even at ten factors per economist-second it is 15,000 years. The reason is a
+support mismatch — the published right tail is far too fat for selection on standard-Normal noise to
+produce at any plausible intensity. **p-hacking alone cannot be the whole explanation.** The companion
+paper estimates the size of the bias instead of assuming it, with an empirical-Bayes estimator whose
+normal approximation is `Shrinkage_i = σ_i²/(σ̂_μ² + σ_i²)` applied to the in-sample return, where
+`σ_i` is the candidate's own standard error and `σ̂_μ` the dispersion of *true* returns across the
+candidate family. Adjusted returns come out only about **12%** below in-sample ones; the implied false
+discovery rate among published predictors is about 1.5%, and a t-hurdle of 1.79 — *below* the
+conventional 1.96 — already delivers 1%. **The identifying moment is the dispersion of outcomes across
+candidates, not their number**, which is the formal contrast with every count-based correction in this
+folder, and the reason the shrinkage falls hardest on the *noisiest* candidates rather than on the
+most numerous family. Their decomposition of a typical anomaly's gross return — 12% publication bias,
+~35% mispricing traded away after publication, much of the remaining ~53% trading costs — also puts
+the statistical discount last and **costs first**, which is independent corroboration of
+`program.md`'s own measured claim that the deflator is not what was stopping exploration. Tier A,
+published post-2018, no sample overlap.
+→ `notes/2026-10-01-limits-of-p-hacking-publication-bias.md`
+
+**The tension, stated rather than smoothed.** Two Tier-A studies of the same literature put the
+discovery-window inflation at 40–60% and at ~12%. They cite each other by name as the opposing view.
+They are not measuring quite the same object — one compares realised returns across eras for
+accounting anomalies, the other estimates a shrinkage from cross-candidate dispersion over a broader
+predictor set — but the gap is far too wide for that to dissolve it, and the second pair cannot
+reconcile their own t-hurdle with Harvey–Liu–Zhu's either, as they say in print. **Carry both.** What
+they agree on is the *sign* and the *shape*: a measured in-sample edge is an overestimate; the
+overestimate is larger for noisier and shorter-sampled candidates; and the correction is a function of
+how dispersed the candidate family's true effects are. What they disagree on is the constant, and
+`CLAUDE.md`'s rule against importing constants across contexts makes that disagreement cheap for this
+lab to live with — the lab should compute its own, not adopt either.
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -8520,6 +8615,84 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`,
     `notes/2026-09-30-shrinking-portfolio-weights-toward-a-target.md`
 
+179. **FREE, and it should be run before any further `range-variance` or volatility-screen work:
+    the survivorship artifact is a `σ²` effect concentrated near the exit boundary, and both halves
+    are testable on data already held.** The lab established inductively that this universe's
+    cross-sectional volatility *level* is its survivorship artifact (+19.4%/yr high-minus-low spread
+    on train; raw GK level IC +0.0766, t = +5.75). The survival-conditioning theorem says the induced
+    drift is `σ²/(p − p̲)`, which makes two further predictions nobody has checked. *(a)* The
+    inflation is linear in **variance**, not in volatility — so a screen or de-levelling specified on
+    `σ` is the wrong functional form, and the comparison to run is the level IC of `σ` against that
+    of `σ²`. *(b)* The inflation is **hyperbolic in distance to the exit boundary** — so sorting on a
+    distance-to-failure proxy (price level, drawdown from a long-run high, illiquidity) *within*
+    volatility bucket should concentrate the level IC in the near-boundary tercile. If it does, the
+    survivorship account is corroborated by a second independent implication of the same formula; if
+    the IC is flat in distance-to-failure, the account is incomplete and something else carries the
+    level effect. Both are IC reads on the train split, no trial, no holdout. Tier A, no overlap.
+    → `notes/2026-10-01-survival-conditioning-induced-drift.md`
+
+180. **FREE, and it is the item on this list that changes a number `program.md` currently treats as
+    given: the leaderboard's `rho` is a selected quantity and should be expected to revert.**
+    `program.md` instructs a challenger to argue a blend from the leaderboard's return correlation to
+    the incumbent, and `experiments/learnings.md` reads the +0.438 required-gain figure off it. The
+    discovery-window literature measures directly that a *low measured correlation to existing
+    strategies is partly an artifact of having selected on it* — an anomaly's loading on its
+    contemporaneous peer index falls from 0.59 to 0.17 and its loading on the out-of-sample peer index
+    rises from 0.09 to 0.54 when it leaves its discovery window, with the identical pattern appearing
+    **backward** into the pre-discovery era, which rules out arbitrageur comovement as the cause. This
+    lab applies the same filter explicitly: it prefers leads that are decorrelated from the champion.
+    **The measurement to run:** for each family lead, compute its correlation to the champion on the
+    **train** split and on the **validation** split separately. A systematic train→validation rise in
+    `rho` for leads chosen partly on decorrelation is a direct estimate of how much of the measured
+    figure is selection, and it either calibrates the required-gain table or clears it. Two already-
+    scored splits, no trial, no holdout. Tier A, no overlap. **Do not import the 40–60% constant** —
+    see #182.
+    → `notes/2026-10-01-discovery-sample-and-anomaly-decay.md`
+
+181. **FREE, and it answers the question the deflator does not ask — what the best of `N` is
+    *worth*, rather than whether it is significant.** The 2026-09-15 session recorded in writing that
+    this folder's multiple-testing notes all ask about significance and none about magnitude, and
+    filed Tweedie's formula as the partial answer. The empirical-Bayes publication-bias estimator is
+    the rest of it, in closed form: `Shrinkage_i = σ_i²/(σ̂_μ² + σ_i²)`, bias-adjusted return
+    `= (1 − Shrinkage_i) × in-sample return`, where `σ_i` is the candidate's own standard error and
+    `σ̂_μ` the dispersion of **true** performance across the candidate family, itself identified by
+    the observed dispersion of in-sample results. The lab holds 104 recorded trials with validation
+    returns, which is exactly the family this estimator needs. **Three properties make it worth
+    running.** It depends on dispersion, **not on the trial count**, so it is structurally independent
+    of the deflated-Sharpe machinery rather than a restatement of it. It shrinks the *noisiest*
+    candidates hardest, which is the opposite ordering from a count-based deflator. And because a
+    family of near-variants has a small true dispersion, it predicts that a sweep of close variants
+    shrinks almost to nothing while a set of genuinely different mechanisms barely shrinks at all —
+    **`program.md`'s breadth mandate, re-derived from estimation theory.** Compute it **per family and
+    compare**, not pooled over all 104 (pooling understates `σ̂_μ` and over-shrinks everything); the
+    comparison is the finding. A diagnostic for the human and this folder, **not** a gate —
+    `CLAUDE.md` forbids reinterpreting protocol thresholds and nothing here proposes to. Tier A,
+    published post-2018, no overlap.
+    → `notes/2026-10-01-limits-of-p-hacking-publication-bias.md`
+
+182. **ANTI-CANDIDATES, four, and the first two are about this very branch.** *(a) Do not import any
+    of tonight's constants.* The 40–60% out-of-sample alpha ratio, the three-fifths information-ratio
+    decline, the 12% publication-bias adjustment, the 1.5% FDR and the 1.79 t-hurdle are all measured
+    on US published cross-sectional predictors under a referee filter this lab does not have, with
+    multi-decade original samples. What transfers is the **formula and its identifying moment**; the
+    numbers do not, and two of them contradict each other by a factor of four. *(b) Do not read
+    "publication bias is small" as "this lab's selection problem is small."* Under the estimator's own
+    formula, a shorter sample means a larger `σ_i` means **more** shrinkage — and this lab selects on
+    a six-year validation window, which is far shorter than the original samples in that literature.
+    The direction of the adjustment for this repo is toward more shrinkage, not less. *(c) Do not
+    treat the survivorship theorem as a licence to trade the artifact.* The lab has stated repeatedly
+    that spending a trial on the volatility level would be knowingly building on hindsight; a
+    derivation of *why* the artifact exists strengthens that position and does not weaken it.
+    *(d) Do not read the `(4−π)/2 ≈ 0.4292` long-horizon variance-ratio limit as a prediction for this
+    panel.* It is derived for a zero-drift process against a fixed absorbing barrier; this repo's
+    universe is selected on *relative capitalisation rank*, which is the case the authors state they
+    could not solve analytically. Use it for sign and ordering — a survivor-selected panel should sit
+    **lower** than a point-in-time one — never for a level.
+    → `notes/2026-10-01-survival-conditioning-induced-drift.md`,
+    `notes/2026-10-01-discovery-sample-and-anomaly-decay.md`,
+    `notes/2026-10-01-limits-of-p-hacking-publication-bias.md`
+
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -8572,8 +8745,130 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-28 (session 45) | **The fourth consecutive session aimed by the previous nightly, and the unit is the *weighting function* — not the score that feeds it, and not the statistic that grades it.** Sessions 28–44 walked families → clauses → operators → the pool → an attribute of its members → the selection rule → the vocabulary → the shape of the output → a column of the input → a primitive of a cited theory → the reference a measure is taken against → the dependent variable → the precondition of a prediction → the null → the variable a promotion turned on → a constraint's two halves → what an estimator is → whether the measured thing exists on this design. The 2026-09-27 nightly spent 1 of 8 trials (**holdout NOT read**, running total still six) and produced the quantity this session is about: the seat holds **~61.41% of gross in its ten largest weights and ~1.43% in its ten smallest of ~48**, ratio **0.023**, *a property of the `c − c.min() + FLOOR` magnitude weighting rather than of any candidate* — which retrospectively explains a whole class of this repo's unresolvable nulls and leaves its next-ideas item 2 asking for **a score change that moves the top ten weights**, with the explicit admission that *nothing on the board supplies one*. A grep across all 137 prior notes returned **zero** for `frog in the pan`, `active share`, `Cremers`, `Petajisto`, `best ideas` and `Cohen, Polk`: the two literatures that own the missing pieces — *what reorders the top of a ranked book* and *how you measure the distance between two long-only books* — had never been read here. Three sources, all read in full text, tiers A/A/B, chosen so each supplies one node: the **score** (a conditioner on the path by which a cumulative return arrived, computable from closes alone and explicitly not a restatement of that return), the **distance** (Active Share, plus the same-sample controlled re-run that finds it predicts nothing — the citable anchor for this lab's own 2026-09-10 rule), and the **tail** (a weighting function inverted into the alpha vector it is implicitly asserting). The session's shape is **three free measurements, one gated candidate and a four-part anti-candidate**, and its most useful single output is a reclassification of a diagnostic the lab already runs: Jaccard and holdings overlap are *unweighted* membership statistics on a book whose risk lives in ten weights, and Active Share is their weighted analogue for one line of code. New: **#165–#169**. | Da–Gurun–Warachka 2014 (RFS) (`2026-09-28-information-discreteness-frog-in-the-pan.md`); Cremers–Petajisto 2009 (RFS) + Frazzini–Friedman–Pomorski 2016 (FAJ) (`2026-09-28-active-share-and-its-deactivation.md`); Antón–Cohen–Polk (2021 draft; earlier Cohen–Polk–Silli, FMG DP 624) (`2026-09-28-best-ideas-and-the-cost-of-overdiversification.md`) — all read in full text |
 | 2026-09-29 (session 46) | **The first session in five not aimed by the previous nightly, and the first in sixteen aimed by a gap this folder had twice *declared in writing* rather than one a detector found.** The 2026-09-28 nightly spent 1 of 8 trials (**holdout NOT read**; running total of looks still **six**), killed `pt_mom_id_z` at `d = −0.127` with ~−0.099 left for the term after both calibrated confounds, produced the Active Share calibration pair (0.026 → `|t|` 0.49; 0.257 → `|t|` 1.95), closed the cost axis on the whole board, and told the human that seven of eight families are closed and "this universe, with these inputs, has been searched out". Its own next-ideas were three free measurements and an anti-candidate list — nothing this folder could supply. So the aim came from two of this folder's *own* disclaimers: `2026-08-29-amihud-illiquidity-measure-and-replication.md` and `2026-09-04-commonality-in-liquidity-across-countries.md` each set the illiquidity-**risk** literature (naming Pástor–Stambaugh and Acharya–Pedersen by author) aside as "a different literature", and a grep across all 140 prior notes returned **zero** for `liquidity beta`, `funding liquidity` and `flight to quality`, with `Pástor` appearing only inside those two disclaimers and nowhere as a subject. Three notes, one family (`liquidity-volume`), and the session is a **documented negative**: the measure replicates essentially exactly under two Critical-Finance-Review-commissioned replications, and the premium does not survive them — ten of ten specifications without significance in one, a traded factor significantly weaker at its natural monthly rebalance in the other, and the predicted-beta version confounded by construction. Acharya–Pedersen then report that all three of their liquidity betas are strongly collinear with the illiquidity **level** the lab already closed on the mean channel, and Brunnermeier–Pedersen predict that collinearity from theory. New: **#170–#173**, of which three are free and the fourth is the anti-candidate against the sorted book. One finding runs the other way and is carried deliberately: liquidity risk is reported **essentially unrelated to momentum**, so the leg is not the incumbent in costume — it is decorrelated with no premium, which #140(a) already priced at zero. **Carried unchanged and still genuinely unrun: #82** (twenty-fourth session), **#94**, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, **#165**'s second use, **#166**, **#167**. **#152 stands.** **#163 and #169 stay anti-candidates.** Access: Pástor–Stambaugh 2003 read as NBER WP 8462 (a `/GNN`-glyph PDF needing a +29 offset decode, a new extraction shape for this folder); Acharya–Pedersen as the typeset JFE version of record; Brunnermeier–Pedersen as NBER WP 12939; all three CFR replication papers from the journal's own open PDFs. **Not read, and nothing is claimed from them:** Jorion (1986) and Frost–Savarino (1986), the two JFQA primaries for shrinking an estimated *mean vector*, which Semantic Scholar reports `CLOSED` and whose one hosted copy answered with a connection reset — see the open-questions entry. | Pástor–Stambaugh 2003 (JPE) + Li–Novy-Marx–Velikov 2019, Pontiff–Singla 2019 and Pástor–Stambaugh 2019 (CFR) (`2026-09-29-liquidity-risk-priced-innovations.md`); Acharya–Pedersen 2005 (JFE) (`2026-09-29-liquidity-adjusted-capm-three-betas.md`); Brunnermeier–Pedersen 2009 (RFS) (`2026-09-29-funding-liquidity-and-margin-spirals.md`) |
 | 2026-09-30 (session 47) | **The first session in seventeen aimed by a gap the *previous session named and left open in writing*, with its access findings already recorded — and the branch's headline turned out to be a free kill rather than a candidate.** 2026-09-29 closed liquidity risk as a documented negative and identified the one unit it could not cover: **shrinkage of an estimated mean vector**, with both primaries verified closed. A grep across all 143 prior notes re-confirmed zero hits for `Bayes-Stein`, `grand mean`, `Michaud` and `shrinkage of means`; the folder's five shrinkage notes shrink a covariance, an SDF coefficient or a selected maximum, never the score vector a book is built from. Both 1986 primaries stayed closed on every route tried (see the note's Access section: Merage faculty tree gone, Cambridge bot page again, Frankfurt behind **Anubis at HTTP 200** — a tenth refusal shape — and Kan's Rotman paper directory gone, which matters beyond tonight). The estimator was therefore read from an independent statement of it and the primary is marked not read. New: **#174–#178**. **The session's main output is #174, which removes a candidate shape**: composed with `c - c.min() + FLOOR`, scalar-target score shrinkage cancels to a `FLOOR` reparametrisation, so a Bayes-Stein score candidate is a knob the lab already owns — zero trials. What survives is the *target*: #176 (partial group-mean demean, the missing middle between the raw score and full country-demeaning [2026-09-10]) and #177 (weight-space shrinkage, the only operator found that acts hardest on the top-ten weights). Free with the branch: #175's `p/n ≈ 1`-is-worst warning and the Mahalanobis inflation correction. | Jorion 1986 (JFQA) + Frost–Savarino 1986 (JFQA) + Bock 2018 (`2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`); Bodnar–Okhrin–Parolya 2019 (J. Multivariate Analysis) (`2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`); Bodnar–Okhrin–Parolya 2023 (JBES) (`2026-09-30-shrinking-portfolio-weights-toward-a-target.md`) |
+| 2026-10-01 (session 48) | **The first session in eighteen aimed at the *sample* rather than at anything computed from it, and the aim was set by the lab being halted rather than by a gap detector.** Two consecutive nightlies [`journal.md` 2026-09-29, 2026-09-30] stopped at step 0 over an unmerged point-in-time-universe branch whose own report re-scores the seated champion from validation Sharpe 1.27 to 0.19, and no research session had ever covered the mechanism that claim rests on. A grep across all 146 prior notes returned **zero** for `delisting bias`, `absorbing barrier`, `pre-sample`, `discovery sample` and `p-hacking`; `2026-08-26` covers selection on end-of-period *rank* and nothing covers selection on *survival* or on the *discovery window*. **Families → … → an estimated moment → the conditioning that put the data in front of the lab.** Headline: the lab's largest measured artifact — "the level *is* the survivorship artifact" — is a **theorem**, `dp* = (μ + σ²·π_p/π)dt + σ dz`, which adds drift in proportion to variance and leaves variance alone, and which predicts two further things the lab has not checked (#179). Second: a measured *decorrelation* is itself selected on and reverts, which is the number `program.md` prices a challenger with (#180). Third: how large the discovery-window discount is, is **contested** — 40–60% against ~12%, both Tier A, each citing the other — and the smaller estimate comes with a dispersion-based (not count-based) shrinkage formula the lab can run on its own 104 trials (#181). New: **#179–#182**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the lab ran no trials for a third night. | Brown–Goetzmann–Ross 1995 (`2026-10-01-survival-conditioning-induced-drift.md`); Linnainmaa–Roberts 2018 (`2026-10-01-discovery-sample-and-anomaly-decay.md`); Chen 2021 + Chen–Zimmermann 2020 (`2026-10-01-limits-of-p-hacking-publication-bias.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-01] Read this first: tonight's headline is that the lab's biggest measured artifact is a
+  theorem, and it was found by aiming at the thing that has the lab stopped.** Three nights of nightly
+  strategy sessions have now produced zero trials [`journal.md` 2026-09-29, 2026-09-30, and the branch
+  is unchanged tonight], all of them halted over whether this repo's results survive a point-in-time
+  universe. No research session in forty-seven had covered the mechanism that question turns on.
+  **The result is #179's first half and it costs nothing:** conditioning a price process on survival
+  gives `dp* = (μ + σ²·π_p/π)dt + σ dz`, so survivorship adds drift **proportional to variance** and
+  leaves **variance unchanged** — a Sharpe inflated purely through its numerator — and with a lower
+  absorbing barrier the drift is `σ²/(p − p̲)`, largest for the names nearest to exit.
+  `experiments/learnings.md` reached "the level *is* the survivorship artifact" inductively across
+  fourteen mechanism screens with no theory attached; **it now has one, and the theory makes two
+  further predictions the lab has never checked** (the effect should be linear in `σ²` not `σ`, and it
+  should concentrate in the near-exit tercile). Read the other way this is also a warning the lab will
+  not enjoy: the same framework says survivorship conditioning induces a first-order stochastic
+  increase in **later**-period returns among survivors, i.e. a continuation component present by
+  construction, in a repo whose champion is a momentum rule on a current-constituent universe. Second
+  new item: **#180**, the leaderboard's `rho` is a selected quantity and should be expected to revert,
+  which matters because `program.md` prices every challenger off it. Third: **#181**, a
+  dispersion-based rather than count-based shrinkage the lab can run on its own 104 trials.
+  Anti-candidates: **#182**. **Nothing is closed by this entry** — no lab measurement was taken
+  tonight. **Carried unchanged and still genuinely unrun: #82** (twenty-sixth session, still the
+  oldest unspent free item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half,
+  **#159**, **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s second use, **#166**, **#167**,
+  **#168**), the 2026-09-29 set (**#170**, **#171**, **#172**) and the 2026-09-30 set (**#174**'s
+  reading, **#175**, **#176**, **#177**). **#152 stands.** **#163, #169, #173 and #178 stay
+  anti-candidates.**
+- **[2026-10-01] What should aim the next session, in order — and for the first time in this file's
+  history the honest answer is that none of it is aimed at the lab, because the lab is not running.**
+  - **#179 goes first and it is the cheapest item on the list.** Two IC reads on the train split,
+    both on panels the lab already computes, and both are predictions of a *formula* rather than
+    guesses — which means either outcome is informative. It also happens to be the only item here
+    that bears on the branch decision the human owns, because it tests whether the artifact behaves
+    the way a survival-conditioned panel must.
+  - **Then #180**, and it is ranked above #181 despite being narrower, because it is the only item on
+    this file that corrects a number `program.md` instructs the lab to use. Two already-scored splits,
+    no trial.
+  - **Then #181**, which is the larger piece of work and the one most likely to be mis-run. Compute
+    `σ̂_μ` **per family**, never pooled — pooling a 34-trial `price-trend` sweep with the scouts
+    understates the dispersion and over-shrinks everything, and the per-family comparison is the
+    actual finding.
+  - **Then the carried items**, unchanged: #174's reading before any score-shrinkage proposal, then
+    #175, #177, #176.
+- **[2026-10-01] The transferable output, and it is an aiming rule rather than an evidentiary one.**
+  **When the lab is stopped, the thing that stopped it is the unit to check coverage at.** Sessions
+  28–47 built progressively finer detectors for gaps in what the lab *computes*; tonight's gap was in
+  what the lab *is arguing about*, and it was sitting in plain sight in two consecutive journal
+  entries. The generalisation: *a halt, a protocol issue or a human-gated decision in `journal.md` is
+  a coverage target, and it outranks the detector when one is open.* This folder had written 146 notes
+  while the one question blocking the lab — what a survivorship-selected universe does to a measured
+  cross-sectional result — had exactly one note on one of its three selection rules.
+- **[2026-10-01] A tension recorded rather than resolved, and it is the sharpest this file holds.**
+  Two Tier-A studies of the same literature put the discovery-window inflation of a measured edge at
+  **40–60%** and at **~12%**. Each cites the other by name as the opposing view. The second pair also
+  cannot reconcile its own t-hurdle (1.79) with Harvey–Liu–Zhu's (2.88) and says so in print. They are
+  not quite measuring the same object, but the gap is too wide for that to dissolve it. **Carry both.**
+  What they agree on is the sign and the shape — a measured in-sample edge is an overestimate, by more
+  for noisier and shorter-sampled candidates, and the correction depends on how dispersed the
+  candidate family's true effects are. **The lab should compute its own constant (#181) and adopt
+  neither**, which is the one course of action both papers' methods support.
+- **[2026-10-01] Access findings, recorded so the next session does not repeat the searches.**
+  **(1) `pdftoppm` IS installed** — `research/README.md`'s 2026-09-08 entry saying it is not, and
+  recommending `pymupdf` as the workaround, is **out of date**. `pdftoppm -png -r 130 -gray` rendered a
+  35-page text-layerless scan first time with no scratchpad install; `pdftotext` is present too. Use
+  `pdffonts` (an empty font table) as the one-command scan diagnostic. **(2) `web.archive.org` is
+  unreachable through this environment's relay** — every request died with `Recv failure: Connection
+  reset by peer`, and `/__agentproxy/status` named the cause as `ws_closed_mid_exchange` tunnels to
+  `web.archive.org:443`; `WebFetch` refused the host outright. This is a **transport failure, not an
+  origin refusal**, and it is the first of its kind in this folder's records — note that the
+  `archive.org` availability and metadata APIs kept working throughout, so a snapshot can be *located*
+  and not *fetched*. Plain `http://` URLs are separately refused by the proxy with
+  `Blocked by egress policy`. **(3) The NYU Faculty Digital Archive (`archivefda.dlib.nyu.edu`) is a
+  working channel** for pre-1996 finance working papers and served a scan the publisher and every
+  mirror refused; search via `/simple-search?query=`, then read the `bitstream/2451/<id>/<n>/<file>`
+  link out of the landing page. The mirror hostname `archive.nyu.edu` served the landing page but
+  **not** the bitstream. **(4) FEDS (`federalreserve.gov/econres/feds/files/<year><number>pap.pdf`) is
+  a reliable channel** and served two closed Tier-1 articles' working-paper versions first time; FEDS
+  papers carry their own DOIs (`10.17016/FEDS.YYYY.NNN`). Note both changed title between working
+  paper and journal, so search by DOI or author, not title. **(5) `scholarsarchive.byu.edu` is behind
+  a Cloudflare challenge on both its `cgi/viewcontent.cgi` and `context/.../viewcontent/` endpoints**
+  (HTTP 403, ~5.6 KB "Just a moment…" body) even with a browser UA and referer — which matters because
+  it is the **sole** OA location Unpaywall, OpenAlex and Semantic Scholar all report for Shumway's
+  delisting papers. `core.ac.uk` is behind the same challenge and its v3 API rejects an unkeyed title
+  query. **(6) Semantic Scholar returns a clean `not found` for a real Tier-1 DOI**
+  (`10.1093/rfs/hhy030`, resolved by both Crossref and OpenAlex) — a third S2 failure mode after the
+  working DOI endpoint and the rate-limited title search, and one that looks like an answer. Crossref
+  was never rate-limited tonight and remains the right first index.
+- **[2026-10-01] Three gaps identified and deliberately left open, two of them carried from last
+  session.** **(a) Delisting returns — still uncovered, and it is the missing third of tonight's
+  section.** Shumway 1997 (JF, 1,071 Crossref / 1,087 OpenAlex citations, checked 2026-10-01) and
+  Shumway–Warther 1999 (JF, 482 Crossref) document that correct delisting returns are unavailable for
+  most negatively-delisted names and that the omitted returns are large. Tonight's section covers what
+  survival conditioning does to the names that *stay*; this pair covers the returns of the ones that
+  *leave*, which is the half a point-in-time universe fix still has to supply separately. **Both are
+  blocked**: their only indexed OA location is the Cloudflare-challenged BYU repository (above), the
+  author's Michigan faculty tree is 404, and Wayback is unreachable. Next session: try an
+  institutional mirror, a course-page copy, or a Tier-2 review that states the imputation convention
+  in full — the `−30%` performance-delisting imputation is itself a citable construction recipe and
+  appears in Linnainmaa–Roberts' data section, which this folder has now read. **(b) Kan–Zhou (2007,
+  JFQA, 605 Crossref / 664 S2)** — carried from [2026-09-30] and **re-confirmed blocked tonight by
+  four further routes**: `www-2.rotman.utoronto.ca/~kan/papers/erisk8.pdf` answers HTTP 200 with a
+  1.6 KB Rotman 404 handler, `www.rotman.utoronto.ca/~kan/` and `rotman.utoronto.ca/~kan/` both 404,
+  Guofu Zhou's `apps.olin.wustl.edu/faculty/zhou/` tree is gone, and the CICF conference mirrors that
+  index the working-paper version (`cicfconf.org`, `www.cicfconf.org`) established a tunnel and then
+  returned nothing. The one route not yet tried is the published-version title's earlier form,
+  *"Optimal Estimation for Economic Gains: Portfolio Choice with Parameter Uncertainty"*, which is how
+  the working paper is indexed. **(c) Frost–Savarino (1986, JFQA, 321 Crossref / 410 S2)** — carried
+  unchanged from [2026-09-30], still covered only from its abstract, still with no intensity formula
+  claimed. Nothing was attempted on it tonight.
+- **[2026-10-01] One observation for the human, offered as a reader of `journal.md` and not as a
+  result.** The nightly strategy loop has now recorded zero trials on three consecutive nights, and
+  every one of the three unblock conditions the 2026-09-29 and 2026-09-30 entries list requires a
+  human action that no bot commit can satisfy. This folder has kept producing notes throughout, which
+  makes `main` look active while no research is happening — the 2026-09-30 entry says exactly this and
+  it is worth repeating from this side of the fence. **Tonight's branch is at least aimed at the
+  decision itself**: #179 is a test of whether the survivorship artifact behaves the way the theory
+  says it must, and `notes/2026-10-01-survival-conditioning-induced-drift.md` records two cautions
+  about the cutover that come from the literature rather than from either side of the dispute — that a
+  point-in-time *membership* fix does not remove the *continuity-of-series* conditioning (gap (a)
+  above), and that the `(4−π)/2` long-horizon variance-ratio limit is a free, parameter-free falsifier
+  for whether a fix changed anything. Neither is a trial and neither reads the holdout.
 
 - **[2026-09-30] Read this first: tonight's deliverable is a *subtraction*, and it is worth more than
   the two candidates beside it.** The unit 2026-09-29 left open — shrinkage of an estimated mean

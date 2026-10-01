@@ -101,9 +101,8 @@ snippets. Three practical limits to plan around:
   an egress block — do not report it as one. Reach those papers via DOI metadata, a preprint
   mirror, or the publisher's landing page instead.
 - **`WebFetch` cannot read PDFs**, which is most of what you want. It returns the raw binary
-  and reports that it cannot parse it (it does save the file, and names the path). `Read` also
-  needs `pdftoppm`, which is not installed. The working recipe is to extract the text yourself
-  in the scratchpad, without touching the repo's `.venv`:
+  and reports that it cannot parse it (it does save the file, and names the path). The working
+  recipe is to extract the text yourself in the scratchpad, without touching the repo's `.venv`:
 
   ```bash
   cd "$SCRATCHPAD"
@@ -139,11 +138,15 @@ snippets. Three practical limits to plan around:
   egress block, and it should be reported as such rather than as an unreachable source. Find the
   identifier with `archive.org/advancedsearch.php?q=title:("...")&output=json`.
 
-- **`pymupdf` renders a text-layerless scan to PNG, which removes the missing-`pdftoppm`
-  dependency** (added 2026-09-08). Install it into the scratchpad `pylibs` exactly like `pypdf`
-  (`--target ./pylibs pymupdf`), then `page.get_pixmap(dpi=140).save(...)` per page and `Read` the
-  images. Always check `page.get_text()` first: a PDF that extracts 38 characters from 39 pages is
-  a scan, and no amount of `pypdf` tuning will fix it.
+- **A text-layerless scan has to be rendered to images and read visually.** Always detect it
+  first: `pdffonts <file>.pdf` printing an **empty font table**, or an extraction yielding a few
+  dozen characters from dozens of pages, means a scan, and no amount of `pypdf` tuning will fix it.
+  **`pdftoppm` is installed** (corrected 2026-10-01; the 2026-09-08 entry that said otherwise was
+  wrong, and `pdftotext` is present too) — `pdftoppm -png -r 130 -gray <file>.pdf <outdir>/p` needs
+  no install and renders one PNG per page to `Read`. `pymupdf` remains a fallback: install it into
+  the scratchpad `pylibs` exactly like `pypdf` (`--target ./pylibs pymupdf`), then
+  `page.get_pixmap(dpi=140).save(...)` per page. No OCR tool is installed, so a scan costs one image
+  read per page — read the abstract, the model section and the conclusion, not all of it.
 
 - **`pm-research.com` (Portfolio Management Research: JPM, JFDS, JOI …) refuses an automated client
   by redirecting into an OpenID authorization flow** (added 2026-09-08) rather than returning a
@@ -176,6 +179,39 @@ snippets. Three practical limits to plan around:
   answered — a synthetic `generateData` call in a reference implementation tells you the paper's
   "out-of-sample" test used no market data. Say in the note that the algorithm was read from the
   code and the argument was not read.
+
+- **Two more working channels, and a transport failure that is not a refusal** (added 2026-10-01).
+  **The NYU Faculty Digital Archive (`archivefda.dlib.nyu.edu`)** hosts the NYU Stern working-paper
+  series and is the route to pre-1996 finance working papers whose journal version is closed: search
+  `/simple-search?query=<title>`, then read the `bitstream/2451/<id>/<n>/<file>.pdf` link out of the
+  landing page. Note the mirror hostname `archive.nyu.edu` served the landing page but **not** the
+  bitstream, so try both. **FEDS (`federalreserve.gov/econres/feds/files/<year><number>pap.pdf`)**
+  serves Federal Reserve Board staff working-paper versions of closed Tier-1 articles, parses
+  cleanly, and carries its own DOIs (`10.17016/FEDS.YYYY.NNN`); beware that titles often change
+  between working paper and journal, so resolve by DOI or author, never by title.
+  **`web.archive.org` is currently unreachable through this environment's relay** — every request
+  dies with `Recv failure: Connection reset by peer`, `/__agentproxy/status` names the cause as
+  `ws_closed_mid_exchange` tunnels to `web.archive.org:443`, and `WebFetch` refuses the host. That is
+  a **transport failure, not an origin refusal**, and it must be reported as such; note that the
+  `archive.org` availability and metadata APIs keep working, so a snapshot can be located and not
+  fetched. Plain `http://` URLs are separately refused by the proxy with `Blocked by egress policy` —
+  always use `https://`.
+
+- **`scholarsarchive.byu.edu` (bepress) is Cloudflare-challenged on every PDF endpoint** (added
+  2026-10-01): both `cgi/viewcontent.cgi?article=…` and the `context/<coll>/article/<id>/viewcontent/`
+  form return HTTP 403 with a ~5.6 KB "Just a moment…" body, with or without a browser UA and referer.
+  This matters out of proportion to one host, because bepress repositories are frequently the **sole**
+  OA location that Unpaywall, OpenAlex and Semantic Scholar all report for a closed article —
+  an `openAccessPdf: GREEN` from any of the three is not a promise the file is fetchable.
+  `core.ac.uk`, the obvious aggregator fallback, is behind the same challenge and its v3 API rejects
+  an unkeyed title query.
+
+- **Semantic Scholar's third failure mode is a clean `not found` for a real, indexed DOI** (added
+  2026-10-01). `10.1093/rfs/hhy030` — a Tier-1 RFS article that both Crossref and OpenAlex resolve —
+  comes back as `Paper with id DOI:… not found`. Like the Incapsula and Anubis cases, it *looks like
+  an answer*. Never record "not indexed" on one index's say-so; **Crossref
+  (`api.crossref.org/works/<doi>`, `is-referenced-by-count`) was never rate-limited and is the right
+  first call**, with OpenAlex second and Semantic Scholar third.
 
 ## Anti-lookahead policy (hard rules)
 
