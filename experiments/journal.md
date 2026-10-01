@@ -16959,3 +16959,117 @@ and unblocks condition 1 on its own; the guard matters at cutover, not at merge.
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, second night.**
 
 ## Research session — 2026-10-01 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-10-01 — `origin/survivorship-pit-v2` still unmerged; third consecutive halt
+
+Recorded by the nightly strategy agent, not by `run_experiment.py`. No trial record was
+added, altered, or removed in writing this entry; `trials.jsonl` remains exactly as
+`run_experiment.py` last wrote it (**104 records**). **No experiment was run tonight and no
+holdout was read.**
+
+### State check — third night, nothing a human controls has moved
+
+The step-0 condition fires on the same single branch. The diagnosis in the **2026-09-29**
+entry is the full argument and it stands unchanged; the **2026-09-30** entry is the first
+repeat. This entry records only what moved and escalates, rather than restating either.
+
+| Checked tonight | 2026-09-29 | 2026-09-30 | 2026-10-01 |
+|---|---|---|---|
+| `git branch -r --no-merged origin/main` (non-`archive/*`) | `survivorship-pit-v2` | same | **same** |
+| Its tip | `d5bc17b` | `d5bc17b` | **`d5bc17b` — no new work, third night** |
+| `origin/archive/*` branches | 0 | 0 | **0 — branch still not parked** |
+| `program.md` decision line | — | unchanged | **unchanged** (`git diff d72a860..origin/main -- program.md CLAUDE.md` empty) |
+| `trials.jsonl` | 104 | 104 | **104** |
+| Champion | `pt_mom_evar_arbrisk` (#98) | same | **same** |
+| `main` engine | green | 33 passed | **33 passed in 36.7s** |
+
+Commits on `origin/main` since the 2026-09-30 halt are **bot-authored only**: `1eefe25`
+`data-refresh-bot` daily refresh, `84116b6` learning-agent research notes. **No human commit,
+no merge, no archive, no `program.md` line.** None of the three unblock conditions has been met.
+
+Re-verified tonight rather than assumed — the branch still touches none of the trial-history
+files:
+
+```
+git diff --stat origin/main...origin/survivorship-pit-v2 -- \
+  experiments/trials.jsonl experiments/journal.md experiments/leaderboard.json \
+  experiments/learnings.md strategies/            # → empty
+```
+
+So the deflated-Sharpe bar on `main` is **not** split, `past_trial_sharpes()` sees the true
+104, and this is still **not** a repeat of 2026-08-16. The halt has never been about a
+corrupted bar. Data store is current (last close 2026-09-30, one trading day back — not stale).
+
+### Why the halt still binds
+
+Unchanged and still the binding reason, not the topology: the branch's own report re-scores
+seated champion #98 from validation Sharpe 1.27 to **0.19** under a point-in-time universe,
+and its recommended cutover order ends *"cut over with a fresh deflated-Sharpe history. v1
+trial Sharpes are not on the v2 scale: pooling them would inflate the variance term and the
+bar."* Eight v1 trials tonight would each permanently raise a bar whose own author plans to
+discard it, scored against an incumbent the same harness values at one-sixth of its recorded
+Sharpe. Recording zero is the same honest move for the third time, for the same reason.
+
+### One thing that did move, and it is not an unblock
+
+Tonight's learning-agent session (`84116b6`, `research/SUMMARY.md`) was aimed by this halt and
+added three notes on the exact mechanism the halt turns on: Brown-Goetzmann-Ross 1995,
+Linnainmaa-Roberts 2018, Chen 2021 / Chen-Zimmermann 2020. Its headline is that conditioning
+on survival induces drift as a *theorem*, not an empirical tendency.
+
+Stated with the discount `research/README.md` requires: that is **literature, not verified on
+this repo's data**, two of the three are `published_post_2018`, and no performance expectation
+from it enters any hypothesis or lesson here. What it does is make the branch's re-scoring
+finding *less* likely to be a harness artifact — the direction of #98's collapse is what the
+theory predicts. It therefore **strengthens the case for the cutover and weakens the case for
+spending v1 trials in the meantime.** It is not a substitute for a human decision, and the
+research arm producing notes nightly while zero trials run is precisely the "`main` looks
+active while no research happens" failure the 2026-09-30 entry named.
+
+### Escalation — this is no longer a pause
+
+Three consecutive nights at zero trials. Two further facts for whoever reads this first:
+
+- **The stall cannot self-clear.** All three unblock conditions require a human action. No bot
+  commit satisfies any of them. The loop will halt identically every night until one happens.
+- **Cost remains opportunity only.** Nothing corrupted, nothing spent, no holdout read on any
+  of the three nights. The 104-trial history and the unspent holdout are intact. That is the
+  halt working as designed — but designed-for behaviour repeated indefinitely is a stalled lab.
+
+Because no human reads these entries in-session, tonight's agent also sent a push
+notification naming the one-command unblock. That is the first escalation outside the journal
+in three nights; prior nights had no channel and were read by nobody but the next agent.
+
+### For the human — one command is enough
+
+Any **one** of these restarts the loop. Parking is the one-command option if the cutover is not
+ready:
+
+```bash
+# 1a. park it — the integrity check ignores archive/* by design
+git push origin origin/survivorship-pit-v2:refs/heads/archive/survivorship-pit-v2
+git push origin --delete survivorship-pit-v2
+
+# 1b. or land it — v2 stays OFF while PROTOCOL_VERSION defaults to 1,
+#     so merging does not by itself change any gate
+git checkout main && git merge --no-ff origin/survivorship-pit-v2 && git push origin main
+```
+
+2. **Or say which protocol the lab searches under**, in `program.md`. If v1 history is to be
+   discarded at cutover, v1 trials run before then are waste and the agent should stay stopped
+   whatever the branch topology says — then please record that, so the halt is a decision on
+   record rather than a topology accident. If v1 continues in parallel, say that and the halt
+   condition becomes topology-only.
+
+3. **Or settle the branch disagreement, now twenty-six sessions old.** The session-start hook,
+   the harness's per-run-branch requirement (`main-9xel5d` tonight) and `CLAUDE.md`'s
+   `git push origin main` still do not agree. As on both prior nights this entry is committed
+   once and pushed to `main` and to the per-run branch as the **identical commit**, so no
+   history splits either way. Still care, not a fix.
+
+The agent did **not** park or rename the branch itself: it is a human's unmerged work, renaming
+it destroys the reference others may hold, and no instruction in `CLAUDE.md`, `program.md` or
+the nightly prompt authorises an agent to move someone else's branch. That remains the human's
+call, and it is the cheapest of the three.
+
+**Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, third night.**
