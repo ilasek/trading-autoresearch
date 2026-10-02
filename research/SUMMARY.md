@@ -5044,6 +5044,104 @@ how dispersed the candidate family's true effects are. What they disagree on is 
 `CLAUDE.md`'s rule against importing constants across contexts makes that disagreement cheap for this
 lab to live with — the lab should compute its own, not adopt either.
 
+### What the *measurement* does to a measured result — the pool's weighting, the leavers, and the estimator (cross-family)
+
+Three notes, added 2026-10-02, and they continue the previous session's axis one step inward.
+[2026-10-01] asked what the **conditioning that put the data in front of the lab** does to a result.
+Tonight asks what the **three measurement choices sitting on top of that data** do to it: how the pool
+is bucketed and weighted, what happens to the members that leave it, and which estimator computes the
+average. All three turn out to push the same way — **upward, in the numerator, hardest for the pool's
+noisiest members** — which is the same signature as the survivorship artifact this lab has already
+identified, from three causes that are not survivorship.
+
+**(1) The pool's weighting decides whether a cross-sectional effect exists at all.** Hou–Xue–Zhang
+(2020, RFS, Tier A, 1,037 Crossref citations) re-implement **452 published anomalies** from their
+original definitions and run each through a grid of procedures. With NYSE breakpoints and
+value-weighted decile returns, **65% cannot clear `|t| ≥ 1.96`**; with pooled NYSE-Amex-NASDAQ
+breakpoints and equal weights — what many original studies used — the failure rate falls to 41.4%. The
+mechanism is one sentence: **the extreme buckets of an uncontrolled sort fill up with the noisiest
+members of the pool.** Microcaps are ~3% of aggregate market capitalisation and ~60% of the *count* of
+names, they carry the largest cross-sectional dispersion of both returns and anomaly variables, and
+with pooled breakpoints they can be **more than 60% of the names in an extreme decile**. Breakpoint
+choice decides who reaches the tail; weighting decides how loudly the tail speaks; OLS Fama-MacBeth
+does the same thing in regression form because OLS weights by count. The casualty is concentrated
+rather than spread: in the **trading-frictions** category (liquidity, microstructure, volume,
+volatility) **102 of 106 variables — 96% — fail** at the single-test bar, and 60.4% still fail even at
+maximum microcap weight; momentum (63.2%) and investment (73.7%) replicate acceptably. Adjusting for
+multiple testing with Harvey–Liu–Zhu's Benjamini–Hochberg–Yekutieli cutoff of **2.78** drops the
+NYSE-VW replication rate to 17.9%. It is **not** sample extension: re-run on each study's own original
+window the rate is 34.7% against 35% extended. Tier A, `validation_overlap: false`,
+`published_post_2018: true` → `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`.
+
+**This is also the folder's second unresolved Tier-A-against-Tier-A disagreement, and it has the same
+shape as the first.** Jensen–Kelly–Pedersen (2023, JF, `notes/2026-08-25-hierarchical-bayesian-factor-replication.md`)
+study much the same literature and conclude that most factors **do** replicate, globally. They differ
+on method, not data: HXZ test one anomaly at a time against a fixed `|t|` bar, JKP shrink each toward
+its cluster mean under a prior. As with the 40–60% versus ~12% discovery-window gap [2026-10-01],
+**both sides agree on sign and shape — a measured in-sample cross-sectional edge is an overestimate,
+by more for noisier candidates — and disagree on the magnitude. Carry both; adopt neither constant.**
+
+**(2) The members that leave the pool have large negative returns, and *which end of the sort they
+occupied* sets the sign of the bias.** Three Tier-A sources, abstract-level coverage with the
+construction recipe read in full from HXZ's Appendix B. Shumway (1997, JF, 1,072 Crossref) establishes
+that negative delistings "are generally surprises", that the correct delisting return is unavailable
+for most negatively-delisted names, and that the omitted returns are **large**. Shumway–Warther (1999,
+JF, 483 Crossref) establish on NASDAQ that the missing returns are "large and negative on average",
+that a **−55%** replacement for a missing performance-related delisting return corrects the bias, and —
+the sharpest cross-sectional consequence in the cluster — that after the correction "there is no
+evidence that there ever was a size effect on NASDAQ", a published premium that turns out to be the
+delisting bias under another name. **Beaver–McNichols–Price (2007, JAE, 231 Crossref) supply the rule
+that generalises:** including delisting firm-years *increases* measured strategy returns for some
+anomaly variables and *decreases* them for others, "due to the disproportionate number of delisting
+firm-years in the lowest decile of these variables" — and such firm-years are usually excluded **not by
+decision but by construction** (a missing final return, a filter requiring subsequent data, a
+complete-case merge). So **"survivorship bias inflates results" is half a sentence**: exiting names
+crowd one end of a sort, and whether a book is long or short that end decides the sign. The
+delisting-adjusted-return algebra, the three-way recovery of the partial-month return, the last-day
+case (push the event return into the following month — booking it in the announcement month is a
+one-day peek), and the **causal** imputation (trailing-60-month mean conditional on exchange × delisting
+type, preferred over a static constant precisely because it survives a causality check) are all written
+out in → `notes/2026-10-02-delisting-returns-the-other-half-of-survivorship.md`.
+
+**(3) The estimator itself is biased upward, and worst for the characteristics this lab screens.**
+Asparouhova–Bessembinder–Kalcheva (2010, JFE, 213 Crossref; 2013, JF, 220 Crossref), abstract-level.
+A recorded price is the fundamental times a transitory error, so the error enters a return twice with
+opposite signs and does **not** wash out of an average: measured mean returns are biased upward by
+roughly the noise variance. ABK 2013 state that this biases three distinct objects — **a security's
+mean return, a difference in mean returns across portfolios (every decile spread), and a regression
+parameter (every IC and Fama-MacBeth slope)** — and that the bias "can be large in economic terms, for
+example, equal to 50% or more of the corrected estimate for firm size and share price." ABK 2010 add
+the clause that matters most here: the bias bites **"particularly when security-level explanatory
+variables are cross-sectionally correlated with the amount of noise"** — so illiquidity, price level,
+turnover and volatility will **appear priced even if they are not**, and they document a significant
+upward bias in estimated premiums for an array of illiquidity measures. Two qualifications they state
+themselves: the bias shrinks but **persists** for large-cap, post-decimalization samples, and after
+correction the illiquidity premiums are "smaller, **but still significant**" — this is a bias result,
+not a debunking. The correction's *form* is a weighting change (WLS rather than OLS); **its algebra was
+not read and must not be guessed.** → `notes/2026-10-02-noisy-prices-and-biased-premium-estimates.md`
+
+**The joint statement, which is worth more than any of the three alone.** HXZ find the
+trading-frictions literature collapses once the pool's noisiest members stop dominating the extreme
+deciles. ABK find that premium estimates for noise-correlated characteristics are upward biased by that
+same noise. **These are the same finding reached from opposite ends — one by changing the weighting of
+the pool, the other by changing the estimator.** And both land on top of the survival-conditioning
+drift of [2026-10-01], which is also numerator-only and also largest for high-variance names. **This
+lab therefore has at least three mechanisms that produce its single largest measured artifact, and has
+separated one.** Distinguishing them is cheap and is this branch's main deliverable (#183, #185):
+survivorship bias is a property of the **pool** and should be invariant to how the cross-sectional
+average is weighted; noise bias is a property of the **estimator** and should shrink when the noisiest
+names are given less voice in that average. Same data, same train split, no trial, no holdout, and
+either outcome is a finding.
+
+**What explicitly does not transfer, and the section would be misread without it.** This repo's
+universe is ~145 large global stocks and ETFs and contains **no microcaps at all**. HXZ's prescription
+(NYSE breakpoints, value weights) is therefore **not** a defect list for this lab, and "equal weighting
+is dangerous" in HXZ's hands is shorthand for "equal weighting overweights microcaps" — an argument
+that does not apply to a pool without any. `CLAUDE.md`'s rule against importing constants by analogy
+applies at full strength to the −55% delisting constant, to the 50%-of-corrected-estimate noise
+magnitude, and to the 2.78 cutoff (whose own authors call it heuristic in a footnote). What transfers
+from all three notes is **mechanism and discipline**, not a number.
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -8693,6 +8791,123 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-01-limits-of-p-hacking-publication-bias.md`
 
 
+183. **FREE, and it is the highest-value item this folder has added in three sessions: the lab has at
+    least three mechanisms producing its single largest measured artifact, and has separated one.** The
+    artifact is "the level *is* the survivorship artifact", established inductively across fourteen
+    mechanism screens and given a theorem on [2026-10-01]. Two further mechanisms produce the **same
+    signature** — an upward bias in the mean with the variance untouched, largest for the pool's
+    noisiest names — from causes that are not survivorship: the **pool's weighting** (an uncontrolled
+    sort reaches its extreme buckets disproportionately for the highest-dispersion members, HXZ) and
+    the **estimator** (multiplicative price noise biases a measured mean return upward by roughly the
+    noise variance, and does so hardest for characteristics cross-sectionally correlated with that
+    noise, ABK). **The discriminator is one line and it needs no new data:** survivorship bias is a
+    property of the *pool* and must be **invariant** to how the cross-sectional average is weighted;
+    noise bias is a property of the *estimator* and must **shrink** when the noisiest names are given
+    less voice in that average. So recompute an already-recorded IC — the raw Garman-Klass level IC and
+    the `ILLIQ` IC are both on the board — under a second weighting of the cross-sectional average, on
+    the same pool, on the **train** split. If the IC moves materially, part of what the lab has been
+    calling survivorship is estimator bias and the attribution in `learnings.md` is incomplete; if it
+    does not move, the survivorship account survives a test it has never faced. **Either outcome is a
+    finding**, and this is the same shape as [2026-09-30]'s symbolic-composition test: before
+    attributing an effect to a mechanism, check whether a cheaper mechanism produces it. Run it before
+    #179's two IC reads, because #179 interprets those same ICs. No trial, no holdout. Tier A, no
+    overlap. **The ABK correction's own algebra was NOT read — record the diagnostic, do not implement
+    an estimator from this entry** (see #187b).
+    → `notes/2026-10-02-noisy-prices-and-biased-premium-estimates.md`,
+    `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`,
+    `notes/2026-10-01-survival-conditioning-induced-drift.md`
+
+184. **FREE, and it signs an artifact the lab has only ever signed by assumption: the omission bias on
+    a sorted book points whichever way the leavers' decile does.** Beaver–McNichols–Price show that
+    including delisting firm-years *raises* measured strategy returns for some anomaly variables and
+    *lowers* them for others, because exiting names crowd one end of a sort rather than spreading over
+    it. So "survivorship bias inflates results" is half a sentence, and the missing half is **which end
+    of its score this lab's near-exit names would have occupied.** The lab cannot see its exited names,
+    but it can see the proxy and already computes every ingredient. *(a)* Build a near-exit proxy on the
+    **train** split from held panels — realised volatility level, drawdown depth from a long-run high,
+    price level, Amihud illiquidity. *(b)* Measure its cross-sectional rank correlation with the
+    champion's own score. *(c)* Read the sign: if the book **buys** the high-hazard end, the omission
+    flatters it, and flatters it most where the book is most concentrated; if the book **avoids** that
+    end, the omission works against the measured result and the artifact story is weaker than
+    `learnings.md` assumes. **The falsifiable prediction that comes with it:** exit hazard rises with
+    volatility, illiquidity and drawdown depth, so the artifact should be **largest for scores that buy
+    the high-volatility end and smallest or reversed for scores that buy the low-volatility end** — and
+    the low-beta-flavoured `range-variance` book should therefore carry *less* of it than the
+    volatility-level screens did. If that ordering fails, the leavers'-decile mechanism is not what
+    drives this repo's artifact. Pairs directly with #179: that item tests the artifact's **functional
+    form** (`σ²`, and hyperbolic in distance to the boundary), this one tests its **sign on the book**.
+    Train split only, no trial, no holdout. Tier A, no overlap.
+    → `notes/2026-10-02-delisting-returns-the-other-half-of-survivorship.md`
+
+185. **FREE, and it is a standing reporting discipline rather than a one-off measurement: report any
+    cross-sectional spread under at least two weightings and two bucket counts, and treat an effect
+    that lives in one cell as a statement about that cell.** HXZ's entire result is produced by running
+    452 anomalies through a grid — NYSE/All breakpoints × value/equal weights, plus FM-OLS and FM-WLS —
+    and reading which effects survive the grid rather than which survive one specification. The
+    *mechanism* behind the grid is universe-independent even though HXZ's microcap constants are not:
+    breakpoint choice decides **who reaches the tail**, weighting decides **how loudly the tail
+    speaks**, and OLS does the same thing in regression form because it weights by count. This lab
+    already owns the pieces (`notes/2026-09-06-number-of-portfolios-as-tuning-parameter.md`,
+    `notes/2026-09-12-rank-transform-what-it-preserves-and-what-it-breaks.md`) and has already been
+    bitten by exactly this: [2026-09-26] disqualified a screen because the same universe read `0.244·P`
+    on fourteen characteristics and `0.638·P` on eight de-duplicated ones. HXZ is the Tier-A evidence
+    that the check is load-bearing rather than cosmetic, measured on 452 published results. Costs
+    nothing — diagnostic work that scores no returns is free and unlimited under `program.md`. Tier A,
+    no overlap.
+    → `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`
+
+186. **FOR THE HUMAN, two readings that bear on the decision that has the lab stopped, neither of them
+    a verdict on a branch this folder has not seen.** *(a) A point-in-time **membership** fix does not
+    by itself fix the **leavers' returns**, and a re-scoring that treats an exited name as simply
+    ending is still omitting a large negative number.* Knowing who was in the universe in a given year
+    says nothing about what the ones who left earned on the way out; Shumway establishes those returns
+    are large and are surprises, and 14% of delisting event returns are unavailable even in CRSP
+    (16,745 delistings 1925–2016, 86% available). So a corrected backtest built on membership history
+    alone is **itself optimistic**, and the honest version needs an imputation. The recipe to use is
+    the causal one: a **trailing-60-month mean conditional on venue and delisting type**, not a static
+    full-sample constant, because the latter is a full-sample statistic applied backwards and is
+    exactly what `causality_check` exists to catch. *(b) The lab's own promotion bar, stated in HXZ's
+    units.* HXZ's single-test replication bar is `|t| ≥ 1.96` and their multiple-testing bar is 2.78;
+    `program.md` records that **no promotion in this repo's history has ever cleared `|t| = 2` on
+    validation**. Those two facts sit side by side with no new measurement needed: on HXZ's accounting
+    the entire champion sequence reads as a sequence of replication failures. This is **not** an
+    argument to change the gate — the gate is deflated-Sharpe-based and the holdout veto was added for
+    precisely this reason, and `CLAUDE.md` forbids reinterpreting protocol thresholds — but it is the
+    honest frame for how much any single promotion here is worth, and it belongs in a weekly report.
+    → `notes/2026-10-02-delisting-returns-the-other-half-of-survivorship.md`,
+    `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`
+
+187. **ANTI-CANDIDATES, five, and the first two are about mistaking tonight's notes for tools.**
+    *(a) Do not read "value-weight instead of equal-weight" as advice for this repo.* HXZ's objection to
+    equal weighting is specifically that it overweights microcaps; this universe has **none**, and value
+    weights here would pile the book into a handful of mega-caps and straight into the 25% position cap.
+    `CLAUDE.md`'s rule about not importing a constant measured on one pool into another applies to a
+    *prescription* as much as to a number. *(b) Do not implement "the ABK correction".* Its algebra was
+    **not read** — the papers are closed, the one GREEN OA URL is Cloudflare-challenged, and the
+    folder's standing rule is that an estimator is implementable only once its algebra has been read.
+    What #183 proposes is a **diagnostic** (compute the same statistic under two weightings and read the
+    gap), not an estimator; a plausible-sounding weighting is not a citation. *(c) Do not read ABK as
+    "illiquidity is not priced".* After their correction the illiquidity premiums are "smaller, **but
+    still significant**" — it is a bias result, not a debunking, and the lab's own closure of `ILLIQ`'s
+    mean channel [2026-09-24] stands on its own measurement, not on this. If anything ABK make the
+    lab's negatives in `liquidity-volume` and `range-variance` **more** credible, because they are
+    negatives found in spite of a bias that should have flattered them. *(d) Do not carry the −55%
+    delisting constant, the 50%-of-corrected-estimate noise magnitude, or the 2.78 t-cutoff into this
+    universe.* The first is NASDAQ, one vendor, performance-related delistings only; the second is CRSP
+    monthly for firm size and share price specifically; the third is a heuristic by its own authors'
+    footnote and controls a different object (FDR over a literature) than this lab's deflated Sharpe
+    (selection in one maximum over this repo's trial history). *(e) Do not read HXZ's per-category
+    replication rates as a ranking of `program.md` families to try.* They are rates over *published US
+    anomalies* in six categories that do not map onto this lab's families, and the trading-frictions
+    96% failure rate is evidence against the **bare characteristic sort**, not against the families
+    `liquidity-volume` and `range-variance` as mechanism space. Also do not treat ETF closures as
+    delistings of the Shumway kind: a closing index ETF returns NAV, a bankrupt operating company does
+    not, which is the documented basis for `program.md`'s "ETF-level strategies suffer least".
+    → `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`,
+    `notes/2026-10-02-delisting-returns-the-other-half-of-survivorship.md`,
+    `notes/2026-10-02-noisy-prices-and-biased-premium-estimates.md`
+
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -8746,8 +8961,130 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-29 (session 46) | **The first session in five not aimed by the previous nightly, and the first in sixteen aimed by a gap this folder had twice *declared in writing* rather than one a detector found.** The 2026-09-28 nightly spent 1 of 8 trials (**holdout NOT read**; running total of looks still **six**), killed `pt_mom_id_z` at `d = −0.127` with ~−0.099 left for the term after both calibrated confounds, produced the Active Share calibration pair (0.026 → `|t|` 0.49; 0.257 → `|t|` 1.95), closed the cost axis on the whole board, and told the human that seven of eight families are closed and "this universe, with these inputs, has been searched out". Its own next-ideas were three free measurements and an anti-candidate list — nothing this folder could supply. So the aim came from two of this folder's *own* disclaimers: `2026-08-29-amihud-illiquidity-measure-and-replication.md` and `2026-09-04-commonality-in-liquidity-across-countries.md` each set the illiquidity-**risk** literature (naming Pástor–Stambaugh and Acharya–Pedersen by author) aside as "a different literature", and a grep across all 140 prior notes returned **zero** for `liquidity beta`, `funding liquidity` and `flight to quality`, with `Pástor` appearing only inside those two disclaimers and nowhere as a subject. Three notes, one family (`liquidity-volume`), and the session is a **documented negative**: the measure replicates essentially exactly under two Critical-Finance-Review-commissioned replications, and the premium does not survive them — ten of ten specifications without significance in one, a traded factor significantly weaker at its natural monthly rebalance in the other, and the predicted-beta version confounded by construction. Acharya–Pedersen then report that all three of their liquidity betas are strongly collinear with the illiquidity **level** the lab already closed on the mean channel, and Brunnermeier–Pedersen predict that collinearity from theory. New: **#170–#173**, of which three are free and the fourth is the anti-candidate against the sorted book. One finding runs the other way and is carried deliberately: liquidity risk is reported **essentially unrelated to momentum**, so the leg is not the incumbent in costume — it is decorrelated with no premium, which #140(a) already priced at zero. **Carried unchanged and still genuinely unrun: #82** (twenty-fourth session), **#94**, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, **#165**'s second use, **#166**, **#167**. **#152 stands.** **#163 and #169 stay anti-candidates.** Access: Pástor–Stambaugh 2003 read as NBER WP 8462 (a `/GNN`-glyph PDF needing a +29 offset decode, a new extraction shape for this folder); Acharya–Pedersen as the typeset JFE version of record; Brunnermeier–Pedersen as NBER WP 12939; all three CFR replication papers from the journal's own open PDFs. **Not read, and nothing is claimed from them:** Jorion (1986) and Frost–Savarino (1986), the two JFQA primaries for shrinking an estimated *mean vector*, which Semantic Scholar reports `CLOSED` and whose one hosted copy answered with a connection reset — see the open-questions entry. | Pástor–Stambaugh 2003 (JPE) + Li–Novy-Marx–Velikov 2019, Pontiff–Singla 2019 and Pástor–Stambaugh 2019 (CFR) (`2026-09-29-liquidity-risk-priced-innovations.md`); Acharya–Pedersen 2005 (JFE) (`2026-09-29-liquidity-adjusted-capm-three-betas.md`); Brunnermeier–Pedersen 2009 (RFS) (`2026-09-29-funding-liquidity-and-margin-spirals.md`) |
 | 2026-09-30 (session 47) | **The first session in seventeen aimed by a gap the *previous session named and left open in writing*, with its access findings already recorded — and the branch's headline turned out to be a free kill rather than a candidate.** 2026-09-29 closed liquidity risk as a documented negative and identified the one unit it could not cover: **shrinkage of an estimated mean vector**, with both primaries verified closed. A grep across all 143 prior notes re-confirmed zero hits for `Bayes-Stein`, `grand mean`, `Michaud` and `shrinkage of means`; the folder's five shrinkage notes shrink a covariance, an SDF coefficient or a selected maximum, never the score vector a book is built from. Both 1986 primaries stayed closed on every route tried (see the note's Access section: Merage faculty tree gone, Cambridge bot page again, Frankfurt behind **Anubis at HTTP 200** — a tenth refusal shape — and Kan's Rotman paper directory gone, which matters beyond tonight). The estimator was therefore read from an independent statement of it and the primary is marked not read. New: **#174–#178**. **The session's main output is #174, which removes a candidate shape**: composed with `c - c.min() + FLOOR`, scalar-target score shrinkage cancels to a `FLOOR` reparametrisation, so a Bayes-Stein score candidate is a knob the lab already owns — zero trials. What survives is the *target*: #176 (partial group-mean demean, the missing middle between the raw score and full country-demeaning [2026-09-10]) and #177 (weight-space shrinkage, the only operator found that acts hardest on the top-ten weights). Free with the branch: #175's `p/n ≈ 1`-is-worst warning and the Mahalanobis inflation correction. | Jorion 1986 (JFQA) + Frost–Savarino 1986 (JFQA) + Bock 2018 (`2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`); Bodnar–Okhrin–Parolya 2019 (J. Multivariate Analysis) (`2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`); Bodnar–Okhrin–Parolya 2023 (JBES) (`2026-09-30-shrinking-portfolio-weights-toward-a-target.md`) |
 | 2026-10-01 (session 48) | **The first session in eighteen aimed at the *sample* rather than at anything computed from it, and the aim was set by the lab being halted rather than by a gap detector.** Two consecutive nightlies [`journal.md` 2026-09-29, 2026-09-30] stopped at step 0 over an unmerged point-in-time-universe branch whose own report re-scores the seated champion from validation Sharpe 1.27 to 0.19, and no research session had ever covered the mechanism that claim rests on. A grep across all 146 prior notes returned **zero** for `delisting bias`, `absorbing barrier`, `pre-sample`, `discovery sample` and `p-hacking`; `2026-08-26` covers selection on end-of-period *rank* and nothing covers selection on *survival* or on the *discovery window*. **Families → … → an estimated moment → the conditioning that put the data in front of the lab.** Headline: the lab's largest measured artifact — "the level *is* the survivorship artifact" — is a **theorem**, `dp* = (μ + σ²·π_p/π)dt + σ dz`, which adds drift in proportion to variance and leaves variance alone, and which predicts two further things the lab has not checked (#179). Second: a measured *decorrelation* is itself selected on and reverts, which is the number `program.md` prices a challenger with (#180). Third: how large the discovery-window discount is, is **contested** — 40–60% against ~12%, both Tier A, each citing the other — and the smaller estimate comes with a dispersion-based (not count-based) shrinkage formula the lab can run on its own 104 trials (#181). New: **#179–#182**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the lab ran no trials for a third night. | Brown–Goetzmann–Ross 1995 (`2026-10-01-survival-conditioning-induced-drift.md`); Linnainmaa–Roberts 2018 (`2026-10-01-discovery-sample-and-anomaly-decay.md`); Chen 2021 + Chen–Zimmermann 2020 (`2026-10-01-limits-of-p-hacking-publication-bias.md`) |
+| 2026-10-02 (session 49) | **The second consecutive session aimed by the thing that has the lab stopped, and the first to take a gap this folder had named, carried and failed on twice — tonight it was reached by proxy rather than head-on.** The branch is unchanged, so `origin/survivorship-pit-v2` has now blocked three recorded nightlies and is on course for a fourth. [2026-10-01] closed the survivors' half of survivorship and named **delisting returns** as "the missing third", with both primaries blocked at BYU. **Sample → the conditioning that selected it → the three measurement choices sitting on top of it.** Headline: the lab has **at least three distinct mechanisms** producing its single largest measured artifact — survival conditioning, the pool's weighting, and the estimator — all numerator-only and all largest for the noisiest names, and it has separated one (#183, the discriminator: pool bias is invariant to the cross-sectional weighting, estimator bias is not). Second: "survivorship bias inflates results" is **half a sentence** — exiting names crowd one end of a sort and the sign of the bias follows which end a book is on, which makes the lab's artifact **signable and falsifiable** for the first time (#184). Third: a point-in-time *membership* fix still owes the *leavers' returns*, so a corrected re-scoring built on membership history alone is itself optimistic, and the imputation it needs must be a trailing conditional mean rather than a static constant (#186a). Also recorded: this folder's **second** unresolved Tier-A-against-Tier-A disagreement (HXZ's 35% replication rate against Jensen–Kelly–Pedersen's "most factors replicate"), same shape as [2026-10-01]'s 40–60%-against-12%. New: **#183–#187**. **Nothing is closed by this entry** — no lab measurement was taken tonight. | Hou–Xue–Zhang 2020 (RFS; typeset version of record read in full from `theinvestmentcapm.com`) (`2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`); Shumway 1997 + Shumway–Warther 1999 + Beaver–McNichols–Price 2007 — **all three abstract-level only**, abstracts authoritative (bepress `meta description`, Stanford GSB publication page), with the delisting-adjustment algebra read in full from Hou–Xue–Zhang's Appendix B (`2026-10-02-delisting-returns-the-other-half-of-survivorship.md`); Asparouhova–Bessembinder–Kalcheva 2010 + 2013 — **abstract-level only**, abstracts authoritative from ASU's Elsevier Pure instance, correction algebra **not read** (`2026-10-02-noisy-prices-and-biased-premium-estimates.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-02] Read this first: the lab has three mechanisms for its biggest artifact and has
+  separated one — and separating them is cheaper than anything else on this list.** `learnings.md`
+  attributes this universe's volatility-*level* effect entirely to survivorship, and [2026-10-01] gave
+  that channel a theorem. Tonight adds two more channels with the **same signature** — a mean biased
+  upward with the variance untouched, worst for the pool's noisiest members — from causes that are not
+  survivorship: the **pool's weighting** (Hou–Xue–Zhang: the extreme buckets of an uncontrolled sort
+  fill with the highest-dispersion members; 96% of 106 trading-frictions anomalies fail once that is
+  controlled) and the **estimator** (Asparouhova–Bessembinder–Kalcheva: multiplicative price noise
+  biases a measured mean upward, hardest for characteristics correlated with the noise). **#183 is the
+  discriminator and it is one line**: pool bias must be invariant to how the cross-sectional average is
+  weighted, estimator bias must shrink when the noisiest names get less voice. Recompute an
+  already-recorded IC under a second weighting and read the gap. **Second: #184 signs the artifact.**
+  Beaver–McNichols–Price's rule is that exiting names crowd one end of a sort, so the bias on a book
+  follows which end the book is on — which turns "survivorship inflates results" into a prediction with
+  an ordering across the lab's own scores. **Third: #186a is for the human and bears on the branch** —
+  a membership fix does not supply the leavers' returns, and 14% of delisting event returns are missing
+  even in CRSP. New: **#183–#187**. **Nothing is closed by this entry** — no lab measurement was taken
+  tonight. **Carried unchanged and still genuinely unrun: #82** (twenty-seventh session, still the
+  oldest unspent free item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half,
+  **#159**, **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s second use, **#166**, **#167**,
+  **#168**), the 2026-09-29 set (**#170**, **#171**, **#172**), the 2026-09-30 set (**#174**'s reading,
+  **#175**, **#176**, **#177**) and the 2026-10-01 set (**#179**, **#180**, **#181**). **#152 stands.**
+  **#163, #169, #173, #178, #182 and #187 stay anti-candidates.**
+- **[2026-10-02] What should aim the next session, in order.**
+  - **#183 goes first, and it goes *ahead of #179*.** #179 interprets the Garman-Klass and `ILLIQ` level
+    ICs; #183 asks whether those ICs are partly an artifact of the estimator that computed them. Running
+    the interpretation before the validity check is the wrong order, and #183 is the cheaper of the two
+    (one re-weighting of a statistic already on the board, versus two new IC panels).
+  - **Then #184**, because it is the only item on this file that makes the lab's own headline artifact
+    *falsifiable with an ordering* rather than corroborated with a second implication. It also composes
+    with #179(b): both want a distance-to-exit proxy, so build it once and use it twice.
+  - **Then #179 and #180**, unchanged in content and now third and fourth rather than first and second.
+  - **Then #185** as a standing reporting rule rather than a task, applied to whatever is measured next.
+  - **Then the carried items**: #181, then #174's reading, then #175, #177, #176.
+- **[2026-10-02] The transferable output, and it is an evidentiary rule about *attribution* rather than
+  about coverage.** Sessions 28–47 built detectors for gaps; [2026-09-30] added a detector for
+  **redundancy** (compose an operator with the weighting function and see whether it cancels). Tonight
+  adds the third of that kind: **before attributing a measured effect to a mechanism, check how many
+  other mechanisms produce the same signature, and find the one cheap property that separates them.**
+  The lab had fourteen screens converging on "survivorship" and never asked what else is
+  numerator-only-and-worst-for-noisy-names. The separating property here is almost embarrassingly
+  cheap — one is a property of the pool and one of the estimator, so one survives a re-weighting and the
+  other does not — and it was available the whole time. Generalised: **a confirmed mechanism with no
+  rival mechanism considered is an unidentified one**, and the identifying test is usually an invariance
+  rather than a new measurement.
+- **[2026-10-02] A second Tier-A-against-Tier-A tension, recorded rather than resolved, and it is the
+  same shape as the first.** Hou–Xue–Zhang (2020, RFS) put the replication rate of 452 published
+  anomalies at 35% under NYSE breakpoints and value weights, and at 17.9% under a multiple-testing
+  cutoff. Jensen–Kelly–Pedersen (2023, JF, covered 2026-08-25) study much the same literature with a
+  hierarchical Bayesian model and conclude that most factors **do** replicate, and replicate globally.
+  They differ on **method, not data**: HXZ test one anomaly at a time against a fixed `|t|` bar, JKP
+  shrink each toward its cluster's mean under a prior. This is structurally identical to the 40–60%
+  versus ~12% discovery-window gap recorded [2026-10-01], and the resolution is the same: **both agree
+  on sign and shape — a measured in-sample cross-sectional edge is an overestimate, by more for noisier
+  candidates — and disagree only on the constant. Carry both, adopt neither, and note that #181 is the
+  lab computing its own.** The folder now holds two of these pairs and should expect more; a single
+  Tier-A number on a contested magnitude is not a fact about this literature.
+- **[2026-10-02] Access findings, recorded so the next session does not repeat the searches.**
+  **(1) A bepress *landing page* is not challenged even where every PDF endpoint is, and its
+  `meta name="description"` carries the publisher abstract.** `scholarsarchive.byu.edu/facpub/9278`
+  and `/facpub/9279` both returned HTTP 200 and yielded authoritative abstracts for both Shumway papers,
+  while every PDF route 403'd again. **This is the cheap fallback for any Cloudflare-challenged bepress
+  repository** and it is new. **(2) `deepblue.lib.umich.edu` is Cloudflare-challenged too** (HTTP 403 on
+  its REST search), which closes the obvious home-institution route for Shumway. **(3) An institution's
+  Elsevier Pure instance serves full publisher abstracts for closed articles** —
+  `asu.elsevierpure.com/en/publications/<slug>` gave both Asparouhova–Bessembinder–Kalcheva abstracts
+  verbatim. Worth trying for any author at a Pure institution, and it generalises the Stanford GSB
+  publication page which did the same for Beaver–McNichols–Price. **(4) `theinvestmentcapm.com` serves
+  typeset versions of record** — Lu Zhang's project site, `/uploads/1/2/2/6/122679606/<file>.pdf`, found
+  via `/research.html`; the guessable root path 404s. This is the 2026-09-18 faculty-page lesson holding
+  for an author's *project* site. **(5) An `openAccessPdf: GREEN` is a claim about a URL's existence, not
+  its reachability** — second night running: Semantic Scholar's GREEN URL for `10.1111/jofi.12010` is
+  `onlinelibrary.wiley.com/doi/pdfdirect/...`, which is Cloudflare-challenged. **(6) A university
+  `public` tree behind Cloudflare Access is a new refusal shape at HTTP 200** —
+  `www.public.asu.edu/~hbessemb/` answers 200 with an ASU SSO OAuth redirect where the content should
+  be, which breaks the faculty-page trick for any such institution. **(7) `gsbpreserve.stanford.edu`
+  serves a placeholder** — its "download attachment" zip for an off-site publication contains an 88 KB
+  thumbnail PDF, HTTP 200, a real archive, and no paper. Like the Incapsula and Anubis cases it **looks
+  like an answer**. **(8) OpenAlex's free daily budget was already exhausted at session start** (HTTP
+  429, `Insufficient budget`), so Crossref carried every citation count tonight and Semantic Scholar
+  was the only cross-check; Crossref was never rate-limited. S2 returned a clean `not found` for two
+  real DOIs (`10.1016/j.jacceco.2006.12.002`, `10.1111/j.1475-6803.2006.00189.x`), a second and third
+  instance of the failure mode first recorded [2026-10-01].
+- **[2026-10-02] Four gaps identified and deliberately left open, three of them new.** **(a) The ABK
+  correction's algebra — the sharpest new gap on this list.** Both Asparouhova–Bessembinder–Kalcheva
+  papers are closed, their only GREEN OA URL is challenged, Bessembinder's `public.asu.edu` tree is
+  behind SSO, and Asparouhova's Utah page hosts no PDFs. The *form* of the correction is recorded (a
+  weighting change, WLS rather than OLS; the 2013 paper says "a number of corrections", plural) and
+  **the weights are not**. #183 is deliberately written as a diagnostic that needs no formula; closing
+  this gap would upgrade it to an estimator. Next routes: a Tier-1 article that implements the
+  correction and states the weights in its data appendix (the way HXZ's Appendix B supplied
+  Beaver–McNichols–Price tonight), or Kalcheva's Arizona page. **(b) Blume–Stambaugh (1983, JFE 12(3),
+  387–404)** — 582 Crossref / 830 S2 citations, `oa_status: closed`, not hosted on Stambaugh's Wharton
+  page, **not read and nothing claimed from it.** It is the origin of the noise-bias literature and the
+  natural companion to (a). **(c) Ince–Porter (2006, *Journal of Financial Research* 29(4), 463–479,
+  "Individual equity return data from Thomson Datastream: handle with care!")** — 747 Crossref citations,
+  `oa_status: closed`, no OA location, no faculty copy found. This is a **genuinely well-aimed gap for
+  this repo and it should be chased**: it documents the screens a *free or commercial international*
+  equity panel needs — stale price padding after a name stops trading, extreme-return reversal filters,
+  static name-field screens — which is the leavers problem in exactly this lab's data environment
+  (global, free, USD-converted, foreign-holiday NaNs). This folder has mentioned its reversal filter
+  once in passing [2026-09-04] and set it aside as "Datastream-specific hygiene"; that set-aside now
+  looks wrong. Possible routes: Hou–Karolyi–Kho (2011, RFS) or Karolyi–Lee–van Dijk (2012, JFE), both of
+  which state the screens in full in their data appendices, and Kewei Hou is a co-author of the paper
+  `theinvestmentcapm.com` served tonight. **(d) The Shumway pair and Beaver–McNichols–Price in full** —
+  carried from [2026-10-01] and still blocked after four further routes tonight. The cost of the gap is
+  now lower than it was, because HXZ's Appendix B supplied the construction recipe and the three
+  abstracts supplied the mechanisms; what is still missing is the *magnitude* evidence and anything
+  about non-US delistings, of which nothing read here says a word.
+- **[2026-10-02] One observation for the human, unchanged in substance from [2026-10-01] and now one
+  night older.** `origin/survivorship-pit-v2` is still unmerged, the 2026-10-01 journal entry records
+  the third consecutive halted nightly, and nothing in the repository has changed since. This folder has
+  added three more notes, which again makes `main` look active while no experiments are running. The one
+  difference worth reporting is that **tonight's branch is aimed at the decision rather than past it**:
+  #186a says in writing that a point-in-time membership fix does not by itself supply the leavers'
+  returns, so the branch's corrected numbers would themselves be optimistic unless it imputes — and
+  #186a names the causal imputation (trailing-60-month conditional mean) that would survive this repo's
+  own causality check. #183 and #184 are, separately, the cheapest available tests of whether the
+  artifact the branch is arguing about behaves the way three different theories say it must. None of
+  them is a trial and none reads the holdout.
 
 - **[2026-10-01] Read this first: tonight's headline is that the lab's biggest measured artifact is a
   theorem, and it was found by aiming at the thing that has the lab stopped.** Three nights of nightly

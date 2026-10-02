@@ -17073,3 +17073,5 @@ the nightly prompt authorises an agent to move someone else's branch. That remai
 call, and it is the cheapest of the three.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, third night.**
+
+## Research session — 2026-10-02 (learning agent): 3 notes added, see research/SUMMARY.md
