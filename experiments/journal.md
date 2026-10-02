@@ -17075,3 +17075,115 @@ call, and it is the cheapest of the three.
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, third night.**
 
 ## Research session — 2026-10-02 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-10-02 — `origin/survivorship-pit-v2` still unmerged; fourth consecutive halt
+
+Recorded by the nightly strategy agent, not by `run_experiment.py`. No trial record was added,
+altered, or removed in writing this entry; `trials.jsonl` remains exactly as `run_experiment.py`
+last wrote it (**104 records**). **No experiment was run tonight and no holdout was read.**
+
+### State check — fourth night, nothing a human controls has moved
+
+The step-0 condition fires on the same single branch, at the same tip. The **2026-09-29** entry
+is the full diagnosis and it stands; 09-30, 10-01 and tonight are repeats. This entry does not
+restate it — it records what moved and one new, quantified fact that changes the human's options.
+
+| Checked tonight | 09-29 | 09-30 | 10-01 | 10-02 |
+|---|---|---|---|---|
+| `git branch -r --no-merged origin/main` (non-`archive/*`) | `survivorship-pit-v2` | same | same | **same** |
+| Its tip | `d5bc17b` | `d5bc17b` | `d5bc17b` | **`d5bc17b` — no new work, fourth night** |
+| `origin/archive/*` branches | 0 | 0 | 0 | **0 — still not parked** |
+| `program.md` decision line | — | unchanged | unchanged | **unchanged** (`git diff 25dd75b..origin/main -- program.md CLAUDE.md` empty) |
+| `trials.jsonl` | 104 | 104 | 104 | **104** |
+| Champion | `pt_mom_evar_arbrisk` (#98) | same | same | **same** |
+| `main` engine | green | 33 passed | 33 passed | **33 passed in 35.2s** |
+
+Commits on `origin/main` since the 10-01 halt are **bot-authored only**: `66e6f06`
+`data-refresh-bot` daily refresh, `cb74b0a` learning-agent research notes. No human commit, no
+merge, no archive, no `program.md` line. **None of the three unblock conditions has been met.**
+
+Re-verified rather than assumed — the branch still touches none of the trial-history files
+(`git diff --stat origin/main...origin/survivorship-pit-v2 -- experiments/trials.jsonl
+experiments/journal.md experiments/leaderboard.json experiments/learnings.md strategies/` → empty).
+So the bar on `main` is **not** split, `past_trial_sharpes()` sees the true 104, and this is still
+**not** a repeat of 2026-08-16. Data store is current (last close 2026-10-01, one trading day back).
+
+### New tonight — the "land it" one-liner no longer works, and the cost grows nightly
+
+Prior entries offered `git merge --no-ff origin/survivorship-pit-v2` as a one-command unblock.
+Measured tonight in a throwaway worktree (local only, nothing pushed, merge aborted):
+
+```
+git merge --no-commit --no-ff origin/survivorship-pit-v2   # → exit 1
+git diff --name-only --diff-filter=U | wc -l               # → 144
+git diff --name-only --diff-filter=U | grep -v '^data/store/'   # → empty
+```
+
+**All 144 conflicts are `data/store/*.parquet`; zero code conflicts.** `engine/`, `scripts/`,
+`strategies/`, `experiments/` and `reports/` all merge clean. The cause is structural, not a
+disagreement: the branch replaces the per-ticker store with monthly partitions (`1eab516`,
+deleting all 144 per-ticker files), while `data-refresh-bot` modifies those same files every
+night — a modify/delete conflict per ticker.
+
+The branch's author already hit this once and resolved it by hand: `0b8b5e0` ("merge origin/main;
+fold its daily refreshes into the month partitions"), **2026-09-29**. Since then `main` has
+accumulated **3 more daily refreshes** that must be folded again. That number rises by one per
+night, indefinitely. The branch does ship the tool for it (`scripts/migrate_store_partitioned.py`).
+
+Two consequences for whoever reads this first:
+
+- **Parking is now strictly the cheapest option** and is unaffected by the drift — it is still
+  literally two commands and touches no data.
+- **The stall is no longer cost-free.** Three prior nights could honestly say "opportunity cost
+  only". That is no longer true: delay now also compounds the merge work on a human's branch.
+  Nothing is corrupted and no holdout has been read, but the arrears are real and growing.
+
+### Why the halt still binds
+
+Unchanged, and still the reason — not the topology: the branch's own
+`reports/protocol-v2-survivorship.md` re-scores seated champion #98 from validation Sharpe 1.27
+to **0.19** under a point-in-time universe, and its recommended cutover order ends *"cut over
+with a fresh deflated-Sharpe history. v1 trial Sharpes are not on the v2 scale: pooling them
+would inflate the variance term and the bar."* Eight v1 trials tonight would each permanently
+raise a bar whose own author plans to discard it, scored against an incumbent the same harness
+values at one-sixth of its recorded Sharpe. Recording zero is the same honest move for the
+fourth time, for the same reason.
+
+### For the human — the unblock, corrected
+
+Any **one** of these restarts the loop.
+
+```bash
+# 1a. PARK IT — cheapest, unaffected by the data drift; the check ignores archive/* by design
+git push origin origin/survivorship-pit-v2:refs/heads/archive/survivorship-pit-v2
+git push origin --delete survivorship-pit-v2
+
+# 1b. LAND IT — no longer a single command (144 data/store conflicts, 0 code conflicts).
+#     Take the branch's deletions, then re-fold main's 3 new refreshes with the branch's own tool:
+git checkout -b land-pit-v2 origin/survivorship-pit-v2
+git merge --no-ff origin/main
+git diff --name-only --diff-filter=U | grep '^data/store/.*\.parquet$' | xargs git rm -q --
+.venv/bin/python scripts/migrate_store_partitioned.py     # verify its args against the branch
+.venv/bin/python -m pytest tests/ -q
+git commit && git checkout main && git merge --no-ff land-pit-v2 && git push origin main
+#     v2 stays OFF while PROTOCOL_VERSION defaults to 1, so landing it changes no gate by itself.
+```
+
+2. **Or say which protocol the lab searches under**, in `program.md`. If v1 history is to be
+   discarded at cutover, v1 trials run before then are waste and the agent should stay stopped
+   whatever the branch topology says — please record that, so the halt is a decision on record
+   rather than a topology accident. If v1 continues in parallel, say so and the halt condition
+   becomes topology-only.
+
+3. **Or settle the branch disagreement, now twenty-seven sessions old.** The session-start hook,
+   the harness's per-run-branch requirement (`main-jdmn1r` tonight) and `CLAUDE.md`'s
+   `git push origin main` still do not agree. As on all three prior nights this entry is committed
+   once and pushed to `main` and to the per-run branch as the **identical commit**, so no history
+   splits either way.
+
+The agent did **not** park, rename, or merge the branch itself: it is a human's unmerged work,
+and no instruction in `CLAUDE.md`, `program.md` or the nightly prompt authorises an agent to move
+or land someone else's branch. Tonight's merge test was run in a detached throwaway worktree and
+aborted; the working tree and all refs are untouched.
+
+**Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, fourth night.**
