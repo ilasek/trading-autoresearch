@@ -5142,6 +5142,84 @@ applies at full strength to the −55% delisting constant, to the 50%-of-correct
 magnitude, and to the 2.78 cutoff (whose own authors call it heuristic in a footnote). What transfers
 from all three notes is **mechanism and discipline**, not a number.
 
+### How the mean itself is computed — the averaging method, the rebalance grid, and the panel that feeds them (cross-family)
+
+Three notes added 2026-10-03 cover the layer *underneath* every measured result in this repo: not which
+signal predicts returns, not which pool or estimator was used, but **the arithmetic that turns a set of
+price series into a mean return**, and the quality of the price series it is applied to. Sources:
+Roll 1983 (JFE, Tier 1, read in full) with Blume–Stambaugh 1983 (JFE, Tier 1, abstract only);
+Canina–Michaely–Thaler–Womack 1998 (JF, Tier 1, read in full); Ince–Porter 2006 (JFR, ~750–900
+citations, **not read**) reached through Rossi 2011 (MPRA, Tier C, read in full). No validation overlap
+in any of them — the latest sample here ends 2002.
+
+**The averaging method is itself a return, and three standard methods give three different numbers from
+identical data.** Roll separates *arithmetic* (average across firms and days, then compound),
+*buy-and-hold* (link each instrument's own returns over the horizon, then average across instruments)
+and *rebalanced* (restore equal weights each sub-period). Under temporal independence, Jensen's
+inequality gives `E(R_AR) ≥ E(R_RB)` and `E(R_BH) > E(R_RB)`, the latter gap growing in the
+cross-sectional variance of expected returns; `AR` versus `BH` is ambiguous, with `AR` rising in the
+variance of the portfolio's unexpected return (`E(R_AR) = μ̄^τ[1 + k·var(ε̄)]` under cross-sectional
+normality). With serial dependence, `E(R_AR − R_RB) = ½(σ²_ε̄ − σ_ε̄1,ε̄2) > 0` **always**. The economic
+content is that the dependence is asymmetric by construction: bid-ask bounce (Niederhoffer–Osborne) puts
+*negative* first-order autocorrelation in individual returns, non-synchronous trading (Scholes–Williams)
+puts *positive* autocorrelation in portfolios, and **`BH` loads on the former while `AR` and `RB` load on
+the latter**. Both 1983 papers report the measured size premium roughly **halving** under buy-and-hold,
+and Roll reports it becoming only marginally significant. Tier A, no overlap.
+
+**It is a fourth mechanism with the lab's familiar artifact signature, and its discriminator is an
+invariance.** [2026-10-01] gave survival conditioning a theorem (numerator-only, worst for the noisiest
+names); [2026-10-02] added the pool's weighting and multiplicative price noise with the same signature.
+The averaging method makes four: upward-biased for `AR`/`RB` over `BH`, growing in `var(ε̄)`, worst for
+the noisiest books. **The separating property is the review period** — the other three channels are
+invariant to how a fixed set of returns is averaged, this one is not, and Roll establishes the bias must
+shrink as the review period lengthens and shrink *fastest at the short end* (daily→weekly matters more
+than monthly→annual). This is the [2026-10-02] attribution rule applied to a channel that rule's own
+session did not consider.
+
+**The magnitude is large, it does not diversify away, and bid-ask bounce dominates non-synchronous
+trading.** Canina et al. measure the gap directly on a US panel: compounding a daily equal-weighted
+cross-section exceeds the monthly equal-weighted return by roughly **0.43% per month / 6% per year**,
+about **one third of the mean monthly return**, and higher in *every year* of a 30-year sample — while
+the **value-weighted** index shows no such bias, the clean control. Regressions attribute it to more
+negative individual autocorrelation and more positive portfolio autocorrelation, with the
+individual-security channel carrying roughly **2.5× the effect** of the portfolio channel; turnover and
+dividend timing are insignificant. The best single proxy is the **variance of excess-return-to-price**
+(from Blume–Stambaugh), which lifts `R²` from ~22% to ~47%. Decisively for a small universe, a Monte
+Carlo across portfolios of 10 to 900 names gives annualised gaps of ~6.5% to ~7.2% — **already
+near-full-size at ten instruments and flat above one hundred.** Honest weakness, stated by its authors:
+only about half the variation is explained, and the cross-sectional-variance coefficient has the *wrong*
+sign. Tier A, no overlap.
+
+**The panel feeding all of this is dirty in a patterned way, and the pattern points at cross-sectional
+sorts.** Ince–Porter's findings, **restated via Rossi and not read at first hand**: a commercial equity
+panel misclassifies large numbers of non-common-stock vehicles as common stock, its **classification time
+series often carry only the most current value** (a backwards-applied field, i.e. a lookahead hazard of
+exactly the lab's kind), and its quantitative series contain splits on wrong dates, disagreeing closes
+and dividends, bad series-start/end markers, mishandled post-suspension returns, and
+rounding-driven jumps at low nominal prices. Crucially **the defects concentrate in the smaller size
+deciles**, which is what makes them lethal for characteristic sorts rather than for index work. Their
+grading method is the transferable part: correlate a panel's own cross-sectional value-weighted average
+return against an **independently published total-market index**; raw correlations run as low as ~0.20
+and rise to ~0.98 after filtering, and for one market the lift comes only once *misclassification*
+filters are added, which identifies *which class* of defect binds. Rossi's implemented filter list
+(equity-type, primary-listing, currency, ≥24 months verified history, minimum size with a −10%
+hysteresis buffer, turnover floors, traded on ≥90% of trailing days, nominal-price bounds) takes a raw
+single-market universe from 7,968 instruments to 1,333 — **~83% discarded** — with bad
+shares-outstanding data (~48%) and missing volume (~11%) the largest causes. Tier A primary **unread**;
+Tier C vehicle.
+
+**What the three notes jointly say, and it is a causal chain rather than a theme.** A dirty panel
+produces more bid-ask bounce and more stale, non-synchronous quotes → that produces more negative
+individual-security autocorrelation → that *widens the averaging bias* Canina et al. measure → and the
+widening is **largest for exactly the instruments a liquidity or volatility sort puts at one end of the
+book**. Roll states the generalisation himself: *"similar biases can be expected in mean returns when
+securities are classified by any variable related to trading volume"*, naming size, dividend yield,
+price/earnings and beta. So the lab's `liquidity-volume` and `range-variance` families carry a
+differential measurement bias between their buckets **before any economics is involved**, and the sign
+is predictable rather than merely worrying. The honest limit on all three: every source here is about
+*commercial* data (CRSP, Datastream) in large single markets, and **nothing read tonight says anything
+about the error profile of free data or of a 15-region USD-converted panel.**
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -8907,6 +8985,111 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-02-delisting-returns-the-other-half-of-survivorship.md`,
     `notes/2026-10-02-noisy-prices-and-biased-premium-estimates.md`
 
+188. **FREE, and it goes first because it is upstream of every number on the leaderboard: find out which
+    mean the engine reports, then separate the averaging channel from the other three by a review-period
+    invariance.** Roll separates arithmetic, buy-and-hold and rebalanced means and proves
+    `E(R_AR − R_RB) = ½(σ²_ε̄ − σ_ε̄1,ε̄2) > 0` unconditionally; Canina et al. measure the gap at roughly
+    **0.43%/month, ~6%/year, one third of the mean monthly return** on a US panel, with a Monte Carlo
+    showing it is **already near-full-size at ten instruments and flat above a hundred** — so a
+    ~140-instrument universe gets essentially the whole thing and cannot diversify it away. *(a) The
+    one-look question.* Candidates here rebalance monthly, which both papers put at the safe end, but
+    weights are forward-filled to a **daily** grid; whether the reported Sharpe is a daily-rebalanced
+    number or an instrument-linked one depends on arithmetic **this folder is not permitted to read**
+    (`engine/` is out of scope for the research agent and no claim is made about it). Answer it by
+    inspection before arguing about it. *(b) The discriminator, and it is the cheap part.* Survival
+    conditioning, pool weighting and price noise are all **invariant** to how a fixed set of returns is
+    averaged; this channel is not, and must shrink as the review period lengthens, fastest at the short
+    end. Recompute an **already-recorded** statistic under two review periods (daily-linked versus
+    monthly-linked) and read the gap. No new data, no trial, no holdout. *(c) What it bounds.* If the
+    engine does compound a daily cross-section, the bias is a level shift on candidate *and* incumbent,
+    so it largely cancels in the lab's **paired** `t` — meaning this channel threatens the board's
+    absolute Sharpes far more than its promotion decisions. It does **not** cancel where two books
+    differ in bounce exposure, which is exactly the `liquidity-volume` and low-volatility cases. Tier A,
+    no overlap.
+    → `notes/2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`,
+    `notes/2026-10-03-caveat-compounder-daily-rebalancing-bias.md`
+
+189. **FREE, and it is the cheapest data-integrity check available to this repo: grade the panel against
+    an external aggregate it already contains.** Ince–Porter grade a panel by correlating its own
+    cross-sectional value-weighted average return against an **independently published total-market
+    index**, reporting raw correlations as low as ~0.20 rising to ~0.98 after filtering — and, for one
+    market, a lift that arrives only once *misclassification* filters are added, which identifies which
+    class of defect binds. **This universe holds ~42 ETFs across 15 regions**, several of them region or
+    country index trackers, so the external aggregate is already in `data/store/`: for each region,
+    correlate the cross-sectional average return of that region's single stocks against the matching
+    index ETF. A low correlation localises a defect to a region; a high one retires the concern there.
+    **Read the limit as carefully as the result: this tests classification and price-series defects, not
+    survivorship.** A point-in-time membership error leaves survivors' prices perfectly correlated with
+    the index while still biasing the mean, so a correlation near 1.0 would **not** exonerate
+    `origin/survivorship-pit-v2`'s complaint. Cheap enough to be over-read, so the caveat is part of the
+    item. Tier A primary (**unread** — restated via Rossi), no overlap.
+    → `notes/2026-10-03-international-panel-screens-datastream.md`
+
+190. **FREE, and it is an ordering across books already on the board rather than a new measurement.**
+    Roll's own generalisation is that *"similar biases can be expected in mean returns when securities
+    are classified by any variable related to trading volume"* — he names size, dividend yield,
+    price/earnings and beta — because serial dependence differs systematically with the sorting
+    variable. Canina et al. identify the dominant driver as the **average first-order autocorrelation of
+    individual instruments** (≈2.5× the portfolio channel) and the best proxy as the **variance of
+    excess-return-to-price**, both computable from closes alone, causally, on data the lab has. Two
+    predictions with signs attached: *(a)* an illiquidity- or volume-sorted long-only book should show a
+    **larger** daily-versus-monthly gap than a liquidity-neutral book, because its holdings carry more
+    bounce; *(b)* a book's exposure should **scale with its weight on single stocks rather than ETFs**,
+    since an ETF is a value-weighted basket and Canina et al.'s value-weighted control shows no
+    compounding bias. Both are falsifiable orderings over existing trials, and they compose with #179(b)
+    and #184, which also want a per-instrument distance/noise proxy — build it once, use it four times.
+    Tier A, no overlap.
+    → `notes/2026-10-03-caveat-compounder-daily-rebalancing-bias.md`,
+    `notes/2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`
+
+191. **Screens and a construction device, not a strategy — and the staleness screen is the one this
+    universe arguably needs.** From Ince–Porter via Rossi, and from Rossi's own index-provider-derived
+    list: *(a) A staleness screen computable from closes alone* — "traded on at least 90% of trading days
+    in the trailing 12 months", where the proxy for a non-trading day in this panel is a repeated close
+    or a zero return (`2026-09-04-global-liquidity-proxy-horserace.md` has the proxy literature). This
+    matters here specifically because the lab's contract says volume is **not** forward-filled and is
+    NaN on foreign holidays, so a genuine non-trading day and a vendor gap are **indistinguishable in
+    the volume frame** — and Ince–Porter's finding is that real non-holiday gaps are common. Any
+    `liquidity-volume` result should report the fraction of its signal days that were NaN or filled.
+    *(b) A low nominal-price floor* — rounding at low prices produces spuriously large percentage moves;
+    a `$1`-style floor is the Ince–Porter screen most likely to bind on a global panel. The matching
+    high-price ceiling is index-construction practice about liquidity and has no force in a universe this
+    small. *(c) Hysteresis on a threshold-selected sub-universe.* Rossi keeps an instrument once it
+    qualifies until its size falls **10% below** the threshold — this is **banding applied to membership
+    rather than to weights**, one level up from
+    `2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`. The lab's universe is fixed so this
+    is not actionable on membership, but it is directly actionable on any candidate that selects a
+    sub-universe by a threshold — and the board already holds a book that is "equal-weight the low-beta
+    37% of the universe", where inclusion hysteresis is a turnover reduction the cost model would reward.
+    Tier A primary (**unread**) plus Tier C vehicle, no overlap.
+    → `notes/2026-10-03-international-panel-screens-datastream.md`
+
+192. **ANTI-CANDIDATES, five, and three of them are about mistaking tonight's notes for permissions.**
+    *(a) Do not touch the engine, and do not read these notes as "switch everything to buy-and-hold".*
+    `CLAUDE.md` freezes `engine/` and is right to. A monthly-rebalanced equal-weight book genuinely **is**
+    a rebalanced object and its rebalanced return is its honest return; the error these papers describe is
+    computing a number one way and *interpreting* it as the other. #188 asks which quantity is reported,
+    not for a change to how it is computed. *(b) Do not adopt the return-reversal filter.* Ince–Porter
+    delete a large return immediately reversed as a probable price error — sound data hygiene, and
+    **actively dangerous here**, because short-term reversal is a real effect this universe has been
+    tested on, and a filter that deletes the observations a reversal strategy trades would manufacture
+    its own answer. If ever used, use it only at the ±300% magnitude they chose, far outside any genuine
+    daily move, and never tighten it toward where real reversals live. *(c) Do not treat #189's
+    correlation as a survivorship test* — see the limit stated in that item; it is the single most likely
+    misreading on this list. *(d) Do not carry any threshold from Rossi as a calibrated constant.* The 24
+    months, the 90%-of-days, the 10%/20% turnover floors and the `$1` bound are index-provider conventions
+    for large single markets, measured on neither this universe nor free data; `CLAUDE.md`'s rule against
+    importing constants by analogy applies at full strength. *(e) Do not implement "the Ince–Porter
+    screens" as though this folder had read them.* It has not — the paper is closed on all three indexes
+    with zero repository fulltext, and every claim attributed to it here is **restated from a Tier-C
+    survey of it**. The folder's standing rule applies: a recipe may be read off a Tier-C vehicle, an
+    effect size may not, and an unread primary is not a citation. The two better-aimed sources for this
+    gap (Landis–Skouras 2021; Schmidt et al. 2019) were located, are recorded with their next routes, and
+    were **not read either**.
+    → `notes/2026-10-03-international-panel-screens-datastream.md`,
+    `notes/2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`,
+    `notes/2026-10-03-caveat-compounder-daily-rebalancing-bias.md`
+
 
 ## Coverage log
 
@@ -8962,8 +9145,121 @@ hypothesis fodder, then anti-candidates.
 | 2026-09-30 (session 47) | **The first session in seventeen aimed by a gap the *previous session named and left open in writing*, with its access findings already recorded — and the branch's headline turned out to be a free kill rather than a candidate.** 2026-09-29 closed liquidity risk as a documented negative and identified the one unit it could not cover: **shrinkage of an estimated mean vector**, with both primaries verified closed. A grep across all 143 prior notes re-confirmed zero hits for `Bayes-Stein`, `grand mean`, `Michaud` and `shrinkage of means`; the folder's five shrinkage notes shrink a covariance, an SDF coefficient or a selected maximum, never the score vector a book is built from. Both 1986 primaries stayed closed on every route tried (see the note's Access section: Merage faculty tree gone, Cambridge bot page again, Frankfurt behind **Anubis at HTTP 200** — a tenth refusal shape — and Kan's Rotman paper directory gone, which matters beyond tonight). The estimator was therefore read from an independent statement of it and the primary is marked not read. New: **#174–#178**. **The session's main output is #174, which removes a candidate shape**: composed with `c - c.min() + FLOOR`, scalar-target score shrinkage cancels to a `FLOOR` reparametrisation, so a Bayes-Stein score candidate is a knob the lab already owns — zero trials. What survives is the *target*: #176 (partial group-mean demean, the missing middle between the raw score and full country-demeaning [2026-09-10]) and #177 (weight-space shrinkage, the only operator found that acts hardest on the top-ten weights). Free with the branch: #175's `p/n ≈ 1`-is-worst warning and the Mahalanobis inflation correction. | Jorion 1986 (JFQA) + Frost–Savarino 1986 (JFQA) + Bock 2018 (`2026-09-30-bayes-stein-shrinking-an-estimated-mean-vector.md`); Bodnar–Okhrin–Parolya 2019 (J. Multivariate Analysis) (`2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`); Bodnar–Okhrin–Parolya 2023 (JBES) (`2026-09-30-shrinking-portfolio-weights-toward-a-target.md`) |
 | 2026-10-01 (session 48) | **The first session in eighteen aimed at the *sample* rather than at anything computed from it, and the aim was set by the lab being halted rather than by a gap detector.** Two consecutive nightlies [`journal.md` 2026-09-29, 2026-09-30] stopped at step 0 over an unmerged point-in-time-universe branch whose own report re-scores the seated champion from validation Sharpe 1.27 to 0.19, and no research session had ever covered the mechanism that claim rests on. A grep across all 146 prior notes returned **zero** for `delisting bias`, `absorbing barrier`, `pre-sample`, `discovery sample` and `p-hacking`; `2026-08-26` covers selection on end-of-period *rank* and nothing covers selection on *survival* or on the *discovery window*. **Families → … → an estimated moment → the conditioning that put the data in front of the lab.** Headline: the lab's largest measured artifact — "the level *is* the survivorship artifact" — is a **theorem**, `dp* = (μ + σ²·π_p/π)dt + σ dz`, which adds drift in proportion to variance and leaves variance alone, and which predicts two further things the lab has not checked (#179). Second: a measured *decorrelation* is itself selected on and reverts, which is the number `program.md` prices a challenger with (#180). Third: how large the discovery-window discount is, is **contested** — 40–60% against ~12%, both Tier A, each citing the other — and the smaller estimate comes with a dispersion-based (not count-based) shrinkage formula the lab can run on its own 104 trials (#181). New: **#179–#182**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the lab ran no trials for a third night. | Brown–Goetzmann–Ross 1995 (`2026-10-01-survival-conditioning-induced-drift.md`); Linnainmaa–Roberts 2018 (`2026-10-01-discovery-sample-and-anomaly-decay.md`); Chen 2021 + Chen–Zimmermann 2020 (`2026-10-01-limits-of-p-hacking-publication-bias.md`) |
 | 2026-10-02 (session 49) | **The second consecutive session aimed by the thing that has the lab stopped, and the first to take a gap this folder had named, carried and failed on twice — tonight it was reached by proxy rather than head-on.** The branch is unchanged, so `origin/survivorship-pit-v2` has now blocked three recorded nightlies and is on course for a fourth. [2026-10-01] closed the survivors' half of survivorship and named **delisting returns** as "the missing third", with both primaries blocked at BYU. **Sample → the conditioning that selected it → the three measurement choices sitting on top of it.** Headline: the lab has **at least three distinct mechanisms** producing its single largest measured artifact — survival conditioning, the pool's weighting, and the estimator — all numerator-only and all largest for the noisiest names, and it has separated one (#183, the discriminator: pool bias is invariant to the cross-sectional weighting, estimator bias is not). Second: "survivorship bias inflates results" is **half a sentence** — exiting names crowd one end of a sort and the sign of the bias follows which end a book is on, which makes the lab's artifact **signable and falsifiable** for the first time (#184). Third: a point-in-time *membership* fix still owes the *leavers' returns*, so a corrected re-scoring built on membership history alone is itself optimistic, and the imputation it needs must be a trailing conditional mean rather than a static constant (#186a). Also recorded: this folder's **second** unresolved Tier-A-against-Tier-A disagreement (HXZ's 35% replication rate against Jensen–Kelly–Pedersen's "most factors replicate"), same shape as [2026-10-01]'s 40–60%-against-12%. New: **#183–#187**. **Nothing is closed by this entry** — no lab measurement was taken tonight. | Hou–Xue–Zhang 2020 (RFS; typeset version of record read in full from `theinvestmentcapm.com`) (`2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`); Shumway 1997 + Shumway–Warther 1999 + Beaver–McNichols–Price 2007 — **all three abstract-level only**, abstracts authoritative (bepress `meta description`, Stanford GSB publication page), with the delisting-adjustment algebra read in full from Hou–Xue–Zhang's Appendix B (`2026-10-02-delisting-returns-the-other-half-of-survivorship.md`); Asparouhova–Bessembinder–Kalcheva 2010 + 2013 — **abstract-level only**, abstracts authoritative from ASU's Elsevier Pure instance, correction algebra **not read** (`2026-10-02-noisy-prices-and-biased-premium-estimates.md`) |
+| 2026-10-03 (session 50) | **The third consecutive session aimed by the thing that has the lab stopped, and the first to find a channel the previous two sessions' own framework had not considered.** [2026-10-02] established that the lab has at least three mechanisms producing its single largest artifact and wrote the transferable rule — *before attributing an effect to a mechanism, count how many other mechanisms produce the same signature.* Applied to itself that rule turns up a **fourth**, and it sits one layer lower than anything covered in fifty sessions: not the signal, not the pool, not the estimator of a moment, but **the arithmetic that turns price series into a mean return**. A grep across all 152 prior notes returned **zero** for `buy-and-hold bias`, `rebalanced mean`, `compounding bias`, `Caveat Compounder` and `Ince-Porter`. **Sample → the conditioning that selected it → the measurement choices on top of it → the averaging method underneath all of them.** Headline: Roll proves `E(R_AR − R_RB) = ½(σ²_ε̄ − σ_ε̄1,ε̄2) > 0` unconditionally and Canina et al. measure the gap at ~6%/year with a Monte Carlo showing it is **near-full-size at ten instruments and flat above a hundred** — so this universe gets all of it and cannot diversify it away (#188). The discriminator is again an **invariance**, and a cheaper one than #183's: the other three channels are invariant to how a fixed set of returns is averaged, this one must shrink with the review period (#188b). Second: Roll's own generalisation — the bias applies to *any* sort on a volume-related variable, naming size, dividend yield, P/E and beta — gives `liquidity-volume` and `range-variance` a **signed, falsifiable** differential bias between buckets before any economics (#190). Third: Ince–Porter's external-aggregate diagnostic is runnable here for free because the universe already contains ~42 index ETFs (#189), with the limit that it tests classification and price-series defects and **not** survivorship. Also recorded: a causal chain joining the three notes (dirty panel → bounce → wider averaging bias → worst at a liquidity sort's extreme), and **two access findings that are the mirror image of the last two nights'** — an `oa_status: closed` is not proof nothing is fetchable, and an author's *institutional library* reached via OpenAlex's location list served a closed Tier-1 PDF on the first try. New: **#188–#192**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the session's best-aimed primary was again not read. | Roll 1983 (JFE; typeset publisher PDF read in full from `authors.library.caltech.edu`) with Blume–Stambaugh 1983 (JFE) **abstract-only**, abstract authoritative from the authors' own Rodney L. White Center working-paper series (`2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`); Canina–Michaely–Thaler–Womack 1998 (JF; read in full from `ecommons.cornell.edu` via Semantic Scholar's GREEN URL, against OpenAlex's `closed`) (`2026-10-03-caveat-compounder-daily-rebalancing-bias.md`); Ince–Porter 2006 (JFR) — **NOT read**, verified closed on all three indexes with zero repository fulltext, reached by proxy through Rossi 2011 (MPRA, Tier C, read in full); Landis–Skouras 2021 (JBF) and Schmidt et al. 2019 (FMPM) located, routes recorded, **not read** (`2026-10-03-international-panel-screens-datastream.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-03] Read this first: the lab has a *fourth* mechanism for its biggest artifact, it was found
+  by applying last night's own rule to last night's own conclusion, and its discriminator is cheaper than
+  #183's.** [2026-10-02] named three channels with one signature (survival conditioning, the pool's
+  weighting, the estimator) and wrote the rule that **a confirmed mechanism with no rival mechanism
+  considered is an unidentified one**. Tonight ran that rule against that list and found a channel none
+  of the forty-nine prior sessions had covered: **the averaging method itself**. Roll proves the arithmetic mean
+  exceeds the rebalanced mean unconditionally, `E(R_AR − R_RB) = ½(σ²_ε̄ − σ_ε̄1,ε̄2) > 0`, growing in the
+  variance of the portfolio's unexpected return — **numerator-only, worst for the noisiest books, the
+  same signature as the other three.** Canina et al. put the magnitude at ~6%/year on a US panel and,
+  decisively, show by Monte Carlo that it is **already near-full-size at ten instruments and flat above
+  one hundred**, so a 140-instrument universe gets essentially all of it. **#188 is the discriminator and
+  it is cheaper than #183**: the other three channels are invariant to how a fixed set of returns is
+  averaged, this one must shrink as the review period lengthens — so recomputing one already-recorded
+  statistic at two review periods separates it, with no new data. **#188(a) is the prior question and it
+  is one look**: whether the engine reports a daily-rebalanced or an instrument-linked mean. This folder
+  is **not permitted to read `engine/`** and makes no claim about it; it is for the strategy agent or the
+  human, and it is upstream of every number on the board. New: **#188–#192**. **Nothing is closed by this
+  entry** — no lab measurement was taken tonight. **Carried unchanged and still genuinely unrun: #82**
+  (twenty-eighth session, still the oldest unspent free item), **#94** as standing discipline,
+  **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s
+  second use, **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**, **#171**, **#172**), the
+  2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the 2026-10-01 set (**#179**,
+  **#180**, **#181**) and the 2026-10-02 set (**#183**, **#184**, **#185**, **#186**). **#152 stands.**
+  **#163, #169, #173, #178, #182, #187 and #192 stay anti-candidates.**
+- **[2026-10-03] What should aim the next session, in order.**
+  - **#188(a) goes first and it is not research — it is one look at the engine by someone allowed to take
+    it.** Everything else on this list is interpretation of numbers whose arithmetic is unestablished. It
+    costs nothing and it either retires this whole channel or makes it the most important item on the
+    file.
+  - **Then #188(b), ahead of #183.** Both are invariance discriminators and both re-weight or recompute a
+    statistic already on the board, but #188(b) separates a channel whose *magnitude* is measured in a
+    Tier-1 paper (~6%/year, size-invariant) while #183 separates two whose magnitudes here are unknown.
+    Measured-magnitude first.
+  - **Then #189**, because it is the only free item that grades the *data* rather than a statistic
+    computed from it, and the lab has been halted for four nights over a data question. Its stated limit
+    is part of the task: it does not test survivorship.
+  - **Then #183, #184, #179, #180**, in the order [2026-10-02] set them, now fourth through seventh.
+  - **Then #190**, which wants the same per-instrument noise proxy as #179(b) and #184 — build the proxy
+    once and spend it on all three.
+  - **Then #185** as a standing reporting rule, and **#191** as screens to re-measure rather than adopt.
+  - **Then the carried items**: #181, then #174's reading, then #175, #177, #176.
+- **[2026-10-03] The transferable output, and it is about where a mechanism search stops rather than how
+  it starts.** Sessions 28–47 built detectors for gaps; [2026-09-30] added one for redundancy;
+  [2026-10-02] added one for rival mechanisms. Tonight adds the fourth and it is the previous one turned
+  on itself: **after enumerating the mechanisms that could produce an effect, ask what layer the
+  enumeration was conducted at, and look one layer below it.** [2026-10-02]'s three channels are all
+  about *which numbers go into the average* — the sample, the pool, the per-observation estimator. None
+  of them is about *the average*. The fourth channel was not hidden; it was beneath the level the question
+  was posed at, which is why a rule designed to find rival mechanisms missed it. Generalised: **an
+  enumeration is bounded by the abstraction it was written in, so a complete-looking list is evidence
+  about the list's altitude, not about the world.** The practical form is cheap — for any measured
+  quantity, name the arithmetic that produced it and ask whether that arithmetic has a literature. Here
+  it had a Tier-1 one, two papers in a single 1983 journal issue, uncited by this folder in forty-nine prior
+  sessions.
+- **[2026-10-03] Access findings, recorded so the next session does not repeat the searches — and two of
+  them reverse lessons from the last two nights.** **(1) An `oa_status: closed` is not proof that nothing
+  is fetchable.** [2026-10-01] and [2026-10-02] both recorded that a `GREEN` flag is no promise of
+  reachability; tonight the mirror case appeared, and in the *useful* direction — OpenAlex called
+  Canina et al. closed while Semantic Scholar's GREEN URL at `ecommons.cornell.edu` served the file first
+  try. **Check all three indexes' location lists before declaring a paper closed**; this folder has now
+  been wrong in both directions inside three nights. **(2) An author's *institutional library*, found via
+  OpenAlex's `locations` list, is a new and strong channel** —
+  `authors.library.caltech.edu/records/<id>/files/<file>.pdf` served the typeset Elsevier PDF of a closed
+  1983 JFE article on the first try, reached from the landing page OpenAlex named. This is the
+  2026-09-18 faculty-page lesson one step out, and the search was replaced by reading an index's own
+  location list. **(3) `rodneywhitecenter.wharton.upenn.edu/working-papers-abstract/working-paper-abstracts-<year>/`
+  serves per-year abstract pages from 1970 to 2014** — the first stop for any Wharton finance paper of
+  that era, and tonight the authoritative source for Blume–Stambaugh's abstract. **(4)
+  `pyxida.aueb.gr` is behind Anubis at HTTP 200**, with a ~2.4 KB `Oh noes! Access Denied` body on both
+  its `handle/` and `server/api/core/bitstreams/<uuid>/content` routes — the second Anubis host after
+  Frankfurt [2026-09-30], and note it runs **the same DSpace software `ecommons.cornell.edu` served from
+  freely tonight**, so the platform predicts nothing and the institution's bot policy predicts
+  everything. **(5) A filename coincidence can look exactly like a hit**:
+  `ifm.unibe.ch/.../DATASTREAM.pdf` ranks highly for Ince–Porter and is a 2017 student manual for
+  operating the database. Like the Incapsula and `gsbpreserve` cases it **looks like an answer** —
+  `file` and read the first page before believing a search ranking. **(6) Semantic Scholar's clean
+  `not found` for a real DOI recurred** on `10.1111/j.1475-6803.2006.00189.x`, a fourth instance after
+  [2026-10-01]'s first and [2026-10-02]'s two; **Crossref was again never rate-limited and OpenAlex's
+  budget was available tonight**, so both carried the counts. **(7) UNIGE's `archive-ouverte` lists a
+  public OA file with a `resId` and five plausible download paths all 404** — the file is real and the
+  API path was not found; this is the open lead for Schmidt et al.
+- **[2026-10-03] Three gaps left open, and the top one is a *better* target than the gap it replaces.**
+  **(a) Landis–Skouras (2021, JBF 130, 106128)** — 47 Crossref / 53 OpenAlex citations, closed, no
+  repository copy. Per its abstract it supplies guidelines **and code** for deriving high-quality
+  international equity data, raising coverage to 91 countries while **reducing survivorship bias and data
+  staleness** — three live concerns of this lab in one sentence, and a sharper instrument for gap (c) than
+  Ince–Porter itself. **The strong route is the [2026-09-07] lesson: the paper ships code, so look for the
+  authors' published reference implementation**, which would be a complete and unambiguous primary for the
+  screens. The AUEB thesis containing it is the Anubis-blocked `pyxida` item. **(b) Schmidt et al. (2019,
+  FMPM 33(3))** — a step-by-step screening recipe for 23 countries, cost-aware, with a real public OA file
+  at UNIGE whose download path was not found; finding that path closes it. **(c) Ince–Porter (2006) in
+  full** — now verified closed on all three indexes with `any_repository_has_fulltext: false`, chased on
+  five routes across two nights, and reached only through a Tier-C vehicle. **The cost of this gap is now
+  lower than it looks**, because Rossi supplied the screen list and the grading method and because (a) and
+  (b) are both better-aimed successors; what is still missing at first hand is the *evidence* behind the
+  screens. **Carried from [2026-10-02] and not advanced tonight**: the ABK correction's algebra,
+  Blume–Stambaugh's algebra (its abstract is now recorded, which is new), and the Shumway pair.
+- **[2026-10-03] One observation for the human, and it is one night more serious than [2026-10-02]'s.**
+  `origin/survivorship-pit-v2` is still unmerged; the journal now records **four** consecutive halted
+  nightlies [2026-09-29, 09-30, 10-01, 10-02] and the session-start integrity warning still fires. This
+  folder has now added three more notes, which again makes `main` look active while **no experiments have
+  run for five days**. The substantive change tonight is that **the branch's own argument has acquired a
+  fourth confound**: it re-scores the champion from validation Sharpe 1.27 to 0.19 and attributes the gap
+  to survivorship, but tonight's sources establish that an averaging-method choice alone can move a mean
+  return by a third of its size, size-invariantly, and **#188(a) says nobody has checked which averaging
+  method either number uses.** That is not an argument against the branch — it is an argument that the
+  branch's headline difference is **not yet attributable**, and that the check which would make it
+  attributable is one look at `engine/` by someone permitted to take it. #188, #183 and #184 are between
+  them three cheap tests of whether the artifact the branch is arguing about behaves as four different
+  theories now say it must. None is a trial and none reads the holdout.
+
 
 - **[2026-10-02] Read this first: the lab has three mechanisms for its biggest artifact and has
   separated one — and separating them is cheaper than anything else on this list.** `learnings.md`

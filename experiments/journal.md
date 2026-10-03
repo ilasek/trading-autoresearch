@@ -17187,3 +17187,5 @@ or land someone else's branch. Tonight's merge test was run in a detached throwa
 aborted; the working tree and all refs are untouched.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, fourth night.**
+
+## Research session — 2026-10-03 (learning agent): 3 notes added, see research/SUMMARY.md
