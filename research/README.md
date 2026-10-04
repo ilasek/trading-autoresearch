@@ -121,12 +121,49 @@ snippets. Three practical limits to plan around:
   404s that still write a file — check `curl -w '%{http_code}'` and `file` the result before
   parsing.
 
-- **`econstor.eu` is a reliable channel and worth trying early** (added 2026-09-07). It hosts
+- **`econstor.eu` WAS a reliable channel and is now behind Anubis — do not rely on it**
+  (added 2026-09-07; **reversed 2026-10-04**). On 2026-10-04 a direct
+  `econstor.eu/bitstream/10419/<id>/1/<file>.pdf` request returned **HTTP 200 with a 7.9 KB
+  `Making sure you're not a bot!` body** served from `/.within.website/x/xess/` — the same Anubis
+  software recorded at Frankfurt (2026-09-30) and AUEB (2026-10-03), and the **first case of a
+  channel this file recommended going dark.** Like the Incapsula case it *looks like an answer*:
+  HTTP 200, a file written to disk, and only `file` reveals it is HTML. Try it, but check the body,
+  and prefer the two channels in the next bullet. The original note, retained because the host may
+  come back: it hosts
   German-institution discussion papers *and* mirrors of open-access journal articles, so it has
   twice served files the publisher's own site refused — including a **gold open-access MDPI
   article** whose `mdpi.com` PDF endpoint 403s an automated client. OpenAlex's
   `locations[].landing_page_url` list is how to find the handle (`hdl.handle.net/10419/...`);
   fetch the landing page and read the `bitstream` link out of it.
+
+- **For a closed article, enumerate the CO-AUTHORS' institutions and try each one's repository
+  before any search engine** (added 2026-10-04). This is the 2026-09-18 faculty-page lesson and the
+  2026-10-03 institutional-library lesson turned into a procedure, and the way to run it is to read
+  **OpenAlex's own `locations[].landing_page_url` list** rather than to guess hostnames. Two hosts
+  earned their place this way in one session: **`utoronto.scholaris.ca`** (University of Toronto
+  DSpace) served the **typeset published PDF of a closed AER article** on the first try, and
+  **`repository.up.ac.za`** (University of Pretoria) served a working paper of a closed article from
+  its third author's institution. Three cautions. An author's *own publication page* can host the
+  **supplement and not the paper** — one checked tonight listed a JF article with its full abstract
+  and linked only the Internet Appendix. **Legacy Google Sites file URLs are a refusal that looks
+  like an answer**: `sites.google.com/a/<domain>/<user>/<file>.pdf` returns **HTTP 200 with a
+  ~940 KB Google Sites application shell**, unchanged by the legacy `?attredirects=0&d=1` download
+  form, and embeds no Drive file id to follow. And a **Pure or DSpace record can hold a record
+  without holding a file** — a `hdl.handle.net` handle named in a Pure record resolved to a 200
+  landing page with no bitstream link at all, so a handle is not evidence of full text. The
+  *abstract* side of Pure is excellent and is the right fallback for a closed Elsevier article.
+
+- **`api.fatcat.wiki` is unreachable through this environment's relay, and GitHub's search API is
+  closed to this session** (added 2026-10-04). A `api.fatcat.wiki/v0/release/lookup?doi=…` call died
+  with `Recv failure: Connection reset by peer` — the same transport signature this file records for
+  `web.archive.org`, so **report it as a transport failure, not an origin refusal**. Separately,
+  `api.github.com/search/repositories` returns **HTTP 403** with `sessions are bound to their
+  configured repositories`: the "find the authors' published reference implementation" route below
+  **cannot be exhausted from inside this environment**, and a negative result on it is uninformative
+  rather than evidence that no code exists. Also recorded: the **ETH Research Collection**
+  (`research-collection.ethz.ch`) returned HTTP **500** on a handle reached via its own DOI, **401**
+  on `/server/api/core/items` and **403** on `/server/api/discover/search/objects` — three error
+  classes in one minute, which is server or policy behaviour rather than a rate limit.
 
 - **The Internet Archive's OCR text is the cheapest route to a scanned working paper, and it beats
   the institutional repository that holds the same scan** (added 2026-09-08). Many pre-1990 working

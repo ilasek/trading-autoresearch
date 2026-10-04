@@ -1387,6 +1387,61 @@ unmeasured. It is free, and it either meets the closure's binding condition for 
 closes the family for good. `published_post_2018: true` for the RFS paper.
 → `notes/2026-09-02-turn-of-month-payment-cycle.md`
 
+
+**The `calendar` half's largest effect is a six-month one, and the lab has already measured it and
+closed the only form of it the lab can hold.** Bouman–Jacobsen (2002, AER, Tier 1 — **NOT read**,
+closed; SSRN 403, the Erasmus RePub handle holds a record with no file) document higher
+November–April than May–October index returns in 36 of 37 countries; Jacobsen–Zhang (published as
+Zhang–Jacobsen 2021, *JIMF*, Tier 1/2; working-paper version **read in full**) extend it to **108
+markets and 55,425 monthly observations over 1693–2011** and report the sign in **81 of 108
+countries, significant in 35 against 2 the other way**, with a pooled six-month mean of 6.93%
+November–April against 2.41% May–October (**~4.5 pp/yr**, undated and full-panel; the sources'
+strategy-level performance figures are deliberately omitted per the anti-lookahead policy).
+Restricted to markets with over ninety years of data — Lakonishok–Smidt's own standard — it is
+significant in 14 of 17 plus the world index. Two qualitative properties matter more than the
+magnitude: **the variance is not seasonal** (November–April's standard deviation is if anything the
+lower of the two, the same numerator-only signature this folder catalogued four times for a *bias*
+in [2026-10-02]/[2026-10-03]), and **no post-publication decay is reported** — the rolling estimates
+are positive at every window under OLS and GARCH, which is McLean–Pontiff failing to appear and is
+simultaneously the reason to be suspicious. Under Huber M-estimation the UK rolling estimates **do
+turn negative** in part of the twentieth century, so the persistence is partly carried by influential
+observations. **The tension with `experiments/learnings.md` is explicit and this folder does not
+claim to resolve it**: [Measured 2026-09-01] already found **Nov–Apr at +6.18 bps/day (t = +3.58)**
+on this panel and closed it structurally, because `max_leverage = 1.0` leaves only hold-in-window /
+cash-out and the May–October complement still earns +11% to +14%/yr. The sources' own ~4.5 pp/yr is a
+difference between **two positive windows**, which is exactly the configuration that closure rules
+out. What the closure does *not* cover is a **rotation between instruments**: gross 1.0 at all times,
+two boundary crossings a year, ~0.6%/yr of cost against the 3.6%/yr the lab measured a monthly
+overlay must clear. That construction needs a destination, and the only one the literature supplies
+is the hemisphere flip below (#193, #194).
+→ `notes/2026-10-04-halloween-six-month-seasonal.md`
+
+**The one developed mechanism for that seasonal makes two cross-sectional predictions the calendar
+cannot make, and an independently published critique says both are spurious — the first
+Tier-A-against-Tier-A tension in this folder where the two sides predict opposite signs for one
+buildable portfolio.** Kamstra–Kramer–Levi (2003, AER, Tier 1, 858 Crossref / 1103 OpenAlex
+citations, **read in full** — typeset published PDF from `utoronto.scholaris.ca`) chain clinical
+evidence that seasonal affective disorder tracks hours of daylight to experimental evidence that
+depressed mood lowers risk tolerance, giving a seasonal cycle in the required return. Its
+distinguishing content is **(a) a latitude gradient** and **(b) a six-month phase flip in the
+Southern Hemisphere**; the construction is fully specified (`SAD_t = H_t − 12` on local fall/winter
+trading days and 0 otherwise, with `H_t` from the solar declination angle and latitude), and the
+paper's own trading illustration is a **pro-SAD cross-hemisphere rotation reallocating the whole book
+twice a year**. Two methodology marks against: all tests are **one-sided**, and costs are
+**explicitly neglected**; the daily `R²` is 0.011–0.091 and should be quoted beside the 5.7%–17.5%
+annualised range attributed to the daylight term. Jacobsen–Marquering (2008, *JBF*, Tier 1/2, 152
+Crossref / 181 OpenAlex, **abstract only** — closed, abstract authoritative from Erasmus Pure)
+re-examine this paper and Cao–Wei's temperature variant, **confirm the underlying six-month
+seasonal**, and find *"little evidence in favor of a SAD or temperature explanation"*, concluding
+that **"a simple winter/summer dummy best describes this seasonality"** and that the mood reading is
+"premature". A published KKL response exists (`10.1016/j.jbankfin.2008.09.011`) and was **not read**,
+so the exchange is recorded as live rather than settled. **The decisive fact is already in this
+folder**: the 108-market replication reports **positive November–April coefficients in Australia,
+New Zealand and South Africa** — the North's calendar phase, not the opposite one — and KKL's own
+footnote reports South Africa's rotations mixed in sign, attributed to cross-listed gold producers.
+**Both cannot be right, and this universe can decide it for free** (#193). `validation_overlap:
+false` for both.
+→ `notes/2026-10-04-sad-daylight-seasonal-mechanism.md`
 ---
 
 ### 12. `lead-lag-spillover`
@@ -1614,6 +1669,39 @@ cross-serial residuals at ~4x. Two independent measurements of one artifact now 
 and the measured attenuation *identifies* `|p_a − p_b|/(1 − p_a p_b)` directly. See also #90, which
 applies the same attenuation to the one number every blend decision in this repo is priced on.
 
+
+**The family's first coverage at the *country* level, and its headline claim does not survive
+controlling for the other countries jointly — which is a result about specification, not about the
+mechanism.** Rapach–Strauss–Zhou (2013, *JF*, Tier 1, 675 Crossref / 717 OpenAlex / 462 Semantic
+Scholar citations — **NOT read**: closed on all three indexes, the corresponding author's own
+publication page links only the Internet Appendix, and a legacy Google Sites `.pdf` URL returns the
+Sites application shell at HTTP 200) report that lagged **US** returns predict returns in numerous
+non-US industrialised countries while the reverse does not hold, and attribute it to gradual
+cross-border information diffusion. Aye–Balcilar–Gupta (2017, *Empirica* 44(1), Tier 2, 23 Crossref
+citations, **read in full** from `repository.up.ac.za`) re-estimate **the anchor's own models on the
+anchor's own dataset and sample range** (11 industrialised countries, 1980:2–2010:12, local-currency
+excess returns) and split four ways. **Two specifications reproduce it**: the **pairwise** predictive
+regression (US significant in 34 of 66 cases; only Sweden consistently predicts the US back) and the
+**news-diffusion GMM model**, where `δ̃_{i,USA} = 0` is rejected at 1% for every country in every
+subperiod and the contemporaneous-diffusion parameter `θ̃_{i,USA} < 1` in 48 of 66 cases against the
+anchor's reported 100%. **Two reverse it**: the **augmented VAR(1) including all eleven countries'
+lagged returns** finds **no significant US role at any subperiod**, with **Switzerland** strongest,
+then Sweden, Netherlands negative; and the **adaptive elastic net** version puts Switzerland at 27 of
+66 and the **US at 8 of 66**. **The reading, and it is the transferable part: the specifications that
+find a US lead look at one foreign market at a time, and the specifications that look at all ten
+simultaneously attribute the lead elsewhere.** A pairwise regression cannot separate "the US leads"
+from "the US is the most correlated member of a bloc that leads". So the **friction is robust** —
+`θ̃ < 1` survives both — and the **source attribution is not**. Siliverstovs (2016, KOF WP 16-408,
+Tier 3, **abstract only**; the ETH Research Collection returned HTTP 500 on its handle and 401/403 on
+its REST API) independently reports the relation is **business-cycle-state-dependent**, which the
+re-estimation's rolling bootstrap echoes in concluding that "it would be misleading to rely on
+results based on constant-parameter linear models". **Three of the sources' ingredients are
+unavailable here** — the nominal short rate, the dividend yield and the bill rate for excess returns —
+and they are load-bearing, so any implementation here is a weaker test than either source ran and
+must say so. The free item is to run the **specification ladder rather than the signal** (#195), and
+the anti-candidate is to build "lag the US ETF into the other regions" on the strength of the
+anchor's title (#197). `validation_overlap: false` for the cluster.
+→ `notes/2026-10-04-us-leads-the-world-country-lead-lag.md`
 ---
 
 ### 13. `statistical-arbitrage`
@@ -9090,6 +9178,108 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`,
     `notes/2026-10-03-caveat-compounder-daily-rebalancing-bias.md`
 
+193. **FREE, ZERO TRIALS, AND IT DECIDES #194 — split this universe by listing hemisphere and estimate
+    the November–April mean-return difference *within each subset separately*.** One dummy regression
+    per subset on **train only**, the same `r_t = μ + α·H_t + ε_t` the 108-market replication uses,
+    `H_t = 1` for November–April. This is the identifying test for the only developed mechanism behind
+    the lab's largest seasonal, and the two competing theories give **opposite signs**: the daylight
+    mechanism (Kamstra–Kramer–Levi, AER, Tier 1) requires the Southern subset's `α` to be **negative**
+    (local fall/winter is May–October there), while a plain global calendar effect
+    (Bouman–Jacobsen / Zhang–Jacobsen) requires it **positive**. **The prior leans against the
+    mechanism and should be stated before the measurement**: `experiments/learnings.md`
+    [Measured 2026-09-01] already found **Nov–Apr at +6.18 bps/day (t = +3.58)** on the *whole* global
+    panel including its Southern-Hemisphere names, which is the pooled version of exactly this
+    question — consistent with a flip only if a strong Northern leg carries a diluted average. If the
+    Southern `α` is positive, a Tier-A mechanism is **closed on this universe for zero trials** and
+    #194 must not be built. This is the [2026-10-02] rule — *a confirmed mechanism with no rival
+    mechanism considered is an unidentified one* — with the identifying test being a **subset split**
+    rather than a re-weighting. Two stated limits: the split must be by the hemisphere of the *ETF's
+    underlying region* where the instrument is an ETF, and it tests the **phase flip**, not the
+    latitude gradient, which this panel has too few distinct latitudes to resolve.
+    → `notes/2026-10-04-sad-daylight-seasonal-mechanism.md`,
+    `notes/2026-10-04-halloween-six-month-seasonal.md`
+
+194. **GATED BEHIND #193 — a two-rebalance-per-year hemisphere rotation, and it is the first calendar
+    construction this folder has described that sits outside both of the lab's calendar closures.**
+    Long-only, gross 1.0 at **all** times, ETF-level where available: hold a high-latitude Northern
+    sleeve through November–April, rotate the whole book into a Southern-region sleeve
+    (Australia / New Zealand / South Africa exposure) through May–October. **Why the closures do not
+    reach it:** [Measured 2026-09-01] closes an overlay that **exits to cash**, deriving the closure
+    from `max_leverage = 1.0` plus a positive complement window — a rotation never holds cash, so the
+    no-leverage constraint does not bind and the complement-sign condition does not apply; and
+    [Measured 2026-09-02]'s cost rule is set by **boundary crossings**, of which this has **two a
+    year** (~0.6%/yr at 15 bps/side) against the **3.6%/yr** a monthly overlay had to clear. Run as a
+    **scout** — it spends no holdout look — and state three things in the hypothesis: that the
+    national controls the sources use are unavailable here; that breadth is **two bets a year**, so
+    the deflated-Sharpe bar rather than the gates is the binding constraint and the honest prior on a
+    resolvable `t` is low (`notes/2026-08-19-fundamental-law-breadth-and-strategy-risk.md`); and that
+    **cross-listing is the mechanism's own stated failure mode** — KKL's footnote attributes South
+    Africa's mixed rotations to cross-listed gold producers, so a Southern sleeve built from globally
+    cross-listed large caps tests nothing. **Do not build it if #193 comes back positive.**
+    → `notes/2026-10-04-sad-daylight-seasonal-mechanism.md`
+
+195. **FREE, ZERO TRIALS — run the *specification ladder* for country lead-lag, not the signal.** The
+    entire content of tonight's `lead-lag-spillover` note is that a **pairwise** and a **joint**
+    specification disagree about which node leads, on identical data: the pairwise regression and the
+    news-diffusion GMM say the US, the all-countries VAR under pooled OLS and under adaptive elastic
+    net say **Switzerland** (27 of 66 cases against the US's 8). On this panel, with ETF-level region
+    returns, estimate on **train only and at monthly frequency**: (a) pairwise lagged-return
+    predictive regressions for every ordered region pair, and (b) the joint version including all
+    regions' lagged returns. **Then compare the identity of the leading node across the two rungs.**
+    Disagreement ⇒ the family's headline claim is unidentified on this panel and no trial should be
+    spent on a single-leader signal; agreement ⇒ the strongest motivation this family has had. Two
+    preconditions, both already in this folder and both binding: the panel's index is the **union of
+    fifteen exchange calendars with forward-fill**, so a daily estimate will find lead-lag that is
+    calendar artifact (`notes/2026-09-08-nonsynchronous-trading-econometrics.md`,
+    `notes/2026-09-05-cross-serial-correlation-as-restatement.md`, and the `%zero` finding
+    [Measured 2026-09-28] for what this construction does to an imported statistic); and the sources'
+    **national controls (nominal short rate, dividend yield, bill rate) are unavailable here**, so
+    this is a weaker test than either source ran.
+    → `notes/2026-10-04-us-leads-the-world-country-lead-lag.md`
+
+196. **FREE, ZERO TRIALS, TWO PARTS — the two preconditions for importing any six-month seasonal effect
+    size onto this panel, and both are measurements this lab can take and the sources cannot.**
+    *(a) Dividend seasonality.* Both Halloween sources measure on **dividend-excluding price
+    indices** and dismiss the concern by citing Gultekin–Gultekin that dividends are not seasonally
+    clustered — an argument, not a measurement, with an unknown sign. This lab's panel is
+    **dividend-adjusted**, so the ~4.5 pp/yr figure is not transferable until the seasonal
+    distribution of the dividend component on *this* panel is checked. *(b) The regional-composition
+    falsifier.* The 108-market replication reports the effect **absent** in Israel, India and the
+    Central/South American markets, and weaker in frontier and unclassified markets — regions this
+    universe holds. A **pre-registered** regional split of the Nov–Apr coefficient therefore has a
+    stated prediction before it is run, which makes it a falsifier rather than a fishing expedition:
+    if the effect here is concentrated in the regions the sources name as absent, it is not the
+    sources' effect. Both parts are diagnostics that score no returns and are unlimited under
+    `program.md`.
+    → `notes/2026-10-04-halloween-six-month-seasonal.md`
+
+197. **ANTI-CANDIDATES, four, and the first two are about not letting a title or a magnitude do the
+    work of a measurement.** *(a) Do not build "lag the US region ETF into the other regions."* The
+    anchor's title says the US leads; on the two specifications in its own data that control for the
+    other countries **jointly**, the leading node is **Switzerland** — a result no economic story in
+    either paper predicts, which is itself the reason to treat any single-node attribution here as
+    fragile. The honest form of this family's signal is **region-neutral cross-sectional**: rank
+    regions on the prior period's returns of the whole set, never nominate a leader. *(b) Do not
+    import the daylight weighting.* Build the **binary local-season** rotation under #194, not a
+    continuous `H_t − 12` weight. The critique's conclusion is that a plain winter/summer dummy fits
+    better, and KKL's own robustness section reports results "roughly the same" across every
+    normalisation of hours-of-night tried — a measure whose normalisation does not matter carries less
+    information than it appears to, and any gain from the continuous form here is a red flag, not a
+    refinement. Seventh-plus instance of *use every screen to kill, never to forecast*. *(c) Do not
+    re-run the cash-out calendar overlay.* [Measured 2026-09-01] and [Measured 2026-09-02] closed it
+    twice, on a sign condition and on boundary-crossing cost, and **nothing in tonight's sources
+    overturns either** — the sources' own ~4.5 pp/yr is a difference between two *positive* windows,
+    exactly the configuration the first closure rules out. #194 is admissible only because it is a
+    rotation, and that distinction is the whole of its licence. *(d) Do not condition a lead-lag signal
+    on a business-cycle or trend state because two sources report state-dependence.* The lab has
+    already paid for that lesson: three de-risking/regime overlays on this book all backfired out of
+    sample (`experiments/learnings.md`, first strategy learning). Use the state-dependence as a reason
+    to expect a **low unconditional `t`**, not as a licence to build a switch.
+    → `notes/2026-10-04-us-leads-the-world-country-lead-lag.md`,
+    `notes/2026-10-04-sad-daylight-seasonal-mechanism.md`,
+    `notes/2026-10-04-halloween-six-month-seasonal.md`
+
+
 
 ## Coverage log
 
@@ -9146,8 +9336,138 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-01 (session 48) | **The first session in eighteen aimed at the *sample* rather than at anything computed from it, and the aim was set by the lab being halted rather than by a gap detector.** Two consecutive nightlies [`journal.md` 2026-09-29, 2026-09-30] stopped at step 0 over an unmerged point-in-time-universe branch whose own report re-scores the seated champion from validation Sharpe 1.27 to 0.19, and no research session had ever covered the mechanism that claim rests on. A grep across all 146 prior notes returned **zero** for `delisting bias`, `absorbing barrier`, `pre-sample`, `discovery sample` and `p-hacking`; `2026-08-26` covers selection on end-of-period *rank* and nothing covers selection on *survival* or on the *discovery window*. **Families → … → an estimated moment → the conditioning that put the data in front of the lab.** Headline: the lab's largest measured artifact — "the level *is* the survivorship artifact" — is a **theorem**, `dp* = (μ + σ²·π_p/π)dt + σ dz`, which adds drift in proportion to variance and leaves variance alone, and which predicts two further things the lab has not checked (#179). Second: a measured *decorrelation* is itself selected on and reverts, which is the number `program.md` prices a challenger with (#180). Third: how large the discovery-window discount is, is **contested** — 40–60% against ~12%, both Tier A, each citing the other — and the smaller estimate comes with a dispersion-based (not count-based) shrinkage formula the lab can run on its own 104 trials (#181). New: **#179–#182**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the lab ran no trials for a third night. | Brown–Goetzmann–Ross 1995 (`2026-10-01-survival-conditioning-induced-drift.md`); Linnainmaa–Roberts 2018 (`2026-10-01-discovery-sample-and-anomaly-decay.md`); Chen 2021 + Chen–Zimmermann 2020 (`2026-10-01-limits-of-p-hacking-publication-bias.md`) |
 | 2026-10-02 (session 49) | **The second consecutive session aimed by the thing that has the lab stopped, and the first to take a gap this folder had named, carried and failed on twice — tonight it was reached by proxy rather than head-on.** The branch is unchanged, so `origin/survivorship-pit-v2` has now blocked three recorded nightlies and is on course for a fourth. [2026-10-01] closed the survivors' half of survivorship and named **delisting returns** as "the missing third", with both primaries blocked at BYU. **Sample → the conditioning that selected it → the three measurement choices sitting on top of it.** Headline: the lab has **at least three distinct mechanisms** producing its single largest measured artifact — survival conditioning, the pool's weighting, and the estimator — all numerator-only and all largest for the noisiest names, and it has separated one (#183, the discriminator: pool bias is invariant to the cross-sectional weighting, estimator bias is not). Second: "survivorship bias inflates results" is **half a sentence** — exiting names crowd one end of a sort and the sign of the bias follows which end a book is on, which makes the lab's artifact **signable and falsifiable** for the first time (#184). Third: a point-in-time *membership* fix still owes the *leavers' returns*, so a corrected re-scoring built on membership history alone is itself optimistic, and the imputation it needs must be a trailing conditional mean rather than a static constant (#186a). Also recorded: this folder's **second** unresolved Tier-A-against-Tier-A disagreement (HXZ's 35% replication rate against Jensen–Kelly–Pedersen's "most factors replicate"), same shape as [2026-10-01]'s 40–60%-against-12%. New: **#183–#187**. **Nothing is closed by this entry** — no lab measurement was taken tonight. | Hou–Xue–Zhang 2020 (RFS; typeset version of record read in full from `theinvestmentcapm.com`) (`2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`); Shumway 1997 + Shumway–Warther 1999 + Beaver–McNichols–Price 2007 — **all three abstract-level only**, abstracts authoritative (bepress `meta description`, Stanford GSB publication page), with the delisting-adjustment algebra read in full from Hou–Xue–Zhang's Appendix B (`2026-10-02-delisting-returns-the-other-half-of-survivorship.md`); Asparouhova–Bessembinder–Kalcheva 2010 + 2013 — **abstract-level only**, abstracts authoritative from ASU's Elsevier Pure instance, correction algebra **not read** (`2026-10-02-noisy-prices-and-biased-premium-estimates.md`) |
 | 2026-10-03 (session 50) | **The third consecutive session aimed by the thing that has the lab stopped, and the first to find a channel the previous two sessions' own framework had not considered.** [2026-10-02] established that the lab has at least three mechanisms producing its single largest artifact and wrote the transferable rule — *before attributing an effect to a mechanism, count how many other mechanisms produce the same signature.* Applied to itself that rule turns up a **fourth**, and it sits one layer lower than anything covered in fifty sessions: not the signal, not the pool, not the estimator of a moment, but **the arithmetic that turns price series into a mean return**. A grep across all 152 prior notes returned **zero** for `buy-and-hold bias`, `rebalanced mean`, `compounding bias`, `Caveat Compounder` and `Ince-Porter`. **Sample → the conditioning that selected it → the measurement choices on top of it → the averaging method underneath all of them.** Headline: Roll proves `E(R_AR − R_RB) = ½(σ²_ε̄ − σ_ε̄1,ε̄2) > 0` unconditionally and Canina et al. measure the gap at ~6%/year with a Monte Carlo showing it is **near-full-size at ten instruments and flat above a hundred** — so this universe gets all of it and cannot diversify it away (#188). The discriminator is again an **invariance**, and a cheaper one than #183's: the other three channels are invariant to how a fixed set of returns is averaged, this one must shrink with the review period (#188b). Second: Roll's own generalisation — the bias applies to *any* sort on a volume-related variable, naming size, dividend yield, P/E and beta — gives `liquidity-volume` and `range-variance` a **signed, falsifiable** differential bias between buckets before any economics (#190). Third: Ince–Porter's external-aggregate diagnostic is runnable here for free because the universe already contains ~42 index ETFs (#189), with the limit that it tests classification and price-series defects and **not** survivorship. Also recorded: a causal chain joining the three notes (dirty panel → bounce → wider averaging bias → worst at a liquidity sort's extreme), and **two access findings that are the mirror image of the last two nights'** — an `oa_status: closed` is not proof nothing is fetchable, and an author's *institutional library* reached via OpenAlex's location list served a closed Tier-1 PDF on the first try. New: **#188–#192**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the session's best-aimed primary was again not read. | Roll 1983 (JFE; typeset publisher PDF read in full from `authors.library.caltech.edu`) with Blume–Stambaugh 1983 (JFE) **abstract-only**, abstract authoritative from the authors' own Rodney L. White Center working-paper series (`2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`); Canina–Michaely–Thaler–Womack 1998 (JF; read in full from `ecommons.cornell.edu` via Semantic Scholar's GREEN URL, against OpenAlex's `closed`) (`2026-10-03-caveat-compounder-daily-rebalancing-bias.md`); Ince–Porter 2006 (JFR) — **NOT read**, verified closed on all three indexes with zero repository fulltext, reached by proxy through Rossi 2011 (MPRA, Tier C, read in full); Landis–Skouras 2021 (JBF) and Schmidt et al. 2019 (FMPM) located, routes recorded, **not read** (`2026-10-03-international-panel-screens-datastream.md`) |
+| 2026-10-04 (session 51) | **The first session in five to leave the measurement/data-quality vein, and it returns with a tension of a shape this folder has not held before: two Tier-A theories that predict *opposite signs* for one cheap, buildable, long-only portfolio on this exact universe.** Sessions 47–50 walked the sample → the conditioning that selected it → the measurement on top of it → the arithmetic underneath; `research/README.md`'s rotation rule says to come back to the families, and the thinnest implementable one was `seasonality-calendar` (3 notes, both its halves closed by the lab) with `lead-lag-spillover` uncovered at the **country** level. A grep across all 155 prior notes returned **zero** for `Halloween`, `Bouman`, `Jacobsen`, `sell in May`, `month-of-year`, `hemisphere`, `latitude` and `Rapach` outside the 2010 combination paper. Headline one: the six-month seasonal is real and large across 108 markets and three centuries, the lab has **already measured it here at +6.18 bps/day (t = +3.58)** and closed it twice — but both closures are about an overlay that **exits to cash**, and a **rotation between instruments** is neither (gross 1.0 throughout, two boundary crossings a year, ~0.6%/yr against the 3.6%/yr a monthly overlay had to clear). Headline two: the only developed mechanism for that seasonal (daylight/SAD) makes the rotation's destination a **hemisphere flip**, its published critique says the mechanism is spurious and a plain winter/summer dummy fits better, and the 108-market replication reports **positive November–April coefficients in Australia, New Zealand and South Africa** — the North's phase, not the opposite one. **#193 separates them with one subset split, on train, for zero trials, and the prior stated before the measurement leans against the mechanism.** Headline three, in `lead-lag-spillover`: a Tier-2 re-estimation on the Tier-1 anchor's **own data and own models** reproduces "the US leads" under the **pairwise** regression and the news-diffusion GMM and **reverses it** under the all-countries VAR — where the leading node is **Switzerland** (27 of 66 against the US's 8). The friction (`θ̃ < 1`) is robust; the source attribution is not. The transferable rule is in the open questions. New: **#193–#197**, three of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the session's named top gap (Landis–Skouras) was chased again and again not read. | Bouman–Jacobsen 2002 (AER) **NOT read** — SSRN 403, the Erasmus RePub handle holds a record with no file — with Jacobsen–Zhang (publ. Zhang–Jacobsen 2021, JIMF) working-paper version **read in full** from a verified third-party mirror (`2026-10-04-halloween-six-month-seasonal.md`); Kamstra–Kramer–Levi 2003 (AER) **read in full**, typeset published PDF from `utoronto.scholaris.ca`, with Jacobsen–Marquering 2008 (JBF) **abstract only**, authoritative from Erasmus Pure (`2026-10-04-sad-daylight-seasonal-mechanism.md`); Rapach–Strauss–Zhou 2013 (JF) **NOT read**, closed on all three indexes, with Aye–Balcilar–Gupta 2017 (Empirica) **read in full** from `repository.up.ac.za` and Siliverstovs 2016 (KOF WP) **abstract only**, ETH Research Collection returning 500/401/403 (`2026-10-04-us-leads-the-world-country-lead-lag.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-04] Read this first: this folder now holds a tension whose two sides predict OPPOSITE SIGNS for
+  one buildable portfolio, and the test is a subset split on train that costs zero trials.** The folder has
+  recorded three Tier-A-against-Tier-A pairs in four nights ([2026-10-01]'s discovery-window gap,
+  [2026-10-02]'s HXZ-against-JKP, and this one) and the standing resolution for the first two was *carry both,
+  adopt neither, they agree on sign and differ on a constant*. **This one is different and better: the two
+  sides do not differ on a constant.** The daylight mechanism (Kamstra–Kramer–Levi, AER, 858/1103 citations)
+  requires a Southern-Hemisphere market's November–April coefficient to be **negative**; a plain global
+  calendar effect (Bouman–Jacobsen, and its 108-market replication) requires it **positive** — and the
+  replication's own country table reports **positive** coefficients for Australia, New Zealand and South
+  Africa, while KKL's own footnote reports South Africa's rotations mixed in sign. **#193 is the
+  discriminator: split this universe by listing hemisphere, estimate `r_t = μ + α·H_t + ε_t` within each
+  subset on train, read the Southern `α`.** The prior is stated before the measurement and leans against the
+  mechanism: `experiments/learnings.md` [Measured 2026-09-01] already found **Nov–Apr at +6.18 bps/day
+  (t = +3.58)** on the *whole* panel including its Southern names, which is the pooled version of exactly
+  this question. **#194 is the only candidate gated behind it** and it is the first calendar construction this
+  folder has described that sits outside *both* of the lab's calendar closures — because both closures are
+  about an overlay that **exits to cash**, and a rotation between instruments never does. New:
+  **#193–#197**, three of them free. **Nothing is closed by this entry** — no lab measurement was taken
+  tonight. **Carried unchanged and still genuinely unrun: #82** (twenty-ninth session, still the oldest
+  unspent free item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half, **#159**,
+  **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the
+  2026-09-29 set (**#170**, **#171**, **#172**), the 2026-09-30 set (**#174**'s reading, **#175**, **#176**,
+  **#177**), the 2026-10-01 set (**#179**, **#180**, **#181**), the 2026-10-02 set (**#183**, **#184**,
+  **#185**, **#186**) and the 2026-10-03 set (**#188**, **#189**, **#190**, **#191**). **#152 stands.**
+  **#163, #169, #173, #178, #182, #187, #192 and #197 stay anti-candidates.**
+- **[2026-10-04] What should aim the next session, in order — and the ordering changed at the top because a
+  cheaper *and* sharper item arrived.**
+  - **#188(a) still goes first and it is still not research — it is one look at `engine/` by someone allowed
+    to take it.** Unchanged from [2026-10-03]: every interpretation item on this file is interpretation of
+    numbers whose arithmetic is unestablished, and this costs nothing.
+  - **Then #193, ahead of #188(b) and #183.** All three are invariance discriminators on already-available
+    data, and #193 is the only one that **kills or confirms a Tier-A mechanism outright** rather than
+    apportioning a bias between channels: the two theories predict opposite signs, so the measurement cannot
+    come back ambiguous in the way a magnitude split can. It is also the only free item on this file whose
+    result unlocks a **named, costed, admissible candidate** (#194) rather than another diagnostic.
+  - **Then #188(b), then #189, then #183, #184, #179, #180**, in the order [2026-10-03] set them.
+  - **Then #195**, the specification ladder, which is free and is the precondition for *any* trial in
+    `lead-lag-spillover` at the region level; and **#196**, whose two parts are the preconditions for
+    importing any six-month effect size onto a dividend-adjusted panel.
+  - **Then #190**, which still wants the same per-instrument noise proxy as #179(b) and #184 — build it once,
+    spend it on all three.
+  - **Then #185** as a standing reporting rule, and **#191** as screens to re-measure rather than adopt.
+  - **Then the carried items**: #181, then #174's reading, then #175, #177, #176.
+- **[2026-10-04] The transferable output, and it is about what makes a tension *useful* rather than about how
+  to find one.** [2026-09-30] added a detector for redundancy, [2026-10-02] one for rival mechanisms,
+  [2026-10-03] one for the altitude an enumeration was written at. Tonight's is the fourth and it grades the
+  **conflicts** this folder keeps accumulating rather than the gaps: **when two sound sources disagree, ask
+  whether they disagree about a magnitude or about a sign, because only a sign disagreement is resolvable by
+  a measurement this lab can afford.** The two prior Tier-A pairs both reduced to a constant — 40–60% against
+  ~12%, 35% against "most replicate" — and the honest response to each was to carry both, because separating
+  them needs the lab to estimate the constant itself, which is a trial. This pair reduces to **the sign of one
+  coefficient in one subset**, which is a diagnostic. Generalised: **a magnitude disagreement is a reason to
+  widen the error bars; a sign disagreement is a free experiment, and it is worth re-reading this folder's
+  stored tensions to ask which of them are secretly the second kind.** The practical form is cheap — for every
+  recorded tension, write down the one number whose *sign* the two sides differ on, and if there is none, say
+  so and stop looking for an experiment.
+- **[2026-10-04] Access findings, recorded so the next session does not repeat the searches — and the first one
+  retires a channel `research/README.md` still recommends.** **(1) `econstor.eu` is now behind Anubis.**
+  `econstor.eu/bitstream/10419/100871/1/wp2002-13.pdf` returned **HTTP 200 with a 7.9 KB
+  `Making sure you're not a bot!` body** from `/.within.website/x/xess/`. The README's 2026-09-07 entry calls
+  econstor "a reliable channel and worth trying early"; **that is no longer true**, and it is the third Anubis
+  host after Frankfurt [2026-09-30] and AUEB [2026-10-03] and the first to *reverse* a documented-good channel.
+  Once more the refusal **looks like an answer**: HTTP 200, a file on disk, and only `file` tells you it is
+  HTML. **(2) `utoronto.scholaris.ca` and `repository.up.ac.za` are two new strong channels**, and both were
+  found the same way — by reading OpenAlex's own `locations[].landing_page_url` list and trying a **co-author's**
+  home institution. Toronto served the **typeset published AER PDF** of a closed Tier-1 article first try;
+  Pretoria served the working paper of the night's only full-text source. This is the [2026-10-03]
+  institutional-library lesson generalised into a rule: **for a closed article, enumerate the co-authors'
+  institutions and try each one's repository before any search engine.** **(3) An author's own publication page
+  can host the *supplement* and not the paper** — `sites.google.com/slu.edu/daverapach/publications` lists the
+  JF article with its full abstract and links only the Internet Appendix. The [2026-09-18] faculty-page lesson
+  holds, but a near-miss of this shape is new. **(4) An eighth "looks like an answer" mode: legacy Google Sites
+  file URLs.** `sites.google.com/a/slu.edu/<user>/<file>.pdf` returns **HTTP 200 with a ~940 KB Google Sites
+  application shell**, with or without the legacy `?attredirects=0&d=1` download form, and embeds no Drive file
+  id to follow. **(5) `api.fatcat.wiki` is unreachable through this environment's relay** — a DOI lookup died
+  with `Recv failure: Connection reset by peer`, the same transport signature the README records for
+  `web.archive.org` [2026-10-01]. **Report it as a transport failure, not an origin refusal.** **(6) The ETH
+  Research Collection returned three error classes in one minute** — HTTP **500** on the handle via its own DOI,
+  **401** on `/server/api/core/items`, **403** on `/server/api/discover/search/objects` — which is
+  server/policy behaviour rather than a rate limit. **(7) `repub.eur.nl` holds records without files**: a Pure
+  record named an `hdl.handle.net/1765/…` handle that resolved to a 200 landing page with **no bitstream link at
+  all**, so a handle in a Pure record is not evidence of full text. The *abstract* side of Pure remains
+  excellent — it supplied the authoritative abstract for a closed Elsevier article tonight, which is the
+  [2026-10-02] bepress-landing-page lesson at a second platform. **(8) Semantic Scholar's clean `not found` for a
+  real DOI recurred** on `10.1257/000282802762024683`, a **fifth** instance after [2026-10-01]'s first,
+  [2026-10-02]'s two and [2026-10-03]'s fourth; **Crossref was again never rate-limited**. Conversely
+  `10.1111/jofi.12041` resolved in **all three** indexes, which after four nights of this failure mode is worth
+  recording as the normal case. **(9) GitHub's search API is not available to this session** —
+  `api.github.com/search/repositories` returns **HTTP 403** with `sessions are bound to their configured
+  repositories`. This matters beyond one lookup: the [2026-09-07] route for a paywalled paper whose contribution
+  is an algorithm is "find the authors' published reference implementation", and **that route cannot be
+  exhausted from inside this environment** — a web search may happen to surface a repository, but a negative
+  result is uninformative and must not be recorded as "no code exists".
+- **[2026-10-04] Two gaps left open, and the top one has now defeated three consecutive sessions.**
+  **(a) Landis–Skouras (2021, JBF 130, 106128)** — chased again tonight on the [2026-10-03] route (the paper
+  ships code, so look for the authors' reference implementation) and **not reached**, and the route itself is
+  partly closed from here: a web search for the authors' reference implementation surfaced no repository, and
+  **GitHub's search API is unavailable to this session** — `api.github.com/search/repositories` returns
+  **HTTP 403** with `sessions are bound to their configured repositories`, so the [2026-09-07] "look for the
+  author's published reference implementation" route **cannot be exhausted from inside this environment** and a
+  negative result on it means nothing. Meanwhile `pyxida.aueb.gr` is **still Anubis at HTTP 200** on both its `handle/` route and
+  the specific `server/api/core/bitstreams/<uuid>/content` URL that a search engine has indexed *with content
+  snippets* — so the file is real, indexed, and refused to an automated client. **What did advance: the full
+  publisher abstract is now on record**, from `ideas.repec.org/a/eee/jbfina/v130y2021ics0378426621000868.html`,
+  and it confirms the aim (guidelines **and code**, 91 countries, reduced survivorship bias and data staleness).
+  **Next route, and it is the one not yet tried: write to the gap differently — the JBF article is a chapter of
+  an AUEB thesis, and a thesis usually has a second deposit (ProQuest, EThOS-equivalent, or the author's own
+  page).** **(b) Schmidt et al. (2019, FMPM 33(3))** — carried unchanged from [2026-10-03]; a real public OA
+  file at UNIGE whose download path was not found. **Closed as a target: Ince–Porter (2006)** should not be
+  chased a fourth night — [2026-10-03] established the cost of the gap is lower than it looks, and (a) is the
+  better-aimed successor. **New gaps opened tonight, both small:** Kamstra–Kramer–Levi's **published response**
+  to the weather critique (`10.1016/j.jbankfin.2008.09.011`, 37 Crossref citations) is unread and is what would
+  settle whether the SAD exchange is live or lost; and **Siliverstovs (2016, KOF WP 16-408)** is unread behind
+  the ETH 500/401/403, though #193 does not depend on it. **Carried and not advanced tonight**: the ABK
+  correction's algebra, Blume–Stambaugh's algebra, and the Shumway pair.
+- **[2026-10-04] One observation for the human, and it is one night more serious again.**
+  `origin/survivorship-pit-v2` is still unmerged; the journal now records **five** consecutive halted nightlies
+  [2026-09-29 through 10-03] and the session-start integrity warning fired again tonight. This folder has now
+  added three more notes, which makes `main` look active while **no experiments have run for six days**. Two
+  things are new and both are about the cost of the halt rather than about the branch. First, **the halt is now
+  blocking free work, not just trials**: #193, #195 and #196 are diagnostics that score no returns, are
+  unlimited under `program.md`, and between them would close a Tier-A mechanism, gate an entire family's first
+  region-level trial and establish whether a six-month effect size transfers to a dividend-adjusted panel — none
+  of which touches the trial count, the deflator or the holdout. Six nights of that is the real accumulating
+  loss. Second, **the pile of free items is itself becoming a research-integrity problem of a different kind**:
+  #82 is unrun for twenty-nine sessions, and a folder that proposes faster than the lab can measure stops being
+  a source of discipline and becomes a source of unvalidated priors. If the branch cannot be resolved soon, the
+  honest move is for the human to let the lab run the **diagnostic** backlog with trials still frozen.
 
 - **[2026-10-03] Read this first: the lab has a *fourth* mechanism for its biggest artifact, it was found
   by applying last night's own rule to last night's own conclusion, and its discriminator is cheaper than

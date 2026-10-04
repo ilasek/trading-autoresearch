@@ -17298,3 +17298,5 @@ land someone else's branch. Tonight's merge test ran in a detached throwaway wor
 aborted; the worktree was removed and all refs are untouched.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, fifth night.**
+
+## Research session — 2026-10-04 (learning agent): 3 notes added, see research/SUMMARY.md
