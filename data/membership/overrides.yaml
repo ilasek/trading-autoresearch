@@ -1,0 +1,60 @@
+# Hand-maintained corrections applied by scripts/build_membership.py.
+# Vendored from ilasek/trading-agent (data/membership/overrides.yaml, 2026-09-25);
+# symbols are Yahoo tickers, converted to store ids by engine.membership.yahoo_to_id.
+
+# S&P 500 tickers in the fja05680 history are the ones in use at the time.
+# Yahoo serves a company's whole history under its CURRENT ticker only, so a
+# renamed company is mapped onto the ticker Yahoo knows. Spells of old and new
+# ticker then merge into one symbol. Unmapped renames simply show up as
+# unpriced in the coverage report.
+sp500_renames:
+  FB: META
+  ANTM: ELV
+  FI: FISV            # Fiserv traded as FI 2023–2025, back to FISV since
+  RE: EG
+  PKI: RVTY
+  FLT: CPAY
+  WLTW: WTW
+  ABC: COR
+  BLL: BALL
+  COG: CTRA
+  DISCA: WBD
+  DISCK: WBD
+  TMK: GL
+  SYMC: GEN
+  NLOK: GEN
+  FBHS: FBIN
+  KORS: CPRI
+  JEC: J
+  ADS: BFH
+  CTL: LUMN
+  HRS: LHX
+  PEAK: DOC
+  HCP: DOC
+  GPS: GAP
+  VIAC: PARA
+  CBS: PARA
+  WLP: ELV
+  GOOG: GOOGL          # dual share class — keep one line per company
+  FOX: FOXA
+  NWS: NWSA
+  UA: UAA
+
+# Classes kept as separate listings would double a company's weight in a
+# top-15 momentum portfolio.
+drop_symbols:
+  - BRK-A
+  - CCEP
+  # Yahoo now serves these tickers for a different company: Amlin -> Aston
+  # Martin, British Airways -> Bay Capital, Home Retail Group -> Home REIT. The
+  # old companies are unpriced either way; dropping them keeps the newcomers'
+  # prices out of the universe.
+  - AML.L
+  - BAY.L
+  - HOME.L
+
+# Indices with no usable change history. Their current constituents enter on
+# the date they were first seen (the bootstrap date for the initial list) and
+# evolve from there — never backdated. Every tracked index now has a change log
+# under sources/, so the list is empty.
+current_only: []

@@ -17,6 +17,16 @@ never reaches the holdout gate. It earns `FAMILY_LEAD` by being the best result
 yet recorded in its own family. The seat is unchanged and unreachable from the
 scout track; a family's lead reaches it, if at all, through a `challenge`
 candidate that builds on it.
+
+Protocol versions. v1 (the historical protocol, still the default until the
+cut-over) scores every candidate on `data/universe.yaml`: today's constituents,
+so its stock results carry survivorship bias. v2 scores on the point-in-time
+universe (`data/universe_pit.yaml` + `data/membership/intervals.csv`): a stock
+is buyable only on dates it was in a tracked index, the engine enforces that,
+train starts when membership data does (1997), and a candidate must beat a
+survivorship-matched random-portfolio null (`engine/benchmarks.py`). A
+`Setup` carries everything that differs between the two; `run_trial` builds
+the one `PROTOCOL_VERSION` names unless handed another.
 """
 
 from __future__ import annotations
@@ -34,7 +44,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from . import data, metrics
+from . import benchmarks, data, membership, metrics
 from .backtest import run_backtest, sanitize_weights
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -111,6 +121,87 @@ HOLDOUT_VETO_T = 2.0
 TRACKS = ("challenge", "scout")
 DEFAULT_TRACK = "challenge"
 
+# ---------------------------------------------------------------------------
+# Protocol v2: point-in-time universe, survivorship-matched null
+# ---------------------------------------------------------------------------
+
+PROTOCOL_VERSION = 1
+
+# The PIT universe is loaded from here: seven years of warm-up before the v2
+# train split, and the panel stays a manageable size (~2,000 columns).
+PIT_PRICE_START = "1990-01-01"
+
+# Train starts when point-in-time membership does: the S&P 500 history begins
+# 1996-01-02 and signals need a year of it. Earlier prices stay visible to the
+# strategy as warm-up; they are simply not scored.
+SPLITS_V2 = {
+    "train": ("1997-01-01", "2017-12-31"),
+    "validation": ("2018-01-01", "2023-12-31"),
+    "holdout": ("2024-01-01", None),
+}
+
+# The random-portfolio null. A candidate's validation Sharpe must exceed this
+# quantile of what random selection earns when built exactly like it (same
+# holdings schedule, weights, stock/ETF mix) from the same point-in-time pool.
+GATES_V2 = dict(GATES, min_null_percentile=0.90)
+NULL_DRAWS = 200
+NULL_SEED = 20260925
+
+# A candidate may learn its universe only through the `eligible` panel the
+# protocol hands it (truncated with its prices). Reading the membership files
+# directly would see future index changes, which the causality check cannot
+# detect, so the source is refused outright.
+FORBIDDEN_SOURCE = ("membership", "intervals.csv", "universe_pit")
+
+
+@dataclass
+class Setup:
+    """Everything that differs between protocol versions."""
+    version: int
+    splits: dict
+    gates: dict
+    universe: str = "legacy"                # which universe file `data.instruments()` answers for
+    eligible: pd.DataFrame | None = None    # dates x columns, bool; None = v1 (no universe mask)
+    types: dict = field(default_factory=dict)
+    # Measurement aid for code written before v2 (the re-scoring harness):
+    # show the strategy each name's prices only while it is eligible, so code
+    # that ranks every column it is given cannot pick a non-member. The
+    # backtest still uses the true prices. Never used for a trial.
+    mask_strategy_view: bool = False
+
+    @property
+    def pit(self) -> bool:
+        return self.eligible is not None
+
+
+def setup_v1() -> Setup:
+    return Setup(version=1, splits=SPLITS, gates=GATES, universe="legacy")
+
+
+def setup_v2(prices: pd.DataFrame, aux: dict | None, intervals: pd.DataFrame | None = None,
+             universe: str = "pit") -> Setup:
+    """The v2 setup for `prices` (loaded from the PIT universe). `intervals`
+    overrides the membership spells (the re-scoring harness uses this to build
+    the biased "today's members, all history" comparison)."""
+    types = data.instrument_types(universe)
+    volume = (aux or {}).get("volume")
+    elig = membership.eligibility(prices, volume, types, intervals)
+    return Setup(version=2, splits=SPLITS_V2, gates=GATES_V2, universe=universe,
+                 eligible=elig, types=types)
+
+
+def default_setup(prices: pd.DataFrame, aux: dict | None) -> Setup:
+    return setup_v2(prices, aux) if PROTOCOL_VERSION >= 2 else setup_v1()
+
+
+def static_check(candidate_path: Path) -> str | None:
+    src = Path(candidate_path).read_text()
+    hits = [tok for tok in FORBIDDEN_SOURCE if tok in src]
+    if hits:
+        return (f"candidate source references {hits}: the universe may only be read "
+                f"through the `eligible` argument the protocol passes")
+    return None
+
 
 @dataclass
 class TrialResult:
@@ -138,6 +229,11 @@ class TrialResult:
     holdout_se: float | None = None      # paired SE of that difference
     holdout_rho: float | None = None     # correlation of the two holdout series
     holdout_t: float | None = None       # delta / se
+    # Protocol v2: the universe and the survivorship-matched benchmarks.
+    protocol_version: int = 1
+    null: dict | None = None             # null_p50/p90/p95/pctile on validation
+    ew_sharpe: float | None = None       # equal-weight eligible pool, validation
+    ir_vs_ew: float | None = None        # annualised information ratio vs that pool
     ts: str = ""
 
     def to_record(self) -> dict:
@@ -172,7 +268,10 @@ def normalize_family(family: str) -> str:
     return " ".join(str(family or "unknown").strip().lower().split())
 
 
-def call_strategy(generate_weights, prices: pd.DataFrame, aux: dict | None = None):
+def call_strategy(
+    generate_weights, prices: pd.DataFrame, aux: dict | None = None,
+    eligible: pd.DataFrame | None = None, universe: str = "legacy",
+):
     """Call a strategy under whichever contract it declares.
 
     `generate_weights(prices)` is the original contract and still the whole of
@@ -180,25 +279,68 @@ def call_strategy(generate_weights, prices: pd.DataFrame, aux: dict | None = Non
     parameter receives the auxiliary OHLCV panels — already narrowed to exactly
     the rows of `prices`, because a panel that outran the prices it accompanies
     would hand the strategy the future while the causality check watched the
-    wrong frame."""
+    wrong frame.
+
+    Protocol v2: a strategy that declares an `eligible` parameter receives the
+    point-in-time universe (dates x columns, bool) narrowed the same way. The
+    call runs with `universe` active, so `data.instruments()` inside the
+    strategy describes the columns it was handed."""
+    sig = inspect.signature(generate_weights).parameters
     params = [
-        p for p in inspect.signature(generate_weights).parameters.values()
-        if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD)
+        p for p in sig.values()
+        if p.kind in (p.POSITIONAL_ONLY, p.POSITIONAL_OR_KEYWORD) and p.name != "eligible"
     ]
+    args = [prices]
     if len(params) >= 2:
-        return generate_weights(prices, data.slice_panels(aux, prices.index))
-    return generate_weights(prices)
+        args.append(_narrow_panels(aux, prices))
+    kwargs = {}
+    if "eligible" in sig and eligible is not None:
+        kwargs["eligible"] = eligible.reindex(index=prices.index, columns=prices.columns).fillna(False)
+    with data.using_universe(universe):
+        return generate_weights(*args, **kwargs)
+
+
+def _narrow_panels(aux: dict | None, prices: pd.DataFrame) -> dict:
+    panels = data.slice_panels(aux, prices.index)
+    return {k: v.reindex(columns=prices.columns) for k, v in panels.items()}
+
+
+def _strategy_view(generate_weights, visible, aux, elig, setup):
+    """call_strategy's arguments; see Setup.mask_strategy_view."""
+    if setup.mask_strategy_view and elig is not None:
+        visible = visible.where(elig)
+        if aux:
+            aux = {k: (v.reindex(columns=visible.columns).where(elig.reindex(v.index).fillna(False))
+                       if isinstance(v, pd.DataFrame) else v) for k, v in aux.items()}
+    return generate_weights, visible, aux, elig, setup.universe
+
+
+def visible_frame(
+    prices: pd.DataFrame, end: str | None, setup: Setup
+) -> tuple[pd.DataFrame, pd.DataFrame | None]:
+    """Rows up to `end`; in v2 also only the columns that have been eligible at
+    least once by then. A column's mere presence would otherwise reveal that
+    the name joins an index later — look-ahead through the universe itself,
+    which a row-truncating causality check cannot see."""
+    visible = prices.loc[:end] if end else prices
+    if not setup.pit:
+        return visible, None
+    elig = setup.eligible.reindex(index=visible.index, columns=visible.columns).fillna(False)
+    cols = elig.columns[elig.any(axis=0).to_numpy()]
+    return visible[cols], elig[cols]
 
 
 def evaluate_split(
-    generate_weights, prices: pd.DataFrame, split: str, aux: dict | None = None
+    generate_weights, prices: pd.DataFrame, split: str, aux: dict | None = None,
+    setup: Setup | None = None,
 ) -> dict:
     """Run the strategy with data visible up to the split's end; score only the
     returns inside the split window."""
-    start, end = SPLITS[split]
-    visible = prices.loc[:end] if end else prices
-    weights = call_strategy(generate_weights, visible, aux)
-    res = run_backtest(weights, visible, **ENGINE_PARAMS)
+    setup = setup or setup_v1()
+    start, end = setup.splits[split]
+    visible, elig = visible_frame(prices, end, setup)
+    weights = call_strategy(*_strategy_view(generate_weights, visible, aux, elig, setup))
+    res = run_backtest(weights, visible, eligible=elig, **ENGINE_PARAMS)
     window = res.returns.loc[start:end] if start else res.returns.loc[:end]
     w_window = res.weights.loc[window.index]
     turnover = res.turnover.loc[window.index]
@@ -212,7 +354,45 @@ def evaluate_split(
             float(window.mean() / window.std(ddof=1)) if window.std(ddof=1) > 0 else 0.0, 6
         ),
         "_returns": window,  # stripped before serialization
+        "_held": w_window,
+        "_visible": visible,
     })
+    if setup.pit:
+        # Share of the weight the strategy asked for, on rebalance rows inside
+        # the window, that fell on names outside the universe (and was zeroed).
+        raw = weights.reindex(columns=visible.columns).fillna(0.0).abs()
+        raw = raw.loc[raw.index.isin(window.index)]
+        ok = elig.reindex(index=raw.index).fillna(False).astype(bool)
+        total = float(raw.to_numpy().sum())
+        out["ineligible_weight_share"] = round(
+            float(raw.where(~ok, 0.0).to_numpy().sum()) / total, 4) if total > 0 else 0.0
+        out["eligible_median"] = int(elig.loc[window.index].sum(axis=1).median()) if len(window) else 0
+        out["_eligible"] = elig
+    return out
+
+
+def benchmark_split(split_result: dict, setup: Setup, seed: int = NULL_SEED) -> dict:
+    """The survivorship-matched benchmarks for one scored split (v2 only):
+    the random-portfolio null around the candidate, and the equal-weight pool."""
+    held = split_result["_held"]
+    visible = split_result["_visible"]
+    elig = split_result["_eligible"]
+    window = split_result["_returns"]
+    sharpes, _ = benchmarks.random_null(
+        held, visible, elig, setup.types, n_draws=NULL_DRAWS, seed=seed,
+        cost_bps=ENGINE_PARAMS["cost_bps"], slippage_bps=ENGINE_PARAMS["slippage_bps"],
+    )
+    cand = metrics.sharpe(window)
+    out = benchmarks.null_summary(cand, sharpes)
+    ew = benchmarks.equal_weight(
+        visible, elig, str(window.index[0].date()), str(window.index[-1].date()),
+        ENGINE_PARAMS["cost_bps"], ENGINE_PARAMS["slippage_bps"],
+    )
+    diff = (window - ew.reindex(window.index).fillna(0.0))
+    out["ew_sharpe"] = round(metrics.sharpe(ew), 3)
+    out["ir_vs_ew"] = round(metrics.sharpe(diff), 3)
+    out["_null_sharpes"] = sharpes
+    out["_ew_returns"] = ew
     return out
 
 
@@ -228,7 +408,7 @@ def _public(d: dict | None) -> dict | None:
 
 def causality_check(
     generate_weights, prices: pd.DataFrame, cuts=(63, 252), tail_buffer=5,
-    aux: dict | None = None,
+    aux: dict | None = None, setup: Setup | None = None,
 ) -> str | None:
     """Recompute weights on truncated histories: a causal strategy produces
     identical *effective daily holdings* for the dates both runs can see.
@@ -236,25 +416,32 @@ def causality_check(
     We compare post-sanitize, forward-filled holdings rather than raw weight
     frames so that sparse rebalance schedules (whose final partial-period
     rebalance shifts with the truncation point) don't false-positive; the last
-    `tail_buffer` shared days are excluded for the same reason. Returns an
-    error string on failure, None if causal."""
+    `tail_buffer` shared days are excluded for the same reason. In v2 the
+    eligibility panel and the column set are truncated with the rows, exactly
+    as `evaluate_split` would see them. Returns an error string on failure,
+    None if causal."""
+    setup = setup or setup_v1()
 
-    def effective(w, px):
+    def effective(px_end):
+        px, el = visible_frame(prices, None, setup) if px_end is None else px_end
+        w = call_strategy(*_strategy_view(generate_weights, px, aux, el, setup))
         p = ENGINE_PARAMS
-        return sanitize_weights(w, px, p["max_weight"], p["max_leverage"], p["allow_short"])
+        return sanitize_weights(w, px, p["max_weight"], p["max_leverage"], p["allow_short"], el)
 
-    end = SPLITS["validation"][1]
-    visible = prices.loc[:end]
-    w_full = effective(call_strategy(generate_weights, visible, aux), visible)
+    end = setup.splits["validation"][1]
+    visible, elig = visible_frame(prices, end, setup)
+    w_full = effective((visible, elig))
     # Always include a deep truncation: shallow cuts can miss strategies whose
     # future-dependent selection happens to be stable over short horizons.
     for cut in (*cuts, len(visible) // 2):
         if len(visible) <= cut + 300:
             continue
-        truncated = visible.iloc[:-cut]
-        w_trunc = effective(call_strategy(generate_weights, truncated, aux), truncated)
+        t_end = visible.index[-cut - 1]
+        truncated, t_elig = visible_frame(prices, t_end, setup)
+        w_trunc = effective((truncated, t_elig))
         common = w_trunc.index[:-tail_buffer]
-        diff = (w_full.loc[common] - w_trunc.loc[common]).abs().max().max()
+        w_t = w_trunc.reindex(columns=w_full.columns, fill_value=0.0)
+        diff = (w_full.loc[common] - w_t.loc[common]).abs().max().max()
         if diff > 1e-6:
             return (
                 f"holdings change when future data is hidden (max diff {diff:.2e} "
@@ -267,25 +454,26 @@ def causality_check(
 # Gates & verdict
 # ---------------------------------------------------------------------------
 
-def apply_gates(train: dict, validation: dict) -> list[str]:
+def apply_gates(train: dict, validation: dict, gates: dict | None = None) -> list[str]:
+    GATES_ = gates or GATES
     fails = []
-    if train["sharpe"] <= GATES["min_train_sharpe"]:
-        fails.append(f"train sharpe {train['sharpe']} <= {GATES['min_train_sharpe']}")
-    if validation["max_drawdown"] < GATES["max_drawdown"]:
+    if train["sharpe"] <= GATES_["min_train_sharpe"]:
+        fails.append(f"train sharpe {train['sharpe']} <= {GATES_['min_train_sharpe']}")
+    if validation["max_drawdown"] < GATES_["max_drawdown"]:
         fails.append(
-            f"validation drawdown {validation['max_drawdown']} worse than {GATES['max_drawdown']}"
+            f"validation drawdown {validation['max_drawdown']} worse than {GATES_['max_drawdown']}"
         )
-    if validation["ann_turnover"] > GATES["max_ann_turnover"]:
+    if validation["ann_turnover"] > GATES_["max_ann_turnover"]:
         fails.append(
-            f"annual turnover {validation['ann_turnover']} > {GATES['max_ann_turnover']}"
+            f"annual turnover {validation['ann_turnover']} > {GATES_['max_ann_turnover']}"
         )
-    if validation["avg_positions"] < GATES["min_avg_positions"]:
+    if validation["avg_positions"] < GATES_["min_avg_positions"]:
         fails.append(
-            f"avg positions {validation['avg_positions']} < {GATES['min_avg_positions']}"
+            f"avg positions {validation['avg_positions']} < {GATES_['min_avg_positions']}"
         )
-    if validation["active_days"] < GATES["min_active_days"]:
+    if validation["active_days"] < GATES_["min_active_days"]:
         fails.append(
-            f"active days {validation['active_days']} < {GATES['min_active_days']}"
+            f"active days {validation['active_days']} < {GATES_['min_active_days']}"
         )
     return fails
 
@@ -500,28 +688,49 @@ def record_trial(result: TrialResult) -> None:
 
 
 def run_trial(
-    candidate_path: Path, prices: pd.DataFrame, aux: dict | None = None
+    candidate_path: Path, prices: pd.DataFrame, aux: dict | None = None,
+    setup: Setup | None = None,
 ) -> TrialResult:
     """The one entry point for judging a candidate. Never bypass this."""
+    setup = setup or default_setup(prices, aux)
     mod, meta = load_strategy(candidate_path)
     result = TrialResult(
         candidate=str(candidate_path.relative_to(ROOT)),
         name=meta["name"], family=meta["family"], hypothesis=meta["hypothesis"],
         verdict="GATE_FAIL", reasons=[], track=meta["track"],
+        protocol_version=setup.version,
         ts=datetime.now(timezone.utc).isoformat(timespec="seconds"),
     )
 
-    causality_error = causality_check(mod.generate_weights, prices, aux=aux)
+    static_error = static_check(candidate_path) if setup.pit else None
+    causality_error = static_error or causality_check(
+        mod.generate_weights, prices, aux=aux, setup=setup)
     if causality_error:
         result.reasons = [f"causality: {causality_error}"]
         record_trial(result)
         write_leaderboard()
         return result
 
-    result.train = evaluate_split(mod.generate_weights, prices, "train", aux)
-    result.validation = evaluate_split(mod.generate_weights, prices, "validation", aux)
+    result.train = evaluate_split(mod.generate_weights, prices, "train", aux, setup)
+    result.validation = evaluate_split(mod.generate_weights, prices, "validation", aux, setup)
 
-    gate_fails = apply_gates(result.train, result.validation)
+    gate_fails = apply_gates(result.train, result.validation, setup.gates)
+    if setup.pit:
+        bench = benchmark_split(result.validation, setup)
+        result.null = _public(bench)
+        result.ew_sharpe = bench["ew_sharpe"]
+        result.ir_vs_ew = bench["ir_vs_ew"]
+        q = setup.gates.get("min_null_percentile")
+        if q is not None:
+            bar = float(np.quantile(bench["_null_sharpes"], q))
+            cand = metrics.sharpe(result.validation["_returns"])
+            if cand <= bar:
+                gate_fails.append(
+                    f"validation sharpe {cand:.3f} <= the random-selection null's "
+                    f"{q:.0%} quantile {bar:.3f} (median {bench['null_p50']}; "
+                    f"{NULL_DRAWS} draws built like this candidate from the same "
+                    f"point-in-time pool)"
+                )
     if gate_fails:
         result.reasons = gate_fails
         record_trial(result)
@@ -588,13 +797,13 @@ def run_trial(
         else:
             result.verdict = "PROMOTE"
             result.reasons = [f"bootstrap: no champion exists; gates passed with DSR {result.dsr}"]
-            promote(candidate_path, result, prices, aux=aux)
+            promote(candidate_path, result, prices, aux=aux, setup=setup)
         record_trial(result)
         write_leaderboard()
         return result
 
     champ_mod, _ = load_strategy(CHAMPION_FILE)
-    champ_val = evaluate_split(champ_mod.generate_weights, prices, "validation", aux)
+    champ_val = evaluate_split(champ_mod.generate_weights, prices, "validation", aux, setup)
     result.champion_val_sharpe = champ_val["sharpe"]
     # Re-deflate the incumbent against exactly the bar the challenger faces. A
     # champion promoted when the trial count was low is not entitled to a seat it
@@ -639,7 +848,8 @@ def run_trial(
 
     if promote_reasons is not None:
         result.verdict = holdout_gate(
-            mod, champ_mod, prices, result, promote_reasons, candidate_path, aux=aux
+            mod, champ_mod, prices, result, promote_reasons, candidate_path, aux=aux,
+            setup=setup,
         )
 
     record_trial(result)
@@ -659,6 +869,7 @@ def holdout_gate(
     promote_reasons: list[str],
     candidate_path: Path,
     aux: dict | None = None,
+    setup: Setup | None = None,
 ) -> str:
     """Final gate: refuse the seat to a candidate the holdout says is worse.
 
@@ -676,8 +887,8 @@ def holdout_gate(
 
     Returns the verdict and, on a veto, leaves the champion untouched.
     """
-    cand_hold = evaluate_split(mod.generate_weights, prices, "holdout", aux)
-    champ_hold = evaluate_split(champ_mod.generate_weights, prices, "holdout", aux)
+    cand_hold = evaluate_split(mod.generate_weights, prices, "holdout", aux, setup)
+    champ_hold = evaluate_split(champ_mod.generate_weights, prices, "holdout", aux, setup)
 
     se, rho = metrics.sharpe_diff_se(cand_hold["_returns"], champ_hold["_returns"])
     delta = cand_hold["sharpe"] - champ_hold["sharpe"]
@@ -707,7 +918,7 @@ def holdout_gate(
         return "HOLDOUT_VETO"
 
     result.reasons = promote_reasons + [f"holdout gate passed: {arith}"]
-    promote(candidate_path, result, prices, holdout=cand_hold, aux=aux)
+    promote(candidate_path, result, prices, holdout=cand_hold, aux=aux, setup=setup)
     return "PROMOTE"
 
 
@@ -721,6 +932,7 @@ def promote(
     prices: pd.DataFrame,
     holdout: dict | None = None,
     aux: dict | None = None,
+    setup: Setup | None = None,
 ) -> None:
     """Seat the candidate as champion.
 
@@ -743,7 +955,7 @@ def promote(
 
     if holdout is None:
         mod, _ = load_strategy(CHAMPION_FILE)
-        holdout = evaluate_split(mod.generate_weights, prices, "holdout", aux)
+        holdout = evaluate_split(mod.generate_weights, prices, "holdout", aux, setup)
     result.holdout = holdout
 
     card = {
@@ -769,5 +981,9 @@ def promote(
             "veto_t": HOLDOUT_VETO_T,
         },
         "engine_params": ENGINE_PARAMS,
+        "protocol_version": result.protocol_version,
+        "null": result.null,
+        "ew_sharpe": result.ew_sharpe,
+        "ir_vs_ew": result.ir_vs_ew,
     }
     CHAMPION_CARD.write_text(json.dumps(card, indent=2) + "\n")

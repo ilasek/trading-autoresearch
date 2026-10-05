@@ -1,0 +1,147 @@
+# Nikkei 225 constituent changes from 2009 on, reconstructed from the revision
+# history of https://ja.wikipedia.org/wiki/日経平均株価 (retrieved 2026-09-25): the
+# constituent list was parsed at every revision (only revisions listing 222-228
+# names), names mapped to TSE codes, and a change counted once it persisted 14
+# days. Changes edited within 45 days before / 30 days after a periodic review are
+# dated to its effective date (first business day of October; from 2022 also of
+# April); the rest (mergers, delistings, extraordinary replacements) carry the
+# edit date and are marked "approximate". Method: scripts/build_asia_changelogs.py.
+date,action,symbol,name
+2009-04-02,in,1334.T,マルハニチロホールディングス (approximate)
+2009-04-02,in,2269.T,明治ホールディングス (approximate)
+2009-04-02,out,2202.T,明治製菓 (approximate)
+2009-04-02,out,2261.T,明治乳業 (approximate)
+2010-01-19,in,9022.T,東海旅客鉄道 (approximate)
+2010-01-19,out,9201.T,日本航空 (approximate)
+2010-04-01,in,5020.T,ENEOSホールディングス (approximate)
+2010-04-01,in,5407.T,日新製鋼 (approximate)
+2010-04-01,in,8630.T,SOMPOホールディングス (approximate)
+2010-04-01,out,5001.T,新日本石油 (approximate)
+2010-04-01,out,5016.T,新日鉱ホールディングス (approximate)
+2010-04-01,out,8755.T,損害保険ジャパン (approximate)
+2010-10-01,in,5214.T,日本電気硝子
+2010-10-01,in,8804.T,東京建物
+2010-10-01,out,6796.T,クラリオン
+2010-10-02,out,3404.T,三菱レイヨン (approximate)
+2011-04-17,in,6506.T,安川電機 (approximate)
+2011-04-17,in,7735.T,SCREENホールディングス (approximate)
+2011-04-17,in,8750.T,第一ライフグループ (approximate)
+2011-04-17,out,6764.T,三洋電機 (approximate)
+2011-04-17,out,6991.T,パナソニック電工 (approximate)
+2011-04-17,out,8403.T,住友信託銀行 (approximate)
+2011-11-12,in,6113.T,アマダ (approximate)
+2011-11-12,in,8304.T,あおぞら銀行 (approximate)
+2011-11-12,in,8729.T,ソニーフィナンシャルホールディングス (approximate)
+2011-11-12,out,8404.T,みずほ信託銀行 (approximate)
+2011-11-12,out,8606.T,みずほ証券 (approximate)
+2011-11-12,out,9737.T,CSK_(企業) (approximate)
+2012-10-01,in,4043.T,トクヤマ
+2012-10-03,in,5413.T,日新製鋼 (approximate)
+2012-10-03,in,5703.T,日本軽金属ホールディングス (approximate)
+2012-10-03,out,5405.T,住友金属工業 (approximate)
+2012-10-03,out,5407.T,日新製鋼 (approximate)
+2012-10-03,out,5701.T,日本軽金属 (approximate)
+2013-04-09,in,3863.T,日本製紙 (approximate)
+2013-04-09,out,3893.T,日本製紙グループ本社 (approximate)
+2013-10-01,in,6988.T,日東電工
+2013-10-01,out,3864.T,三菱製紙
+2013-10-06,in,3289.T,東急不動産ホールディングス (approximate)
+2013-10-06,out,8815.T,東急不動産 (approximate)
+2014-04-06,in,1333.T,マルハニチロ (approximate)
+2014-04-06,out,1334.T,マルハニチロホールディングス (approximate)
+2015-10-01,in,1808.T,長谷工コーポレーション
+2015-10-01,in,2432.T,ディー・エヌ・エー
+2015-10-01,out,3110.T,日東紡績
+2015-10-01,out,8803.T,平和不動産
+2016-04-01,in,7186.T,横浜フィナンシャルグループ (approximate)
+2016-04-01,out,8332.T,横浜銀行 (approximate)
+2016-04-04,in,9984.T,ソフトバンクグループ (approximate)
+2016-04-04,out,9434.T,ソフトバンク (approximate)
+2016-07-30,in,7272.T,ヤマハ発動機 (approximate)
+2016-07-30,out,6753.T,シャープ (approximate)
+2016-08-27,in,8028.T,ファミリーマート (approximate)
+2016-08-27,out,8270.T,ユニーグループ・ホールディングス (approximate)
+2016-10-03,in,4755.T,楽天グループ
+2016-10-03,out,4041.T,日本曹達
+2017-01-23,in,4578.T,大塚ホールディングス (approximate)
+2017-01-23,out,6767.T,ミツミ電機 (approximate)
+2017-07-21,in,6724.T,セイコーエプソン (approximate)
+2017-07-21,out,6502.T,東芝 (approximate)
+2017-10-02,in,6098.T,リクルートホールディングス
+2017-10-02,in,6178.T,日本郵政
+2017-10-02,out,3865.T,北越紀州製紙
+2017-10-02,out,6508.T,明電舎
+2019-01-12,in,4631.T,DIC (企業) (approximate)
+2019-01-12,in,4751.T,サイバーエージェント (approximate)
+2019-01-12,out,5413.T,日新製鋼 (approximate)
+2019-01-12,out,5715.T,古河機械金属 (approximate)
+2019-03-15,in,6645.T,オムロン (approximate)
+2019-03-15,out,6773.T,パイオニア (approximate)
+2019-03-26,in,5019.T,出光興産 (approximate)
+2019-03-26,out,5002.T,昭和シェル石油 (approximate)
+2019-07-31,in,7832.T,バンダイナムコホールディングス (approximate)
+2019-07-31,out,6366.T,千代田化工建設 (approximate)
+2019-10-01,in,2413.T,エムスリー
+2019-10-01,out,9681.T,東京ドーム
+2020-07-28,in,8697.T,日本取引所グループ (approximate)
+2020-07-28,out,8729.T,ソニーフィナンシャルホールディングス (approximate)
+2020-10-01,in,3659.T,ネクソン
+2020-10-01,in,9434.T,ソフトバンク
+2020-10-01,out,4272.T,日本化薬
+2020-10-28,out,8028.T,ファミリーマート (approximate)
+2020-12-02,in,6753.T,シャープ (approximate)
+2020-12-02,out,9437.T,NTTドコモ (approximate)
+2021-10-01,in,6861.T,キーエンス
+2021-10-01,in,6981.T,村田製作所
+2021-10-01,in,7974.T,任天堂
+2021-10-01,out,3105.T,日清紡ホールディングス
+2021-10-01,out,5901.T,東洋製罐グループホールディングス (approximate)
+2021-10-01,out,9412.T,スカパーJSATホールディングス
+2022-01-04,in,9147.T,NIPPON EXPRESSホールディングス (approximate)
+2022-01-04,out,9062.T,日本通運 (approximate)
+2022-04-01,in,8591.T,オリックス (企業)
+2022-04-01,out,8303.T,新生銀行 (approximate)
+2022-10-03,in,6273.T,SMC
+2022-10-03,in,6594.T,ニデック (電機メーカー)
+2022-10-03,in,7741.T,HOYA
+2022-10-03,out,1333.T,マルハニチロ
+2022-10-03,out,3103.T,ユニチカ
+2022-10-03,out,6703.T,沖電気工業
+2022-10-08,in,5831.T,しずおかフィナンシャルグループ (approximate)
+2022-10-08,out,8355.T,静岡銀行 (approximate)
+2023-04-03,in,4661.T,オリエンタルランド
+2023-04-03,in,6723.T,ルネサスエレクトロニクス
+2023-04-03,in,9201.T,日本航空
+2023-04-03,out,3101.T,東洋紡
+2023-04-03,out,5703.T,日本軽金属ホールディングス
+2023-04-03,out,5707.T,東邦亜鉛
+2023-10-01,out,7003.T,三井E&Sホールディングス (approximate)
+2023-10-02,in,4385.T,メルカリ
+2023-10-02,in,6920.T,レーザーテック
+2023-10-02,in,9843.T,ニトリホールディングス
+2023-10-02,out,5202.T,日本板硝子
+2023-10-02,out,8628.T,松井証券
+2024-04-01,in,3092.T,ZOZO
+2024-04-01,in,6146.T,ディスコ (切断装置製造)
+2024-04-01,in,6526.T,ソシオネクスト
+2024-04-01,out,2531.T,宝ホールディングス
+2024-04-01,out,5232.T,住友大阪セメント
+2024-04-01,out,5541.T,大平洋金属
+2024-10-01,in,4307.T,野村総合研究所
+2024-10-01,in,7453.T,良品計画
+2024-10-01,out,3863.T,日本製紙
+2024-10-01,out,4631.T,DIC (企業)
+2025-04-01,in,6532.T,ベイカレント
+2025-04-01,out,9301.T,三菱倉庫
+2025-07-05,in,6963.T,ローム (approximate)
+2025-07-05,out,9613.T,NTTデータ (approximate)
+2025-10-01,in,3697.T,SHIFT (企業)
+2025-10-01,out,7762.T,シチズン時計
+2025-11-04,in,4062.T,イビデン (approximate)
+2025-11-04,out,6594.T,ニデック (電機メーカー) (approximate)
+2026-04-01,in,285A.T,キオクシアホールディングス
+2026-04-01,in,7532.T,パン・パシフィック・インターナショナルホールディングス
+2026-04-01,out,6674.T,ジーエス・ユアサコーポレーション
+2026-04-01,out,6952.T,カシオ計算機
+2026-04-03,in,543A.T,ARCHION (approximate)
+2026-04-03,out,7205.T,日野自動車 (approximate)

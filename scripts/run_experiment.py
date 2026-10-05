@@ -45,6 +45,14 @@ def journal_entry(r: protocol.TrialResult) -> str:
                 f"ann_ret {m['ann_return']:+.1%}, maxDD {m['max_drawdown']:.1%}, "
                 f"turnover {m['ann_turnover']:.1f}x"
             )
+    if r.null:
+        lines.append(
+            f"- Survivorship-matched benchmarks (protocol v{r.protocol_version}): validation "
+            f"sharpe at the {r.null['null_pctile']:.0%} percentile of {r.null['null_draws']} "
+            f"random-selection replicas (median {r.null['null_p50']:+.2f}, 90% "
+            f"{r.null['null_p90']:+.2f}); equal-weight eligible pool {r.ew_sharpe:+.2f}, "
+            f"information ratio vs it {r.ir_vs_ew:+.2f}"
+        )
     if r.dsr is not None:
         lines.append(
             f"- Deflated Sharpe prob: {r.dsr} (bar from {r.n_trials} trials, "
@@ -86,9 +94,11 @@ def main() -> int:
         print(f"no such candidate: {candidate}")
         return 2
 
-    print(f"Loading price data …")
-    prices = data.load_prices()
-    aux = data.load_panels()
+    universe = "pit" if protocol.PROTOCOL_VERSION >= 2 else "legacy"
+    print(f"Loading price data (protocol v{protocol.PROTOCOL_VERSION}, {universe} universe) …")
+    start = protocol.PIT_PRICE_START if universe == "pit" else None
+    prices = data.load_prices(universe=universe, start=start)
+    aux = data.load_panels(universe=universe, start=start)
     print(f"  {prices.shape[1]} instruments, {prices.index[0].date()} → {prices.index[-1].date()}")
     print(f"  aux panels: {', '.join(sorted(aux))}")
 
@@ -100,6 +110,12 @@ def main() -> int:
     print("reasons: " + "; ".join(result.reasons))
     print(fmt_split("train     ", protocol._public(result.train)))
     print(fmt_split("validation", protocol._public(result.validation)))
+    if result.null:
+        print(
+            f"  random-selection null: candidate at the {result.null['null_pctile']:.0%} "
+            f"percentile (median {result.null['null_p50']:+.2f}, 90% {result.null['null_p90']:+.2f}); "
+            f"equal-weight pool {result.ew_sharpe:+.2f}, IR vs pool {result.ir_vs_ew:+.2f}"
+        )
     if result.dsr is not None:
         print(
             f"  deflated sharpe prob: {result.dsr}  (trial #{result.n_trials}, "
