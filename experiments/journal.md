@@ -17418,3 +17418,131 @@ land someone else's branch.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, sixth night.**
 ## Research session — 2026-10-05 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-10-05 — `survivorship-pit-v2` RESOLVED; a new strand, `origin/claude/dazzling-brahmagupta-tj0zsg`, halts the session
+
+Recorded by the nightly strategy agent, not by `run_experiment.py`. No trial record was added,
+altered, or removed in writing this entry; `trials.jsonl` remains exactly as `run_experiment.py`
+last wrote it (**104 records**). **No experiment was run tonight and no holdout was read.**
+
+### First, the good news: the six-night blocker is cleared
+
+`origin/survivorship-pit-v2` **landed on `main` today** as `ef4c7a9` (PR #4), together with the
+protocol-v2 re-scoring work. The 2026-09-29..10-04 halt chain is over and its unblock section is
+now spent — no future session should re-derive it. `PROTOCOL_VERSION` is still **1**
+(`engine/protocol.py:128`), i.e. v2 is merged but **off**, so v1 remains the live, sanctioned
+protocol and the "v1 trials inflate a bar its own author plans to discard" objection that drove
+nights 1–6 no longer applies. Had tonight been otherwise clean, trials would have been honest.
+
+### What fires instead — a different branch, with a different shape
+
+| Checked tonight | value |
+|---|---|
+| `git branch -r --no-merged origin/main` (non-`archive/*`) | **`origin/claude/dazzling-brahmagupta-tj0zsg`** |
+| Its tip | `317d1b3`, one commit, authored today 21:10 UTC |
+| Merge base with `main` | `ef4c7a9` (a true fork, **not** an orphan history) |
+| `origin/archive/*` branches | 0 |
+| `trials.jsonl` | 104 on `main`, **104 on the branch** |
+| Champion | `pt_mom_evar_arbrisk` (#98), unchanged |
+| `main` engine | **57 passed in 49.9s** (was 33; the v2 merge added 24 tests) |
+| Last close in `data/store/` | 2026-10-02 — one to two trading days back, within tolerance |
+
+### The bar is NOT split — verified, not assumed
+
+`git diff --stat origin/main origin/claude/dazzling-brahmagupta-tj0zsg` over every file that
+feeds the deflated-Sharpe bar returns **empty**:
+
+```
+experiments/trials.jsonl       byte-identical (104 trials both sides)
+experiments/leaderboard.json   byte-identical
+strategies/champion_card.json  byte-identical
+strategies/champion.py         byte-identical
+engine/                        byte-identical
+```
+
+The branch's **only** unique content is nine `reports/*.md` annotations (the protocol-v2 before/
+after notes for W32–W40). `main`'s only unique content since the merge base is `journal.md` plus
+the three 2026-10-05 research notes. **The two file sets are disjoint** — there is no conflict and
+no contested content. So `past_trial_sharpes()` sees the true 104, the bar on `main` is complete
+and honest, and this is **not** a repeat of 2026-08-16.
+
+### Why the session halted anyway, and why that is not the 2026-08-25 outcome
+
+On the topology alone this is the lightest possible strand: a reports-only fork onto a path a
+research session is explicitly allowed to write (`reports/` — create weekly reports), disjoint from
+`main`'s own changes. The obvious remedy was therefore to **land it here** rather than halt, which
+is what the 2026-08-31 entry did by fast-forward for `origin/main-rdlknw`.
+
+**That was attempted and refused by the environment, not declined by judgement.** `git merge
+--no-ff origin/claude/dazzling-brahmagupta-tj0zsg` was blocked by this session's permission layer
+as a shared-resource modification. The denial is categorical about the outcome, so the merge was
+not retried by any other route, and no attempt was made to reach the same end through a
+cherry-pick, a file-level copy of the nine reports, or a push of the branch ref. **The nine report
+annotations remain only on `317d1b3`.**
+
+That leaves the step-0 rule binding as written: a non-`archive/*` branch holds a commit absent from
+`origin/main`, it cannot be resolved from a session, so the session records and stops. Running eight
+trials on top of a strand this session is unable to clear would also be eight permanent additions to
+the bar made while the integrity guard was lit — the cheap and honest move is to record zero for the
+seventh time, though for the **first** time on this branch and for a reason a human clears in about
+ten seconds.
+
+### Root cause — the harness pattern, again
+
+`317d1b3` was written by a sibling agent session (`session_01RcZ5Skr51b2NXx8mRjJjMo`) that did good
+work and then pushed it to its own per-run branch instead of `main`. This is the **same** harness
+behaviour the journal has recorded since 2026-08-12: sessions open on a per-run branch
+(tonight's opened on `main-452uf0`, pointing at exactly `origin/main`, local `main` 22 behind, and
+was corrected with `git checkout main && git reset --hard origin/main` before any work). Twenty-one
+such `origin/main-*` branches are already merged and harmless; the failure mode is only the ones
+whose work never gets forwarded. **Until a session can land its own branch, every agent that writes
+to `reports/` or `research/` and pushes off-`main` arms this guard for the next night.**
+
+### For the human — the unblock (either one, ~10 seconds)
+
+Both are safe: no frozen path is touched, no trial record changes, and the engine is green on both
+sides.
+
+```bash
+# 1a. LAND IT — the nine report annotations are real work and nothing conflicts
+git fetch origin && git checkout main && git merge --no-ff origin/claude/dazzling-brahmagupta-tj0zsg
+git push origin main && git push origin --delete claude/dazzling-brahmagupta-tj0zsg
+
+# 1b. PARK IT — only if the annotations are judged unwanted; the guard ignores archive/* by design
+git push origin origin/claude/dazzling-brahmagupta-tj0zsg:refs/heads/archive/dazzling-brahmagupta
+git push origin --delete claude/dazzling-brahmagupta-tj0zsg
+```
+
+**Worth fixing at the root while you are here:** granting nightly sessions merge rights onto `main`,
+or having the harness forward per-run branches, removes this entire class of halt. Seven of the last
+seven nights have recorded zero trials for branch-topology reasons rather than research ones.
+
+### Standing note for the next agent
+
+If `origin/claude/dazzling-brahmagupta-tj0zsg` is gone or merged, this entry is spent — proceed
+straight to the experiment loop; the bar is 104 and `PROTOCOL_VERSION` is 1. If it is still at
+`317d1b3`, do **not** re-derive the diagnosis above: verify the trial files are still byte-identical,
+re-attempt the merge in case permissions have changed, notify the owner's channel, append a two-line
+pointer here, and stop.
+
+## Session summary — 2026-10-05 (nightly)
+
+- **Experiments run: 0. Verdicts: none. No holdout was read.** Halted at step 0 by the integrity
+  guard; see the `## Protocol issue` entry immediately above.
+- **Best finding of the night is an unblocking, not a strategy result:** the six-night
+  `survivorship-pit-v2` blocker is **resolved** (PR #4, `ef4c7a9`), protocol v2 is merged but **off**
+  at `PROTOCOL_VERSION = 1`, and the engine is green at 57 tests. The research loop is one merge
+  away from running normally again.
+- **The one thing in the way** is a reports-only fork, `origin/claude/dazzling-brahmagupta-tj0zsg`
+  (`317d1b3`), whose trial files are byte-identical to `main`'s. The merge that would have cleared it
+  was attempted and refused by this session's permission layer, so it needs a human command.
+- **Ideas held for the next session, unspent** (provenance kept visible; none acted on tonight, none
+  holdout-informed): from `research/SUMMARY.md` — the **CHL close-high-low spread estimator** as a
+  liquidity/microstructure family input, and **turnover and the momentum life-cycle** as a
+  conditioner on a price-trend lead rather than a new price-trend construction. Note #193
+  (SAD/weather) is **retracted by the learning agent as a test** and must not be built on. Per
+  `program.md`'s allocation, the next session that actually runs should open outside `price-trend`:
+  the turnover idea is a conditioner, not a third price-trend trial.
+- **Nothing was merged, parked, renamed, or pushed to any branch other than `main`.** No candidate
+  file was written, no `strategies/lib/` file added or edited, and `trials.jsonl`, `leaderboard.json`,
+  `champion.py` and `champion_card.json` are untouched.
