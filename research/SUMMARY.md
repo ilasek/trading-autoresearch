@@ -1193,6 +1193,63 @@ is therefore a **state variable, two construction corrections and a falsifier** 
 → `notes/2026-09-29-liquidity-risk-priced-innovations.md`,
 `notes/2026-09-29-liquidity-adjusted-capm-three-betas.md`,
 `notes/2026-09-29-funding-liquidity-and-margin-spirals.md`
+
+**The family's one unscreened construction is a cost measure that needs no volume at all, and that is
+exactly what the lab's own two nulls point to.** Abdi–Ranaldo (2017, *RFS*, Tier 1, 340 Crossref /
+359 OpenAlex, **read in full** from the St. Gallen working-paper version) estimate the **effective
+bid-ask spread from daily close, high and low prices alone**. The construction is Roll's logic with
+one substitution that does all the work: replace Roll's neighbouring closes with the **mid-range**
+`η_t = (h_t + l_t)/2` in logs, which is *spread-free* because the half-spread is added at the high
+and subtracted at the low and cancels in the average. The efficient price passes through the
+mid-range at least once a day, the day-`t` mid-range precedes the close and the day-`t+1` mid-range
+follows it, so their average is an unbiased midquote proxy and the squared distance from the close
+splits into a spread term and an efficient-price-variance term; the latter is separately identified
+from `E[(η_{t+1} − η_t)²] = (2 − 2·ln 2)·σ²_e`. The identification is
+`s² = 4·E[(c_t − η_t)(c_t − η_{t+1})]`, with two truncation variants given. **Use the *two-day*
+corrected form** (truncate each two-day estimate at zero, root, then average) not the less-biased
+monthly one — the authors' own finding, and the general principle worth carrying: *truncating early
+costs bias and buys correlation with the truth, and for a ranking signal correlation is what you
+want*. Discard any two-day pair containing a non-trading day or a zero-range day. **Three properties
+decide its value here.** (i) It needs **no volume term**, so it sidesteps `program.md`'s warning that
+`volume` is a native-unit share count that is NaN on foreign holidays — a real constraint on a
+15-region panel. (ii) It is simultaneously a `range-variance` object, and it is the **first one that
+is not a width measure** — `η_t` is a *location* statistic of the daily bar, where all nine mechanisms
+that family has screened were widths. (iii) Its accuracy advantage over Corwin–Schultz is largest for
+**illiquid, thinly traded** names, and it carries **partial** correlation with the intraday benchmark
+beyond the other estimators, so it is not a re-labelling of `ILLIQ`. **The disqualifying pitfall is
+causality**: equation (9) uses `η_{t+1}`, *tomorrow's* mid-range, so an estimate indexed to day `t` is
+not knowable at day `t`'s close and a naive build fails `causality_check` — form weights on date `T`
+from pairs with `t+1 ≤ T − 1`, and say so in the hypothesis. **The gap to record: validation is
+US-only**, so "CHL beats HL" is not established on an international panel. Candidates **#200** (the
+build) and **#201** (the free pre-check). `validation_overlap: false`.
+→ `notes/2026-10-05-chl-spread-estimator-close-high-low.md`
+
+**And the family's most-cited activity result is an anti-candidate here, for a reason the source
+itself supplies.** Lee–Swaminathan (2000, *JF*, Tier 1, 1095 Crossref / 1561 OpenAlex, **read in
+full**) is the canonical turnover×momentum paper: independently double-sort on `J`-month return
+(10 deciles) and `J`-month **average daily turnover** (3 terciles), hold `K` months in overlapping
+tranches with a one-week formation-to-holding lag, and read the "momentum life cycle" — high-turnover
+winners and low-turnover losers are *late stage* and reverse sooner; low-turnover winners and
+high-turnover losers are *early stage* and persist. **Turnover needs shares outstanding, which this
+repo does not have**, and `experiments/learnings.md` has already measured both substitutes to null
+([2026-08-29] log ADV, IC +0.0010 at t = +0.11; [2026-08-31] relative volume, |t| ≤ 1.06 at every
+horizon). **The tension is worth stating rather than glossing, because it strengthens the refusal**:
+Lee–Swaminathan argue explicitly that turnover is *not* a size or spread proxy — low correlation with
+both, and an effect independent of size — on an **equal-weighted NYSE/AMEX panel including small
+names**, whereas the lab's measured explanation for its null is that on ~140 mega-caps activity *is*
+size. The source's own identifying claim therefore **predicts its own failure here**, which is a
+stronger reason not to re-test it than a proxy null. **What transfers is one reading rule and one
+brake.** *(a)* The famous "volume improves momentum" result is **driven by the short leg** —
+low-turnover losers rebound while high-turnover losers stay weak — and on the **long** leg the
+ordering **reverses**: low-turnover winners beat high-turnover winners, small in Year 1 and clearly
+over Years 2–5. A long-only book importing the headline would tilt its winners the wrong way. This is
+the folder's third instance of long/short asymmetry and the first where the two legs disagree in
+**sign**, so: *before importing any double-sort result, ask which leg the interaction lives on.*
+*(b)* Momentum reverses over Years 2–5 and the reversal strengthens **monotonically in the formation
+window `J`** — a mechanism-level brake on lengthening horizons, to be used to stop a long-window idea
+rather than to start one. Anti-candidate **#202**; **Tier A on venue, C in use here**.
+→ `notes/2026-10-05-turnover-and-the-momentum-life-cycle.md`
+
 ### 10. `range-variance`
 
 **This family is a measurement result, not a premium, and the measurement gain is large, analytical
@@ -1442,6 +1499,48 @@ footnote reports South Africa's rotations mixed in sign, attributed to cross-lis
 **Both cannot be right, and this universe can decide it for free** (#193). `validation_overlap:
 false` for both.
 → `notes/2026-10-04-sad-daylight-seasonal-mechanism.md`
+**[CORRECTED 2026-10-05 — the paragraph above overstates what the hemisphere split can do, and the
+whole three-part JBF exchange has now been read.]** Two factual corrections and one that changes a
+recommendation. *(1) The DOI named above as "a published KKL response" is not KKL's.*
+`10.1016/j.jbankfin.2008.09.011` is **Jacobsen–Marquering's *Response*** (JBF 33(3), 583–587, 37
+Crossref / 47 Semantic Scholar / 43 OpenAlex). **Kamstra–Kramer–Levi's *Comment* is
+`10.1016/j.jbankfin.2008.09.013`** (JBF 33(3), 578–582, 27 Crossref / 37 S2 / 28 OpenAlex) and it has
+now been **read in full** from `utoronto.scholaris.ca`; Jacobsen–Marquering's argument has been read
+in full from the 2004 ERIM working-paper version at `repub.eur.nl`; only their 2009 Response remains
+unread (SSRN 403). *(2) The critique's core contribution is a **placebo** argument, not an
+alternative mechanism*: US ice-cream production and detrended UK outbound airline travel each
+"explain" the same seasonality across the 48-country panel with the right sign and wide significance,
+so **the time-series fit identifies nothing** — any regressor with an annual summer/winter shape
+produces it. KKL do not contest this and reply on identification instead (the half-year dummy nests
+the daylight term's low-frequency content; dropping the fall dummy makes the *flow* hypothesis
+untestable, since SAD onset peaks Sept–Oct and recovery peaks March; ten of the 48 countries are
+within 20° of the equator where the mechanism predicts nothing; the world-index control was
+orthogonalised with respect to the sell-in-May dummy *only*). *(3) **#193 is not a sign discriminator,
+and the claim that it "cannot come back ambiguous" is withdrawn.*** **Both sides state in print that
+market integration confounds the Southern-Hemisphere test** — KKL that Northern investors dominate
+mature Southern markets, which they say "likely explains the somewhat weaker results we found in the
+southern hemisphere countries"; Jacobsen–Marquering that a Northern SAD effect "might be 'exported'"
+and "imported to Australia". A positive Southern Nov–Apr coefficient is therefore predicted by **both**
+theories, and this universe — global, USD-converted, ETF-heavy, current mega-cap constituents — is
+close to the worst available panel for the test. The split is still worth taking as a **description**
+of where the lab's own seasonal lives, at zero trials, but **not as a kill**, and **#194 loses its
+licence**: see #198 and #199.
+
+**The replacement discriminator is cross-asset rather than cross-hemisphere, and it comes from the
+mechanism's own authors.** KKL state in the Comment that a risk-aversion channel implies an
+**opposing** seasonal in *low-risk* securities — higher safe-asset returns exactly when SAD-affected
+holders shun risky ones — and cite their own Treasury and fund-flow work as having found it. That is
+a **within-market, cross-risk-level** prediction: integration exports the *timing* of a Northern
+seasonal, but supplies no reason for safe and risky assets *in the same place* to seasonalise in
+opposite directions, whereas a plain calendar dummy is a level shift in the index and predicts **no**
+risk gradient at all. On this universe the runnable form is the same seasonal estimated **inside risk
+buckets** (beta to the universe, or a range-based volatility) on the Northern subset, train only —
+#198, free, with a pre-registered placebo. Both sides of the exchange agree the underlying six-month
+seasonal exists, so none of this bears on whether the effect is there; it bears only on what it is
+called, and therefore on whether any cross-sectional construction built on it has a destination.
+**Tier B in use** — the critique's headline could not be replicated by the authors it criticises, and
+the Comment's counter-estimates have never been independently replicated either.
+→ `notes/2026-10-05-sad-weather-exchange-and-the-integration-escape.md`
 ---
 
 ### 12. `lead-lag-spillover`
@@ -9281,6 +9380,103 @@ hypothesis fodder, then anti-candidates.
 
 
 
+
+198. **FREE, ZERO TRIALS — the replacement for #193, and it is the discriminator the mechanism's own
+    authors name.** A risk-aversion channel implies the six-month seasonal must be **graded by risk
+    level within a market**; a plain calendar dummy is a level shift in the index and implies **no
+    gradient at all**. Unlike the hemisphere split, this is immune to the integration escape clause
+    both sides of the JBF exchange invoke, because integration exports a seasonal's *timing* and
+    gives no reason for safe and risky assets in the *same place* to seasonalise in opposite
+    directions. **Build**: on the **Northern** subset of this universe, on **train only**, sort names
+    into buckets on a risk proxy the lab already trusts — **beta to the universe**, or a range-based
+    volatility from `strategies/lib/features.py` — and estimate the same Nov–Apr mean-return
+    difference **inside each bucket**. A gradient that **rises monotonically in the risk proxy** is
+    the risk-aversion signature and is immediately a construction (overweight low-risk names through
+    the onset window, high-risk names through the recovery window, **gross 1.0 throughout, no cash
+    leg** — a rotation along the *risk* axis, which sits outside both of the lab's calendar closures
+    for the same reason #194 did). A **flat** gradient says the effect is a level shift and closes the
+    mechanism here for good. **Three conditions, and the first is not optional.** *(a)* **Pre-register
+    a placebo.** This is the critique's entire contribution: ice-cream production and UK airline
+    travel both "explain" the seasonal with the right sign in most of 48 countries, so the
+    significance of the seasonal *inside any one bucket* is evidence of nothing — **only the gradient
+    across buckets discriminates.** *(b)* Prefer **beta to the universe** over a volatility *level*,
+    and ETF-level buckets where available: `experiments/learnings.md` records that this universe's
+    volatility-level sort is survivorship-contaminated, and a risk-bucket split inherits it.
+    *(c)* Use a real **monotonicity test**
+    (`notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`), not an eyeballed ordering — the
+    daylight paper's own latitude gradient is the cautionary case, asserted over nine countries and
+    never tested.
+    → `notes/2026-10-05-sad-weather-exchange-and-the-integration-escape.md`
+
+199. **FREE, ZERO TRIALS, AND A DOWNGRADE — #193 is still worth running but **not** as a kill, and
+    #194 should not be built.** The hemisphere split (Nov–Apr mean difference within the Southern and
+    Northern subsets separately, train only) remains a cheap and genuinely useful **description** of
+    whether the lab's own seasonal leg is a global constant or a Northern one, which matters for any
+    calendar construction. It is **not** a test: **both** sides of the JBF exchange state in print
+    that market integration confounds it, each about their own preferred conclusion, and this panel —
+    global, USD-converted, ETF-heavy, current mega-cap constituents — is close to the worst available
+    place to run it. **State before running that neither sign refutes anything**, or a positive
+    Southern coefficient will be written up as a kill it cannot support. Consequently **#194, the
+    cross-hemisphere rotation, has no surviving licence from this literature and should not be
+    built**: its destination was supposed to be established by a test that turns out to have no power,
+    and what remains is a two-bets-a-year calendar trade with no cross-sectional breadth and a prior
+    the lab's own pooled measurement already leans against. The rotation's one real virtue — never
+    holding cash, hence outside both calendar closures — is an argument about *constraints*, not about
+    *signal*. Carry the virtue to #198, which has a destination.
+    → `notes/2026-10-05-sad-weather-exchange-and-the-integration-escape.md`
+
+200. **ONE TRIAL, `liquidity-volume` — the family's first construction that needs no volume at all,
+    and it is a direct test of the lab's own stated conclusion.** `experiments/learnings.md`
+    [2026-08-29] and [2026-08-31] killed log ADV and relative volume and concluded the family's live
+    content is Amihud `ILLIQ`'s **price-impact numerator**, not trading activity. The **CHL effective
+    spread** is a pure cost-of-trading measure built from **close, high and low only**: with `c_t`,
+    `h_t`, `l_t` as log prices and `η_t = (h_t + l_t)/2`,
+
+        ŝ_t = sqrt( max{ 4·(c_t − η_t)·(c_t − η_{t+1}), 0 } ),   ŝ = mean over the window of ŝ_t
+
+    (the **two-day corrected** form; it is the more biased of the two variants and the one that
+    correlates better with the truth, which is what a ranking wants). Discard any two-day pair
+    containing a non-trading day or a **zero-range** day — on a 15-region panel those are foreign
+    holidays, and `h = l` degenerates the product. Monthly window, matching the champion's cadence;
+    tilt toward the **high**-spread end, long-only, as the existing `lv_amihud_illiquidity_tilt`
+    scout does. **The disqualifying pitfall is causality and it must be in the hypothesis text**:
+    `η_{t+1}` is *tomorrow's* mid-range, so when forming weights on date `T`, use only pairs with
+    `t+1 ≤ T − 1`, or `causality_check` will fail the candidate. Expect a **small `t`** and
+    pre-register that: this is ~140 mega-caps plus 42 ETFs, and the source's own advantage is
+    concentrated in wide-spread names this panel does not contain.
+    → `notes/2026-10-05-chl-spread-estimator-close-high-low.md`
+
+201. **FREE, ZERO TRIALS — the one-line pre-check that decides whether #200 is a new leg or the
+    Amihud leg in costume.** Compute the CHL spread score and `ILLIQ` on the same dates and read
+    their **rank correlation**, plus each one's rank correlation with log ADV. The lab has been
+    burned by exactly this shape before — `experiments/learnings.md` records a candidate returning at
+    rho **0.976** to `lv_amihud_illiquidity_tilt`. The source's own evidence says CHL carries
+    *partial* correlation with an intraday benchmark beyond the other estimators, so the prediction
+    is stated before the measurement: **CHL should be less size-loaded than `ILLIQ`**, because
+    `ILLIQ` still carries dollar volume in its denominator and CHL carries no volume term at all. If
+    CHL rank-correlates above ~0.9 with `ILLIQ` here, the live question is not "does it predict" but
+    "which end of a near-identical ranking pays" — the same question [2026-08-29] had to answer about
+    log ADV, and the answer there cost a trial that this check costs nothing.
+    → `notes/2026-10-05-chl-spread-estimator-close-high-low.md`
+
+202. **ANTI-CANDIDATES, two, and the first is a reading rule the folder should apply before importing
+    any double sort.** *(a) Do not import "volume improves momentum", and do not spend a trial on any
+    turnover-shaped signal here.* Lee–Swaminathan's headline interaction is **driven by the short
+    leg** — low-turnover losers rebound while high-turnover losers stay weak — and on the **long** leg
+    the ordering **reverses**: low-turnover winners beat high-turnover winners, small in Year 1 and
+    clearly over Years 2–5. A long-only book importing the headline tilts its winners the wrong way.
+    Generalised, and this is the transferable part: **before importing any double-sort result, ask
+    which leg the interaction lives on, because a long-only lab inherits only one of them.** Third
+    instance of the long/short asymmetry in this folder and the first where the two legs disagree in
+    *sign* rather than in share. Separately, the state variable is **share turnover**, which this repo
+    cannot compute, and the source's own claim that turnover is not a size proxy holds on an
+    equal-weighted NYSE/AMEX panel **including small names** — on ~140 mega-caps the lab has measured
+    that activity *is* size, so **the source predicts its own failure here**. *(b) Do not lengthen the
+    formation window.* Momentum reverses over Years 2–5 and the reversal strengthens **monotonically
+    in `J`**. Use this as a mechanism-level brake on a "try 24 months" idea, not as a new candidate.
+    → `notes/2026-10-05-turnover-and-the-momentum-life-cycle.md`
+
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -9337,8 +9533,133 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-02 (session 49) | **The second consecutive session aimed by the thing that has the lab stopped, and the first to take a gap this folder had named, carried and failed on twice — tonight it was reached by proxy rather than head-on.** The branch is unchanged, so `origin/survivorship-pit-v2` has now blocked three recorded nightlies and is on course for a fourth. [2026-10-01] closed the survivors' half of survivorship and named **delisting returns** as "the missing third", with both primaries blocked at BYU. **Sample → the conditioning that selected it → the three measurement choices sitting on top of it.** Headline: the lab has **at least three distinct mechanisms** producing its single largest measured artifact — survival conditioning, the pool's weighting, and the estimator — all numerator-only and all largest for the noisiest names, and it has separated one (#183, the discriminator: pool bias is invariant to the cross-sectional weighting, estimator bias is not). Second: "survivorship bias inflates results" is **half a sentence** — exiting names crowd one end of a sort and the sign of the bias follows which end a book is on, which makes the lab's artifact **signable and falsifiable** for the first time (#184). Third: a point-in-time *membership* fix still owes the *leavers' returns*, so a corrected re-scoring built on membership history alone is itself optimistic, and the imputation it needs must be a trailing conditional mean rather than a static constant (#186a). Also recorded: this folder's **second** unresolved Tier-A-against-Tier-A disagreement (HXZ's 35% replication rate against Jensen–Kelly–Pedersen's "most factors replicate"), same shape as [2026-10-01]'s 40–60%-against-12%. New: **#183–#187**. **Nothing is closed by this entry** — no lab measurement was taken tonight. | Hou–Xue–Zhang 2020 (RFS; typeset version of record read in full from `theinvestmentcapm.com`) (`2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`); Shumway 1997 + Shumway–Warther 1999 + Beaver–McNichols–Price 2007 — **all three abstract-level only**, abstracts authoritative (bepress `meta description`, Stanford GSB publication page), with the delisting-adjustment algebra read in full from Hou–Xue–Zhang's Appendix B (`2026-10-02-delisting-returns-the-other-half-of-survivorship.md`); Asparouhova–Bessembinder–Kalcheva 2010 + 2013 — **abstract-level only**, abstracts authoritative from ASU's Elsevier Pure instance, correction algebra **not read** (`2026-10-02-noisy-prices-and-biased-premium-estimates.md`) |
 | 2026-10-03 (session 50) | **The third consecutive session aimed by the thing that has the lab stopped, and the first to find a channel the previous two sessions' own framework had not considered.** [2026-10-02] established that the lab has at least three mechanisms producing its single largest artifact and wrote the transferable rule — *before attributing an effect to a mechanism, count how many other mechanisms produce the same signature.* Applied to itself that rule turns up a **fourth**, and it sits one layer lower than anything covered in fifty sessions: not the signal, not the pool, not the estimator of a moment, but **the arithmetic that turns price series into a mean return**. A grep across all 152 prior notes returned **zero** for `buy-and-hold bias`, `rebalanced mean`, `compounding bias`, `Caveat Compounder` and `Ince-Porter`. **Sample → the conditioning that selected it → the measurement choices on top of it → the averaging method underneath all of them.** Headline: Roll proves `E(R_AR − R_RB) = ½(σ²_ε̄ − σ_ε̄1,ε̄2) > 0` unconditionally and Canina et al. measure the gap at ~6%/year with a Monte Carlo showing it is **near-full-size at ten instruments and flat above a hundred** — so this universe gets all of it and cannot diversify it away (#188). The discriminator is again an **invariance**, and a cheaper one than #183's: the other three channels are invariant to how a fixed set of returns is averaged, this one must shrink with the review period (#188b). Second: Roll's own generalisation — the bias applies to *any* sort on a volume-related variable, naming size, dividend yield, P/E and beta — gives `liquidity-volume` and `range-variance` a **signed, falsifiable** differential bias between buckets before any economics (#190). Third: Ince–Porter's external-aggregate diagnostic is runnable here for free because the universe already contains ~42 index ETFs (#189), with the limit that it tests classification and price-series defects and **not** survivorship. Also recorded: a causal chain joining the three notes (dirty panel → bounce → wider averaging bias → worst at a liquidity sort's extreme), and **two access findings that are the mirror image of the last two nights'** — an `oa_status: closed` is not proof nothing is fetchable, and an author's *institutional library* reached via OpenAlex's location list served a closed Tier-1 PDF on the first try. New: **#188–#192**. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the session's best-aimed primary was again not read. | Roll 1983 (JFE; typeset publisher PDF read in full from `authors.library.caltech.edu`) with Blume–Stambaugh 1983 (JFE) **abstract-only**, abstract authoritative from the authors' own Rodney L. White Center working-paper series (`2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`); Canina–Michaely–Thaler–Womack 1998 (JF; read in full from `ecommons.cornell.edu` via Semantic Scholar's GREEN URL, against OpenAlex's `closed`) (`2026-10-03-caveat-compounder-daily-rebalancing-bias.md`); Ince–Porter 2006 (JFR) — **NOT read**, verified closed on all three indexes with zero repository fulltext, reached by proxy through Rossi 2011 (MPRA, Tier C, read in full); Landis–Skouras 2021 (JBF) and Schmidt et al. 2019 (FMPM) located, routes recorded, **not read** (`2026-10-03-international-panel-screens-datastream.md`) |
 | 2026-10-04 (session 51) | **The first session in five to leave the measurement/data-quality vein, and it returns with a tension of a shape this folder has not held before: two Tier-A theories that predict *opposite signs* for one cheap, buildable, long-only portfolio on this exact universe.** Sessions 47–50 walked the sample → the conditioning that selected it → the measurement on top of it → the arithmetic underneath; `research/README.md`'s rotation rule says to come back to the families, and the thinnest implementable one was `seasonality-calendar` (3 notes, both its halves closed by the lab) with `lead-lag-spillover` uncovered at the **country** level. A grep across all 155 prior notes returned **zero** for `Halloween`, `Bouman`, `Jacobsen`, `sell in May`, `month-of-year`, `hemisphere`, `latitude` and `Rapach` outside the 2010 combination paper. Headline one: the six-month seasonal is real and large across 108 markets and three centuries, the lab has **already measured it here at +6.18 bps/day (t = +3.58)** and closed it twice — but both closures are about an overlay that **exits to cash**, and a **rotation between instruments** is neither (gross 1.0 throughout, two boundary crossings a year, ~0.6%/yr against the 3.6%/yr a monthly overlay had to clear). Headline two: the only developed mechanism for that seasonal (daylight/SAD) makes the rotation's destination a **hemisphere flip**, its published critique says the mechanism is spurious and a plain winter/summer dummy fits better, and the 108-market replication reports **positive November–April coefficients in Australia, New Zealand and South Africa** — the North's phase, not the opposite one. **#193 separates them with one subset split, on train, for zero trials, and the prior stated before the measurement leans against the mechanism.** Headline three, in `lead-lag-spillover`: a Tier-2 re-estimation on the Tier-1 anchor's **own data and own models** reproduces "the US leads" under the **pairwise** regression and the news-diffusion GMM and **reverses it** under the all-countries VAR — where the leading node is **Switzerland** (27 of 66 against the US's 8). The friction (`θ̃ < 1`) is robust; the source attribution is not. The transferable rule is in the open questions. New: **#193–#197**, three of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the session's named top gap (Landis–Skouras) was chased again and again not read. | Bouman–Jacobsen 2002 (AER) **NOT read** — SSRN 403, the Erasmus RePub handle holds a record with no file — with Jacobsen–Zhang (publ. Zhang–Jacobsen 2021, JIMF) working-paper version **read in full** from a verified third-party mirror (`2026-10-04-halloween-six-month-seasonal.md`); Kamstra–Kramer–Levi 2003 (AER) **read in full**, typeset published PDF from `utoronto.scholaris.ca`, with Jacobsen–Marquering 2008 (JBF) **abstract only**, authoritative from Erasmus Pure (`2026-10-04-sad-daylight-seasonal-mechanism.md`); Rapach–Strauss–Zhou 2013 (JF) **NOT read**, closed on all three indexes, with Aye–Balcilar–Gupta 2017 (Empirica) **read in full** from `repository.up.ac.za` and Siliverstovs 2016 (KOF WP) **abstract only**, ETH Research Collection returning 500/401/403 (`2026-10-04-us-leads-the-world-country-lead-lag.md`) |
+| 2026-10-05 (session 52) | **The first session in this folder's history whose headline is that it was WRONG, and the item it retracts is the one it ranked second-highest four hours of lab time ago.** [2026-10-04] closed with a tension it called better than the two before it — two Tier-A sides predicting **opposite signs** for one buildable portfolio, resolvable by a free subset split (#193) that would unlock a named candidate (#194) — and left two small gaps, the top of which was "Kamstra-Kramer-Levi's published response, unread, which is what would settle whether the SAD exchange is live or lost". Tonight took that gap first, and it reversed the entry that named it. Three things came out of it. *(1) The DOI was mis-attributed*: `10.1016/j.jbankfin.2008.09.011` is **Jacobsen-Marquering's Response**, not KKL's; **KKL's Comment is `10.1016/j.jbankfin.2008.09.013`**, found by a Crossref *journal-and-issue* query after a title query failed, and read in full. *(2) The critique's contribution is a **placebo argument***: US ice-cream production and detrended UK airline travel each 'explain' the same seasonality across 48 countries with the right sign and wide significance, so **the time-series fit identifies nothing**, and KKL do not contest it - they reply on identification. *(3) **#193 has no power and is withdrawn as a test, and #194 loses its licence**: both sides state in print that market integration confounds the Southern-Hemisphere sign, KKL that Northern investors dominate mature Southern markets, JM that a Northern effect 'might be exported' and 'imported to Australia' — so a positive Southern Nov-Apr coefficient is predicted by **both** theories, and this panel (global, USD-converted, ETF-heavy, current mega-caps) is close to the worst place to run it.** The replacement comes from the mechanism's own authors and is **cross-risk-level rather than cross-hemisphere** (#198), which integration cannot neutralise. The other two notes are `liquidity-volume` and they run in opposite directions on purpose: **Abdi-Ranaldo's CHL spread** is the family's first construction needing **no volume term at all** — close, high and low only, a *location* statistic of the daily bar rather than the ninth width measure — which makes it a direct test of the lab's own [2026-08-31] conclusion that the live content is the price-impact numerator and not activity (#200, #201); and **Lee-Swaminathan**, the most-cited turnover-momentum paper, is an **anti-candidate whose own identifying claim predicts its failure here**, with its famous interaction living entirely on the **short leg** and **reversing in sign** on the long one (#202). New: **#198-#202**, four of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight; **#194 and #193-as-a-test are closed by a reading**, which is different. | Jacobsen-Marquering 2008 (JBF) argument **read in full** from the 2004 ERIM working paper at `repub.eur.nl` + Kamstra-Kramer-Levi 2009 *Comment* (JBF) **read in full** from `utoronto.scholaris.ca`, with Jacobsen-Marquering 2009 *Response* **NOT read** (SSRN 403) (`2026-10-05-sad-weather-exchange-and-the-integration-escape.md`); Abdi-Ranaldo 2017 (RFS) **read in full** from the St. Gallen working-paper version at `alexandria.unisg.ch`, equations read visually from page renders (`2026-10-05-chl-spread-estimator-close-high-low.md`); Lee-Swaminathan 2000 (JF) **read in full**, typeset article from `johnhcochrane.com` (`2026-10-05-turnover-and-the-momentum-life-cycle.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-05] Read this first: this folder was wrong about its own top item, and the correction is the
+  session's main product.** [2026-10-04] ranked **#193** second only to #188(a) on the grounds that *"the two
+  theories predict opposite signs, so the measurement cannot come back ambiguous in the way a magnitude split
+  can"*, and gated a named candidate (**#194**) behind it. Reading the rest of the JBF exchange retires that
+  argument: **both sides state in print that market integration confounds the Southern-Hemisphere sign.**
+  Kamstra–Kramer–Levi write that Northern investors dominate mature Southern markets and that this *"likely
+  explains the somewhat weaker results we found in the southern hemisphere countries"*; Jacobsen–Marquering,
+  about the very result that is their strongest evidence, write that a Northern effect *"might be 'exported'"*
+  and *"imported to Australia"*. So a **positive** Southern Nov–Apr coefficient is predicted by the calendar
+  theory directly **and** by the daylight theory via importation, and the test has no power — least of all on
+  this panel, which is global, USD-converted, ETF-heavy and built from current mega-cap constituents, i.e. the
+  exact wrapper through which Northern capital holds Southern markets. **#193 survives as a description, not
+  as a kill (#199); #194 should not be built (#199).** The replacement is **#198**, and it comes from the
+  mechanism's own authors: a risk-aversion channel implies the seasonal must be **graded by risk level within
+  a market**, which integration cannot neutralise, and a plain calendar dummy implies **no gradient**. New:
+  **#198–#202**, four of them free. **Nothing was measured by the lab tonight**, so nothing empirical is
+  closed; **#194 and #193-as-a-test are closed by a reading**, which is a different and cheaper thing.
+  **Carried unchanged and still genuinely unrun: #82** (thirtieth session, still the oldest unspent free
+  item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half, **#159**, **#161**,
+  **#164(a)**, the 2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the 2026-09-29 set
+  (**#170**, **#171**, **#172**), the 2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the
+  2026-10-01 set (**#179**, **#180**, **#181**), the 2026-10-02 set (**#183**, **#184**, **#185**, **#186**),
+  the 2026-10-03 set (**#188**, **#189**, **#190**, **#191**) and, from 2026-10-04, **#195** and **#196**.
+  **#152 stands.** **#163, #169, #173, #178, #182, #187, #192, #197 and #202 stay anti-candidates.**
+- **[2026-10-05] What should aim the next session, in order — the top is unchanged, the second slot has been
+  vacated by its own source, and a buildable candidate enters the list for the first time in three nights.**
+  - **#188(a) still goes first and it is still not research — it is one look at `engine/` by someone allowed
+    to take it.** Unchanged for a third night: every interpretation item on this file is interpretation of
+    numbers whose arithmetic is unestablished, and it costs nothing.
+  - **Then #198, which takes the slot #193 occupied.** It is free, it is on train only, it discriminates a
+    Tier-A mechanism on a prediction integration cannot neutralise, and unlike #193 a flat result is a real
+    closure rather than an uninterpretable one. Its placebo requirement is part of the item, not a caveat.
+  - **Then #201, then #200.** #201 is one rank correlation and decides whether #200 is a new leg or the
+    Amihud leg in costume; running #200 first risks spending a trial to learn what a free line would have
+    said. Together they are the only route this file currently offers to a **new, buildable, long-only
+    candidate** rather than another diagnostic.
+  - **Then #188(b), #189, #183, #184, #179, #180**, in the order [2026-10-03] set them.
+  - **Then #195** (the specification ladder, precondition for any region-level `lead-lag-spillover` trial) and
+    **#196** (the two preconditions for importing a six-month effect size onto a dividend-adjusted panel).
+    Note **#196 is now more valuable, not less**: with #194 withdrawn, #196(a)'s dividend-seasonality question
+    is the only remaining live reason to care what the six-month effect's size is here.
+  - **Then #199**, which is cheap and descriptive and should be run *after* #198 so that a Southern
+    coefficient is read in the light of a known risk gradient rather than on its own.
+  - **Then #190**, which still wants the same per-instrument noise proxy as #179(b) and #184 — build it once,
+    spend it on all three. **Then #185** as a standing reporting rule, **#191** as screens to re-measure
+    rather than adopt. **Then the carried items**: #181, #174's reading, #175, #177, #176.
+- **[2026-10-05] The transferable output, and it is about the folder's own output rather than about sources.**
+  [2026-09-30] added a detector for redundancy, [2026-10-02] one for rival mechanisms, [2026-10-03] one for the
+  altitude an enumeration was written at, [2026-10-04] one grading a tension by whether the two sides differ on
+  a magnitude or a sign. Tonight's is the fifth and it is the fourth one turned on itself: **a sign
+  disagreement between two sources is only a free experiment if neither source has already told you why the
+  sign is unidentified — so before promoting a tension to a test, read what each side says about the test's
+  own confound.** [2026-10-04]'s rule found a sign disagreement and stopped there; both sides had, in print,
+  already disarmed it, and one of them did so *in the very paper the folder had read in full*, two paragraphs
+  from the footnote the folder did quote. The practical form is cheap and it is a search, not a judgement:
+  **for the measurement you are about to propose, grep each source for its own discussion of that
+  measurement's confound — integration, non-synchronicity, cross-listing, selection — and quote what you find
+  before you rank the item.** A corollary worth stating separately, because it generalises past this case:
+  **a mechanism with a published escape clause is not falsifiable by the test the escape clause covers**, and
+  an escape clause that *both* sides invoke is as strong a piece of evidence as this literature produces —
+  about the test, not about the world.
+- **[2026-10-05] Access findings, recorded so the next session does not repeat the searches.**
+  **(1) For a comment-and-reply pair, enumerate the journal issue instead of searching the title.** A
+  Crossref *journal* query —
+  `api.crossref.org/journals/<ISSN>/works?filter=from-pub-date:…,until-pub-date:…&query.bibliographic=<words>`
+  — returned both halves of the exchange with DOIs, pages and citation counts in one call, after a title
+  lookup had failed and after this folder had spent a night with the wrong DOI. A reply's title is a
+  near-duplicate of the article's and ranks badly; its *issue* is not.
+  **(2) `repub.eur.nl` does serve files, and the [2026-10-04] entry needs narrowing rather than keeping.**
+  That entry recorded a Pure record naming a handle that resolved to a landing page with no bitstream link —
+  true of the handle route. The **direct** path works: RePEc's record page (`ideas.repec.org/p/ems/eureri/<id>`)
+  names the exact filename, and `repub.eur.nl/pub/<id>/<file>.pdf` returned HTTP 200 and a parseable PDF.
+  **Read the download URL out of the RePEc record; do not resolve the handle.**
+  **(3) `utoronto.scholaris.ca` is now a confirmed channel, not a lucky hit** — second consecutive night it
+  has served the full text of a closed Tier-1/2 article reached from OpenAlex's `locations` list.
+  **(4) A prolific author's site often hosts *other people's* canonical papers.**
+  `johnhcochrane.com/s/<author>_<topic>_JF.pdf` served the typeset JF article of a paper that OpenAlex,
+  Crossref and Semantic Scholar all report closed with `any_repository_has_fulltext: false`. This extends the
+  [2026-09-18] faculty-page lesson: try the *teaching library* of a prominent author in the field, not only
+  the paper's own authors' pages.
+  **(5) `alexandria.unisg.ch` serves `server/api/core/bitstreams/<uuid>/content` freely** — the *same* DSpace
+  URL form that `pyxida.aueb.gr` serves behind Anubis [2026-10-03]. Third confirmation that the platform
+  predicts nothing and the institution's bot policy predicts everything.
+  **(6) A ninth "looks like an answer" mode, and it is the most dangerous one yet: silent math dropout.**
+  `pdftotext -layout` produced a complete, well-formatted, 152 KB text file from a born-digital PDF in which
+  **every displayed equation and every inline symbol was absent** — not garbled, gone, leaving sentences like
+  *"the estimator in which (  ) is replaced with ( )"*. Unlike a scan this passes every check the README
+  lists: `file` says PDF, `pdffonts` is populated, extraction yields plenty of characters. **The tell is a
+  definition that reads as empty parentheses.** The fix is cheap and known — `pdftoppm -png -r 120 -gray -f
+  <a> -l <b>` on the five pages that carry the derivation, then read them as images. **Grep extracted text for
+  `( )` and `(  )` before trusting a formula-bearing paper.**
+  **(7) SSRN's `Delivery.cfm` URL that OpenAlex lists as a green location returned HTTP 403 with a 5.6 KB
+  Cloudflare body**, as the README predicts; an `oa_status: green` from OpenAlex is again not a promise of
+  reachability. **(8) Semantic Scholar's clean `not found` for a real, indexed DOI recurred twice** — on
+  `10.1093/rfs/hhx084` and `10.1111/0022-1082.00280`, the **sixth and seventh** instances. **Crossref was
+  again never rate-limited and answered every lookup tonight**, including the journal-enumeration query in
+  (1); OpenAlex's budget was available and carried both counts S2 missed.
+- **[2026-10-05] Gaps, and the top one is unchanged for a fourth night.** **(a) Landis–Skouras (2021, JBF 130,
+  106128)** — not advanced tonight and not chased, because [2026-10-04] established the remaining route (a
+  second thesis deposit) and the session's budget went to the item that turned out to be a retraction. It
+  stays the folder's top unreached source. **(b) Schmidt et al. (2019, FMPM 33(3))** — carried unchanged.
+  **(c) New and small: Jacobsen–Marquering's 2009 *Response*** (`10.1016/j.jbankfin.2008.09.011`, 37 Crossref)
+  is the last unread piece of the exchange and is what would say whether the critique conceded KKL's
+  replication failure. **Its absence does not affect anything above**, because the integration escape clause
+  is quoted from the two pieces that *were* read, and both sides state it. Route: Jacobsen's institutional
+  repository, or a Massey/Auckland deposit; SSRN is closed to this client. **Carried and not advanced
+  tonight**: the ABK correction's algebra, Blume–Stambaugh's algebra, the Shumway pair, KOF WP 16-408 behind
+  the ETH 500/401/403.
+- **[2026-10-05] One observation for the human, and it is one night more serious again.**
+  `origin/survivorship-pit-v2` is still unmerged and the session-start integrity warning fired again tonight;
+  the journal now records **six** consecutive halted nightlies. **What is new is not the branch, it is what
+  tonight demonstrates about the cost of the halt.** This folder has now spent four consecutive sessions
+  producing items the lab cannot run, and tonight it retracted one of them — **a top-ranked item that stood
+  unexamined for a single day, and would have been run as a kill it could not support if the lab had been
+  live.** That cuts both ways and both should be said plainly. It is an argument *for* this folder (the
+  retraction cost nothing and happened because a gap was chased rather than assumed), and it is an argument
+  that **a proposal backlog degrades with age in a way a measured result does not**: #82 is unrun for thirty
+  sessions, and the file now carries five free diagnostics (#193/#199, #195, #196, #198, #201) that would
+  between them close or re-aim a Tier-A mechanism, gate a family's first region-level trial, and decide
+  whether a proposed new leg is a duplicate — **none of which touches the trial count, the deflator or the
+  holdout.** Seven nights of unrun diagnostics is the accumulating loss, and it is now large enough that the
+  honest recommendation is unchanged and more urgent: **if the branch cannot be resolved, let the lab run the
+  diagnostic backlog with trials still frozen.**
 
 - **[2026-10-04] Read this first: this folder now holds a tension whose two sides predict OPPOSITE SIGNS for
   one buildable portfolio, and the test is a subset split on train that costs zero trials.** The folder has

@@ -17417,3 +17417,4 @@ no instruction in `CLAUDE.md`, `program.md` or the nightly prompt authorises an 
 land someone else's branch.
 
 **Session verdict: 0 experiments, 0 verdicts, 0 holdout reads. Halted at step 0, sixth night.**
+## Research session — 2026-10-05 (learning agent): 3 notes added, see research/SUMMARY.md

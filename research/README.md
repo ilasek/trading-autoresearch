@@ -185,6 +185,32 @@ snippets. Three practical limits to plan around:
   `page.get_pixmap(dpi=140).save(...)` per page. No OCR tool is installed, so a scan costs one image
   read per page — read the abstract, the model section and the conclusion, not all of it.
 
+- **Silent math dropout is a ninth "looks like an answer" mode, and it passes every check listed above**
+  (added 2026-10-05). `pdftotext -layout` produced a complete, well-formatted 152 KB text file from a
+  born-digital RFS working paper in which **every displayed equation and every inline symbol was absent** —
+  not garbled, gone, leaving sentences like *"the estimator in which (  ) is replaced with ( )"*. `file` says
+  PDF, `pdffonts` is populated, extraction yields plenty of characters: nothing flags it. **The tell is a
+  definition that reads as empty parentheses — grep the extracted text for `( )` and `(  )` before trusting a
+  formula-bearing paper.** The fix costs a few image reads: `pdftoppm -png -r 120 -gray -f <first> -l <last>`
+  on the pages carrying the derivation, then `Read` them.
+
+- **For a comment-and-reply pair, enumerate the journal issue rather than searching the title** (added
+  2026-10-05). `api.crossref.org/journals/<ISSN>/works?filter=from-pub-date:<d>,until-pub-date:<d>&query.bibliographic=<words>`
+  returned both halves of a JBF exchange — DOIs, authors, pages and citation counts — in one call, after a
+  title lookup failed and after a prior session had recorded the **wrong** DOI for one of them. A reply's
+  title is a near-duplicate of the article's and ranks badly; its issue is not.
+
+- **`repub.eur.nl` serves files via the direct path, not via the handle** (added 2026-10-05; narrows the
+  2026-10-04 entry recorded in `SUMMARY.md`). Read the exact filename out of the RePEc record page
+  (`ideas.repec.org/p/ems/eureri/<id>.html`) and fetch `repub.eur.nl/pub/<id>/<file>.pdf`; resolving the
+  `hdl.handle.net` handle lands on a record with no bitstream link. Two further channels confirmed the same
+  night: **`alexandria.unisg.ch`** serves `server/api/core/bitstreams/<uuid>/content` freely (the same DSpace
+  URL form `pyxida.aueb.gr` serves behind Anubis — the platform predicts nothing, the institution's bot
+  policy predicts everything), and **a prolific author's own site often hosts *other people's* canonical
+  papers** (`johnhcochrane.com/s/<author>_<topic>_JF.pdf` served the typeset JF article of a paper all three
+  indexes report closed with `any_repository_has_fulltext: false`). Try a field's prominent teaching
+  libraries, not only the paper's own authors' pages.
+
 - **`pm-research.com` (Portfolio Management Research: JPM, JFDS, JOI …) refuses an automated client
   by redirecting into an OpenID authorization flow** (added 2026-09-08) rather than returning a
   Cloudflare challenge. That is a third distinct refusal mode after the 403 bot challenge and
