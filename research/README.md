@@ -101,9 +101,8 @@ snippets. Three practical limits to plan around:
   an egress block — do not report it as one. Reach those papers via DOI metadata, a preprint
   mirror, or the publisher's landing page instead.
 - **`WebFetch` cannot read PDFs**, which is most of what you want. It returns the raw binary
-  and reports that it cannot parse it (it does save the file, and names the path). `Read` also
-  needs `pdftoppm`, which is not installed. The working recipe is to extract the text yourself
-  in the scratchpad, without touching the repo's `.venv`:
+  and reports that it cannot parse it (it does save the file, and names the path). The working
+  recipe is to extract the text yourself in the scratchpad, without touching the repo's `.venv`:
 
   ```bash
   cd "$SCRATCHPAD"
@@ -122,12 +121,49 @@ snippets. Three practical limits to plan around:
   404s that still write a file — check `curl -w '%{http_code}'` and `file` the result before
   parsing.
 
-- **`econstor.eu` is a reliable channel and worth trying early** (added 2026-09-07). It hosts
+- **`econstor.eu` WAS a reliable channel and is now behind Anubis — do not rely on it**
+  (added 2026-09-07; **reversed 2026-10-04**). On 2026-10-04 a direct
+  `econstor.eu/bitstream/10419/<id>/1/<file>.pdf` request returned **HTTP 200 with a 7.9 KB
+  `Making sure you're not a bot!` body** served from `/.within.website/x/xess/` — the same Anubis
+  software recorded at Frankfurt (2026-09-30) and AUEB (2026-10-03), and the **first case of a
+  channel this file recommended going dark.** Like the Incapsula case it *looks like an answer*:
+  HTTP 200, a file written to disk, and only `file` reveals it is HTML. Try it, but check the body,
+  and prefer the two channels in the next bullet. The original note, retained because the host may
+  come back: it hosts
   German-institution discussion papers *and* mirrors of open-access journal articles, so it has
   twice served files the publisher's own site refused — including a **gold open-access MDPI
   article** whose `mdpi.com` PDF endpoint 403s an automated client. OpenAlex's
   `locations[].landing_page_url` list is how to find the handle (`hdl.handle.net/10419/...`);
   fetch the landing page and read the `bitstream` link out of it.
+
+- **For a closed article, enumerate the CO-AUTHORS' institutions and try each one's repository
+  before any search engine** (added 2026-10-04). This is the 2026-09-18 faculty-page lesson and the
+  2026-10-03 institutional-library lesson turned into a procedure, and the way to run it is to read
+  **OpenAlex's own `locations[].landing_page_url` list** rather than to guess hostnames. Two hosts
+  earned their place this way in one session: **`utoronto.scholaris.ca`** (University of Toronto
+  DSpace) served the **typeset published PDF of a closed AER article** on the first try, and
+  **`repository.up.ac.za`** (University of Pretoria) served a working paper of a closed article from
+  its third author's institution. Three cautions. An author's *own publication page* can host the
+  **supplement and not the paper** — one checked tonight listed a JF article with its full abstract
+  and linked only the Internet Appendix. **Legacy Google Sites file URLs are a refusal that looks
+  like an answer**: `sites.google.com/a/<domain>/<user>/<file>.pdf` returns **HTTP 200 with a
+  ~940 KB Google Sites application shell**, unchanged by the legacy `?attredirects=0&d=1` download
+  form, and embeds no Drive file id to follow. And a **Pure or DSpace record can hold a record
+  without holding a file** — a `hdl.handle.net` handle named in a Pure record resolved to a 200
+  landing page with no bitstream link at all, so a handle is not evidence of full text. The
+  *abstract* side of Pure is excellent and is the right fallback for a closed Elsevier article.
+
+- **`api.fatcat.wiki` is unreachable through this environment's relay, and GitHub's search API is
+  closed to this session** (added 2026-10-04). A `api.fatcat.wiki/v0/release/lookup?doi=…` call died
+  with `Recv failure: Connection reset by peer` — the same transport signature this file records for
+  `web.archive.org`, so **report it as a transport failure, not an origin refusal**. Separately,
+  `api.github.com/search/repositories` returns **HTTP 403** with `sessions are bound to their
+  configured repositories`: the "find the authors' published reference implementation" route below
+  **cannot be exhausted from inside this environment**, and a negative result on it is uninformative
+  rather than evidence that no code exists. Also recorded: the **ETH Research Collection**
+  (`research-collection.ethz.ch`) returned HTTP **500** on a handle reached via its own DOI, **401**
+  on `/server/api/core/items` and **403** on `/server/api/discover/search/objects` — three error
+  classes in one minute, which is server or policy behaviour rather than a rate limit.
 
 - **The Internet Archive's OCR text is the cheapest route to a scanned working paper, and it beats
   the institutional repository that holds the same scan** (added 2026-09-08). Many pre-1990 working
@@ -139,11 +175,15 @@ snippets. Three practical limits to plan around:
   egress block, and it should be reported as such rather than as an unreachable source. Find the
   identifier with `archive.org/advancedsearch.php?q=title:("...")&output=json`.
 
-- **`pymupdf` renders a text-layerless scan to PNG, which removes the missing-`pdftoppm`
-  dependency** (added 2026-09-08). Install it into the scratchpad `pylibs` exactly like `pypdf`
-  (`--target ./pylibs pymupdf`), then `page.get_pixmap(dpi=140).save(...)` per page and `Read` the
-  images. Always check `page.get_text()` first: a PDF that extracts 38 characters from 39 pages is
-  a scan, and no amount of `pypdf` tuning will fix it.
+- **A text-layerless scan has to be rendered to images and read visually.** Always detect it
+  first: `pdffonts <file>.pdf` printing an **empty font table**, or an extraction yielding a few
+  dozen characters from dozens of pages, means a scan, and no amount of `pypdf` tuning will fix it.
+  **`pdftoppm` is installed** (corrected 2026-10-01; the 2026-09-08 entry that said otherwise was
+  wrong, and `pdftotext` is present too) — `pdftoppm -png -r 130 -gray <file>.pdf <outdir>/p` needs
+  no install and renders one PNG per page to `Read`. `pymupdf` remains a fallback: install it into
+  the scratchpad `pylibs` exactly like `pypdf` (`--target ./pylibs pymupdf`), then
+  `page.get_pixmap(dpi=140).save(...)` per page. No OCR tool is installed, so a scan costs one image
+  read per page — read the abstract, the model section and the conclusion, not all of it.
 
 - **`pm-research.com` (Portfolio Management Research: JPM, JFDS, JOI …) refuses an automated client
   by redirecting into an OpenID authorization flow** (added 2026-09-08) rather than returning a
@@ -176,6 +216,39 @@ snippets. Three practical limits to plan around:
   answered — a synthetic `generateData` call in a reference implementation tells you the paper's
   "out-of-sample" test used no market data. Say in the note that the algorithm was read from the
   code and the argument was not read.
+
+- **Two more working channels, and a transport failure that is not a refusal** (added 2026-10-01).
+  **The NYU Faculty Digital Archive (`archivefda.dlib.nyu.edu`)** hosts the NYU Stern working-paper
+  series and is the route to pre-1996 finance working papers whose journal version is closed: search
+  `/simple-search?query=<title>`, then read the `bitstream/2451/<id>/<n>/<file>.pdf` link out of the
+  landing page. Note the mirror hostname `archive.nyu.edu` served the landing page but **not** the
+  bitstream, so try both. **FEDS (`federalreserve.gov/econres/feds/files/<year><number>pap.pdf`)**
+  serves Federal Reserve Board staff working-paper versions of closed Tier-1 articles, parses
+  cleanly, and carries its own DOIs (`10.17016/FEDS.YYYY.NNN`); beware that titles often change
+  between working paper and journal, so resolve by DOI or author, never by title.
+  **`web.archive.org` is currently unreachable through this environment's relay** — every request
+  dies with `Recv failure: Connection reset by peer`, `/__agentproxy/status` names the cause as
+  `ws_closed_mid_exchange` tunnels to `web.archive.org:443`, and `WebFetch` refuses the host. That is
+  a **transport failure, not an origin refusal**, and it must be reported as such; note that the
+  `archive.org` availability and metadata APIs keep working, so a snapshot can be located and not
+  fetched. Plain `http://` URLs are separately refused by the proxy with `Blocked by egress policy` —
+  always use `https://`.
+
+- **`scholarsarchive.byu.edu` (bepress) is Cloudflare-challenged on every PDF endpoint** (added
+  2026-10-01): both `cgi/viewcontent.cgi?article=…` and the `context/<coll>/article/<id>/viewcontent/`
+  form return HTTP 403 with a ~5.6 KB "Just a moment…" body, with or without a browser UA and referer.
+  This matters out of proportion to one host, because bepress repositories are frequently the **sole**
+  OA location that Unpaywall, OpenAlex and Semantic Scholar all report for a closed article —
+  an `openAccessPdf: GREEN` from any of the three is not a promise the file is fetchable.
+  `core.ac.uk`, the obvious aggregator fallback, is behind the same challenge and its v3 API rejects
+  an unkeyed title query.
+
+- **Semantic Scholar's third failure mode is a clean `not found` for a real, indexed DOI** (added
+  2026-10-01). `10.1093/rfs/hhy030` — a Tier-1 RFS article that both Crossref and OpenAlex resolve —
+  comes back as `Paper with id DOI:… not found`. Like the Incapsula and Anubis cases, it *looks like
+  an answer*. Never record "not indexed" on one index's say-so; **Crossref
+  (`api.crossref.org/works/<doi>`, `is-referenced-by-count`) was never rate-limited and is the right
+  first call**, with OpenAlex second and Semantic Scholar third.
 
 ## Anti-lookahead policy (hard rules)
 
