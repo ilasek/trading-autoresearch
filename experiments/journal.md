@@ -17546,3 +17546,5 @@ pointer here, and stop.
 - **Nothing was merged, parked, renamed, or pushed to any branch other than `main`.** No candidate
   file was written, no `strategies/lib/` file added or edited, and `trials.jsonl`, `leaderboard.json`,
   `champion.py` and `champion_card.json` are untouched.
+
+## Research session — 2026-10-06 (learning agent): 3 notes added, see research/SUMMARY.md
