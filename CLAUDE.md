@@ -20,7 +20,7 @@ trading days behind), note it in the journal and continue; do not mass-download.
 | Path | Access |
 |---|---|
 | `strategies/candidates/` | **create/edit freely** — this is your workspace |
-| `strategies/lib/` | **add new files freely**; never edit an existing one (a promoted candidate becomes the champion and keeps importing it — editing in place would silently change an already-measured strategy). CI enforces this. |
+| `strategies/lib/` | **add new files freely**; never edit an existing one (a promoted candidate becomes the champion and keeps importing it — editing in place would silently change an already-measured strategy). CI enforces this. `groups.py` names the 140 legacy stocks, so under protocol v2 any candidate importing it (directly or via `signal_blend.py` / `union_legs.py`) is refused — write a new helper that works from the `eligible` panel instead. |
 | `experiments/journal.md`, `experiments/learnings.md` | append/edit |
 | `reports/` | create weekly reports |
 | `research/` | written by the nightly learning agent (rules in `research/README.md`); strategy sessions read-only |
@@ -29,9 +29,12 @@ trading days behind), note it in the journal and continue; do not mass-download.
 
 ## The experiment loop (repeat up to the budget in program.md)
 
-1. **Read first**: `experiments/learnings.md`, the last ~20 entries of
+1. **Read first**: the "Protocol v2" section of `program.md`, `experiments/learnings.md`
+   (measured under v1 — see Hard rules), the last ~20 entries of
    `experiments/journal.md`, the champion's result card
-   (`strategies/champion_card.json`), `experiments/leaderboard.json` (which families
+   (`strategies/champion_card.json` — until the first v2 promotion this is still the
+   v1 champion's card, which holds no seat under v2; check its `protocol_version`),
+   `experiments/leaderboard.json` (v2 trials only from the first v2 trial on: which families
    have been tried, how far each got, how correlated each lead is to the champion),
    and `research/SUMMARY.md` (external-research findings, if present). Then read
    `program.md`'s budget allocation and plan the session's mix of families **before**
@@ -97,6 +100,26 @@ def generate_weights(prices):
     fails candidates that peek."""
 ```
 
+### Protocol v2: the `eligible` panel and the hindsight guard
+
+Trials run on a point-in-time universe of ~1,400 stocks plus 42 ETFs. Declare `eligible`
+as a keyword parameter to receive it:
+
+```python
+def generate_weights(prices, aux, eligible=None):
+    """eligible: dates x columns, bool — True where the name was an index member
+    (ETFs: from their first price). Truncated with `prices`. A column appears in
+    `prices` only once its name has been eligible."""
+```
+
+Select only names that are eligible on the rebalance date; the engine zeroes weight on
+anything else. The protocol refuses, before running, any candidate that names a stock
+in code, reads the legacy universe (`data/universe.yaml`, `universe="legacy"`), or reads
+the membership files — in its own source or in any `strategies` module it imports.
+ETF ids (e.g. `SPY` as a market proxy) and pandas frequency strings are allowed.
+Constructing a stock id at run time, or loading one from a file, to get past the guard
+is a protocol violation, not a loophole.
+
 ### The optional second argument
 
 Declaring a second positional parameter gets you the rest of the daily bar:
@@ -123,13 +146,14 @@ illiquidity, volume shocks, cross-sectional normalisation, long-only weighting).
 - **Be deterministic.** Fix `random_state`, keep estimators single-threaded. The
   causality check compares holdings at 1e-6; non-determinism reads as a peek.
 - **Watch the clock.** The protocol calls `generate_weights` about seven times per
-  trial (three truncated causality runs, three splits, the champion). The current
-  champion takes ~12s; keep a candidate under ~60s per call. If a model is too
+  trial (three truncated causality runs, three splits, the champion). The v1
+  champion took ~12s on the 140-name panel; keep a candidate under ~60s per call. If a model is too
   expensive to refit at every month-end, give it fewer rebalance dates rather than a
-  cached fit nobody can audit.
-- **Prefer few features and a penalised linear model first.** This universe is 140
-  instruments; a heavy learner mostly fits noise, and the literature's own finding is
-  that the dominant signals are few.
+  cached fit nobody can audit. The v2 panel is ~10x wider than the v1 one, so measure
+  a call's runtime before writing a model around it.
+- **Prefer few features and a penalised linear model first.** About 1,000 names are
+  eligible on a typical validation date; a heavy learner mostly fits noise, and the
+  literature's own finding is that the dominant signals are few.
 
 ## Hard rules
 
@@ -147,10 +171,15 @@ illiquidity, volume shocks, cross-sectional normalisation, long-only weighting).
 - **Spend the budget across families.** `program.md` sets the allocation: at most 2
   trials in `price-trend`, at most 2 in any one family until four families have leads,
   at least one in a family with no trials at all. This is a rule, not advice.
-- **The learnings file is mostly about one family.** Almost everything in
-  `experiments/learnings.md` was measured on `price-trend` constructions. Do not carry
-  its constants (the de-concentration price, the required-gain table, the risk-bet
-  calibration) into a new family by analogy — re-measure them there or say you have not.
+- **The learnings file is mostly about one family, and all of it is v1.** Almost
+  everything in `experiments/learnings.md` was measured on `price-trend` constructions,
+  and every entry was measured on today's survivors (protocol v1). Do not carry its
+  constants (the de-concentration price, the required-gain table, the risk-bet
+  calibration) into a new family by analogy, or into v2 at all — re-measure them or say
+  you have not.
+- **No hindsight.** Never hard-code instruments, and never design a candidate around
+  knowledge of which names later won. The guard catches the first; only you can avoid
+  the second.
 - **Every strategy run goes through `run_experiment.py`** so the trial count (and thus
   the deflated-Sharpe bar) stays honest. No ad-hoc backtests of candidate ideas.
 - **No trading, no orders, no broker APIs.** Research only.
