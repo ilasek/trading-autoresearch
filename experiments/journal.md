@@ -17722,3 +17722,53 @@ and stop. Do not push the halt notice to a per-run branch.
   `program.md`'s allocation requires. Note #193 (SAD/weather) remains **retracted by the learning
   agent as a test** and must not be built on.
 - **Nothing was merged, parked, renamed, or pushed to any branch other than `main`.**
+
+## Protocol change — 2026-10-06: cut-over to protocol v2
+
+**Decision (human, 2026-10-06): v2 is the protocol from now on.** This answers item 2 of the
+halt entries of 09-29 → 10-04: the lab searches under v2, and v1 history does not count toward
+the v2 bar. The branch that carried v2 (`survivorship-pit-v2`) was merged on 2026-10-05
+(ilasek/trading-autoresearch#4).
+
+What the cut-over did, in the re-scoring report's own order:
+
+1. **Hindsight guard** (`protocol.static_check`). A v2 candidate may not name a stock in code,
+   read the legacy universe, or read the membership files — in its own source or in any
+   `strategies` module it imports, transitively. Docstrings, comments and prose strings are not
+   scanned; ETF ids and pandas frequency aliases are allowed. Over the files on disk: the
+   hindsight sanity strategy is refused, plain 12-1 momentum and random selection pass, and 31 of
+   the 103 candidate files are refused — one for a hard-coded sector map, 30 because they import
+   `strategies/lib/groups.py` (the v1 champion's file is refused for the same reason).
+2. **Fresh deflated-Sharpe history.** The bar, family bests, leaderboard and champion seat read
+   only trials recorded under the running version. The 104 v1 records are untouched and remain
+   v1 records (no `protocol_version` field = v1).
+3. **Re-seating.** No v2 champion exists. `pt_mom_evar_arbrisk` holds no seat under v2 and is
+   never compared against; the first v2 `challenge` that passes every gate at DSR ≥ 0.95 is
+   promoted by the bootstrap rule, which archives the v1 files.
+
+**Finding made during the cut-over, and it qualifies the re-scoring.** `groups.py` hard-codes the
+140 legacy names (its sector map, and its region/type maps read `data/universe.yaml`). Every score
+built on it can only rank survivors: `signal_blend.group_lead_score` scores only mapped names, and
+the union books keep only names every leg scores, so their joint pool *is* the legacy list. Under
+the re-scoring's masked view those books therefore still selected from today's survivors, while
+their random-selection null drew from the whole point-in-time pool. That is the likeliest
+explanation of why the zero-leg hash placebo (#77, reads no market data) scored 0.77 at the 100th
+null percentile, and it means the v2 top ten in `reports/protocol-v2-comparison.md` — seasonality,
+portfolio-learning and lead-lag books — is **not** survivorship-free. Their v2 numbers should be
+read as v1 numbers on a slightly different window. The guard now refuses all of them.
+
+Practical consequences for the next session:
+
+- Point-in-time sector labels do not exist in the store. Region and type do (`data.instruments()`
+  answers for the active universe inside a strategy call). A group-based signal needs a new
+  `strategies/lib` helper built on those, or on return-based clusters estimated causally.
+- `experiments/learnings.md` is v1 knowledge throughout. Re-measure before relying on it.
+- `experiments/leaderboard.json` still shows v1 until the first v2 trial rewrites it.
+- The v2 panel is ~1,444 columns (~950 eligible per validation day); loading it takes about a
+  minute. Measure a candidate's call time before building on it.
+- `scripts/rescore_protocol_v2.py` numbers trials from `protocol.recorded_trials()`, which now
+  returns v2 records only; re-running it needs `recorded_trials(1)`. It was not edited (`scripts/`
+  was outside this change's remit).
+
+- Lesson: survivorship can re-enter through a shared helper as easily as through a universe file;
+  a guard has to follow imports, not just read the candidate.

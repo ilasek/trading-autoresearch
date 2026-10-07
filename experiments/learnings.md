@@ -3,6 +3,12 @@
 Read this before proposing any hypothesis. Add to it when a pattern repeats
 across experiments; prune entries that later evidence contradicts.
 
+> **Protocol v2 since 2026-10-06.** Every entry below was measured under protocol v1, on
+> today's ~140 surviving constituents. The point-in-time re-scoring reordered the board
+> (v1 vs v2 rank agreement +0.43) and cut the v1 champion from 1.27 to 0.19, so treat each
+> entry as a hypothesis to re-measure under v2, not as a result. See the 2026-10-06 entry in
+> `experiments/journal.md`.
+
 ## Data & methodology caveats (permanent)
 
 - **Survivorship bias**: the universe is today's constituents. Single-stock alpha

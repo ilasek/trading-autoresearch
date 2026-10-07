@@ -18,19 +18,28 @@ yet recorded in its own family. The seat is unchanged and unreachable from the
 scout track; a family's lead reaches it, if at all, through a `challenge`
 candidate that builds on it.
 
-Protocol versions. v1 (the historical protocol, still the default until the
-cut-over) scores every candidate on `data/universe.yaml`: today's constituents,
-so its stock results carry survivorship bias. v2 scores on the point-in-time
+Protocol versions. v1 (the historical protocol, the default until the
+2026-10-06 cut-over) scores every candidate on `data/universe.yaml`: today's
+constituents, so its stock results carry survivorship bias. v2 (the default
+since) scores on the point-in-time
 universe (`data/universe_pit.yaml` + `data/membership/intervals.csv`): a stock
 is buyable only on dates it was in a tracked index, the engine enforces that,
 train starts when membership data does (1997), and a candidate must beat a
 survivorship-matched random-portfolio null (`engine/benchmarks.py`). A
 `Setup` carries everything that differs between the two; `run_trial` builds
 the one `PROTOCOL_VERSION` names unless handed another.
+
+Each version keeps its own history. The deflated-Sharpe bar, the family bests,
+the leaderboard and the champion seat read only trials recorded under the
+version being run: v1 Sharpes are not on the v2 scale, and pooling them would
+inflate the dispersion term of the bar. `trials.jsonl` stays one append-only
+file; a record without `protocol_version` is a v1 record.
 """
 
 from __future__ import annotations
 
+import ast
+import functools
 import importlib.util
 import inspect
 import json
@@ -125,7 +134,9 @@ DEFAULT_TRACK = "challenge"
 # Protocol v2: point-in-time universe, survivorship-matched null
 # ---------------------------------------------------------------------------
 
-PROTOCOL_VERSION = 1
+# Switched from 1 on 2026-10-06, after the hindsight guard below existed (the
+# re-scoring's cut-over order: guard, fresh deflated-Sharpe history, re-seat).
+PROTOCOL_VERSION = 2
 
 # The PIT universe is loaded from here: seven years of warm-up before the v2
 # train split, and the panel stays a manageable size (~2,000 columns).
@@ -152,6 +163,29 @@ NULL_SEED = 20260925
 # directly would see future index changes, which the causality check cannot
 # detect, so the source is refused outright.
 FORBIDDEN_SOURCE = ("membership", "intervals.csv", "universe_pit")
+# The same, as it would appear in a string literal: a path, not the word
+# ("the membership band" in a hypothesis is prose, "data/membership/" is not).
+FORBIDDEN_STRINGS = ("membership/", "membership\\", "intervals.csv", "universe_pit")
+
+# The hindsight guard. Point-in-time membership removes survivorship from the
+# universe, not from candidate code: a hard-coded list of today's 15 biggest
+# winners was an index member throughout validation and passes every v2 gate
+# (`experiments/protocol_v2/sanity/hindsight_winners.py`: Sharpe 1.12, 100th
+# null percentile). A random-selection null cannot flag a selection that really
+# was the best. So a v2 candidate may not name a stock, and may not read the
+# legacy universe (the list of today's survivors), in its own source or in any
+# `strategies` module it imports: a library helper is the same leak one step
+# removed. `strategies/lib/groups.py` is the case in point — it maps exactly the
+# 140 legacy names, so any score built on it can only ever rank survivors.
+#
+# Names the guard leaves alone: ETF ids (the ETF sleeve is the same in both
+# universes, eligible from first price, and naming SPY as a market proxy is not
+# hindsight) and strings that are pandas frequency aliases ("M", "MS", "D" …
+# collide with real tickers). Docstrings and comments are not scanned. Building
+# an id at run time, or reading one from a file, to get past this is a protocol
+# violation rather than a loophole; the guard catches honest mistakes.
+LEGACY_UNIVERSE_TOKENS = ("universe.yaml",)
+LEGACY_UNIVERSE_NAME = "legacy"
 
 
 @dataclass
@@ -195,12 +229,116 @@ def default_setup(prices: pd.DataFrame, aux: dict | None) -> Setup:
 
 
 def static_check(candidate_path: Path) -> str | None:
-    src = Path(candidate_path).read_text()
-    hits = [tok for tok in FORBIDDEN_SOURCE if tok in src]
-    if hits:
-        return (f"candidate source references {hits}: the universe may only be read "
-                f"through the `eligible` argument the protocol passes")
+    """Source-level checks a v2 candidate must pass before it is run: no reading
+    of the membership data, and no hindsight (see `LEGACY_UNIVERSE_TOKENS`).
+    Applied to the candidate and to every `strategies` module it imports,
+    transitively, and to code only — imports, attribute names and string
+    literals, not docstrings or comments. Returns an error string, or None if
+    the source is clean."""
+    candidate_path = Path(candidate_path)
+    for path in _source_closure(candidate_path):
+        where = "candidate source" if path == candidate_path else _rel(path)
+        tree = ast.parse(path.read_text())
+        strings = _string_constants(tree)
+        hits = sorted({tok for tok in FORBIDDEN_SOURCE for name in _code_names(tree) if tok in name}
+                      | {tok for tok in FORBIDDEN_STRINGS for lit in strings if tok in lit})
+        if hits:
+            return (f"{where} references {hits}: the universe may only be read "
+                    f"through the `eligible` argument the protocol passes")
+        stocks = sorted({s for s in strings if s in _stock_ids() and not _is_freq_alias(s)})
+        if stocks:
+            shown = ", ".join(stocks[:8]) + (f" … ({len(stocks)} in all)" if len(stocks) > 8 else "")
+            return (f"hindsight: {where} names stock(s) {shown}. A v2 candidate may not "
+                    f"hard-code instruments; select from the `eligible` panel instead")
+        legacy = sorted({s for s in strings
+                         if s == LEGACY_UNIVERSE_NAME or any(t in s for t in LEGACY_UNIVERSE_TOKENS)})
+        if legacy:
+            return (f"hindsight: {where} reads the legacy universe ({legacy}), which is "
+                    f"today's survivors; a v2 candidate may not")
     return None
+
+
+@functools.lru_cache(maxsize=1)
+def _stock_ids() -> frozenset:
+    ids: set[str] = set()
+    for universe in ("legacy", "pit"):
+        ids |= {i for i, t in data.instrument_types(universe).items() if t == "stock"}
+    return frozenset(ids)
+
+
+# Period and pre-2.2 offset aliases ("M" in `to_period("M")`) that the current
+# pandas `to_offset` no longer accepts but strategy code still writes.
+_PERIOD_ALIASES = frozenset({"M", "A", "Y", "Q", "H", "T", "S", "L", "U", "N",
+                             "BM", "BQ", "BA", "BY", "SM", "CBM", "BH"})
+
+
+def _is_freq_alias(s: str) -> bool:
+    if s in _PERIOD_ALIASES:
+        return True
+    try:
+        pd.tseries.frequencies.to_offset(s)
+        return True
+    except ValueError:
+        return False
+
+
+def _rel(path: Path) -> str:
+    try:
+        return str(path.relative_to(ROOT))
+    except ValueError:
+        return str(path)
+
+
+def _string_constants(tree: ast.AST) -> list[str]:
+    """Every string literal in `tree` except docstrings."""
+    docs = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Module, ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
+            first = node.body[0] if node.body else None
+            if (isinstance(first, ast.Expr) and isinstance(first.value, ast.Constant)
+                    and isinstance(first.value.value, str)):
+                docs.add(id(first.value))
+    return [n.value for n in ast.walk(tree)
+            if isinstance(n, ast.Constant) and isinstance(n.value, str) and id(n) not in docs]
+
+
+def _code_names(tree: ast.AST) -> list[str]:
+    """Imported module names and attribute names: where code, as opposed to
+    prose ("the membership band"), would reach the membership data."""
+    out: list[str] = []
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            out += [a.name for a in node.names]
+        elif isinstance(node, ast.ImportFrom):
+            out += [node.module or ""] + [a.name for a in node.names]
+        elif isinstance(node, ast.Attribute):
+            out.append(node.attr)
+    return out
+
+
+def _source_closure(path: Path) -> list[Path]:
+    """`path` plus every module under ROOT/strategies it imports, transitively."""
+    seen: list[Path] = []
+    todo = [path]
+    while todo:
+        p = todo.pop()
+        if p in seen or not p.exists():
+            continue
+        seen.append(p)
+        for node in ast.walk(ast.parse(p.read_text())):
+            if isinstance(node, ast.Import):
+                names = [a.name for a in node.names]
+            elif isinstance(node, ast.ImportFrom) and node.module and not node.level:
+                names = [node.module] + [f"{node.module}.{a.name}" for a in node.names]
+            else:
+                continue
+            for name in names:
+                parts = name.split(".")
+                if parts[0] != "strategies":
+                    continue
+                base = ROOT.joinpath(*parts)
+                todo += [c for c in (base.with_suffix(".py"), base / "__init__.py") if c.exists()]
+    return seen
 
 
 @dataclass
@@ -502,29 +640,29 @@ def load_trial_returns(ts: str, name: str) -> pd.Series | None:
     return pd.read_parquet(path)["ret"]
 
 
-def past_trial_sharpes() -> list[float]:
-    """Daily-frequency validation Sharpes of every recorded trial."""
-    return [sharpe for sharpe, _ in past_trials()]
+def record_version(rec: dict) -> int:
+    """The protocol version a trial was recorded under. Records written before
+    versions existed carry no field and are v1."""
+    return int(rec.get("protocol_version") or 1)
 
 
-def past_trials() -> list[tuple[float, pd.Series | None]]:
-    """(daily validation Sharpe, validation returns) for every recorded trial.
+def past_trial_sharpes(version: int | None = None) -> list[float]:
+    """Daily-frequency validation Sharpes of every trial recorded under `version`."""
+    return [sharpe for sharpe, _ in past_trials(version)]
+
+
+def past_trials(version: int | None = None) -> list[tuple[float, pd.Series | None]]:
+    """(daily validation Sharpe, validation returns) for every trial recorded
+    under `version` (default: `PROTOCOL_VERSION`).
 
     Returns are None for trials recorded before per-trial returns were stored
     and never backfilled; those count as fully independent trials."""
-    if not TRIALS_FILE.exists():
-        return []
     out = []
-    with open(TRIALS_FILE) as f:
-        for line in f:
-            line = line.strip()
-            if not line:
-                continue
-            rec = json.loads(line)
-            sd = rec.get("validation", {}).get("sharpe_daily")
-            if sd is None:
-                continue
-            out.append((float(sd), load_trial_returns(rec.get("ts", ""), rec.get("name", ""))))
+    for rec in recorded_trials(version):
+        sd = (rec.get("validation") or {}).get("sharpe_daily")
+        if sd is None:
+            continue
+        out.append((float(sd), load_trial_returns(rec.get("ts", ""), rec.get("name", ""))))
     return out
 
 
@@ -569,21 +707,46 @@ def effective_n_trials(returns_list: list[pd.Series | None], rho: float = TRIAL_
     return float(n_clusters + n_missing)
 
 
-def recorded_trials() -> list[dict]:
-    """Every trial record, oldest first. Read-only; `trials.jsonl` is append-only."""
+def recorded_trials(version: int | None = None, all_versions: bool = False) -> list[dict]:
+    """Trial records under `version` (default: `PROTOCOL_VERSION`), oldest first,
+    or every record with `all_versions`. Read-only; `trials.jsonl` is append-only."""
     if not TRIALS_FILE.exists():
         return []
+    want = PROTOCOL_VERSION if version is None else version
     out = []
     with open(TRIALS_FILE) as f:
         for line in f:
             line = line.strip()
             if line:
-                out.append(json.loads(line))
+                rec = json.loads(line)
+                if all_versions or record_version(rec) == want:
+                    out.append(rec)
     return out
 
 
+def champion_version() -> int | None:
+    """The protocol version the seated champion was promoted under, or None if
+    the seat is empty. A card without the field predates versions: v1."""
+    if not CHAMPION_FILE.exists():
+        return None
+    if not CHAMPION_CARD.exists():
+        return 1
+    try:
+        return int(json.loads(CHAMPION_CARD.read_text()).get("protocol_version") or 1)
+    except (json.JSONDecodeError, OSError, ValueError):
+        return 1
+
+
+def champion_seated(version: int | None = None) -> bool:
+    """Whether a champion holds the seat under `version`. A champion promoted
+    under another version holds nothing here: its numbers are not on this
+    version's scale, so the seat is empty and the bootstrap rule applies."""
+    return champion_version() == (PROTOCOL_VERSION if version is None else version)
+
+
 def family_best_sharpe(family: str, records: list[dict] | None = None) -> float | None:
-    """Best validation Sharpe yet recorded in `family`, or None if it has none.
+    """Best validation Sharpe yet recorded in `family` under the current
+    protocol version, or None if it has none.
 
     Only trials that reached the validation split count — a candidate killed by
     the causality check or the hard gates has no number to be best with."""
@@ -599,12 +762,14 @@ def family_best_sharpe(family: str, records: list[dict] | None = None) -> float 
     return best
 
 
-def champion_trial_returns(records: list[dict]) -> pd.Series | None:
+def champion_trial_returns(records: list[dict], version: int | None = None) -> pd.Series | None:
     """The seated champion's stored validation returns, for correlation only.
 
     Found from the champion card's name, falling back to the last PROMOTE. Used
     to report how decorrelated each family's lead is from the incumbent — the
     quantity an ensemble challenger has to argue from. Costs no re-run."""
+    if not champion_seated(version):
+        return None
     name = None
     if CHAMPION_CARD.exists():
         try:
@@ -621,7 +786,7 @@ def champion_trial_returns(records: list[dict]) -> pd.Series | None:
     return None
 
 
-def write_leaderboard() -> dict:
+def write_leaderboard(version: int | None = None) -> dict:
     """Regenerate `experiments/leaderboard.json` from the recorded trials.
 
     One row per family: its best validation result, and that result's return
@@ -629,9 +794,11 @@ def write_leaderboard() -> dict:
     and the stored per-trial returns — no strategy is re-run, no split is read,
     and nothing here feeds a gate. It exists so that a family the champion
     comparison would score as a plain REJECT still leaves a legible record of
-    how far it got and how decorrelated it is."""
-    records = recorded_trials()
-    champ_rets = champion_trial_returns(records)
+    how far it got and how decorrelated it is. Only trials recorded under
+    `version` (default: `PROTOCOL_VERSION`) are on the board."""
+    version = PROTOCOL_VERSION if version is None else version
+    records = recorded_trials(version)
+    champ_rets = champion_trial_returns(records, version)
     rows: dict[str, dict] = {}
     for rec in records:
         val = rec.get("validation") or {}
@@ -663,9 +830,10 @@ def write_leaderboard() -> dict:
         }
     board = {
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "protocol_version": version,
         "champion": (
             json.loads(CHAMPION_CARD.read_text()).get("name")
-            if CHAMPION_CARD.exists() else None
+            if champion_seated(version) and CHAMPION_CARD.exists() else None
         ),
         "families": dict(sorted(rows.items(), key=lambda kv: -kv[1]["validation"]["sharpe"])),
     }
@@ -708,7 +876,7 @@ def run_trial(
     if causality_error:
         result.reasons = [f"causality: {causality_error}"]
         record_trial(result)
-        write_leaderboard()
+        write_leaderboard(setup.version)
         return result
 
     result.train = evaluate_split(mod.generate_weights, prices, "train", aux, setup)
@@ -734,11 +902,11 @@ def run_trial(
     if gate_fails:
         result.reasons = gate_fails
         record_trial(result)
-        write_leaderboard()
+        write_leaderboard(setup.version)
         return result
 
-    prior_records = recorded_trials()
-    prior = past_trials()
+    prior_records = recorded_trials(setup.version)
+    prior = past_trials(setup.version)
     trial_sharpes = [s for s, _ in prior] + [result.validation["sharpe_daily"]]
     trial_returns = [r for _, r in prior] + [result.validation["_returns"]]
     result.n_trials = len(trial_sharpes)
@@ -782,12 +950,14 @@ def run_trial(
                 f"{result.family_best_sharpe} (DSR {result.dsr}, {bar})"
             ]
         record_trial(result)
-        write_leaderboard()
+        write_leaderboard(setup.version)
         return result
 
-    if not CHAMPION_FILE.exists():
+    if not champion_seated(setup.version):
         # The first champion clears the same bar as every challenger after it.
-        # Nothing holds the seat until something earns it.
+        # Nothing holds the seat until something earns it — including after a
+        # protocol cut-over, when the previous version's champion is archived
+        # by `promote` rather than compared against.
         if result.dsr < DSR_THRESHOLD:
             result.verdict = "REJECT"
             result.reasons = [
@@ -799,7 +969,7 @@ def run_trial(
             result.reasons = [f"bootstrap: no champion exists; gates passed with DSR {result.dsr}"]
             promote(candidate_path, result, prices, aux=aux, setup=setup)
         record_trial(result)
-        write_leaderboard()
+        write_leaderboard(setup.version)
         return result
 
     champ_mod, _ = load_strategy(CHAMPION_FILE)
@@ -853,7 +1023,7 @@ def run_trial(
         )
 
     record_trial(result)
-    write_leaderboard()
+    write_leaderboard(setup.version)
     return result
 
 

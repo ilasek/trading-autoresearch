@@ -22,7 +22,12 @@ def prices():
 
 @pytest.fixture
 def sandbox(tmp_path, monkeypatch):
-    """Redirect all protocol state files into a temp dir."""
+    """Redirect all protocol state files into a temp dir.
+
+    Pins the default protocol to v1: these synthetic prices have no membership
+    data, and the gates, holdout veto and tracks under test are shared by both
+    versions. v2 tests build their own `Setup` (see `_v2_setup`)."""
+    monkeypatch.setattr(protocol, "PROTOCOL_VERSION", 1)
     monkeypatch.setattr(protocol, "ROOT", tmp_path)
     monkeypatch.setattr(protocol, "CHAMPION_FILE", tmp_path / "strategies" / "champion.py")
     monkeypatch.setattr(protocol, "CHAMPION_CARD", tmp_path / "strategies" / "champion_card.json")
@@ -310,3 +315,97 @@ def test_v2_trial_records_null_and_benchmarks(prices, sandbox, monkeypatch):
     assert r.verdict == "GATE_FAIL"
     assert any("random-selection null" in x for x in r.reasons)
     assert rec["ir_vs_ew"] == pytest.approx(0.0, abs=0.3)
+
+
+# ---------------------------------------------------------------------------
+# The v2 cut-over: hindsight guard, per-version history, re-seating
+# ---------------------------------------------------------------------------
+
+HINDSIGHT_LIST = '''
+import pandas as pd
+STRATEGY = {"name": "hindsight", "family": "bug", "hypothesis": "Hold today's winners."}
+WINNERS = ["NVDA", "AAPL", "MSFT"]
+def generate_weights(prices):
+    return pd.DataFrame(1 / 3, index=prices.index[:1], columns=WINNERS)
+'''
+
+CLEAN_WITH_ETF_AND_FREQ = '''
+"""Mentions AAPL and data/universe.yaml in a docstring, which is not code."""
+import pandas as pd
+STRATEGY = {"name": "clean", "family": "baseline",
+            "hypothesis": "SPY-relative, monthly; the membership band is prose, not a read."}
+def generate_weights(prices):
+    rebal = prices.groupby(pd.Grouper(freq="ME")).tail(1).index
+    monthly = prices.resample("M").last()          # "M" and "MS" are also tickers
+    starts = prices.resample("MS").first()
+    proxy = prices.get("SPY")
+    return pd.DataFrame(1.0 / prices.shape[1], index=rebal, columns=prices.columns)
+'''
+
+
+def test_v2_static_check_refuses_hard_coded_stocks(sandbox):
+    msg = protocol.static_check(write_candidate(sandbox, HINDSIGHT_LIST, "hindsight"))
+    assert msg is not None and "hindsight" in msg and "NVDA" in msg
+    assert protocol.static_check(write_candidate(sandbox, CLEAN_WITH_ETF_AND_FREQ, "clean")) is None
+
+
+def test_v2_static_check_follows_strategy_imports(sandbox):
+    lib = sandbox / "strategies" / "lib"
+    lib.mkdir(parents=True)
+    (sandbox / "strategies" / "__init__.py").write_text("")
+    (lib / "__init__.py").write_text("")
+    (lib / "sectors.py").write_text('TECH = ["AAPL", "MSFT"]\n')
+    (lib / "wrapper.py").write_text("from strategies.lib import sectors\n")
+    path = write_candidate(sandbox, "from strategies.lib import wrapper\n" + CAUSAL_STRATEGY, "indirect")
+    msg = protocol.static_check(path)
+    assert msg is not None and "strategies/lib/sectors.py" in msg
+
+
+def test_v2_static_check_refuses_the_legacy_universe(sandbox):
+    for i, src in enumerate([
+        'from pathlib import Path\nU = Path("data") / "universe.yaml"\n',
+        'from engine import data\nNAMES = data.instruments(universe="legacy")\n',
+    ]):
+        msg = protocol.static_check(write_candidate(sandbox, src + CAUSAL_STRATEGY, f"legacy{i}"))
+        assert msg is not None and "legacy universe" in msg
+
+
+def _record(sandbox, **rec):
+    path = sandbox / "experiments" / "trials.jsonl"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "a") as f:
+        f.write(json.dumps(rec) + "\n")
+
+
+def test_history_is_kept_per_protocol_version(sandbox):
+    _record(sandbox, name="old", family="baseline", ts="2026-01-01T00:00:00+00:00",
+            validation={"sharpe": 1.5, "sharpe_daily": 0.09})
+    _record(sandbox, name="new", family="baseline", ts="2026-02-01T00:00:00+00:00",
+            protocol_version=2, validation={"sharpe": 0.4, "sharpe_daily": 0.03})
+    assert [s for s, _ in protocol.past_trials(1)] == [0.09]
+    assert [s for s, _ in protocol.past_trials(2)] == [0.03]
+    assert protocol.family_best_sharpe("baseline", protocol.recorded_trials(2)) == 0.4
+    assert len(protocol.recorded_trials(all_versions=True)) == 2
+    board = protocol.write_leaderboard(2)
+    assert board["protocol_version"] == 2
+    assert board["families"]["baseline"]["name"] == "new"
+
+
+def test_v1_champion_does_not_hold_the_v2_seat(prices, sandbox, monkeypatch):
+    protocol.run_trial(write_candidate(sandbox, CAUSAL_STRATEGY, "baseline"), prices)
+    assert protocol.champion_seated(1) and not protocol.champion_seated(2)
+
+    monkeypatch.setattr(protocol, "NULL_DRAWS", 40)
+    eligible = pd.DataFrame(True, index=prices.index, columns=prices.columns)
+    setup = _v2_setup(prices, eligible)
+    result = protocol.run_trial(
+        write_candidate(sandbox, HOLDOUT_AGREEING_STRATEGY, "v2_first"), prices, setup=setup)
+    # no v2 champion: the candidate is judged by the bootstrap rule, never
+    # compared with (or holdout-gated against) the v1 incumbent
+    assert result.champion_val_sharpe is None and result.holdout_t is None
+    if result.verdict == "PROMOTE":
+        assert protocol.champion_seated(2)
+        assert any(p.name.endswith("_equal_weight_monthly.py")
+                   for p in (sandbox / "strategies" / "archive").iterdir())
+    else:
+        assert protocol.champion_seated(1)
