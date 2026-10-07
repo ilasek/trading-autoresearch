@@ -215,7 +215,9 @@ touching the rule. Do not use the deflator as a reason to stay in one family.
   start of a session: it is the fastest picture of which families have been tried, how
   far each got, and how correlated each lead is with the incumbent.
 - Weekly report in `reports/YYYY-WW.md`: champion metric trend, promotions/retirements,
-  top learnings, notable failures. Keep it readable for a human skimming on a phone.
+  the family leaderboard from `experiments/leaderboard.json` as of the week's end (each
+  family's lead, its trial count, validation Sharpe, and ρ to the champion), top learnings,
+  notable failures. Keep it readable for a human skimming on a phone.
 
 ## Future upgrades (do not start without human approval)
 
