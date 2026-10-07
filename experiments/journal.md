@@ -17948,3 +17948,13 @@ books land, that asymmetry is the finding worth keeping.
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
 - Lesson: _(fill in after reflection)_
 
+## 2026-10-07T23:50:55+00:00 — pt_resid_reversal_band — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_resid_reversal_band.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Dropping the 30 most extreme losers from the 21-day market-residual reversal sort and holding ranks 31-120 equal-weight monthly clears the -45% validation drawdown gate that killed the top-30 book at -54.1% while keeping its selection content, because on the train split the same slice earns +27.0 bps/month over the equal-weight eligible pool at t = +3.28 against the top-30's +14.0 at t = +0.61 and carries a -65.1% drawdown against its -84.0%, i.e. the extreme tail of a loser sort is where the risk is and not where the signal is; a validation drawdown that fails to improve materially on -54.1% falsifies that reading and says the drawdown is the pool's beta rather than the tail's.
+- Verdict: GATE_FAIL — validation sharpe 0.379 <= the random-selection null's 90% quantile 0.396 (median 0.322; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.55, ann_ret +9.3%, maxDD -62.1%, turnover 17.0x
+- Validation: sharpe +0.38, ann_ret +5.8%, maxDD -43.1%, turnover 21.0x
+- Survivorship-matched benchmarks (protocol v2): validation sharpe at the 81% percentile of 200 random-selection replicas (median +0.32, 90% +0.40); equal-weight eligible pool +0.51, information ratio vs it -0.04
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+
