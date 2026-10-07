@@ -1640,6 +1640,96 @@ called, and therefore on whether any cross-sectional construction built on it ha
 **Tier B in use** — the critique's headline could not be replicated by the authors it criticises, and
 the Comment's counter-estimates have never been independently replicated either.
 → `notes/2026-10-05-sad-weather-exchange-and-the-integration-escape.md`
+
+**[2026-10-07] The turn-of-the-tax-year vein, and the headline is that its *mechanism* is Tier-A
+contested while one by-product of it is the session's best buildable item.** Four primaries, all read
+in full. The vein: losers are sold to crystallise tax losses near the tax year-end, the selling
+depresses their prices, the pressure lifts, and they rebound at the start of the new tax year. This
+folder had **zero** coverage of it after 161 notes (`January effect`, `turn-of-the-year`,
+`tax-loss selling` and `Grinblatt, Moskowitz` all returned nothing or near-nothing), and it is a
+mechanically different object from the two seasonal notes already here — Heston–Sadka and
+Keloharju–Linnainmaa–Nyberg sort on the *same calendar month in past years*, while this conditions a
+*past-return* effect on the current month. **It is also the one branch of this family that the lab's
+own [2026-09-01] structural closure does not reach**: that closure kills a long-only book that holds
+in-window and sits in cash out of window, on the ground that the complement window's return is
+positive. A turn-of-the-tax-year construction is a *cross-sectional reallocation at constant gross
+exposure*, so the complement-window argument has no purchase on it, and at two rebalances a year it
+is the cheapest construction this family admits — the opposite of Heston–Sadka's whole-portfolio
+monthly turnover, which their own authors say may not be worth paying.
+
+**What the four sources establish, in the order the argument has to be built.** *(1)*
+**Constantinides (1984, JFE, Tier A)** derives the volume seasonal from an optimising model — with
+transaction costs the investor follows a control-limit policy, so loss realisation rises through the
+tax year and stops abruptly in the first days of the new one — and then refuses to derive a *price*
+seasonal from it. The price step needs the extra assumption that sellers do not repurchase the same
+name, or a name another tax-loss seller is simultaneously dumping; if sellers swap, pairs of them
+exchange positions and neither price moves. His conclusion in print: tax-loss selling "predicts a
+seasonal pattern in trading volume … and one in stock prices **only if we further assume
+irrationality or ignorance**". He adds two negatives the lab should carry: **tax trading does not
+explain the small-firm premium itself**, and the *gain*-deferral side of the same timing option
+predicts new-year selling pressure in prior-year **winners**, i.e. the opposite sign from momentum in
+January. *(2)* **Grinblatt–Keloharju (2004, JFE, Tier A)** meet the naivety precondition with
+investor-level data — the complete Finnish shareholding register, daily, with purchase prices, in a
+jurisdiction with **no wash-sale rule** so sell-and-rebuy is observable. Odean's
+gain-versus-loss realisation ratio declines **virtually monotonically over the last ten trading days
+of December** and jumps back at the turn: the tax deadline temporarily overrides the disposition
+effect. Repurchase rates rise with the **size of the capital loss** and with **proximity to the
+year-end**, and the resulting net buying pressure — a purely temporal demand shift, by construction
+unrelated to news — has a calendar profile matching that of returns, significantly so **in small
+firms only**. Their own footnote concedes the observed end-of-December concentration is *not* optimal
+tax timing by Constantinides' standard, which is precisely the naivety his price channel requires.
+*(3)* **Grinblatt–Moskowitz (2004, JFE, Tier A)** supply the cross-sectional version: the long-horizon
+(t−36…t−13) reversal effect is **almost entirely a January phenomenon** driven by long-term losers,
+is absent February–November, and **flips sign to persistence in December**; one-year momentum is flat
+across the calendar by contrast. Conditioning on a US short-term-capital-gains **tax regime**, the
+turn-of-the-year profitability is a high-tax-regime phenomenon concentrated in the loser decile,
+December down and January up, and strongest in **small caps with low institutional ownership** —
+among large caps, institutional ownership makes essentially no difference. *(4)* **Brown–Keim–Kleidon–Marsh
+(1983, JFE, Tier A)** run the one test that distinguishes the tax story from everything else and it
+fails. Australia's tax year ends 30 June and its "share trader" class — all taxpaying financial
+institutions automatically — deducts all realised losses with no annual cap, so the hypothesis
+predicts a July effect at least as strong as the US January one. What they find is **both**
+December–January **and** July–August seasonals, largest and roughly equal in January and July, with
+the Australian small-firm premium itself roughly **constant across months** rather than concentrated
+at a tax boundary. They also report the US January effect as significant in almost every year across
+a half-century including low-tax pre-war periods, i.e. **its magnitude is insensitive to the tax rate
+that supposedly drives it**.
+
+**The tension graded, not smoothed.** By the [2026-10-04] sign-versus-magnitude rule this is **not** a
+sign disagreement: no source disputes that losers are sold near the tax year-end. The disagreement is
+whether that flow **has a price consequence** — Constantinides' and BKKM's objection (1), that
+realisation is not a demand shift unless the name's demand curve slopes downward. So the arbitrating
+evidence is **substitutability**, not more seasonality data, and this folder already holds that note
+(`2026-09-22-arbitrage-risk-substitute-portfolios.md`). **On this universe objection (1) bites harder
+than it did on any of the four samples.** Protocol v2's pool is ~1,400 names that were ever members of
+nine large-cap indices plus 42 ETFs: close substitutes (same region, same index, similar beta) are
+abundant by construction, and the small, thinly traded, retail-held tail where all four sources locate
+the effect is exactly what a point-in-time large-cap index universe excludes. **Consequence for the
+verdict reader: a null on a turn-of-the-tax-year book here is uninformative about the mechanism
+rather than evidence against it** — say so in the hypothesis rather than discovering it afterwards.
+New: **#208**–**#212**, three of them free, and **#212 is an anti-candidate**.
+
+**The by-product is the session's best item and it has no tax story in it at all.**
+Grinblatt–Moskowitz's **consistency** dummy is a *sign count*, not a magnitude: one if the monthly
+return was positive in **at least 8 of the 11 months** of the t−12…t−2 window (and ≥15 of 24 for
+t−36…t−13). The thresholds are **not tuned** — under a coin-flip null P(≥8 of 11) ≈ P(≥15 of 24) ≈
+10%, so the rule is "take the top decile of sign-run consistency under the null", which is why it
+transfers to a new panel without refitting. **Every** consistent-winner coefficient is positive across
+all three horizons and all three seasonal subperiods and most are significant, while consistent-loser
+coefficients do little — an asymmetry the authors use to rule out the reading that consistency proxies
+low volatility (which would hit both tails with opposite signs). Two properties make it worth one of
+`price-trend`'s two capped slots rather than a repeat of a refuted idea: it is **unit-free and binary**,
+which sidesteps the no-common-scale problem `experiments/learnings.md` records across heterogeneous
+scores; and the content is on the **winner** side, which a long-only book holds directly. It is a
+different functional of the same data than anything the lab has sorted on — the nearest relative,
+information discreteness (`2026-09-28`), is about the distribution of the path's *magnitudes*.
+Flags: all four samples end no later than 2000, so `validation_overlap: false` throughout and
+`published_post_2018: false` throughout. **No dated performance figure from any of the four is
+recorded anywhere** — signs, orderings, asymmetries, significance and construction only.
+→ `notes/2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md` ·
+`notes/2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md` ·
+`notes/2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md` ·
+`notes/2026-10-07-tax-year-end-alignment-and-the-australian-test.md`
 ---
 
 ### 12. `lead-lag-spillover`
@@ -9672,6 +9762,113 @@ hypothesis fodder, then anti-candidates.
     should be high and turnover low — compute it before spending the trial.
     → `notes/2026-10-06-common-idiosyncratic-volatility-factor.md`
 
+208. **FREE, ZERO TRIALS — the per-region tax-year alignment screen, which is the one measurement the
+    whole turn-of-the-tax-year vein turns on, and this universe has better variation for it than the
+    paper that invented the test.** Brown–Keim–Kleidon–Marsh ran it with an *n* of two tax regimes
+    (US December, Australia June) and the hypothesis failed. This repo spans fifteen regions and nine
+    national indices, so the test runs **inside one panel**: estimate the prior-tax-year-loser
+    reversal effect by region and ask whether each region's window tracks **that region's own** tax
+    year-end or whether every region shows the same calendar window. A common window across regions
+    with differing tax year-ends is evidence against the tax mechanism; region-specific windows are
+    evidence for it, and would be the first such evidence in a literature where the one direct test
+    went the other way. Train only, scores no portfolio, so free and unlimited under `program.md`.
+    Three things to declare before running it. *(a)* **The per-region personal tax-year calendar is an
+    external input this repo does not hold.** Writing it into a diagnostic is a judgement call that
+    belongs in the hypothesis text, not in a silent constant; it is not a hindsight-guard violation
+    (no stock is named, and tax-year ends are public, long-pre-dated institutional facts) but it is
+    unverified here. *(b)* USD conversion books an FX factor as *region* variance
+    (`notes/2026-09-10-currency-component-in-usd-converted-returns.md`), so the region effect must be
+    read off demeaned or FX-aware returns, not raw USD ones. *(c)* Pool rule first — ETFs and their
+    own constituents in one pool make a "region" mean different things for different instruments
+    (`notes/2026-09-12-missing-data-and-complete-case-pools.md`).
+    → `notes/2026-10-07-tax-year-end-alignment-and-the-australian-test.md`
+
+209. **ONE TRIAL, `price-trend` (and it should take one of that family's two capped slots) — rank on
+    the *sign count* of the past year, not its magnitude.** Construction, exactly as calibrated in the
+    source and with nothing to refit: from daily closes build monthly returns; over the window
+    **t−12 to t−2** (eleven months, most recent month skipped for microstructure orthogonality) count
+    the months with a positive return; the **consistent-winner flag is ≥8 of 11**. Hold the flagged
+    names from the `eligible` panel, equal- or signal-weighted, monthly. The threshold is **not a
+    tuned parameter**: under a coin-flip null P(≥8 of 11) ≈ 10%, so the rule is "top decile of
+    sign-run consistency under the null" and it transfers to any panel. Why this is not another lap of
+    an exhausted family: *(a)* it is a **different functional** of the same data — the lab has sorted
+    on past-return magnitude and on path functionals (52-week-high proximity, information discreteness,
+    capital-gains overhang) but not on a sign count, and the nearest relative, information discreteness,
+    is about the distribution of the path's *magnitudes*; *(b)* it is **binary and unit-free**, which
+    sidesteps the no-common-scale problem `experiments/learnings.md` records for blending heterogeneous
+    scores, and makes it an unusually clean union leg; *(c)* the published asymmetry puts the content on
+    the **winner** side (every consistent-winner coefficient positive across three horizons and three
+    seasonal subperiods; consistent-loser coefficients do little), which is the side a long-only book
+    reaches directly — and the authors use that asymmetry to rule out "consistency = low volatility",
+    since low vol would hit both tails with opposite signs. Four things to check for free before
+    spending the trial. **Turnover**: a sign count over eleven months should move slowly, so compute
+    the flag's rank autocorrelation across adjacent month-ends on train and expect it well above a
+    magnitude-ranked momentum book's. **Book width**: a 10%-under-the-null screen on an eligible panel
+    of roughly a thousand names is a strong screen, not a tilt — check the concentration gate and the
+    25% cap before the Sharpe. **The benchmark differs**: the source's coefficients come from returns
+    *hedged* against size, book-to-market and industry; this repo has no book-to-market and its only
+    grouping axis is region, so run a region-demeaned variant alongside the raw one
+    (`notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`) — the raw version is
+    measuring a different object than the paper did. **Correlation to the incumbent**: a sign count over
+    the same window as a 12-month momentum score will share rank information with it, so read
+    `leaderboard.json`'s rho before arguing any blend, per `program.md`'s standing rule.
+    → `notes/2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md`
+
+210. **FREE, ZERO TRIALS — three pre-registered calendar sign flips in the past-return relation, each
+    a directional claim with a published answer.** Run the lab's existing past-return regressions with
+    non-overlapping horizons and a month-of-year interaction, and check: *(a)* the long-horizon
+    (**t−36 to t−13**, twenty-four months with the most recent year skipped) reversal coefficient
+    should be concentrated in **January** and absent February–November; *(b)* it should **flip sign to
+    persistence in December**; *(c)* the one-year momentum coefficient should be roughly **flat** across
+    the calendar by contrast. A fourth, from the theory rather than the measurement: the gain-deferral
+    half of the tax timing option predicts prior-year **winners** are weak at the turn of the year, so
+    the January coefficient on a 12-month momentum score should be **no higher** than its
+    February–November coefficient. All four are diagnostics that score no returns. Their value is not
+    the seasonal — it is that they test whether *this* panel reproduces a Tier-A cross-sectional result
+    at all, which is information about the panel and is reusable by every later candidate in the family.
+    → `notes/2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md`
+
+211. **FREE, ZERO TRIALS, `liquidity-volume` diagnostic — test the mechanism's *volume* prediction
+    before buying its *return* prediction, because the volume step is the part both the theory and the
+    investor-level data agree on.** Constantinides derives it from a control-limit policy and
+    Grinblatt–Keloharju observe it directly: realisation volume in losing names **rises through the tax
+    year, concentrates in roughly its last eight to ten trading days, and stops abruptly in the first
+    days of the new one**, with the effect increasing in the **size of the loss**. The repo now receives
+    `volume` and `dollar_volume`, so this is measurable on train with **no return data and no trial**:
+    bucket eligible names by tax-year-to-date return, and profile turnover by trading day relative to
+    the year-end. **The window is days, not months** — the behavioural shift lives in `[-8,-1]` and
+    `[0,+5]` trading days, so any month-end grid averages it away with three weeks of ordinary December,
+    which is a construction error worth avoiding before it costs a trial. If the volume signature is
+    absent on this universe, every return-side construction in this vein is unmotivated and the
+    family's capped budget is better spent elsewhere. Expect NaN volume on foreign holidays
+    (`program.md`) — the panel is not forward-filled, and a day-relative profile on fifteen regions
+    will have ragged coverage exactly at year-end.
+    → `notes/2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md` ·
+    `notes/2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md`
+
+212. **ANTI-CANDIDATE — the plain December/January prior-year-loser tilt on this universe. Do not spend
+    a trial on it, and specifically do not spend one to produce a null.** The mechanism needs five
+    things and this universe supplies at most three. *(1)* A **volume seasonal** in the right shape —
+    testable here, free, and that is #211. *(2)* **One-sidedness**: the flow must not be absorbed by
+    substitute buying. Within a pool of ~1,400 large-cap members of nine national indices, close
+    substitutes are abundant by construction, which is the Scholes flat-demand-curve case both
+    Constantinides and Brown–Keim–Kleidon–Marsh name as the mechanism's main failure mode. *(3)*
+    **Illiquidity**: every one of the four sources locates the price effect in the small, thinly
+    traded, retail-held tail — and Grinblatt–Moskowitz find it specifically among **low
+    institutional ownership** names, with no effect among large caps. A point-in-time large-cap index
+    universe excludes exactly that tail. *(4)* **Seller naivety** — met in the one market where it has
+    been measured, but measured in a jurisdiction with no wash-sale rule, and a binding wash-sale rule
+    redirects or delays the repurchase in a way that weakens the price step. *(5)* **Tax-year
+    alignment** — directly tested once and failed (#208 is the re-test this universe can run). The
+    operational consequence: a null here would be **uninformative about the mechanism**, so the trial
+    buys no knowledge while still raising the deflated-Sharpe bar for everything after it. Spend #208
+    and #211, which are free, and let their answers decide whether any book is worth building. Note
+    also that the lab's [2026-09-01] closure is **not** the reason to decline this one — that closure
+    is about in-window-versus-cash timing and does not reach a constant-gross-exposure cross-sectional
+    reallocation. The reason is the universe's liquidity profile.
+    → `notes/2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md` ·
+    `notes/2026-10-07-tax-year-end-alignment-and-the-australian-test.md`
+
 
 ## Coverage log
 
@@ -9731,9 +9928,103 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-04 (session 51) | **The first session in five to leave the measurement/data-quality vein, and it returns with a tension of a shape this folder has not held before: two Tier-A theories that predict *opposite signs* for one cheap, buildable, long-only portfolio on this exact universe.** Sessions 47–50 walked the sample → the conditioning that selected it → the measurement on top of it → the arithmetic underneath; `research/README.md`'s rotation rule says to come back to the families, and the thinnest implementable one was `seasonality-calendar` (3 notes, both its halves closed by the lab) with `lead-lag-spillover` uncovered at the **country** level. A grep across all 155 prior notes returned **zero** for `Halloween`, `Bouman`, `Jacobsen`, `sell in May`, `month-of-year`, `hemisphere`, `latitude` and `Rapach` outside the 2010 combination paper. Headline one: the six-month seasonal is real and large across 108 markets and three centuries, the lab has **already measured it here at +6.18 bps/day (t = +3.58)** and closed it twice — but both closures are about an overlay that **exits to cash**, and a **rotation between instruments** is neither (gross 1.0 throughout, two boundary crossings a year, ~0.6%/yr against the 3.6%/yr a monthly overlay had to clear). Headline two: the only developed mechanism for that seasonal (daylight/SAD) makes the rotation's destination a **hemisphere flip**, its published critique says the mechanism is spurious and a plain winter/summer dummy fits better, and the 108-market replication reports **positive November–April coefficients in Australia, New Zealand and South Africa** — the North's phase, not the opposite one. **#193 separates them with one subset split, on train, for zero trials, and the prior stated before the measurement leans against the mechanism.** Headline three, in `lead-lag-spillover`: a Tier-2 re-estimation on the Tier-1 anchor's **own data and own models** reproduces "the US leads" under the **pairwise** regression and the news-diffusion GMM and **reverses it** under the all-countries VAR — where the leading node is **Switzerland** (27 of 66 against the US's 8). The friction (`θ̃ < 1`) is robust; the source attribution is not. The transferable rule is in the open questions. New: **#193–#197**, three of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight, and the session's named top gap (Landis–Skouras) was chased again and again not read. | Bouman–Jacobsen 2002 (AER) **NOT read** — SSRN 403, the Erasmus RePub handle holds a record with no file — with Jacobsen–Zhang (publ. Zhang–Jacobsen 2021, JIMF) working-paper version **read in full** from a verified third-party mirror (`2026-10-04-halloween-six-month-seasonal.md`); Kamstra–Kramer–Levi 2003 (AER) **read in full**, typeset published PDF from `utoronto.scholaris.ca`, with Jacobsen–Marquering 2008 (JBF) **abstract only**, authoritative from Erasmus Pure (`2026-10-04-sad-daylight-seasonal-mechanism.md`); Rapach–Strauss–Zhou 2013 (JF) **NOT read**, closed on all three indexes, with Aye–Balcilar–Gupta 2017 (Empirica) **read in full** from `repository.up.ac.za` and Siliverstovs 2016 (KOF WP) **abstract only**, ETH Research Collection returning 500/401/403 (`2026-10-04-us-leads-the-world-country-lead-lag.md`) |
 | 2026-10-05 (session 52) | **The first session in this folder's history whose headline is that it was WRONG, and the item it retracts is the one it ranked second-highest four hours of lab time ago.** [2026-10-04] closed with a tension it called better than the two before it — two Tier-A sides predicting **opposite signs** for one buildable portfolio, resolvable by a free subset split (#193) that would unlock a named candidate (#194) — and left two small gaps, the top of which was "Kamstra-Kramer-Levi's published response, unread, which is what would settle whether the SAD exchange is live or lost". Tonight took that gap first, and it reversed the entry that named it. Three things came out of it. *(1) The DOI was mis-attributed*: `10.1016/j.jbankfin.2008.09.011` is **Jacobsen-Marquering's Response**, not KKL's; **KKL's Comment is `10.1016/j.jbankfin.2008.09.013`**, found by a Crossref *journal-and-issue* query after a title query failed, and read in full. *(2) The critique's contribution is a **placebo argument***: US ice-cream production and detrended UK airline travel each 'explain' the same seasonality across 48 countries with the right sign and wide significance, so **the time-series fit identifies nothing**, and KKL do not contest it - they reply on identification. *(3) **#193 has no power and is withdrawn as a test, and #194 loses its licence**: both sides state in print that market integration confounds the Southern-Hemisphere sign, KKL that Northern investors dominate mature Southern markets, JM that a Northern effect 'might be exported' and 'imported to Australia' — so a positive Southern Nov-Apr coefficient is predicted by **both** theories, and this panel (global, USD-converted, ETF-heavy, current mega-caps) is close to the worst place to run it.** The replacement comes from the mechanism's own authors and is **cross-risk-level rather than cross-hemisphere** (#198), which integration cannot neutralise. The other two notes are `liquidity-volume` and they run in opposite directions on purpose: **Abdi-Ranaldo's CHL spread** is the family's first construction needing **no volume term at all** — close, high and low only, a *location* statistic of the daily bar rather than the ninth width measure — which makes it a direct test of the lab's own [2026-08-31] conclusion that the live content is the price-impact numerator and not activity (#200, #201); and **Lee-Swaminathan**, the most-cited turnover-momentum paper, is an **anti-candidate whose own identifying claim predicts its failure here**, with its famous interaction living entirely on the **short leg** and **reversing in sign** on the long one (#202). New: **#198-#202**, four of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight; **#194 and #193-as-a-test are closed by a reading**, which is different. | Jacobsen-Marquering 2008 (JBF) argument **read in full** from the 2004 ERIM working paper at `repub.eur.nl` + Kamstra-Kramer-Levi 2009 *Comment* (JBF) **read in full** from `utoronto.scholaris.ca`, with Jacobsen-Marquering 2009 *Response* **NOT read** (SSRN 403) (`2026-10-05-sad-weather-exchange-and-the-integration-escape.md`); Abdi-Ranaldo 2017 (RFS) **read in full** from the St. Gallen working-paper version at `alexandria.unisg.ch`, equations read visually from page renders (`2026-10-05-chl-spread-estimator-close-high-low.md`); Lee-Swaminathan 2000 (JF) **read in full**, typeset article from `johnhcochrane.com` (`2026-10-05-turnover-and-the-momentum-life-cycle.md`) |
 | 2026-10-06 (session 53) | **The first session in six to be aimed by `research/README.md`'s own rotation rule rather than by a gap detector or by the previous nightly, and it opens the one axis `program.md` charters for a family and the folder had never covered: co-movement, read as a panel-level time series instead of as a cross-sectional score.** A grep across all 161 prior notes returned **zero** for `absorption ratio`, `correlation regime`, `Pollet`, `Campbell, Lettau`, `Herskovic`, `common factor in idiosyncratic`, `semivariance`, `Black-Litterman`, `CVaR` and `nested clustered`, while `average correlation` appeared only in the trial-clustering and multiple-testing sense. `range-variance` was the right home because `program.md` lists "cross-sectional dispersion and correlation regimes" in its charter, and because the family's standing closure — *ten screened mechanisms all sort on a cross-sectional **level of width**, and the width level is the survivorship artifact* — **does not cover a statistic that produces one number for the whole panel**, which is the same escape the folder already accepted for Corwin–Schultz. Three results. *(1)* The two rival co-movement summaries are **not** interchangeable and the difference is arithmetic, not empirical: the absorption ratio is computed on the **covariance** matrix and is therefore weighted by where the risk is, while average correlation weights every pair equally — its source gives a constructed two-period case where average correlation falls and the absorption ratio rises. *(2)* **The session's best free item was not the co-movement statistic at all.** The same paper's appendix tested a whole-spectrum Herfindahl against a truncated top-`n` share and found the Herfindahl form *less informative* because the small eigenvectors are unstable — which is what `notes/2026-09-27-marchenko-pastur...` proves must happen and **exactly the failure the 2026-09-26 nightly measured on its own `EffRank`** (0.208·P to 0.638·P across four column sets, i.i.d. control 0.775·P, placebo 0.875·P). A theorem, a published comparison and the lab's own measurement agree, and the re-run is one line (**#203**). *(3)* Campbell–Lettau–Malkiel–Xu's betaless split gives average correlation **without a correlation matrix** (`MKT/(MKT+IND+FIRM)` ≈ average market-model R²) and, more valuably, the **exact leakage term** the folder's second-hand copy of that decomposition could not carry: a region demean removes region risk **plus `CSV(β_region) × market variance`**, a quantity the lab has assumed away every time it demeans. The third note, **CIV**, is the only one of the three that is a cross-sectional sort, is **always-on at gross 1.0** and so sits outside the de-risking-overlay class the lab has refuted three times, and has the favourable asymmetry: **the high-return leg is the low-CIV-beta end, which a long-only book holds directly**. New: **#203–#207**, four of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight. The honest discount is stated once in the family section: the absorption ratio's own application is a de-risking overlay on an external state variable, i.e. the default-refuted class, and #204 exists to make the exception checkable rather than arguable. | Kritzman–Li–Page–Rigobon 2011 (JPM) **read in full** from MIT Sloan WP 4785-10 at `web.mit.edu/finlunch/Fall10/PCASystemicRisk.pdf` (`2026-10-06-absorption-ratio-eigenvalue-concentration.md`); Campbell–Lettau–Malkiel–Xu 2001 (JF) **read in full** from NBER WP 7590, body **Caesar-shifted +3** and decoded (`2026-10-06-betaless-variance-decomposition-and-average-correlation.md`); Herskovic–Kelly–Lustig–Van Nieuwerburgh 2016 (JFE) **read in full** from NBER WP 20076 (`2026-10-06-common-idiosyncratic-volatility-factor.md`); Pollet–Wilson 2010 (JFE) **NOT read**, five channels tried and recorded, now the folder's top unreached source |
+| 2026-10-07 (session 54) | **The first session in seven aimed at a *family* mechanism rather than at a statistic or at the lab's own measurement chain, and the first in this folder's history whose headline mechanism arrives already contested by a Tier-A direct test — with the session's best buildable item turning out to be a by-product with no connection to that mechanism at all.** Aim set by `research/README.md`'s rotation rule plus one grep: across 162 prior notes, `January effect`, `turn-of-the-year` and `tax-loss selling` returned zero or near-zero, `Grinblatt, Moskowitz` returned **zero**, while `holiday` and `day-of-week` were already covered — so the turn-of-the-tax-year branch of `seasonality-calendar` was the family's one uncovered half. It is mechanically distinct from the two seasonal notes already here (those sort on the **same calendar month in past years**; this conditions a **past-return** effect on the current month), and it is **the one branch of this family the lab's own [2026-09-01] structural closure does not reach** — that closure kills in-window-versus-cash timing because the complement window's return is positive, and a turn-of-the-tax-year book is a cross-sectional reallocation at constant gross exposure, at two rebalances a year. Four results. *(1)* **The price step is conditional and its author says so in print.** Constantinides derives the volume seasonal from a control-limit policy under transaction costs, then declines to derive a price seasonal: it requires that sellers not repurchase the same name or another tax-loss seller's name, because swapping sellers move no price — "a seasonal pattern in stock prices **only if we further assume irrationality or ignorance**". He adds that tax trading **does not explain the small-firm premium itself**, and that the gain-deferral half of the same option predicts new-year weakness in prior-year **winners**, the opposite sign from momentum. *(2)* **The naivety precondition is empirically met, in one small market.** Grinblatt–Keloharju's complete Finnish register (daily, with purchase prices, **no wash-sale rule** so sell-and-rebuy is observable) shows Odean's gain-versus-loss realisation ratio declining virtually monotonically over the **last ten trading days of December** and snapping back at the turn; repurchase rates rise in **loss size** and in **year-end proximity**; net buying pressure — a purely temporal demand shift — tracks returns, significantly **in small firms only**. Their own footnote concedes the observed timing is *not* optimal tax timing by Constantinides' standard, which is exactly the naivety his channel needs. *(3)* **The one test that distinguishes the tax story from everything else has been run and it failed.** Brown–Keim–Kleidon–Marsh: Australia's tax year ends 30 June and its "share trader" class deducts all realised losses uncapped, so a July effect at least as strong as the US January one is predicted; found instead **both** December–January **and** July–August seasonals, roughly equal in January and July, with the small-firm premium itself roughly **constant across months**, plus the US January effect significant across a half-century including low-tax pre-war years — **magnitude insensitive to the tax rate that supposedly drives it**. Their integration rescue is self-defeating and the argument generalises (see the transferable output below). *(4)* **The by-product is the item that should actually run.** Grinblatt–Moskowitz's **consistency** dummy is a *sign count*, not a magnitude — positive in **≥8 of the 11 months** of t−12…t−2 (≥15 of 24 for t−36…t−13) — and the threshold is **not tuned**: under a coin-flip null both are ≈10%, i.e. "top decile of sign-run consistency under the null", which is why it transfers without refitting. Every consistent-winner coefficient is positive across three horizons and three seasonal subperiods; consistent-loser coefficients do little, an asymmetry the authors use to kill the "consistency = low volatility" reading. It is binary and unit-free (sidestepping the no-common-scale problem `learnings.md` records) and its content is on the **winner** side, which a long-only book holds directly. **The honest discount, stated once and not buried**: protocol v2's pool is ~1,400 large-cap members of nine national indices plus 42 ETFs, and all four sources locate the price effect in the small, thinly traded, **low-institutional-ownership** tail that such a pool excludes by construction — so **a null on a turn-of-the-tax-year book here is uninformative about the mechanism**, which is why #212 is an anti-candidate rather than a trial. New: **#208–#212**, three free, one trial, one anti-candidate. **Nothing is closed by this entry**; no lab measurement was taken tonight. All four samples end no later than 2000: `validation_overlap: false` and `published_post_2018: false` throughout, and no dated performance figure from any source is recorded anywhere. | Constantinides 1984 (JFE) **read in full** from NBER WP 1176 (`2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md`); Grinblatt–Keloharju 2004 (JFE) **read in full** from NBER WP 8745 (`2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md`); Grinblatt–Moskowitz 2004 (JFE) **read in full** from NBER WP 8744, body **uniformly ASCII-shifted by −29** and decoded (`2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md`); Brown–Keim–Kleidon–Marsh 1983 (JFE) **read in full** as the Internet Archive OCR text layer of MIT Sloan WP 1378-82 (`2026-10-07-tax-year-end-alignment-and-the-australian-test.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-07] Read this first: the session went looking for a mechanism and came back with a
+  contested mechanism and an uncontested signal, and the signal is what should run.** The focus was
+  the turn-of-the-tax-year branch of `seasonality-calendar` — the family's one uncovered half after
+  162 notes, and **the one branch the lab's own [2026-09-01] closure does not reach**, because that
+  closure kills in-window-versus-cash *timing* and this is a cross-sectional reallocation at constant
+  gross exposure, at two rebalances a year. The mechanism arrives contested by a Tier-A **direct
+  test** (Australia's June tax year does not move the seasonal; the US effect's magnitude is
+  insensitive to the tax rate), and its price step is conditional by its own author's admission.
+  **But Grinblatt–Moskowitz's consistency dummy — #209 — has nothing to do with taxes, is a sign
+  count rather than a magnitude, has a threshold fixed by a coin-flip null rather than fitted, is
+  binary and unit-free, and puts its content on the winner side a long-only book holds directly.** It
+  is the first genuinely new *functional* of the past return this folder has produced in some time,
+  and it is the one item here worth a trial. New: **#208–#212**, three free, one trial, and **#212 an
+  anti-candidate on universe grounds, not on mechanism grounds** — the distinction matters, because a
+  null there would be uninformative rather than a kill. **Nothing is closed by this entry**; no lab
+  measurement was taken tonight. **Carried unchanged and still genuinely unrun: #82** (thirty-second
+  session, still the oldest unspent free item), **#94** as standing discipline, **#105–#107**,
+  **#110**'s shrink half, **#159**, **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s second use,
+  **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**, **#171**, **#172**), the 2026-09-30 set
+  (**#174**'s reading, **#175**, **#176**, **#177**), the 2026-10-01 set (**#179**, **#180**,
+  **#181**), the 2026-10-02 set (**#183**–**#186**), the 2026-10-03 set (**#188**–**#191**), from
+  2026-10-04 **#195** and **#196**, from 2026-10-05 **#198**, **#199**, **#200**, **#201**, and the
+  2026-10-06 set (**#203**–**#207**). **#152 stands.** **#163, #169, #173, #178, #182, #187, #192,
+  #197, #202 and #212 stay anti-candidates.**
+- **[2026-10-07] What should aim the next session, in order. The top is unchanged for a fifth night;
+  one new item enters high because it is the first buildable leg this folder has added in three
+  sessions.**
+  - **#188(a) still goes first and it is still not research — it is one look at `engine/` by someone
+    allowed to take it.** Every interpretation item on this file interprets numbers whose arithmetic
+    is unestablished, and it costs nothing. **Updated tonight: protocol v2 is no longer merged-but-off
+    — `program.md` records it as in force since 2026-10-06, `PROTOCOL_VERSION = 2`, with the v1 seat
+    vacated and the leaderboard rewritten from the first v2 trial.** That makes the look *more* urgent,
+    not less, because every number this file interprets was measured under v1 and `program.md` now
+    says v1 rankings largely did not carry over (Spearman +0.43 across 104 trials).
+  - **Then #203**, still free, still the cheapest item this folder has produced, and still the only one
+    that revives an existing disqualified screen rather than adding a new one.
+  - **Then #209**, new tonight and the highest-ranked *trial* on this file: one `price-trend` slot for a
+    sign-count signal whose threshold is calibrated to a binomial null rather than fitted, whose
+    published asymmetry lives on the long-only side, and which is binary and therefore an unusually
+    clean union leg. Run its four free pre-checks (rank autocorrelation, book width against the
+    concentration gate and the 25% cap, the region-demeaned variant, and rho to the incumbent) before
+    spending the trial.
+  - **Then #198**, carried at full value: free, train-only, and it discriminates a Tier-A mechanism on a
+    prediction market integration cannot neutralise.
+  - **Then #205, then #206.** Both free, both **preconditions** rather than proposals. *(Note for
+    whoever runs them: both were written for a "140-name panel", which protocol v2 has superseded —
+    #206's thin-cross-sectional-averaging worry is substantially weaker on ~1,400 names and its ~0.9
+    correlation threshold should be re-derived rather than reused.)*
+  - **Then #208 and #211**, both free and both **preconditions for #212's vein rather than proposals**:
+    #208 is the tax-year alignment test, which this universe can run with fifteen regions where the
+    literature's one direct test had two; #211 tests the mechanism's *volume* prediction, which is the
+    step the theory and the investor-level data agree on, before any return-side construction is
+    bought. **Then #210**, three calendar sign flips with published directions, whose value is that
+    they test whether this panel reproduces a Tier-A cross-sectional result at all.
+  - **Then #201, then #200**, in the order [2026-10-05] set them. **Then #207**, if #206 passes.
+  - **Then #188(b), #189, #183, #184, #179, #180**, in the order [2026-10-03] set them. **Then #195**
+    and **#196**. **Then #199**, after #198. **Then #190**, which still wants the same per-instrument
+    noise proxy as #179(b) and #184 — build it once, spend it on all three. **Then #185** as a standing
+    reporting rule, **#191** as screens to re-measure rather than adopt. **Then the carried items**:
+    #181, #174's reading, #175, #177, #176. **#204** stays below them for the reason [2026-10-06] gave.
+- **[2026-10-07] The transferable output, and it is the seventh detector — the first one this folder
+  has seen *twice*, which promotes it from an observation to a rule.** [2026-09-30] added a detector
+  for redundancy, [2026-10-02] one for rival mechanisms, [2026-10-03] one for the altitude an
+  enumeration was written at, [2026-10-04] one grading a tension by sign-versus-magnitude, [2026-10-05]
+  one requiring a tension be checked against each side's own account of the test's confound,
+  [2026-10-06] one requiring that a disqualified statistic be checked against a truncated variant of
+  itself. Tonight's: **a frictional or behavioural explanation that has to travel across a border to
+  fit the data is self-undermining, because the transmission requires the market integration whose
+  *absence* the friction requires.** Brown–Keim–Kleidon–Marsh state it exactly: a market integrated
+  enough to carry a US tax-induced January seasonal into Australian penny stocks cannot also be
+  segmented enough for the original US mispricing to form. This folder met the identical shape
+  [2026-10-05] in the SAD exchange, where **both** sides reach for integration — one to explain weak
+  Southern-Hemisphere results, the other to explain why the sign test cannot settle anything. Two
+  independent Tier-A literatures reaching for the same escape and hitting the same wall makes it a
+  rule: **when a candidate is motivated by a local friction and this lab's universe is global,
+  USD-converted and fifteen regions wide, check whether the motivating story needs a segmentation the
+  universe does not have — before the trial, not after.** The corollary is the one this session
+  actually acted on, and it is the more useful half: **when a mechanism's own literature localises its
+  effect to a tail the universe excludes, the right output is an anti-candidate with the reason named
+  (#212), not a trial that produces an uninformative null.**
+- **[2026-10-07] A standing correction this file should carry rather than re-derive: every
+  implementability assessment written here before 2026-10-06 was written for a ~140-instrument
+  panel, and the panel is now ~1,400.** `program.md` puts protocol v2 in force from 2026-10-06:
+  ~1,400 stocks that were ever members of nine indices, plus the 42 ETFs, point-in-time, with roughly
+  a thousand names eligible on a typical validation date. This cuts both ways and both directions
+  matter. **Looser**: thin-cross-section objections written against a hundred-name panel (notably
+  #206's, and `research/README.md`'s own "140 names cannot support a 900-feature model" guidance for
+  `statistical-learning`) are substantially weaker, and cross-sectional sorts now have real breadth —
+  a 10%-of-the-null screen like #209's selects ~100 names rather than ~14. **Tighter**: the pool is
+  nine *large-cap national indices*, so it is wider without being deeper, and every mechanism this
+  folder has filed as living in the small, illiquid, retail-held tail is now excluded by construction
+  rather than merely under-represented. Tonight's vein is the first clear casualty. **Whoever writes
+  the next session's notes should state which panel an implementability claim is about.**
 - **[2026-10-06] Read this first: the session's best item is not the thing it went looking for.** The
   focus was co-movement as a panel-level state variable — the one axis `program.md` charters for
   `range-variance` ("cross-sectional dispersion and correlation regimes") that had zero notes after 161.
@@ -9797,6 +10088,69 @@ hypothesis fodder, then anti-candidates.
   unstable on this panel" and "this family of statistics is unstable on this panel" are different
   closures with different consequences, and a disqualification that does not say which one it is has
   not finished.**
+- **[2026-10-07] Access findings: four closed Tier-1 articles, four read in full, and an
+  extraction artifact that is a *variant* of one this folder recorded only last night.** All four
+  primaries are `oa_status: closed` on OpenAlex with `any_repository_has_fulltext: false`, and all
+  four were read complete. The channels, in the order they were reached:
+  **(a) NBER, three for three, and it remains this folder's single most reliable host.** The
+  working-paper versions of all three *Journal of Financial Economics* articles — Constantinides
+  (w1176, 1983), Grinblatt–Moskowitz (w8744, 2002) and Grinblatt–Keloharju (w8745, 2002) — carry the
+  full abstract, every section, the table discussion and the reference list. Note that `file` reported
+  "10 page(s)" for two of them against `pdftotext`'s 90–150 KB of text, so **a page count from `file`
+  is not a completeness check**; the character count is.
+  **(b) The Internet Archive's OCR text layer worked again, on a 1982 MIT Sloan working paper, and it
+  is still the cheapest route to a pre-1990 scan.** `archive.org/metadata/stockreturnseaso00mars`
+  named a `_djvu.txt` and the `server`/`dir` to fetch it from; the whole Brown–Keim–Kleidon–Marsh
+  paper came back in one request. The MIT DSpace record for the same item was not needed and not
+  tried, which is the right order given the 429s this file records against that host. Caveat for the
+  note-writer: OCR noise sits in the headers and marginalia (interleaved garbage lines, `)c` for `k`),
+  so **the body prose is trustworthy and table values are not** — that is recorded in the note's
+  `read:` field rather than discovered later.
+  **(c) A new variant of last night's shift cipher, and it is worse because it is silent in a
+  different place.** [2026-10-06] recorded an NBER working paper whose body extracted
+  **Caesar-shifted +3**. Tonight's w8744 extracted **uniformly shifted by −29 in ASCII** — `Introduction`
+  comes out as `QWURGXFWLRQ` — so the shift magnitude is not a constant of the host or of the vintage
+  and must be measured per document. Two practical points. The title page and abstract were in
+  **clear text** while the body was shifted, so checking the first page proves nothing. And decoding by
+  `+29` **while preserving whitespace** recovers clean prose **with digits intact**, but the extractor
+  has already dropped the parentheses and the `fi`/`ff`/`ffi` ligatures (`profits` → `pronts`,
+  `efficiency` → `epciency`, `(1993)` → bare `1993`), and those do not come back. **The detection
+  recipe that works**: count occurrences of `" the "` in the raw extract — a decode that leaves the
+  count unchanged means the document was never shifted (this is how w8745 was correctly left alone
+  after w8744 needed decoding). The `( )` empty-parenthesis tell from [2026-10-05] was checked on all
+  four and was clean.
+  **(d) Crossref's journal-issue enumeration resolved a DOI that four title searches could not.**
+  Constantinides' published DOI was unobtainable by title (the search returns his NBER DOI and an
+  unrelated *Journal of the American Taxation Association* record with a near-identical title and zero
+  citations). `api.crossref.org/journals/0304-405X/works?filter=from-pub-date:1984-01-01,until-pub-date:1984-12-31&query.bibliographic=…`
+  returned it with volume, pages and count on the first call. This is the [2026-10-05] comment-and-reply
+  recipe generalising: **when a title lookup fails or returns a plausible near-duplicate, enumerate the
+  journal-year instead.** Also worth recording: my four guessed JFE DOIs (built from the
+  `0304-405X(YY)NNNNN-N` pattern) **all 404'd**, and the correct ones differ only in the sequence
+  number — never guess an Elsevier legacy DOI.
+  **Index behaviour: three more instances of "disbelieve a lone count", and one of them is a new
+  combination.** Constantinides' JFE DOI gives Crossref 293 / OpenAlex 315 / **Semantic Scholar a clean
+  `not found`** — the **sixth** instance of the S2 clean-miss-on-a-real-Tier-1-finance-DOI pattern first
+  recorded [2026-10-01], and the fourth consecutive session in which S2 is the index that fails.
+  Brown–Keim–Kleidon–Marsh: Crossref 258 / OpenAlex 270 / S2 **387** — S2 high, which is the less common
+  direction. Grinblatt–Keloharju: Crossref 80 / OpenAlex 105 / S2 **22, and S2 also reports the year as
+  2000** against a 2004 publication — **a visible undercount and a corrupted year field together**, the
+  same pairing recorded [2026-08-23], and the one case tonight where a single lookup would have been
+  off by nearly 5×. Crossref answered every lookup and was never rate-limited; OpenAlex answered all
+  four with calls spaced four seconds apart and its budget was not exhausted. **Standing rule
+  re-confirmed: Crossref first, OpenAlex second, Semantic Scholar third.**
+  **One channel recorded as not worth re-trying, and one source declined on licence grounds.**
+  The Wharton Rodney L. White Center working-paper paths (`rodneywhitecenter.wharton.upenn.edu/wp-content/uploads/…`,
+  `finance.wharton.upenn.edu/~rlwctr/papers/…`) both returned **HTTP 404 with an HTML body** for the
+  Gultekin–Gultekin 1983 international-seasonality paper, which that series is reported to hold — so
+  **Gultekin–Gultekin is this session's unreached source** and the international index-level evidence
+  on tax-year alignment rests on Brown–Keim–Kleidon–Marsh's second-hand description of it, flagged as
+  such in that note. Note also that a 2004 working draft of Starks–Yong–Zheng (JF 2006, municipal-bond
+  closed-end funds, the cleanest identification design in this vein) is hosted at
+  `bus.umich.edu/pdf/mitsui/workshopdocs/` but is **marked "Please Do Not Quote without the Authors'
+  Permission"**; it was therefore **not used**, and nothing in tonight's notes relies on it. A later
+  session wanting that identification should seek the published version.
+
 - **[2026-10-06] Access findings, recorded so the next session does not repeat the searches.**
   **(1) A tenth "looks like an answer" mode, and it is the most completely disguised one yet: a
   Caesar-shifted text layer.** `pdftotext -layout` on NBER Working Paper 7590 returns a complete,

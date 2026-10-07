@@ -17772,3 +17772,5 @@ Practical consequences for the next session:
 
 - Lesson: survivorship can re-enter through a shared helper as easily as through a universe file;
   a guard has to follow imports, not just read the candidate.
+
+## Research session — 2026-10-07 (learning agent): 4 notes added, see research/SUMMARY.md

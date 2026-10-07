@@ -32,8 +32,22 @@ Prioritize what is **implementable under this project's constraints**:
 - **scikit-learn and scipy are installed**, so learned models are implementable — subject
   to walk-forward fitting (a single full-sample fit fails the lab's causality check).
 - 15 bps per-side costs, 1-day execution lag; high-turnover ideas must survive that
-- global stock + ETF universe (~140 instruments across 15 regions, 42 of them ETFs), free
-  data, survivorship-biased constituents
+- **universe — rewritten by protocol v2, in force since 2026-10-06; read `program.md` before
+  writing an implementability section.** The panel is now **~1,400 stocks** that were ever members
+  of nine tracked indices (S&P 500 from 1996; DAX, CAC 40, FTSE 100, SMI, AEX, Euro Stoxx 50,
+  Nikkei 225, Hang Seng from 2009) **plus the 42 legacy ETFs**, point-in-time: a name is buyable
+  only on dates it was an index member, and roughly a thousand are eligible on a typical validation
+  date. This supersedes the "~140 instruments across 15 regions" figure this file carried until
+  2026-10-07, and **both directions of the change matter for grading a source**. *Wider*:
+  thin-cross-section objections written against a hundred-name panel are substantially weaker, and
+  cross-sectional sorts, penalised models and decile constructions now have real breadth — see the
+  `statistical-learning` bullet below, whose "140 names" premise no longer holds. *Not deeper*: the
+  pool is nine **large-cap national indices**, so any mechanism whose own literature localises its
+  effect to small, thinly traded or retail-held names is now excluded **by construction** rather
+  than merely under-represented, and a null on such a mechanism is uninformative rather than
+  evidence against it. Say which panel an implementability claim is about. Survivorship bias is
+  removed from the universe, not eliminated: coverage of index members is far thinner before 2009
+  than over validation, so train numbers stay optimistic.
 
 A brilliant paper that needs fundamentals or intraday data is a low-priority note; a modest
 effect that runs on daily OHLCV is a high-priority one.
@@ -48,8 +62,11 @@ is now a well-covered vein with diminishing returns:
   features survive costs, how much of the reported gain is nonlinearity versus feature
   count, and the methodological literature on doing it without leakage (purged
   cross-validation, embargoes, backtest overfitting). Note especially any finding about
-  *how few* predictors actually matter — this universe is 140 names and cannot support a
-  900-feature model.
+  *how few* predictors actually matter. (The original form of this clause read "this universe is
+  140 names and cannot support a 900-feature model"; under protocol v2 the eligible cross-section
+  is roughly a thousand names, so the breadth objection is much weaker than when this was written.
+  Costs, the skip-month and the walk-forward refit requirement are now the binding constraints, not
+  the count of names.)
 - **Liquidity and volume from daily data** — Amihud's ILLIQ and its successors, volume
   shocks, turnover as a signal rather than a control.
 - **Range-based volatility** — Parkinson, Garman-Klass, Rogers-Satchell, HAR-RV, and what
@@ -174,6 +191,55 @@ snippets. Three practical limits to plan around:
   429 to every attempt including five retries with exponential backoff** — a rate limit, not an
   egress block, and it should be reported as such rather than as an unreachable source. Find the
   identifier with `archive.org/advancedsearch.php?q=title:("...")&output=json`.
+
+- **A shifted-ASCII body is an eighth "looks like an answer" mode, the shift is NOT a constant, and
+  the first page does not reveal it** (added 2026-10-07; narrows the 2026-10-06 entry recorded in
+  `SUMMARY.md`, which found an NBER working paper whose body extracted Caesar-shifted **+3**).
+  Tonight an NBER working paper (w8744) extracted with its **title page and abstract in clear text**
+  and its **entire body uniformly shifted by −29 in ASCII** — `Introduction` comes out as
+  `QWURGXFWLRQ`. So checking the first page proves nothing, and the shift magnitude is a property of
+  the individual document, not of the host or the vintage: a sibling working paper fetched from the
+  same directory minutes later (w8745) was **not shifted at all**, and naively decoding it destroyed
+  it. **The detection test is a word count, not an eyeball:** count `" the "` in the raw extract and
+  again in the decoded one; unchanged means the document was never shifted. Decode with
+  `chr(ord(c)+shift)` **while passing whitespace through untouched** — shifting the spaces too turns
+  them into `=` and the newlines into `'`. Digits survive the round trip; **parentheses and the
+  `fi`/`ff`/`ffi` ligatures are dropped by the extractor before the shift and do not come back**
+  (`profits` → `pronts`, `efficiency` → `epciency`, `(1993)` → bare `1993`), so a citation year in
+  parentheses reads oddly and a *definition* can still look mangled after a correct decode. Check
+  the 2026-10-05 `( )` dropout tell separately; the two artifacts are independent.
+
+- **Never guess a legacy Elsevier DOI, and when a title lookup fails, enumerate the journal-year**
+  (added 2026-10-07; generalises the 2026-10-05 comment-and-reply entry). Four DOIs guessed from the
+  `10.1016/0304-405X(YY)NNNNN-N` pattern for known *Journal of Financial Economics* articles **all
+  404'd on Crossref** — the correct ones differ only in the sequence number, which is not derivable.
+  Worse, a title search can return a **plausible near-duplicate**: the published DOI for
+  Constantinides (1984) was unobtainable by title because the search surfaced his NBER DOI and an
+  unrelated *Journal of the American Taxation Association* record carrying almost the same title
+  with zero citations. The call that worked first try was
+  `api.crossref.org/journals/0304-405X/works?filter=from-pub-date:1984-01-01,until-pub-date:1984-12-31&query.bibliographic=<words>`,
+  which returned DOI, volume, pages and `is-referenced-by-count` together. **A journal's year is a
+  much better key than an article's title.**
+
+- **`file`'s page count is not a completeness check** (added 2026-10-07). `file -b` reported
+  "PDF document, version 1.3, 10 page(s)" for two NBER working papers from which `pdftotext` then
+  extracted 90 KB and 150 KB of text — i.e. the complete 25–40 page articles. Judge completeness by
+  the character count and by finding the conclusion section, never by the page count.
+
+- **The Wharton Rodney L. White Center working-paper paths are 404 and are not worth reaching for
+  first** (added 2026-10-07). Both
+  `rodneywhitecenter.wharton.upenn.edu/wp-content/uploads/<year>/<month>/<id>.pdf` and
+  `finance.wharton.upenn.edu/~rlwctr/papers/<id>.pdf` returned **HTTP 404 with an HTML body** for a
+  paper that series is reported to hold. Worth recording because [2026-09-07] logged a *successful*
+  read from a Rodney L. White working-paper PDF, so the channel has worked before — treat it as a
+  host that has partially gone dark, and `file` the result.
+
+- **A working draft marked "do not quote without the authors' permission" is a source you have found
+  and may not use** (added 2026-10-07). A 2004 workshop draft of a *Journal of Finance* article was
+  the only fetchable copy and carried that notice; it was left unread and unused, and the note that
+  would have cited it records the published version as unobtained instead. Finding a file is not the
+  same as being allowed to rely on it — record the pointer and the restriction for a later session,
+  and do not quietly summarise it.
 
 - **A text-layerless scan has to be rendered to images and read visually.** Always detect it
   first: `pdffonts <file>.pdf` printing an **empty font table**, or an extraction yielding a few
