@@ -17938,3 +17938,13 @@ tail genuinely disagree on this mechanism, and here it is the IC that is strong 
 weak, i.e. **the disagreement has the opposite sign to the one the lesson records.** Whichever way the
 books land, that asymmetry is the finding worth keeping.
 
+## 2026-10-07T23:39:13+00:00 — pt_resid_reversal_v2 — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_resid_reversal_v2.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: A long-only equal-weight book of the 30 eligible names with the most negative 21-day return measured against the equal-weight eligible pool, re-formed monthly, beats the 90% quantile of the survivorship-matched random-selection null on validation net of 15 bps a side, because the one score of nine that clears |t| = 2 on the train-split forward-return screen on the point-in-time panel is residual reversal (+0.0282, t = +3.07) and it is decorrelated from every other screened score (|rho| <= 0.18), including the 12-1 momentum that produced all seven v1 promotions and that the same screen reads as a null here (+0.0128, t = +0.96); landing at or below the null's 90% quantile falsifies the claim that the point-in-time panel carries a cross-sectional reversal premium net of costs.
+- Verdict: GATE_FAIL — validation drawdown -0.5406 worse than -0.45
+- Train: sharpe +0.44, ann_ret +8.9%, maxDD -78.6%, turnover 20.2x
+- Validation: sharpe +0.54, ann_ret +12.1%, maxDD -54.1%, turnover 21.9x
+- Survivorship-matched benchmarks (protocol v2): validation sharpe at the 98% percentile of 200 random-selection replicas (median +0.30, 90% +0.44); equal-weight eligible pool +0.51, information ratio vs it +0.41
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+
