@@ -1,37 +1,64 @@
 """Does removing FIVE principal components beat removing one market factor?
 
-THE PAIR THIS FILE COMPLETES. `pt_resid_reversal_band` reverts the 21-day return
-measured against the equal-weight eligible pool -- a single, equally-weighted
-factor. This file reverts the 21-day return measured against the **five leading
-principal components** of the trailing 252-day standardised return matrix,
-re-estimated from scratch at every rebalance date on the names eligible that day,
-and is otherwise byte-identical in construction: same horizon, same band (ranks
-31-120 of the sort), same equal weight, same monthly grid. The pair was declared a
-designed pair on one mechanism in the session's pre-registration, not two
-independent bets, and the two scores correlate **+0.847** cross-sectionally on the
-train split. The one variable between them is how much of the comovement is removed
-before the residual is reverted.
+THE PAIR THIS FILE COMPLETES, AND WHY ITS ANCHOR MOVED BEFORE IT RAN. This file
+reverts the 21-day return measured against the **five leading principal components**
+of the trailing 252-day standardised return matrix, re-estimated from scratch at
+every rebalance date on the names eligible that day. Its partner,
+`pt_resid_reversal_v2`, reverts the same 21-day return against a single
+equally-weighted pool factor, and is otherwise identical: same horizon, same **top
+30** of the sort, same equal weight, same monthly grid. The two scores correlate
+**+0.847** cross-sectionally on the train split and were declared a designed pair on
+one mechanism, not two independent bets.
+
+**The anchor was going to be ranks 31-120 and the lab just found out it must not be.**
+Trial #2 (`pt_resid_reversal_band`) took that band on the market-residual score
+because seven train slices said the extreme tail was risk without signal. On
+validation:
+
+    trial                      train sharpe  train mdd   val sharpe  val mdd  null pctile  IR vs pool
+    #1 top 30                     +0.44       -78.6%       +0.54     -54.1%      98%         +0.41
+    #2 ranks 31-120               +0.55       -62.1%       +0.38     -43.1%      81%         -0.04
+
+The band did exactly what the train screens promised on the axis they measured --
+drawdown -54.1% -> -43.1%, clearing the gate -- and **inverted the selection content
+it was supposed to protect**: 0.54 -> 0.379, from the 98th percentile of the null to
+the 81st, from +0.41 of information ratio over the pool to -0.04. So
+`learnings.md` [2026-08-30]'s "the book buys the extreme tail, not the quintile mean"
+is right and the train screen that contradicted it was wrong, and the configuration
+this question has to be asked at is the top 30.
 
 WHY THE QUESTION IS WORTH A TRIAL RATHER THAN A NOTE. The free screens measure the
-extra factor removal twice, and it wins on both readings while the risk shape stays
-put (train split only; journal F3, F6, F7):
+extra factor removal twice and it wins on both (train split only; journal F3, F6, F7):
 
     reading                                      market residual   5-PC residual
     cross-sectional IC vs forward 21d return    +0.0282 (t 3.07)  +0.0278 (t 5.17)
     band 31-90, excess over pool, bps/month       +28.1 (t 2.82)    +32.2 (t 4.30)
-    band 31-120, excess over pool, bps/month      +27.0 (t 3.28)    +23.9 (t 4.20)
-    band 31-120, train mdd                           -65.1%           -66.3%
 
 The IC magnitudes are the same to three decimals and the **t nearly doubles**, which
 is the signature of a score whose cross-sectional dispersion is being cleaned rather
-than enlarged: removing the market, region and sector-like comovement that the five
-leading components carry leaves a residual whose reversion is less contaminated by
-whichever factor happened to move in a given month. That is a claim about stability,
-and stability is what `experiments/learnings.md` records this lab repeatedly losing
-when it mistook one for the other -- three separate scores in the v1 history turned
-out to be "reversal in costume", i.e. a factor move wearing a stock-specific label.
-Here the direction is reversed: the question is whether a score that is *already*
-reversal gets better when the factor moves are taken out properly.
+than enlarged. That reading is now explicitly on probation: those are train numbers,
+and trial #2 is the fourth consecutive reading in which a train advantage outside the
+incumbent's family anti-predicted the validation ordering (`learnings.md` [2026-08-30],
+three for three before tonight, two of them designed pairs; this pair makes four, and
+it is a designed pair too). **So the train screens are the REASON this is tested and
+are being treated as evidence against the hypothesis, not for it.**
+
+THE MECHANISM-LEVEL REASON TO EXPECT SOMETHING ANYWAY, which is independent of the
+train screens and is what actually justifies the trial. The market-residual sort's
+top 30 are the names that fell most against a single equal-weight average, so that
+tail is loaded with names whose *region or sector* fell -- a factor move wearing a
+stock-specific label, which is the thing `learnings.md` records three v1 scores
+turning out to be. Removing five components takes those out of the tail by
+construction and leaves names whose *own* move was extreme. If the reversion premium
+is price pressure on individual names, that substitution should raise the selection
+content; if it is a factor-level overreaction, it should destroy it. Either answer is
+worth the trial, and the two are distinguishable in one number.
+
+PRE-REGISTERED TRAIN-AS-PREDICTION ENTRY, which `learnings.md` [2026-08-30] asks every
+scout to record: train Sharpe is predicted at **+0.45 to +0.60** (trial #1 scored
++0.438 at top 30 and the 5-PC score's train excess is higher), and the anti-prediction
+rule therefore predicts validation **below** trial #1's +0.54. The hypothesis below
+predicts the opposite. The pair is the fifth reading either way.
 
 HOW THE ABSENCE OF THE SHORT LEG IS HANDLED, which `program.md` requires a
 `statistical-arbitrage` candidate to state. A residual-reversion signal is naturally
@@ -48,8 +75,8 @@ discarded unused.
 
 WHY FIVE COMPONENTS AND A 252-DAY WINDOW. Five because the panel spans 15 regions
 and two instrument types and the leading components of a global daily return matrix
-are the ones the residual must not contain; 252 days because the band screens and the
-IC screens were both run at that window and changing it here would confound the one
+are the ones the residual must not contain; 252 days because every screen this
+session ran was run at that window and changing it here would confound the one
 variable the pair is testing. No component count other than five was scored, so this
 is not a sweep -- it is the pair's partner at the pair's settings.
 
@@ -62,12 +89,16 @@ date, so hiding later rows -- and with them the columns that become eligible lat
 cannot change the basis. Build cost is 2.7 s over 251 train month-ends, about 4 s per
 `generate_weights` call on the full window, well inside the ~60 s budget.
 
-FALSIFIER. If this lands at or below `pt_resid_reversal_band` on validation Sharpe,
-the near-doubling of the IC's t-statistic and the +4.1 bps/month of extra train
-excess were a train-split artifact, and the lab should stop treating factor removal
-as an improvement to a reversal score on this panel. If it also fails the drawdown
-gate, the +0.847 correlation was the whole story and the pair is one trial's worth of
-information, not two.
+FALSIFIER, AND THE DRAWDOWN RISK ACCEPTED IN ADVANCE. If this lands at or below
+`pt_resid_reversal_v2`'s +0.54 and 98th null percentile, the near-doubling of the
+IC's t-statistic was a train-split artifact, factor removal is not an improvement to
+a reversal score on this panel, and the +0.847 correlation was the whole story -- the
+pair is then one trial's worth of information, not two. Trial #1 was killed by the
+drawdown gate at -54.1% and this file deliberately returns to its book size, so a
+drawdown failure is a live and accepted risk: the number that answers the question is
+the validation Sharpe and the null percentile, both of which are recorded even on a
+GATE_FAIL. A candidate that clears -45% *as well* would say the 5-PC residual
+de-concentrates the crash exposure of the tail, which no screen tonight measured.
 """
 
 from __future__ import annotations
@@ -83,24 +114,27 @@ STRATEGY = {
         "Reverting the 21-day return measured against the five leading "
         "principal components of the trailing 252-day standardised return "
         "matrix, re-estimated at every month-end on that day's eligible names, "
-        "beats the same band of the same sort taken against the single "
-        "equal-weight pool factor on validation Sharpe, because on the train "
-        "split the five-component residual leaves the IC's magnitude unchanged "
-        "(+0.0278 vs +0.0282) while nearly doubling its t-statistic (+5.17 vs "
-        "+3.07) and raises the band's excess over the pool from +28.1 to +32.2 "
-        "bps/month at t = +4.30 vs +2.82 with the risk shape unchanged; "
-        "landing at or below the market-residual version says the extra factor "
-        "removal is a train-split artifact and that the two scores' +0.847 "
-        "cross-sectional correlation was the whole story."
+        "beats the same top-30 book taken against the single equal-weight "
+        "pool factor (trial #1: validation 0.54 at the 98th percentile of its "
+        "null, IR vs pool +0.41) on validation Sharpe, because the top 30 of a "
+        "single-factor residual sort is loaded with names whose region or "
+        "sector fell rather than names whose own move was extreme, and "
+        "removing five components substitutes the second population for the "
+        "first; landing at or below +0.54 says the reversion premium on this "
+        "panel is factor-level overreaction rather than price pressure on "
+        "individual names, that the five-component residual's near-doubled "
+        "train IC t-statistic (+5.17 vs +3.07) was a train-split artifact, and "
+        "that the two scores' +0.847 cross-sectional correlation was the whole "
+        "story. Train Sharpe is predicted at +0.45 to +0.60."
     ),
 }
 
 HORIZON = 21
 WINDOW = 252
 N_PC = 5
-BAND_LO = 30
-BAND_HI = 120
-MIN_NAMES = 150
+BAND_LO = 0
+BAND_HI = 30
+MIN_NAMES = 50
 MIN_COVERAGE = 0.8
 
 

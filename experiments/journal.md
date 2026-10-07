@@ -17958,3 +17958,14 @@ books land, that asymmetry is the finding worth keeping.
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
 - Lesson: _(fill in after reflection)_
 
+## 2026-10-07T23:55:51+00:00 — sa_pca_resid_reversion — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/sa_pca_resid_reversion.py` (family: statistical-arbitrage, track: scout, trial #3)
+- Hypothesis: Reverting the 21-day return measured against the five leading principal components of the trailing 252-day standardised return matrix, re-estimated at every month-end on that day's eligible names, beats the same top-30 book taken against the single equal-weight pool factor (trial #1: validation 0.54 at the 98th percentile of its null, IR vs pool +0.41) on validation Sharpe, because the top 30 of a single-factor residual sort is loaded with names whose region or sector fell rather than names whose own move was extreme, and removing five components substitutes the second population for the first; landing at or below +0.54 says the reversion premium on this panel is factor-level overreaction rather than price pressure on individual names, that the five-component residual's near-doubled train IC t-statistic (+5.17 vs +3.07) was a train-split artifact, and that the two scores' +0.847 cross-sectional correlation was the whole story. Train Sharpe is predicted at +0.45 to +0.60.
+- Verdict: FAMILY_LEAD — first recorded result in family 'statistical-arbitrage': validation sharpe 0.597, DSR 0.8937 (3 trials, 3 effective after clustering at rho 0.95)
+- Train: sharpe +0.54, ann_ret +9.4%, maxDD -59.4%, turnover 21.1x
+- Validation: sharpe +0.60, ann_ret +10.3%, maxDD -40.1%, turnover 22.5x
+- Survivorship-matched benchmarks (protocol v2): validation sharpe at the 99% percentile of 200 random-selection replicas (median +0.28, 90% +0.41); equal-weight eligible pool +0.51, information ratio vs it +0.35
+- Deflated Sharpe prob: 0.8937 (bar from 3 trials, 3 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+

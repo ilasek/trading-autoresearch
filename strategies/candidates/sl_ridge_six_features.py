@@ -44,15 +44,31 @@ feature's worth of signal. That is the specific failure this trial is designed t
 detect, and it is why the comparison is against `pt_resid_reversal_band` and not
 against the pool.
 
-CONSTRUCTION, HELD FIXED TO THE PAIR'S SETTINGS SO THE COMPARISON IS ONE VARIABLE.
-Same 21-day horizon, same monthly grid, same band (ranks 31-120 of the predicted
-score), same equal weight as `pt_resid_reversal_band` and `sa_pca_resid_reversion`.
-The only change is that the score is a fitted combination rather than one feature.
-Features are cross-sectionally z-scored on each date and winsorised at ±3 sd so the
-ridge sees comparable scales and is not dragged by one fat tail; the target is the
+CONSTRUCTION, HELD FIXED TO THE SESSION'S ANCHOR SO THE COMPARISON IS ONE VARIABLE.
+Same 21-day horizon, same monthly grid, same **top 30** of the score, same equal
+weight as `pt_resid_reversal_v2` and `sa_pca_resid_reversion`. The only change is
+that the score is a fitted combination rather than one feature. Features are
+cross-sectionally z-scored on each date and winsorised at ±3 sd so the ridge sees
+comparable scales and is not dragged by one fat tail; the target is the
 cross-sectional *rank* of the forward 21-day return (`walkforward.rank_target`),
 because this panel's return distribution is heavy enough that a raw-return target
 would be fitted to a handful of moves.
+
+WHY THE ANCHOR IS THE TOP 30 AND NOT THE BAND THIS FILE ORIGINALLY USED. Trial #2
+(`pt_resid_reversal_band`) took ranks 31-120 of the single-feature score on the
+strength of seven train slices and inverted the result that mattered: validation
+Sharpe 0.54 -> 0.379, the null percentile 98% -> 81%, information ratio over the
+equal-weight pool +0.41 -> -0.04, while delivering exactly the drawdown relief the
+train screens promised (-54.1% -> -43.1%). The band is therefore not a neutral
+container for a score comparison -- it removes the population the premium lives in --
+and every comparison in this session is re-anchored at the top 30.
+
+PRE-REGISTERED TRAIN-AS-PREDICTION ENTRY (`learnings.md` [2026-08-30] asks every scout
+for one): train Sharpe predicted at **+0.40 to +0.60**, the range the two top-30
+single-feature books occupy. The anti-prediction rule -- four for four as of tonight,
+three of those pairs designed -- says that if this beats trial #1 on train it should
+lose to it on validation. The hypothesis below predicts otherwise, and the drawdown
+gate is a live risk at this book size: trial #1 was killed by it at -54.1%.
 
 CAUSALITY. `walkforward.walk_forward_scores` does the bookkeeping: a training row
 for prediction date `d` is a past rebalance date `t` with `t + 21 <= d`, so no
@@ -65,9 +81,12 @@ over whatever columns happen to be present, because the column set itself shrink
 when the causality check hides the tail and a pool mean taken over all columns would
 move with it.
 
-FALSIFIER. If this lands at or below `pt_resid_reversal_band` on validation Sharpe,
-the five auxiliary feature groups cost more in estimation error than they carry in
-signal on this panel, and the lab should stop proposing combinations of nulls.
+FALSIFIER. If this lands at or below `pt_resid_reversal_v2`'s +0.54 on validation
+Sharpe, the five auxiliary feature groups cost more in estimation error than they
+carry in signal on this panel, and the lab should stop proposing combinations of
+nulls. If it lands below the random-selection null's 90% quantile the combination is
+worse than its own largest term by enough to erase the mechanism, which would be the
+strongest result of the night against learned combiners on this panel.
 """
 
 from __future__ import annotations
@@ -88,21 +107,23 @@ STRATEGY = {
         "pairwise rank correlations are all inside +/-0.08 (21-day pool "
         "residual, 12-1 momentum, negative idiosyncratic vol, log Amihud "
         "illiquidity, negative volume shock, same-calendar-month seasonal), "
-        "beats the best single feature's book (pt_resid_reversal_band) on "
-        "validation Sharpe at the same band, weighting and grid, because six "
+        "beats the best single feature's own book (pt_resid_reversal_v2: "
+        "validation 0.54 at the 98th percentile of its null) on validation "
+        "Sharpe at the same top-30 selection, weighting and grid, because six "
         "nearly orthogonal predictors is the case where a penalised linear "
-        "combination beats its largest term; landing at or below it shows the "
-        "five auxiliary groups -- five of which are individually "
+        "combination beats its largest term; landing at or below +0.54 shows "
+        "the five auxiliary groups -- five of which are individually "
         "indistinguishable from zero on the train split -- cost more in "
-        "estimation error than they carry in signal on this panel."
+        "estimation error than they carry in signal on this panel. Train "
+        "Sharpe is predicted at +0.40 to +0.60."
     ),
 }
 
 HORIZON = 21
 ALPHA = 10.0
-BAND_LO = 30
-BAND_HI = 120
-MIN_NAMES = 150
+BAND_LO = 0
+BAND_HI = 30
+MIN_NAMES = 50
 WARMUP = 300          # month-end rows skipped before the first possible fit
 
 
