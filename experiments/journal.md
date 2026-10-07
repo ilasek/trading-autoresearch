@@ -17774,3 +17774,167 @@ Practical consequences for the next session:
   a guard has to follow imports, not just read the candidate.
 
 ## Research session — 2026-10-07 (learning agent): 4 notes added, see research/SUMMARY.md
+
+## Pre-registration and free measurements — 2026-10-07 (nightly), the first session to run under protocol v2
+
+**Integrity check.** `git fetch origin --prune`; `git branch -r --no-merged origin/main` is empty, so
+the 2026-09-29 → 2026-10-06 halt condition is cleared and trials may resume. The harness placed this
+session on a per-run branch (`main-esahem`) which was level with `origin/main`; corrected to `main`
+before any write, per the 2026-08-16 and 2026-10-06 protocol-issue entries. `pytest tests/ -q`: 62
+passed.
+
+**Where the lab stands.** 104 trials in `trials.jsonl`, **all of them v1 records**. Zero v2 trials, so
+the deflated-Sharpe bar, the family bests, `leaderboard.json` and the champion seat are all empty;
+`champion_card.json` has `protocol_version: None` and therefore holds no seat. Every entry in
+`experiments/learnings.md` is v1 knowledge measured on 140 survivors. This session's job is not to
+defend a seat — there is none — but to find out which mechanisms have content on the point-in-time
+panel.
+
+**Panel census (free).** `prices` is 16544 x 1444 (1402 stocks + 42 ETFs), 1962-01-02 → 2026-10-07;
+loading it takes 45 s and `setup_v2` another 7 s. Eligible names: 904 at the train/validation
+boundary, 965 mid-validation, 1037 at the validation end, **mean 962.6 over 2018-2023**, and every
+eligible name is priced on its eligible days (mean names with price ∧ eligible = 962.6, i.e. the
+eligibility mask already encodes price availability). ~10x the v1 width, as the cut-over entry said.
+
+**Plan for the session's 8 trials, fixed before any candidate file was written.** All on the **scout**
+track. Rationale, stated in advance: the bootstrap promotion rule needs DSR ≥ 0.95, and at n ≤ 2
+recorded trials `deflated_sharpe` falls back to its fixed dispersion term (`0.25/252`), which puts the
+DSR 0.95 bar at **validation Sharpe ≈ 1.0** (computed on synthetic iid series: DSR 0.54 / 0.73 / 0.86
+/ 0.97 at Sharpe 0.3 / 0.5 / 0.7 / 1.0). The v1 champion scores 0.19 on this panel. A challenge trial
+tonight would therefore almost certainly reject, and a rejected challenge records strictly less than a
+scout, which records a family best. Breadth first; the seat is reachable next session from recorded
+leads. Allocation: ≤ 2 `price-trend`, ≤ 2 in any one family, ≥ 1 in a family with no recorded trial —
+all satisfied by construction, since under v2 no family has a recorded trial.
+
+### F1 — the random-selection null's 90% quantile is FLAT in book size, which removes K as a lever against the new gate
+
+Train split only (1997-01-01 → 2017-12-31). For each K, one equal-weight monthly book of K names drawn
+at random from the eligible, priced pool, then `benchmarks.random_null` with 100 draws around it. This
+measures the **gate**, not any candidate.
+
+    K     p10     p50     p90     mean    sd
+     10  +0.333  +0.459  +0.566  +0.450  0.094
+     20  +0.408  +0.487  +0.570  +0.488  0.059
+     30  +0.449  +0.505  +0.585  +0.514  0.052
+     50  +0.472  +0.529  +0.565  +0.523  0.039
+    100  +0.528  +0.566  +0.603  +0.565  0.030
+    200  +0.607  +0.620  +0.636  +0.620  0.013
+
+**The reading, and it is a design constraint rather than a result.** The p90 is **0.565 → 0.636 across
+a twenty-fold range of K** — it does not fall as the book widens, because the two things K moves cancel:
+the mean rises with diversification exactly as fast as the 1.28·sd tail shrinks. So a candidate cannot
+buy room against `min_null_percentile` by choosing a book size, and the gate reduces to a clean
+question about selection: beat **pool + ~1.28·sd(K)**, where sd(K) is 0.094 at K=10 and 0.013 at K=200.
+At wide K the gate is nearly "beat the equal-weight pool"; at narrow K it allows ~0.12 of Sharpe for
+luck. Note the direction this cuts: a *concentrated* book is judged against a *wider* null, so
+concentration is not a free way past the gate either. Costs cancel in the comparison — the null keeps
+the candidate's holdings schedule and so pays the same turnover.
+
+### F2 — nine causal scores, cross-sectional IC against the forward 21-day return, and the decorrelation matrix
+
+Train split only, 251 month-ends (1997-01-01 → 2017-11-30), ~900 eligible names per date, Spearman of
+score against forward 21-day return. No portfolio formed, no returns scored.
+
+    score         IC(all)     t      n   | IC(stocks only)    t
+    rev1m        +0.0282   +3.07   251   |   +0.0286      +3.18
+    mom12_1      +0.0128   +0.96   251   |   +0.0109      +0.84
+    lowidio      +0.0088   +0.78   251   |   +0.0118      +0.96
+    consistency  +0.0043   +0.41   251   |   +0.0027      +0.26
+    volshock     +0.0012   +0.21   248   |   +0.0029      +0.49
+    size_dv      -0.0021   -0.25   251   |   -0.0006      -0.06
+    lowvol_pk    -0.0028   -0.20   251   |   +0.0009      +0.06
+    seas         -0.0142   -2.01   251   |   -0.0133      -1.88
+
+Pairwise mean cross-sectional rank correlation (every 6th date):
+
+                 mom12_1  consist  lowvol_pk  lowidio   seas   rev1m  volshock  size_dv
+    mom12_1         1.00     0.61       0.07     0.08   0.00    0.02     -0.01    -0.07
+    consistency     0.61     1.00       0.16     0.16  -0.02   -0.18     -0.02    -0.06
+    lowvol_pk       0.07     0.16       1.00     0.82  -0.08    0.01     -0.08     0.14
+    lowidio         0.08     0.16       0.82     1.00  -0.05    0.02     -0.07     0.08
+    seas            0.00    -0.02      -0.08    -0.05   1.00   -0.03      0.01    -0.14
+    rev1m           0.02    -0.18       0.01     0.02  -0.03    1.00     -0.04     0.02
+    volshock       -0.01    -0.02      -0.08    -0.07   0.01   -0.04      1.00    -0.05
+    size_dv        -0.07    -0.06       0.14     0.08  -0.14    0.02     -0.05     1.00
+
+**Five readings.**
+
+*(a) Residual reversal is the only score of the nine that clears |t| = 2 with the sign its mechanism
+predicts*, and it is twice the next-largest in magnitude. It is also decorrelated from everything else
+on the list (|rho| ≤ 0.18), which is the property a future blend needs and the reason it is worth a
+trial rather than just a note.
+
+*(b) 12-1 momentum reads +0.0128 at t = +0.96 on the point-in-time panel — and that is NOT evidence it
+is dead here.* `learnings.md` [2026-08-30] measured the same screen at +0.0102 / t = +0.97 on the v1
+universe, in the era when momentum held the seat at validation Sharpe 1.2. The two readings are
+statistically indistinguishable. **So this screen does not discriminate between v1 and v2 for
+momentum, and nothing in it licenses retiring the mechanism.** Recorded explicitly because the
+temptation to read the table that way was real and would have been wrong.
+
+*(c) Grinblatt-Moskowitz consistency (`research/SUMMARY.md`, 2026-10-07 note) is two-thirds momentum
+and the remaining third is a null.* The count of positive 21-day blocks in the formation year — their
+path statistic, the part of the paper with no tax story in it — reads +0.0043 at t = +0.41 and
+correlates **+0.61** with the cumulative 12-1 return it was supposed to be distinct from. Their
+asymmetry claim (consistent winners positive, consistent losers inert) is about regression
+coefficients alongside non-overlapping horizon returns, which a univariate IC cannot see; but as a
+standalone score on this panel it is not worth a trial. **Free kill, imported idea, no trial spent.**
+
+*(d) The same-calendar-month seasonal is significantly NEGATIVE here (-0.0142, t = -2.01), i.e.
+inverted relative to the sign v1 traded it in.* This is a sign disagreement between the survivor panel
+and the point-in-time panel on a mechanism the v1 lab had a live leg in. Flipping the sign because the
+number came out that way would be fitting the screen, so no trial is spent on it tonight; it is
+recorded as the sharpest single piece of evidence so far that v1 leg signs do not transfer.
+
+*(e) Low-vol and low-idiosyncratic-vol are one object (rho +0.82) and both are nulls* (-0.0028 / +0.0088).
+Fifteen v1 `range-variance` screens found the same thing on 140 names; the point-in-time panel does not
+revive it at the quintile-mean level.
+
+### F3 — the PCA residual is the same object as the market residual, measured better; the Amihud premium is a flat null; and the TAIL is where the discouragement is
+
+Train split only, same 251 month-ends. `pca_rev` removes the **5 leading principal components** of the
+trailing 252-day standardised return matrix (re-estimated at every rebalance date, eligible names only)
+and reverts the cumulative 21-day residual. `illiq` is `features.amihud_illiquidity` at a 126-day window.
+
+    score      IC        t      n        rank-corr
+    pca_rev  +0.0278   +5.17   251       pca_rev vs rev1m  +0.847
+    rev1m    +0.0282   +3.07   251       pca_rev vs illiq  +0.002
+    illiq    -0.0024   -0.29   251       rev1m   vs illiq  +0.014
+    liquid   +0.0024   +0.29   251
+
+Top-25 slice, mean forward 21-day return minus the eligible pool's mean:
+
+    score      excess (bps/month)     t
+    rev1m           +12.5          +0.50
+    illiq           +10.8          +0.69
+    pca_rev          +8.3          +0.67
+    liquid           -2.5          -0.14
+
+**Three readings, one of which is a warning this session is going to spend trials against anyway, deliberately.**
+
+*(a) Removing five principal components rather than one equal-weight market factor leaves the IC's
+magnitude alone (+0.0278 vs +0.0282) and nearly doubles its t (+5.17 vs +3.07).* The two scores
+correlate +0.847, so they are largely one object; the honest question the pair asks is whether the
+extra factor removal buys a steadier book or just a different arbitrary specification, and that is a
+question about the book, not about the IC. Declared in advance: these two trials are **a designed pair
+on one mechanism**, not two independent bets, and their family leads should be read that way.
+
+*(b) The Amihud illiquidity premium is a flat null on the point-in-time panel* (-0.0024, t = -0.29, and
++0.0024 the other way). This is the first number the lab has on the question that motivated widening
+the universe at all — v1's 140 names were all mega-caps, so an illiquidity premium was unmeasurable
+there. It is measurable here and it is zero at the quintile-mean level. **Free kill: no
+`liquidity-volume` trial is spent on a standalone illiquidity sort.** Its decorrelation from both
+reversal scores (+0.002, +0.014) is clean, so it stays available as a *conditioner*, which is the slot
+the next screen tests.
+
+*(c) The tail diagnostic is the discouraging one, and it is recorded BEFORE the trials rather than after.*
+The top-25 slice of the best score earns **+12.5 bps/month over the pool at t = +0.50** — about
++1.5%/yr gross, which at ~18% book vol is ~+0.08 of Sharpe, against a gate that F1 prices at
+pool + 1.28·sd(30) ≈ pool + 0.067. **The point estimate clears the gate by 0.015 of Sharpe and the
+t-statistic on the excess is 0.50.** So the pre-registered expectation for tonight's two reversal
+trials is a coin flip, stated as such. `learnings.md` [2026-08-30] is the reason the trials run anyway
+and not the reason to expect a win: it records a v1 reversal book scoring 0.701 on validation while its
+train IC was a null, "because the book buys the extreme tail, not the quintile mean" — the IC and the
+tail genuinely disagree on this mechanism, and here it is the IC that is strong and the tail that is
+weak, i.e. **the disagreement has the opposite sign to the one the lesson records.** Whichever way the
+books land, that asymmetry is the finding worth keeping.
+
