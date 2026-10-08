@@ -17997,3 +17997,221 @@ books land, that asymmetry is the finding worth keeping.
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
 - Lesson: _(fill in after reflection)_
 
+
+## Free measurements, second block — 2026-10-07 (nightly), no trial spent
+
+Four screens run between trials, three of which kill a candidate the session would otherwise
+have run, and one of which is the reason the session stops at six trials rather than eight.
+
+### F8 — two conditioners on the lead: the range-variance pair is the lead in disguise, the price-impact tilt is not
+
+Train split only, 251 month-ends, against the forward 21-day return; `pca_rev` is
+`sa_pca_resid_reversion`'s score.
+
+    score                                  IC        t   | top30 excess   t    rho to lead
+    pca_rev (the lead)                  +0.0278   +5.17  |    +7.2     +0.61     1.000
+    pca_rev / parkinson vol             +0.0295   +5.62  |   +15.2     +1.28    +0.980
+    pca_rev / residual std              +0.0276   +5.16  |    +9.0     +0.77    +0.993
+    pca_rev * illiq rank                +0.0267   +5.19  |   +28.0     +1.93    +0.929
+    z(pca_rev) + 0.5 z(illiq)           +0.0248   +4.12  |   +24.2     +1.84    +0.912
+
+**Free kill, `range-variance`.** The two obvious range-variance conditioners on the lead —
+dividing the residual by Parkinson range volatility or by its own residual standard deviation —
+score **rho +0.980 and +0.993** to the lead. They are the lead wearing a different label, a
+fourth instance of this repo's "the score turned out to be reversal in costume" finding and the
+first caught *before* a trial rather than after one. The reason is mechanical and worth keeping:
+the 5-PC residual is already standardised per name inside its own construction, so dividing it
+again by a scale barely reorders the cross-section. **A conditioner whose rho to its base exceeds
+~0.97 cannot be a family's first result, whatever family its inputs come from.**
+
+**Licensed instead: the price-impact tilt** (trial #6), which *lowers* the IC and roughly
+quadruples the tail excess — a conditioner that relocates the premium into the slice the book
+buys rather than adding cross-sectional information. It is at rho +0.912 to the lead, which was
+recorded in the candidate file as "a refinement, not an independent mechanism" before it ran.
+
+### F9 — the causality leak that cost trial #4, located rather than guessed
+
+Every one of trial #4's six feature panels was recomputed on the full visible frame and on the
+63-day-truncated frame and compared on the shared rows and columns:
+
+    panel        max |diff|        panel        max |diff|
+    rev21         1.8e-15          illiq         1.0e-14
+    mom12_1       1.8e-15          volshock      1.8e-15
+    lowidio       1.6e-13          seas          1.3e-15
+    rank_target   3.8e-03   <-- the leak
+
+**Every feature was clean to floating point and the TARGET was not**, and the mechanism is
+specific. `walkforward.rank_target` is `xs_rank(forward_return(prices, h)) - 0.5`, and trial #4
+masked it to the eligible names *after* ranking. `xs_rank` scales each row's ranks by the number
+of non-NaN names in that row, so with **1246 columns in the full frame and 1239 in the truncated
+one** — the seven names that only become eligible inside the hidden tail — every rank in every
+row shifts, the fit moves, and the holdings move with it. `rebalance_dates` also differed by
+exactly one date (2023-10-03, the truncated frame's partial final month), which the gate's
+`tail_buffer` is there to absorb and which was not the cause.
+
+- Lesson, and it generalises past this one helper: **a row-wise rank or z-score is causal in the
+  time axis and is NOT automatically causal in the column axis, and under protocol v2 the column
+  axis is where the look-ahead lives.** `visible_frame` hides columns that become eligible later
+  precisely because their presence is information; any cross-sectional normalisation taken over
+  the frame's column set puts that information straight back. **Mask, then normalise — never the
+  other way round.** `features.xs_zscore`, `features.xs_rank` and `walkforward.rank_target` are
+  all exposed to it. Trial #4's features escaped only because they were masked before scoring.
+
+### F10 — two non-reversal mechanisms, both declined; and the number that ends the session
+
+Train split only.
+
+**F10a, `lead-lag-spillover`: peer-basket lead-lag is a null, and it is anti-correlated with the
+night's winning score.** For each name, the mean 21-day return of its 10 most-correlated peers
+over the trailing 252 days (peers from the same correlation matrix the lead's PCA is built on):
+
+    score                             IC        t      top30 excess      t
+    peer mean 21d return (momentum) -0.0055   -0.43      -13.1        -0.47
+    negated (peer reversal)         +0.0055   +0.43      -29.4        -1.12
+    rank-corr(peer score, own residual reversal) = -0.450
+
+Both signs are nulls on the IC and **both lose money in the tail**, which is the slice that
+matters. The rank correlation of **-0.450** explains why and is the transferable part: a name's
+correlated peers' recent return is substantially the *negative* of its own residual decline, so
+"peer momentum" on this panel is a diluted short position in the one mechanism that works. This
+closes the family's most natural object on top of the weekly cross-lag null in F4e (corr(r_t,
+US_{t-1}) between -0.066 and +0.063 across six regions, no consistent sign). **No trial spent.**
+
+**F10b, `seasonality-calendar`: the Halloween six-month seasonal is real in sign, unresolvable in
+size, and declined on arithmetic.** Equal-weight eligible pool, 1997-2017:
+
+    Nov-Apr  +7.66 bps/day   sd 110   n=2696
+    May-Oct  +2.21 bps/day   sd 118   n=2754
+    difference +5.44 bps/day, t = +1.76
+    Nov-Apr is 49.5% of days and carries 77.2% of the pool's total return
+    implied in/out overlay Sharpe multiple vs always-in: 1.097x, before costs
+
+The sign is the literature's (`research/notes/2026-10-04-halloween-six-month-seasonal.md`) and
+the t is +1.76. **The arithmetic is what declines it.** A binary in/out overlay buys ~**+10% of
+Sharpe** — about +0.06 on tonight's best lead — and costs two full portfolio turns a year, ~2.0x
+of annual turnover, ~0.30%/yr at 15 bps a side, call it 0.02-0.03 of Sharpe. So the expected net
+gain is ~+0.03 to +0.06, **inside this repo's ±0.05 construction floor**, on a t of +1.76. It is
+also a *switch*, and `learnings.md`'s oldest surviving entry is "blending beats switching". A
+trial that cannot resolve its own effect should not be run, and the next screen says what it
+would cost.
+
+**F10c, the number that ends the session: what the empty seat now requires.** Computed from the
+five recorded v2 trials that reached a validation split (daily Sharpes 0.03401, 0.02384, 0.03758,
+0.02424, 0.04234), the DSR a candidate of a given annualised validation Sharpe would score:
+
+    candidate annual sharpe   0.70    0.80    0.90    1.00    1.10
+    DSR as the 7th trial     0.9016  0.9271  0.9454  0.9590  0.9693
+    DSR as the 8th trial     0.8958  0.9167  0.9319  0.9438  0.9534
+
+**The v2 seat needs a validation Sharpe of about 0.95 as the next trial, and about 1.05 if two
+more trials are recorded first.** Tonight's best is 0.672 (trial #6, DSR 0.9033). Nothing the
+session had left could plausibly reach 0.95 — the two mechanisms still unscreened were both
+declined above, and the only remaining moves were parameter changes to the lead, which raise the
+bar for the candidate that might one day clear it while buying at most a few hundredths of
+Sharpe. **So the last two trials are deliberately not spent.** `learnings.md` [2026-09-13]'s rule
+for doing this is a table rather than an assertion, and the table above is it: the gap between the
+board's best and the seat's requirement is 0.28 of Sharpe, and the cost of a trial that does not
+close it is 0.013 of DSR permanently, for everyone after.
+
+## Session summary — 2026-10-07 (nightly) — the first session under protocol v2
+
+**Experiments run: 6 of 8. Verdicts: 2 FAMILY_LEAD, 4 GATE_FAIL. No holdout was read, the seat
+is still empty, and the last two trials were declined on the arithmetic in F10c.** Every
+candidate ran on the `scout` track, which was a decision made in the pre-registration before any
+candidate was written and which is why the session never had to stop: the bootstrap promotion
+rule needs DSR ≥ 0.95, F10c prices that at a validation Sharpe near 0.95, and the board's best is
+0.672.
+
+    #  candidate                  family                 verdict      train    val   val mdd  null %ile  IR vs pool
+    1  pt_resid_reversal_v2       price-trend            GATE_FAIL   +0.438  +0.540  -54.1%     98%        +0.41
+    2  pt_resid_reversal_band     price-trend            GATE_FAIL   +0.550  +0.379  -43.1%     81%        -0.04
+    3  sa_pca_resid_reversion     statistical-arbitrage  FAMILY_LEAD +0.544  +0.597  -40.1%     99%        +0.35
+    4  sl_ridge_six_features      statistical-learning   GATE_FAIL      n/a     n/a     n/a    causality check
+    5  sl_ridge_six_masked        statistical-learning   GATE_FAIL   +0.040  +0.385  -53.7%     81%        +0.13
+    6  lv_resid_rev_illiq_tilt    liquidity-volume       FAMILY_LEAD +0.650  +0.672  -35.7%    100%        +0.42
+
+Equal-weight eligible pool: validation +0.51. Every book above holds 30 names equal-weight,
+monthly, at 20-22x annual turnover, except trial #2 (90 names). **Budget allocation complied with
+in full**: 2 in `price-trend` (its cap), 2 in `statistical-learning` (the per-family cap), 1 each
+in `statistical-arbitrage` and `liquidity-volume`; all four were first-of-family under v2, so the
+"at least one family with no recorded trial" rule is satisfied four times over.
+
+**The v2 board after one night, and the thing worth noticing about it:**
+
+    liquidity-volume       0.672    statistical-arbitrage  0.597
+    price-trend            0.540    statistical-learning   0.385
+
+**A non-`price-trend` family leads the board on the first night of v2, and the family that
+produced all seven v1 promotions is third.** That is what the two-track design in `program.md`
+was built for, and it is the first time in this repo's history that it has happened.
+
+**Best finding of the night, in one sentence:** on the point-in-time panel the tradeable
+cross-sectional premium is **short-horizon residual reversion**, it gets better when more of the
+comovement is removed before the residual is reverted (1 factor → 5 components: 0.540 → 0.597,
+and the validation drawdown from -54.1% to -40.1%), and better again when the book is tilted
+toward names whose price impact per dollar traded is high (0.597 → 0.672, the 100th percentile of
+its own random-selection null, drawdown -35.7%) — while the **standalone** illiquidity premium
+that tilt is built from is a flat null (-0.0024, t = -0.29). The three readings together say the
+premium is price pressure on individual names rather than factor-level overreaction, which is
+exactly the distinction Brown-Keim-Kleidon's first a-priori objection draws.
+
+**Second finding, and the one that cost the most to learn: the train split anti-predicted the
+validation ordering on the axis the trial was designed around, and it did so through a screen
+that looked decisive.** Trials #1 and #2 are a designed pair with one variable (top 30 versus
+ranks 31-120 of the same sort). Seven train slices said the extreme tail was risk without signal
+— the band earned +27.0 bps/month over the pool at t = +3.28 against the top 30's +14.0 at t =
++0.61, with a train drawdown of -65.1% against -84.0%:
+
+    trial            train sharpe  train mdd   val sharpe  val mdd   null %ile  IR vs pool
+    #1 top 30           +0.438      -78.6%      +0.540     -54.1%      98%        +0.41
+    #2 ranks 31-120     +0.550      -62.1%      +0.379     -43.1%      81%        -0.04
+
+The band delivered **exactly** the drawdown relief the screens promised, clearing the gate that
+killed trial #1 — and inverted the selection content it was supposed to protect. So
+`learnings.md` [2026-08-30]'s "the book buys the extreme tail, not the quintile mean" is right,
+and the train screen that contradicted it was wrong. Every later trial tonight was re-anchored at
+the top 30 as a result, which is how trials #3 and #6 came to be built the way they were.
+
+**Ideas for the next session.** Provenance kept visible; none of these is holdout-informed, since
+no holdout number was read tonight.
+
+1. **The seat needs 0.95 and the board has 0.672 — the honest routes are few, and they are not
+   parameter changes.** F10c's table is the constraint. A conditioner at rho > 0.9 to the lead
+   buys hundredths; what the arithmetic needs is either a materially better single mechanism or a
+   genuinely decorrelated second leg to blend. Tonight produced no decorrelated leg: every live
+   score is in the +0.85 to +0.99 rho band of the same residual-reversion object, and the one
+   mechanically different candidate (peer lead-lag) is at **-0.450** to it and is a null.
+2. **The `statistical-learning` question is unanswered, not answered.** Trial #5's validation
+   0.385 is confounded: `WARMUP = 300` was set in *month-ends* rather than rows, so the first
+   ridge fit lands around 2015 and the **train split holds a nearly empty book** (train Sharpe
+   +0.04 at 3.8 average positions and 2.7x turnover, against 30 positions and ~20x on validation).
+   The validation number is from a real book but from a model with ~3 years of training history at
+   the window's start. Re-run with a warmup in the low hundreds of *rows* before concluding
+   anything about learned combiners here; the family's cap is now lifted (four families have
+   leads). Its pre-registered train-as-prediction entry (+0.40 to +0.60) is **void**, not missed.
+3. **Price impact is the one conditioner that worked, and only one coefficient was ever screened.**
+   `TILT = 0.5` was the single value measured; the mechanism's *shape* (a monotone tilt versus a
+   pool restriction to the high-impact half, which F4a measured on the weaker score at +0.0314
+   against +0.0268) is a question about the mechanism rather than a knob, and the restriction
+   version has a cleaner interpretation.
+4. **From `research/SUMMARY.md`, still unspent and now partly priced.** The **CHL close-high-low
+   spread estimator** as a liquidity/microstructure input is the obvious next `liquidity-volume`
+   object and is better motivated after tonight than before it, since Amihud's *interaction* with
+   reversion carried the night's best result while its level was a null — a second, independent
+   price-impact proxy is the natural robustness test of that claim. **Turnover and the momentum
+   life-cycle** remains unexamined. The three 2026-10-06 panel state variables (**absorption
+   ratio**, **betaless variance decomposition**, **common idiosyncratic volatility**) are still
+   unexamined and are now more interesting, not less: all three are statements about how much
+   comovement the panel carries, and tonight's result is that removing comovement is what makes
+   the residual tradeable. Note #193 (SAD/weather) remains **retracted by the learning agent as a
+   test** and must not be built on. Tonight's own imports: Grinblatt-Moskowitz consistency was
+   **killed free** (rho +0.61 to momentum, IC t +0.41), Brown-Keim-Kleidon's substitutability
+   objection **motivated the night's best trial**, and the Halloween note was **declined on
+   arithmetic** (F10b).
+5. **Do not re-test tonight's free kills** without a stated reason: the standalone Amihud premium,
+   same-calendar-month seasonality (significantly *inverted* on this panel at t = -2.01, against
+   the sign v1 traded), low-vol and low-idiosyncratic-vol (one object at rho +0.82, both nulls),
+   region-demeaned reversal, weekly US-leads-the-world, range-variance conditioners on the lead
+   (rho +0.98 and +0.99), and the band/low-vol de-risker *combination*, which drops the IC to
+   t = +0.04 because the two de-riskers are substitutes rather than complements.
+
