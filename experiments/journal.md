@@ -17986,3 +17986,14 @@ books land, that asymmetry is the finding worth keeping.
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
 - Lesson: _(fill in after reflection)_
 
+## 2026-10-08T00:19:02+00:00 — lv_resid_rev_illiq_tilt — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/lv_resid_rev_illiq_tilt.py` (family: liquidity-volume, track: scout, trial #5)
+- Hypothesis: Adding half a cross-sectional z-score of log Amihud price impact (126-day window) to the z-scored five-component residual reversion score, and holding the top 30 equal-weight monthly exactly as sa_pca_resid_reversion does, beats that lead's validation Sharpe of 0.597 (99th percentile of its null), because the residual-reversion premium is price pressure and must therefore be larger where a given flow moves the price more -- on the train split the tilt roughly quadruples the top-30 excess over the eligible pool (+7.2 to +24.2 bps/month, t +0.61 to +1.84) while LOWERING the cross-sectional IC (+0.0278 to +0.0248), the signature of a conditioner that relocates the premium into the slice the book buys, and the standalone illiquidity premium is a flat null here (-0.0024, t -0.29) so no level effect is being smuggled in; landing at or below 0.597 says the tilt moved the book without moving the premium.
+- Verdict: FAMILY_LEAD — first recorded result in family 'liquidity-volume': validation sharpe 0.672, DSR 0.9033 (5 trials, 5 effective after clustering at rho 0.95)
+- Train: sharpe +0.65, ann_ret +11.8%, maxDD -61.5%, turnover 19.8x
+- Validation: sharpe +0.67, ann_ret +11.7%, maxDD -35.7%, turnover 22.0x
+- Survivorship-matched benchmarks (protocol v2): validation sharpe at the 100% percentile of 200 random-selection replicas (median +0.32, 90% +0.45); equal-weight eligible pool +0.51, information ratio vs it +0.42
+- Deflated Sharpe prob: 0.9033 (bar from 5 trials, 5 effective)
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+
