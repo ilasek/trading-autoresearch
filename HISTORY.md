@@ -230,6 +230,18 @@ for quick reference. Each links to where the reasoning is spelled out in full.
    backstop. Rules live in `research/README.md`; the agent never backtests and
    never touches the trial ledger.
 
+8. **Point-in-time universe, random-selection null, hindsight guard (protocol v2)** —
+   2026-10-06; see `reports/protocol-v2-survivorship.md` and the journal's cut-over entry.
+9. **Protocol v3: realistic execution, skill-based deflation counted across versions,
+   ranking with error bars, holdout hygiene, forward incubation** — 2026-10-08. An audit
+   of the single-strategy evaluation found that v2's numbers were flattered by its
+   execution model (same-close fills on a calendar mixing time zones, free daily
+   rebalancing, one flat cost, no cash rate), that its deflated-Sharpe null (zero Sharpe)
+   was the wrong null for long-only books, that each version restarted the trial count on
+   a validation window it had already searched, and that the leaderboard's order was
+   mostly noise. Re-measured under v3, both v2 family leads score zero skill against the
+   equal-weight pool. Full account: `reports/protocol-v3-methodology.md`.
+
 ## Current state (as of 2026-08-16)
 
 - **Champion:** `mom_zscore_overlap6_daily_trim` — cross-sectional momentum,

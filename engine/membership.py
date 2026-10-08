@@ -175,7 +175,15 @@ def membership_mask(
     return pd.DataFrame(mask, index=dates, columns=ids)
 
 
-def liquidity_mask(prices: pd.DataFrame, volume: pd.DataFrame) -> pd.DataFrame:
+def trailing_adv(prices: pd.DataFrame, volume: pd.DataFrame) -> pd.DataFrame:
+    """Trailing median USD traded value (ADV_WINDOW rows, past rows only).
+    Shared by the liquidity floor and the v3 cost model."""
+    vol = volume.reindex(index=prices.index, columns=prices.columns)
+    return (vol * prices).rolling(ADV_WINDOW, min_periods=ADV_MIN_PERIODS).median()
+
+
+def liquidity_mask(prices: pd.DataFrame, volume: pd.DataFrame,
+                   adv: pd.DataFrame | None = None) -> pd.DataFrame:
     """True where the trailing median USD traded value clears MIN_ADV_USD.
 
     `prices` is USD closes, `volume` the native share count aligned to it.
@@ -183,8 +191,10 @@ def liquidity_mask(prices: pd.DataFrame, volume: pd.DataFrame) -> pd.DataFrame:
     with no volume at all (some FX-quoted lines) is judged on price presence
     alone rather than excluded: missing volume is a data gap, not illiquidity."""
     vol = volume.reindex(index=prices.index, columns=prices.columns)
-    traded = vol * prices
-    adv = traded.rolling(ADV_WINDOW, min_periods=ADV_MIN_PERIODS).median()
+    if adv is None:
+        adv = trailing_adv(prices, volume)
+    else:
+        adv = adv.reindex(index=prices.index, columns=prices.columns)
     ok = adv >= MIN_ADV_USD
     no_volume = vol.notna().sum() == 0
     if no_volume.any():
@@ -197,6 +207,7 @@ def eligibility(
     volume: pd.DataFrame | None,
     types: dict[str, str],
     intervals: pd.DataFrame | None = None,
+    adv: pd.DataFrame | None = None,
 ) -> pd.DataFrame:
     """Point-in-time eligibility panel (dates x columns of `prices`).
 
@@ -216,7 +227,8 @@ def eligibility(
     if stocks:
         member = membership_mask(iv, prices.index, stocks)
         if volume is not None:
-            member &= liquidity_mask(prices[stocks], volume[stocks])
+            member &= liquidity_mask(prices[stocks], volume[stocks],
+                                     None if adv is None else adv[stocks])
         elig[stocks] = member
     if etfs:
         elig[etfs] = True

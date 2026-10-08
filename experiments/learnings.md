@@ -3,11 +3,13 @@
 Read this before proposing any hypothesis. Add to it when a pattern repeats
 across experiments; prune entries that later evidence contradicts.
 
-> **Protocol v2 since 2026-10-06.** Every entry below was measured under protocol v1, on
-> today's ~140 surviving constituents. The point-in-time re-scoring reordered the board
-> (v1 vs v2 rank agreement +0.43) and cut the v1 champion from 1.27 to 0.19, so treat each
-> entry as a hypothesis to re-measure under v2, not as a result. See the 2026-10-06 entry in
-> `experiments/journal.md`.
+> **Protocol v3 since 2026-10-08.** Nothing in this file was measured under v3. Entries above
+> the v2 section were measured under protocol v1, on today's ~140 surviving constituents; the
+> v2 section was measured on the point-in-time panel but with v2's execution model (fills at
+> the signal's own close, free drift, one flat cost, no cash rate), which v3 replaced
+> because it flattered exactly the short-horizon books v2 found (see
+> `reports/protocol-v3-methodology.md`). Treat every entry as a hypothesis to re-measure
+> under v3, not as a result.
 
 ## Data & methodology caveats (permanent)
 
@@ -3463,6 +3465,13 @@ across experiments; prune entries that later evidence contradicts.
   pairs are the West leading JP/HK, and since those markets close ~13 hours earlier the first print
   that can contain a day-`t` US move is the day-`t+1` close — **exactly the bar the engine's 1-day
   execution lag fills at**, so the information is in the price before the book could trade it.
+  **[Corrected 2026-10-08, engine maintenance] The last sentence misread the engine.** Under
+  v1/v2 a weight decided on row t earned close(t)→close(t+1): the book bought Tokyo *at the
+  day-t Tokyo close*, before the US move it conditioned on — so the day-t+1 Tokyo reaction
+  WAS credited to it, which is look-ahead, not "information already in the price". A
+  synthetic US→Japan rule scores Sharpe +7.6 under that convention and −0.24 with fills at the
+  next real print (protocol v3). The family's regional half closed for the wrong reason;
+  any v1/v2 result that conditioned non-US names on same-date US data is suspect.
 
 - **[Measured 2026-09-17, nightly] "Blending beats switching" extends from external state
   variables to a component's own past return, and the designed pair is what makes that a
@@ -4742,3 +4751,19 @@ across experiments; prune entries that later evidence contradicts.
   produced no decorrelated leg**: every live score sits in the +0.85 to +0.99 rho band of one
   residual-reversion object, and the only mechanically different candidate is a null. **Compute
   this table before planning the back half of a session, not after it.**
+
+## Protocol v3 learnings (fills at the next real print, drift, per-name costs, cash rate)
+
+- **[Measured 2026-10-08, engine maintenance — not a trial] THE v2 "TRADEABLE RESIDUAL-REVERSION
+  PREMIUM" DOES NOT SURVIVE REALISTIC EXECUTION.** Re-measured under v3 (train + validation,
+  nothing recorded, rf = 0 pending the T-bill seed): `lv_resid_rev_illiq_tilt` 0.672 → 0.440 and
+  `sa_pca_resid_reversion` 0.597 → 0.453, against an equal-weight pool at 0.452 — skill −0.01 and
+  +0.00 with 90% intervals of about ±0.33, −0.28 and −0.22 at 2× costs, and negative train skill
+  in both 1997–2008 and 2009–2017. They still sit at the 99th–100th percentile of their
+  random-selection null, because random books churned 22× a year pay the same costs and earn
+  nothing; **beating the null is not beating the pool.** The v2 entry above that calls residual
+  reversion "the tradeable cross-sectional premium on the point-in-time panel" is refuted as
+  stated. What carried it: fills at the close the signal was computed on (bid-ask bounce on the
+  last day of a 21-day reversal), free daily rebalancing, and one flat 15 bps on books tilted
+  toward illiquid, 71%-non-US, stamp-duty-paying names. Full table:
+  `reports/protocol-v3-methodology.md`.
