@@ -18260,3 +18260,77 @@ on any of it, and read the correction to the 2026-09-17 time-zone entry before r
   result on a global, illiquid-tilted, 21-day reversal book.
 
 ## Research session — 2026-10-08 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-10-08 — unlanded engine-maintenance work (`claude/protocol-v3-methodology`)
+
+Recorded by the nightly research agent at the start of the session, before any research
+work. No trial was run tonight and no trial record was added, altered or removed:
+`trials.jsonl` stands at 110 records exactly as `run_experiment.py` last wrote it.
+
+**What the integrity check found.** `git branch -r --no-merged origin/main` reports one
+remote branch holding commits absent from `origin/main`:
+
+  - `origin/claude/protocol-v3-methodology` — 7 commits, all dated 2026-10-08, all
+    tagged `[engine-maintenance]`: `f1876895`, `9a40e6e6`, `c9566f0c`, `ac1fd0fb`,
+    `fc90006d`, `c87d8869`, `e6a1d691`.
+
+PR #7 was opened from this branch and merged at 2026-10-08T20:59:28Z — but only at head
+`2d5b7efb`, the protocol v3 cut-over, which is on `main`. The seven commits above were
+pushed to the branch *after* that merge, and the PR is now closed. There is no open PR
+anywhere in the repository, so nothing currently tracks them; they will not land on their
+own.
+
+**What is in them** (125 paths, 120 of them Parquet):
+
+  - `scripts/rescore_protocol_v3.py` — the re-scoring harness
+  - `experiments/protocol_v3/rescore.jsonl` — 120 rows (104 v1 trials, 5 v2 trials, plus
+    sanity and imported rows) re-scored under v3
+  - `experiments/protocol_v3/returns/*.parquet` — 120 validation return series
+  - `reports/2026-W41.md` — "every recorded trial re-scored under protocol v3"
+  - edits to `reports/protocol-v3-methodology.md` and `reports/strategy-summaries.md`
+
+**Why this stops the session instead of being merged here.** The fix is not this agent's
+to apply: `scripts/` is frozen, and these are engine-maintenance commits, which CLAUDE.md
+reserves for human review. The content is also not safe for a strategy session to read —
+a v3 re-scoring of every recorded trial may carry holdout columns, which is the same
+violation as reading the holdout columns of `reports/protocol-v2-*.md`. Accordingly only
+file names, commit subjects and the diff *stat* were inspected; the contents of
+`reports/2026-W41.md`, `reports/protocol-v3-methodology.md`,
+`reports/strategy-summaries.md` and `rescore.jsonl` were not read.
+
+**Consequence if it stays unlanded.** Milder than the 2026-08-16 split, and in a different
+place. Nothing on this branch touches `trials.jsonl`, `journal.md`, `leaderboard.json`,
+`champion.py` or `incubation.jsonl`, so the deflated-Sharpe bar is **not** understated by
+it: `main`'s 110 records are the true attempted history and `past_trial_sharpes()` sees
+all of them. What is lost is the evidence base that step 1 of the loop is supposed to read.
+The 2026-10-08 protocol-change entry tells a session that the v3 seat is empty and that
+only five v2 trials have been scored under v3; the branch re-scores all 120 rows, which is
+exactly the input that decides which families are worth a trial. Every session that starts
+while this is unlanded plans its family mix from a strictly smaller evidence base than the
+lab has already paid for — and `reports/` is missing its 2026-W41 weekly report.
+
+**Second, independent blocker found while checking.** `RATE_US3M` is still not seeded in
+the data store: `data/store/2026/2026-10.parquet` carries 1,116 ids through 2026-10-08 and
+none of them is a rate series. Protocol v3 measures every Sharpe in excess of the 13-week
+T-bill, so a v3 trial errors out regardless of the branch question — exactly as the
+2026-10-08 protocol-change entry warned. Both items need clearing before the next nightly
+session can spend a trial.
+
+**What a human needs to do.**
+
+1. Open a *fresh* PR from `claude/protocol-v3-methodology` into `main` — the merged PR #7
+   cannot carry these commits — and merge it; or cherry-pick the seven commits onto `main`.
+2. Seed `RATE_US3M` through the data-refresh workflow.
+3. Once landed, delete the branch or rename it under `archive/*` so this check stops
+   firing on every nightly run.
+
+Until then the nightly session will keep stopping at step 0, which is the intended
+behaviour, not a malfunction.
+
+- Lesson: a merged PR does not leave a clean branch behind it. Commits pushed to a branch
+  whose PR has already merged are orphaned silently — no open PR, no failing check, no
+  review queue entry — and the only thing that notices is the next session's
+  `--no-merged` sweep. The 2026-08 failure mode was work pushed to the wrong branch; this
+  one is work pushed to a *spent* branch, and it needs the same check to catch it.
+
+---
