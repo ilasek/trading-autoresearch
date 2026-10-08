@@ -18258,3 +18258,5 @@ on any of it, and read the correction to the 2026-09-17 time-zone entry before r
 - Lesson: an execution convention is part of the hypothesis. "Fill at the close the signal
   was computed on, at one flat cost, with free daily rebalancing" decided the 2026-10-07
   result on a global, illiquid-tilted, 21-day reversal book.
+
+## Research session — 2026-10-08 (learning agent): 3 notes added, see research/SUMMARY.md

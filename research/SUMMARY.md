@@ -274,6 +274,39 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > remain findings about `price-trend`. They should not be carried into a new family by
 > analogy without being re-measured there.
 
+> ## ⚠ Protocol change — 2026-10-08 (protocol v3, read before planning a session)
+>
+> `program.md` put **protocol v3** in force on 2026-10-08, and it invalidates execution and
+> cost assumptions used throughout this file. Three changes, all load-bearing:
+>
+> - **Costs are per name, and include statutory taxes.** A liquidity tier (15/20/30/40 bps per
+>   side by trailing USD volume) **plus** the listing market's transaction tax — UK stamp duty
+>   0.5% on purchases, HK stamp duty both sides, French/Italian/Spanish FTTs on purchases. **The
+>   flat "15 bps per side" premise that every pre-2026-10-08 implementability section in this
+>   file (and in `research/README.md`) was written against is gone**, and the spread between the
+>   cheapest and dearest name is now roughly 4×.
+> - **Drift is charged.** Holdings are held as shares and drift between emitted rows; the trades
+>   that undo drift are charged. Under v1 and v2 drift was free, so every rebalance-mechanics
+>   item in this file is now worth more than when it was written.
+> - **Fills are at the next *real* close, and skill replaced Sharpe as the deflated statistic.**
+>   A row emitted on date `d` fills at each name's next real print, which removes the
+>   same-close look-ahead a global time-zone-mixing panel had; "same-close mean reversion and
+>   lead-lag 'edges' that relied on the old convention are gone, by design". And the deflator now
+>   runs on **skill** — validation Sharpe minus the **equal-weight eligible pool's** on the same
+>   days — not on Sharpe against a zero-Sharpe null. Sharpes are on excess returns, with
+>   uninvested cash earning the 13-week T-bill rate.
+>
+> Two consequences for reading this file. **(1)** State which *protocol version* an
+> implementability claim is about, not only which panel — the 2026-10-07 panel-width correction
+> below is still live and this one sits on top of it. **(2)** Every number the lab now produces
+> is a **difference against one specific portfolio**, so results are joint statements about the
+> candidate and about the pool's construction; see the 2026-10-08 cross-family section and
+> item **#217**.
+>
+> Nothing below is retracted. But the lab re-measured both v2 family leads under v3 and both
+> score **zero skill** (`experiments/learnings.md`), so treat every pre-v3 performance
+> expectation in this file as superseded rather than merely discounted.
+
 ## Key findings by strategy family
 
 ### 1. Cross-sectional momentum
@@ -5598,6 +5631,121 @@ about the error profile of free data or of a 15-region USD-converted panel.**
 
 ---
 
+### What realistic execution does to a measured result — the statute, the band, and the benchmark (cross-family)
+
+[2026-10-08] `program.md` put **protocol v3** in force on 2026-10-08, and it changed three things
+this folder had never covered. Costs became **per name** — a liquidity tier (15/20/30/40 bps per
+side) **plus the listing market's transaction tax** (UK stamp duty 0.5% on purchases, HK both
+sides, French/Italian/Spanish FTTs on purchases). Holdings now **drift** between emitted rows and
+"undoing drift is charged". And the statistic being deflated became **skill** — "validation Sharpe
+minus the equal-weight eligible pool's on the same days" — rather than Sharpe against a zero-Sharpe
+null, because "a long-only book with no skill has the market's Sharpe". The re-measurement was
+brutal: both v2 family leads score **zero skill**, negative at 2× costs, negative train skill in
+both sub-periods, and the lab's own entry concludes "**beating the null is not beating the pool**"
+(`experiments/learnings.md`, Protocol v3). That entry also names, without a citation behind it,
+books tilted toward "71%-non-US, **stamp-duty-paying** names". Three greps across all 170 prior
+notes returned **zero** for `stamp duty` / `financial transaction tax` / `Umlauf` / `Colliard`, for
+`no trade region` / `Leland` / `Davis-Norman`, and for `benchmark index` / `Zitzewitz`. Session 55
+covered one source cluster for each.
+
+**1. A transaction tax is a different economic object from a spread, and its only adjustment
+margin is turnover.** Colliard–Hoffmann (JF, tier A) and Saporta–Kan (BoE WP, tier B) establish
+the structure. An STT is *ad valorem* and cannot be reduced by patience, clip-sizing or
+liquidity-seeking; it is levied on **net daily position change** (so pure intraday is de facto
+exempt — the French FTT and UK stamp duty share this design); it is **one-sided** for UK/FR and
+two-sided for HK; and its scope follows the **issuer's domicile**, not the holder's, so it is a
+property of the *column*. Theory gives two responses, both of which Colliard–Hoffmann find
+operating together: **turnover adjustment** (Constantinides 1986, Vayanos 1998) and the
+**holdings/clientele adjustment** of Amihud–Mendelson (1986), by which "assets with higher
+transaction costs are held by investors with longer average holding periods". The elasticity is
+large — the studies Saporta–Kan summarise put a one-percentage-point STT increase at a **50–70%
+fall in turnover** — so the correct response to a tax is a *large* cut in turnover, not a small
+one. Saporta–Kan separately find stamp duty **is capitalised in prices** (ADRs vs their London
+lines), and in proportion to a name's expected turnover. Both sources reject the volatility claim
+STTs are usually defended with. The single most transferable line is Colliard–Hoffmann's: the
+impact of a tax on aggregate outcomes "should thus be **second order** compared to changes in the
+affected investors' portfolios and trading strategies". **So the tax is not something to trade; it
+is something to redesign turnover around.** One narrowing worth recording: every avoidance route
+the literature documents is *instrument or venue substitution* (exempt ADRs, migration to London),
+and the `eligible` panel closes all of them. Turnover is the only margin a candidate here has.
+→ `notes/2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`
+
+**2. The policy shape depends on the cost's functional form, and the lab's covered policy answers
+the wrong form.** Muhle-Karbe–Reppen–Soner's review (tier B — rigorous but wholly non-empirical)
+states the taxonomy: with **proportional** costs one "performs the minimal amount of trading to
+remain in a no-trade interval around the frictionless target"; with **fixed** costs one "directly
+trades back to a target portfolio once the boundaries of the no-trade region is reached"; with
+**quadratic** costs there is no band at all and "optimal strategies always trade towards the target
+at some finite, absolutely continuous rate"; with fixed *and* proportional costs one trades to a
+point in between. **Protocol v3 charges proportional costs** (bps per side plus an ad valorem tax;
+no size-dependent impact term). The policy this folder already covers —
+Gârleanu–Pedersen's "move a fixed fraction of the distance to the aim portfolio"
+(`notes/2026-08-20-…`) — is the **quadratic**-cost answer. The proportional-cost answer, which
+the lab has never held, is a **no-trade region in weight space**, with two quantitative
+consequences. The halfwidth scales as **cost^(1/3)**, with the utility loss scaling as
+**cost^(2/3)** — from balancing `C₁∆² + C₂λ/∆`, since staying inside a band of width ∆ costs 1/∆
+in trading while sitting off-target costs ∆² in displacement. And for CRRA utility with a
+constant target the halfwidth is explicit: `λ^(1/3)·(3/(2γ))^(1/3)·[π(1−π)]^(2/3)`. Read with
+finding 1, this is what turns a per-name tax into a per-name rebalance rule: a FTSE name paying
+15 bps plus 50 bps stamp duty carries λ ≈ 3–4× a liquid untaxed US name's and therefore a band
+**~1.5× wider** — a principled, unfitted asymmetry whose only free parameter is γ, entering as
+γ^(−1/3). Two cautions carried from the source itself: **there is no closed form for multiple
+risky assets under proportional costs** (closed forms exist for quadratic and fixed costs, not
+this one), so a per-name independent band is a heuristic that ignores offsetting drifts and will
+run too tight; and the whole result is a **small-cost asymptotic**, which a 0.5% stamp duty may
+not satisfy. Take the direction, not the multiple. **And note what the λ^(2/3) exponent implies
+in the lab's favour: costs hurt a cost-*aware* policy less than proportionally**, so the gap
+between v3's measured cost drag and what an optimally banded book would pay is the size of the
+prize — and it is a cost recovery, never manufactured skill.
+→ `notes/2026-10-08-no-trade-bands-under-proportional-costs.md`
+
+**3. The benchmark a result is measured against has alpha of its own, and v3 has just made one
+benchmark load-bearing for every number the lab produces.** Cremers–Petajisto–Zitzewitz (tier A,
+261 citations, 1980–2005 extended to 1927–2005) show that standard factor models assign
+"economically and statistically significant nonzero alphas, even for passive benchmark indices
+such as the S&P 500 and Russell 2000" — rejectable at p < 0.1% even allowing for clustering,
+systematic in sign (large-cap positive, small-cap negative), and stronger on the long sample.
+Three causes, two of them uncovered here. **(a) The benchmark's weighting scheme is itself an
+exposure bet**: Fama–French "equal-weights the 2x3 size-by-BM portfolios... even though these
+portfolios contain very different amounts of market cap", which silently overweights the smallest
+sub-pool and reappears as everyone else's alpha with a sign set by their loading. **(b) The
+benchmark's *composition* biases it**: CRSP-VW includes non-US firms, closed-end funds, REITs and
+SBIs, whose different behaviour made the index "a downward-biased benchmark for U.S. stocks".
+**(c) Index reconstitution drags the index's own return down** — already covered here by Cai–Houge
+(`notes/2026-08-26-…`), and the authors stress it is not the whole story. Their vocabulary is
+worth adopting: a benchmark bias is either **ex-ante/structural** (a fee, a construction
+asymmetry — persists, correctable) or **ex-post/realized-sample** (whatever that slice happened to
+do — need not persist, "could lead to biased alphas (**in either direction**) in future time
+periods"). The second kind cannot be signed in advance, which is the dangerous one for a lab with
+a fixed validation window. **Channels (a) and (b) map onto v3's equal-weight eligible pool
+arithmetically, one level up.** The pool equal-weights ~1,000 names drawn from nine indices
+contributing wildly unequal name counts (S&P 500 ~500; SMI, AEX, CAC 40 tens each), so its
+**country weights are name counts** — neither cap weights nor anything an investor could hold —
+and a candidate tilting toward an under-represented country gains or loses measured skill with no
+signal content at all. And 42 fixed ETFs equal-weighted beside a *growing* stock count means the
+pool's instrument mix **drifts mechanically across the splits**, so the benchmark may not be the
+same object in train and validation. Their remedy principle is one line: **a benchmark should be a
+portfolio the evaluated strategy could have bought, weighted the way an investor would have had to
+weight it.** Their best gift is a diagnostic: project benchmark and test portfolio onto the same
+characteristic grid and compare weights, because "models producing close portfolio weight matches
+also produce smaller index alphas" — a cheap, returns-free screen for whether a measured alpha is
+a construction artifact.
+→ `notes/2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`
+
+**The cross-cutting consequence, and it is the session's output.** The three findings compose into
+one chain that did not exist before tonight: **the statute sets a per-name cost (1) → the per-name
+cost sets a per-name no-trade band and a trade-to-the-edge rule (2) → and whatever skill that book
+then shows is a difference against a benchmark whose own construction is uncharacterised (3).**
+Two of the three links are actionable tonight at zero trials (#213, #214, #215); the third is the
+one thing this folder cannot do for itself. **Every v3 number is now a difference against one
+specific portfolio, and nobody has read how that portfolio is built** — whether it is charged
+costs, on what grid it rebalances, and whether its ETF share is stable across splits. Under v1 and
+v2 the deflator ran against *zero* and needed no benchmark at all, so `SUMMARY.md`'s six-night-old
+top item **#188(a)** — "one look at `engine/` by someone allowed to take it" — was already right
+and is now strictly more urgent than when it was written.
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -9870,6 +10018,126 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-07-tax-year-end-alignment-and-the-australian-test.md`
 
 
+213. **FREE, ZERO TRIALS — split any existing v3-measured book's charged cost into liquidity-tier cost
+    and transaction tax, per region.** The v3 learnings entry asserts that part of the v2 board's
+    collapse came from books tilted toward "71%-non-US, **stamp-duty-paying** names", and it is an
+    assertion rather than a measurement. The engine already computes both components per name, so the
+    decomposition needs no candidate, no trial and no holdout. The answer decides whether the whole
+    tax vein is worth anything: if the tax share is large, #216's region-conditional banding is the
+    cheapest construction change available under v3; if it is small, the vein closes for the price of
+    one diagnostic, which is also a result. Run it before #216, not after.
+    → `notes/2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`
+
+214. **FREE, ZERO TRIALS, AND ARGUABLY A STANDING REPORTING RULE — the candidate-versus-pool
+    cell-weight mismatch, which is a returns-free screen for whether a v3 skill number is signal or
+    exposure.** Cremers–Petajisto–Zitzewitz's empirical finding is that "models producing close
+    portfolio weight matches also produce smaller index alphas", i.e. a benchmark whose holdings-space
+    weights differ from the test portfolio's generates spurious alpha in proportion to the mismatch.
+    Translated: partition the eligible panel into cells on three axes the engine already computes —
+    **listing region × liquidity tier × tax status** — then compare a candidate's average cell weights
+    against the equal-weight pool's. Large mismatch ⇒ the measured skill is substantially a
+    cell-exposure difference; small mismatch ⇒ more likely signal. This is the same genre as the cheap
+    holdings-only diagnostics `learnings.md` already credits with killing ideas before they cost a
+    trial (HHI, position counts, the entry/exit-vs-re-sizing turnover split), and under v3 — where
+    *every* number is a difference against one portfolio — it is the natural companion to any reported
+    skill. Caveat from the source: it compares *average* weights and will miss a candidate whose cell
+    exposures move over time, so it is a screen, not a proof.
+    → `notes/2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`
+
+215. **FREE, ZERO TRIALS — the precondition for #216: how much of a book's charged turnover is
+    re-sizing inside a band it should never have crossed?** On train data only, take any existing
+    book's holdings schedule, compute each name's optimal halfwidth from
+    `λ^(1/3)·(3/(2γ))^(1/3)·[π(1−π)]^(2/3)` with that name's own v3 cost as λ and γ fixed by argument
+    beforehand, and measure the share of charged turnover generated by weight moves that never left
+    the band. The lab already decomposes turnover into entry/exit versus re-sizing and has found
+    re-sizing to be a large share, so the machinery exists. If the in-band share is small, #216 buys
+    nothing and the no-trade-band vein closes cheaply; if large, #216 is a cost recovery with a
+    quantified size before any trial is spent.
+    → `notes/2026-10-08-no-trade-bands-under-proportional-costs.md`
+
+216. **ONE TRIAL — a weight-space no-trade band with a per-name halfwidth set by that name's own v3
+    cost, trading to the band edge rather than to target.** This is the first construction in this
+    folder's history that is matched to the cost geometry protocol v3 actually charges. v3 charges
+    *proportional* costs, and the proportional-cost optimum is to "perform the minimal amount of
+    trading that keeps the portfolio within the no-trade region" — a band in **weight** space, with
+    halfwidth ∝ **cost^(1/3)**. The recipe: compute each eligible name's λ as its liquidity tier plus
+    the listing market's tax where one applies; set the halfwidth from the CRRA formula above; each
+    rebalance date emit a **sparse row** containing only the names outside their bands, each moved to
+    its **band edge**; leave everything else to drift. Three properties make this a mechanism rather
+    than a knob: the band width is derived, not fitted; the per-name asymmetry is derived from the
+    statute (a FTSE name paying 15 bps plus 50 bps stamp duty gets a band ~1.5× a liquid untaxed US
+    name's, because `(3-4)^(1/3) ≈ 1.5`); and the single free parameter γ enters as γ^(−1/3) and must
+    be **fixed before the trial and never swept**, or the lab's "test ideas, not knobs" rule is
+    violated. Four cautions, all from the sources. *(i)* **Trade to the edge, not to target** —
+    trading to target is the *fixed*-cost policy and discards most of the benefit. *(ii)* The lab's
+    existing band evidence is about a **different band**: `mom_12m_buffered`'s hysteresis is on
+    **score rank** and controls *membership* churn, while this is on **weight** and controls
+    *re-sizing* churn — complementary, not substitutes, and the cleanest candidate applies both. The
+    52-week-high entry's turnover blow-up is likewise a rank-band failure and does not transfer.
+    *(iii)* There is **no closed form for several risky assets under proportional costs**, so the
+    per-name independent band ignores offsetting drifts and will run conservatively tight; do not
+    "fix" that by widening it arbitrarily, which re-introduces a fitted parameter. *(iv)* The honest
+    claim for the hypothesis is "**recovers a known cost drag**", not "has an edge" — a banded
+    rebalance cannot manufacture skill in a book with no gross edge, and with v3's 90% skill intervals
+    at roughly ±0.33 a cost recovery may not be separable from noise in one trial. Judge it on the
+    turnover and cost decomposition **as well as** on skill, and run #215 and #213 first so its size
+    is known before the trial is spent. Family: this is portfolio-construction machinery, so it should
+    ride a family slot the allocation leaves open rather than consuming a `price-trend` cap.
+    → `notes/2026-10-08-no-trade-bands-under-proportional-costs.md` ·
+    `notes/2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`
+
+217. **NOT RESEARCH — a sharpening of the standing #188(a) engine read, with two specific questions
+    attached and a reason it is now more urgent than when it was written.** Under v1 and v2 the
+    deflator ran against a *zero*-Sharpe null and needed no benchmark at all; under v3 **every number
+    is a difference against the equal-weight eligible pool**, and nobody has read how that pool is
+    built. Two questions decide how to read every v3 skill figure. *(a)* **Is the pool charged
+    costs, and on what rebalance grid?** An equal-weight pool of ~1,000 point-in-time index members is
+    not passive — it must trade to hold weights equal and to track membership changes, and on the
+    FTSE, CAC and Hang Seng legs that turnover pays stamp duty. If the pool is gross while candidates
+    are charged, every v3 skill number is biased **downward** by a roughly constant amount; if the
+    pool is charged, the comparison is fair but the pool's own drag becomes a function of membership
+    churn, which Cai–Houge show is not return-neutral. *(b)* **Does the pool's ETF weight share drift
+    between train and validation?** Forty-two fixed ETFs equal-weighted beside a stock count that
+    grows over the sample (coverage before 2009 is far thinner, per `program.md`) means the benchmark
+    may not be the same object across splits, which would contaminate every train-versus-validation
+    skill comparison. Either answer to either question is workable; not knowing is not. A research
+    session may take this look; this folder's agent may not.
+    → `notes/2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`
+
+218. **ANTI-CANDIDATE — a cross-sectional tilt toward transaction-taxed names as a "liquidity/tax
+    premium" harvest. Do not build it, and the reason is a holding-period mismatch rather than a
+    universe objection.** Amihud–Mendelson's equilibrium result and Saporta–Kan's capitalisation
+    finding together do imply taxed names should carry some higher *gross* expected return, which
+    looks like a free long-only tilt toward the FTSE and Hang Seng legs. Three things kill it.
+    *(1)* The compensation accrues to the **long-horizon holder who actually realises the lower
+    turnover** — "assets with higher transaction costs are held by investors with longer average
+    holding periods" — so a monthly-rebalanced book pays the tax and collects a premium priced for
+    someone holding for years. *(2)* Colliard–Hoffmann's central conclusion is that the adjustment is
+    **second order in prices and first order in holders' policies**, so there is little price-side
+    effect to harvest even in principle. *(3)* On this panel the tilt is nearly **collinear with
+    "non-US"**, which the lab's own v3 audit already names as a property of the books that collapsed;
+    any such candidate would need region-demeaning before it tested anything, and even demeaned it is
+    testing a holding-period premium at the wrong holding period. The constructive reading of the same
+    mechanism is #216: respond to the tax through **turnover**, which is the only margin the
+    literature says exists and the only one the `eligible` panel leaves open.
+    → `notes/2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`
+
+219. **ANTI-CANDIDATE, and it is a rule about honesty rather than about a mechanism — do not build a
+    candidate whose edge is the equal-weight pool's construction.** #214 and #217 establish that the
+    v3 benchmark is not a neutral object: its country weights are name counts and its instrument mix
+    may drift across splits. The immediate temptation is to tilt toward whichever region or instrument
+    type the pool under-weights, which would raise measured **skill** without supporting any claim
+    about returns. That is gaming the statistic, it is the mirror image of what
+    Cremers–Petajisto–Zitzewitz warn against, and a promotion won that way would seat a champion whose
+    only edge is a benchmark artifact. If the pool's construction is biased, the remedies are to
+    characterise it (#214), have a human read the engine (#217), or report the mismatch alongside the
+    skill — **never** to harvest it. Operationally: if a candidate's skill turns out to be mostly
+    cell-weight mismatch under #214, that belongs in the journal as a finding about the benchmark, not
+    as a candidate to refine.
+    → `notes/2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`
+
+---
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -9929,9 +10197,121 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-05 (session 52) | **The first session in this folder's history whose headline is that it was WRONG, and the item it retracts is the one it ranked second-highest four hours of lab time ago.** [2026-10-04] closed with a tension it called better than the two before it — two Tier-A sides predicting **opposite signs** for one buildable portfolio, resolvable by a free subset split (#193) that would unlock a named candidate (#194) — and left two small gaps, the top of which was "Kamstra-Kramer-Levi's published response, unread, which is what would settle whether the SAD exchange is live or lost". Tonight took that gap first, and it reversed the entry that named it. Three things came out of it. *(1) The DOI was mis-attributed*: `10.1016/j.jbankfin.2008.09.011` is **Jacobsen-Marquering's Response**, not KKL's; **KKL's Comment is `10.1016/j.jbankfin.2008.09.013`**, found by a Crossref *journal-and-issue* query after a title query failed, and read in full. *(2) The critique's contribution is a **placebo argument***: US ice-cream production and detrended UK airline travel each 'explain' the same seasonality across 48 countries with the right sign and wide significance, so **the time-series fit identifies nothing**, and KKL do not contest it - they reply on identification. *(3) **#193 has no power and is withdrawn as a test, and #194 loses its licence**: both sides state in print that market integration confounds the Southern-Hemisphere sign, KKL that Northern investors dominate mature Southern markets, JM that a Northern effect 'might be exported' and 'imported to Australia' — so a positive Southern Nov-Apr coefficient is predicted by **both** theories, and this panel (global, USD-converted, ETF-heavy, current mega-caps) is close to the worst place to run it.** The replacement comes from the mechanism's own authors and is **cross-risk-level rather than cross-hemisphere** (#198), which integration cannot neutralise. The other two notes are `liquidity-volume` and they run in opposite directions on purpose: **Abdi-Ranaldo's CHL spread** is the family's first construction needing **no volume term at all** — close, high and low only, a *location* statistic of the daily bar rather than the ninth width measure — which makes it a direct test of the lab's own [2026-08-31] conclusion that the live content is the price-impact numerator and not activity (#200, #201); and **Lee-Swaminathan**, the most-cited turnover-momentum paper, is an **anti-candidate whose own identifying claim predicts its failure here**, with its famous interaction living entirely on the **short leg** and **reversing in sign** on the long one (#202). New: **#198-#202**, four of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight; **#194 and #193-as-a-test are closed by a reading**, which is different. | Jacobsen-Marquering 2008 (JBF) argument **read in full** from the 2004 ERIM working paper at `repub.eur.nl` + Kamstra-Kramer-Levi 2009 *Comment* (JBF) **read in full** from `utoronto.scholaris.ca`, with Jacobsen-Marquering 2009 *Response* **NOT read** (SSRN 403) (`2026-10-05-sad-weather-exchange-and-the-integration-escape.md`); Abdi-Ranaldo 2017 (RFS) **read in full** from the St. Gallen working-paper version at `alexandria.unisg.ch`, equations read visually from page renders (`2026-10-05-chl-spread-estimator-close-high-low.md`); Lee-Swaminathan 2000 (JF) **read in full**, typeset article from `johnhcochrane.com` (`2026-10-05-turnover-and-the-momentum-life-cycle.md`) |
 | 2026-10-06 (session 53) | **The first session in six to be aimed by `research/README.md`'s own rotation rule rather than by a gap detector or by the previous nightly, and it opens the one axis `program.md` charters for a family and the folder had never covered: co-movement, read as a panel-level time series instead of as a cross-sectional score.** A grep across all 161 prior notes returned **zero** for `absorption ratio`, `correlation regime`, `Pollet`, `Campbell, Lettau`, `Herskovic`, `common factor in idiosyncratic`, `semivariance`, `Black-Litterman`, `CVaR` and `nested clustered`, while `average correlation` appeared only in the trial-clustering and multiple-testing sense. `range-variance` was the right home because `program.md` lists "cross-sectional dispersion and correlation regimes" in its charter, and because the family's standing closure — *ten screened mechanisms all sort on a cross-sectional **level of width**, and the width level is the survivorship artifact* — **does not cover a statistic that produces one number for the whole panel**, which is the same escape the folder already accepted for Corwin–Schultz. Three results. *(1)* The two rival co-movement summaries are **not** interchangeable and the difference is arithmetic, not empirical: the absorption ratio is computed on the **covariance** matrix and is therefore weighted by where the risk is, while average correlation weights every pair equally — its source gives a constructed two-period case where average correlation falls and the absorption ratio rises. *(2)* **The session's best free item was not the co-movement statistic at all.** The same paper's appendix tested a whole-spectrum Herfindahl against a truncated top-`n` share and found the Herfindahl form *less informative* because the small eigenvectors are unstable — which is what `notes/2026-09-27-marchenko-pastur...` proves must happen and **exactly the failure the 2026-09-26 nightly measured on its own `EffRank`** (0.208·P to 0.638·P across four column sets, i.i.d. control 0.775·P, placebo 0.875·P). A theorem, a published comparison and the lab's own measurement agree, and the re-run is one line (**#203**). *(3)* Campbell–Lettau–Malkiel–Xu's betaless split gives average correlation **without a correlation matrix** (`MKT/(MKT+IND+FIRM)` ≈ average market-model R²) and, more valuably, the **exact leakage term** the folder's second-hand copy of that decomposition could not carry: a region demean removes region risk **plus `CSV(β_region) × market variance`**, a quantity the lab has assumed away every time it demeans. The third note, **CIV**, is the only one of the three that is a cross-sectional sort, is **always-on at gross 1.0** and so sits outside the de-risking-overlay class the lab has refuted three times, and has the favourable asymmetry: **the high-return leg is the low-CIV-beta end, which a long-only book holds directly**. New: **#203–#207**, four of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight. The honest discount is stated once in the family section: the absorption ratio's own application is a de-risking overlay on an external state variable, i.e. the default-refuted class, and #204 exists to make the exception checkable rather than arguable. | Kritzman–Li–Page–Rigobon 2011 (JPM) **read in full** from MIT Sloan WP 4785-10 at `web.mit.edu/finlunch/Fall10/PCASystemicRisk.pdf` (`2026-10-06-absorption-ratio-eigenvalue-concentration.md`); Campbell–Lettau–Malkiel–Xu 2001 (JF) **read in full** from NBER WP 7590, body **Caesar-shifted +3** and decoded (`2026-10-06-betaless-variance-decomposition-and-average-correlation.md`); Herskovic–Kelly–Lustig–Van Nieuwerburgh 2016 (JFE) **read in full** from NBER WP 20076 (`2026-10-06-common-idiosyncratic-volatility-factor.md`); Pollet–Wilson 2010 (JFE) **NOT read**, five channels tried and recorded, now the folder's top unreached source |
 | 2026-10-07 (session 54) | **The first session in seven aimed at a *family* mechanism rather than at a statistic or at the lab's own measurement chain, and the first in this folder's history whose headline mechanism arrives already contested by a Tier-A direct test — with the session's best buildable item turning out to be a by-product with no connection to that mechanism at all.** Aim set by `research/README.md`'s rotation rule plus one grep: across 162 prior notes, `January effect`, `turn-of-the-year` and `tax-loss selling` returned zero or near-zero, `Grinblatt, Moskowitz` returned **zero**, while `holiday` and `day-of-week` were already covered — so the turn-of-the-tax-year branch of `seasonality-calendar` was the family's one uncovered half. It is mechanically distinct from the two seasonal notes already here (those sort on the **same calendar month in past years**; this conditions a **past-return** effect on the current month), and it is **the one branch of this family the lab's own [2026-09-01] structural closure does not reach** — that closure kills in-window-versus-cash timing because the complement window's return is positive, and a turn-of-the-tax-year book is a cross-sectional reallocation at constant gross exposure, at two rebalances a year. Four results. *(1)* **The price step is conditional and its author says so in print.** Constantinides derives the volume seasonal from a control-limit policy under transaction costs, then declines to derive a price seasonal: it requires that sellers not repurchase the same name or another tax-loss seller's name, because swapping sellers move no price — "a seasonal pattern in stock prices **only if we further assume irrationality or ignorance**". He adds that tax trading **does not explain the small-firm premium itself**, and that the gain-deferral half of the same option predicts new-year weakness in prior-year **winners**, the opposite sign from momentum. *(2)* **The naivety precondition is empirically met, in one small market.** Grinblatt–Keloharju's complete Finnish register (daily, with purchase prices, **no wash-sale rule** so sell-and-rebuy is observable) shows Odean's gain-versus-loss realisation ratio declining virtually monotonically over the **last ten trading days of December** and snapping back at the turn; repurchase rates rise in **loss size** and in **year-end proximity**; net buying pressure — a purely temporal demand shift — tracks returns, significantly **in small firms only**. Their own footnote concedes the observed timing is *not* optimal tax timing by Constantinides' standard, which is exactly the naivety his channel needs. *(3)* **The one test that distinguishes the tax story from everything else has been run and it failed.** Brown–Keim–Kleidon–Marsh: Australia's tax year ends 30 June and its "share trader" class deducts all realised losses uncapped, so a July effect at least as strong as the US January one is predicted; found instead **both** December–January **and** July–August seasonals, roughly equal in January and July, with the small-firm premium itself roughly **constant across months**, plus the US January effect significant across a half-century including low-tax pre-war years — **magnitude insensitive to the tax rate that supposedly drives it**. Their integration rescue is self-defeating and the argument generalises (see the transferable output below). *(4)* **The by-product is the item that should actually run.** Grinblatt–Moskowitz's **consistency** dummy is a *sign count*, not a magnitude — positive in **≥8 of the 11 months** of t−12…t−2 (≥15 of 24 for t−36…t−13) — and the threshold is **not tuned**: under a coin-flip null both are ≈10%, i.e. "top decile of sign-run consistency under the null", which is why it transfers without refitting. Every consistent-winner coefficient is positive across three horizons and three seasonal subperiods; consistent-loser coefficients do little, an asymmetry the authors use to kill the "consistency = low volatility" reading. It is binary and unit-free (sidestepping the no-common-scale problem `learnings.md` records) and its content is on the **winner** side, which a long-only book holds directly. **The honest discount, stated once and not buried**: protocol v2's pool is ~1,400 large-cap members of nine national indices plus 42 ETFs, and all four sources locate the price effect in the small, thinly traded, **low-institutional-ownership** tail that such a pool excludes by construction — so **a null on a turn-of-the-tax-year book here is uninformative about the mechanism**, which is why #212 is an anti-candidate rather than a trial. New: **#208–#212**, three free, one trial, one anti-candidate. **Nothing is closed by this entry**; no lab measurement was taken tonight. All four samples end no later than 2000: `validation_overlap: false` and `published_post_2018: false` throughout, and no dated performance figure from any source is recorded anywhere. | Constantinides 1984 (JFE) **read in full** from NBER WP 1176 (`2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md`); Grinblatt–Keloharju 2004 (JFE) **read in full** from NBER WP 8745 (`2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md`); Grinblatt–Moskowitz 2004 (JFE) **read in full** from NBER WP 8744, body **uniformly ASCII-shifted by −29** and decoded (`2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md`); Brown–Keim–Kleidon–Marsh 1983 (JFE) **read in full** as the Internet Archive OCR text layer of MIT Sloan WP 1378-82 (`2026-10-07-tax-year-end-alignment-and-the-australian-test.md`) |
+| 2026-10-08 (session 55) | **The first session aimed by a protocol change rather than by a gap detector, the previous nightly's list or this folder's own rotation — and the first whose three notes are one chain rather than three topics.** `program.md` put **protocol v3** in force today: costs became per-name (a 15/20/30/40 bps liquidity tier **plus** UK/HK/FR/IT/ES transaction taxes), holdings now **drift** between emitted rows and undoing drift is charged, and the deflated statistic became **skill against the equal-weight eligible pool** instead of Sharpe against a zero-Sharpe null. The re-measurement put both v2 family leads at **zero skill**, and `learnings.md` concluded "beating the null is not beating the pool" while naming books tilted toward "71%-non-US, **stamp-duty-paying** names" — an attribution with no literature behind it anywhere in this folder. Three greps across all 170 prior notes returned **zero**: `stamp duty`/`financial transaction tax`/`Umlauf`/`Colliard`; `no trade region`/`Leland`/`Davis-Norman`; `benchmark index`/`Zitzewitz`. One cluster each. Headline: **the statute sets a per-name cost → the per-name cost sets a per-name no-trade band and a trade-to-the-edge rule → and whatever skill that book shows is a difference against a benchmark nobody has read the construction of.** Best buildable item is **#216** (weight-space bands, halfwidth ∝ cost^(1/3), derived not fitted); best free items are **#213**, **#214**, **#215**; **#217** sharpens the standing engine read with two specific questions; **#218** and **#219** are anti-candidates, the second a rule against harvesting the benchmark's own flaw. Also recorded: the covered Gârleanu–Pedersen partial-move policy is the **quadratic**-cost optimum and v3 charges **proportional** costs, so the lab's one cost-aware construction answers the wrong cost geometry. Access notes: Wiley `pdfdirect` is Cloudflare-challenged (403, 5.5 KB "Just a moment…"), a legacy `sites.google.com/site/<user>` faculty page now **302s into a Google login** (an eleventh "looks like an answer" mode — `curl` reports 200 at the top level), both Lancaster `eprints` records for a JPM article hold **no file**, and EDHEC's publication pages gate PDFs behind registration; the three sources read in full came from **ECB** (`ecb.europa.eu/pub/pdf/scpwps/`), **NBER** (unshifted, no `( )` dropout) and **arXiv**, and **University of Pretoria DSpace** (`repository.up.ac.za/bitstreams/<uuid>/download`) served a 2.7 MB thesis on the first try. | Colliard–Hoffmann 2017 (JF) + Saporta–Kan 1997 (BoE WP) + Umlauf 1993 (JFE, **not obtained**) (`2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`); Muhle-Karbe–Reppen–Soner 2017 (Annual Review of Financial Economics) + Constantinides 1986 (JPE) + Janecek–Shreve 2004 (Finance and Stochastics) (`2026-10-08-no-trade-bands-under-proportional-costs.md`); Cremers–Petajisto–Zitzewitz 2013 (Critical Finance Review; read as NBER WP 18050) (`2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-08] Read this first: the protocol changed under this folder today, and the session's
+  finding is that one of the lab's covered constructions is now the answer to the wrong question.**
+  `program.md` put **protocol v3** in force on 2026-10-08. It charges per-name costs (a
+  15/20/30/40 bps liquidity tier **plus** UK/HK/FR/IT/ES transaction taxes), it charges the trades
+  that undo **drift**, and it deflates **skill against the equal-weight eligible pool** rather than
+  Sharpe against a zero-Sharpe null. Both v2 family leads re-measured to **zero skill**. Three
+  greps across all 170 prior notes returned zero for the three things that changed, so this session
+  covered one source cluster for each, and they compose into a single chain: **the statute sets a
+  per-name cost → the per-name cost sets a per-name no-trade band and a trade-to-the-edge rule →
+  and whatever skill that book shows is a difference against a benchmark whose construction nobody
+  has read.** The sharpest single result is a mismatch the lab did not know it had:
+  Muhle-Karbe–Reppen–Soner's taxonomy says the optimal policy's *shape* is set by the cost's
+  functional form — proportional costs give a **no-trade band** you trade only to the **edge** of,
+  fixed costs give a band you trade **back to target** from, quadratic costs give **no band** and a
+  continuous partial move. **v3 charges proportional costs, and the lab's one covered cost-aware
+  construction — Gârleanu–Pedersen's fixed-fraction move toward the aim portfolio — is the
+  quadratic-cost optimum.** New: **#213–#219**, three free, one trial, one engine read, two
+  anti-candidates. **Nothing is closed by this entry**; no lab measurement was taken tonight, and
+  the holdout was not read. **Carried unchanged and still genuinely unrun: #82** (thirty-third
+  session, still the oldest unspent free item), **#94** as standing discipline, **#105–#107**,
+  **#110**'s shrink half, **#159**, **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s second
+  use, **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**, **#171**, **#172**), the
+  2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the 2026-10-01 set (**#179**,
+  **#180**, **#181**), the 2026-10-02 set (**#183**–**#186**), the 2026-10-03 set
+  (**#188**–**#191**), from 2026-10-04 **#195** and **#196**, from 2026-10-05 **#198**, **#199**,
+  **#200**, **#201**, the 2026-10-06 set (**#203**–**#207**), and the 2026-10-07 set (**#208**,
+  **#209**, **#210**, **#211**). **#152 stands.** **#163, #169, #173, #178, #182, #187, #192,
+  #197, #202, #212, #218 and #219 stay anti-candidates.**
+- **[2026-10-08] A standing correction, and it is larger than last night's panel-width one: every
+  implementability assessment and every calibrated constant in this file was written against v1 or
+  v2 execution, and v3 replaced it.** `program.md` and `learnings.md` both now say so
+  explicitly — `learnings.md`'s header reads "Nothing in this file was measured under v3" and names
+  what v2's model flattered: "fills at the signal's own close, free drift, one flat cost, no cash
+  rate". Four consequences for reading this file. *(1)* **The flat "15 bps/side" premise is gone**;
+  costs are per name and range from 15 bps to 15 bps + 50 bps stamp duty, so any item here whose
+  implementability turned on a single cost number needs re-reading, `research/README.md`'s own
+  constraints block included. *(2)* **Drift is no longer free**, which promotes every
+  rebalance-mechanics item in this file and is why #215 and #216 exist. *(3)* **Short-horizon
+  mechanisms lost their subsidy**: v3 fills at the next *real* close, so "same-close mean reversion
+  and lead-lag 'edges' that relied on the old convention are gone, by design" — items motivated by
+  one-to-five-day reversal should be re-read with that in mind, and the lab has already refuted its
+  v2 residual-reversion result on exactly this ground. *(4)* **A Sharpe is now an excess-return
+  Sharpe** with uninvested cash earning the T-bill rate, so partial investment is no longer free
+  and any item that proposed holding cash as a risk control is cheaper than it was. **Whoever
+  writes the next session's notes should say which protocol version an implementability claim is
+  about, not only which panel.**
+- **[2026-10-08] What should aim the next session, in order. The top changes for the first time in
+  seven nights — not because #188(a) was done, but because tonight gave it two specific questions
+  and v3 made it decisive rather than merely useful.**
+  - **#217 goes first, and it is still not research — it is one look at `engine/` by someone allowed
+    to take it.** It is #188(a) with the two questions that now matter: **is the equal-weight pool
+    charged costs, and on what grid does it rebalance?** and **does the pool's ETF weight share
+    drift between train and validation?** Under v1 and v2 the deflator ran against *zero* and
+    needed no benchmark, so #188(a) was good hygiene; under v3 **every number in the lab is a
+    difference against this one portfolio**, and if it is gross while candidates are charged then
+    every v3 skill figure is biased downward by a near-constant. Costs nothing.
+  - **Then #214**, free, and the best thing this folder produced tonight: a returns-free screen on
+    **region × liquidity tier × tax status** cell weights that says whether a given skill number is
+    signal or exposure. It is cheap enough to be a standing reporting rule rather than a one-off,
+    and it is the only item here that makes *every later* v3 number easier to read.
+  - **Then #213**, free, and the one that decides whether the tax vein is worth anything at all:
+    split an existing book's charged cost into liquidity tier and tax. The v3 learnings entry
+    asserts the tax share is large; nobody has measured it.
+  - **Then #215, then #216.** #215 is the free precondition (how much charged turnover is re-sizing
+    inside a band that should never have been crossed) and #216 is the trial it sizes. Run them in
+    that order and do not run #216 first — its honest claim is "recovers a known cost drag", and
+    with v3's 90% skill intervals around ±0.33 a cost recovery is worth spending a trial on only
+    once #215 says it is big.
+  - **Then #203**, still free, still the cheapest item this folder has produced, and still the only
+    one that revives an existing disqualified screen rather than adding a new one.
+  - **Then #209**, which was the highest-ranked trial on this file last night and drops only because
+    v3 arrived, not because anything refuted it. *(Note for whoever runs it: it was written under
+    v2 and its four free pre-checks should be re-derived under v3 — in particular the book-width
+    check against the concentration gate, since the pool comparison and the cost model both
+    changed.)*
+  - **Then #198**, carried at full value: free, train-only, and it discriminates a Tier-A mechanism
+    on a prediction market integration cannot neutralise. **Then #205, then #206**, both free
+    preconditions rather than proposals, with [2026-10-07]'s caveat that #206's
+    thin-cross-section worry was written for a 140-name panel and its ~0.9 correlation threshold
+    should be re-derived.
+  - **Then #208 and #211**, both free preconditions for #212's vein. **Then #210**, three calendar
+    sign flips with published directions. **Then #201, then #200**, in the order [2026-10-05] set
+    them. **Then #207**, if #206 passes.
+  - **Then #188(b), #189, #183, #184, #179, #180**, in the order [2026-10-03] set them. **Then
+    #195** and **#196**. **Then #199**, after #198. **Then #190**, which still wants the same
+    per-instrument noise proxy as #179(b) and #184 — build it once, spend it on all three. **Then
+    #185** as a standing reporting rule, **#191** as screens to re-measure rather than adopt.
+    **Then the carried items**: #181, #174's reading, #175, #177, #176. **#204** stays below them
+    for the reason [2026-10-06] gave.
+- **[2026-10-08] The transferable output, and it is the eighth detector — the first one aimed at
+  this lab's own toolkit rather than at a source's argument.** The seven before it grade evidence:
+  redundancy [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written
+  at [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the
+  test's confound [2026-10-05], a disqualified statistic against a truncated variant of itself
+  [2026-10-06], and the self-undermining cross-border friction [2026-10-07, seen twice]. Tonight's
+  points inward: **a construction technique is the solution to a specific cost or measurement
+  geometry, not a general-purpose tool — so when the protocol changes, re-check which assumption
+  each covered technique was optimal under, before reusing it.** The instance is exact and was
+  invisible until the taxonomy was read: the lab holds one cost-aware rebalancing construction
+  (Gârleanu–Pedersen's partial move toward an aim portfolio), it is correct, and it is correct for
+  **quadratic** costs — while v3 charges **proportional** ones, whose optimum is a no-trade band
+  with a different policy *shape* (trade to the edge, not a fraction of the way to target). Nothing
+  about the lab's prior use of it was wrong; its precondition simply stopped holding on 2026-10-08.
+  The corollary, which is the more general half: **a change of benchmark relocates uncertainty
+  rather than removing it.** v3 was right to stop deflating against a zero-Sharpe null — "a
+  long-only book with no skill has the market's Sharpe" — but the replacement makes every result a
+  joint statement about the candidate *and* the equal-weight pool's construction, and
+  Cremers–Petajisto–Zitzewitz show that benchmark portfolios carry significant alphas of their own
+  for purely arithmetic reasons. So the right question after any methodology upgrade is not "is the
+  new statistic better" (it is) but "**what is the new statistic now a property of, and has anyone
+  read that**" — which is #217.
 - **[2026-10-07] Read this first: the session went looking for a mechanism and came back with a
   contested mechanism and an uncontested signal, and the signal is what should run.** The focus was
   the turn-of-the-tax-year branch of `seasonality-calendar` — the family's one uncovered half after
