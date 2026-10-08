@@ -17976,3 +17976,13 @@ books land, that asymmetry is the finding worth keeping.
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
 - Lesson: _(fill in after reflection)_
 
+## 2026-10-08T00:14:57+00:00 — sl_ridge_six_masked — **GATE_FAIL**
+- Candidate: `strategies/candidates/sl_ridge_six_masked.py` (family: statistical-learning, track: scout, trial #0)
+- Hypothesis: A ridge (alpha 10) refitted at every month-end on realized cross-sectional rank targets ranked over the ELIGIBLE names only, over six causal feature groups whose pairwise rank correlations are all inside +/-0.08 (21-day pool residual, 12-1 momentum, negative idiosyncratic vol, log Amihud illiquidity, negative volume shock, same-calendar-month seasonal), beats the session's best single-score book (sa_pca_resid_reversion, validation 0.597 at the 99th percentile of its null) on validation Sharpe at the same top-30 selection, weighting and grid, because six nearly orthogonal predictors is the case where a penalised linear combination beats its largest term; landing between +0.54 and +0.597 shows the five auxiliary groups add nothing the best single feature already had, and landing below the random-selection null's 90% quantile shows the combination is worse than its own largest term. Train Sharpe is predicted at +0.40 to +0.60.
+- Verdict: GATE_FAIL — validation drawdown -0.5371 worse than -0.45; validation sharpe 0.385 <= the random-selection null's 90% quantile 0.427 (median 0.289; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.04, ann_ret +0.1%, maxDD -26.1%, turnover 2.7x
+- Validation: sharpe +0.39, ann_ret +6.9%, maxDD -53.7%, turnover 19.7x
+- Survivorship-matched benchmarks (protocol v2): validation sharpe at the 81% percentile of 200 random-selection replicas (median +0.29, 90% +0.43); equal-weight eligible pool +0.51, information ratio vs it +0.13
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+

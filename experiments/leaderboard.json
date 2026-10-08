@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-07T23:59:44+00:00",
+  "generated_at": "2026-10-08T00:17:49+00:00",
   "protocol_version": 2,
   "champion": null,
   "families": {
@@ -36,6 +36,23 @@
         "avg_positions": 30.0
       },
       "train_sharpe": 0.438
+    },
+    "statistical-learning": {
+      "name": "sl_ridge_six_masked",
+      "candidate": "strategies/candidates/sl_ridge_six_masked.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-08T00:14:57+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.385,
+        "ann_return": 0.0689,
+        "max_drawdown": -0.5371,
+        "ann_turnover": 19.67,
+        "avg_positions": 30.0
+      },
+      "train_sharpe": 0.04
     }
   }
 }
