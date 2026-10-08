@@ -23,14 +23,25 @@ def ann_vol(returns: pd.Series) -> float:
     return float(returns.std(ddof=1) * math.sqrt(TRADING_DAYS)) if len(returns) > 2 else 0.0
 
 
-def sharpe(returns: pd.Series) -> float:
+def excess(returns: pd.Series, rf: pd.Series | None) -> pd.Series:
+    """Returns in excess of the cash rate (unchanged when `rf` is None).
+    Protocol v3 measures every Sharpe on excess returns: a long-only book
+    that merely matched T-bills at 5% is not a 0.3-Sharpe strategy."""
+    if rf is None:
+        return returns
+    return returns - rf.reindex(returns.index).fillna(0.0)
+
+
+def sharpe(returns: pd.Series, rf: pd.Series | None = None) -> float:
+    returns = excess(returns, rf)
     vol = ann_vol(returns)
     if vol == 0:
         return 0.0
     return float(returns.mean() * TRADING_DAYS / vol)
 
 
-def sortino(returns: pd.Series) -> float:
+def sortino(returns: pd.Series, rf: pd.Series | None = None) -> float:
+    returns = excess(returns, rf)
     downside = returns[returns < 0]
     if len(downside) < 2:
         return 0.0
@@ -188,12 +199,103 @@ def sharpe_diff_se(
     return math.sqrt(var) * math.sqrt(TRADING_DAYS), rho
 
 
-def summary(returns: pd.Series) -> dict:
-    return {
+def summary(returns: pd.Series, rf: pd.Series | None = None) -> dict:
+    out = {
         "ann_return": round(ann_return(returns), 4),
         "ann_vol": round(ann_vol(returns), 4),
-        "sharpe": round(sharpe(returns), 3),
-        "sortino": round(sortino(returns), 3),
+        "sharpe": round(sharpe(returns, rf), 3),
+        "sortino": round(sortino(returns, rf), 3),
         "max_drawdown": round(max_drawdown(returns), 4),
         "n_days": int(len(returns)),
     }
+    if rf is not None:
+        out["ann_rf"] = round(ann_return(rf.reindex(returns.index).fillna(0.0)), 4)
+    return out
+
+
+# ---------------------------------------------------------------------------
+# Resampling (protocol v3): honest error bars on Sharpe ratios and differences
+# ---------------------------------------------------------------------------
+
+BOOT_DRAWS = 1000
+BOOT_BLOCK = 21          # mean block length in days: about a month of dependence
+BOOT_SEED = 20261008
+
+
+def stationary_bootstrap_indices(n: int, n_boot: int = BOOT_DRAWS, mean_block: float = BOOT_BLOCK,
+                                 seed: int = BOOT_SEED) -> np.ndarray:
+    """(n_boot, n) row indices of Politis-Romano stationary-bootstrap resamples:
+    blocks of geometric length (mean `mean_block`) starting at random rows,
+    wrapping around. Keeps volatility clustering and, because every series is
+    resampled with the same indices, the cross-correlation between strategies."""
+    rng = np.random.default_rng(seed)
+    t = np.arange(n)
+    restart = rng.random((n_boot, n)) < 1.0 / mean_block
+    restart[:, 0] = True
+    starts = rng.integers(0, n, size=(n_boot, n))
+    last = np.maximum.accumulate(np.where(restart, t, 0), axis=1)
+    first = np.take_along_axis(starts, last, axis=1)
+    return (first + t - last) % n
+
+
+def bootstrap_sharpes(frame: pd.DataFrame, n_boot: int = BOOT_DRAWS, mean_block: float = BOOT_BLOCK,
+                      seed: int = BOOT_SEED, chunk: int = 100) -> np.ndarray:
+    """(n_boot, n_columns) annualised Sharpe ratios of the columns of `frame`
+    (already excess returns, aligned, no NaN) on shared stationary-bootstrap
+    resamples."""
+    x = frame.to_numpy(dtype=float)
+    idx = stationary_bootstrap_indices(len(x), n_boot, mean_block, seed)
+    out = np.empty((n_boot, x.shape[1]))
+    for lo in range(0, n_boot, chunk):
+        xb = x[idx[lo:lo + chunk]]                       # (chunk, n, k)
+        sd = xb.std(axis=1, ddof=1)
+        with np.errstate(divide="ignore", invalid="ignore"):
+            out[lo:lo + chunk] = np.where(sd > 0, xb.mean(axis=1) / sd, 0.0) * math.sqrt(TRADING_DAYS)
+    return out
+
+
+def sharpe_diff_bootstrap(a: pd.Series, b: pd.Series, rf: pd.Series | None = None,
+                          n_boot: int = BOOT_DRAWS, mean_block: float = BOOT_BLOCK,
+                          seed: int = BOOT_SEED) -> dict:
+    """Paired stationary-bootstrap distribution of Sharpe(a) - Sharpe(b),
+    annualised, on excess returns. Unlike `sharpe_diff_se` it makes no
+    normality or i.i.d. assumption, so fat tails and volatility clustering
+    widen the error bar as they should.
+
+    Returns {diff, se, lo, hi (5%/95%), rho}."""
+    joined = pd.concat([excess(a, rf), excess(b, rf)], axis=1, join="inner").dropna()
+    if len(joined) < 30:
+        return {"diff": 0.0, "se": float("inf"), "lo": float("nan"), "hi": float("nan"),
+                "rho": float("nan")}
+    obs = sharpe(joined.iloc[:, 0]) - sharpe(joined.iloc[:, 1])
+    boots = bootstrap_sharpes(joined, n_boot, mean_block, seed)
+    d = boots[:, 0] - boots[:, 1]
+    rho = float(joined.corr().iloc[0, 1])
+    return {"diff": float(obs), "se": float(d.std(ddof=1)), "lo": float(np.quantile(d, 0.05)),
+            "hi": float(np.quantile(d, 0.95)), "rho": rho}
+
+
+def deflated_skill(skill: float, se: float, trial_skills: list[float], n_effective: float) -> float:
+    """Protocol v3's deflated Sharpe: the probability that a candidate's true
+    *skill* — its Sharpe minus the equal-weight eligible pool's, on the same
+    days — exceeds the best skill N_eff no-skill trials would show by luck.
+
+    Why not `deflated_sharpe`: Bailey & López de Prado's benchmark is the
+    expected maximum of N trials whose true Sharpe is ZERO. In a long-only
+    stock lab a strategy with no selection skill does not have zero Sharpe, it
+    has the market's; so their test mostly asks "is this long equity?" (the
+    equal-weight pool itself scored DSR 0.81 under v2). Measuring skill against
+    the pool restores the null their formula assumes.
+
+    All arguments are annualised. `trial_skills` are the skills of every trial
+    recorded under the current protocol version, including this one; their
+    cross-trial variance sets the scale of the expected maximum. With fewer
+    than three trials that variance is not estimable, and the candidate's own
+    sampling variance (`se`**2) stands in: under the null of no skill the
+    spread of independent trials' skill estimates is exactly their sampling
+    error."""
+    if not math.isfinite(se) or se <= 0:
+        return 0.0
+    var = float(np.var(trial_skills, ddof=1)) if len(trial_skills) > 2 else se**2
+    bench = expected_max_sharpe(var, n_effective)
+    return _norm_cdf((skill - bench) / se)

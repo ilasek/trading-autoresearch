@@ -83,11 +83,25 @@ def instrument_types(universe: str | None = None) -> dict[str, str]:
     return {i["id"]: i["type"] for i in load_universe(universe)["instruments"]}
 
 
+def instrument_regions(universe: str | None = None) -> dict[str, str]:
+    """{id: listing region} for every instrument of a universe."""
+    return {i["id"]: i.get("region", "") for i in load_universe(universe)["instruments"]}
+
+
+# The cash rate. Protocol v3 pays it on uninvested cash and measures Sharpe on
+# returns in excess of it. ^IRX is the 13-week US T-bill discount yield in
+# percent; it is fetched by the data-refresh workflow like any other series and
+# stored under `id`. Not a universe member: it is never in `prices`.
+RATE_SERIES = {"id": "RATE_US3M", "yahoo": "^IRX", "stooq": None, "type": "rate",
+               "currency": "USD", "name": "US 13-week T-bill yield (%)"}
+
+
 def all_series(universe: str | None = None) -> list[dict]:
-    """Every series we store for a universe: instruments plus FX pairs."""
+    """Every series we store for a universe: instruments, FX pairs and the
+    cash rate."""
     uni = load_universe(universe)
     fx = [dict(v, type="fx", currency="USD") for v in uni["fx"].values()]
-    return uni["instruments"] + fx
+    return uni["instruments"] + fx + [dict(RATE_SERIES)]
 
 
 # ---------------------------------------------------------------------------
@@ -349,6 +363,48 @@ def load_panels(
     if "volume" in panels:
         panels["dollar_volume"] = panels["volume"] * close
     return panels
+
+
+def load_traded(
+    index: pd.DatetimeIndex, columns, universe: str | None = None,
+) -> pd.DataFrame:
+    """Bool panel aligned to `load_prices()`: True where the instrument printed
+    a real close that day. `load_prices` forward-fills holidays so rolling
+    windows behave; an execution model must not fill an order at such a
+    stale, carried-forward price."""
+    uni = {i["id"]: i for i in load_universe(universe)["instruments"]}
+    out = pd.DataFrame(False, index=index, columns=list(columns))
+    for col in out.columns:
+        df = load_ohlcv(col)
+        if df is None or df.empty:
+            continue
+        close = df["close"]
+        valid_from = (uni.get(col) or {}).get("valid_from")
+        if valid_from:
+            close = close.loc[valid_from:]
+        out[col] = close.notna().reindex(index).fillna(False).astype(bool)
+    return out
+
+
+def load_rf(index: pd.DatetimeIndex, required: bool = True) -> pd.Series | None:
+    """Daily simple return on cash for each row of `index`, from the stored
+    T-bill yield: the yield known at the previous row, accrued over the
+    calendar days between the rows (actual/365). The first row accrues
+    nothing. Returns None (or raises, if `required`) when the series is not in
+    the store yet — the data-refresh workflow seeds it."""
+    df = load_ohlcv(RATE_SERIES["id"])
+    if df is None or df.empty:
+        if required:
+            raise FileNotFoundError(
+                f"cash-rate series {RATE_SERIES['id']} ({RATE_SERIES['yahoo']}) is not in the "
+                f"store; run the data-refresh workflow, which seeds it"
+            )
+        return None
+    yld = df["close"].astype(float).sort_index()
+    yld = yld.reindex(yld.index.union(index)).ffill().reindex(index)
+    days = pd.Series(index, index=index).diff().dt.days.fillna(0.0)
+    rf = (yld.shift(1) / 100.0 * days / 365.0).fillna(0.0)
+    return rf.rename("rf")
 
 
 def slice_panels(panels: dict[str, pd.DataFrame] | None, index) -> dict[str, pd.DataFrame]:

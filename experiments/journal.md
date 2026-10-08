@@ -18215,3 +18215,46 @@ no holdout number was read tonight.
    (rho +0.98 and +0.99), and the band/low-vol de-risker *combination*, which drops the IC to
    t = +0.04 because the two de-riskers are substitutes rather than complements.
 
+
+## Protocol change — 2026-10-08: cut-over to protocol v3
+
+**Engine maintenance, requested by the human owner after a methodology audit; no trial was
+recorded and no holdout was read.** Full account and re-measurement:
+`reports/protocol-v3-methodology.md`. `PROTOCOL_VERSION = 3`.
+
+What changed, in one line each:
+
+1. **Execution**: each name fills at its next *real* close after the decision row; holdings
+   drift and undoing drift is charged; per-name costs (15/20/30/40 bps by liquidity plus
+   UK/HK/FR/IT/ES transaction taxes); cash earns the T-bill rate and Sharpe is on excess
+   returns. The old convention filled at the signal's own close, which on this mixed-time-zone
+   calendar bought Tokyo before the US close it conditioned on.
+2. **Deflation**: DSR is computed on *skill* (Sharpe minus the equal-weight eligible pool's)
+   with a paired block-bootstrap SE, and its effective trial count spans **every version's**
+   trials of the 2018–2023 window (109 trials → 36 effective at cut-over).
+3. **Gates**: train skill > 0 replaces train Sharpe > 0; the null is region-matched and runs
+   through the same execution model; 2× cost and 30% delisting-haircut stresses are recorded.
+4. **Holdout**: the veto also refuses a loss to the pool, and covers a version's first
+   champion; its numbers go only to `experiments/holdout_log.jsonl` (sessions do not read it).
+5. **Forward incubation**: family leads and gate-reaching candidates are frozen into
+   `strategies/incubating/` and scored only on later data (`scripts/incubation_report.py`).
+6. **Ranking**: `scripts/rank_trials.py` (skill intervals, P(best), model confidence set);
+   the leaderboard groups family leads into mechanisms by active-return correlation, and the
+   budget rule now counts distinct mechanisms.
+7. **Data**: the refresh puts appended rows on the stored adjustment basis and a weekly
+   `--verify-days 120` repairs spliced dividends/splits; ^IRX is seeded as `RATE_US3M`.
+
+**Measured on the v2 board under v3** (train + validation, rf = 0 until the seed): both v2
+family leads score zero skill against the pool (−0.01 and +0.00, 90% intervals ±0.33), negative
+skill at 2× costs, and negative train skill in both sub-periods; none of the five scored v2
+trials passes the v3 gates. See the new v3 section of `learnings.md`.
+
+**For the next session**: the v3 seat is empty and the bar is high from the first trial
+(36 effective trials already). A v3 trial errors out until the data-refresh workflow has
+seeded `RATE_US3M`. `learnings.md` is v1/v2 knowledge throughout — re-measure before relying
+on any of it, and read the correction to the 2026-09-17 time-zone entry before reopening
+`lead-lag-spillover`.
+
+- Lesson: an execution convention is part of the hypothesis. "Fill at the close the signal
+  was computed on, at one flat cost, with free daily rebalancing" decided the 2026-10-07
+  result on a global, illiquid-tilted, 21-day reversal book.

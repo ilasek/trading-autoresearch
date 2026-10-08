@@ -26,8 +26,17 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # Mondays (and manual runs) also re-fetch the last 120 days of every live
+      # stock and ETF and repair stretches where a dividend or split was spliced
+      # onto an old adjustment basis (see scripts/update_data.py). The first run
+      # also seeds the T-bill rate series protocol v3 needs.
       - name: Refresh price store
-        run: python scripts/update_data.py --max-age-bdays 0
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python scripts/update_data.py --max-age-bdays 0 --verify-days 120
+          else
+            python scripts/update_data.py --max-age-bdays 0
+          fi
 
       # Weekly (Mondays): apply today's index constituent lists to the
       # point-in-time membership spells and fetch prices for new members.
@@ -40,11 +49,21 @@ jobs:
             echo "not Monday — membership left unchanged"
           fi
 
+      # Weekly: score every incubating candidate on the trading days after it
+      # was registered (forward, out-of-sample). For humans; strategy sessions
+      # do not read reports/incubation.md.
+      - name: Forward incubation report
+        run: |
+          if [ "$(date -u +%u)" = "1" ] || [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            python scripts/incubation_report.py || echo "incubation report failed (non-fatal)"
+          fi
+
       - name: Commit updated parquet
         run: |
           git config user.name "data-refresh-bot"
           git config user.email "actions@users.noreply.github.com"
           git add data/store data/membership data/universe_pit.yaml
+          if [ -f reports/incubation.md ]; then git add reports/incubation.md; fi
           if git diff --cached --quiet; then
             echo "store already fresh — nothing to commit"
           else

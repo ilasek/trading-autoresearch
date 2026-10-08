@@ -17,9 +17,15 @@ bias) routinely overstate live performance.
   stored in `data/store/` and refreshed incrementally by a GitHub Actions cron job.
   Backtests are fully offline, so API rate limits never throttle research.
 - **Fixed protocol.** `engine/` is frozen (CI-enforced). Walk-forward splits:
-  train (→2017) / validation (2018–2023) / locked holdout (2024→). One objective metric:
-  validation net Sharpe, deflated for the number of trials ever attempted. Hard gates on
-  drawdown, turnover, and concentration. Automatic causality (no-lookahead) check.
+  train (→2017) / validation (2018–2023) / locked holdout (2024→). Protocol v3: fills at
+  each name's next real close, drifting holdings, per-name liquidity and tax costs, cash at
+  the T-bill rate; the objective is validation Sharpe, and the multiple-testing test is on
+  *skill* over the equal-weight point-in-time pool, deflated by every trial ever run on the
+  validation window. Hard gates on drawdown, turnover, concentration, train skill and a
+  random-selection null. Automatic causality (no-lookahead) check. Rankings come with
+  error bars (`scripts/rank_trials.py`); promising candidates are frozen and tracked
+  forward on data they never saw (`scripts/incubation_report.py`).
+  See `reports/protocol-v3-methodology.md`.
 - **Learning loop.** Every trial is appended to `experiments/trials.jsonl` and
   `experiments/journal.md`; distilled insights accumulate in `experiments/learnings.md`,
   which agents read before proposing the next hypothesis.

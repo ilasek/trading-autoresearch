@@ -22,6 +22,8 @@ JOURNAL = protocol.ROOT / "experiments" / "journal.md"
 def fmt_split(name: str, m: dict | None) -> str:
     if not m:
         return f"  {name}: n/a"
+    if "sharpe" not in m:   # protocol v3 holdout: read, numbers not shown
+        return f"  {name}: read by the holdout gate (numbers in {m.get('numbers')})"
     return (
         f"  {name}: sharpe {m['sharpe']:+.2f} | ann_ret {m['ann_return']:+.1%} | "
         f"maxDD {m['max_drawdown']:.1%} | turnover {m['ann_turnover']:.1f}x | "
@@ -39,12 +41,29 @@ def journal_entry(r: protocol.TrialResult) -> str:
     ]
     for split in ("train", "validation", "holdout"):
         m = protocol._public(getattr(r, split))
-        if m:
+        if m and "sharpe" not in m:
+            lines.append(f"- {split.capitalize()}: read by the holdout gate; its numbers are in "
+                         f"`{m.get('numbers')}`, which strategy sessions do not read")
+        elif m:
             lines.append(
                 f"- {split.capitalize()}: sharpe {m['sharpe']:+.2f}, "
                 f"ann_ret {m['ann_return']:+.1%}, maxDD {m['max_drawdown']:.1%}, "
                 f"turnover {m['ann_turnover']:.1f}x"
+                + (f", skill vs pool {m['skill']:+.2f}" if "skill" in m else "")
             )
+    v = r.validation or {}
+    if "skill" in v:
+        t = r.train or {}
+        subs = ", ".join(f"{k[6:].replace('_', '-')} {t[k]:+.2f}" for k in sorted(t)
+                         if k.startswith("skill_") and k[6:10].isdigit())
+        lines.append(
+            f"- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation "
+            f"{v['skill']:+.2f}"
+            + (f", 90% CI [{r.skill_ci90[0]:+.2f}, {r.skill_ci90[1]:+.2f}]" if r.skill_ci90 else "")
+            + f"; at 2x costs {v.get('skill_cost2x', float('nan')):+.2f}; with a 30% delisting "
+            f"haircut {v.get('skill_delist30', float('nan')):+.2f}; train {t.get('skill', float('nan')):+.2f}"
+            + (f" ({subs})" if subs else "")
+        )
     if r.null:
         lines.append(
             f"- Survivorship-matched benchmarks (protocol v{r.protocol_version}): validation "
@@ -53,7 +72,12 @@ def journal_entry(r: protocol.TrialResult) -> str:
             f"{r.null['null_p90']:+.2f}); equal-weight eligible pool {r.ew_sharpe:+.2f}, "
             f"information ratio vs it {r.ir_vs_ew:+.2f}"
         )
-    if r.dsr is not None:
+    if r.dsr is not None and r.n_trials_all_versions is not None:
+        lines.append(
+            f"- Deflated skill prob: {r.dsr} (bar from {r.n_trials_all_versions} trials of this "
+            f"validation window across all protocol versions, {r.n_effective_trials:g} effective)"
+        )
+    elif r.dsr is not None:
         lines.append(
             f"- Deflated Sharpe prob: {r.dsr} (bar from {r.n_trials} trials, "
             f"{r.n_effective_trials:g} effective)"
@@ -81,6 +105,15 @@ def journal_entry(r: protocol.TrialResult) -> str:
             f"paired SE {r.holdout_se}, rho {r.holdout_rho}, "
             f"**t {r.holdout_t:+.2f}** (veto below -{protocol.HOLDOUT_VETO_T})"
         )
+    elif r.holdout is not None:
+        lines.append(
+            "- Holdout gate: " + (f"**vetoed** (lost to the {', '.join(r.holdout_vetoed_by)})"
+                                  if r.holdout_vetoed_by else "passed")
+            + " — numbers withheld from the journal by design"
+        )
+    if r.incubation:
+        lines.append(f"- Frozen for forward incubation: `{r.incubation}` (scored only on data after "
+                     f"today; see `scripts/incubation_report.py`)")
     lines.append("- Lesson: _(fill in after reflection)_")
     return "\n".join(lines) + "\n\n"
 
@@ -129,6 +162,14 @@ def main() -> int:
     if result.holdout:
         print(fmt_split("holdout   ", protocol._public(result.holdout)))
         print("  (holdout read by the holdout gate — logged)")
+    if result.skill is not None:
+        v = result.validation
+        print(f"  skill vs pool {result.skill:+.3f}, 90% CI {result.skill_ci90}; "
+              f"2x costs {v.get('skill_cost2x')}; delist30 {v.get('skill_delist30')}; "
+              f"train skill {result.train.get('skill')}")
+    if result.holdout_vetoed_by:
+        print(f"  holdout gate vetoed by: {', '.join(result.holdout_vetoed_by)} "
+              f"(numbers in {protocol._rel(protocol.holdout_log_file())})")
     if result.holdout_t is not None:
         print(
             f"  holdout gate: champion {result.champion_holdout_sharpe:+.2f}, "

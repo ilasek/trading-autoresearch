@@ -18,7 +18,58 @@ The two tracks below exist so that a genuinely different mechanism — a learned
 liquidity signal, a seasonal effect — can be tested, recorded and built on without
 weakening a single gate.
 
-## Protocol v2 — in force since 2026-10-06
+## Protocol v3 — in force since 2026-10-08
+
+v3 keeps v2's universe, splits, hindsight guard and random-selection null, and changes how
+a candidate's returns are produced and judged. The audit that motivated it, and the
+re-measurement of the v2 board under it, are in `reports/protocol-v3-methodology.md`. In
+one line: v2's numbers were flattered by its execution assumptions, and its ranking looked
+sharper than six years of data can make it.
+
+- **Execution** (`engine/backtest.py`, `engine/costs.py`). An emitted row fills, name by
+  name, at that name's next *real* close (the old convention filled at the same close the
+  signal used — look-ahead on a calendar mixing time zones, and free bid-ask bounce).
+  Holdings drift between rebalances and undoing drift is charged. Costs are per name: a
+  liquidity tier (15/20/30/40 bps per side by trailing USD volume) plus UK/HK/FR/IT/ES
+  transaction taxes. Cash earns the 13-week T-bill rate; every Sharpe is on excess returns.
+- **Skill, not Sharpe, is deflated.** The deflated-Sharpe test of v1/v2 asked whether a
+  candidate beat the best of N *zero*-Sharpe strategies; a long-only book with no skill
+  has the market's Sharpe, so it mostly asked "is this long equity?" (the equal-weight pool
+  itself scored 0.81). v3 deflates **skill** — validation Sharpe minus the equal-weight
+  eligible pool's on the same days — with a paired block-bootstrap error.
+- **The trial count spans every version.** v1's 104 trials and v2's all searched the same
+  2018–2023 window. The deflator's effective N clusters every recorded trial of every
+  version (109 → 36 effective at cut-over). Only the dispersion term is per-version.
+- **Train must show skill.** The train gate is now "train Sharpe above the pool's on the
+  same days", not "train Sharpe above zero". 1997–2008 and 2009–2017 are reported apart.
+- **Stresses are recorded** with every trial: skill at 2× liquidity costs, and skill when a
+  held series that ends is sold 30% below its last price (the delisting bias that remains
+  in a Yahoo-priced universe falls hardest on loser-buying books).
+- **The null is region-matched** (a random replacement for a stock comes from the same
+  listing region) and runs through the same execution model.
+- **Holdout hygiene.** The veto now also refuses a candidate that loses to the equal-weight
+  pool by more than 2 paired SEs, and applies to a version's first champion too. Holdout
+  numbers go only to `experiments/holdout_log.jsonl`; the card, the journal and
+  `trials.jsonl` record the verdict. The 2024+ split is **partly spent**: the v2 re-scoring
+  read it for the momentum lineage and published the result.
+- **Forward incubation.** Every candidate that leads its family or reaches the holdout gate
+  is frozen into `strategies/incubating/` and scored by `scripts/incubation_report.py` only
+  on trading days after it was registered — the one evidence about current conditions
+  that no design decision here has seen. For humans; sessions do not read it.
+- **Ranking with error bars.** `scripts/rank_trials.py` ranks recorded trials by skill
+  with a 90% interval, P(best), and the model confidence set (tier 1 = cannot be told apart
+  from the best). The leaderboard groups family leads into **mechanisms** by the
+  correlation of their active returns.
+- **The seat starts empty again**, and a v3 trial needs the T-bill series in the store
+  (seeded by the data-refresh workflow); `run_experiment.py` stops with an error until it is.
+
+What v3 measured on the v2 board (train + validation, nothing recorded): both v2 family
+leads score **zero skill** (−0.01 and +0.00 against a pool at 0.45, 90% intervals about
+±0.33), negative skill at 2× costs, and negative train skill in both sub-periods. The v2
+"tradeable cross-sectional premium" (`learnings.md`, 2026-10-07) does not survive realistic
+execution.
+
+## Protocol v2 — in force 2026-10-06 → 2026-10-08
 
 Every trial now runs under protocol v2 (`PROTOCOL_VERSION = 2` in `engine/protocol.py`).
 The re-scoring that motivated the switch is in `reports/protocol-v2-survivorship.md` and
@@ -54,8 +105,9 @@ the v2 ranking at Spearman +0.43 only. What changed:
 ## Objective and promotion rule (owned by `engine/protocol.py` — do not reinterpret)
 
 - Objective: **net Sharpe on the validation split (2018-01-01 → 2023-12-31)**, after
-  costs, deflated by the number of trials recorded under the current protocol version in
-  `experiments/trials.jsonl`.
+  costs and in excess of T-bills; the deflated test (DSR ≥ 0.95) is on its **skill** over
+  the equal-weight eligible pool, against the effective number of trials recorded under
+  **every** protocol version in `experiments/trials.jsonl` (v3).
 - Only a `challenge` candidate can move the champion. `FAMILY_LEAD` and `SCOUT`
   verdicts record a family's best result and never touch the seat or the holdout.
 - A candidate is promoted to champion only if `run_experiment.py` says `PROMOTE`:
@@ -64,10 +116,12 @@ the v2 ranking at Spearman +0.43 only. What changed:
   guard, random-selection null), pass
   the train-split sanity check, and **clear the holdout veto** below.
 - **The holdout veto.** A candidate that has won everything above is still refused the
-  seat if it is worse than the incumbent on the **holdout split (2024-01-01 →)** by more
-  than `HOLDOUT_VETO_T` = 2.0 paired standard errors (Memmel's correction to
-  Jobson-Korkie, `metrics.sharpe_diff_se`). Such a trial is recorded as `HOLDOUT_VETO`:
-  it still counts against the deflated-Sharpe bar, and the champion does not move.
+  seat if it is worse than the incumbent — or, under v3, than the equal-weight eligible
+  pool — on the **holdout split (2024-01-01 →)** by more than `HOLDOUT_VETO_T` = 2.0
+  paired standard errors (Memmel's correction to Jobson-Korkie, `metrics.sharpe_diff_se`).
+  Such a trial is recorded as `HOLDOUT_VETO`: it still counts against the deflated bar,
+  and the champion does not move. Under v3 the first champion of the version faces the
+  pool comparison too.
   - The veto is **one-sided**. Holdout is never scored, ranked, or maximized — it can
     only ever say no. A candidate that ties or wins on holdout is promoted on its
     validation case alone, so the burden of proof stays on the challenger.
@@ -160,7 +214,10 @@ Use these slugs verbatim in `STRATEGY["family"]`; the leaderboard groups on them
 Of the 8 experiments:
 
 - **at most 2** in `price-trend`;
-- **at most 2** in any single family, until at least four families have a recorded lead;
+- **at most 2** in any single family, until at least four **distinct mechanisms** have a
+  recorded lead (`distinct_mechanisms` in `leaderboard.json`: family leads whose active
+  returns correlate at ≥ 0.5 are one mechanism, whatever their slugs — on the first v2
+  night four slugs were one residual-reversal stream);
 - **at least 1** in a family with no recorded trial at all, while any such family remains.
 
 Spending a whole session inside the champion's family is a protocol violation, not a
@@ -168,8 +225,11 @@ judgement call. Diagnostic work that scores no returns remains free and unlimite
 
 ### Exploring is cheap — this is measured, not assumed
 
-(Measured on the v1 trial history; the v2 history starts empty, so early v2 bars are lower
-and rise faster with each trial.)
+(Measured on the v1 trial history and the v1 deflator. **Superseded by v3**: the v3 bar
+deflates skill against an effective N that already counts every earlier version's trials
+— 36 at cut-over — so it is much higher from the first v3 trial on, and one more
+decorrelated trial moves it less than the table below suggests. Re-measure before
+quoting it.)
 
 The standing reason not to explore was the deflated-Sharpe bar. Measured against the
 recorded trial history and the champion's stored validation returns, the DSR of a
@@ -185,7 +245,9 @@ touching the rule. Do not use the deflator as a reason to stay in one family.
 
 ## Constraints and known caveats (repeat these in your reasoning)
 
-- Long-only, max 25% per position, gross leverage ≤ 1.0, costs 15 bps per side (10 cost + 5 slippage).
+- Long-only, max 25% per position, gross leverage ≤ 1.0. Costs (v3): 15–40 bps per side by
+  liquidity, plus transaction taxes (UK 0.5% on buys, HK both sides, FR/IT/ES on buys);
+  fills at each name's next real close; holdings drift between rebalances.
 - Universe is **point-in-time** (protocol v2): survivorship bias is removed from the
   universe, not eliminated. Yahoo prices 89–97% of index members over validation but only
   40–66% over 1996–2008, so train numbers stay optimistic. The guard catches hard-coded
@@ -215,11 +277,15 @@ touching the rule. Do not use the deflator as a reason to stay in one family.
   start of a session: it is the fastest picture of which families have been tried, how
   far each got, and how correlated each lead is with the incumbent.
 - Weekly report in `reports/YYYY-WW.md`: champion metric trend, promotions/retirements,
-  the strategy leaderboard as of the week's end (the 15 best strategies by validation Sharpe
-  plus every strategy first tested that week, each with its rank, family, verdict, validation
-  Sharpe and a one-line plain-English summary of what it does, with no jargon), top learnings,
-  notable failures. Summaries live in `reports/strategy-summaries.md`: add a row there for
-  every new strategy and quote it. Keep it readable for a human skimming on a phone.
+  the strategy leaderboard as of the week's end (from `scripts/rank_trials.py`: the
+  confidence-set tier 1 plus every strategy first tested that week, each with its **tier**,
+  family, verdict, skill and its 90% interval, mechanism, and a one-line plain-English
+  summary of what it does, with no jargon — never an ordinal rank on its own, which reads
+  as a precision the data does not have), top learnings, notable failures. Summaries live
+  in `reports/strategy-summaries.md`: add a row there for every new strategy and quote it.
+  Keep it readable for a human skimming on a phone.
+- `reports/incubation.md` (forward results, written weekly by the data-refresh workflow)
+  is for the human owner only; strategy sessions never read it.
 
 ## Future upgrades (do not start without human approval)
 
