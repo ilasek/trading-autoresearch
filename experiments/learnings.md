@@ -4594,3 +4594,151 @@ across experiments; prune entries that later evidence contradicts.
   even though its primary gate merely opened: a statistic imported as a proxy must be checked
   against the thing it proxies on THIS panel, because a data-layer convention can invert it
   entirely.** `liquidity-volume`'s 2026-09-24 closure on the mean channel stands.
+
+---
+
+## Protocol v2 learnings (measured on the point-in-time panel; the entries above are all v1)
+
+> Everything below this line was measured under protocol v2 on ~960 eligible point-in-time names.
+> It does not inherit the constants above and the constants above do not inherit it.
+
+- **[Measured 2026-10-07, nightly] THE TRADEABLE CROSS-SECTIONAL PREMIUM ON THE POINT-IN-TIME
+  PANEL IS SHORT-HORIZON RESIDUAL REVERSION, AND IT IMPROVES TWICE: ONCE BY REMOVING MORE
+  COMOVEMENT, ONCE BY TILTING TOWARD PRICE IMPACT.** Three trials, each a one-variable change on
+  the one before, all top-30 equal-weight monthly books on the same grid, all net of 15 bps a
+  side at 20-22x annual turnover:
+
+      construction                                     val sharpe  val mdd  null %ile  IR vs pool
+      -21d return vs the equal-weight eligible pool       0.540     -54.1%     98%        +0.41
+      ... vs the 5 leading PCs of the 252d return matrix  0.597     -40.1%     99%        +0.35
+      ... plus 0.5 z(log Amihud price impact, 126d)       0.672     -35.7%    100%        +0.42
+      equal-weight eligible pool (reference)              0.51         --       --          --
+
+  **The drawdown improves monotonically with the signal, which no screen predicted and which is
+  the mechanism's signature.** The single-factor sort's top 30 is loaded with names whose region
+  or sector fell — a factor move wearing a stock-specific label, the thing three v1 scores turned
+  out to be — and removing five components substitutes names whose *own* move was extreme.
+  **The tilt's base is a null on its own**: standalone Amihud scores IC -0.0024 (t = -0.29)
+  against the forward 21-day return over 251 train month-ends, so the tilt adds no level effect,
+  only a location. Read together the three rows say the premium is **price pressure on individual
+  names, not factor-level overreaction** — the distinction Brown-Keim-Kleidon's first a-priori
+  objection draws (realization is not a demand shift unless the name is hard to substitute; price
+  impact per dollar is the measurable version of hard to substitute). **Riders.** All three are
+  20-22x-turnover books whose quoted numbers already pay ~3.3%/yr of cost, so the whole result is
+  a bet that 15 bps a side is the right cost model on names selected *for* high price impact —
+  the one obvious way it could be an artifact, and untested. And the deflator does not yet reward
+  it: 0.672 scores DSR 0.9033, and the seat needs 0.95.
+
+- **[Measured 2026-10-07, nightly] THE EXTREME TAIL OF A LOSER SORT IS WHERE THE PREMIUM LIVES ON
+  VALIDATION, THE TRAIN SPLIT SAYS THE OPPOSITE, AND SEVEN TRAIN SLICES SAID IT DECISIVELY.** A
+  designed pair, one variable (top 30 versus ranks 31-120 of the same market-residual sort):
+
+      trial            train sharpe  train mdd  train excess/mo  val sharpe  val mdd  null %ile  IR vs pool
+      #1 top 30           +0.438      -78.6%    +14.0 (t +0.61)    +0.540    -54.1%     98%        +0.41
+      #2 ranks 31-120     +0.550      -62.1%    +27.0 (t +3.28)    +0.379    -43.1%     81%        -0.04
+
+  The band did **exactly** what the train screens promised on the axis they measured — it cleared
+  the -45% drawdown gate that killed trial #1 — and inverted the content it was meant to protect.
+  So v1's [2026-08-30] "the book buys the extreme tail, not the quintile mean" **transfers to v2
+  intact**, and it is the train screen that was wrong. **Two general rules follow.** (i) On this
+  mechanism, judge a conditioner on the **tail** (the top-30 slice's excess over the pool), never
+  on the cross-sectional IC and never on a train Sharpe: tonight's winning conditioner *lowered*
+  the IC (+0.0278 → +0.0248) and quadrupled the tail excess, and tonight's losing one did the
+  reverse. (ii) **A train-split screen can be decisive, mechanistically reasoned, significant at
+  t = +3.28, and still point the wrong way** — the band was chosen by a pre-registered rule over
+  seven slices, not by cherry-picking, and that did not save it.
+
+- **[Measured 2026-10-07, nightly] THE TRAIN-AS-PREDICTION RECORD IS NOW 4-FOR-6, AND BOTH
+  COUNTER-EXAMPLES ARE WINS.** v1's [2026-08-30] entry stood at three-for-three (train advantage
+  *anti*-predicting validation advantage outside the incumbent's family). Tonight adds three
+  readings, all designed pairs: #2 over #1 confirms it (train +0.112, validation -0.161), #3 over
+  #1 **breaks** it (train +0.106, validation +0.057), #6 over #3 **breaks** it again (train
+  +0.106, validation +0.075). So the sign is no longer three-for-three and the mechanism v1
+  proposed for it — screen-overfitting, since all the v1 readings were designed after a train
+  screen — now has a visible boundary: **tonight's two agreements were both changes to the SCORE
+  (more factors removed, a price-impact tilt) and the one anti-prediction was a change to the
+  SELECTION SLICE (which names of the sort to hold).** That is a testable split and not yet a
+  result. Keep recording the number; it costs nothing.
+
+- **[Measured 2026-10-07, nightly] A ROW-WISE RANK OR Z-SCORE IS CAUSAL IN THE TIME AXIS AND NOT
+  AUTOMATICALLY CAUSAL IN THE COLUMN AXIS — AND UNDER v2 THE COLUMN AXIS IS WHERE THE LOOK-AHEAD
+  LIVES. This cost a trial.** Trial #4 failed `causality_check` at 3.33e-02; all six of its
+  feature panels were clean to 1.8e-15 and the **target** was not (3.8e-03). The cause:
+  `walkforward.rank_target` is `xs_rank(forward_return(...)) - 0.5` and the candidate masked it to
+  the eligible names *after* ranking. `xs_rank` divides by each row's non-NaN count, the full
+  visible frame has **1246 columns against the truncated frame's 1239** — the names that become
+  eligible inside the hidden tail — so every rank in every row moved, and with it the fit and the
+  holdings. **`protocol.visible_frame` hides those columns precisely because their presence is
+  information; any cross-sectional normalisation taken over the frame's column set puts it back.
+  Mask, then normalise.** `features.xs_zscore`, `features.xs_rank` and `walkforward.rank_target`
+  are all exposed. A pool mean, a PCA basis and a peer-correlation matrix are exposed the same way
+  and must be estimated on the eligible set, not on the columns present.
+
+- **[Measured 2026-10-07, nightly] THE RANDOM-SELECTION NULL'S 90% QUANTILE IS FLAT IN BOOK SIZE,
+  SO K IS NOT A LEVER AGAINST THE NEW GATE — AND THE GATE IS THE BINDING CONSTRAINT, NOT THE
+  DEFLATOR.** Train, 100 draws per cell, one equal-weight monthly random book per K:
+
+      K        10      20      30      50     100     200
+      p90    +0.566  +0.570  +0.585  +0.565  +0.603  +0.636
+      sd      0.094   0.059   0.052   0.039   0.030   0.013
+
+  The p90 moves 0.07 across a twenty-fold range of K because diversification raises the mean as
+  fast as it shrinks the 1.28·sd tail. **So the gate reduces to "beat pool + 1.28·sd(K)" and
+  cannot be gamed by widening or concentrating the book**; concentration is judged against a
+  *wider* null, so it is not a free pass either. Costs cancel in the comparison — the null keeps
+  the candidate's holdings schedule and pays the same turnover. Two of tonight's four GATE_FAILs
+  were this gate and two were the drawdown gate; none was the deflator.
+
+- **[Measured 2026-10-07, nightly] A CONDITIONER AT rho > ~0.97 TO ITS BASE CANNOT BE A FAMILY'S
+  FIRST RESULT, WHATEVER FAMILY ITS INPUTS COME FROM — and the check is free.** The two obvious
+  `range-variance` conditioners on the night's lead (divide the residual by Parkinson range
+  volatility, or by its own residual standard deviation) score **rho +0.980 and +0.993** to the
+  lead on train. They would have been recorded as `range-variance`'s first v2 result while being
+  the lead wearing a different label — the fourth instance of this repo's "the score turned out to
+  be reversal in costume" finding and **the first caught before the trial rather than after it**.
+  The reason is mechanical: a 5-PC residual is already standardised per name, so dividing it again
+  by a scale barely reorders the cross-section. **Screen a proposed conditioner's rank correlation
+  to its base before writing the candidate file; it is one cheap screen and it protects a family
+  slug from being spent on a relabelling.** The same screen licensed the price-impact tilt at rho
+  +0.912, which was declared in the candidate file as a refinement rather than an independent
+  mechanism *before* it ran.
+
+- **[Measured 2026-10-07, nightly] FIVE OF SIX v1 LEG SIGNS AND LEVELS DO NOT SURVIVE THE
+  POINT-IN-TIME PANEL, AND ONE INVERTS.** Train, 251 month-ends, cross-sectional IC against the
+  forward 21-day return, ~900 names per date:
+
+      rev1m +0.0282 (t +3.07)   mom12_1 +0.0128 (t +0.96)   lowidio +0.0088 (t +0.78)
+      consistency +0.0043 (+0.41)  volshock +0.0012 (+0.21)  size_dv -0.0021 (-0.25)
+      lowvol_pk -0.0028 (-0.20)    seas -0.0142 (t -2.01)
+
+  **The same-calendar-month seasonal is significantly NEGATIVE here, i.e. inverted against the
+  sign v1 traded it in** — the sharpest single piece of evidence that v1 leg signs do not carry
+  over, and it is deliberately *not* traded in its new sign, because flipping a sign because the
+  number came out that way is fitting the screen. Low-vol and low-idiosyncratic-vol are **one
+  object** (rho +0.82) and both are nulls, matching fifteen v1 `range-variance` screens on 140
+  names. **One important non-result: 12-1 momentum's +0.0128 / t +0.96 is statistically
+  indistinguishable from the +0.0102 / t +0.97 the same screen gave it on the v1 universe in the
+  era when it held the seat at Sharpe 1.2 — so this screen does NOT discriminate v1 from v2 for
+  momentum and nothing in it licenses retiring the mechanism.** Imported ideas priced free the
+  same night: Grinblatt-Moskowitz **consistency** (the count of positive formation-year blocks) is
+  **+0.61 correlated with the cumulative return it was meant to be distinct from** and the
+  remainder is a null; peer-basket lead-lag is a null on both signs and is at **-0.450** to own
+  residual reversal, i.e. a diluted short in the one mechanism that works; the Halloween seasonal
+  is right in sign (+5.44 bps/day, t +1.76) and **unresolvable in size** (a +1.097x Sharpe
+  multiple before costs, ~+0.03 to +0.06 net, inside the ±0.05 construction floor).
+
+- **[2026-10-07, nightly] THE v2 SEAT'S PRICE IS A TABLE, AND IT IS WHY A SESSION WITH TWO TRIALS
+  OF BUDGET LEFT SPENT NEITHER.** From the five recorded v2 trials that reached a validation
+  split:
+
+      candidate annual val sharpe   0.70    0.80    0.90    1.00    1.10
+      DSR as the next trial        0.9016  0.9271  0.9454  0.9590  0.9693
+      DSR two trials later         0.8958  0.9167  0.9319  0.9438  0.9534
+
+  **The empty seat needs ~0.95 of validation Sharpe now and ~1.05 after two more trials; the
+  board's best is 0.672.** A conditioner at rho > 0.9 to the lead buys hundredths of Sharpe and
+  costs everyone after it ~0.013 of DSR permanently. So the move that closes a 0.28 gap is either
+  a materially different single mechanism or a genuinely decorrelated second leg — and **tonight
+  produced no decorrelated leg**: every live score sits in the +0.85 to +0.99 rho band of one
+  residual-reversion object, and the only mechanically different candidate is a null. **Compute
+  this table before planning the back half of a session, not after it.**
