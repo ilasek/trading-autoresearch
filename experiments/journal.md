@@ -17969,3 +17969,10 @@ books land, that asymmetry is the finding worth keeping.
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
 - Lesson: _(fill in after reflection)_
 
+## 2026-10-07T23:58:49+00:00 — sl_ridge_six_features — **GATE_FAIL**
+- Candidate: `strategies/candidates/sl_ridge_six_features.py` (family: statistical-learning, track: scout, trial #0)
+- Hypothesis: A ridge (alpha 10) refitted at every month-end on realized cross-sectional rank targets, over six causal feature groups whose pairwise rank correlations are all inside +/-0.08 (21-day pool residual, 12-1 momentum, negative idiosyncratic vol, log Amihud illiquidity, negative volume shock, same-calendar-month seasonal), beats the best single feature's own book (pt_resid_reversal_v2: validation 0.54 at the 98th percentile of its null) on validation Sharpe at the same top-30 selection, weighting and grid, because six nearly orthogonal predictors is the case where a penalised linear combination beats its largest term; landing at or below +0.54 shows the five auxiliary groups -- five of which are individually indistinguishable from zero on the train split -- cost more in estimation error than they carry in signal on this panel. Train Sharpe is predicted at +0.40 to +0.60.
+- Verdict: GATE_FAIL — causality: holdings change when future data is hidden (max diff 3.33e-02 with last 63 days removed) — strategy is peeking ahead
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+
