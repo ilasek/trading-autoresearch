@@ -86,3 +86,41 @@ def test_jump_warnings_flag_big_moves():
     new = bars([101.0, 50.0, 51.0, 52.0], idx[1:])
     lines = update_data.jump_warnings("X", stored, new)
     assert len(lines) == 1 and "-50%" in lines[0]
+
+
+# --- 2026-10-09 refresh failure ------------------------------------------------
+
+def _yf_like(tickers, **kw):
+    """What yfinance >= 0.2.48 returns: (Ticker, Price) MultiIndex columns,
+    even for a single ticker."""
+    idx = pd.bdate_range("2026-09-01", periods=5)
+    frames = {t: pd.DataFrame({"Open": 4.0 + i, "High": 4.1 + i, "Low": 3.9 + i, "Close": 4.0 + i,
+                               "Volume": 1e3}, index=idx) for i, t in enumerate(tickers)}
+    return pd.concat(frames.values(), axis=1, keys=frames.keys(), names=["Ticker", "Price"])
+
+
+def test_single_symbol_fetch_handles_multiindex_columns(monkeypatch):
+    import sys
+    import types
+    monkeypatch.setitem(sys.modules, "yfinance", types.SimpleNamespace(download=_yf_like))
+    one = update_data.data.fetch_yahoo_batch(["^IRX"])
+    assert list(one["^IRX"].columns) == update_data.data.OHLCV_COLS
+    assert (one["^IRX"]["close"] == 4.0).all()
+    many = update_data.data.fetch_yahoo_batch(["AAA", "BBB"])
+    assert (many["BBB"]["close"] == 5.0).all()
+
+
+def test_write_many_refuses_a_multiindex_frame(tmp_path, monkeypatch):
+    monkeypatch.setattr(update_data.data, "STORE", tmp_path)
+    bad = _yf_like(["^IRX"])
+    with pytest.raises(ValueError, match="MultiIndex"):
+        update_data.data.write_many({"RATE_US3M": bad})
+
+
+def test_a_volume_revision_alone_is_not_an_adjustment(monkeypatch):
+    idx = pd.bdate_range("2026-10-01", periods=8)
+    stored = bars(np.full(5, 100.0), idx[:5], volume=1e6)
+    fetched = bars(np.full(8, 100.0), idx, volume=1e10)      # Yahoo restated recent volumes
+    monkeypatch.setattr(update_data.data, "load_ohlcv", lambda sid: stored)
+    new = update_data.new_rows_for({"id": "X", "type": "stock"}, idx[4], fetched)
+    assert (new["volume"] == 1e10).all() and (new["close"] == 100.0).all()

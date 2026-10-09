@@ -116,3 +116,14 @@ Two phrases recur, because many strategies build on earlier ones:
 | 102 | `ll_peer_momentum_evargate` | lead-lag-spillover | Follow-your-peers, but only for stocks that really move with their look-alikes. |
 | 103 | `pt_mom_seasonal_deferral` | price-trend | The #98 champion, but it delays a sale by a month if the stock usually does well in the coming month, and delays a purchase if it usually does badly. |
 | 104 | `pt_mom_id_z` | price-trend | The #98 champion, with extra preference for stocks that climbed in many small steady steps rather than a few big jumps. |
+
+### Protocol v2 trials (numbered within v2)
+
+| # | strategy | family | what it does |
+|---|---|---|---|
+| v2-1 | `pt_resid_reversal_v2` | price-trend | Buys the 30 stocks that fell furthest behind the average stock over the past month, betting they bounce back; refreshed monthly. |
+| v2-2 | `pt_resid_reversal_band` | price-trend | The same bounce-back bet, but skips the 30 most extreme fallers and buys the next 90, hoping for a smoother ride. |
+| v2-3 | `sa_pca_resid_reversion` | statistical-arbitrage | Buys the 30 stocks that fell furthest compared with what similar stocks (same region, sector, style) did last month, betting the gap closes. |
+| v2-4 | `sl_ridge_six_features` | statistical-learning | A simple learned model that blends six stock measurements to guess next month's winners; thrown out because it accidentally used information from the future. |
+| v2-5 | `sl_ridge_six_masked` | statistical-learning | The same learned model with the future-information leak fixed. |
+| v2-6 | `lv_resid_rev_illiq_tilt` | liquidity-volume | The look-alike bounce-back bet (v2-3), tilted toward thinly traded stocks, where forced selling is thought to push prices furthest. |
