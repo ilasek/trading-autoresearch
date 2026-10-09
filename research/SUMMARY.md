@@ -5744,6 +5744,115 @@ v2 the deflator ran against *zero* and needed no benchmark at all, so `SUMMARY.m
 top item **#188(a)** — "one look at `engine/` by someone allowed to take it" — was already right
 and is now strictly more urgent than when it was written.
 
+
+### Where the panel's columns come from — index membership as an event, not a sample frame (cross-family)
+
+[2026-10-09] Protocol v2 defined this repo's universe as **point-in-time membership of nine
+maintained indices**, and protocol v3 made **the equal-weight eligible pool the benchmark every
+number is measured against**. Both changes were right, and together they make one fact load-bearing
+that no session had ever examined: **a column enters the `eligible` panel because an index committee
+added a name, and leaves because a committee deleted one.** Those are not sampling events. They are
+decisions taken on past returns, announced in advance, and acted on mechanically by a large pool of
+tracking capital — which is precisely the setting the index-effect literature was built to study. A
+grep across all 171 prior notes returned **zero** for `index inclusion`, `Chen, Noronha`,
+`Greenwood`, `demand curve slope`, `index premium`, `index turnover cost` and
+`price pressure hypothesis`; `index addition`, `index effect` and `Petajisto` returned one or two
+notes each, every one of them about something else, and the single hit for `migration` is last
+night's note using the word for venue substitution under a transaction tax. Session 56 covered
+three source clusters, and they are one chain.
+
+**1. A mechanical, information-free demand shock moves a large-cap share price by a few percent on
+the day — and the two founding papers disagree, on overlapping data, about whether it stays.**
+Shleifer (1986) and Harris–Gurel (1986), both JF, both Tier A, both read in full. The experiment is
+the same in each: an index provider states that investment appeal plays no part in selection, index
+funds must trade the name regardless, so the announcement is a demand shift with no information in
+it. Both find an announcement-day abnormal return of about **+3%**. Shleifer finds the cumulative
+abnormal return still positive and roughly intact ten and twenty days later and reads it as
+**downward-sloping demand** — a new equilibrium price. Harris–Gurel find the rise **fully reversed
+within about three weeks** (cumulative −1.74% by day 11, −2.49% by day 21, both significant;
+Bayesian posterior odds on *no* reversal below 0.07 at every horizon past fifteen days) and read it
+as **price pressure** — a rent paid to whoever supplies immediate liquidity. The pair agrees on
+everything except permanence, and on one corroborating fact that neither information story can
+explain: **in both papers the effect is absent in the early sample and present in the later one,
+tracking the growth of indexed assets.** Two constructions transfer: Harris–Gurel's volume ratio
+`VR_it = (V_it/V_mt)·(V_m·/V_i·)` against an eight-week trailing norm, which is a fully causal
+volume-shock statistic needing only the volume panel; and their sample hygiene, which drops bulk
+index revisions and index-internal reshuffles as a different event — a split a membership matrix
+cannot make.
+
+**2. The premium has a size, a cross-sectional shape, and a closed-form cost it imposes on anyone
+who tracks an index mechanically.** Petajisto (2011, JEmpFin, tier B; with his 2009 JFQA theory
+companion, tier 1 venue) measures the announcement-to-effective impact on two indices with different
+rules, and converts it into an **implied demand elasticity** of about −0.84 for S&P 500 changes and
+about −0.43 for Russell 2000 changes — i.e. the smaller-cap index's names have roughly half the
+demand elasticity. Cross-sectionally, **idiosyncratic risk raises price impact strongly** (t ≈ 8–10,
+the limits-to-arbitrage channel his 2009 paper derives as an equilibrium result rather than assuming)
+and **size lowers it**. The construct that matters here is the **index turnover cost**: a mechanical
+tracker always buys at the premium and always sells without it, so relative to an *index-neutral*
+portfolio holding comparable names without regard to membership, its annual drag is
+`p·[s(a−d)+d]/(1+p)` if the premium is permanent and `p·(a+d)/(1+p)` if it fully reverses, where *a*
+and *d* are the value shares added and deleted per year. He puts it at **21–28 bp/yr for the S&P 500
+and 38–77 bp/yr for the Russell 2000** over his sample, calls both **lower bounds**, and notes they
+dwarf the explicit fees of the funds paying them. Two horizon facts, both index-specific and not to
+be averaged: S&P 500 additions keep a few percent at six months while S&P 500 deletions reverse fully
+within about two; **for the Russell 2000 the asymmetry runs the other way.** And one confound he
+flags that matters more here than anything else in his paper: **part of a deletion's
+pre-announcement decline is selection — providers delete names that have just fallen hard** — while
+the same story is much weaker for additions.
+
+**3. In the one index family where it has been tracked for forty years, the effect decayed to
+nothing — and two of the three surviving explanations are structural rather than cyclical.**
+Greenwood–Sammon (NBER WP 30748, read in full; published JF, tier A) document that the abnormal
+return to addition rose and then fell to a level indistinguishable from zero by the end of their
+sample, *while the mechanical demand shock kept growing* — the opposite of what
+`price impact = shock ÷ elasticity` predicts. They test five explanations against each other and
+reject two on their own terms: **composition change** accounts for part but not all, and
+**general market liquidity improvement** fails on *timing* (trading costs fell before the effect
+did), which is the stronger form of rejection. Their verdict rests on **migrations** — an
+increasing majority of large-cap index additions are names simultaneously leaving the same family's
+mid-cap index, so forced buying is matched name-for-name by forced selling and the *net* shock is
+small — and on **event-specific liquidity provision**: index trading desks, volume concentrating
+into a pre-announced closing auction, and the clinching observation that **total institutional
+ownership barely moves around index changes** even though trackers buy a substantial single-digit
+percentage, i.e. active institutions sell to passive buyers in roughly equal measure. Predictability
+is not ruled out as a contributor. They frame it as McLean–Pontiff generalised: *when a demand shock
+becomes regular, repeated and pre-announced, a competitive market adapts to minimise its price
+impact.* They name the **non-US national indices (TOPIX, Nikkei 225) as the open question**, which
+is eight of the nine indices in this panel.
+
+**The one fact in this chain that does not decay, and it is the one about this repo.** Greenwood–
+Sammon's own Figure-8 construction shows the **total** pre-announcement distance travelled by a
+future addition — roughly stable across their sample even as the announcement-day effect vanished —
+and they are careful that two readings fit it: better anticipation by arbitrageurs, *or* an index
+provider that increasingly adds recent winners. Petajisto flags the mirror confound on the deletion
+side. **Either way, the consequence for this panel is the same and is not an anomaly at all: a
+column becomes eligible shortly after a large positive market-adjusted move, and stops being
+eligible shortly after a large negative one.** Protocol v2 removed the look-ahead in *which* names
+the universe contains; it cannot remove this, because this is a property of how the real indices are
+maintained rather than of how the data was sampled. Every cross-sectional score the lab computes —
+every momentum score above all — is computed on a panel whose entrants are recent winners and whose
+leavers are recent losers, and `program.md` says coverage of the eight non-US indices before 2009 is
+far thinner than over validation, so the **composition of that distortion is not stable across
+train and validation**.
+
+**The cross-cutting consequence, and it composes with last night's.** [2026-10-08] ended with "every
+v3 number is a difference against one specific portfolio, and nobody has read how that portfolio is
+built". Tonight names what that portfolio *is*: **the equal-weight eligible pool is a mechanical
+tracker of nine maintained indices**, so Petajisto's index turnover cost is a drag it pays by
+construction, and the panel's entry/exit return signature is a term inside it. Three asymmetries
+follow, and the third is the uncomfortable one. *(i)* The lab is confined to the **tracker side** of
+Petajisto's comparison: the index-neutral portfolio is unbuildable here, because non-member names are
+not in the panel and the engine zeroes weight on a name the day it stops being eligible. *(ii)* So
+the **deletion leg is unavoidable** — every candidate and the pool alike are forced sellers at
+whatever the deletion mechanism did to the price. *(iii)* But the **entry leg is declinable**: a
+candidate that simply does not buy a name during its first months of eligibility avoids part of a
+cost the pool pays, and will show positive skill for a reason that is not forecasting. That is a real
+economic effect rather than #219's cell-weight mismatch — the pool really does pay this, and a real
+portfolio really can decline it — but it is **also not a cross-sectional edge**, and it is worth
+exactly `p` times the panel's fresh-entrant weight, where `p` on these nine indices is a number
+nobody has measured and the US evidence says is shrinking. **Measure the weight before assuming the
+premium.** New: **#220–#226**, four free, one trial, one engine question, one anti-candidate.
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -10136,6 +10245,131 @@ hypothesis fodder, then anti-candidates.
     as a candidate to refine.
     → `notes/2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`
 
+220. **FREE, train-only, and it gates everything else in this cluster — a census of the `eligible`
+    panel's entries and exits.** For each month of train and of validation separately, count the
+    names whose **first eligible date** falls in the preceding *k* months (k ∈ {3, 6, 12}) and
+    express them as a share of the equal-weight pool's weight; do the same for names in their last
+    *k* months of eligibility **as a diagnostic only** (a name's last eligible date is not knowable
+    in real time and must never enter a signal). The numbers feed Petajisto's cost formula directly:
+    the bracket term `s(a−d)+d` is pure accounting on the membership matrix, so the panel's annual
+    eligibility turnover can be computed with **no return data at all**, and the index turnover cost
+    the equal-weight pool pays reduces to that number times the premium `p`. Three outcomes, all
+    useful. If fresh-entrant weight is a fraction of a percent, #221–#223 close cheaply and nothing
+    further is owed. If it is a few percent, the pool carries a membership drag of the same order as
+    the v3 cost model's liquidity tier and the lab should say so in every report. And the
+    train-versus-validation comparison answers a question #217(b) raises in a different form:
+    `program.md` says the eight non-US indices are covered only from 2009 and the S&P 500 from 1996,
+    so **the panel's entry rate is itself non-stationary across the splits**, and nine indices' start
+    dates create synthetic entry cohorts that are an artifact of coverage rather than index events.
+    Exclude the first year or two after each index's coverage start before reading anything into the
+    train numbers. Costs nothing, needs no trial, and makes every later item in this cluster readable.
+    → `notes/2026-10-09-index-premium-and-the-index-turnover-cost.md` ·
+    `notes/2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`
+
+221. **FREE, train-only, and it is the one that could reinterpret the lab's own history — is the
+    panel's momentum signal partly an index-maintenance artifact?** Both Greenwood–Sammon and
+    Petajisto establish that index providers **add names that have just risen and delete names that
+    have just fallen**, that the pre-event leg is large, and — importantly — that this leg did *not*
+    decay along with the announcement effect, because it is selection rather than price impact. On
+    this panel that means the set of recently-eligible names is a set of recent winners **by
+    construction of the index, not by any market mechanism.** The measurement, on train month-ends:
+    split the eligible names by seasoning (first eligible within *k* months versus longer) and
+    compare the distribution of whatever cross-sectional score is under study — 12-1 momentum,
+    52-week-high proximity, the v2 residual-reversion score — across the two groups, plus each
+    group's share of the selected book's top slice. If fresh entrants are systematically in the
+    top slice of a momentum sort, **every momentum book in this lab's history has carried an
+    index-maintenance tilt it never declared**, and the lab's standing "the book buys the extreme
+    tail" finding [learnings 2026-08-30, confirmed under v2 2026-10-07] acquires a second
+    interpretation that costs a trial to confuse with the first. Run it per the lab's own rule —
+    judge on the **tail**, not on the cross-sectional IC [learnings 2026-10-07]. No returns are
+    forecast and no split is spent.
+    → `notes/2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`
+
+222. **FREE, train-only — what does the panel's *exit* edge look like, and can anything be done about
+    it?** Petajisto flags that part of a deletion's pre-announcement decline is **selection, not
+    price impact**: providers delete names that have just fallen hard. Measure, on train, the
+    cumulative market-adjusted (or pool-adjusted) return of names over the *k* months **before** their
+    last eligible date. If it is strongly negative, then the panel's exit is a conditioned forced
+    sale near a low, and — this is the part that matters — **neither a candidate nor the equal-weight
+    pool can avoid it**, because the engine zeroes weight on a name the day it stops being eligible.
+    The result is therefore not a trade; it is a number that belongs in the lab's ledger of what the
+    v3 benchmark is a property of, next to #214 and #217. It also bounds a tempting mistake: there is
+    no "hold through the deletion" construction available here, so any reasoning that assumes one is
+    reasoning about a different universe. Note the distinction from the lab's covered delisting work
+    — a deleted name usually keeps trading, so v3's 30%-haircut delisting stress is not a model of
+    this and the two should not be conflated.
+    → `notes/2026-10-09-index-premium-and-the-index-turnover-cost.md` ·
+    `notes/2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`
+
+223. **ONE TRIAL, and only after #220 and #221 — a seasoning screen on an existing construction.**
+    Exclude from the selection set any name whose first eligible date is within the trailing *k*
+    months, with **k fixed in advance** (6 is the defensible default: long enough to clear every
+    reversion horizon the readable literature documents on the addition side, short enough not to
+    discard a meaningful share of the panel) and **never swept**, or the lab's "test ideas, not
+    knobs" rule is violated. It is a one-line, hindsight-free change computable from the `eligible`
+    frame alone. The hypothesis has to be stated honestly, because **two of its three motivations
+    point at the benchmark rather than at returns**: *(a)* under the price-pressure reading the book
+    avoids buying a rent that is about to be repaid; *(b)* under either permanence reading it avoids
+    paying the entry half of Petajisto's index turnover cost, which the pool pays — a real avoided
+    cost, not a cell-weight artifact, but not a forecast either; *(c)* it removes names whose
+    apparent momentum is the index provider's selection rule rather than a market effect (#221).
+    Three cautions. The Greenwood–Sammon decay evidence argues the *(a)* channel is small and
+    shrinking in the one index family where it has been measured, so do not size the hypothesis off
+    it. The eight non-US indices are explicitly outside that evidence — the migration mechanism that
+    drove the US decay needs a tracked mid-cap sibling, which those indices do not obviously have in
+    this panel — so the screen's value may be concentrated in the non-US legs, which is checkable in
+    #220's census before the trial. And the screen only *removes* names, so on a top-*K* book it
+    pulls in the next-ranked names rather than holding cash; judge it against the same-*K* book, and
+    expect the effect to be small by construction. Family: this is universe machinery and should ride
+    whichever family slot the allocation leaves open rather than consuming a `price-trend` cap.
+    → `notes/2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md` ·
+    `notes/2026-10-09-index-premium-and-the-index-turnover-cost.md`
+
+224. **FREE — Harris–Gurel's volume ratio as a drop-in volume-shock statistic, and it is cheaper
+    than what the lab has.** `VR_it = (V_it/V_mt)·(V_m·/V_i·)`: the name's volume over the period,
+    divided by total market volume over the same period, times the ratio of their respective
+    averages over a trailing window (theirs is eight weeks). Expected value 1 under no change, fully
+    causal, scale-free, needs only the volume panel, and the division by contemporaneous market
+    volume removes market-wide volume regimes **without estimating anything** — no rolling
+    regression, no cross-sectional normalisation, so none of the column-axis look-ahead the lab paid
+    a trial for [learnings 2026-10-07]. Worth having as the reference construction whenever a
+    volume-shock conditioner is wanted, including as the denominator-free complement to the Amihud
+    constructions the lab has already measured. Not a hypothesis on its own.
+    → `notes/2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`
+
+225. **NOT RESEARCH — one question for the standing #217 engine read, and the two possible answers
+    have opposite consequences.** When a name becomes eligible and its column appears in `prices`,
+    **does the column carry that name's price history from before its first eligible date, or does
+    it begin at eligibility?** If it carries history, then every lookback feature on a fresh entrant
+    is computed across the provider-selected pre-entry run-up that #221 is about, and the artifact is
+    live in every score. If it begins at eligibility, then fresh entrants silently drop out of every
+    long-lookback score — a different and equally undeclared composition effect, running the other
+    way, and one that interacts with whatever the engine does with NaNs in a ranking. A third
+    possibility worth checking in the same look: whether `eligible` can go True → False → True for a
+    name that re-enters an index, in which case "first eligible date" and "months of continuous
+    eligibility" are different variables and #220/#223 must say which they mean. Add to the two
+    questions [2026-10-08] already put on this list; this folder's agent may not take the look.
+    → `notes/2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`
+
+226. **ANTI-CANDIDATE — do not build an index-addition event trade. Four independent reasons, any
+    one of which is sufficient.** *(1)* **The panel has no announcement dates.** Both 1986 primaries
+    are emphatic that the event is the *announcement* and that mis-dating it destroys the result —
+    Shleifer discards his entire pre-1976 sample over precisely this. An eligibility flag records
+    something at or after the *effective* date, by which time the announcement-to-effective window
+    every one of these papers measures has already closed. *(2)* **v3 fills at each name's next real
+    close**, so a signal that first sees the event on the effective date is two fills late on a
+    one-day event — the same execution change that killed the lab's v2 residual-reversion result.
+    *(3)* **The US evidence says the event is now small**, and says so with a mechanism: migrations
+    and organised liquidity provision are structural, not cyclical, and would not unwind if arbitrage
+    capital left. *(4)* **The non-US evidence does not exist** — Greenwood–Sammon name national
+    indices as their open question — so there is no prior to build on for eight of the nine indices
+    here, in *either* direction. The reachable object in this whole vein is the **seasoning of the
+    panel's columns as a screen and a diagnostic** (#220–#223), not the event. Related but distinct
+    from #219: that one forbids harvesting a benchmark *construction mismatch*; this one forbids
+    chasing a market event the data cannot see.
+    → `notes/2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md` ·
+    `notes/2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`
+
 ---
 
 ## Coverage log
@@ -10198,9 +10432,102 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-06 (session 53) | **The first session in six to be aimed by `research/README.md`'s own rotation rule rather than by a gap detector or by the previous nightly, and it opens the one axis `program.md` charters for a family and the folder had never covered: co-movement, read as a panel-level time series instead of as a cross-sectional score.** A grep across all 161 prior notes returned **zero** for `absorption ratio`, `correlation regime`, `Pollet`, `Campbell, Lettau`, `Herskovic`, `common factor in idiosyncratic`, `semivariance`, `Black-Litterman`, `CVaR` and `nested clustered`, while `average correlation` appeared only in the trial-clustering and multiple-testing sense. `range-variance` was the right home because `program.md` lists "cross-sectional dispersion and correlation regimes" in its charter, and because the family's standing closure — *ten screened mechanisms all sort on a cross-sectional **level of width**, and the width level is the survivorship artifact* — **does not cover a statistic that produces one number for the whole panel**, which is the same escape the folder already accepted for Corwin–Schultz. Three results. *(1)* The two rival co-movement summaries are **not** interchangeable and the difference is arithmetic, not empirical: the absorption ratio is computed on the **covariance** matrix and is therefore weighted by where the risk is, while average correlation weights every pair equally — its source gives a constructed two-period case where average correlation falls and the absorption ratio rises. *(2)* **The session's best free item was not the co-movement statistic at all.** The same paper's appendix tested a whole-spectrum Herfindahl against a truncated top-`n` share and found the Herfindahl form *less informative* because the small eigenvectors are unstable — which is what `notes/2026-09-27-marchenko-pastur...` proves must happen and **exactly the failure the 2026-09-26 nightly measured on its own `EffRank`** (0.208·P to 0.638·P across four column sets, i.i.d. control 0.775·P, placebo 0.875·P). A theorem, a published comparison and the lab's own measurement agree, and the re-run is one line (**#203**). *(3)* Campbell–Lettau–Malkiel–Xu's betaless split gives average correlation **without a correlation matrix** (`MKT/(MKT+IND+FIRM)` ≈ average market-model R²) and, more valuably, the **exact leakage term** the folder's second-hand copy of that decomposition could not carry: a region demean removes region risk **plus `CSV(β_region) × market variance`**, a quantity the lab has assumed away every time it demeans. The third note, **CIV**, is the only one of the three that is a cross-sectional sort, is **always-on at gross 1.0** and so sits outside the de-risking-overlay class the lab has refuted three times, and has the favourable asymmetry: **the high-return leg is the low-CIV-beta end, which a long-only book holds directly**. New: **#203–#207**, four of them free. **Nothing is closed by this entry** — no lab measurement was taken tonight. The honest discount is stated once in the family section: the absorption ratio's own application is a de-risking overlay on an external state variable, i.e. the default-refuted class, and #204 exists to make the exception checkable rather than arguable. | Kritzman–Li–Page–Rigobon 2011 (JPM) **read in full** from MIT Sloan WP 4785-10 at `web.mit.edu/finlunch/Fall10/PCASystemicRisk.pdf` (`2026-10-06-absorption-ratio-eigenvalue-concentration.md`); Campbell–Lettau–Malkiel–Xu 2001 (JF) **read in full** from NBER WP 7590, body **Caesar-shifted +3** and decoded (`2026-10-06-betaless-variance-decomposition-and-average-correlation.md`); Herskovic–Kelly–Lustig–Van Nieuwerburgh 2016 (JFE) **read in full** from NBER WP 20076 (`2026-10-06-common-idiosyncratic-volatility-factor.md`); Pollet–Wilson 2010 (JFE) **NOT read**, five channels tried and recorded, now the folder's top unreached source |
 | 2026-10-07 (session 54) | **The first session in seven aimed at a *family* mechanism rather than at a statistic or at the lab's own measurement chain, and the first in this folder's history whose headline mechanism arrives already contested by a Tier-A direct test — with the session's best buildable item turning out to be a by-product with no connection to that mechanism at all.** Aim set by `research/README.md`'s rotation rule plus one grep: across 162 prior notes, `January effect`, `turn-of-the-year` and `tax-loss selling` returned zero or near-zero, `Grinblatt, Moskowitz` returned **zero**, while `holiday` and `day-of-week` were already covered — so the turn-of-the-tax-year branch of `seasonality-calendar` was the family's one uncovered half. It is mechanically distinct from the two seasonal notes already here (those sort on the **same calendar month in past years**; this conditions a **past-return** effect on the current month), and it is **the one branch of this family the lab's own [2026-09-01] structural closure does not reach** — that closure kills in-window-versus-cash timing because the complement window's return is positive, and a turn-of-the-tax-year book is a cross-sectional reallocation at constant gross exposure, at two rebalances a year. Four results. *(1)* **The price step is conditional and its author says so in print.** Constantinides derives the volume seasonal from a control-limit policy under transaction costs, then declines to derive a price seasonal: it requires that sellers not repurchase the same name or another tax-loss seller's name, because swapping sellers move no price — "a seasonal pattern in stock prices **only if we further assume irrationality or ignorance**". He adds that tax trading **does not explain the small-firm premium itself**, and that the gain-deferral half of the same option predicts new-year weakness in prior-year **winners**, the opposite sign from momentum. *(2)* **The naivety precondition is empirically met, in one small market.** Grinblatt–Keloharju's complete Finnish register (daily, with purchase prices, **no wash-sale rule** so sell-and-rebuy is observable) shows Odean's gain-versus-loss realisation ratio declining virtually monotonically over the **last ten trading days of December** and snapping back at the turn; repurchase rates rise in **loss size** and in **year-end proximity**; net buying pressure — a purely temporal demand shift — tracks returns, significantly **in small firms only**. Their own footnote concedes the observed timing is *not* optimal tax timing by Constantinides' standard, which is exactly the naivety his channel needs. *(3)* **The one test that distinguishes the tax story from everything else has been run and it failed.** Brown–Keim–Kleidon–Marsh: Australia's tax year ends 30 June and its "share trader" class deducts all realised losses uncapped, so a July effect at least as strong as the US January one is predicted; found instead **both** December–January **and** July–August seasonals, roughly equal in January and July, with the small-firm premium itself roughly **constant across months**, plus the US January effect significant across a half-century including low-tax pre-war years — **magnitude insensitive to the tax rate that supposedly drives it**. Their integration rescue is self-defeating and the argument generalises (see the transferable output below). *(4)* **The by-product is the item that should actually run.** Grinblatt–Moskowitz's **consistency** dummy is a *sign count*, not a magnitude — positive in **≥8 of the 11 months** of t−12…t−2 (≥15 of 24 for t−36…t−13) — and the threshold is **not tuned**: under a coin-flip null both are ≈10%, i.e. "top decile of sign-run consistency under the null", which is why it transfers without refitting. Every consistent-winner coefficient is positive across three horizons and three seasonal subperiods; consistent-loser coefficients do little, an asymmetry the authors use to kill the "consistency = low volatility" reading. It is binary and unit-free (sidestepping the no-common-scale problem `learnings.md` records) and its content is on the **winner** side, which a long-only book holds directly. **The honest discount, stated once and not buried**: protocol v2's pool is ~1,400 large-cap members of nine national indices plus 42 ETFs, and all four sources locate the price effect in the small, thinly traded, **low-institutional-ownership** tail that such a pool excludes by construction — so **a null on a turn-of-the-tax-year book here is uninformative about the mechanism**, which is why #212 is an anti-candidate rather than a trial. New: **#208–#212**, three free, one trial, one anti-candidate. **Nothing is closed by this entry**; no lab measurement was taken tonight. All four samples end no later than 2000: `validation_overlap: false` and `published_post_2018: false` throughout, and no dated performance figure from any source is recorded anywhere. | Constantinides 1984 (JFE) **read in full** from NBER WP 1176 (`2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md`); Grinblatt–Keloharju 2004 (JFE) **read in full** from NBER WP 8745 (`2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md`); Grinblatt–Moskowitz 2004 (JFE) **read in full** from NBER WP 8744, body **uniformly ASCII-shifted by −29** and decoded (`2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md`); Brown–Keim–Kleidon–Marsh 1983 (JFE) **read in full** as the Internet Archive OCR text layer of MIT Sloan WP 1378-82 (`2026-10-07-tax-year-end-alignment-and-the-australian-test.md`) |
 | 2026-10-08 (session 55) | **The first session aimed by a protocol change rather than by a gap detector, the previous nightly's list or this folder's own rotation — and the first whose three notes are one chain rather than three topics.** `program.md` put **protocol v3** in force today: costs became per-name (a 15/20/30/40 bps liquidity tier **plus** UK/HK/FR/IT/ES transaction taxes), holdings now **drift** between emitted rows and undoing drift is charged, and the deflated statistic became **skill against the equal-weight eligible pool** instead of Sharpe against a zero-Sharpe null. The re-measurement put both v2 family leads at **zero skill**, and `learnings.md` concluded "beating the null is not beating the pool" while naming books tilted toward "71%-non-US, **stamp-duty-paying** names" — an attribution with no literature behind it anywhere in this folder. Three greps across all 170 prior notes returned **zero**: `stamp duty`/`financial transaction tax`/`Umlauf`/`Colliard`; `no trade region`/`Leland`/`Davis-Norman`; `benchmark index`/`Zitzewitz`. One cluster each. Headline: **the statute sets a per-name cost → the per-name cost sets a per-name no-trade band and a trade-to-the-edge rule → and whatever skill that book shows is a difference against a benchmark nobody has read the construction of.** Best buildable item is **#216** (weight-space bands, halfwidth ∝ cost^(1/3), derived not fitted); best free items are **#213**, **#214**, **#215**; **#217** sharpens the standing engine read with two specific questions; **#218** and **#219** are anti-candidates, the second a rule against harvesting the benchmark's own flaw. Also recorded: the covered Gârleanu–Pedersen partial-move policy is the **quadratic**-cost optimum and v3 charges **proportional** costs, so the lab's one cost-aware construction answers the wrong cost geometry. Access notes: Wiley `pdfdirect` is Cloudflare-challenged (403, 5.5 KB "Just a moment…"), a legacy `sites.google.com/site/<user>` faculty page now **302s into a Google login** (an eleventh "looks like an answer" mode — `curl` reports 200 at the top level), both Lancaster `eprints` records for a JPM article hold **no file**, and EDHEC's publication pages gate PDFs behind registration; the three sources read in full came from **ECB** (`ecb.europa.eu/pub/pdf/scpwps/`), **NBER** (unshifted, no `( )` dropout) and **arXiv**, and **University of Pretoria DSpace** (`repository.up.ac.za/bitstreams/<uuid>/download`) served a 2.7 MB thesis on the first try. | Colliard–Hoffmann 2017 (JF) + Saporta–Kan 1997 (BoE WP) + Umlauf 1993 (JFE, **not obtained**) (`2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`); Muhle-Karbe–Reppen–Soner 2017 (Annual Review of Financial Economics) + Constantinides 1986 (JPE) + Janecek–Shreve 2004 (Finance and Stochastics) (`2026-10-08-no-trade-bands-under-proportional-costs.md`); Cremers–Petajisto–Zitzewitz 2013 (Critical Finance Review; read as NBER WP 18050) (`2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`) |
+| 2026-10-09 (session 56) | **The first session to look at where the panel's columns come from, and it finds that protocol v2 fixed the half of index-membership bias that is about sampling while leaving untouched the half that is about index *maintenance*.** Aim set by `research/README.md`'s rotation rule plus one observation: v2 made the universe point-in-time membership of nine maintained indices and v3 made the equal-weight eligible pool the benchmark for every number, so a column now enters the panel because a committee added a name and leaves because a committee deleted one — the exact setting the index-effect literature was built on. A grep across all 171 prior notes returned **zero** for `index inclusion`, `Chen, Noronha`, `Greenwood`, `demand curve slope`, `index premium`, `index turnover cost` and `price pressure hypothesis`. Three clusters, one chain. Headline one: the **two founding Tier-A papers disagree on overlapping data about whether the ~3% announcement effect persists** (Shleifer: yes, at 10–20 days; Harris–Gurel: fully reversed by ~3 weeks, with Bayesian posterior odds on no-reversal below 0.07), and both report the effect absent early in their samples and present late, tracking indexation — which no information story explains. Headline two: Petajisto's **index turnover cost**, `p·[s(a−d)+d]/(1+p)` permanent or `p·(a+d)/(1+p)` fully reversed, is a drag paid by *any mechanical index tracker* — **which is exactly what the v3 equal-weight eligible pool is** — and his escape route, an index-neutral portfolio holding non-member names, is **unbuildable here by construction**, so the lab is confined to the tracker side: the deletion leg is unavoidable, the entry leg is declinable. Headline three: Greenwood–Sammon show the effect **decayed to nothing** in the one index family tracked for forty years, driven by **migrations** (a large-cap addition is now usually a mid-cap deletion, so the net shock is small) and **organised liquidity provision** (total institutional ownership barely moves around index changes), both structural rather than cyclical — and they name non-US **national** indices, eight of the nine here, as their open question. **The one thing in the chain that does not decay is the fact about this repo**: providers add recent winners and delete recent losers, so the panel's entrants are recent winners and its leavers recent losers, and `program.md` says coverage before 2009 is thin, so that distortion is not even stable across splits. Best free items **#220** (entry/exit census — pure accounting, gates the rest) and **#221** (is the panel's momentum signal an index-maintenance artifact?); **#222** free; **#223** the one trial; **#224** a free drop-in volume-shock statistic; **#225** adds a third question to the standing engine read; **#226** anti-candidate. **Nothing is closed by this entry** — no lab measurement was taken, the holdout was not read, and the two notes with buildable content both say the size of the effect on these nine indices is unmeasured. Access notes: **both 1986 JF primaries exist only as JSTOR scans** served by `johnhcochrane.com` — `pdftotext` yields ~1.6 KB of cover page from 13 and 16 pages, `pdffonts` shows a populated table (so the empty-font-table test does **not** catch it) and the tell is the character count alone; `pdftoppm -png -r 120 -gray` plus selective page reads recovered both in ~8 image reads. `ww.petajisto.net/papers/` (note the two-w host) served both Petajisto papers first try while the three-w form 404s; NBER w30748 was unshifted with no `( )` dropout; **Semantic Scholar returned `not found` for `10.1111/jofi.13410`**, a twelfth instance of the folder's standing JF-DOI rule, while Crossref answered every lookup. Two sources **not obtained**: Chen–Noronha–Singal 2004 (green OA only at a bepress repository, and the two UCF records are faculty-bibliography entries holding no file) and Kumar et al. 2023 (closed, the one Pure record holds no file) — both recorded as pointers to the live asymmetry disagreement rather than relied on. | Shleifer 1986 (JF) + Harris–Gurel 1986 (JF), **both read in full** as rendered scans (`2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`); Petajisto 2011 (J. Empirical Finance) + Petajisto 2009 (JFQA), **both read in full** from the author's site (`2026-10-09-index-premium-and-the-index-turnover-cost.md`); Greenwood–Sammon (NBER WP 30748 **read in full**; published JF 2025, not read), with Chen–Noronha–Singal 2004 (JF) and Kumar–Lawrence–Prakash–Rodríguez 2023 (JBF) **both not obtained** (`2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-09] Read this first: protocol v2 fixed the half of index-membership bias that is about
+  sampling, and it cannot fix the half that is about index maintenance — because that half is not a
+  property of the data.** `2026-08-26`'s note closed look-ahead *constituent selection*: choosing a
+  universe by **end-of-period** membership selects names for having not fallen behind, and a
+  point-in-time panel removes it. v2 did that. What remains, and what this folder had never looked
+  at in 171 notes, is that inside a correctly point-in-time panel **every column still begins at an
+  index addition and ends at an index deletion**, and those are decisions a committee takes on past
+  returns and announces in advance to a large pool of mechanically tracking capital. Three
+  consequences, in the order they bind. *(1)* **The entrants are recent winners and the leavers are
+  recent losers**, as a matter of the provider's selection rule rather than of any market mechanism
+  — Greenwood–Sammon document the pre-announcement leg as large and, unlike the announcement effect
+  itself, **not decaying**, and Petajisto flags the mirror confound on the deletion side. So every
+  cross-sectional score the lab computes is computed on a panel with a built-in momentum tilt at its
+  boundary, and `program.md`'s thin pre-2009 coverage of the eight non-US indices means the size of
+  that tilt differs between train and validation. *(2)* **The v3 equal-weight eligible pool is a
+  mechanical index tracker**, so it pays Petajisto's index turnover cost by construction, and his
+  escape route — an index-neutral book holding comparable non-member names — **does not exist on this
+  panel**, because non-members are not in it and the engine zeroes weight on a name the day it stops
+  being eligible. The lab is confined to the tracker side: **the deletion leg is unavoidable, the
+  entry leg is declinable.** *(3)* The size of all of this is `p` times the panel's fresh-entrant
+  weight, and **neither factor has been measured here** — `p` on these nine indices is not in the
+  literature (the forty-year decay evidence is one US index family, and its dominant driver,
+  migrations between tiers of the same family, needs a tracked mid-cap sibling the eight non-US
+  indices do not obviously have in this panel), while the weight is pure accounting on the
+  `eligible` matrix that nobody has done. **New: #220–#226**, four free, one trial, one engine
+  question, one anti-candidate. **Nothing is closed by this entry**; no lab measurement was taken
+  tonight and the holdout was not read. **Carried unchanged and still genuinely unrun: #82**
+  (thirty-fourth session, still the oldest unspent free item), **#94** as standing discipline,
+  **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, the 2026-09-28 set
+  (**#165**'s second use, **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**, **#171**,
+  **#172**), the 2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the 2026-10-01
+  set (**#179**, **#180**, **#181**), the 2026-10-02 set (**#183**–**#186**), the 2026-10-03 set
+  (**#188**–**#191**), from 2026-10-04 **#195** and **#196**, from 2026-10-05 **#198**, **#199**,
+  **#200**, **#201**, the 2026-10-06 set (**#203**–**#207**), the 2026-10-07 set (**#208**–**#211**),
+  and the 2026-10-08 set (**#213**–**#217**). **#152 stands.** **#163, #169, #173, #178, #182, #187,
+  #192, #197, #202, #212, #218, #219 and #226 stay anti-candidates.**
+- **[2026-10-09] What should aim the next session, in order. The top is unchanged for the second
+  night and the reason is now stronger, not weaker.**
+  - **#217 still goes first, and tonight adds a third question to it (#225).** It is one look at
+    `engine/` by someone allowed to take it, and the questions are now: is the equal-weight pool
+    charged costs and on what grid; does its ETF weight share drift between train and validation;
+    and **does a column's price history begin at its first eligible date or carry the name's
+    pre-eligibility prices?** The third decides whether the panel's provider-selected entry run-up
+    is *inside* every lookback feature or *absent* from it — opposite artifacts, both undeclared,
+    and a one-minute read settles which. Costs nothing.
+  - **Then #220**, free, pure accounting, and it is the cheapest item this folder has produced since
+    #203: the panel's annual eligibility turnover and fresh-entrant weight share, train and
+    validation separately. It gates #221–#223 and it is the missing input to Petajisto's cost
+    formula, which otherwise reduces to an unmeasured premium times an unmeasured weight.
+  - **Then #221**, free and train-only, and it is the item with the largest possible consequence on
+    this list: if freshly eligible names are systematically in the top slice of a momentum sort,
+    **every momentum book in this lab's history has carried an index-maintenance tilt it never
+    declared**, and the lab's standing "the book buys the extreme tail" finding acquires a second
+    reading that will otherwise cost a trial to disentangle from the first.
+  - **Then #214**, free, unchanged from [2026-10-08]'s reasoning — the region × liquidity × tax cell
+    census — and note it composes with #220 into one pass over the same panel: both are
+    returns-free censuses of the eligible matrix, so build the machinery once.
+  - **Then #213**, then **#215**, then **#216**, in the order [2026-10-08] set them, with **#222**
+    free alongside #213 (both are "what does the universe charge me that no signal can avoid").
+    **#223** is the one new trial and it goes **after** #220 and #221, never before: its honest
+    claim is "declines part of a cost the benchmark pays", the US evidence says that cost is
+    shrinking, and with v3's 90% skill intervals near ±0.33 it is worth a trial only once #220 says
+    the weight is there. **#224** is free and not a hypothesis — adopt it as the reference
+    volume-shock construction whenever one is wanted.
+  - **Then #203**, still free, still the only item that revives an existing disqualified screen.
+    **Then #209**, with [2026-10-08]'s note that its four pre-checks were written under v2 and need
+    re-deriving. **Then #198**, **#205**, **#206**. **Then #208 and #211**, then **#210**, then
+    **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183, #184, #179, #180**
+    in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190** (same per-instrument noise
+    proxy as #179(b) and #184 — build once, spend on all three), **#185** as a standing reporting
+    rule, **#191** as screens to re-measure. **Then the carried items**: #181, #174's reading, #175,
+    #177, #176. **#204** stays below them for the reason [2026-10-06] gave.
+- **[2026-10-09] The transferable output, and it is the ninth detector — the first aimed at the
+  boundary of the dataset rather than at a source, a statistic or the lab's toolkit.** The eight
+  before it: redundancy [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was
+  written at [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of
+  the test's confound [2026-10-05], a disqualified statistic against a truncated variant of itself
+  [2026-10-06], the self-undermining cross-border friction [2026-10-07], and a construction
+  technique's cost geometry [2026-10-08]. Tonight's: **a universe is not a sample frame. When
+  membership is maintained by a rule that reacts to past returns, the boundary of the dataset is
+  itself a signal — so fixing the look-ahead in *which* names are included does not remove the
+  return signature of *when* they enter and leave.** The test is one question: *who moves this
+  boundary, on what information, and is anyone obliged to trade when it moves?* Here all three
+  answers are unfavourable — an index committee, on recent returns, with mechanically tracking
+  capital obliged to follow — and the lab had taken the boundary as neutral through two protocol
+  versions. The corollary is the uncomfortable one and it should be read next to #219: **when the
+  benchmark is defined by the same boundary as the candidate's opportunity set, some of the skill a
+  candidate can earn against it is a cost the benchmark is forced to pay rather than a return the
+  candidate forecast.** That is not fraud and it is not nothing — the pool really does pay it — but
+  it is a different claim from "this signal predicts returns", and the journal entry has to say
+  which one it is. The general form, which outlives this panel: **after any change of benchmark,
+  ask not only how the benchmark is built but what the benchmark is *obliged* to do.**
 - **[2026-10-08] Read this first: the protocol changed under this folder today, and the session's
   finding is that one of the lab's covered constructions is now the answer to the wrong question.**
   `program.md` put **protocol v3** in force on 2026-10-08. It charges per-name costs (a

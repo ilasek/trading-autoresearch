@@ -18334,3 +18334,5 @@ behaviour, not a malfunction.
   one is work pushed to a *spent* branch, and it needs the same check to catch it.
 
 ---
+
+## Research session — 2026-10-09 (learning agent): 3 notes added, see research/SUMMARY.md
