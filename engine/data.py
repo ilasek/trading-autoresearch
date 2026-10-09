@@ -188,6 +188,9 @@ def write_many(frames: dict[str, pd.DataFrame], replace: bool = False) -> None:
     for sid, df in frames.items():
         if df is None or df.empty:
             continue
+        if isinstance(df.columns, pd.MultiIndex):
+            raise ValueError(f"{sid}: OHLCV frame has MultiIndex columns {list(df.columns)[:3]}; "
+                             f"expected flat {OHLCV_COLS}")
         d = df.copy()
         d.index = pd.to_datetime(d.index).astype("datetime64[ms]")
         for col in OHLCV_COLS:
@@ -482,10 +485,20 @@ def fetch_yahoo_batch(yahoo_symbols: list[str], start: str | None = None) -> dic
     out: dict[str, pd.DataFrame] = {}
     if raw is None or raw.empty:
         return out
+    # yfinance >= 0.2.48 returns (Ticker, Price) MultiIndex columns even for a
+    # single symbol (multi_level_index defaults to True); older versions
+    # returned flat columns for one symbol. Select the ticker level whenever it
+    # is there: treating a one-symbol MultiIndex frame as flat yields all-NaN
+    # bars with tuple column names, which crashed the 2026-10-09 refresh.
+    multi = isinstance(raw.columns, pd.MultiIndex)
     for sym in yahoo_symbols:
-        try:
-            df = raw[sym] if len(yahoo_symbols) > 1 else raw
-        except KeyError:
+        if multi:
+            if sym not in raw.columns.get_level_values(0):
+                continue
+            df = raw[sym]
+        elif len(yahoo_symbols) == 1:
+            df = raw
+        else:
             continue
         df = df.dropna(how="all")
         if df.empty:

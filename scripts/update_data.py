@@ -46,6 +46,12 @@ from engine import data, membership
 CHUNK = 50
 OVERLAP_DAYS = 10          # calendar days re-fetched before each series' last stored row
 ADJ_TOL = 1e-4             # stored/fetched ratio further from 1 than this = an adjustment
+# A basis change this large is a split or consolidation, not a dividend; only
+# then is volume rescaled, by the inverse of the price ratio (Yahoo restates
+# share counts on splits only). Measured volume ratios are NOT used: Yahoo
+# revises the latest days' volumes on its own, and on 2026-10-09 that read as
+# x0.0001 "adjustments" on LSE names whose prices had not moved at all.
+SPLIT_RATIO = 1.25
 VERIFY_TOL = 1e-3          # verify mode: ratio drift beyond this inside the window = a break
 JUMP_WARN = 0.40           # flag new daily moves beyond +-40% for a human to check
 ADJUSTED_TYPES = ("stock", "etf")
@@ -57,11 +63,18 @@ def _ratio(num: pd.Series, den: pd.Series) -> pd.Series:
     return r[r > 0]
 
 
+def volume_ratio_for(price_ratio: float) -> float:
+    """Share-count rescale implied by a price-basis change: 1/price_ratio for a
+    split or consolidation (so close x volume is unchanged), 1 for a dividend."""
+    return 1.0 / price_ratio if max(price_ratio, 1.0 / price_ratio) >= SPLIT_RATIO else 1.0
+
+
 def adjustment_ratios(stored: pd.DataFrame, fetched: pd.DataFrame, last: pd.Timestamp,
                       n: int = 3) -> tuple[float, float] | None:
-    """(price, volume) ratios stored/fetched on the latest `n` rows both hold
-    at or before `last`, or None when they share no row. A price ratio away
-    from 1 means Yahoo re-adjusted the old rows for an event after `last`."""
+    """(price, volume) ratios that put fetched rows on the stored basis, from
+    the latest `n` rows both hold at or before `last`; None when they share no
+    row. A price ratio away from 1 means Yahoo re-adjusted the old rows for an
+    event after `last`; the volume ratio follows from it (`volume_ratio_for`)."""
     common = stored.index.intersection(fetched.index)
     common = common[common <= last][-n:]
     if not len(common):
@@ -69,8 +82,8 @@ def adjustment_ratios(stored: pd.DataFrame, fetched: pd.DataFrame, last: pd.Time
     pr = _ratio(stored.loc[common, "close"], fetched.loc[common, "close"])
     if not len(pr):
         return None
-    vr = _ratio(stored.loc[common, "volume"], fetched.loc[common, "volume"])
-    return float(pr.median()), (float(vr.median()) if len(vr) else 1.0)
+    price_ratio = float(pr.median())
+    return price_ratio, volume_ratio_for(price_ratio)
 
 
 def on_stored_basis(rows: pd.DataFrame, price_ratio: float, volume_ratio: float) -> pd.DataFrame:
@@ -130,9 +143,10 @@ def new_rows_for(spec: dict, last: pd.Timestamp | None, fetched: pd.DataFrame) -
         print(f"  WARN {spec['id']}: no overlap with stored rows; appended without basis check")
         return new
     price_ratio, volume_ratio = ratios
-    if abs(price_ratio - 1) > ADJ_TOL or abs(volume_ratio - 1) > ADJ_TOL:
+    if abs(price_ratio - 1) > ADJ_TOL:
+        kind = "a split" if volume_ratio != 1.0 else "a dividend"
         print(f"  adj {spec['id']}: new rows rescaled onto the stored basis (price x{price_ratio:.6f}, "
-              f"volume x{volume_ratio:.4f}) — a dividend or split since the last refresh")
+              f"volume x{volume_ratio:.4f}) — {kind} since the last refresh")
         new = on_stored_basis(new, price_ratio, volume_ratio)
     return new
 
@@ -162,13 +176,24 @@ def refresh_yahoo(stale: list[tuple[dict, pd.Timestamp | None]]) -> int:
                 # membership update (or a human) can confirm.
                 print(f"  WARN {spec['id']}: Yahoo returned no data for {ysym}")
                 continue
-            new = new_rows_for(spec, last, df)
-            if len(new):
+            try:
+                new = new_rows_for(spec, last, df)
+            except Exception as e:  # noqa: BLE001 — one bad series must not stop the refresh
+                print(f"::warning::{spec['id']} skipped by the refresh ({type(e).__name__}: {e})")
+                continue
+            if len(new) and new["close"].notna().any():
                 if spec.get("type") in ADJUSTED_TYPES:
                     for line in jump_warnings(spec["id"], data.load_ohlcv(spec["id"]), new):
                         print(line)
                 new_rows[spec["id"]] = new
-        data.write_many(new_rows)
+            elif len(new):
+                print(f"::warning::{spec['id']}: Yahoo returned {len(new)} rows with no close; not stored")
+        try:
+            data.write_many(new_rows)
+        except Exception as e:  # noqa: BLE001 — keep every other batch's rows
+            print(f"::warning::refresh batch {i}: write failed ({type(e).__name__}: {e}); "
+                  f"{len(new_rows)} series not updated")
+            continue
         updated += len(new_rows)
         for sid, new in new_rows.items():
             print(f"  ok {sid}: +{len(new)} rows through {new.index[-1].date()}")
@@ -214,9 +239,7 @@ def repair_window(stored: pd.DataFrame, fetched: pd.DataFrame, since: pd.Timesta
     drift = float((q / ref - 1).abs().max())
     if drift <= VERIFY_TOL:
         return None, drift
-    qv = _ratio(stored.loc[common[:5], "volume"], fetched.loc[common[:5], "volume"])
-    fixed = on_stored_basis(fetched.loc[fetched.index >= common[0]], ref,
-                            float(qv.median()) if len(qv) else 1.0)
+    fixed = on_stored_basis(fetched.loc[fetched.index >= common[0]], ref, volume_ratio_for(ref))
     return fixed, drift
 
 
