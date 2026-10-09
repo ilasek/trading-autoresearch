@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-09T23:40:49+00:00",
+  "generated_at": "2026-10-09T23:53:43+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -28,8 +28,34 @@
       ],
       "train_skill": -0.063,
       "mechanism": 1
+    },
+    "statistical-arbitrage": {
+      "name": "sa_resid_rev63_band",
+      "candidate": "strategies/candidates/sa_resid_rev63_band.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-09T23:51:55+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.218,
+        "ann_return": 0.0416,
+        "max_drawdown": -0.3473,
+        "ann_turnover": 10.59,
+        "avg_positions": 99.98,
+        "skill": -0.119,
+        "skill_cost2x": -0.232,
+        "skill_delist30": -0.119
+      },
+      "train_sharpe": 0.523,
+      "skill_ci90": [
+        -0.318,
+        0.039
+      ],
+      "train_skill": -0.001,
+      "mechanism": 2
     }
   },
-  "distinct_mechanisms": 1,
+  "distinct_mechanisms": 2,
   "mechanism_rho": 0.5
 }

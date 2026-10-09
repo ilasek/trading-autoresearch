@@ -18371,3 +18371,40 @@ behaviour, not a malfunction.
   0.633), and a Sharpe flat in beta is flat under either label. `price-trend` therefore spends 1
   of its 2 trials tonight, not 2.
 
+## 2026-10-09T23:51:55+00:00 — sa_resid_rev63_band — **GATE_FAIL**
+- Candidate: `strategies/candidates/sa_resid_rev63_band.py` (family: statistical-arbitrage, track: scout, trial #0)
+- Hypothesis: Reverting the 63-day return measured against the five leading principal components of the trailing 252-day standardised return matrix, holding the top 100 equal weight on monthly decisions but retaining a name already held while it stays inside the top 200, beats the equal-weight eligible pool's validation Sharpe by at least 0.10, because on the train split that slice earns +22.2 bps per 21 days over the pool (t +3.03) at the pool's own beta (0.974 vs 0.988) while the retention band cuts one-way turnover from 5.4x to 3.2x a year -- about 110 bps/yr of modelled cost against 266 of gross excess, where the v2 lead's 22x construction paid 3-6%/yr and scored zero skill under v3; skill at or below zero says v3's verdict is on residual reversal itself rather than on its execution, and a null percentile below 90% says the band rather than the score did the work.
+- Verdict: GATE_FAIL — train skill -0.001 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.218 <= the random-selection null's 90% quantile 0.243 (median 0.169; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.52, ann_ret +10.6%, maxDD -58.0%, turnover 6.6x, skill vs pool -0.00
+- Validation: sharpe +0.22, ann_ret +4.2%, maxDD -34.7%, turnover 10.6x, skill vs pool -0.12
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.12, 90% CI [-0.32, +0.04]; at 2x costs -0.23; with a 30% delisting haircut -0.12; train -0.00 (1997-2008 -0.02, 2009-2017 -0.02)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 80% percentile of 200 random-selection replicas (median +0.17, 90% +0.24); equal-weight eligible pool +0.34, information ratio vs it -0.30
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the 63-day residual-reversal mechanism's gross excess is real and is almost exactly
+  the size of its own v3 cost bill — train skill came in at -0.001, i.e. 21 years of dead heat
+  with the pool.** Read with the 2x-cost stress (-0.232 against -0.119) the book pays about
+  **0.11 of Sharpe, ~180 bps/yr, in costs**, so gross of costs its train skill was about +0.11
+  and net of them it is zero. That is a sharper statement than the v3 audit could make: the
+  audit retired a 22x-turnover construction, and this retires the *mechanism* at a seventh of
+  that turnover. The null percentile **80%** says the score did add something over a random
+  100-name book of the same types and regions — just not enough to pay for itself.
+  **The costly mistake, and it is a general one: a name-turnover screen is a LOWER BOUND on the
+  turnover you will be charged, and it was calibrated on the wrong split.** F6 predicted 3.2x
+  one-way a year from the fraction of names replaced per month on train; the engine charged
+  **6.6x on train and 10.6x on validation**. Two separate gaps. (i) The engine's turnover metric
+  counts both sides, so a 26%-of-book monthly replacement is 3.2x one-way but 6.3x as reported —
+  the train figure is reconciled. (ii) Validation name turnover ran **68% above train's**, which
+  no train screen can see: the 2018-2023 panel is ~3x wider and the residual decays faster in
+  it. So a train-calibrated cost estimate on a signal-driven book needs a margin for the
+  validation split's own churn, and 'net +156 bps/yr' from the F6 table was never the right
+  number to plan on. **Pre-register turnover as a range with the wider split's churn in it, or
+  the net-of-cost column is fiction.**
+  Also confirmed, and worth keeping: the retention band is not a cost/signal trade-off. It cut
+  name turnover 42% while *raising* the held book's train excess (+17.5 to +22.2 bps/21d), so
+  the no-trade-band result transfers to a long-only discrete book. The band is a keeper; the
+  score it was put around is not. **What is left to test is cost, not signal:** gross skill
+  ~+0.11 against a ~180 bps/yr bill means the only remaining lever on this mechanism is the
+  per-name cost of the names it buys, which is exactly the rider `learnings.md` 2026-10-07 left
+  open ("a bet that 15 bps a side is the right cost model on names selected *for* high price
+  impact — the one obvious way it could be an artifact, and untested").
+
