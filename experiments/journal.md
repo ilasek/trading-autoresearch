@@ -18345,5 +18345,29 @@ behaviour, not a malfunction.
 - Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.03, 90% CI [-0.26, +0.21]; at 2x costs -0.05; with a 30% delisting haircut -0.03; train -0.06 (1997-2008 -0.09, 2009-2017 -0.01)
 - Survivorship-matched benchmarks (protocol v3): validation sharpe at the 64% percentile of 200 random-selection replicas (median +0.29, 90% +0.35); equal-weight eligible pool +0.34, information ratio vs it -0.25
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Lesson: **the low-volatility anomaly is absent on this panel: the risk reduction is real, the
+  Sharpe gain is not, and the cost arithmetic was right for nothing.** Both pre-registered
+  columns came in as predicted — the book held 97.7 names at **1.2x one-way turnover a year**
+  (every scored v2 trial was 22x) and the validation drawdown is **-27.6%**, so the risk third
+  of the hypothesis is confirmed. The cost-insensitivity claim is confirmed *quantitatively*:
+  doubling the liquidity tier moves skill from **-0.033 to -0.047**, i.e. the whole cost bill is
+  ~14 bps/yr against the 3-6%/yr the v2 leads paid. **That corner of the design space is now
+  measured and open, which is the one durable thing this trial bought.** What failed is the
+  numerator: validation annual return **+4.8%**, against a pool earning its 0.34 Sharpe on
+  roughly three times the beta — the raw return fell almost exactly in proportion to beta, so
+  **Sharpe is flat in beta here** and the first pre-registered falsifier is the one that fired.
+  **The free IC screen was not wrong; it was answering a different question.** A flat rank IC
+  against the forward 21/63-day return is consistent with both a low-vol anomaly and plain CAPM,
+  because a rank correlation is **scale-free in exactly the dimension the hypothesis turned on**
+  — it cannot tell "the same return at lower risk" from "a lower return at lower risk". Screen a
+  risk-reduction hypothesis on a beta-sorted *mean return*, never on a rank IC. Second reading,
+  independent and agreeing: the null percentile **64%** says a random 100-name book of the same
+  types and regions did as well, so neither low-volatility selection nor de-concentration added
+  anything — and since a random replica carries beta ~1.0 while this book carried 0.66 and the
+  two scored the same Sharpe, both readings say the same thing. **Free kill, recorded so it is
+  not re-bought:** the planned second half of this pair — the identical construction selecting
+  on trailing 252-day beta to the pool instead of total range volatility — is now pointless. Low
+  GK vol and low beta are the same object on this panel (that is *why* the beta ratio came in at
+  0.633), and a Sharpe flat in beta is flat under either label. `price-trend` therefore spends 1
+  of its 2 trials tonight, not 2.
 
