@@ -54,6 +54,12 @@ and they lose to it once costs are doubled. The residual-reversion "premium" of 
 was the execution model: same-close fills on the signal's own close, free drift, and a
 flat cost on illiquid, stamp-duty-paying names.
 
+**Every recorded trial re-scored.** `scripts/rescore_protocol_v3.py` re-ran all 109 scored
+trials of v1 and v2 (plus the ported champions and sanity strategies) under v3; the summary is
+`reports/2026-W41.md`. None of the 82 trials that were free to pick from the whole
+point-in-time pool has a skill interval above zero; the only three that do are confined to
+today's survivors, one of them a no-information placebo.
+
 ## What v3 still does not fix
 
 - **Free data.** Yahoo does not price most delisted members (3–11% over validation, 34–60%
