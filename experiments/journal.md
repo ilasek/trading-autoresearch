@@ -18336,3 +18336,14 @@ behaviour, not a malfunction.
 ---
 
 ## Research session — 2026-10-09 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-09T23:39:55+00:00 — pt_lowvol_gk_quarterly — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_lowvol_gk_quarterly.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Holding the 100 eligible names with the lowest trailing 252-day Garman-Klass range volatility, equal weight, rebalanced only at quarter-ends, beats the equal-weight eligible pool's validation Sharpe of 0.452 by at least 0.10, because on the train split that selection's cross-sectional IC against the forward 63-day return is a flat null (+0.0005, t +0.04) while its mean 252-day beta to the pool is 0.633 of the pool's own (0.623 against 0.983) -- an unchanged numerator over a denominator a third smaller -- and because at 0.51x one-way turnover a year, 43 times less than every scored v2 trial, the cost model that destroyed the v2 board cannot reach it; skill at or below zero says the pool's extra variance is compensated after all, and a null percentile below 90% says the gain was de-concentration rather than low-volatility selection.
+- Verdict: GATE_FAIL — train skill -0.063 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.304 <= the random-selection null's 90% quantile 0.353 (median 0.286; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.46, ann_ret +7.7%, maxDD -39.6%, turnover 1.2x, skill vs pool -0.06
+- Validation: sharpe +0.30, ann_ret +4.8%, maxDD -27.6%, turnover 1.3x, skill vs pool -0.03
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.03, 90% CI [-0.26, +0.21]; at 2x costs -0.05; with a 30% delisting haircut -0.03; train -0.06 (1997-2008 -0.09, 2009-2017 -0.01)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 64% percentile of 200 random-selection replicas (median +0.29, 90% +0.35); equal-weight eligible pool +0.34, information ratio vs it -0.25
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: _(fill in after reflection)_
+

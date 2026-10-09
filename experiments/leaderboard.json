@@ -1,75 +1,35 @@
 {
-  "generated_at": "2026-10-08T00:21:02+00:00",
-  "protocol_version": 2,
+  "generated_at": "2026-10-09T23:40:49+00:00",
+  "protocol_version": 3,
   "champion": null,
   "families": {
-    "liquidity-volume": {
-      "name": "lv_resid_rev_illiq_tilt",
-      "candidate": "strategies/candidates/lv_resid_rev_illiq_tilt.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-10-08T00:19:02+00:00",
-      "n_trials": 1,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.672,
-        "ann_return": 0.1166,
-        "max_drawdown": -0.3566,
-        "ann_turnover": 22.01,
-        "avg_positions": 30.0
-      },
-      "train_sharpe": 0.649
-    },
-    "statistical-arbitrage": {
-      "name": "sa_pca_resid_reversion",
-      "candidate": "strategies/candidates/sa_pca_resid_reversion.py",
-      "track": "scout",
-      "verdict": "FAMILY_LEAD",
-      "ts": "2026-10-07T23:55:51+00:00",
-      "n_trials": 1,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.597,
-        "ann_return": 0.1032,
-        "max_drawdown": -0.4012,
-        "ann_turnover": 22.49,
-        "avg_positions": 30.0
-      },
-      "train_sharpe": 0.544
-    },
     "price-trend": {
-      "name": "pt_resid_reversal_v2",
-      "candidate": "strategies/candidates/pt_resid_reversal_v2.py",
+      "name": "pt_lowvol_gk_quarterly",
+      "candidate": "strategies/candidates/pt_lowvol_gk_quarterly.py",
       "track": "scout",
       "verdict": "GATE_FAIL",
-      "ts": "2026-10-07T23:39:13+00:00",
-      "n_trials": 2,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.54,
-        "ann_return": 0.1209,
-        "max_drawdown": -0.5406,
-        "ann_turnover": 21.87,
-        "avg_positions": 30.0
-      },
-      "train_sharpe": 0.438
-    },
-    "statistical-learning": {
-      "name": "sl_ridge_six_masked",
-      "candidate": "strategies/candidates/sl_ridge_six_masked.py",
-      "track": "scout",
-      "verdict": "GATE_FAIL",
-      "ts": "2026-10-08T00:14:57+00:00",
+      "ts": "2026-10-09T23:39:55+00:00",
       "n_trials": 1,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.385,
-        "ann_return": 0.0689,
-        "max_drawdown": -0.5371,
-        "ann_turnover": 19.67,
-        "avg_positions": 30.0
+        "sharpe": 0.304,
+        "ann_return": 0.0477,
+        "max_drawdown": -0.2756,
+        "ann_turnover": 1.32,
+        "avg_positions": 99.99,
+        "skill": -0.033,
+        "skill_cost2x": -0.047,
+        "skill_delist30": -0.033
       },
-      "train_sharpe": 0.04
+      "train_sharpe": 0.461,
+      "skill_ci90": [
+        -0.259,
+        0.206
+      ],
+      "train_skill": -0.063,
+      "mechanism": 1
     }
-  }
+  },
+  "distinct_mechanisms": 1,
+  "mechanism_rho": 0.5
 }
