@@ -467,6 +467,13 @@ instruments:
   region: JP
   currency: JPY
   indices: [n225]
+- id: 1347_HK
+  yahoo: 1347.HK
+  name: 華虹宏力
+  type: stock
+  region: HK
+  currency: HKD
+  indices: [hsi]
 - id: 1378_HK
   yahoo: 1378.HK
   name: 中國宏橋
@@ -701,6 +708,13 @@ instruments:
 - id: 2331_HK
   yahoo: 2331.HK
   name: 李寧
+  type: stock
+  region: HK
+  currency: HKD
+  indices: [hsi]
+- id: 2338_HK
+  yahoo: 2338.HK
+  name: 濰柴動力
   type: stock
   region: HK
   currency: HKD
@@ -5459,6 +5473,13 @@ instruments:
   region: DE
   currency: EUR
   indices: [dax]
+- id: GALD_SW
+  yahoo: GALD.SW
+  name: Galderma
+  type: stock
+  region: CH
+  currency: CHF
+  indices: [smi]
 - id: GAP
   yahoo: GAP
   name: GAP
@@ -5559,7 +5580,7 @@ instruments:
   indices: [sp500]
 - id: GLD
   yahoo: GLD
-  name: GLD
+  name: Gold
   type: stock
   region: US
   currency: USD
@@ -8341,6 +8362,13 @@ instruments:
   region: UK
   currency: GBX
   indices: [ftse100]
+- id: SDZ_SW
+  yahoo: SDZ.SW
+  name: Sandoz
+  type: stock
+  region: CH
+  currency: CHF
+  indices: [smi]
 - id: SEDG
   yahoo: SEDG
   name: SEDG
@@ -8442,6 +8470,13 @@ instruments:
 - id: SK
   yahoo: SK
   name: SK
+  type: stock
+  region: US
+  currency: USD
+  indices: [sp500]
+- id: SKYD
+  yahoo: SKYD
+  name: Skydance Corporation
   type: stock
   region: US
   currency: USD
@@ -9107,6 +9142,13 @@ instruments:
 - id: TTWO
   yahoo: TTWO
   name: Take-Two Interactive
+  type: stock
+  region: US
+  currency: USD
+  indices: [sp500]
+- id: TWLO
+  yahoo: TWLO
+  name: Twilio
   type: stock
   region: US
   currency: USD
