@@ -18747,3 +18747,183 @@ signal it was wrapped around is not.
    is why this session ran; that check should not have to be made twice.
 
 ## Research session — 2026-10-10 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Engine issue — 2026-10-11 — the 4 membership tests are still red, the fix is NOT a stale test constant, and the reconciliation that caused them deleted 20 Nikkei names
+
+**No trial was run tonight. No portfolio was formed, no return series or Sharpe was computed
+outside `run_experiment.py`, and no holdout or forward file was opened.** The setup rule in
+`CLAUDE.md` is "engine must be green"; `.venv/bin/python -m pytest tests/ -q` reports
+**4 failed, 88 passed** — the same four `tests/test_membership.py` assertions the 2026-10-09
+data-issue entry raised. That entry closed with a request a human has not yet acted on and with
+an explicit instruction to this session: *"every nightly session will find a red suite and have
+to make this same call, which is a worse situation than a clean stop: the alarm is correct and it
+should be cleared rather than reasoned around twice."* It is not reasoned around a second time.
+The session stops here, and spends its night on the diagnosis instead so the next human pass is a
+small edit rather than an investigation.
+
+Failing: `test_change_logs_keep_index_size[ftse100, n225, smi]`,
+`test_hang_seng_log_matches_published_sizes`. Store is current (last price date 2026-10-09,
+`RATE_US3M` present), and the only data commit since the last session (`973a12ee`, daily refresh
+2026-10-10) touched two 2026 price partitions and no membership file.
+
+### 1. The failure is not confined to the holdout era, and the previous entry's reading of it was too narrow
+
+The 2026-10-09 entry described the failures as "index-change bookkeeping for dates inside the
+holdout era". The replayed counts are in fact wrong on **essentially every business day back to
+2009-01-01** — the start of the replay window, which spans all of train (2009-2017 for the eight
+non-US indices) and all of validation:
+
+    index     wrong days / replayed days   replayed count vs expected
+    ftse100        4625 / 4626             99 vs 100, continuously 2009-01-01 .. 2026-09-23
+    smi            4625 / 4626             21 vs 20, continuously (22 vs 21 inside the two exceptions)
+    n225           4626 / 4626             213 vs 225, continuously; 205 on the snapshot day
+    hsi              47 / 47 checkpoints   +2 at EVERY published checkpoint, 2009-06-08 .. 2024-06-11
+    sx5e, aex         0                    clean
+
+So the alarm is broader than it was recorded as being, and a session that reads the previous
+entry alone would under-rate it. **It is still not evidence that the train/validation panel is
+wrong — see §3 — but the reason is a property of the test's replay, not of the dates involved,
+and that distinction was not in the record.**
+
+### 2. Why a 2026 reconciliation moves counts back to 2009 — and why updating the test's snapshot date does not fix it
+
+`_replay` in the test does not read the stored spells. It rebuilds them from
+`{index}_changes.csv` plus **today's** member list (`end is NaT` in the stored intervals) through
+`intervals_from_events`, which gives any current member with *no event anywhere in the log* a
+spell running from `LOG_COMPLETE_FROM` (2009-01-01). The replay therefore walks the present
+backwards, and a name the log has never heard of is credited with seventeen years of membership
+it never had. That is the whole mechanism of the 2009-onwards error:
+
+- **hsi** — `1347_HK` and `2338_HK` entered the panel on 2026-10-09 and appear in no log row, so
+  the replay counts both from 2009-01-01. That is exactly the uniform **+2** at all 47 published
+  checkpoints, and it is why this test produces **zero warnings**: the warning paths only cover
+  log-says-in-but-not-current and log-exit-but-current, not current-with-no-log-row.
+- **smi** — same two-name mechanism (`GALD_SW`, `SDZ_SW`, both opened 2026-10-09) nets against
+  `KNIN_SW`, whose exit row is missing, for **+1**.
+- **ftse100** — `BBY_UK` and `WPP_UK` are current members whose last log event is an *exit*, so
+  the replay holds them out until the snapshot (-2); `BEZ_UK` joined 2022-12-19 with no recorded
+  exit and is no longer a member (+1). Net **-1**.
+- **n225** — eight names (`1808_JP`, `2432_JP`, `3659_JP`, `3697_JP`, `4307_JP`, `4385_JP`,
+  `543A_JP`, `7974_JP`) have joins with no recorded exit and are not current, plus four further
+  log gaps. Net **-12**.
+
+**The test's `SNAP = T("2026-09-24")` is stale** — the store's membership was rebuilt by the
+2026-10-09 refresh and carries no spell boundary at 2026-09-24 at all (0 opened, 0 closed) — but
+**that constant is not the bug**. Replaying every index under both dates:
+
+    SNAP          ftse100   smi    n225   hsi(checkpoints)   sx5e   aex
+    2026-09-24      4625    4625   4626        47/47           0      0
+    2026-10-09      4636    4636   4637        47/47           0     11
+
+Moving the constant forward fixes nothing and breaks `aex` as well, because that index's
+exception table ends at 2026-09-25. **The fix is the missing change-log rows, not the date.**
+
+### 3. The train and validation panel is sound — checked on the stored spells, not on the replay
+
+The engine builds `eligible` from the stored intervals, not from the replay. Counting stored
+membership directly on sample dates:
+
+    index     ids   2010-06   2015-06   2020-06   2023-06   2026-09-24
+    aex        57       25        25        25        25        30
+    cac40      63       40        40        40        40        40
+    dax        58       30        30        30        40        40
+    ftse100   201       98       100       100       100       100
+    hsi       117       43        48        50        76        93
+    n225      290      225       224       224       225       225
+    smi        34       20        20        20        20        20
+    sp500    1137      478       482       499       500       500
+    sx5e       81       49        49        50        50        50
+
+Every index is at or within one name of its published size across train and validation, and the
+HSI column tracks its documented growth. Independently: **no spell boundary produced by this
+reconciliation lands before 2026-10-09** — the 2026-10-09 refresh opened 9 spells and closed 27,
+and 2026-09-24 has none. Together with the previous session's two checks (pre-2024 spells
+byte-identical across the refresh; no pre-2024 price row changed) this says the panel a trial
+would have run on tonight is the same panel trials #1 and #2 ran on. **That is why this is an
+engine/data-bookkeeping stop and not a corrupted-history stop** — but it is a human's call to
+clear the alarm, not a session's to keep out-voting it.
+
+### 4. The new finding, and it is the part that should be fixed first: the Nikkei list lost 20 names with no replacements
+
+The 2026-10-09 reconciliation **closed 20 `n225` spells on one day and opened none**:
+
+    1801_JP 1802_JP 1803_JP 1808_JP 1812_JP 1925_JP 1928_JP 1963_JP 2432_JP 3659_JP
+    3697_JP 4307_JP 4385_JP 4704_JP 4902_JP 543A_JP 7004_JP 7974_JP 9602_JP 9766_JP
+
+The stored intervals therefore assert the Nikkei 225 has had **205 members since 2026-10-09**.
+No index event explains that: a 225-name index does not drop 20 constituents without
+replacements, and eight of the twenty are the same names whose missing exit rows break the
+`n225` size test. The likely cause is a partial constituent scrape being treated as the current
+list, which `build_membership.py` then reconciles by closing every spell the scrape omitted —
+the same `workflow_dispatch`-takes-the-Monday-path side effect the previous entry flagged.
+Smaller instances of the same pattern: `ftse100` closed `SDR_UK`, `smi` closed `SCMN_SW`
+(Swisscom), `sp500` closed `CTVA`, `PSKY`, `WBD`.
+
+**This cannot touch train or validation** (§3), and it is confined to 2026-10-09 onward. It
+does reach two live things, which is why it is listed first for the human: the **forward
+incubation scoring** in `scripts/incubation_report.py` runs on post-registration days and would
+score frozen candidates on a Japanese universe missing 9% of its names, and any future session's
+validation of a fresh refresh starts from this list.
+
+### 5. What a human needs to do — the specific rows
+
+Everything below is in paths frozen to a session (`scripts/`, `tests/`, `data/`). None of it was
+edited tonight.
+
+1. **Re-check the 2026-10-09 constituent scrape for `n225` before anything else**, and either
+   restore the 20 names above or add the real change rows if some of those exits are genuine.
+   Same question for `SDR_UK`, `SCMN_SW`, `CTVA`, `PSKY`, `WBD`.
+2. **`ftse100_changes.csv`** — add the re-entry rows for `BBY_UK` and `WPP_UK` (both current
+   members whose last recorded event is an exit) and the exit row for `BEZ_UK` (joined
+   2022-12-19, no longer a member).
+3. **`smi_changes.csv`** — add the exit row for `KNIN_SW` and join rows for `GALD_SW` and
+   `SDZ_SW`.
+4. **`hsi_changes.csv`** — add join rows for `1347_HK` and `2338_HK`. These two alone are the
+   whole `+2` in all 47 published checkpoints, so this one test should go green on that edit.
+5. **`n225_changes.csv`** — add exit rows for the eight names named in §2, after (1) settles
+   which of the twenty are real.
+6. **Consider making the alarm cheaper to read.** Two small things would have saved both
+   sessions a night: have `intervals_from_events` warn on a *current member with no log row*
+   (the one case that produces a silent, uniform, 17-year count error — the `hsi` failure
+   carried zero warnings), and derive the test's `SNAP` from the stored intervals rather than
+   hard-coding it, so a stale constant cannot be mistaken for the bug. Both are engine/test
+   edits and need a human.
+
+- Lesson: **a backward-walking reconstruction turns a one-day data defect into a seventeen-year
+  one, and the shape of the error says which it is.** The four red tests look like a train-and-
+  validation catastrophe (4,625 of 4,626 days wrong) and are in fact four missing CSV rows plus
+  one bad scrape, because `_replay` credits any current member with no log row from
+  `LOG_COMPLETE_FROM`. The diagnostic that separates the two readings is free and took one pass:
+  **count the stored spells directly on a few sample dates per split, and look at where the
+  reconciliation's spell boundaries actually land.** If every boundary is after the last split
+  boundary, a replay error spanning the splits is an artifact of the replay. Record it with the
+  alarm, because the previous entry's narrower description ("bookkeeping inside the holdout era")
+  was both too reassuring about §1 and too reassuring about §4 — the genuinely alarming thing in
+  this refresh was not in the failing tests at all, it was the 20 silently closed Nikkei spells
+  that no test asserts on.
+
+## Session summary — 2026-10-11 (nightly) — halted at setup, 0 of 8 experiments
+
+**Experiments run: 0. The engine suite is red (88/92) for the second consecutive night with the
+same four `tests/test_membership.py` failures, so the session stopped at step 2 per `CLAUDE.md`'s
+setup rule and the 2026-10-09 entry's explicit instruction not to reason around the alarm twice.**
+No candidate was written, no holdout or forward file was read, the seat is still empty and the
+trial count is unchanged at 2 under v3 — so the deflated-skill bar is exactly where the last
+session left it.
+
+The night went into diagnosis instead (see the `## Engine issue` entry above). Three results,
+all free: (i) the replayed index sizes are wrong back to **2009-01-01**, not just in the holdout
+era as the previous entry said, but this is an artifact of the test's backward walk from today's
+member list and **not** a train/validation defect — the stored spells are at published size on
+sample dates in every split, and no boundary from the bad reconciliation lands before 2026-10-09;
+(ii) the test's stale `SNAP` constant is **not** the bug — replaying under both candidate dates
+fixes nothing and breaks `aex` — the bug is a specific, enumerated set of missing change-log
+rows; (iii) **the genuinely alarming thing in the 2026-10-09 refresh is not in any failing test**:
+it closed **20 `n225` spells in one day and opened none**, so the stored Nikkei list has been 205
+names since 2026-10-09, which reaches forward incubation scoring.
+
+**Next session**: if the suite is still red and the `## Engine issue` remedy list has not been
+acted on, halt again rather than re-litigating it — this is now a two-night-old alarm with a
+named, specific fix, and a third judgement call in its place would be worth less than the stop.
+Research ideas remain exactly as the 2026-10-10 summary left them (its five numbered items are
+unspent, and nothing tonight touched them).
