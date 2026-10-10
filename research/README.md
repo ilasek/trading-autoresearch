@@ -342,6 +342,19 @@ snippets. Three practical limits to plan around:
   (`api.crossref.org/works/<doi>`, `is-referenced-by-count`) was never rate-limited and is the right
   first call**, with OpenAlex second and Semantic Scholar third.
 
+- **`repository.arizona.edu` (DSpace 7) serves a closed article's accepted manuscript freely, and an
+  index's `any_repository_has_fulltext: false` can be wrong about a handle that index itself lists**
+  (added 2026-10-10). A closed *Review of Finance* article that OpenAlex, Crossref and Semantic
+  Scholar all report as having no fetchable OA copy — OpenAlex's own `open_access` block read
+  `oa_status: closed, any_repository_has_fulltext: false` — nevertheless had
+  `hdl.handle.net/10150/661294` in the same response's `locations` list, and that handle resolved to
+  a landing page whose `/bitstreams/<uuid>/download` links held the 53-page Final Accepted
+  Manuscript. **Read the `locations` list even when the OA flags say there is nothing to read.** Two
+  mechanics worth copying: the landing page is a ~780 KB Angular shell, so grep the bitstream UUIDs
+  out of it rather than looking for a `.pdf` href, and **one of the bitstreams is a thumbnail PNG** —
+  `file` each download before parsing. The modern DSpace path form is `/bitstreams/<uuid>/download`
+  (also `/content`), not the legacy `/bitstream/<handle>/<n>/<file>.pdf`.
+
 ## Anti-lookahead policy (hard rules)
 
 The strategy agent backtests on past data with validation 2018–2023 and a locked holdout

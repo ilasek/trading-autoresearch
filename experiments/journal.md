@@ -18745,3 +18745,5 @@ signal it was wrapped around is not.
    `tests/test_membership.py` index-change assertions are red and need a human to add the missing
    change rows (or to accept the reconciliation). The pre-2024 panel was verified unchanged, which
    is why this session ran; that check should not have to be made twice.
+
+## Research session — 2026-10-10 (learning agent): 3 notes added, see research/SUMMARY.md

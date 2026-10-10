@@ -2023,6 +2023,51 @@ must say so. The free item is to run the **specification ladder rather than the 
 the anti-candidate is to build "lag the US ETF into the other regions" on the strength of the
 anchor's title (#197). `validation_overlap: false` for the cluster.
 → `notes/2026-10-04-us-leads-the-world-country-lead-lag.md`
+
+**ETF-versus-constituent, covered for the first time — and the literature explains the lab's null
+rather than contesting it.** `program.md` charters "ETF versus constituent" for this family and
+calls the 42-ETF panel "unusually well suited" to it; the lab screened it on 2026-08-31 (9 SPDR
+sector ETFs + VNQ) and found the ETF's residual of the member-median control a null at every
+horizon pair, and this folder had never read the underlying literature in 174 notes. Read now, it
+resolves into two branches that make **opposite** predictions, and the lab tested the one neither
+side defends. Ben-David–Franzoni–Moussawi (2018, JF, Tier A, 604 Crossref citations, read as NBER
+w20071) set up exactly this fork: under **gradual price discovery** the more liquid ETF moves first
+on fundamental news and the constituents follow with a lag (a directional lead, no reversal); under
+**arbitrage-mediated shock propagation** a non-fundamental shock to the ETF is absorbed by
+risk-averse arbitrageurs who hedge in the basket, so constituent prices move *with no news* and
+then revert. **The discriminating observable is the reversal, and the paper's own tests take the
+propagation side** — stock-level ETF flows predict a same-signed move and then a partial reversal,
+roughly 45% of it inside twenty trading days with nothing more out to forty, which the authors read
+as flows carrying fundamental and non-fundamental shocks in roughly equal shares. The effect is
+larger where arbitrage is cheaper (tighter spreads, lower lending fees) and is identified off the
+Russell 1000/2000 cutoff. The lab's 2026-08-31 screen measured the *directional lead* — the
+price-discovery branch — so **the null is consistent with this paper**, and repeating it would
+re-measure the branch neither account predicts. `validation_overlap: false`,
+`published_post_2018: false`.
+→ `notes/2026-10-10-etf-arbitrage-shock-propagation.md`
+
+**And the half of that channel this panel could compute is a published null.** The obvious
+candidate on this universe writes itself — the panel holds both the ETFs and the index members they
+track, so an **ETF-versus-synthetic-basket divergence** is computable from closes alone and can be
+traded as reversion. Brown–Davies–Ringgenberg (2021, *Review of Finance*, Tier A, 134 Crossref
+citations, **read in full** from `repository.arizona.edu`) build the clean version of both halves and
+measure them against each other. Their identification is the sharp part: an ETF share is a claim on
+the ETF's assets, so excess demand for *either* side must be non-fundamental, which makes observed
+creation/redemption a direct signal of a non-fundamental demand shock. Two signals follow —
+`ETFFlow` (the percentage change in **shares outstanding**) and `ETFPremChange` (the change in
+`price/NAV − 1`). **Flows predict returns negatively at one, three and six months; premium changes
+predict nothing at any horizon in any sub-sample**, which the authors attribute to a competitive AP
+market plus noisy premia. Two further findings make the price side unreachable rather than merely
+weak: the working signal is **non-linear** (decile dummies significant, the continuous measure never
+is) and ETF flows are **neither persistent nor correlated with contemporaneous returns**, so no
+function of past prices proxies for them. Predictability is similar on NAV returns as on share
+returns, so the distortion does reach the assets. Together with the note above, the reading for this
+lab is: **the ETF-arbitrage vein is real and is not reachable from a daily close panel** — the
+observable half is a null measured correctly, the working half is a share count, and on this panel a
+synthetic premium is additionally dominated by the US-listing-versus-local-close time-zone artifact
+that v3's next-real-close fill rule exists to stop candidates from harvesting (#229, #230).
+`validation_overlap: false`, `published_post_2018: true`.
+→ `notes/2026-10-10-etf-flows-and-the-premium-change-null.md`
 ---
 
 ### 13. `statistical-arbitrage`
@@ -5852,6 +5897,39 @@ portfolio really can decline it — but it is **also not a cross-sectional edge*
 exactly `p` times the panel's fresh-entrant weight, where `p` on these nine indices is a number
 nobody has measured and the US evidence says is shrinking. **Measure the weight before assuming the
 premium.** New: **#220–#226**, four free, one trial, one engine question, one anti-candidate.
+
+
+**[2026-10-10] The ETF columns have a boundary too, and it is moved by a provider rather than a
+committee — with the pool obliged to follow and the candidate not.** The 2026-10-09 detector asks
+three questions of any dataset boundary: *who moves it, on what information, and is anyone obliged
+to trade when it moves?* Asked of the panel's 42 ETF columns — which `eligible` turns True for from
+each fund's **first price** — the answers are not the stock half's. Ben-David–Franzoni–Kim–Moussawi
+(2023, RFS, Tier A, 123 Crossref citations, read as NBER w28369) give the supply-side theory: the
+ETF industry is **segmented into two salience equilibria** (Bordalo–Gennaioli–Shleifer), broad-based
+products competing on fee and specialized sector/thematic products competing on an attention-grabbing
+non-price attribute, with flows into the first group fee-sensitive and flows into the second
+fee-*insensitive* and past-performance-sensitive. The launch decision is therefore **return-chasing
+by construction** for the specialized half: providers ship a product once a theme is popular, and by
+the listing date its securities have had their run — the paper eliminates segment-selection skill,
+hedging/market-completion and "warm glow" on three separate predictions before settling there, and
+documents that newly launched specialized funds hold stocks with recent run-ups, favourable recent
+media, high market-to-book, high short interest and **positively skewed returns**. The construction
+worth stealing is the **event-time ladder**: 60 calendar-time portfolios indexed by *months since
+launch*, one factor model each, cumulated — it separates "this product type is bad" from "this
+product type is bad while young", and no calendar-time sort can. Two consequences here. *(1)* The
+answer to "is anyone obliged to trade when the boundary moves" is **yes, the v3 equal-weight
+eligible pool**: it takes a position in every ETF from that fund's first price, in whatever a
+provider chose to launch, and a candidate is under no such obligation — the same decline-what-the-
+benchmark-must-hold structure as #223, on a different sleeve. *(2)* Neither factor has been measured
+here: the ETF sleeve's **specialized share** and its **young-column weight share** are pure
+accounting on `eligible` plus first-price dates (#227), and the expected outcome is that this
+panel's broad regional trackers leave the vein empty — which is why the census comes first and
+costs nothing. Two returns-based proxies make the rest partially reachable without holdings data:
+months-since-first-price as launch age, and `1 − |corr|` against the equal-weight pool as a
+differentiation proxy for the paper's `1 − cosine similarity` on weights (#228). **Flagged
+`validation_overlap: true`** (1993–2019) and `published_post_2018: true`: no magnitude or sign from
+this paper may enter a hypothesis. New: **#227–#232**, three free, one trial, two anti-candidates.
+→ `notes/2026-10-10-etf-launch-as-a-return-chasing-boundary.md`
 
 ---
 
@@ -10370,6 +10448,103 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md` ·
     `notes/2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`
 
+227. **FREE — count the ETF sleeve before believing anything about it: the specialized share and the
+    young-column weight share, train and validation separately.** Pure accounting on the `eligible`
+    matrix plus each ETF column's first-price date; no returns, no trial. Three numbers. *(a)* How
+    many of the 42 ETFs are **sector, industry or thematic** rather than broad market, regional or
+    asset-class trackers (ETF ids are allowed in code, so this is a classification the session can
+    simply write down and justify). *(b)* What share of the ETF sleeve's eligible weight sits in
+    funds inside their **first 60 months of eligibility**, computed on each split separately —
+    60 months is the window in which the source's event-time ladder puts the whole effect. *(c)*
+    Whether (b) differs between train and validation, since the sleeve was younger in the earlier
+    split by construction and any sleeve-level number is then not comparable across splits. This
+    gates #228 and #231 and it is the honest way to kill them: if this panel holds two or three
+    specialized funds and almost no young weight, the vein is empty and nothing below costs a trial.
+    Composes into one pass with #214 (region × liquidity × tax cells) and #220 (eligibility
+    turnover) — all three are returns-free censuses of the same matrix, so build the machinery once.
+    → `notes/2026-10-10-etf-launch-as-a-return-chasing-boundary.md`
+
+228. **FREE — two causal proxies that make the product-launch mechanism measurable without holdings
+    data, and they are reference constructions rather than hypotheses.** *(a)* **Launch age**:
+    months since a column's first price, defined for every instrument and exactly the event-time
+    axis the source's 60-portfolio ladder is built on. *(b)* **Differentiation**: `1 − |corr|` of an
+    instrument's returns against the equal-weight eligible pool over a trailing window, as the
+    returns-based stand-in for the source's `1 − cosine similarity` between a fund's portfolio
+    weights and the aggregate ETF portfolio. Both are cheap, causal and scale-free, and (b) is
+    worth having on the *stock* side too — it is the same object as the "distance from the
+    benchmark in weight space" material in this file, computed in return space where this panel can
+    actually compute it. Adopt as the reference pair whenever a seasoning or differentiation
+    conditioner is wanted; neither is a candidate on its own.
+    → `notes/2026-10-10-etf-launch-as-a-return-chasing-boundary.md`
+
+229. **ANTI-CANDIDATE — do not build the ETF-versus-synthetic-basket premium reversion, and the
+    first reason alone is sufficient.** The candidate is tempting and buildable today: the panel
+    holds both the ETFs and the index members they track, so accumulate an ETF's return against the
+    eligible-member basket's return and trade the gap as reversion — no NAV feed, no holdings, no
+    share counts. *(1)* **The premium side is the published null.** `ETFPremChange`, measured
+    against funds' *true* NAVs over a decade of US ETFs, predicts nothing cross-sectionally at one,
+    three or six months in any sub-sample, and the authors abandon it. A synthetic basket proxy is a
+    noisier version of a statistic that fails when measured cleanly; the trial would buy measurement
+    error on a zero. *(2)* **The signal that does work is a share count and has no price proxy** —
+    ETF flows are reported as neither persistent nor correlated with contemporaneous returns, which
+    closes the obvious substitutions. *(3)* **On this panel the gap is mostly a clock.** Eight of the
+    nine index regions close hours before a US-listed ETF prints, so a close-to-close ETF-minus-basket
+    divergence measures staleness, not mispricing — the artifact v3's next-real-close fill rule exists
+    to stop, and the one that already killed the lab's v2 residual-reversion result. Distinct from
+    #226: that forbids an index-*event* trade the data cannot date; this forbids a continuously
+    computable divergence whose clean version is a measured zero.
+    → `notes/2026-10-10-etf-flows-and-the-premium-change-null.md` ·
+    `notes/2026-10-10-etf-arbitrage-shock-propagation.md`
+
+230. **ANTI-CANDIDATE — do not re-run ETF-versus-constituent lead-lag under v3, and record *why* the
+    2026-08-31 null is now a mechanism-level closure rather than one measurement.** The lab's screen
+    tested whether the ETF's return, residual of the member-median control, predicts its
+    constituents — i.e. the **gradual-price-discovery** branch, which Ben-David–Franzoni–Moussawi set
+    up explicitly as the *rival* to their own account and do not defend. The branch the literature
+    does defend predicts **no directional lead at all**: a non-fundamental shock arriving in the
+    constituents through arbitrage hedging, identified by a **reversal conditional on primary-market
+    activity**. That conditioner is a creation/redemption count. So the family's charter
+    sub-mechanism is unreachable here for a structural reason — the observable version is #229's
+    null and the identified version needs data this repo does not have and may not fetch — and a
+    re-test under v3 would re-measure the branch neither side predicts, at a worse fill convention.
+    Note the one thing this does *not* close: the paper's cross-section implies short-horizon
+    reversal should be **stronger in liquid, index-core, basket-held names** than in the illiquid
+    tail, which is the opposite of the usual prior and is a free check on an existing signal rather
+    than a new one.
+    → `notes/2026-10-10-etf-arbitrage-shock-propagation.md`
+
+231. **TRIAL, and only after #227 — an ETF-sleeve seasoning screen, whose honest claim is "declines
+    an exposure the benchmark is obliged to hold".** The v3 equal-weight eligible pool holds every
+    ETF from its first price, so it takes whatever a provider launched, at the launch date. A
+    candidate need not. The construction is a screen, not a score: within the ETF sleeve of an
+    otherwise existing book, give zero weight to any ETF column inside its first `N` months of
+    eligibility (`N` from #227's (b), not fitted), and redistribute to the remainder of the sleeve.
+    Pre-registered failure condition: if #227 says the young-column weight share is below a couple
+    of percent in validation, **do not run it** — there is nothing to decline. Two further
+    disciplines. The source's sample touches 2018–2019 (`validation_overlap: true`), so **no
+    magnitude or sign from it may be imported**; the screen is justified by the *boundary* argument,
+    which is structural, not by the paper's measured underperformance. And the claim must be written
+    in the journal as a decline-what-the-pool-must-hold result, in #219's sense, not as "this
+    predicts returns" — same caution as #223, and like #223 it is worth a trial only once the census
+    says the weight is there.
+    → `notes/2026-10-10-etf-launch-as-a-return-chasing-boundary.md`
+
+232. **FREE — a standing caution about this lab's own screening statistic: a continuous-score null
+    is not a signal null, and there is a Tier-A instance of exactly that gap.** Brown–Davies–
+    Ringgenberg report, at **all three horizons**, that decile-dummy specifications on their signal
+    are significant while the **continuous** measure of the same signal is not — the information is
+    in the tails, and a linear cross-sectional score measures its absence. This lab closes
+    mechanisms on rank ICs and their t-statistics (`learnings.md` is full of entries of the form "a
+    clean null, IC +0.0087 / +0.0132, t = +1.00 / +1.56"), and a rank IC **is** the continuous
+    measure. The caution is not "those closures are wrong" — several were pre-registered and are
+    properly spent — it is that **a screen reported only as an IC has not tested a tail-concentrated
+    signal**, and the fix is free: report the top-decile-minus-bottom-decile spread alongside the IC
+    whenever a family is closed on a null. This connects the folder's existing "shape of a sorted
+    book" and "max-of-z versus mean" material to a published case where the two disagree in the
+    direction that matters.
+    → `notes/2026-10-10-etf-flows-and-the-premium-change-null.md`
+
+
 ---
 
 ## Coverage log
@@ -10433,9 +10608,95 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-07 (session 54) | **The first session in seven aimed at a *family* mechanism rather than at a statistic or at the lab's own measurement chain, and the first in this folder's history whose headline mechanism arrives already contested by a Tier-A direct test — with the session's best buildable item turning out to be a by-product with no connection to that mechanism at all.** Aim set by `research/README.md`'s rotation rule plus one grep: across 162 prior notes, `January effect`, `turn-of-the-year` and `tax-loss selling` returned zero or near-zero, `Grinblatt, Moskowitz` returned **zero**, while `holiday` and `day-of-week` were already covered — so the turn-of-the-tax-year branch of `seasonality-calendar` was the family's one uncovered half. It is mechanically distinct from the two seasonal notes already here (those sort on the **same calendar month in past years**; this conditions a **past-return** effect on the current month), and it is **the one branch of this family the lab's own [2026-09-01] structural closure does not reach** — that closure kills in-window-versus-cash timing because the complement window's return is positive, and a turn-of-the-tax-year book is a cross-sectional reallocation at constant gross exposure, at two rebalances a year. Four results. *(1)* **The price step is conditional and its author says so in print.** Constantinides derives the volume seasonal from a control-limit policy under transaction costs, then declines to derive a price seasonal: it requires that sellers not repurchase the same name or another tax-loss seller's name, because swapping sellers move no price — "a seasonal pattern in stock prices **only if we further assume irrationality or ignorance**". He adds that tax trading **does not explain the small-firm premium itself**, and that the gain-deferral half of the same option predicts new-year weakness in prior-year **winners**, the opposite sign from momentum. *(2)* **The naivety precondition is empirically met, in one small market.** Grinblatt–Keloharju's complete Finnish register (daily, with purchase prices, **no wash-sale rule** so sell-and-rebuy is observable) shows Odean's gain-versus-loss realisation ratio declining virtually monotonically over the **last ten trading days of December** and snapping back at the turn; repurchase rates rise in **loss size** and in **year-end proximity**; net buying pressure — a purely temporal demand shift — tracks returns, significantly **in small firms only**. Their own footnote concedes the observed timing is *not* optimal tax timing by Constantinides' standard, which is exactly the naivety his channel needs. *(3)* **The one test that distinguishes the tax story from everything else has been run and it failed.** Brown–Keim–Kleidon–Marsh: Australia's tax year ends 30 June and its "share trader" class deducts all realised losses uncapped, so a July effect at least as strong as the US January one is predicted; found instead **both** December–January **and** July–August seasonals, roughly equal in January and July, with the small-firm premium itself roughly **constant across months**, plus the US January effect significant across a half-century including low-tax pre-war years — **magnitude insensitive to the tax rate that supposedly drives it**. Their integration rescue is self-defeating and the argument generalises (see the transferable output below). *(4)* **The by-product is the item that should actually run.** Grinblatt–Moskowitz's **consistency** dummy is a *sign count*, not a magnitude — positive in **≥8 of the 11 months** of t−12…t−2 (≥15 of 24 for t−36…t−13) — and the threshold is **not tuned**: under a coin-flip null both are ≈10%, i.e. "top decile of sign-run consistency under the null", which is why it transfers without refitting. Every consistent-winner coefficient is positive across three horizons and three seasonal subperiods; consistent-loser coefficients do little, an asymmetry the authors use to kill the "consistency = low volatility" reading. It is binary and unit-free (sidestepping the no-common-scale problem `learnings.md` records) and its content is on the **winner** side, which a long-only book holds directly. **The honest discount, stated once and not buried**: protocol v2's pool is ~1,400 large-cap members of nine national indices plus 42 ETFs, and all four sources locate the price effect in the small, thinly traded, **low-institutional-ownership** tail that such a pool excludes by construction — so **a null on a turn-of-the-tax-year book here is uninformative about the mechanism**, which is why #212 is an anti-candidate rather than a trial. New: **#208–#212**, three free, one trial, one anti-candidate. **Nothing is closed by this entry**; no lab measurement was taken tonight. All four samples end no later than 2000: `validation_overlap: false` and `published_post_2018: false` throughout, and no dated performance figure from any source is recorded anywhere. | Constantinides 1984 (JFE) **read in full** from NBER WP 1176 (`2026-10-07-tax-trading-theory-and-the-price-pressure-condition.md`); Grinblatt–Keloharju 2004 (JFE) **read in full** from NBER WP 8745 (`2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md`); Grinblatt–Moskowitz 2004 (JFE) **read in full** from NBER WP 8744, body **uniformly ASCII-shifted by −29** and decoded (`2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md`); Brown–Keim–Kleidon–Marsh 1983 (JFE) **read in full** as the Internet Archive OCR text layer of MIT Sloan WP 1378-82 (`2026-10-07-tax-year-end-alignment-and-the-australian-test.md`) |
 | 2026-10-08 (session 55) | **The first session aimed by a protocol change rather than by a gap detector, the previous nightly's list or this folder's own rotation — and the first whose three notes are one chain rather than three topics.** `program.md` put **protocol v3** in force today: costs became per-name (a 15/20/30/40 bps liquidity tier **plus** UK/HK/FR/IT/ES transaction taxes), holdings now **drift** between emitted rows and undoing drift is charged, and the deflated statistic became **skill against the equal-weight eligible pool** instead of Sharpe against a zero-Sharpe null. The re-measurement put both v2 family leads at **zero skill**, and `learnings.md` concluded "beating the null is not beating the pool" while naming books tilted toward "71%-non-US, **stamp-duty-paying** names" — an attribution with no literature behind it anywhere in this folder. Three greps across all 170 prior notes returned **zero**: `stamp duty`/`financial transaction tax`/`Umlauf`/`Colliard`; `no trade region`/`Leland`/`Davis-Norman`; `benchmark index`/`Zitzewitz`. One cluster each. Headline: **the statute sets a per-name cost → the per-name cost sets a per-name no-trade band and a trade-to-the-edge rule → and whatever skill that book shows is a difference against a benchmark nobody has read the construction of.** Best buildable item is **#216** (weight-space bands, halfwidth ∝ cost^(1/3), derived not fitted); best free items are **#213**, **#214**, **#215**; **#217** sharpens the standing engine read with two specific questions; **#218** and **#219** are anti-candidates, the second a rule against harvesting the benchmark's own flaw. Also recorded: the covered Gârleanu–Pedersen partial-move policy is the **quadratic**-cost optimum and v3 charges **proportional** costs, so the lab's one cost-aware construction answers the wrong cost geometry. Access notes: Wiley `pdfdirect` is Cloudflare-challenged (403, 5.5 KB "Just a moment…"), a legacy `sites.google.com/site/<user>` faculty page now **302s into a Google login** (an eleventh "looks like an answer" mode — `curl` reports 200 at the top level), both Lancaster `eprints` records for a JPM article hold **no file**, and EDHEC's publication pages gate PDFs behind registration; the three sources read in full came from **ECB** (`ecb.europa.eu/pub/pdf/scpwps/`), **NBER** (unshifted, no `( )` dropout) and **arXiv**, and **University of Pretoria DSpace** (`repository.up.ac.za/bitstreams/<uuid>/download`) served a 2.7 MB thesis on the first try. | Colliard–Hoffmann 2017 (JF) + Saporta–Kan 1997 (BoE WP) + Umlauf 1993 (JFE, **not obtained**) (`2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`); Muhle-Karbe–Reppen–Soner 2017 (Annual Review of Financial Economics) + Constantinides 1986 (JPE) + Janecek–Shreve 2004 (Finance and Stochastics) (`2026-10-08-no-trade-bands-under-proportional-costs.md`); Cremers–Petajisto–Zitzewitz 2013 (Critical Finance Review; read as NBER WP 18050) (`2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`) |
 | 2026-10-09 (session 56) | **The first session to look at where the panel's columns come from, and it finds that protocol v2 fixed the half of index-membership bias that is about sampling while leaving untouched the half that is about index *maintenance*.** Aim set by `research/README.md`'s rotation rule plus one observation: v2 made the universe point-in-time membership of nine maintained indices and v3 made the equal-weight eligible pool the benchmark for every number, so a column now enters the panel because a committee added a name and leaves because a committee deleted one — the exact setting the index-effect literature was built on. A grep across all 171 prior notes returned **zero** for `index inclusion`, `Chen, Noronha`, `Greenwood`, `demand curve slope`, `index premium`, `index turnover cost` and `price pressure hypothesis`. Three clusters, one chain. Headline one: the **two founding Tier-A papers disagree on overlapping data about whether the ~3% announcement effect persists** (Shleifer: yes, at 10–20 days; Harris–Gurel: fully reversed by ~3 weeks, with Bayesian posterior odds on no-reversal below 0.07), and both report the effect absent early in their samples and present late, tracking indexation — which no information story explains. Headline two: Petajisto's **index turnover cost**, `p·[s(a−d)+d]/(1+p)` permanent or `p·(a+d)/(1+p)` fully reversed, is a drag paid by *any mechanical index tracker* — **which is exactly what the v3 equal-weight eligible pool is** — and his escape route, an index-neutral portfolio holding non-member names, is **unbuildable here by construction**, so the lab is confined to the tracker side: the deletion leg is unavoidable, the entry leg is declinable. Headline three: Greenwood–Sammon show the effect **decayed to nothing** in the one index family tracked for forty years, driven by **migrations** (a large-cap addition is now usually a mid-cap deletion, so the net shock is small) and **organised liquidity provision** (total institutional ownership barely moves around index changes), both structural rather than cyclical — and they name non-US **national** indices, eight of the nine here, as their open question. **The one thing in the chain that does not decay is the fact about this repo**: providers add recent winners and delete recent losers, so the panel's entrants are recent winners and its leavers recent losers, and `program.md` says coverage before 2009 is thin, so that distortion is not even stable across splits. Best free items **#220** (entry/exit census — pure accounting, gates the rest) and **#221** (is the panel's momentum signal an index-maintenance artifact?); **#222** free; **#223** the one trial; **#224** a free drop-in volume-shock statistic; **#225** adds a third question to the standing engine read; **#226** anti-candidate. **Nothing is closed by this entry** — no lab measurement was taken, the holdout was not read, and the two notes with buildable content both say the size of the effect on these nine indices is unmeasured. Access notes: **both 1986 JF primaries exist only as JSTOR scans** served by `johnhcochrane.com` — `pdftotext` yields ~1.6 KB of cover page from 13 and 16 pages, `pdffonts` shows a populated table (so the empty-font-table test does **not** catch it) and the tell is the character count alone; `pdftoppm -png -r 120 -gray` plus selective page reads recovered both in ~8 image reads. `ww.petajisto.net/papers/` (note the two-w host) served both Petajisto papers first try while the three-w form 404s; NBER w30748 was unshifted with no `( )` dropout; **Semantic Scholar returned `not found` for `10.1111/jofi.13410`**, a twelfth instance of the folder's standing JF-DOI rule, while Crossref answered every lookup. Two sources **not obtained**: Chen–Noronha–Singal 2004 (green OA only at a bepress repository, and the two UCF records are faculty-bibliography entries holding no file) and Kumar et al. 2023 (closed, the one Pure record holds no file) — both recorded as pointers to the live asymmetry disagreement rather than relied on. | Shleifer 1986 (JF) + Harris–Gurel 1986 (JF), **both read in full** as rendered scans (`2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`); Petajisto 2011 (J. Empirical Finance) + Petajisto 2009 (JFQA), **both read in full** from the author's site (`2026-10-09-index-premium-and-the-index-turnover-cost.md`); Greenwood–Sammon (NBER WP 30748 **read in full**; published JF 2025, not read), with Chen–Noronha–Singal 2004 (JF) and Kumar–Lawrence–Prakash–Rodríguez 2023 (JBF) **both not obtained** (`2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`) |
+| 2026-10-10 (session 57) | **The first session to read the ETF literature at all, on a panel whose other 42 columns are ETFs — and it both closes `program.md`'s one charter sub-mechanism for a mechanism-level reason and finds that the ETF columns have a boundary problem of their own.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 174 prior notes `creation-redemption`, `ETF arbitrage`, `ETF flow`, `comovement of ETF` and `MAX effect` returned **zero**, and `ETF` appeared only in implementability sections as an instrument, never as a subject — this despite `program.md` chartering "ETF versus constituent" for `lead-lag-spillover` and calling the 42-ETF panel "unusually well suited" to it, and despite the lab having closed that sub-mechanism on a free screen on 2026-08-31 with no literature behind the closure. Three notes, one chain. Headline one: the ETF-versus-constituent question has **two branches making opposite predictions**, and the lab tested the one neither side defends — BFM's fork is gradual price discovery (directional lead, no reversal) versus arbitrage-mediated shock propagation (no lead, a reversal conditional on primary-market activity), their own tests take the second, and the lab's 2026-08-31 directional null is therefore **consistent with the paper** rather than evidence against it. Headline two, and the session's most useful output: the half of that channel this panel *can* compute is a **published null** — Brown–Davies–Ringgenberg measure `ETFPremChange` against funds' true NAVs and find it predicts nothing at any horizon in any sub-sample, while the signal that works is a **share count** that they report as neither persistent nor correlated with contemporaneous returns, so the tempting ETF-versus-synthetic-basket divergence candidate is refused before it is built (#229) and the vein is closed on mechanism rather than on one measurement (#230). Headline three extends 2026-10-09's boundary detector to the ETF half of the panel: a stock column opens when a committee adds a name, an **ETF column opens when a provider launches a product**, which BFKM show is return-chasing by construction for the specialized half of a two-equilibrium industry — and the question "is anyone obliged to trade when the boundary moves" answers **yes, the v3 equal-weight pool**, which holds every ETF from its first price (#227, #228, #231). By-product worth more than it looks: BDR's decile-significant / continuous-insignificant contrast is a Tier-A case against this lab's own habit of closing families on a rank IC alone (#232). New: **#227–#232**, three free, one trial, two anti-candidates. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. New access channel: **`repository.arizona.edu`** DSpace bitstreams served a closed *Review of Finance* article's accepted manuscript on the first try, found via OpenAlex's own `locations` list — whose `any_repository_has_fulltext: false` for that article was **wrong**. | Ben-David–Franzoni–Moussawi 2018 (`2026-10-10-etf-arbitrage-shock-propagation.md`); Brown–Davies–Ringgenberg 2021 (`2026-10-10-etf-flows-and-the-premium-change-null.md`); Ben-David–Franzoni–Kim–Moussawi 2023 (`2026-10-10-etf-launch-as-a-return-chasing-boundary.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-10] Read this first: `program.md` charters an ETF sub-mechanism for
+  `lead-lag-spillover`, the lab closed it on a free screen, and the literature — read here for the
+  first time, 174 prior notes having no subject-level coverage of it — says the closure is right for a reason the screen could not see.** The
+  2026-08-31 screen asked whether a sector ETF's return, residual of the member-median control,
+  predicts its constituents. That is the **gradual-price-discovery** branch, which
+  Ben-David–Franzoni–Moussawi erect as the *rival* to their own mechanism and never defend. The
+  branch with Tier-A support predicts **no directional lead at all**: a non-fundamental shock
+  absorbed by arbitrageurs in the ETF and hedged in the basket, which shows up as a **reversal
+  conditional on primary-market activity**. The conditioner is a creation/redemption count, and the
+  one price-observable substitute for it — the ETF premium change — is a **published null at every
+  horizon in every sub-sample** when measured against funds' real NAVs (Brown–Davies–Ringgenberg).
+  So: the symptom the lab measured is not predicted by either account; the mechanism that is
+  supported is not observable from a daily close panel; and the obvious synthetic-basket version of
+  it is dominated by the time-zone artifact v3's fill rule exists to stop. **The ETF *signal* vein
+  is closed on mechanism, not on one measurement** (#229, #230), and this is the first time a
+  `program.md` sub-mechanism has been closed by a *convergence* of the lab's null with the
+  literature's own negative rather than by one or the other. **Nothing of the lab's is closed by
+  this entry** beyond that reading; no lab measurement was taken tonight and the holdout was not
+  read. **New: #227–#232**, three free, one trial, two anti-candidates. **Carried unchanged and
+  still genuinely unrun: #82** (thirty-fifth session, still the oldest unspent free item), **#94**
+  as standing discipline, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**,
+  the 2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the 2026-09-29 set
+  (**#170**, **#171**, **#172**), the 2026-09-30 set (**#174**'s reading, **#175**, **#176**,
+  **#177**), the 2026-10-01 set (**#179**, **#180**, **#181**), the 2026-10-02 set
+  (**#183**–**#186**), the 2026-10-03 set (**#188**–**#191**), from 2026-10-04 **#195** and
+  **#196**, from 2026-10-05 **#198**, **#199**, **#200**, **#201**, the 2026-10-06 set
+  (**#203**–**#207**), the 2026-10-07 set (**#208**–**#211**), the 2026-10-08 set
+  (**#213**–**#217**), and the 2026-10-09 set (**#220**–**#225**). **#152 stands.** **#163, #169,
+  #173, #178, #182, #187, #192, #197, #202, #212, #218, #219, #226, #229 and #230 stay
+  anti-candidates.**
+- **[2026-10-10] What should aim the next session, in order. The top is unchanged for the third
+  night, and tonight adds one item to the same engine read and one census to the same single pass.**
+  - **#217 still goes first, and it is still not research** — one look at `engine/` by someone
+    allowed to take it. The questions now number four: is the equal-weight pool charged costs and
+    on what grid; does its ETF weight share drift between train and validation; does a column's
+    price history begin at its first eligible date or carry pre-eligibility prices (#225); and —
+    added tonight — **does an ETF column's `eligible` flag begin at that fund's first price even
+    when the fund launched mid-sample, so that the pool really does take a position in every new
+    launch?** The ETF half of the boundary argument (#227, #231) rests on an affirmative answer and
+    nothing else in this folder can check it. Costs nothing.
+  - **Then the one census pass, now three items wide: #220 (eligibility turnover and fresh-entrant
+    weight), #214 (region × liquidity × tax cells) and #227 (the ETF sleeve's specialized share and
+    young-column weight).** All three are returns-free counts on the same `eligible` matrix, train
+    and validation separately; build the machinery once and spend it three times. #227 is the
+    cheapest of the three and the one most likely to **kill** its own branch — if the panel's 42
+    ETFs are broad regional trackers with negligible young weight, #231 is dead before it costs a
+    trial, which is the outcome to expect.
+  - **Then #221**, unchanged from [2026-10-09]'s reasoning and still the item with the largest
+    possible consequence on this list.
+  - **Then #232, immediately and permanently, because it is a reporting rule rather than a task.**
+    Report the top-minus-bottom decile spread alongside the rank IC whenever a family is closed on
+    a null. A rank IC is the continuous measure, and there is now a Tier-A case in this folder where
+    the continuous measure is insignificant at every horizon while the decile sort is strongly
+    significant. Free, and it makes every future closure in this lab harder to overturn.
+  - **Then #213**, then **#215**, then **#216**, in [2026-10-08]'s order, with **#222** free
+    alongside #213 and **#228** adopted as the reference launch-age/differentiation pair whenever a
+    seasoning conditioner is wanted. **#223** and **#231** are the two trials in this cluster and
+    both go **after** their censuses, never before: each one's honest claim is "declines part of
+    what the benchmark is obliged to hold", and with v3's 90% skill intervals near ±0.33 that is
+    worth a trial only once the weight is known to be there.
+  - **Then #203**, still free, still the only item that revives an existing disqualified screen.
+    **Then #209**, with [2026-10-08]'s note that its four pre-checks were written under v2 and need
+    re-deriving. **Then #198**, **#205**, **#206**. **Then #208 and #211**, then **#210**, then
+    **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183, #184, #179,
+    #180** in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190**, **#185** as a
+    standing reporting rule, **#191** as screens to re-measure. **Then the carried items**: #181,
+    #174's reading, #175, #177, #176. **#204** stays below them for the reason [2026-10-06] gave.
+- **[2026-10-10] The transferable output, and it is the tenth detector — the first about a *family
+  charter* rather than about a source, a statistic, the lab's toolkit or the dataset's edge.** The
+  nine before it: redundancy [2026-09-30], rival mechanisms [2026-10-02], the altitude an
+  enumeration was written at [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each
+  side's account of the test's confound [2026-10-05], a disqualified statistic against a truncated
+  variant of itself [2026-10-06], the self-undermining cross-border friction [2026-10-07], a
+  construction technique's cost geometry [2026-10-08], and a universe whose boundary is itself a
+  signal [2026-10-09]. Tonight's: **when a mechanism has two branches that predict opposite
+  observables, a null on one of them is not a result about the mechanism — and a lab that screens
+  the cheap branch will close the family having tested the thing neither side claims.** The test is
+  two questions asked before the screen, not after: *which branch does the literature actually
+  defend, and what is the one observable the branches disagree on?* Here the answer was a reversal
+  rather than a lead, and the lab's screen measured a lead. The corollary is the uncomfortable one:
+  **a free screen is cheap enough to run before reading the literature, which is exactly why it
+  gets run on the wrong branch** — and the folder's job is therefore not only to supply mechanisms
+  but to say, for each one, which observable would distinguish it from its rival. The general form:
+  *before spending a screen on a family, name the branch and name the discriminating observable; if
+  you cannot, the screen cannot close the family whatever it returns.*
 - **[2026-10-09] Read this first: protocol v2 fixed the half of index-membership bias that is about
   sampling, and it cannot fix the half that is about index maintenance — because that half is not a
   property of the data.** `2026-08-26`'s note closed look-ahead *constituent selection*: choosing a
