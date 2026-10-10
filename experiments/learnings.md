@@ -4767,3 +4767,114 @@ across experiments; prune entries that later evidence contradicts.
   last day of a 21-day reversal), free daily rebalancing, and one flat 15 bps on books tilted
   toward illiquid, 71%-non-US, stamp-duty-paying names. Full table:
   `reports/protocol-v3-methodology.md`.
+
+- **[Measured 2026-10-09/10, nightly — the first session to score a trial under v3] THE CHEAP
+  CORNER OF v3's DESIGN SPACE IS REAL AND NEARLY FREE, AND THE TWO MECHANISMS THAT FIT IN IT ARE
+  A DISGUISED BETA BET AND A PREMIUM THAT EXISTS ONLY IN NAMES YOU CANNOT AFFORD TO TRADE.**
+  Two trials, both `scout`, both GATE_FAIL, both in tier 1 of the two-trial board:
+
+      candidate                 family       train  val   skill   CI90           2x cost  turn   null %ile
+      pt_lowvol_gk_quarterly    price-trend  +0.46  +0.30  -0.03  [-0.26,+0.21]   -0.05   1.3x     64%
+      sa_resid_rev63_band       stat-arb     +0.52  +0.22  -0.12  [-0.32,+0.04]   -0.23  10.6x     80%
+      equal-weight pool                      +0.524 +0.34     --        --           --     --       --
+
+  **The cost result is the durable one and it cuts both ways.** A 100-name book at 1.3x annual
+  turnover pays about **14 bps/yr**: doubling the liquidity tier moved its skill by 0.014, against
+  the 0.22 the v2 lead lost. So v3's cost model is lethal only to books that trade, and the
+  low-turnover corner is open for any future signal. But **nothing put in that corner beat the
+  pool**, and the v3 pool is a harder benchmark than the v2 numbers suggest: **+0.34 on validation
+  and +0.524 on train** once `RATE_US3M` is seeded and Sharpe is on excess returns (the
+  methodology report's 0.452 was computed at rf = 0).
+
+- **[Measured 2026-10-09/10, nightly] SHARPE IS FLAT IN BETA ON THIS PANEL, SO RISK-REDUCTION IS
+  NOT A SOURCE OF SKILL — AND A RANK IC CANNOT SCREEN A CLAIM THAT IT IS.** The low-GK-vol
+  selection delivered everything it promised on the risk axis: bottom-100 GK vol **0.614x** the
+  pool's, mean 252-day beta **+0.623 against +0.983**, validation drawdown **-27.6%**. It earned
+  **+4.8%/yr** while the pool earned its 0.34 on three times the beta, i.e. the return fell in
+  proportion to the risk, and the null percentile was **64%** — a random 100-name book of the same
+  types and regions, carrying beta ~1.0, scored the same Sharpe. **The low-volatility anomaly is
+  absent here**, and with it the whole class of de-risking constructions (consistent with v1's
+  three de-risking overlays and v2's low-vol IC null, now for a reason rather than by coincidence).
+  **The methodological half is the more transferable half.** The trial was built on a flat
+  cross-sectional IC (-GK vol against the forward 63-day return: **+0.0005, t +0.04**), read as
+  "the low-vol end earns the same money". A **rank** correlation is scale-free in exactly the
+  dimension the hypothesis turned on: a flat IC is equally consistent with the anomaly and with
+  plain CAPM. **Screen a magnitude hypothesis on the slice's excess in BPS, its BETA, and its
+  TURNOVER together.** That triple ended three of the four candidates this session declined before
+  writing them, where the rank IC had passed one of them through.
+
+- **[Measured 2026-10-09/10, nightly] RESIDUAL REVERSION'S GROSS ALPHA IS THE SAME SIZE AS ITS OWN
+  v3 COST BILL, AND THE PREMIUM IS NOT AVAILABLE IN NAMES THAT ARE CHEAP TO TRADE. THE MECHANISM
+  IS CLOSED, NOT JUST ITS 22x CONSTRUCTION.** The v3 audit retired `sa_pca_resid_reversion` (21-day
+  formation, top 30, monthly, 22x turnover). Tonight re-engineered it for v3 — 63-day formation
+  (which F4 shows dominates 21-day on both the IC, +0.0288 vs +0.0223, and the top-100 level,
+  +38.3 vs +35.2 bps/63d, while decaying more slowly), 100 names, and a retention band — and got
+  **train skill -0.001**: 21 years of dead heat. The 2x-cost stress prices the bill at **~0.11 of
+  Sharpe (~180 bps/yr)**, so gross train skill was about +0.11 and net is zero. Then the liquidity
+  cut, which answers the rider the 2026-10-07 entry left open in as many words:
+
+      candidate pool        names  turn/yr  tier bps/side  taxed buys  fwd21 exc    t     net bps/yr
+      whole eligible pool    498     3.15        21.7         0.09      +22.2    +3.03      +121
+      liquid half (by ADV)   284     1.97        17.4         0.08       +1.9    +0.24       -51
+      illiquid half          284     2.06        24.3         0.15      +17.6    +1.89      +102
+      illiquid quartile      202     0.67        28.1         0.33       -4.4    -0.26       -97
+
+  **Restricting to the liquid half halves the cost and deletes 91% of the gross excess.** And the
+  illiquid corners are not the other answer: the whole pool's excess **exceeds both halves'**,
+  because a top-100 drawn from 498 candidates reaches a more extreme tail than one drawn from 284
+  — **a liquidity split on a fixed book size is confounded with tail depth**, which is the same
+  axis that decided the 2026-10-07 pair. Both restrictions were declined on arithmetic. Note also
+  that F4's level screen has **momentum's top-100 slice losing 11-20 bps per 63 days at every
+  horizon from 21 to 252 days** on this panel, a stronger negative than v2's IC screen.
+
+- **[Measured 2026-10-09/10, nightly] THE NO-TRADE BAND IS THE ONE CONSTRUCTION THAT PAID, AND IT
+  IS NOT A COST/SIGNAL TRADE-OFF.** v3 charges proportional costs, and under proportional costs the
+  optimal policy is to trade the minimum that keeps the book inside a band (width ∝ λ^(1/3)), not
+  to trade to target — the aim-portfolio partial-move rule already in `research/` solves the
+  *quadratic*-cost problem, a geometry v3 does not have. The long-only discrete version is a
+  retention buffer: hold the top K, keep a held name while it is inside the top B. At K = 100 on
+  the monthly grid, B = 200 cut name turnover **42%** (5.43x → 3.15x/yr) and **raised** the held
+  book's train excess from **+17.5 to +22.2 bps/21d** (t +2.32 → +3.03): the names a band declines
+  to sell are names whose score has decayed but not reversed, and churning them was paying to
+  replace a good holding with a marginally better one. **Carry the band onto any future signal.**
+  Two riders. A very wide band (B = 800, 0.17x turnover) produces a near-static book whose monthly
+  observations are one draw repeated — its +182 bps/yr is an artifact, and the same
+  autocorrelation inflates every row of such a table, so read those t-statistics as upper bounds.
+  And **a name-overlap screen is a LOWER BOUND on the turnover you are charged**: F6 predicted
+  3.2x one-way, the engine charged 6.6x on train (the metric counts both sides — reconciled) and
+  **10.6x on validation**, because 2018-2023 name churn ran **68% above train's** on a panel three
+  times as wide. Drift correction was not the gap (6.6x reported against 6.3x of name churn leaves
+  ~0.3x/yr), so emitting a full equal-weight row monthly is nearly free. **Pre-register turnover as
+  a range with the wider split's churn in it.**
+
+- **[2026-10-09/10, nightly] TWO STRUCTURAL FACTS ABOUT THE v3 GATES THAT SHOULD STOP TWO WHOLE
+  CLASSES OF CANDIDATE BEFORE THEY ARE WRITTEN.** (i) **v3 measures Sharpe on returns in excess of
+  T-bills and the benchmark pool is fully invested, so a cash position forfeits the equity premium
+  the pool keeps earning.** Any timing construction therefore starts a long way behind: a book in
+  cash nine months a year needs several times the active return to reach +0.34. This is what makes
+  `seasonality-calendar` mostly unreachable *as a timing family* — including the real effect found
+  tonight, that the 63-day residual-reversal book earns **+43.9 bps in the month after a
+  quarter-end (t +3.32, n 82) against +9.4 bps in other months (t +0.99, n 164)**, which is a flow
+  concentration worth knowing and is not a trade. The way into that family is a cross-sectional
+  seasonal on a fully-invested book, and v2 already measured the same-calendar-month version as
+  significantly *inverted* here. (ii) **A near-full-pool book cannot clear a null gate that
+  randomises its own names**: a random relabelling of ~1,000 eligible names is approximately the
+  same book, so the null distribution collapses onto the candidate and the percentile sits near
+  50%. Any `portfolio-learning` or index-tracking-drag proposal has to be concentrated enough for
+  the null to have something to randomise, which is a real design constraint and not a detail.
+
+- **[2026-10-09/10, nightly] ONE EXTERNAL FINDING PRICED AND CLOSED: COMMON IDIOSYNCRATIC
+  VOLATILITY BETA IS A NULL ON THIS PANEL.** Built to the note's own recipe (monthly CIV as the
+  cross-sectional mean of firm-level residual variance, innovations as first differences, CIV-beta
+  from a trailing 60-month regression of monthly returns on CIV **and** market-variance
+  innovations jointly), 215 train month-ends, median 327 names: IC **+0.0099 (t +0.99)**,
+  lowest-100 slice excess **+8.8 bps/21d (t +0.81) = +105 bps/yr gross**, market beta of the slice
+  **+1.004 against +0.989** (so genuinely *not* a beta bet, unlike the low-vol book), rank
+  autocorrelation **+0.969** and turnover **0.92x/yr** (so ~44 bps/yr of cost — it does sit in the
+  free corner). Declined: ~60 bps/yr net is inside this lab's construction floor, and the sign
+  **inverts across the train sub-periods** (-6.8 bps in 1997-2008, +24.6 in 2009-2017) against a
+  gate that is on 1997-2017 as a whole. The note's own first caveat predicted the reason: CIV is a
+  cross-sectional *average* of idiosyncratic variance, and over 327 large-cap index members that
+  average is a portfolio residual, not a universe-wide state. **A literature-derived factor whose
+  construction needs a broad panel should be screened for panel width before it is screened for
+  signal.**

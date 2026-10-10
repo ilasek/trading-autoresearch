@@ -18408,3 +18408,340 @@ behaviour, not a malfunction.
   open ("a bet that 15 bps a side is the right cost model on names selected *for* high price
   impact — the one obvious way it could be an artifact, and untested").
 
+
+## Free measurements — 2026-10-09/10 (nightly), no trial spent
+
+Eight screens, all on the **train split only** (1997-2017), all of them cross-sectional
+statistics, cost properties of columns, or name-overlap counts. **No portfolio was formed and
+no return series, Sharpe or drawdown was computed outside `run_experiment.py`; no holdout or
+forward file was opened.** Four of the eight ended a candidate idea before it cost a trial;
+they are written down so the kills are not re-bought.
+
+**F1-F3 (motivated trial #1, `pt_lowvol_gk_quarterly`).** Garman-Klass 252-day volatility on
+the eligible panel, 252 month-ends: IC against the forward 63-day return **+0.0005 (t +0.04)**,
+against the forward 21-day **+0.0007 (t +0.04)**, and **-0.0017 (t -0.11)** restricted to
+stocks. Bottom-100 mean GK vol **0.614x** the pool's; mean 252-day beta to the pool **+0.623**
+against **+0.983** (ratio **0.633**; 0.716 in 1997-2008, 0.543 in 2009-2017). Bottom-100 name
+overlap **0.947 at 1m, 0.873 at 3m, 0.672 at 12m**. Composition: **27% ETFs against the pool's
+7%**, 1 listing region before 2009 and ~6 after. Cross-sectional rho(GK vol, close-to-close
+vol) **+0.909**, so the two estimators are one object here and the range version is an
+efficiency choice, not a mechanism.
+
+**F4 — which formation horizon carries a level effect, and whether it is a beta effect.** Top-100
+slice, forward 63-day excess over the eligible pool's mean on the same date, 244 month-ends.
+Reported as a level *and* with the slice's beta, which is the correction tonight's first trial
+forced:
+
+    score            k      IC        t    top100 excess bps/63d    t     beta_top  beta_pool
+    resid5pc_rev    21   +0.0223   +4.12          +35.2          +2.52     +0.963    +0.988
+    resid5pc_rev    63   +0.0288   +4.99          +38.3          +2.83     +0.974    +0.988
+    resid5pc_rev   126   +0.0178   +3.22          +29.6          +2.15     +0.973    +0.988
+    resid5pc_rev   252   +0.0113   +1.51          +19.8          +1.32     +0.955    +0.988
+    raw_rev         21   +0.0159   +1.56          +39.5          +1.47     +1.040    +0.988
+    raw_rev         63   +0.0218   +2.09          +54.4          +1.93     +1.033    +0.988
+    raw_rev        126   +0.0084   +0.71          +51.0          +1.41     +1.048    +0.988
+    raw_rev        252   -0.0070   -0.49          +17.9          +0.44     +1.076    +0.989
+    resid5pc_mom    21   -0.0223   -4.12          -38.5          -3.63     +0.961    +0.988
+    resid5pc_mom   252   -0.0113   -1.51          -11.0          -0.73     +0.981    +0.988
+
+Three readings. **The 63-day residual horizon dominates the 21-day one the v2 lead used**, on
+the IC and on the level, and it decays more slowly so it turns over less — that pair of facts
+is what trial #2 was built on. **The residual version earns its excess at the pool's own beta
+(0.955-0.974) and the raw version does not (1.033-1.076)**: a single-factor reversal sort buys
+names whose region or sector fell, which is the fourth time this repo has found a score to be a
+factor move wearing a stock-specific label. And **momentum is negative at every horizon out to
+252 days on this panel** — v2's IC screen said 12-1 momentum was +0.0128 (t +0.96), tonight's
+level screen says its top-100 slice *loses* 11 to 20 bps per 63 days at every horizon. Nothing
+licenses a momentum trial here.
+
+**F5/F6 — the retention band, and why it is theory rather than a knob.** v3 charges proportional
+costs, and under proportional costs the optimal policy is provably not "trade to target" but
+"trade the minimum that keeps the book inside a no-trade band", width scaling as the cube root
+of cost (`research/notes/2026-10-08-no-trade-bands-under-proportional-costs.md`; the
+aim-portfolio partial-move rule this folder already covered solves the *quadratic*-cost problem,
+which is not the geometry v3 has). The long-only discrete version is a retention buffer: hold
+the top K, keep a held name while it is inside the top B. Monthly grid, held book's forward
+21-day excess over the pool, 246 dates, K = 100:
+
+    buffer B   turn/yr   fwd21 excess bps     t      ann gross   cost @35bps   net bps/yr
+       100       5.43          +17.5        +2.32       +210         190           +20
+       150       4.07          +20.9        +2.69       +251         143          +108
+       200       3.15          +22.2        +3.03       +266         110          +156
+       300       1.92          +11.9        +1.69       +143          67           +76
+       500       1.25           +6.8        +1.23        +82          44           +38
+       800       0.17          +15.7        +2.52       +188           6          +182
+
+**The band is not a cost/signal trade-off on this mechanism: it cuts turnover 42% and raises
+the held book's excess** (+17.5 to +22.2, t +2.32 to +3.03). The names a band declines to sell
+are names whose score has decayed but not reversed, and churning them was paying to replace a
+good holding with a marginally better one. **B = 800's +182 is an artifact and was refused**: at
+0.17x turnover a year the book barely changes after its first fill, so its 246 observations are
+one draw repeated. That autocorrelation inflates every row (a B = 200 book carries ~74% of
+itself month to month), so every t above is an upper bound. On the quarter-end grid only (F5,
+82 dates) the forward-63-day excess is just **+17.7 bps (t +0.83) at B = 100 and +22.6 (t +1.02)
+at B = 150**.
+
+**F6b — a real calendar concentration that is nevertheless not tradeable, and the structural
+reason why.** At B = 150 the held book's forward-21-day excess is **+43.9 bps (t +3.32, n 82) in
+the month following a quarter-end against +9.4 bps (t +0.99, n 164) in every other month** — a
+4.7x concentration. Read with F5 (+17.7 bps over the whole 63 days from a quarter-end) it says
+the premium is paid in the three weeks after quarter-end and partly given back over the rest of
+the quarter. A flow story, and tempting as this lab's first `seasonality-calendar` trial. **It is
+not tradeable here and the reason generalises to the whole family: v3 measures Sharpe on returns
+in excess of T-bills and the equal-weight pool is fully invested, so any strategy that sits in
+cash forfeits the equity premium while the pool keeps earning it.** A book in cash nine months a
+year needs an active return several times this one's to reach the pool's 0.34. The concentration
+is therefore an argument for deciding monthly — every month's decision gets a fresh signal —
+and not for timing. **Recorded as a finding for a human, not as a candidate.**
+
+**F7 — DECLINED ON ARITHMETIC: there is no cost-liquidity corner where the reversal mechanism is
+net positive.** This answers the rider `learnings.md` 2026-10-07 left open in as many words ("the
+whole result is a bet that 15 bps a side is the right cost model on names selected *for* high
+price impact — the one obvious way it could be an artifact, and untested"). The book's actual v3
+bill, name by name, with `engine/costs.py`'s own tier function and tax table, next to what each
+restriction does to the gross excess (K = 100, B = 200, monthly, 246 dates):
+
+    candidate pool        names  turn/yr  tier bps/side  taxed buys  fwd21 exc    t     net bps/yr
+    whole eligible pool    498     3.15        21.7         0.09      +22.2    +3.03      +121
+    liquid half (ADV)      284     1.97        17.4         0.08       +1.9    +0.24       -51
+    illiquid half          284     2.06        24.3         0.15      +17.6    +1.89      +102
+    illiquid quartile      202     0.67        28.1         0.33       -4.4    -0.26       -97
+
+**Restricting to the liquid half halves the cost and deletes 91% of the gross excess**
+(+22.2 to +1.9 bps, t +3.03 to +0.24), so the premium is not available in the names that are
+cheap to trade. But the illiquid corners are not the answer either: the whole pool's excess is
+*higher* than either half's, because a top-100 drawn from 498 candidates reaches a more extreme
+tail than one drawn from 284 — **the liquidity split is confounded with tail depth**, which is
+the same "the book buys the extreme tail" axis that decided trials #1 and #2 of 2026-10-07, and
+the illiquid quartile's 0.67x turnover makes it another near-static book. Since the whole-pool
+cell's modelled net of +121 bps/yr realised as **exactly zero train skill** in trial #2, a cell
+modelled *below* it is not worth a trial in either direction. Both the liquid-restriction and the
+illiquid-tilt trials are declined.
+
+**F8 — DECLINED ON ARITHMETIC: common idiosyncratic volatility beta.** From
+`research/notes/2026-10-06-common-idiosyncratic-volatility-factor.md` (Herskovic-Kelly-Lustig-Van
+Nieuwerburgh; average returns decreasing in CIV-beta, so a long-only book holds the lowest
+CIV-beta names). Built to the note's own recipe: monthly CIV as the cross-sectional mean of
+firm-level residual variance (residual against the equal-weight eligible pool), innovations as
+first differences, and each name's CIV-beta from a trailing **60-month** regression of its
+monthly returns on CIV **and** market-variance innovations jointly — the note is explicit that
+the joint regression is what separates CIV-beta from plain market-variance exposure. 215 train
+month-ends, median 327 names:
+
+    IC(-CIV_beta, fwd 21d)                 +0.0099  (t +0.99)
+    lowest-100 slice excess                  +8.8 bps/21d  (t +0.81)  = +105 bps/yr gross
+    market beta of the slice                +1.004  vs panel +0.989   (ratio 1.016)
+    CIV-beta rank autocorrelation (1m)      +0.969
+    lowest-100 name overlap (1m)             0.923  -> 0.92x/yr one-way turnover
+    sub-periods      1997-2008  -6.8 bps/21d (t -0.49)  |  2009-2017  +24.6 (t +1.49)
+
+Two things are right about it and three are fatal. **Right:** it is genuinely beta-neutral (1.004
+against 0.989), so unlike tonight's low-vol book it is not a disguised beta bet; and at 0.92x
+one-way turnover a year its whole cost bill is ~44 bps/yr, so it is in the free corner of the
+design space this night measured. **Fatal:** the level effect is **+105 bps/yr gross at t +0.81**,
+leaving ~60 bps/yr net, which is inside the ±0.05-of-Sharpe construction floor this lab has
+already measured; the sign **inverts across the two train sub-periods** (-6.8 then +24.6), and
+`GATES_V3["min_train_skill"]` is a gate on 1997-2017 as a whole with those sub-periods reported
+next to it; and the note's own first caveat applies with full force here — CIV is a
+cross-sectional *average* of idiosyncratic variance, and on a panel of **327 large-cap index
+members** that average is a portfolio residual rather than a universe-wide idiosyncratic state.
+**This is, so far as `research/SUMMARY.md` records, the first independent reading of the CIV-beta
+sort anywhere in this lab's reach, and it is a null on this panel.** Declined.
+
+- Lesson: **four of tonight's eight screens ended a candidate, and three of the four were ended by
+  a LEVEL, not by a rank.** Trial #1's post-mortem says why: a rank IC is scale-free in exactly
+  the dimension a magnitude hypothesis turns on, so it can neither confirm a risk-reduction claim
+  nor price one against a cost. Every screen after F3 therefore reports the slice's excess in bps,
+  its beta, and its turnover together — and that triple is what killed the liquid-half
+  restriction (+1.9 bps), the illiquid corners (confounded with tail depth) and CIV-beta (+105
+  bps/yr at t +0.81, sign-inverted across sub-periods). **The triple (level, beta, turnover) is
+  the screen this protocol wants; adopt it as the standing form.** Second, general and worth more
+  than any of tonight's candidates: **under v3 a cash position forfeits the equity premium the
+  fully-invested pool keeps earning, so every timing construction starts a long way behind the
+  benchmark and `seasonality-calendar` is mostly out of reach as a timing family.** The way into
+  that family, if there is one, is a cross-sectional seasonal on a fully-invested book — and v2
+  already measured the same-calendar-month version as significantly *inverted* here.
+
+## Data issue — 2026-10-09 — both v3 blockers cleared, and 4 membership tests went red doing it
+
+**This entry exists because the engine suite is NOT fully green on `main` as this session ends:
+88 of 92 pass, and the 4 failures are in `tests/test_membership.py`. They were green at session
+start. The session ran trials anyway, which is a judgement call and is justified below with the
+check that justifies it — a human should read this before the next session.**
+
+**What was blocking.** The 2026-10-08 entry listed two blockers: seven unlanded
+`claude/protocol-v3-methodology` commits, and `RATE_US3M` missing from the store (protocol v3
+measures every Sharpe in excess of the 13-week T-bill, so a v3 trial raises
+`FileNotFoundError` without it). The first is **resolved**: PR #8 merged the branch at
+`fa3ecc03`, `git branch -r --no-merged origin/main` is empty, and the v3 re-scoring, 2026-W41
+and the 120 return series are on `main`.
+
+**Why the second was still open, and what cleared it.** The data-refresh workflow had failed
+twice. Run #49 (scheduled, 2026-10-09 02:20Z) died inside `update_data.py` with
+`KeyError: Index(['date', 'id'])` out of `data.write_many` — the single-ticker Yahoo fetch path,
+which only the rate seed exercises; `4830f972 fix data-refresh: single-ticker Yahoo fetch and
+spurious volume rescales [engine-maintenance]` fixes it and landed with PR #8. Run #50 (manual,
+20:35Z, on the fixed head) got all the way through: it seeded ^IRX and committed
+`data: daily refresh 2026-10-09`, 808 files — and then **the push failed**,
+`error: RPC failed; HTTP 408`, `send-pack: unexpected disconnect`. The commit died with the
+runner. So the store was missing the rate for want of one `git push`, not for want of code.
+This session re-dispatched the same workflow (`data-refresh.yml` on `main`, run #51, 23:20Z),
+which succeeded; `RATE_US3M` is now in the store with **16,678 rows, 1960-01-04 → 2026-10-09**.
+No market data was fetched by this session and nothing under `data/` was written by hand — the
+workflow is the repo's own sanctioned path and the previous entry named re-running it as the
+remedy.
+
+**What went red, and why it is not the train/validation panel.** A `workflow_dispatch` run takes
+the Monday branch, so run #51 also ran `build_membership.py`, which applied today's scraped
+constituent lists to the point-in-time spells. The hand-maintained change-log CSVs under
+`scripts/` no longer explain the current lists for four indices, so the builder reconciled the
+difference by opening or closing spells **at the 2026-09-24 snapshot date**, and
+`test_change_logs_keep_index_size[ftse100, n225, smi]` plus
+`test_hang_seng_log_matches_published_sizes` assert that no such reconciliation is needed. The
+failures are that alarm firing. Examples: `BBY_UK`/`WPP_UK` are FTSE 100 members whose log's last
+event is an exit; eight Nikkei names have joins with no recorded exit.
+
+Two checks were run before any trial, because "it only touches 2026" is exactly the kind of
+claim that should not be assumed:
+
+1. **Membership spells before 2024-01-01 are byte-identical across the refresh.** 2,060 spell
+   rows either side, truncated at the cut; `DataFrame.equals` → `True`.
+2. **No pre-existing price row changed before 2024.** Sampling 1997-06, 2008-10, 2017-12,
+   2020-03, 2023-12: every id present in both commits has identical rows. The files differ only
+   because the rate series was written into every month partition and because five newly added
+   index members (`2338_HK`, `SKYD`, `TWLO`, `1347_HK`, `SDZ_SW`) had their history back-fetched
+   — and by check (1) none of them is eligible before 2024, so `visible_frame` never shows their
+   columns to a train or validation call.
+
+So tonight's two trials were measured on exactly the panel a session yesterday would have seen,
+plus the T-bill series the protocol requires. **The judgement call:** the setup rule is "the
+engine must be green", and every engine test — backtest, costs, protocol, metrics, causality —
+passes. The four red tests are index-change bookkeeping for dates inside the holdout era. Had
+they touched train or validation eligibility this session would have stopped at step 2.
+
+**What a human needs to do.** Add the missing change rows to `scripts/sources/ftse100_changes.csv`,
+`n225_changes.csv`, `smi_changes.csv` and `hsi_changes.csv` (both are frozen to a session), or
+accept the reconciliation and update the test's expectations. Until then every nightly session
+will find a red suite and have to make this same call, which is a worse situation than a clean
+stop: the alarm is correct and it should be cleared rather than reasoned around twice.
+
+- Lesson: **a failed `git push` is indistinguishable from work never done, and it cost this lab a
+  night.** Run #50 did every expensive thing right — fetched 66 years of ^IRX, repaired 120 days
+  of spliced corporate actions, rebuilt membership, committed — and lost all of it to an HTTP 408
+  on an 808-file push. Nothing in the repo recorded that the work had been done, so the 2026-10-08
+  entry's "seed `RATE_US3M`" read as untouched. Seeding a series that creates hundreds of new
+  month partitions is a large push and should be expected to need a retry; the workflow's commit
+  step has no retry and `set -e` turns the failure into a lost run. **Second lesson, about this
+  session's own action: triggering a `workflow_dispatch` runs the Monday path, not the weekday
+  one** — membership evolution and `--verify-days 120` included. That is more side effect than
+  "re-run the refresh" sounds like, and it is how the red tests arrived.
+
+## Session summary — 2026-10-10 (nightly) — the first session to score a trial under protocol v3
+
+**Experiments run: 2 of 8. Verdicts: 2 GATE_FAIL. Four further candidates were declined on
+arithmetic before they were written, no holdout or forward file was read, and the seat is still
+empty.** Both trials ran on the `scout` track, decided before the first hypothesis: the v3
+deflator already counts 36 effective trials across every protocol version, so a `challenge`
+candidate needs a validation skill nothing on the board is near, and a scouting session never
+has to stop early.
+
+    #  candidate                  family                 verdict    train  val   skill   CI90          2x cost  turn  null %ile
+    1  pt_lowvol_gk_quarterly     price-trend            GATE_FAIL  +0.46  +0.30  -0.03  [-0.26,+0.21]  -0.05   1.3x    64%
+    2  sa_resid_rev63_band        statistical-arbitrage  GATE_FAIL  +0.52  +0.22  -0.12  [-0.32,+0.04]  -0.23  10.6x    80%
+
+Equal-weight eligible pool: **+0.34 on validation, +0.524 on train** (both lower than the
+pre-seed figures quoted in `reports/protocol-v3-methodology.md`, which used rf = 0). Gates
+failed: train skill on both, and the random-selection null on both.
+`scripts/rank_trials.py` puts **both trials in tier 1 of a two-trial board** — the data cannot
+separate them, and neither has a skill interval above zero. `distinct_mechanisms` = 2.
+
+**Budget allocation.** 2 trials, 1 in `price-trend` (its cap is 2, and tonight's own result
+freed the second slot by killing the planned low-beta pair member), 1 in
+`statistical-arbitrage`. Both were the first v3 trial in their family, so the "at least one
+family with no recorded trial" rule is satisfied twice. No family reached its cap.
+
+**Best finding of the night, in one sentence.** The cost corner of v3's design space is now
+measured and it is nearly free — **a 100-name book at 1.3x annual turnover pays about 14 bps/yr,
+and doubling the liquidity tier moves its skill by 0.014** — but nothing put in that corner beat
+the pool, because the two mechanisms that fit there are a disguised beta bet and a premium that
+exists only in the names you cannot afford to trade.
+
+**The three readings that make that a structure rather than two failures.**
+
+1. **Sharpe is flat in beta on this panel.** Trial #1's selection had beta 0.633 of the pool's,
+   realised a validation drawdown of -27.6%, and earned +4.8%/yr against a pool earning its 0.34
+   on three times the beta — the raw return fell in proportion to the risk. The low-volatility
+   anomaly is absent here. That kills risk-reduction constructions generally, and it killed the
+   low-beta trial that was to be this pair's second member (low GK vol and low beta are one
+   object here, which is *why* the beta ratio came out at 0.633).
+2. **The best cross-sectional signal's gross alpha is the same size as its own cost bill.**
+   Trial #2's train skill is **-0.001** — 21 years of dead heat — and its 2x-cost stress
+   (-0.232 against -0.119) prices its cost at about 0.11 of Sharpe, so gross it was about +0.11.
+   The v3 audit retired a 22x-turnover construction; this retires the mechanism at a seventh of
+   that turnover.
+3. **And the premium is not available in cheap names.** F7: restricting the same book to the
+   liquid half of the panel halves the cost and deletes **91% of the gross excess** (+22.2 to
+   +1.9 bps/21d, t +3.03 to +0.24). The illiquid corners are not an answer either — the whole
+   pool's excess exceeds both halves', because tail depth is confounded with the split.
+
+**Second finding, methodological, and it cost trial #1.** A **rank IC cannot screen a magnitude
+hypothesis**: it is scale-free in exactly the dimension that separates "the same return at lower
+risk" from "a lower return at lower risk". Trial #1 was built on a flat IC (+0.0005, t +0.04)
+that was equally consistent with the anomaly and with plain CAPM. Every screen after it reports
+**the slice's excess in bps, its beta, and its turnover together**, and that triple is what
+killed three of the four declined candidates. Adopt the triple as the standing screen form.
+
+**Third finding, about turnover.** A name-overlap screen is a **lower bound** on what you will be
+charged, and it is calibrated on the wrong split. F6 predicted 3.2x one-way; the engine charged
+6.6x on train (the metric counts both sides — reconciled) and **10.6x on validation**, because
+2018-2023 name churn ran 68% above train's on a panel three times as wide. Drift correction was
+*not* the gap: 6.6x reported against 6.3x of name churn leaves only ~0.3x/yr for re-weighting, so
+emitting a full equal-weight row every month is nearly free and there is nothing to win by
+emitting drifted rows instead.
+
+**One keeper.** The retention band is a genuine construction win and the only positive result of
+the night: at K = 100 it cut name turnover **42%** while *raising* the held book's train excess
+(+17.5 to +22.2 bps/21d, t +2.32 to +3.03). The no-trade-band result for proportional costs
+transfers to a long-only discrete book. The band is worth carrying onto any future signal; the
+signal it was wrapped around is not.
+
+**Ideas for the next session.** None is holdout-informed — no holdout or forward number was read.
+
+1. **The honest state of the program: no selection signal measured on this panel has cleared even
+   the random-selection null, let alone the pool.** Tonight's two are at the 64th and 80th
+   percentile; v2's five were at 98-100% but only because 22x-turnover random books also earn
+   nothing. The next session should treat "is the equal-weight eligible pool beatable by
+   cross-sectional selection on free daily data under v3 execution?" as the live question and
+   pick its trials to answer it, rather than working down a family list.
+2. **The untouched families, with tonight's priors attached.** `seasonality-calendar` is mostly
+   out of reach **as a timing family** for a structural reason worth not re-deriving: v3 scores
+   excess returns and the pool is fully invested, so cash forfeits the equity premium (F6b). A
+   cross-sectional seasonal is the only way in, and v2 measured the same-calendar-month version as
+   significantly *inverted*. `range-variance` has now been entered through the low-vol door and
+   found empty; what is untested there is vol-of-vol and cross-sectional dispersion, both of which
+   are risk measures and therefore exposed to reading (1). `portfolio-learning` has a structural
+   problem worth checking before it is spent: **a near-full-pool book cannot clear a null gate
+   that randomises its own names**, since a random relabelling of ~1,000 eligible names is
+   approximately the same book, so the gate forces concentration on any weighting-scheme trial.
+   `lead-lag-spillover` and `statistical-learning` are both unentered under v3; the latter's v2
+   trial was confounded by a `WARMUP` set in month-ends rather than rows and its question is still
+   open, though tonight's legs give a combiner little to combine.
+3. **From `research/SUMMARY.md`, priced tonight and now closed:** the no-trade-band note
+   (2026-10-08) **paid off** and is the night's one keeper; the CIV factor note (2026-10-06) is a
+   **null on this panel** (F8: +105 bps/yr gross at t +0.81, sign-inverted across train
+   sub-periods, and CIV computed over 327 large caps is a portfolio residual rather than a
+   universe-wide state, which the note's own first caveat predicted). Still unspent there: the
+   **CHL close-high-low spread estimator** (2026-10-05), the **absorption ratio** and **betaless
+   variance decomposition** (2026-10-06), **turnover and the momentum life-cycle** (2026-10-05),
+   and the three **index-membership** notes (2026-10-09) — of which the index-effect trade is
+   long-only-unreachable here, since a deletion leaves the eligible panel and the engine zeroes
+   its weight, so only the *entry* half of the inclusion drag is tradeable.
+4. **Do not re-buy tonight's four free kills** without a stated reason: the low-beta twin of
+   trial #1, the liquid-half restriction of trial #2, the illiquid-half and illiquid-quartile
+   tilts, and CIV-beta. Add to them the momentum family on this panel — F4's level screen has its
+   top-100 slice *losing* 11 to 20 bps per 63 days at every horizon from 21 to 252 days, which is
+   a stronger negative than v2's IC screen and licenses no momentum trial.
+5. **Read the 2026-10-09 data issue entry above first.** The engine suite is at 88/92: four
+   `tests/test_membership.py` index-change assertions are red and need a human to add the missing
+   change rows (or to accept the reconciliation). The pre-2024 panel was verified unchanged, which
+   is why this session ran; that check should not have to be made twice.
