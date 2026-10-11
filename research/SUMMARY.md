@@ -2523,6 +2523,16 @@ nothing. Tier A (Jorion, construction) / B (both modern papers) / C (the tradabl
 `notes/2026-09-30-optimal-shrinkage-of-a-high-dimensional-mean-vector.md`,
 `notes/2026-09-30-shrinking-portfolio-weights-toward-a-target.md`
 
+**[2026-10-11] The family's newest material is not in this section** — because after protocol v3 it
+stopped being about weighting a score and became about **deviating from a named portfolio**. Roll's
+constant efficiency loss, Jorion's constant-TEV ellipse and its benchmark-independent `√d` ceiling,
+Tu–Zhou's closed-form mixture weight against `1/N`, and the one buildable rule designed to beat an
+equal-weight benchmark (`β̄⁺/σ̂²`, long-only by truncation) are all written up under
+*"The objective is now relative to a portfolio"* below, with candidates #233–#238. Read that section
+before proposing anything in this family: two of the shapes it rules out (minimum-tracking-error
+books, and heavy anchoring toward the pool) are natural next steps from the shrinkage material above.
+
+
 ---
 
 ### Portfolio construction & rebalance mechanics (cross-family)
@@ -5931,6 +5941,85 @@ differentiation proxy for the paper's `1 − cosine similarity` on weights (#228
 this paper may enter a hypothesis. New: **#227–#232**, three free, one trial, two anti-candidates.
 → `notes/2026-10-10-etf-launch-as-a-return-chasing-boundary.md`
 
+
+---
+
+### The objective is now relative to a portfolio — the geometry of that, and how big the active bet should be (cross-family)
+
+**[2026-10-11] Read this first: protocol v3 did not only change the number a candidate is graded
+on, it changed the *kind* of optimisation the lab is running — and the literature on that kind has
+three results the folder had never held.** On 2026-10-08 the deflated statistic became **skill**:
+validation Sharpe minus the equal-weight eligible pool's on the same days. That is a
+benchmark-relative mandate, and benchmark-relative optimisation is a different problem from
+minimising risk, with a different solution and a documented pathology. A grep across all 177 prior
+notes returned **zero** for `Roll 1992`, `tracking error volatility`, `Jorion 2003`, `Talmud`,
+`Tu and Zhou`, `Kirby`, `Ostdiek` and `reward-to-risk timing`; `tracking error` appeared only
+incidentally inside notes about other things, and the folder's three shrinkage notes shrink toward
+`1/N` as a *target* without ever treating it as the thing being *measured against*.
+
+**Result one — the geometry, and a ceiling that does not depend on the benchmark.** With `µ`, `Ω`
+and the data-only constants `a = ι'Ω⁻¹ι`, `b = ι'Ω⁻¹µ`, `c = µ'Ω⁻¹µ`, `d = c − b²/a`, Roll's
+mean-TEV frontier is the mean-variance frontier **horizontally translated** in `(σ²_P, µ_P)` space,
+and the translation is a *constant*: `δ_B = ∆₂ − ∆₁²/d`, where `∆₁ = µ_B − µ_C` and
+`∆₂ = σ²_B − σ²_C` measure the benchmark against the minimum-variance portfolio. So the efficiency
+loss of optimising relative to a benchmark **does not shrink as the active book gets smaller** — it
+is set by where the benchmark sits, and it is zero only if the benchmark is itself efficient. Under
+a tracking-error budget `TEV = T₀` (a *variance*), Jorion's feasible set is an **ellipse** centred
+at `σ²_B + T₀`; whether any point of it is mean-variance efficient is decided by
+`Ψ = dT₀ − d∆₂ + ∆₁²`, with tangency at exactly `T₀ = δ_B` — **below that budget there is nothing
+efficient to buy.** And the ellipse's maximum-return vertex is `µ_B + √(dT₀)`, i.e. the maximum
+ex-ante **active return per unit of tracking error is `√d`**, the asymptotic slope of the universe's
+own frontier, *independent of which benchmark was chosen*. Read together: the benchmark decides the
+efficiency loss, the opportunity set decides the information-ratio ceiling. Both primaries are
+closed (`pm-research.com`'s OpenID redirect; CFA Institute's abstract-only page) and the algebra was
+read from Palomba–Riccetti (2012, *Journal of Banking & Finance*, Tier B here, 13 Crossref / 22
+OpenAlex citations) which restates both formally before extending them. **Short sales are allowed
+throughout and costs are absent**, so every quantity is an upper bound on what a long-only,
+cost-charged book can reach — the paper's own closing sentence names no-short-sales as the open
+extension. `validation_overlap: false`.
+
+**Result two — how big the active bet should be, in closed form.** Tu–Zhou (2011, *Journal of
+Financial Economics*, Tier A, 420 Crossref / 493 OpenAlex citations, read as the typeset version)
+mix the naive rule with an estimated one, `ŵ_c = (1−δ)·w_e + δ·w̃`, and the decision-theoretic loss
+separates into `(γ/2)[(1−δ)²π₁ + δ²π₂]` with `π₁` the naive rule's squared bias and `π₂` the
+estimated rule's variance, giving **`δ* = π₁/(π₁+π₂)`** and — their Proposition 1 — a mixture that
+**strictly dominates both components** whenever `1/N` is not exactly optimal, which is always. When
+`π₁ = π₂` the loss is *halved*: diversification across estimation errors rather than across assets.
+The feasible estimator needs one scalar, which is the design argument, but it needs `T > N + 4`,
+which is **fatal at this panel's width** (~1,000 eligible names) and is the binding constraint on
+where it can be used. Their footnote 5 supplies the bridge this lab needs without being asked:
+*a benchmarked mandate is handled by putting the benchmark's return in the role of the riskless
+rate* — which is exactly v3's skill. Two honest caveats from the paper itself: the mixtures still
+lose to `1/N` in short-window simulations, and **the objective is expected-utility loss, not the
+Sharpe ratio**, which the authors say separate once parameters are estimated. `validation_overlap:
+false`.
+
+**Result three — the one buildable rule in the vein, arriving with its own negative.** Kirby–Ostdiek
+(2012, *JFQA*, ~300 citations) answer the "nothing beats `1/N`" literature with a design argument —
+the losers estimate expected returns and turn over violently — and replace the mean with a **factor
+loading**, which is estimated far more precisely from the same data: `w ∝ (β̄⁺/σ̂²)^ω`, long-only by
+**truncation at zero**, monthly, low turnover by construction of its inputs. The primary is closed
+at `cambridge.org` and was not read; the construction comes from Bock (2018), **a source this folder
+already covers**, whose sixteen-strategy re-test across six datasets *does not support the rule* —
+below minimum-variance in most datasets, significantly below `1/N` in one — and which also fails to
+support Tu–Zhou's mixtures. Sharper than the unconditional null: Kirby–Ostdiek's stated edge
+condition is large cross-sectional dispersion of expected returns, and the re-test finds the rule
+**worse** where dispersion is larger. That re-test is Tier C (unrefereed, uncited, one
+implementation each, and it keeps the full `Σ̂⁻¹` where the authors assume a diagonal), so it makes
+the claim fragile rather than dead — but it is the external counterpart of this lab's own "beating
+the null is not beating the pool", and it argues for *fewer and cheaper* candidates against the
+pool, not more elaborate ones. `validation_overlap: true` on the re-test and unverified on the
+primary, so no magnitude, sign or ranking from either may enter a hypothesis.
+
+**What the chain says as one sentence.** Minimising distance to the pool is the wrong objective
+(result one), the right size of the deviation has a closed form that this panel's width breaks
+(result two), and the cheapest rule designed to beat an equal-weight benchmark fails its own stated
+edge condition in the only independent test available (result three). New: **#233–#238**, three free,
+two trials, one anti-candidate. **Nothing of the lab's is closed by this entry**; no lab measurement
+was taken tonight and the holdout was not read.
+→ `notes/2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`,
+`notes/2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md`,
+`notes/2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`
 ---
 
 ## Candidate ideas for the strategy agent
@@ -10545,6 +10634,118 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-10-etf-flows-and-the-premium-change-null.md`
 
 
+
+233. **FREE, and it goes before every other item in this cluster — two constants of the eligible
+    panel that say whether a benchmark-relative mandate has any room in it at all.** Both are pure
+    accounting on the **train** split, returns-only, no candidate and no validation read. *(a)*
+    **`√d`**, with `d = c − b²/a` from the panel's sample `µ` and `Ω` (`a = ι'Ω⁻¹ι`,
+    `b = ι'Ω⁻¹µ`, `c = µ'Ω⁻¹µ`): the asymptotic slope of the universe's own mean-variance frontier,
+    and by Jorion's ellipse the **maximum ex-ante active return per unit of tracking error against
+    any benchmark whatsoever**. *(b)* **`δ_B = ∆₂ − ∆₁²/d`** with `∆₁ = µ_B − µ_C`,
+    `∆₂ = σ²_B − σ²_C` measured for the *equal-weight eligible pool* as `B` against the panel's
+    minimum-variance portfolio `C`: the pool's **efficiency loss**, which is the constant excess
+    variance any tracking-error-minimising book carries, and simultaneously the minimum
+    tracking-error budget at which anything mean-variance efficient becomes reachable
+    (`T_H = δ_B`). Two readings, both decision-relevant. A **small `δ_B`** means the pool is nearly
+    efficient on this panel and there is little room for *any* benchmark-relative construction —
+    which would be the single most useful negative this folder could hand the lab. A **large `δ_B`**
+    says the room exists and moves the question to whether a long-only book can reach it. Expect
+    `√d` to be wildly optimistic (it is a sample maximum over ~1,000 names — the folder's
+    estimation-error and post-selection notes all apply), which makes any comparison against it
+    conservative in the useful direction. Practical cautions: `Ω` is singular at this width, so
+    compute on a **sleeve or factor reduction** and say which; `T₀` is a **variance** throughout,
+    not a volatility; and `∆₁ < 0` is a normal case, not a bug.
+    → `notes/2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`
+
+234. **FREE — a standing interpretation rule about what v3's statistic does and does not pay for,
+    and it rules out two plausible book shapes before they cost a trial.** Skill is a **Sharpe
+    difference**, i.e. a statement about *total* risk-adjusted return, not the TEV-constrained
+    active-return objective the benchmark-relative literature optimises. Three consequences. *(1)*
+    **Never minimise tracking error against the pool as an objective.** Roll's mean-TEV frontier is
+    the mean-variance frontier shifted right by `δ_B` at *every* return level, so a hug-and-tilt
+    book is optimising a curve that is uniformly dominated — and the shift does not shrink as the
+    tilt shrinks. *(2)* **Do not aim at the maximum-active-return vertex either.** On Jorion's
+    constant-TEV ellipse the efficient part is the **left arc that coincides with the mean-variance
+    frontier**, not the `µ_B + √(dT₀)` vertex; a Sharpe difference rewards the former. *(3)*
+    **Anchoring a book toward the pool compresses the thing being measured.** With v3's 90% skill
+    intervals near ±0.33, a book mixed heavily toward the benchmark has mechanically small skill
+    *and* mechanically small tracking error, so it cannot be distinguished from the pool whatever
+    its merits — which is an argument for *fewer, more concentrated* active bets under this
+    statistic, and the exact opposite of the de-concentration reflex the lab developed under v1's
+    Sharpe-versus-zero bar. Free, and it should be read next to #219: a skill number earned by
+    hugging is neither a forecast nor a declined obligation, it is a smaller sample of the same bet.
+    → `notes/2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`
+
+235. **FREE — import *return-loss relative to the pool* as a standing reporting statistic alongside
+    skill.** Defined as the extra return a book would need to match the benchmark's **post-cost**
+    Sharpe, it is the statistic the `1/N` literature uses to settle cost arguments, and it converts
+    a Sharpe gap into the units a cost argument is actually made in. The lab already reports skill
+    and skill at 2× liquidity costs; return-loss is computable from series the protocol already
+    produces, needs no new data, and makes "this lost to the pool on costs" quantitative rather
+    than rhetorical. A negative return-loss is by construction a higher post-cost Sharpe than the
+    pool. Pairs naturally with #232's decile-spread rule: one makes a null harder to overturn, the
+    other makes a cost claim auditable.
+    → `notes/2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`
+
+236. **TRIAL — reward-to-risk timing in its diagonal form, the cheapest buildable rule this folder
+    has found that was *designed* to beat an equal-weight benchmark, and it comes with its own
+    pre-registered failure condition.** Construction, fixed before the first run:
+    `w_i ∝ max(0, β̄_i)/σ̂²_i` normalised over eligible names, where `β̄_i` is the trailing average
+    loading of name `i` on a small factor set (an ETF market proxy is allowed by the hindsight
+    guard; a one-factor version is the honest starting point), `σ̂²_i` is its trailing return
+    variance, monthly rebalance, long-only **by truncation at zero** rather than by a constrained
+    optimiser. Three disciplines, all of which must be written down before running. *(a)* **`ω = 1`,
+    not scanned** — the source pair uses small integers and the deflator charges for every knob.
+    *(b)* **Diagonal covariance only**, declared as a deviation from the full-`Σ̂⁻¹` implementation
+    the independent re-test used, because that is the version the published negative was measured
+    on, and it is also the only version computable at this panel's width. *(c)* **The failure
+    condition is in the rule's own literature**: its authors' stated edge condition is large
+    cross-sectional dispersion of expected returns, and the one independent re-test finds the rule
+    *worse* where dispersion is larger. So write the hypothesis narrowly — "a long-only `β̄⁺/σ̂²`
+    weighting of the eligible panel earns positive skill against the equal-weight pool" — record
+    the tension first, and treat either outcome as a result. Distinct from the lab's inverse-risk
+    legs (they have no reward numerator) and from its momentum lineage (the numerator is a
+    *loading*, not a past return). `validation_overlap: true` on the only evidence available, so
+    **no magnitude or sign may be imported**; the justification is the estimation-precision
+    argument, which is structural.
+    → `notes/2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`
+
+237. **TRIAL, and only after #233 — a pool-anchored mixture whose mixing weight is *derived* rather
+    than fitted.** Submit `(1−δ)·w_pool + δ·w̃` for an existing book `w̃`, with
+    `δ = π₁/(π₁+π₂)`, `π₁` the pool's squared bias and `π₂` the book's estimation variance in the
+    `Σ`-metric, recomputed at **every rebalance from trailing data only**. Tu–Zhou's Proposition 1
+    is the licence: the mixture strictly dominates *both* components in decision-theoretic loss
+    whenever the naive rule is not exactly optimal. Four conditions, and the first is a hard gate.
+    *(a)* **`T > N + 4` fails on the raw panel** (~1,000 eligible names), so the paper's own
+    estimator is not computable: either apply the mixture at **sleeve level** where the gate holds,
+    or estimate `π₁, π₂` from the realised **active-return series** of the book against the pool —
+    a substitution that must be declared in the journal as not the paper's estimator. *(b)* The
+    paper's objective is **expected-utility loss, not the Sharpe ratio**, and its authors state the
+    two separate once parameters are estimated — so `δ` is to be *pre-registered from the formula*,
+    never scanned against skill. *(c)* The comparison must be against the **same `w̃` submitted
+    un-mixed**, or the trial measures the mixture and the book together. *(d)* `(1−δ)·w_pool` is not
+    a free leg: the pool drifts and v3 charges the trades that undo drift. Expect this to **reduce**
+    measured skill even where it reduces loss against the true optimum — see #234(3) — which is
+    why it goes after #233 and why its honest claim is about *sizing*, not about forecasting.
+    → `notes/2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md`
+
+238. **ANTI-CANDIDATE — do not build a minimum-tracking-error or enhanced-index book against the
+    equal-weight pool, and do not treat "low turnover" as an edge under v3.** Two independent
+    reasons. *(1)* **The objective is dominated by construction.** Every portfolio on the
+    minimum-TEV frontier lies to the right of the mean-variance frontier by the same `δ_B`,
+    whatever its return target, so a book built to track the pool closely and tilt slightly is
+    paying a constant variance penalty for a statistic that does not reward proximity — and if the
+    tracking-error budget is below `δ_B`, *no* point in the feasible set is efficient at all. *(2)*
+    **The turnover argument does not transfer.** The external evidence that cheap, low-turnover
+    rules beat `1/N` is measured against a flat 50 bps per transaction on US data; v3 charges a
+    per-name liquidity tier **plus** UK/HK/FR/IT/ES transaction taxes, and the pool itself drifts
+    and is itself rebalanced, so "trades slightly more than the benchmark" is not a cost advantage
+    here — the lab's own cost accounting decides it, not the literature's. Note what this does
+    **not** forbid: #236's rule, whose low turnover is a by-product of slow-moving inputs rather
+    than the reason to run it, and #237's mixture, which is a sizing discipline rather than a
+    tracking objective.
+    → `notes/2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md` ·
+    `notes/2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`
 ---
 
 ## Coverage log
@@ -10609,9 +10810,106 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-08 (session 55) | **The first session aimed by a protocol change rather than by a gap detector, the previous nightly's list or this folder's own rotation — and the first whose three notes are one chain rather than three topics.** `program.md` put **protocol v3** in force today: costs became per-name (a 15/20/30/40 bps liquidity tier **plus** UK/HK/FR/IT/ES transaction taxes), holdings now **drift** between emitted rows and undoing drift is charged, and the deflated statistic became **skill against the equal-weight eligible pool** instead of Sharpe against a zero-Sharpe null. The re-measurement put both v2 family leads at **zero skill**, and `learnings.md` concluded "beating the null is not beating the pool" while naming books tilted toward "71%-non-US, **stamp-duty-paying** names" — an attribution with no literature behind it anywhere in this folder. Three greps across all 170 prior notes returned **zero**: `stamp duty`/`financial transaction tax`/`Umlauf`/`Colliard`; `no trade region`/`Leland`/`Davis-Norman`; `benchmark index`/`Zitzewitz`. One cluster each. Headline: **the statute sets a per-name cost → the per-name cost sets a per-name no-trade band and a trade-to-the-edge rule → and whatever skill that book shows is a difference against a benchmark nobody has read the construction of.** Best buildable item is **#216** (weight-space bands, halfwidth ∝ cost^(1/3), derived not fitted); best free items are **#213**, **#214**, **#215**; **#217** sharpens the standing engine read with two specific questions; **#218** and **#219** are anti-candidates, the second a rule against harvesting the benchmark's own flaw. Also recorded: the covered Gârleanu–Pedersen partial-move policy is the **quadratic**-cost optimum and v3 charges **proportional** costs, so the lab's one cost-aware construction answers the wrong cost geometry. Access notes: Wiley `pdfdirect` is Cloudflare-challenged (403, 5.5 KB "Just a moment…"), a legacy `sites.google.com/site/<user>` faculty page now **302s into a Google login** (an eleventh "looks like an answer" mode — `curl` reports 200 at the top level), both Lancaster `eprints` records for a JPM article hold **no file**, and EDHEC's publication pages gate PDFs behind registration; the three sources read in full came from **ECB** (`ecb.europa.eu/pub/pdf/scpwps/`), **NBER** (unshifted, no `( )` dropout) and **arXiv**, and **University of Pretoria DSpace** (`repository.up.ac.za/bitstreams/<uuid>/download`) served a 2.7 MB thesis on the first try. | Colliard–Hoffmann 2017 (JF) + Saporta–Kan 1997 (BoE WP) + Umlauf 1993 (JFE, **not obtained**) (`2026-10-08-securities-transaction-taxes-turnover-and-holding-period.md`); Muhle-Karbe–Reppen–Soner 2017 (Annual Review of Financial Economics) + Constantinides 1986 (JPE) + Janecek–Shreve 2004 (Finance and Stochastics) (`2026-10-08-no-trade-bands-under-proportional-costs.md`); Cremers–Petajisto–Zitzewitz 2013 (Critical Finance Review; read as NBER WP 18050) (`2026-10-08-benchmark-portfolios-have-alpha-of-their-own.md`) |
 | 2026-10-09 (session 56) | **The first session to look at where the panel's columns come from, and it finds that protocol v2 fixed the half of index-membership bias that is about sampling while leaving untouched the half that is about index *maintenance*.** Aim set by `research/README.md`'s rotation rule plus one observation: v2 made the universe point-in-time membership of nine maintained indices and v3 made the equal-weight eligible pool the benchmark for every number, so a column now enters the panel because a committee added a name and leaves because a committee deleted one — the exact setting the index-effect literature was built on. A grep across all 171 prior notes returned **zero** for `index inclusion`, `Chen, Noronha`, `Greenwood`, `demand curve slope`, `index premium`, `index turnover cost` and `price pressure hypothesis`. Three clusters, one chain. Headline one: the **two founding Tier-A papers disagree on overlapping data about whether the ~3% announcement effect persists** (Shleifer: yes, at 10–20 days; Harris–Gurel: fully reversed by ~3 weeks, with Bayesian posterior odds on no-reversal below 0.07), and both report the effect absent early in their samples and present late, tracking indexation — which no information story explains. Headline two: Petajisto's **index turnover cost**, `p·[s(a−d)+d]/(1+p)` permanent or `p·(a+d)/(1+p)` fully reversed, is a drag paid by *any mechanical index tracker* — **which is exactly what the v3 equal-weight eligible pool is** — and his escape route, an index-neutral portfolio holding non-member names, is **unbuildable here by construction**, so the lab is confined to the tracker side: the deletion leg is unavoidable, the entry leg is declinable. Headline three: Greenwood–Sammon show the effect **decayed to nothing** in the one index family tracked for forty years, driven by **migrations** (a large-cap addition is now usually a mid-cap deletion, so the net shock is small) and **organised liquidity provision** (total institutional ownership barely moves around index changes), both structural rather than cyclical — and they name non-US **national** indices, eight of the nine here, as their open question. **The one thing in the chain that does not decay is the fact about this repo**: providers add recent winners and delete recent losers, so the panel's entrants are recent winners and its leavers recent losers, and `program.md` says coverage before 2009 is thin, so that distortion is not even stable across splits. Best free items **#220** (entry/exit census — pure accounting, gates the rest) and **#221** (is the panel's momentum signal an index-maintenance artifact?); **#222** free; **#223** the one trial; **#224** a free drop-in volume-shock statistic; **#225** adds a third question to the standing engine read; **#226** anti-candidate. **Nothing is closed by this entry** — no lab measurement was taken, the holdout was not read, and the two notes with buildable content both say the size of the effect on these nine indices is unmeasured. Access notes: **both 1986 JF primaries exist only as JSTOR scans** served by `johnhcochrane.com` — `pdftotext` yields ~1.6 KB of cover page from 13 and 16 pages, `pdffonts` shows a populated table (so the empty-font-table test does **not** catch it) and the tell is the character count alone; `pdftoppm -png -r 120 -gray` plus selective page reads recovered both in ~8 image reads. `ww.petajisto.net/papers/` (note the two-w host) served both Petajisto papers first try while the three-w form 404s; NBER w30748 was unshifted with no `( )` dropout; **Semantic Scholar returned `not found` for `10.1111/jofi.13410`**, a twelfth instance of the folder's standing JF-DOI rule, while Crossref answered every lookup. Two sources **not obtained**: Chen–Noronha–Singal 2004 (green OA only at a bepress repository, and the two UCF records are faculty-bibliography entries holding no file) and Kumar et al. 2023 (closed, the one Pure record holds no file) — both recorded as pointers to the live asymmetry disagreement rather than relied on. | Shleifer 1986 (JF) + Harris–Gurel 1986 (JF), **both read in full** as rendered scans (`2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`); Petajisto 2011 (J. Empirical Finance) + Petajisto 2009 (JFQA), **both read in full** from the author's site (`2026-10-09-index-premium-and-the-index-turnover-cost.md`); Greenwood–Sammon (NBER WP 30748 **read in full**; published JF 2025, not read), with Chen–Noronha–Singal 2004 (JF) and Kumar–Lawrence–Prakash–Rodríguez 2023 (JBF) **both not obtained** (`2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`) |
 | 2026-10-10 (session 57) | **The first session to read the ETF literature at all, on a panel whose other 42 columns are ETFs — and it both closes `program.md`'s one charter sub-mechanism for a mechanism-level reason and finds that the ETF columns have a boundary problem of their own.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 174 prior notes `creation-redemption`, `ETF arbitrage`, `ETF flow`, `comovement of ETF` and `MAX effect` returned **zero**, and `ETF` appeared only in implementability sections as an instrument, never as a subject — this despite `program.md` chartering "ETF versus constituent" for `lead-lag-spillover` and calling the 42-ETF panel "unusually well suited" to it, and despite the lab having closed that sub-mechanism on a free screen on 2026-08-31 with no literature behind the closure. Three notes, one chain. Headline one: the ETF-versus-constituent question has **two branches making opposite predictions**, and the lab tested the one neither side defends — BFM's fork is gradual price discovery (directional lead, no reversal) versus arbitrage-mediated shock propagation (no lead, a reversal conditional on primary-market activity), their own tests take the second, and the lab's 2026-08-31 directional null is therefore **consistent with the paper** rather than evidence against it. Headline two, and the session's most useful output: the half of that channel this panel *can* compute is a **published null** — Brown–Davies–Ringgenberg measure `ETFPremChange` against funds' true NAVs and find it predicts nothing at any horizon in any sub-sample, while the signal that works is a **share count** that they report as neither persistent nor correlated with contemporaneous returns, so the tempting ETF-versus-synthetic-basket divergence candidate is refused before it is built (#229) and the vein is closed on mechanism rather than on one measurement (#230). Headline three extends 2026-10-09's boundary detector to the ETF half of the panel: a stock column opens when a committee adds a name, an **ETF column opens when a provider launches a product**, which BFKM show is return-chasing by construction for the specialized half of a two-equilibrium industry — and the question "is anyone obliged to trade when the boundary moves" answers **yes, the v3 equal-weight pool**, which holds every ETF from its first price (#227, #228, #231). By-product worth more than it looks: BDR's decile-significant / continuous-insignificant contrast is a Tier-A case against this lab's own habit of closing families on a rank IC alone (#232). New: **#227–#232**, three free, one trial, two anti-candidates. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. New access channel: **`repository.arizona.edu`** DSpace bitstreams served a closed *Review of Finance* article's accepted manuscript on the first try, found via OpenAlex's own `locations` list — whose `any_repository_has_fulltext: false` for that article was **wrong**. | Ben-David–Franzoni–Moussawi 2018 (`2026-10-10-etf-arbitrage-shock-propagation.md`); Brown–Davies–Ringgenberg 2021 (`2026-10-10-etf-flows-and-the-premium-change-null.md`); Ben-David–Franzoni–Kim–Moussawi 2023 (`2026-10-10-etf-launch-as-a-return-chasing-boundary.md`) |
+| 2026-10-11 (session 58) | **The first session to read the literature on the *objective itself* after protocol v3 made that objective benchmark-relative, and the first whose three sources form a question-and-answer-and-negative chain rather than three topics.** Aim set by `research/README.md`'s rotation rule plus one observation: v3 deflates **skill** — validation Sharpe minus the equal-weight eligible pool's on the same days — so every number the lab now produces is a difference against a specific portfolio, and a grep across all 177 prior notes returned **zero** for `Roll 1992`, `tracking error volatility`, `Jorion 2003`, `Talmud`, `Tu and Zhou`, `Kirby`, `Ostdiek` and `reward-to-risk timing`. Three results. *(1)* **The geometry is unfavourable in a way that does not shrink with the size of the bet**: Roll's minimum-TEV frontier is the mean-variance frontier shifted right by the *constant* `δ_B = ∆₂ − ∆₁²/d`, Jorion's constant-TEV feasible set touches the efficient frontier only when the budget reaches `δ_B` exactly (`Ψ = dT₀ − d∆₂ + ∆₁² ≥ 0`), and the ellipse's return vertex gives a benchmark-**independent** ceiling of `√d` active return per unit of tracking error. *(2)* **The size of the active bet has a closed form** — `δ* = π₁/(π₁+π₂)` in a mixture of the naive rule with an estimated one, strictly dominating both components, halving the loss when bias and variance are equal — whose feasible estimator needs `T > N + 4` and is therefore **not computable at this panel's width**, and whose objective is expected-utility loss rather than the Sharpe ratio the lab scores. *(3)* **The cheapest rule ever designed to beat an equal-weight benchmark fails its own stated edge condition** in the one independent re-test located: Kirby–Ostdiek replace the sample mean with a factor loading (`β̄⁺/σ̂²`, long-only by truncation at zero, low turnover by construction of its inputs) and predict an edge where cross-sectional dispersion of expected returns is large, while the re-test finds the rule worse exactly there. New: **#233–#238**, three free, two trials, one anti-candidate; the best free item is **#233** (the panel's `√d` and the pool's `δ_B`, train-only accounting that can **kill** the whole vein if `δ_B` is small), the best standing rule is **#234**, and the one cheap trial is **#236**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: Palomba–Riccetti read as the Università Politecnica delle Marche working paper (OpenAlex `locations`, `https` not the listed `http`); Tu–Zhou as the typeset JFE version from the green copy OpenAlex names. **Not read, and nothing is claimed from their own words:** Roll (1992) and Jorion (2003), both closed (`pm-research.com` OpenID redirect; CFA Institute abstract-only) with their algebra taken from the peer-reviewed restatement, and Kirby–Ostdiek (2012), closed at `cambridge.org`, with its construction taken from Bock (2018) — a source this folder already covers, so it is **not counted as new coverage**. Also unobtained: Plyakha–Uppal–Vilkov on the equal-weight benchmark's own mechanics (SSRN 403, EDHEC registration wall, Springer chapter closed) and El-Hassan–Kofman (2003) on the no-short-sales version of the TEV frontier — `opus.lib.uts.edu.au` answers a bitstream request with **HTTP 200 by redirecting to `/password-login`**, a new looks-like-an-answer shape. | Palomba–Riccetti 2012 (JBF), carrying Roll 1992 (JPM) and Jorion 2003 (FAJ) (`2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`); Tu–Zhou 2011 (JFE) (`2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md`); Kirby–Ostdiek 2012 (JFQA), via Bock 2018 (`2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-11] Read this first: v3 changed the lab's *objective*, not only its scoreboard — and the
+  benchmark-relative literature says the shape of the optimum changes with it, in a direction that
+  makes two obvious book shapes dominated before they cost a trial.** `program.md` now deflates
+  **skill** (validation Sharpe minus the equal-weight eligible pool's on the same days). That is a
+  benchmark-relative mandate, and three results follow that this folder had never held in 177 notes.
+  *(1)* Roll's minimum-tracking-error frontier is the mean-variance frontier **shifted right by a
+  constant**, `δ_B = ∆₂ − ∆₁²/d`, set by where the benchmark sits relative to the minimum-variance
+  portfolio and **not** by how aggressive the active book is; Jorion's constant-TEV feasible set is
+  an ellipse that touches the efficient frontier only once the budget reaches `δ_B`, and its
+  maximum-return vertex implies a **benchmark-independent ceiling of `√d`** active return per unit of
+  tracking error. So *hug-and-tilt is a dominated shape* (#234, #238) and the ceiling is a property
+  of the opportunity set, not of the benchmark choice. *(2)* The right **size** of the active bet has
+  a closed form — `δ* = π₁/(π₁+π₂)` — that strictly dominates both the naive benchmark and the
+  estimated rule, but its feasible estimator needs `T > N + 4` and so is **not computable at this
+  panel's width**, and it optimises a utility loss rather than the Sharpe difference the lab scores
+  (#237). *(3)* The cheapest rule ever built to beat an equal-weight benchmark — replace the sample
+  mean with a **factor loading**, `β̄⁺/σ̂²`, long-only by truncation — **fails its own stated edge
+  condition** in the one independent re-test located (#236). **New: #233–#238**, three free, two
+  trials, one anti-candidate. **Nothing of the lab's is closed by this entry**; no lab measurement was
+  taken tonight and the holdout was not read. Two sources were **not obtained** and are left as
+  pointers rather than claims: **Plyakha–Uppal–Vilkov** on what an equal-weight benchmark
+  mechanically earns and pays (SSRN 403, EDHEC behind a registration wall, the 2021 Springer chapter
+  closed, the one third-party mirror unreachable at the transport layer) — this is the *direct*
+  literature on the pool the lab is now graded against, and it remains the highest-value unread item
+  this folder knows of; and **El-Hassan–Kofman (2003)**, the no-short-sales version of the TEV
+  frontier, which is the long-only correction #233's `√d` needs. **Carried unchanged and still
+  genuinely unrun: #82** (thirty-sixth session, still the oldest unspent free item), **#94** as
+  standing discipline, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, the
+  2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**,
+  **#171**, **#172**), the 2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the
+  2026-10-01 set (**#179**, **#180**, **#181**), the 2026-10-02 set (**#183**–**#186**), the
+  2026-10-03 set (**#188**–**#191**), from 2026-10-04 **#195** and **#196**, from 2026-10-05
+  **#198**, **#199**, **#200**, **#201**, the 2026-10-06 set (**#203**–**#207**), the 2026-10-07 set
+  (**#208**–**#211**), the 2026-10-08 set (**#213**–**#217**), the 2026-10-09 set
+  (**#220**–**#225**), and the 2026-10-10 set (**#227**, **#228**, **#231**, **#232**). **#152
+  stands.** **#163, #169, #173, #178, #182, #187, #192, #197, #202, #212, #218, #219, #226, #229,
+  #230 and #238 stay anti-candidates.**
+- **[2026-10-11] What should aim the next session, in order. The top is unchanged for the fourth
+  night; tonight adds one item to the same single census pass and one rule that costs nothing and
+  applies immediately.**
+  - **#217 still goes first, and it is still not research** — one look at `engine/` by someone
+    allowed to take it, with the same four questions ([2026-10-10]'s list). Costs nothing, and
+    tonight's #233 gives it a fifth reason to matter: if the pool is rebalanced on a grid and
+    charged costs, then `δ_B` is being paid by the benchmark, and the skill a candidate measures
+    against it is partly that payment rather than a forecast.
+  - **Then the one census pass, now four items wide: #220, #214, #227 and #233.** All four are
+    returns-level or eligibility-level accounting on the train split with no validation read and no
+    candidate; build the machinery once and spend it four times. **#233 is the one most likely to
+    close a vein rather than open one** — a small `δ_B` says the equal-weight pool is nearly
+    efficient on this panel and that no benchmark-relative construction has room, which would be
+    the most useful negative in this file.
+  - **Then #234 and #232, immediately and permanently, because both are reporting and
+    interpretation rules rather than tasks**, and #235 alongside them (return-loss against the pool,
+    computable from series the protocol already produces). #234 is the one that changes behaviour:
+    under a Sharpe-difference statistic, anchoring toward the benchmark compresses the measured
+    quantity as well as the risk, which argues for **fewer and more concentrated** active bets —
+    the reverse of the de-concentration instinct the lab built under v1's Sharpe-versus-zero bar.
+  - **Then #221**, unchanged from [2026-10-09]'s reasoning and still the item with the largest
+    possible consequence on this list.
+  - **Then #236**, which is now the cheapest trial on the board and the only one aimed squarely at
+    the v3 objective: a long-only `β̄⁺/σ̂²` weighting, `ω = 1` and diagonal covariance both
+    pre-registered, with its literature's own negative written into the journal *before* the run.
+    It goes before #223, #231 and #237 because it needs no census first.
+  - **Then #213**, then **#215**, then **#216**, in [2026-10-08]'s order, with **#222** free
+    alongside #213 and **#228** as the reference launch-age/differentiation pair. **#223**, **#231**
+    and **#237** are the trials that each wait on a census or constant of their own and never go
+    before it.
+  - **Then #203**, still free, still the only item that revives an existing disqualified screen.
+    **Then #209**, **#198**, **#205**, **#206**. **Then #208 and #211**, then **#210**, then
+    **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183, #184, #179,
+    #180** in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190**, **#185** as a
+    standing reporting rule, **#191** as screens to re-measure. **Then the carried items**: #181,
+    #174's reading, #175, #177, #176. **#204** stays below them for the reason [2026-10-06] gave.
+- **[2026-10-11] The transferable output, and it is the eleventh detector — the first aimed at the
+  lab's *objective* rather than at a source, a statistic, a family charter, the toolkit or the
+  dataset's edge.** The ten before it: redundancy [2026-09-30], rival mechanisms [2026-10-02], the
+  altitude an enumeration was written at [2026-10-03], sign-versus-magnitude in a tension
+  [2026-10-04], each side's account of the test's confound [2026-10-05], a disqualified statistic
+  against a truncated variant of itself [2026-10-06], the self-undermining cross-border friction
+  [2026-10-07], a construction technique's cost geometry [2026-10-08], a universe whose boundary is
+  itself a signal [2026-10-09], and a family charter with two branches predicting opposite
+  observables [2026-10-10]. Tonight's: **when the grading statistic changes, the optimisation
+  problem changes with it — so the literature to read is the one about the new *objective*, not the
+  one about the new *number*.** The lab treated 2026-10-08 as a recalibration (both v2 leads
+  re-measured to zero skill, costs re-priced) and asked what signal could clear the new bar. The
+  question it did not ask is what *shape* of book the new bar rewards — and that question has a
+  sixty-year-old answer with closed forms, which rules out two shapes for free and puts a ceiling on
+  a third. The test is two questions asked of any new scoring rule, before the next candidate is
+  written: *what is this statistic the optimum of, and what is the published pathology of optimising
+  it?* The corollary is the uncomfortable one: **a benchmark-relative statistic quietly rewards
+  concentration, because it rewards total risk-adjusted return while a hugging book shrinks the very
+  difference being measured** — so a protocol change aimed at honesty can invert a construction
+  instinct the lab spent dozens of trials calibrating, and nothing in the change announcement says
+  so. The general form, which outlives this protocol: **after any change of objective, re-derive
+  which construction shapes it rewards, and do not carry forward a shape that was optimal under the
+  old one.**
 - **[2026-10-10] Read this first: `program.md` charters an ETF sub-mechanism for
   `lead-lag-spillover`, the lab closed it on a free screen, and the literature — read here for the
   first time, 174 prior notes having no subject-level coverage of it — says the closure is right for a reason the screen could not see.** The

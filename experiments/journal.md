@@ -18927,3 +18927,5 @@ acted on, halt again rather than re-litigating it — this is now a two-night-ol
 named, specific fix, and a third judgement call in its place would be worth less than the stop.
 Research ideas remain exactly as the 2026-10-10 summary left them (its five numbered items are
 unspent, and nothing tonight touched them).
+
+## Research session — 2026-10-11 (learning agent): 3 notes added, see research/SUMMARY.md

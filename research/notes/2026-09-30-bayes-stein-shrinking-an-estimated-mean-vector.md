@@ -188,3 +188,7 @@ magnitude-weighted long-only book either, and this note does not claim it does.
   — the folder's covariance-side shrinkage notes; this is the mean-side gap they left.
 - `2026-09-15-tweedies-formula-empirical-bayes-selection-bias.md` — empirical Bayes applied to a
   *selected* maximum rather than to the whole vector; a different use of the same machinery.
+- `2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md` — [added 2026-10-11] the second
+  use of Bock (2018) as a recipe channel in this folder, and the place its sixteen-strategy
+  horserace verdict is recorded rule by rule rather than as one line. Bock is a covered source;
+  that note's new coverage is Kirby–Ostdiek (2012).
