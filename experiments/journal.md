@@ -18929,3 +18929,80 @@ Research ideas remain exactly as the 2026-10-10 summary left them (its five numb
 unspent, and nothing tonight touched them).
 
 ## Research session — 2026-10-11 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Engine issue — 2026-10-11 (second session of the day) — third consecutive red suite, state byte-for-byte unchanged, halting without re-diagnosis
+
+**No trial was run. No candidate was written, no portfolio was formed, no return series or Sharpe
+was computed outside `run_experiment.py`, and no holdout or forward file was opened.** The setup
+rule in `CLAUDE.md` is "engine must be green"; `.venv/bin/python -m pytest tests/ -q` reports
+**4 failed, 88 passed**. The previous entry closed with a standing instruction to this session:
+*"if the suite is still red and the `## Engine issue` remedy list has not been acted on, halt
+again rather than re-litigating it."* The remedy list has not been acted on, so the session halts
+and this entry records only what is needed to show the state is unchanged — no third diagnosis.
+
+### What was checked (all read-only, ~2 minutes)
+
+1. **The failure set is identical**, not merely the same count:
+   `test_change_logs_keep_index_size[ftse100]`, `[n225]`, `[smi]`,
+   `test_hang_seng_log_matches_published_sizes`. Same four as 2026-10-09 and 2026-10-11 (first
+   session).
+2. **No membership data has changed.** `data/membership/` was last touched by `c74ac03d`
+   (daily refresh 2026-10-09) — the refresh that caused the alarm. The only data commit since is
+   `973a12ee` (2026-10-10), which touched two 2026 price partitions and nothing else. None of the
+   five enumerated CSV edits in §5 of the previous entry has been made.
+3. **The defect the previous entry flagged as the most serious is still live.** Current spells in
+   the stored intervals: `n225` **205** (should be 225), `hsi` **95**, `ftse100` 100, `sp500` 500,
+   `smi` 20, `sx5e` 50, `cac40` 40, `dax` 40, `aex` 30. The Nikkei is still asserted at 205 members
+   since 2026-10-09, i.e. missing 9% of its names for forward-incubation scoring. The `hsi` count
+   of 95 against the 93 of the published snapshot is the two unlogged joins (`1347_HK`, `2338_HK`)
+   that the previous entry identified as the whole `+2` in all 47 checkpoints — confirmation of
+   that diagnosis, not a new fact.
+4. **Nothing else is blocking.** The store is current (last price date **2026-10-10**, 1,125 ids in
+   the October partition) and `RATE_US3M` is present through 2026-10-09, so a v3 trial would have
+   had its T-bill series. The red suite is the only thing standing between this session and the
+   experiment loop.
+
+### Cost so far, stated plainly because it is now the main fact about this alarm
+
+Three consecutive nightly sessions have produced **zero trials**: 2026-10-11 (first session) and
+this one halted at setup; the run before them was the 2026-10-09 data-issue stop. The v3 board is
+still at **2 trials, both `GATE_FAIL`, seat empty**, and the deflated-skill bar is exactly where
+2026-10-10 left it. The research agenda is not degrading — the five numbered idea items in the
+2026-10-10 summary are unspent and nothing since has touched them — but the throughput of the lab
+is zero until a human makes the five CSV edits in §5 of the previous entry (or accepts the
+reconciliation and adjusts the assertions). That list is specific, enumerated by name, and
+unchanged; it does not need another night of agent time spent on it.
+
+- Lesson: **once an alarm has a named, specific remedy, further agent nights add nothing and the
+  honest output is a shrinking entry, not a fuller one.** The first night diagnosed, the second
+  night widened the diagnosis and found the Nikkei scrape defect that no test asserts on; the
+  third night's entire contribution is four confirmations that nothing moved. The marginal value
+  of a nightly session is zero while a human-only edit is the binding constraint, and the right
+  record of that is the four checks above plus the halt — a session that instead re-derived the
+  mechanism would look productive and would be noise. The one structural improvement worth more
+  than any of these entries is §5(6) of the previous entry: make `intervals_from_events` warn on
+  a current member with no log row, so this class of defect announces itself with a warning
+  instead of costing three nights.
+
+## Session summary — 2026-10-11 (nightly, second session) — halted at setup, 0 of 8 experiments
+
+**Experiments run: 0. Verdicts: none. The engine suite is red (88/92) for the third consecutive
+session with the identical four `tests/test_membership.py` failures, so the session stopped at
+step 2 per `CLAUDE.md`'s setup rule and the previous session's explicit standing instruction.**
+No candidate file was created, no holdout or forward file was read, the seat is still empty, and
+the v3 trial count is unchanged at 2 — the deflated-skill bar has not moved.
+
+**Best finding of the night:** nothing new, by design. The night's four read-only checks establish
+that the state is unchanged — identical failure set, `data/membership/` untouched since the
+2026-10-09 refresh that broke it, `n225` still asserting 205 members, and the store otherwise fresh
+and v3-ready (prices to 2026-10-10, `RATE_US3M` present) — which means the blocker is still the
+five enumerated CSV edits in §5 of the 2026-10-11 `## Engine issue` entry and nothing an agent can
+do. Recorded cost: three consecutive sessions, zero trials.
+
+**Next session**: if `data/membership/` still carries no commit newer than `c74ac03d` and the suite
+is still red, halt at step 2 with a one-paragraph entry and do not re-diagnose — the diagnosis is
+two entries deep and complete. If the suite is green, run the experiment loop against the
+2026-10-10 summary's five unspent idea items, whose provenance and priors are recorded there
+(including which came from `research/SUMMARY.md`); its item (1) — "is the equal-weight eligible
+pool beatable by cross-sectional selection on free daily data under v3 execution?" — is still the
+live question and should drive the family mix rather than a family list.
