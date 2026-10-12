@@ -153,6 +153,31 @@ snippets. Three practical limits to plan around:
   `locations[].landing_page_url` list is how to find the handle (`hdl.handle.net/10419/...`);
   fetch the landing page and read the `bitstream` link out of it.
 
+- **`econstor.eu` works again, and the route to it is the RePEc paper page** (added 2026-10-12;
+  **reverses the 2026-10-04 entry above**, which recorded the host as dark behind Anubis). A
+  `econstor.eu/bitstream/10419/<id>/1/<file>.pdf` request returned a genuine 4.3 MB PDF that
+  `pdftotext -layout` parsed into 110 KB of clean text — the conference version of a closed
+  *European Journal of Finance* article. The handle came from `ideas.repec.org/p/zbw/vfsc12/<id>.html`,
+  which prints the bitstream URL in full, so a RePEc working-paper listing is the fastest key to a
+  German-institution deposit. Keep checking the body (`file`, and the size), because the Anubis
+  behaviour may return; the lesson is that **a channel this file records as dark is worth one cheap
+  retry per session, not permanent exclusion.**
+
+- **`researchaffiliates.com` now answers every document request with a destination chooser, and that is
+  a tenth "looks like an answer" mode** (added 2026-10-12). Both
+  `/documents/<file>.pdf` and `/content/dam/ra/documents/<file>.pdf` return **HTTP 200 with a 70 KB
+  HTML page titled "ResearchAffiliates.com — Choose your destination"**, linking to `rafi.com` and
+  `syzygyassetmanagement.com`; the `rafi.com` equivalent path is a 404 HTML page. The firm's own PDF
+  library — the standard route to its *Journal of Investment Management* and *Financial Analysts
+  Journal* reprints — is therefore closed to an automated client, and a search result naming such a
+  PDF is not evidence it can be fetched. Three further one-line observations from the same session:
+  **`autopapers.ssrn.com`**, which OpenAlex lists as the green location for several closed articles,
+  fails with `curl: (56) CONNECT tunnel failed, response 502` (transport, not an origin refusal);
+  **`orbilu.uni.lu`** fails TLS verification even with `--cacert /root/.ccr/ca-bundle.crt`, i.e. its
+  own chain is incomplete rather than the proxy interfering; and **OpenAlex's free daily budget is
+  small enough to exhaust in about a dozen calls** — the `Insufficient budget` body arrived after ~10
+  single-work lookups, so spend OpenAlex on `locations` lists and use Crossref for citation counts.
+
 - **For a closed article, enumerate the CO-AUTHORS' institutions and try each one's repository
   before any search engine** (added 2026-10-04). This is the 2026-09-18 faculty-page lesson and the
   2026-10-03 institutional-library lesson turned into a procedure, and the way to run it is to read

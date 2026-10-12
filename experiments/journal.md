@@ -19006,3 +19006,5 @@ two entries deep and complete. If the suite is green, run the experiment loop ag
 (including which came from `research/SUMMARY.md`); its item (1) — "is the equal-weight eligible
 pool beatable by cross-sectional selection on free daily data under v3 execution?" — is still the
 live question and should drive the family mix rather than a family list.
+
+## Research session — 2026-10-12 (learning agent): 3 notes added, see research/SUMMARY.md

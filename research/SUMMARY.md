@@ -6022,6 +6022,92 @@ was taken tonight and the holdout was not read.
 `notes/2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`
 ---
 
+### Estimating the book instead of forecasting it — the precision matrix, what is computable at this panel's width, and the one anchoring operator that is (cross-family)
+
+**[2026-10-12] Read this first: the lab's two standing excuses for not building an optimised book —
+"the panel is too wide to estimate on" and "long-only breaks the algebra" — are both *partly* right,
+and the literature says exactly which part.** Last night's chain ended on a blocked item: Tu–Zhou's
+optimal mixing weight needs `T > N + 4` and is not computable at ~1,000 eligible names (`#237`), and
+the long-only version of the tracking-error frontier was an unobtained pointer. Tonight read the
+estimation literature that answers both questions. A grep across all 180 prior notes returned
+**zero** for `nodewise`, `precision matrix`, `POET`, `MAXSER`, `Black-Litterman`,
+`reverse optimization` and `implied returns` — so the folder held 180 notes about *what to forecast*
+and none about *how to turn a forecast into weights when the covariance matrix cannot be inverted*.
+
+**Result one — the object is `Σ⁻¹`, it can be estimated directly, and the regime map is explicit
+about where that stops working.** Every weight the lab might want is a function of the precision
+matrix: GMV is `Θ1/1'Θ1`, tangency is `Θµ/1'Θµ`. Nodewise regression (Meinshausen–Bühlmann;
+Callot–Caner–Önder–Ulaşan, JBES) estimates `Θ` **directly** as `p` Lasso regressions — one per name,
+each name on all the others — rather than inverting an estimated `Σ`, and is consistent for weights,
+portfolio variance and Sharpe ratio **with more assets than observations**, under sparsity of the
+*inverse* covariance (`s̄·log p / n = o(1)`; with `p > n` this means `s̄ = o(√(n/log p))`). Sparsity of
+`Θ` is not sparsity of `Σ` — `Σ_{i,j} = ρ^{|i−j|}` is dense with a sparse inverse. Caner–Medeiros–Vasconcelos
+(*Journal of Econometrics*) add an observed-factor first stage and nodewise on the residuals, and
+state the regime map precisely: with `p > n` the Sharpe estimators are consistent for GMV and
+mean-variance books, and the **maximum** Sharpe estimator is consistent when weights sum to one; but
+the **maximum out-of-sample** Sharpe estimator is proved consistent only for `p ≪ n`. In every
+theorem of the cluster, **variance and Sharpe converge more slowly than weights do** — a book whose
+weights are well estimated can still have a badly estimated Sharpe ratio. Two practical corollaries
+for this lab, both arithmetic: at daily frequency with a full train split (`n ≈ 5,000`) the panel is
+`p < n` and the hard regime is not even binding, while **a one- or two-year rolling window puts it
+back into `p > n`** — so window length, not the method, decides which theorem a candidate stands on;
+and the whole cluster improves the `Θ` half of `Θµ` and leaves the `µ` half at its sample mean, which
+is why the **mean-free** uses (GMV, risk weighting) are the ones with clean guarantees.
+
+**Result two — the constrained version exists, and it concedes the long-only case.** Caner–Fan's CROWN
+preprint solves the tracking-error-constrained and the tracking-error-plus-weight-constrained problems
+in the same framework. Three things come out of it. *(a)* The TE-constrained optimum is
+`w* = m + κ(Θµ/1'Θµ − Θ1/1'Θ1)`: **the optimal active overlay is a scalar times
+(tangency − global-minimum-variance), and the benchmark enters only as the anchor `m`** — the
+estimation-side twin of last night's benchmark-independent `√d` ceiling. Only the *size* `κ` is a
+choice, so a candidate in this vein has exactly one knob and should pre-register it. *(b)* Constraints
+are free asymptotically: TE-only, TE-plus-equality and TE-plus-inequality all converge at the same rate,
+which is set by estimating the unconstrained maximum-Sharpe weights, and whether an inequality binds can
+be decided from the data (`κŵ_u > ω`) with consistency either way. The benchmark-relative problem can
+even be *easier* in finite samples, because the benchmark's weights are given rather than estimated.
+*(c)* And the concession: a no-short constraint is a floor on each weight, and the authors state their
+method "cannot cover a short sales constraint for each asset in a portfolio" — it handles a floor on
+**one** asset, or a joint floor on a **group's summed** weight, and nothing else. Read together with the
+`p > n` guarantee resting on a *diverging* maximum Sharpe ratio (under a bounded one, consistency needs
+`p < T`), the honest summary is: **when this literature says "weight constraints" it means a few linear
+group budgets, not `p` non-negativity constraints, and the long-only tracking-error problem at this
+panel's width is an open problem.** Truncating a signed optimum at zero is allowed as a heuristic but
+cannot cite this literature for support.
+
+**Result three — the practitioner answer to the same anchoring problem has a knob that *is* computable
+here, and it is the one transferable thing in it.** Black–Litterman starts from reverse optimization:
+if benchmark weights `ω` solve a mean-variance problem, the implied excess returns are `Π = δΣω`, so a
+benchmark *is* a return forecast and needs no mean estimation at all. Views `Q` with uncertainty `Ω`
+are then combined with that prior by GLS, giving a precision-weighted posterior
+`µ̂_BL = [(τΣ)⁻¹ + P'Ω⁻¹P]⁻¹[(τΣ)⁻¹Π + P'Ω⁻¹Q]`, where `τ` controls distance from the benchmark
+(`τ → 0` is the benchmark, `τ → ∞` is plain mean-variance on the views) and can be calibrated to a
+tracking-error budget. In the one cost-aware out-of-sample evaluation located (Bessler–Opfer–Wolff,
+*European Journal of Finance*; long-only, volatility-capped, turnover and net Sharpe reported, Sharpe
+differences tested with a statistic valid for correlated non-normal series), the plain mean-variance
+book **failed** to beat the equally weighted benchmark — reproducing DeMiguel–Garlappi–Uppal — while the
+Black–Litterman book beat both static benchmarks on net Sharpe and drawdown. But their own sensitivity
+analysis attributes that to two specific things: **lower turnover**, and a **time-varying view-reliability
+weight** estimated as the trailing variance of each view's own past forecast errors. The textbook
+convention `Ω = P(τΣ)P'`, which makes the posterior independent of `τ` and encodes no view quality at
+all, did *worse*. So the transferable claim is narrow and mechanical: *an error-variance confidence weight
+on a weak signal, with the benchmark as the fallback, beat using the same signal raw* — and that operator
+needs no `Σ⁻¹`, no `T > N + 4` and no optimiser, which is precisely what `#237` could not have. Two
+caveats bound it: their cross-section is **five asset-class indices**, so nothing in it speaks to a
+thousand-name panel; and the turnover half of the attribution is exactly what `#238` already ruled
+non-transferable under v3's per-name costs and taxes.
+
+**What the chain says as one sentence.** The covariance inverse is estimable at this width by `p` Lasso
+regressions under a checkable sparsity condition and is cleanest in its mean-free uses (result one); the
+constrained, benchmark-anchored version of the same optimum has a one-knob closed form but **no theory
+for long-only at this width** (result two); and the only anchoring rule whose mixing weight is computable
+here is a confidence weight built from realised forecast errors (result three). New: **#239–#243**, two
+free, two trials, one anti-candidate. **Nothing of the lab's is closed by this entry**; no lab measurement
+was taken tonight and the holdout was not read.
+→ `notes/2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`,
+`notes/2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`,
+`notes/2026-10-12-black-litterman-benchmark-anchored-tilting.md`
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -10746,6 +10832,89 @@ hypothesis fodder, then anti-candidates.
     tracking objective.
     → `notes/2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md` ·
     `notes/2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`
+
+239. **FREE — reverse-optimize the equal-weight pool and read out the return forecast the benchmark
+    is implicitly making.** If the pool's weights `ω` were the solution to a mean-variance problem,
+    the excess returns consistent with them are `Π = δΣω` for any fixed `δ` (the scalar only sets
+    the level, not the cross-section). Compute `Σ̂` on the **train split only** over the eligible
+    panel, print `Π` by name and by region, and compare its cross-section with trailing realised
+    means. Three things this buys at zero trial cost. *(a)* It is the same machinery `#233` needs
+    for `δ_B`, so build it once and spend it twice — if the pool's implied returns are nearly flat
+    across names, the pool is close to the minimum-variance portfolio on this panel and no
+    benchmark-relative construction has room. *(b)* It says which names the lab's own benchmark is
+    already betting on, which is the right control for any candidate claiming a tilt. *(c)* It is
+    the only piece of Black–Litterman that needs no view, no optimiser and no matrix inverse — only
+    `Σ̂ω`. Train-only, no validation read, no candidate file.
+    → `notes/2026-10-12-black-litterman-benchmark-anchored-tilting.md`
+
+240. **FREE — the admissibility census for the whole precision-matrix route: measure `s̄` and the
+    `p` versus `n` arithmetic before any optimised book is written.** The consistency results for
+    estimating `Σ⁻¹` by nodewise regression hold under sparsity of the **inverse** covariance,
+    `s̄·log p / n = o(1)`, where `s̄` is the largest row count of non-zeros in `Θ`. Fit the `p`
+    Lasso regressions **once** on the train split (no rebalance loop, no returns scored), record
+    the realised `s̄`, and evaluate `s̄·log p / n` at the three window lengths a candidate might
+    plausibly use — one year (`n ≈ 252`), two years (`n ≈ 504`) and the full train split
+    (`n ≈ 5,000`) — against `p ≈ 1,000` eligible names. The regime, not the method, decides which
+    theorem any later candidate is standing on: at a short window the panel is `p > n` and only the
+    diverging-Sharpe version of the theory applies, while on the full split it is `p < n` by a
+    factor of about five. Record the number in the journal and declare the window in every later
+    hypothesis rather than tuning it. Expect this to be the item that **rules the route in or out**
+    — and note the companion fact that none of this helps the `µ` half of `Θµ`, so a pass licenses
+    the mean-free uses (GMV, risk weighting) more than it licenses a tangency book.
+    → `notes/2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`
+
+241. **TRIAL — confidence-weighted blending toward the pool, with the confidence estimated from the
+    signal's own realised forecast errors.** For an existing signal `s` producing a long-only book
+    `w̃`, submit `w = (1−λ_t)·w_pool + λ_t·w̃` with `λ_t = 1/(1 + v̂_t/v₀)`, where `v̂_t` is the
+    trailing variance of the signal's own forecast errors (its past cross-sectional scores against
+    the subsequently realised returns) over a **pre-registered** window ending strictly before the
+    rebalance date, and `v₀` a pre-registered scale. This is the one piece of Black–Litterman that
+    survives transplant: the published evaluation attributes its out-of-sample edge over the same
+    signal used raw to exactly this error-based reliability weight, and reports that the textbook
+    alternative (`Ω = P(τΣ)P'`, which makes the posterior independent of the confidence parameter)
+    did worse. It needs no covariance inverse, no optimiser and no `T > N + 4`, so unlike `#237`
+    it is computable at this panel's width. Four disciplines. *(a)* Pre-register the error window
+    and `v₀`; the deflator charges for every knob and a scanned `λ` would be fitting the gate.
+    *(b)* Compare against **the same `w̃` submitted un-blended**, or the trial measures the blend
+    and the signal together. *(c)* `w_pool` is not a free leg — it drifts, and v3 charges the trades
+    that undo drift — so build the blend in weight space at each rebalance and let the measured
+    turnover speak. *(d)* Expect blending to **reduce** measured skill where it reduces loss
+    (`#234`): the honest hypothesis is "error-weighted blending toward the pool raises skill
+    relative to the un-blended book", and a null is a result about sizing, not about the signal.
+    → `notes/2026-10-12-black-litterman-benchmark-anchored-tilting.md`
+
+242. **TRIAL, and only after #240 passes — the two mean-free uses of an estimated precision matrix,
+    at sleeve width rather than panel width.** Both forms drop the sample-mean vector entirely,
+    which is where the estimation error that kills optimised books lives, and both run where `n ≫ p`
+    holds comfortably. *(a)* **Nodewise GMV over sleeves**: form a few dozen sleeve return series
+    (regions, the 42-ETF panel, or the recorded family leads), estimate `Θ̂` by nodewise regression
+    on them with a pre-registered window and penalty rule, hold `Θ̂1/1'Θ̂1` truncated at zero and
+    renormalised, monthly, and let the sleeves' own constituents be equal-weighted inside each
+    sleeve so the book stays long-only by construction. *(b)* **Group-budget overlay**: keep the
+    pool as the anchor and allow the book to deviate from the pool's weight on a region or on the
+    ETF sleeve by at most a pre-registered `ω`, using the data-based binding test `κŵ_u > ω` to
+    switch between the constrained and unconstrained solutions. Declare three things in the journal
+    before running: the window (from `#240`), that truncation-at-zero is a heuristic with **no**
+    theory behind it at this width (see `#243`), and that variance and Sharpe converge more slowly
+    than weights do, so the book may be better than its own estimated Sharpe suggests or worse.
+    → `notes/2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md` ·
+    `notes/2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`
+
+243. **ANTI-CANDIDATE — do not build a per-name long-only "tracking-error-optimal" book and do not
+    cite the high-dimensional literature as licence for it.** The most recent paper in that vein
+    states plainly that its method handles a short-sale constraint on **one** asset, or a joint
+    floor on a **group's summed** weight, and "cannot cover a short sales constraint for each asset
+    in a portfolio" — so the lab's actual constraint set (long-only on every name, 25% cap, gross
+    ≤ 1) is outside everything proved there. Two further reasons to keep the claim small. *(1)* The
+    `p > T` consistency results rest on a **diverging** maximum Sharpe ratio; under the modest
+    assumption of a bounded one, the same authors' appendix recovers consistency only for `p < T`.
+    *(2)* The whole frame assumes a tracking-error *budget* is the manager's constraint, which under
+    a Sharpe-difference statistic is a problem the lab does not have (`#234`, `#238`). What this
+    does **not** forbid: the algebra (`#242`'s group budget, whose constraint form *is* covered),
+    the mean-free books, and truncation-at-zero used openly as a heuristic. What it forbids is
+    writing "the high-dimensional portfolio literature supports this construction" in a hypothesis
+    about a long-only optimised book — it does not.
+    → `notes/2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`
 ---
 
 ## Coverage log
@@ -10811,8 +10980,102 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-09 (session 56) | **The first session to look at where the panel's columns come from, and it finds that protocol v2 fixed the half of index-membership bias that is about sampling while leaving untouched the half that is about index *maintenance*.** Aim set by `research/README.md`'s rotation rule plus one observation: v2 made the universe point-in-time membership of nine maintained indices and v3 made the equal-weight eligible pool the benchmark for every number, so a column now enters the panel because a committee added a name and leaves because a committee deleted one — the exact setting the index-effect literature was built on. A grep across all 171 prior notes returned **zero** for `index inclusion`, `Chen, Noronha`, `Greenwood`, `demand curve slope`, `index premium`, `index turnover cost` and `price pressure hypothesis`. Three clusters, one chain. Headline one: the **two founding Tier-A papers disagree on overlapping data about whether the ~3% announcement effect persists** (Shleifer: yes, at 10–20 days; Harris–Gurel: fully reversed by ~3 weeks, with Bayesian posterior odds on no-reversal below 0.07), and both report the effect absent early in their samples and present late, tracking indexation — which no information story explains. Headline two: Petajisto's **index turnover cost**, `p·[s(a−d)+d]/(1+p)` permanent or `p·(a+d)/(1+p)` fully reversed, is a drag paid by *any mechanical index tracker* — **which is exactly what the v3 equal-weight eligible pool is** — and his escape route, an index-neutral portfolio holding non-member names, is **unbuildable here by construction**, so the lab is confined to the tracker side: the deletion leg is unavoidable, the entry leg is declinable. Headline three: Greenwood–Sammon show the effect **decayed to nothing** in the one index family tracked for forty years, driven by **migrations** (a large-cap addition is now usually a mid-cap deletion, so the net shock is small) and **organised liquidity provision** (total institutional ownership barely moves around index changes), both structural rather than cyclical — and they name non-US **national** indices, eight of the nine here, as their open question. **The one thing in the chain that does not decay is the fact about this repo**: providers add recent winners and delete recent losers, so the panel's entrants are recent winners and its leavers recent losers, and `program.md` says coverage before 2009 is thin, so that distortion is not even stable across splits. Best free items **#220** (entry/exit census — pure accounting, gates the rest) and **#221** (is the panel's momentum signal an index-maintenance artifact?); **#222** free; **#223** the one trial; **#224** a free drop-in volume-shock statistic; **#225** adds a third question to the standing engine read; **#226** anti-candidate. **Nothing is closed by this entry** — no lab measurement was taken, the holdout was not read, and the two notes with buildable content both say the size of the effect on these nine indices is unmeasured. Access notes: **both 1986 JF primaries exist only as JSTOR scans** served by `johnhcochrane.com` — `pdftotext` yields ~1.6 KB of cover page from 13 and 16 pages, `pdffonts` shows a populated table (so the empty-font-table test does **not** catch it) and the tell is the character count alone; `pdftoppm -png -r 120 -gray` plus selective page reads recovered both in ~8 image reads. `ww.petajisto.net/papers/` (note the two-w host) served both Petajisto papers first try while the three-w form 404s; NBER w30748 was unshifted with no `( )` dropout; **Semantic Scholar returned `not found` for `10.1111/jofi.13410`**, a twelfth instance of the folder's standing JF-DOI rule, while Crossref answered every lookup. Two sources **not obtained**: Chen–Noronha–Singal 2004 (green OA only at a bepress repository, and the two UCF records are faculty-bibliography entries holding no file) and Kumar et al. 2023 (closed, the one Pure record holds no file) — both recorded as pointers to the live asymmetry disagreement rather than relied on. | Shleifer 1986 (JF) + Harris–Gurel 1986 (JF), **both read in full** as rendered scans (`2026-10-09-index-inclusion-demand-curves-vs-price-pressure.md`); Petajisto 2011 (J. Empirical Finance) + Petajisto 2009 (JFQA), **both read in full** from the author's site (`2026-10-09-index-premium-and-the-index-turnover-cost.md`); Greenwood–Sammon (NBER WP 30748 **read in full**; published JF 2025, not read), with Chen–Noronha–Singal 2004 (JF) and Kumar–Lawrence–Prakash–Rodríguez 2023 (JBF) **both not obtained** (`2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md`) |
 | 2026-10-10 (session 57) | **The first session to read the ETF literature at all, on a panel whose other 42 columns are ETFs — and it both closes `program.md`'s one charter sub-mechanism for a mechanism-level reason and finds that the ETF columns have a boundary problem of their own.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 174 prior notes `creation-redemption`, `ETF arbitrage`, `ETF flow`, `comovement of ETF` and `MAX effect` returned **zero**, and `ETF` appeared only in implementability sections as an instrument, never as a subject — this despite `program.md` chartering "ETF versus constituent" for `lead-lag-spillover` and calling the 42-ETF panel "unusually well suited" to it, and despite the lab having closed that sub-mechanism on a free screen on 2026-08-31 with no literature behind the closure. Three notes, one chain. Headline one: the ETF-versus-constituent question has **two branches making opposite predictions**, and the lab tested the one neither side defends — BFM's fork is gradual price discovery (directional lead, no reversal) versus arbitrage-mediated shock propagation (no lead, a reversal conditional on primary-market activity), their own tests take the second, and the lab's 2026-08-31 directional null is therefore **consistent with the paper** rather than evidence against it. Headline two, and the session's most useful output: the half of that channel this panel *can* compute is a **published null** — Brown–Davies–Ringgenberg measure `ETFPremChange` against funds' true NAVs and find it predicts nothing at any horizon in any sub-sample, while the signal that works is a **share count** that they report as neither persistent nor correlated with contemporaneous returns, so the tempting ETF-versus-synthetic-basket divergence candidate is refused before it is built (#229) and the vein is closed on mechanism rather than on one measurement (#230). Headline three extends 2026-10-09's boundary detector to the ETF half of the panel: a stock column opens when a committee adds a name, an **ETF column opens when a provider launches a product**, which BFKM show is return-chasing by construction for the specialized half of a two-equilibrium industry — and the question "is anyone obliged to trade when the boundary moves" answers **yes, the v3 equal-weight pool**, which holds every ETF from its first price (#227, #228, #231). By-product worth more than it looks: BDR's decile-significant / continuous-insignificant contrast is a Tier-A case against this lab's own habit of closing families on a rank IC alone (#232). New: **#227–#232**, three free, one trial, two anti-candidates. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. New access channel: **`repository.arizona.edu`** DSpace bitstreams served a closed *Review of Finance* article's accepted manuscript on the first try, found via OpenAlex's own `locations` list — whose `any_repository_has_fulltext: false` for that article was **wrong**. | Ben-David–Franzoni–Moussawi 2018 (`2026-10-10-etf-arbitrage-shock-propagation.md`); Brown–Davies–Ringgenberg 2021 (`2026-10-10-etf-flows-and-the-premium-change-null.md`); Ben-David–Franzoni–Kim–Moussawi 2023 (`2026-10-10-etf-launch-as-a-return-chasing-boundary.md`) |
 | 2026-10-11 (session 58) | **The first session to read the literature on the *objective itself* after protocol v3 made that objective benchmark-relative, and the first whose three sources form a question-and-answer-and-negative chain rather than three topics.** Aim set by `research/README.md`'s rotation rule plus one observation: v3 deflates **skill** — validation Sharpe minus the equal-weight eligible pool's on the same days — so every number the lab now produces is a difference against a specific portfolio, and a grep across all 177 prior notes returned **zero** for `Roll 1992`, `tracking error volatility`, `Jorion 2003`, `Talmud`, `Tu and Zhou`, `Kirby`, `Ostdiek` and `reward-to-risk timing`. Three results. *(1)* **The geometry is unfavourable in a way that does not shrink with the size of the bet**: Roll's minimum-TEV frontier is the mean-variance frontier shifted right by the *constant* `δ_B = ∆₂ − ∆₁²/d`, Jorion's constant-TEV feasible set touches the efficient frontier only when the budget reaches `δ_B` exactly (`Ψ = dT₀ − d∆₂ + ∆₁² ≥ 0`), and the ellipse's return vertex gives a benchmark-**independent** ceiling of `√d` active return per unit of tracking error. *(2)* **The size of the active bet has a closed form** — `δ* = π₁/(π₁+π₂)` in a mixture of the naive rule with an estimated one, strictly dominating both components, halving the loss when bias and variance are equal — whose feasible estimator needs `T > N + 4` and is therefore **not computable at this panel's width**, and whose objective is expected-utility loss rather than the Sharpe ratio the lab scores. *(3)* **The cheapest rule ever designed to beat an equal-weight benchmark fails its own stated edge condition** in the one independent re-test located: Kirby–Ostdiek replace the sample mean with a factor loading (`β̄⁺/σ̂²`, long-only by truncation at zero, low turnover by construction of its inputs) and predict an edge where cross-sectional dispersion of expected returns is large, while the re-test finds the rule worse exactly there. New: **#233–#238**, three free, two trials, one anti-candidate; the best free item is **#233** (the panel's `√d` and the pool's `δ_B`, train-only accounting that can **kill** the whole vein if `δ_B` is small), the best standing rule is **#234**, and the one cheap trial is **#236**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: Palomba–Riccetti read as the Università Politecnica delle Marche working paper (OpenAlex `locations`, `https` not the listed `http`); Tu–Zhou as the typeset JFE version from the green copy OpenAlex names. **Not read, and nothing is claimed from their own words:** Roll (1992) and Jorion (2003), both closed (`pm-research.com` OpenID redirect; CFA Institute abstract-only) with their algebra taken from the peer-reviewed restatement, and Kirby–Ostdiek (2012), closed at `cambridge.org`, with its construction taken from Bock (2018) — a source this folder already covers, so it is **not counted as new coverage**. Also unobtained: Plyakha–Uppal–Vilkov on the equal-weight benchmark's own mechanics (SSRN 403, EDHEC registration wall, Springer chapter closed) and El-Hassan–Kofman (2003) on the no-short-sales version of the TEV frontier — `opus.lib.uts.edu.au` answers a bitstream request with **HTTP 200 by redirecting to `/password-login`**, a new looks-like-an-answer shape. | Palomba–Riccetti 2012 (JBF), carrying Roll 1992 (JPM) and Jorion 2003 (FAJ) (`2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`); Tu–Zhou 2011 (JFE) (`2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md`); Kirby–Ostdiek 2012 (JFQA), via Bock 2018 (`2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`) |
+| 2026-10-12 (session 59) | **The first session to read the estimation literature behind portfolio construction — how a forecast becomes weights when the covariance matrix cannot be inverted — and the first whose headline finding is an explicit impossibility conceded by the source itself.** Aim set by the blocked item last night left at the top: `#237`'s mixing weight needs `T > N + 4` and is not computable at ~1,000 eligible names, and the long-only version of the tracking-error frontier was an unobtained pointer. A grep across all 180 prior notes returned **zero** for `nodewise`, `precision matrix`, `POET`, `MAXSER`, `Black-Litterman`, `reverse optimization` and `implied returns` — 180 notes about what to forecast, none about how to weight it. Three results. *(1)* **`Σ⁻¹` is directly estimable at this width**: nodewise regression is `p` Lasso regressions, one per name, consistent for weights, variance and Sharpe even with more assets than observations, under sparsity of the *inverse* covariance (`s̄·log p / n = o(1)`), which is not sparsity of `Σ`; but the **maximum out-of-sample** Sharpe estimator is proved consistent only for `p ≪ n`, variance and Sharpe converge more slowly than weights everywhere, and the whole cluster improves the `Θ` half of `Θµ` and leaves the `µ` half at its sample mean — so the **mean-free** uses are the ones with guarantees. At daily frequency the lab is `p < n` on a full train split and `p > n` on a one- or two-year window, so **window length decides which theorem a candidate stands on**. *(2)* **The constrained version concedes long-only**: the tracking-error optimum is `m + κ(tangency − GMV)` with the benchmark entering only as the anchor (one knob, benchmark-independent direction), constraints cost nothing asymptotically, binding can be tested from the data — but the method handles a short-sale floor on **one** asset or on a **group's summed** weight and, in the authors' words, "cannot cover a short sales constraint for each asset in a portfolio", while the `p > T` guarantee rests on a *diverging* maximum Sharpe ratio (bounded ⇒ `p < T`). **"Weight constraints" in this literature means a few linear group budgets, not `p` non-negativity constraints.** *(3)* **The one anchoring knob that is computable here**: Black–Litterman's reverse optimization makes a benchmark into a return forecast (`Π = δΣω`, no mean estimation), and in the one cost-aware out-of-sample evaluation located the plain mean-variance book failed to beat `1/N` while the BL book beat both static benchmarks — attributed by its own sensitivity analysis to lower turnover (ruled non-transferable by `#238`) and to a **trailing-forecast-error confidence weight**, which needs no inverse, no optimiser and no `T > N + 4`. New: **#239–#243**, two free, two trials, one anti-candidate; the best free item is **#240** (the admissibility census that can rule the whole route out), the cheapest trial is **#241**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: both nodewise papers read from the authors' arXiv postings; Bessler–Opfer–Wolff read from **EconStor, which is working again** — this reverses `README.md`'s 2026-10-04 entry that recorded the host as dark behind Anubis. **Not read:** Black & Litterman (1992), closed at CFA Institute, construction taken from the peer-reviewed restatement; Bajeux-Besnainou et al. (2011), closed, described only as Caner–Fan describe it; and the CROWN preprint's own empirical section, **deliberately skipped** as a 2025-vintage sample. Still unobtained: **Plyakha–Uppal–Vilkov** (SSRN 403, EDHEC registration wall, Springer chapter closed, and the one third-party mirror reachable by search died at the transport layer) and **El-Hassan–Kofman (2003)** (`opus.lib.uts.edu.au` serves its bitstream as an OPUS **Log In** page — last night's finding, confirmed; the old `qfrc.uts.edu.au` working-paper path 403s; SAGE is Cloudflare-challenged; the UTS `/citation/handle/` endpoint does return a RIS record with the abstract). Also recorded: **`researchaffiliates.com` now answers every `/documents/*.pdf` request with HTTP 200 and a "Choose your destination" interstitial** pointing at `rafi.com`, a tenth looks-like-an-answer shape. | Callot–Caner–Önder–Ulaşan 2021 (JBES) + Caner–Medeiros–Vasconcelos 2023 (J. Econometrics) (`2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`); Caner–Fan (arXiv, CROWN) (`2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`); Bessler–Opfer–Wolff 2017 (EJF), carrying Black–Litterman 1992 (FAJ) (`2026-10-12-black-litterman-benchmark-anchored-tilting.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-12] Read this first: the two things the lab has been assuming about optimised books are
+  both half-true, and the half that is false is the one that would have cost a trial.** Last night
+  ended blocked — `#237`'s derived mixing weight needs `T > N + 4` and the panel is ~1,000 names wide
+  — and tonight read the estimation literature that answers it. *(1)* **`Σ⁻¹` is estimable here.**
+  Nodewise regression gets the precision matrix directly as `p` Lasso regressions under sparsity of
+  the **inverse** covariance (`s̄·log p / n = o(1)`, which a dense `Σ` can satisfy), consistently even
+  with `p > n`; but the **maximum out-of-sample** Sharpe estimator is proved consistent only for
+  `p ≪ n`, variance and Sharpe converge more slowly than weights in every theorem, and nothing in the
+  cluster improves the sample-mean half of `Θµ` — so the **mean-free** uses (GMV, risk weighting) are
+  the licensed ones. Window length, not method, decides the regime: a full train split is `p < n` by
+  about 5×, a one- or two-year window is `p > n`. *(2)* **The long-only constrained version does not
+  exist.** The most recent paper in the vein handles a short-sale floor on one asset or on a group's
+  summed weight and states it "cannot cover a short sales constraint for each asset in a portfolio",
+  and its `p > T` guarantee rests on a *diverging* maximum Sharpe ratio (bounded ⇒ `p < T`). Its
+  closed form is still worth having: the TE-constrained optimum is `m + κ(tangency − GMV)`, one knob,
+  direction independent of the benchmark. *(3)* **The one anchoring knob computable at this width** is
+  Black–Litterman's, and specifically *not* its textbook form: reverse optimization turns the pool
+  into a return forecast (`Π = δΣω`, no mean estimation), and the one cost-aware out-of-sample
+  evaluation located attributes its edge over the same signal used raw to a **trailing-forecast-error
+  confidence weight** — with the textbook `Ω = P(τΣ)P'` convention, which encodes no view quality,
+  doing worse. **New: #239–#243**, two free, two trials, one anti-candidate. **Nothing of the lab's is
+  closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Two
+  sources remain unobtained and are still pointers, not claims: **Plyakha–Uppal–Vilkov** on what an
+  equal-weight benchmark mechanically earns and pays — still the highest-value unread item this folder
+  knows of, and now tried through SSRN (403), the EDHEC registration wall, the closed Springer
+  chapter, and a third-party mirror that failed at the transport layer — and **El-Hassan–Kofman
+  (2003)**, whose OPUS bitstream serves a Log In page (last night's finding, confirmed), whose old
+  `qfrc.uts.edu.au` path 403s and whose SAGE version is Cloudflare-challenged; its abstract is
+  reachable through UTS's `/citation/handle/` RIS endpoint, and it is in any case an *empirical
+  application* of Jorion's frontier with a no-short-sales addition rather than the closed-form
+  long-only frontier `#233` wants, which on tonight's reading **does not exist in this literature**.
+  **Carried unchanged and still genuinely unrun: #82** (thirty-seventh session, still the oldest
+  unspent free item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half, **#159**,
+  **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the
+  2026-09-29 set (**#170**, **#171**, **#172**), the 2026-09-30 set (**#174**'s reading, **#175**,
+  **#176**, **#177**), the 2026-10-01 set (**#179**, **#180**, **#181**), the 2026-10-02 set
+  (**#183**–**#186**), the 2026-10-03 set (**#188**–**#191**), from 2026-10-04 **#195** and **#196**,
+  from 2026-10-05 **#198**, **#199**, **#200**, **#201**, the 2026-10-06 set (**#203**–**#207**), the
+  2026-10-07 set (**#208**–**#211**), the 2026-10-08 set (**#213**–**#217**), the 2026-10-09 set
+  (**#220**–**#225**), the 2026-10-10 set (**#227**, **#228**, **#231**, **#232**), and the 2026-10-11
+  set (**#233**–**#237**). **#152 stands.** **#163, #169, #173, #178, #182, #187, #192, #197, #202,
+  #212, #218, #219, #226, #229, #230, #238 and #243 stay anti-candidates.**
+- **[2026-10-12] What should aim the next session, in order. The top is unchanged for the fifth night;
+  tonight adds two items to the same single census pass and one trial that needs nothing first.**
+  - **#217 still goes first, and it is still not research** — one look at `engine/` by someone
+    allowed to take it, with [2026-10-10]'s four questions. Costs nothing.
+  - **Then the one census pass, now six items wide: #220, #214, #227, #233, #239 and #240.** All six
+    are returns-level, eligibility-level or covariance-level accounting on the train split, with no
+    validation read and no candidate file; build the machinery once and spend it six times. **#239
+    shares `Σ̂` with #233** (implied returns are `δΣ̂ω`, the efficiency loss `δ_B` comes from the same
+    matrix), and **#240 is the one most likely to close a vein rather than open one** — if realised
+    row sparsity makes `s̄·log p / n` large at every plausible window, the whole precision-matrix route
+    is inadmissible here and `#242` never gets written.
+  - **Then #241**, which is now the cheapest trial on the board and needs no census first: an
+    error-variance confidence weight blending any existing book toward the pool, computable where
+    `#237`'s estimator is not. It goes alongside **#236** (still the cheapest *signal* trial) rather
+    than after it — they are independent and test different things.
+  - **Then #234 and #232 as standing reporting rules**, with **#235** alongside them, unchanged from
+    [2026-10-11].
+  - **Then #221**, still the item with the largest possible consequence on this list.
+  - **Then #242**, but only if #240 passes, and with the truncation-at-zero caveat of **#243** written
+    into the journal before the run.
+  - **Then #213**, **#215**, **#216** in [2026-10-08]'s order, with **#222** free alongside #213 and
+    **#228** as the reference launch-age/differentiation pair. **#223**, **#231** and **#237** remain
+    the trials that each wait on a census or a constant of their own.
+  - **Then #203**, then **#209**, **#198**, **#205**, **#206**, then **#208** and **#211**, then
+    **#210**, then **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183,
+    #184, #179, #180** in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190**, **#185**
+    as a standing reporting rule, **#191** as screens to re-measure. **Then the carried items**:
+    #181, #174's reading, #175, #177, #176. **#204** stays below them for [2026-10-06]'s reason.
+- **[2026-10-12] The transferable output, and it is the twelfth detector — the first aimed at a
+  method's *admitted scope* rather than at its result.** The eleven before it: redundancy
+  [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at
+  [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's
+  confound [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06],
+  the self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], and the objective-versus-number distinction
+  [2026-10-11]. Tonight's: **read a method's stated scope before its results, because the word that
+  names your binding constraint may not mean what your constraint is.** Three papers tonight are
+  about "portfolios with weight constraints", which is exactly the lab's situation in plain English —
+  long-only, 25% per name, gross ≤ 1 — and in all three the phrase means *a few linear group budgets*,
+  with the per-name non-negativity case conceded as out of reach in one sentence of a remark. A
+  session that read the abstract, the theorems and the simulations and skipped the remark would have
+  written a candidate justified by a theorem that does not cover it. The test is two questions asked
+  of any method before it is adopted: *which of my constraints does this paper's notation actually
+  express, and where does the paper say its guarantees stop?* The corollary is that a conceded
+  limitation is often the most valuable sentence in a paper for an outside user, because it is the
+  one claim the authors have no incentive to overstate — and here it closes a vein (`#243`) while
+  leaving the algebra (`#242`'s group budget) intact. The general form: **a method's scope statement
+  is evidence of the same rank as its results, and the scope that matters is the one written in the
+  notation, not the one written in the prose.**
 
 - **[2026-10-11] Read this first: v3 changed the lab's *objective*, not only its scoreboard — and the
   benchmark-relative literature says the shape of the optimum changes with it, in a direction that
