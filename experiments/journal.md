@@ -19008,3 +19008,69 @@ pool beatable by cross-sectional selection on free daily data under v3 execution
 live question and should drive the family mix rather than a family list.
 
 ## Research session — 2026-10-12 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Engine issue — 2026-10-12 — fourth consecutive red suite, state unchanged, halted at setup
+
+**No trial was run. No candidate was written, no portfolio was formed, no return series or Sharpe
+was computed outside `run_experiment.py`, and no holdout or forward file was opened.**
+`.venv/bin/python -m pytest tests/ -q` reports **4 failed, 88 passed** with the identical failure
+set — `test_change_logs_keep_index_size[ftse100]`, `[n225]`, `[smi]`,
+`test_hang_seng_log_matches_published_sizes`. Per the previous session's standing instruction
+("if `data/membership/` still carries no commit newer than `c74ac03d` and the suite is still red,
+halt at step 2 with a one-paragraph entry and do not re-diagnose"), the four read-only checks are
+all that this entry records:
+
+1. **Failure set identical** to 2026-10-09 and both 2026-10-11 sessions.
+2. **`data/membership/` untouched** — still last written by `c74ac03d` (daily refresh 2026-10-09,
+   the refresh that caused the alarm). The only data commit since remains `973a12ee` (refresh
+   2026-10-10, two 2026 price partitions). None of the five enumerated CSV edits in §5 of the
+   2026-10-11 `## Engine issue` entry has been made.
+3. **The most serious defect is still live.** Current stored spells: `n225` **205** (should be
+   225), `hsi` **95** (published snapshot 93), `ftse100` 100, `sp500` 500, `smi` 20, `sx5e` 50,
+   `cac40` 40, `dax` 40, `aex` 30. The Nikkei still asserts 205 members since 2026-10-09, i.e.
+   forward-incubation scoring still runs on a Japanese universe missing 9% of its names.
+4. **Nothing else blocks.** Store current (last price date **2026-10-10**, 1,125 ids in the
+   October partition), `RATE_US3M` present through 2026-10-09, so a v3 trial would have had its
+   T-bill series. The red suite is the only thing between this session and the experiment loop.
+
+**Cost to date: four consecutive nightly sessions, zero trials.** The v3 board is unchanged at
+**2 trials, both `GATE_FAIL`, seat empty**, and the deflated-skill bar is exactly where 2026-10-10
+left it. Every remedy is in a path frozen to a session (`data/`, `tests/`, `scripts/`), so no part
+of it is an agent's to apply. Because three journal entries have not moved it, this session also
+sent the halt to the program owner as a push notification rather than only recording it here —
+the escalation is the one thing a fourth night can add.
+
+- Lesson: **an alarm whose remedy is outside every writable path needs an escalation channel, not
+  another entry.** Nights two and three each added real content (the replay mechanism, then the
+  20 silently-closed Nikkei spells); night four has nothing to add to the diagnosis and the only
+  unspent lever left was notifying the human directly. If a fifth session finds the same state,
+  the useful question is no longer "what is broken" but "why is a complete, enumerated remedy list
+  not reaching anyone" — and §5(6) of the 2026-10-11 entry (warn in `intervals_from_events` on a
+  current member with no log row) remains worth more than any of these four entries, because it
+  turns this whole class of defect into a warning instead of four lost nights.
+
+## Session summary — 2026-10-12 (nightly) — halted at setup, 0 of 8 experiments
+
+**Experiments run: 0. Verdicts: none.** The engine suite is red (88/92) for the fourth consecutive
+session with the identical four `tests/test_membership.py` failures, so the session stopped at
+step 2 per `CLAUDE.md`'s setup rule and the previous session's standing instruction. No candidate
+file was created, no holdout or forward file was read, the seat is still empty, and the v3 trial
+count is unchanged at 2 — the deflated-skill bar has not moved.
+
+**Best finding of the night:** nothing new about the defect, by design; the night's contribution
+is the escalation. The four read-only checks confirm the state is byte-for-byte what the third
+halt recorded — identical failure set, `data/membership/` with no commit newer than `c74ac03d`,
+`n225` still at 205 current spells, store otherwise fresh and v3-ready — so the binding constraint
+is still the five enumerated CSV edits in §5 of the 2026-10-11 `## Engine issue` entry, all of them
+in frozen paths. Recorded cost: four consecutive sessions, zero trials.
+
+**Next session**: unchanged from the third halt. If `data/membership/` still carries no commit
+newer than `c74ac03d` and the suite is still red, halt at step 2 with a one-paragraph entry and do
+not re-diagnose — the diagnosis is complete across the 2026-10-09 and 2026-10-11 entries. If the
+suite is green, run the experiment loop against the five unspent idea items in the 2026-10-10
+summary, whose provenance (including which came from `research/SUMMARY.md`) is recorded there;
+its item (1) — "is the equal-weight eligible pool beatable by cross-sectional selection on free
+daily data under v3 execution?" — is still the live question and should drive the family mix
+rather than a family list. The 2026-10-12 research notes (precision-matrix estimation, constrained
+high-dimensional portfolios, Black-Litterman anchoring) are unread by any session and are fodder,
+not priors.
