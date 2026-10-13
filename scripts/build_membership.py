@@ -302,8 +302,9 @@ def bootstrap(today: pd.Timestamp) -> tuple[pd.DataFrame, dict[str, str], list[s
 
 def evolve(iv: pd.DataFrame, today: pd.Timestamp) -> tuple[pd.DataFrame, dict[str, str], list[str]]:
     """Weekly: apply today's constituent lists. A fetch that fails or returns a
-    list far smaller than the open spells is skipped, never applied — a broken
-    page must not close every spell of an index."""
+    list smaller than 95% of the open spells is skipped, never applied — a broken
+    page must not close spells. (At 80%, a 2026-10-09 Nikkei scrape that lost two
+    sector tables, 205 of 225 names, got through and closed 17 live members.)"""
     ov = load_overrides()
     renames = {k.replace(".", "-"): v for k, v in (ov.get("sp500_renames") or {}).items()}
     drop = set(ov.get("drop_symbols") or [])
@@ -320,7 +321,7 @@ def evolve(iv: pd.DataFrame, today: pd.Timestamp) -> tuple[pd.DataFrame, dict[st
             members = {renames.get(s, s): n for s, n in members.items()}
         members = {s: n for s, n in members.items() if s not in drop}
         n_open = int(((iv["index"] == idx) & iv["end"].isna()).sum())
-        if len(members) < max(15, 0.8 * n_open):
+        if len(members) < max(15, 0.95 * n_open):
             log.append(f"{idx}: fetched {len(members)} names vs {n_open} open spells; left unchanged")
             continue
         names.update(members)
