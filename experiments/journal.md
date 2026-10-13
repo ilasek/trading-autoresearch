@@ -19074,3 +19074,5 @@ daily data under v3 execution?" — is still the live question and should drive 
 rather than a family list. The 2026-10-12 research notes (precision-matrix estimation, constrained
 high-dimensional portfolios, Black-Litterman anchoring) are unread by any session and are fodder,
 not priors.
+
+## Research session — 2026-10-13 (learning agent): 3 notes added, see research/SUMMARY.md

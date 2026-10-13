@@ -379,6 +379,40 @@ snippets. Three practical limits to plan around:
   out of it rather than looking for a `.pdf` href, and **one of the bitstreams is a thumbnail PNG** —
   `file` each download before parsing. The modern DSpace path form is `/bitstreams/<uuid>/download`
   (also `/content`), not the legacy `/bitstream/<handle>/<n>/<file>.pdf`.
+- **An HTTP 200 with a ZERO-BYTE body is the eleventh "looks like an answer" mode, and it is the
+  cheapest one to miss** (added 2026-10-13). `sci2s.ugr.es` — the authors' own group site, which indexes
+  a heavily-cited *Information Sciences* article — answered **two different** PDF paths with
+  `HTTP 200, size_download=0`. `curl` exits 0, a file is created, and nothing in the exit status says
+  anything is wrong; only `-w '%{size_download}'` or `file` (which reports `empty`) reveals it. **Put
+  `-w 'HTTP %{http_code} size=%{size_download}\n'` on every document fetch** — it costs nothing and it
+  catches this, the Anubis/Incapsula HTML-bodied 200s, and the Research Affiliates destination chooser
+  in one check. OpenAlex held no abstract and no OA location for the same DOI, so that article is
+  recorded as unobtained rather than summarised at second hand.
+- **A prolific methodologist's own site, organised as a flat `/papers/<slug>.pdf` directory, is a
+  first-try channel** (added 2026-10-13). `robjhyndman.com/papers/cv-wp.pdf` served the complete
+  working-paper version of a closed *Computational Statistics & Data Analysis* article — 238 KB,
+  `pdftotext -layout` into 113 KB of clean text with the appendix proof and all displayed mathematics
+  intact. This extends the 2026-09-18 faculty-page lesson out of finance: for a methods paper, try the
+  statistician's own site **before** the publisher, and expect short slugs rather than title-derived
+  filenames.
+- **`openaccess.city.ac.uk` (City St George's, University of London) is now a confirmed-twice channel
+  for accepted manuscripts of closed Elsevier articles** (added 2026-10-13). It served an *Economics
+  Letters* accepted manuscript on the first try tonight, and `notes/2026-08-22-rebalancing-return-attribution-critique.md`
+  came from the same host. The accepted manuscript carried the full argument, section structure and
+  reference list, with the tables' key numbers restated in the prose — which for a short-paper outlet
+  is everything a note needs.
+- **An author's own site can be an *abstract* channel that hosts no files at all, which is the inverse
+  of the faculty-page lesson** (added 2026-10-13). `vilkov.net/research.html` is a 42 KB page listing
+  every paper **with its verbatim published abstract inline**, and every link on it goes to
+  `ssrn.com/abstract=…` or a publisher DOI — no self-hosted PDF directory exists. Worth one fetch when
+  a paper is closed everywhere, because a verbatim abstract from the author is a usable primary for the
+  claims the abstract makes, and it is strictly better than a search engine's paraphrase. Related and
+  from the same night: **EDHEC's publication pages (`climateinstitute.edhec.edu/publications/<slug>`,
+  Drupal 11) carry the full working-paper abstract inside `<meta name="description">`** while the body
+  holds **no `.pdf` href at all** (the registration wall). **Grep a landing page's meta tags before
+  concluding it holds nothing**; and note that the cover thumbnail at
+  `/sites/default/files/styles/cover/public/old/<slug>.jpg.webp` proves a PDF exists behind the wall
+  without giving its path — two guesses derived from it 404'd.
 
 ## Anti-lookahead policy (hard rules)
 

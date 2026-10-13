@@ -1034,6 +1034,43 @@ second screen.** The replacements are #161's estimator-disagreement check and #1
 free, neither licensing a trial. See the cross-family section *Reading a spectrum* below.
 → `notes/2026-09-27-counting-factors-eigenvalue-estimators.md`
 
+**[2026-10-13] "No cross-validation, to preserve temporal ordering" is a convention this file inherited
+from Gu–Kelly–Xiu and repeated as if it were a theorem; it is not, and the methodology literature states
+the actual condition.** Bergmeir–Hyndman–Koo (*CSDA*, read in full) prove that for a **purely
+autoregressive** model, ordinary K-fold cross-validation — random folds, future rows used to fit a model
+scored on past rows — is **consistent for prediction error** provided the model's errors are serially
+uncorrelated, with no purging, blocking or embargo. The construction that makes it work is embedding the
+series into rows `[y_{t−p},…,y_{t−1} | y_t]` and leaving out **whole rows**: the series' dependence has
+been absorbed into the lagged predictors, and what is left is a regression residual. The three
+assumptions carry all the content — a stationary ergodic nonlinear AR(p) with **no misspecification**, a
+consistent estimator, and errors forming a **martingale difference sequence** (serially uncorrelated,
+conditionally homoskedastic, finite `4+δ` moment). The failure path is explicit and its direction is the
+dangerous one: misspecify, and the residuals acquire serial correlation, the MDS assumption fails, and CV
+**systematically underestimates** the error. Two practical consequences. *(a)* **The detector is one line
+of code** — Ljung–Box on the residuals — and the corollary is counter-intuitive: a model flexible enough
+to be at risk of overfitting *has* uncorrelated errors, so the folk rule "never K-fold a time series" is
+backwards about which models are actually endangered. *(b)* **h-block / "non-dependent" CV is not a
+default**: dropping the rows either side of each test row starves the fit and performed considerably
+worse than plain K-fold in every experiment where the model was adequate; a single hold-out block is
+better only in the heavily misspecified regime. **But apply this file's own [2026-10-12] scope detector
+before using any of it, and it bites hard.** "Time series" here means *univariate, stationary, purely
+autoregressive, one-step-ahead* — and the lab's learned candidates are cross-sectional panels with
+~1,000 names per date, features that are not own-lags, and month-ahead targets. Three of those four words
+fail: contemporaneous cross-sectional correlation at a date is **outside the theorem entirely**, so a
+random fold over `(date, name)` rows leaks through same-date correlation and **the admissible fold unit in
+a panel is the date, not the row**; overlapping multi-day targets violate the MDS assumption *by
+construction*, which is this paper's own failure mode reached through the label rather than through
+misspecification (and is what the finance tradition's purging addresses — no contradiction between the
+two literatures, as the engine's walk-forward release rule already implements purging); and stationarity
+is assumed rather than argued, against the lab's own finding that its splits are not homogeneous. So the
+correctly scoped recommendation is narrow and still worth having: **K-fold over whole released dates,
+residuals checked for serial correlation, is a defensible and more precise alternative to carving a
+second hold-out block out of the training window** — and the one rule that transfers without
+qualification is that **a model with serially correlated residuals is underfit and every error estimate
+taken from it is optimistic**, a free pre-trial diagnostic that applies to any candidate that fits
+anything. New: **#248**, free. **Nothing of the lab's is closed by this entry.**
+→ `notes/2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -6108,6 +6145,73 @@ was taken tonight and the holdout was not read.
 `notes/2026-10-12-black-litterman-benchmark-anchored-tilting.md`
 ---
 
+### The benchmark's own return — what an equal-weighted pool mechanically earns, and what a candidate is graded net of (cross-family)
+
+**[2026-10-13] Read this first: protocol v3 grades every candidate against the equal-weight eligible
+pool, and the pool is not a neutral object — on the literature read tonight it is (a) a size/value tilt
+over its own universe, (b) a fixed-weight *rebalancing* channel whose only possible source is
+short-horizon relative mean reversion, and (c) the single largest non-market factor exposure in
+professionally managed equity money.** A grep across all 183 prior notes returned **zero** for
+`equal-weighted portfolio` as a *subject* — the folder held four notes on the diversification return as
+an identity (`notes/2026-08-21`, `notes/2026-08-22` ×2, `notes/2026-08-17-naive-vs-optimized-weighting.md`)
+and none on what the equal-weight portfolio earns *against capitalisation weights*, which is the object
+v3 made into the lab's null. The highest-value unread item this file has carried for two sessions —
+Plyakha–Uppal–Vilkov — is the direct literature on it, and tonight it was resolved to **abstract level**
+after five further access channels (see the note; the body is still unobtained).
+
+**Result one — the pool's return splits in two, and only one half is a puzzle.** Weighting an index's
+members equally rather than by capitalisation mechanically overweights the smaller and cheaper members,
+so part of what the pool earns is a passive **size/value/market tilt** and nothing more. The authors
+report that a considerable part of the remainder — roughly two-fifths in their sample, a decomposition
+share that must not be imported as an expectation — survives a four-factor model and comes from
+*rebalancing to maintain constant weights*. Secondary summaries add two mechanism claims that this file
+records as pointers rather than verified: that **equality is not the active ingredient (constancy is)**,
+which is exactly what the diversification-return identity predicts, and that the residual channel is a
+**contrarian** exposure to reversal.
+
+**Result two — that attribution collides with a refutation this folder already holds, and the collision
+is the useful part.** Cuthbertson–Hayley–Motson–Nitzsche (`notes/2026-08-22-rebalancing-return-attribution-critique.md`)
+prove that excess growth is *not* created by rebalancing, that rebalanced and buy-and-hold books start
+with identical expected growth and diverge only as the drifting book de-diversifies, and that **under IID
+returns the rebalancing trades have exactly zero expected value** — profitable only where relative prices
+mean-revert, loss-making where they trend. The two sources are not inconsistent: they are a conditional
+and its antecedent. **A fixed-weight book's advantage over the drifting version of itself is a bet that
+relative prices among its members mean-revert at the rebalance horizon, and there is no other way for it
+to pay.** That makes the pool's rebalancing channel a tradeable-mechanism claim rather than an accounting
+artifact — and therefore something v3's fill rule can interact with.
+
+**Result three — the tilt is pervasive, near-orthogonal, and cheap, which is why subtracting it is a hard
+bar.** Hanke–Keswani–Quigley–Stolin–Zagonov (*Economics Letters*, read in full) turn the finding into a
+one-line factor, **EMV = equal-weighted universe minus value-weighted universe**, and measure it against
+eight standard factors on US funds benchmarked to one large-cap index. Three qualitative findings
+transfer: being *more diversified than a cap-weighted index is mechanically a tilt toward equal weights*,
+so the exposure is the default rather than a corner case (the average fund's loading sits around a
+quarter of the way from cap weights to equal weights); roughly **44% of EMV's variation is unexplained**
+by market, size, value, momentum, liquidity, beta, quality and profitability together; and dropping EMV
+from a nine-factor model raises unexplained fund-return variance by more than dropping any factor except
+the market (momentum is next). The factor also needs no shorting in practice — in an evaluation
+regression the short leg is absorbed by the market loading, so the exposure is two long index positions —
+and the published equal-weight index's own annual turnover is only in the mid-20-percent range.
+
+**What the chain says as one sentence, and the three consequences for the lab.** The pool the lab is
+graded against already contains the most pervasive non-market tilt in real managed money plus a
+mean-reversion bet, so: *(1)* **skill against the equal-weight pool is a strictly harder statistic than
+alpha against a cap-weighted market**, which is an independent reason to read the lab's near-zero v3
+skill numbers as partly a statement about the benchmark rather than only about the signals; *(2)* **any
+operator whose effect is "hold more names, more evenly" buys nothing measurable**, because the benchmark
+is that operator at its limit — which reaches `#234`'s conclusion (concentration, not de-concentration)
+by a completely independent route; and *(3)* **equal weighting inside a candidate's own book is the
+neutral choice under this benchmark, not a bet** — such a book is long EMV over its selection and short
+it over the complement, so its measured skill is about selection, which is the right way round. **The
+EW-vs-VW axis itself is closed here by data, not by evidence**: the panel has no share counts and
+`dollar_volume` is a liquidity measure, not a size measure, so no candidate can be written on it and a
+null on it would be uninformative. New: **#244–#247**, two free, one trial, one anti-candidate, plus a
+fifth question added to `#217`. **Nothing of the lab's is closed by this entry**; no lab measurement was
+taken tonight and the holdout was not read.
+→ `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`,
+`notes/2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -10915,6 +11019,82 @@ hypothesis fodder, then anti-candidates.
     writing "the high-dimensional portfolio literature supports this construction" in a hypothesis
     about a long-only optimised book — it does not.
     → `notes/2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`
+244. **FREE, and it is one more question for `#217`'s single `engine/` read rather than a task of its
+    own — on what grid, at what fills, and at what cost is the equal-weight pool itself maintained?**
+    Under v3 every candidate is scored as Sharpe minus this pool's Sharpe, so the pool's own
+    construction is inside the statistic. Four answers, each with a consequence that is known in
+    advance. *(a)* Rebalanced on a grid **and charged v3's costs** → the benchmark is paying for its
+    rebalancing channel and measured skill is the honest net; nothing to fix. *(b)* Rebalanced **free
+    of cost** → the benchmark receives a channel nobody pays for and every candidate is short an
+    unpriced position. *(c)* Rebalanced **at each date's own close**, while candidates fill at the next
+    real close → the benchmark holds a same-close reversal bet that **no candidate is permitted to
+    replicate**, which is the asymmetry v3's fill rule exists to remove from candidates. *(d)*
+    **Buy-and-hold from an equal-weight start** → the pool has no rebalancing channel at all and
+    de-diversifies across the split, so a candidate that merely rebalances to equal weight would beat
+    it for free. This is a read of `engine/`, not research: the learning agent may not take it, and the
+    strategy agent may not edit what it finds. Costs nothing and it conditions the interpretation of
+    every v3 number.
+    → `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`
+
+245. **FREE — measure the benchmark's rebalancing channel on the train split instead of importing it,
+    and fold it into the census pass.** Compute the equal-weight eligible pool's return two ways over
+    the train split only: restored to equal weight on the protocol's grid, and held from an
+    equal-weight start with weights allowed to drift. The difference **is** the rebalancing channel on
+    this panel, and by Cuthbertson et al.'s result its sign answers a question no external number can:
+    do relative prices among eligible large caps mean-revert at the rebalance horizon *here*? Add two
+    one-line variants that separate the mechanism from its label — the same book held buy-and-hold from
+    an equal-weight start (isolates rebalancing from the weights) and a non-equal fixed-weight target
+    on the same grid (isolates constancy from equality). No validation read, no candidate file, no
+    trial; it shares machinery with `#220`, `#214`, `#227`, `#233`, `#239` and `#240` and belongs in
+    the same pass. A near-zero difference would be the most useful negative available: it would say the
+    benchmark is a pure tilt and that the only thing to beat is selection.
+    → `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md` ·
+    `notes/2026-08-22-rebalancing-return-attribution-critique.md`
+
+246. **FREE, and a standing interpretation rule that reaches `#234`'s conclusion by an independent
+    route — under an equal-weight benchmark, every "hold more names, more evenly" operator is
+    unmeasurable, and equal weighting *inside* a book is the neutral choice rather than a bet.** The
+    tilt toward equal weights is, on the fund-evaluation evidence, the largest non-market factor
+    exposure in professionally managed equity money and is close to orthogonal to the standard factor
+    set; v3 sets the lab's null to exactly that tilt at its limit. Two consequences to write into
+    hypotheses rather than to test. *(a)* The de-concentration instinct calibrated under v1's
+    Sharpe-versus-zero bar is now doubly suspect: `#234` says anchoring compresses the measured
+    difference, and this says the chosen anchor monopolises the diversification return, so what can
+    move the statistic is concentration or a genuinely non-weight-like signal. *(b)* A candidate that
+    equal-weights within its selection is long the tilt over its names and short it over the
+    complement, so its measured skill is **about selection** — which means equal weighting inside a
+    book carries no penalty under this benchmark and needs no defending in a hypothesis.
+    → `notes/2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`
+
+247. **ANTI-CANDIDATE — do not build an equal-weight-versus-capitalisation-weight candidate, and do not
+    use `dollar_volume` as a market-capitalisation proxy to make one possible.** The whole EW-vs-VW
+    literature needs share counts; the panel has no fundamentals and no share counts, so the axis is
+    closed here **by data rather than by evidence** and a null on it would be uninformative rather than
+    informative. `dollar_volume` is price × traded shares — a liquidity measure with three notes of its
+    own in this folder — so substituting it renames the hypothesis instead of testing it, and the
+    resulting book would be an illiquidity tilt reported under a weighting-scheme label. The usable
+    content of this literature is about the **benchmark** (`#244`–`#246`), not about a rival weighting.
+    → `notes/2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md` ·
+    `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`
+
+248. **FREE — two corrections to how this file has recorded model-fitting discipline, one of which is a
+    pre-trial diagnostic that costs nothing and applies to every candidate that fits anything.** *(a)*
+    **The diagnostic, and it is the transferable half:** a fitted model whose residuals are serially
+    correlated is **underfit**, and every error estimate taken from it is **optimistic** — so run a
+    Ljung–Box test on any in-candidate model's residuals before trusting its own selection criterion.
+    This needs no validation read and generalises past learned models. *(b)* **The correction:** this
+    file has twice recorded "no cross-validation, to preserve temporal ordering" as if it were derived;
+    it is Gu–Kelly–Xiu's convention. The theorem says K-fold CV is consistent for prediction error
+    under a stationary purely-autoregressive model with serially uncorrelated errors, so where a
+    candidate must pick a hyperparameter from rows the protocol's walk-forward bookkeeping has already
+    released, **K-fold over whole released dates** (never over `(date, name)` rows — same-date
+    cross-sectional correlation is outside the theorem) is defensible and estimates error more
+    precisely than carving a second hold-out block out of the training window. Three scope limits must
+    be stated in the journal before any use: the theorem is univariate, assumes stationarity, and is
+    violated **by construction** by overlapping multi-day targets. It licenses nothing across the
+    train/validation boundary, and h-block CV is not the fix for a misspecified model.
+    → `notes/2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`
+
 ---
 
 ## Coverage log
@@ -10981,9 +11161,116 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-10 (session 57) | **The first session to read the ETF literature at all, on a panel whose other 42 columns are ETFs — and it both closes `program.md`'s one charter sub-mechanism for a mechanism-level reason and finds that the ETF columns have a boundary problem of their own.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 174 prior notes `creation-redemption`, `ETF arbitrage`, `ETF flow`, `comovement of ETF` and `MAX effect` returned **zero**, and `ETF` appeared only in implementability sections as an instrument, never as a subject — this despite `program.md` chartering "ETF versus constituent" for `lead-lag-spillover` and calling the 42-ETF panel "unusually well suited" to it, and despite the lab having closed that sub-mechanism on a free screen on 2026-08-31 with no literature behind the closure. Three notes, one chain. Headline one: the ETF-versus-constituent question has **two branches making opposite predictions**, and the lab tested the one neither side defends — BFM's fork is gradual price discovery (directional lead, no reversal) versus arbitrage-mediated shock propagation (no lead, a reversal conditional on primary-market activity), their own tests take the second, and the lab's 2026-08-31 directional null is therefore **consistent with the paper** rather than evidence against it. Headline two, and the session's most useful output: the half of that channel this panel *can* compute is a **published null** — Brown–Davies–Ringgenberg measure `ETFPremChange` against funds' true NAVs and find it predicts nothing at any horizon in any sub-sample, while the signal that works is a **share count** that they report as neither persistent nor correlated with contemporaneous returns, so the tempting ETF-versus-synthetic-basket divergence candidate is refused before it is built (#229) and the vein is closed on mechanism rather than on one measurement (#230). Headline three extends 2026-10-09's boundary detector to the ETF half of the panel: a stock column opens when a committee adds a name, an **ETF column opens when a provider launches a product**, which BFKM show is return-chasing by construction for the specialized half of a two-equilibrium industry — and the question "is anyone obliged to trade when the boundary moves" answers **yes, the v3 equal-weight pool**, which holds every ETF from its first price (#227, #228, #231). By-product worth more than it looks: BDR's decile-significant / continuous-insignificant contrast is a Tier-A case against this lab's own habit of closing families on a rank IC alone (#232). New: **#227–#232**, three free, one trial, two anti-candidates. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. New access channel: **`repository.arizona.edu`** DSpace bitstreams served a closed *Review of Finance* article's accepted manuscript on the first try, found via OpenAlex's own `locations` list — whose `any_repository_has_fulltext: false` for that article was **wrong**. | Ben-David–Franzoni–Moussawi 2018 (`2026-10-10-etf-arbitrage-shock-propagation.md`); Brown–Davies–Ringgenberg 2021 (`2026-10-10-etf-flows-and-the-premium-change-null.md`); Ben-David–Franzoni–Kim–Moussawi 2023 (`2026-10-10-etf-launch-as-a-return-chasing-boundary.md`) |
 | 2026-10-11 (session 58) | **The first session to read the literature on the *objective itself* after protocol v3 made that objective benchmark-relative, and the first whose three sources form a question-and-answer-and-negative chain rather than three topics.** Aim set by `research/README.md`'s rotation rule plus one observation: v3 deflates **skill** — validation Sharpe minus the equal-weight eligible pool's on the same days — so every number the lab now produces is a difference against a specific portfolio, and a grep across all 177 prior notes returned **zero** for `Roll 1992`, `tracking error volatility`, `Jorion 2003`, `Talmud`, `Tu and Zhou`, `Kirby`, `Ostdiek` and `reward-to-risk timing`. Three results. *(1)* **The geometry is unfavourable in a way that does not shrink with the size of the bet**: Roll's minimum-TEV frontier is the mean-variance frontier shifted right by the *constant* `δ_B = ∆₂ − ∆₁²/d`, Jorion's constant-TEV feasible set touches the efficient frontier only when the budget reaches `δ_B` exactly (`Ψ = dT₀ − d∆₂ + ∆₁² ≥ 0`), and the ellipse's return vertex gives a benchmark-**independent** ceiling of `√d` active return per unit of tracking error. *(2)* **The size of the active bet has a closed form** — `δ* = π₁/(π₁+π₂)` in a mixture of the naive rule with an estimated one, strictly dominating both components, halving the loss when bias and variance are equal — whose feasible estimator needs `T > N + 4` and is therefore **not computable at this panel's width**, and whose objective is expected-utility loss rather than the Sharpe ratio the lab scores. *(3)* **The cheapest rule ever designed to beat an equal-weight benchmark fails its own stated edge condition** in the one independent re-test located: Kirby–Ostdiek replace the sample mean with a factor loading (`β̄⁺/σ̂²`, long-only by truncation at zero, low turnover by construction of its inputs) and predict an edge where cross-sectional dispersion of expected returns is large, while the re-test finds the rule worse exactly there. New: **#233–#238**, three free, two trials, one anti-candidate; the best free item is **#233** (the panel's `√d` and the pool's `δ_B`, train-only accounting that can **kill** the whole vein if `δ_B` is small), the best standing rule is **#234**, and the one cheap trial is **#236**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: Palomba–Riccetti read as the Università Politecnica delle Marche working paper (OpenAlex `locations`, `https` not the listed `http`); Tu–Zhou as the typeset JFE version from the green copy OpenAlex names. **Not read, and nothing is claimed from their own words:** Roll (1992) and Jorion (2003), both closed (`pm-research.com` OpenID redirect; CFA Institute abstract-only) with their algebra taken from the peer-reviewed restatement, and Kirby–Ostdiek (2012), closed at `cambridge.org`, with its construction taken from Bock (2018) — a source this folder already covers, so it is **not counted as new coverage**. Also unobtained: Plyakha–Uppal–Vilkov on the equal-weight benchmark's own mechanics (SSRN 403, EDHEC registration wall, Springer chapter closed) and El-Hassan–Kofman (2003) on the no-short-sales version of the TEV frontier — `opus.lib.uts.edu.au` answers a bitstream request with **HTTP 200 by redirecting to `/password-login`**, a new looks-like-an-answer shape. | Palomba–Riccetti 2012 (JBF), carrying Roll 1992 (JPM) and Jorion 2003 (FAJ) (`2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`); Tu–Zhou 2011 (JFE) (`2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md`); Kirby–Ostdiek 2012 (JFQA), via Bock 2018 (`2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`) |
 | 2026-10-12 (session 59) | **The first session to read the estimation literature behind portfolio construction — how a forecast becomes weights when the covariance matrix cannot be inverted — and the first whose headline finding is an explicit impossibility conceded by the source itself.** Aim set by the blocked item last night left at the top: `#237`'s mixing weight needs `T > N + 4` and is not computable at ~1,000 eligible names, and the long-only version of the tracking-error frontier was an unobtained pointer. A grep across all 180 prior notes returned **zero** for `nodewise`, `precision matrix`, `POET`, `MAXSER`, `Black-Litterman`, `reverse optimization` and `implied returns` — 180 notes about what to forecast, none about how to weight it. Three results. *(1)* **`Σ⁻¹` is directly estimable at this width**: nodewise regression is `p` Lasso regressions, one per name, consistent for weights, variance and Sharpe even with more assets than observations, under sparsity of the *inverse* covariance (`s̄·log p / n = o(1)`), which is not sparsity of `Σ`; but the **maximum out-of-sample** Sharpe estimator is proved consistent only for `p ≪ n`, variance and Sharpe converge more slowly than weights everywhere, and the whole cluster improves the `Θ` half of `Θµ` and leaves the `µ` half at its sample mean — so the **mean-free** uses are the ones with guarantees. At daily frequency the lab is `p < n` on a full train split and `p > n` on a one- or two-year window, so **window length decides which theorem a candidate stands on**. *(2)* **The constrained version concedes long-only**: the tracking-error optimum is `m + κ(tangency − GMV)` with the benchmark entering only as the anchor (one knob, benchmark-independent direction), constraints cost nothing asymptotically, binding can be tested from the data — but the method handles a short-sale floor on **one** asset or on a **group's summed** weight and, in the authors' words, "cannot cover a short sales constraint for each asset in a portfolio", while the `p > T` guarantee rests on a *diverging* maximum Sharpe ratio (bounded ⇒ `p < T`). **"Weight constraints" in this literature means a few linear group budgets, not `p` non-negativity constraints.** *(3)* **The one anchoring knob that is computable here**: Black–Litterman's reverse optimization makes a benchmark into a return forecast (`Π = δΣω`, no mean estimation), and in the one cost-aware out-of-sample evaluation located the plain mean-variance book failed to beat `1/N` while the BL book beat both static benchmarks — attributed by its own sensitivity analysis to lower turnover (ruled non-transferable by `#238`) and to a **trailing-forecast-error confidence weight**, which needs no inverse, no optimiser and no `T > N + 4`. New: **#239–#243**, two free, two trials, one anti-candidate; the best free item is **#240** (the admissibility census that can rule the whole route out), the cheapest trial is **#241**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: both nodewise papers read from the authors' arXiv postings; Bessler–Opfer–Wolff read from **EconStor, which is working again** — this reverses `README.md`'s 2026-10-04 entry that recorded the host as dark behind Anubis. **Not read:** Black & Litterman (1992), closed at CFA Institute, construction taken from the peer-reviewed restatement; Bajeux-Besnainou et al. (2011), closed, described only as Caner–Fan describe it; and the CROWN preprint's own empirical section, **deliberately skipped** as a 2025-vintage sample. Still unobtained: **Plyakha–Uppal–Vilkov** (SSRN 403, EDHEC registration wall, Springer chapter closed, and the one third-party mirror reachable by search died at the transport layer) and **El-Hassan–Kofman (2003)** (`opus.lib.uts.edu.au` serves its bitstream as an OPUS **Log In** page — last night's finding, confirmed; the old `qfrc.uts.edu.au` working-paper path 403s; SAGE is Cloudflare-challenged; the UTS `/citation/handle/` endpoint does return a RIS record with the abstract). Also recorded: **`researchaffiliates.com` now answers every `/documents/*.pdf` request with HTTP 200 and a "Choose your destination" interstitial** pointing at `rafi.com`, a tenth looks-like-an-answer shape. | Callot–Caner–Önder–Ulaşan 2021 (JBES) + Caner–Medeiros–Vasconcelos 2023 (J. Econometrics) (`2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`); Caner–Fan (arXiv, CROWN) (`2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`); Bessler–Opfer–Wolff 2017 (EJF), carrying Black–Litterman 1992 (FAJ) (`2026-10-12-black-litterman-benchmark-anchored-tilting.md`) |
+| 2026-10-13 (session 60) | **The first session to read the literature on the *benchmark* — the equal-weight pool v3 subtracts from every candidate's Sharpe — and the first to resolve this file's longest-carried unread pointer, to abstract level, after five further access channels.** Aim set by `research/README.md`'s rotation rule plus the standing [2026-10-11]/[2026-10-12] instruction that a change of objective means reading the literature about the new objective. A grep across all 183 prior notes returned **zero** for the equal-weighted portfolio as a *subject*: the folder held four notes on the diversification return as an identity and none on what equal weighting earns against capitalisation weights, which is exactly the object v3 made into the lab's null. Three findings. *(1)* The pool's return splits into a passive size/value tilt plus a fixed-weight **rebalancing** channel the authors put at roughly two-fifths of the gap in their sample. *(2)* That attribution collides head-on with a refutation this folder already holds (Cuthbertson et al.: rebalancing trades have **zero** expected value under IID, and pay only where relative prices mean-revert) — and the collision resolves into a conditional that makes the pool's channel a **mean-reversion bet**, which v3's own fill rule is designed to deny to candidates. *(3)* The tilt is the largest non-market factor exposure in professionally managed equity money and ~44% orthogonal to the standard eight, so **skill against this pool is a strictly harder statistic than alpha against a cap-weighted market** — reaching `#234`'s "concentrate, do not de-concentrate" conclusion by a wholly independent route, and giving the lab's near-zero v3 skill numbers a second reading. The rotation note is a methodology one in `statistical-learning`: the theorem that says when K-fold CV is valid on dependent data, which corrects a convention this file had twice recorded as a result — and whose scope, read with [2026-10-12]'s detector, excludes the lab's panel case in three of four words. | Plyakha, Uppal & Vilkov (Springer chapter 2021; WP 2012/2014) — abstract level only, body unobtained (`2026-10-13-equal-weighting-and-the-rebalancing-component.md`); Hanke, Keswani, Quigley, Stolin & Zagonov 2019 (Economics Letters), read in full (`2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`); Bergmeir, Hyndman & Koo 2018 (CSDA), read in full, with Bergmeir & Benítez 2012 (Information Sciences) unobtained (`2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-13] Read this first: the lab has spent fifty-nine sessions reading about signals and none
+  about its own null, and the null turns out to be a strategy with three properties that change how
+  every v3 number should be read.** Protocol v3 scores skill as a candidate's Sharpe **minus the
+  equal-weight eligible pool's** on the same days. A grep across 183 prior notes returned **zero** for
+  the equal-weighted portfolio as a *subject* — four notes on the diversification return as an
+  identity, none on what equal weighting earns against capitalisation weights. *(1)* **The pool's
+  return is a passive size/value tilt plus a fixed-weight *rebalancing* channel** (the authors put the
+  second at roughly two-fifths of the gap in their sample; do not import the share). *(2)* **That
+  attribution collides with a refutation this folder already holds, and resolves into a conditional
+  rather than a contradiction**: Cuthbertson et al. prove rebalancing trades have **zero** expected
+  value under IID and pay *only* where relative prices mean-revert — so the pool's channel, if real,
+  is a short-horizon mean-reversion bet, and v3's fill rule exists precisely to deny candidates the
+  same-close version of that bet. *(3)* **The tilt is the largest non-market factor exposure in
+  professionally managed equity money** and is ~44% orthogonal to the standard eight, so skill against
+  this pool is a strictly harder statistic than alpha against a cap-weighted market — which reaches
+  `#234`'s "concentrate rather than de-concentrate" conclusion by a wholly independent route and gives
+  the lab's near-zero v3 skill numbers a second reading: **partly a statement about the benchmark, not
+  only about the signals.** The rotation note corrects a convention this file twice recorded as a
+  result ("no cross-validation, to preserve temporal ordering"): K-fold CV *is* consistent on dependent
+  data under stated conditions, and its scope — read with [2026-10-12]'s detector — excludes the lab's
+  panel case in three of four words. **New: #244–#248**, three free, one anti-candidate, one free
+  diagnostic-plus-correction, plus a **fifth question added to `#217`**. **Nothing of the lab's is
+  closed by this entry**; no lab measurement was taken tonight and the holdout was not read. One source
+  moved status and one did not: **Plyakha–Uppal–Vilkov is now resolved to *abstract level* and should
+  stop being carried as the highest-value unread item** — five further channels were spent (the third
+  author's own site, which hosts verbatim abstracts and **no files**; the third-party mirror, which
+  reset at the transport layer again; EDHEC's Drupal pages, whose `<meta name="description">` holds the
+  full abstract while the body holds no `.pdf` href; and two 404'd path guesses), and the body remains
+  unobtained, with one circulating mechanism claim explicitly marked unverified in the note.
+  **Bergmeir & Benítez (2012)** is a new unobtained pointer: `sci2s.ugr.es` answers its PDF paths with
+  **HTTP 200 and a zero-byte body**, an eleventh "looks like an answer" mode now recorded in
+  `research/README.md`. **El-Hassan–Kofman (2003)** stays unobtained and unchanged. **Carried unchanged
+  and still genuinely unrun: #82** (thirty-eighth session, still the oldest unspent free item), **#94**
+  as standing discipline, **#105–#107**, **#110**'s shrink half, **#159**, **#161**, **#164(a)**, the
+  2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**,
+  **#171**, **#172**), the 2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the
+  2026-10-01 set (**#179**, **#180**, **#181**), the 2026-10-02 set (**#183**–**#186**), the 2026-10-03
+  set (**#188**–**#191**), from 2026-10-04 **#195** and **#196**, from 2026-10-05 **#198**, **#199**,
+  **#200**, **#201**, the 2026-10-06 set (**#203**–**#207**), the 2026-10-07 set (**#208**–**#211**),
+  the 2026-10-08 set (**#213**–**#217**), the 2026-10-09 set (**#220**–**#225**), the 2026-10-10 set
+  (**#227**, **#228**, **#231**, **#232**), the 2026-10-11 set (**#233**–**#237**), and the 2026-10-12
+  set (**#239**–**#242**). **#152 stands.** **#163, #169, #173, #178, #182, #187, #192, #197, #202,
+  #212, #218, #219, #226, #229, #230, #238, #243 and #247 stay anti-candidates.**
+- **[2026-10-13] What should aim the next session, in order. The top is unchanged for the sixth night
+  and tonight makes it cheaper to justify: `#217` now carries a fifth question whose answer conditions
+  the reading of every v3 number the lab will ever produce.**
+  - **`#217` still goes first, and it is still not research** — one look at `engine/` by someone
+    allowed to take it, with [2026-10-10]'s four questions **plus `#244`**: on what grid, at what
+    fills, and at what cost is the equal-weight pool itself maintained? Tonight's chain says each of
+    the four possible answers has a different, known consequence for what "skill" means, and one of
+    them (pool rebalanced at each date's own close while candidates fill at the next real close) would
+    be an asymmetry the protocol's own fill rule exists to prevent. Costs nothing.
+  - **Then the one census pass, now seven items wide: #220, #214, #227, #233, #239, #240 and #245.**
+    All seven are returns-level, eligibility-level or covariance-level accounting on the train split
+    with no validation read and no candidate file; build the machinery once and spend it seven times.
+    **`#245` is the cheapest of the seven and the one that most directly bounds the others** — it
+    measures the benchmark's own rebalancing channel rather than importing a number for it, and a
+    near-zero answer would be the most useful negative on this list: it would say the pool is a pure
+    tilt and that selection is the only thing to beat. **`#239` still shares `Σ̂` with `#233`**, and
+    **`#240` is still the one most likely to close a vein** rather than open one.
+  - **Then `#246` and `#248`(a), immediately and permanently, because both are rules rather than
+    tasks.** `#246` is an interpretation rule that independently confirms `#234` and additionally
+    settles that equal weighting *inside* a candidate's book needs no defending. `#248`(a) is a
+    one-line pre-trial diagnostic (Ljung–Box on any fitted model's residuals) that applies to every
+    candidate that fits anything, not only to learned ones.
+  - **Then #241**, still the cheapest trial on the board and still needing no census first, alongside
+    **#236** (still the cheapest *signal* trial); they are independent and test different things.
+  - **Then #234 and #232 as standing reporting rules**, with **#235** alongside them, unchanged.
+  - **Then #221**, still the item with the largest possible consequence on this list.
+  - **Then #242**, but only if `#240` passes, with `#243`'s truncation-at-zero caveat and `#248`(b)'s
+    three scope limits written into the journal before the run.
+  - **Then #213**, **#215**, **#216** in [2026-10-08]'s order, with **#222** free alongside #213 and
+    **#228** as the reference launch-age/differentiation pair. **#223**, **#231** and **#237** remain
+    the trials that each wait on a census or a constant of their own.
+  - **Then #203**, then **#209**, **#198**, **#205**, **#206**, then **#208** and **#211**, then
+    **#210**, then **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183, #184,
+    #179, #180** in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190**, **#185** as a
+    standing reporting rule, **#191** as screens to re-measure. **Then the carried items**: #181,
+    #174's reading, #175, #177, #176. **#204** stays below them for [2026-10-06]'s reason.
+- **[2026-10-13] The transferable output, and it is the thirteenth detector — the first aimed at the
+  thing the lab *subtracts* rather than at the thing it builds.** The twelve before it: redundancy
+  [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at [2026-10-03],
+  sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's confound
+  [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06], the
+  self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], the objective-versus-number distinction
+  [2026-10-11], and a method's admitted scope [2026-10-12]. Tonight's: **when the scoring rule is a
+  difference against a portfolio, that portfolio is a strategy — so read its literature as a strategy,
+  not as a number.** [2026-10-11] established that a change of objective means reading the literature
+  about the new objective. It did not go the one step further that was available for free: v3's
+  objective is a *difference*, and the subtrahend is a construction with a return generator, a turnover
+  bill, a fill convention and a factor exposure of its own. Fifty-nine sessions had read about what to
+  put in the numerator and nothing about what sits in the subtrahend — and one night of reading about
+  it produced three results, one protocol question with four pre-computed consequences, and an
+  independent confirmation of the lab's newest construction rule. The test is three questions asked of
+  any benchmark-relative statistic, before the next candidate: *what strategy is my benchmark, what
+  does it earn mechanically, and does my protocol let me hold the same thing it holds?* **The corollary
+  is the night's second transferable:** two sources that look like a contradiction can be **a
+  conditional and its antecedent**, and reading them that way is strictly more informative than
+  picking a winner — here, "rebalancing earns a premium" and "rebalancing trades have zero expected
+  value" are the same statement once the second supplies the condition the first needs, which turned a
+  benchmark description into a falsifiable claim about mean reversion at the rebalance horizon. The
+  general form, which outlives this protocol: **audit the null as a construction, and when the folder
+  already holds the refutation of a new source's attribution, check whether the two compose before
+  deciding which is wrong.**
 - **[2026-10-12] Read this first: the two things the lab has been assuming about optimised books are
   both half-true, and the half that is false is the one that would have cost a trial.** Last night
   ended blocked — `#237`'s derived mixing weight needs `T > N + 4` and the panel is ~1,000 names wide
