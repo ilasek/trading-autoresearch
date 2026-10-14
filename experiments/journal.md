@@ -19456,3 +19456,46 @@ candidate that needs to make a selection claim rather than a geography claim sho
   volatility did not. Turnover pre-registration held for the second night running: 2.0-5.5x
   predicted, 4.4x charged.
 
+## 2026-10-14T23:45:23+00:00 — pt_decade_reversal_peer_neutral — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_decade_reversal_peer_neutral.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Selecting the 100 eligible names with the lowest trailing ten-year mean monthly return, with entries quota-allocated across trailing-trading-calendar peer groups so the book's geography matches the pool's, earns positive validation skill over the equal-weight eligible pool, because a decade of flat prices in a name that is still a large-cap index member is this panel's only reachable proxy for a low price relative to fundamentals -- distinct from the three-year reversal this lab measured as a null (rank rho +0.35) and from index seasoning (+0.06).
+- Verdict: GATE_FAIL — validation sharpe 0.331 <= the random-selection null's 90% quantile 0.368 (median 0.297; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.56, ann_ret +10.8%, maxDD -63.1%, turnover 2.0x, skill vs pool +0.03
+- Validation: sharpe +0.33, ann_ret +6.3%, maxDD -42.9%, turnover 2.7x, skill vs pool -0.01
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.01, 90% CI [-0.29, +0.28]; at 2x costs -0.03; with a 30% delisting haircut -0.01; train +0.03 (1997-2008 -0.05, 2009-2017 +0.02)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 75% percentile of 200 random-selection replicas (median +0.30, 90% +0.37); equal-weight eligible pool +0.34, information ratio vs it +0.06
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE FIRST v3 BOOK WHOSE SELECTION BEAT ITS OWN REGION-MATCHED REPLICAS — 75th
+  percentile, against 0th for both of the two region-neutralised books before it — and it did so
+  at a dead heat with the pool (skill -0.006, the best validation skill on the v3 board), which
+  makes the gate's remaining 15 percentile points the whole of what is missing rather than the
+  mechanism.** Decomposing the same way as this session's first trial: the null median (+0.297)
+  sits **below** the pool (+0.337), so the book's geography cost about **-0.04**, and selecting
+  the decade's losers inside that frame **earned +0.034** — the first positive selection term v3
+  has recorded on validation. Train skill +0.033, 2x costs move it 0.023, the delisting haircut
+  moves it 0.000 (0.000% of the slice's series end within the horizon on train, so the
+  loser-buying book's one obvious artifact is priced and absent), turnover 2.7x against a
+  pre-registered 1.3-3.5x — the third consecutive night the turnover range held.
+  **This entry corrects the prediction written into tonight's earlier lesson.** That lesson
+  proposed that *flatness of the excess in bps per day across horizons* was the screen column
+  which had predicted both of the lab's clean-screen failures. This candidate's excess is just as
+  flat (1.4 / 1.2 / 1.1 / 1.3 bps/day at 21 / 63 / 126 / 252 days) and it came out at the 75th
+  percentile, not the 0th. **So flatness in horizon does not discriminate, and the 2026-10-13
+  entry's reading of it should be kept as what it was — a warning that a level premium will be
+  judged by a ratio gate — and not promoted to a predictor of the null percentile.** The column
+  that did discriminate between tonight's two trials is the one neither screen contained: the
+  **sign of the null median against the pool is not the whole story, but the selection term
+  (candidate minus null median) is** — arbitrage risk scored -0.18 there and decade reversal
+  +0.034, while their *train* screens were equally clean and arbitrage risk's was the stronger
+  of the two (+27.4 bps/63d at t +2.24 with no geography confound, against a sort whose
+  whole-pool reading was less than half its region-matched one). **Nothing in the train screen
+  sheet ordered these two correctly**, which is the third consecutive night that a train screen
+  has failed to rank validation outcomes, and the standing train-as-prediction record should be
+  read as having no demonstrated skill under v3.
+  What is genuinely open after this: the decade-reversal mechanism is **not refuted** — it is a
+  dead heat with the pool whose selection term is positive, and the 90% null gate is the binding
+  constraint, exactly as the v2 session concluded for a different family. It is also the cheapest
+  such book the lab has produced (2.7x turnover against the pool's own 0.89x one-way, delisting
+  stress 0.000). Do not re-run it as a parameter sweep: the 10-year and 20-year windows are one
+  object (rank rho +0.872) and the band grid is already measured and declined.
+

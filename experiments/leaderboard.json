@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-10-14T23:43:09+00:00",
+  "generated_at": "2026-10-14T23:46:49+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
     "price-trend": {
-      "name": "pt_lowvol_gk_quarterly",
-      "candidate": "strategies/candidates/pt_lowvol_gk_quarterly.py",
+      "name": "pt_decade_reversal_peer_neutral",
+      "candidate": "strategies/candidates/pt_decade_reversal_peer_neutral.py",
       "track": "scout",
       "verdict": "GATE_FAIL",
-      "ts": "2026-10-09T23:39:55+00:00",
-      "n_trials": 1,
+      "ts": "2026-10-14T23:45:23+00:00",
+      "n_trials": 2,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.304,
-        "ann_return": 0.0477,
-        "max_drawdown": -0.2756,
-        "ann_turnover": 1.32,
-        "avg_positions": 99.99,
-        "skill": -0.033,
-        "skill_cost2x": -0.047,
-        "skill_delist30": -0.033
+        "sharpe": 0.331,
+        "ann_return": 0.0626,
+        "max_drawdown": -0.4285,
+        "ann_turnover": 2.71,
+        "avg_positions": 100.04,
+        "skill": -0.006,
+        "skill_cost2x": -0.029,
+        "skill_delist30": -0.006
       },
-      "train_sharpe": 0.461,
+      "train_sharpe": 0.556,
       "skill_ci90": [
-        -0.259,
-        0.206
+        -0.288,
+        0.281
       ],
-      "train_skill": -0.063,
+      "train_skill": 0.033,
       "mechanism": 1
     },
     "liquidity-volume": {
@@ -105,9 +105,9 @@
         0.022
       ],
       "train_skill": 0.046,
-      "mechanism": 1
+      "mechanism": 4
     }
   },
-  "distinct_mechanisms": 3,
+  "distinct_mechanisms": 4,
   "mechanism_rho": 0.5
 }
