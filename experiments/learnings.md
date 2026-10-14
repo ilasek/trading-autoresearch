@@ -4878,3 +4878,106 @@ across experiments; prune entries that later evidence contradicts.
   average is a portfolio residual, not a universe-wide state. **A literature-derived factor whose
   construction needs a broad panel should be screened for panel width before it is screened for
   signal.**
+
+- **[Measured 2026-10-13/14, nightly] WHOLE-POOL EXCESS AND REGION-MATCHED EXCESS ARE DIFFERENT
+  STATISTICS AND THEY DISAGREE IN BOTH DIRECTIONS; READ EVERY SCREEN BOTH WAYS OR THE SCORE AND THE
+  GEOGRAPHY STAY WELDED TOGETHER.** v3's random-selection null is **region-matched**; the skill
+  statistic is against the whole equal-weight pool, which is **76% US on train — 97% before 2009
+  and 48% after**, because the eight non-US indices only join in 2009. So a score correlated with
+  listing region produces a book whose excess over the pool is partly geography, and only the null
+  prices it. Top-100 slice, forward 63-day excess, 211-222 train month-ends:
+
+      score (slice)          vs whole pool       region-matched     turn/yr   US%
+      seasoning_days top      +43.2 (t +3.12)    +5.3  (t +0.66)      0.01   100%
+      amihud126      top      +18.3 (t +0.93)   +46.8  (t +3.23)      0.25    50%
+      amihud126      bot      -39.4 (t -2.24)   -63.5  (t -3.97)      0.11    92%
+
+  **Both errors are live.** "Hold the longest-standing index members" is the best-looking score ever
+  screened here under v3 and is **100% US on all 222 dates** — pure geography, declined free. The
+  illiquidity premium is the inverse: real within-market, *hidden* by the whole-pool comparison
+  because an unconstrained illiquidity sort is half non-US against a three-quarters-US pool and pays
+  for the premium with an opposite-signed geography bet. A candidate can neutralise the axis without
+  the region table: `volume` is not forward-filled, so a name's non-print days are its listing
+  market's holidays, and grouping the eligible names on that trailing fingerprint
+  (`strategies/lib/calendar_peers.py`) recovers it at **0.94-0.96** name-weighted purity. Mask to
+  the eligible set **before** deriving the grouping, or its anchors depend on the visible frame's
+  column count — the 2026-10-07 leak.
+
+- **[Measured 2026-10-13/14, nightly] THE WITHIN-MARKET PRICE-IMPACT PREMIUM IS REAL ON TRAIN,
+  ABSENT ON VALIDATION, AND THE NULL IS WHAT PROVED IT BY SPLITTING THE BOOK INTO GEOGRAPHY AND
+  SELECTION.** `lv_illiq_peer_neutral_band` (126-day Amihud, calendar-peer quotas, K=100, top-200
+  retention band, monthly) measured **+94.2 bps/63d at t +5.75** on train, positive in both
+  sub-periods, and scored **train skill +0.084** — the first positive train skill on the v3 board.
+  On validation it sat at the **0th percentile of 200 region-matched replicas**: null median
+  **+0.424** against a pool at **+0.337**, candidate **+0.285**. The decomposition is the finding:
+  matching the pool's region mix was worth about **+0.09** of Sharpe and selecting on illiquidity
+  inside that frame gave back about **0.14**. Not a cost result (2x costs move skill by 0.005), not
+  a delisting artifact (the 30% haircut moves it by 0.000, and 0.000% of holdings' series end within
+  63 days on train), and not data dust (the slice's trailing median dollar volume is $18-28M/day,
+  10th percentile $6.6M). **`zero_days_126` (Lesmond-Ogden-Trzcinka zero-return days, +28.2 bps/63d,
+  t +2.39 region-matched) is the same mechanism in a different costume and is refuted with it.** Do
+  not flip the sign to trade the liquid half: validation came out that way, and choosing a sign
+  because the number did is what the v2 inverted-seasonal entry already refused.
+
+- **[Measured 2026-10-13/14, nightly] THE BENCHMARK IS A PURE TILT: ITS REBALANCING CHANNEL IS ZERO,
+  AND NEITHER EQUALITY NOR CONSTANCY IS WORTH ANYTHING. THE WHOLE WEIGHTING AXIS IS DEAD.** The pool
+  is monthly-restored equal weight over every eligible name, run through **the same execution model
+  and costs as a candidate** (so there is no fill or cost asymmetry to chase). Four train books:
+
+      book                                           sharpe  ann ret  turn/yr  cost/yr
+      EW restored monthly  [the protocol's pool]      +0.524  +10.33%     0.89    0.22%
+      held from one EW start, drifting                +0.569  +11.16%     0.05    0.01%
+      EW restored once a year                         +0.456   +8.89%     0.32    0.08%
+      FIXED UNEQUAL weights, restored monthly         +0.529  +10.44%     0.90    0.22%
+
+  The channel is **-0.71%/yr (t -0.49)** against buy-and-hold and **+1.38%/yr (t +1.36)** against
+  annual restoration — indistinguishable from zero in both directions, so relative prices among
+  eligible large caps do not mean-revert at the rebalance horizon here and the published two-fifths
+  attribution does not transfer. A *fixed unequal* vector on the same grid scores the same as equal
+  weight (**+0.10%/yr, t +0.56**). And **concentration is flat too**: random region-proportional
+  books at K = 25, 50, 100, 200, 400 all score within **±0.03** of the pool. So the train-skill gate
+  cannot be cleared without real selection, the pool's own cost bill is only 0.22%/yr (a
+  low-turnover candidate competes cost-neutrally), and any "hold more/fewer names, more/less evenly"
+  operator is unmeasurable here. **Caveat on method**: a book-size study on this panel must cap K at
+  the eligible count rather than skip dates with fewer than K names — the panel runs 139 eligible
+  names in 1997 to 906 in 2017, and skipping produced a spurious non-monotone table before the fix.
+
+- **[2026-10-13/14, nightly] THE v3 GATE SET ADMITS EXACTLY ONE KIND OF CLAIM — CROSS-SECTIONAL NAME
+  SELECTION WITHIN REGION — AND THIS IS DERIVABLE WITHOUT A MEASUREMENT, SO IT SHOULD STOP THREE
+  CLASSES OF CANDIDATE BEFORE THEY ARE WRITTEN.** `benchmarks.random_null_v3` replaces each name a
+  candidate *enters* with one of the **same type and, for stocks, the same listing region**, and
+  keeps the candidate's **schedule and weight vectors**. Therefore: (i) **region rotation, country
+  momentum and cross-region lead-lag are matched move-for-move by their own null** and can never
+  move the percentile off ~50%, whatever they earn against the pool — only *within*-region lead-lag
+  is reachable, and v2 already measured peer-basket lead-lag as a null on both signs and at -0.450
+  to own residual reversal; (ii) **a timing edge is shared by the replicas** too, while the skill
+  statistic charges cash against a fully-invested pool, so timing loses at both gates at once;
+  (iii) **weighting and breadth buy nothing** (previous entry). What is left is selecting *which*
+  names, inside region and type.
+
+- **[2026-10-13/14, nightly] THE STANDING SCREEN TRIPLE NEEDS A FOURTH COLUMN: THE SLICE'S OWN
+  VOLATILITY. A LEVEL PREMIUM PASSES A bps SCREEN AND FAILS A RATIO GATE.** The triple adopted on
+  2026-10-10 (excess bps / beta / turnover) passed `lv_illiq_peer_neutral_band` through on an excess
+  that was positive in **both** train sub-periods in bps (+44.5, +144.5) while its train *skill* was
+  **-0.04 in 1997-2008** against +0.11 in 2009-2017. The tell was visible in the screen and not
+  looked at: the excess was **flat in horizon at ~1.3 bps/day** (+25.9 at 21 days, +81.7 at 63,
+  +164.8 at 126), which is the signature of a risk premium rather than a forecast, and a premium
+  earns more *and* risks more. Beta was no help — it was 0.94. **Report the slice's annualised
+  volatility as a ratio to the pool's alongside the excess, and treat flatness in horizon as a
+  warning that the gate will refuse what the screen accepted.** One thing that did work: a turnover
+  **range** pre-registered with the wider split's churn in it (0.2-1.5x/yr predicted, 1.31x charged)
+  — the first time this lab's turnover pre-registration was not a lower bound.
+
+- **[Measured 2026-10-13/14, nightly] `statistical-learning`'s HEADLINE QUESTION, ANSWERED FOR FREE:
+  A PENALISED LINEAR COMBINATION OF INDIVIDUALLY-NULL FEATURES IS ITSELF A NULL HERE.** A
+  walk-forward ridge (alpha 10, quarterly refit, 63-day horizon) over seven features — 126-day
+  Amihud, 252-day and 21-day return, 126-day volatility, 252-day skewness, dollar-volume trend,
+  Parkinson/close-to-close — each z-scored **within peer group over the eligible names only** and
+  trained on the **peer-group-demeaned** forward 63-day return, scores rank IC **+0.0066 (t +0.28,
+  n 62)** and a top-100 region-matched excess of **+18.7 bps/63d (t +0.33)**. The sign ordering is
+  right and the size is nothing, which is the measured version of "the legs give a combiner little
+  to combine". **A mechanical trap worth one line**: the frames handed to
+  `walkforward.walk_forward_scores` must live on the **price calendar**, because it uses row
+  positions in `target.index` as its clock — a sparse month-end frame makes its embargo count
+  *months* instead of days, which is the same class of confound that spoiled the v2 `sl_ridge_six_*`
+  trials. A first draft here made that error and produced one scored date.
