@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-13T23:35:32+00:00",
+  "generated_at": "2026-10-14T23:43:09+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -80,6 +80,32 @@
       ],
       "train_skill": -0.001,
       "mechanism": 2
+    },
+    "range-variance": {
+      "name": "rv_arbrisk_peer_neutral",
+      "candidate": "strategies/candidates/rv_arbrisk_peer_neutral.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-14T23:40:44+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.104,
+        "ann_return": 0.0233,
+        "max_drawdown": -0.3208,
+        "ann_turnover": 4.43,
+        "avg_positions": 99.88,
+        "skill": -0.233,
+        "skill_cost2x": -0.288,
+        "skill_delist30": -0.233
+      },
+      "train_sharpe": 0.57,
+      "skill_ci90": [
+        -0.542,
+        0.022
+      ],
+      "train_skill": 0.046,
+      "mechanism": 1
     }
   },
   "distinct_mechanisms": 3,

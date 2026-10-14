@@ -19422,3 +19422,37 @@ candidate that needs to make a selection claim rather than a geography claim sho
    the 2026-10-12 standing instruction should not be carried forward.
 
 ## Research session — 2026-10-14 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-14T23:40:44+00:00 — rv_arbrisk_peer_neutral — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_arbrisk_peer_neutral.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: Selecting the 100 eligible names with the highest unhedgeable share of return variance against their four most-correlated substitutes (250 trading days ending 20 days back), with entries quota-allocated across trailing-trading-calendar peer groups so the book's geography matches the pool's, earns positive validation skill over the equal-weight eligible pool, because Wurgler-Zhuravskaya's arbitrage-risk channel says mispricing persists where a name's variance is least hedgeable -- a quantity measured here at rank correlation +0.13/+0.16/+0.17 to the realized-vol, Garman-Klass and Amihud scores this lab has already refuted, and therefore not a restatement of any of them.
+- Verdict: GATE_FAIL — validation sharpe 0.104 <= the random-selection null's 90% quantile 0.363 (median 0.283; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.57, ann_ret +10.7%, maxDD -55.5%, turnover 3.3x, skill vs pool +0.05
+- Validation: sharpe +0.10, ann_ret +2.3%, maxDD -32.1%, turnover 4.4x, skill vs pool -0.23
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.23, 90% CI [-0.54, +0.02]; at 2x costs -0.29; with a 30% delisting haircut -0.23; train +0.05 (1997-2008 +0.01, 2009-2017 +0.10)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 0% percentile of 200 random-selection replicas (median +0.28, 90% +0.36); equal-weight eligible pool +0.34, information ratio vs it -0.65
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **Arbitrage risk is a real within-region selection score on train and the wrong sign of
+  one on validation, and tonight's null decomposition is the MIRROR IMAGE of 2026-10-13's.** The
+  score cleared every pre-trial screen this lab has: region-matched top-100 excess +27.4 bps/63d
+  (t +2.24) against a whole-pool reading of +27.5 — so, unusually, no geography confound at all —
+  two-sided (bottom-100 -27.0, t -2.39), rank rho only +0.13/+0.16/+0.17 to the refuted
+  realized-vol, Garman-Klass and Amihud scores and -0.12 to low volatility, slice beta 0.90 and
+  slice volatility 0.92x the pool's (so it passes the fourth column the 2026-10-13 entry added),
+  and a positive train appraisal ratio (+0.38, SR - rho*SR_pool = +0.084) as research `#249`
+  requires. It still landed at the **0th percentile of 200 region-matched replicas**. The
+  decomposition inverts last night's: there the null median (+0.424) sat **above** the pool
+  (+0.337), so geography was worth +0.09 and selection gave back 0.14; here the null median
+  (+0.283) sits **below** the pool, so this book's geography cost about **-0.054** and selecting
+  on arbitrage risk inside that frame cost a further **-0.18**. Two durable readings follow.
+  (i) **The null's median against the pool is a free, signed read on a book's geography, and it
+  should be quoted with every trial** - two trials now, with opposite signs, and in neither case
+  did the whole-pool train screen predict it. (ii) **A clean pre-trial screen sheet is not
+  evidence of validation skill**: this is the second consecutive trial where the full standing
+  screen - region-matched excess, both sides, beta, volatility ratio, turnover, the relabelling
+  rho, and now the appraisal ratio - passed and validation refused, and the one thing both
+  trials' screens share is that the excess was **flat in bps per day across horizons** (0.38 /
+  0.43 / 0.50 / 0.47 at 21 / 63 / 126 / 252 days here). On present evidence flatness in horizon
+  is the screen column that has predicted both failures, and it predicted them where beta and
+  volatility did not. Turnover pre-registration held for the second night running: 2.0-5.5x
+  predicted, 4.4x charged.
+
