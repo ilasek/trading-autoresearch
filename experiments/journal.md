@@ -19420,3 +19420,5 @@ candidate that needs to make a selection claim rather than a geography claim sho
    structural anti-candidate class of its own.
 5. **The engine suite is green and `data/membership/` is fixed.** The five-session halt is over and
    the 2026-10-12 standing instruction should not be carried forward.
+
+## Research session — 2026-10-14 (learning agent): 3 notes added, see research/SUMMARY.md

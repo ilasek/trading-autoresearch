@@ -6210,6 +6210,94 @@ fifth question added to `#217`. **Nothing of the lab's is closed by this entry**
 taken tonight and the holdout was not read.
 → `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`,
 `notes/2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`
+
+### What statistic decides that a book beat its benchmark — the sufficient statistic, its cost-aware scope, and the level it takes (cross-family)
+
+**[2026-10-14] Read this first: the statistic protocol v3 scores is *sufficient* for a candidate to
+beat the pool but it is not *necessary*, the exact condition is `SR_candidate > ρ · SR_pool`, and the
+prize hiding in the gap between the two is real but second-order.** [2026-10-13] read the literature
+about the pool *as a strategy*; the one step left unspent was the literature about the **difference
+itself**. A grep across all 186 prior notes returned **zero** for `Barillas`, `Treynor`,
+`characteristic vs covariance`, `Detzel`, `model comparison` and `cost mitigation`, and
+`appraisal ratio` appeared only inside the spanning trilogy — so the folder held the *test* of
+whether a new leg belongs (spanning, 2026-09-23) and the *inference* on a Sharpe difference
+(2026-08-24) but never the identity that connects the two to a portfolio decision.
+
+**Result one — the identity, and what it says about v3's gate.** Gibbons–Ross–Shanken's algebra, as
+Barillas–Shanken use it, is `α′Σ⁻¹α = Sh(f,R)² − Sh(f)²`: a quadratic form in the alphas *is* the
+improvement in maximum squared Sharpe ratio that the new assets buy. For one benchmark and one
+candidate this collapses to `Sh(B,C)² = Sh(B)² + (α/σ_ε)²`, so the whole of what a candidate adds is
+its **appraisal ratio** against the pool. Three consequences follow by algebra, with no estimation:
+*(a)* `α > 0` exactly when `SR_C > ρ SR_B`, so a candidate can expand the pool's frontier while
+losing to it standalone — v3's skill gate is strictly stricter than the economics, by a band whose
+width is `(1 − ρ)·SR_B`; *(b)* a **long-only, unlevered** blend `w(κ) = (1−κ)·pool + κ·tilt` captures
+it, because the derivative of the blend's Sharpe ratio at `κ = 0` has the sign of `α` — no leverage,
+no short leg, no covariance matrix; *(c)* the attainable gain is `≈ AR²/(2·SR_B)`, which is
+**second-order in the appraisal ratio**, so the band is thin and the honest use is as a pre-trial
+screen (`α ≤ 0` ⇒ do not write the candidate) rather than as a rescue. The fourth consequence is
+free and applies to the leaderboard: by test-asset irrelevance, **ranking trials against a common
+pool is not a comparison of the trials** — the pool cancels, and the comparison is each candidate's
+alpha against the *other candidate's* return stream.
+
+**Result two — the scope limit, and it says the lab is in the easy regime for a reason that is a
+property of its own cost model.** Li–DeMiguel–Martín-Utrera prove that the squared-Sharpe criterion
+survives **proportional** costs (the net frontier is still a straight line, so one number still
+characterises the opportunity set) and **fails** under costs that grow faster than linearly: the
+frontier becomes strictly concave, every point on it has a different net Sharpe ratio, and the
+comparison has to be made on mean–variance utility at a stated risk aversion and a stated amount of
+capital. v3's costs — a per-name liquidity tier plus statutory taxes, charged per side — are
+proportional, with no trade-size term, so **net squared Sharpe is a sufficient statistic here,
+"skill" is scale-free, and the lab needs no risk-aversion parameter.** Two riders. Their quadratic
+case yields the identity `θ* = (Σ+Λ)⁻¹μ` — **trading costs enter a mean-variance problem exactly as
+extra covariance**, completing the pair with the folder's constraint-side version of the same
+statement (2026-08-21) — and under *proportional* costs the implied policy is not a partial move at
+all but the **no-trade band** the lab has already measured as its one construction win. And their
+empirical lesson, recorded without numbers: which book wins can invert once costs are charged, and
+**turnover alone does not predict the inversion — the liquidity of the names traded matters
+independently**, which means v3's impact-free cost model *understates* the bill of an illiquid book
+and gives the lab's refused "flip to the liquid half" a second, independent reason to stay refused.
+
+**Result three — the level, and it is the right prior for a lab that has just screened eighteen
+scores to nulls.** Chen–Velikov subtract, from published cross-sectional anomalies, effective
+spreads measured from high-frequency data, post-publication decay, a structural change in trading
+technology, and **data-mining bias** — the last removed two independent ways that agree (an
+out-of-sample sort on in-sample statistics, and empirical Bayes on Sharpe ratios with a fitted
+location-scale `t` prior). Net of all four the expected return is effectively zero, *after* applying
+cost mitigation to every strategy and *before* charging any price impact, and the authors' own
+accounting splits the originally reported gross return into roughly 15% publication bias, 40%
+trading costs and 45% traded away — shares, **not an expectation to import**. Three things transfer.
+*(i)* The lab's setting is **harder than this on three counts** (long-only, large-cap index members
+only, and graded against a fully-invested equal-weight pool rather than against zero), so
+"effectively zero" is an **upper bound** on what the same signals should be expected to yield here,
+and a long run of nulls is evidence of a correctly specified protocol rather than of a broken one.
+*(ii)* Their selection-adjustment finding is that the only in-sample statistic with any transfer at
+all was the in-sample **net Sharpe ratio**, and even it was non-monotone across quantiles — so the
+ordering inside a leaderboard is close to uninformative, and the right fix is an empirical-Bayes
+posterior fitted on the **ratio** rather than on excess basis points (the authors note that modelling
+levels gave even smaller adjusted expectations). *(iii)* Their cost-mitigated implementation **is**
+the lab's band: a `20/40` buy/hold spread nests the plain quintile sort at `20/20`, and the parameter
+they optimise is the **exit** threshold while the enter threshold stays conventional.
+
+**The one tension, and it resolves into the night's only new buildable item.** Chen–Velikov's first
+stated limitation is that they do not combine anomalies and that combining helps *particularly
+through trading costs*; the lab measured a walk-forward penalised combination of seven
+individually-null features as a null. These are claims about **different channels** — the lab
+combined to raise the *signal* and found nothing to combine, while the literature's cost argument is
+that the *trades* of different legs partly cancel, so a combined book pays less turnover than the sum
+of its legs (`notes/2026-08-20-trading-diversification-combining-signals.md`). Under v3, where drift
+is charged and costs are per name, **the cancellation is measurable on train for free and never has
+been here.** It is a precondition rather than a candidate — a zero-IC combination cannot be rescued
+by cheaper trading — but it converts "how much IC does a combiner need to be worth building" from a
+guess into a number. **New: #249–#256**, six free, one trial, one recorded calibration. **Nothing of
+the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not
+read. One source in the chain, **Detzel–Novy-Marx–Velikov (JF 2023)** — the paper that first put the
+squared-Sharpe criterion on *net* returns — is recorded as **body unobtained** with its verbatim
+abstract in hand; its OpenAlex `is_oa: true` bronze location 403s, and none of its three co-authors
+self-hosts it.
+→ `notes/2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`,
+`notes/2026-10-14-net-of-cost-model-comparison-and-the-concave-frontier.md`,
+`notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -11095,6 +11183,132 @@ hypothesis fodder, then anti-candidates.
     train/validation boundary, and h-block CV is not the fix for a misspecified model.
     → `notes/2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`
 
+249. **FREE — the pre-trial screen tonight's chain exists to supply: a candidate's *alpha against the
+    pool*, not its Sharpe difference, is what says whether it adds anything.** Regress the candidate's
+    daily train excess returns on the equal-weight eligible pool's over the same days: `C = α + βB + ε`.
+    Then `Sh(B,C)² = Sh(B)² + (α/σ_ε)²` exactly, so the **appraisal ratio** `AR = α/σ_ε` is the whole of
+    what the candidate adds, and `α > 0` holds precisely when **`SR_C > ρ · SR_B`** — the candidate's own
+    Sharpe need only beat the pool's *scaled down by their correlation*. Two uses, one of which is a
+    refusal. *(a)* **Kill before writing:** a candidate whose train `α ≤ 0` against the pool cannot be
+    helped by any blend, any weighting or any concentration choice, and should not be built. *(b)* **Do
+    not read it as a rescue**: the attainable Sharpe gain is `√(SR_B² + AR²) − SR_B ≈ AR²/(2 SR_B)`,
+    second-order in `AR`, and the long-only constraint can only shrink it. Report `AR` alongside the
+    skill number in every screen; it costs two return series and no trial. Tier A (a proof), no overlap.
+    → `notes/2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`
+
+250. **ONE TRIAL, and only for a candidate sitting in `#249`'s thin band (`α > 0`, skill < 0): emit the
+    pool-blended tilt at a κ pre-registered from train.** `w(κ) = (1−κ)·(equal weight over eligible) +
+    κ·(the tilt)` is long-only, fully invested and monthly, so it is a legal row; the derivative of its
+    Sharpe ratio at `κ = 0` has the sign of `α`, so *some* `κ > 0` beats the pool whenever the alpha is
+    positive, with no leverage and no short leg. The Sharpe-maximising mix has the closed form
+    `κ* = (μ_d σ_B² − μ_B σ_Bd)/(μ_B σ_d² − μ_d σ_Bd)` with `d = C − B`; if `κ* ≥ 1` the best feasible
+    blend is the candidate itself and blending is pointless. **Two gate interactions to pre-register in
+    the journal before the run**: `κ` trades skill magnitude against **null power** (as `κ → 0` the book
+    approaches the pool, and a near-full-pool book cannot clear a null that randomises its own names —
+    the lab's own measured fact), and train skill must clear zero at the **same** `κ`. This sharpens
+    `#241` by supplying the knob and the exact condition under which any `κ > 0` helps. Tier A on the
+    algebra, no overlap.
+    → `notes/2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md` ·
+    `notes/2026-10-12-black-litterman-benchmark-anchored-tilting.md`
+
+251. **FREE — standing interpretation rule: a leaderboard ordered by skill against a common pool is not
+    a comparison of the candidates, and the comparison that *is* one costs a regression.** By
+    Barillas–Shanken's test-asset irrelevance, when two models are compared on likelihood, on the Sharpe
+    criterion or on the modified HJ distance, everything both are measured *against* cancels, and what
+    remains is each model's ability to price the factors the other has. Applied here: to decide whether
+    candidate A or candidate B is the better bet, **regress each one's active return on the other's** and
+    read the two alphas — the pool, the trial board and any third statistic contribute nothing. This is
+    the sharp form of `CLAUDE.md`'s rule that family leads whose active returns correlate are one bet:
+    correlation says they are the same bet, the pairwise alphas say which to keep, and
+    `scripts/rank_trials.py`'s tier 1 is the set where neither direction is decisive. Tier A, no overlap.
+    → `notes/2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`
+
+252. **FREE, and it is a licence rather than a task: v3's cost model is *proportional*, which is exactly
+    the regime in which net squared Sharpe is a sufficient statistic and "skill" is scale-free.** The
+    frontier net of proportional costs is still a straight line, so one number characterises the whole
+    opportunity set and no risk-aversion or capital assumption is needed; under costs that grow faster
+    than linearly the frontier is strictly **concave**, every point on it has a different net Sharpe
+    ratio, and two candidates can swap order with the assumed book size. So `#249`–`#251` apply here
+    **on net returns with nothing added**. Three riders worth carrying. *(a)* The coherence is a property
+    of the engine's cost model, not of reality: a human adding a trade-size term would make skill
+    scale-dependent — an `engine/` observation for the queue beside `#217`, not a change the agents may
+    make. *(b)* Because the model has no impact term it **understates** an illiquid book's bill, so the
+    refused "flip the illiquidity sign to the liquid half" has a second independent reason to stay
+    refused, and turnover alone never predicts which of two books costs more — the liquidity of the names
+    traded matters separately. *(c)* The identity `θ* = (Σ + Λ)⁻¹μ` says trading costs enter a
+    mean-variance problem **exactly as extra covariance** (completing the pair with the constraint-side
+    version at `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`) — but that partial-move
+    geometry belongs to *quadratic* costs; under v3's proportional costs the implied policy is the
+    **no-trade band**, which is what the lab already measured as its one construction win. Tier B
+    (validation overlap on the empirical half, which is not used), proof on the part used.
+    → `notes/2026-10-14-net-of-cost-model-comparison-and-the-concave-frontier.md`
+
+253. **FREE, train-only, and the missing precondition under every future multi-signal proposal: measure
+    whether combining legs *cancels turnover*, instead of assuming the only reason to combine is IC.**
+    Chen–Velikov's own stated limitation is that they do not combine anomalies and that combining helps
+    **particularly through trading costs**; the lab measured a penalised combination of seven
+    individually-null features as a null — and the two are about different channels, because the lab
+    combined to raise the *signal* while the cost argument is that the *trades* of different legs partly
+    offset at the name level. The measurement: form each leg's book separately, compute one-way name
+    turnover per year for each leg and for the equal-weighted combination of the legs, and report the
+    ratio `turnover(combined) / mean(turnover(legs))`. Under v3 — drift charged, costs per name, taxes on
+    the UK/HK/FR/IT/ES side — a ratio well below one is a real, free cost saving that applies to any
+    future combiner, and a ratio near one closes the cost argument for combining on this panel. **Not a
+    candidate on its own**: a zero-IC combination cannot be rescued by cheaper trading. Its value is that
+    it prices the question "how much IC does a combiner have to add to be worth building" instead of
+    guessing. Shares machinery with the census pass. Tier A, no overlap.
+    → `notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md` ·
+    `notes/2026-08-20-trading-diversification-combining-signals.md`
+
+254. **FREE — the unspent shrink half of `#110`, now with a fitted prior and a statement of which
+    quantity to shrink.** Across a large set of strategies, the only in-sample statistic with *any*
+    transfer to later net returns was the in-sample **net Sharpe ratio**, and even it failed to produce a
+    monotone relation across quantiles; three of four selection statistics (mean net return, cost
+    reduction, turnover) produced no monotone relation at all. The adjustment that worked models the
+    **Sharpe ratio** as normal around its true value with standard error `1/√T`, puts a fitted
+    location-scale `t` prior over true Sharpe ratios across strategies, and reports **posterior means**
+    for the selected ones — and the authors note that modelling mean *levels* instead gave even smaller
+    adjusted expectations. Two uses. *(a)* Treat the ordering inside `scripts/rank_trials.py` as
+    uninformative rather than weakly informative — which is what `CLAUDE.md` already says from the
+    error-bar side. *(b)* Once enough v3 trials are recorded, shrink the best recorded **skill** (a
+    ratio) toward the cross-trial mean with an empirical-Bayes posterior fitted on skill, not on excess
+    basis points. Tier A, no overlap.
+    → `notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md` ·
+    `notes/2026-09-15-inference-on-winners-post-selection-estimation.md`
+
+255. **FREE refinement of the lab's one construction win: the band's *exit* threshold is the parameter
+    worth optimising; the *enter* threshold is a convention; and the weighting lever that comes with it is
+    closed on this panel.** The literature's cost-mitigated implementation is the **buy/hold spread**: a
+    `20/40` rule enters names in the top 20th percentile and exits a held name only below the 40th, and
+    at `20/20` it **is** the plain quintile sort — so the lab's `K = 100 / B = 200` retention band is this
+    object at a `10/20`-style setting, and the one-parameter generalisation of a sort is where the money
+    was found. The published optimisation holds the enter threshold fixed and chooses the exit threshold
+    to maximise net return **within turnover quartiles**, deliberately refusing richer parameterisations
+    to avoid overfitting. The second lever in the same optimisation — equal versus value weighting, as a
+    way to tilt the book toward cheaper names — is **not available here** (`#247`: no share counts) and
+    the lab has separately measured the whole weighting axis as flat, so: optimise the exit, leave the
+    weighting alone, and pre-register the grid. Tier A, no overlap.
+    → `notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md` ·
+    `notes/2026-10-08-no-trade-bands-under-proportional-costs.md`
+
+256. **RECORDED CALIBRATION, not a task — the expected yield of the search itself, and the reason a long
+    run of nulls is evidence about the protocol rather than about the lab.** Net of effective spreads,
+    post-publication decay, a structural improvement in trading technology and **data-mining bias**
+    (removed two independent ways that agree), the expected return of a published cross-sectional anomaly
+    is effectively zero — and that is *after* cost mitigation is applied to every strategy and *before*
+    any price impact is charged, so it is a lower bound on cost and an upper bound on return. This lab's
+    setting is harder on three counts that all push the same way: **long-only** (a large share of anomaly
+    profits sits on the short leg), **large-cap index members only** (the effects attenuate in big
+    stocks), and **benchmarked against a fully-invested equal-weight pool** rather than against zero.
+    Carry this as the prior when reading the lab's v3 board: the honest implication is not that the search
+    is mis-specified but that **the yield per trial is small and the deflated-skill bar is the binding
+    constraint**, which argues for spending trials on constructions the gate set rewards (`#250`, `#255`)
+    and on free screens (`#249`, `#253`, `#254`) rather than on further single free-OHLCV scores. Tier A,
+    no overlap (sample ends before the validation window).
+    → `notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md` ·
+    `notes/2026-09-06-long-side-share-of-anomaly-profits.md` ·
+    `notes/2026-09-02-anomalies-by-size-group.md`
+
 ---
 
 ## Coverage log
@@ -11162,9 +11376,119 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-11 (session 58) | **The first session to read the literature on the *objective itself* after protocol v3 made that objective benchmark-relative, and the first whose three sources form a question-and-answer-and-negative chain rather than three topics.** Aim set by `research/README.md`'s rotation rule plus one observation: v3 deflates **skill** — validation Sharpe minus the equal-weight eligible pool's on the same days — so every number the lab now produces is a difference against a specific portfolio, and a grep across all 177 prior notes returned **zero** for `Roll 1992`, `tracking error volatility`, `Jorion 2003`, `Talmud`, `Tu and Zhou`, `Kirby`, `Ostdiek` and `reward-to-risk timing`. Three results. *(1)* **The geometry is unfavourable in a way that does not shrink with the size of the bet**: Roll's minimum-TEV frontier is the mean-variance frontier shifted right by the *constant* `δ_B = ∆₂ − ∆₁²/d`, Jorion's constant-TEV feasible set touches the efficient frontier only when the budget reaches `δ_B` exactly (`Ψ = dT₀ − d∆₂ + ∆₁² ≥ 0`), and the ellipse's return vertex gives a benchmark-**independent** ceiling of `√d` active return per unit of tracking error. *(2)* **The size of the active bet has a closed form** — `δ* = π₁/(π₁+π₂)` in a mixture of the naive rule with an estimated one, strictly dominating both components, halving the loss when bias and variance are equal — whose feasible estimator needs `T > N + 4` and is therefore **not computable at this panel's width**, and whose objective is expected-utility loss rather than the Sharpe ratio the lab scores. *(3)* **The cheapest rule ever designed to beat an equal-weight benchmark fails its own stated edge condition** in the one independent re-test located: Kirby–Ostdiek replace the sample mean with a factor loading (`β̄⁺/σ̂²`, long-only by truncation at zero, low turnover by construction of its inputs) and predict an edge where cross-sectional dispersion of expected returns is large, while the re-test finds the rule worse exactly there. New: **#233–#238**, three free, two trials, one anti-candidate; the best free item is **#233** (the panel's `√d` and the pool's `δ_B`, train-only accounting that can **kill** the whole vein if `δ_B` is small), the best standing rule is **#234**, and the one cheap trial is **#236**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: Palomba–Riccetti read as the Università Politecnica delle Marche working paper (OpenAlex `locations`, `https` not the listed `http`); Tu–Zhou as the typeset JFE version from the green copy OpenAlex names. **Not read, and nothing is claimed from their own words:** Roll (1992) and Jorion (2003), both closed (`pm-research.com` OpenID redirect; CFA Institute abstract-only) with their algebra taken from the peer-reviewed restatement, and Kirby–Ostdiek (2012), closed at `cambridge.org`, with its construction taken from Bock (2018) — a source this folder already covers, so it is **not counted as new coverage**. Also unobtained: Plyakha–Uppal–Vilkov on the equal-weight benchmark's own mechanics (SSRN 403, EDHEC registration wall, Springer chapter closed) and El-Hassan–Kofman (2003) on the no-short-sales version of the TEV frontier — `opus.lib.uts.edu.au` answers a bitstream request with **HTTP 200 by redirecting to `/password-login`**, a new looks-like-an-answer shape. | Palomba–Riccetti 2012 (JBF), carrying Roll 1992 (JPM) and Jorion 2003 (FAJ) (`2026-10-11-tracking-error-frontiers-and-the-active-return-ceiling.md`); Tu–Zhou 2011 (JFE) (`2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md`); Kirby–Ostdiek 2012 (JFQA), via Bock 2018 (`2026-10-11-reward-to-risk-timing-against-the-naive-benchmark.md`) |
 | 2026-10-12 (session 59) | **The first session to read the estimation literature behind portfolio construction — how a forecast becomes weights when the covariance matrix cannot be inverted — and the first whose headline finding is an explicit impossibility conceded by the source itself.** Aim set by the blocked item last night left at the top: `#237`'s mixing weight needs `T > N + 4` and is not computable at ~1,000 eligible names, and the long-only version of the tracking-error frontier was an unobtained pointer. A grep across all 180 prior notes returned **zero** for `nodewise`, `precision matrix`, `POET`, `MAXSER`, `Black-Litterman`, `reverse optimization` and `implied returns` — 180 notes about what to forecast, none about how to weight it. Three results. *(1)* **`Σ⁻¹` is directly estimable at this width**: nodewise regression is `p` Lasso regressions, one per name, consistent for weights, variance and Sharpe even with more assets than observations, under sparsity of the *inverse* covariance (`s̄·log p / n = o(1)`), which is not sparsity of `Σ`; but the **maximum out-of-sample** Sharpe estimator is proved consistent only for `p ≪ n`, variance and Sharpe converge more slowly than weights everywhere, and the whole cluster improves the `Θ` half of `Θµ` and leaves the `µ` half at its sample mean — so the **mean-free** uses are the ones with guarantees. At daily frequency the lab is `p < n` on a full train split and `p > n` on a one- or two-year window, so **window length decides which theorem a candidate stands on**. *(2)* **The constrained version concedes long-only**: the tracking-error optimum is `m + κ(tangency − GMV)` with the benchmark entering only as the anchor (one knob, benchmark-independent direction), constraints cost nothing asymptotically, binding can be tested from the data — but the method handles a short-sale floor on **one** asset or on a **group's summed** weight and, in the authors' words, "cannot cover a short sales constraint for each asset in a portfolio", while the `p > T` guarantee rests on a *diverging* maximum Sharpe ratio (bounded ⇒ `p < T`). **"Weight constraints" in this literature means a few linear group budgets, not `p` non-negativity constraints.** *(3)* **The one anchoring knob that is computable here**: Black–Litterman's reverse optimization makes a benchmark into a return forecast (`Π = δΣω`, no mean estimation), and in the one cost-aware out-of-sample evaluation located the plain mean-variance book failed to beat `1/N` while the BL book beat both static benchmarks — attributed by its own sensitivity analysis to lower turnover (ruled non-transferable by `#238`) and to a **trailing-forecast-error confidence weight**, which needs no inverse, no optimiser and no `T > N + 4`. New: **#239–#243**, two free, two trials, one anti-candidate; the best free item is **#240** (the admissibility census that can rule the whole route out), the cheapest trial is **#241**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: both nodewise papers read from the authors' arXiv postings; Bessler–Opfer–Wolff read from **EconStor, which is working again** — this reverses `README.md`'s 2026-10-04 entry that recorded the host as dark behind Anubis. **Not read:** Black & Litterman (1992), closed at CFA Institute, construction taken from the peer-reviewed restatement; Bajeux-Besnainou et al. (2011), closed, described only as Caner–Fan describe it; and the CROWN preprint's own empirical section, **deliberately skipped** as a 2025-vintage sample. Still unobtained: **Plyakha–Uppal–Vilkov** (SSRN 403, EDHEC registration wall, Springer chapter closed, and the one third-party mirror reachable by search died at the transport layer) and **El-Hassan–Kofman (2003)** (`opus.lib.uts.edu.au` serves its bitstream as an OPUS **Log In** page — last night's finding, confirmed; the old `qfrc.uts.edu.au` working-paper path 403s; SAGE is Cloudflare-challenged; the UTS `/citation/handle/` endpoint does return a RIS record with the abstract). Also recorded: **`researchaffiliates.com` now answers every `/documents/*.pdf` request with HTTP 200 and a "Choose your destination" interstitial** pointing at `rafi.com`, a tenth looks-like-an-answer shape. | Callot–Caner–Önder–Ulaşan 2021 (JBES) + Caner–Medeiros–Vasconcelos 2023 (J. Econometrics) (`2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`); Caner–Fan (arXiv, CROWN) (`2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`); Bessler–Opfer–Wolff 2017 (EJF), carrying Black–Litterman 1992 (FAJ) (`2026-10-12-black-litterman-benchmark-anchored-tilting.md`) |
 | 2026-10-13 (session 60) | **The first session to read the literature on the *benchmark* — the equal-weight pool v3 subtracts from every candidate's Sharpe — and the first to resolve this file's longest-carried unread pointer, to abstract level, after five further access channels.** Aim set by `research/README.md`'s rotation rule plus the standing [2026-10-11]/[2026-10-12] instruction that a change of objective means reading the literature about the new objective. A grep across all 183 prior notes returned **zero** for the equal-weighted portfolio as a *subject*: the folder held four notes on the diversification return as an identity and none on what equal weighting earns against capitalisation weights, which is exactly the object v3 made into the lab's null. Three findings. *(1)* The pool's return splits into a passive size/value tilt plus a fixed-weight **rebalancing** channel the authors put at roughly two-fifths of the gap in their sample. *(2)* That attribution collides head-on with a refutation this folder already holds (Cuthbertson et al.: rebalancing trades have **zero** expected value under IID, and pay only where relative prices mean-revert) — and the collision resolves into a conditional that makes the pool's channel a **mean-reversion bet**, which v3's own fill rule is designed to deny to candidates. *(3)* The tilt is the largest non-market factor exposure in professionally managed equity money and ~44% orthogonal to the standard eight, so **skill against this pool is a strictly harder statistic than alpha against a cap-weighted market** — reaching `#234`'s "concentrate, do not de-concentrate" conclusion by a wholly independent route, and giving the lab's near-zero v3 skill numbers a second reading. The rotation note is a methodology one in `statistical-learning`: the theorem that says when K-fold CV is valid on dependent data, which corrects a convention this file had twice recorded as a result — and whose scope, read with [2026-10-12]'s detector, excludes the lab's panel case in three of four words. | Plyakha, Uppal & Vilkov (Springer chapter 2021; WP 2012/2014) — abstract level only, body unobtained (`2026-10-13-equal-weighting-and-the-rebalancing-component.md`); Hanke, Keswani, Quigley, Stolin & Zagonov 2019 (Economics Letters), read in full (`2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`); Bergmeir, Hyndman & Koo 2018 (CSDA), read in full, with Bergmeir & Benítez 2012 (Information Sciences) unobtained (`2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`) |
+| 2026-10-14 (session 61) | **The first session to read the literature on the *difference* that v3 scores — the statistic itself rather than the thing in the numerator or the thing in the subtrahend — and the first whose three sources are a statistic, its scope limit and its level.** Aim set by `research/README.md`'s rotation rule plus the one step [2026-10-13] left unspent: that entry read the pool *as a strategy*, and the remaining object was the subtraction. A grep across all 186 prior notes returned **zero** for `Barillas`, `Detzel`, `model comparison`, `cost mitigation`, `characteristic vs covariance` and `Treynor`, while `appraisal ratio` appeared only inside the 2026-09-23 spanning trilogy — so the folder held the *test* of whether a new leg belongs and the *inference* on a Sharpe difference but never the identity tying either to a portfolio decision. Headline: **v3's skill gate is sufficient but not necessary — the exact frontier-expansion condition is `SR_C > ρ·SR_B` — and the prize in the gap is second-order (`≈ AR²/2SR_B`), so the right use of the identity is a pre-trial screen on the candidate's alpha against the pool, not a rescue.** Second: the squared-Sharpe criterion **survives proportional costs and fails under price impact**, and v3's costs are proportional, so the lab's statistic is coherent and scale-free *because of the shape of its own cost model* — with the rider that an impact-free model understates an illiquid book's bill. Third: net of spreads, decay, the trading-technology change and **data-mining bias**, the literature's own estimate of a published cross-sectional signal's expected return is effectively zero, and this lab's setting is harder on three counts, so a long run of nulls is evidence about the protocol being right rather than about the search being broken. One tension resolved into the night's only buildable item: combining legs helps *costs* (trades cancel) even where it does not help *IC*, and the cancellation has never been measured here. New: **#249–#256**, six free, one trial, one recorded calibration. **Detzel–Novy-Marx–Velikov (JF 2023)** is a new unobtained-body pointer with its verbatim abstract in hand. Barillas–Shanken 2017 (`2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`); Li–DeMiguel–Martín-Utrera 2024 (`2026-10-14-net-of-cost-model-comparison-and-the-concave-frontier.md`); Chen–Velikov 2022 (`2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-14] Read this first: the lab has been grading itself with a statistic that is *sufficient*
+  but not *necessary*, and the three sources read tonight say what the right one is, when it stays
+  right, and roughly what value it should be expected to take.** *(1)* **The identity.** For one
+  benchmark `B` and one candidate `C`, `Sh(B,C)² = Sh(B)² + (α/σ_ε)²`, so the appraisal ratio against
+  the pool is the whole of what a candidate adds, and `α > 0` exactly when **`SR_C > ρ·SR_B`** — a
+  candidate can expand the pool's frontier while losing to it standalone, and a **long-only, unlevered**
+  blend toward the pool captures it, because the blend's Sharpe derivative at `κ = 0` has the sign of
+  `α`. The counterweight is in the same algebra: the attainable gain is `≈ AR²/(2·SR_B)`, second-order,
+  so this is a **screen** (`α ≤ 0` ⇒ do not write the candidate) with one trial behind it, not a new
+  vein (**#249**, **#250**). A fourth consequence is free: by test-asset irrelevance, **ranking trials
+  against a common pool is not a comparison of the trials** — regress each candidate's active return on
+  the other's (**#251**). *(2)* **The scope limit, and it is a licence.** The squared-Sharpe criterion
+  survives **proportional** costs (net frontier still a straight line) and fails under superlinear ones
+  (strictly concave frontier, a different net Sharpe at every point, ranking dependent on assumed
+  capital and risk aversion). v3's costs are per-name proportional with no trade-size term, so net
+  squared Sharpe is sufficient here and skill is **scale-free** — with three riders: that coherence is a
+  property of the engine's cost model; an impact-free model **understates** an illiquid book's bill, so
+  the refused liquid-half flip stays refused for a second independent reason; and trading costs enter a
+  mean-variance problem **exactly as extra covariance**, but that partial-move geometry is the
+  *quadratic*-cost solution, while v3's proportional costs imply the **band** (**#252**). *(3)* **The
+  level.** Net of spreads, decay, the trading-technology change and data-mining bias — the last removed
+  two independent ways that agree — the expected return of a published cross-sectional signal is
+  effectively zero, after cost mitigation and before any price impact; and this lab is harder on three
+  counts (long-only, large caps only, benchmarked against a fully-invested equal-weight pool). So the
+  lab's run of nulls is **evidence that the protocol is right**, not that the search is broken
+  (**#256**), the leaderboard's ordering should be treated as uninformative and the best recorded skill
+  shrunk with an empirical-Bayes posterior fitted on the **ratio** (**#254**), and the band's **exit**
+  threshold is the parameter worth optimising while the enter threshold stays conventional (**#255**).
+  **The one tension resolved into the night's only new buildable item:** combining legs helps **costs**
+  (their trades cancel at the name level) even where it does not help **IC**, which is why the lab's
+  penalised-combination null and the literature's pro-combination finding are not in conflict — and the
+  cancellation is measurable on train for free and never has been here (**#253**). **Nothing of the
+  lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read.
+  **Closed by the lab overnight, not by this file, and removed from the queue below:** `#217`/`#244`
+  (the pool is monthly-restored equal weight charged v3's own costs — answer (a), no asymmetry),
+  `#245` (the rebalancing channel measured at zero rather than imported), `#246` (confirmed twice from
+  the lab's own data), and `#248`(a) (not needed — the model was declined on its IC first). **New
+  unobtained pointer: Detzel–Novy-Marx–Velikov (JF 2023)**, whose verbatim abstract is in hand and
+  whose body is behind a Wiley 403 that OpenAlex reports as bronze OA; none of its three co-authors
+  self-hosts it. **Carried unchanged and still genuinely unrun: #82** (fortieth session, still the
+  oldest unspent free item), **#94** as standing discipline, **#105–#107**, **#110**'s shrink half (now
+  with a prior attached at **#254**), **#159**, **#161**, **#164(a)**, the 2026-09-28 set (**#165**'s
+  second use, **#166**, **#167**, **#168**), the 2026-09-29 set (**#170**, **#171**, **#172**), the
+  2026-09-30 set (**#174**'s reading, **#175**, **#176**, **#177**), the 2026-10-01 set (**#179**,
+  **#180**, **#181**), the 2026-10-02 set (**#183**–**#186**), the 2026-10-03 set (**#188**–**#191**),
+  from 2026-10-04 **#195** and **#196**, from 2026-10-05 **#198**, **#199**, **#200**, **#201**, the
+  2026-10-06 set (**#203**–**#207**), the 2026-10-07 set (**#208**–**#211**), from 2026-10-08
+  **#213**–**#216**, the 2026-10-09 set (**#220**–**#225**), the 2026-10-10 set (**#227**, **#228**,
+  **#231**, **#232**), the 2026-10-11 set (**#233**–**#237**), the 2026-10-12 set (**#239**–**#242**),
+  and **#248**(b). **#152 stands.** **#163, #169, #173, #178, #182, #187, #192, #197, #202, #212,
+  #218, #219, #226, #229, #230, #238, #243 and #247 stay anti-candidates.**
+- **[2026-10-14] What should aim the next session, in order. The top of this list has changed for the
+  first time in seven nights, because the lab closed `#217`/`#244`/`#245`/`#246` overnight and because
+  its own closing paragraph says the free single-score space is nearly exhausted region-matched.**
+  - **`#249` first, and it is not a trial — it is the screen that should precede every candidate from
+    now on.** Two return series, one regression: `α`, `σ_ε`, `ρ` and `AR` against the equal-weight pool
+    on train. It costs nothing, it refuses a whole class of candidates before they are written
+    (`α ≤ 0`), and it is the only statistic in this folder that converts "does it beat the pool" into
+    something measurable **before** the gate sees it. Run it retrospectively on the three recorded v3
+    trials first: that is free, and it says whether any of them was in the band.
+  - **Then `#253` and `#251`, both free and both answering questions the lab is about to ask anyway.**
+    `#253` (turnover cancellation across legs) is the precondition for every future combiner and belongs
+    in the census pass with `#220`, `#214`, `#227`, `#233`, `#239` and `#240`; `#251` (compare two
+    candidates by regressing each on the other) costs one line and replaces an ordering the lab already
+    knows is not evidence.
+  - **Then `#250`, which is the cheapest *trial* on the board that the gate set actually rewards**, and
+    only for a candidate `#249` has placed in the band. Pre-register `κ`, the closed-form `κ*` computed
+    on train, and the null-power trade-off; if `κ* ≥ 1` do not run it. **`#236` remains the cheapest
+    *signal* trial** and they test different things.
+  - **Then `#255`** — optimise the band's exit threshold on train, enter threshold fixed, weighting
+    untouched. It refines the lab's one measured construction win rather than opening a vein.
+  - **Then `#254`** as a standing reporting rule, alongside **#234**, **#232** and **#235**, and
+    **#252** as a standing interpretation rule.
+  - **Then the rest of the census pass** (**#220**, **#214**, **#227**, **#233**, **#239**, **#240**),
+    with **#239** still sharing `Σ̂` with **#233** and **#240** still the one most likely to close a
+    vein rather than open one. **Then `#221`**, still the item with the largest possible consequence.
+  - **Then `#242`**, only if `#240` passes, with `#243`'s truncation caveat and `#248`(b)'s three scope
+    limits in the journal first. **Then #213**, **#215**, **#216** in [2026-10-08]'s order, with
+    **#222** free alongside #213 and **#228** as the reference launch-age/differentiation pair.
+    **#223**, **#231** and **#237** remain trials that each wait on a census or a constant of their own.
+  - **Then #203**, then **#209**, **#198**, **#205**, **#206**, then **#208** and **#211**, then
+    **#210**, then **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183, #184,
+    #179, #180** in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190**, **#185** as a
+    standing reporting rule, **#191** as screens to re-measure. **Then the carried items**: #181,
+    #174's reading, #175, #177, #176. **#204** stays below them for [2026-10-06]'s reason.
+- **[2026-10-14] The transferable output, and it is the fourteenth detector — the first aimed at the
+  *operator* in the scoring rule rather than at either of its arguments.** The thirteen before it:
+  redundancy [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at
+  [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's
+  confound [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06],
+  the self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], the objective-versus-number distinction
+  [2026-10-11], a method's admitted scope [2026-10-12], and the benchmark read as a strategy
+  [2026-10-13]. Tonight's: **when your score is `f(candidate) − f(benchmark)`, ask what `f` and the
+  minus sign are a sufficient statistic *for*, and under what conditions they stop being one.** Two
+  sessions had already read the numerator and the subtrahend; nobody had read the *subtraction*. One
+  night of it produced a necessary-and-sufficient condition that is strictly weaker than the gate, a
+  long-only construction that exploits the difference, a proof that the gate's coherence depends on the
+  **shape** of the cost function rather than on its level, and a calibrated prior for the whole search.
+  The test is three questions asked of any scoring rule before the next candidate: *what is my statistic
+  a sufficient statistic for, what assumption makes it one, and does my protocol satisfy that
+  assumption?* **The corollary is the night's second transferable, and it generalises [2026-10-13]'s:**
+  a source's **stated limitation** can be another source's **buildable item** — Chen–Velikov's "we do
+  not combine anomalies, and combining helps particularly through trading costs" is not a caveat about
+  their paper, it is a free measurement the lab has never taken, and it sits in a channel (cost
+  cancellation) that the lab's own refutation (no IC to combine) does not touch. **Read every source's
+  limitations section as a list of things somebody has to do, and check which of them you are the one
+  who can.**
 - **[2026-10-13] Read this first: the lab has spent fifty-nine sessions reading about signals and none
   about its own null, and the null turns out to be a strategy with three properties that change how
   every v3 number should be read.** Protocol v3 scores skill as a candidate's Sharpe **minus the

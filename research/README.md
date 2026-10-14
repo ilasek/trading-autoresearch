@@ -413,6 +413,27 @@ snippets. Three practical limits to plan around:
   concluding it holds nothing**; and note that the cover thumbnail at
   `/sites/default/files/styles/cover/public/old/<slug>.jpg.webp` proves a PDF exists behind the wall
   without giving its path — two guesses derived from it 404'd.
+- **A valid PDF of the right title can be a slide deck, and the character count after extraction is
+  the only cheap tell** (added 2026-10-14; this is a twelfth "looks like an answer" mode and the first
+  in which the file really is a PDF). Two hosts served documents tonight that passed every check the
+  list above prescribes — HTTP 200, non-zero size, `file` reporting a valid PDF, `pdffonts` populated
+  — and were not the paper: a conference site's 1.1 MB PDF of the right title was a **six-page slide
+  deck**, and a mirror of a published article was a 95 KB PDF that `pdftotext` turned into **5 KB of
+  text containing seven instances of `" the "`** (a cover page). **Judge a document by the extracted
+  character count and the `" the "` count before reading it**: a full article is tens of KB of text
+  and hundreds of `" the "`, and both numbers are already in hand from the shift-detection check the
+  NBER entry above requires. A six-page PDF whose byte count looks like a working paper is usually
+  slides, because the figures carry the weight.
+- **A publisher's own `bronze` OA endpoint can 403, so `is_oa: true` is not a promise either** (added
+  2026-10-14; extends the 2026-10-01 bepress entry from green to bronze). OpenAlex reported
+  `is_oa: true, oa_status: bronze` for a closed *Journal of Finance* article and named
+  `onlinelibrary.wiley.com/doi/pdfdirect/<doi>` as the location; that URL returned **HTTP 403 with a
+  5.5 KB Cloudflare body**. With all three co-authors' own sites listing the article by DOI only — one
+  of them hosting four other PDFs and not that one — the honest outcome was **abstract obtained, body
+  unobtained**, and the abstract came from a **Pure record's rendered page** (grep the de-tagged text
+  for `Abstract`; that record carried the full verbatim abstract while holding no file and no
+  `<meta name="description">`). For a three-author paper, enumerating all three sites costs four
+  requests and is still the right first move; it is simply not guaranteed to work.
 
 ## Anti-lookahead policy (hard rules)
 
