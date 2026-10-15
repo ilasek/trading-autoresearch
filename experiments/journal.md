@@ -19499,3 +19499,302 @@ candidate that needs to make a selection claim rather than a geography claim sho
   stress 0.000). Do not re-run it as a parameter sweep: the 10-year and 20-year windows are one
   object (rank rho +0.872) and the band grid is already measured and declined.
 
+
+## Free measurements — 2026-10-14/15 (nightly), no trial spent
+
+The engine suite is green (92 passed). Everything below is **train split only** (1997-01-01 →
+2017-12-31) on the panel `protocol.visible_frame` hands a candidate truncated at the train end,
+except F8, which measures the *gate* rather than a candidate and runs on 2010-2017. No validation
+Sharpe, no holdout, forward or incubation file was opened outside `run_experiment.py`.
+
+**F1 — research `#249` implemented: the appraisal-ratio screen, and it is calibrated against the
+engine.** The screen regresses a book's daily train returns on the equal-weight pool's over the
+same days and reports `AR = α/σ_ε` plus the exact frontier-expansion condition `SR_C > ρ·SR_B`.
+Checked against the engine on last night's score: the `amihud126` top-100 book gives
+`SR − ρ·SR_pool = +0.090` and `AR +0.37`, against the **+0.084 of train skill the engine recorded
+for the trial built on it** — so two return series reproduce the engine's train number to within
+0.006 and the screen costs no trial. **What it is worth is narrower than the note hoped.** Both
+candidates tonight had `α > 0` on train, so the refusal half of `#249` never fired; and the
+attainable-gain formula `≈ AR²/(2·SR_B)` priced arbitrage risk's train prize at ~0.10 of Sharpe
+while its realised validation skill was **−0.23**. **A positive train appraisal ratio bounds the
+TRAIN prize and carries no information about validation** — which is the same thing the three
+preceding nights have said about every other train screen.
+
+**F2 — eleven scores screened, both ways, nine declined before a candidate file existed.** Top or
+bottom 100, forward 63-day excess in bps, 249 month-ends; `plain` is the unconstrained sort read
+against the whole pool, `regm` is the calendar-peer-quota book read against its own peer mix
+(journal F3/F4, 2026-10-13). `volr` is the slice's daily volatility as a ratio to the pool's, the
+column the 2026-10-13 entry added; `AR` and `SR−ρSR_b` are F1's.
+
+    score                side   plain bps      t   regm bps      t  turn  beta  volr     AR  SR-rSRb
+    amihud126 [repro]    top        +7.8  +0.43      +59.4  +3.00  0.86  1.06  1.09  +0.37   +0.090
+    mom252_skip21[repro] top       -21.2  -0.85       -6.8  -0.28  2.57  0.90  0.98  +0.13   +0.051
+    resid_mom252_s       top        -4.1  -0.18       +6.4  +0.29  2.65  0.91  0.96  +0.19   +0.063
+    var_ratio5           top        -4.1  -0.21       +5.3  +0.32  2.41  1.05  1.08  -0.17   -0.034
+    seas_same_month      bot       +31.0  +2.38      +36.8  +3.15  6.40  1.00  1.02  +0.27   +0.056
+    longrun_mean20y      bot       +31.4  +1.42      +62.1  +2.77  0.62  0.84  0.93  +0.17   +0.073
+    longrun_mean10y      bot       +66.5  +2.59      +81.3  +3.16  0.87  0.87  0.97  +0.20   +0.088  <- run
+    tom_diff_5y          bot       +32.3  +1.97      +21.5  +1.77  1.16  0.93  0.96  +0.14   +0.034
+    price_delay_hm       top       -29.9  -1.56      -12.2  -0.70  1.63  0.86  0.89  +0.20   +0.057
+    arb_risk_4peer       top       +27.5  +2.28      +27.4  +2.24  1.33  0.90  0.92  +0.39   +0.085  <- run
+    avg_corr126          bot       -44.9  -2.43       -8.7  -0.54  2.13  0.85  0.90  +0.18   +0.057
+
+The harness reproduces last night's F4 readings for `amihud126` (whole-pool null, region-matched
++3.00) and `mom252` (null both ways), which is what licenses the rest of the table.
+**`resid_mom252_s` closes the one momentum variant this panel had left**: Blitz-Huij-Martens
+residual momentum is a null region-matched (+6.4, t +0.29) *and* is rank-correlated **+0.903** to
+the raw 12-1 momentum the lab already measured as a null, so it is a refinement of a null rather
+than a new mechanism. **`price_delay_hm`** (Hou-Moskowitz delay: 1 − R²(contemporaneous) /
+R²(contemporaneous + 4 weekly market lags), 104 weeks) is a null on both sides, and it was
+`lead-lag-spillover`'s last reachable sub-mechanism after F12 closed region rotation structurally
+— the family is now closed on measurement as well as on deduction. **`avg_corr126` is the
+cleanest illustration yet of the 2026-10-13 geography lesson**: its bottom side reads −44.9 at
+t −2.43 against the whole pool and **−8.7 at t −0.54 region-matched**, i.e. the entire apparent
+signal was the region mix. It also proves `arb_risk` is not low-average-correlation in costume —
+the level of comovement is a null, the unhedgeable *share* is not.
+
+**F3 — `strategies/lib/features.seasonal_same_month_return` IS OFF BY ONE MONTH, AND THE PROPERLY
+ALIGNED HESTON-SADKA SEASONAL IS A NULL HERE. This is the night's methodological finding and it
+retires a v2 learnings line.** The helper publishes, on the last trading day of month *m*, the
+average of past month-*m* returns. A book formed on that date is held through month *m+1*
+onwards, so the score describes **the month that has just ended, not the month about to start**.
+Rebuilt both ways over the same 249 month-ends:
+
+    construction                                   side   regm bps      t    whole bps      t
+    offset 0  (the helper: past month just ENDED)  bot       +36.8  +3.15       +31.0  +2.38
+    offset 0                                       top       -18.7  -1.58       -11.9  -0.91
+    offset 1  (ALIGNED: past month about to START) bot       +21.7  +1.78        +19.3  +1.40
+    offset 1                                       top       -10.8  -0.91        -8.6  -0.60
+    rank rho(offset 0, offset 1)                            -0.086
+
+**The two are orthogonal, and only the misaligned one has a signal.** So (i) the Heston-Sadka
+same-calendar-month seasonal, built as the literature builds it, is a **region-matched null on
+this panel** — a real answer for `seasonality-calendar`, which had no v3 trial and now has a
+measured non-result; and (ii) the v2 learnings line recording the seasonal as "significantly
+NEGATIVE here, i.e. inverted against the sign v1 traded it in" (IC −0.0142, t −2.01) was
+measuring the **off-by-one** object, so it is not evidence about the published effect and is
+corrected in `learnings.md` tonight. The misaligned score's own +3.15 was **not** bought: a
+seasonal that works only on the wrong calendar alignment has no mechanism, and the lab's standing
+refusal to trade a sign because the number came out that way covers it twice over. `features.py`
+is a `strategies/lib/` file and was **not edited** (the manual forbids it); any future use needs
+a new helper, and this entry is the warning so nobody re-buys the helper's version.
+
+**F4 — the pre-registration grid for the decade-reversal book actually written.** Region-quota
+entries, K=100, forward 63-day region-matched excess, 10-year window:
+
+    K    B      exc bps        t    name turn/yr      1997-2008      2009-2017
+    100  none      +81.3    +3.16         0.87       +60.6/+2.14   +102.5/+2.36   <- run
+    100  200       +69.3    +3.20         0.22       +50.6/+1.96    +88.4/+2.53
+    100  300       +79.3    +3.75         0.14       +79.0/+3.43    +79.6/+2.21
+    200  none      +32.9    +2.58         0.55       +15.0/+1.11    +51.3/+2.35
+    200  400       +15.4    +1.58         0.11        -5.9/-1.09    +37.4/+1.98
+
+**The band was declined on this lab's own rider, not on the t-statistic** — B=300 has the best t
+(+3.75) and the most balanced sub-periods, and it is a 0.14x/yr near-static book whose monthly
+observations are one draw repeated (learnings, 2026-10-10), so its t is an upper bound. The
+unbanded book's 0.87x one-way churn is already *below* the pool's own 0.89x, so there was nothing
+for a band to buy. The 10- and 20-year windows are **one object** (rank rho +0.872) and the
+10-year one was taken because it is the more balanced across sub-periods; that two-cell choice is
+the whole of the window search. Delisting exposure, the one obvious artifact of a loser-buying
+book: **0.000% of the slice's series end within 63, 126 or 252 days, identical to the pool's**,
+and the engine's 30% haircut duly moved the trial's skill by 0.000.
+
+**F5 — the arbitrage-risk grid, and the band hurt it.** Region-quota entries, forward 63-day
+region-matched excess:
+
+    K    B      exc bps        t    name turn/yr      1997-2008      2009-2017
+    100  none      +27.3    +2.23         1.35        +14.8/+0.94    +44.4/+2.27   <- run
+    100  200       +25.3    +2.35         0.32         +7.1/+0.58    +50.3/+2.64
+    100  300       +16.6    +1.66         0.18         -7.6/-0.76    +49.8/+2.61
+    200  none      +18.4    +2.91         0.79         +6.5/+1.16    +34.6/+2.72
+
+Relabelling screen, 32 month-ends: rank rho **+0.128** to 126-day close-to-close volatility,
+**+0.155** to Garman-Klass, **+0.168** to Amihud, **−0.116** to low volatility — so the score is
+genuinely none of the three refuted objects, which is why it was worth a trial even though it
+then failed. Slice US share 77% against a 76% pool, and whole-pool and region-matched readings
+agree at +27.5 / +27.4: **the one score screened here with no geography component at all**, which
+is what makes its 0th-percentile validation result a pure selection failure.
+
+**F6 — research `#253` answered, and the answer closes the cost argument for combining on this
+panel: COMBINING LEGS DOES NOT CANCEL TURNOVER, IT ADDS TO IT.** One-way name churn per year,
+K=100 region-quota books on the same monthly grid, train:
+
+    leg                          turn/yr
+    arb_risk                        1.35
+    decade_rev                      0.87
+    amihud126                       0.86
+    mom252                          2.58
+    low_vol126                      1.39
+    mean of the five legs           1.41
+    EQUAL-WEIGHT COMBINATION        1.91
+    ratio combined / mean(legs)     1.36
+
+Chen-Velikov's stated limitation is that combining anomalies helps *particularly through trading
+costs* because the legs' trades partly offset at the name level. **On this panel the offset is
+negative**: a z-score average of five legs churns 36% *more* than the average leg, because the
+combined score's top-100 is a shifting compromise that no single leg's ranking holds still. So
+the lab's 2026-10-13 finding that a combiner has nothing to combine on the *signal* side is not
+rescued by a cost saving on the *trade* side, and `#253`'s question is closed with the answer
+that was not assumed. (Rider: this is name churn on a fixed K, measured without a band; a band
+on each leg before combining was not tested and is the one way the sign could still move.)
+
+**F7 — research `#251` applied to tonight's two legs: they are near-orthogonal, and the
+combination's train appraisal ratio beats either leg's.** Rank rho between the scores
+**−0.024**; rho between the two books' daily *active* returns **+0.104**. Train, gross:
+
+    book         SR      pool     rho    AR      SR-rho*SR_pool   turn/yr
+    arb_risk    +0.757  +0.690  0.975  +0.380       +0.084          1.35
+    decade_rev  +0.703  +0.690  0.894  +0.193       +0.087          0.87
+    COMBINED    +0.732  +0.690  0.886  +0.260       +0.121          1.91
+
+**No blend was written, and the reason is worth recording rather than the number.** By the end of
+the session one of the two legs had been refuted on validation at the 0th percentile of its own
+null, so the combination's +0.121 is a train statistic over a leg the lab now knows does not
+transfer; and F6 prices the combination at 1.91x churn against the better leg's 0.87x. A
+`portfolio-learning` trial here would have spent budget to confirm an arithmetic certainty.
+
+**F8 — A STANDING STRUCTURAL CLAIM IN `learnings.md` IS WRONG, AND CORRECTING IT REOPENS RESEARCH
+`#250`. The region-matched null does NOT collapse against a near-full-pool book; it collapses
+against a near-full-pool EQUAL-WEIGHT book, which is a different statement.** The 2026-10-09/10
+entry reads: "a random relabelling of ~1,000 eligible names is approximately the same book, so
+the null distribution collapses onto the candidate and the percentile sits near 50%", and it is
+cited in `program.md`-adjacent reasoning as a hard constraint on `portfolio-learning`. Reading
+`benchmarks.random_null_v3`: the replacement loop draws each entered name's substitute from the
+eligible, **unused** names of the same type and region, so when a candidate enters every eligible
+name the replica is a within-region **permutation of the candidate's weight vector**. A
+permutation of an equal-weight book is the identity; a permutation of a non-uniform one is not.
+Measured, 2010-2017, 40 draws, books of the form `w(κ) = (1−κ)·pool + κ·tilt` with the tilt the
+126-day Amihud top-100 (the leg last night refuted — used here only because the question is about
+the *gate*, not the leg):
+
+    book          names   own SR   null median   null sd   null p90   percentile
+    pool (EW)       809    +0.888      +0.895     0.0032    +0.899         0%
+    blend κ=0.1     809    +0.888      +0.886     0.0060    +0.894        78%
+    blend κ=0.3     809    +0.869      +0.849     0.0135    +0.867        98%
+    blend κ=0.6     809    +0.807      +0.764     0.0236    +0.794       100%
+    pure tilt        99    +0.702      +0.623     0.0398    +0.659       100%
+
+**Three things follow, and together they are the most useful result of the night.** (i) The
+equal-weight full-pool row behaves exactly as the old entry says — null sd **0.0032**, the
+replicas *are* the candidate — so the claim is right about the case it was measured on and wrong
+as a general statement. (ii) **Null power is continuous in κ**: the dispersion rises monotonically
+(0.0032 → 0.0060 → 0.0135 → 0.0236 → 0.0398) and the percentile with it, so a blend is a legal,
+gradable candidate and `portfolio-learning` is **not** structurally closed by this gate. (iii)
+**The two gates pull in opposite directions in κ, and research `#250` had the tension right but
+the mechanism wrong.** The null percentile is maximised at κ = 1 (the pure tilt) and decays toward
+50% as κ → 0; skill against the pool moves the other way whenever the tilt loses to the pool. The
+κ = 0.3 row is the existence proof that both can hold at once: **+0.869 against a pool at +0.866
+AND the 98th percentile of its own null.** So the construction is reachable — and it is **starved
+of a leg, not blocked by a gate**. The precondition is exact: *a tilt whose own validation null
+percentile is already well above 90%*, and the v3 board's best are `sa_resid_rev63_band` at 80%
+and tonight's `pt_decade_reversal_peer_neutral` at 75%. Nothing on the board qualifies yet, which
+is why no blend was written tonight.
+
+## Session summary — 2026-10-14/15 (nightly) — 2 trials of 8; the fourth distinct mechanism, and the null gate re-opened
+
+**Experiments run: 2 of 8. Verdicts: 2 GATE_FAIL. Nine further scores were declined on
+train-only arithmetic before being written, no holdout, forward or incubation file was read, and
+the seat is still empty.** The engine suite is green (92 passed).
+
+    #  candidate                         family           verdict    train  val   skill   CI90          2x cost  turn  null %ile
+    4  rv_arbrisk_peer_neutral           range-variance   GATE_FAIL  +0.57  +0.10  -0.23  [-0.54,+0.02]  -0.29   4.4x     0%
+    5  pt_decade_reversal_peer_neutral   price-trend      GATE_FAIL  +0.56  +0.33  -0.01  [-0.29,+0.28]  -0.03   2.7x    75%
+
+Equal-weight pool: **+0.34 on validation, +0.524 on train**. Both trials failed on the
+random-selection null alone; no other hard gate bound. `scripts/rank_trials.py` puts all five v3
+trials in tier 1 of a five-trial board, and `pt_decade_reversal_peer_neutral` is now the board's
+best on skill (−0.01) and `P(best)` (38%).
+
+**Budget allocation, planned before the first hypothesis was written.** 1 trial in
+`range-variance` — a family with **no recorded v3 trial** — which satisfies the "at least one in
+a family with no recorded trial at all" rule; 1 in `price-trend`, against its cap of 2. No family
+reached a cap. `distinct_mechanisms` is now **4**, so the "at most 2 in any one family until four
+distinct mechanisms have a recorded lead" clause is satisfied for the first time under v3 and no
+longer binds future sessions. The nine declines were spread across `price-trend` (residual
+momentum, long-run mean reversion at a second window), `range-variance` (variance ratio, average
+peer correlation), `seasonality-calendar` (the same-calendar-month seasonal, both alignments; the
+turn-of-month differential), `lead-lag-spillover` (Hou-Moskowitz price delay) and
+`portfolio-learning` (the five-leg combination, declined on F6/F7 arithmetic) — so the breadth is
+in the screens, and `seasonality-calendar` and `lead-lag-spillover` now have measured non-results
+rather than no coverage.
+
+**Best finding of the night, in one sentence.** **A standing structural claim — that v3's
+region-matched null collapses against a near-full-pool book and therefore closes
+`portfolio-learning` — is wrong as stated: it collapses only against a near-full-pool
+EQUAL-WEIGHT book, because the null permutes the candidate's weight vector within region, so a
+pool-plus-tilt blend is gradable, its null power rises continuously in the tilt weight κ, and a
+κ = 0.3 blend measured +0.869 against a pool at +0.866 at the 98th percentile of its own null**
+(F8). The construction research `#250` proposed is therefore reachable and is **starved of a leg
+rather than blocked by a gate**, with an exact precondition: a tilt whose own validation null
+percentile is already well above 90%, which nothing on the board has (best: 80% and 75%).
+
+**The other three readings that make tonight a structure rather than two failures.**
+
+1. **The first positive selection term v3 has recorded on validation** (trial #5). Decomposing a
+   trial the way F8's arithmetic suggests: the null median sits *below* the pool, so the book's
+   geography cost about −0.04, and selecting the decade's losers inside that frame **earned
+   +0.034**. Both earlier region-neutralised books sat at the 0th percentile. The decade-reversal
+   mechanism is **not refuted** — it is a dead heat with the pool (skill −0.006, 2x costs −0.029,
+   delisting haircut 0.000) at 2.7x turnover against the pool's own 0.89x one-way, and the 90%
+   null gate is the one thing it missed.
+2. **The null median's position relative to the pool is a free, signed read on a book's
+   geography, and the two trials came out with opposite signs** — arbitrage risk's geography cost
+   −0.054 where last night's illiquidity book's *earned* +0.09. Neither was predicted by any
+   whole-pool train screen. Quote it with every trial.
+3. **A clean screen sheet is not evidence, and tonight supplies the sharpest instance.** Both
+   trials passed the full standing screen — region-matched excess on both sides, beta, the
+   volatility ratio the 2026-10-13 entry added, turnover, the relabelling rho, and the new
+   appraisal ratio — and the one with the **stronger** sheet (arbitrage risk: +27.4 bps/63d at
+   t +2.24 with no geography component at all, AR +0.38) came out at the 0th percentile while the
+   weaker-looking one reached the 75th. The mid-session hypothesis that *flatness of the excess
+   in bps per day* was the column predicting these failures is **refuted within the same session**
+   — both candidates were flat and they landed 75 percentile points apart. Recorded as wrong in
+   trial #4's lesson and corrected in trial #5's.
+
+**Second methodological finding, and it retires a v2 learnings line.**
+`strategies/lib/features.seasonal_same_month_return` publishes, on the last trading day of month
+*m*, the average of past month-*m* returns — **the month that has just ended, not the month a book
+formed then will hold**. Rebuilt properly aligned, the Heston-Sadka seasonal is a region-matched
+null here (+21.7 bps/63d, t +1.78); the helper's off-by-one version reads t +3.15, and the two are
+**orthogonal** (rank rho −0.086). So the v2 line recording the seasonal as "significantly negative,
+i.e. inverted" measured the misaligned object and is not evidence about the published effect. The
+helper was **not edited** (`strategies/lib/` is append-only by the manual); F3 is the warning.
+
+**Research `#253` closed with the answer that was not assumed**: combining legs does not cancel
+turnover on this panel, it **adds** 36% to the mean leg's churn (F6), so the 2026-10-13 finding
+that a combiner has nothing to combine on the signal side is not rescued on the cost side.
+
+**Ideas for the next session.** None is holdout-informed; no holdout or forward number was read.
+
+1. **The sharpest live item is F8's blend, and it is one leg away.** The precondition is a tilt
+   whose *validation* null percentile is comfortably above 90%. The board's best are
+   `sa_resid_rev63_band` (80%) and `pt_decade_reversal_peer_neutral` (75%). Note the direction
+   carefully: blending **lowers** the null percentile toward 50% as κ → 0 and **raises** skill
+   whenever the tilt loses to the pool, so a blend cannot rescue a leg that fails its own null —
+   it can only rescue a leg that **beats its null and loses to the pool**, which is exactly the
+   shape `lv_illiq_peer_neutral_band` had on *train* and exactly what the lab has never found on
+   validation. Searching for that shape is a sharper target than searching for skill.
+2. **Do not re-buy tonight's declines without a stated reason**: residual (Blitz-Huij-Martens)
+   momentum, the variance ratio, average peer correlation, Hou-Moskowitz price delay, the
+   turn-of-month differential, the same-calendar-month seasonal in **either** alignment, the
+   20-year window of the decade-reversal score (one object with the 10-year, rho +0.872), and the
+   five-leg z-score combination. Do not re-run `pt_decade_reversal_peer_neutral` as a parameter
+   sweep — its band grid and both windows are already measured in F4.
+3. **What is still open.** `statistical-learning` and `portfolio-learning` have no v3 trial;
+   F8 has reopened the second of them on the gate side, and F6/F7 say a combiner still needs a
+   signal. `seasonality-calendar` and `lead-lag-spillover` now have measured non-results at the
+   one construction each that v3's gate set admits, so they are closed rather than uncovered.
+   The honest reading is unchanged from last night and now has 20-odd region-matched scores behind
+   it: the free-daily-OHLCV score space is close to exhausted, and the next real move is either a
+   **construction** the gate set rewards (F8's blend is the first such construction the lab has
+   identified) or an input the panel does not have.
+4. **From `research/SUMMARY.md`, priced tonight**: **`#249`** implemented and calibrated against
+   the engine, with its scope narrowed — a positive train appraisal ratio bounds the *train* prize
+   and said nothing about validation on either trial (F1); **`#250`** reopened and characterised,
+   its gate tension measured rather than assumed, and reduced to a one-line precondition (F8);
+   **`#251`** applied to tonight's two legs (F7); **`#253`** closed (F6); **`#252`** stands as the
+   interpretation rule it was written as. Still unspent there: the **CHL close-high-low spread
+   estimator**, the **absorption ratio** and **betaless variance decomposition**, **turnover and
+   the momentum life-cycle**, **#239**/**#240**, **#254** (the empirical-Bayes posterior on the
+   ratio, now more pressing with five tier-1 trials), **#255** (the band's exit threshold) and
+   **#256**.

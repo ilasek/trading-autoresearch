@@ -4721,7 +4721,12 @@ across experiments; prune entries that later evidence contradicts.
       lowvol_pk -0.0028 (-0.20)    seas -0.0142 (t -2.01)
 
   **The same-calendar-month seasonal is significantly NEGATIVE here, i.e. inverted against the
-  sign v1 traded it in** — the sharpest single piece of evidence that v1 leg signs do not carry
+  sign v1 traded it in** [**CORRECTED 2026-10-15: this measured a MISALIGNED score and is
+  not evidence about the published effect.** `features.seasonal_same_month_return` publishes, on
+  the last trading day of month *m*, the average of past month-*m* returns -- the month that has
+  just ended, not the month a book formed then will hold. Rebuilt properly aligned the seasonal is
+  a region-matched **null** (+21.7 bps/63d, t +1.78); the helper's version reads t +3.15 and the
+  two are orthogonal (rank rho -0.086). See journal F3, 2026-10-14/15.] — the sharpest single piece of evidence that v1 leg signs do not carry
   over, and it is deliberately *not* traded in its new sign, because flipping a sign because the
   number came out that way is fitting the screen. Low-vol and low-idiosyncratic-vol are **one
   object** (rho +0.82) and both are nulls, matching fifteen v1 `range-variance` screens on 140
@@ -4857,8 +4862,16 @@ across experiments; prune entries that later evidence contradicts.
   quarter-end (t +3.32, n 82) against +9.4 bps in other months (t +0.99, n 164)**, which is a flow
   concentration worth knowing and is not a trade. The way into that family is a cross-sectional
   seasonal on a fully-invested book, and v2 already measured the same-calendar-month version as
-  significantly *inverted* here. (ii) **A near-full-pool book cannot clear a null gate that
-  randomises its own names**: a random relabelling of ~1,000 eligible names is approximately the
+  significantly *inverted* here. (ii) **A near-full-pool EQUAL-WEIGHT book cannot clear a null gate that
+  randomises its own names** [**CORRECTED 2026-10-15 -- the word EQUAL-WEIGHT was missing and the
+  general claim is false.** `benchmarks.random_null_v3` draws each entered name's substitute from
+  the eligible *unused* names of the same type and region, so a candidate that enters every
+  eligible name gets replicas that are within-region **permutations of its weight vector**. A
+  permutation of an equal-weight book is the identity (measured null sd 0.0032); a permutation of
+  a non-uniform one is not, and null dispersion rises monotonically in the tilt weight (0.0060 /
+  0.0135 / 0.0236 at kappa = 0.1 / 0.3 / 0.6), carrying the percentile to 78 / 98 / 100%. So
+  `portfolio-learning` is **NOT** closed by this gate, and a pool-plus-tilt blend is a legal,
+  gradable candidate. See journal F8, 2026-10-14/15.]: a random relabelling of ~1,000 eligible names is approximately the
   same book, so the null distribution collapses onto the candidate and the percentile sits near
   50%. Any `portfolio-learning` or index-tracking-drag proposal has to be concentrated enough for
   the null to have something to randomise, which is a real design constraint and not a detail.
@@ -4981,3 +4994,89 @@ across experiments; prune entries that later evidence contradicts.
   positions in `target.index` as its clock — a sparse month-end frame makes its embargo count
   *months* instead of days, which is the same class of confound that spoiled the v2 `sl_ridge_six_*`
   trials. A first draft here made that error and produced one scored date.
+
+- **[Measured 2026-10-14/15, nightly] THE REGION-MATCHED NULL PERMUTES A CANDIDATE'S WEIGHT VECTOR
+  WITHIN REGION, SO NULL POWER IS CONTINUOUS IN HOW CONCENTRATED THE BOOK IS — AND A POOL-PLUS-TILT
+  BLEND IS A LEGAL CANDIDATE THAT CAN CLEAR THE NULL GATE AND TIE THE POOL AT THE SAME TIME.** This
+  supersedes the 2026-10-09/10 claim corrected above. Books `w(k) = (1-k)*pool + k*tilt`, 2010-2017,
+  40 draws, tilt = 126-day Amihud top-100:
+
+      book          names   own SR   null median   null sd   null p90   percentile
+      pool (EW)       809    +0.888      +0.895     0.0032    +0.899         0%
+      blend k=0.1     809    +0.888      +0.886     0.0060    +0.894        78%
+      blend k=0.3     809    +0.869      +0.849     0.0135    +0.867        98%
+      blend k=0.6     809    +0.807      +0.764     0.0236    +0.794       100%
+      pure tilt        99    +0.702      +0.623     0.0398    +0.659       100%
+
+  **The two gates pull in opposite directions in `k`**: the null percentile is maximised at `k = 1`
+  and decays toward 50% as `k -> 0`, while skill against the pool rises as `k` falls whenever the
+  tilt loses to the pool. The `k = 0.3` row is the existence proof that both can hold — **+0.869
+  against a pool at +0.866 at the 98th percentile of its own null**. Research `#250` had the
+  tension right and the mechanism wrong (it is a smooth decay, not a collapse). **The precondition
+  is exact and is the thing to search for: a tilt that BEATS ITS OWN NULL AND LOSES TO THE POOL on
+  validation.** A blend cannot rescue a leg that fails its own null. The v3 board's best validation
+  null percentiles are 80% (`sa_resid_rev63_band`) and 75% (`pt_decade_reversal_peer_neutral`), so
+  nothing qualifies yet. Note the shape `lv_illiq_peer_neutral_band` had on *train* was exactly
+  this one; finding it on validation is the open problem.
+
+- **[Measured 2026-10-14/15, nightly] THE NULL MEDIAN'S POSITION RELATIVE TO THE POOL IS A FREE,
+  SIGNED READ ON A BOOK'S GEOGRAPHY, AND THE SELECTION TERM IS WHAT IS LEFT — QUOTE BOTH WITH EVERY
+  TRIAL.** Every v3 trial already prints its null median and the pool's Sharpe, so the split costs
+  nothing: `geography = null_median - pool`, `selection = candidate - null_median`. Three trials now:
+
+      trial                             pool   null med   geography   selection   percentile
+      lv_illiq_peer_neutral_band       +0.337    +0.424      +0.087      -0.139        0%
+      rv_arbrisk_peer_neutral          +0.337    +0.283      -0.054      -0.179        0%
+      pt_decade_reversal_peer_neutral  +0.337    +0.297      -0.040      +0.034       75%
+
+  **The geography term has come out with both signs and no whole-pool train screen predicted either
+  one.** The third row is **the first positive selection term v3 has recorded on validation**, which
+  is why a dead-heat skill of -0.006 is a better result than it looks. Note that a calendar-peer
+  quota does *not* make the geography term zero: it matches the book's region mix to the eligible
+  panel's, and the pool is that panel equal-weighted, so the residual is the interaction between
+  region weights and within-region returns over the scored window.
+
+- **[Measured 2026-10-14/15, nightly] THE FULL STANDING PRE-TRIAL SCREEN HAS NOW PASSED THREE
+  CONSECUTIVE BOOKS THAT VALIDATION REFUSED, AND ON ONE NIGHT IT ORDERED TWO OF THEM BACKWARDS. READ
+  IT AS A FILTER AGAINST RELABELLINGS, NOT AS EVIDENCE OF SKILL.** The screen is now six columns —
+  region-matched excess on both sides, slice beta, slice volatility as a ratio to the pool's,
+  turnover, the relabelling rho against every refuted score, and (new) the train appraisal ratio
+  `AR = alpha/sigma_eps` against the pool. Tonight the candidate with the **stronger** sheet
+  (`arb_risk`: +27.4 bps/63d at t +2.24, whole-pool and region-matched agreeing to 0.1 bps so no
+  geography component at all, beta 0.90, vol 0.92x, AR +0.38, rho <= +0.17 to all three refuted
+  objects) landed at the **0th** percentile, and the weaker-looking one at the **75th**. **Two
+  specific corrections fall out.** (i) **Flatness of the excess in bps per day across horizons does
+  NOT predict the null percentile** — a hypothesis formed mid-session and refuted inside it, since
+  both candidates were flat (0.4-0.5 and 1.1-1.4 bps/day across 21-252 days) and landed 75
+  percentile points apart. Keep the 2026-10-13 reading of flatness as what it was: a warning that a
+  level premium will be judged by a ratio gate. (ii) **A positive train appraisal ratio bounds the
+  TRAIN prize and says nothing about validation**: research `#249`'s formula priced `arb_risk`'s
+  train prize at ~0.10 of Sharpe and its validation skill came in at **-0.23**. The screen's
+  demonstrated value is the one thing it has actually delivered twice — catching a score that is a
+  refuted mechanism in costume before a trial is spent on it.
+
+- **[Measured 2026-10-14/15, nightly] COMBINING LEGS DOES NOT CANCEL TURNOVER ON THIS PANEL; IT ADDS
+  36% TO THE MEAN LEG'S CHURN.** One-way name churn per year, K=100 region-quota books, monthly, no
+  band, train: `arb_risk` 1.35, `decade_rev` 0.87, `amihud126` 0.86, `mom252` 2.58, `low_vol126`
+  1.39; mean of the legs **1.41**; the equal-weight z-score combination **1.91**; ratio **1.36**.
+  Chen-Velikov's limitation note argues combining helps *particularly through trading costs* because
+  the legs' trades partly offset at the name level; here the sign is the other way, because the
+  combined score's top-100 is a shifting compromise that no single leg's ranking holds still. So the
+  2026-10-13 finding that a combiner has nothing to combine on the **signal** side is not rescued on
+  the **cost** side, and research `#253` is closed. Rider: measured at fixed K with no band on the
+  legs; banding each leg before combining is the one untested way the sign could move.
+
+- **[Measured 2026-10-14/15, nightly] FOUR MORE FREE-OHLCV SCORES PRICED TO NULLS REGION-MATCHED,
+  AND TWO OF THEM CLOSE A FAMILY EACH.** Top or bottom 100, forward 63-day region-matched excess,
+  249 train month-ends: **Blitz-Huij-Martens residual momentum** +6.4 (t +0.29) *and* rank-correlated
+  **+0.903** to the raw 12-1 momentum already measured as a null here, so it is a refinement of a
+  null rather than a new mechanism and the momentum lineage has no variants left; **Hou-Moskowitz
+  price delay** (1 - R2(contemporaneous) / R2(+4 weekly market lags), 104 weeks) -12.2 (t -0.70),
+  which was `lead-lag-spillover`'s last reachable sub-mechanism after the 2026-10-13 structural
+  argument closed region rotation, so that family is now closed on measurement too; the
+  **Lo-MacKinlay variance ratio** +5.3 (t +0.32); and the **turn-of-month differential** +21.5
+  (t +1.77). **One of them is the cleanest demonstration of the geography lesson yet**: average peer
+  correlation reads -44.9 at t -2.43 against the whole pool and **-8.7 at t -0.54 region-matched**,
+  so the whole apparent signal was the region mix — and it is also the control proving arbitrage
+  risk is not low-comovement in costume, since the *level* of comovement is a null while the
+  unhedgeable *share* was not.
