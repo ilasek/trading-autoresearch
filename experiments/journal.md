@@ -19798,3 +19798,5 @@ that a combiner has nothing to combine on the signal side is not rescued on the 
    the momentum life-cycle**, **#239**/**#240**, **#254** (the empirical-Bayes posterior on the
    ratio, now more pressing with five tier-1 trials), **#255** (the band's exit threshold) and
    **#256**.
+
+## Research session — 2026-10-15 (learning agent): 3 notes added, see research/SUMMARY.md

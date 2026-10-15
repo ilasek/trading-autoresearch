@@ -434,6 +434,33 @@ snippets. Three practical limits to plan around:
   for `Abstract`; that record carried the full verbatim abstract while holding no file and no
   `<meta name="description">`). For a three-author paper, enumerating all three sites costs four
   requests and is still the right first move; it is simply not guaranteed to work.
+- **A single-author consultancy's own flat `/wp-content/uploads/<slug>.pdf` directory is a first-try
+  channel, and its landing page prints the filename so nothing has to be guessed** (added
+  2026-10-15). `burns-stat.com` served two working papers this way on the first attempt (215 KB and
+  916 KB; `pdftotext -layout` → 52 KB and 30 KB of clean text, 320 and 213 instances of `" the "`,
+  `( )`-dropout check zero). The route is `/documents/working-papers/<slug>/` for the landing page,
+  then the single `href="/wp-content/uploads/<file>.pdf"` out of it. This extends the 2026-09-18
+  faculty-page lesson and the 2026-10-13 `robjhyndman.com/papers/` lesson to **practitioner
+  consultancies**, which matters because a one-person firm's working paper is often the *primary*
+  source for a method the later literature only re-derives — and because the same method's Springer
+  chapter was unobtainable. **For a practitioner method, try the author's firm before the publisher.**
+- **`openaccess.city.ac.uk` also serves sponsored industry *reports*, not only accepted manuscripts
+  of journal articles** (added 2026-10-15; third confirmed read from that host, after
+  `notes/2026-08-22-rebalancing-return-attribution-critique.md` and
+  `notes/2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`). A 1.3 MB
+  consultancy-sponsored Cass Business School report whose only other home is an SSRN abstract page
+  came back on the first try and parsed into 135 KB of clean text. Two reusable points: the repository's `id/eprint/<n>/1/<Title
+  With Spaces>.pdf` path form needs the spaces percent-encoded, and **a report's figures do not
+  extract**, so check whether the prose restates the numbers before relying on it — in this case it
+  did, and the chart-only numbers were left out of the note rather than guessed.
+- **Re-confirmed 2026-10-15, both as `research/README.md` already records them**: `papers.ssrn.com`
+  answered a *green OA location named by OpenAlex* with **HTTP 403 and a 5.5 KB Cloudflare body**,
+  and `researchaffiliates.com/content/dam/ra/documents/<file>.pdf` answered with **HTTP 200 and the
+  70 KB destination chooser**. Together they closed the only two channels for a **venue-tier-1 JPM
+  article**, which is now a named unobtained pointer. The transferable scrap: when both of a paper's
+  channels are already on this list as dark, **spend the budget on a different source for the same
+  mechanism rather than on a third channel** — tonight a tier-B source with a fully described
+  construction replaced it and the note is better for having the construction.
 
 ## Anti-lookahead policy (hard rules)
 

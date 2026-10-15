@@ -6300,6 +6300,104 @@ self-hosts it.
 
 ---
 
+### The null the difference is compared against — random portfolios, where their centre sits, and what a percentile tests (cross-family)
+
+**[2026-10-15] Read this first: the gate that has decided every v3 trial is an *m-out-of-n
+bootstrap*, its centre is the equal-weight pool **by construction** rather than by coincidence, and
+the literature on it says it is a sound descriptive instrument and an unsound significance test —
+with the unsoundness running in the lab's favour.** Sessions 58–61 read the numerator (a candidate's
+Sharpe), the subtrahend (the equal-weight pool) and the subtraction (skill as a sufficient
+statistic). The one object left in that chain is **the distribution the difference is compared
+against**, and a grep across all 189 prior notes returned **zero** for `monkey`, `Burns`,
+`random selection`, `Kosowski`, `luck versus skill` and `Surz`, with `random portfolio` appearing
+once, in an implementability aside. The folder had covered resampling against a *max* statistic over
+many strategies (2026-09-15, 2026-09-16) and never the gate's own null — this although
+`experiments/learnings.md` [2026-10-07] records that **this gate, not the deflator, is the binding
+constraint** on the board.
+
+**Result one — the gate's identity, and why its centre cannot be anywhere else.** Drawing `m` names
+from `n` and weighting them like the candidate "essentially constitutes an m-out-of-n bootstrap". For
+weights near `1/n` the uniform measure on the simplex concentrates: `E‖ω‖²₂ = (2n − 1)/n²` and
+therefore `E‖ω − ω̄‖²₂ = (n² − n)/n³`, which **tends to zero** — uniform random portfolios converge
+on the equal-weighted portfolio, and sparse or concentrated books are "extremely unlikely to be
+sampled". The two limits are read off directly: at `m = n` the null "merely provides a measure of the
+uncertainty in the performance of the equal-weighted strategy", and as `m` falls the draws spread out
+along the **risk** axis while still covering only a small region of the feasible set. Independently,
+ten million random-weight indices on a thousand-name pool put the equal-weighted index at the
+**mode** of the resulting performance distribution, and the result survives a tenfold coarsening of
+the sampler (1,000 draws of 0.1% versus 100 draws of 1%). **This is the structural explanation of two
+things the lab measured and could not account for**: [2026-10-07]'s finding that the null's 90%
+quantile is nearly flat across a twenty-fold range of K, so "the gate reduces to beat pool +
+1.28·sd(K) and cannot be gamed by widening or concentrating the book" — the centre is the pool and
+only the width moves — and the 2026-10-14/15 F8 finding that the null "collapses against a
+near-full-pool equal-weight book", which is the `m = n` case.
+
+**Result two — the test is lenient, not harsh, and that is the single most useful line in this
+entry.** The same geometry that fixes the null's centre makes its support "a thin shell of typical
+allocations", and using such a distribution for significance testing "would likely result in
+**overly optimistic rejections of the Null hypothesis**". A too-narrow null is *easier* to exceed, so
+the lab's run of 0th-percentile results is **stronger** evidence against those candidates than the
+percentiles suggest, and the gate's reputation as the thing that kills every trial is not evidence
+that it is unfair. That reaches `#256`'s conclusion — a long run of nulls is evidence about the
+protocol being right, not about the search being broken — by a third independent route, after the
+net-expected-return route [2026-10-14] and the benchmark-tilt route [2026-10-13]. **And v3 escapes
+the other half of the critique entirely**: the literature's standing complaint is a reference-point
+ambiguity ("no skill" is undefined until you say whether the unskilled investor holds cap weights or
+equal weights, and the two give opposite verdicts), and v3 pairs a naive random portfolio with the
+naive benchmark it is centred on. Benchmark and null centre coincide. The incoherent pairing is what
+produces monkey alpha — and the demonstration of how far that goes is a book formed on **how many
+times a letter of the alphabet appears in a company's name**, which beat a cap-weighted parent index
+with significant factor loadings and a significant alpha, for *every* letter, and in its inverted
+form too, while sitting squarely inside the high-mass region of a naive random portfolio.
+
+**Result three — the method's own operating manual, which the lab has been running without.** Four
+items, each arithmetic rather than empirical: the Monte Carlo p-value is
+`(n_at_least_as_good + 1)/(N + 1)` and is **never zero**, so with 200 draws the finest resolvable
+p-value is `1/201` and the gate *is* a one-sided 10%-level test (**#257**); sub-period p-values
+combine by **Stouffer** on centered values and **not by Fisher**, whose `−2 Σ ln p` certifies skill
+and anti-skill at the same tiny p-value on a record extreme in both directions — the exact record v3
+produces when it reports 1997–2008 and 2009–2017 apart (**#258**); the *sequence* of sub-period
+percentiles is a control chart that separates "the signal decayed" from "the null drifted", a
+distinction that in the source's own worked case resolved as the second once the draws were matched
+on the number of closing positions; and the **matched-dimension rule**, which is the general form of
+all of it — **a random-portfolio test has power against exactly the dimensions on which the candidate
+differs from its draws, and none against the dimensions that are matched.** Every matching decision
+is simultaneously a confound removed and a mechanism made invisible. v3 matches the holdings
+schedule, the weights, the stock/ETF mix, the region and the costs; it does not match **realized
+volatility**, which the source names as a failure mode that makes p-values drift. A corollary worth
+quoting with every trial: the null's **dispersion in a window is that window's opportunity set** — if
+every asset returned the same amount, every benchmark-relative ratio would be zero whatever the skill
+— so a percentile is skill *divided by* opportunity and percentiles are not comparable across windows
+or across K (**#261**).
+
+**The one live tension, and it is a genuine disagreement between two of tonight's sources about the
+same axis.** The methodological source says an **unmatched volatility gap flatters the candidate**
+and should be matched away. The empirical source says the volatility axis is where the only real edge
+was: across ten million draws, schemes re-weighting on price or size sat *inside* the random
+distribution, every scheme setting weights against the covariance structure sat above most of it, and
+variance minimisation sat above **all** of it. Both can be true, and which one applies here turns on
+a mechanism: v3's null copies the candidate's weight **vector** onto permuted names, so a variance
+reduction obtained by *which* names are held is inside the null's reach while one obtained by fitting
+weights to the covariance of the names *actually held* may not be. That is **#260**, the night's one
+trial, and it is proposed with its counter-evidence attached — `rv_arbrisk_peer_neutral` ran at 0.92×
+the pool's volatility and still landed at the 0th percentile. **The night's one free diagnostic
+(#259) is the use the critical source endorses**: the 200 replicas each have an exposure to the
+candidate's own score and a realized Sharpe, and the scatter of the second on the first says whether
+the candidate's book is an outlier relative to *equally exposed* random books or a typical member of
+its own exposure class — with a standing prediction to test it against, that exposure versus risk is
+U-shaped and constraints land the feasible set on one leg of the U, so the sign of the relation
+*inside* a constraint set can differ from the sign of the unconstrained sort. **New: #257–#262**,
+four free, one trial, one anti-candidate. **Nothing of the lab's is closed by this entry**; no lab
+measurement was taken tonight and the holdout was not read. **One source recorded as body
+unobtained:** Arnott–Hsu–Kalesnik–Tindall (JPM 2013), the best-known primary of the monkey result and
+tier 1 on venue — SSRN 403s and the firm's own PDF library answers with a destination chooser, so its
+claims appear only where the preprint quotes them verbatim, marked second-hand.
+→ `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md`,
+`notes/2026-10-15-random-weight-indices-and-the-equal-weight-centre.md`,
+`notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md`
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -11309,6 +11407,120 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-09-06-long-side-share-of-anomaly-profits.md` ·
     `notes/2026-09-02-anomalies-by-size-group.md`
 
+257. **FREE — report the random-selection gate as a Monte Carlo p-value with its resolution attached,
+    not as a bare percentile, because the percentile hides both the test's level and its granularity.**
+    The correct Monte Carlo p-value counts the observed strategy among the draws:
+    `p = (n_draws_at_least_as_good + 1) / (N + 1)`, never zero. With v3's `N = 200` the finest
+    attainable p-value is `1/201 ≈ 0.005`, so the board's recorded "0th percentile" is
+    `p ≈ 0.005` one-sided *against* the candidate, "75th percentile" is `p ≈ 0.25`, and F8's "98th
+    percentile" is `p ≈ 0.02` **and no finer** — a distinction that matters the moment such a number
+    is combined with anything else or compared with the deflator. A gate at the 90% quantile of 200
+    draws *is* a one-sided 10%-level Monte Carlo test; saying so makes it commensurable with every
+    other test the lab runs. For any combining step use the **centered** form
+    `(n + 0.5)/(N + 1)`, which keeps a draw-beating-everything record off the normal quantile's
+    infinity. Tier C source, but the arithmetic is standard and sample-free.
+    → `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md`
+
+258. **FREE — combine the two train sub-period null p-values with Stouffer's method, never Fisher's,
+    and then read the *sequence* of sub-period percentiles as a control chart.** v3 already reports
+    train skill for 1997–2008 and 2009–2017 apart, and non-overlapping windows combine legitimately.
+    Fisher's `−2 Σ ln p` has a concrete pathology on exactly the record the lab keeps producing — a
+    book strong in one sub-period and weak in the other certifies skill **and** anti-skill at the same
+    tiny p-value — while Stouffer on centered p-values returns ~0.5 and admits weights for unequal
+    window lengths. The second half is the more valuable one: a *sequence* of non-overlapping
+    sub-period null percentiles distinguishes two hypotheses that the lab's single-window
+    `geography`/`selection` split cannot — **the signal decayed** versus **the null drifted away from
+    the candidate on an unmatched dimension**. In the source's own worked case the apparent decay of a
+    strategy's edge disappeared once the draws were matched on the number of positions that close,
+    i.e. it was the second hypothesis. Tier C source; the pathology is arithmetic.
+    → `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md`
+
+259. **FREE, and the night's main buildable item: regress the 200 replica books' realized Sharpe on
+    each replica's exposure to the candidate's own score, with a quadratic term.** Every v3 trial
+    already builds and scores 200 region-matched replicas and then discards everything but their
+    median and their 90% quantile. Each replica has a computable exposure `γ = ⟨ω_replica, score⟩` on
+    the dates the trial already uses, so the scatter costs nothing and answers three questions the lab
+    currently cannot: **(a)** is the candidate's book an outlier relative to *equally exposed* random
+    books, or a typical member of its own exposure class — this is the folder's "is a sorted slice
+    evidence" question in the form the source endorses, and it separates a real tilt from a draw that
+    landed where the score happened to be high; **(b)** is the exposure–performance relation monotone
+    over the *reachable* range of exposure, given that constraints can land the feasible set on one
+    leg of a relation that is U-shaped unconstrained, so the sign inside a constraint set can differ
+    from the sign of the unconstrained sort; **(c)** does the exposure axis account for the
+    `geography`/`selection` split the lab now quotes with every trial, those two numbers being
+    summaries of this scatter. The source's standing prediction to test against: exposure versus
+    *risk* is U-shaped, both tails carrying higher variance than the unexposed middle — which under a
+    Sharpe objective penalises precisely the end a top-K sort concentrates in. This is a read of
+    output the engine already produces: no protocol change, no new data, no holdout. Tier C as
+    evidence (preprint, one market, overlapping sample), and the diagnostic itself is construction,
+    not a finding.
+    → `notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md`
+
+260. **ONE TRIAL, screen first — the *variance* axis is the one dimension a weight-permuting null may
+    structurally fail to imitate, so risk weighting *within* an already-selected slice is the
+    construction the gate set may reward.** Across ten million random-weight draws on a thousand-name
+    pool, the schemes that re-weighted on price or size sat inside the random distribution while every
+    scheme that set weights against the covariance structure sat above most of it, and variance
+    minimisation sat above **all** of it. The mechanism that makes this relevant rather than
+    anecdotal: v3's null copies the candidate's **weight vector** onto region-matched replacement
+    names, so a variance reduction achieved by *which* names are held is inside the null's reach,
+    while one achieved by fitting weights to the covariance structure of the names *actually held* may
+    not be — the permuted book inherits the vector's shape but not its fit. Four riders, all of which
+    belong in the journal before the file is written. (i) **The lab has one observation pointing the
+    other way**: `rv_arbrisk_peer_neutral` ran at 0.92× the pool's volatility and still landed at the
+    0th percentile — one observation, not a refutation, but it sets the prior. (ii) The implementable
+    form is the **risk-parity-flavoured** one (inverse volatility, equal risk contribution) rather
+    than the optimised one, because `#1`'s parameter-count screen and the folder's nodewise-precision
+    note both say a covariance inverse is not available at ~1,000 eligible names — and `#1` also says
+    risk weighting loses when components have unequal Sharpe ratios, which is the live objection to
+    this item and must be answered on train first. (iii) All the source's orderings are **gross**, and
+    non-cap weighting mechanically overweights thinner names, which is where v3's per-name cost tiers
+    and the UK/HK/FR/IT/ES transaction taxes bite hardest. (iv) A low-volatility **weighting** is not
+    the low-volatility **selection** the lab already refuted (its `range-variance` lead reduced to
+    "equal-weight the low-beta 37% of the universe"); declare the distinction, and the rank
+    correlation to that refuted object, in the candidate file. Tier B source, no overlap.
+    → `notes/2026-10-15-random-weight-indices-and-the-equal-weight-centre.md` ·
+    `notes/2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`
+
+261. **FREE — two standing interpretation rules about the gate itself: it is *lenient* rather than
+    harsh, and a percentile is skill divided by the window's opportunity.** *(a)* A null built by
+    drawing `m` names from `n` and weighting them like the candidate is an **m-out-of-n bootstrap**,
+    and for weights near `1/n` the uniform measure concentrates on a thin shell of near-pool books —
+    `E‖ω − ω̄‖²₂ = (n² − n)/n³ → 0`. A null whose support is that narrow produces **over-optimistic
+    rejections**, so the gate is easier to pass than a properly dispersed control would be, and the
+    lab's 0th-percentile results are *stronger* evidence against those candidates than their
+    percentiles suggest. Together with `#256` (net expected return ≈ zero) and the equal-weight pool's
+    own tilt, that is three independent routes to "the nulls are real, and the protocol is right".
+    *(b)* The dispersion of the null in a window **is** that window's opportunity set — the source's
+    cleanest argument is that if every asset returned the same amount, every portfolio's
+    benchmark-relative ratio would be zero whatever the skill. So a percentile is skill *scaled by*
+    opportunity, which makes percentiles non-comparable across windows and across book sizes: the lab's
+    own K-table has the null `sd` falling from 0.094 at K=10 to 0.013 at K=200, so a large-K book is
+    graded through a much tighter lens than a small-K one at identical skill. Quote the null `sd`
+    beside every percentile. One scope limit: that K-table is the Sharpe-metric **shadow** of the
+    `1/n` geometry above, not independent corroboration of it — do not cite the two as agreeing.
+    → `notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md` ·
+    `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md`
+
+262. **ANTI-CANDIDATE — do not propose a random, equal-ish or "anything but cap weight" book as a
+    candidate, and discount every imported result whose benchmark is a capitalisation-weighted index
+    before reading it as skill.** The whole "monkeys beat the index" literature is a statement about
+    the gap between equal and capitalisation weighting, not about randomness: the standard random-weight
+    index is a multinomial perturbation of `1/n`, the equal-weighted portfolio sits at the **mode** of
+    the resulting performance distribution, and the result survives a tenfold coarsening of the
+    sampler. v3 benchmarks skill against the **equal-weight eligible pool**, so that entire premium is
+    *inside the lab's benchmark* and is unavailable to its candidates by construction — which is also
+    why an intentionally meaningless selection rule (counting a letter of the alphabet in company
+    names) can beat a cap-weighted parent index significantly, for every letter, and in its inverted
+    form too. The lab has met the same trap from its own side ("hold the longest-standing index
+    members", declined free as pure geography). And the rejoinder that makes this a rule rather than a
+    curiosity: by Sharpe's arithmetic, random portfolios beating the cap-weighted index does **not**
+    imply most strategies do — the random draw samples the *name* space uniformly where cap weighting
+    samples the *capital* space. Tier B and C sources, no overlap on the B one.
+    → `notes/2026-10-15-random-weight-indices-and-the-equal-weight-centre.md` ·
+    `notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md` ·
+    `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`
+
 ---
 
 ## Coverage log
@@ -11377,8 +11589,118 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-12 (session 59) | **The first session to read the estimation literature behind portfolio construction — how a forecast becomes weights when the covariance matrix cannot be inverted — and the first whose headline finding is an explicit impossibility conceded by the source itself.** Aim set by the blocked item last night left at the top: `#237`'s mixing weight needs `T > N + 4` and is not computable at ~1,000 eligible names, and the long-only version of the tracking-error frontier was an unobtained pointer. A grep across all 180 prior notes returned **zero** for `nodewise`, `precision matrix`, `POET`, `MAXSER`, `Black-Litterman`, `reverse optimization` and `implied returns` — 180 notes about what to forecast, none about how to weight it. Three results. *(1)* **`Σ⁻¹` is directly estimable at this width**: nodewise regression is `p` Lasso regressions, one per name, consistent for weights, variance and Sharpe even with more assets than observations, under sparsity of the *inverse* covariance (`s̄·log p / n = o(1)`), which is not sparsity of `Σ`; but the **maximum out-of-sample** Sharpe estimator is proved consistent only for `p ≪ n`, variance and Sharpe converge more slowly than weights everywhere, and the whole cluster improves the `Θ` half of `Θµ` and leaves the `µ` half at its sample mean — so the **mean-free** uses are the ones with guarantees. At daily frequency the lab is `p < n` on a full train split and `p > n` on a one- or two-year window, so **window length decides which theorem a candidate stands on**. *(2)* **The constrained version concedes long-only**: the tracking-error optimum is `m + κ(tangency − GMV)` with the benchmark entering only as the anchor (one knob, benchmark-independent direction), constraints cost nothing asymptotically, binding can be tested from the data — but the method handles a short-sale floor on **one** asset or on a **group's summed** weight and, in the authors' words, "cannot cover a short sales constraint for each asset in a portfolio", while the `p > T` guarantee rests on a *diverging* maximum Sharpe ratio (bounded ⇒ `p < T`). **"Weight constraints" in this literature means a few linear group budgets, not `p` non-negativity constraints.** *(3)* **The one anchoring knob that is computable here**: Black–Litterman's reverse optimization makes a benchmark into a return forecast (`Π = δΣω`, no mean estimation), and in the one cost-aware out-of-sample evaluation located the plain mean-variance book failed to beat `1/N` while the BL book beat both static benchmarks — attributed by its own sensitivity analysis to lower turnover (ruled non-transferable by `#238`) and to a **trailing-forecast-error confidence weight**, which needs no inverse, no optimiser and no `T > N + 4`. New: **#239–#243**, two free, two trials, one anti-candidate; the best free item is **#240** (the admissibility census that can rule the whole route out), the cheapest trial is **#241**. **Nothing of the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read. Access: both nodewise papers read from the authors' arXiv postings; Bessler–Opfer–Wolff read from **EconStor, which is working again** — this reverses `README.md`'s 2026-10-04 entry that recorded the host as dark behind Anubis. **Not read:** Black & Litterman (1992), closed at CFA Institute, construction taken from the peer-reviewed restatement; Bajeux-Besnainou et al. (2011), closed, described only as Caner–Fan describe it; and the CROWN preprint's own empirical section, **deliberately skipped** as a 2025-vintage sample. Still unobtained: **Plyakha–Uppal–Vilkov** (SSRN 403, EDHEC registration wall, Springer chapter closed, and the one third-party mirror reachable by search died at the transport layer) and **El-Hassan–Kofman (2003)** (`opus.lib.uts.edu.au` serves its bitstream as an OPUS **Log In** page — last night's finding, confirmed; the old `qfrc.uts.edu.au` working-paper path 403s; SAGE is Cloudflare-challenged; the UTS `/citation/handle/` endpoint does return a RIS record with the abstract). Also recorded: **`researchaffiliates.com` now answers every `/documents/*.pdf` request with HTTP 200 and a "Choose your destination" interstitial** pointing at `rafi.com`, a tenth looks-like-an-answer shape. | Callot–Caner–Önder–Ulaşan 2021 (JBES) + Caner–Medeiros–Vasconcelos 2023 (J. Econometrics) (`2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`); Caner–Fan (arXiv, CROWN) (`2026-10-12-tracking-error-and-weight-constrained-portfolios-in-high-dimensions.md`); Bessler–Opfer–Wolff 2017 (EJF), carrying Black–Litterman 1992 (FAJ) (`2026-10-12-black-litterman-benchmark-anchored-tilting.md`) |
 | 2026-10-13 (session 60) | **The first session to read the literature on the *benchmark* — the equal-weight pool v3 subtracts from every candidate's Sharpe — and the first to resolve this file's longest-carried unread pointer, to abstract level, after five further access channels.** Aim set by `research/README.md`'s rotation rule plus the standing [2026-10-11]/[2026-10-12] instruction that a change of objective means reading the literature about the new objective. A grep across all 183 prior notes returned **zero** for the equal-weighted portfolio as a *subject*: the folder held four notes on the diversification return as an identity and none on what equal weighting earns against capitalisation weights, which is exactly the object v3 made into the lab's null. Three findings. *(1)* The pool's return splits into a passive size/value tilt plus a fixed-weight **rebalancing** channel the authors put at roughly two-fifths of the gap in their sample. *(2)* That attribution collides head-on with a refutation this folder already holds (Cuthbertson et al.: rebalancing trades have **zero** expected value under IID, and pay only where relative prices mean-revert) — and the collision resolves into a conditional that makes the pool's channel a **mean-reversion bet**, which v3's own fill rule is designed to deny to candidates. *(3)* The tilt is the largest non-market factor exposure in professionally managed equity money and ~44% orthogonal to the standard eight, so **skill against this pool is a strictly harder statistic than alpha against a cap-weighted market** — reaching `#234`'s "concentrate, do not de-concentrate" conclusion by a wholly independent route, and giving the lab's near-zero v3 skill numbers a second reading. The rotation note is a methodology one in `statistical-learning`: the theorem that says when K-fold CV is valid on dependent data, which corrects a convention this file had twice recorded as a result — and whose scope, read with [2026-10-12]'s detector, excludes the lab's panel case in three of four words. | Plyakha, Uppal & Vilkov (Springer chapter 2021; WP 2012/2014) — abstract level only, body unobtained (`2026-10-13-equal-weighting-and-the-rebalancing-component.md`); Hanke, Keswani, Quigley, Stolin & Zagonov 2019 (Economics Letters), read in full (`2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`); Bergmeir, Hyndman & Koo 2018 (CSDA), read in full, with Bergmeir & Benítez 2012 (Information Sciences) unobtained (`2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`) |
 | 2026-10-14 (session 61) | **The first session to read the literature on the *difference* that v3 scores — the statistic itself rather than the thing in the numerator or the thing in the subtrahend — and the first whose three sources are a statistic, its scope limit and its level.** Aim set by `research/README.md`'s rotation rule plus the one step [2026-10-13] left unspent: that entry read the pool *as a strategy*, and the remaining object was the subtraction. A grep across all 186 prior notes returned **zero** for `Barillas`, `Detzel`, `model comparison`, `cost mitigation`, `characteristic vs covariance` and `Treynor`, while `appraisal ratio` appeared only inside the 2026-09-23 spanning trilogy — so the folder held the *test* of whether a new leg belongs and the *inference* on a Sharpe difference but never the identity tying either to a portfolio decision. Headline: **v3's skill gate is sufficient but not necessary — the exact frontier-expansion condition is `SR_C > ρ·SR_B` — and the prize in the gap is second-order (`≈ AR²/2SR_B`), so the right use of the identity is a pre-trial screen on the candidate's alpha against the pool, not a rescue.** Second: the squared-Sharpe criterion **survives proportional costs and fails under price impact**, and v3's costs are proportional, so the lab's statistic is coherent and scale-free *because of the shape of its own cost model* — with the rider that an impact-free model understates an illiquid book's bill. Third: net of spreads, decay, the trading-technology change and **data-mining bias**, the literature's own estimate of a published cross-sectional signal's expected return is effectively zero, and this lab's setting is harder on three counts, so a long run of nulls is evidence about the protocol being right rather than about the search being broken. One tension resolved into the night's only buildable item: combining legs helps *costs* (trades cancel) even where it does not help *IC*, and the cancellation has never been measured here. New: **#249–#256**, six free, one trial, one recorded calibration. **Detzel–Novy-Marx–Velikov (JF 2023)** is a new unobtained-body pointer with its verbatim abstract in hand. Barillas–Shanken 2017 (`2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`); Li–DeMiguel–Martín-Utrera 2024 (`2026-10-14-net-of-cost-model-comparison-and-the-concave-frontier.md`); Chen–Velikov 2022 (`2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`) |
+| 2026-10-15 (session 62) | **The first session to read the literature on the lab's own *null* — the 200 random portfolios every v3 trial is graded against — and the last object in the four-night chain that began with the numerator.** Sessions 58-61 walked the candidate's Sharpe -> the equal-weight pool -> the subtraction between them -> and tonight the **distribution the difference is compared against**. Aim set by `research/README.md`'s rotation rule plus one observation and one grep: `experiments/learnings.md` [2026-10-07] records that the random-selection gate, **not** the deflator, is the binding constraint on the v3 board, and both of the 2026-10-14/15 nightly's GATE_FAILs failed on that gate alone -- while a grep across all 189 prior notes returned **zero** for `monkey`, `Burns`, `random selection`, `Kosowski`, `luck versus skill`, `Surz` and `upside-down`, with `random portfolio` appearing exactly once and only as an implementability aside. Three sources, forming method -> what the draws earn -> why the inference fails: the gate's identity as an **m-out-of-n bootstrap** whose centre is the equal-weight pool by construction (`E‖ω − ω̄‖²₂ → 0`), which explains the lab's own `p90`-flat-in-K table and its F8 null collapse; the **leniency** reading (a thin-shell null gives over-optimistic rejections, so a 0th-percentile result is stronger evidence than it looks -- a third independent route to `#256`); the finding that v3 **escapes** the literature's reference-point criticism because its benchmark and its null's centre coincide; the method's unused operating manual (the `(N+1)` p-value, Stouffer over Fisher, the p-value control chart, and the matched-dimension rule); and one genuine disagreement between two of the three sources about the **volatility** axis, which becomes the night's single trial. | Burns 2004 + 2006 cluster (`2026-10-15-random-portfolios-as-the-null-of-no-skill.md`); Clare-Motson-Thomas 2013 (`2026-10-15-random-weight-indices-and-the-equal-weight-centre.md`); Bachelard-Chalkis-Fisikopoulos-Tsigaridas 2024 (`2026-10-15-random-portfolio-inference-concentration-of-measure.md`). Unobtained: Arnott-Hsu-Kalesnik-Tindall 2013 (JPM), SSRN 403 + Research Affiliates destination chooser |
 
 ### Open questions for future sessions
+
+- **[2026-10-15] Read this first: the gate that decides every v3 trial is an *m-out-of-n bootstrap*
+  whose centre is the equal-weight pool by construction, it is a *lenient* test rather than a harsh
+  one, and the lab has been running it without its operating manual.** *(1)* **Why the centre cannot
+  move.** Drawing `m` names from `n` and weighting them like the candidate is an m-out-of-n
+  bootstrap; for weights near `1/n` the uniform measure concentrates, `E‖ω − ω̄‖²₂ = (n²−n)/n³ → 0`,
+  so the draws converge on the equal-weighted portfolio and concentrated books are essentially never
+  sampled. At `m = n` the null degenerates into the sampling distribution of the pool itself.
+  Independently, ten million random-weight indices put the equal-weighted index at the **mode** of
+  the performance distribution, robust to a tenfold coarsening of the sampler. **This is the
+  mechanism behind two lab measurements that were previously unexplained**: [2026-10-07]'s
+  `p90`-flat-in-K table ("the gate reduces to beat pool + 1.28·sd(K)") and 2026-10-14/15's F8 null
+  collapse against a near-full-pool equal-weight book. *(2)* **The leniency reading, which is the
+  most useful line here.** A thin-shell null is too *narrow*, and a narrow null gives **overly
+  optimistic rejections** — so the gate is easier to pass than a properly dispersed control, and the
+  lab's 0th-percentile results are **stronger** evidence against those candidates than their
+  percentiles suggest. Third independent route to `#256`. *(3)* **v3 escapes the literature's main
+  criticism.** The standing complaint is that "no skill" is undefined until the reference point is
+  declared (cap weights and equal weights give opposite verdicts, and the dispersion can be dialled
+  — "reverse-engineering the random control to achieve a desired statistical test result. A dangerous
+  game"); v3 pairs a naive random portfolio with the naive benchmark it is centred on, so the pairing
+  is coherent and the lab's frozen engine is what keeps the dial out of a candidate's hands — with
+  [2026-10-07]'s "concentration is judged against a wider null" as the measured proof that a
+  candidate does partly choose its own null's width. *(4)* **The unused manual**: the Monte Carlo
+  p-value is `(n+1)/(N+1)` so 200 draws resolve no finer than `1/201` and the gate *is* a one-sided
+  10% test (**#257**); Stouffer not Fisher for the two train sub-periods, since Fisher certifies
+  skill **and** anti-skill on a record extreme in both directions (**#258**); the sequence of
+  sub-period percentiles separates "signal decayed" from "null drifted" (**#258**); and the
+  **matched-dimension rule** — a random-portfolio test has power against exactly the dimensions on
+  which the candidate differs from its draws, so v3's unmatched **realized volatility** is either its
+  biggest confound or its biggest lever (**#260**, **#261**). **New: #257–#262.** **Nothing of the
+  lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not read.
+  **New unobtained pointer: Arnott–Hsu–Kalesnik–Tindall (JPM 2013)** — venue tier 1, the best-known
+  primary of the monkey result; `papers.ssrn.com` 403s its green OA location and
+  `researchaffiliates.com` answers with the destination chooser, so it is quoted only second-hand
+  through the preprint, and its co-authors' institutional pages were **not** enumerated tonight (the
+  cheapest remaining channel). **Carried unchanged from [2026-10-14] and still genuinely unrun:
+  #82** (forty-first session, still the oldest unspent free item), **#94** as standing discipline,
+  **#105–#107**, **#110**'s shrink half (prior at **#254**), **#159**, **#161**, **#164(a)**, the
+  2026-09-28 set (**#165**'s second use, **#166**, **#167**, **#168**), the 2026-09-29 set
+  (**#170**–**#172**), the 2026-09-30 set (**#174**'s reading, **#175**–**#177**), the 2026-10-01 set
+  (**#179**–**#181**), the 2026-10-02 set (**#183**–**#186**), the 2026-10-03 set
+  (**#188**–**#191**), from 2026-10-04 **#195** and **#196**, from 2026-10-05 **#198**–**#201**, the
+  2026-10-06 set (**#203**–**#207**), the 2026-10-07 set (**#208**–**#211**), from 2026-10-08
+  **#213**–**#216**, the 2026-10-09 set (**#220**–**#225**), the 2026-10-10 set (**#227**, **#228**,
+  **#231**, **#232**), the 2026-10-11 set (**#233**–**#237**), the 2026-10-12 set
+  (**#239**–**#242**), **#248**(b), and from 2026-10-14 **#249**–**#255** as the nightly left them
+  (**#249** implemented and scope-narrowed, **#250** reduced to a one-line precondition, **#251**
+  applied, **#253** closed, **#252** standing). **#152 stands.** **#163, #169, #173, #178, #182,
+  #187, #192, #197, #202, #212, #218, #219, #226, #229, #230, #238, #243, #247 and #262 stay
+  anti-candidates.**
+- **[2026-10-15] What should aim the next session, in order. The top has changed, because the two
+  cheapest items on it are reads of output the engine already produces and throws away.**
+  - **`#257` and `#261` first, and neither is a task so much as a change of notation.** Report the
+    gate as a Monte Carlo p-value with its `1/201` resolution, and quote the null's `sd` beside every
+    percentile as that window's opportunity. Both are free, both apply retrospectively to all five
+    recorded v3 trials, and together they say whether the board's percentile ordering means anything
+    at all.
+  - **Then `#259`, which is the night's main buildable item and costs no trial.** The 200 replicas
+    per trial already exist; regress their realized Sharpe on each replica's exposure to the
+    candidate's own score, with a quadratic term. It answers "is this slice an outlier relative to
+    equally exposed random books" — the question the lab's standing screen has now failed to answer
+    three consecutive times — and it tests the U-shape prediction that the extreme-exposure end a
+    top-K sort selects is also the high-variance end.
+  - **Then `#258`**, the Stouffer combination of the two train sub-periods plus the sub-period
+    percentile sequence, which is the diagnostic that distinguishes a decaying signal from a drifting
+    null and is the right next step after the `geography`/`selection` split.
+  - **Then `#260`, the night's one trial, and only after the screen `#1` demands**: risk weighting
+    within an already-selected slice, pre-registering the rank correlation to the refuted low-beta
+    *selection* object and the component-Sharpe objection. It is the first candidate this folder has
+    proposed whose rationale is a property of the **gate** rather than of a signal, and it competes
+    directly with `#250` (the pool-plus-tilt blend), which the nightly reduced to needing a leg whose
+    own validation null percentile is comfortably above 90% — a leg the board does not have.
+  - **Then the 2026-10-14 queue as the nightly left it**: `#255` (the band's exit threshold), `#254`
+    as a standing reporting rule alongside **#234**, **#232**, **#235**, and **#252** as a standing
+    interpretation rule; then the census pass (**#220**, **#214**, **#227**, **#233**, **#239**,
+    **#240**), then **#221**, then **#242** with **#243**'s and **#248**(b)'s caveats, then **#213**,
+    **#215**, **#216** with **#222** and **#228**, then **#223**, **#231**, **#237**.
+  - **Then #203**, then **#209**, **#198**, **#205**, **#206**, then **#208** and **#211**, then
+    **#210**, then **#201**, **#200**, then **#207** if #206 passes. **Then #188(b), #189, #183,
+    #184, #179, #180** in [2026-10-03]'s order, then **#195**, **#196**, **#199**, **#190**, **#185**
+    as a standing reporting rule, **#191** as screens to re-measure. **Then the carried items**:
+    #181, #174's reading, #175, #177, #176. **#204** stays below them for [2026-10-06]'s reason.
+- **[2026-10-15] The transferable output, and it is the fifteenth detector — the first aimed at the
+  *null* rather than at the statistic or either of its arguments.** The fourteen before it:
+  redundancy [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at
+  [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's
+  confound [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06],
+  the self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], the objective-versus-number distinction
+  [2026-10-11], a method's admitted scope [2026-10-12], the benchmark read as a strategy
+  [2026-10-13], and the operator in the scoring rule [2026-10-14]. Tonight's: **ask what your null is
+  a distribution *over*, what it holds fixed, and therefore what it cannot see.** Four nights running
+  the chain had read everything in the formula and nothing about the thing the formula is compared
+  to, although the lab's own records said that comparison — not the deflator — was killing every
+  candidate. One night of it produced the gate's identity as a known statistical object, the reason
+  its centre is the benchmark, an argument that it is lenient rather than strict, three free changes
+  of notation and diagnostics, and the only candidate this folder has ever proposed whose rationale
+  is a gap in the **test** rather than an effect in the market. The test is two questions asked of
+  any null before its verdict is believed: *which dimensions does my null match my candidate on —
+  and therefore which mechanisms has it made invisible?* **Second transferable, and it generalises
+  [2026-10-14]'s "read every source's limitations section as a list of things somebody has to do":**
+  **a source whose headline is that a method is invalid can still be the source that tells you your
+  own version of it is sound.** The preprint read tonight concludes that random-portfolio
+  significance tests are inappropriate — and the *reasons* it gives are that the reference point is
+  usually incoherent (v3's is not) and that the null is too narrow (which makes v3's gate generous,
+  not unfair). **Read a critique's reasons, not its conclusion, and check which of them your setup
+  actually satisfies**; a negative paper can license your design more strongly than a positive one.
 
 - **[2026-10-14] Read this first: the lab has been grading itself with a statistic that is *sufficient*
   but not *necessary*, and the three sources read tonight say what the right one is, when it stays
