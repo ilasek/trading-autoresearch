@@ -20161,3 +20161,5 @@ measurement instead of believing it. The same check is what produced F3.
    replica *weights*, which `benchmarks.random_null_v3` does not return, so it is a read of output
    the engine produces and discards and may not be free after all), **`#254`**, **`#255`**,
    **`#82`**, and the carried queue as 2026-10-15's open-questions entry leaves it.
+
+## Research session — 2026-10-16 (learning agent): 3 notes added, see research/SUMMARY.md

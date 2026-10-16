@@ -1800,6 +1800,112 @@ recorded anywhere** — signs, orderings, asymmetries, significance and construc
 `notes/2026-10-07-tax-loss-trading-and-wash-sales-investor-level.md` ·
 `notes/2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md` ·
 `notes/2026-10-07-tax-year-end-alignment-and-the-australian-test.md`
+
+**[2026-10-16] The family's `calendar` half — the axis `program.md` charters as "day-of-week,
+holiday windows" and this folder had never covered — is now read, and the literature closes it a
+third time for a reason the lab's own two closures could not see: the biggest and most
+cross-country-consistent calendar effects are not effects in *risk-adjusted* units at all.**
+Hansen–Lunde–Nason (Brown WP 2003-03 / FRB Atlanta WP 2005-02; **tier B** — working paper, 32
+Crossref citations, but 27 indices across 10 countries and the authors' methodological lineage is
+tier 1) build a joint `χ²` test of the hypothesis that **no** calendar subset has a mean different
+from the whole-sample mean, over an enumerated universe of **181 calendar effects** (5 day-of-week,
+12 month-of-year, 60 weekday-of-month, 65 week-of-month, 26 semi-month, 8 turn-of-month, 3
+end-of-year, 2 holiday — "almost identical" to the universe Sullivan–Timmermann–White built 9,452
+trading rules from). Three findings, in descending order of consequence for this lab.
+*(1)* **The same test run on *standardized* returns — mean over the window's own return standard
+deviation, `ρ₍ₖ₎ = ξ₍ₖ₎/ω̄₍ₖ₎` — kills the end-of-year and holiday windows**, which are the largest
+raw anomalies in almost every country they study: "the larger returns that these effects have
+produced historically are associated with a higher variance in returns, so there is little evidence
+that standardized returns are significantly different around holidays than the rest of the year."
+`learnings.md` closed the calendar overlay twice in **mean** units ([2026-09-01] the complement-window
+sign condition; [2026-09-02] the ~3.6%/yr boundary-crossing cost floor). This is the prior question
+neither closure asked, and re-reading the windows the lab has already measured in Sharpe units costs
+nothing — **#263**. *(2)* **Named effects do not survive even a minimal control.** Over the
+17-effect universe of weekdays and months — which the authors call the smallest universe one is
+*required* to control for before claiming a Monday or January effect — the **majority of their 27
+series show no significant calendar effects at all**; the full-universe rejections are carried by
+the other groups. *(3)* **Where the robust, standardization-surviving effect does live: small- and
+mid-cap indices**, consistently across countries and subsamples. By `research/README.md`'s grading
+rule that is **excluded by construction** on a pool of nine large-cap national indices' members —
+so the honest statement is not "the calendar half is dead" but "its survivable form is not reachable
+on this panel", `learnings.md`'s standing *real, large, significant and structurally unreachable*
+category. Two further transferables: the covariance between two calendar rules' means is determined
+**entirely by the overlap of their day sets** (`cov(r̄₍ₖ₎,r̄₍ₗ₎) = (n₍ₖ₎n₍ₗ₎)⁻¹ Σ_{t∈S₍ₖ₎∩S₍ₗ₎} σ²ₜ`),
+so the dependence among a family of rules that average over overlapping subsets is **derivable in
+closed form rather than estimated or bootstrapped** — which is a route to a derived effective trial
+count, **#266**; and they *demonstrate* that cross-market confirmation is not independent evidence
+(the rolling p-value paths of two US large-cap indices are nearly identical), which bears on how much
+the lab's 15-region panel can ever corroborate itself. `validation_overlap: false`;
+`published_post_2018: false`.
+→ `notes/2026-10-16-calendar-effects-data-mining-robust-test.md`
+
+**[2026-10-16] The same night's other two sources say the calendar effect that *is* real is a
+cross-sectional one, and the distinction is not a hedge — one of them explains why the aggregate and
+the cross-section must disagree.** Birru (JFE 2018, venue tier 1, 167 Crossref citations; graded
+**B** — single market, no costs modelled anywhere, unreplicated) classifies 19 long-short anomalies
+by **which leg holds the speculative stocks** (hard to value, attractive to optimists: small, young,
+unprofitable, volatile, lottery-like, distressed, illiquid) and predicts that weekday mood — low
+Monday, high Friday — moves that leg. The signs come out as predicted for all 19 on the
+Monday-versus-Friday contrast; the pattern is **monotone across all five weekdays** in the direction
+of the Twitter-measured mood gradient for most anomalies; it is driven by the **speculative leg
+alone**; 56 of 57 cells go the predicted way in a holiday extension (Tuesday after a Monday holiday
+behaves like a Monday, Thursday before a Friday holiday and the Wednesday before Thanksgiving behave
+like Fridays); and **44 further anomalies selected *because* they have no clear speculative leg —
+momentum among them — are a pre-specified null**. VIX and Treasury returns corroborate the mood
+direction on instruments that are not the sorted stocks. The reconciliation with Hansen–Lunde–Nason
+is the author's own: "changes in mood deliver clear cross-sectional predictions, but not clear
+aggregate predictions", because a mood decline hits speculative names while producing a flight to
+quality that lifts safe ones — and he reports the cross-sectional effect present in **all
+subperiods** while the aggregate weekend effect is documented elsewhere as having gone. **So a null
+on an index-level calendar effect is not evidence against the cross-sectional one.** For this lab the
+tradeable form is dead on cost before it starts (two days a week in a decile book is ~100 boundary
+crossings a year against the ~24 that already cost 3.6%/yr here), but the **weekday decomposition is
+free and is two tests in one** — a pre-signed mechanism test on the five legs this repo can build
+(ivol, MAX, 52-week high, trailing beta, listing age) plus the two it has scouted leads in (Amihud
+illiquidity and the Corwin–Schultz spread, whose speculative leg is the **long** leg, so their
+predicted concentration is **Friday**, the opposite sign to the other sixteen), and a **cadence
+screen**: a leg whose entire edge lives on one weekday is not harvestable by a monthly rebalance at
+all. That is **#264**. `validation_overlap: false`; `published_post_2018: true`.
+→ `notes/2026-10-16-day-of-week-and-the-cross-section.md`
+
+**[2026-10-16] And the third source is the mechanism layer under both, with the one buildable
+candidate of the night: it says the lab's seated seasonal leg is a mixture of two effects with
+opposite signs.** Hirshleifer–Jiang–Meng (JFE 2020, venue tier 1, 142 Crossref citations; graded
+**B** — US only, no costs or turnover discussion anywhere, unreplicated, `published_post_2018: true`)
+model investors whose mood varies seasonally and securities that differ in their sensitivity to it.
+Their Proposition 2 is the new prediction and it is sharp: relative performance across securities
+**recurs** between *mood-congruent* windows and **reverses** between *non-congruent* ones,
+"regardless of whether the mood state is identified using calendar windows or not". The lab's
+`seasonal_same_month_return` averages a name's past same-calendar-month returns **unconditionally**,
+which by this account mixes a positive and a negative term — and the fix is a **selection** change on
+the existing monthly grid, so none of the calendar-overlay cost arithmetic applies (**#265**).
+Three construction facts carry the weight. *(a)* Mood windows can be labelled **without any calendar
+semantics** — the two best and two worst months by realized equal-weighted market return *within each
+year* (and best/worst weekday within each week) reproduce the results from the calendar-named
+labelling, which is what makes the recipe runnable on a 15-region panel whose regions have different
+turn-of-year conventions and opposite daylight profiles. *(b)* **Mood beta** — a univariate loading on
+the equal-weighted market estimated **on mood-window observations only** (10-year rolling, min 40 obs
+monthly; 6-month rolling, min 50 obs at weekday frequency; a ratio-of-mean-differences estimator
+works nearly as well, and the composite is the first PC of the two) — absorbs much of the historical
+seasonal return's predictive power for individual stocks and most of the non-congruent reversal at
+portfolio level. It survives controls for **market beta** (whose premium in these windows is
+significantly *negative*) and for Baker–Wurgler **sentiment beta** (insignificant). *(c)* The
+mechanism is tested in three windows selected with **no return information**: pre-holiday `(−2,0)`
+windows on 13 century-old US holidays, DST clock-change weekends, and deseasonalized NYC cloud-cover
+quartiles — the first two derivable here (holiday calendars from the non-forward-filled `volume`
+frame's NaN blocks; DST by arithmetic), the third outside this repo's data and not proposable. Two
+cautions this folder must carry into any trial: the authors **equal-weight their test portfolios
+specifically because mood should bite harder on small firms**, which is the same localisation
+Hansen–Lunde–Nason found and the same one this panel excludes by construction; and a beta estimated
+on a subset of dates will load on the volatility level, which on this universe *is* the measured
+survivorship artifact (`learnings.md`: high-minus-low vol spread +19.4%/yr on train; `beta-minus` is
+"the volatility level wearing a risk label"), so the rank correlation to trailing vol and to
+all-window beta must be pre-registered — with the source's own sign-flip between high- and low-mood
+windows as the discriminating test an artifact cannot pass. One honest weakness, recorded rather than
+smoothed: the calendar-named mood months are chosen partly on their own realized sample means, a
+post-selection problem of the `inference-on-winners` shape, mitigated but not removed by the ex ante
+SAD/turn-of-year rationale and the independent best/worst labelling.
+→ `notes/2026-10-16-mood-beta-and-seasonal-recurrence.md`
 ---
 
 ### 12. `lead-lag-spillover`
@@ -11521,6 +11627,111 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md` ·
     `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`
 
+263. **FREE — re-read every calendar window the lab has already measured in *standardized* units,
+    and do it before anything else in this family.** `learnings.md` closed the calendar overlay
+    twice in **mean** units: [2026-09-01] on the complement-window sign condition (turn-of-month
+    in-window +36.9%/yr against +12.6%/yr out, Mondays −10.00 bps/day, Nov–Apr +6.18 bps/day) and
+    [2026-09-02] on cost (excluding a 5-day window costs 23.8× annual turnover either way, so a
+    monthly overlay needs a window losing more than ~3.6%/yr and the worst offset measured was
+    −1.26 bps/day). The source's second hypothesis is the question neither asked: divide each
+    window's mean by **that window's own return standard deviation** and compare with its
+    complement, because a window with a high mean and proportionally high variance is not an
+    anomaly in Sharpe units — which is the only unit v3 grades. It re-reads numbers already in the
+    journal, scores no returns, and either supplies a third independent closure or identifies the
+    one window where the cost arithmetic deserves another look. **Pre-register the prediction:
+    Monday is the window most likely to survive standardization and the end-of-year/turn-of-month
+    windows the least**, since the source attributes the latter's size to variance and finds
+    Monday's effect in standardized form in the one large-cap series where it appears at all. Tier
+    B source, no overlap.
+    → `notes/2026-10-16-calendar-effects-data-mining-robust-test.md`
+
+264. **FREE — decompose every family lead's active return by weekday, with the sign of each leg
+    pre-registered from its speculative-leg classification, and read it as a *cadence* screen as
+    much as a mechanism test.** Of the 19 anomalies the source classifies, five are buildable here
+    (ivol, MAX, 52-week high, trailing beta, listing age) and two are legs the lab already has
+    scouted leads in — **Amihud illiquidity and the Corwin–Schultz/high-low spread, whose
+    speculative leg is the *long* leg, so their predicted concentration is Friday, the opposite sign
+    to the other sixteen**. An opposite-signed prediction on two of the lab's own legs is hard to
+    satisfy by accident, which is what makes this worth running. The second reading is the more
+    valuable one and the lab has never checked it: **a leg whose edge lives on one weekday cannot be
+    harvested by a monthly rebalance**, because a monthly book holds the name on all five days — so
+    this measures how much of each lead's recorded skill is reachable at the cadence it is actually
+    traded. Include the source's own placebo: **momentum**, for which the mechanism predicts a flat
+    weekday profile. Caveat to state in advance: the speculative axis is the volatility/illiquidity
+    axis, i.e. this universe's most survivorship-contaminated characteristic, though an artifact in
+    the *level* has no reason to concentrate on one weekday. Tier B source, no overlap.
+    → `notes/2026-10-16-day-of-week-and-the-cross-section.md`
+
+265. **CANDIDATE (1 trial, `seasonality-calendar`) — split the seated seasonal leg's formation
+    months by *mood congruence* instead of averaging them, on the same monthly grid.** The theory
+    says a name's past same-calendar-month returns are a mixture of two opposite-signed terms:
+    performance in **mood-congruent** past windows **recurs**, performance in **non-congruent** ones
+    **reverses**. The lab's `seasonal_same_month_return` averages them unconditionally, so the signal
+    is partly self-cancelling by construction. Build: label each past month by the realized return of
+    the **equal-weight eligible pool** — the two best and two worst months *within each year*, which
+    needs no calendar semantics and so survives a 15-region panel with opposite daylight profiles and
+    different turn-of-year conventions — then score each name by (mean return in congruent windows) −
+    (mean return in non-congruent windows) at annual lags ≥ 1, and rank the cross-section on it.
+    No change of rebalance cadence, hence **no new turnover**: this is a selection change, the only
+    kind the long-only budget leaves reachable. Variant (b), if the split works: replace the
+    per-name seasonal mean with the source's **mood beta** — a univariate loading on the pool's
+    return estimated on mood-window observations only (ratio-of-mean-differences estimator is nearly
+    as good and costs two means per name, comfortably inside the 60 s budget). **Three
+    pre-registrations, all before the trial**: the rank correlation of the score to trailing total
+    volatility and to all-window beta (if high, this is the refuted volatility-level object, and the
+    source's **sign flip between high- and low-mood windows** is the test an artifact cannot pass);
+    the expectation that the ETF sleeve **should** carry a mood-beta effect even though
+    `learnings.md` [2026-09-02] found no same-calendar-month content there, since an ETF has a factor
+    loading but no firm-specific seasonal; and the acknowledgement that the authors equal-weight
+    their portfolios *because* mood should bite harder on small firms, so a null here is weak
+    evidence about the mechanism. Tier B source, `published_post_2018: true` — discount the novelty,
+    not the construction.
+    → `notes/2026-10-16-mood-beta-and-seasonal-recurrence.md` ·
+    `notes/2026-08-29-same-calendar-month-seasonality.md` ·
+    `notes/2026-09-02-return-seasonalities-common-factors.md`
+
+266. **FREE / DESIGN RULE — when a family of candidate rules are averages over *overlapping subsets*
+    of one sample, their correlation is derivable in closed form and does not have to be estimated.**
+    For two rules defined by day sets `S₍ₖ₎`, `S₍ₗ₎`,
+    `cov(r̄₍ₖ₎, r̄₍ₗ₎) = (n₍ₖ₎ n₍ₗ₎)⁻¹ Σ_{t ∈ S₍ₖ₎∩S₍ₗ₎} σ²ₜ`, so the whole dependence structure is
+    `Σ = A′ diag(σ²) A` with `A` the indicator/averaging matrix — and a joint test is then
+    `T = X′B⊥(B⊥′ΣB⊥)⁺B⊥′X`, `χ²` with `rank(B⊥′ΣB⊥)` degrees of freedom, which dominates a
+    Bonferroni bound in power precisely because Bonferroni discards that structure. Two uses here.
+    *(a)* Any **enumerated screen family** the lab runs (calendar windows, lookback grids, quantile
+    cut grids) should be deflated against the universe it implicitly searched, with the exact
+    correlation rather than a clustering estimate — the complement to `#105`–`#107`, `#126` and the
+    `effective-number-of-independent-tests` notes, which all *estimate* what this *derives*. *(b)*
+    The same algebra applies with **name sets instead of day sets**, and every family lead on this
+    board is a top-K book with overlapping membership — so this is a derived answer to "how many
+    independent bets are on the board", computable from the stored weight vectors alone. The scope
+    limit is the source's own maintained assumption: it needs serially uncorrelated returns, which on
+    a non-synchronous 15-region daily panel fails for the reasons
+    `notes/2026-09-08-nonsynchronous-trading-econometrics.md` sets out, so apply it at the monthly
+    frequency or to name sets, not to pooled global daily returns. Tier B source, no overlap.
+    → `notes/2026-10-16-calendar-effects-data-mining-robust-test.md` ·
+    `notes/2026-09-16-effective-number-of-independent-tests-eigenvalue-estimators.md` ·
+    `notes/2026-09-16-clustering-trials-onc-effective-number-of-trials.md`
+
+267. **ANTI-CANDIDATE — do not propose a calendar *timing* overlay on this panel again, in any of its
+    forms (weekday, pre-/post-holiday, end-of-year, semi-month, week-of-month), and the reason is now
+    three-deep rather than two.** The lab's two closures were structural (the sat-out window must earn
+    at or below zero) and economic (turnover is set by boundary crossings, so the window's width is
+    irrelevant and a monthly overlay needs a window losing >~3.6%/yr). The literature adds a
+    **measurement** reason that precedes both: over a 181-effect universe and 27 indices in 10
+    countries, the largest and most cross-country-consistent calendar windows — end-of-year and
+    holiday — lose their significance once returns are **standardized**, because their high means
+    come with high variance; the named weekday and month effects do not survive control over even a
+    minimal 17-effect universe; and the only form that survives everything, including
+    standardization and subsample analysis, is in **small- and mid-cap indices**, a segment this
+    panel excludes by construction. File the whole axis as *real, large, significant and
+    structurally unreachable here* alongside 5–10 day reversal and regional neutralisation. **What
+    is not closed by this entry**: the **cross-sectional** calendar effects (`#264`, `#265`), which
+    are a different prediction with a different sign of aggregation — the source whose aggregate
+    weekday effect is uncertifiable is not evidence against them, and the author of the
+    cross-sectional result explains why. Tier B sources, one with `published_post_2018: true`.
+    → `notes/2026-10-16-calendar-effects-data-mining-robust-test.md` ·
+    `notes/2026-10-16-day-of-week-and-the-cross-section.md`
+
 ---
 
 ## Coverage log
@@ -11590,8 +11801,87 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-13 (session 60) | **The first session to read the literature on the *benchmark* — the equal-weight pool v3 subtracts from every candidate's Sharpe — and the first to resolve this file's longest-carried unread pointer, to abstract level, after five further access channels.** Aim set by `research/README.md`'s rotation rule plus the standing [2026-10-11]/[2026-10-12] instruction that a change of objective means reading the literature about the new objective. A grep across all 183 prior notes returned **zero** for the equal-weighted portfolio as a *subject*: the folder held four notes on the diversification return as an identity and none on what equal weighting earns against capitalisation weights, which is exactly the object v3 made into the lab's null. Three findings. *(1)* The pool's return splits into a passive size/value tilt plus a fixed-weight **rebalancing** channel the authors put at roughly two-fifths of the gap in their sample. *(2)* That attribution collides head-on with a refutation this folder already holds (Cuthbertson et al.: rebalancing trades have **zero** expected value under IID, and pay only where relative prices mean-revert) — and the collision resolves into a conditional that makes the pool's channel a **mean-reversion bet**, which v3's own fill rule is designed to deny to candidates. *(3)* The tilt is the largest non-market factor exposure in professionally managed equity money and ~44% orthogonal to the standard eight, so **skill against this pool is a strictly harder statistic than alpha against a cap-weighted market** — reaching `#234`'s "concentrate, do not de-concentrate" conclusion by a wholly independent route, and giving the lab's near-zero v3 skill numbers a second reading. The rotation note is a methodology one in `statistical-learning`: the theorem that says when K-fold CV is valid on dependent data, which corrects a convention this file had twice recorded as a result — and whose scope, read with [2026-10-12]'s detector, excludes the lab's panel case in three of four words. | Plyakha, Uppal & Vilkov (Springer chapter 2021; WP 2012/2014) — abstract level only, body unobtained (`2026-10-13-equal-weighting-and-the-rebalancing-component.md`); Hanke, Keswani, Quigley, Stolin & Zagonov 2019 (Economics Letters), read in full (`2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`); Bergmeir, Hyndman & Koo 2018 (CSDA), read in full, with Bergmeir & Benítez 2012 (Information Sciences) unobtained (`2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`) |
 | 2026-10-14 (session 61) | **The first session to read the literature on the *difference* that v3 scores — the statistic itself rather than the thing in the numerator or the thing in the subtrahend — and the first whose three sources are a statistic, its scope limit and its level.** Aim set by `research/README.md`'s rotation rule plus the one step [2026-10-13] left unspent: that entry read the pool *as a strategy*, and the remaining object was the subtraction. A grep across all 186 prior notes returned **zero** for `Barillas`, `Detzel`, `model comparison`, `cost mitigation`, `characteristic vs covariance` and `Treynor`, while `appraisal ratio` appeared only inside the 2026-09-23 spanning trilogy — so the folder held the *test* of whether a new leg belongs and the *inference* on a Sharpe difference but never the identity tying either to a portfolio decision. Headline: **v3's skill gate is sufficient but not necessary — the exact frontier-expansion condition is `SR_C > ρ·SR_B` — and the prize in the gap is second-order (`≈ AR²/2SR_B`), so the right use of the identity is a pre-trial screen on the candidate's alpha against the pool, not a rescue.** Second: the squared-Sharpe criterion **survives proportional costs and fails under price impact**, and v3's costs are proportional, so the lab's statistic is coherent and scale-free *because of the shape of its own cost model* — with the rider that an impact-free model understates an illiquid book's bill. Third: net of spreads, decay, the trading-technology change and **data-mining bias**, the literature's own estimate of a published cross-sectional signal's expected return is effectively zero, and this lab's setting is harder on three counts, so a long run of nulls is evidence about the protocol being right rather than about the search being broken. One tension resolved into the night's only buildable item: combining legs helps *costs* (trades cancel) even where it does not help *IC*, and the cancellation has never been measured here. New: **#249–#256**, six free, one trial, one recorded calibration. **Detzel–Novy-Marx–Velikov (JF 2023)** is a new unobtained-body pointer with its verbatim abstract in hand. Barillas–Shanken 2017 (`2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`); Li–DeMiguel–Martín-Utrera 2024 (`2026-10-14-net-of-cost-model-comparison-and-the-concave-frontier.md`); Chen–Velikov 2022 (`2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`) |
 | 2026-10-15 (session 62) | **The first session to read the literature on the lab's own *null* — the 200 random portfolios every v3 trial is graded against — and the last object in the four-night chain that began with the numerator.** Sessions 58-61 walked the candidate's Sharpe -> the equal-weight pool -> the subtraction between them -> and tonight the **distribution the difference is compared against**. Aim set by `research/README.md`'s rotation rule plus one observation and one grep: `experiments/learnings.md` [2026-10-07] records that the random-selection gate, **not** the deflator, is the binding constraint on the v3 board, and both of the 2026-10-14/15 nightly's GATE_FAILs failed on that gate alone -- while a grep across all 189 prior notes returned **zero** for `monkey`, `Burns`, `random selection`, `Kosowski`, `luck versus skill`, `Surz` and `upside-down`, with `random portfolio` appearing exactly once and only as an implementability aside. Three sources, forming method -> what the draws earn -> why the inference fails: the gate's identity as an **m-out-of-n bootstrap** whose centre is the equal-weight pool by construction (`E‖ω − ω̄‖²₂ → 0`), which explains the lab's own `p90`-flat-in-K table and its F8 null collapse; the **leniency** reading (a thin-shell null gives over-optimistic rejections, so a 0th-percentile result is stronger evidence than it looks -- a third independent route to `#256`); the finding that v3 **escapes** the literature's reference-point criticism because its benchmark and its null's centre coincide; the method's unused operating manual (the `(N+1)` p-value, Stouffer over Fisher, the p-value control chart, and the matched-dimension rule); and one genuine disagreement between two of the three sources about the **volatility** axis, which becomes the night's single trial. | Burns 2004 + 2006 cluster (`2026-10-15-random-portfolios-as-the-null-of-no-skill.md`); Clare-Motson-Thomas 2013 (`2026-10-15-random-weight-indices-and-the-equal-weight-centre.md`); Bachelard-Chalkis-Fisikopoulos-Tsigaridas 2024 (`2026-10-15-random-portfolio-inference-concentration-of-measure.md`). Unobtained: Arnott-Hsu-Kalesnik-Tindall 2013 (JPM), SSRN 403 + Research Affiliates destination chooser |
+| 2026-10-16 (session 63) | **The first session in six to leave the lab's own measurement chain and return to a family, and it opens the one axis `program.md` charters that this folder had never covered at all — the `calendar` half of `seasonality-calendar` (day-of-week, holiday windows) — closing it a third time while its *cross-sectional* twin survives intact.** Sessions 58-62 walked the objective → the estimation → the benchmark → the difference → the null, and that chain ended. Tonight's three sources are one argument: a data-mining-robust joint test over an enumerated 181-effect calendar universe says the biggest, most cross-country-consistent windows (end-of-year, holiday) **vanish in standardized returns** and that the only form surviving everything lives in **small- and mid-cap indices** — excluded by construction on this panel (**#263**, **#266**, **#267**); then the weekday effect reappears as a **cross-sectional** phenomenon driven by the speculative leg, with the author's own explanation of why aggregate and cross-sectional calendar predictions must disagree, giving the lab a free weekday decomposition that doubles as a **cadence-reachability** screen on every lead it holds (**#264**); then a mood-based model that reads the lab's seated seasonal leg as a mixture of two **opposite-signed** terms and supplies the night's one buildable candidate, a congruence split with a calendar-free labelling and a sign-flip test an artifact cannot pass (**#265**). **New: #263-#267. Nothing of the lab's is contradicted; its two calendar closures are strengthened by a third, independent, measurement-level reason.** | Hansen-Lunde-Nason 2003/2005 (`2026-10-16-calendar-effects-data-mining-robust-test.md`); Birru 2018 JFE (`2026-10-16-day-of-week-and-the-cross-section.md`); Hirshleifer-Jiang-Meng 2020 JFE (`2026-10-16-mood-beta-and-seasonal-recurrence.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-16] What should aim the next session, in order — and the top of this list is cheaper than
+  anything the 2026-10-15 nightly left, because two of tonight's items are re-reads of numbers the
+  journal already holds.**
+  - **`#263` first: standardize the calendar windows the lab has already measured.** The journal
+    holds in-window and complement means in bps/day and %/yr for turn-of-month, the T−8..T−4 payment
+    window, Mondays and Nov–Apr. Divide each by that window's own return standard deviation. Free,
+    retrospective, and it decides whether the lab's two calendar closures rest on two reasons or
+    three. The prediction is pre-registered in `#263`; record it before looking.
+  - **Then `#264`, the weekday decomposition, which is free and is two screens in one.** Pre-sign
+    each leg from its speculative-leg classification — and note that the lab's **illiquidity and
+    spread leads carry the opposite sign to every other leg**, which is what makes the test
+    informative rather than decorative. Its second reading is the one to care about: a leg whose
+    edge lives on one weekday is not reachable at monthly cadence, and the lab has never checked
+    that for any lead it holds.
+  - **Then `#265`, the night's one trial**, and only after `#264` has established whether this
+    panel shows any weekday/mood structure at all. It is a **selection** change on the existing
+    monthly grid — no new turnover, so none of the overlay cost arithmetic bites — with three
+    pre-registrations, the sharpest being the sign-flip test that separates a mood loading from the
+    refuted volatility level.
+  - **`#266` is a standing design rule, not a task**: wherever candidate rules average over
+    overlapping subsets of one sample, the dependence is derivable rather than estimable. It belongs
+    beside `#105`–`#107` and the `effective-number-of-independent-tests` notes, and it also applies
+    to the overlapping *name* sets of the board's own top-K leads.
+  - **Then the 2026-10-15 queue unchanged**, in the order that nightly set: `#257` and `#261` (both
+    free changes of notation), then `#259`, then `#258`, then `#260`; then the 2026-10-14 queue and
+    everything carried below it. Nothing on that list is closed or reordered by tonight.
+- **[2026-10-16] The transferable output, and it is the sixteenth detector: ask at which *level of
+  aggregation* a mechanism's prediction is sharp, because a null at one level is not evidence at
+  another.** The fifteen before it: redundancy [2026-09-30], rival mechanisms [2026-10-02], the
+  altitude an enumeration was written at [2026-10-03], sign-versus-magnitude in a tension
+  [2026-10-04], each side's account of the test's confound [2026-10-05], a disqualified statistic
+  against a truncated variant of itself [2026-10-06], the self-undermining cross-border friction
+  [2026-10-07], a construction technique's cost geometry [2026-10-08], a universe whose boundary is
+  itself a signal [2026-10-09], a family charter with two branches predicting opposite observables
+  [2026-10-10], the objective-versus-number distinction [2026-10-11], a method's admitted scope
+  [2026-10-12], the benchmark read as a strategy [2026-10-13], the operator in the scoring rule
+  [2026-10-14], and what the null is a distribution *over* [2026-10-15]. Tonight's arrived from the
+  sources rather than from an audit: one source cannot certify a weekday effect in **index** returns
+  over a controlled universe, another finds a strong weekday effect in the **cross-section** of the
+  same market, and they do not contradict each other — the second supplies the reason, that a mood
+  shock moves speculative and safe names in opposite directions, so the cross-sectional prediction
+  is sharp exactly where the aggregate one is ambiguous. The lab has the mirror-image exposure: it
+  grades every candidate as a **cross-sectional** book against a pool, and its two calendar
+  closures were both about **aggregate timing**. Those closures were right and are now three-deep,
+  but they never tested the cross-sectional form, and five sessions of reading the measurement chain
+  would not have found that — only reading a family did. The test is one question of any imported
+  null: *at what level of aggregation was this measured, and is that the level my candidate acts
+  on?* **Second transferable, smaller and about grading rather than mechanism: a source's own
+  weighting choice is evidence about where it thinks its effect lives.** Tonight's mood paper
+  equal-weights its test portfolios and says in one clause that it does so because mood should bite
+  harder on small firms — which is the same localisation the calendar-significance paper reaches
+  statistically, and it is the clause that decides implementability on a large-cap panel. Read the
+  weighting sentence, not only the robustness section.
+- **[2026-10-16] Access findings, one unobtained pointer, and a new "looks like an answer" mode.**
+  **New channels that worked first try**: `aeaweb.org/conference/<year>/preliminary/paper/<id>`
+  serves the author's own conference draft as a PDF (a complete 219 KB-of-text JFE article here) and
+  is the route to a paper whose published version is closed; `economics.brown.edu/sites/default/files/papers/<year>-<n>_paper.pdf`
+  is a flat departmental working-paper directory of the `robjhyndman.com/papers/` shape.
+  **A thirteenth "looks like an answer" mode, and the cheapest yet to miss: HTTP 202 with a zero-byte body.**
+  `escholarship.org` answered `/uc/item/<id>.pdf`, `/content/qt<id>/qt<id>.pdf` and the plain landing
+  page with **202 and `size_download=0`** — `curl` exits 0, `WebFetch` reports an empty page, and
+  only `-w '%{size_download}'` or `file` reveals it; adding a browser user-agent converted it to a
+  403. This extends the 2026-10-13 zero-byte-200 entry to a second status code, so **check the body
+  size on every document fetch regardless of status**. Also recorded: an **LSE Research Online
+  record that holds no file** (the Pure/DSpace caution again, from a host that usually serves
+  accepted manuscripts), and a reminder that **an NBER working-paper number guessed from a citation
+  is a complete, valid PDF of somebody else's paper** — `w26634` extracted cleanly as a labour
+  economics paper, passing every integrity check in `research/README.md`, so **verify the title line
+  after extraction, not the file**. **New unobtained pointer: Sullivan–Timmermann–White (2001,
+  *Journal of Econometrics*, `10.1016/S0304-4076(01)00077-X`, 203 Crossref citations)** — the
+  keystone primary for the calendar data-mining critique, closed on OpenAlex and Semantic Scholar,
+  whose only repository locations are the LSE record holding no file and the eScholarship paths
+  above. Tonight's tier-B working paper stood in for it and, per the 2026-10-15 lesson about
+  spending the budget on a different source rather than a third channel, the note is better for
+  carrying that paper's closed-form dependence structure than it would have been for carrying STW's
+  bootstrap. The cheapest remaining channel is the co-authors' institutional repositories, which
+  were **not** enumerated tonight.
 
 - **[2026-10-15] Read this first: the gate that decides every v3 trial is an *m-out-of-n bootstrap*
   whose centre is the equal-weight pool by construction, it is a *lenient* test rather than a harsh

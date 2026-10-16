@@ -462,6 +462,41 @@ snippets. Three practical limits to plan around:
   mechanism rather than on a third channel** — tonight a tier-B source with a fully described
   construction replaced it and the note is better for having the construction.
 
+- **An HTTP **202** with a zero-byte body is the thirteenth "looks like an answer" mode, and
+  `escholarship.org` is now a dark channel** (added 2026-10-16; extends the 2026-10-13 zero-byte-200
+  entry to a second status code). Three different paths to the same UC working paper —
+  `/uc/item/<id>.pdf`, `/content/qt<id>/qt<id>.pdf` and the plain `/uc/item/<id>` landing page —
+  each returned **HTTP 202 with `size_download=0`**. `curl` exits 0 and writes a file, `WebFetch`
+  reports only that the page was empty, and `file` says `empty`; adding a browser user-agent turned
+  the 202 into a **403**. Since eScholarship is the green location RePEc names for the whole UCSD
+  economics discussion-paper series, that series is currently unreachable here. **Put
+  `-w 'HTTP %{http_code} size=%{size_download}\n'` on every document fetch and read the size even
+  when the status is a success** — a 2xx is not evidence of a body.
+- **Two channels that worked first try, both of the flat-directory shape this file keeps
+  rediscovering** (added 2026-10-16). **`aeaweb.org/conference/<year>/preliminary/paper/<id>`** serves
+  an author's own conference draft as a PDF — here the complete working version of a closed *Journal
+  of Financial Economics* article (1.4 MB → 219 KB of clean text, 820 instances of `" the "`), and
+  the id comes straight out of a web search result rather than having to be derived. **A
+  university economics department's working-paper directory**,
+  `economics.brown.edu/sites/default/files/papers/<year>-<n>_paper.pdf`, served a methods working
+  paper the same way. This extends the 2026-09-18 faculty-page and 2026-10-13
+  `robjhyndman.com/papers/` lessons to **conference programmes and department series**: for a closed
+  article, the authors' *venues* are worth trying alongside the authors' *sites*.
+- **An NBER working-paper number guessed from a citation returns a complete, valid PDF of somebody
+  else's paper, and it passes every integrity check in this file** (added 2026-10-16). A guessed
+  `w26634` extracted to 179 KB of clean text with 652 instances of `" the "`, zero `( )` dropout and
+  no ASCII shift — and was a labour-economics paper on deunionization, not the finance paper sought.
+  The correct number (`w24676`, reachable as
+  `/system/files/working_papers/w24676/revisions/w24676.rev0.pdf`) came from a single web search.
+  **Read the title line of the extract before reading anything else**; the checks in this file
+  verify that a document is intact, never that it is the right document.
+- **An LSE Research Online record that holds no file** (added 2026-10-16; the Pure/DSpace caution
+  from 2026-10-04 again, now on a host that usually serves accepted manuscripts).
+  `eprints.lse.ac.uk/<id>/` returned a 33 KB record page whose only links were citation exports —
+  no bitstream, no `.pdf` href, and no abstract in the body. OpenAlex had listed it as a location
+  for the work, so **a `locations[]` entry is evidence of a record, not of a file** in both
+  directions: 2026-10-10 found a file where the OA flags denied one, and this is the converse.
+
 ## Anti-lookahead policy (hard rules)
 
 The strategy agent backtests on past data with validation 2018–2023 and a locked holdout
