@@ -19841,3 +19841,323 @@ that a combiner has nothing to combine on the signal side is not rescued on the 
   window rather than of a mechanism. Turnover pre-registration held for the fourth night
   running: 1.5-4.5x predicted, 2.8x charged.
 
+
+## Free measurements — 2026-10-15/16 (nightly), no trial spent
+
+The engine suite is green (92 passed). Everything below is **train split only** (1997-01-01 →
+2017-12-31) on the panel `protocol.visible_frame` hands a candidate truncated at the train end.
+No validation Sharpe outside `run_experiment.py`, and no holdout, forward or incubation file was
+opened. Nulls here use 40 region-matched draws (the engine uses 200), so a reported null `sd`
+carries ~11% relative error; the harness reproduces the protocol's pool exactly (F2a) and
+reproduced the scored trial's train skill and both sub-period skills to the printed digit, which
+is what licenses the rest.
+
+**F1 — THE GATE'S GEOMETRY IN K, AND IT REFUTES THE HYPOTHESIS THE SESSION OPENED WITH.** The
+null's `sd` falls steeply in book size, so the obvious idea is that the gate — `candidate >
+null_p90 = null_median + 1.28·sd(K)` — is easier to clear with a wider book, and that the lab's
+uniform choice of K = 100 has been fighting it at the worst size. Measured on the one score with
+a positive recorded validation selection term (the ten-year reversal of trial #5), region-quota
+entries, equal weight, monthly, 40 draws:
+
+    K     npos     sr    pool   skill  null med   null sd   null p90   geography  selection   margin  turn
+     50   42.7  +0.527  +0.524  +0.003   +0.423    0.0369    +0.482      -0.100     +0.103    +0.045  2.45x
+    100   85.6  +0.556  +0.524  +0.033   +0.434    0.0241    +0.463      -0.090     +0.123    +0.094  2.02x
+    200  170.8  +0.504  +0.524  -0.020   +0.443    0.0140    +0.461      -0.081     +0.061    +0.044  1.49x
+    400  283.0  +0.460  +0.524  -0.064   +0.453    0.0079    +0.462      -0.071     +0.007    -0.002  1.11x
+    800  438.8  +0.445  +0.524  -0.079   +0.468    0.0043    +0.472      -0.056     -0.023    -0.027  0.78x
+
+`sd` does fall roughly as `npos^-0.77`, but **the selection term falls faster**, and the margin is
+maximised at **K = 100** — the size every v3 trial has used. So the lab's K is not arbitrary and
+there is no free win in widening or concentrating the book. Two riders worth keeping: the
+selection term is **non-monotone** (K = 50 is worse than K = 100, so the top of the sort is not
+the best part of it), and the apparent "geography" term shrinks monotonically toward zero as the
+book approaches the pool — which is the thread F3 pulls.
+
+**F2 — CONTROL BOOKS, AND THE ONE THAT LOOKED LIKE A FREE +0.108 WAS A START-DATE ARTIFACT.**
+Equal weight, monthly, no score:
+
+    control book                              npos    sr    pool    delta   turn
+    (a) every eligible name                  492.4  +0.524  +0.524  +0.000  0.89x
+    (b) eligible names with >=60m of history  449.2  +0.632  +0.524  +0.108  0.92x
+    (c) eligible names with a peer group      492.1  +0.524  +0.524  +0.000  0.89x
+
+(a) reproduces the protocol's pool to three decimals, which calibrates the harness; (c) shows
+the calendar-peer grouping drops nothing that matters. (b) appeared to be a free +0.108 of skill
+from a pure data-availability filter — and it is not: its holdings are **identical** to F1's
+K = 800 row (overlap 1.000 on every common date) which scored +0.445, and the entire 0.19
+difference is that (b) starts emitting in 1996-01 while the quota book's 50-scored-name condition
+delays it to 2000-01. Scored from the same start, (b) is +0.492 against a pool at +0.486 and the
+K = 800 book is +0.481. **A data-availability filter is worth nothing here; three years of cash
+at the start of train is worth 0.19 of train Sharpe.** The decline was avoided only by checking
+two books that should have agreed, which is the method note: reconcile a surprising control
+against an existing measurement before believing it.
+
+**F3 — THE "GEOGRAPHY" TERM THE LAST SESSION ADOPTED IS MOSTLY THE CANDIDATE'S OWN UN-INVESTED
+WARM-UP, AND TRIAL #5's TRAIN SKILL WAS UNDERSTATED BY A FACTOR OF THREE. This is the night's
+main finding and it corrects a reading rule.** The decomposition adopted on 2026-10-14/15 is
+`geography = null_median − pool` and `selection = candidate − null_median`. But the null's
+replicas **inherit the candidate's schedule**, so they inherit any period in which the candidate
+holds nothing, while the pool is fully invested from the first day of train. Any score with a long
+formation window therefore charges its own warm-up to the "geography" term. Same book, three
+scorings:
+
+    scoring                                   sr    pool   skill  null med  null sd  geography  selection  margin
+    trial #5 as it ran (window from 1997)   +0.556  +0.524  +0.033   +0.434   0.0241    -0.090    +0.123   +0.094
+    same book, from its own first row 2000  +0.601  +0.486  +0.115   +0.469   0.0260    -0.018    +0.133   +0.101
+    pool held during warm-up, from 1997     +0.628  +0.524  +0.104   +0.514   0.0213    -0.010    +0.114   +0.096
+
+**80-90% of the recorded -0.090 "geography" was three years of cash**, and the book's true train
+skill is **+0.104 to +0.115, not +0.033**. Two consequences. (i) Both geography terms the lab has
+recorded (`lv_illiq_peer_neutral_band` +0.087, `rv_arbrisk_peer_neutral` -0.054) must be re-read
+against their candidates' first emitted rows before they are treated as region effects; the
+confound is larger than either reading. (ii) The fix is free and in the candidate's hands —
+**hold the equal-weight eligible pool on dates where the score does not yet exist** — and it
+recovers 0.071 of train skill while moving the selection term by -0.009. `learnings.md`
+(2026-10-09/10) already says "a cash position forfeits the equity premium the pool keeps
+earning"; it was written about *timing* and nobody applied it to a score's warm-up. Note the
+scope: this cannot change a validation verdict, because a long-window score is formed on every
+date in 2018-2023, so the warm-up branch never fires there. It is a **train-gate and
+train-screen** correction, and the train gate (`min_train_skill = 0.0`) is hard.
+
+**F4 — research `#260` priced: risk weighting inside a selected slice raises skill and widens its
+own null.** Same 100 names, same dates, only the weight vector changing:
+
+    weight vector inside the slice      sr     skill   null med   null sd   selection   margin
+    equal weight [baseline]           +0.628   +0.104    +0.514    0.0213     +0.114    +0.096
+    1/sigma (126d close-to-close)     +0.644   +0.120    +0.499    0.0375     +0.144    +0.100
+    1/sigma^2                         +0.665   +0.141    +0.514    0.0584     +0.151    +0.088
+
+The null median **does** drop for 1/sigma, so the permutation genuinely cannot inherit a fit to
+the names actually held — `#260`'s mechanism is real. But dispersion rises with the vector's
+non-uniformity (F8 of 2026-10-14/15, in its κ form) and the gate is at p90, so the margin is flat.
+`1/sigma^2` gives the **largest train skill ever recorded under v3 (+0.141)** at the **worst**
+gate margin of the three. Choosing between the two cells on theory rather than on the numbers:
+research `#1`'s theorem makes risk balancing the maximum-Sharpe weighting exactly when component
+Sharpes are equal and correlations constant, and the lab has *measured* the first condition
+(2026-10-09/10: Sharpe is flat in beta on this panel), which makes `1/sigma` the principled cell
+and `1/sigma^2` the zero-correlation minimum-variance solution. `1/sigma` was taken; the two cells
+are the whole of the search.
+
+**F5 — THE FULLY-INVESTED SEASONAL ROUTE INTO `seasonality-calendar` IS MEASURED AND DECLINED, ON
+TURNOVER ARITHMETIC NOBODY HAD DONE.** `learnings.md` (2026-10-09/10) records that the 63-day
+residual-reversal book earns +43.9 bps in the month after a quarter-end (t +3.32, n 82) against
++9.4 bps in other months, calls it "a flow concentration worth knowing and not a trade" because
+trading it means sitting in cash, and names "a cross-sectional seasonal on a fully-invested book"
+as the way in. That is now built: the pool in off-months, the tilt in quarter-end months. The
+hypothesis was that concentrating the trading in the third of months that pay would cut the cost
+bill that killed the mechanism:
+
+    book (63d residual reversal, region-quota K=100)   sr    skill  null med  null sd  selection  margin  turn
+    always on (k = 1)                               +0.485  -0.039   +0.408   0.0244   +0.077    +0.052  10.91x
+    quarter-end months only (k = 1)                 +0.460  -0.064   +0.396   0.0151   +0.064    +0.047  11.29x
+    quarter-end months only, k = 0.5                +0.495  -0.029   +0.481   0.0078   +0.014    +0.004   5.90x
+    always on, k = 0.5                              +0.507  -0.017   +0.479   0.0129   +0.028    +0.009   5.88x
+
+**Turnover did not fall — it rose, 10.91x to 11.29x.** Entering and leaving a ~500-name
+fully-invested base four times a year costs more than the eight monthly rebalances it replaces, so
+the conditioning pays the bill it was built to avoid. Every variant has negative skill and a worse
+margin than always-on, and the `k = 0.5` rows reproduce F8's `margin ∝ κ` decay. Residual reversal
+stays closed and this route into the family is closed with it.
+
+**F6 — PUT THE RISK INFORMATION IN THE NAMES INSTEAD OF THE WEIGHTS: the mechanism works in the
+predicted direction and the tail-depth confound eats it, for the third time.** F4's reading
+suggests the asymmetry: the null replaces *names* with same-region draws, so a slice chosen to be
+mutually decorrelated has lower book variance than its replicas, while an **equal**-weight vector
+keeps the null's dispersion at its floor. Preselect the top 200 by score inside the same quotas,
+then keep 100 on average pairwise correlation (126d), equal weight:
+
+    book                                      sr    skill  null med  null sd  selection  margin  ann vol
+    decade K=100 EW [baseline]              +0.628  +0.104   +0.514   0.0213   +0.114    +0.096   18.79%
+    top-200 -> 100 LEAST correlated         +0.560  +0.036   +0.485   0.0265   +0.075    +0.043   17.49%
+    top-200 -> 100 MOST correlated          +0.529  +0.006   +0.490   0.0230   +0.039    +0.009   19.23%
+
+Both predicted effects appear — book volatility falls 7% and the null median falls 0.029, so the
+permutation does fail to imitate the composition — and the sign across the two sides is right
+(least minus most correlated: +0.030 of skill, -1.7 points of volatility). **Both still lose
+heavily to the straight top-100**, because a secondary criterion at fixed K is necessarily a
+*shallowing of the primary sort*: 100-of-200 instead of 100-of-~500 cost 0.068 of skill where the
+variance reduction bought back at most 0.030. This is the **third** time this axis has decided a
+construction here (the 2026-10-07 pair; the liquidity-half split of 2026-10-09/10; now this), and
+it is worth promoting to a standing screen: **price the depth loss of any secondary criterion
+before building it, because on this panel the primary sort's depth has beaten every secondary
+criterion tried.**
+
+**F7 — the pre-registration sheet for the trial, and the number in it that stopped the obvious
+candidate.** Unfloored `1/sigma` on the K = 100 slice: mean largest weight **9.4%**, effective
+breadth **33.4 names of 100** (1/HHI), train sub-period skills **+0.189 / +0.001** against the
+equal-weight book's +0.103 / +0.023 — the whole advantage in the half of train where Yahoo's
+coverage is worst. Written up as a probable staleness artifact; see F8 for why that was wrong.
+
+**F8 — THE STALENESS EXPLANATION IS REFUTED AND THE FLOOR IS THE REAL RESULT. What the null's
+dispersion responds to is the weight vector's TAIL, not its mild non-uniformity.** `volume` is not
+forward-filled, so a NaN is a day the name did not print and its close was carried; a close-to-
+close sigma over calendar days counts those as zero returns, which would make `1/sigma` partly
+`1/(coverage)`. Recomputing sigma on **printing days only** reproduces the naive book to three
+decimals, because print coverage of the eligible names is **1.00 / 0.97 / 0.97** in 1997 / 2008 /
+2017 — this panel is large-cap index members and it is not stale. The tail is real dispersion in
+trailing volatility. Flooring sigma at the slice's own 20th percentile:
+
+    book                              sr    skill   97-08   09-17   1/HHI    maxw   null sd  selection  margin
+    equal weight [baseline]         +0.628  +0.104  +0.103  +0.023   107.1  0.0093   0.0213   +0.114    +0.096
+    1/sigma, calendar days          +0.644  +0.120  +0.189  +0.002    33.5  0.0942   0.0375   +0.144    +0.100
+    1/sigma, printing days only     +0.644  +0.120  +0.189  +0.001    33.4  0.0943   0.0375   +0.144    +0.100
+    1/sigma, printing + p20 floor   +0.644  +0.120  +0.136  +0.034   100.0  0.0123   0.0210   +0.137    +0.121  <- run
+
+The floor keeps the whole +0.120 of skill, restores effective breadth to the book's own size,
+balances the sub-periods, holds the null's dispersion **at the equal-weight floor** (0.0210 against
+0.0213) and so converts the skill gain into **+0.121 of gate margin against the baseline's
++0.096** — the first construction in six v3 trials to improve the margin on the gate that decided
+all five earlier ones. One floor value was tested, the quintile, chosen a priori as a breadth
+guard; "none" and "p20" are the two cells. This became the night's trial, and the trial's lesson
+records which half of it survived contact with validation.
+
+**F9 — FREE REPORTING RULES APPLIED: research `#257` and `#261`(b), the whole v3 board restated.**
+A percentile hides the test's level and its granularity; the Monte Carlo p-value is
+`(n_at_least_as_good + 1)/(N + 1)`, is never zero, and with `N = 200` resolves no finer than
+`1/201 ≈ 0.005`. The null's `sd` in a window is that window's opportunity set, so quote it. All
+six recorded v3 trials (validation; `sd` backed out of the recorded `p90 − median`):
+
+    trial                              val    pool   null med   null sd   %ile   MC p   geography  selection  hurdle
+    pt_lowvol_gk_quarterly           +0.304  +0.337   +0.286    0.0523     64%   0.368    -0.051     +0.018   +0.067
+    sa_resid_rev63_band              +0.218  +0.337   +0.169    0.0577     80%   0.209    -0.168     +0.049   +0.074
+    lv_illiq_peer_neutral_band       +0.285  +0.337   +0.424    0.0453      0%   0.995    +0.087     -0.139   +0.058
+    rv_arbrisk_peer_neutral          +0.104  +0.337   +0.283    0.0624      0%   1.000    -0.054     -0.179   +0.080
+    pt_decade_reversal_peer_neutral  +0.331  +0.337   +0.297    0.0554     75%   0.254    -0.040     +0.034   +0.071
+    pl_decade_invvol_floored         +0.298  +0.337   +0.284    0.0577     60%   0.398    -0.053     +0.014   +0.077
+
+**The board's best null result is `p = 0.209`, and "75th percentile" is `p = 0.254` — nothing on
+this board is close to significant in either direction, and the two 0th-percentile books are
+`p = 0.995` and `p = 1.000` *against*.** Read with research `#261`(a) — a thin-shell null gives
+over-optimistic rejections, so those two are stronger evidence against their candidates than the
+percentiles suggest — the honest summary of six trials is one strong refutation, one weak
+refutation and four dead heats.
+
+**F10 — THE GATE'S BAR, CALIBRATED FOR THE FIRST TIME, AND IT IS THE MOST USEFUL NUMBER OF THE
+NIGHT FOR AIMING A SESSION.** The validation null `sd` runs **0.045-0.062** across the six trials
+against **0.021-0.024** measured on train at the same K — a ratio of **2.3-2.5x**, close to
+`sqrt(21/6) = 1.87` and the rest from the shorter window's own composition, because `sd` is a
+*sampling* quantity in the length of the scored window and nothing a candidate controls. So the
+validation hurdle `1.28·sd ≈ 0.070` where train's is `≈ 0.027`: **the validation gate is
+intrinsically about 2.5x harder than the train version of itself, before any signal decays.**
+Combining that with the measured decay of the selection term (3.4x for trial #5's equal-weight
+vector, 9.8x for tonight's weighted one), **a candidate needs a train selection term of roughly
++0.24 to expect to clear the validation null gate** — against a v3 record whose best is +0.151
+(tonight's `1/sigma^2` row) and whose best *transferring* one is +0.114. That bar should be
+pre-registered against before a file is written, and on present evidence no construction reaches
+it; it is the quantitative form of the last two sessions' conclusion that the next real move is an
+input the panel does not have.
+
+## Session summary — 2026-10-15/16 (nightly) — 1 trial of 8; the geography term was mostly a warm-up, and the gate's bar is now a number
+
+**Experiments run: 1 of 8. Verdict: 1 GATE_FAIL. Ten free train-only measurement blocks (F1-F10),
+four candidate constructions declined on arithmetic before a file existed, and one surprising
+control reconciled away before it was believed. No holdout, forward or incubation file was read,
+and the seat is still empty.** The engine suite is green (92 passed).
+
+    #  candidate                   family              verdict    train  val   skill   CI90          2x cost  turn  null %ile  MC p
+    6  pl_decade_invvol_floored    portfolio-learning  GATE_FAIL  +0.64  +0.30  -0.04  [-0.31,+0.23]  -0.07   2.8x     60%     0.398
+
+Equal-weight pool: **+0.34 on validation, +0.524 on train**. The trial failed on the
+random-selection null alone, as all five before it did; no other hard gate bound.
+`scripts/rank_trials.py` puts all six v3 trials in tier 1 of a six-trial board, with
+`pt_decade_reversal_peer_neutral` still best on skill (-0.01) and `P(best)` (34%); tonight's trial
+is M4, the **same mechanism** as the lead it re-weighted, so `distinct_mechanisms` stays at **4**.
+
+**Budget allocation, planned before the first hypothesis was written.** 1 trial in
+`portfolio-learning` — a family with **no recorded v3 trial** — which satisfies the "at least one
+in a family with no recorded trial at all" rule; **0 in `price-trend`**, against its cap of 2; no
+family reached a cap. The four declines were spread across `portfolio-learning` (inverse-variance
+weighting, F4; the comovement-selected slice, F6), `seasonality-calendar` (the quarter-end
+conditional tilt on a fully-invested base, F5) and the K axis of `price-trend` (F1), so the
+breadth is in the screens again. One trial rather than eight is a choice, for the reason F10 now
+puts a number on: the gate's bar is about +0.24 of train selection and nothing measured tonight
+reached half of it, so a second trial would have spent the shared deflator to confirm arithmetic.
+
+**Best finding of the night, in one sentence.** **The `geography = null_median − pool` split the
+last session adopted is confounded with the candidate's own un-invested warm-up — the null's
+replicas inherit the candidate's schedule while the pool is fully invested from the first day of
+train — and for a long-window score that confound is larger than either geography reading the lab
+has recorded: trial #5's -0.090 "geography" was 80-90% three years of cash, and its train skill
+was +0.104 to +0.115, not the +0.033 on its record** (F3). The fix is free and in the candidate's
+hands (hold the equal-weight pool until the score exists), it recovers 0.071 of train skill while
+moving the selection term by -0.009, and it **cannot** change a validation verdict, because a
+long-window score is formed on every date in 2018-2023. Both recorded geography terms
+(`lv_illiq_peer_neutral_band` +0.087, `rv_arbrisk_peer_neutral` -0.054) need re-reading against
+their candidates' first emitted rows before they are treated as region effects.
+
+**The second finding is the trial's, and it is the cleanest paired evidence the lab has about its
+own train screens.** Two books with **identical names on identical dates**, differing in one
+operator (the weight vector), went in opposite directions: train skill +0.104 → +0.120 and train
+selection +0.114 → +0.137, against validation skill -0.006 → **-0.039** and validation selection
++0.034 → **+0.014**. Every confound the lab has catalogued is held fixed by construction, so this
+is not "two different books disagreed": **the operator that added the most train skill decayed the
+fastest** (selection decay 3.4x for equal weight, **9.8x** for the weighted vector). Research
+`#260` is closed. Note which objection was wrong: F4's gate arithmetic predicted this failure for
+a reason the trial refutes, and the floor built to answer F4 worked exactly as designed — the
+floored vector's validation null `sd` is **0.0577** against the equal-weight version's **0.0554**,
+so **a permutation-mild weight tilt is not punished by the null**, measured out of sample. That
+operator is free and transfers; it is the one piece of tonight's construction that did.
+
+**The construction axis is now closed from five directions, which is the session's structural
+result.** The margin over the gate is maximised by what the lab already does: K = 100 (F1 — the
+null's `sd` falls as `npos^-0.77` but the selection term falls faster), equal-or-mildly-tilted
+weights (F4, F8, and the trial), no time conditioning (F5 — the conditional *raises* turnover,
+10.91x → 11.29x, because entering and leaving a 500-name base four times a year costs more than
+the monthly rebalances it replaces), and no secondary selection criterion (F6 — a secondary
+criterion at fixed K is a shallowing of the primary sort, which cost 0.068 of skill against at
+most 0.030 bought back; the **third** time the tail-depth confound has decided a construction
+here).
+
+**The number to aim the next session with (F10).** The validation null `sd` is 0.045-0.062 across
+six trials against 0.021-0.024 on train at the same K — a 2.3-2.5x ratio that is pure window
+length and nothing a candidate controls — so the validation hurdle `1.28·sd ≈ 0.070` against
+train's `≈ 0.027`. With the measured selection decay of 3.4x, **a candidate needs a train
+selection term near +0.24 to expect to clear the validation null gate.** The v3 record's best is
++0.151 (F4's `1/sigma^2` row, which decayed worst) and its best transferring one is +0.114. Also
+free, from research `#257`/`#261`: restated as Monte Carlo p-values at `1/201` resolution, the
+board's best null result is **p = 0.209** and "75th percentile" is **p = 0.254**, so six trials
+read as one strong refutation, one weak refutation and four dead heats — not as a search being
+unfairly gated.
+
+**One method note worth carrying.** F2's control looked like a free +0.108 of skill from a pure
+data-availability filter and was a **start-date artifact**: its holdings are identical to F1's
+K = 800 row (overlap 1.000 on every common date), which scored 0.19 lower, and the whole gap was
+three years of cash. It was caught only by reconciling a surprising control against an existing
+measurement instead of believing it. The same check is what produced F3.
+
+**Ideas for the next session.** None is holdout-informed; no holdout or forward number was read.
+
+1. **Apply the warm-up rule and the mild-tilt floor as standing operators, not as hypotheses.**
+   Both are now measured free (F3, and the trial's validation `sd`), both cost nothing, and
+   neither needs its own trial. Any future candidate with a formation window longer than a year
+   should hold the pool until its score exists, and should report its train skill from its own
+   first emitted row as well as from 1997.
+2. **Pre-register against F10's bar.** A construction whose train selection term is below ~+0.24
+   should state why it expects to beat a 3.4x decay, or not be written. This is the first
+   quantitative stopping rule the lab has for the gate that has decided all six v3 trials.
+3. **Do not re-buy tonight's declines without a stated reason**: the K axis of the decade score
+   in either direction (F1 — and its band grid and both windows were already declined in F4 of
+   2026-10-14); inverse-variance weighting (F4); the comovement-selected slice on either sign
+   (F6); the quarter-end-conditional residual-reversal tilt at either κ (F5); unfloored
+   inverse-vol weighting (F7/F8); and the "names with enough history" filter (F2), which is
+   nothing. Residual reversal stays closed and `seasonality-calendar`'s fully-invested route is
+   now closed with it.
+4. **What is still open.** `statistical-learning` has no v3 trial and its headline question was
+   answered for free on 2026-10-13 (a penalised combination of individually-null features is
+   itself a null), so it is uncovered rather than unexplored. Research `#250`'s blend still needs
+   a leg whose own validation null percentile is comfortably above 90%, and the board's best is
+   now 80% / 75% / 60% — tonight moved that search backwards, not forwards. The honest reading is
+   unchanged and now has a calibrated bar behind it: the free-daily-OHLCV space is exhausted for
+   *selection*, the construction axis is closed from five directions, and the next real move is an
+   input the panel does not have.
+5. **From `research/SUMMARY.md`, priced tonight**: **`#257`** and **`#261`**(b) applied as
+   reporting rules to the whole board (F9), with `#261`(a)'s leniency reading used to interpret it;
+   **`#260`** built, measured and **closed** — its gate mechanism confirmed out of sample and its
+   signal absent (the trial); **`#261`**(b)'s "percentiles are not comparable across windows" is
+   what F10's calibration is. Still unspent there: **`#258`** (Stouffer over Fisher for the two
+   train sub-periods, and the sub-period percentile sequence as a control chart — more pressing
+   now that F3 shows the early sub-period is where a warm-up confound lives), **`#259`** (regress
+   the 200 replicas' Sharpe on each replica's exposure to the candidate's own score; it needs the
+   replica *weights*, which `benchmarks.random_null_v3` does not return, so it is a read of output
+   the engine produces and discards and may not be free after all), **`#254`**, **`#255`**,
+   **`#82`**, and the carried queue as 2026-10-15's open-questions entry leaves it.
