@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T00:11:26+00:00",
+  "generated_at": "2026-10-16T23:56:31+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -132,8 +132,34 @@
       ],
       "train_skill": 0.046,
       "mechanism": 4
+    },
+    "seasonality-calendar": {
+      "name": "sc_weekday_mood_band",
+      "candidate": "strategies/candidates/sc_weekday_mood_band.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-16T23:54:16+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.072,
+        "ann_return": 0.0171,
+        "max_drawdown": -0.4371,
+        "ann_turnover": 4.2,
+        "avg_positions": 99.99,
+        "skill": -0.265,
+        "skill_cost2x": -0.305,
+        "skill_delist30": -0.265
+      },
+      "train_sharpe": 0.582,
+      "skill_ci90": [
+        -0.509,
+        -0.011
+      ],
+      "train_skill": 0.058,
+      "mechanism": 5
     }
   },
-  "distinct_mechanisms": 4,
+  "distinct_mechanisms": 5,
   "mechanism_rho": 0.5
 }

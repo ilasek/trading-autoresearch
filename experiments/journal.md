@@ -17946,7 +17946,33 @@ books land, that asymmetry is the finding worth keeping.
 - Validation: sharpe +0.54, ann_ret +12.1%, maxDD -54.1%, turnover 21.9x
 - Survivorship-matched benchmarks (protocol v2): validation sharpe at the 98% percentile of 200 random-selection replicas (median +0.30, 90% +0.44); equal-weight eligible pool +0.51, information ratio vs it +0.41
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
 
 ## 2026-10-07T23:50:55+00:00 — pt_resid_reversal_band — **GATE_FAIL**
 - Candidate: `strategies/candidates/pt_resid_reversal_band.py` (family: price-trend, track: scout, trial #0)
@@ -17956,7 +17982,33 @@ books land, that asymmetry is the finding worth keeping.
 - Validation: sharpe +0.38, ann_ret +5.8%, maxDD -43.1%, turnover 21.0x
 - Survivorship-matched benchmarks (protocol v2): validation sharpe at the 81% percentile of 200 random-selection replicas (median +0.32, 90% +0.40); equal-weight eligible pool +0.51, information ratio vs it -0.04
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
 
 ## 2026-10-07T23:55:51+00:00 — sa_pca_resid_reversion — **FAMILY_LEAD**
 - Candidate: `strategies/candidates/sa_pca_resid_reversion.py` (family: statistical-arbitrage, track: scout, trial #3)
@@ -17967,14 +18019,66 @@ books land, that asymmetry is the finding worth keeping.
 - Survivorship-matched benchmarks (protocol v2): validation sharpe at the 99% percentile of 200 random-selection replicas (median +0.28, 90% +0.41); equal-weight eligible pool +0.51, information ratio vs it +0.35
 - Deflated Sharpe prob: 0.8937 (bar from 3 trials, 3 effective)
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
 
 ## 2026-10-07T23:58:49+00:00 — sl_ridge_six_features — **GATE_FAIL**
 - Candidate: `strategies/candidates/sl_ridge_six_features.py` (family: statistical-learning, track: scout, trial #0)
 - Hypothesis: A ridge (alpha 10) refitted at every month-end on realized cross-sectional rank targets, over six causal feature groups whose pairwise rank correlations are all inside +/-0.08 (21-day pool residual, 12-1 momentum, negative idiosyncratic vol, log Amihud illiquidity, negative volume shock, same-calendar-month seasonal), beats the best single feature's own book (pt_resid_reversal_v2: validation 0.54 at the 98th percentile of its null) on validation Sharpe at the same top-30 selection, weighting and grid, because six nearly orthogonal predictors is the case where a penalised linear combination beats its largest term; landing at or below +0.54 shows the five auxiliary groups -- five of which are individually indistinguishable from zero on the train split -- cost more in estimation error than they carry in signal on this panel. Train Sharpe is predicted at +0.40 to +0.60.
 - Verdict: GATE_FAIL — causality: holdings change when future data is hidden (max diff 3.33e-02 with last 63 days removed) — strategy is peeking ahead
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
 
 ## 2026-10-08T00:14:57+00:00 — sl_ridge_six_masked — **GATE_FAIL**
 - Candidate: `strategies/candidates/sl_ridge_six_masked.py` (family: statistical-learning, track: scout, trial #0)
@@ -17984,7 +18088,33 @@ books land, that asymmetry is the finding worth keeping.
 - Validation: sharpe +0.39, ann_ret +6.9%, maxDD -53.7%, turnover 19.7x
 - Survivorship-matched benchmarks (protocol v2): validation sharpe at the 81% percentile of 200 random-selection replicas (median +0.29, 90% +0.43); equal-weight eligible pool +0.51, information ratio vs it +0.13
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
 
 ## 2026-10-08T00:19:02+00:00 — lv_resid_rev_illiq_tilt — **FAMILY_LEAD**
 - Candidate: `strategies/candidates/lv_resid_rev_illiq_tilt.py` (family: liquidity-volume, track: scout, trial #5)
@@ -17995,7 +18125,33 @@ books land, that asymmetry is the finding worth keeping.
 - Survivorship-matched benchmarks (protocol v2): validation sharpe at the 100% percentile of 200 random-selection replicas (median +0.32, 90% +0.45); equal-weight eligible pool +0.51, information ratio vs it +0.42
 - Deflated Sharpe prob: 0.9033 (bar from 5 trials, 5 effective)
 - Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
-- Lesson: _(fill in after reflection)_
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
 
 
 ## Free measurements, second block — 2026-10-07 (nightly), no trial spent
@@ -20163,3 +20319,40 @@ measurement instead of believing it. The same check is what produced F3.
    **`#82`**, and the carried queue as 2026-10-15's open-questions entry leaves it.
 
 ## Research session — 2026-10-16 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-16T23:54:16+00:00 — sc_weekday_mood_band — **GATE_FAIL**
+- Candidate: `strategies/candidates/sc_weekday_mood_band.py` (family: seasonality-calendar, track: scout, trial #0)
+- Hypothesis: Selecting the 100 eligible names with the highest trailing-252-day weekday mood exposure -- (mean Monday return minus mean Tuesday-to-Friday return) divided by the name's own return standard deviation, which is Birru's speculative-leg contrast measured on the name itself rather than through a characteristic proxy -- quota-allocated across trailing-calendar peer groups and held through a top-200 retention band, lands above the 90th percentile of its region-matched null on validation, because the score's rank correlation to every known or refuted score on this panel is at most +0.126 and a null that permutes names within region has the least to imitate in the most decorrelated book; the pre-registered expectation from F10's calibration is the opposite, a train selection term of +0.027 against a required +0.24 putting it near the 55-60th percentile.
+- Verdict: GATE_FAIL — validation sharpe 0.072 <= the random-selection null's 90% quantile 0.395 (median 0.319; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.58, ann_ret +10.8%, maxDD -46.3%, turnover 2.5x, skill vs pool +0.06
+- Validation: sharpe +0.07, ann_ret +1.7%, maxDD -43.7%, turnover 4.2x, skill vs pool -0.27
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.27, 90% CI [-0.51, -0.01]; at 2x costs -0.30; with a 30% delisting haircut -0.27; train +0.06 (1997-2008 +0.06, 2009-2017 +0.10)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 0% percentile of 200 random-selection replicas (median +0.32, 90% +0.40); equal-weight eligible pool +0.34, information ratio vs it -0.65
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Geography / selection split: pool +0.337, null median +0.319 -> geography **-0.018**, selection
+  **-0.247**. The geography term is the smallest any v3 trial has recorded, so the calendar-peer
+  quotas did their job completely and nothing here is a region bet; the whole of the loss is
+  selection. Turnover 2.47x on train and 4.2x on validation, inside the pre-registered 2.0-5.0x
+  (the second consecutive trial whose turnover pre-registration was a range and not a lower bound).
+- Lesson: **THE MOST DECORRELATED SCORE THIS LAB HAS BUILT LANDED AT THE 0th PERCENTILE, SO
+  DECORRELATION BUYS NOTHING AT THE NULL GATE — AND F10's BAR IS CONFIRMED FROM BELOW BY A
+  SELECTION TERM THAT DID NOT DECAY BUT INVERTED.** The hypothesis was that a null which permutes
+  names within region has least to imitate in a book whose score is unlike anything else, so
+  maximal decorrelation (|rho| <= +0.126 against seven known or refuted scores) should buy gate
+  margin. It bought none: 0th percentile, the third v3 trial to land there, and the realised
+  verdict is *worse* than the pre-registered 55-60th percentile that F10's calibration predicted.
+  The quantitative read is the useful one. Train selection +0.027 became validation selection
+  **-0.247** — not the 3.4x decay the board has measured but a **sign inversion at ten times the
+  train magnitude**, the largest train-to-validation reversal on the v3 board. So F10's bar
+  (`train selection ~ +0.24` to expect to clear the gate) is not merely a hurdle this book missed;
+  this book shows the decay factor itself is unbounded below for a score with no economic anchor,
+  which makes the bar a necessary and *not* a sufficient condition. Mechanically the trial also
+  separates two things the night's free work had bundled: **Birru's mood effect is real on this
+  panel at the level of the CHARACTERISTIC (F1: 7/7 pre-signed, five at |t| > 3) and is pure noise
+  at the level of the NAME (F4/F5)** — a per-name Monday-minus-rest contrast is estimated from ~50
+  Monday observations and its sampling error swamps the ~6 bps/day the characteristic sorts show.
+  `seasonality-calendar` now has its first recorded trial under v3 and its `day-of-week` axis is
+  closed on measurement, which with F2's 30.67%/yr rotation bill and F3's refutation of research
+  `#265` closes the family's `calendar` half three ways in one night. One consolation that is a
+  real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
+  — the score genuinely is a new return stream, it is simply a worthless one.
+
