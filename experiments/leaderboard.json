@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T23:46:49+00:00",
+  "generated_at": "2026-10-16T00:11:26+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -27,6 +27,32 @@
         0.281
       ],
       "train_skill": 0.033,
+      "mechanism": 1
+    },
+    "portfolio-learning": {
+      "name": "pl_decade_invvol_floored",
+      "candidate": "strategies/candidates/pl_decade_invvol_floored.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-16T00:09:10+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.298,
+        "ann_return": 0.0535,
+        "max_drawdown": -0.3839,
+        "ann_turnover": 2.78,
+        "avg_positions": 100.04,
+        "skill": -0.039,
+        "skill_cost2x": -0.067,
+        "skill_delist30": -0.039
+      },
+      "train_sharpe": 0.644,
+      "skill_ci90": [
+        -0.31,
+        0.234
+      ],
+      "train_skill": 0.12,
       "mechanism": 1
     },
     "liquidity-volume": {

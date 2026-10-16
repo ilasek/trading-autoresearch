@@ -19800,3 +19800,44 @@ that a combiner has nothing to combine on the signal side is not rescued on the 
    **#256**.
 
 ## Research session — 2026-10-15 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-16T00:09:10+00:00 — pl_decade_invvol_floored — **GATE_FAIL**
+- Candidate: `strategies/candidates/pl_decade_invvol_floored.py` (family: portfolio-learning, track: scout, trial #0)
+- Hypothesis: Weighting an already-selected slice -- the 100 eligible names with the lowest trailing ten-year mean monthly return, quota-allocated across trailing-calendar peer groups -- inversely to 126-day volatility floored at the slice's own 20th percentile earns a higher validation null percentile than the equal-weight version of the same slice (75%), because v3's null copies the weight vector onto permuted names and so cannot inherit a fit to the names actually held, while a floored vector stays mild enough (100 effective names, 1.2% largest weight) that the null's dispersion stays at the equal-weight floor instead of widening with it as the unfloored vector's does (0.0210 against 0.0375 on train).
+- Verdict: GATE_FAIL — validation sharpe 0.298 <= the random-selection null's 90% quantile 0.358 (median 0.284; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.64, ann_ret +12.2%, maxDD -56.6%, turnover 2.3x, skill vs pool +0.12
+- Validation: sharpe +0.30, ann_ret +5.3%, maxDD -38.4%, turnover 2.8x, skill vs pool -0.04
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.04, 90% CI [-0.31, +0.23]; at 2x costs -0.07; with a 30% delisting haircut -0.04; train +0.12 (1997-2008 +0.14, 2009-2017 +0.03)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 60% percentile of 200 random-selection replicas (median +0.28, 90% +0.36); equal-weight eligible pool +0.34, information ratio vs it -0.14
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE WEIGHT-VECTOR HALF OF THE MECHANISM WAS CONFIRMED AND THE SKILL HALF DID NOT
+  TRANSFER AT ALL, WHICH MAKES THIS THE CLEANEST PAIRED DEMONSTRATION THE LAB HAS THAT A TRAIN
+  SCREEN CARRIES NO INFORMATION ABOUT VALIDATION** — same 100 names, same schedule, same peer
+  quotas, only the weight vector changed. The pre-registered prediction named a percentile above
+  the baseline's 75% as support and *at or below 75% as refutation*; it came out at **60%**, so
+  the mechanism is refuted in the direction the file wrote down. The two halves came out
+  opposite ways and have to be read apart.
+  (i) **The gate-geometry claim held.** The floor existed to stop the vector's tail widening its
+  own null (F8: unfloored 1/sigma leaves 33.4 effective names of 100 at null sd 0.0375; floored
+  at the slice's p20, 100.0 effective names at 0.0210, against equal weight's 0.0213). On
+  validation the floored book's null sd is **0.0577** against the equal-weight version's
+  **0.0554** — the dispersion did stay at the equal-weight floor, on a split no screen had seen.
+  That half of research `#260`'s reasoning is measured true: a permutation-mild weight tilt is
+  not punished by the null, and it is a free operator for any other leg.
+  (ii) **The signal was not there.** Train selection (candidate minus null median) rose
+  +0.114 -> +0.137 with the weighting; validation selection **fell +0.034 -> +0.014**. Train
+  skill rose +0.104 -> +0.120 and validation skill **fell -0.006 -> -0.039**. So risk weighting
+  inside a selected slice is a train-only effect on this panel — worth +0.016 of train skill and
+  **-0.033 of validation skill** — and `#260` is closed. Note which objection was the wrong one:
+  F4's gate arithmetic (dispersion rises faster than selection) predicted the failure for a
+  reason this trial shows is false, and the floor that answered F4 worked exactly as designed.
+  **Why this instance is worth more than the four before it.** The three preceding nights each
+  ended with "a clean train screen is not evidence" by comparing two *different* books. Here the
+  two books hold identical names on identical dates and differ in one operator, so every
+  confound the lab has catalogued is held fixed by construction: geography -0.053 against the
+  baseline's -0.040, tail depth identical, turnover 2.8x against 2.7x, the delisting haircut
+  0.000 in both, 2x costs moving skill 0.028. The train-to-validation decay of the selection
+  term is **3.4x for the equal-weight vector and 9.8x for the weighted one**: the operator that
+  added the most train skill decayed the fastest, which is the signature of fitting the train
+  window rather than of a mechanism. Turnover pre-registration held for the fourth night
+  running: 1.5-4.5x predicted, 2.8x charged.
+
