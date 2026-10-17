@@ -2675,6 +2675,43 @@ equal-weight benchmark (`β̄⁺/σ̂²`, long-only by truncation) are all writt
 before proposing anything in this family: two of the shapes it rules out (minimum-tracking-error
 books, and heavy anchoring toward the pool) are natural next steps from the shrinkage material above.
 
+**[2026-10-17] The family's oldest literature was the one it had never read, and it turns out to
+describe the lab's own grading machinery rather than a new candidate.** Online portfolio selection —
+Cover's universal portfolio and its descendants — competes against the **best constant-rebalanced
+portfolio (CRP) chosen in hindsight**, and the v3 equal-weight eligible pool *is* a CRP (`b = 1/n`).
+Put beside the 2026-10-15 cluster's concentration result, **all three objects in v3's grading
+machinery are points or measures on one simplex of constant-rebalanced portfolios**: the benchmark
+is the uniform CRP, the 200 random replica books are draws from a measure on that simplex which
+concentrates on the uniform CRP, and the hindsight ceiling is `Sₙ* = maxᵦ Πᵢ b′xᵢ`. Cover's algorithm
+is the uniform measure on that simplex **reweighted by realised wealth**, and Blum–Kalai's randomised
+implementation of it is literally "draw `N` random portfolios, hold them, never transfer between
+them" — the lab's null, used as a strategy. Three results follow. *(1)* A naive universal-portfolio
+candidate differs from the v3 benchmark **by exactly its performance tilt and by nothing else**, so
+the measurement that decides the family is the realised distance from `1/n`, not a Sharpe (#268).
+*(2)* **The regret guarantees are numerically vacuous at every scale this lab operates at** —
+`(m−1)log(n+1)` for the universal portfolio and `√(2T log N)` for exponentiated gradient are both of
+order tens to thousands in log wealth at `m, N ≈ 10³`, `T ≈ 1500`, and dividing by `T` leaves a
+per-day allowance of order one percent; what they certify is a vanishing *rate*, never a level, and
+the papers' own random-subset experiment shows the fraction of best-CRP wealth captured **falling**
+as the asset count rises (#269). *(3)* The genuinely transferable object is not a signal but an
+**operator**: the exponentiated-gradient update
+`wᵢ ∝ wᵢ·exp(η·xᵢ/(w·x))` is a relative-entropy-regularised step whose single parameter `η` is a
+turnover dial with a published prior range, long-only by algebra rather than by projection, and it
+accepts any score in place of the price relative (#270). The branch of the same literature that
+reports large returns is **Follow-the-Loser** mean reversion (OLMAR and kin), and it is an
+anti-candidate whose refutation the lab already measured under v3 before reading the source — the
+survey's own assumption list (zero costs, fills *at the closing price*, no impact) is item-for-item
+what `experiments/learnings.md` [2026-10-08] names as what had been carrying the v2 residual-reversion
+leads (#271). One structural observation falls out of that branch and is kept: **restoring fixed
+weights is itself a Follow-the-Loser trade**, so the pool's rebalancing channel is a mean-reversion
+bet the protocol's fill rule denies challengers at one-day horizons while leaving it with the
+benchmark at slower ones (#272). Tier A (Cover; Helmbold et al.), tier B (Blum–Kalai; the survey and
+OLMAR); no validation overlap and nothing published post-2018 — the whole cluster predates this
+lab's windows, so McLean–Pontiff applies at full strength.
+→ `notes/2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md`,
+`notes/2026-10-17-exponentiated-gradient-portfolio-update.md`,
+`notes/2026-10-17-follow-the-loser-online-portfolio-selection.md`
+
 
 ---
 
@@ -11732,6 +11769,132 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-16-calendar-effects-data-mining-robust-test.md` ·
     `notes/2026-10-16-day-of-week-and-the-cross-section.md`
 
+268. **FREE / RECORDED IDENTITY — the benchmark, the null and a 35-year-old literature's hindsight
+    ceiling are three objects on one simplex, and the consequence is a pre-trial screen that costs
+    nothing.** A constant-rebalanced portfolio (CRP) holds fixed proportions on the simplex and
+    restores them every period; the v3 equal-weight eligible pool **is** the uniform CRP, `b = 1/n`.
+    The 200 random replica books are draws from a measure on that same simplex, and [2026-10-15]
+    established that the measure concentrates on the uniform CRP (`E‖ω − ω̄‖²₂ → 0`). Cover's
+    universal portfolio is that measure **reweighted by realised wealth**, and Blum–Kalai's
+    randomised implementation of it is exactly "draw `N` random portfolios, hold them, never
+    transfer between them" — i.e. *the lab's own null run as a strategy*. **Therefore any
+    universal-portfolio or wealth-weighted-replica candidate differs from the v3 benchmark by
+    precisely its performance tilt and by nothing else**, and the quantity that decides the family
+    is not a Sharpe but the realised mean absolute weight deviation from `1/n`, computable from the
+    weight frames of one trial. Pre-register it: a small tilt means the candidate is the pool
+    wearing a hat (zero skill by construction, which is the F8 null-collapse measurement again); a
+    large tilt means the guarantee is irrelevant and the thing is a concentrated momentum bet to be
+    graded as one. Two corollaries. *(a)* The hindsight ceiling `Sₙ*` dominates every buy-and-hold
+    **by set inclusion** (buy-and-hold maximises over the simplex's vertices), so "the best CRP beat
+    the best stock" is never evidence of anything. *(b)* Under i.i.d. returns the best CRP *is* the
+    growth-optimal portfolio — so the literature's target is only *optimal* under the assumption the
+    lab's own benchmark literature disputes, and the distribution-free reading (the best member of
+    an arbitrary class) is the honest one. Tier A source, no overlap.
+    → `notes/2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md` ·
+    `notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md` ·
+    `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`
+
+269. **FREE / INTERPRETATION RULE — a regret bound is a statement about a *rate* and never about a
+    level, and this family's bounds are numerically vacuous at every scale this lab operates at.**
+    Check it in one line before importing any "provably as good as" claim. The universal portfolio
+    allows a log-wealth shortfall of `(m−1)·log(n+1)`: ≈ 8.6 at **two** assets over a 22-year daily
+    sample, tens at a handful, thousands at ~1,000 eligible names. Exponentiated gradient trades the
+    linear `m` for `log N` and pays for it in time, `√(2T log N)` ≈ of order a hundred at `N ≈ 10³`,
+    `T ≈ 1500`. Dividing by `T` does not rescue either — `(m−1)log(n+1)/n` is still of order one
+    percent per day at `m = 5`, `n ≈ 1500`. What the bounds *do* certify is that the shortfall cannot
+    grow linearly in `n`, i.e. the rule cannot be permanently and catastrophically wrong relative to
+    the comparator class; that is a real property and it is not a performance promise. Two
+    empirical companions worth carrying with the rule: the observed wealth ratio to the best CRP is
+    far better than the bound (`R < 2` for the asset pairs in the published experiments), and a
+    **random-subset** experiment — the least cherry-picked number in the cluster — shows the fraction
+    of best-CRP wealth captured **falling monotonically** as the subset grows from two names to a
+    couple of dozen, for both algorithms. The dimension penalty is real in data, not only in the
+    analysis, and it points the wrong way for a thousand-name panel. Generalises beyond this family:
+    **ask what a bound bounds, and evaluate the constant at this lab's `N` and `T` before quoting
+    it.** Tier A sources, no overlap.
+    → `notes/2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md` ·
+    `notes/2026-10-17-exponentiated-gradient-portfolio-update.md`
+
+270. **CANDIDATE (1 trial, `portfolio-learning`) — the exponentiated-gradient update as a
+    turnover-aware weighting *operator* over a score the lab already owns, with `η` as the single
+    cost dial.** The rule is
+    `wᵢ^{t+1} ∝ wᵢ^t · exp(η · sᵢ^t)`, renormalised — the closed-form maximiser of
+    `η·log(w·x) − D_RE(w‖w_prev)`, i.e. *move toward the score, penalised by relative entropy from
+    where the book already sits*. Properties that make it worth a trial rather than a note: weights
+    cannot leave the simplex, so **long-only and gross-leverage-1 are enforced by the algebra and not
+    by a projection**; it is causal by construction (`w_{t+1}` is a function of `w_t` and day `t`
+    only) so `causality_check` is trivial; it is `O(N)` per rebalance with no matrix anywhere, so it
+    passes the standing parameter-counting triage (candidate 1) with **zero** estimated parameters;
+    and it is *mechanically different* from the lab's existing band and top-K machinery — bands
+    threshold, this one scales. `η` has a published prior range of `[0.01, 0.15]` with the authors'
+    recommendation at `0.05`, flat within that range and loss-making above 1 in their toy market, so
+    it is a dial to set rather than a grid to sweep. Turnover scales as `η` times the
+    cross-sectional dispersion of the score, which makes the cost consequence predictable before the
+    run — report it. Two sub-items. *(a)* **Prefer a weekly or monthly rebalance grid with the input
+    measured over the same interval**: v3's next-real-print fill plus a 15-region non-synchronous
+    panel makes a one-day input partly a stale-price artifact. *(b)* The `EG(η,α)` variant's mixing
+    step, `w̃ = (1−α)w + (α/N)·1`, is **shrinkage toward equal weight with the mixing weight set by a
+    regret bound instead of an estimate** — the computable substitute for `#237`'s `δ*`, which needs
+    `T > N + 4` and is unavailable at this panel's width. Tier A source, no overlap.
+    → `notes/2026-10-17-exponentiated-gradient-portfolio-update.md` ·
+    `notes/2026-10-11-optimal-combination-of-the-naive-rule-and-an-estimated-one.md` ·
+    `notes/2026-08-20-dynamic-trading-transaction-costs-aim-portfolio.md`
+
+271. **ANTI-CANDIDATE — do not propose an online-portfolio-selection mean-reversion rule (OLMAR,
+    PAMR, CWMR, RMR, Anticor) on this panel, and the reason is that the lab measured the refutation
+    before it read the source.** The construction predicts reversion of each name's price to its own
+    `w`-day moving average and takes a passive–aggressive step toward the names furthest below it; at
+    the published `ε = 10` the constraint is *saturated* on every day, so the simplex projection does
+    the real work and the book is a **near-vertex, ~100%-daily-turnover** bet — which breaks the 25%
+    cap outright and, once capped, becomes "equal-weight the few most oversold names" at unchanged
+    turnover. The field's own survey states its three modelling assumptions as **no transaction
+    costs or taxes, trades executed *at the closing price*, and no market impact**; those are
+    item-for-item what `experiments/learnings.md` [2026-10-08] names as what had been carrying the v2
+    residual-reversion leads before v3 retired them to skill of −0.01 and +0.00 against the pool.
+    **There is no tension between source and refutation — read the assumption list and the two
+    agree.** Four further discounts, all structural: the scoring metric is undiscounted compounded
+    daily-rebalanced wealth, which is exactly the upward-biased estimator of
+    `notes/2026-10-03-caveat-compounder-daily-rebalancing-bias.md`; parameters are picked on the same
+    panels the `t`-statistics are computed on with multiple testing unacknowledged; the canonical
+    benchmark panel is a few dozen names with continuous multi-decade histories, i.e.
+    survivorship-conditioned by construction; and the branch's own proponents report it failing badly
+    on one of four panels, so the mechanism is panel-dependent on their evidence. Note also that this
+    family splits into **two branches making opposite trades on the same data**, both claiming
+    empirical success — the [2026-10-10] detector arriving from a source rather than an audit. Tier B
+    sources, no overlap. **What is not closed**: the operator in `#270`, the aggregator in `#272`'s
+    second half, and the identity in `#272`.
+    → `notes/2026-10-17-follow-the-loser-online-portfolio-selection.md` ·
+    `notes/2026-10-03-caveat-compounder-daily-rebalancing-bias.md` ·
+    `notes/2026-08-26-survivorship-conditioning-and-spurious-persistence.md`
+
+272. **FREE / STRUCTURAL OBSERVATION about the lab's own grading, plus the one aggregator three
+    independent sources now agree on.** *(a)* **Restoring fixed weights is itself a Follow-the-Loser
+    trade**: a uniform CRP whose holdings drift to `(1/3, 2/3)` sells the winner and buys the loser
+    to get back to `(1/2, 1/2)`, every period. So the pool's rebalancing channel — which
+    [2026-10-13] puts at a sizeable share of its gap over cap weighting, and which
+    `notes/2026-08-22-rebalancing-return-attribution-critique.md` shows has zero expected value under
+    i.i.d. and pays only where relative prices mean-revert — **is the simplest member of the branch
+    `#271` closes.** v3's next-real-print fill rule removes the one-day part of that effect from
+    challengers while the pool, a slow restorer of equal weights, keeps whatever lives at longer
+    horizons. That is a structural feature of the lab's grading rather than a complaint, and it
+    predicts the sign of a measurable quantity: **the pool's advantage should concentrate in the
+    slower part of the reversion**, which is checkable from stored returns and is a sharper version of
+    the standing question of what the benchmark is actually earning. *(b)* **Buy-and-hold over
+    experts is the free aggregator, and it has now arrived from three independent directions**:
+    Blum–Kalai's randomised universal portfolio (draw `N` random CRPs, hold, never transfer),
+    `BAH(OLMAR)` over its window grid, and the survey's whole meta-learning category. It performance-
+    weights its components *automatically*, costs **no meta-level turnover**, needs no covariance
+    matrix and no expected-return vector, and it is the exact shape `program.md` charters for
+    `portfolio-learning` ("stacking or meta-labelling over family leads"). Two cautions carried from
+    elsewhere: the components must be different return streams rather than noisy estimates of one
+    quantity (candidate 2), and where the experts are averages over **overlapping windows of one
+    sample** their correlation is derivable rather than estimable, so `#266` applies to the deflation.
+    Tier A/B sources, no overlap.
+    → `notes/2026-10-17-follow-the-loser-online-portfolio-selection.md` ·
+    `notes/2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md` ·
+    `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md` ·
+    `notes/2026-10-16-calendar-effects-data-mining-robust-test.md`
+
 ---
 
 ## Coverage log
@@ -11802,8 +11965,82 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-14 (session 61) | **The first session to read the literature on the *difference* that v3 scores — the statistic itself rather than the thing in the numerator or the thing in the subtrahend — and the first whose three sources are a statistic, its scope limit and its level.** Aim set by `research/README.md`'s rotation rule plus the one step [2026-10-13] left unspent: that entry read the pool *as a strategy*, and the remaining object was the subtraction. A grep across all 186 prior notes returned **zero** for `Barillas`, `Detzel`, `model comparison`, `cost mitigation`, `characteristic vs covariance` and `Treynor`, while `appraisal ratio` appeared only inside the 2026-09-23 spanning trilogy — so the folder held the *test* of whether a new leg belongs and the *inference* on a Sharpe difference but never the identity tying either to a portfolio decision. Headline: **v3's skill gate is sufficient but not necessary — the exact frontier-expansion condition is `SR_C > ρ·SR_B` — and the prize in the gap is second-order (`≈ AR²/2SR_B`), so the right use of the identity is a pre-trial screen on the candidate's alpha against the pool, not a rescue.** Second: the squared-Sharpe criterion **survives proportional costs and fails under price impact**, and v3's costs are proportional, so the lab's statistic is coherent and scale-free *because of the shape of its own cost model* — with the rider that an impact-free model understates an illiquid book's bill. Third: net of spreads, decay, the trading-technology change and **data-mining bias**, the literature's own estimate of a published cross-sectional signal's expected return is effectively zero, and this lab's setting is harder on three counts, so a long run of nulls is evidence about the protocol being right rather than about the search being broken. One tension resolved into the night's only buildable item: combining legs helps *costs* (trades cancel) even where it does not help *IC*, and the cancellation has never been measured here. New: **#249–#256**, six free, one trial, one recorded calibration. **Detzel–Novy-Marx–Velikov (JF 2023)** is a new unobtained-body pointer with its verbatim abstract in hand. Barillas–Shanken 2017 (`2026-10-14-which-alpha-the-sufficient-statistic-for-beating-a-benchmark.md`); Li–DeMiguel–Martín-Utrera 2024 (`2026-10-14-net-of-cost-model-comparison-and-the-concave-frontier.md`); Chen–Velikov 2022 (`2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`) |
 | 2026-10-15 (session 62) | **The first session to read the literature on the lab's own *null* — the 200 random portfolios every v3 trial is graded against — and the last object in the four-night chain that began with the numerator.** Sessions 58-61 walked the candidate's Sharpe -> the equal-weight pool -> the subtraction between them -> and tonight the **distribution the difference is compared against**. Aim set by `research/README.md`'s rotation rule plus one observation and one grep: `experiments/learnings.md` [2026-10-07] records that the random-selection gate, **not** the deflator, is the binding constraint on the v3 board, and both of the 2026-10-14/15 nightly's GATE_FAILs failed on that gate alone -- while a grep across all 189 prior notes returned **zero** for `monkey`, `Burns`, `random selection`, `Kosowski`, `luck versus skill`, `Surz` and `upside-down`, with `random portfolio` appearing exactly once and only as an implementability aside. Three sources, forming method -> what the draws earn -> why the inference fails: the gate's identity as an **m-out-of-n bootstrap** whose centre is the equal-weight pool by construction (`E‖ω − ω̄‖²₂ → 0`), which explains the lab's own `p90`-flat-in-K table and its F8 null collapse; the **leniency** reading (a thin-shell null gives over-optimistic rejections, so a 0th-percentile result is stronger evidence than it looks -- a third independent route to `#256`); the finding that v3 **escapes** the literature's reference-point criticism because its benchmark and its null's centre coincide; the method's unused operating manual (the `(N+1)` p-value, Stouffer over Fisher, the p-value control chart, and the matched-dimension rule); and one genuine disagreement between two of the three sources about the **volatility** axis, which becomes the night's single trial. | Burns 2004 + 2006 cluster (`2026-10-15-random-portfolios-as-the-null-of-no-skill.md`); Clare-Motson-Thomas 2013 (`2026-10-15-random-weight-indices-and-the-equal-weight-centre.md`); Bachelard-Chalkis-Fisikopoulos-Tsigaridas 2024 (`2026-10-15-random-portfolio-inference-concentration-of-measure.md`). Unobtained: Arnott-Hsu-Kalesnik-Tindall 2013 (JPM), SSRN 403 + Research Affiliates destination chooser |
 | 2026-10-16 (session 63) | **The first session in six to leave the lab's own measurement chain and return to a family, and it opens the one axis `program.md` charters that this folder had never covered at all — the `calendar` half of `seasonality-calendar` (day-of-week, holiday windows) — closing it a third time while its *cross-sectional* twin survives intact.** Sessions 58-62 walked the objective → the estimation → the benchmark → the difference → the null, and that chain ended. Tonight's three sources are one argument: a data-mining-robust joint test over an enumerated 181-effect calendar universe says the biggest, most cross-country-consistent windows (end-of-year, holiday) **vanish in standardized returns** and that the only form surviving everything lives in **small- and mid-cap indices** — excluded by construction on this panel (**#263**, **#266**, **#267**); then the weekday effect reappears as a **cross-sectional** phenomenon driven by the speculative leg, with the author's own explanation of why aggregate and cross-sectional calendar predictions must disagree, giving the lab a free weekday decomposition that doubles as a **cadence-reachability** screen on every lead it holds (**#264**); then a mood-based model that reads the lab's seated seasonal leg as a mixture of two **opposite-signed** terms and supplies the night's one buildable candidate, a congruence split with a calendar-free labelling and a sign-flip test an artifact cannot pass (**#265**). **New: #263-#267. Nothing of the lab's is contradicted; its two calendar closures are strengthened by a third, independent, measurement-level reason.** | Hansen-Lunde-Nason 2003/2005 (`2026-10-16-calendar-effects-data-mining-robust-test.md`); Birru 2018 JFE (`2026-10-16-day-of-week-and-the-cross-section.md`); Hirshleifer-Jiang-Meng 2020 JFE (`2026-10-16-mood-beta-and-seasonal-recurrence.md`) |
+| 2026-10-17 (session 64) | **The first session to read the oldest literature about the lab's own portfolio object — online portfolio selection, which has competed against the best *constant-rebalanced portfolio* since 1991 — and it finds that the v3 benchmark, the v3 null and that literature's hindsight ceiling are three objects on one simplex.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 192 prior notes `universal portfolio`, `online portfolio`, `Anticor`, `OLMAR`, `follow-the-leader`, `Kalman`, `conformal` and `turnover constraint` all returned **zero**, and `Cover` appeared only as a surname in reference lists — 192 notes about what to forecast and how to weight it, none about the sequential-decision literature whose entire setting (long-only, weights summing to one, daily closes, no fundamentals) is this lab's setting exactly. Four sources, three notes, one chain: the guarantee → the cheap operator → the branch that claims returns. Headline: **the equal-weight eligible pool *is* the uniform CRP, the 200 random replica books are draws from a measure on the same simplex that [2026-10-15] showed concentrates on it, and Cover's universal portfolio is that measure reweighted by realised wealth — so Blum–Kalai's randomised implementation is literally the lab's own null run as a strategy**, and a naive candidate in this family differs from the benchmark by exactly its performance tilt (**#268**). Second, and the night's most transferable discipline: **the regret bounds are numerically vacuous at every scale this lab operates at** — `(m−1)log(n+1)` is ≈8.6 in log wealth at *two* assets over 22 years of daily data and thousands at a thousand names, `√(2T log N)` is of order a hundred at this panel's width, and the papers' own random-subset experiment shows the captured fraction of best-CRP wealth *falling* as the asset count rises; what a bound certifies is a rate, never a level (**#269**). Third, the one buildable item is an **operator, not a signal**: the exponentiated-gradient update is a relative-entropy-regularised step whose single parameter is a turnover dial with a published prior range, long-only by algebra, zero estimated parameters, and it accepts any score the lab already owns (**#270**); its `EG(η,α)` mixing step is also the *computable* substitute for `#237`'s uncomputable `δ*`. Fourth, the Follow-the-Loser branch (OLMAR and kin) is an **anti-candidate whose refutation the lab measured before reading the source** — the survey's own assumption list (no costs, fills *at the closing price*, no impact) is item-for-item what `experiments/learnings.md` [2026-10-08] names as what carried the v2 residual-reversion leads, so there is no tension to adjudicate (**#271**). Kept from that branch: **restoring fixed weights is itself a Follow-the-Loser trade**, so the pool's rebalancing channel is a mean-reversion bet v3's fill rule denies challengers at one-day horizons and leaves with the benchmark at slower ones, and *buy-and-hold over experts* is the free aggregator three independent sources now agree on (**#272**). No lab measurement was taken and the holdout was not read. | Cover 1991 (*Mathematical Finance*, tier A) + Blum–Kalai 1999 (*Machine Learning*, tier B) (`2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md`); Helmbold–Schapire–Singer–Warmuth 1998 (*Mathematical Finance*, tier A) (`2026-10-17-exponentiated-gradient-portfolio-update.md`); Li–Hoi 2014 (*ACM Computing Surveys*) + Li–Hoi 2012/Li–Hoi–Sahoo–Liu 2015 OLMAR (*ICML* / *Artificial Intelligence*), tier B (`2026-10-17-follow-the-loser-online-portfolio-selection.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-17] What should aim the next session, in order — and the top of this list is now one free
+  identity rather than a queue of re-reads, because tonight's cluster closed a loop the last six
+  sessions had been circling.**
+  - **`#268` first, and it is free and retrospective.** The weight frames of every book already
+    scored are on disk; the quantity nobody has computed is the realised **mean absolute weight
+    deviation from `1/n`** for each lead and for the replica draws. That one number decides the whole
+    online-portfolio-selection family before a trial is spent, and it also calibrates the lab's own
+    null: [2026-10-15] proved the draws concentrate on the pool in theory, and this measures how far
+    they actually sit at `n ≈ 1000` with v3's `K`-name selection rule in the way. Pre-register the
+    prediction before looking.
+  - **Then `#269` as standing discipline, not a task.** It belongs beside `#94`: before quoting any
+    bound, guarantee or asymptotic result, evaluate its constant at this lab's `N` and `T`. Tonight
+    it retired a famous theorem from the set of things that can motivate a hypothesis here, and the
+    same test applies to every `O(·)` claim the folder holds.
+  - **Then `#270`, the night's one trial, and it is cheap in the specific way v3 rewards.** An
+    exponentiated-gradient weighting operator over a score the lab already owns: zero estimated
+    parameters, long-only by algebra, `O(N)`, causal by construction, and with a turnover dial whose
+    prior range is published rather than swept. Run it on a weekly or monthly grid with the input
+    measured over the same interval — a one-day input on this non-synchronous panel is partly the
+    stale-price artifact v3's fill rule already removed from the tradeable side. Report realised
+    turnover against `η` as the deliverable even if the skill is null; that table calibrates every
+    later scaling rule.
+  - **`#272`(a) is the sharpest free diagnostic left on the benchmark**, and it is the natural
+    successor to session 60's reading of the pool as a strategy: if the pool's rebalancing channel is
+    a Follow-the-Loser trade, its advantage should concentrate in the *slower* part of the reversion,
+    because v3's fill rule takes the one-day part away from challengers and not from it. Checkable
+    from stored returns.
+  - **Then the 2026-10-16 queue unchanged**, in the order that nightly set: `#263`, then `#264`, then
+    `#265`, with `#266` standing as a design rule; then the 2026-10-15 queue (`#257`, `#261`, `#259`,
+    `#258`, `#260`), then the 2026-10-14 queue and everything carried below it. Nothing on those
+    lists is closed or reordered by tonight, and `#271` adds one anti-candidate rather than retiring
+    any open item.
+- **[2026-10-17] The transferable output, and it is the seventeenth detector: ask whether the
+  literature's *comparator* is an object the lab already holds, because if it is, the whole guarantee
+  is about the lab's own benchmark rather than about a new edge.** The sixteen before it: redundancy
+  [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at
+  [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's
+  confound [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06],
+  the self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], the objective-versus-number distinction
+  [2026-10-11], a method's admitted scope [2026-10-12], the benchmark read as a strategy [2026-10-13],
+  the operator in the scoring rule [2026-10-14], what the null is a distribution *over* [2026-10-15],
+  and the level of aggregation a prediction is sharp at [2026-10-16]. Tonight's came from noticing
+  that "the best constant-rebalanced portfolio chosen in hindsight" is not an exotic benchmark but
+  **the class the lab's own equal-weight pool belongs to** — at which point a 35-year-old literature
+  stops being a source of candidates and becomes a source of facts about the grading machinery. The
+  test is one question of any imported guarantee: *what is this promising to be as good as, and do I
+  already own that object?* **Second transferable, smaller and about reading method papers: a
+  modelling-assumptions list is the implementability section, and it is usually three lines long and
+  stated up front.** Tonight's survey put "no transaction costs or taxes; trades executed at the
+  closing price; no market impact" in its problem-setting section, and those three lines decided the
+  verdict on an entire branch — matching, item for item, what the lab's own [2026-10-08] re-measurement
+  had already named. **Read the assumption list before the results section**; where a source and a lab
+  refutation appear to disagree, the assumption list is usually where they turn out to agree.
+- **[2026-10-17] Access findings — two first-try channels, one host confirmed as a general-purpose
+  finance library, and nothing dark.** **`gwern.net/doc/<field>/<topic>/<year>-<author>.pdf`** served
+  the typeset *Mathematical Finance* version of a 1991 tier-1 article on the first try (971 KB →
+  57 KB of clean text, 320 instances of `" the "`, zero `( )` dropout); it is a flat, slug-predictable
+  personal document library of the `robjhyndman.com/papers/` and `burns-stat.com` shape this file keeps
+  rediscovering, and worth trying for any widely-taught paper. **`cis.upenn.edu/~<faculty>/finread/<slug>.pdf`**
+  is a *course reading list* directory and served the published version of a closed 1998 tier-1
+  article — the 2026-09-18 faculty-page lesson extended one step further out: a **teaching** directory
+  indexes other people's canonical papers, so try the syllabus of a course on the topic, not only the
+  authors' own sites. Also confirmed: **`link.springer.com/content/pdf/<doi>.pdf`** serves a 1999
+  *Machine Learning* article's typeset PDF without challenge (the journal's pre-2000 volumes appear to
+  be open), and **arXiv is the right first stop for anything from the ML side of this literature** —
+  both the ICML paper and the preprint of the ACM survey parsed cleanly. **No new "looks like an
+  answer" mode tonight**, and the `-w 'HTTP %{http_code} size=%{size_download}'` check this file
+  mandates caught nothing because nothing was wrong; recorded because a clean session is evidence the
+  check is cheap, not evidence it is unnecessary. **No new unobtained pointers**: all four sources were
+  read in full, which is the first session in several with nothing to carry forward on access.
 
 - **[2026-10-16] What should aim the next session, in order — and the top of this list is cheaper than
   anything the 2026-10-15 nightly left, because two of tonight's items are re-reads of numbers the

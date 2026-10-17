@@ -20640,3 +20640,5 @@ produced an all-NaN score and zero scored dates rather than an error. **A rollin
 computed on a masked frame has a different effective sample size from the same statistic on the
 unmasked one, and `min_periods` must be set per frame; check the scored-date count before reading
 any number off such a construction.**
+
+## Research session — 2026-10-17 (learning agent): 3 notes added, see research/SUMMARY.md
