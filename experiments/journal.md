@@ -20356,3 +20356,287 @@ measurement instead of believing it. The same check is what produced F3.
   real result: the book is `mechanism` 5 on the leaderboard, so `distinct_mechanisms` rises 4 -> 5
   — the score genuinely is a new return stream, it is simply a worthless one.
 
+
+## Free measurements — 2026-10-16/17 (nightly), one trial spent
+
+The engine suite is green (92 passed). Everything below is **train split only** (1997-01-01 →
+2017-12-31) on the panel `protocol.visible_frame` hands a candidate truncated at the train end,
+except F6, which reads only `experiments/trials.jsonl`. No validation Sharpe outside
+`run_experiment.py`, and no holdout, forward or incubation file was opened. Nulls here use 40
+region-matched draws (the engine uses 200), so a reported null `sd` carries ~11% relative error.
+The harness reproduces the protocol's pool to four decimals (+0.5238 against the recorded +0.524)
+and reproduces last session's F2(a) control row exactly (+0.524, npos 492.4, turn 0.89x), which is
+what licenses the rest.
+
+**F1 — BIRRU'S CROSS-SECTIONAL WEEKDAY MOOD EFFECT REPLICATES ON THIS PANEL, SEVEN TIMES OUT OF
+SEVEN, PRE-SIGNED.** Research `#264` asks for a weekday decomposition of every leg this repo can
+build, with each leg's sign fixed in advance by which side holds the *speculative* names: a
+long-only book whose long leg is NON-speculative should earn most on Monday (low mood) and least
+into Friday, and a book whose long leg IS the speculative side — illiquidity, distress — should do
+the opposite. Daily active return against the equal-weight eligible pool, region-quota K = 100
+books, monthly re-formation, gross (a weekday decomposition of a held book is a signal diagnostic,
+not a trade), 1085 Mondays:
+
+    book (long leg)        predicted    all    Mon   rest   Mon-rest      t    beta  alpha/d  Mon alpha
+    low ivol126            Mon > rest  -0.70  +3.93  -1.85    +5.78    +3.60   0.73   +0.62     +4.01
+    low MAX21              Mon > rest  -0.52  +3.50  -1.52    +5.02    +3.24   0.72   +0.83     +3.59
+    near 52w high          Mon > rest  -1.00  +4.51  -2.37    +6.87    +4.22   0.75   +0.22     +4.58
+    low beta252            Mon > rest  -1.09  +4.11  -2.38    +6.49    +3.20   0.61   +0.79     +4.22
+    low vol126             Mon > rest  -1.01  +4.32  -2.34    +6.66    +3.53   0.65   +0.66     +4.42
+    high amihud126         rest > Mon  +1.26  +0.08  +1.55    -1.48    -1.23   1.08   +0.89     +0.05
+    decade reversal (#5)   rest > Mon  +1.22  -1.11  +1.80    -2.91    -2.24   1.00   +1.20     -1.10
+    arb risk (rv lead)     [ambiguous] -0.45  +1.67  -0.98    +2.66    +2.01   0.82   +0.42     +1.73
+
+bps/day. **Seven of seven in the predicted direction, five at |t| > 3**, and two of the seven are
+the lab's own family leads rather than textbook legs. The eighth row is recorded as ambiguous
+rather than as a miss: `arb_risk` is a residual *share*, which is mechanically a low-beta quantity
+(slice beta 0.82) and so has no clean speculative-leg classification — `learnings.md` already
+separates the share from the level.
+
+**Read the `all` column through beta, not directly.** The five defensive books look like they lose
+money against the pool (-0.5 to -1.1 bps/day) and they do not: their betas are 0.61-0.75 and the
+lab has measured Sharpe to be flat in beta here, so the raw active return is mostly the missing
+beta. Beta-adjusted, **every one of them has positive CAPM alpha (+0.22 to +0.83 bps/day), of
+which Monday alone supplies +3.6 to +4.6** — about 85-100% of a week's alpha falling on 20% of its
+days, with the other four days negative. That is `#264`'s second reading, the cadence screen, and
+it fires: **the defensive family's entire alpha is Monday-localised**, which is the mechanical
+explanation for a result the lab previously recorded as a bare fact ("the low-volatility anomaly
+is absent here", 2026-10-09/10). It is not absent; it is concentrated on one weekday and given
+back on the other four.
+
+**F2 — AND THAT IS WHY IT IS NOT A TRADE. THE ROTATION COSTS 30.67%/yr, PRICED THROUGH v3's OWN
+EXECUTION MODEL RATHER THAN ASSERTED.** A Monday-localised alpha can only be harvested
+fully-invested by rotating: hold the defensive slice over Monday, hold the equal-weight pool the
+rest of the week, two decision rows a week (emitted the session *before* the day they are meant to
+cover, because a row fills at the next real print).
+
+    book                             sr     pool   skill   npos   turn/yr  cost/yr
+    Monday rotation (2 rows/wk)    -1.216  +0.524  -1.740  421.2   131.69   30.67%
+    low-vol book, monthly          +0.503  +0.524  -0.021   98.2     3.10    0.77%
+
+The gross prize was ~300 bps/yr (5.8 bps/day × 52 Mondays) and the bill is **30.67%/yr at 131.7x
+turnover**. Dead by a factor of ten. Note this is the same shape as last session's F5 — a
+conditional overlay on a fully-invested base raises turnover rather than cutting it, because
+entering and leaving a ~500-name base is more expensive than the rebalances it replaces — but an
+order of magnitude more extreme, because the cadence is weekly rather than quarterly. `#264`'s own
+estimate (~100 boundary crossings a year) was the right arithmetic and understated the answer.
+
+**F3 — RESEARCH `#265`'s MOOD BETA IS PLAIN MARKET BETA ON THIS PANEL, AND IT FAILS ITS OWN
+DISCRIMINATING TEST. DECLINED BEFORE A FILE EXISTED.** Built to the note's recipe, with its
+calendar-free labelling so the construction survives a 15-region panel: within each **completed**
+calendar year the 2 best and 2 worst months by realized equal-weight pool return are the high- and
+low-mood windows (no calendar semantics, no month labelled with its own future); mood beta is a
+univariate pool loading estimated on **mood-window months only**, 120-month window, min 40
+observations; the coming month's ex-ante state is the frequency with which that calendar month has
+been high minus low over completed years. 167 scored month-ends, 2004-01 → 2017-11. The labelling
+itself behaves sensibly — July/August/September are the months most often labelled low (6/7/7
+times) and February/April/October most often high (6/6/5) — so the recipe is not broken.
+
+The two pre-registrations, in the order the note sets them:
+
+    (ii) mean rank corr of mood beta to all-month beta  +0.966
+         mean rank corr of mood beta to trailing vol126 +0.453
+
+    (i) THE SIGN FLIP -- forward 21d region-matched excess, bps
+        window                        n    highB top100     t    lowB bot100     t      H-L
+        high-mood months (state>0)   60          +3.9   +0.13        -27.8   -0.87    +31.7
+        low-mood months (state<0)    59         +16.0   +0.53         -7.5   -0.23    +23.5
+        neutral (state==0)           48         -37.0   -1.38        +16.8   +0.48    -53.9
+
+**Mood beta is market beta wearing a mood label** (rank correlation +0.966), which is a measured
+null here, and **the sign flip is absent**: the high-mood-beta slice earns the *same* sign in both
+states and is numerically larger in low-mood months, where Proposition 2 requires it to be
+negative. Every cell is inside noise (|t| ≤ 1.38). The note's own caution predicted the failure
+mode and named the wrong quantity: it warned that a beta estimated on a subset of dates would load
+on the **volatility level** (it does, +0.453) and the larger problem is that it loads on **beta**
+(+0.966), because mood months are a third of all months and beta is stable over 120 of them.
+**Transferable: before building a characteristic that is "X estimated on a subset of observations",
+report its rank correlation to the same X estimated on all of them — if the subset is a constant
+fraction and the parameter is stable, the subset estimator is the full estimator plus noise.**
+
+**F4 — THE SCORE THE TRIAL TRADED, AND THE LOWEST RELABELLING PROFILE ANYTHING SCREENED HERE HAS
+HAD.** F1 measured the mood mechanism through characteristic *proxies* for speculativeness. F4
+measures a name's exposure directly from its own returns, which is a different object and — unlike
+F3's estimator — removes the beta level by construction, because it is a difference:
+
+    wd(i,t) = [ mean(r_i | Monday) - mean(r_i | Tue-Fri) ] / sd(r_i),  trailing 252 days
+
+252 scored month-ends, median 325 scored names (the Monday-print requirement costs coverage
+against the ~500 eligible). Relabelling rank correlations against every known or refuted score on
+this panel: **-vol126 +0.105, -ivol252 +0.082, -beta252 +0.126, -MAX21 +0.088, prox52 +0.016,
+amihud126 +0.002, decade_rev +0.029.** Slice beta 0.888, slice volatility 0.947x the pool's.
+Forward region-matched excess of the top 100: **+3.3 bps/21d (t +0.40)**, -2.8 bps/63d (t -0.22);
+bottom 100 -3.9 and -2.7. The sign ordering is right at 21 days and the magnitude is nothing.
+
+**F5 — THE BOOK, ON TRAIN, WITH THE GATE THAT HAS DECIDED ALL SEVEN v3 TRIALS.** Standing
+operators only, none of them a parameter of this score (calendar-peer quotas, K = 100, retention
+band B = 200, equal weight, monthly, hold the pool until the score exists). 40 draws:
+
+    book                     npos    sr    pool   skill  nullmed  nullsd   geo    sel  margin  pct  turn
+    wd top-100, band 200    100.0 +0.582 +0.524 +0.058   +0.555  0.0298 +0.031 +0.027 -0.002  88%  2.47
+    wd top-100, no band     100.0 +0.501 +0.524 -0.023   +0.476  0.0240 -0.047 +0.025 -0.006  88%  5.20
+      [band] 1997-2008      100.0 +0.360 +0.300 +0.060       --      --     --     --     --   --  1.46
+      [band] 2009-2017      100.0 +1.036 +0.936 +0.100       --      --     --     --     --   --  3.81
+
+The band reproduces its recorded effect exactly (turnover -52%, skill -0.023 → +0.058) and the
+train skill is positive in **both** sub-periods, which the liquidity lead's was not. Train
+selection **+0.027** against F10's bar of +0.24 — a ninth of it — so the trial was pre-registered
+to **fail**, at a predicted validation null percentile of 55-60%. It landed at **0%**. See the
+trial entry above, and F6 below for what that does to the bar itself.
+
+**F6 — THE BAR F10 SET LAST NIGHT DOES NOT SURVIVE ITS OWN BOARD. TRAIN SKILL CARRIES NO USABLE
+INFORMATION ABOUT WHERE A BOOK LANDS AT THE VALIDATION NULL GATE, AND THE SIGN OF WHAT LITTLE
+RELATIONSHIP THERE IS POINTS THE WRONG WAY.** Recorded trials only (`trials.jsonl`); nothing was
+re-run. `selection = candidate − null_median`, as the lab defines it:
+
+    trial                            tr skill  97-08   09-17  val skill  nullmed    geo  val sel   pct   turn
+    pt_lowvol_gk_quarterly             -0.063  -0.094  -0.011    -0.033   +0.286  -0.051   +0.018   64%   1.32
+    sa_resid_rev63_band                -0.001  -0.022  -0.017    -0.119   +0.169  -0.168   +0.049   80%  10.59
+    lv_illiq_peer_neutral_band         +0.084  -0.035  +0.114    -0.052   +0.424  +0.087   -0.139    0%   1.31
+    rv_arbrisk_peer_neutral            +0.046  +0.013  +0.105    -0.233   +0.283  -0.054   -0.179    0%   4.43
+    pt_decade_reversal_peer_neutral    +0.033  -0.050  +0.023    -0.006   +0.297  -0.040   +0.034   75%   2.71
+    pl_decade_invvol_floored           +0.120  +0.136  +0.034    -0.039   +0.284  -0.053   +0.014   60%   2.78
+    sc_weekday_mood_band               +0.058  +0.060  +0.100    -0.265   +0.319  -0.018   -0.247    0%   4.20
+
+    corr(train skill, validation selection) = -0.345   Spearman -0.571
+    OLS  validation_selection = -0.704 * train_skill - 0.036   (slope SE 0.856, t -0.82)
+
+**The two trials with the most train skill (+0.120, +0.084) landed at the 60th and 0th percentiles;
+the two with NEGATIVE train skill (-0.063, -0.001) landed at the 64th and 80th — the board's best.**
+With n = 7 and a slope SE of 0.856 this does not establish an inverted relationship, and it is not
+claimed as one. What it does establish, at the only precision available, is that **the quantity
+F10 turned into a pre-registration bar is uncorrelated with the outcome the bar was supposed to
+predict**, and that the 3.4x decay figure behind it — derived from ONE paired comparison of two
+books with identical names on identical dates — describes that pair and does not generalise across
+candidates. Tonight's trial is the extreme illustration: train selection +0.027 became validation
+selection **-0.247**, not a 3.4x decay but a **sign inversion at ten times the train magnitude**.
+
+The second pre-specified predictor, flagged by the 2026-10-13 entry rather than invented now —
+agreement of sign between the two train sub-periods — is also null: mean validation selection
+**-0.069** for the five trials whose sub-periods agree against **-0.052** for the two that
+disagree. (Both of the board's best percentiles belong to trials whose sub-periods agree on being
+*negative*, which is suggestive in the same inverted direction and is not pursued: with n = 7, two
+pre-specified predictors is the whole of what can honestly be tested, and no third was scanned.)
+
+**The distinction that replaces the bar, and it is the precise one.** A train screen can still
+legitimately **refute** — F2's 30.67%/yr cost bill against a ~300 bps/yr gross prize, and F3's
++0.966 relabelling correlation, are refutations that no amount of validation luck could overturn,
+and both were worth the measurement. What a train screen cannot do is **qualify or rank**: six
+consecutive sessions have now ended with some version of "a clean screen is not evidence", and the
+answer to that was supposed to be a calibrated threshold rather than a vibe. It is not. **Keep
+screens that can kill a candidate; stop building screens that are supposed to bless one.**
+
+## Session summary — 2026-10-16/17 (nightly) — 1 trial of 8; the mood effect is real, unharvestable, and name-level noise — and last night's bar does not survive its own board
+
+**Experiments run: 1 of 8. Verdict: 1 GATE_FAIL. Six free measurement blocks (F1-F6), one
+literature candidate (research `#265`) declined before a file existed on its own discriminating
+test, and one candidate construction (the Monday rotation) priced and killed through the real
+execution model. No holdout, forward or incubation file was read, and the seat is still empty.**
+The engine suite is green (92 passed).
+
+    #  candidate              family               verdict    train  val   skill   CI90          2x cost  turn  null %ile  MC p
+    7  sc_weekday_mood_band   seasonality-calendar GATE_FAIL  +0.58  +0.07  -0.27  [-0.51,-0.01]  -0.30   4.2x      0%     0.005
+
+Equal-weight pool: **+0.34 on validation, +0.524 on train**. The trial failed on the
+random-selection null alone, as all six before it did; no other hard gate bound.
+`scripts/rank_trials.py` puts all seven v3 trials in tier 1 of a seven-trial board, with
+`pt_decade_reversal_peer_neutral` still best on skill (-0.01) and `P(best)` (34%). Tonight's trial
+is the board's worst on skill and — the one dubious distinction worth recording — **the first v3
+trial whose 90% skill interval excludes zero**: [-0.51, -0.01]. It is the first candidate the data
+can tell apart from the pool, and it is distinguishably worse. The leaderboard's
+`distinct_mechanisms` rises **4 → 5**: the score genuinely is a new return stream, and it is a
+worthless one.
+
+**Budget allocation, planned before the first hypothesis was written.** 1 trial in
+`seasonality-calendar` — a family with **no recorded v3 trial** — which satisfies the "at least
+one in a family with no recorded trial at all" rule and is the family the whole night's work sits
+in; **0 in `price-trend`**, against its cap of 2; no family reached a cap. One trial rather than
+eight because after F6 there is no train-side quantity left that can honestly motivate a second
+one tonight, and the reason is itself tonight's main finding.
+
+**Best finding of the night, in one sentence.** **Birru's cross-sectional weekday mood effect is
+real on this panel — seven of seven legs in the pre-signed direction, five at |t| > 3, including
+two of the lab's own family leads — and it is real only at the level of the CHARACTERISTIC: the
+same mechanism measured on a name's own returns is pure noise** (F1 against F4/F5). The defensive
+legs' CAPM alpha is +0.22 to +0.83 bps/day of which Monday supplies +3.6 to +4.6, so 85-100% of a
+week's alpha falls on 20% of its days — which is the mechanical explanation for a fact the lab had
+only recorded flatly, that "the low-volatility anomaly is absent here". It is not absent; it is
+Monday-localised and given back Tuesday to Friday.
+
+**The second finding corrects last session's headline, and it is the one that should change how
+the next session is planned.** F10 of 2026-10-15/16 calibrated a bar — "a candidate needs a train
+selection term near +0.24 to expect to clear the validation null gate" — from a 3.4x selection
+decay measured on **one** paired comparison. Across all seven recorded v3 trials the correlation
+between train skill and validation selection is **-0.345 (Spearman -0.571, OLS slope -0.70, SE
+0.856)**: the two trials with the most train skill landed at the 60th and 0th percentiles, the two
+with *negative* train skill at the 64th and 80th. With n = 7 that is not evidence of an inverted
+relationship and is not claimed as one; it is evidence that **the quantity the bar was built on is
+uncorrelated with the outcome the bar was built to predict.** Tonight's trial is the extreme point:
+train selection +0.027 → validation selection **-0.247**, a sign inversion at ten times the train
+magnitude rather than a decay. The second pre-specified predictor, train sub-period sign agreement,
+is null too (-0.069 against -0.052).
+
+**The rule that replaces the bar, stated precisely so it is not read as nihilism.** A train screen
+can still **refute**: F2 priced the Monday rotation at **30.67%/yr on 131.7x turnover against a
+~300 bps/yr gross prize** and F3 found research `#265`'s mood beta at rank correlation **+0.966**
+to plain market beta with its own sign-flip test failing — two candidates killed on arithmetic no
+validation luck could overturn, and both measurements were worth making. What a train screen
+cannot do is **qualify or rank** a candidate. Six sessions have ended with a version of "a clean
+screen is not evidence"; the answer was supposed to be a calibrated threshold instead of a vibe,
+and it is not one. **Keep the screens that can kill a candidate; stop building screens meant to
+bless one.**
+
+**What closed tonight.** `seasonality-calendar`'s `calendar` half — the axis `program.md` charters
+as "day-of-week, holiday windows" and the lab had never scored under any protocol — is closed
+three independent ways in one night: the effect exists (F1) but is Monday-localised and costs
+30.67%/yr to rotate into (F2); its monthly re-expression is plain beta and fails its own sign flip
+(F3); and its name-level estimate is noise that scored the board's worst validation skill (F4/F5,
+the trial). That is a closure by measurement rather than by the structural argument of 2026-10-13,
+and it is the stronger kind.
+
+**Ideas for the next session.** None is holdout-informed; no holdout or forward number was read.
+
+1. **Do not pre-register against F10's +0.24 bar** — F6 retires it as a qualification rule. Use
+   train screens to refute (cost arithmetic, relabelling rho, sign-flip tests) and never to
+   qualify. If a session wants a stopping rule, it needs one built on something other than train
+   skill, and F6's table is the evidence that no such quantity has been found yet.
+2. **Do not re-buy tonight's declines**: research `#265`'s mood beta in any monthly form (F3 —
+   +0.966 to market beta, and the sign flip is the test it fails, so a different window or
+   estimator does not rescue it); the Monday rotation at any κ (F2 — cost scales with κ exactly as
+   the edge does, so the ratio is κ-invariant and it is dead at every κ); the per-name weekday
+   contrast on either side (F4/F5, now a recorded trial); and the characteristic defensive legs,
+   which are the 2026-10-09/10 low-vol null with a mechanism attached rather than a new idea.
+3. **The one thing F1 opened that is NOT closed**, and it needs a session with a plan rather than
+   a spare hour: the lab's leads (`decade_rev`, `amihud126`) and the defensive legs load on
+   **opposite sides of the same measured mood factor** (Mon-rest -2.91 and -1.48 against +5.0 to
+   +6.9). That is a documented, pre-signed source of decorrelation between two families, which is
+   exactly what research `#250`'s blend has been starved of. The honest caveat is that F6 now says
+   a train-side argument for such a blend is worth nothing, so it would have to be argued from
+   the leaderboard's rho and spent as a trial — and the board's best validation null percentile is
+   still 80%, below `#250`'s precondition.
+4. **What is still open.** `statistical-learning` and `lead-lag-spillover` have no v3 trial;
+   the first was answered for free on 2026-10-13 and the second was closed structurally on
+   2026-10-13 and on measurement on 2026-10-14/15, so both are uncovered rather than unexplored,
+   and the "at least one in an untried family" rule now points at two families the lab has
+   argued are closed. That tension should be put to the human owner rather than resolved by
+   spending trials on it. The standing reading is unchanged and tonight did not move it: the
+   free-daily-OHLCV space is exhausted for *selection*, the construction axis is closed from five
+   directions, and the next real move is an input the panel does not have.
+5. **From `research/SUMMARY.md`, spent tonight**: **`#264`** built in full (F1) — its mechanism
+   half replicated 7/7 pre-signed and its cadence half fired, which is the first imported finding
+   this lab has *confirmed* rather than nulled; **`#265`** built to its own recipe and
+   **declined** on its own discriminating test (F3); **`#263`** is superseded in substance — it
+   asks whether the calendar closures rest on two reasons or three, and tonight supplies a third
+   and a fourth by direct measurement rather than by re-reading old means in standardized units,
+   so re-running it is no longer worth a session's attention. **`#266`** remains a standing design
+   rule. Still unspent: **`#259`** (needs replica weights `benchmarks.random_null_v3` does not
+   return), **`#258`**, **`#254`**, **`#255`**, **`#82`**, and the carried queue as 2026-10-15's
+   open-questions entry leaves it.
+
+**One method note worth carrying.** F3's recipe needed two different `min_periods` on the same
+rolling window — a 252-day window holds ~50 Mondays and ~200 other days, so a single threshold
+either never fires on the Monday frame or is meaningless on the other. The first draft silently
+produced an all-NaN score and zero scored dates rather than an error. **A rolling statistic
+computed on a masked frame has a different effective sample size from the same statistic on the
+unmasked one, and `min_periods` must be set per frame; check the scored-date count before reading
+any number off such a construction.**
