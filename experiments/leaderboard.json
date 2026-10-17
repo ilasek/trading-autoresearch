@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-16T23:56:31+00:00",
+  "generated_at": "2026-10-17T23:50:57+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -79,6 +79,32 @@
         0.15
       ],
       "train_skill": 0.084,
+      "mechanism": 3
+    },
+    "statistical-learning": {
+      "name": "sl_gbm_seven_nonlinear",
+      "candidate": "strategies/candidates/sl_gbm_seven_nonlinear.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-17T23:47:39+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.282,
+        "ann_return": 0.0588,
+        "max_drawdown": -0.4511,
+        "ann_turnover": 4.41,
+        "avg_positions": 99.75,
+        "skill": -0.055,
+        "skill_cost2x": -0.082,
+        "skill_delist30": -0.055
+      },
+      "train_sharpe": 0.424,
+      "skill_ci90": [
+        -0.269,
+        0.096
+      ],
+      "train_skill": -0.1,
       "mechanism": 3
     },
     "statistical-arbitrage": {

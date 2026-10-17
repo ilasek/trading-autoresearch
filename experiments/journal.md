@@ -20642,3 +20642,33 @@ unmasked one, and `min_periods` must be set per frame; check the scored-date cou
 any number off such a construction.**
 
 ## Research session — 2026-10-17 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-17T23:47:39+00:00 — sl_gbm_seven_nonlinear — **GATE_FAIL**
+- Candidate: `strategies/candidates/sl_gbm_seven_nonlinear.py` (family: statistical-learning, track: scout, trial #0)
+- Hypothesis: Replacing the linear combiner in the lab's own seven-feature walk-forward model with a depth-3 gradient-boosted tree ensemble -- every other element of the 2026-10-13 F10 construction held fixed, same features, same within-peer-group normalisation, same peer-demeaned forward 63-day target, same quarterly grid, same top-100 peer-quota equal-weight book -- raises the model's rank information coefficient materially above F10's +0.0066 and puts the book above the 90% quantile of the region-matched random-selection null, because the ridge can express only a monotone linear combination while the whole case for machine learning in the cross-section rests on interactions and thresholds.
+- Verdict: GATE_FAIL — train skill -0.1 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation drawdown -0.4511 worse than -0.45; validation sharpe 0.282 <= the random-selection null's 90% quantile 0.368 (median 0.297; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.42, ann_ret +9.2%, maxDD -63.1%, turnover 3.6x, skill vs pool -0.10
+- Validation: sharpe +0.28, ann_ret +5.9%, maxDD -45.1%, turnover 4.4x, skill vs pool -0.06
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.06, 90% CI [-0.27, +0.10]; at 2x costs -0.08; with a 30% delisting haircut -0.06; train -0.10 (1997-2008 -0.13, 2009-2017 -0.11)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 42% percentile of 200 random-selection replicas (median +0.30, 90% +0.37); equal-weight eligible pool +0.34, information ratio vs it +0.13
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **F10's two readings are now separated, and the answer is the features, not the
+  combiner.** Holding every element of the 2026-10-13 ridge construction fixed and changing only
+  the functional form of the learner, depth-3 boosted trees do not beat the linear combiner —
+  they lose to it. Train skill **-0.100**, negative in *both* sub-periods (-0.13 / -0.11), where
+  the ridge's own top-100 book had read +18.7 bps/63d (t +0.33) on the same seven features; the
+  extra capacity bought a worse in-sample-adjacent result, which is what fitting a null with
+  interactions looks like. Validation skill **-0.055** [90% CI -0.27, +0.10] at the **42nd**
+  percentile of the null. `program.md` charters this family as "penalised linear models, trees,
+  gradient boosting, small neural nets" and asks "which feature groups carry signal"; with the
+  linear half answered for free on 2026-10-13 and the tree half answered here on a recorded
+  trial, the answer on this panel is **none of them, under either functional form** — the
+  remaining uncovered cell (small neural nets) is a third estimator on the same seven null
+  features and is not worth a trial. Two secondary readings worth keeping. (i) This is the
+  **first v3 trial to fail a gate other than the null** — validation drawdown -0.4511 against the
+  -0.45 bar, and the train drawdown is -63.1% against the pool's -56.0%: a learned top-100 book
+  is *more* drawdown-prone than the pool, not less, so the diversification gate is reachable from
+  this family and the lab should stop assuming only the null binds. (ii) The 42nd percentile with
+  a *negative* skill is the shape the 2026-10-14/15 entry named as the only one a pool-plus-tilt
+  blend could rescue — beats its null, loses to the pool — except that it does not beat its null
+  either, so it is not that leg.
+
