@@ -1522,6 +1522,76 @@ is a free precondition (#204) and not a result. CIV-beta, by contrast, is an **a
 cross-sectional sort** at gross 1.0 and is not in the refuted class at all, which is why it is the one
 of the three that is worth a scout outright.
 
+**[2026-10-18] The family's charter names "cross-sectional dispersion" and the folder had never had
+a note on it — and reading it finds that the dispersion of the panel is three different objects
+depending on where it is placed in a sentence, only one of which belongs to this family.** A grep
+across all 198 prior notes returned **zero** for `CSAD`, `dispersion beta`, `cross-sectional
+variance of returns` as an estimator, `inverse-CSV weighting` and `Ankrim`, and `variance ratio`,
+`Hurst`, `semivariance` and `return dispersion` were each present only as passing words inside notes
+about something else. Three sources, read as one chain: the **estimator**, the **signal**, and the
+**denominator**.
+
+*(i) The estimator, and it is the solid end of the chain.* Garcia–Mantilla-García–Martellini
+(2014, JFQA, tier A on the theory): the equal-weighted cross-sectional variance of one day's
+returns, `CSVₜ = Σ wᵢ(rᵢₜ − r̄ₜ)²`, **converges almost surely to average idiosyncratic variance**
+for any strictly positive weighting with `Σ wᵢ² = O(1/N)`, with finite-`N` bias exactly
+`(1 − Σ wᵢ²)` — closed form, so correctable by division — and **equal weighting minimises both the
+bias and the variance over the whole class**, making EW CSV consistent and asymptotically efficient
+among CSV estimators. It is *model-free* (no residuals, no betas, no covariance matrix) and
+*observable at any frequency* (one cross-section per data point, where every model-based aggregate
+idiosyncratic-volatility measure needs a time-series window and is monthly at best); monthly CSV
+correlates above 99% with the CAPM-, Fama–French-, Goyal–Santa-Clara- and Bali-based measures. One
+bias does **not** vanish with breadth: `E[F²ₜ·CSVᵝₜ]`, beta dispersion times the *squared* factor
+return, which on this lab's nine-index USD-converted panel carries region and FX exposure and is
+therefore a larger term here than in the US literature it was measured in. The construction extends
+free to higher cross-sectional moments. `validation_overlap: false`; `published_post_2018: false`.
+→ `notes/2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md`
+
+*(ii) The signal, which is the family-shaped item and the weakest of the three.* Verousis–Voukelatos
+(2018, *Quantitative Finance*, tier B): treat `ΔCSD` as a state variable, estimate each name's
+loading on it from a **two-regressor daily regression over the previous month**, sort into quintiles,
+and expected returns fall monotonically in the loading — **a negative price of dispersion risk,
+whose high-return leg is the low-beta quintile a long-only book can hold directly.** It survives a
+genuinely thorough control set (idiosyncratic volatility, co-skewness, size, Pástor–Stambaugh
+liquidity, analyst dispersion, mean stock variance, macro uncertainty, a VIX-change mimicking
+factor) on both characteristic regressions and double sorts. Three things keep it tier B and one of
+them is the source's own diagnostic: no transaction costs are modelled anywhere, the headline is a
+zero-cost long-short, and **pre-formation betas span roughly −6.9 to +6.7 while post-formation betas
+span about −0.03 to +0.22** — almost none of the sorted loading persists one month, which is the
+same pattern Ang et al. report for aggregate-volatility betas and the reason the effect's decay as
+the formation window lengthens reads as estimation noise at least as well as it reads as
+time-varying betas. `validation_overlap: false`; `published_post_2018: false`.
+→ `notes/2026-10-18-dispersion-beta-and-the-cross-section.md`
+
+*(iii) The denominator, which is the item with the best ratio of value to cost and does not belong
+to this family at all.* de Silva–Sapra–Thorley (2001, FAJ) and Ankrim–Ding (2002, FAJ): the spread
+between good and bad **active** outcomes is mostly a function of security return dispersion rather
+than of skill or of market efficiency, and the association is present outside US large-caps, in
+several equity markets, and is not an artifact of one episode. The algebra is immediate — active
+return is `a′r`, so widening the cross-section of `r` widens the active return with `a` and skill
+both fixed — and the consequence is that **any time series of active returns is heteroskedastic by
+construction in `CSVₜ`**, which makes every statistic computed from it under an equal-variance
+assumption mis-specified in a knowable way. The prescribed fix is a WLS with weights `∝ 1/CSVₜ`.
+That object is this lab's `skill` statistic exactly. `validation_overlap: false`;
+`published_post_2018: false`.
+→ `notes/2026-10-18-return-dispersion-and-the-measurement-of-active-performance.md`
+
+**The honest discount on the family-shaped item, and the one result that keeps the chain from
+over-promising.** `experiments/learnings.md` [2026-09-01] closed `range-variance` as "nine screened
+mechanisms with one cause … unreachable on this universe rather than unexplored". Every one of those
+nine was a **width measure of a single name's own returns used as a stock-level sort**; `CSV` is one
+number per date describing the panel, so the closure is about a different object and does not reach
+it. But the closure's *stated cause* — that the family collapses to one volatility axis this panel
+does not pay for — is precisely what `#275`'s free pre-trial correlation screen is built to detect,
+and the lab's own 2026-10-17/18 finding that "a correlation score standardised by own volatility is
+still a volatility score with the sign flipped" is the same failure one step away. **Run the screen
+before the file exists.** Separately, the chain's own second source supplies the discipline for its
+third: in an independent out-of-US replication of the dispersion-adjusted alpha, the correction
+moved every value and a Wilcoxon rank-sum found **no significant change in the ranking** — so the
+expected deliverable of `#274` is a narrower error bar, not a reordered board, and that prediction
+should be written down before the measurement is taken.
+
+
 ### 11. `seasonality-calendar`
 
 **A permanent cross-sectional seasonal, with a sign pattern sharp enough to be a genuine
@@ -11895,6 +11965,97 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md` ·
     `notes/2026-10-16-calendar-effects-data-mining-robust-test.md`
 
+273. **FREE / MEASUREMENT PRIMITIVE — the panel already contains a no-estimation, any-frequency
+    estimator of aggregate idiosyncratic variance, and it is one line: the equal-weighted
+    cross-sectional variance of the day's returns over the eligible pool.** `CSV_t = Σ wᵢ(rᵢₜ − r̄ₜ)²`
+    converges almost surely to average idiosyncratic variance as `N → ∞` for any strictly positive
+    weighting with `Σ wᵢ² = O(1/N)`; the finite-`N` bias is the closed-form factor `(1 − Σ wᵢ²)`, so
+    correcting it is a division and not an estimate; and **equal weighting is a theorem, not a
+    preference** — it minimises both the bias and the variance over all positive weighting schemes,
+    making the EW CSV consistent and asymptotically efficient in that class. Nothing is fitted, no
+    betas, no covariance matrix, one row of the panel per data point — so it cannot fail
+    `causality_check` and costs nothing in runtime. Three riders that decide what it means here.
+    *(i)* **Compute it over the eligible pool, never over a held book**: the admissibility condition
+    is exactly a ban on concentration, and a `K`-name equal-weighted book has `Σ w² = 1/K`, so at
+    `K = 20` the bias factor is 5% against 0.1% at `N ≈ 1000`. *(ii)* The one bias that does **not**
+    vanish with breadth is beta dispersion, `E[F²ₜ · CSVᵝₜ]` — cross-sectional variance of loadings
+    times the *squared* factor return — and on a nine-index, multi-currency, USD-converted panel
+    that term carries region and FX exposure, so it is larger here than in the single-market
+    literature. Demean within region, or regress out the squared pool return, and say which.
+    *(iii)* The construction generalises free to higher cross-sectional moments; the source names
+    cross-sectional **skewness** as the obvious next one. The matched benchmark is already the
+    lab's: v3 grades against the equal-weight eligible pool, and EW CSV is the dispersion about
+    exactly that pool's return. Tier A for the estimator theory, B for the (US-only) empirics;
+    no overlap. **Note what this is not**: the source's headline use is aggregate market-return
+    timing, which `#267` and the scale-free-objective finding both close on this universe. The
+    estimator survives both closures because it is a panel-level measurement, not a timing signal.
+    → `notes/2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md` ·
+    `notes/2026-10-06-betaless-variance-decomposition-and-average-correlation.md`
+
+274. **FREE / ESTIMATOR CORRECTION on the lab's own skill statistic, with its own pre-registered
+    null — standardise each day's active return by that day's cross-sectional dispersion before
+    averaging.** An active book's return is `a′r` with `a = w − w_pool`; hold `a` fixed and widen
+    the cross-section of `r` and the active return widens with it, **with no change in skill**. So
+    the daily active-return series behind every v3 `skill` number is heteroskedastic by
+    construction, with the scale set by `CSV_t`, and a plain mean over a six-year window
+    over-weights the wide-dispersion days. The literature's fix is a weighted least squares with
+    `√wₜ = normalised inverse CSV` — the textbook heteroskedasticity correction, no free parameter
+    once the weighting is fixed as `1/CSVₜ` in advance. **Run it as three steps on stored returns,
+    with the prediction written down first.** *(i)* Test whether `|active return|` scales with
+    `CSVₜ` on the eligible pool — if it does not, stop. *(ii)* Recompute each lead's skill and its
+    bootstrap interval with `1/CSVₜ` weights and compare **both**. *(iii)* Apply the one sharp
+    empirical result the sources supply: in an independent out-of-US replication, the correction
+    moved every alpha's **value** and a Wilcoxon rank-sum detected **no significant change in the
+    ranking**. Pre-register that as the expected outcome here. **If the order is unchanged, the
+    correction belongs in the error bars and nowhere else** — which is still worth having, because
+    `rank_trials.py` currently puts every v3 trial in tier 1 and tier width is driven by the
+    variance of the skill difference; a variance-stabilising transform narrows an interval without
+    touching a point estimate, and if it does not narrow it, that says the board's irresolution is
+    not a heteroskedasticity artifact. Two warnings from the sources: the dispersion a book's
+    active return scales with is the dispersion of the **opportunity set it selected from**, so use
+    the eligible panel and nothing wider (the replication's own weakest point was being forced to
+    use a market-wide proxy, a limitation this lab does not share); and the correction removes
+    signal along with noise, because an opportunity-set story *predicts* a real edge is larger when
+    the cross-section is wide — so this is a lower-variance estimator of the same quantity, checked
+    against the unweighted one, never a replacement score. Diagnostic only; the gate's statistics
+    are owned by `engine/protocol.py`. Tier B (two tier-1 practitioner-academic articles whose
+    bodies are closed, one tier-4 restatement read in full), no overlap.
+    → `notes/2026-10-18-return-dispersion-and-the-measurement-of-active-performance.md` ·
+    `notes/2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md` ·
+    `notes/2026-09-09-nonstandard-errors-in-portfolio-sorts.md`
+
+275. **CANDIDATE (1 trial, `range-variance`) — hold the names whose returns are *least* sensitive to
+    changes in cross-sectional dispersion, but run the free disqualifying screen first.** The
+    construction is fully specified and cheap: compute `ΔCSD` over the eligible pool daily (absolute
+    or squared deviation about the pool mean — the source reports both, and about the pool mean
+    rather than a cap-weighted index is the matched choice here); for each name each month run a
+    **two-regressor daily regression over the previous month only**, `rᵉ = a + β_MKT·MKT + β_ΔCSD·ΔCSD`,
+    requiring ≥ 15 observations; sort on `β_ΔCSD` and hold the lowest quintile, equal-weighted,
+    monthly. Zero estimated parameters beyond two OLS slopes per name, `O(N)`, trivially
+    walk-forward, no covariance matrix anywhere — so it clears the standing parameter-counting
+    triage and does not touch the risk axis the lab closed on 2026-10-17/18. The predicted sign is
+    **negative price of dispersion risk**: high `β_ΔCSD`, low expected return, with mean returns
+    monotone across the five quintiles. **Four discounts to apply before writing the file, and the
+    first is a free kill.** *(a)* The screen that decides it: rank-correlate `β_ΔCSD` against total
+    volatility, idiosyncratic volatility and market beta on the eligible panel. The lab has recorded
+    that the low-volatility anomaly is absent here, that Sharpe is flat in beta, and that a
+    correlation score standardised by own volatility is a volatility score with the sign flipped —
+    if `|ρ|` is large, this is the tenth mechanism with `range-variance`'s one cause and not a new
+    one. *(b)* Everything the source reports is a **long-short spread**; only the long leg is
+    available, and the source gives no evidence on the split. *(c)* The effect is strongest at a
+    one-month formation window and **weakens substantially as the window lengthens**, so the version
+    that works is the version that trades most, and v3 charges per-name liquidity tiers plus
+    UK/HK/FR/IT/ES transaction taxes — price the implied turnover before, not after. The source's
+    own estimator diagnostic is the reason to read that decay as noise rather than as time-varying
+    betas: pre-formation betas span roughly −6.9 to +6.7 across quintiles, post-formation betas only
+    about −0.03 to +0.22, i.e. almost none of the sorted loading persists a month. *(d)* On a
+    multi-region panel a dispersion loading may be a **region or currency loading in disguise**;
+    demean `ΔCSD` within region as the guard, and expect the guard to be able to remove the signal.
+    Tier B source: single market, seventeen-year sample, lightly cited, **no transaction costs
+    modelled anywhere in the paper**, no independent replication. No overlap.
+    → `notes/2026-10-18-dispersion-beta-and-the-cross-section.md` ·
+    `notes/2026-09-06-long-side-share-of-anomaly-profits.md`
+
 ---
 
 ## Coverage log
@@ -11966,8 +12127,129 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-15 (session 62) | **The first session to read the literature on the lab's own *null* — the 200 random portfolios every v3 trial is graded against — and the last object in the four-night chain that began with the numerator.** Sessions 58-61 walked the candidate's Sharpe -> the equal-weight pool -> the subtraction between them -> and tonight the **distribution the difference is compared against**. Aim set by `research/README.md`'s rotation rule plus one observation and one grep: `experiments/learnings.md` [2026-10-07] records that the random-selection gate, **not** the deflator, is the binding constraint on the v3 board, and both of the 2026-10-14/15 nightly's GATE_FAILs failed on that gate alone -- while a grep across all 189 prior notes returned **zero** for `monkey`, `Burns`, `random selection`, `Kosowski`, `luck versus skill`, `Surz` and `upside-down`, with `random portfolio` appearing exactly once and only as an implementability aside. Three sources, forming method -> what the draws earn -> why the inference fails: the gate's identity as an **m-out-of-n bootstrap** whose centre is the equal-weight pool by construction (`E‖ω − ω̄‖²₂ → 0`), which explains the lab's own `p90`-flat-in-K table and its F8 null collapse; the **leniency** reading (a thin-shell null gives over-optimistic rejections, so a 0th-percentile result is stronger evidence than it looks -- a third independent route to `#256`); the finding that v3 **escapes** the literature's reference-point criticism because its benchmark and its null's centre coincide; the method's unused operating manual (the `(N+1)` p-value, Stouffer over Fisher, the p-value control chart, and the matched-dimension rule); and one genuine disagreement between two of the three sources about the **volatility** axis, which becomes the night's single trial. | Burns 2004 + 2006 cluster (`2026-10-15-random-portfolios-as-the-null-of-no-skill.md`); Clare-Motson-Thomas 2013 (`2026-10-15-random-weight-indices-and-the-equal-weight-centre.md`); Bachelard-Chalkis-Fisikopoulos-Tsigaridas 2024 (`2026-10-15-random-portfolio-inference-concentration-of-measure.md`). Unobtained: Arnott-Hsu-Kalesnik-Tindall 2013 (JPM), SSRN 403 + Research Affiliates destination chooser |
 | 2026-10-16 (session 63) | **The first session in six to leave the lab's own measurement chain and return to a family, and it opens the one axis `program.md` charters that this folder had never covered at all — the `calendar` half of `seasonality-calendar` (day-of-week, holiday windows) — closing it a third time while its *cross-sectional* twin survives intact.** Sessions 58-62 walked the objective → the estimation → the benchmark → the difference → the null, and that chain ended. Tonight's three sources are one argument: a data-mining-robust joint test over an enumerated 181-effect calendar universe says the biggest, most cross-country-consistent windows (end-of-year, holiday) **vanish in standardized returns** and that the only form surviving everything lives in **small- and mid-cap indices** — excluded by construction on this panel (**#263**, **#266**, **#267**); then the weekday effect reappears as a **cross-sectional** phenomenon driven by the speculative leg, with the author's own explanation of why aggregate and cross-sectional calendar predictions must disagree, giving the lab a free weekday decomposition that doubles as a **cadence-reachability** screen on every lead it holds (**#264**); then a mood-based model that reads the lab's seated seasonal leg as a mixture of two **opposite-signed** terms and supplies the night's one buildable candidate, a congruence split with a calendar-free labelling and a sign-flip test an artifact cannot pass (**#265**). **New: #263-#267. Nothing of the lab's is contradicted; its two calendar closures are strengthened by a third, independent, measurement-level reason.** | Hansen-Lunde-Nason 2003/2005 (`2026-10-16-calendar-effects-data-mining-robust-test.md`); Birru 2018 JFE (`2026-10-16-day-of-week-and-the-cross-section.md`); Hirshleifer-Jiang-Meng 2020 JFE (`2026-10-16-mood-beta-and-seasonal-recurrence.md`) |
 | 2026-10-17 (session 64) | **The first session to read the oldest literature about the lab's own portfolio object — online portfolio selection, which has competed against the best *constant-rebalanced portfolio* since 1991 — and it finds that the v3 benchmark, the v3 null and that literature's hindsight ceiling are three objects on one simplex.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 192 prior notes `universal portfolio`, `online portfolio`, `Anticor`, `OLMAR`, `follow-the-leader`, `Kalman`, `conformal` and `turnover constraint` all returned **zero**, and `Cover` appeared only as a surname in reference lists — 192 notes about what to forecast and how to weight it, none about the sequential-decision literature whose entire setting (long-only, weights summing to one, daily closes, no fundamentals) is this lab's setting exactly. Four sources, three notes, one chain: the guarantee → the cheap operator → the branch that claims returns. Headline: **the equal-weight eligible pool *is* the uniform CRP, the 200 random replica books are draws from a measure on the same simplex that [2026-10-15] showed concentrates on it, and Cover's universal portfolio is that measure reweighted by realised wealth — so Blum–Kalai's randomised implementation is literally the lab's own null run as a strategy**, and a naive candidate in this family differs from the benchmark by exactly its performance tilt (**#268**). Second, and the night's most transferable discipline: **the regret bounds are numerically vacuous at every scale this lab operates at** — `(m−1)log(n+1)` is ≈8.6 in log wealth at *two* assets over 22 years of daily data and thousands at a thousand names, `√(2T log N)` is of order a hundred at this panel's width, and the papers' own random-subset experiment shows the captured fraction of best-CRP wealth *falling* as the asset count rises; what a bound certifies is a rate, never a level (**#269**). Third, the one buildable item is an **operator, not a signal**: the exponentiated-gradient update is a relative-entropy-regularised step whose single parameter is a turnover dial with a published prior range, long-only by algebra, zero estimated parameters, and it accepts any score the lab already owns (**#270**); its `EG(η,α)` mixing step is also the *computable* substitute for `#237`'s uncomputable `δ*`. Fourth, the Follow-the-Loser branch (OLMAR and kin) is an **anti-candidate whose refutation the lab measured before reading the source** — the survey's own assumption list (no costs, fills *at the closing price*, no impact) is item-for-item what `experiments/learnings.md` [2026-10-08] names as what carried the v2 residual-reversion leads, so there is no tension to adjudicate (**#271**). Kept from that branch: **restoring fixed weights is itself a Follow-the-Loser trade**, so the pool's rebalancing channel is a mean-reversion bet v3's fill rule denies challengers at one-day horizons and leaves with the benchmark at slower ones, and *buy-and-hold over experts* is the free aggregator three independent sources now agree on (**#272**). No lab measurement was taken and the holdout was not read. | Cover 1991 (*Mathematical Finance*, tier A) + Blum–Kalai 1999 (*Machine Learning*, tier B) (`2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md`); Helmbold–Schapire–Singer–Warmuth 1998 (*Mathematical Finance*, tier A) (`2026-10-17-exponentiated-gradient-portfolio-update.md`); Li–Hoi 2014 (*ACM Computing Surveys*) + Li–Hoi 2012/Li–Hoi–Sahoo–Liu 2015 OLMAR (*ICML* / *Artificial Intelligence*), tier B (`2026-10-17-follow-the-loser-online-portfolio-selection.md`) |
+| 2026-10-18 (session 65) | **The first session to read the literature on the *width of the cross-section* — a quantity `program.md` charters by name for `range-variance` and the folder had never covered — and it finds that one statistic does three different jobs, of which the family-shaped one is the weakest and the measurement one is free.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 198 prior notes `CSAD`, `dispersion beta`, `inverse-CSV weighting` and `Ankrim` returned **zero**, and `return dispersion`, `variance ratio`, `Hurst` and `semivariance` appeared only as passing words inside notes about other things — 198 notes about what to forecast, how to weight it and how to grade it, none about the single number that describes how far apart the day's returns are. Three sources, one chain: the **estimator**, the **signal**, the **denominator**. Headline: the equal-weighted cross-sectional variance of one day's returns is a **consistent and asymptotically efficient, model-free, any-frequency estimator of average idiosyncratic variance**, with a closed-form finite-`N` bias `(1 − Σw²)` and a theorem (not a preference) that equal weighting is the best choice in its class — and its admissibility condition `Σw² = O(1/N)` is a **ban on concentration**, which means it is a pool-level object and a `K`-name book cannot carry it (**#273**). Second, the one bias that survives breadth is `E[F²·CSVᵝ]`, beta dispersion times the squared factor return, which on a nine-index USD-converted panel is region and FX exposure and is therefore a bigger term here than in the US literature that measured it as immaterial. Third, the family-shaped item is a **dispersion-beta sort** whose predicted sign puts the high-return leg on the long side — buildable, `O(N)`, no covariance matrix — but the source models **no costs at all**, reports only a long-short spread, weakens sharply as the formation window lengthens, and prints pre-formation betas spanning ±7 against post-formation betas spanning −0.03 to +0.22, so almost none of what the sort ranks persists a month (**#275**, gated behind a free volatility-relabel screen). Fourth, and the night's best ratio of value to cost, is not a candidate at all: **an active book's return is `a′r`, so it scales with the width of the cross-section with skill held fixed, which makes every v3 `skill` number an average of heteroskedastic observations** — the fix is a `1/CSVₜ` weighting, free and retrospective on stored returns, and the sources supply its own pre-registered null, because an independent out-of-US replication found the correction moves every value and changes **no ranking** (**#274**). The transferable detector is below. No lab measurement was taken and the holdout was not read. | Garcia–Mantilla-García–Martellini 2014 (*JFQA*, tier A on the theory) (`2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md`); Verousis–Voukelatos 2018 (*Quantitative Finance*, tier B) (`2026-10-18-dispersion-beta-and-the-cross-section.md`); de Silva–Sapra–Thorley 2001 + Ankrim–Ding 2002 (*FAJ*, tier 1 venue, **bodies not read** — abstracts from CFA Institute, method restated second-hand from Gething 2014, UCT, read in full) (`2026-10-18-return-dispersion-and-the-measurement-of-active-performance.md`) |
+
 
 ### Open questions for future sessions
+
+- **[2026-10-18] What should aim the next session, in order — and the top of it is a two-step pair
+  that is free, retrospective and answers the previous nightly's own closing sentence.** The
+  2026-10-17/18 nightly ended with "what remains is an input the panel does not have". Tonight's
+  reading is a partial, honest rebuttal: **the width of the panel's own cross-section is an input
+  the panel does have, it needs no estimation of any kind, and in 198 notes it has
+  never once been written down.** That is not a promise it carries an edge — item (iii) below says the
+  edge-shaped use of it is the weak one — but it does mean the "no input left" reading is about
+  *selection scores*, not about the panel.
+  - **`#273` first, because it is the primitive everything else here needs, and it is three lines.**
+    EW cross-sectional variance of the day's returns over the **eligible pool** (never over a held
+    book — the admissibility condition is a ban on concentration, and `Σw² = 1/K` at `K` names).
+    Store the daily series alongside the pool return. While storing it, record the two things that
+    decide whether it means here what it means in the literature: its correlation with the squared
+    pool return, and how much of it survives demeaning within region. On a nine-index USD panel the
+    beta-dispersion bias `E[F²·CSVᵝ]` is the one term that does not vanish with breadth, and region
+    plus FX is exactly what sits in it.
+  - **Then `#274`, and pre-register its outcome before looking.** Weight each day's active return by
+    `1/CSVₜ` and recompute every v3 lead's skill **and its bootstrap interval**. The sources'
+    independent out-of-US replication found the correction moves every value and changes **no
+    ranking**, so the prediction to write down is: point estimates shift, order does not, intervals
+    narrow. The interval is the part worth having — `rank_trials.py` currently cannot separate any
+    v3 trial from the best, and tier width is a variance, not a mean. A null here is also
+    informative and should be recorded as one: it says the board's irresolution is not a
+    heteroskedasticity artifact and no amount of re-weighting will resolve it.
+  - **Then the 2026-10-17 queue as that nightly left it, minus what it closed.** `#268` is closed
+    algebraically (a permutation null preserves the weight multiset exactly, so every moment of the
+    weight distribution is identical in candidate and replica) and `#260` is closed at its root by
+    the scale-free-objective argument; `#269` stands as standing discipline. That leaves **`#272`(a)**
+    — does the pool's rebalancing advantage concentrate in the slower part of the reversion, which
+    v3's fill rule leaves it and denies challengers — then **`#270`**, the exponentiated-gradient
+    operator, carrying the previous nightly's own warning that F1 predicts it null unless it is run
+    over a score with real selection in it.
+  - **`#275` is a candidate and it is explicitly gated**, not queued. Run its free screen first:
+    rank-correlate the dispersion-beta score against total volatility, idiosyncratic volatility and
+    market beta on the eligible panel. The lab has recorded that the low-volatility anomaly is
+    absent here, that Sharpe is flat in beta, and that a correlation score standardised by own
+    volatility is a volatility score with the sign flipped. **If `|ρ|` is large the candidate is
+    `range-variance`'s tenth mechanism with its one cause and should not cost a trial.** If the
+    screen passes, the trial is cheap and sits in a family with a recorded lead rather than in
+    `price-trend`.
+  - **Unchanged below that**: the 2026-10-16 queue (`#263`, `#264`, `#265`, with `#266` as a design
+    rule), then the 2026-10-15 queue (`#257`, `#261`, `#259`, `#258`, `#260` — now closed), then the
+    2026-10-14 queue and everything carried under it. Nothing on those lists is closed or reordered
+    by tonight.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to) is a human decision, and
+    every null percentile in the record should be read with that nightly's holding-length correction
+    until it is settled.
+- **[2026-10-18] The transferable output, and it is the eighteenth detector: ask whether a source is
+  using its statistic as an *estimator*, as a *signal*, or as a *scale* — the same number can be all
+  three, the three have completely different evidentiary requirements, and the family's own charter
+  usually names only the weakest of them.** The seventeen before it: redundancy [2026-09-30], rival
+  mechanisms [2026-10-02], the altitude an enumeration was written at [2026-10-03],
+  sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's confound
+  [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06], the
+  self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], the objective-versus-number distinction
+  [2026-10-11], a method's admitted scope [2026-10-12], the benchmark read as a strategy
+  [2026-10-13], the operator in the scoring rule [2026-10-14], what the null is a distribution *over*
+  [2026-10-15], the level of aggregation a prediction is sharp at [2026-10-16], and whether the
+  literature's comparator is an object the lab already holds [2026-10-17]. Tonight's arrived because
+  three papers about the same two-line statistic turned out to need three different standards of
+  proof. As an **estimator**, `CSV` is backed by theorems — consistency, an explicit bias, an
+  efficiency result — and needs no sample at all to be believed; it is Tier A on the strength of the
+  algebra. As a **signal**, the same number is a tier-B empirical claim from one country and one
+  seventeen-year sample with no costs modelled, and it inherits every discount the folder applies to
+  a long-short anomaly. As a **scale** — a denominator for someone else's number — it needs only
+  that the heteroskedasticity it posits is actually present, which is one testable line. `program.md`
+  charters "cross-sectional dispersion" under `range-variance`, i.e. as a *signal*, which is the use
+  with the worst evidence and the highest cost; the estimator and the scale are free and neither is
+  in any family. The test is one question of any imported statistic: *is this paper asking me to
+  believe a theorem, a premium, or a unit conversion?* **Second transferable, smaller and about
+  reading a sort: the gap between a sort's pre-formation and post-formation loadings is the cheapest
+  available measure of how much of it is estimation noise.** Tonight's dispersion-beta sort spreads
+  loadings across roughly ±7 at formation and about −0.03 to +0.22 afterwards; the paper reports both
+  honestly and attributes the difference to time-varying betas, but the same two columns are what a
+  sceptic needs to argue the sort mostly ranks noise. **Read the post-formation column whenever a
+  paper prints one, and ask for it when it does not** — and note that the lab can compute its own
+  version for any beta-like score it builds, for free.
+- **[2026-10-18] Access findings — one new working channel, two refusals already on this file's list
+  confirmed again, one new "looks like an answer" mode, and three named unobtained pointers.**
+  **New first-try channel: `depot.erudit.org/dspace/bitstream/<id>/1/<file>.pdf` serves CIRANO
+  Série Scientifique discussion papers** (399 KB → 134 KB of clean text here), which is the route to
+  the working-paper version of closed Cambridge/JFQA articles by Québec-affiliated authors; the
+  handle came straight out of a web search result rather than having to be derived, and
+  `cirano.qc.ca/pdf/publication/<id>.pdf` is the sibling path. **Confirmed working again:**
+  `repository.essex.ac.uk/<id>/1/<file>.pdf` for an accepted working paper of a closed Taylor &
+  Francis article, and `open.uct.ac.za/bitstream/<handle>/1/<file>.pdf` for a South African
+  dissertation — both plain, unguarded bitstream paths of the shape this file keeps rediscovering.
+  **New "looks like an answer" mode, the fourteenth: a Federal Reserve Bank media path returns
+  HTTP 200 with a 48 KB body that `file` identifies as `JavaScript source`** — not HTML, not a PDF,
+  not empty, so a body-length check alone would pass it and only `file` catches it;
+  `frbatlanta.org/-/media/documents/research/publications/wp/<year>/<id>.pdf` and the
+  `atlantafed.org` alias both did this for a guessed working-paper number. The lesson is the one
+  this file already records from the guessed-NBER-number case: **a guessed working-paper id is not a
+  citation**, and the `-w 'HTTP %{http_code} size=%{size_download}'` plus `file` pair is what keeps
+  it cheap. **Refusals re-confirmed, both already listed here**: `papers.ssrn.com` answered the
+  *green OA location OpenAlex itself names* with **HTTP 403 and an 896 KB "Content Blocked" body** —
+  note the size, which is two orders of magnitude larger than the 5.5 KB Cloudflare body this file
+  records, so **the body-size heuristic for a Cloudflare refusal does not generalise across SSRN's
+  variants**; and `digitalcommons.<institution>/cgi/viewcontent.cgi` (bepress) returned the familiar
+  5.6 KB 403. Also seen again: **Semantic Scholar's clean `not found` for a real, indexed DOI**
+  (`10.1017/s0022109014000489`, which Crossref and OpenAlex both resolve), and a **`business.<school>.edu`
+  faculty-vita path that returns HTTP 404 with a 217 KB HTML body**. **Unobtained pointers for a
+  later session, named rather than summarised:** the **bodies** of de Silva–Sapra–Thorley (2001) and
+  Ankrim–Ding (2002) — CFA Institute premium content, no repository location in OpenAlex, abstracts
+  obtained verbatim from `rpc.cfainstitute.org` and the method taken second-hand; **Stivers–Sun
+  (2010, *JFQA*, ~190 citations), "Cross-Sectional Return Dispersion and Time Variation in Value and
+  Momentum Premiums"** — the only OA location any index names is an SSRN page that 403s, and ODU's
+  bepress repository is challenged, so the *conditioning* half of this literature is currently
+  unread here; and **Angelidis–Sakkas–Tessaromatis (2015, *JBF*), "Stock Market Dispersion, the
+  Business Cycle and Expected Factor Returns"**, whose Southampton eprint returns **HTTP 401** and
+  whose EDHEC landing page carries the full abstract in `<meta name="description">` and no `.pdf`
+  href — the same Drupal pattern this file records for EDHEC, and the reason the G7 multi-market
+  evidence on dispersion as a state variable is a pointer here rather than a note. Those two sources
+  are the obvious first targets if a later session wants the time-variation reading that tonight's
+  chain deliberately does not make.
 
 - **[2026-10-17] What should aim the next session, in order — and the top of this list is now one free
   identity rather than a queue of re-reads, because tonight's cluster closed a loop the last six

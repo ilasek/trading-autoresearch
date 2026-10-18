@@ -21013,3 +21013,5 @@ a masked permutation of an equal-weight full-pool book returns the book (+0.5240
 **When a session re-implements an engine routine in order to instrument it, find the invariant the
 re-implementation must satisfy and check it before reading any number off the instrument** — here
 the invariant was what exposed the bug, not the comparison it was built for.
+
+## Research session — 2026-10-18 (learning agent): 3 notes added, see research/SUMMARY.md
