@@ -20672,3 +20672,344 @@ any number off such a construction.**
   blend could rescue — beats its null, loses to the pool — except that it does not beat its null
   either, so it is not that leg.
 
+
+## Free measurements — 2026-10-17/18 (nightly), one trial spent
+
+The engine suite is green (92 passed). Everything below is **train split only** (1997-01-01 →
+2017-12-31) on the panel `protocol.visible_frame` hands a candidate truncated at the train end.
+No validation Sharpe outside `run_experiment.py`, and no holdout, forward or incubation file was
+opened. Nulls here use 12-20 region-matched draws (the engine uses 200), so a reported null `sd`
+carries 16-23% relative error; every claim below rests on a *median* gap rather than on a tail
+quantile. The harness reproduces the protocol's pool exactly — the equal-weight eligible pool run
+as a candidate scores **+0.5238** against the recorded +0.524, at 492.4 positions and 0.89x
+turnover, matching the last four sessions' control row — which is what licenses the rest.
+
+**F1 — THE RISK AXIS IS WORTH NOTHING ON THIS PANEL, AND THAT CLOSES RESEARCH `#260` AT ITS ROOT
+RATHER THAN AT THE GATE.** `#260` is the first candidate the research folder proposed whose
+rationale is a property of the *gate* — v3's null copies a candidate's weight vector onto permuted
+names, so a vector fitted to the covariance of the names actually held cannot be inherited by the
+replicas, and the empirical source behind it reports that across ten million random-weight indices
+every scheme setting weights against the covariance structure sat above most of the distribution
+and **variance minimisation sat above all of it**. The lab had tested only the diagonal case
+(`pl_decade_invvol_floored`, 1/sigma inside a slice). Tonight builds the off-diagonal ones on the
+whole pool, where the permutation null has nothing but the weight vector to work with:
+
+    book                              sr      skill   97-08   09-17   vol    maxDD   turn   npos  1/HHI   maxw
+    equal-weight pool [baseline]   +0.5238  +0.000  +0.000  +0.000  18.1%  -56.0%  0.89  492.4  484.7  0.0030
+    1/sigma, whole pool            +0.5193  -0.005  -0.002  -0.035  17.0%  -52.0%  0.84  459.9  419.5  0.0047
+    one-factor minimum variance    +0.5089  -0.015  -0.075  +0.139  11.4%  -32.2%  1.76  273.0  129.2  0.0283
+      ... 50% blended with 1/n     +0.5373  +0.014  -0.021  +0.094  14.3%  -44.6%  1.23  492.4  282.7  0.0157
+    two-factor minimum variance    +0.5216  -0.002  -0.074  +0.174  11.4%  -33.4%  2.00  283.3  127.2  0.0296
+    residual-crowding rank ramp    +0.4638  -0.060  -0.014  -0.166  20.5%  -60.6%  1.36  459.9  356.7  0.0062
+
+One-factor minimum variance is `Sigma^-1 1` under `Sigma = var_m*beta beta' + diag(idio)`, solved by
+Sherman-Morrison at O(N) per date with the idiosyncratic variance floored at its own 10th
+percentile and negatives clipped; the two-factor version adds the equal-weighted *residual* as a
+second factor and solves the 2x2 Woodbury. Both are causal, deterministic and cost ~3s for the
+whole train split.
+
+**A 37% cut in portfolio volatility buys -0.015 of Sharpe, and a 21% cut in drawdown comes with
+it.** That is the finding, and the reason is not subtle once stated: **the objective is scale-free
+in exactly the quantity a covariance fit improves.** Sharpe is on excess returns, gross leverage is
+capped at 1.0, and uninvested cash earns the T-bill rate and therefore contributes exactly zero
+excess return — so there is no mechanism in this protocol by which a variance reduction becomes
+Sharpe. The lab had recorded the ingredient ("Sharpe is flat in beta here", "the low-volatility
+anomaly is absent") as an empirical curiosity about one family; it is better read as the statement
+that **this panel's risk-return line passes through the origin**, and the corollary is that every
+risk-based construction — minimum variance, risk parity, maximum diversification, hierarchical risk
+parity, the whole of `portfolio-learning`'s risk half — is a measured null here *before* any
+question about the null gate arises. `#260` does not need a trial. (The honest caveat, recorded so
+it is not re-discovered as news: minimum variance is strongly positive in 2009-2017 (+0.139,
++0.174) and strongly negative in 1997-2008 (-0.075, -0.074), which is the sub-period instability
+F6 of 2026-10-16/17 says carries no information about validation. The 50%-blended row is the only
+positive full-train cell and its kappa is one of two values tried, so it is not offered as a
+result.)
+
+**F2 — AND THE OFF-DIAGONAL OBJECT IS A NEGATIVE VOLATILITY RELABEL, WHICH IS WHY ITS BOOK IS THE
+WORST ROW IN F1.** Average residual correlation, computed in O(NT) rather than from a correlation
+matrix: standardise each name's market residual by its own trailing 252-day scale, take the
+cross-sectional mean of those standardised residuals as "the crowd", and read each name's
+correlation to it. Applying the transferable rule from F3 of 2026-10-16/17 — before building a
+characteristic, report its rank correlation to the things it might secretly be — over 39 sampled
+month-ends and ~424 scored names:
+
+    rank corr(residual crowding, beta252)      -0.303
+    rank corr(residual crowding, vol126)       -0.543
+    rank corr(residual crowding, idio vol)     -0.571      mean +0.095, sd 0.249
+
+**High-volatility names are the names least correlated with the crowd**, so tilting away from
+crowding is tilting *toward* volatility — the opposite of the diversification the construction was
+meant to buy, and the -0.060 skill and 20.5% volatility of its book are that mistake priced. The
+transferable form, which the de-concentration and co-movement entries in `learnings.md` each half
+contain: **a correlation-based score standardised by own volatility is still a volatility score
+with the sign flipped**, because what standardising removes from the numerator it leaves in the
+denominator's sampling error.
+
+**F3 — INDEX-MEMBERSHIP TENURE: THE WEIGHT IS TOO SMALL AND THE SIGN DOES NOT HOLD. RESEARCH
+`#226`(iii) DECLINED BEFORE A FILE EXISTED, ON THE MEASUREMENT THE NOTE ITSELF ASKS FOR.** The
+2026-10-09 research entry's one buildable item is that the pool is a mechanical tracker of nine
+maintained indices, so it pays the entry leg of Petajisto's index turnover cost by construction,
+while **a candidate can decline to buy a name during its first months of eligibility** — a real
+economic effect, not a forecast, and one the region-matched null cannot imitate because a random
+replacement has the panel's ordinary tenure. The note closes with "measure the weight before
+assuming the premium". Measured, from the `eligible` panel alone (tenure = trading days since the
+current membership spell began):
+
+    share of the eligible pool inside its first N trading days of membership
+        N = 21     63     126    252        median tenure 1315 days, 495 names/date
+          1.27%  3.38%  6.03%  11.05%       (1997-2008 slightly higher than 2009-2017)
+
+    forward region-matched excess by tenure bucket (bps, train month-ends)
+        bucket (days)    0-21    22-63   64-126   127-252   253-756   757+
+        +21d             -55.3   +17.2    +33.0     -13.7      -0.2     +0.7
+          t              -1.72   +0.66    +1.32     -0.80     -0.02    +0.27
+        +63d             +12.3   +84.3   +122.0     -32.0      +9.8     -2.4
+          t              +0.21   +1.81    +2.51     -1.10     +0.69    -0.58
+
+The first-month sign is Harris-Gurel's price-pressure reversal and it is the right sign, but the
+arithmetic kills it: **-55 bps over 21 days on 1.27% of the book is -0.7 bps per 21 days, about
+-9 bp/yr of pool return, roughly 0.005 of Sharpe** — and it is given back and more over months 2
+to 6, so the net over a name's first year is not signed. The 64-126 bucket's +122 bps/63d (t
++2.51 on overlapping windows, so nearer t +1.4 effective) is the only cell that looks like
+anything and it lives on 12.5 names a date. Declined: the entry leg is real, measurable, and an
+order of magnitude too small to pay for the gate margin F4 shows it would have to buy.
+
+**F4 — THE NULL'S REPLICAS ARE NOT HELD TO THE ELIGIBILITY BOUNDARY THE CANDIDATE IS HELD TO, AND
+ON THIS PANEL THAT IS WORTH +0.018 OF SHARPE TO THE NULL.** Written up separately under
+`## Engine issue` below; the numbers are here because they are a measurement.
+`benchmarks.random_null_v3` draws a replacement for every name the candidate *enters* and then
+keeps it "for exactly as long as the candidate held its name" — but it never re-checks that the
+replacement is still a member, and it runs its replicas through `simulate` **without** the
+`eligible` mask that `run_backtest` applies to the candidate's own book. 20 draws, hand-rolled from
+the engine's own mapping loop (it reproduces `random_null_v3`'s median to three decimals, which is
+the control that licenses the comparison):
+
+    book                    candidate   replicas as the     replicas masked to    replica weight on
+                                        engine runs them    the eligible set      INELIGIBLE names
+    equal-weight pool        +0.5238    +0.5419 (sd .0050)  +0.5240 (sd .0049)         4.8%
+    one-factor min variance  +0.5089    +0.5130 (sd .0205)  +0.4950 (sd .0196)         3.2%
+
+The masked row for the pool is the clincher: **+0.5240 against the candidate's +0.5238**, which is
+the identity the permutation argument demands (a within-region permutation of an equal-weight
+full-pool book *is* that book) and which the engine's own replicas miss by +0.018. The sign is not
+an accident — a name deleted from an index and still priced by Yahoo today is a survivor, which is
+the bias `engine/benchmarks.py`'s own docstring warns about from the other direction.
+
+**F5 — AND THE HANDICAP IS A FUNCTION OF HOLDING LENGTH, WHICH MAKES IT A CONSTRUCTION DECISION
+RATHER THAN A CONSTANT.** Region-proportional **random** K=100 books (no signal: the only thing
+varying is how long a name is held), 12 draws each:
+
+    book                          candidate   null raw   null masked   handicap   inelig w   turn
+    equal-weight pool, monthly      +0.5238    +0.5409     +0.5240      +0.0169     4.8%     0.89
+    random K=100, re-formed 1-ly    +0.2799    +0.3505     +0.3524      -0.0019     0.3%    16.72
+    random K=100, re-formed 6-ly    +0.5213    +0.4848     +0.4795      +0.0053     1.2%     3.39
+    random K=100, re-formed 12-ly   +0.5107    +0.4969     +0.4898      +0.0071     1.7%     2.07
+
+**Zero for a book that re-draws every month, +0.017 for one that holds a name for its whole
+membership spell.** Two consequences the lab should carry. (i) Every low-turnover operator it owns
+— the retention band above all, which cuts turnover 52% by extending holds — **buys its cost saving
+partly out of its own gate margin**, and that cost has never been in the band's ledger. (ii) The
+near-full-pool constructions `#250` and F8 of 2026-10-14/15 identified as the one reachable
+construction face the *maximum* handicap, because the pool holds every name for its entire spell:
+F8's kappa=0.3 blend cleared its null by +0.020 of selection, and +0.017 of that is this artifact.
+**The pool-plus-tilt route is materially weaker than it looked, and the reason is the measuring
+instrument rather than the idea.**
+
+**F6 — RESEARCH `#268` IS CONSERVED BY CONSTRUCTION AND THEREFORE CARRIES EXACTLY ZERO
+INFORMATION AGAINST THIS NULL. CLOSED ALGEBRAICALLY, CONFIRMED NUMERICALLY, TOP OF THE RESEARCH
+QUEUE SPENT FOR NOTHING.** `#268` is the 2026-10-17 session's headline free item: compute the
+realised **mean absolute weight deviation from 1/n** for each lead and for the replica draws, on
+the argument that the equal-weight pool is the uniform constant-rebalanced portfolio and the
+replicas are draws from a measure on the same simplex that concentrates on it. The pre-registration
+that should have been written before measuring, and is written here before the number is read: **v3's
+null is a within-region *permutation* of the candidate's weight vector, not a resample from the
+simplex, and a permutation preserves the multiset of weights exactly — so every moment of the
+weight distribution, the deviation from 1/n included, is identical in the candidate and in every
+replica, and the diagnostic has no power whatever.** Measured on the decision rows:
+
+    book                        candidate    replicas     max |difference|
+    equal-weight pool, monthly  9.633e-03    9.633e-03        0.00e+00
+    random K=100, monthly       1.318e-02    1.318e-02        0.00e+00
+
+Bit-identical, as the algebra requires. The 2026-10-15 concentration-of-measure reading — that
+uniform random portfolios converge on the equal-weighted one — describes a **different null** from
+the one this engine runs, and the two should not be reasoned about together: v3's draws differ from
+the candidate only in *which names* carry which weights. Everything that follows from "the null is
+a measure on the simplex" needs re-deriving for a permutation null before it is quoted here again.
+
+## Engine issue — 2026-10-18 — the random-selection null's replicas are not held to the eligibility boundary the candidate is held to
+
+**No engine file was edited.** This is written up as `CLAUDE.md` requires and left for a human.
+
+**What the code does.** `engine/benchmarks.random_null_v3` builds each replica by mapping every
+name the candidate *enters* to a name drawn from the eligible, unused names of the same type and
+listing region **on that decision date**, and keeps the mapping until the candidate drops its own
+name. It never re-checks the replacement's eligibility afterwards, and — the part that makes it
+asymmetric rather than merely approximate — it scores the replica with
+
+    res = simulate(replica, px, execution, max_leverage, keep_weights=False, start=sim_start)
+
+while the candidate's own book is scored by `protocol.evaluate_split` with
+
+    res = run_backtest(weights, visible, eligible=elig, execution=setup.execution, **ENGINE_PARAMS)
+
+The `eligible=elig` argument zeroes the candidate's weight on any name that has left the universe.
+The replica has no such argument, so it goes on holding a deleted name until the *candidate's*
+corresponding slot turns over.
+
+**Why it matters.** The module's own docstring says both benchmarks "pick from exactly the pool the
+candidate could pick from on each date". They do not: measured over train (F4/F5 above, 20 draws,
+reproducing the engine's own null median to three decimals), the replicas of the equal-weight pool
+carry **4.8% of their weight on names that are no longer index members**, and masking them to the
+eligible set moves the null median from **+0.5419 to +0.5240** — the latter being, to four decimals,
+the candidate itself (+0.5238), which is the identity a permutation of an equal-weight full-pool
+book must satisfy. So the gate currently charges a fully-invested, boundary-respecting candidate
+about **+0.018 of Sharpe** it cannot earn. The bias is one-signed on this panel for a known reason:
+a name deleted from an index and still carried by Yahoo is a survivor. And it is **not constant** —
+it is ~0.000 for a book that re-draws its names monthly, +0.005 at a six-month hold, +0.007 at a
+twelve-month hold and +0.017 for a book that holds a name for its whole membership spell — so it
+penalises exactly the low-turnover constructions the cost model otherwise rewards.
+
+**What it does and does not change about the record.** The bias makes the gate **harder**, so every
+recorded `GATE_FAIL` stands: no result in `trials.jsonl` is inflated by it, and a candidate that
+had cleared the gate would have cleared it under the fix too. What it does corrupt is *inference*
+— the "geography" term the lab reads off the null median now has a known, holding-length-dependent
+component in it, and the near-full-pool blend of research `#250`, whose entire measured margin at
+kappa = 0.3 was +0.020 of selection, is mostly this artifact. **Tonight's one trial was run after
+this was established and its verdict does not hinge on it**: `sl_gbm_seven_nonlinear` failed the
+train-skill gate at -0.100 and the drawdown gate at -0.4511 independently of the null, its null
+percentile was 42% against a 90% bar, and F5 puts the handicap on a quarterly 100-name book at
+about +0.005. No further trial was run tonight.
+
+**The minimal fix a human might consider** (not applied, not tested): pass the eligibility mask to
+the replica's `simulate` call the same way `run_backtest` receives it, or re-draw a replacement
+when it leaves the eligible set. The second is closer to the docstring's intent ("the pool the
+candidate could pick from on each date"); the first is closer to the candidate's own treatment.
+They differ, and the choice is a protocol decision rather than a bug fix.
+
+## Session summary — 2026-10-17/18 (nightly) — 1 trial of 8; the risk axis closes, and the gate that has decided every v3 trial is measurably biased against the candidate
+
+**Experiments run: 1 of 8. Verdict: 1 GATE_FAIL. Six free measurement blocks (F1-F6), three
+candidate constructions declined on train arithmetic before a file existed (one-factor and
+two-factor minimum variance, the residual-crowding tilt, the index-tenure entrant exclusion), one
+research item closed algebraically, and one engine issue filed. No holdout, forward or incubation
+file was read, and the seat is still empty.** The engine suite is green (92 passed).
+
+    #  candidate                family                verdict    train  val   skill   CI90          2x cost  turn  null %ile
+    8  sl_gbm_seven_nonlinear   statistical-learning  GATE_FAIL  +0.42  +0.28  -0.06  [-0.27,+0.10]  -0.08   4.4x     42%
+
+Equal-weight pool: **+0.34 on validation, +0.524 on train**. `scripts/rank_trials.py` puts all
+eight v3 trials in tier 1 of an eight-trial board, with `pt_decade_reversal_peer_neutral` still
+best on skill (-0.01) and `P(best)` (30%); tonight's trial is fifth on skill and shares **mechanism
+M3** with the liquidity lead, so `distinct_mechanisms` stays at **5**.
+
+**Budget allocation, planned before the first hypothesis was written.** 1 trial in
+`statistical-learning` — a family with **no recorded v3 trial** — which satisfies the "at least one
+in a family with no recorded trial at all" rule; **0 in `price-trend`**, against its cap of 2; no
+family reached a cap. `lead-lag-spillover` remains the one family with no recorded trial, and it is
+the one the lab has closed *structurally* (F12 of 2026-10-13: the null matches a candidate's region
+mix move-for-move, so a region-allocation edge can never move the percentile), so spending a trial
+there would buy a number whose value is known in advance to be ~50%. That tension is for the human
+owner, as the last session said. One trial rather than eight for the reason the engine issue gives:
+after F4 the measuring instrument is known to be biased, and the manual's rule for a suspected
+engine bug is to stop the experiment rather than run more under it.
+
+**Best finding of the night, in one sentence.** **The whole risk axis — minimum variance, risk
+parity, every scheme that sets weights against the covariance structure — is worth exactly nothing
+under this protocol, and not because the null can imitate it but because the objective is
+scale-free in the quantity it improves: one-factor minimum variance over the full eligible pool
+cuts portfolio volatility from 18.1% to 11.4% and maximum drawdown from -56% to -32% and *loses*
+0.015 of Sharpe doing it** (F1). Sharpe is on excess returns, leverage is capped at 1.0 and cash
+earns T-bills and therefore contributes zero excess, so there is no channel from a variance
+reduction to the objective. That closes research `#260` — the first candidate the research folder
+proposed whose rationale was a property of the gate — at its root rather than at the gate, and it
+closes the risk half of `portfolio-learning` with it. The lab had the ingredient recorded as a
+family curiosity ("Sharpe is flat in beta here", "the low-volatility anomaly is absent"); the
+general form is that **this panel's risk-return line passes through the origin**, and a construction
+that only moves along it cannot be graded by a scale-free statistic.
+
+**Second finding, and it is the one that should change how the next session reads a null
+percentile.** `benchmarks.random_null_v3` scores its replicas through `simulate` **without** the
+eligibility mask that `run_backtest` applies to the candidate's own book, and never re-checks a
+replacement after it is drawn — so a replica goes on holding a name after that name leaves the
+index. Measured (F4, 20 draws, reproducing the engine's own null median to three decimals): the
+replicas of the equal-weight pool carry **4.8% of their weight on names that are no longer
+members**, and masking them to the eligible set moves the null median from **+0.5419 to +0.5240**,
+the latter being the candidate itself (+0.5238) to four decimals — the identity a within-region
+permutation of an equal-weight full-pool book must satisfy. The gate therefore charges a
+boundary-respecting candidate about **+0.018 of Sharpe it cannot earn**, one-signed because a
+deleted-but-still-priced name on a Yahoo panel is a survivor. F5 makes it a construction decision
+rather than a constant: the handicap is **0.000** for a book that re-draws monthly, **+0.005** at a
+six-month hold, **+0.007** at twelve months and **+0.017** for a book that holds a name for its
+whole membership spell. Two consequences. (i) Every low-turnover operator the lab owns — the
+retention band above all, which cuts turnover 52% by extending holds — buys its cost saving partly
+out of its own gate margin, and that cost has never been in the band's ledger. (ii) **The
+near-full-pool blend of research `#250`, which F8 of 2026-10-14/15 identified as the one reachable
+construction left, cleared its null by +0.020 of selection at kappa = 0.3 — and +0.017 of that is
+this artifact.** Filed under `## Engine issue` above; no engine file was touched, and the bias makes
+the gate harder, so no recorded `GATE_FAIL` is called into question.
+
+**What closed tonight, and what it cost.** Four things, three of them for zero trials.
+*(i)* `#260` and the risk axis (F1, free). *(ii)* The residual-crowding object, which turns out to
+be a **negative** volatility relabel — rank correlation -0.54 to total and -0.57 to idiosyncratic
+volatility, so tilting away from the crowd tilts *toward* volatility (F2, free); the transferable
+form is that **a correlation score standardised by own volatility is still a volatility score with
+the sign flipped**. *(iii)* Research `#226`(iii)'s index-entry premium, declined on the note's own
+instruction to measure the weight first: fresh entrants are **1.3%** of the pool at 21 days and
+**11.1%** at a year, their first-month region-matched excess is -55.3 bps (t -1.72) and the sign
+reverses over months 2-6, so the whole prize is about **-9 bp/yr of pool return, ~0.005 of Sharpe**
+(F3, free). *(iv)* `statistical-learning`, on the one recorded trial: holding every element of the
+2026-10-13 ridge screen fixed and changing only the learner, depth-3 boosted trees score **train
+skill -0.100** (negative in both sub-periods) and **validation skill -0.055 at the 42nd percentile**
+— they lose to the linear combiner, which separates F10's two readings and says the answer is the
+**features**, not the combiner. The family's charter question is now answered under both functional
+forms; the uncovered cell (small neural nets) is a third estimator on the same null features and is
+not worth a trial.
+
+**One result that is pure arithmetic and retires the top of the research queue.** `#268` asks for
+the realised mean absolute weight deviation from `1/n` for each book and for the replica draws.
+**v3's null is a within-region permutation of the candidate's weight vector, not a resample from
+the simplex, and a permutation preserves the multiset of weights exactly** — so that statistic, and
+every other moment of the weight distribution, is identical in the candidate and in every replica.
+Confirmed bit-for-bit (F6): 9.633e-03 against 9.633e-03 for the pool, 1.318e-02 against 1.318e-02
+for a K=100 book, maximum difference 0.00e+00. The 2026-10-15 concentration-of-measure reading
+describes a **different null** from the one this engine runs, and anything derived from "the null
+is a measure on the simplex" needs re-deriving for a permutation null before it is quoted here.
+
+**Ideas for the next session.** None is holdout-informed; no holdout or forward number was read.
+
+1. **The engine issue is the first thing to settle, and it is a human decision, not a session's.**
+   Until it is, read every recorded null percentile with F5's holding-length correction in mind,
+   and do not build the `#250` blend: its measured margin is mostly the artifact.
+2. **Do not re-buy tonight's declines**: minimum variance or any other covariance-fitted weighting
+   in any family (F1 — the objective is scale-free in what it improves, so a different estimator,
+   a different factor count or a different kappa does not rescue it); the residual-crowding tilt on
+   either sign (F2); the index-tenure entrant exclusion at any horizon (F3 — the weight is the
+   binding constraint, not the estimate); and a third learner over F10's seven features (the
+   trial).
+3. **What is still open, and it is shorter than it was.** `lead-lag-spillover` is the only family
+   with no recorded trial and the only one the lab has argued is structurally unreachable under
+   this gate — that pairing is now two sessions old and wants a human ruling. On the lab's own
+   measurement chain, the standing reading is unchanged and tonight strengthened it from a new
+   direction: with selection exhausted across the free-daily-OHLCV space, the construction axis
+   closed from five directions and now the **risk** axis closed by a scale-free-objective argument
+   that applies to every family at once, what remains is an input the panel does not have.
+4. **From `research/SUMMARY.md`, spent tonight**: **`#260`** built in full and **closed at its
+   root** (F1) — the first time the folder's gate-rationale candidate class has been answered by a
+   property of the *objective* rather than of the gate; **`#268`** closed algebraically and
+   confirmed numerically (F6), which retires the top item of the 2026-10-17 queue; **`#226`**(iii)
+   declined on its own stated precondition (F3). **`#269`** stands as the standing discipline it was
+   written as, and tonight is an instance of it from the other side — a *mechanism* that is sound
+   in the literature's setting and vacuous in this one because the objective differs. Still unspent:
+   **`#270`** (the exponentiated-gradient operator — note that F1 now predicts it will be null for
+   the same scale-free reason unless it is run over a score with real selection), **`#272`**(a),
+   **`#259`**, **`#258`**, **`#257`**, **`#261`**, **`#254`**, **`#255`**, **`#82`**, and the
+   carried queue as 2026-10-15's open-questions entry leaves it.
+
+**One method note worth carrying.** Every number in F4 and F5 rests on a hand-rolled copy of
+`random_null_v3`'s mapping loop, and it was only trustworthy because it reproduced two things it
+was not fitted to: the engine's own null median to three decimals, and the algebraic identity that
+a masked permutation of an equal-weight full-pool book returns the book (+0.5240 against +0.5238).
+**When a session re-implements an engine routine in order to instrument it, find the invariant the
+re-implementation must satisfy and check it before reading any number off the instrument** — here
+the invariant was what exposed the bug, not the comparison it was built for.

@@ -3,7 +3,8 @@
 Read this before proposing any hypothesis. Add to it when a pattern repeats
 across experiments; prune entries that later evidence contradicts.
 
-> **Protocol v3 since 2026-10-08.** Nothing in this file was measured under v3. Entries above
+> **Protocol v3 since 2026-10-08.** Only the entries under "Protocol v3 learnings" at the foot of
+> this file were measured under v3; everything above it was not. Entries above
 > the v2 section were measured under protocol v1, on today's ~140 surviving constituents; the
 > v2 section was measured on the point-in-time panel but with v2's execution model (fills at
 > the signal's own close, free drift, one flat cost, no cash rate), which v3 replaced
@@ -5287,3 +5288,108 @@ across experiments; prune entries that later evidence contradicts.
   dates** with no error. Print the scored-date count and the median scored-name count before
   reading any number off a construction of this shape — the weekday score covers a median of 325
   names against the ~500 eligible, which is itself a fact worth knowing about it.
+
+- **[Measured 2026-10-17/18, nightly] THE WHOLE RISK AXIS IS WORTH NOTHING UNDER THIS PROTOCOL,
+  AND THE REASON GENERALISES TO EVERY FAMILY AT ONCE: THE OBJECTIVE IS SCALE-FREE IN EXACTLY THE
+  QUANTITY A COVARIANCE FIT IMPROVES.** The 2026-10-09/10 entry above records "Sharpe is flat in
+  beta on this panel" from one low-volatility *selection*. Tonight measures the *weighting* half,
+  on the whole eligible pool, through the full v3 execution model (train 1997-2017):
+
+      book                              sr      skill   97-08   09-17   vol    maxDD   turn   1/HHI
+      equal-weight pool [baseline]   +0.5238  +0.000  +0.000  +0.000  18.1%  -56.0%  0.89   484.7
+      1/sigma, whole pool            +0.5193  -0.005  -0.002  -0.035  17.0%  -52.0%  0.84   419.5
+      one-factor minimum variance    +0.5089  -0.015  -0.075  +0.139  11.4%  -32.2%  1.76   129.2
+      two-factor minimum variance    +0.5216  -0.002  -0.074  +0.174  11.4%  -33.4%  2.00   127.2
+
+  (One-factor = `Sigma^-1 1` under `Sigma = var_m·ββ' + diag(idio)` by Sherman-Morrison, idio
+  floored at its 10th percentile, negatives clipped; two-factor adds the equal-weighted residual
+  as a second factor by Woodbury. Both O(N) per date, ~3s for the split.) **A 37% cut in
+  volatility and a 24-point cut in drawdown buy -0.015 of Sharpe.** Sharpe is on excess returns,
+  gross leverage is capped at 1.0, and uninvested cash earns T-bills and so contributes exactly
+  zero excess return — there is no mechanism in this protocol by which a variance reduction
+  becomes the objective. **Read the general form, not the instance: this panel's risk-return line
+  passes through the origin, so minimum variance, risk parity, maximum diversification,
+  hierarchical risk parity and every other scheme that only moves a book along that line is a
+  measured null here before any question about the null gate arises.** This closes research `#260`
+  — whose rationale was that the permutation null cannot inherit a covariance fit, which is true
+  and irrelevant — and it closes the risk half of `portfolio-learning`. A risk fit is still worth
+  something as an *amplifier* of an alpha the book already carries (the same active return on a
+  0.63x-volatility base is worth 1.6x the Sharpe), which is the only live version of the idea and
+  needs an alpha first. **Anti-candidate travelling with this entry: do not re-buy a covariance
+  weighting at a different estimator, factor count, shrinkage or blend weight — none of them
+  changes the scale-free argument.**
+
+- **[Measured 2026-10-17/18, nightly — ENGINE ISSUE, see the journal entry of 2026-10-18] THE
+  RANDOM-SELECTION NULL'S REPLICAS ARE NOT HELD TO THE ELIGIBILITY BOUNDARY THE CANDIDATE IS HELD
+  TO, AND IT IS WORTH +0.018 OF SHARPE TO THE NULL — RISING WITH HOLDING LENGTH.**
+  `benchmarks.random_null_v3` scores replicas through `simulate` without the `eligible` mask that
+  `run_backtest` applies to the candidate, and never re-checks a replacement after it is drawn, so
+  a replica keeps holding a name after it leaves the index. Measured over train, 20 draws, with a
+  hand-rolled copy of the engine's mapping loop that reproduces the engine's null median to three
+  decimals:
+
+      book                    candidate   replicas as run      replicas masked      replica weight on
+                                                               to the eligible set  INELIGIBLE names
+      equal-weight pool        +0.5238    +0.5419 (sd .0050)   +0.5240 (sd .0049)        4.8%
+      one-factor min variance  +0.5089    +0.5130 (sd .0205)   +0.4950 (sd .0196)        3.2%
+
+  The masked pool row *is* the candidate to four decimals, which is the identity a within-region
+  permutation of an equal-weight full-pool book must satisfy and which the engine's replicas miss
+  by +0.018. One-signed, for a known reason: a name deleted from an index and still priced by
+  Yahoo is a survivor. And it scales with how long a name is held — region-proportional **random**
+  K=100 books (no signal, only the hold varying): **-0.002** re-formed monthly, **+0.005** at six
+  months, **+0.007** at twelve, **+0.017** for the pool, which holds each name for its whole
+  membership spell. **Three standing consequences.** (i) The bias makes the gate harder, so no
+  recorded `GATE_FAIL` is called into question — but the "geography" term read off a null median
+  now has a known holding-length component inside it and is not a clean read on a book's region
+  mix. (ii) **Every low-turnover operator buys its cost saving partly out of its own gate margin**
+  — the retention band most of all, which cuts turnover 52% by extending holds, and whose ledger
+  has never carried this. (iii) The near-full-pool blend of research `#250` faces the maximum
+  handicap: its measured margin at kappa = 0.3 was +0.020 of selection and +0.017 of that is this
+  artifact, so **do not build it until a human has ruled on the engine issue.**
+
+- **[Measured 2026-10-17/18, nightly] `statistical-learning` IS ANSWERED UNDER BOTH FUNCTIONAL
+  FORMS, AND IT IS THE FEATURES.** Holding every element of the 2026-10-13 ridge screen fixed —
+  same seven features, same within-peer-group normalisation, same peer-demeaned forward 63-day
+  target, same quarterly grid, same top-100 peer-quota equal-weight book — and changing only the
+  learner to depth-3 gradient-boosted trees: **train skill -0.100** (negative in both sub-periods,
+  -0.13 / -0.11), **validation skill -0.055** [-0.27, +0.10] at the **42nd** null percentile,
+  against the ridge's +18.7 bps/63d (t +0.33) top-100 excess on the same inputs. The extra
+  capacity bought a *worse* result, which is what fitting a null with interactions looks like.
+  `program.md`'s charter question for the family — "which feature groups carry signal" — now has
+  the answer *none of them, linear or nonlinear*; the uncovered cell (small neural nets) is a third
+  estimator over the same null features. **Also the first v3 trial to fail a gate other than the
+  null**: validation drawdown -0.4511 against the -0.45 bar, train drawdown -63.1% against the
+  pool's -56.0%. A learned top-100 book is *more* drawdown-prone than the pool, so the
+  diversification gates are reachable and "only the null binds" is no longer true.
+
+- **[Method, 2026-10-17/18] A CORRELATION SCORE STANDARDISED BY OWN VOLATILITY IS STILL A
+  VOLATILITY SCORE WITH THE SIGN FLIPPED, AND v3's PERMUTATION NULL CONSERVES EVERY MOMENT OF THE
+  WEIGHT DISTRIBUTION.** Two independent traps, both cheap to check. (i) Average residual
+  correlation — standardise each name's market residual by its own trailing scale, correlate it
+  with the cross-sectional mean of those standardised residuals — reads rank **-0.543** to 126-day
+  volatility and **-0.571** to idiosyncratic volatility, because the names least correlated with
+  the crowd are the volatile ones; its book scored -0.060 of train skill at **20.5%** volatility
+  against the pool's 18.1%, i.e. the construction bought the opposite of the diversification it was
+  designed for. Standardising removes the level from the numerator and leaves it in the
+  denominator's sampling error. (ii) The null permutes the candidate's weight *vector* within
+  region rather than resampling the simplex, so the multiset of weights — and therefore the mean
+  absolute deviation from `1/n`, and every other moment — is **identical in the candidate and in
+  every replica** (measured bit-for-bit: 9.633e-03 vs 9.633e-03 for the pool, 1.318e-02 vs
+  1.318e-02 for a K=100 book, max difference 0.00e+00). Research `#268` is therefore
+  zero-information against this null, and anything derived from "the null is a measure on the
+  simplex" (the 2026-10-15 concentration-of-measure reading included) must be re-derived for a
+  permutation null before it is quoted here.
+
+- **[Measured 2026-10-17/18, nightly] THE INDEX-ENTRY PREMIUM IS REAL, CORRECTLY SIGNED AND AN
+  ORDER OF MAGNITUDE TOO SMALL — THE WEIGHT IS THE BINDING CONSTRAINT, NOT THE ESTIMATE.** The
+  pool is a mechanical tracker of nine maintained indices and pays the entry leg of the index
+  turnover cost by construction, while a candidate can decline to buy a name during its first
+  months of eligibility — a real effect the region-matched null cannot imitate. From the
+  `eligible` panel alone, train: fresh entrants are **1.27%** of the pool at 21 trading days,
+  3.38% at 63, 6.03% at 126 and **11.05%** at a year (median tenure 1315 days). Their forward
+  region-matched excess is **-55.3 bps/21d (t -1.72)** in the first month — Harris-Gurel's price
+  pressure, right sign — and **+17.2 / +33.0 bps** over months 2 to 6, so the net over a name's
+  first year is unsigned. The whole prize is **about -9 bp/yr of pool return, ~0.005 of Sharpe**,
+  against a null handicap of +0.005 to +0.017 for a book of that holding length. **Declined at
+  every horizon**: a different exclusion window changes the estimate and not the weight.
