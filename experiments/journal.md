@@ -21102,3 +21102,5 @@ behaviour, not a malfunction.
   current rule each one still buys a full halt. If that trade is wrong, the place to change
   it is step 0's wording in the nightly prompt — a session judging for itself which flagged
   branch is benign enough to run past is exactly how the 2026-08 split happened.
+
+## Research session — 2026-10-19 (learning agent): 3 notes added, see research/SUMMARY.md

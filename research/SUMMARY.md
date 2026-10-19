@@ -1071,6 +1071,83 @@ taken from it is optimistic**, a free pre-trial diagnostic that applies to any c
 anything. New: **#248**, free. **Nothing of the lab's is closed by this entry.**
 → `notes/2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`
 
+
+**[2026-10-19] The folder held 201 notes about *what* to predict, which features carry it and how to
+weight the answer, and none about **what the loss function makes a model predict** — and that question
+has an exact answer, which is a theorem rather than a preference: a scoring function does not measure
+accuracy, it *names a functional of the predictive distribution*.** A grep across all 201 prior notes
+returned **zero** for `scoring rule`, `proper scoring`, `elicitab`, `Bregman`, `pinball`, `expectile`,
+`quantile regression`, `learning to rank`, `ranking loss`, `economic loss`, `logistic`, `conformal`
+and `Gneiting`, with `loss function` appearing in two notes and only in passing. Both existing ML
+notes (Gu–Kelly–Xiu, Avramov–Cheng–Metzker) hold the mean-squared objective fixed and vary the
+estimator; this entry is the axis they leave untouched, and three sources answer it three ways.
+*(1)* **The theory.** Disclose a loss and the optimal forecast is a specific functional and nothing
+else: squared error ⟺ the mean (the consistent losses are *exactly* the Bregman functions), absolute
+error ⟺ the median, the pinball loss ⟺ a quantile (*exactly* the generalized-piecewise-linear
+functions), with analogous characterisations for expectiles and ratios of expectations. The
+demonstration is a synthetic GARCH simulation in which a forecaster who knows the true
+data-generating process and issues the true conditional mean is **ranked below a forecaster issuing a
+constant** by both absolute error and absolute percentage error, and below a different constant by
+relative error. Three sharp constraints follow: **weighting a loss by a function of the realisation
+re-targets it to the original functional of a *tilted* density `∝ w(y)f(y)`** (with squared error and
+weight `w`, the elicited quantity is `E[Y·w(Y)]/E[w(Y)]`) — so "focus the loss on the big movers" does
+not predict the movers' mean; **absolute percentage error is consistent for a non-standard functional
+that "tends to support severe underforecasts"** and is disqualified on returns twice over, the second
+time because returns are signed and routinely near zero; and **conditional value-at-risk is not
+elicitable at all**, nor is a sum of distinct quantiles, so no loss trains a model to minimise
+shortfall — tail risk is a descriptor, not a trainable target, which is the lab's own
+"`DR` is a composition descriptor and not a drawdown predictor" [`learnings.md` 2026-09-25] arriving
+from the algebra. *(2)* **The ordinal loss, on this lab's exact decision.** v3 admits only
+cross-sectional name selection, weighting and breadth having been measured to buy nothing, so the
+decision consumes an *ordering* — yet the standard "regress-then-rank" design spends its capacity on
+the level of every name including the ~80% never selected. Recast the problem as information
+retrieval (**a rebalance date is a query, a name is a document, its label is its realised
+forward-return decile at the next rebalance**) and train on a pairwise or listwise loss. The reported
+pattern: every rank-loss model beats every benchmark on every finance metric, listwise does *not* beat
+pairwise (attributed to sample size — listwise sees `12·N` training examples a year where pairwise
+sees `12·N²`), and **the MSE-trained net is the weakest non-random model, landing barely above random
+selection and below a one-line price heuristic.** The long-only decile table is the directly usable
+evidence: random selection's decile Sharpes are flat and non-monotone as they must be, the
+MSE-trained net's are nearly flat and **non-monotone across its top three deciles**, and the
+rank-loss models' rise steeply and monotonically with the improvement visible in **the top decile
+taken alone**, not only in the long–short spread. *(3)* **The economic loss, and the diagnosis of how
+MSE fails.** Replacing the forecast error with the no-arbitrage moment condition — squared pricing
+errors of instrumented assets, with the conditioning function chosen *adversarially* to find the
+portfolios and times the candidate model prices worst, which is Hansen–Jagannathan's result that
+minimising the largest pricing error finds the closest admissible SDF — yields a model that
+**explains more return variation out of sample than a model whose objective *is* to maximise
+explained variation**, and an off-the-shelf prediction net "can perform worse than even linear
+no-arbitrage models". The mechanism is visible in the variable-importance columns and it is the single
+most transferable paragraph in the three sources: the **MSE-trained** model's first fourteen
+characteristics are almost entirely frictions and past returns — short-term reversal,
+unexplained-volume illiquidity, size — "which raises the suspicion that a simple forecasting approach
+might focus mainly on illiquid penny stocks", while the economically-constrained model spreads its
+first twenty across all six anomaly categories. **The MSE objective's attractor is the illiquid
+micro-cap tail, because that is where squared-error reduction is largest** — a region this lab has
+measured as a twelve-session null and which a nine-large-cap-index panel excludes *by construction*.
+Two further free transfers from the same loss: weight each name's contribution by **`√Tᵢ/√T̄`**,
+because moment convergence is `1/√Tᵢ` and this panel is unbalanced in exactly the way that device is
+for (coverage 89–97% over validation against 40–66% over 1996–2008); and note that **the aggregation
+level of a loss is itself a de-noising device** — averaging over all `N·D` instrumented names rather
+than `D` sorted portfolios forces the fit onto structure common to most of the cross-section, which
+is the mechanism-level reason a model trained to price a few sorted portfolios can look excellent and
+select badly. One construction rule and one scope limit. The rule: characteristics enter
+approximately **linearly in isolation** and the gain from flexibility is **interactions**, so the
+cheapest upgrade from a penalised linear model is pairwise products of a few standardised
+characteristics, not a deeper learner, and additive non-linear forms (splines, kernels) are the least
+promising direction — which turns `program.md`'s "prefer few features and a penalised linear model
+first" from a style preference into a measured claim with a named next step. The limit: **none of
+this licenses an expectation of an edge.** A coherent objective over a score with no information in
+it is still a null, and the tension to state out loud is that the ordinal-loss paper's demonstration
+case is cross-sectional **momentum** — the one feature block this lab has already priced to a
+region-matched null, where residual momentum was found to be a refinement of a null at `ρ = +0.903`
+to raw 12-1 [`learnings.md` 2026-10-14/15]. New: **#276–#279**, three free, one trial. **Nothing of
+the lab's is closed by this entry**; no lab measurement was taken tonight and the holdout was not
+read.
+→ `notes/2026-10-19-consistent-scoring-functions-and-elicitability.md`,
+`notes/2026-10-19-learning-to-rank-cross-sectional-selection.md`,
+`notes/2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md`
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -12056,6 +12133,125 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-18-dispersion-beta-and-the-cross-section.md` ·
     `notes/2026-09-06-long-side-share-of-anomaly-profits.md`
 
+276. **FREE / DESIGN RULE, and it is the one that should change the next learned candidate before it
+    is written: name the target functional first, and on this panel that functional is almost never a
+    conditional mean.** A loss does not measure accuracy, it *elicits* a functional — squared error
+    elicits the mean, and the consistent losses for the mean are **exactly** the Bregman class.
+    Protocol v3 admits one kind of claim, cross-sectional name selection within region and type, with
+    weighting and breadth measured to buy nothing; the decision therefore consumes an **ordering**, or
+    equivalently, per name, the conditional probability of landing in the **top `K` of its own
+    region's** forward-return distribution. That probability is an expectation of an indicator, hence
+    elicitable, hence trainable with a strictly proper loss (log loss or Brier, both Bregman). So the
+    licensed substitution is: **replace an MSE regression on forward returns with a classifier on
+    within-region top-`K` membership, or with an ordinal loss on within-region forward-return decile
+    grades.** Two riders that are not optional. *(a)* Grade **within region**, because v3's null
+    replaces each entered name with one of the same type and, for stocks, the same listing region, so
+    a grade computed pool-wide encodes a geography the null matches move for move — the mechanism that
+    already turned average peer correlation from `−44.9` pool-wide into `−8.7` region-matched
+    [`learnings.md` 2026-10-14/15]. *(b)* The label is a realised forward return, so it is unavailable
+    until its horizon closes: release rows through `strategies/lib/walkforward.py`, and K-fold, if
+    used at all, over **whole released dates** (**#248**). Costs nothing, needs no new data, and is a
+    change of objective rather than of model class. Tier A (theorem-grade; no sample, no market, no
+    decay), no overlap.
+    → `notes/2026-10-19-consistent-scoring-functions-and-elicitability.md` ·
+    `notes/2026-10-19-learning-to-rank-cross-sectional-selection.md`
+
+277. **FREE / DISQUALIFYING RULES — three ways of choosing a loss that are incoherent rather than
+    merely suboptimal, and one of them is the obvious thing to try on this panel.** *(i)* **Never
+    weight a mean loss by a function of the realisation.** The folder already holds the finding that
+    the long-horizon cross-section is dominated by a few names, which invites a loss weighted by
+    `|y|` to "focus on the movers"; the theorem says `w(y)·S(x,y)` is strictly consistent **not** for
+    the original functional but for that functional applied to the *tilted* density `∝ w(y)·f(y)` —
+    with squared error, `E[Y·w(Y)]/E[w(Y)]`. With `w = |y|` that elicits `E[Y|Y|]/E[|Y|]`, which
+    over-weights the right tail of an already right-skewed cross-section and is the mean of nothing
+    anyone has a decision for. If the tail is genuinely the target, **change the functional
+    explicitly** — predict a high quantile (pinball/GPL loss, `QuantileRegressor`) or a high expectile
+    — rather than reweighting a mean loss and hoping. *(ii)* **Never use a percentage- or ratio-form
+    loss on returns.** Absolute percentage error is consistent for a "median of order −1" that the
+    source says "tends to support severe underforecasts", relative error for a median of order 1, and
+    squared relative error for `E[Y²]/E[Y]`; separately, all of them are defined only for strictly
+    positive quantities while a return is signed and routinely near zero. They are defaults in a
+    great deal of applied forecasting code and must not reach a candidate here. *(iii)* **No loss
+    elicits a shortfall objective.** CVaR is **not elicitable** — no scoring function is consistent
+    for it — and neither is a sum of distinct quantiles, so drawdown and expected-shortfall targets
+    belong in the result card as *descriptors* and can never be the thing a learner minimises. This is
+    the algebraic form of the lab's own measurement that `DR` is a composition descriptor and not a
+    drawdown predictor [`learnings.md` 2026-09-25], and of the standing habit that entry generalised
+    to: pre-register a statistic's predictive claim separately from its descriptive one. One more,
+    adjacent: a **Huber** loss is not consistent for the mean, so a robust fit is a deliberate change
+    of target and not a cleaner estimate of the same one. Tier A, no overlap.
+    → `notes/2026-10-19-consistent-scoring-functions-and-elicitability.md` ·
+    `notes/2026-09-11-influential-observations-winsorization-versus-robust-regression.md`
+
+278. **FREE / PRE-TRIAL PREDICTION about any MSE-fitted learner on this panel, checkable from the
+    fitted coefficients before a single return is scored — plus a one-line estimator fix the panel's
+    own imbalance calls for.** The prediction: a learner minimising squared forward-return error will
+    **collapse onto the trading-frictions and short-term-reversal block**, because that is where
+    realised return variance, and therefore squared-error reduction, is largest. This is not an
+    extrapolation — the source reports it as a diagnosed property of the *objective*, showing the
+    MSE-trained model's first fourteen characteristics almost entirely frictions and past returns
+    (short-term reversal, unexplained-volume illiquidity, size) with the explicit suspicion that such
+    a model "might focus mainly on illiquid penny stocks", while the economically-constrained model
+    with adversarial test assets spreads its first twenty variables across all six anomaly
+    categories. On this universe the destination is **doubly wrong**: the lab has already priced
+    `liquidity-volume` to a twelve-session null and hit `SUMMARY.md` #18's short-horizon cost wall on
+    reversal objects, **and** the micro-cap tail the objective is pulled toward is excluded by
+    construction from nine large-cap national indices. So **write the prediction down, fit, and read
+    the coefficients**: if a penalised linear or tree candidate in `statistical-learning` loads on the
+    frictions-and-reversal block, that is the objective talking and not a discovery, and the free
+    answer is **#276**'s change of target, not more features. The estimator fix, independent and also
+    free: weight each name's contribution to the loss by **`√Tᵢ/√T̄`** — moment convergence is
+    `1/√Tᵢ`, so this up-weights precisely-estimated moments and down-weights briefly-observed names,
+    which this panel needs because a column enters only once eligible, leaves on index deletion, and
+    coverage runs 89–97% over validation against 40–66% over 1996–2008. Distinct from the lab's
+    warm-up finding [`learnings.md` 2026-10-15/16]: that one is about *scoring*, this one is about
+    *fitting*. Related and also free: averaging a loss over **every** eligible name rather than over a
+    handful of extreme-decile portfolios forces the fit onto structure common to most of the
+    cross-section, which is the mechanism-level reason a model trained to price a few sorted
+    portfolios can look excellent and select badly. Tier A source, no overlap.
+    → `notes/2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md` ·
+    `notes/2026-08-29-machine-learning-cross-section-comparative.md`
+
+279. **CANDIDATE (1 trial, `statistical-learning`) — a pairwise-logistic *ranker* over within-region
+    forward-return decile grades, but run the free rank-IC screen first and do not run it over
+    momentum features.** The construction is fully specified and uses only what is installed: at each
+    month-end, grade every eligible name by its **within-region decile of forward return at the next
+    rebalance**; form within-date, within-region **pairs** and fit a penalised **logistic regression
+    on the difference of the two names' feature vectors** — which is exactly RankNet's loss with a
+    linear scoring function, hence convex, deterministic, single-threaded, with one regularisation
+    parameter and no hidden width, dropout or learning rate to search. Score out-of-sample, sort, hold
+    a **fixed count** of top names equal-weighted. It satisfies `program.md`'s "prefer few features
+    and a penalised linear model first" exactly and clears the standing parameter-counting triage.
+    The predicted sign: a rank-loss score's **within-region rank IC exceeds** that of both the raw
+    heuristic and an MSE-fitted penalised linear model on the same features, while remaining **small
+    in absolute terms** — the source's own ranking metrics move only hundredths off the random
+    baseline, so import the construction and no magnitude. **Four gates before and after, and the
+    first is free and may close it.** *(a)* **The screen that decides it**: fit the ranker
+    walk-forward and compare its within-region rank IC against the same features scored by the
+    heuristic and by MSE. If the three are indistinguishable on this panel the whole family closes for
+    the price of a diagnostic, and that is a result worth recording. *(b)* **Pre-register the second
+    question before looking**: does the rank-IC gain survive the turnover the reordering costs? The
+    source models **no transaction costs anywhere** and never reports turnover, while v3 charges
+    per-name liquidity tiers plus UK/HK/FR/IT/ES transaction taxes and charges the trades that undo
+    drift. *(c)* **Do not run it over the trend block.** The source's demonstration features are 3/6/12-month
+    returns and volatility-normalised MACDs — the lineage this lab has priced to a region-matched null,
+    where residual momentum was a refinement of a null at `ρ = +0.903` to raw 12-1
+    [`learnings.md` 2026-10-14/15]. Put the ordinal loss over a score from a family with a **live**
+    lead, or over a non-trend feature set, and report correlation to the incumbent's momentum score as
+    a precondition rather than an afterthought. *(d)* **Measure one call's runtime first**: `O(N²)`
+    pairs at ~1,000 eligible names is ~500k pairs per date against `program.md`'s ~60 s per call and
+    ~seven calls per trial, so subsample pairs per date or restrict to pairs spanning a grade gap.
+    Out of scope and not to be planned around: LambdaMART is XGBoost, which is not in this stack, and
+    scikit-learn exposes no ranking objective; the neural variants fail the `1e-6` determinism
+    requirement and carry a 50-iteration hyperparameter search the deflated bar would charge for.
+    Tier B− source: single market, single asset class, no costs, no multiple-testing treatment, no
+    independent replication, long–short framing. **`validation_overlap: true`** — its out-of-sample
+    window runs to 2019 and overlaps this lab's validation split by two years, so discount its
+    novelty accordingly.
+    → `notes/2026-10-19-learning-to-rank-cross-sectional-selection.md` ·
+    `notes/2026-10-19-consistent-scoring-functions-and-elicitability.md` ·
+    `notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`
+
 ---
 
 ## Coverage log
@@ -12129,8 +12325,104 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-17 (session 64) | **The first session to read the oldest literature about the lab's own portfolio object — online portfolio selection, which has competed against the best *constant-rebalanced portfolio* since 1991 — and it finds that the v3 benchmark, the v3 null and that literature's hindsight ceiling are three objects on one simplex.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 192 prior notes `universal portfolio`, `online portfolio`, `Anticor`, `OLMAR`, `follow-the-leader`, `Kalman`, `conformal` and `turnover constraint` all returned **zero**, and `Cover` appeared only as a surname in reference lists — 192 notes about what to forecast and how to weight it, none about the sequential-decision literature whose entire setting (long-only, weights summing to one, daily closes, no fundamentals) is this lab's setting exactly. Four sources, three notes, one chain: the guarantee → the cheap operator → the branch that claims returns. Headline: **the equal-weight eligible pool *is* the uniform CRP, the 200 random replica books are draws from a measure on the same simplex that [2026-10-15] showed concentrates on it, and Cover's universal portfolio is that measure reweighted by realised wealth — so Blum–Kalai's randomised implementation is literally the lab's own null run as a strategy**, and a naive candidate in this family differs from the benchmark by exactly its performance tilt (**#268**). Second, and the night's most transferable discipline: **the regret bounds are numerically vacuous at every scale this lab operates at** — `(m−1)log(n+1)` is ≈8.6 in log wealth at *two* assets over 22 years of daily data and thousands at a thousand names, `√(2T log N)` is of order a hundred at this panel's width, and the papers' own random-subset experiment shows the captured fraction of best-CRP wealth *falling* as the asset count rises; what a bound certifies is a rate, never a level (**#269**). Third, the one buildable item is an **operator, not a signal**: the exponentiated-gradient update is a relative-entropy-regularised step whose single parameter is a turnover dial with a published prior range, long-only by algebra, zero estimated parameters, and it accepts any score the lab already owns (**#270**); its `EG(η,α)` mixing step is also the *computable* substitute for `#237`'s uncomputable `δ*`. Fourth, the Follow-the-Loser branch (OLMAR and kin) is an **anti-candidate whose refutation the lab measured before reading the source** — the survey's own assumption list (no costs, fills *at the closing price*, no impact) is item-for-item what `experiments/learnings.md` [2026-10-08] names as what carried the v2 residual-reversion leads, so there is no tension to adjudicate (**#271**). Kept from that branch: **restoring fixed weights is itself a Follow-the-Loser trade**, so the pool's rebalancing channel is a mean-reversion bet v3's fill rule denies challengers at one-day horizons and leaves with the benchmark at slower ones, and *buy-and-hold over experts* is the free aggregator three independent sources now agree on (**#272**). No lab measurement was taken and the holdout was not read. | Cover 1991 (*Mathematical Finance*, tier A) + Blum–Kalai 1999 (*Machine Learning*, tier B) (`2026-10-17-universal-portfolios-and-the-best-constant-rebalanced-portfolio.md`); Helmbold–Schapire–Singer–Warmuth 1998 (*Mathematical Finance*, tier A) (`2026-10-17-exponentiated-gradient-portfolio-update.md`); Li–Hoi 2014 (*ACM Computing Surveys*) + Li–Hoi 2012/Li–Hoi–Sahoo–Liu 2015 OLMAR (*ICML* / *Artificial Intelligence*), tier B (`2026-10-17-follow-the-loser-online-portfolio-selection.md`) |
 | 2026-10-18 (session 65) | **The first session to read the literature on the *width of the cross-section* — a quantity `program.md` charters by name for `range-variance` and the folder had never covered — and it finds that one statistic does three different jobs, of which the family-shaped one is the weakest and the measurement one is free.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 198 prior notes `CSAD`, `dispersion beta`, `inverse-CSV weighting` and `Ankrim` returned **zero**, and `return dispersion`, `variance ratio`, `Hurst` and `semivariance` appeared only as passing words inside notes about other things — 198 notes about what to forecast, how to weight it and how to grade it, none about the single number that describes how far apart the day's returns are. Three sources, one chain: the **estimator**, the **signal**, the **denominator**. Headline: the equal-weighted cross-sectional variance of one day's returns is a **consistent and asymptotically efficient, model-free, any-frequency estimator of average idiosyncratic variance**, with a closed-form finite-`N` bias `(1 − Σw²)` and a theorem (not a preference) that equal weighting is the best choice in its class — and its admissibility condition `Σw² = O(1/N)` is a **ban on concentration**, which means it is a pool-level object and a `K`-name book cannot carry it (**#273**). Second, the one bias that survives breadth is `E[F²·CSVᵝ]`, beta dispersion times the squared factor return, which on a nine-index USD-converted panel is region and FX exposure and is therefore a bigger term here than in the US literature that measured it as immaterial. Third, the family-shaped item is a **dispersion-beta sort** whose predicted sign puts the high-return leg on the long side — buildable, `O(N)`, no covariance matrix — but the source models **no costs at all**, reports only a long-short spread, weakens sharply as the formation window lengthens, and prints pre-formation betas spanning ±7 against post-formation betas spanning −0.03 to +0.22, so almost none of what the sort ranks persists a month (**#275**, gated behind a free volatility-relabel screen). Fourth, and the night's best ratio of value to cost, is not a candidate at all: **an active book's return is `a′r`, so it scales with the width of the cross-section with skill held fixed, which makes every v3 `skill` number an average of heteroskedastic observations** — the fix is a `1/CSVₜ` weighting, free and retrospective on stored returns, and the sources supply its own pre-registered null, because an independent out-of-US replication found the correction moves every value and changes **no ranking** (**#274**). The transferable detector is below. No lab measurement was taken and the holdout was not read. | Garcia–Mantilla-García–Martellini 2014 (*JFQA*, tier A on the theory) (`2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md`); Verousis–Voukelatos 2018 (*Quantitative Finance*, tier B) (`2026-10-18-dispersion-beta-and-the-cross-section.md`); de Silva–Sapra–Thorley 2001 + Ankrim–Ding 2002 (*FAJ*, tier 1 venue, **bodies not read** — abstracts from CFA Institute, method restated second-hand from Gething 2014, UCT, read in full) (`2026-10-18-return-dispersion-and-the-measurement-of-active-performance.md`) |
 
+| 2026-10-19 (session 66) | **The first session to read the literature on the *objective function itself* — not what to predict, not which features carry it, not how to weight the answer, but what a loss makes a model predict — and it finds that the question has a theorem for an answer and that two independent literatures have measured the same failure of the default.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 201 prior notes `scoring rule`, `proper scoring`, `elicitab`, `Bregman`, `pinball`, `expectile`, `quantile regression`, `learning to rank`, `ranking loss`, `economic loss`, `logistic`, `conformal` and `Gneiting` all returned **zero**, and `loss function` appeared in two notes only in passing — 201 notes in which every machine-learning source holds the mean-squared objective fixed and varies the estimator. Three sources, one chain: the theory → the ordinal loss → the economic loss. Headline: **a scoring function does not measure accuracy, it names a functional** (squared error ⟺ the mean, and the consistent losses for the mean are *exactly* the Bregman class; pinball ⟺ a quantile, *exactly* the GPL class), demonstrated by a synthetic GARCH simulation in which a forecaster issuing the true conditional mean is ranked **below a constant** by two of the four error measures in universal use. Three hard constraints come with it: **weighting a loss by the realisation re-targets it to a tilted density**, so "focus the loss on the big movers" predicts the mean of nothing; **percentage-form losses are consistent for functionals that favour severe underforecasts** and are undefined on signed returns; and **CVaR is not elicitable**, so tail risk is a descriptor and never a trainable target — the algebraic form of the lab's own `DR`-is-not-a-drawdown-predictor finding. Second: recast selection as information retrieval (**a rebalance date is a query, a name is a document, its label is its realised forward-return decile**) and a pairwise or listwise loss beats every benchmark on every metric reported, while **the MSE-trained net is the weakest non-random model** — below a one-line price heuristic — with a long-only decile table that is nearly flat and *non-monotone across its top three deciles* for MSE and steeply monotone for the rank losses, the gain visible in **the top decile taken alone**. Third: replacing the forecast error with an adversarially-instrumented no-arbitrage moment condition yields a model that **explains more return variation out of sample than a model whose objective *is* to maximise explained variation**, and the variable-importance columns diagnose *how* MSE fails: its first fourteen characteristics are almost entirely frictions and past returns, with the authors' own suspicion that it "might focus mainly on illiquid penny stocks" — i.e. **the MSE objective's attractor is the illiquid micro-cap tail**, which on this nine-large-cap-index panel is both a measured dead end and absent by construction. Two free transfers ride along: weight each name's loss contribution by `√Tᵢ/√T̄` on an unbalanced panel, and treat the **aggregation level** of a loss as a de-noising device. One construction rule: characteristics enter approximately **linearly in isolation** and the gain from flexibility is **interactions**, turning `program.md`'s "penalised linear model first" into a measured claim with a named next step (pairwise products, not depth; additive splines and kernels least of all). The night's one trial is a **pairwise-logistic ranker over within-region decile grades** — convex, deterministic, one penalty parameter, nothing installed that it lacks — gated on a free rank-IC screen and explicitly barred from the momentum features the source demonstrates on, which are the lineage this lab already closed. New: **#276–#279**, three free, one trial. No lab measurement was taken and the holdout was not read. | Gneiting 2011, *JASA* (`2026-10-19-consistent-scoring-functions-and-elicitability.md`); Poh–Lim–Zohren–Roberts 2021, *JFDS* (`2026-10-19-learning-to-rank-cross-sectional-selection.md`); Chen–Pelger–Zhu 2024, *Management Science* (`2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-19] What should aim the next session, in order — and the top of it is a change of
+  objective rather than a new signal, which is why it sits above the queue the last three nights
+  built.** Sessions 58–62 walked the lab's own measurement chain (the numerator, the estimation, the
+  benchmark, the difference, the null), 63–65 returned to families. Tonight's reading is orthogonal to
+  both: **every learned candidate this lab has written or will write minimises a loss, and nobody has
+  asked what that loss makes the model predict.** The answer is a theorem, it is free, and it
+  invalidates two things the lab would otherwise try.
+  - **`#276` first, because it is the primitive and it is a relabelling.** Grade each eligible name
+    by its **within-region decile of forward return at the next rebalance** and make *that* the
+    learning target — or, equivalently, a top-`K`-membership indicator trained with log loss. v3
+    admits only name selection, so the functional the decision consumes is an ordering, and an
+    ordering is elicitable while a conditional mean of a USD return on a nine-region panel is mostly
+    region and FX. The region qualification is not stylistic: the null matches region move for move.
+  - **Then `#277` as standing discipline, not a task.** It belongs beside `#94` and `#269`: before
+    writing any loss, ask which functional it elicits. Three prohibitions follow and each kills a
+    thing somebody would otherwise try — no realisation-weighted mean losses, no percentage-form
+    losses on returns, no shortfall objective (CVaR is not elicitable). Note that this retires an
+    *idea* rather than a measurement, which is the cheapest kind of retirement available.
+  - **Then `#278`, which is a prediction to write down before the next `statistical-learning` fit and
+    read off the coefficients afterwards.** An MSE-fitted learner on this panel should collapse onto
+    frictions and short-term reversal; that destination is a twelve-session null here *and* excluded
+    by construction, so the coefficient read is a free falsification of the objective rather than of
+    the features. The `√Tᵢ` weighting fix in the same item is one line and independent of everything
+    else.
+  - **`#279` is the night's one trial and it is explicitly gated twice.** Run the free within-region
+    rank-IC comparison first (ranker vs. heuristic vs. MSE on identical features); if the three are
+    indistinguishable the family closes for the price of a diagnostic. If it passes, the second gate
+    is turnover, pre-registered before looking, because the source models no costs and never reports
+    turnover while v3 charges per-name tiers plus five transaction taxes plus drift. And **do not run
+    it over the momentum features the source demonstrates on** — that would be an ordinal loss over a
+    closed lineage, i.e. a refinement of a null in the exact sense already measured.
+  - **Unchanged below that**: the 2026-10-18 queue (`#273`, then `#274`, with `#275` gated on its own
+    free screen), then the 2026-10-17 queue (`#272`(a), `#270`, with `#269` standing), then the
+    2026-10-16 queue (`#263`, `#264`, `#265`, with `#266` as a design rule), then 2026-10-15 and
+    everything carried under it. Nothing on those lists is closed or reordered by tonight.
+  - **Named for a later session, because tonight's chain reached its third member by a different
+    route:** the *distributional* answer to the same question — predicting a quantile or an expectile
+    of the conditional return distribution rather than its mean — has no note here. The obvious
+    primary, **Ma–Pohlman (2008, *European Journal of Finance*, 64 Crossref citations), "Return
+    forecasts and optimal portfolio construction: a quantile regression approach"**, is closed at
+    Taylor & Francis and its only OA location is an SSRN page, which `research/README.md` already
+    records as dark; per this file's own 2026-10-15 rule, the budget went to a third source for the
+    same mechanism instead of a third channel for this one. It is an **unobtained pointer**, not a
+    gap in the argument: `#277` already licenses the pinball/GPL loss on theorem-grade evidence, and
+    what Ma–Pohlman would add is empirical calibration, not permission.
+- **[2026-10-19] The transferable output, and it is the nineteenth detector: ask what *functional* of
+  the predictive distribution a source's loss function elicits, because the answer is usually not the
+  one the source's prose claims and is never a matter of taste.** The eighteen before it: redundancy
+  [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at
+  [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's
+  confound [2026-10-05], a disqualified statistic against a truncated variant of itself [2026-10-06],
+  the self-undermining cross-border friction [2026-10-07], a construction technique's cost geometry
+  [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family charter with two
+  branches predicting opposite observables [2026-10-10], the objective-versus-number distinction
+  [2026-10-11], a method's admitted scope [2026-10-12], the benchmark read as a strategy [2026-10-13],
+  the operator in the scoring rule [2026-10-14], what the null is a distribution *over* [2026-10-15],
+  the level of aggregation a prediction is sharp at [2026-10-16], whether the literature's comparator
+  is an object the lab already holds [2026-10-17], and whether a statistic is being used as an
+  estimator, a signal or a scale [2026-10-18]. Tonight's is the sharpest form of the last one: where
+  [2026-10-18] asked what *job* a statistic is doing, this asks what *quantity* a loss is estimating,
+  and it has a closed-form answer. The test is one line on any imported method: **write down the
+  loss, read off the functional it is consistent for, and check that it is the functional the
+  decision consumes.** Mismatches found tonight, all three in papers whose own prose is honest about
+  them only in passing: an MSE regression used as a *ranking* score (two of the three sources), a
+  realisation-weighted loss presented as "focusing on what matters" (hypothetical, and ruled out), and
+  a shortfall objective presented as trainable (CVaR, ruled out by a theorem). **Second transferable,
+  smaller and about reading an ML paper's evidence: the variable-importance column is where an
+  objective's bias is visible, and it is cheaper to read than the performance table.** Tonight the
+  decisive fact about the mean-squared objective came not from any Sharpe ratio but from noticing
+  *which characteristics* the MSE-trained model loaded on — frictions, reversal, size — against which
+  ones the economically-constrained model spread across. **Read the importance ranking before the
+  performance table, and when a model's importance ranking is concentrated in one category, suspect
+  the objective before the data.** The lab can compute its own version for any penalised linear
+  candidate it fits, for free, before the trial is scored.
+- **[2026-10-19] Access findings — a clean night with no new refusal modes, three first-try channels
+  confirmed, and one named unobtained pointer.** All three sources were read from **arXiv PDFs on the
+  first attempt** (`arxiv.org/pdf/<id>`, 0.4–3.1 MB → 70–297 KB of clean text; `" the "` counts 273,
+  776 and 1,830; zero `( )` dropout; no ASCII shift; title lines verified before reading further, per
+  the 2026-10-16 guessed-NBER-number lesson). Worth recording because the three published versions
+  are closed at a practitioner journal, a statistics journal and INFORMS respectively, and **all three
+  authors' groups maintain current preprints of the version of record's content** — for a methods or
+  machine-learning paper, arXiv is the first channel and not the fallback. **Crossref answered every
+  citation lookup and `api.crossref.org/journals/<ISSN>/works?filter=from-pub-date:…&query.bibliographic=…`
+  resolved a DOI by journal-year on the first try again** (the 2026-10-07 lesson: a journal's year is
+  a better key than an article's title), while **Semantic Scholar returned a clean `not found` for
+  `10.1287/mnsc.2023.4695`** — a Management Science article Crossref resolves with 394 references —
+  which is the fourth instance this folder has logged of that failure mode and a reminder never to
+  record "not indexed" on one index's say-so. **Unobtained pointer, named rather than summarised:**
+  Ma–Pohlman (2008, *EJF*, `10.1080/13518470802042369`, 64 Crossref citations), the standard primary
+  on quantile-regression return forecasts feeding portfolio construction — Taylor & Francis is closed
+  and OpenAlex's only green location is `10.2139/ssrn.880478`, i.e. SSRN, which this file records as
+  answering with a Cloudflare body. Two channels, both already on the dark list, so by the 2026-10-15
+  rule no third was attempted; the note that would have cited it does not exist and the open-questions
+  entry above records what it would have added.
 
 - **[2026-10-18] What should aim the next session, in order — and the top of it is a two-step pair
   that is free, retrospective and answers the previous nightly's own closing sentence.** The
