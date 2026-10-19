@@ -21104,3 +21104,163 @@ behaviour, not a malfunction.
   branch is benign enough to run past is exactly how the 2026-08 split happened.
 
 ## Research session — 2026-10-19 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-19T23:25:56+00:00 — ll_peer_delay_band — **GATE_FAIL**
+- Candidate: `strategies/candidates/ll_peer_delay_band.py` (family: lead-lag-spillover, track: scout, trial #0)
+- Hypothesis: Selecting the 100 eligible names with the highest share of their weekly return response that arrives one week after their own most-correlated same-peer-group basket moves -- entries quota-allocated across trailing-trading-calendar peer groups so the book's geography matches the pool's, with a top-200 retention band -- earns positive validation skill over the equal-weight eligible pool, because gradual information diffusion predicts that a name which prices its peers' information late is compensated for limited investor recognition. Train screen reads -8.3 bps/63d region-matched (t -0.86), so a loss is the expected verdict; the score's rank correlation is -0.005 to 21-day return and +0.035 to trailing volatility, making it the most orthogonal object the lab has measured under v3.
+- Verdict: GATE_FAIL — validation sharpe -0.003 <= the random-selection null's 90% quantile 0.288 (median 0.2; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.53, ann_ret +10.0%, maxDD -55.6%, turnover 5.8x, skill vs pool +0.01
+- Validation: sharpe -0.00, ann_ret +0.8%, maxDD -37.5%, turnover 10.5x, skill vs pool -0.34
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.34, 90% CI [-0.51, -0.18]; at 2x costs -0.47; with a 30% delisting haircut -0.34; train +0.01 (1997-2008 +0.06, 2009-2017 -0.05)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 0% percentile of 200 random-selection replicas (median +0.20, 90% +0.29); equal-weight eligible pool +0.34, information ratio vs it -1.30
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **`lead-lag-spillover` is now closed on measurement rather than on a structural
+  argument, and the trial that closed it is the worst result the v3 board has recorded — which
+  is exactly what the pre-registration said would happen.** Validation skill **-0.340**
+  [-0.512, -0.185], against the previous worst of -0.265; the 0th percentile of its own null;
+  and the hypothesis was written with a train screen of **-8.3 bps/63d (t -0.86)** and an
+  explicit statement that a loss was expected. Three things in it are worth keeping.
+  *(i) The split says the book lost on both terms at once.* `geography = null_median - pool`
+  = +0.20 - 0.34 = **-0.140** and `selection = candidate - null_median` = **-0.203**. The
+  calendar-peer quota was supposed to zero the geography term and did not, and the engine issue
+  of 2026-10-18 makes the true figure worse rather than better (the null's replicas are not held
+  to the eligibility boundary, which is worth +0.005 to +0.017 *to the null* at this book's
+  holding length). A quota matches the book's region *mix* to the panel's; it cannot match the
+  interaction between region weights and within-region returns, and on 2018-2023 that interaction
+  cost 0.14 of Sharpe.
+  *(ii) The retention band's turnover saving did not transfer, and the pre-registered range was a
+  lower bound for the fifth time.* Train churn 5.8x against validation **10.5x** — 81% above,
+  against a pre-registered band of 4.5-9.5x that was itself widened for exactly this effect. The
+  band holds a name while it stays inside the top 200 of the score; on validation the score's
+  ranking is less persistent, so the band releases more names and the saving it bought on train
+  is not a property of the operator but of the window. **Pre-register a band's turnover from the
+  unbanded churn, not from the banded train figure.**
+  *(iii) Orthogonality is not a substitute for a signal, and this is the cleanest demonstration
+  the lab has.* The score's rank correlation is **-0.005** to 21-day return and **+0.035** to
+  trailing volatility — the most orthogonal object measured under v3, and the standing diagnosis
+  of this board has been that every new score turns out to be a refuted one in costume. This one
+  genuinely is not, and it scored last. Being a new object is a necessary condition for a result
+  and carries no information about its sign.
+
+## Free measurements — 2026-10-19/20 (nightly), one trial spent
+
+All train only (1997-01-01 → 2017-12-31). No validation, holdout, forward or incubation file
+was opened. Instrument: a hand-rolled month-end screen (249 month-ends, forward 63 trading
+days, top/bottom 100, equal weight) reporting excess over the whole eligible pool and over a
+**region-matched** pool carrying the slice's own region shares.
+
+**Instrument validation first, per the standing method rule** (find the invariant a
+re-implementation must satisfy before reading a number off it). Two invariants and one
+replication:
+
+    invariant / replication                                  required            measured
+    slice = the whole eligible pool                          both excesses 0     +0.000000 / -0.000000
+    8 independent random scores, top 100                     centred on 0        pool +0.1, regmatch +0.2 (cross-seed sd 5.9/6.0)
+    Hou-Moskowitz market-lag price delay, top 100, regmatch   -12.2 bps (t -0.70) recorded 2026-10-14
+                                                                                 -15.0 bps (t -1.22) here
+
+The third line is the one that matters: this instrument independently reproduces a number the
+lab recorded from a different implementation on a different night. It does **not** reproduce
+every recorded figure — 126-day Amihud top-100 reads +33.3 (t +2.41) here against the recorded
++46.8 (t +3.23), same sign, same sub-period pattern (+4.2 then +73.3), same n = 249 — so the
+scale of this block's numbers is its own and only within-block comparisons are made below.
+The cross-seed sd of 6 bps/63d is the opportunity set: a top-100 score needs well over ~12-18
+bps to be distinguishable from a relabelling of chance on this screen.
+
+**F1 — within-region lead-lag on peer RETURNS: null, and the one number is 21-day reversal in
+costume at a forbidden turnover.** Peers are the 10 most-correlated eligible names *in the same
+region* over a trailing 252-day window (so no cross-region allocation enters: v3's null is
+region-matched and matches a region bet move-for-move, 2026-10-13). Mean peers found 9.75.
+
+    score                     side  pool bps      t    regmatch bps     t    turn/yr   rho(own r21)
+    peer_r21                   top     -12.4   -0.53      -16.3     -0.80     8.28        +0.504
+    peer_r21                   bot     -13.1   -0.55       -4.8     -0.24     8.16
+    peer_r21_minus_own         top     +41.7   +1.86      +39.2     +1.74     8.26        -0.857
+    peer_r63                   top     -32.4   -1.43       -8.3     -0.43     5.37        +0.266
+
+Network momentum (`peer_r21`, `peer_r63`) is a null under v3, confirming the v1 closure from a
+different construction. The laggard-catch-up score is the only positive number in the whole
+block and it is **-0.857 rank-correlated to the name's own 21-day return** — 21-day reversal
+with the sign flipped, which this lab has refuted under three protocol versions — at **8.3x
+one-way churn**, i.e. ~360 bps/yr of cost against a ~155 bps/yr gross prize. Refused twice over.
+
+**F2 — within-region lead-lag on peer ACTIVITY (volume, dollar volume, range): the pre-signed
+direction fails on every object, and the significant side is the inverted one.** Same peer sets.
+Pre-signed direction in each case is the Gervais-Kaniel-Mingelgrin one: *high* peer trading
+activity → higher subsequent return.
+
+    score                side   regmatch bps     t     turn/yr   1997-2008      2009-2017
+    peer_volshock (5d)    top        -2.2     -0.14     7.90    -13.9/-0.73    +13.8/+0.49
+    peer_volshock63       top       -23.1     -1.38     3.54    -62.0/-2.81    +30.3/+1.22
+    peer_volshock126      top       -28.4     -1.68     2.90    -68.7/-2.85    +26.7/+1.22
+    peer_volshock126      bot       +31.5     +2.06     3.14    +67.0/+3.08    -17.2/-0.87
+    peer_dvtrend          top       -37.7     -2.33     3.82    -28.3/-1.48    -50.5/-1.81
+    peer_parkshock        top       +10.6     +0.49     5.79     +5.7/+0.23    +17.4/+0.45
+
+The `peer_volshock126` sort is monotone, correctly ordered and the only one of the thirteen
+objects screened tonight whose live side clears |t| = 2 — **and its live side is the one the
+hypothesis signed against**. It is not traded. The lab's own rule (2026-10-13, written about the
+liquid half of the illiquidity sort) is that choosing a sign because the number came out that way
+is fitting the screen, and the sub-periods settle it independently: **+67.0 (t +3.08) in
+1997-2008 against -17.2 (t -0.87) in 2009-2017**, a sign inversion across a gate that is on
+1997-2017 as a whole. The own-name counterparts of the two activity scores were run as the
+"which level is the prediction sharp at" control (2026-10-16): `own_volshock63` top +15.9
+(t +0.94), `own_dvtrend` bot +26.5 (t +1.34) — both nulls, so unlike the weekday-mood case there
+is no characteristic-level effect hiding behind a noisy per-name estimate here.
+
+**F3 — the one functional form a level screen cannot see: the diffusion INTERACTION. Null.** A
+level screen on "price delay" asks whether slow names earn more on average. Hong-Stein's actual
+prediction is an interaction — after the peer group moves, the slow responders have further to
+go, *in the direction of that move* — and an interaction is a different functional form, not a
+relabelling of the level. Pre-signed positive.
+
+    score                side   regmatch bps     t     turn/yr   rho(own r21)  rho(vol126)  rho(peer63)
+    delay (52w)           top        +3.6     +0.34     6.06       -0.005        +0.035       +0.003
+    beta_lag              top        +3.1     +0.26     5.33
+    delay_x_peer63        top        -5.8     -0.38     6.31       +0.171        -0.006       +0.643
+    delay_x_peer21        top        -6.3     -0.41     8.14
+
+Both interactions are wrong-signed and inside noise, at 6-8x one-way churn. The level is flat.
+Note the delay level's own orthogonality: **-0.005 to the name's 21-day return, +0.035 to its
+126-day volatility, +0.003 to its peer basket's return** — the most orthogonal score this lab has
+measured under v3, and the reason the night's one trial was spent on it rather than on anything
+with a bigger number.
+
+**F4 — the relabelling column, and a window-sensitivity result that refutes the object on its
+own.** At Hou-Moskowitz's own 104-week specification rather than F3's 52 weeks:
+
+    score         side   pool bps      t    regmatch bps     t    1997-2008      2009-2017
+    peer_delay     top      -7.6    -0.78      -10.4     -1.11    +9.9/+0.87    -38.2/-2.48
+    peer_delay     bot     +12.9    +1.61       +9.3     +1.19    +6.3/+0.60    +13.3/+1.17
+    mkt_delay      top     -25.5    -1.71      -15.0     -1.22   +18.2/+1.48    -60.4/-2.63
+
+    rho(peer_delay, mkt_delay) = +0.441
+
+So the peer-basket delay is **partly** the market-lag delay the lab nulled on 2026-10-14 — not a
+pure relabelling at +0.441, but the same sign and the same magnitude, which is the more
+informative agreement. And the object fails a test it set itself: **the 52-week window reads
++3.6 bps and the 104-week window reads -8.3 bps on the identical construction.** A characteristic
+whose sign depends on its lookback is not a characteristic. The 104-week spec was taken for the
+trial because it is the literature's, not because of its number.
+
+**F5 — the trial's exact construction, priced before it was run.** Calendar-peer grouping for
+both the peer basket and the quota (the candidate cannot read the region table), K = 100, top-200
+retention band, monthly:
+
+    one-way name churn, unbanded                     5.74x/yr
+    one-way name churn, band B = 200                 2.72x/yr   (-53%)
+    median scored names per date                     325 of ~500 eligible
+    mean book size                                   100.0
+    first scored month-end                           1997-01-31  (no warm-up in cash)
+    region-matched excess, top 100                   -8.3 bps/63d (t -0.86)
+
+At ~21.7 bps a side on 2.72x one-way churn the banded book pays about **118 bps/yr** against a
+gross prize of about **-33 bps/yr**. That is an arithmetic refutation of the construction, it was
+written into the candidate's docstring before the run, and the trial was spent anyway on the
+budget rule — see the session summary for why, and for what the human owner should decide.
+
+**What the block closes.** Thirteen within-region spillover objects across three functional forms
+— peer returns at two horizons, laggard catch-up, peer activity in four flavours, the diffusion
+level in two estimators, and the diffusion interaction at two horizons — and **not one has a
+positive region-matched excess in its pre-signed direction.** `lead-lag-spillover`'s cross-region
+half was already closed structurally (the region-matched null); its within-region half is now
+closed on measurement. The family no longer rests on an argument.

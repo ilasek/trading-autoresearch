@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-17T23:50:57+00:00",
+  "generated_at": "2026-10-19T23:30:16+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -184,6 +184,32 @@
       ],
       "train_skill": 0.058,
       "mechanism": 5
+    },
+    "lead-lag-spillover": {
+      "name": "ll_peer_delay_band",
+      "candidate": "strategies/candidates/ll_peer_delay_band.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-19T23:25:56+00:00",
+      "n_trials": 1,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": -0.003,
+        "ann_return": 0.0076,
+        "max_drawdown": -0.3753,
+        "ann_turnover": 10.5,
+        "avg_positions": 99.88,
+        "skill": -0.34,
+        "skill_cost2x": -0.473,
+        "skill_delist30": -0.34
+      },
+      "train_sharpe": 0.532,
+      "skill_ci90": [
+        -0.512,
+        -0.185
+      ],
+      "train_skill": 0.008,
+      "mechanism": 4
     }
   },
   "distinct_mechanisms": 5,
