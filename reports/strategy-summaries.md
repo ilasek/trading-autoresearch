@@ -127,3 +127,16 @@ Two phrases recur, because many strategies build on earlier ones:
 | v2-4 | `sl_ridge_six_features` | statistical-learning | A simple learned model that blends six stock measurements to guess next month's winners; thrown out because it accidentally used information from the future. |
 | v2-5 | `sl_ridge_six_masked` | statistical-learning | The same learned model with the future-information leak fixed. |
 | v2-6 | `lv_resid_rev_illiq_tilt` | liquidity-volume | The look-alike bounce-back bet (v2-3), tilted toward thinly traded stocks, where forced selling is thought to push prices furthest. |
+
+### Protocol v3 trials (numbered within v3)
+
+| # | strategy | family | what it does |
+|---|---|---|---|
+| v3-1 | `pt_lowvol_gk_quarterly` | price-trend | Holds the 100 calmest stocks (smallest price swings over the past year) in equal amounts, rebalancing only four times a year. |
+| v3-2 | `sa_resid_rev63_band` | statistical-arbitrage | Buys the 100 stocks that have drifted furthest below what the market's main patterns say they should be worth over the past quarter, betting the gap closes; keeps a stock as long as it's still among the worst 200, to cut needless trading. |
+| v3-3 | `lv_illiq_peer_neutral_band` | liquidity-volume | The hard-to-trade-stocks bet, built region by region so no single country or exchange dominates the book, and holds a stock until it drops out of the worst 200. |
+| v3-4 | `rv_arbrisk_peer_neutral` | range-variance | Buys the 100 stocks whose price moves are hardest for similar stocks to hedge against, picked region by region so the book's country mix matches the overall market. |
+| v3-5 | `pt_decade_reversal_peer_neutral` | price-trend | Buys the 100 big, long-established stocks whose prices have gone nowhere on average for ten years, picked region by region so the book's country mix matches the market. |
+| v3-6 | `pl_decade_invvol_floored` | portfolio-learning | The ten-year-flat-price stock picks (v3-5), but sized to put a little less money in the jumpier names and a little more in the calmer ones, with a floor so no single stock gets too tiny a stake. |
+| v3-7 | `sc_weekday_mood_band` | seasonality-calendar | Buys the 100 stocks whose own Monday returns have lagged the rest of the week the most, picked region by region and held until they drop out of the worst 200. |
+| v3-8 | `sl_gbm_seven_nonlinear` | statistical-learning | The lab's seven-measurement stock-picking model, but with its simple add-the-clues-up rule swapped for a more flexible tree-based one that can react to combinations of the measurements. |
