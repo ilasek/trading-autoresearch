@@ -5287,7 +5287,16 @@ across experiments; prune entries that later evidence contradicts.
   the weekday score used `min_periods=150` on both and produced an all-NaN score and **zero scored
   dates** with no error. Print the scored-date count and the median scored-name count before
   reading any number off a construction of this shape — the weekday score covers a median of 325
-  names against the ~500 eligible, which is itself a fact worth knowing about it.
+  names against the ~500 eligible, which is itself a fact worth knowing about it. [**CORRECTED
+  2026-10-19/20 — that comparison is a median against a MEAN and the coverage deficit it reports
+  does not exist.** Over the 252 train month-ends the eligible count has mean **495** and median
+  **328** (q10 197, q25 261, q50 328, q75 790, q90 849): the panel roughly triples in 2009 when
+  eight non-US indices join, so the distribution is bimodal and the two statistics differ by 51%.
+  Re-measured directly, the weekday score is scored on **99.3%** of eligible names per date
+  (median 99.6%), scored median 325 against eligible median 328, and its scored subsample's US
+  share is 0.759 against the panel's 0.757 — full, region-neutral coverage. **On a panel whose
+  width jumps, never compare a median count to a mean count; quote the per-date ratio.** See
+  journal F6/F7, 2026-10-19/20.]
 
 - **[Measured 2026-10-17/18, nightly] THE WHOLE RISK AXIS IS WORTH NOTHING UNDER THIS PROTOCOL,
   AND THE REASON GENERALISES TO EVERY FAMILY AT ONCE: THE OBJECTIVE IS SCALE-FREE IN EXACTLY THE
@@ -5393,3 +5402,117 @@ across experiments; prune entries that later evidence contradicts.
   first year is unsigned. The whole prize is **about -9 bp/yr of pool return, ~0.005 of Sharpe**,
   against a null handicap of +0.005 to +0.017 for a book of that holding length. **Declined at
   every horizon**: a different exclusion window changes the estimate and not the weight.
+
+- **[Measured 2026-10-19/20, nightly] `lead-lag-spillover` IS CLOSED ON MEASUREMENT, NOT ON AN
+  ARGUMENT — THIRTEEN WITHIN-REGION OBJECTS ACROSS THREE FUNCTIONAL FORMS AND NOT ONE HAS A
+  POSITIVE REGION-MATCHED EXCESS IN ITS PRE-SIGNED DIRECTION. EVERY `program.md` FAMILY NOW HAS A
+  RECORDED v3 TRIAL, SO THE "AT LEAST ONE IN A COLD FAMILY" RULE IS SPENT.** The cross-region half
+  was already structurally unreachable (the null is region-matched, 2026-10-13). The within-region
+  half, screened free on train (249 month-ends, forward 63 days, top/bottom 100, peers = the 10
+  most-correlated eligible names in the same region):
+
+      form                  object                regmatch bps      t    turn/yr   note
+      peer returns          peer_r21 top              -16.3     -0.80    8.28     network momentum, null
+                            peer_r63 top               -8.3     -0.43    5.37
+                            peer_r21-own top          +39.2     +1.74    8.26     rho -0.857 to own r21
+      peer activity         peer_volshock5 top         -2.2     -0.14    7.90
+                            peer_volshock63 top       -23.1     -1.38    3.54
+                            peer_volshock126 top      -28.4     -1.68    2.90     bot +31.5 (t +2.06), inverted
+                            peer_dvtrend top          -37.7     -2.33    3.82
+                            peer_parkshock top        +10.6     +0.49    5.79
+      diffusion level       peer_delay(104w) top      -10.4     -1.11    5.66     rho +0.441 to mkt delay
+                            mkt_delay(104w) top       -15.0     -1.22    5.20     replicates the -12.2 on record
+                            beta_lag top               +3.1     +0.26    5.33
+      diffusion interaction delay_x_peer63 top         -5.8     -0.38    6.31
+                            delay_x_peer21 top         -6.3     -0.41    8.14
+
+  **Three refutations that generalise beyond the family.** (i) The only positive number in the
+  block, laggard catch-up, is **-0.857 rank-correlated to the name's own 21-day return** — 21-day
+  reversal with the sign flipped — at 8.3x one-way churn, so ~360 bps/yr of cost against a ~155
+  bps/yr gross prize. (ii) The only side clearing |t| = 2 is `peer_volshock126`'s **bottom**, i.e.
+  the side the Gervais-Kaniel-Mingelgrin hypothesis signed against, and its sub-periods invert
+  (+67.0 at t +3.08 in 1997-2008 against -17.2 at t -0.87 in 2009-2017). Not traded. (iii) **A
+  characteristic whose sign depends on its own lookback is not a characteristic**: the delay share
+  reads +3.6 bps at 52 weeks and -8.3 bps at 104 weeks on an otherwise identical construction.
+  The own-name controls were run for the 2026-10-16 "which level is the prediction sharp at"
+  screen and are nulls too (`own_volshock63` top +15.9 t +0.94, `own_dvtrend` bot +26.5 t +1.34),
+  so unlike the weekday-mood case there is no characteristic-level effect hiding behind a noisy
+  per-name estimate here.
+
+- **[Measured 2026-10-19/20, nightly] ORTHOGONALITY IS A NECESSARY CONDITION FOR A RESULT AND
+  CARRIES NO INFORMATION ABOUT ITS SIGN. THE MOST ORTHOGONAL SCORE THE LAB HAS MEASURED SCORED
+  LAST.** The standing diagnosis of the v3 board has been that every new score turns out to be a
+  refuted one in costume, and the standing screen's most valuable column has been the relabelling
+  rho. Trial #9's score — the share of a name's weekly response to its own most-correlated
+  same-peer-group basket that arrives one week late — is rank-correlated **-0.005** to the name's
+  21-day return, **+0.035** to its 126-day volatility and **+0.003** to its peer basket's return:
+  the cleanest new object this lab has put on the board. It recorded **validation skill -0.340**
+  [-0.512, -0.185], the 0th percentile of its own null, and the worst result of the nine v3 trials
+  (previous worst -0.265). The lesson is not that orthogonality is bad; it is that the relabelling
+  column **screens out dead ends and does not screen in live ones**, exactly like every other
+  column of the pre-trial sheet (2026-10-14/15, 2026-10-16/17). Add it to the list of things a
+  train-time screen may refute with and may not qualify with.
+
+- **[Measured 2026-10-19/20, nightly] THE RETENTION BAND'S TURNOVER SAVING IS A PROPERTY OF THE
+  WINDOW, NOT OF THE OPERATOR — PRE-REGISTER A BANDED BOOK'S TURNOVER FROM ITS UNBANDED CHURN.**
+  The band (hold the top K, keep a held name while it stays inside the top B) cut trial #9's
+  one-way train churn **53%**, from 5.74x to 2.72x/yr at K = 100, B = 200 — close to the 42% the
+  2026-10-10 entry recorded. On validation the engine charged **10.5x** against train's 5.8x, 81%
+  higher, and against a pre-registered range of 4.5-9.5x that had already been widened for this
+  effect. **The band releases a name when its score rank decays, so the saving is bought out of the
+  score's rank persistence, which is a window property.** This is the sixth consecutive trial whose
+  pre-registered turnover was a lower bound, and the one rule that has worked (2026-10-13: a range
+  with the wider split's churn in it) does not survive a banded book. Note this compounds with the
+  2026-10-18 engine issue in the same direction: a band buys its cost saving partly out of its own
+  gate margin by extending holds, and now partly not at all out of sample.
+
+- **[Measured 2026-10-19/20, nightly] `null_median - pool` IS NOT A "GEOGRAPHY" TERM. TWO CANDIDATE
+  EXPLANATIONS REFUTED FREE, AND THE REGION CONTENT IS NOW BOUNDED AT ABOUT 5% OF BOOK MASS.** The
+  2026-10-14/15 decomposition (`geography = null_median - pool`, `selection = candidate -
+  null_median`) has already been corrected once, for warm-up cash (2026-10-16). Tonight's trial
+  carried **-0.140** on that term *despite* a calendar-peer quota built to zero it, which is the
+  second-largest negative on the board, so the two mechanical explanations were tested:
+
+      candidate explanation                           test                           result
+      the score's coverage is region-dependent,       scored subsample's US share    0.758 vs panel 0.757,
+      so the quota matches the wrong distribution     vs the eligible panel's        coverage 99.5%  -> REFUTED
+      a calendar-peer quota matches CLUSTER counts    total variation distance,      mean TVD 0.048-0.050,
+      while the null matches TRUE listing region      book mix vs panel mix          p90 0.067, US +1.8pp -> BOUNDED
+
+  18.5 true regions collapse into 7.1 calendar clusters and the resulting mix error is ~5% of the
+  book's mass (largest single deviations: US +1.8pp, IT +0.8pp, GLOBAL -1.0pp, FR -0.8pp) — far too
+  small to produce 0.14 of Sharpe. What is left in the term is **book size/breadth, holding length
+  (the 2026-10-18 eligibility artifact, which pushes it the other way), type mix and the null's own
+  sampling error**, and the lab has only a train bound on the first (random region-proportional
+  books at K = 25-400 score within ±0.03 of the pool, 2026-10-13) against validation terms spanning
+  -0.17 to +0.09. **The term is not identified. Quote it as `null_median - pool` and stop calling it
+  geography**; a signed region bet is not what it measures.
+
+- **[Measured 2026-10-19/20, nightly] THE OBJECTIVE-FUNCTION BRANCH OF `statistical-learning` IS
+  CLOSED FOR ZERO TRIALS: AN ORDINAL LOSS CANNOT CREATE ORDERING INFORMATION THE FEATURES DO NOT
+  CARRY, AND THE LAB'S OWN NULL SCREENS WERE ALREADY ORDINAL.** Research `#276`-`#279` proposed a
+  pairwise-logistic ranker over within-group forward-return **decile grades**, with pairwise feature
+  products as the flexibility channel, on the grounds that a pointwise squared-error loss elicits
+  the conditional mean and spends its capacity on the middle of the cross-section the sort discards.
+  The construction is sound and was built to the note's own recipe, walk-forward, deterministic,
+  five free-OHLCV characteristics with the momentum lineage barred as the note requires:
+
+      learner / loss                       features  rank IC    t     top-100 regmatch      turn/yr
+      pointwise ridge   [2026-10-13]           7     +0.0066  +0.28   +18.7 bps (t +0.33)     1.71
+      depth-3 GBM       [trial #8]             7        --      --    train skill -0.100      4.41
+      pairwise logistic, linear                5     -0.0110  -1.08    -9.9 bps (t -0.55)     2.99
+      pairwise logistic, + 10 interactions    15     -0.0052  -0.56    +1.1 bps (t +0.06)     3.63
+
+  Every cell is inside noise and the ordinal loss is, if anything, the worse of the two.
+  **The reason is structural and is the transferable part: Gneiting's theorem says the loss names
+  which functional of the predictive distribution the model estimates, so changing it can only
+  help if the features order the cross-section and the pointwise objective was mis-reading that
+  order. A rank IC screen is itself ordinal, and the lab's rank IC screens on these features were
+  already nulls** — there is no ordering for a ranking loss to recover. The source's own mechanism
+  ("better ordering -> steeper spread between extreme buckets") therefore has nothing to act on
+  here, and the interaction channel the note named as the next step moves the IC by 0.006. **General
+  rule to carry: before importing a loss-function improvement, check whether the lab's refutation of
+  the features was measured with a statistic in the same equivalence class as the proposed loss. If
+  it was, the proposal is answered already.** This retires the whole 2026-10-19 research cluster
+  (three notes, four ideas, one of them a proposed trial) without spending a trial, and leaves
+  `statistical-learning` answered on estimator, functional form and objective alike.

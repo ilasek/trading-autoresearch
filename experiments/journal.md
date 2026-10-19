@@ -21264,3 +21264,168 @@ level in two estimators, and the diffusion interaction at two horizons — and *
 positive region-matched excess in its pre-signed direction.** `lead-lag-spillover`'s cross-region
 half was already closed structurally (the region-matched null); its within-region half is now
 closed on measurement. The family no longer rests on an argument.
+
+## Session summary — 2026-10-19/20 (nightly) — 1 trial of 8; the last cold family is closed on measurement, and the research folder's newest cluster is answered for free
+
+**Experiments run: 1 of 8. Verdict: 1 GATE_FAIL. Nine free measurement blocks (F1-F9), one
+recorded learnings entry corrected in place, two mechanical explanations of a standing statistic
+refuted, and one three-note research cluster retired without a trial. No holdout, forward or
+incubation file was read, and the seat is still empty.** The engine suite is green (92 passed in
+94.5s) and the integrity check was clean — `origin/main` level with HEAD and
+`git branch -r --no-merged origin/main` empty, so the `claude/keen-bardeen-qile2p` orphan that
+halted the 2026-10-18 session has landed (PR #10, `668a1c64`) and `scripts/weekly_board.py` is
+on `main`.
+
+    #  candidate             family               verdict    train  val    skill   CI90           2x cost  turn   null %ile
+    9  ll_peer_delay_band    lead-lag-spillover   GATE_FAIL  +0.53  -0.00  -0.34  [-0.51,-0.18]   -0.47   10.5x     0%
+
+Equal-weight pool: **+0.34 on validation, +0.524 on train**. `scripts/rank_trials.py` puts all
+**nine** v3 trials in tier 1 of a nine-trial board; tonight's is last on skill and on `P(best)`
+(0%), and `distinct_mechanisms` stays at **5**.
+
+**Budget allocation, planned before the first hypothesis was written.** 1 trial in
+`lead-lag-spillover` — the one family in `program.md` with no recorded trial under any protocol
+version — which discharges the "at least one in a family with no recorded trial at all" rule that
+the 2026-10-17/18 and 2026-10-13/14 sessions both escalated to the human owner without a ruling.
+**0 in `price-trend`**, against its cap of 2; no family reached a cap. **The rule is now spent:
+every family named in `program.md` has a recorded v3 trial**, so no future session is bound by it
+and the tension does not need a ruling any more.
+
+**Why one trial and not eight, stated plainly.** No second hypothesis could be written tonight
+that an existing refutation does not already answer. The two that got closest were both screened
+free and both refused: the research folder's own pairwise-logistic ranker (F9) and every remaining
+within-region spillover object (F1-F4). Writing a candidate anyway would have raised the
+deflated-Sharpe bar for every future trial to buy a number already known — which `program.md`
+calls a wasteful trial with a real cost. The budget was spent on measurement instead.
+
+### The one trial, and it did what the pre-registration said it would
+
+`ll_peer_delay_band` selects the 100 eligible names whose weekly return loads most on the
+**one-week-lagged** return of their own most-correlated same-calendar-peer-group basket — Hong-Stein
+gradual diffusion, Hou-Moskowitz's priced delay premium — quota-allocated across peer groups, with
+a top-200 retention band. Its docstring was written with the train screen in it (**-8.3 bps/63d
+region-matched, t -0.86**) and the sentence "the expected verdict is a loss". Validation skill came
+in at **-0.340** [-0.512, -0.185], the 0th percentile of 200 replicas, the worst of the nine v3
+trials. Split: `null_median - pool` = **-0.140**, `candidate - null_median` = **-0.203** — it lost
+on both terms at once.
+
+**The durable lesson from it is about the lab's own screen, not about the family.** This score is
+rank-correlated **-0.005** to the name's 21-day return, **+0.035** to its 126-day volatility and
+**+0.003** to its peer basket's return: the most orthogonal object this lab has measured under v3,
+built precisely because the standing diagnosis of the board is that every new score turns out to
+be a refuted one in costume. It is genuinely not a relabelling, and it scored last. **The
+relabelling column screens out dead ends and does not screen in live ones** — which is now true of
+every column of the pre-trial sheet, and is the fourth consecutive restatement of "a clean screen
+is not evidence" arriving from a new direction.
+
+### Best finding of the night: the last cold family closes on thirteen measurements
+
+`lead-lag-spillover` had, until tonight, neither a recorded trial nor a measurement — only the
+structural argument of 2026-10-13 (the random-selection null is region-matched, so a region bet is
+matched move-for-move by its own replicas and cannot move the percentile off ~50%). The reachable
+half is selection *within* a region on a variable measured on *other* names, and F1-F4 screened
+**thirteen** such objects across three functional forms — peer returns at two horizons, laggard
+catch-up, peer activity in four flavours (volume shock at three windows, dollar-volume trend, range
+expansion), the diffusion level in two estimators, and the diffusion *interaction* at two horizons.
+**Not one has a positive region-matched excess in its pre-signed direction.** Three of the
+refutations generalise past the family: the only positive number in the block is 21-day reversal
+with the sign flipped (rho **-0.857**) at a cost bill twice its gross prize; the only side clearing
+|t| = 2 is the side its own hypothesis signed *against*, with inverted train sub-periods, and is
+not traded; and the delay share reads **+3.6 bps at a 52-week window against -8.3 at 104 weeks** on
+an otherwise identical construction, so **a characteristic whose sign depends on its own lookback
+is not a characteristic.**
+
+### Second finding: the statistic every v3 trial is read through is not what the lab calls it
+
+Tonight's book carried `null_median - pool` = **-0.140** *despite* a calendar-peer quota built to
+zero exactly that, so the two mechanical explanations were tested and both fail (F6, F6b, F8).
+Coverage is not it: the score is computed on **99.5%** of eligible names and its scored subsample's
+US share is 0.758 against the panel's 0.757. Cluster-versus-region mismatch is not it either, and
+is now **bounded**: 18.5 true listing regions collapse into 7.1 calendar clusters, and the book's
+resulting region-mix error is a total variation distance of **0.048-0.050** (p90 0.067, US +1.8pp)
+— about 5% of book mass, nowhere near 0.14 of Sharpe. What remains inside the term is book
+size/breadth, holding length (the 2026-10-18 eligibility artifact, which pushes it the *other*
+way), type mix and the null's own sampling error, and the lab has only a train bound on the first
+(±0.03 at K = 25-400) against validation terms spanning -0.17 to +0.09. **The term is not
+identified; quote it as `null_median - pool` and stop reading a signed region bet off it.** This is
+the second correction to the 2026-10-14/15 decomposition, after the warm-up correction of
+2026-10-16.
+
+### Third finding: the newest research cluster, answered for zero trials
+
+Research `#276`-`#279` (three notes read 2026-10-19: Gneiting on elicitability, Poh et al. on
+learning to rank, Chen-Pelger-Zhu on the no-arbitrage criterion) proposed one trial — a
+**pairwise-logistic ranker over within-group forward-return decile grades**, with pairwise feature
+products as the flexibility channel, on the sound argument that a squared-error loss elicits the
+conditional mean and spends its capacity on the middle of a cross-section the sort discards. Built
+to the note's own recipe, walk-forward, deterministic, momentum lineage barred as the note requires
+(F9): **rank IC -0.0110 (t -1.08)** linear and **-0.0052 (t -0.56)** with the ten interactions,
+against the pointwise ridge's **+0.0066 (t +0.28)** on the same class of inputs. The ordinal loss
+is the worse of the two and every cell is inside noise. **The reason is structural and is the part
+to carry: a rank IC screen is itself ordinal, so the lab's existing refutation of these features
+was already measured in the same equivalence class as the proposed loss — there is no ordering for
+a ranking loss to recover.** Before importing a loss-function improvement, check whether the
+refutation of the features was measured with a statistic in the proposed loss's own class.
+`statistical-learning` is now answered on estimator, functional form and objective alike.
+
+### One correction to the record, and the method rule behind it
+
+The 2026-10-16/17 learnings entry says the weekday mood score "covers a median of 325 names against
+the ~500 eligible, which is itself a fact worth knowing about it". **That compares a median to a
+mean and the deficit does not exist.** Over the 252 train month-ends the eligible count has mean
+**495** and median **328** (q25 261, q75 790) — the panel roughly triples in 2009 when eight non-US
+indices join, so the distribution is bimodal and the two statistics differ by 51%. Re-measured
+per date, the weekday score covers **99.3%** of eligible names (median 99.6%), scored median 325
+against eligible median 328. The entry is annotated in place; tonight's own F3/F5 blocks and the
+candidate's docstring made the identical mis-comparison and are corrected here rather than rewritten
+there. **On a panel whose width jumps, never compare a median count to a mean count — quote the
+per-date ratio.**
+
+### Method note worth carrying: the instrument was validated before it was read
+
+Every number in F1-F9 comes from a hand-rolled month-end screen, and the standing rule is to find
+the invariant a re-implementation must satisfy before reading anything off it. Three checks ran
+first: a slice equal to the whole eligible pool returns **exactly** zero on both excess statistics;
+eight independent random scores' top-100 books centre on **+0.1 and +0.2 bps** with a cross-seed sd
+of **5.9/6.0**; and the Hou-Moskowitz market-lag price delay, recorded on 2026-10-14 as **-12.2 bps
+(t -0.70)** from a different implementation, reads **-15.0 (t -1.22)** here. The instrument does
+*not* reproduce every recorded figure — 126-day Amihud top-100 reads +33.3 (t +2.41) against the
+recorded +46.8 (t +3.23), same sign, same sub-period pattern, same n = 249 — so only within-block
+comparisons were made, and the cross-seed sd of 6 bps was quoted as the block's own opportunity set.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **The 2026-10-18 engine issue is still the first thing to settle and it is still a human
+   decision.** `benchmarks.random_null_v3` scores its replicas without the eligibility mask the
+   candidate is held to, worth +0.005 to +0.017 of Sharpe *to the null* depending on holding length.
+   Tonight's trial is a long-hold banded book and sits at the top of that range. Until it is ruled
+   on, do not build the near-full-pool blend of `#250`, and read `null_median - pool` with both this
+   and tonight's non-identification finding in mind.
+2. **The cold-family rule is spent — breadth can no longer aim a session.** Every `program.md`
+   family has a recorded v3 trial and every one of them is in tier 1 of a nine-trial board whose
+   best skill is -0.01. What aims a session now is the lab's own measurement chain, and it says the
+   same thing from a sixth direction tonight: selection is exhausted across the free-daily-OHLCV
+   space, the construction axis is closed from five directions, the risk axis is closed by a
+   scale-free-objective argument, `statistical-learning` is closed on estimator *and* objective, and
+   `lead-lag-spillover` is closed on thirteen measurements. **The open question is no longer which
+   family to try; it is whether this panel contains a signal the protocol can grade at all**, and
+   that is a question for the human owner about inputs (`program.md`'s "Future upgrades": paid
+   point-in-time data, pre-2009 coverage, fundamentals, intraday bars).
+3. **Do not re-buy tonight's declines.** Network momentum or peer-basket lead-lag on either sign
+   and at any horizon (F1); peer activity spillover in any flavour, and specifically not the
+   inverted `peer_volshock126` bottom side (F2); the diffusion interaction at any horizon (F3); the
+   delay level at any estimation window (F4 — its sign is a function of the window); a ranking,
+   pairwise or listwise loss over the lab's free-OHLCV characteristics (F9 — answered in the loss's
+   own equivalence class); and a calendar-peer quota offered as a fix for the `null_median - pool`
+   term (F8 — the region content is bounded at ~5% of book mass).
+4. **From `research/SUMMARY.md`, spent tonight**: **`#276`-`#279`** — the whole 2026-10-19 cluster
+   — built and closed free (F9), including the one trial the research session proposed. The free
+   transfers in it that survive and cost nothing are worth keeping even though the trial is dead:
+   weight each name's loss contribution by `sqrt(T_i)/sqrt(T_bar)` on an unbalanced panel, and treat
+   a loss's **aggregation level** as a de-noising device. **Still unspent**: **`#270`** (the
+   exponentiated-gradient operator — 2026-10-17's F1 predicts it null for the scale-free reason
+   unless run over a score with real selection, and no such score exists), **`#272`**(a), **`#259`**,
+   **`#258`**, **`#257`**, **`#261`**, **`#254`**, **`#255`**, **`#82`**, and the carried queue as
+   2026-10-15's open-questions entry leaves it.
