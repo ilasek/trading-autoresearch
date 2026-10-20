@@ -21431,3 +21431,39 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    2026-10-15's open-questions entry leaves it.
 
 ## Research session — 2026-10-20 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-10-20T23:55:03+00:00 — sa_coint_slope_volneutral — **GATE_FAIL**
+- Candidate: `strategies/candidates/sa_coint_slope_volneutral.py` (family: statistical-arbitrage, track: scout, trial #0)
+- Hypothesis: Selecting the 100 eligible names with the highest slope in an Engle-Granger cointegrating regression of their 504-day log price on their own calendar-peer-group equal-weight log-price index, that slope orthogonalised within the group against 126-day realised volatility so it is not the refuted low-vol object, earns positive validation skill over the equal-weight eligible pool, because the estimation half of a cointegrating relationship prices how much of a name's level is carried by its group and the long-only book can only hold the high-loading side. Tonight's calibration implies +0.111 of gross train skill from a within-region rank IC of +0.0328 (t +3.23) and the harness measures +0.041, the gap being volatility, so a dead heat or a GATE_FAIL is the expected verdict; the object is traded because the beta axis has never been tested as a selection under v3, its mean ordering is the only one screened tonight that holds sign in both train sub-periods, and at 1.03x one-way churn it is the cheapest book the lab has built.
+- Verdict: GATE_FAIL — validation sharpe 0.183 <= the random-selection null's 90% quantile 0.357 (median 0.278; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.54, ann_ret +11.7%, maxDD -59.0%, turnover 3.4x, skill vs pool +0.02
+- Validation: sharpe +0.18, ann_ret +3.6%, maxDD -35.8%, turnover 5.0x, skill vs pool -0.15
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.15, 90% CI [-0.37, +0.01]; at 2x costs -0.20; with a 30% delisting haircut -0.15; train +0.02 (1997-2008 -0.01, 2009-2017 +0.08)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 4% percentile of 200 random-selection replicas (median +0.28, 90% +0.36); equal-weight eligible pool +0.34, information ratio vs it -0.42
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The beta axis is now closed as a SELECTION as well as a weighting, and the night's
+  one new instrument survived its first contact with the engine.** Three things.
+  *(i) The object.* Within-group cointegrating slope at fixed own volatility carries the highest
+  within-region rank IC of anything screened tonight (**+0.0328, t +3.23**) and the only mean
+  ordering that holds its sign in both train sub-periods, and it scored validation skill
+  **-0.154** [-0.366, +0.014] at the **4th** percentile of its own null. The learnings entry
+  "Sharpe is flat in beta on this panel" was measured from a low-volatility *selection* and from
+  covariance *weighting*; the slope is neither, and the axis loses from this direction too. Note
+  the split: `null_median - pool` = +0.278 - 0.337 = **-0.059**, `candidate - null_median` =
+  **-0.095**, so most of the loss is selection, which is what the quota is supposed to leave.
+  *(ii) The calibration held through the full execution model, which is what the trial bought.*
+  Tonight's noisy-oracle block (F7) fixes train skill ~= **3.37 x** within-region rank IC, with an
+  uninformative score's skill scattered at **sd 0.025** (F8). From IC +0.0328 that implies +0.111
+  gross; the hand-rolled harness measured +0.041 after the volatility ratio of 1.187 ate 62% of
+  it; net of ~60 bps/yr the pre-registration said **~+0.008**, and the engine returned train skill
+  **+0.018**. Three independent steps, agreeing to within 0.01 on a quantity whose noise floor is
+  0.025. **The exchange rate is usable; it is a necessary-condition screen only** — it prices what
+  a train book can earn from an IC, and the lab's own seven-trial record says train says nothing
+  about validation (Spearman -0.571).
+  *(iii) The turnover pre-registration was not a lower bound, for the second time ever.* Predicted
+  **2.5-6.0x**, charged **3.4x train and 5.0x validation** — both inside the band. The band was
+  built the way 2026-10-19/20 said to build one: from the *unbanded* churn of the candidate's own
+  construction (1.39x one-way, not the harness's simpler 1.03x), widened for the wider split. The
+  method works; the previous five failures were all bands pre-registered off a banded train figure.
+  This book carried no retention band at all, by choice (the 2026-10-18 engine issue makes a
+  low-turnover operator buy part of its gate margin from the null), and it is still the cheapest
+  book the lab has run.
