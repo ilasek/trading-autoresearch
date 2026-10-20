@@ -284,7 +284,9 @@ touching the rule. Do not use the deflator as a reason to stay in one family.
   with its **tier**, family, verdict, skill and its 90% interval, mechanism, and a one-line
   plain-English summary of what it does — never an ordinal rank without its tier, which
   reads as a precision the data does not have), and a chart of the best trial of each top
-  mechanism against the S&P 500 and the equal-weight pool over validation. Summaries live
+  mechanism against the S&P 500 and the equal-weight pool over validation. The S&P 500 is a
+  reference, never a ranked entry: its row shows its Sharpe minus the pool's (a region and
+  size gap, not skill) and each trial carries a "vs S&P" read of its paired interval. Summaries live
   in `reports/strategy-summaries.md`: add a row there for every new strategy before
   generating the section (it lists the trials still missing one). The chart and table use
   validation returns only; never extend them into the holdout. Keep the rest of the report

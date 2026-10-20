@@ -22,6 +22,12 @@ whose active returns correlate >= 0.5 are one bet; five momentum variants on
 one chart would be one line drawn five times) and plots growth of $1 over
 validation against SPY (total return, no costs) and the equal-weight eligible
 pool the skill numbers are measured against. SPY is cut at the validation end.
+
+SPY is a reference, never a ranked entry: its row shows Sharpe minus the
+pool's with the board's interval (a region and size bet, so labelled a gap,
+not skill), and each trial gets a "vs S&P" read of its paired interval of
+Sharpe minus SPY's. Putting SPY into `rank_table` would move it into the
+confidence set and change every trial's tier and P(best).
 """
 
 from __future__ import annotations
@@ -105,16 +111,36 @@ def collect() -> tuple[pd.DataFrame, pd.Series, pd.Series, dict, list]:
     return pd.DataFrame(rets), pool, rf, meta, unscored
 
 
-def vs_pool(r) -> str:
-    if r.skill_lo > 0:
+def side(lo: float, hi: float) -> str:
+    """Read a 90% interval: better / worse only when it is all on one side of zero."""
+    if lo > 0:
         return "better"
-    if r.skill_hi < 0:
+    if hi < 0:
         return "worse"
     return "can't tell"
 
 
-def table_md(table: pd.DataFrame, meta: dict, tiers: bool) -> list[str]:
-    head = "| # | tier | trial | strategy | family | verdict | mech. | val Sharpe | skill [90% CI] | vs pool | what it does |"
+def vs_pool(r) -> str:
+    return side(r.skill_lo, r.skill_hi)
+
+
+def bench_gaps(rets: pd.DataFrame, pool: pd.Series, spy: pd.Series, rf: pd.Series) -> pd.DataFrame:
+    """Sharpe minus SPY's for each column of `rets`, and for the pool, with
+    paired 90% intervals: the same days, excess returns and bootstrap
+    resamples as `ranking.rank_table` on the same columns."""
+    joined = pd.concat([rets, pool.rename("__pool__"), spy.rename("__spy__")],
+                       axis=1, join="inner").dropna()
+    ex = joined.apply(lambda s: metrics.excess(s, rf))
+    boots = metrics.bootstrap_sharpes(ex)
+    obs = np.array([metrics.sharpe(ex[c]) for c in ex.columns])
+    gap = boots[:, :-1] - boots[:, -1:]
+    return pd.DataFrame({"gap": obs[:-1] - obs[-1], "lo": np.quantile(gap, 0.05, axis=0),
+                         "hi": np.quantile(gap, 0.95, axis=0)}, index=ex.columns[:-1])
+
+
+def table_md(table: pd.DataFrame, meta: dict, tiers: bool, gaps: pd.DataFrame) -> list[str]:
+    head = ("| # | tier | trial | strategy | family | verdict | mech. | val Sharpe | skill [90% CI] | vs pool "
+            "| vs S&P | what it does |")
     if not tiers:
         head = head.replace(" tier |", "").replace(" mech. |", "")
     lines = [head, "|" + "---|" * (head.count("|") - 1)]
@@ -122,7 +148,8 @@ def table_md(table: pd.DataFrame, meta: dict, tiers: bool) -> list[str]:
         m = meta[lab]
         cells = [str(i), str(int(r.tier)), lab, f"`{m['name']}`", m["family"] or "—",
                  f"{m['verdict']} (v{m['version']})", f"M{int(r.mechanism)}", f"{r.sharpe:+.2f}",
-                 f"{r.skill:+.2f} [{r.skill_lo:+.2f}, {r.skill_hi:+.2f}]", vs_pool(r), m["summary"]]
+                 f"{r.skill:+.2f} [{r.skill_lo:+.2f}, {r.skill_hi:+.2f}]", vs_pool(r),
+                 side(gaps.at[lab, "lo"], gaps.at[lab, "hi"]), m["summary"]]
         if not tiers:
             del cells[6], cells[1]
         lines.append("| " + " | ".join(cells) + " |")
@@ -216,11 +243,15 @@ def main() -> int:
     conf = [c for c in rets if meta[c]["confined"]]
     table = ranking.rank_table(rets[open_], pool, rf)
     ctable = ranking.rank_table(rets[conf], pool, rf) if conf else None
+    days = rets.index
+    spy = spy_returns(days)
+    gaps = bench_gaps(rets[open_], pool, spy, rf)
+    cgaps = bench_gaps(rets[conf], pool, spy, rf) if conf else None
+    spy_gap = gaps.loc["__pool__"]  # pool minus SPY; the SPY row shows its negation
+    n_better, n_worse = int((gaps.loc[open_, "lo"] > 0).sum()), int((gaps.loc[open_, "hi"] < 0).sum())
 
     # chart: best trial of each of the top mechanisms
     picks = table.sort_values("skill", ascending=False).drop_duplicates("mechanism").head(args.top)
-    days = rets.index
-    spy = spy_returns(days)
     series = [(f"{lab} {meta[lab]['name']}", rets[lab].fillna(0.0), SERIES[k], "solid")
               for k, lab in enumerate(picks.index)]
     series += [("S&P 500 (SPY)", spy, INK, "bench"), ("Equal-weight pool", pool.reindex(days).fillna(0.0), MUTED, "pool")]
@@ -247,26 +278,34 @@ def main() -> int:
             t = table.loc[lab.split(" ")[0]]
             name, sk = f"`{lab}` (M{int(t.mechanism)})", f"{t.skill:+.2f} [{t.skill_lo:+.2f}, {t.skill_hi:+.2f}]"
         else:
-            name, sk = lab, ("+0.00 (the baseline)" if style == "pool" else "—")
+            name, sk = lab, ("+0.00 (the baseline)" if style == "pool" else
+                             f"{-spy_gap.gap:+.2f} [{-spy_gap.hi:+.2f}, {-spy_gap.lo:+.2f}] — a gap, not skill")
         md.append(f"| {'strategy' if style == 'solid' else 'benchmark'} | {name} | {s['sharpe']:+.2f} | {sk} | "
                   f"{s['total']:+.0%} | {s['cagr']:+.1%} | {s['vol']:.1%} | {s['maxdd']:.0%} |")
     md += ["", "Sharpe is in excess of T-bills. **Skill is Sharpe minus the equal-weight pool's**, the "
-           "number every strategy here is judged on; the S&P 500 is shown for orientation, not as the bar.", "",
+           "number every strategy here is judged on; the S&P 500 is shown for orientation, not as the bar. "
+           "Its row shows Sharpe minus the pool's with the same interval — a gap, not skill: SPY holds US "
+           "large caps weighted by size, a region and size bet the random-selection null does not credit. "
+           "It is also roughly the skill a strategy would need to match the S&P's Sharpe.", "",
            "**How to read the ranking.** Sorted by tier, then skill. Tier 1 is the set the data cannot "
            "separate from the best (10% model confidence set) — **order inside tier 1 is not evidence**. "
            "Tier 2 is outside it with a skill interval above zero; tier 3 is everything else. \"vs pool\" "
-           "reads the 90% interval: better / worse only when the whole interval is on one side of zero. "
+           "reads the 90% interval: better / worse only when the whole interval is on one side of zero; "
+           "\"vs S&P\" reads the paired 90% interval of the trial's Sharpe minus SPY's the same way "
+           "(SPY itself is never ranked or tiered). "
            "\"mech.\" groups trials whose active returns correlate ≥ 0.5 — one mechanism under several "
            "labels is one bet. Verdict is as recorded, under the protocol version shown.", "",
            f"Equal-weight pool validation Sharpe: {table.attrs['pool_sharpe']:+.2f}. "
-           f"{n1} of {len(table)} trials are in tier 1.", "",
+           f"{n1} of {len(table)} trials are in tier 1. Against the S&P 500 "
+           f"({-spy_gap.gap:+.2f} over the pool), {n_better} are better and {n_worse} worse with "
+           f"confidence; the rest can't be told apart from it.", "",
            f"### A. All {len(table)} ranked trials", ""]
-    md += table_md(table, meta, tiers=True)
+    md += table_md(table, meta, tiers=True, gaps=gaps)
     if ctable is not None:
         md += ["", f"### B. {len(ctable)} confined trials (survivorship-contaminated — not comparable)", "",
                "These picked only from the legacy names, which are known survivors; their skill is not "
                "evidence of a method. Shown for completeness, sorted by skill, not tiered.", ""]
-        md += table_md(ctable.sort_values("skill", ascending=False), meta, tiers=False)
+        md += table_md(ctable.sort_values("skill", ascending=False), meta, tiers=False, gaps=cgaps)
     if unscored:
         md += ["", f"### C. {len(unscored)} trials with no stored validation returns", "",
                "| trial | strategy | family | verdict |", "|---|---|---|---|"]
