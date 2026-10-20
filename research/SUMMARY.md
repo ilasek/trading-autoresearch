@@ -1148,6 +1148,72 @@ read.
 `notes/2026-10-19-learning-to-rank-cross-sectional-selection.md`,
 `notes/2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md`
 
+**[Session 67, 2026-10-20] The *distributional* branch of this family is answered too — and it is
+the first of the three answers that arrives with a ceiling attached rather than another null.**
+Sessions 60–66 varied the estimator (ridge → GBM), then the loss (MSE → pairwise ordinal); the one
+remaining move is to vary the **predicted object**, from a number to a whole conditional
+distribution. Three sources, one chain: the estimator theorem → the global cross-sectional empirics →
+the calibration layer. *(1)* **The map from functionals to losses is not a bijection in the direction
+that matters, and the gain from exploiting that is bounded.** Composite quantile regression fits `K`
+check-function losses in one convex program with `K` free intercepts and **one shared slope**
+(`τ_k = k/(K+1)`), which recovers the *same* location slope least squares does. It is root-`n`
+consistent and asymptotically normal **even when the error variance is infinite**, exactly where the
+least-squares oracle theory — SCAD, adaptive lasso — breaks down because the oracle it mimics is no
+longer root-`n` consistent; and its asymptotic relative efficiency against least squares has a
+**universal lower bound `6/(eπ) = 0.7026` over every finite-variance error density**, with
+`δ(f) = 12σ²(E_ε[f(ε)])²` taking the values 0.955 (normal), 1.097 (logistic — where it attains the
+Fisher information bound), 1.5 (double exponential), 1.9 (Student `t`, 3 df) and **unbounded** for a
+slightly contaminated normal with bounded variance. Two cautions ride with it. A **single** quantile
+regression, median/LAD included, has relative efficiency that **can be arbitrarily small** — the
+authors decline to call it "a safe alternative to the least squares" — so it is the `K`-fold
+aggregation and not the check function that buys the floor. And the shared slope is a **pure
+location-shift model**: the predictors may move the centre of the conditional distribution and
+nothing else. **The ceiling, which is the entry's load-bearing sentence:** a `t` statistic scales as
+the inverse standard error, so swapping squared error for *any* loss inside the same functional class
+can lift a `t` by at most `√δ` — about **1.38** at `t(3)` errors, below 1 at a Gaussian — against the
+`+0.28` and `−1.08` rank-IC `t` statistics `learnings.md` [2026-10-19/20] already recorded on this
+panel's free-OHLCV feature sets. So the lab's own closure of the objective-function branch survives
+its one genuine loophole, now with an arithmetic bound rather than an argument. *(2)* **On a real
+global cross-section, the distributional apparatus's payoff is a better *mean*, and everything else
+about the distribution is unpriced — most sharply in the subsample that resembles this panel.** A
+two-stage quantile neural network predicting **37 quantile levels** per name per month, interpolated
+by cubic B-splines into a smooth CDF whose moments follow by numerical integration, run on four
+regions and 23 developed countries, finds: **only the central `τ`-quantiles are priced**, with the
+decile spread decaying monotonically to insignificance toward *both* tails ("the tail `τ`-quantiles
+in isolation are not priced"); **no higher moment — volatility, skewness, kurtosis — monotonically
+priced** in either sample or either weighting scheme, with the predicted-volatility relation negative
+but insignificant among large caps; and the **integrated mean beating both a direct squared-error
+mean forecast and the model's own median**, which is the composite-quantile theorem's prediction
+arriving from the empirical side. The discount that matters here: the paper reports a "full" and a
+"liquid" universe side by side, and **in the liquid one — top-95% cap *and* dollar volume, i.e. this
+lab's nine-large-cap-index analogue — the significant band narrows sharply and the mean-over-median
+advantage disappears entirely.** Both of the method's gains shrink as the universe becomes the one
+this lab trades. Costs are modelled nowhere in the paper and turnover is never reported. *(3)* **The
+calibration layer, which survives the other two's negatives because it never needed the distribution
+to be priced, and which yields a prohibition the lab can apply immediately.** Conformal prediction
+built on a conditional-*mean* model uses residuals, which are **not** independent of the predictors
+under heteroskedasticity; the resulting interval has **width that does not depend on the state at
+all**, so it necessarily over-covers where dispersion is low and under-covers where it is high — an
+analytical fact in the location-scale model `Y = X + X·ε`, and measured as such across twenty bins of
+lagged realised volatility on nine decades of daily index returns. Substituting the
+**probability-integral-transform rank** `U_t = F(Y_t, X_t)`, which is uniform and independent of `X`
+by construction, restores conditional validity: the score `ψ(u) = |u − 1/2|` plus one empirical
+quantile of held-out ranks gives approximate conditional validity under consistent CDF estimation,
+exact finite-sample *unconditional* validity under arbitrary misspecification with exchangeable data,
+and asymptotic validity under β-mixing dependence — the class standard stochastic-volatility and
+GARCH models belong to. One scalar shift of the target rank (`b(x,α)`, the start of the narrowest
+`α`-wide probability window) makes the interval the shortest possible when the conditional
+distribution is skewed. **Note the cross-link the two halves of the night make by themselves:** this
+paper's equity exercise concludes a **location-*scale*** model approximates the conditional return
+distribution well, which is exactly one restriction looser than the **location-*shift*** model
+composite quantile regression assumes — so a demonstrated need for the scale term is a demonstrated
+misspecification of the cheaper estimator. New: **#280–#283**, all four free, **no trial proposed** —
+which is the right output for a night whose three sources agree that the branch is closed. No lab
+measurement was taken and the holdout was not read.
+→ `notes/2026-10-20-composite-quantile-regression-efficiency-bound.md`,
+`notes/2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`,
+`notes/2026-10-20-distributional-conformal-prediction.md`
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -12251,6 +12317,107 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-19-learning-to-rank-cross-sectional-selection.md` ·
     `notes/2026-10-19-consistent-scoring-functions-and-elicitability.md` ·
     `notes/2026-09-06-monotonicity-tests-for-portfolio-sorts.md`
+280. **ANTI-CANDIDATE, free, and it retires four candidate signals at once: do not sort on a
+    predicted tail quantile, a predicted variance, a predicted skewness or a predicted kurtosis.**
+    A peer-reviewed study that forecasts **37 conditional quantiles** of each name's next-month
+    return — four regions, 23 developed countries, a long sample, both equal- and value-weighted
+    deciles — finds the cross-sectional spread from sorting on a forecast `τ`-quantile is largest at
+    the **centre** of the distribution and **decays monotonically to insignificance toward both
+    tails**, and that **none** of the distribution-derived higher moments is monotonically priced in
+    either of its two universes. So four separate "predict the shape of the distribution" ideas are
+    answered by one published null, on a panel this lab has never touched. **Two riders that make it
+    sharper rather than weaker.** *(a)* The decay is **much faster in the paper's liquid subsample**
+    — top-95% market cap *and* top-95% dollar volume, i.e. the closest published analogue to this
+    lab's nine large-cap national indices — where the significant band is narrow. A proposal
+    justified by the full-sample column is justified by a universe this panel does not contain.
+    *(b)* This agrees with the lab's own volatility and dispersion nulls from a completely
+    independent direction, which is the strongest form the evidence comes in: the lab's nulls were
+    measured *on* this panel and could have been panel artifacts; this one could not. **Use it to
+    kill a distributional-signal proposal before it costs a trial, and if one is ever written anyway,
+    the functional to read off the CDF is the mean — not a quantile and not the median.** Tier B
+    source (peer-reviewed, multi-region, but essentially uncited, unreplicated, no transaction costs
+    modelled anywhere and no multiple-testing correction). **`validation_overlap: true`** — the main
+    out-of-sample window ends in 2018 but an appendix extends into the lab's validation window;
+    discount novelty accordingly.
+    → `notes/2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`
+
+281. **FREE INTERPRETATION RULE, and it is a ceiling: a loss swap inside one functional class buys
+    *variance*, never signal, and the asymptotic relative efficiency gives the exact bound on the
+    variance it can buy.** `#277` established that a loss names a functional. The natural next
+    thought — "then reach the mean through a *better-behaved* loss than squared error" — is correct
+    and has a theorem behind it: composite quantile regression (`K` check-function losses, `K` free
+    intercepts, **one shared slope**, `τ_k = k/(K+1)`, solved as a linear program) recovers the same
+    location slope as least squares, stays root-`n` consistent **even at infinite error variance**
+    where the least-squares oracle theory breaks, and has asymptotic relative efficiency against
+    least squares bounded below by **`6/(eπ) = 0.7026` for every finite-variance error density**,
+    with `δ(f) = 12σ²(E_ε[f(ε)])²` reaching 1.5 at a double exponential, 1.9 at `t(3)` and unbounded
+    at a slightly contaminated normal. **The rule to carry is what that implies, not what it
+    promises.** A `t` statistic scales as the inverse standard error, so the best any such swap can
+    do is lift a `t` by `√δ` — **≈1.38** at `t(3)`, **below 1** at a Gaussian. Against the `+0.0066`
+    rank IC (`t +0.28`) and `−0.0110` (`t −1.08`) `learnings.md` [2026-10-19/20] already recorded on
+    this panel's free-OHLCV feature sets, that ceiling does not reach, so **the lab's closure of the
+    objective-function branch now survives its one genuine loophole with a number attached.** Two
+    corollaries, both free. *(a)* **A single quantile regression is not the robust choice it looks
+    like**: median/LAD relative efficiency against least squares **can be arbitrarily small** — the
+    aggregation across levels is what buys the floor, so never substitute "fit the median, it's
+    robust" for a mean fit. *(b)* **A one-line diagnostic worth reporting on any penalised linear
+    candidate this lab fits**: the plug-in `δ̂ = 12·σ̂²·(mean of the residual density at the K fitted
+    quantiles)²` says whether squared error was costing anything *on this panel at all*, and it costs
+    no trial. Tier A, no overlap, theorems only.
+    → `notes/2026-10-20-composite-quantile-regression-efficiency-bound.md` ·
+    `notes/2026-10-19-consistent-scoring-functions-and-elicitability.md`
+
+282. **FREE MEASUREMENT RULE, on the error bar rather than the forecast: never build an interval from
+    the pooled residuals of a conditional-mean model, because its width cannot depend on the state
+    and it therefore mis-covers systematically.** Residuals are **not** independent of the predictors
+    under heteroskedasticity. In the location-scale model `Y = X + X·ε` the mean-based conformal
+    interval is `[x − Q_{|R|}(1−α), x + Q_{|R|}(1−α)]`, whose length `2·Q_{|R|}(1−α)` **does not
+    depend on `x`** — so it over-covers where the conditional dispersion is small and under-covers
+    where it is large, by construction and at any sample size. Measured exactly that way across
+    twenty bins of lagged realised volatility on nine decades of daily index returns, against
+    quantile-based alternatives whose coverage stays flat. **The fix is to permute the
+    probability-integral-transform *rank* `U_t = F(Y_t, X_t)` instead of the residual** — uniform and
+    independent of `X` by construction — with the score `ψ(u) = |u − 1/2|` and one empirical quantile
+    of held-out ranks: approximate *conditional* validity under consistent CDF estimation, **exact
+    finite-sample unconditional validity under arbitrary misspecification** with exchangeable data,
+    and asymptotic validity under β-mixing dependence, the class standard stochastic-volatility and
+    GARCH models belong to. One scalar shift of the target rank gives the shortest interval when the
+    conditional distribution is skewed. **Scope, stated so nobody mistakes this for a signal:** an
+    interval is not an ordering and cannot select a name — any "use conformal prediction to pick
+    stocks" proposal is a category error against `#277`. Its use is on the **reporting and
+    diagnostic** side, where the split version needs only `sklearn`'s `QuantileRegressor` (installed)
+    plus four lines, is fully deterministic with no `random_state`, and splits on *time*, which is
+    the shape the lab's walk-forward bookkeeping already enforces. It touches engine-owned
+    machinery, so it licenses nothing about a gate or a threshold. Tier A (PNAS, theorems).
+    **`validation_overlap: true`** but immaterial — the method is distribution-free and nothing in it
+    is a signal.
+    → `notes/2026-10-20-distributional-conformal-prediction.md`
+
+283. **FREE CONSTRUCTION MATERIAL, with its own null attached: a thirteen-feature volatility block
+    that is entirely computable from this panel's OHLCV, plus two normalisation devices — and the
+    source's own finding that sorting on what it predicts is unpriced among large caps.** The one
+    part of a 194-feature global study that this lab's data can reach, specified completely: **EWMAs
+    of squared returns at decay factors `α ∈ {0.8, 0.9, 0.94, 0.96, 0.98, 0.99}`; EWMAs of
+    *negative* returns only at `α ∈ {0.8, 0.9, 0.94}` as an asymmetric-volatility proxy; total
+    volatility over 3, 6 and 12 months; and Parkinson (1980) high–low range volatility** — thirteen
+    causal features available through `strategies/lib/features.py`. Two devices come with it and are
+    the transferable part. *(a)* **Divide every stock-level volatility by its own cross-sectional
+    mean** before it enters, so a volatility sits on the same footing as a rank-normalised
+    characteristic and the series carries no market-wide level. *(b)* **Standardise returns by the
+    *cross-sectional average* of stock-level volatilities, not by each name's own** — deliberately,
+    to avoid injecting the noise of an individual volatility estimate — and use `σ̄_t`, never
+    `σ̄_{t+1}`, which is precisely the trap `causality_check` exists to catch; the source adds a
+    second stage that learns a *multiplicative adjustment* to `σ̄_t` rather than forecasting market
+    volatility directly. Returns are divided but **not** demeaned, on the stated ground that average
+    returns are not persistent. **The null that must travel with it:** in that paper's own liquid
+    subsample these are the inputs behind a predicted-volatility sort that is **negative and
+    insignificant**, which the authors attribute to the large-cap focus — so this is a **feature set
+    and two normalisations for a family with a live lead**, not a standalone signal, and it should
+    never be cited as motivation for a volatility-sorted candidate. Tier B source,
+    **`validation_overlap: true`**.
+    → `notes/2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md` ·
+    `notes/2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md`
+
 
 ---
 
@@ -12327,7 +12494,112 @@ hypothesis fodder, then anti-candidates.
 
 | 2026-10-19 (session 66) | **The first session to read the literature on the *objective function itself* — not what to predict, not which features carry it, not how to weight the answer, but what a loss makes a model predict — and it finds that the question has a theorem for an answer and that two independent literatures have measured the same failure of the default.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 201 prior notes `scoring rule`, `proper scoring`, `elicitab`, `Bregman`, `pinball`, `expectile`, `quantile regression`, `learning to rank`, `ranking loss`, `economic loss`, `logistic`, `conformal` and `Gneiting` all returned **zero**, and `loss function` appeared in two notes only in passing — 201 notes in which every machine-learning source holds the mean-squared objective fixed and varies the estimator. Three sources, one chain: the theory → the ordinal loss → the economic loss. Headline: **a scoring function does not measure accuracy, it names a functional** (squared error ⟺ the mean, and the consistent losses for the mean are *exactly* the Bregman class; pinball ⟺ a quantile, *exactly* the GPL class), demonstrated by a synthetic GARCH simulation in which a forecaster issuing the true conditional mean is ranked **below a constant** by two of the four error measures in universal use. Three hard constraints come with it: **weighting a loss by the realisation re-targets it to a tilted density**, so "focus the loss on the big movers" predicts the mean of nothing; **percentage-form losses are consistent for functionals that favour severe underforecasts** and are undefined on signed returns; and **CVaR is not elicitable**, so tail risk is a descriptor and never a trainable target — the algebraic form of the lab's own `DR`-is-not-a-drawdown-predictor finding. Second: recast selection as information retrieval (**a rebalance date is a query, a name is a document, its label is its realised forward-return decile**) and a pairwise or listwise loss beats every benchmark on every metric reported, while **the MSE-trained net is the weakest non-random model** — below a one-line price heuristic — with a long-only decile table that is nearly flat and *non-monotone across its top three deciles* for MSE and steeply monotone for the rank losses, the gain visible in **the top decile taken alone**. Third: replacing the forecast error with an adversarially-instrumented no-arbitrage moment condition yields a model that **explains more return variation out of sample than a model whose objective *is* to maximise explained variation**, and the variable-importance columns diagnose *how* MSE fails: its first fourteen characteristics are almost entirely frictions and past returns, with the authors' own suspicion that it "might focus mainly on illiquid penny stocks" — i.e. **the MSE objective's attractor is the illiquid micro-cap tail**, which on this nine-large-cap-index panel is both a measured dead end and absent by construction. Two free transfers ride along: weight each name's loss contribution by `√Tᵢ/√T̄` on an unbalanced panel, and treat the **aggregation level** of a loss as a de-noising device. One construction rule: characteristics enter approximately **linearly in isolation** and the gain from flexibility is **interactions**, turning `program.md`'s "penalised linear model first" into a measured claim with a named next step (pairwise products, not depth; additive splines and kernels least of all). The night's one trial is a **pairwise-logistic ranker over within-region decile grades** — convex, deterministic, one penalty parameter, nothing installed that it lacks — gated on a free rank-IC screen and explicitly barred from the momentum features the source demonstrates on, which are the lineage this lab already closed. New: **#276–#279**, three free, one trial. No lab measurement was taken and the holdout was not read. | Gneiting 2011, *JASA* (`2026-10-19-consistent-scoring-functions-and-elicitability.md`); Poh–Lim–Zohren–Roberts 2021, *JFDS* (`2026-10-19-learning-to-rank-cross-sectional-selection.md`); Chen–Pelger–Zhu 2024, *Management Science* (`2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md`) |
 
+| 2026-10-20 (session 67) | **The first session to read the literature on the *predicted object* — a whole conditional distribution rather than a number — and it closes the last of the three moves available inside `statistical-learning`, with a ceiling rather than another null.** Aim set by the [2026-10-19] open-questions entry, which named the distributional answer "for a later session", plus one grep: across all 204 prior notes `conformal` and `isotonic` returned **zero**, `composite quantile` and `conditional quantile` **zero**, and `quantile regression` appeared exactly **once**, inside last night's elicitability note as an unobtained pointer. Three sources, one chain: the estimator theorem → the global cross-sectional empirics → the calibration layer. Headline: **the map from functionals to losses is not a bijection in the direction that matters, and the prize for exploiting that is bounded by a constant.** Composite quantile regression — `K` check-function losses in one convex program, `K` free intercepts, **one shared slope** — recovers the same location slope as least squares, stays root-`n` consistent **where the least-squares oracle theory breaks down at infinite error variance** (taking SCAD and the adaptive lasso with it), and has asymptotic relative efficiency against least squares bounded below by **`6/(eπ) = 0.7026` for every finite-variance error density**, with `δ(f) = 12σ²(E_ε[f(ε)])²` equal to 0.955 at a normal, 1.097 at a logistic (attaining the Fisher information bound), 1.5 at a double exponential, 1.9 at `t(3)` and **unbounded** at a slightly contaminated normal — while a **single** quantile regression, median included, has efficiency that **can be arbitrarily small**, so the `K`-fold aggregation and not the check function is what buys the floor. Since a `t` scales as the inverse standard error, that bounds any same-class loss swap at **`√δ ≈ 1.38`** on a `t` statistic, against the `+0.28` and `−1.08` rank-IC `t`s `learnings.md` [2026-10-19/20] already recorded here — **so the lab's closure of the objective-function branch survives its one genuine loophole, now with arithmetic instead of an argument** (**#281**). Second, and the night's four-for-one retirement: a peer-reviewed study forecasting **37 conditional quantiles** per name per month across four regions and 23 countries, B-spline-interpolated into a CDF whose moments follow by integration, finds **only the central `τ`-quantiles priced** with the decile spread decaying monotonically to insignificance toward *both* tails, **no higher moment monotonically priced** in either universe or either weighting scheme, and the **integrated mean beating both a direct squared-error mean forecast and the model's own median** — i.e. the distributional route's whole payoff is a better mean, which is the composite-quantile theorem arriving from the empirical side. The discount that matters: the paper prints a **liquid** universe beside its full one, and in that column — top-95% cap *and* dollar volume, the closest published analogue to nine large-cap national indices — **the significant band narrows sharply and the mean-over-median advantage vanishes**, so both gains shrink precisely as the universe becomes this panel (**#280**). Third, the one layer that survives the other two's negatives because it never needed the distribution to be priced: **an interval built from a mean model's pooled residuals has a width that cannot depend on the state**, so it over-covers in calm cross-sections and under-covers in dispersed ones by construction — an analytical fact in `Y = X + X·ε` and measured across twenty volatility bins on nine decades of daily index returns — while permuting the **probability-integral-transform rank**, uniform and independent of the predictors by construction, restores conditional validity and keeps **exact finite-sample unconditional validity under arbitrary misspecification** (**#282**). The night's free cross-link is made by the sources themselves: the conformal paper's equity exercise concludes a **location-*scale*** model fits these returns well, one restriction looser than the **location-*shift*** model composite quantile regression assumes, so a demonstrated need for the scale term is a demonstrated misspecification of the cheaper estimator. One reusable construction block rides along — thirteen free-OHLCV volatility features at named EWMA decays plus negative-return EWMAs plus Parkinson range, each divided by its own cross-sectional mean, and the `σ̄_t`-not-`σ̄_{t+1}` standardisation — carrying its source's own large-cap null (**#283**). New: **#280–#283, all four free, and no trial proposed**, which is the correct output for a night whose three independent sources agree the branch is closed. No lab measurement was taken and the holdout was not read. | Zou–Yuan 2008, *Annals of Statistics* (`2026-10-20-composite-quantile-regression-efficiency-bound.md`); Baruník–Hronec–Tobek 2026, *International Journal of Forecasting* (`2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`); Chernozhukov–Wüthrich–Zhu 2021, *PNAS* (`2026-10-20-distributional-conformal-prediction.md`) |
+
 ### Open questions for future sessions
+
+- **[2026-10-20] What should aim the next session, and for the first time in ten nights the honest
+  answer is "a different family" — because tonight closed the last of the three moves available
+  inside `statistical-learning` and the queue the previous three nights built is now largely
+  retired by the lab itself.** The record: `learnings.md` [2026-10-13/14] answered the family on
+  **estimator**, [2026-10-17/18] on **functional form**, [2026-10-19/20] on **objective**, and
+  tonight's three sources answer it on **predicted object** — a loss swap inside one functional
+  class is bounded at `√δ ≈ 1.38` on a `t` statistic, and the distributional functionals the swap
+  would unlock (tail quantiles, variance, skewness, kurtosis) are a published multi-region null
+  that is *sharpest* in the subsample resembling this panel. **There is no fifth move.** Note also
+  that the lab's [2026-10-19/20] entry retired `#276`–`#279` outright, so the 2026-10-19 queue this
+  entry would otherwise sit on top of is spent.
+  - **First, the three free rules, because none of them costs a trial and two are retrospective.**
+    `#282` is the most immediately usable and is about the lab's own measurement rather than any
+    candidate: **any error bar computed from pooled residuals of a conditional-mean model has a
+    width that cannot depend on the state**, so it mis-covers as a function of cross-sectional
+    dispersion in a known direction. That is worth one pass over whatever in `reports/` or the
+    diagnostics currently pools residuals to get an interval. `#281`'s plug-in `δ̂` is one line on
+    any penalised linear fit already in the record and says whether squared error was ever costing
+    anything on this panel. `#280` is a kill-screen to apply to proposals rather than a thing to do.
+  - **Then pick the family by what has never been read, not by what the lab last measured.** On
+    tonight's greps the thinnest veins across 207 notes are, in order: **`hidden Markov` / `change
+    point` (zero)** — `program.md` charters regime switching inside `price-trend`, and the folder
+    holds 54 notes mentioning regimes and none on the detection machinery; **`transfer entropy`
+    (zero)**, which is the `lead-lag-spillover` family's information-theoretic branch and reachable
+    from daily closes; **`Engle-Granger` / `Kalman` (zero)** and `cointegrat` (one), which is to say
+    the `statistical-arbitrage` family's *estimation* half has essentially no coverage while its
+    residual-reversion half has four notes; and **`feature selection` (zero)**, which is now the
+    only unread thing left about learning here and is the one the lab's own closure points at
+    (three sessions of nulls all attributed to the features, and nothing in this folder about how
+    to choose them). Of those, **`statistical-arbitrage`'s estimation half is the best-aimed
+    choice**: it is a family with a charter clause this folder has never answered (`program.md`
+    asks specifically "what survives a **long-only** constraint, since only the cheap side of a
+    residual is tradeable here"), and it is not downstream of anything tonight closed.
+  - **Unchanged and still live below that**: the 2026-10-18 pair (`#273` then `#274`, with `#275`
+    gated on its own free screen) — nothing tonight touches either, and `#274`'s inverse-`CSV`
+    re-weighting of every v3 lead's bootstrap interval remains the one retrospective item that
+    could narrow a tier the board cannot currently separate. Then the 2026-10-17 queue (`#272`(a),
+    `#270`, with `#269` standing), then 2026-10-16 (`#263`–`#265`, `#266` as a design rule), then
+    2026-10-15 and everything carried under it.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to) is still a human decision.
+  - **Named for a later session rather than summarised:** the *distributional* literature's own
+    next step — predicting a conditional **expectile** rather than a quantile, where the elicited
+    functional is a weighted-least-squares object and so sits between the mean and a quantile — has
+    no note here. The primary is **Newey–Powell (1987, *Econometrica* 55(4), 819–847), "Asymmetric
+    Least Squares Estimation and Testing"**, which is closed at JSTOR and the Econometric Society's
+    own three hostnames; no repository location was pursued, because by this file's 2026-10-15 rule
+    the budget went to a third source for the same mechanism instead of a third channel for this
+    one. It is an **unobtained pointer, not a gap in tonight's argument**: `#281`'s efficiency
+    ceiling is a statement about *any* same-class loss swap and an expectile loss is one, so
+    Newey–Powell would add calibration rather than permission.
+- **[2026-10-20] The transferable output, and it is the twentieth detector: ask whether a source is
+  offering *signal* or *variance*, because the second has a closed-form ceiling and the first does
+  not — and a paper's own prose almost never separates them.** The nineteen before it: redundancy
+  [2026-09-30], rival mechanisms [2026-10-02], the altitude an enumeration was written at
+  [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each side's account of the test's
+  confound [2026-10-05], a disqualified statistic against a truncated variant of itself
+  [2026-10-06], the self-undermining cross-border friction [2026-10-07], a construction technique's
+  cost geometry [2026-10-08], a universe whose boundary is itself a signal [2026-10-09], a family
+  charter with two branches predicting opposite observables [2026-10-10], the objective-versus-number
+  distinction [2026-10-11], a method's admitted scope [2026-10-12], the benchmark read as a strategy
+  [2026-10-13], the operator in the scoring rule [2026-10-14], what the null is a distribution *over*
+  [2026-10-15], the level of aggregation a prediction is sharp at [2026-10-16], whether the
+  literature's comparator is an object the lab already holds [2026-10-17], whether a statistic is
+  being used as an estimator, a signal or a scale [2026-10-18], and what functional a loss elicits
+  [2026-10-19]. Tonight's is the economic consequence of the last two: an estimator paper that
+  improves *efficiency* is making a bounded offer, and the bound is usually printed in the paper as
+  an asymptotic relative efficiency — so the first question of any "better estimator" import is
+  **what is the ARE, and what does `√ARE` do to the `t` statistic the lab already measured?** That
+  one line retired tonight's only buildable proposal before it was written, for free, and it
+  generalises: a variance improvement cannot rescue a measured null unless the null's `t` is within
+  `√ARE` of the bar, which is a check anybody can run from the record. **Second transferable,
+  smaller and about reading an empirical paper's universe columns: when a paper reports a "full" and
+  a "liquid" sample side by side, the liquid column is the only one this lab may cite, and the gap
+  between them is the size of the discount every other paper in the same literature should get for
+  not reporting it.** Tonight both of the headline gains were substantially weaker — one of them
+  gone entirely — in the liquid column, and nothing but the paper's own choice to print both made
+  that visible. **Ask for the liquid column; when a paper does not print one, assume the gap.**
+- **[2026-10-20] Access findings — a clean night, three first-try channels, one new confirmation of
+  an already-listed refusal mode, and no new refusal modes.** All three sources were read from
+  **arXiv on the first attempt** (`arxiv.org/pdf/<id>`, 0.3–2.5 MB → 58–258 KB of clean text;
+  `" the "` counts 298, 466 and 1,425; `( )` dropout zero, zero and three-in-prose; no ASCII shift;
+  title lines verified first per the 2026-10-16 guessed-NBER-number lesson) — including, notably,
+  the **IMS electronic reprint of a 2008 *Annals of Statistics* article, which is the published
+  paper and says so in its own header**, so for an IMS journal arXiv is the version of record and
+  not a preprint. This is the second consecutive night on which arXiv served all sources first try,
+  and it now looks like the rule for methods and machine-learning papers rather than a run of luck.
+  **Confirmed again, on a new host: Project Euclid's `journals/<journal>/volume-<v>/issue-<i>/<slug>/<doi>.pdf`
+  endpoint returned HTTP 200 with a 1,155-byte body that `file` identifies as HTML** — the
+  HTML-bodied-200 mode this file already records for Anubis, Incapsula and the Research Affiliates
+  destination chooser, now with a body **two orders of magnitude smaller** than any of them, which
+  is a reminder that the `-w 'HTTP %{http_code} size=%{size_download}'` check catches it and a
+  body-size heuristic tuned to Cloudflare's 5.5 KB does not. **Crossref answered every citation
+  lookup on the first call** (487, 74 and 1 `is-referenced-by-count`) and **`api.crossref.org/works?query.bibliographic=<title>`
+  resolved a brand-new Elsevier DOI by title on the first try** — worth recording because this file's
+  2026-10-07 entry warns that a title lookup can return a plausible near-duplicate; the safeguard
+  that worked was checking the returned `container-title` and author list against the preprint's own
+  front matter before trusting it. **Semantic Scholar resolved all three DOIs cleanly**, which is the
+  first night in several with no instance of its `not found`-for-a-real-DOI mode. **Unobtained
+  pointer, named rather than summarised:** Newey–Powell (1987, *Econometrica*, the expectile-regression
+  primary), closed at JSTOR with no repository location pursued — see the open-questions entry above
+  for why no third channel was attempted and why nothing in tonight's argument depends on it.
 
 - **[2026-10-19] What should aim the next session, in order — and the top of it is a change of
   objective rather than a new signal, which is why it sits above the queue the last three nights

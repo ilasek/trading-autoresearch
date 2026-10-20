@@ -21429,3 +21429,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    unless run over a score with real selection, and no such score exists), **`#272`**(a), **`#259`**,
    **`#258`**, **`#257`**, **`#261`**, **`#254`**, **`#255`**, **`#82`**, and the carried queue as
    2026-10-15's open-questions entry leaves it.
+
+## Research session — 2026-10-20 (learning agent): 3 notes added, see research/SUMMARY.md
