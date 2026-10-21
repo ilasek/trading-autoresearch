@@ -5516,3 +5516,90 @@ across experiments; prune entries that later evidence contradicts.
   it was, the proposal is answered already.** This retires the whole 2026-10-19 research cluster
   (three notes, four ideas, one of them a proposed trial) without spending a trial, and leaves
   `statistical-learning` answered on estimator, functional form and objective alike.
+
+- **[Measured 2026-10-20/21, nightly] A bps SCREEN AND A SHARPE SCREEN DISAGREE ABOUT THE SIGN OF A
+  RESULT ON THIS PANEL, AND THEY DISAGREE MOST WHERE THE bps NUMBER IS BIGGEST. EVERY FREE
+  MEASUREMENT BLOCK IN THIS JOURNAL BEFORE TONIGHT WAS READ IN bps.** Eight paired observations,
+  train, K = 100 monthly, region-matched excess beside the realised Sharpe skill of the same book:
+
+      object                regmatch bps/63d     t     churn    SR skill   vol/pool
+      sd_e high                  +53.6        +2.17   0.86x      -0.041      1.288
+      sd_e low                   -41.5        -2.27   0.93x      +0.006      0.857
+      r2 high                    +39.2        +2.34   1.10x      +0.022      1.164
+      r2 low                     -64.6        -3.15   1.37x      -0.136      0.953
+      beta to group, low         -96.3        -3.87   0.99x      -0.181      0.870
+      cheap spread (-z)          +15.3        +0.66   3.63x      -0.032      1.219
+      eg_t most stationary        -1.3        -0.14   2.73x      +0.006      1.006
+
+  **Every object clearing |t| = 2 in bps carries a volatility ratio at least 0.14 from 1.00, and its
+  Sharpe skill is inside the noise floor or negative.** `sd_e high` earns +53.6 bps per 63 days and
+  **-0.041** of Sharpe. The 2026-10-13 entry adopted "report the slice's volatility ratio beside the
+  excess" as a caution after one case; with eight it is stronger than a caution — the bps screen is
+  not a weak version of the gate's statistic, it is a **different statistic with a different sign**.
+  **Quote Sharpe skill and the volatility ratio with every screened object, and treat a bps excess
+  alone as uninterpretable.** A free retrospective pass re-reading the existing F-blocks in Sharpe
+  units is outstanding and may move objects in both directions.
+
+- **[Measured 2026-10-20/21, nightly] THE EXCHANGE RATE BETWEEN A RANK IC AND A SHARPE, AND ITS
+  NOISE FLOOR — THE LAB CAN NOW PRICE A CANDIDATE BEFORE WRITING THE FILE. THE SCREEN IS ONE-SIDED:
+  IT REFUSES AND IT CANNOT QUALIFY.** A synthetic score `s = a*t + sqrt(1-a^2)*noise`, with `t` the
+  within-region normal score of the realised forward 63-day return, K = 100 monthly equal weight,
+  gross, train:
+
+      rank IC    0.002   0.011   0.020   0.030   0.049   0.077   0.115   0.192   0.336   0.583
+      skill     +0.016  +0.029  +0.062  +0.097  +0.165  +0.261  +0.384  +0.652 +1.132  +1.900
+
+  **train skill = 3.37 x rank IC**, linear to three figures across the usable range. The floor under
+  it, from AR(1) random scores carrying no information (16 seeds each): **sd ~= 0.025, flat in
+  persistence** across churn from 0.91x to 8.58x, centred a little below zero. So the smallest IC a
+  train book can resolve at 2 sd is **~0.015** and the smallest worth a trial is **~0.03**.
+  **But `3.37 x IC` is a CEILING.** Across seven objects priced the same night the realised fraction
+  ran **6% to 38% and was negative once** (slope 38%, 3-leg blend 21%, r2 20%, r2|vol 10%, 4-leg
+  blend 6%, cheap spread negative), because a rank IC is a whole-cross-section statistic and a top-K
+  book is a tail statistic, and they come apart wherever a score's information sits in the middle of
+  the sort. **Use it as a refusal rule only** — it would have refused eight of the ten v3 trials on
+  the board — and never as a qualification, which is the same shape as the 2026-10-16/17 retirement
+  of the previous bar and the same shape as the holdout veto. The one chain that *was* confirmed end
+  to end is harness-to-engine: `sa_coint_slope_volneutral` pre-registered net train skill ~+0.008 and
+  the engine returned **+0.018**, on a quantity whose floor is 0.025.
+
+- **[Measured 2026-10-20/21, nightly] `statistical-arbitrage`'s ESTIMATION HALF IS CLOSED ON
+  MEASUREMENT, AND THE BETA AXIS IS NOW CLOSED AS A SELECTION AS WELL AS A WEIGHTING.** The family's
+  residual-reversion half was closed 2026-10-09/10; its estimation half — Engle-Granger
+  cointegration, the OU speed, the dynamic hedge ratio — had no note in `research/` and no
+  measurement here, and `research/SUMMARY.md`'s 2026-10-20 entry named it the best-aimed remaining
+  choice. Cointegrating each eligible name's 504-day log price on its own calendar-peer-group index
+  (98.3% per-date coverage; `eg_t` median -2.33, 24.9% below -2.89; half-life median 34 days):
+  **the spread level is a null** (+15.3 bps/63d, t +0.66, IC +0.0091), **the stationarity statistic
+  is a null** (IC +0.0045), **the OU half-life is a null** (IC +0.0015), and **the level-by-speed
+  interaction loses to its own tail-depth control** — cheap-z inside the most-stationary tercile
+  reads +29.8 bps (t +2.20) against **+19.1 (cross-seed sd 12.0) for a RANDOM tercile of the same
+  size**, 0.9 sd apart, with the ordering non-monotone in the tercile and the sub-periods inverting
+  between K = 60 and K = 100. Three estimation windows (252 / 504 / 1008) and an EWMA dynamic beta
+  all land inside noise and move the level 10 bps, so the 2026-10-19/20 lookback rule applies.
+  `program.md`'s charter question for the family is answered: **the cheap side is the side that
+  survives long-only, and it is a null — the long-only constraint is not what binds.** What was left
+  standing was the cointegrating *slope*: IC **+0.0412**, **+0.0328** after within-group
+  volatility-orthogonalisation (and the group-explained share `r2` collapses from +0.0332 to
+  **-0.0028** once the slope is removed, so `r2` was the slope in costume). Traded as
+  `sa_coint_slope_volneutral`: validation skill **-0.154** [-0.366, +0.014], **4th** percentile of
+  its own null, `null_median - pool` -0.059 and `candidate - null_median` -0.095. The entry
+  "Sharpe is flat in beta on this panel" was measured from a low-volatility *selection* and from
+  covariance *weighting*; **the axis is now closed from the selection side too, at the highest rank
+  IC this lab has recorded for any object.** Anti-candidates travelling with this entry: the spread
+  level, the stationarity statistic and the half-life at any window or estimator; the interaction at
+  any tercile or K; the spread amplitude `sd_e` and the group-explained share `r2`; the slope itself.
+
+- **[Method, 2026-10-20/21] NEVER POOL WITHIN-GROUP PERCENTILE RANKS ACROSS GROUPS — COMPUTE THE
+  STATISTIC INSIDE THE GROUP AND AGGREGATE THE STATISTIC. THE FREE DETECTOR IS AN OBJECT'S OWN
+  NEGATION.** The first implementation of tonight's IC board ranked score and forward return
+  `pct=True` within region and correlated the pooled result. It returned **+0.035 to +0.087 for
+  every one of sixteen objects**, with momentum and reversal both positive and low-volatility and
+  high-volatility both positive. The cause is arithmetic: a one-name region ranks 1.0 on both axes
+  and a two-name region 0.5/1.0, so pooling over 18 regions of which most are small manufactures
+  agreement. Corrected (Spearman inside each region of >= 20 scored names, name-weighted, then
+  averaged over dates) the same board reads momentum +0.0104, low-vol **-0.0140**, Amihud +0.0190 —
+  consistent with every recorded v3 result. **Run the negation of every score through any new
+  statistic before reading a number off it: an object and its own negation cannot both be positive.**
+  This is the second instrument-validation catch in two nights, and unlike the 2026-10-19/20 one it
+  was caught by a free invariant rather than by a replication against a recorded figure.

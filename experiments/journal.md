@@ -21456,9 +21456,14 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   gross; the hand-rolled harness measured +0.041 after the volatility ratio of 1.187 ate 62% of
   it; net of ~60 bps/yr the pre-registration said **~+0.008**, and the engine returned train skill
   **+0.018**. Three independent steps, agreeing to within 0.01 on a quantity whose noise floor is
-  0.025. **The exchange rate is usable; it is a necessary-condition screen only** — it prices what
-  a train book can earn from an IC, and the lab's own seven-trial record says train says nothing
-  about validation (Spearman -0.571).
+  0.025. **[CORRECTED later the same session, see F10 — "the exchange rate is usable" overstates
+  what was shown.** What held is the *harness-to-engine* step. The *IC-to-realised* step did not:
+  across the seven objects priced tonight the realisation ratio ran **6% to 38% and was negative
+  once**, so `3.37 x IC` is a **ceiling**, not an estimate. The durable form is one-sided, like the
+  holdout veto — an object whose implied skill is under the 0.025 noise floor cannot qualify; an
+  object whose implied skill clears it may still realise nothing.**] It prices at most what a train
+  book can earn from an IC, and the lab's own seven-trial record says train says nothing about
+  validation (Spearman -0.571).
   *(iii) The turnover pre-registration was not a lower bound, for the second time ever.* Predicted
   **2.5-6.0x**, charged **3.4x train and 5.0x validation** — both inside the band. The band was
   built the way 2026-10-19/20 said to build one: from the *unbanded* churn of the candidate's own
@@ -21467,3 +21472,321 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   This book carried no retention band at all, by choice (the 2026-10-18 engine issue makes a
   low-turnover operator buy part of its gate margin from the null), and it is still the cheapest
   book the lab has run.
+
+## Free measurements — 2026-10-20/21 (nightly), one trial spent
+
+All train only (1997-01-01 → 2017-12-29, 252 month-ends). No validation, holdout, forward or
+incubation file was opened. Instrument: a hand-rolled month-end screen (forward 63 trading days,
+top/bottom K, equal weight) reporting excess over the whole eligible pool and over a
+**region-matched** pool carrying the slice's own region shares, plus — new tonight — the slice's
+realised **Sharpe skill** and volatility ratio, because the night's first finding is that those two
+statistics disagree about every large number on the sheet.
+
+**F1 — instrument validation first, per the standing method rule.** Two invariants and one
+replication:
+
+    invariant / replication                                 required           measured
+    slice = the whole eligible pool                         both excesses 0    +0.000000000 / -0.000000000
+    8 independent random scores, top 100                    centred on 0       pool +5.5, regmatch +5.8 (cross-seed sd 5.7/5.3)
+    126-day Amihud top-100, region-matched, recorded
+      2026-10-19/20 as +33.3 bps (t +2.41)                                     +33.3 bps (t +2.41)
+
+The third line reproduces last night's instrument **to 0.1 bps**, with the same sub-period split
+(+4.3 / +73.1 here against the recorded +4.2 / +73.3) and the same n = 249, so this block and last
+night's are on one scale. The random centre sits at **+5.5** rather than last night's +0.1 — inside
+one cross-seed sd, but quoted so that only within-block comparisons are made. Panel: eligible per
+date mean **495**, median **328**, which confirms the 2026-10-19/20 correction.
+
+**F2 — the Engle-Granger LEVEL objects are nulls.** Cointegrating regression of each eligible name's
+504-day log price on its own calendar-peer-group equal-weight log-price index; residual `e`, spread
+`z = e_T/sd(e)`, and step-two OU/ADF statistics on `e`. Median scored 322 of ~328 eligible
+(**98.3% per-date coverage**). Pooled: `eg_t` median -2.33 with **24.9%** below -2.89, half-life
+median 33.7 days, slope median 0.957 — the machinery is estimating what it should.
+
+    object (K=100, monthly)        regmatch bps/63d      t      churn/yr
+    cheap spread (-z), top              +15.3        +0.66       3.63x
+    expensive spread (+z), top           -3.4        -0.18       3.76x
+    most stationary (eg_t), top          -1.3        -0.14       2.73x
+    least stationary, top                +3.8        +0.34       2.93x
+
+**F3 — the family's actual claim is the INTERACTION, and its own tail-depth control refutes it.**
+Hong-Stein-style level screens are not what cointegration predicts; the prediction is that the cheap
+side reverts *where the spread is stationary*. Pre-signed positive:
+
+    cheap-z inside the eg_t tercile    regmatch bps/63d     t      churn    97-08 / 09-17
+    T1 most stationary  (K60)               +29.8       +2.20     5.64x    +13.4 / +45.3
+    T2 middle           (K60)                +9.8       +0.60     6.45x    +13.3 /  +6.5
+    T3 least stationary (K60)               +18.5       +0.63     4.23x    -35.6 / +70.1
+    CONTROL: a RANDOM tercile (K60, 8 seeds) +19.1  (cross-seed sd 12.0)    8.90x
+
+**The treatment beats its own tail-depth-matched control by 0.9 cross-seed sd.** Restricting to a
+third of the pool and taking 60 names is a *shallowing* of the sort, and a random third buys +19.1
+of the +29.8 by itself. The ordering is also not monotone (T3 > T2), and at K = 100 the same object
+reads +25.5 (t +1.75) on 119 dates with its **sub-periods inverted** against the K = 60 version
+(+77.6/+18.5 against +13.4/+45.3). A conditioning whose sub-period pattern flips with book size is
+not a conditioning.
+
+**F4 — window sensitivity and the Kalman branch: no estimator separates.** The research folder's
+greps named `Engle-Granger` and `Kalman` as zero-coverage; both are answered here.
+
+    estimator of the cointegrating relation   regmatch bps/63d     t     churn    97-08 / 09-17
+    W = 252, OLS                                   +25.9       +1.31    5.01x     +1.0 / +59.9
+    W = 504, OLS                                   +15.3       +0.66    3.63x    -19.8 / +63.3
+    W = 1008, OLS                                  +22.2       +0.71    2.52x    -30.6 / +87.6
+    W = 504, EWMA half-life 126 (dynamic beta)     +15.4       +0.74    4.69x    -10.8 / +51.3
+
+All four inside noise, all four negative or flat in 1997-2008 and positive in 2009-2017, and the
+level moves 10 bps across a four-fold range of estimation window — the 2026-10-19/20 rule (**a
+characteristic whose sign depends on its own lookback is not a characteristic**) applies to the
+magnitude here as well.
+
+**F5 — the sibling objects produce the night's biggest bps numbers and the ratio gate eats all of
+them. This is the block's first durable finding.** Same machinery, K = 100:
+
+    object              regmatch bps/63d     t     churn    SR skill   vol/pool
+    sd_e high                +53.6        +2.17   0.86x      -0.041      1.288
+    sd_e low                 -41.5        -2.27   0.93x      +0.006      0.857
+    r2 high                  +39.2        +2.34   1.10x      +0.022      1.164
+    r2 low                   -64.6        -3.15   1.37x      -0.136      0.953
+    beta to group, high         --           --   0.95x      +0.053      1.313
+    beta to group, low       -96.3        -3.87   0.99x      -0.181      0.870
+    cheap spread (-z)        +15.3        +0.66   3.63x      -0.032      1.219
+    eg_t most stationary      -1.3        -0.14   2.73x      +0.006      1.006
+
+**Every object on this sheet whose bps number clears |t| = 2 has a volatility ratio at least 0.14
+away from 1.00, and its Sharpe skill is inside the noise floor or negative.** `sd_e high` earns
++53.6 bps per 63 days and **-0.041** of Sharpe. The 2026-10-13 rule said to report the slice's
+volatility ratio beside the excess; this block is the demonstration of why, and the stronger form
+is now available: **on this panel a bps screen and a Sharpe screen disagree about the sign of the
+result whenever the slice's volatility ratio is away from 1, which is most of the time.**
+
+**F6 — orthogonalisation isolates the axis, and it is the slope.** Within-region rank IC against the
+forward 63-day return:
+
+    r2 raw                      +0.0332 (t +3.57)
+    r2 | vol126                 +0.0256 (t +3.08)
+    r2 | vol126 + slope         -0.0028 (t -0.57)      <- collapses
+    slope raw                   +0.0412 (t +3.19)
+    slope | vol126              +0.0328 (t +3.23)      <- survives
+
+So the group-explained share is the slope in costume and the slope is not the volatility object.
+That is what the night's one trial was spent on, and `sa_coint_slope_volneutral` returned validation
+skill **-0.154** at the **4th** percentile of its own null.
+
+**F7 — the noisy-oracle calibration: what a rank IC is WORTH, in Sharpe.** A score
+`s = a*t + sqrt(1-a^2)*noise`, where `t` is the within-region normal score of the realised forward
+63-day return; K = 100, monthly, equal weight, gross, train:
+
+    corr a      0.00    0.01    0.02    0.03    0.05    0.08    0.12    0.20    0.35    0.60    1.00
+    rank IC    0.002   0.011   0.020   0.030   0.049   0.077   0.115   0.192   0.336   0.583   1.000
+    skill     +0.016  +0.029  +0.062  +0.097  +0.165  +0.261  +0.384  +0.652 +1.132  +1.900  +2.991
+
+Linear through the whole usable range: **train skill = 3.37 x rank IC** (the ratio is 3.37, 3.39,
+3.34, 3.40 at IC 0.049 / 0.077 / 0.115 / 0.192). The lab has never had this exchange rate.
+
+**F8 — and what the noise floor under it is.** AR(1) random scores carrying no information, 16 seeds
+each, K = 100, train; `phi` sets persistence and therefore churn:
+
+    phi        0.000   0.700   0.900   0.950   0.980   0.995
+    churn      8.58x   4.75x   2.81x   2.06x   1.40x   0.91x
+    mean      -0.003  -0.007  -0.010  -0.017  -0.015  -0.009
+    sd         0.031   0.022   0.016   0.023   0.025   0.021
+
+**sd ~= 0.025 and flat in persistence**, centred slightly below zero (a K=100 book is marginally
+more volatile than the pool it is measured against). So the smallest rank IC a train book can
+resolve at two standard deviations is **~0.015**, and the smallest worth a trial is **~0.03**.
+
+**F9 — the IC board, and a methodological correction that nearly cost the night.** With the
+statistic fixed (Spearman inside each region with at least 20 scored names, name-weighted across
+regions, then averaged over month-ends):
+
+    -r63            +0.0239 (t +2.34)      -z (cheap spread)      +0.0091 (t +0.77)
+    -r21            +0.0212 (t +2.16)      -eg_t (stationarity)   +0.0045 (t +0.91)
+    amihud126       +0.0190 (t +2.22)      sd_e                   +0.0059 (t +0.64)
+    r252_1 (12-1)   +0.0166 (t +1.24)      half_life              +0.0015 (t +0.30)
+    r252            +0.0104 (t +0.75)      -vol126                -0.0140 (t -0.93)
+    slope to group  +0.0412 (t +3.19)      -park126               -0.0123 (t -0.83)
+    r2              +0.0332 (t +3.57)      -z inside stationary half +0.0194 (t +2.00)
+
+**The first version of this statistic was wrong and said so loudly.** Ranking score and forward
+return `pct=True` *within* region and then correlating the pooled result returned **+0.035 to
++0.087 for every one of sixteen objects**, including momentum and reversal simultaneously and
+low-volatility and high-volatility simultaneously. The cause is an aggregation artifact: a
+one-name region ranks 1.0 on both axes and a two-name region 0.5/1.0, so pooling percentile ranks
+over 18 regions of which most are tiny manufactures agreement. **Never pool within-group percentile
+ranks across groups — compute the statistic inside the group and aggregate the statistic.** The
+tell was free and immediate: an object and its own negation both scoring positive.
+
+**F10 — the calibration's own qualification, and it is one-sided.** Implied skill `3.37 x IC`
+against what a top-100 book on the same score actually realises, train, gross:
+
+    object            implied   measured   realised
+    slope raw          +0.139    +0.053       38%
+    slope | vol126     +0.111    +0.041       37%
+    3-leg blend        +0.116    +0.024       21%
+    r2                 +0.112    +0.022       20%
+    r2 | vol126        +0.086    +0.009       10%
+    4-leg blend        +0.125    +0.008        6%
+    cheap spread       +0.031    -0.032     negative
+
+**`3.37 x IC` is a ceiling, not an estimate.** A rank IC is a whole-cross-section statistic and a
+top-K book is a tail statistic, and they come apart exactly where a score's information sits in the
+middle of the sort. **The usable form is therefore one-sided, like the holdout veto: an object whose
+implied skill is under the 0.025 noise floor cannot qualify, and an object whose implied skill
+clears it may still realise nothing.** This corrects the lesson line of tonight's trial in place.
+
+**F11 — four never-screened objects, and the highest IC of the night realising the least.**
+
+    object                      IC (t)           book skill   vol/pool   churn
+    4-leg equal-rank blend    +0.0370 (+4.11)      +0.008       1.144     5.95x
+    3-leg blend (no 12-1)     +0.0345 (+3.29)      +0.024       1.216     5.67x
+    52-week-high proximity    -0.0145 (-1.07)      -0.040       0.813     5.02x
+    -skew252                  +0.0051 (+0.85)      +0.047       0.988     1.85x
+    -maxret21 (MAX effect)    +0.0022 (+0.20)      +0.137       0.769     5.97x
+    +maxret21                 -0.0022 (-0.20)      -0.090       1.405     6.41x
+
+Leg correlations in the blend: `-r63 x -r21` +0.537, `-r63 x r252_1` -0.251, and Amihud is
+effectively orthogonal to all three (+0.032, +0.032, -0.007). **The blend buys the highest rank IC
+measured tonight (+0.0370, t +4.11) and realises 6% of it** — the clearest instance of F10, because
+the tail of a rank-sum is the small, noisy set where four partly-disagreeing legs happen to agree.
+And `-maxret21` is the night's largest *measured* skill (+0.137) on an IC of **zero**: it is bought
+entirely by a 23% volatility reduction, at 5.97x churn (~260 bps/yr, ~0.14 of Sharpe) which deletes
+it, and its mechanism is `pt_lowvol_gk_quarterly`'s, already a recorded v3 GATE_FAIL.
+
+**What the block closes.** `statistical-arbitrage`'s **estimation half** — named by
+`research/SUMMARY.md`'s 2026-10-20 open-questions entry as the best-aimed choice left and by its
+greps as the folder's thinnest vein — is closed on measurement: the spread level, the stationarity
+statistic, the OU half-life, the spread amplitude, the group-explained share, the level-by-speed
+interaction, three estimation windows and a dynamic (EWMA) hedge ratio, against a tail-depth-matched
+control that beats the one positive result. `program.md`'s charter question for the family ("what
+survives a long-only constraint, since only the cheap side of a residual is tradeable here") is
+answered: **the cheap side is the side that survives, and it is a null — the long-only constraint is
+not what is binding.** The **beta axis** is closed as a selection as well as a weighting.
+
+## Session summary — 2026-10-20/21 (nightly) — 1 trial of 8; the lab now has an exchange rate between a rank IC and a Sharpe, and it is one-sided
+
+**Experiments run: 1 of 8. Verdict: 1 GATE_FAIL. Eleven free measurement blocks (F1-F11), one
+recorded lesson corrected in place within the session, one statistic caught and fixed before it was
+believed, and the research folder's own top-ranked open question answered without a second trial. No
+holdout, forward or incubation file was read, and the seat is still empty.** The engine suite is
+green (92 passed in 69s) and the integrity check was clean — `origin/main` level with HEAD and
+`git branch -r --no-merged origin/main` empty, with all four stray remote branches confirmed
+contained in `origin/main`.
+
+    #   candidate                   family                verdict    train  val    skill   CI90            2x cost  turn   null %ile
+    10  sa_coint_slope_volneutral   statistical-arbitrage GATE_FAIL  +0.54  +0.18  -0.15  [-0.37,+0.01]   -0.20    5.0x      4%
+
+Equal-weight pool: **+0.34 on validation**. `scripts/rank_trials.py` puts all **ten** v3 trials in
+tier 1 of a ten-trial board whose best skill is still -0.01; tonight's is **seventh** on skill and
+third-lowest on `P(best)` (3%). It is scored as a **new mechanism (M6)** — the board's sixth
+distinct return stream and the first since 2026-10-16 — while `distinct_mechanisms` in the
+leaderboard stays at **5**, because that count groups *family leads* and this family's lead is still
+`sa_resid_rev63_band`, which tonight's trial did not displace.
+
+**Budget allocation, planned before the first hypothesis was written.** 1 trial in
+`statistical-arbitrage`, against a cap of 2 — the family `research/SUMMARY.md` named as the
+best-aimed remaining choice, and the only `program.md` family whose charter clause this lab had
+never answered. **0 in `price-trend`**, against its cap of 2. The "at least one in a family with no
+recorded trial" rule was spent on 2026-10-19/20 and no longer binds; `distinct_mechanisms` is 5, so
+the four-mechanism cap does not bind either. No family reached a cap.
+
+**Why one trial and not eight.** Tonight produced the instrument that answers this question
+numerically for the first time rather than by judgement. The exchange rate (F7) says a K=100 monthly
+book earns at most `3.37 x` its within-region rank IC, and the noise floor (F8) says a train skill
+number is scattered at sd 0.025 — so an object needs a rank IC above **~0.03** to be worth a trial.
+**Of twenty-two objects priced tonight, exactly two cleared it** (the group-explained share and the
+cointegrating slope), they are the same object (F6), and the trial was spent on it. Everything else
+— the whole Engle-Granger branch, both blends, the MAX effect, 52-week-high proximity, skewness —
+is below the bar, and three of them are below the floor at which a train screen can resolve
+anything at all. Writing further candidates would have raised the deflated-Sharpe bar for every
+future trial to buy numbers the screen already prices.
+
+### The trial, and it did what the pre-registration said
+
+`sa_coint_slope_volneutral` holds the 100 eligible names with the highest slope of their 504-day log
+price on their own calendar-peer-group log-price index, that slope orthogonalised **inside the
+group** against 126-day realised volatility, quota-allocated across groups, no retention band.
+Validation skill **-0.154** [-0.366, +0.014], **4th** percentile of 200 replicas, train skill +0.018.
+Split: `null_median - pool` = **-0.059**, `candidate - null_median` = **-0.095**, so the loss is
+mostly selection. The learnings entry "Sharpe is flat in beta on this panel" was measured from a
+low-volatility *selection* and from covariance *weighting*; **the beta axis is now closed as a
+selection too**, from the one direction that was left and at the highest rank IC the lab has
+recorded for any object.
+
+Two pre-registrations are worth recording as kept. The **turnover band** was 2.5-6.0x and the engine
+charged **3.4x train, 5.0x validation** — both inside it, the second time ever here, and it was
+built the way 2026-10-19/20 said to build one (from the candidate's own *unbanded* churn of 1.39x,
+not from a banded train figure). And the **net train skill** was pre-registered at ~+0.008 against
+an engine result of **+0.018**, on a quantity whose noise floor is 0.025.
+
+### Best finding: a bps screen and a Sharpe screen disagree about the sign, and they disagree most where the number is biggest
+
+F5 is the night's most transferable result. Of the eight objects in that table, the four with the
+largest absolute bps excesses all carry a volatility ratio at least 0.14 from 1.00, and their Sharpe
+skills are inside the noise floor or negative — `sd_e high` at **+53.6 bps/63d (t +2.17)** realises
+**-0.041** of Sharpe. The lab adopted "report the slice's volatility ratio beside the excess" as a
+*caution* on 2026-10-13 after one case. With eight paired observations it is stronger than a
+caution: **on this panel the bps screen is not a weaker version of the gate's statistic, it is a
+different statistic that disagrees about the sign.** Every free screen in this journal before
+tonight was read in bps.
+
+### Second finding: the calibration, and the discipline of making it one-sided
+
+The exchange rate `train skill = 3.37 x rank IC` (F7) with a noise floor of sd 0.025 (F8) is the
+first tool this lab has for pricing a candidate *before* writing it, and it immediately priced
+twenty of twenty-two objects out. But F10 is the part that keeps it honest: the realisation ratio
+across seven objects ran **6% to 38% and was negative once**, because a rank IC is a
+whole-cross-section statistic and a top-K book is a tail statistic. **So it is a ceiling and the
+screen is one-sided — it can refuse and it cannot qualify**, which is the same shape as the holdout
+veto and the same shape as every other screen this lab has calibrated (2026-10-16/17 retired the
+previous qualification bar for exactly this reason). The lesson line of tonight's trial claimed more
+than this and is annotated in place.
+
+### Third finding: a statistic that was wrong in a way the lab should be able to catch for free
+
+The first implementation of the IC board (F9) pooled within-region percentile ranks across regions
+and returned a positive IC for **every object including mutually exclusive pairs** — momentum and
+reversal both positive, low-volatility and high-volatility both positive. The cause is that a
+one-name region ranks 1.0 on both axes. The fix is one line and the detection was free: **an object
+and its own negation cannot both be positive, so run the negation of every score through any new
+statistic before reading it.** This is the second instrument-validation catch in two nights and the
+standing method rule earned its keep again.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **The 2026-10-18 engine issue is still the first thing to settle and is still a human decision.**
+   `benchmarks.random_null_v3` scores its replicas without the eligibility mask the candidate is
+   held to, worth +0.005 to +0.017 of Sharpe *to the null*. Tonight's candidate carried no retention
+   band partly for this reason. Until it is ruled on, the near-full-pool blend of research `#250`
+   stays unbuilt.
+2. **Price every future candidate in IC units before writing the file.** F7/F8/F10 make this
+   mechanical: compute the within-region rank IC (inside each region, never pooled), multiply by
+   3.37 for a ceiling on train skill, and refuse the candidate if that ceiling is under ~0.03. This
+   is a refusal rule only. Retrospectively it would have refused eight of the ten v3 trials on the
+   board.
+3. **Re-read the existing free-measurement blocks in Sharpe units, not bps.** Every F-block in this
+   journal before tonight reports bps excesses, and F5 shows those disagree in sign with the gate's
+   own statistic whenever the slice's volatility ratio is away from 1. That is a free, retrospective
+   pass over the record and it may change which objects the lab believes it has refuted — in both
+   directions.
+4. **Do not re-buy tonight's declines.** The Engle-Granger spread level, the stationarity statistic
+   and the OU half-life at any window or estimator, OLS or dynamic (F2, F4); the level-by-speed
+   interaction, which loses to a random tercile (F3); the spread amplitude and the group-explained
+   share, which are the slope and the volatility axis in costume (F5, F6); the within-group slope
+   itself, now a recorded GATE_FAIL; a fixed equal-rank blend of the lab's individually-largest legs
+   (F11 — highest IC of the night, 6% realised); the MAX effect and 52-week-high proximity (F11).
+5. **From `research/SUMMARY.md`, spent tonight**: the **2026-10-20 open-questions entry's own
+   first-ranked recommendation** — `statistical-arbitrage`'s estimation half, with its
+   `Engle-Granger` / `Kalman` / `cointegrat` zero-coverage greps — built and closed free, plus one
+   trial. The folder's three free rules from `#280`-`#283` were not used: **`#282`** (a pooled-residual
+   error bar cannot have state-dependent width) remains the most immediately usable and is now
+   *more* relevant, because F8 gives the lab a pooled noise floor and F10 shows it varies by object.
+   **Still unspent**: **`#273`**/**`#274`**/**`#275`** (the 2026-10-18 pair, `#274`'s inverse-CSV
+   re-weighting still the one retrospective item that could narrow the board's single tier),
+   **`#270`**, **`#272`**(a), **`#269`**, **`#263`**-**`#266`**, and the carried queue below those.
+   The folder's remaining named cold veins are `hidden Markov`/`change point`, `transfer entropy`
+   and `feature selection`; the first two sit in families this lab has closed structurally
+   (timing loses at both gates; `lead-lag-spillover` closed on thirteen measurements), so
+   **`feature selection`** is the one of the three that is not downstream of a closure.
