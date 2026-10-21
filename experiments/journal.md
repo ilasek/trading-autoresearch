@@ -21790,3 +21790,4 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    and `feature selection`; the first two sit in families this lab has closed structurally
    (timing loses at both gates; `lead-lag-spillover` closed on thirteen measurements), so
    **`feature selection`** is the one of the three that is not downstream of a closure.
+## Research session — 2026-10-21 (learning agent): 4 notes added, see research/SUMMARY.md

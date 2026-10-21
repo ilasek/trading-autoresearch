@@ -1214,6 +1214,67 @@ measurement was taken and the holdout was not read.
 `notes/2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`,
 `notes/2026-10-20-distributional-conformal-prediction.md`
 
+**[Session 68, 2026-10-21] The family's *selection* layer — how a predictor gets into the candidate
+set — had zero coverage, and it supplies the one tension this folder can still raise against the
+lab's closure of the family: the two procedures the closure was measured with are the two that fail,
+by construction, in exactly the case of a feature that is marginally null and jointly important.**
+Sessions 60–67 answered this family on estimator, functional form, objective and predicted object,
+and each closure was attributed by the lab to **the features**. A grep across all 207 prior notes
+returned **zero** for `feature selection`, `sure independence`, `stability selection` and `knockoff`
+— the folder's eight lasso notes and eight sparsity notes all treat a penalty as a way to *estimate*
+a coefficient vector, and none asks how the candidate set was formed. Three Tier-A statistics
+primaries plus one Tier-A economics primary, all read in full, all with `validation_overlap: false`.
+*(1)* **A marginal screen's guarantee assumes away its own worst failure, and the assumption is
+named in the theorem.** Ranking predictors by marginal correlation `ω = Xᵀy` has the *sure screening*
+property `P(M* ⊆ M_γ) → 1` only under four conditions, of which Condition 3 — the source's own words
+— "rules out the situation in which an important variable is marginally uncorrelated with `Y`, but
+jointly correlated with `Y`". Two further readings of the same theorem run against intuition: the
+required surviving-set size is `n^{θ*}` with `θ* > 2κ + τ`, so **a weaker signal and more collinearity
+each demand that you keep *more* candidates**, and `κ < 1/2` is required outright because signals
+below root-`n` order are undetectable by any of this machinery. In the source's own simulation, a
+predictor constructed to be marginally uncorrelated with the response but genuinely in the model is
+recovered **0% of the time by the marginal screen and 0% of the time by a one-pass lasso over the
+full candidate set**, at every sample size tried, while the **iterated-residual procedure (ISIS)
+recovers it 100% of the time** — more data does not fix it, because the ranked quantity does not
+contain the information (**#284**). *(2)* **A selection should be reported as a frequency, not as a
+set, and two independent literatures say so.** Subsampling `⌊n/2⌋` of the observations ~100 times,
+recording each variable's selection frequency, and keeping those above a cutoff `π_thr` gives a
+finite-sample bound on the expected number of false selections, `E(V) ≤ q_Λ²/((2π_thr−1)p)`, which
+converts the unanswerable choice of penalty into the answerable choice of how many variables the
+procedure may select on average; with the randomised lasso it is selection-consistent **without the
+irrepresentable condition** that ordinary lasso selection needs, and its guarantee holds for *all*
+`λ ≥ λ_min`, so an over-large penalty costs power and never admits noise (**#285**). *(3)* **The same
+reporting rule arrives from the Bayesian side with a stronger claim attached.** Nesting selection and
+shrinkage in one spike-and-slab prior and putting a posterior on both the inclusion probability `q`
+and the shrinkage `γ²` shows them to be **substitutes** — so "variable selection techniques that do
+not explicitly allow for shrinkage might artificially recover sparse model representations simply as
+a device to reduce estimation error", and the Bayesian lasso, lava, horseshoe and elastic net *cannot*
+produce a sparse representation at all, since none puts positive mass on an exact zero. In five of six
+unrelated prediction problems no predictor is systematically excluded and the best prediction is a
+weighted average over many models with **different** memberships; the **cross-section of US stock
+returns is the most extreme case in the paper**, with a predictive-score curve flat to the order of
+`10⁻⁶` per observation across the whole range of model sizes and sparsity that **could not be induced
+even by a prior giving under 1% probability to models with five or more predictors** (**#286**).
+*(4)* **The night's one result about the lab's own machinery rather than its candidates, and it is
+stated as a tension because it does not transfer mechanically.** An FDR-controlling selection filter
+works by manufacturing a decoy column per predictor that preserves `XᵀX̃ = Σ − diag{s}`, i.e. the
+original-to-decoy **cross**-correlations; the paper then asks whether a **row permutation** would do
+instead, and shows it cannot, because permutation preserves `X^πᵀX^π = Σ` while destroying
+`XᵀX^π ≈ 0` — so permuted decoys behave unlike genuine nulls, which *are* correlated with the
+signals. Measured: at a uniform pairwise feature correlation of 0.3 and a nominal 20%, the decoy
+filter realised 12.29% and the permutation construction **45.61%** (**#287**, with **#288** the
+construction recipe). The lab's region-matched null permutes a *weight vector* rather than a design
+matrix and this is **not** a refutation of it — but it is independent, third-party evidence that
+permutation-built nulls mis-estimate false-discovery rates precisely where columns are correlated,
+which is the seam the lab's own [2026-10-14/15] finding (null power continuous in book concentration)
+and its **standing 2026-10-18 engine issue** already point at. New: **#284–#288**; **#284 ends in a
+free, one-sided falsifier** that costs no trial and strengthens the lab's closure if it comes back
+empty, and **no trial is proposed**. No lab measurement was taken and the holdout was not read.
+→ `notes/2026-10-21-sure-independence-screening-marginal-vs-joint.md`,
+`notes/2026-10-21-stability-selection-subsampling-error-control.md`,
+`notes/2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`,
+`notes/2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`
+
 ### 9. `liquidity-volume`
 
 **Amihud's `ILLIQ` replicates cleanly, decays out of sample, and — this is the finding the lab
@@ -12418,6 +12479,159 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md` ·
     `notes/2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md`
 
+284. **FREE, ONE-SIDED FALSIFIER, AND THE HIGHEST-VALUE ITEM TONIGHT: an iterated-residual pass over
+    the lab's existing feature block, which is the only test that can distinguish "these features
+    carry nothing" from "these features carry something no marginal screen and no one-pass fit can
+    see".** The lab closed `statistical-learning` three times and attributed each closure to the
+    features, measuring with (a) **marginal** rank ICs per feature and (b) a **one-pass** penalised
+    joint fit. Those are exactly the two procedures that fail, 0% of the time successful at every
+    sample size tried, when a true predictor is marginally uncorrelated with the target but jointly
+    correlated with it; only the iterated-residual procedure finds it, 100% of the time. The pass, in
+    the lab's own units: within-peer-group z-scored features and the peer-demeaned forward 63-day
+    target, frames **on the price calendar** (the `target.index`-as-clock trap of [2026-10-13/14]);
+    fit walk-forward on the single highest-|rank IC| feature alone; take the residual of the target
+    against its fitted score; **re-score every remaining feature's rank IC against that residual
+    rather than against the raw target**; iterate while something moves. Step four is the whole idea
+    and costs roughly what the lab's existing IC board costs. **Read it either way and it pays:** a
+    feature whose |rank IC| is materially larger against the residual means the lab's marginal
+    refusal rule ([2026-10-20/21] idea 2 — rank IC × 3.37, refuse under ~0.03) is unsafe on this
+    block; **no feature moving means the three closures are strengthened, which is the more likely
+    outcome and still worth having.** Two cheap variants from the same source, same pass: score
+    features in **small disjoint groups** rather than singly, and screen a **decorrelating transform**
+    of the block (cluster-and-sparse-PCA, or differences between features rather than levels — the
+    source names differencing of financial series explicitly), since [2026-10-17/18] and
+    [2026-10-20/21] F5/F6 document several of the lab's features collapsing onto the volatility axis
+    and the slope. **Scope, stated plainly: this is one-sided like every other screen here — it can
+    find a jointly-important feature and cannot prove one absent**, so do not write the result up as
+    vindicating or refuting the features in general. Also note the regime mismatch and do not oversell
+    it: the source is `p ≫ n` and the lab is `p ≈ 7–15`, so the *theorem* does not apply here; the
+    *failure mode* is a finite-`p` fact about marginal versus joint information and does. Tier A
+    (JRSS-B read paper, 2118/2802 citations), `validation_overlap: false`.
+    → `notes/2026-10-21-sure-independence-screening-marginal-vs-joint.md`
+
+285. **FREE REPORTING RULE, and the wrapper #284 needs to be reportable: report a selection as a
+    per-feature frequency over resampled fits, never as the set one fit happened to return.**
+    Subsample **whole dates, or contiguous blocks of dates — never individual name-date rows**, which
+    is the one change the recipe needs here (`notes/2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`
+    is why, and drawing rows would make the frequencies optimistic in the same way the lab's
+    [2026-10-20/21] pooled-rank error did); run the selection ~100 times; keep features above a
+    pre-registered cutoff `π_thr` (the source's default is 0.9, insensitive across 0.6–0.9 — pick it
+    before looking, since tuning it is the argmax act the lab embargoed on 2026-09-14). The bound
+    `E(V) ≤ q_Λ²/((2π_thr−1)p)` translates to a deflating but useful number at this `p`: with `p ≈
+    7–15`, `q_Λ = 0.8√(αp)` for familywise control at `α = 0.1` admits **about one feature**, so
+    treat the arithmetic as a sanity check on ambition rather than as the operative screen (the source
+    itself notes the bound is loose below `p ≈ 10`). Two further free uses, both retrospective and
+    both aimed at things the lab already holds: **(a)** the selection frequency of each feature
+    *across the walk-forward refits the lab already runs* is a stability path for nothing — a feature
+    chosen in 5% of month-end refits and one chosen in 95% are different objects and the lab currently
+    reports neither; **(b)** a **block-resampled distribution of the screen's own statistic** is the
+    state-dependent replacement for the pooled noise floor that `#282` warns about — [2026-10-20/21]
+    F8 gives the lab a *pooled* floor (sd 0.025) and F10 shows the realisation ratio varies by object
+    (6%–38%, negative once), which is exactly the state-independence `#282` predicts. **Do not run 100
+    refits inside `generate_weights`**: the source's own cost figure is ~25 single fits (≈3× 10-fold
+    CV, rising to ≈5.5× when per-fit cost is linear in `n`, which is the lab's `p < n` case) against a
+    ~60s-per-call budget and ~7 calls per trial. Run it as a free measurement, hard-code the chosen
+    set, and declare the set as selected. If any of it runs inside a candidate, every draw must come
+    from a seeded generator, because `causality_check` reads non-determinism as a peek. **It creates
+    no signal** — a stable selection of nothing is what a null block returns. Tier A (JRSS-B read
+    paper, 2245/2861 citations), `validation_overlap: false`.
+    → `notes/2026-10-21-stability-selection-subsampling-error-control.md`
+
+286. **FREE DESIGN RULE AND A STATED TENSION WITH THIS FOLDER'S OWN STANDING ADVICE: "few predictors
+    matter" and "the identity of the few is recoverable" are different claims, and on the cross-section
+    of equity returns the literature supports the first and denies the second.** `research/README.md`
+    asks sessions to note "any finding about *how few* predictors actually matter" and this folder has
+    two sources on that side; tonight's primary argues the apparent fewness is partly an artifact of
+    estimators that can only **select**, because inclusion probability and shrinkage are **substitutes**
+    — "variable selection techniques that do not explicitly allow for shrinkage might artificially
+    recover sparse model representations simply as a device to reduce estimation error", and the
+    Bayesian lasso, lava, horseshoe and elastic net put **no mass on an exact zero**, so none of them
+    is evidence about sparsity at all. Across six unrelated prediction problems only one is genuinely
+    sparse; in the rest **no predictor is systematically excluded** and the best prediction is a
+    weighted average over models with *different* memberships, which the source attributes to
+    collinear predictors carrying overlapping information. The **cross-section of US stock returns is
+    its most extreme case**: a predictive-score curve flat to the order of `10⁻⁶` per observation
+    across all model sizes, and the **one application where sparsity could not be induced even by a
+    prior giving under 1% probability to five-or-more-predictor models**. Three usable
+    consequences. **(a)** Report inclusion *frequency*, not the selected set — the same rule `#285`
+    gives from the frequentist side, and two Tier-A sources converging from opposite statistical
+    traditions is the strongest form this folder has. **(b)** Adopt the source's **dogmatic-prior
+    stress test** as a pre-registerable kill condition for any future claim that a handful of features
+    matter here: force the method to be sparse and check whether the handful is stable. **(c)** The
+    source's own prescription is model averaging — but **the lab has already measured the version that
+    fits in a top-K book and found it a null** ([2026-10-20/21] F11: a fixed equal-rank blend of the
+    individually-largest legs had the night's highest rank IC and **6% realised**; [2026-10-14/15]:
+    combining legs adds turnover rather than cancelling it), so **do not re-buy the blend**; the only
+    untested residual is averaging over inclusion sets *inside one fit*, which is a different object.
+    **Discounts to apply, and they are real**: its pool is `p ≈ 144` against the lab's 7–15, so
+    identification should be *easier* here, not harder; its characteristics include fundamentals the
+    lab cannot build; its panel is ~2,250 US names including the small and thin ones this universe
+    excludes by construction, and **it prints no liquid column, so by the 2026-10-20 rule assume the
+    gap — with the direction genuinely unknown** rather than conveniently favourable. The part that
+    transfers at any `p` is (a): selection without shrinkage manufactures sparsity. Tier A
+    (Econometrica), **`published_post_2018: true`**, `validation_overlap: false`.
+    → `notes/2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`
+
+287. **NOT A CANDIDATE — A STATED TENSION WITH THE ENGINE, AND THE ONE ITEM TONIGHT THE LAB CANNOT ACT
+    ON ALONE: independent evidence that a permutation-built null under-states false discoveries
+    exactly where the columns are correlated.** An FDR-controlling selection filter builds a decoy
+    column per predictor satisfying `X̃ᵀX̃ = Σ` **and** `XᵀX̃ = Σ − diag{s}` — the second condition is
+    the point, because it preserves the original-to-decoy **cross**-correlations. The source then asks
+    whether a **row permutation** of `X` would serve instead, since it preserves `X^πᵀX^π = Σ` exactly
+    and breaks the link to the response, and shows it cannot: permutation also makes `XᵀX^π ≈ 0`, so
+    permuted decoys are *uncorrelated with the originals* while genuine nulls are *correlated with the
+    signals*, and the two behave differently in the fit. Measured, in a deliberately mild design —
+    uniform pairwise feature correlation 0.3, nominal FDR 20%, 1000 trials — the decoy filter realised
+    **12.29%** and the permutation construction **45.61%**, and the source generalises it: "in general
+    such methods will suffer from similar issues arising from the lack of correlation between the
+    permuted and the original features." **Read the scope before reading the implication.** The lab's
+    region-matched null permutes a candidate's **weight vector** to place one Sharpe in a percentile;
+    it is not a decoy *design matrix* used to select variables, and this result does **not** transfer
+    mechanically — `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md` is where that null's
+    own justification lives. What transfers is the diagnostic question — *a permutation null is only as
+    good as the dependence it preserves between the permuted object and the thing it stands in for* —
+    and it lands on a seam the lab has already found twice from the inside: [2026-10-14/15]'s "null
+    power is continuous in how concentrated the book is" (0th percentile for the equal-weight pool,
+    100th for a pure tilt), and the **engine issue filed 2026-10-18**, still a human decision, where
+    the null's replicas are not held to the eligibility boundary the candidate is held to (+0.005 to
+    +0.017 of Sharpe *to the null*). So this is **a reason to take that engine issue seriously and
+    nothing more**: `CLAUDE.md` forbids editing the engine, the lab cannot measure its way around a
+    gate it does not own, and writing this up as "the v3 gate is invalid" would be the cross-domain
+    over-transfer the hard rules warn against. Tier A (*Annals of Statistics*, 562/880 citations),
+    `validation_overlap: false`.
+    → `notes/2026-10-21-knockoff-filter-fdr-control-vs-permutation.md` ·
+    `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md`
+
+288. **FREE CONSTRUCTION MATERIAL, and the one place tonight where the lab's data regime is *better*
+    than the source's: exact finite-sample FDR control over a feature block, which answers
+    `program.md`'s charter question in the units of the question.** `program.md` asks of
+    `statistical-learning` "which feature groups carry signal"; every answer the lab has produced is a
+    Sharpe or a rank IC. This gives a **set of features with a bounded false-discovery rate**, and —
+    unusually — its sample-size condition is satisfied here with orders of magnitude to spare: the
+    method needs `n ≥ p` and its cleanest construction `n ≥ 2p`, against the lab's `p ≈ 7–15`. No
+    random-design machinery needed. Recipe: normalise the feature columns; `Σ = XᵀX`; pick `s ≥ 0`
+    componentwise as large as `diag{s} ⪯ 2Σ` allows; build `X̃ = X(I − Σ^{-1}diag{s}) + ŨC` with `Ũ`
+    orthonormal and orthogonal to `span(X)` and `CᵀC = 2diag{s} − diag{s}Σ^{-1}diag{s}` (at `p ≤ 15`
+    this is a 15×15 Cholesky — microseconds); fit the lasso path on the augmented `2p` columns,
+    walk-forward and deterministic; set `W_j = max(Z_j, Z̃_j)·sign(Z_j − Z̃_j)` from the entry penalties;
+    threshold with **knockoff+**, `T = min{t : (1 + #{W_j ≤ −t})/(#{W_j ≥ t} ∨ 1) ≤ q}` at a `q`
+    written down beforehand. **Use the `+` variant, not the plain one** — the source says the extra 1
+    "is necessary both theoretically and empirically to control FDR in scenarios where extremely few
+    discoveries are made", which is this lab's regime, and on a heavy-tailed real design (excess
+    kurtosis 9.24) knockoff+ held its nominal level while the plain filter overshot. **The empty
+    selected set is the informative outcome** and is the honest way to state "no feature in this block
+    survives FDR control" — in the units of the charter question rather than as a portfolio number.
+    Two free riders: the `W_j` sign distribution is an **instrument check** of the same family as the
+    lab's standing negate-every-score rule ([2026-10-20/21]) — under the global null the signs should
+    be balanced, and a lopsided distribution on a believed-null block means the construction is wrong,
+    not that signal was found; and the guarantee is **per refit**, since it treats `X` as fixed, so
+    aggregating across refits is `#285`'s exercise and not an FDR-controlled one. **The pitfall is
+    power, not level:** a near-singular `Σ` forces `s` small, a decoy too similar to its original
+    destroys power silently, and the lab's block is visibly collinear — so **expect poor power exactly
+    where the features are redundant**, which is the method telling the truth about the block and the
+    same message as `#286`. Tier A (*Annals of Statistics*), `validation_overlap: false`.
+    → `notes/2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`
+
 
 ---
 
@@ -12495,9 +12709,125 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-19 (session 66) | **The first session to read the literature on the *objective function itself* — not what to predict, not which features carry it, not how to weight the answer, but what a loss makes a model predict — and it finds that the question has a theorem for an answer and that two independent literatures have measured the same failure of the default.** Aim set by `research/README.md`'s rotation rule plus one grep: across all 201 prior notes `scoring rule`, `proper scoring`, `elicitab`, `Bregman`, `pinball`, `expectile`, `quantile regression`, `learning to rank`, `ranking loss`, `economic loss`, `logistic`, `conformal` and `Gneiting` all returned **zero**, and `loss function` appeared in two notes only in passing — 201 notes in which every machine-learning source holds the mean-squared objective fixed and varies the estimator. Three sources, one chain: the theory → the ordinal loss → the economic loss. Headline: **a scoring function does not measure accuracy, it names a functional** (squared error ⟺ the mean, and the consistent losses for the mean are *exactly* the Bregman class; pinball ⟺ a quantile, *exactly* the GPL class), demonstrated by a synthetic GARCH simulation in which a forecaster issuing the true conditional mean is ranked **below a constant** by two of the four error measures in universal use. Three hard constraints come with it: **weighting a loss by the realisation re-targets it to a tilted density**, so "focus the loss on the big movers" predicts the mean of nothing; **percentage-form losses are consistent for functionals that favour severe underforecasts** and are undefined on signed returns; and **CVaR is not elicitable**, so tail risk is a descriptor and never a trainable target — the algebraic form of the lab's own `DR`-is-not-a-drawdown-predictor finding. Second: recast selection as information retrieval (**a rebalance date is a query, a name is a document, its label is its realised forward-return decile**) and a pairwise or listwise loss beats every benchmark on every metric reported, while **the MSE-trained net is the weakest non-random model** — below a one-line price heuristic — with a long-only decile table that is nearly flat and *non-monotone across its top three deciles* for MSE and steeply monotone for the rank losses, the gain visible in **the top decile taken alone**. Third: replacing the forecast error with an adversarially-instrumented no-arbitrage moment condition yields a model that **explains more return variation out of sample than a model whose objective *is* to maximise explained variation**, and the variable-importance columns diagnose *how* MSE fails: its first fourteen characteristics are almost entirely frictions and past returns, with the authors' own suspicion that it "might focus mainly on illiquid penny stocks" — i.e. **the MSE objective's attractor is the illiquid micro-cap tail**, which on this nine-large-cap-index panel is both a measured dead end and absent by construction. Two free transfers ride along: weight each name's loss contribution by `√Tᵢ/√T̄` on an unbalanced panel, and treat the **aggregation level** of a loss as a de-noising device. One construction rule: characteristics enter approximately **linearly in isolation** and the gain from flexibility is **interactions**, turning `program.md`'s "penalised linear model first" into a measured claim with a named next step (pairwise products, not depth; additive splines and kernels least of all). The night's one trial is a **pairwise-logistic ranker over within-region decile grades** — convex, deterministic, one penalty parameter, nothing installed that it lacks — gated on a free rank-IC screen and explicitly barred from the momentum features the source demonstrates on, which are the lineage this lab already closed. New: **#276–#279**, three free, one trial. No lab measurement was taken and the holdout was not read. | Gneiting 2011, *JASA* (`2026-10-19-consistent-scoring-functions-and-elicitability.md`); Poh–Lim–Zohren–Roberts 2021, *JFDS* (`2026-10-19-learning-to-rank-cross-sectional-selection.md`); Chen–Pelger–Zhu 2024, *Management Science* (`2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md`) |
 
 | 2026-10-20 (session 67) | **The first session to read the literature on the *predicted object* — a whole conditional distribution rather than a number — and it closes the last of the three moves available inside `statistical-learning`, with a ceiling rather than another null.** Aim set by the [2026-10-19] open-questions entry, which named the distributional answer "for a later session", plus one grep: across all 204 prior notes `conformal` and `isotonic` returned **zero**, `composite quantile` and `conditional quantile` **zero**, and `quantile regression` appeared exactly **once**, inside last night's elicitability note as an unobtained pointer. Three sources, one chain: the estimator theorem → the global cross-sectional empirics → the calibration layer. Headline: **the map from functionals to losses is not a bijection in the direction that matters, and the prize for exploiting that is bounded by a constant.** Composite quantile regression — `K` check-function losses in one convex program, `K` free intercepts, **one shared slope** — recovers the same location slope as least squares, stays root-`n` consistent **where the least-squares oracle theory breaks down at infinite error variance** (taking SCAD and the adaptive lasso with it), and has asymptotic relative efficiency against least squares bounded below by **`6/(eπ) = 0.7026` for every finite-variance error density**, with `δ(f) = 12σ²(E_ε[f(ε)])²` equal to 0.955 at a normal, 1.097 at a logistic (attaining the Fisher information bound), 1.5 at a double exponential, 1.9 at `t(3)` and **unbounded** at a slightly contaminated normal — while a **single** quantile regression, median included, has efficiency that **can be arbitrarily small**, so the `K`-fold aggregation and not the check function is what buys the floor. Since a `t` scales as the inverse standard error, that bounds any same-class loss swap at **`√δ ≈ 1.38`** on a `t` statistic, against the `+0.28` and `−1.08` rank-IC `t`s `learnings.md` [2026-10-19/20] already recorded here — **so the lab's closure of the objective-function branch survives its one genuine loophole, now with arithmetic instead of an argument** (**#281**). Second, and the night's four-for-one retirement: a peer-reviewed study forecasting **37 conditional quantiles** per name per month across four regions and 23 countries, B-spline-interpolated into a CDF whose moments follow by integration, finds **only the central `τ`-quantiles priced** with the decile spread decaying monotonically to insignificance toward *both* tails, **no higher moment monotonically priced** in either universe or either weighting scheme, and the **integrated mean beating both a direct squared-error mean forecast and the model's own median** — i.e. the distributional route's whole payoff is a better mean, which is the composite-quantile theorem arriving from the empirical side. The discount that matters: the paper prints a **liquid** universe beside its full one, and in that column — top-95% cap *and* dollar volume, the closest published analogue to nine large-cap national indices — **the significant band narrows sharply and the mean-over-median advantage vanishes**, so both gains shrink precisely as the universe becomes this panel (**#280**). Third, the one layer that survives the other two's negatives because it never needed the distribution to be priced: **an interval built from a mean model's pooled residuals has a width that cannot depend on the state**, so it over-covers in calm cross-sections and under-covers in dispersed ones by construction — an analytical fact in `Y = X + X·ε` and measured across twenty volatility bins on nine decades of daily index returns — while permuting the **probability-integral-transform rank**, uniform and independent of the predictors by construction, restores conditional validity and keeps **exact finite-sample unconditional validity under arbitrary misspecification** (**#282**). The night's free cross-link is made by the sources themselves: the conformal paper's equity exercise concludes a **location-*scale*** model fits these returns well, one restriction looser than the **location-*shift*** model composite quantile regression assumes, so a demonstrated need for the scale term is a demonstrated misspecification of the cheaper estimator. One reusable construction block rides along — thirteen free-OHLCV volatility features at named EWMA decays plus negative-return EWMAs plus Parkinson range, each divided by its own cross-sectional mean, and the `σ̄_t`-not-`σ̄_{t+1}` standardisation — carrying its source's own large-cap null (**#283**). New: **#280–#283, all four free, and no trial proposed**, which is the correct output for a night whose three independent sources agree the branch is closed. No lab measurement was taken and the holdout was not read. | Zou–Yuan 2008, *Annals of Statistics* (`2026-10-20-composite-quantile-regression-efficiency-bound.md`); Baruník–Hronec–Tobek 2026, *International Journal of Forecasting* (`2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`); Chernozhukov–Wüthrich–Zhu 2021, *PNAS* (`2026-10-20-distributional-conformal-prediction.md`) |
+| 2026-10-21 (session 68) | **The first session to read the literature on *selection* rather than *shrinkage* — how a predictor gets into the candidate set — and it supplies the one tension this folder can still raise against the lab's four-fold closure of `statistical-learning`: the two procedures the closure was measured with are the two that fail, by construction, in exactly one named case.** Aim taken from the 2026-10-20 open-questions entry and the 2026-10-20/21 journal's own idea 5, which between them named `feature selection` as "the one of the three [remaining cold veins] that is not downstream of a closure" — `hidden Markov`/`change point` and `transfer entropy` sit in families the lab has closed structurally. One grep confirmed it: across all 207 prior notes `feature selection`, `sure independence`, `stability selection` and `knockoff` returned **zero**, while `lasso` returned 8 and `sparsity` 8 — every one of which treats a penalty as a way to *estimate* a coefficient vector, none as a way to form the candidate set. Four primaries, all read in full, three Tier-A statistics and one Tier-A economics, forming one chain: can a cheap screen find it → is the selection reproducible → is the selection real → should you be selecting at all. Headline: **the lab's refusal rule and the lab's closure were both measured with marginal and one-pass procedures, and there is exactly one failure mode those two share.** Ranking by marginal correlation `ω = Xᵀy` has the sure-screening property `P(M* ⊆ M_γ) → 1` only under a condition the source states in words — it "rules out the situation in which an important variable is marginally uncorrelated with `Y`, but jointly correlated with `Y`" — and in that case the marginal screen recovers the true model **0% of the time *and so does a one-pass lasso over the full candidate set***, at every sample size tried, while the **iterated-residual procedure recovers it 100% of the time**; more data does not help, because the ranked quantity does not hold the information. Two further readings of the same theorem invert intuition: the surviving set must be **larger** when signals are weaker (`θ* > 2κ + τ`) and nothing below root-`n` is detectable at all (`κ < 1/2`), which is the lab's own sd-0.025 noise floor arriving from theory. So the lab's "a penalised linear combination of individually-null features is itself a null here" is sound as a *measurement* and does **not** license the inference that no marginally-null-but-jointly-important feature is in the block — and the test that decides it is free and strengthens the closure if it comes back empty (**#284**). Second, a reporting rule that two independent statistical traditions reach from opposite directions: subsampling-based **selection frequencies** with a finite-sample bound `E(V) ≤ q_Λ²/((2π_thr−1)p)` and consistency **without the irrepresentable condition** (**#285**), and a Bayesian spike-and-slab showing inclusion probability and shrinkage to be **substitutes** — so a method that can only select "might artificially recover sparse model representations simply as a device to reduce estimation error", and the Bayesian lasso, lava, horseshoe and elastic net put no mass on an exact zero and are therefore no evidence about sparsity at all. In five of six unrelated prediction problems no predictor is systematically excluded; the **cross-section of US stock returns is the extreme case**, its predictive-score curve flat to order `10⁻⁶` per observation across all model sizes and the only application where sparsity **could not be induced even by a prior giving under 1% probability to five-or-more-predictor models** (**#286**). Third, the night's one result about the lab's own machinery, recorded as a tension and not a refutation: an FDR filter works by preserving the original-to-decoy **cross**-correlations `XᵀX̃ = Σ − diag{s}`, and a **row permutation** cannot substitute because it preserves `X^πᵀX^π = Σ` while destroying `XᵀX^π ≈ 0` — at a uniform feature correlation of 0.3 and a nominal 20%, the decoy filter realised 12.29% and the permutation construction **45.61%**. The lab's null permutes a weight vector rather than a design matrix, so this transfers as a *question* (a permutation null is only as good as the dependence it preserves) landing on the seam the lab found twice from the inside — [2026-10-14/15]'s null power continuous in concentration, and the **standing 2026-10-18 engine issue** — and on nothing else (**#287**, with **#288** the construction, whose `n ≥ 2p` condition this panel satisfies by orders of magnitude and which answers `program.md`'s charter question *in the units of the question*: a feature set with a bounded false-discovery rate, empty set included). New: **#284–#288, all five free, no trial proposed**, which is the right output for a night whose job was to check an inference rather than to supply a book. No lab measurement was taken and the holdout was not read. | Fan–Lv 2008, *JRSS-B* (`2026-10-21-sure-independence-screening-marginal-vs-joint.md`); Meinshausen–Bühlmann 2010, *JRSS-B* (`2026-10-21-stability-selection-subsampling-error-control.md`); Giannone–Lenza–Primiceri 2021, *Econometrica* (`2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`); Barber–Candès 2015, *Annals of Statistics* (`2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`) |
 
 ### Open questions for future sessions
 
+- **[2026-10-21] What should aim the next session, and the answer is the same shape as tonight's but
+  pointed at a different family: there are exactly two named cold veins left, both sit in families
+  the lab has closed *structurally* rather than on measurement, and that distinction is now the
+  thing to decide.** Tonight spent the last of the three veins the 2026-10-20 entry listed that was
+  *not* downstream of a closure (`feature selection`). The remaining two, with greps re-run against
+  all 211 notes: **`hidden Markov` / `change point` (still zero)**, which `program.md` charters as
+  regime switching inside `price-trend` and which the folder touches in 57 notes that mention regimes
+  and none on the detection machinery; and **`transfer entropy` (still zero)**, the
+  `lead-lag-spillover` family's information-theoretic branch, reachable from daily closes alone.
+  - **The case for reading one of them anyway, and it is tonight's own lesson generalised.** The
+    2026-10-20 entry ruled both out because "timing loses at both gates" and "`lead-lag-spillover`
+    closed on thirteen measurements". But tonight's result is precisely that **a closure is only as
+    strong as the procedure it was measured with** — the lab's `statistical-learning` nulls are real
+    numbers that nonetheless cannot rule out one specific structure, because every procedure used to
+    look shared one blind spot. The question to ask of the two remaining veins is therefore not "is
+    the family closed" but **"was the closing measurement capable of seeing the mechanism the unread
+    vein proposes?"** For regime detection the answer looks like *no*: the lab's timing results are
+    overlays on an existing signal, and a change-point estimator is a different object — it proposes
+    *when* a parameter broke, not a tilt. For `transfer entropy` the answer looks like *yes, probably*
+    — thirteen lead-lag measurements on this panel priced the thing it would detect. So **regime
+    detection is the better-aimed of the two**, on exactly the reasoning tonight validated.
+  - **Against that, the honest counter, which should be weighed and not buried:** `price-trend` is
+    the legacy family and `program.md` caps it at 2 trials, the lab's three de-risking overlays all
+    backfired, and `SUMMARY.md`'s 2026-09-21 entry already recorded that roughly half the benefit of
+    volatility scaling *is* a short-horizon trend overlay a trend champion holds. A regime-detection
+    note that ends in a timing overlay is an idea the lab has refuted from three directions. **The
+    acceptance criterion should therefore be sharper than usual: read it only if the vein can produce
+    something that is not a timing overlay** — a change-point estimator used as a *diagnostic on the
+    lab's own train/validation split stability*, say, rather than as a signal. If it cannot, skip it
+    and pick by the detector instead.
+  - **The free queue, and tonight added five to it.** `#284` is the one to run first and the only
+    item in the whole queue that can change the status of a *closed* family; it is one-sided, costs no
+    trial, and the likely outcome (nothing moves) is itself worth recording. `#285`(b) — a
+    block-resampled distribution of a screen's statistic — is the state-dependent replacement for the
+    pooled noise floor that `#282` warned about and that [2026-10-20/21] F8 then built, so those two
+    items now compose. `#288` answers `program.md`'s charter question in the units of the question and
+    its empty-set outcome is the informative one. `#286`'s dogmatic-prior stress test is a
+    pre-registerable kill condition rather than a thing to do now. `#287` is **not actionable by the
+    lab at all** and should not be treated as if it were: it is one more reason the 2026-10-18 engine
+    issue deserves a human ruling.
+  - **Unchanged and still live below those**: `#282` (a pooled-residual error bar cannot have
+    state-dependent width) and `#281`'s one-line plug-in `δ̂`, both from 2026-10-20 and both still
+    unspent; then the 2026-10-18 pair (`#273` then `#274`, with `#275` gated on its own free screen),
+    `#274`'s inverse-`CSV` re-weighting of every v3 lead's bootstrap interval still the one
+    retrospective item that could narrow a tier the board cannot separate; then the 2026-10-17 queue
+    (`#272`(a), `#270`, with `#269` standing), then 2026-10-16 (`#263`–`#265`, `#266` as a design
+    rule), then 2026-10-15 and everything carried under it.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to) is still a human decision, and
+    tonight's `#287` is independent outside evidence bearing on it.
+  - **Named for a later session rather than summarised:** **model-X knockoffs** (Candès, Fan, Janson,
+    Lv — the random-design successor that drops the `n ≥ p` requirement and replaces it with knowledge
+    of the predictors' joint distribution) has no note here. It was *deliberately* not pursued: this
+    panel satisfies `n ≥ 2p` with orders of magnitude to spare, so the fixed-design result covered
+    tonight is the applicable one and model-X would add generality the lab does not need. An
+    **unobtained pointer by choice, not a gap** — if the lab ever builds a feature block wider than
+    its date count, it becomes relevant and not before. Likewise **Barro–Lee, Welch–Goyal and the
+    other five datasets** behind `#286` are not worth separate notes; only its cross-sectional-returns
+    application bears on this lab.
+- **[2026-10-21] The transferable output, and it is the twenty-first detector: ask what *procedure*
+  a refutation was measured with, and whether that procedure and the lab's screen share a blind
+  spot — because a measured null is evidence about the procedure as well as about the world.** The
+  twenty before it: redundancy [2026-09-30], rival mechanisms [2026-10-02], the altitude an
+  enumeration was written at [2026-10-03], sign-versus-magnitude in a tension [2026-10-04], each
+  side's account of the test's confound [2026-10-05], a disqualified statistic against a truncated
+  variant of itself [2026-10-06], the self-undermining cross-border friction [2026-10-07], a
+  construction technique's cost geometry [2026-10-08], a universe whose boundary is itself a signal
+  [2026-10-09], a family charter with two branches predicting opposite observables [2026-10-10], the
+  objective-versus-number distinction [2026-10-11], a method's admitted scope [2026-10-12], the
+  benchmark read as a strategy [2026-10-13], the operator in the scoring rule [2026-10-14], what the
+  null is a distribution *over* [2026-10-15], the level of aggregation a prediction is sharp at
+  [2026-10-16], whether the literature's comparator is an object the lab already holds [2026-10-17],
+  whether a statistic is being used as an estimator, a signal or a scale [2026-10-18], what functional
+  a loss elicits [2026-10-19], and signal-versus-variance with its closed-form ceiling [2026-10-20].
+  Tonight's is their precondition. Four closures of one family all attributed the null to the
+  features; each was measured with a *marginal* screen or a *one-pass* joint fit; and there is exactly
+  one documented structure — marginally null, jointly important — that **both** of those are blind to,
+  at 0% recovery, at every sample size, with the blindness unfixable by more data. The closures are
+  not wrong; the **inference from them is wider than the measurements support**, and the gap is
+  decidable for free. The generalisation: *when several independent refutations of one thing all
+  share a procedural step, the shared step is the thing to vary next, not the subject.* This is the
+  mirror image of the 2026-10-17 detector (does the literature's comparator already sit in the lab's
+  book?) — that one checks what the lab holds, this one checks how the lab looked. **Second
+  transferable, smaller and about reading an estimator paper's regime:** tonight's screening primary
+  is a `p ≫ n` paper and the lab is `p ≈ 7–15`, so its *theorem* has no work to do here while its
+  *failure-mode taxonomy* transfers exactly — **separate a source's asymptotic regime from its
+  finite-sample mechanics before discarding it for regime mismatch**, because the second often
+  survives when the first does not. Three of tonight's four sources are in that position.
+- **[2026-10-21] Access findings — a clean night, four first-try channels, no new refusal modes, and
+  one new "looks like an answer" variant that is the *inverse* of the usual one.** All four sources
+  read on the first attempt: **three from arXiv** (`arxiv.org/pdf/math/0612857`, `/0809.2932`,
+  `/1404.5609` → 467 KB / 2.3 MB / 860 KB of PDF into 137 / 281 / 90 KB of clean text; `" the "`
+  counts 802, 599 and 727; no ASCII shift; title lines verified first per the 2026-10-16
+  guessed-number lesson) and **one from the Federal Reserve Bank of New York's `medialibrary`
+  staff-report path** (`newyorkfed.org/medialibrary/media/research/staff_reports/sr847.pdf`, 1.7 MB →
+  73 KB, `" the "` 432) — **a new working channel worth recording**, and the natural route to any
+  closed article by a Fed-affiliated author, in the same class as the NBER and author-hosted PDFs
+  this file already recommends. This is the **third consecutive night on which arXiv served every
+  methods source first try**, and the Barber–Candès fetch is the **second confirmation in two
+  sessions that an IMS electronic reprint on arXiv is the published article and says so in its own
+  header** — for an *Annals of Statistics* or *Annals of Applied Statistics* DOI, arXiv is the version
+  of record and not a preprint. **The new tell, and it is the inverse of the HTML-bodied-200 mode:**
+  `file` reported the Meinshausen–Bühlmann PDF as **"6 page(s)"** while it extracted to 281 KB
+  spanning the whole article. A *too-small* page count is not a truncated fetch, and the body-size and
+  `" the "` checks are what distinguish the two — so **check the extract, not the page count**, which
+  is the same lesson as the HTML-bodied 200 arriving from the opposite direction. **Crossref answered
+  every citation lookup on the first call** (2118, 2245, 169 and 562 `is-referenced-by-count`).
+  **Semantic Scholar resolved three of four DOIs** and returned `Paper with id DOI:10.3982/ECTA17842
+  not found` for a real, published *Econometrica* DOI — the `not found`-for-a-real-DOI mode this file
+  already records, so **OpenAlex was spent as the documented fallback and answered on the first call**
+  (176). One **new indexing artifact worth a line**: Semantic Scholar returns the Fan–Lv DOI under the
+  title *"Discussion of 'Sure Independence Screening…'"* — the citation count is the article's and the
+  DOI is right, but **a title mismatch on a JRSS-B read-paper DOI is the bound invited discussion, not
+  a wrong DOI**; do not re-resolve on the strength of it. `pdftotext -layout` was used throughout and
+  the scratchpad `pypdf` install was not needed.
 - **[2026-10-20] What should aim the next session, and for the first time in ten nights the honest
   answer is "a different family" — because tonight closed the last of the three moves available
   inside `statistical-learning` and the queue the previous three nights built is now largely
