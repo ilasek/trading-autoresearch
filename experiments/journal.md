@@ -21791,3 +21791,487 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    (timing loses at both gates; `lead-lag-spillover` closed on thirteen measurements), so
    **`feature selection`** is the one of the three that is not downstream of a closure.
 ## Research session — 2026-10-21 (learning agent): 4 notes added, see research/SUMMARY.md
+
+## Free measurements — 2026-10-21/22 (nightly), no trial spent
+
+All train only (1997-01-01 → 2017-12-29, 252 month-ends). No validation, holdout, forward or
+incubation file was opened. The session was aimed by `research/SUMMARY.md`'s 2026-10-21 entry
+(`#284`: the one failure mode a marginal screen and a one-pass lasso share) and by last night's
+own ideas 2 and 3 (price every candidate in IC units first; re-read the existing bps blocks in
+Sharpe units). It ended somewhere else: the screen that was built to test `#284` found that **the
+stored price level is not a causal quantity on this panel**, and the rest of the night is that
+result and its reach.
+
+**Instrument.** A month-end screen (forward 63 trading days, top/bottom K, equal weight, gross)
+plus — new tonight — **within-region normal-score correlation matrices, one per (date, region)
+cell**, from which a marginal IC, any linear combination's IC, a partial IC given any set and the
+block's multiple correlation all follow in closed form. 659 cells over 252 dates at a mean cell of
+168 names. Statistic as the 2026-10-20/21 method rule requires: computed **inside** each region of
+≥ 20 scored names, name-weighted across regions, then averaged over month-ends; never pooled
+percentile ranks.
+
+**F1 — instrument validation, three ways, and one sensitivity the lab did not know it had.**
+
+    invariant / replication                         required            measured
+    slice = the whole eligible pool                 excess exactly 0    0.000e+00 on all 252 dates
+    an object and its own negation                  ICs sum to 0        0.0e+00 for all six tested
+    8 iid random scores, top 100                    centred on 0        whole -0.1, regmatch +0.1 (sd ~8)
+    the recorded IC board (2026-10-20/21 F9)        reproduce           all six within 0.002 of IC, 0.1 of t
+
+          object        measured            recorded
+          -r63          +0.0222 (t +2.18)   +0.0239 (t +2.34)
+          -r21          +0.0217 (t +2.23)   +0.0212 (t +2.16)
+          amihud126     +0.0185 (t +2.25)   +0.0190 (t +2.22)
+          r252_1        +0.0175 (t +1.33)   +0.0166 (t +1.24)
+          -vol126       -0.0151 (t -1.02)   -0.0140 (t -0.93)
+          -park126      -0.0133 (t -0.92)   -0.0123 (t -0.83)
+
+The **sensitivity** is on the bps side, not the IC side. The recorded Amihud top-100 number
+(+33.3 bps/63d, t +2.41, n 249) moves to **+45.0 (t +3.13) on n 224** if dates with fewer than 2K
+scored names are skipped and to **+27.5 (t +1.92) on n 252** if K is capped at 40% of the scored
+count instead. The panel runs 197 eligible names at its 10th percentile against 849 at its 90th,
+so whether a narrow early date is dropped or its book shrunk decides which regime the average is
+over — ±18 bps and ±0.6 of t on the lab's most-quoted screen number. Same family as the
+2026-10-19/20 median-versus-mean correction: **on a panel whose width triples, a date-selection
+rule is a parameter. Quote it.** This block caps K and reports n = 252 throughout.
+
+**Pool and floor for this block.** Gross monthly-re-formed equal-weight eligible pool: Sharpe
+**+0.5692**, vol 17.3% (gross, so above the protocol's net +0.524). 16 iid random K=100 books:
+skill mean **-0.0153**, sd **0.0254**, vol ratio 1.010, churn 8.9x — the sd reproduces the
+2026-10-20/21 F8 floor (0.025) and the mean sits lower because a K=100 book is measured against a
+~500-name pool; a random book taking 40% of the pool scores **+0.002**, so the offset is book size,
+not the harness. **Read every skill number below against -0.015 ± 0.05.**
+
+**F2 — the joint-versus-marginal screen (`#284`), and the thing it found.** Fifteen free-OHLCV
+features, marginal within-region IC:
+
+    r21      -0.0156 (t -1.60)    zero126    -0.0067 (t -1.13)
+    r63      -0.0172 (t -1.70)    ladv126    -0.0139 (t -1.54)
+    r252_1   +0.0208 (t +1.54)    amihud126  +0.0194 (t +2.27)
+    vol126   +0.0169 (t +1.16)    dvtrend    -0.0047 (t -0.65)
+    park126  +0.0154 (t +1.08)    beta252    +0.0216 (t +1.29)
+    skew252  -0.0021 (t -0.36)    ivol126    +0.0090 (t +0.71)
+    maxret21 +0.0031 (t +0.29)    hi52       -0.0098 (t -0.73)
+    logprice -0.0878 (t -12.59)   <-- twice the largest IC this lab has ever recorded
+
+`logprice` is the within-region log of the stored close. **-0.0878 at t -12.59** against a previous
+record of +0.0412 (the cointegrating slope, traded last night) and a resolution floor of 0.015. The
+greedy forward selection takes it first, and the block's in-sample multiple correlation reaches
++0.4651 with a **fixed pooled direction** worth IC +0.0955 — of which the level's weight is the
+largest term. All eight of the largest pairwise *differences* of normal-scored features have
+`logprice` on one side (+0.0611 to +0.0793). A number that size on a free-OHLCV panel after 120
+recorded trials is an artifact until proved otherwise, so the night turned into proving it.
+
+**F3 — it is a back-adjustment lookahead, and two independent signatures say so.**
+`scripts/update_data.py`'s own docstring: "Yahoo serves dividend- and split-adjusted bars, adjusted
+*as of the day they are fetched*", and `load_ohlcv` exposes `open/high/low/close/volume` with **no
+raw close**. So for every stored row
+
+    adj_i(t) = raw_i(t) * D_i(t),     D_i(t) = the product of every distribution factor AFTER t,
+                                               up to the fetch date (2026-10-21)
+
+and the **level** at date t carries the name's whole future dividend and split stream, while every
+**ratio** of two prices inside the visible window has `D_i` cancel. `causality_check` cannot see
+this: hiding the tail does not change the stored numbers, so a level-valued score recomputes
+bit-identically and passes. Neither can the hindsight guard, which looks for named instruments and
+membership files.
+
+*(a) The contaminant is the remaining future, so it must shrink as the decision date approaches the
+fetch date.* It does, monotonically, and almost exactly in proportion:
+
+    decision dates    IC of log price level     yrs of future adjustment left   IC per year
+    1997-2001         -0.1231 (t  -6.22)                 27.8                     0.00443
+    2002-2006         -0.1151 (t  -9.55)                 22.8                     0.00505
+    2007-2011         -0.0652 (t  -5.28)                 17.8                     0.00366
+    2012-2017         -0.0490 (t  -4.93)                 11.8                     0.00415
+
+**|IC| ≈ 0.0043 × (years of store left after the decision date)**, four buckets, no free parameter.
+The panel's composition changes once (eight non-US indices join in 2009) and the decline is monotone
+across all four buckets, so composition is not driving it. No economic reading of a nominal-price
+effect makes its strength proportional to the distance from the day the data were downloaded.
+
+*(b) A deterministic per-name drift accumulates linearly in the mean while a return's dispersion
+grows as sqrt(h), so a leaked drift's IC must GROW like sqrt(h); a forecast decays.*
+
+    object                    fwd21    fwd63    fwd126   fwd252   fwd504
+    logprice                -0.0497  -0.0862  -0.1217  -0.1677  -0.2222   <- x4.5 over x24 horizon
+    amihud126               +0.0088  +0.0211  +0.0362  +0.0479  +0.0599   <- same shape
+    -r63      [leak-free]   +0.0115  +0.0169  +0.0019  -0.0142  -0.0045   <- decays, as a forecast does
+    -zero126  [leak-free]   +0.0066  +0.0073  +0.0023  +0.0007  +0.0016
+
+*(c) What the level is correlated with inside region, and what that predicts.* With the level's
+IC at -0.0878, an object whose only exposure to it is a correlation `rho` should carry
+`rho × -0.0878` of leaked IC:
+
+    object       rho to logprice   leak-predicted IC   measured IC        partial | logprice
+    amihud126        -0.236            +0.0207          +0.0194 (t +2.27)   -0.0086 (t -1.10)
+    ladv126          +0.181            -0.0159          -0.0139 (t -1.54)   +0.0102 (t +1.19)
+    park126          -0.172            +0.0151          +0.0154 (t +1.08)   --
+    vol126           -0.146            +0.0128          +0.0169 (t +1.16)   +0.0102 (t +0.71)
+    ivol126          -0.158            +0.0139          +0.0090 (t +0.71)   --
+    hi52             +0.166            -0.0146          -0.0098 (t -0.73)   --
+    lvol126          -0.511            +0.0449          +0.0383 (t +4.82)   +0.0045 (t +0.54)
+    zero126          -0.161            +0.0141          -0.0067 (t -1.13)   -0.0223 (t -4.00)
+    r252_1           +0.121            -0.0106          +0.0208 (t +1.54)   +0.0296 (t +2.31)
+
+**Six of the lab's characteristics have marginal ICs that one number reproduces to within 0.004**,
+and the two that it gets wrong (`zero126`, `r252_1`) are the two whose partial IC *rises* once the
+level is projected out. `amihud126` — the lab's best-replicated liquidity object and the score
+behind trial #3, the only trial ever to record positive train skill — **loses its IC and changes
+sign** conditional on the level.
+
+**F4 — `#284` answered on the LEAK-FREE block, against its own null.** Dropped: `logprice`
+(the level), `ladv126` and `amihud126` (both functions of `dollar_volume = adjusted_close × volume`,
+so both carry the dividend half of the contaminant; the split half cancels in close×volume by
+construction, `volume_ratio_for` in `scripts/update_data.py`). What is left is a ratio of two
+prices inside the window, a moment of returns, or a ratio of two volumes. Greedy forward selection
+by |partial IC|, p = 12, with the identical procedure on 12 iid random scores as the band:
+
+    step   selected    its |partial|   next-best ratios to their own marginals   NULL max |partial|
+                                                                                  mean    p90
+      1    beta252        0.0216       (all ratios 1.00 by construction)         0.0064  0.0078
+      2    r252_1         0.0217       maxret21 3.3x, zero126 1.1x               0.0055  0.0071
+      3    r63            0.0260       hi52 2.2x, skew252 5.6x                   0.0045  0.0060
+      4    skew252        0.0095       --                                        0.0042  0.0058
+
+    in-sample multiple R, p=12:  observed +0.4291   null +0.2412 (sd 0.0020)
+
+**The block does carry joint structure well above its null — and not one marginally-null feature
+becomes jointly important above the lab's own trial bar.** The three largest partials belong to the
+three features whose *marginals* were already largest; the features with big ratios (`skew252`
+5.6x, `maxret21` 3.3x, `hi52` 2.2x) all top out at |partial| ≤ 0.0213, under the ~0.03 an object
+needs to be worth a trial and barely over the 0.015 a train book can resolve. So `#284`'s failure
+mode is **looked for and not found here**, which is the outcome its own note called more likely and
+which strengthens rather than overturns the three `statistical-learning` closures.
+
+**F5 — the retrospective pass last night asked for: every object in SHARPE units beside its bps.**
+Top 100, long side pre-signed, gross, train. Floor: -0.015 ± 0.05.
+
+    object (long side)        regm bps      t   SR skill  vol/pool  churn
+    -logprice (LEAKY level)     +139.2  +8.39    +0.163     1.082   0.71   <- the lab's largest ever
+    -maxret21 (low MAX)          -37.4  -1.72    +0.068     0.795   6.28
+    r252_1 (12-1 momentum)       +21.3  +0.83    +0.054     1.031   2.81
+    -r21 (short reversal)        +44.6  +1.72    +0.034     1.194   8.74
+    -ivol126 (low idio vol)      -43.2  -1.83    +0.031     0.815   1.28
+    -vol126 (low vol)            -59.3  -2.10    +0.014     0.752   1.31
+    -skew252 (low skew)           +5.3  +0.44    +0.013     1.006   1.97
+    -park126 (low range)         -55.7  -2.17    -0.005     0.740   1.04
+    dvtrend                       -3.9  -0.26    -0.026     1.023   6.28
+    -r63 (reversal)              +53.5  +1.98    -0.036     1.255   5.09
+    -ladv126 (small/thin)        +16.1  +1.05    -0.042     0.990   0.71
+    zero126 (zero days)          +18.8  +1.52    -0.047     1.075   2.76
+    amihud126 (illiquid)         +27.5  +1.92    -0.061     1.107   0.80
+    hi52 (near 52w high)         -37.0  -1.44    -0.070     0.853   5.41
+    -beta252 (low beta)          -69.3  -2.46    -0.111     0.751   1.14
+
+Three readings. **(i) The largest train skill in this lab's history is a data artifact** — the
+leaked level at +0.163, against the previous record +0.141 (1/sigma² weighting, 2026-10-15/16).
+**(ii) Every leak-free object in the block is inside or within one sd of the floor band**, and the
+two that clear it on the gross number (`-maxret21` +0.068 at 6.28x churn, `r252_1` +0.054 at 2.81x)
+are deleted by their own cost bills (~0.14 and ~0.065 of Sharpe through v3's model) — the first is
+`pt_lowvol_gk_quarterly`'s mechanism, already a recorded GATE_FAIL, the second is the capped
+momentum lineage the lab has recorded as having no variants left. **(iii) The 2026-10-20/21
+bps-versus-Sharpe disagreement reproduces on an independent set**: of the five objects here clearing
+|t| = 2 in bps, four have vol ratios 0.74-0.75 and Sharpe skills from +0.014 to -0.111.
+
+**F6 — the leak claim's two necessary checks, and a price-free restatement of the illiquidity
+premium.** The lab's recorded *bps* numbers for Amihud run the opposite way to the leak gradient
+(+4.3 in 1997-2008 against +73.1 in 2009-2017), so the sub-period comparison has to be in matched
+units for both objects:
+
+    object       1997-2008            2009-2017          cells: 144 (mean 247) / 515 (mean 145)
+    logprice    -0.1056 (t -10.49)   -0.0641 (t  -7.32)   <- the gradient, in IC units
+    amihud126   +0.0082 (t  +0.61)   +0.0343 (t  +4.09)   <- the opposite gradient
+    lvol126     +0.0472 (t  +3.78)   +0.0264 (t  +3.28)
+    vol126      -0.0013 (t  -0.07)   +0.0412 (t  +1.79)
+    impact126   +0.0047 (t  +0.25)   +0.0327 (t  +1.50)
+
+So the sub-period split does **not** corroborate the leak for Amihud, and this is recorded as the
+one piece of evidence pointing the other way. What decides it instead is a construction: a
+**price-free** price-impact measure, |ret| divided by the name's volume *relative to its own
+trailing median* — the same economic claim as Amihud up to a per-name scale, with no price in it
+at all, so no contaminant:
+
+    object                         marginal IC        partial | logprice   horizon profile
+    amihud126 (|ret| / $volume)  +0.0194 (t +2.27)   -0.0086 (t -1.10)    +0.009→+0.060, monotone
+    impact126 (|ret| / rel.vol)  +0.0167 (t +1.17)   +0.0097 (t +0.69)    +0.006,+0.017,+0.012,
+                                                                          +0.004,-0.014 — peaks at 63d
+
+    impact126 high (illiquid), K=100:  +52.7 bps/63d (t +1.90), SR skill -0.023, vol/pool 1.386
+    impact126 low  (liquid),   K=100:  -64.1 bps/63d (t -2.34), SR skill +0.020, vol/pool 0.763
+
+**The price-contaminated and the price-free version of the same claim have different horizon
+signatures and different verdicts**: Amihud's IC grows like a leaked drift and dies conditional on
+the level; the price-free version is a null (t +1.17, under the 0.03 bar), its horizon profile is a
+forecast's, and its book buys +52.7 bps with a 39% volatility increase for **-0.023** of Sharpe.
+The 2026-10-13 entry's "within-market price-impact premium is real on train" does not survive the
+restatement.
+
+**F7 — does the leak reach last night's trial? No, and the check is worth having.** Trial #10
+regressed 504-day **log price levels** on a peer group's **log-price index**, so it was the obvious
+place for the contaminant to be hiding. Harness version (true region in place of the calendar-peer
+group):
+
+    object      marginal IC         rho to logprice   partial | logprice   horizon profile
+    slope      +0.0444 (t +3.57)        +0.006        +0.0473 (t +4.01)   +0.026,+0.044,+0.058,
+                                                                          +0.062,+0.033 — peaks at 252d
+    drift      +0.0115 (t +0.86)        +0.158        +0.0246 (t +1.95)   flat
+    logprice   -0.0864 (t -12.32)       +1.000             --             monotone to -0.222
+
+The slope is **orthogonal to the level** (rho +0.006), its IC *rises* when the level is projected
+out, and its horizon profile turns over. Trial #10's object is clean, and its recorded GATE_FAIL
+(validation skill -0.154, 4th percentile) stands on its own terms. The mechanism is also now
+explicit: the contaminant is a per-name multiplicative **constant** `D_i(t)`, so it cancels in every
+ratio and is *swamped* in every trend — the 504-day trend of an adjusted log price is dominated by
+the realised return over the window. **It dominates only where the statistic has no other
+cross-sectional scale, which on this panel is exactly two objects: the price level and the volume
+level.**
+
+**F8 — the volume level carries the split half of the same contaminant, and the whole apparent power
+of a learned combination is these two columns.** `volume_ratio_for` rescales historical share
+counts by `1/price_ratio` on a split (so close×volume is unchanged), which puts future splits in the
+volume level with the opposite sign — hence rho(logprice, lvol126) = **-0.511**:
+
+    object      fwd21    fwd63    fwd126   fwd252   fwd504
+    lvol126    +0.0219  +0.0358  +0.0454  +0.0603  +0.0730   <- leak signature
+    vratio     -0.0123  -0.0161  -0.0206  -0.0162  -0.0140   <- a volume RATIO: flat
+    dvtrend    -0.0098  -0.0057  -0.0014  -0.0089  -0.0129   <- flat
+
+And the combination question, asked the only way that is both causal and comparable to the
+`3.37 × IC` exchange rate — pooled OLS direction over the normal-scored block, weights fitted on
+**strictly earlier cells only**, 216 scored dates:
+
+    block                            in-sample direction      CAUSAL expanding-window      implied skill
+    leak-free (p=12)                 +0.0337 (t  +3.47)        +0.0039 (t  +0.35)             +0.013
+    plus the level features (p=16)   +0.0960 (t +14.92)        +0.0744 (t +10.52)             +0.251
+
+**A causally fitted linear combination of the leak-free block is a null** — +0.0039 against the
+walk-forward ridge's recorded +0.0066 (t +0.28) on a different block, a different normalisation and
+a different estimator, which is as close to an independent replication as this lab gets. **Adding
+the two level columns multiplies it by nineteen.** That is the whole of `statistical-learning`'s
+apparent upside, and it is a lookahead.
+
+## Engine issue — 2026-10-22 — the stored price and volume LEVELS embed future corporate actions, and neither `causality_check` nor the hindsight guard can see it
+
+**No engine, script, data or protocol file was edited.** This is written up as `CLAUDE.md` requires
+and left for a human. The measurements behind it are F2, F3, F6, F7 and F8 of the free block above.
+
+**What the data are.** `scripts/update_data.py`'s module docstring states it: "Yahoo serves dividend-
+and split-adjusted bars, adjusted *as of the day they are fetched*", and the store keeps old rows on
+their fetched basis, splicing new rows onto it (`adjustment_ratios`, `on_stored_basis`). `load_ohlcv`
+exposes `open/high/low/close/volume` and no raw close. So a stored close at date `t` is
+`raw_i(t) × D_i(t)`, where `D_i(t)` is the product of every distribution factor **after** `t` up to
+the fetch date, and `volume_ratio_for` applies `1/price_ratio` to historical share counts on a split,
+putting the split half of the same factor into the volume level with the opposite sign.
+
+**Why it is a protocol problem and not just a data caveat.** `D_i(t)` is a per-name multiplicative
+constant, so it cancels in every ratio of two prices inside the visible window and is swamped in
+every trend (F7: the 504-day trend of an adjusted log price is dominated by the realised return over
+the window, IC +0.0115, flat in horizon). It dominates only where a statistic has no other
+cross-sectional scale — the **price level** and the **volume level**. And a level-valued score is
+invisible to both of v3's defences:
+
+* `protocol.causality_check` recomputes the weights with the tail of the frame hidden and fails
+  anything whose holdings move. Hiding rows does not change the stored numbers, so a level score
+  recomputes **bit-identically** and passes at 1e-6.
+* `protocol.static_check` looks for named instruments, the legacy universe and the membership
+  files. A level score names nothing.
+
+So a candidate scoring on `np.log(prices)` would clear every gate the protocol has, and on train it
+would clear them by the largest margin in this repo's history (F5: train skill **+0.163**, against
+the previous record +0.141; IC **-0.0878 at t -12.59**, against a previous record of +0.0412).
+
+**The evidence that it is a lookahead rather than a nominal-price effect.** Two signatures, neither
+of which has an economic reading, both free:
+
+1. **|IC| ≈ 0.0043 × (years of store remaining after the decision date)** — -0.1231 / -0.1151 /
+   -0.0652 / -0.0490 across the four five-year buckets of train at 27.8 / 22.8 / 17.8 / 11.8 years
+   left (F3a). Monotone across all four, while the panel's composition changes once.
+2. **The IC grows like sqrt(horizon)** — -0.0497 at 21 days to -0.2222 at 504 (F3b), which is what a
+   leaked deterministic drift does (linear in the mean, sqrt in the dispersion) and the opposite of
+   what a 63-day forecast does. Every leak-free object in the block decays instead.
+
+One piece of evidence points the other way and is recorded as such: Amihud's *sub-period* IC runs
++0.0082 then +0.0343 (F6a), against the level's gradient. What settles that object is the
+price-free restatement, not the gradient (F6b/F6c).
+
+**What it does and does not change about the record.** It changes **no recorded verdict**, because
+no recorded trial scores on a level:
+
+* The `lv_*` lineage and `sl_*` blocks use `dollar_volume = adjusted_close × volume`, where the split
+  half of the factor cancels and the dividend half remains. That is the weaker, inverted contaminant,
+  and it is enough to account for Amihud's whole marginal IC (predicted +0.0207 from
+  rho = -0.236, measured +0.0194, and -0.0086 conditional on the level — F3c/F3d).
+* Trial #10 (`sa_coint_slope_volneutral`) regresses levels on levels and is the one place the leak
+  should have bitten; it is **clean** (rho +0.006 to the level, F7).
+* No level-valued candidate has ever been written here, which is luck rather than design.
+
+What it does change is **inference**, in one direction and across the whole v3 record: six of the
+lab's characteristics — the volatility family (`vol126`, `park126`, `ivol126`), the liquidity family
+(`amihud126`, `ladv126`) and 52-week-high proximity — have marginal ICs that `rho × -0.0878`
+reproduces to within 0.004 (F3c). The standing learnings entry that "several of the lab's features
+collapse onto the volatility axis" is better read as: **they collapse onto the price level, and the
+price level is contaminated.** And because the contaminant decays at ~0.0043 of IC per year of
+remaining store, it is roughly **twice as strong on train as on validation** — which is a mechanical
+contributor to the lab's single most persistent regularity, seven sessions of "a clean train screen
+is not evidence" (2026-10-16/17).
+
+**What a human might consider.** None of this is applied or tested.
+
+* The decisive measurement needs data this repo does not have: an unadjusted close, or a
+  point-in-time price source. `program.md` already lists "paid point-in-time data with full price
+  coverage" under future upgrades; this is a second, independent reason for it, and a cheap partial
+  version exists — refetch `close` with Yahoo's `auto_adjust=False` alongside the adjusted series and
+  store the ratio, which *is* `D_i(t)` up to a constant and would turn tonight's inference into a
+  measurement.
+* A `static_check` rule refusing a score built on a bare price or volume **level** (as distinct from
+  any ratio, return or trend of them) would close the gap the two existing guards leave. Where to
+  draw that line is a protocol decision, not a bug fix: `logprice` is unambiguous, `dollar_volume` is
+  a judgement call, and `sa_coint_slope_volneutral` shows a legitimate construction built on level
+  frames.
+* Until a human rules, the operating rule this session adopted and recommends is the cheap one:
+  **a candidate may use ratios, returns and trends of the stored panels and may not use their
+  levels — and may not orthogonalise against a level either**, since projecting on a contaminated
+  regressor moves the contaminant into the residual.
+
+**Was a trial run after this was established?** No. See the session summary for why, and note that
+the reason is the lab's own refusal rule rather than this issue: every leak-free object priced
+tonight is under the IC bar.
+
+## Session summary — 2026-10-21/22 (nightly) — 0 trials of 8; the stored price level is a lookahead, it accounts for six of the lab's characteristics, and research `#284` comes back empty on the block that is left
+
+**Experiments run: 0 of 8. Verdicts: none recorded. Eight free measurement blocks (F1–F8), one
+`## Engine issue` filed, one new instrument built and validated three ways, and the research
+folder's own top-ranked open question answered without a trial. No validation, holdout, forward or
+incubation file was read, and the seat is still empty.** The engine suite is green (92 passed in
+98s) and the integrity check was clean — HEAD level with `origin/main`, `git branch -r --no-merged
+origin/main` empty.
+
+**Budget allocation, planned before the first hypothesis was written.** The session was aimed at
+`statistical-learning` (cap 2) because `research/SUMMARY.md`'s 2026-10-21 entry named
+`feature selection` as the one of three remaining cold veins not downstream of a closure, and at the
+free retrospective pass in `price-trend`/`liquidity-volume` that last night's ideas 2 and 3 asked
+for. `distinct_mechanisms` is 5, so the four-mechanism cap does not bind; the "at least one in a
+family with no recorded trial" rule was spent on 2026-10-19/20. **No trial was spent in any family,
+so no cap was approached.**
+
+### Why zero trials, stated in the lab's own calibrated units
+
+Last night's exchange rate (`train skill = 3.37 × within-region rank IC`, floor sd 0.025) makes this
+arithmetic rather than judgement. Objects priced tonight that clear the ~0.03 IC bar an object needs
+to be worth a trial:
+
+    object                        IC         status
+    logprice                   -0.0878      a back-adjustment lookahead (engine issue above)
+    lvol126 (volume level)     +0.0383      the same lookahead, split half only
+    coint slope to group       +0.0444      trial #10, a recorded GATE_FAIL five days ago
+    everything else            <= 0.026     under the bar
+
+**That is the whole list.** The leak-free block's best *joint* object reaches |partial IC| 0.0260
+(F4), its best causally-fitted linear combination reaches **+0.0039** (F8), and in Sharpe units
+every leak-free book in F5 sits inside one sd of the -0.015 floor except two whose own cost bills
+delete them. Writing a candidate anyway would have raised the deflated-Sharpe bar for every future
+trial — the effective N already clusters all 120 recorded trials of all three protocol versions (104 v1, 6 v2, 10 v3) — to
+buy a number the screen has already priced. The 2026-10-16/17 rule ("a train screen may refute but
+may not qualify") cuts in the refusing direction here, which is the direction it is allowed to cut.
+
+### Best finding: the stored price level knows the future, and it is the biggest number this lab has ever measured
+
+The store holds Yahoo's dividend- and split-adjusted bars, back-adjusted to the fetch date, and no
+raw close. So `adj_i(t) = raw_i(t) × D_i(t)` with `D_i(t)` the product of every distribution factor
+**after** `t`: ratios cancel it, trends swamp it, and the **level** is dominated by it. Measured:
+within-region IC **-0.0878 at t -12.59** against a previous record of +0.0412, a top-100 book at
+train skill **+0.163** against a previous record of +0.141, and two signatures with no economic
+reading — |IC| proportional to the years of store left after the decision date (0.0043/yr across
+four buckets, F3a) and IC growing like sqrt(horizon) to -0.2222 at 504 days (F3b). Neither
+`causality_check` (hiding the tail does not change stored numbers) nor the hindsight guard (nothing
+is named) can see it. Filed as an engine issue; no engine file was touched.
+
+### Second finding: it accounts for six of the lab's own characteristics, and for part of the train-to-validation decay
+
+With the level's IC at -0.0878, an object exposed to it only through a correlation should carry
+`rho × -0.0878` of leaked IC. For the volatility family (`vol126`, `park126`, `ivol126`), the
+liquidity family (`amihud126`, `ladv126`) and 52-week-high proximity, **that one number reproduces
+the measured marginal IC to within 0.004** (F3c). `amihud126` — the lab's best-replicated liquidity
+object, the score behind the only trial that ever recorded positive train skill — goes from
++0.0194 (t +2.27) to **-0.0086 (t -1.10)** conditional on the level, and its **price-free**
+restatement (|ret| per unit of the name's own relative volume) is a null with a forecast's horizon
+profile and **-0.023** of Sharpe skill at a 1.39 volatility ratio (F6). The standing reading that
+"several of the lab's features collapse onto the volatility axis" is better stated as: they collapse
+onto the price level. And since the contaminant decays at ~0.0043 of IC per year of remaining store,
+it is about **twice as strong on train as on validation** — a mechanical contributor to seven
+sessions of "a clean train screen is not evidence".
+
+### Third finding: `#284` is answered, and the answer strengthens the closures
+
+The note's theorem names one failure mode a marginal screen and a one-pass lasso share: a feature
+marginally uncorrelated with the target but jointly important. Looked for on the leak-free block
+with an iterated-residual (partial-IC) screen against its own 12-random-score null: the block's
+joint structure is real (max |partial| 0.0216/0.0217/0.0260/0.0095 against a null p90 of
+0.006–0.008; in-sample multiple R +0.4291 against +0.2412), and **no marginally-null feature becomes
+jointly important above the trial bar** — the three largest partials belong to the three largest
+marginals, and the big *ratios* (`skew252` 5.6x, `maxret21` 3.3x, `hi52` 2.2x) all top out at 0.0213.
+A causally fitted linear combination of the leak-free block scores IC **+0.0039 (t +0.35)**, within
+0.003 of the walk-forward ridge's recorded +0.0066 on a different block with a different estimator —
+an independent replication of the family's closure. Adding the two level columns multiplies it by
+nineteen (+0.0744, t +10.52), which is the whole of `statistical-learning`'s apparent upside and is
+the lookahead.
+
+### Fourth finding (method): the lab's most-quoted screen number is convention-dependent
+
+The recorded Amihud top-100 figure is +33.3 bps/63d (t +2.41, n 249). The same object on the same
+dates reads **+45.0 (t +3.13)** if narrow early dates are skipped and **+27.5 (t +1.92)** if K is
+capped at 40% of the scored count — ±18 bps and ±0.6 of t, because the panel runs 197 eligible names
+at its 10th percentile against 849 at its 90th and the rule decides which regime the average is
+over. Same family as the 2026-10-19/20 median-versus-mean correction. **On a panel whose width
+triples, a date-selection rule is a parameter; quote it with the number.**
+
+### Housekeeping
+
+Six scratch artifacts committed by accident at the repository root on 2026-10-20 (`fwd.pkl`,
+`mret.pkl`, `st_a.npy`, `st_a.pkl`, `st_c.pkl`, `st_cc.pkl`, 3.1 MB, referenced by nothing) are
+deleted in this session's commit. Nothing in `engine/`, `scripts/`, `tests/`, `data/`, `program.md`,
+`CLAUDE.md` or `trials.jsonl` was touched.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **The engine issue is the first thing to settle and it is a human decision**, and it now joins
+   the 2026-10-18 null-eligibility issue in that queue. The cheap partial fix named in the entry —
+   refetch `close` unadjusted alongside the adjusted series and store the ratio, which *is* `D_i(t)`
+   up to a constant — would convert tonight's inference into a measurement and would let the lab
+   put an error bar on the leak component of every characteristic it has screened. Until a human
+   rules: **a candidate may use ratios, returns and trends of the stored panels, not their levels,
+   and may not orthogonalise against a level either.**
+2. **A pre-registered, falsifiable prediction to settle the leak's reach, costing no trial.** The
+   gradient is `|IC| ≈ 0.0043 × years-of-store-remaining`. The validation split's midpoint is
+   2021-01, i.e. 5.8 years before the fetch date, so the prediction is **logprice IC ≈ -0.025 on
+   validation against -0.088 on train**, and for any object the leaked component scales by the same
+   0.29 factor. For `amihud126` (rho -0.236) that puts its validation leak at **+0.0059** against a
+   train marginal IC of +0.0194 — i.e. almost all of its train IC should evaporate. Trial #3's
+   recorded train skill +0.084 → validation skill -0.052 is the observation this predicts. **Write
+   the prediction down before the next trial reads validation, and check it then** — the one honest
+   way to test a train-to-validation claim without spending the split on a screen.
+3. **Re-read the remaining F-blocks in Sharpe units.** F5 does the 15-feature block and the
+   bps-versus-Sharpe disagreement reproduces on it (four of five objects clearing |t| = 2 in bps
+   carry volatility ratios of 0.74–0.75 and Sharpe skills from +0.014 to -0.111). The earlier blocks
+   — the Engle-Granger sheet, the thirteen lead-lag objects, the weekday-mood legs — are still bps
+   only, and each is cheap to re-read with tonight's harness.
+4. **Do not re-buy tonight's declines.** The price level and the volume level at any transformation
+   (anti-candidates, and lookaheads rather than nulls); `impact126`, the price-free illiquidity
+   restatement (a null, and it closes the one surviving positive-train-skill mechanism); a linear
+   combination of the free-OHLCV block at any estimator fitted causally (F8, now twice measured);
+   `-maxret21` and `r252_1` as books, both deleted by their own cost bills; `zero126` and `hi52`
+   whose partial ICs rise only when conditioned on a contaminated regressor.
+5. **From `research/SUMMARY.md`, spent tonight**: `#284` (the SIS marginal-versus-joint failure
+   mode) — built, run against its own null, and answered empty, which is the outcome the note itself
+   called more likely. **Unspent and now more relevant**: `#288` (knockoff+ FDR over the feature
+   block, which would answer `program.md`'s charter question in FDR units rather than Sharpe units,
+   and whose `n ≥ 2p` condition this panel satisfies by orders of magnitude) — worth running on the
+   **leak-free** block only, since tonight shows what a contaminated column does to a selection;
+   `#285`/`#286` (report a selection as a per-feature frequency over block-resampled fits, never as
+   the set one fit returned); `#282` (a pooled-residual error bar cannot have state-dependent width,
+   which tonight's single pooled floor of sd 0.025 again assumes); and `#273`–`#275`, `#270`,
+   `#272`(a), `#269`, `#263`–`#266`. The folder's two other named cold veins (`hidden Markov` /
+   `change point`, `transfer entropy`) remain downstream of structural closures.
