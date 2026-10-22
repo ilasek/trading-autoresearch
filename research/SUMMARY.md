@@ -6813,6 +6813,108 @@ claims appear only where the preprint quotes them verbatim, marked second-hand.
 `notes/2026-10-15-random-weight-indices-and-the-equal-weight-centre.md`,
 `notes/2026-10-15-random-portfolio-inference-concentration-of-measure.md`
 
+### Where a sample breaks — dating a parameter change, and the gap between a regime existing and a regime being tradeable (cross-family)
+
+[2026-10-22] The folder's 212 notes mention regimes 57 times and contained, until tonight, **zero**
+notes on the estimators that decide where a regime boundary is. `program.md` charters regime
+switching inside `price-trend`; the lab has approached it three times and always as *a signal*
+(a trend filter, a volatility trigger, a binary SPY-trend switch), never as *a measurement*. Three
+sources tonight cover the measurement layer, and they divide cleanly into the retrospective
+machinery (which is usable here) and the real-time problem (which is where the lab's three
+refutations live).
+
+**1. The split date a human chooses is not a testable hypothesis, and the correction is large and
+known.** The classical Chow test requires the breakdate to be known in advance. A researcher can
+only pick an arbitrary date (the test misses the true break) or pick one from a feature of the data
+(the date is endogenous and the test rejects falsely). Hansen's demonstration is one line: on his
+series, two candidate split dates two years apart give Chow statistics of 3.9 and 7.1 against a 5%
+`χ²` critical value of 6.0 — opposite conclusions from nearly adjacent choices. The fix, going back
+to Quandt, is to maximise the statistic over all admissible dates and use the **maximised** null
+distribution (Andrews 1993; Andrews–Ploberger 1994; `p`-values via Hansen 1997). The magnitude of
+the correction is the number worth carrying: **for a two-parameter model the Andrews 5% critical
+value is 12.9 against a `χ²` value of 6.0, "just over twice".** Two further cautions in the author's
+own voice: Andrews' critical values are **not robust to structural change in the regressors'
+marginal distribution** (simulate case by case), and asymptotic critical values in this literature
+should be treated as "a crude guide" with **finite-sample bootstrap critical values much preferred**.
+Tier A, `validation_overlap: false`. This bears directly on the protocol's own reporting of train
+skill for **1997–2008 and 2009–2017 separately** — those are human-chosen boundaries, and the gap
+between the two numbers is not evidence of a regime until the split survives this machinery.
+→ `notes/2026-10-22-breakdate-inference-unknown-timing.md`
+
+**2. Break dates are estimated far less precisely than breaks are asserted, and the precision is
+set by the break's magnitude rather than by the sample's length.** On a 651-observation monthly
+series, Hansen's procedure finds three breaks: one localised by its 90% confidence interval to
+about four years, the other two to **roughly twelve and eleven years**. The breakdate the applied
+literature had conventionally assumed for that series **lies outside every one of those intervals**
+— a convention about when something changed survived for years while being inconsistent with what
+the data could support. The theory behind the intervals (Bai; Bai–Perron) explains the pattern: the
+break *fractions* converge at rate `T` rather than `√T`, but the interval width scales inversely
+with the squared size of the coefficient shift, so a large break is dated tightly and a small one
+is barely dated at all. Bai–Lumsdaine–Stock's extension adds that **using several series jointly
+improves dating precision**, which has an obvious analogue on a wide panel. The transferable rule:
+**any claim that something changed at a date should carry an interval, and the interval is usually
+wide.** Tier A, `validation_overlap: false`.
+→ `notes/2026-10-22-breakdate-inference-unknown-timing.md`,
+`notes/2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`
+
+**3. The estimation machinery itself is cheap, exact and already implementable here.** Every
+changepoint method in use minimises `Σ C(segment) + β·f(m)` — segment cost plus a penalty in the
+number of breaks. Bai–Perron give the econometric version (segment SSR; dynamic programming in
+**`O(T²)` least-squares operations for any number of breaks**; `supF`, a `DmaxF` double-maximum test
+against an unknown number of breaks, and a sequential `F(ℓ+1|ℓ)`), and PELT gives the algorithmic
+version (**exact and `O(n)`** via a pruning condition that permanently discards candidates which can
+never be optimal). Three construction facts matter more than the asymptotics. **Trimming is a real
+parameter**: breaks must be bounded away from the sample edges and from each other, with the
+convention `ε` between 5% and 15%, and every critical value is conditional on it. **The penalty, not
+the data, chooses the number of breaks** — AIC and BIC disagree, and Bai–Perron's own sequential
+route is **inconsistent at fixed test size**, over-selecting with probability `α^j` for `j` extra
+breaks (consistency needs `α_T → 0`). And the authors of PELT volunteer two limitations a less
+honest paper would bury: **PELT is not in practice faster than Binary Segmentation** (the case for
+it is exactness, not speed), and **the accuracy advantage of exact over greedy segmentation is large
+only when the number of breaks grows with the sample, and negligible when it is fixed** — so for one
+or two breaks in a fixed window, the greedy method gives the same answer. Both papers also treat
+**change in variance** as a first-class target, which the lab's mean/trend-shaped regime attempts
+never have. Tier A, `validation_overlap: false`.
+→ `notes/2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`
+
+**4. The real-time problem is where all three of the lab's overlays died, and the literature's own
+numbers do not contradict the lab's refutations once the conditioning is read.** Markov-switching
+models describe returns well: a two-state model mechanically generates fat tails,
+heteroskedasticity, skewness, volatility clustering and time-varying correlations, with the
+high-volatility state carrying the lowest expected return and lowest Sharpe, and regimes highly
+persistent. The survey literature reports material costs to ignoring regimes in allocation. But the
+conditioning attached to that result is stated by the authors themselves: in the central
+illustration **"the risk-return trade-offs are known in each regime"** and the investor can infer
+the prevailing state. Two things break in real time. First, **smoothed regime probabilities
+`Pr(s_t | I_T)` condition on the whole sample** — the compelling regime charts in this literature
+are smoothed, and using them in a backtest is a straightforward lookahead of exactly the kind
+`causality_check` exists to catch. Second, the **filtered** probabilities `Pr(s_t | I_t)`, evaluated
+on a simulated path from a *correctly specified model with true parameters* — the most favourable
+case there is — "at times miss an important regime change and at other times issue false alarms",
+which the authors call out as the difficulty of real-time tracking. **Missed changes are dilution
+and false alarms are whipsaw**, which are precisely the two failure modes `learnings.md` records for
+the lab's three de-risking overlays. The apparent tension between "large costs to ignoring regimes"
+and "every regime overlay here backfired" resolves without either side being wrong: **the
+literature's gains are known-regime gains and the lab's losses are inferred-regime losses.** A
+fifth, separate finding from the same source: **the number of regimes is essentially never tested**,
+because under the null of one regime the second regime's parameters are unidentified, so the
+likelihood ratio is not asymptotically `χ²`; practice is to fix it at two. That is the same
+identification pathology as the unknown-breakdate problem, and it carries the same moral. Tier A,
+`validation_overlap: false`.
+→ `notes/2026-10-22-regime-switching-financial-markets.md`
+
+**The cross-cutting principle these three share, and it is the cleanest external instance of
+something the lab already tracks.** `SUMMARY.md` carries standing sections on what a selected
+maximum is worth and on what a count of correlated trials is worth. The Quandt/Andrews result is
+that same problem with a **closed-form answer**: a statistic maximised over a continuum of
+correlated candidates has a known, strictly larger null distribution, and ignoring the maximisation
+roughly halves the critical value. Hansen's formulation of why is the sharpest the folder now has —
+a searched-for statistic and a specified one can take **the same numerical value** and still mean
+different things, because "the test is constructed using a different *procedure*, and hence it has a
+different sampling distribution." That is last session's twenty-first detector (ask what procedure a
+result was measured with) stated as a theorem rather than as a heuristic.
+
+---
 ---
 
 ## Candidate ideas for the strategy agent
@@ -12632,6 +12734,76 @@ hypothesis fodder, then anti-candidates.
     same message as `#286`. Tier A (*Annals of Statistics*), `validation_overlap: false`.
     → `notes/2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`
 
+289. **FREE DIAGNOSTIC, AND THE HIGHEST-VALUE ITEM TONIGHT: test whether the protocol's own train
+    subperiod split is a split the data supports.** The protocol reports train skill for 1997–2008
+    and 2009–2017 separately. Those boundaries were chosen by a human, which is exactly the
+    endogenous-Chow situation: a split date picked from a known feature of the data makes the test
+    reject falsely, and two nearby dates can give opposite answers. The exercise: on a champion or
+    family-lead *active* return series, compute the Chow/Wald statistic at every admissible split
+    date (trimming `ε` fixed in advance at 5–15%), take the maximum, and compare it against
+    **bootstrap** critical values rather than `χ²` — then report the break-date confidence interval,
+    not the date. Costs no trial, reads no holdout, touches no candidate. **The likely outcome is the
+    informative one**: given that a 651-observation monthly series localised two of three breaks only
+    to within about a decade, a daily return series will very probably localise a break in its own
+    mean extremely coarsely — which would mean the two reported train numbers are a *convention*, and
+    that any difference between them is much weaker evidence of regime-dependence than it reads as.
+    Tier A, `validation_overlap: false`.
+    → `notes/2026-10-22-breakdate-inference-unknown-timing.md`
+
+290. **FREE INTERPRETATION RULE, with a closed-form magnitude: a statistic maximised over candidate
+    dates needs the maximised null, and the correction is roughly a doubling of the critical value.**
+    For a two-parameter model the Andrews 5% critical value is 12.9 where the `χ²` value is 6.0.
+    This composes directly with the lab's existing deflation machinery rather than duplicating it:
+    the deflated-Sharpe bar prices a count of *discrete* trials, while this prices a maximum over a
+    *continuum* of correlated candidates, and any future "we looked for the best split/lookback/date
+    and found one" claim needs the second as well as the first. The accompanying caution is
+    actionable here at no cost: **asymptotic critical values in this literature are a crude guide and
+    finite-sample bootstrap values are preferred**, and the lab bootstraps already. Tier A,
+    `validation_overlap: false`.
+    → `notes/2026-10-22-breakdate-inference-unknown-timing.md`
+
+291. **FREE PRE-SCREEN THAT CAN CLOSE THE REGIME VEIN WITHOUT SPENDING A TRIAL: read the shape of
+    the SSE-versus-breakdate curve before building anything regime-shaped.** Plot the total sum of
+    squared errors (both subsamples) as a function of candidate breakdate. **If the parameters are
+    constant the curve varies erratically with no well-defined minimum; if there is a break it varies
+    systematically and shows a pronounced `V`.** An erratic curve is direct evidence that there is no
+    break to find, and it costs one plot. Multiple local minima are candidate multiple breaks. This
+    is the cheapest possible gate on the whole regime vein and should run before `#292` or anything
+    downstream of it. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-22-breakdate-inference-unknown-timing.md`,
+    `notes/2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`
+
+292. **CONSTRUCTION MATERIAL, AND THE ONE USE OF A REGIME MODEL HERE THAT IS A NULL RATHER THAN A
+    SIGNAL: a two-state Markov-switching process as a parametric stress null.** A two-state model
+    with constant parameters inside each state mechanically produces fat tails, heteroskedasticity,
+    skewness, volatility clustering and time-varying correlations — and specifically **high
+    autocorrelation in squared returns with essentially zero autocorrelation in levels**. That makes
+    it a data-generating process to simulate under, and a harder null than resampling the panel's own
+    history: it is the natural stress test for any candidate whose apparent edge might be an artifact
+    of volatility clustering rather than of a mean effect. **The known-parameter limitation that
+    disqualifies regime models as signals is irrelevant for this use**, because nothing has to be
+    identified in real time. Fix two states, order them by fitted `σ` to defeat label switching, fix
+    `random_state`. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-22-regime-switching-financial-markets.md`
+
+293. **ANTI-CANDIDATE, AND IT IS THE DEFAULT THING THIS VEIN TEMPTS SOMEONE INTO BUILDING: a
+    changepoint or regime-switching *timing overlay*.** `learnings.md` records three de-risking
+    overlays — inverse-vol plus vol targeting, a per-asset 200dma trend filter, and a binary
+    SPY-trend regime switch — that all cut train drawdown and all lost more validation Sharpe than
+    they saved, via dilution and whipsaw. Nothing in tonight's sources argues a fourth would differ,
+    and one of them supplies the mechanism for why it would not: filtered regime inference, tested on
+    a correctly-specified simulated path with the *true* parameters, still misses changes and issues
+    false alarms. **Missed changes are the dilution and false alarms are the whipsaw.** Two further
+    traps specific to this vein, both of which would produce a spectacular and wrong train result:
+    **smoothed regime probabilities `Pr(s_t|I_T)` are a function of the whole sample** and must never
+    reach a backtest (filtered only, from parameters fitted walk-forward); and **the number of states
+    cannot be chosen by test** — the LR statistic is not `χ²` because the second regime's parameters
+    are unidentified under the null — so choosing it by fit is an unpriced hyperparameter search. If
+    a candidate is ever written from this vein, **the burden is to show it is not a timing overlay**.
+    Tier A, `validation_overlap: false`.
+    → `notes/2026-10-22-regime-switching-financial-markets.md`,
+    `notes/2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`
+
 
 ---
 
@@ -12710,8 +12882,116 @@ hypothesis fodder, then anti-candidates.
 
 | 2026-10-20 (session 67) | **The first session to read the literature on the *predicted object* — a whole conditional distribution rather than a number — and it closes the last of the three moves available inside `statistical-learning`, with a ceiling rather than another null.** Aim set by the [2026-10-19] open-questions entry, which named the distributional answer "for a later session", plus one grep: across all 204 prior notes `conformal` and `isotonic` returned **zero**, `composite quantile` and `conditional quantile` **zero**, and `quantile regression` appeared exactly **once**, inside last night's elicitability note as an unobtained pointer. Three sources, one chain: the estimator theorem → the global cross-sectional empirics → the calibration layer. Headline: **the map from functionals to losses is not a bijection in the direction that matters, and the prize for exploiting that is bounded by a constant.** Composite quantile regression — `K` check-function losses in one convex program, `K` free intercepts, **one shared slope** — recovers the same location slope as least squares, stays root-`n` consistent **where the least-squares oracle theory breaks down at infinite error variance** (taking SCAD and the adaptive lasso with it), and has asymptotic relative efficiency against least squares bounded below by **`6/(eπ) = 0.7026` for every finite-variance error density**, with `δ(f) = 12σ²(E_ε[f(ε)])²` equal to 0.955 at a normal, 1.097 at a logistic (attaining the Fisher information bound), 1.5 at a double exponential, 1.9 at `t(3)` and **unbounded** at a slightly contaminated normal — while a **single** quantile regression, median included, has efficiency that **can be arbitrarily small**, so the `K`-fold aggregation and not the check function is what buys the floor. Since a `t` scales as the inverse standard error, that bounds any same-class loss swap at **`√δ ≈ 1.38`** on a `t` statistic, against the `+0.28` and `−1.08` rank-IC `t`s `learnings.md` [2026-10-19/20] already recorded here — **so the lab's closure of the objective-function branch survives its one genuine loophole, now with arithmetic instead of an argument** (**#281**). Second, and the night's four-for-one retirement: a peer-reviewed study forecasting **37 conditional quantiles** per name per month across four regions and 23 countries, B-spline-interpolated into a CDF whose moments follow by integration, finds **only the central `τ`-quantiles priced** with the decile spread decaying monotonically to insignificance toward *both* tails, **no higher moment monotonically priced** in either universe or either weighting scheme, and the **integrated mean beating both a direct squared-error mean forecast and the model's own median** — i.e. the distributional route's whole payoff is a better mean, which is the composite-quantile theorem arriving from the empirical side. The discount that matters: the paper prints a **liquid** universe beside its full one, and in that column — top-95% cap *and* dollar volume, the closest published analogue to nine large-cap national indices — **the significant band narrows sharply and the mean-over-median advantage vanishes**, so both gains shrink precisely as the universe becomes this panel (**#280**). Third, the one layer that survives the other two's negatives because it never needed the distribution to be priced: **an interval built from a mean model's pooled residuals has a width that cannot depend on the state**, so it over-covers in calm cross-sections and under-covers in dispersed ones by construction — an analytical fact in `Y = X + X·ε` and measured across twenty volatility bins on nine decades of daily index returns — while permuting the **probability-integral-transform rank**, uniform and independent of the predictors by construction, restores conditional validity and keeps **exact finite-sample unconditional validity under arbitrary misspecification** (**#282**). The night's free cross-link is made by the sources themselves: the conformal paper's equity exercise concludes a **location-*scale*** model fits these returns well, one restriction looser than the **location-*shift*** model composite quantile regression assumes, so a demonstrated need for the scale term is a demonstrated misspecification of the cheaper estimator. One reusable construction block rides along — thirteen free-OHLCV volatility features at named EWMA decays plus negative-return EWMAs plus Parkinson range, each divided by its own cross-sectional mean, and the `σ̄_t`-not-`σ̄_{t+1}` standardisation — carrying its source's own large-cap null (**#283**). New: **#280–#283, all four free, and no trial proposed**, which is the correct output for a night whose three independent sources agree the branch is closed. No lab measurement was taken and the holdout was not read. | Zou–Yuan 2008, *Annals of Statistics* (`2026-10-20-composite-quantile-regression-efficiency-bound.md`); Baruník–Hronec–Tobek 2026, *International Journal of Forecasting* (`2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`); Chernozhukov–Wüthrich–Zhu 2021, *PNAS* (`2026-10-20-distributional-conformal-prediction.md`) |
 | 2026-10-21 (session 68) | **The first session to read the literature on *selection* rather than *shrinkage* — how a predictor gets into the candidate set — and it supplies the one tension this folder can still raise against the lab's four-fold closure of `statistical-learning`: the two procedures the closure was measured with are the two that fail, by construction, in exactly one named case.** Aim taken from the 2026-10-20 open-questions entry and the 2026-10-20/21 journal's own idea 5, which between them named `feature selection` as "the one of the three [remaining cold veins] that is not downstream of a closure" — `hidden Markov`/`change point` and `transfer entropy` sit in families the lab has closed structurally. One grep confirmed it: across all 207 prior notes `feature selection`, `sure independence`, `stability selection` and `knockoff` returned **zero**, while `lasso` returned 8 and `sparsity` 8 — every one of which treats a penalty as a way to *estimate* a coefficient vector, none as a way to form the candidate set. Four primaries, all read in full, three Tier-A statistics and one Tier-A economics, forming one chain: can a cheap screen find it → is the selection reproducible → is the selection real → should you be selecting at all. Headline: **the lab's refusal rule and the lab's closure were both measured with marginal and one-pass procedures, and there is exactly one failure mode those two share.** Ranking by marginal correlation `ω = Xᵀy` has the sure-screening property `P(M* ⊆ M_γ) → 1` only under a condition the source states in words — it "rules out the situation in which an important variable is marginally uncorrelated with `Y`, but jointly correlated with `Y`" — and in that case the marginal screen recovers the true model **0% of the time *and so does a one-pass lasso over the full candidate set***, at every sample size tried, while the **iterated-residual procedure recovers it 100% of the time**; more data does not help, because the ranked quantity does not hold the information. Two further readings of the same theorem invert intuition: the surviving set must be **larger** when signals are weaker (`θ* > 2κ + τ`) and nothing below root-`n` is detectable at all (`κ < 1/2`), which is the lab's own sd-0.025 noise floor arriving from theory. So the lab's "a penalised linear combination of individually-null features is itself a null here" is sound as a *measurement* and does **not** license the inference that no marginally-null-but-jointly-important feature is in the block — and the test that decides it is free and strengthens the closure if it comes back empty (**#284**). Second, a reporting rule that two independent statistical traditions reach from opposite directions: subsampling-based **selection frequencies** with a finite-sample bound `E(V) ≤ q_Λ²/((2π_thr−1)p)` and consistency **without the irrepresentable condition** (**#285**), and a Bayesian spike-and-slab showing inclusion probability and shrinkage to be **substitutes** — so a method that can only select "might artificially recover sparse model representations simply as a device to reduce estimation error", and the Bayesian lasso, lava, horseshoe and elastic net put no mass on an exact zero and are therefore no evidence about sparsity at all. In five of six unrelated prediction problems no predictor is systematically excluded; the **cross-section of US stock returns is the extreme case**, its predictive-score curve flat to order `10⁻⁶` per observation across all model sizes and the only application where sparsity **could not be induced even by a prior giving under 1% probability to five-or-more-predictor models** (**#286**). Third, the night's one result about the lab's own machinery, recorded as a tension and not a refutation: an FDR filter works by preserving the original-to-decoy **cross**-correlations `XᵀX̃ = Σ − diag{s}`, and a **row permutation** cannot substitute because it preserves `X^πᵀX^π = Σ` while destroying `XᵀX^π ≈ 0` — at a uniform feature correlation of 0.3 and a nominal 20%, the decoy filter realised 12.29% and the permutation construction **45.61%**. The lab's null permutes a weight vector rather than a design matrix, so this transfers as a *question* (a permutation null is only as good as the dependence it preserves) landing on the seam the lab found twice from the inside — [2026-10-14/15]'s null power continuous in concentration, and the **standing 2026-10-18 engine issue** — and on nothing else (**#287**, with **#288** the construction, whose `n ≥ 2p` condition this panel satisfies by orders of magnitude and which answers `program.md`'s charter question *in the units of the question*: a feature set with a bounded false-discovery rate, empty set included). New: **#284–#288, all five free, no trial proposed**, which is the right output for a night whose job was to check an inference rather than to supply a book. No lab measurement was taken and the holdout was not read. | Fan–Lv 2008, *JRSS-B* (`2026-10-21-sure-independence-screening-marginal-vs-joint.md`); Meinshausen–Bühlmann 2010, *JRSS-B* (`2026-10-21-stability-selection-subsampling-error-control.md`); Giannone–Lenza–Primiceri 2021, *Econometrica* (`2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`); Barber–Candès 2015, *Annals of Statistics* (`2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`) |
+| 2026-10-22 | **The `hidden Markov` / `change point` vein — the first of the two named cold veins left by [2026-10-21], aimed at the measurement layer rather than the signal layer, and read against that entry's sharpened acceptance criterion (admit it only if it yields something that is *not* a timing overlay). Zero prior notes on `change point`, `changepoint`, `hidden Markov` or `CUSUM` across 211 notes; `structural break` appeared in 4, none about the estimators. Outcome: the criterion is met on the diagnostic side and fails on the signal side, which is recorded as an anti-candidate.** | Bai–Perron 1998 (Econometrica) + Killick–Fearnhead–Eckley 2012 (JASA) (`2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`); Hansen 2001 (JEP) (`2026-10-22-breakdate-inference-unknown-timing.md`); Ang–Timmermann 2012 (Annual Review of Financial Economics, read as NBER WP 17182) (`2026-10-22-regime-switching-financial-markets.md`). **Three sources recorded as not obtained:** Andrews 1993 (Econometrica, 3065 cites — Cowles legacy PDF path returns an HTML body and the current Cowles record page is a 1.1 MB Drupal shell with no PDF href at all); Hansen 1992 (JAE, 593 cites — fetched cleanly from the author's site but is a text-layerless scan, not rendered); Bai–Perron 2003 (JAE, 4445 cites, the computation companion). Nothing below is attributed to any of the three. |
 
 ### Open questions for future sessions
+
+- **[2026-10-22] What should aim the next session: `transfer entropy` is now the last named cold vein,
+  and tonight's result changes the case for it from "probably already priced" to "probably already
+  priced, and here is the one test that would say".** The [2026-10-21] entry named exactly two cold
+  veins and ranked them: **regime detection** (better-aimed, because the lab's closing measurements
+  were overlays and a change-point estimator is a different object) and **`transfer entropy`**
+  (likely already priced by thirteen `lead-lag-spillover` measurements). Tonight spent the first.
+  Greps re-run against all 214 notes: `transfer entropy` is **still zero**, and `hidden Markov`,
+  `change point`, `changepoint` and `CUSUM` are now covered.
+  - **Tonight's vein met its own acceptance bar, but only on one side of it, and the split is the
+    result.** [2026-10-21] set the criterion: admit the vein only if it can produce something that is
+    not a timing overlay. It can — `#289`–`#291` are three free diagnostics and an interpretation
+    rule, none of which touches a position — and the *signal* side of the same vein came back
+    confirming the lab's three refutations from the literature's own side, which is why `#293` is
+    written as an anti-candidate rather than as a hypothesis. **The pattern worth generalising: a
+    vein can be worth reading for what it rules out as much as for what it proposes**, and the
+    cheapest form of that is a source whose own authors state the condition under which their
+    headline result holds (here: "the risk-return trade-offs are known in each regime").
+  - **The case for `transfer entropy`, re-weighed with tonight's evidence, and it is now weaker
+    rather than stronger.** The 2026-10-21 reasoning was that thirteen lead-lag measurements on this
+    panel "priced the thing it would detect", and tonight supplies a reason to believe that more
+    firmly: the detector-versus-closure question ("was the closing measurement capable of seeing the
+    mechanism the unread vein proposes?") resolves *yes* for lead-lag, because transfer entropy
+    detects directional predictability between series and that is what thirteen lead-lag trials
+    measured. **The honest read is that `transfer entropy` is a nonlinear/information-theoretic
+    estimator of an object the lab has already measured linearly thirteen times, and the only thing
+    it could add is the nonlinearity.** That is a narrow and specific question, and it is worth at
+    most one note, not a session. A better-aimed session would pick by the **gap in the free queue**
+    instead.
+  - **The free queue, and tonight added four free items plus one anti-candidate.** `#289` is the one
+    to run first and is the strongest free item tonight on the same grounds `#284` was: it is
+    one-sided, costs no trial, reads no holdout, and **its likely outcome — that the train subperiod
+    split is a convention the data cannot localise — would change how a standing piece of the
+    protocol's own output is read.** `#291` should run before anything else regime-shaped and can
+    close the vein for a plot. `#290` composes with the deflation machinery rather than duplicating
+    it. `#292` is the one piece of construction material and it is a *null*, not a signal, so it
+    composes with `#285`(b)'s block-resampled distribution rather than competing with it.
+  - **Unchanged and still live below those**: `#284` (the iterated-residual pass, still the only
+    queue item that can change the status of a closed family) and `#285`–`#288` from 2026-10-21;
+    then `#282` and `#281` from 2026-10-20; then the 2026-10-18 pair (`#273`, `#274`, with `#275`
+    gated on its own free screen), then 2026-10-17 (`#272`(a), `#270`, `#269`), then 2026-10-16
+    (`#263`–`#265`, `#266` as a design rule), then 2026-10-15 and everything carried under it.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to) is still a human decision.
+  - **Named for a later session rather than summarised:** **Bai–Perron (2003)**, the computation
+    companion (JAE, 4445 cites), which holds the `UDmax`/`WDmax` critical-value tables and the
+    practical guidance the 1998 theory paper does not — worth one fetch if `#289` is ever run in
+    earnest, and not before. **Andrews–Ploberger (1994)**, whose exponentially-weighted average of
+    the Chow sequence has better power than the supremum. And the **Andrews (2003) corrigendum**,
+    which secondary sources say revised the Table I critical values for `p = 8` upward: an
+    **unverified pointer** located tonight only as a file named `andrewsCorrect.pdf` on a mailing-list
+    archive, flagged as such in the note, and **nothing in this folder depends on it** — but it must
+    be resolved before anyone implements from Andrews' tables directly.
+- **[2026-10-22] The transferable output, and it is the twenty-second detector: when a source reports
+  a gain, find the sentence that states what the decision-maker in it was assumed to know, because
+  the gap between that and what is knowable in real time is often the whole finding.** The
+  twenty-one before it are listed in the 2026-10-21 entry below. Tonight's arrives from a survey
+  whose headline is "large costs to ignoring regimes" and whose own text says, of the central
+  illustration, that "the risk-return trade-offs are known in each regime" and that the investor
+  "can infer which regime prevails at each time". Once that is read, an apparent contradiction with
+  three of the lab's own refuted overlays dissolves into agreement: **known-regime gains versus
+  inferred-regime losses**, with the survey's own simulation — filtered inference, correct model,
+  *true* parameters — still missing changes and issuing false alarms, which are the lab's dilution
+  and whipsaw under other names. This is the mirror of the 2026-10-17 detector (does the
+  literature's comparator already sit in the lab's book?): that one asks what the *benchmark* was,
+  this one asks what the *agent* knew. **Second transferable, and it is a statistical result rather
+  than a heuristic:** the Quandt/Andrews correction is the lab's own selected-maximum problem with a
+  closed form attached — a statistic maximised over a continuum of correlated candidates has a known,
+  strictly larger null, and ignoring the maximisation roughly halves the critical value. Hansen's
+  phrasing is the sharpest version of last session's twenty-first detector the folder now has: a
+  searched-for statistic and a specified one can take **the same numerical value** and still mean
+  different things, because the test "is constructed using a different *procedure*, and hence it has
+  a different sampling distribution."
+- **[2026-10-22] Access findings — two new working channels, one host confirmed dark, a new TLS
+  failure, and an OCR trap that silently fakes a coverage gap.** **New channel 1, and the useful one:
+  the Internet Archive's OCR text layer served the MIT working-paper version of a closed *Econometrica*
+  article** (`ia######.us.archive.org/<dir>/estimatingtestin00baij_djvu.txt`, 142 KB, `" the "` 1091)
+  after the `archive.org/metadata/<identifier>` call named the server and directory — this is the
+  2026-09-08 lesson holding for a *finance-adjacent econometrics* classic, not only for pre-1990
+  scans, and it is the route to any closed Econometrica paper with an MIT/NBER working-paper
+  ancestor. **New channel 2: `users.ssc.wisc.edu/~bhansen/papers/<slug>.pdf` is a first-try flat
+  directory** (both `users.ssc.wisc.edu` and `www.ssc.wisc.edu` serve it), which extends the
+  2026-10-13 Hyndman lesson to econometrics — but see the caution below. **NBER's
+  `system/files/working_papers/wNNNNN/wNNNNN.pdf` answered first try with no ASCII shift** (`" the "`
+  455), the third consecutive session in which the documented shift check was run and came back
+  clean. **Confirmed dark: `cowles.yale.edu`.** The legacy discussion-paper path
+  `/sites/default/files/pub/d09/d0943.pdf` returns **HTTP 200 with an HTML body**, and the current
+  record page `/node/145655` is a **1.1 MB Drupal shell whose only `files/` hrefs are favicons** —
+  a Pure/DSpace-style "record without a file", and the reason Andrews (1993) is recorded as
+  unobtained. **New TLS failure: `econweb.ucsd.edu` fails certificate verification even with
+  `--cacert /root/.ccr/ca-bundle.crt`** (`curl: (60) unable to get local issuer certificate`), i.e.
+  an incomplete chain at the origin rather than proxy interference — the same class as `orbilu.uni.lu`,
+  and it closes the obvious route to Hamilton's self-hosted papers. **The caution on Bruce Hansen's
+  site, and it is a thirteenth "looks like an answer" mode by composition rather than a new one:**
+  both files fetched from it were **text-layerless scans** — 1.32 MB / 12 pages extracting to **12
+  characters**, and 2.43 MB / 22 pages to **26 characters** — so a *working* channel can still cost
+  twelve image reads per paper. `pdffonts` printing an empty table caught both immediately;
+  `pdftoppm -png -r 125 -gray` rendered the one that was read. **The genuinely new trap, and it is
+  cheap to fall into: `archive.org`'s `_djvu.txt` OCR separates words with DOUBLE spaces, so a
+  multi-word `grep` returns ZERO on text that plainly contains the phrase.** A case-insensitive grep
+  for `multiple structural change` found nothing in a document whose title page reads MULTIPLE
+  STRUCTURAL CHANGES, and `dynamic programming`, `confidence interval` and `trimming` all read as
+  absent before normalisation. **Always `tr -s ' '` an OCR text layer before grepping it** — otherwise
+  a term-coverage check on a source you have successfully fetched reports a false negative, which is
+  the inverse of every other mode on this list: not a refusal dressed as an answer, but an answer
+  dressed as an absence. **Crossref answered all eight citation lookups on the first call** (4623,
+  4445, 3065, 2312, 6778, 606, 371, 593); OpenAlex and Semantic Scholar were not needed and not spent.
 
 - **[2026-10-21] What should aim the next session, and the answer is the same shape as tonight's but
   pointed at a different family: there are exactly two named cold veins left, both sit in families

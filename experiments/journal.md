@@ -21791,3 +21791,33 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    (timing loses at both gates; `lead-lag-spillover` closed on thirteen measurements), so
    **`feature selection`** is the one of the three that is not downstream of a closure.
 ## Research session — 2026-10-21 (learning agent): 4 notes added, see research/SUMMARY.md
+## Research session — 2026-10-22 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-10-22 (learning agent): unmerged remote branch, verified NOT to affect the trial history
+
+Filed because the session-start integrity banner flagged `origin/main-cozirv` as holding commits
+absent from `origin/main`, and the banner asks for this entry when the divergence is not resolved.
+A research session cannot resolve it: the learning agent writes only inside `research/` plus this
+journal pointer, and merging that branch would write to `experiments/learnings.md`, which is not
+its file. So it is recorded here for a strategy session or a human.
+
+What was checked, so the next session does not have to repeat it:
+
+- Of the six `origin/main-*` branches, **five are fully merged** into `origin/main` (0 commits
+  ahead). Only `origin/main-cozirv` diverges, by **one commit** (`d20f26b9`, "journal + learnings:
+  2026-10-21/22 nightly — the stored price level is a back-adjustment lookahead").
+- That commit touches **`experiments/journal.md` (+484), `experiments/learnings.md` (+138)** and
+  deletes six stray `.pkl`/`.npy` files from the repo root. `git diff origin/main...origin/main-cozirv
+  -- experiments/trials.jsonl experiments/leaderboard.json strategies/` is **empty**.
+- **Therefore the precedent the banner cites does not apply here: no trial is missing from `main`,
+  and the deflated-Sharpe bar is not understated.** The 2026-08-12..15 incident was 19 trials
+  stranded on per-run branches; this is a journal-and-learnings commit with no trial record in it.
+
+What is actually at stake is narrower but not nothing: **622 lines of journal and learnings content
+from a prior nightly session are not on `main`**, including a learnings entry whose title asserts
+that the stored price level is a back-adjustment lookahead — which, if it is what it sounds like,
+is an engine-level finding a later session would want. A human or a strategy session should merge
+`origin/main-cozirv` into `main`, or confirm it was superseded.
+
+This session did not read that branch's contents beyond the file-level diff above, did not merge
+it, and ran no experiments.
