@@ -21821,3 +21821,82 @@ is an engine-level finding a later session would want. A human or a strategy ses
 
 This session did not read that branch's contents beyond the file-level diff above, did not merge
 it, and ran no experiments.
+
+## Protocol issue — 2026-10-22/23 (nightly) — `origin/main-cozirv` is a strategy session's to land, and the sandbox will not let this one land it
+
+Third consecutive night the step-0 integrity banner has fired on the same branch, and the
+second night it has cost a full session. No trial was run and no trial record was added,
+altered or removed: `trials.jsonl` stands at **120 records** exactly as `run_experiment.py`
+last wrote it. No candidate was written, no holdout, forward or incubation file was opened,
+and no file under `engine/`, `scripts/`, `tests/`, `data/`, `program.md` or `CLAUDE.md` was
+touched.
+
+**State at step 0.** The container started on the per-run branch `main-gyvkjp`, at `29902f15`,
+identical to `origin/main` (0 ahead, 0 behind) — nothing was stranded there. Local `main` was
+6 behind and fast-forwarded cleanly (`git merge --ff-only`, no reset needed). Of the six
+`origin/main-*` remotes, five are ancestors of `origin/main`; only **`origin/main-cozirv`**
+diverges, by one commit `d20f26b9` ("journal + learnings: 2026-10-21/22 nightly — the stored
+price level is a back-adjustment lookahead"), authored 2026-10-21T23:44:41Z.
+
+**This one is in scope for a strategy session, and that is the new fact tonight.** The
+2026-10-18 orphan was correctly refused because it touched `scripts/` and `program.md`, both
+on CLAUDE.md's never-edit list. This branch is the opposite case, re-verified here rather
+than taken on faith from the learning agent's entry above:
+
+- `git diff --name-only origin/main...origin/main-cozirv` over `experiments/trials.jsonl`,
+  `experiments/leaderboard.json`, `experiments/holdout_log.jsonl`,
+  `experiments/incubation.jsonl`, `strategies/`, `engine/`, `scripts/`, `tests/`, `data/`,
+  `reports/`, `program.md` and `CLAUDE.md` is **empty**.
+- What it does touch: `experiments/journal.md` (+484), `experiments/learnings.md` (+138) —
+  both **append/edit** for this agent — and the deletion of six scratch artifacts
+  (`fwd.pkl`, `mret.pkl`, `st_a.npy`, `st_a.pkl`, `st_c.pkl`, `st_cc.pkl`) committed by
+  accident at the repo root on 2026-10-20. They are still on `main`.
+- `trials.jsonl` is byte-identical on both sides at 120 records, so **the deflated-Sharpe bar
+  is not understated by this branch** and the 2026-08-12..15 precedent does not apply.
+- Every occurrence of "holdout" in the branch's diff is an *assertion that none was read*
+  ("No validation, holdout, forward or incubation number was read"), not a holdout number.
+  Reading the merged content is therefore not a holdout read.
+
+**Why it still did not land.** Not a rule in this repo — a permission boundary in the
+execution sandbox. `git merge --no-ff --no-commit origin/main-cozirv` was refused by the
+session's auto-mode permission classifier as *"Modify Shared Resources"*, as was an earlier
+combined `checkout`/`reset --hard` invocation. The content changes could have been reproduced
+by hand-appending the same 622 lines to `journal.md` and `learnings.md` — both writable here —
+but that is the same act by another route, and bypassing the denial rather than reporting it
+is not a trade this agent gets to make. It is reported instead. The nightly runner needs
+`git merge` (or `git cherry-pick`) pre-approved for this to be fixable without a human.
+
+**Diagnostics for whoever picks this up.** Engine green on `main` at `29902f15`:
+`.venv/bin/python -m pytest tests/ -q` → **92 passed in 97.11s**. Nothing else stands between
+this branch and a merge; the merge was never attempted far enough to learn whether the two
+end-of-file journal appends conflict, so expect a trivial append conflict in
+`experiments/journal.md` and resolve it chronologically (the nightly entry `d20f26b9` writes
+precedes the learning agent's `## Protocol issue — 2026-10-22` entry, which precedes this one).
+
+**What a human needs to do** (two commands, then cleanup):
+
+1. `git checkout main && git merge --no-ff origin/main-cozirv` — resolve the journal append
+   conflict by keeping both entries in the order above; or `git cherry-pick d20f26b9`.
+2. `git push origin main`, then delete `origin/main-cozirv` or rename it under `archive/*`
+   so the sweep stops firing. The five merged `origin/main-*` remotes are also safe to prune.
+
+**Consequence if it stays unlanded.** Unchanged from the entry above and now compounding:
+622 lines of a prior nightly's journal and learnings are off `main`, including a learnings
+entry asserting that **the stored price level is a back-adjustment lookahead** whose own
+summary says it closes the only positive-train-skill mechanism on the v3 board. A session that
+cannot see it may design candidates against a signal already known to be an artifact, or
+re-measure the finding at the cost of a trial — the 2026-08 re-test failure mode, arriving
+through learnings rather than through trials. Every night this stays open is either a lost
+session (tonight, and 2026-10-22) or a blind one.
+
+- Lesson: **the step-0 halt is correctly calibrated for frozen-path orphans and miscalibrated
+  for this one, and the binding constraint turned out not to be the rule at all.** The
+  2026-10-18 lesson warned that a session judging a flagged branch "benign enough to run past"
+  is how the 2026-08 split happened — that warning still holds, and nothing here was run past:
+  the aim was to *resolve* the divergence (after which the sweep is clean by construction), not
+  to proceed with it open. The gap that remains is narrower and more mundane than any rule
+  question: the one agent whose file permissions cover this branch is the one whose sandbox
+  denies `git merge`. A tripwire that only a human can clear will keep costing whole sessions,
+  and it has now cost two. Both fixes are outside this agent's reach — pre-approve merge/
+  cherry-pick for the nightly runner, or have the engine-maintenance session that pushes a
+  branch open a PR for it the same night, which is the 2026-10-18 lesson restated.
