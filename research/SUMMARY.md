@@ -6914,6 +6914,115 @@ different things, because "the test is constructed using a different *procedure*
 different sampling distribution." That is last session's twenty-first detector (ask what procedure a
 result was measured with) stated as a theorem rather than as a heuristic.
 
+### What the risk number itself is — coherence axioms, the tail objective that is a linear program, and the estimation error that makes it the wrong one (cross-family, `portfolio-learning`)
+
+Six sources, read 2026-10-23, on the one layer this folder had never looked at: **not which signal to
+hold or how to weight it, but what functional the word "risk" denotes** and what it costs to estimate
+one. Greps across all 214 prior notes returned **zero** for `Rockafellar`, `Uryasev`, `Artzner`,
+`coherent risk`, `semivariance`, `lower partial moment`, `spectral risk` and `conditional value at
+risk`, and 1 each for `CVaR`, `Sortino` and `expected shortfall`; `maximum drawdown` appeared in 5
+notes but only ever as an *outcome* being reported, never as an objective being optimised. The vein is
+`portfolio-learning` by charter and cross-family in effect, since it bears on the gate's own statistic.
+
+**Finding one, and it is the axiomatic frame: the four coherence axioms reject the obvious symmetric
+objective AND the obvious downside objective, for different reasons.** Artzner–Delbaen–Eber–Heath
+(Tier A, 6846 cites) define coherence as translation invariance + subadditivity + positive homogeneity
++ monotonicity, justify subadditivity entirely on *institutional* grounds (a trader splitting one
+position across two margin accounts; a supervisor decentralising a cash limit into per-desk limits),
+and then record in two one-line remarks that **monotonicity rules out `−E[X] + α·σ(X)`** — the
+mean-variance criterion, which can be made worse by improving every outcome — and **subadditivity
+rules out the "semi-variance type" `−E[X] + σ((X − E[X])⁻)`**. VaR satisfies three axioms and fails
+subadditivity, demonstrated three ways: two digital options whose combined 1% VaR is positive while
+each leg's is negative (which also makes VaR's *acceptance set non-convex*, a worse defect than the
+measurement failure); two i.i.d. densities where non-subadditivity holds for **independent** risks;
+and a hundred independent 1%-default bonds where **diversifying raises measured risk** while a
+single-name pile-up reads as riskless. Their constructive proposal is to average the tail rather than
+read its edge, and the coherent version of that is "worst conditional expectation", not the computable
+"tail conditional expectation" — the two coincide only when the loss distribution has no atom at the
+quantile. **The consequence for this lab is a negative one worth stating plainly: v3's gate statistic
+(Sharpe, skill-relative to the equal-weight eligible pool) fails axiom M, and that does not matter**,
+because every justification offered for the axioms is about allocating capital across desks and
+accounts, and the lab has one book and one supervisor. Coherence is a criterion for a *construction*
+objective, not for a *grading* statistic, and the argument "the gate is incoherent, therefore replace
+the gate" does not follow from this literature. → `notes/2026-10-23-coherent-measures-of-risk-axioms.md`
+
+**Finding two, the computational one, and it is completely solved: minimising a coherent tail measure
+is a linear program, and the device is one identity.** Rockafellar–Uryasev (Tier A; 5550 and 3111
+cites) show `CVaR_β(x) = min_α [ α + (1−β)⁻¹ E[(loss − α)⁺] ]`, so the quantile is not an input to be
+plugged in but a **free variable of the optimisation**, recovered as the argmin's left endpoint. The
+joint problem in `(x, α)` is convex whenever the loss is convex in `x` — for a portfolio the loss is
+*linear* — and on sampled scenarios it is an LP in `n + q + 1` variables whose illustrative constraint
+set in the paper is **`xⱼ ≥ 0`, `Σxⱼ = 1`: exactly this lab's constraint set.** Their 2002 sequel
+removes the no-atoms assumption, which is what repairs Artzner's coherence gap: of the three
+functionals that coincide for continuous distributions, **only the atom-splitting one (CVaR proper) is
+coherent**, while "upper" and "lower" CVaR are not, and CVaR turns out to be a weighted average
+`λ·VaR + (1−λ)·CVaR⁺` of two functionals neither of which is coherent. The discrete-sample formula is
+a weighted sum of sorted returns and needs no optimiser at all, which is what makes finding two usable
+as a free diagnostic (item 297). **The one line in the pair that bounds everything the vein can buy:
+under normality and `β ≥ 0.5`, VaR and CVaR are both affine in `(µ, σ)` and minimum-CVaR,
+minimum-VaR and minimum-variance are provably the SAME portfolio.** Every counterexample motivating
+coherence needs an atomic or deliberately non-normal payoff — digital options, defaults, an option
+book — not a diversified daily equity portfolio. So the value of a tail objective here is bounded by
+the book's departure from normality, which is a measurable quantity and is item 295's screen.
+→ `notes/2026-10-23-cvar-optimization-as-a-linear-program.md`
+
+**Finding three, the generalisation, which supplies the one construction object that survives the
+night and also marks its own boundary.** Rockafellar–Uryasev–Zabarankin (Tier A, 458 and 88 cites)
+axiomatise **deviation** measures — shift-invariant, positively homogeneous, subadditive, positive on
+non-constants, hence convex — which is the family standard deviation actually belongs to (it is *not*
+a coherent risk measure, because it is shift-invariant the wrong way). Adding one axiom, **lower range
+dominance** `D(X) ≤ EX − inf X`, gives a one-to-one correspondence: `R(X) = −E[X] + D(X)` is **coherent
+iff `D` is lower range dominated**, which `σ₋ = ‖[X−EX]₋‖` satisfies and `σ` and `σ₊` do not. That
+resolves the apparent clash with finding one — Artzner's ruled-out example applies the
+*standard-deviation operator* to the shortfall where this applies the plain `L²` norm, and **whether
+the shortfall is centred before the norm is the difference between subadditive and not.** Dually,
+every deviation measure is a worst case over a "risk envelope" of probability re-weightings (for CVaR:
+any state up to `1/α` times its true probability), and the subgradient — the "risk identifier" — of
+CVaR is the **normalised indicator of the tail**. Which is why the CVaR analogue of a CAPM beta is a
+ratio of conditional shortfalls over the reference portfolio's own worst states: a **tail beta**,
+computable from daily closes as a univariate conditional mean per name, with the equal-weight eligible
+pool as the natural reference because v3 grades against it. **The boundary, and the authors draw it
+themselves: their derivation does not impose `xᵢ ≥ 0`, and they explicitly criticise earlier work for
+assuming the non-negativity multipliers can be taken as zero.** On a long-only book with most of a
+~1,000-name cross-section at the `xᵢ = 0` boundary those multipliers are active, so the tail beta
+survives as a *measurable feature* and **not** as an equilibrium or expected-return relation.
+→ `notes/2026-10-23-generalized-deviation-measures.md`
+
+**Finding four, the counterweight, and it reverses the ranking the first three establish.**
+Kondor–Pafka–Nagy (Tier A, JBF, 105 cites) ask not whether a measure is coherent but how much of the
+optimised portfolio is noise, and answer it the only way it can be answered — by simulating from a
+*known* covariance so the true optimum is known. The mean inflation of realised risk over the
+attainable minimum is exactly **`q̄₀ = 1/√(1 − N/T)`**, depending on `N` and `T` only through the
+ratio, so widening the panel and lengthening the history cancel. Each measure has a critical ratio at
+which this diverges with exponent `−1/2`: **1 for variance and MAD, 1/2 for maximal loss, below 1/2
+for expected shortfall** — and, which the authors call unexpected, *lower* for looser tail levels. So
+**the better-axiomatised measures are the harder-to-estimate ones**, filtering methods exist for
+covariance and "hardly any" for the alternatives, and their own verdict is that under Gaussian returns
+"variance is the best risk measure from the point of view of noise tolerance" with real data able only
+to be worse. Worked for this panel the numbers are decisive: ~1,000 eligible names against the entire
+2018–2023 validation span is `N/T ≈ 0.66`, i.e. a **71% risk inflation for variance and past CVaR's
+critical ratio outright**, and a causal candidate sees less history than that. Two pieces of
+scrupulousness this folder should keep. Their *feasibility* result — the tail objective unbounded
+below, no solution existing — **does not transfer**, because long-only confines the weights to a
+compact simplex which bounds the CVaR program for every sample (worked through in the note); accuracy
+transfers, infeasibility does not, and a candidate citing the latter here would be wrong. And their
+methodological aside is the most portable thing in the cluster: **overlapping windows manufacture
+apparent structure in series that are uncorrelated by construction**, so any rolling-window stability
+picture the lab draws is partly a picture of its own overlap.
+→ `notes/2026-10-23-noise-sensitivity-of-risk-measures.md`
+
+**The cluster's net verdict, because the four findings do not point the same way and the session's
+value is in the split.** Axiomatically a coherent tail measure dominates variance; computationally it
+is as tractable as variance; distributionally it coincides with variance on anything close to normal;
+and statistically it is strictly worse to estimate, by a known closed form, at a ratio this panel
+already violates. **Three of the four roads into the vein are therefore closed by arithmetic rather
+than by measurement** — full-panel CVaR optimisation (item 299), the equilibrium reading of the tail
+beta (item 296's limit), and any single-`α` objective whose effective tail sample `T(1−α)` goes
+uncounted. What is left is genuinely cheap and genuinely new to this lab: a free triage formula (294),
+a free screen that can close the rest of the vein in a few lines (295), one univariate feature immune
+to the dimensional objection (296), a free tail diagnostic on series already held (297), and a method
+correction to stability diagnostics the lab already runs (298).
+
 ---
 ---
 
@@ -12803,6 +12912,107 @@ hypothesis fodder, then anti-candidates.
     Tier A, `validation_overlap: false`.
     → `notes/2026-10-22-regime-switching-financial-markets.md`,
     `notes/2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`
+294. **FREE TRIAGE ARITHMETIC, AND THE HIGHEST-VALUE ITEM TONIGHT: a closed form that kills a whole
+    class of candidate before a trial is spent.** For a portfolio chosen by minimising an *estimated*
+    risk, the mean inflation of realised risk over the attainable minimum is exactly
+    `q̄₀ = 1/√(1 − N/T)` — `N` the cross-section entering the optimisation, `T` the scenario rows.
+    The error depends on `N` and `T` **only through the ratio**, so widening the panel and
+    lengthening the history cancel. Each risk measure has a critical `N/T` at which this diverges
+    (exponent `−1/2`): **1 for variance and mean absolute deviation, 1/2 for maximal loss, and below
+    1/2 for expected shortfall / CVaR**, decreasing further as the tail level loosens — which the
+    authors themselves flag as counter-intuitive. Worked for this panel: ~1,000 eligible names against
+    the whole 2018–2023 validation span (~1,510 days, and a causal candidate gets less) is
+    `N/T ≈ 0.66`, i.e. **`q̄₀ ≈ 1.71`, a 71% inflation of realised risk for variance, and past CVaR's
+    critical ratio entirely.** Collapsing to ~50 groups on a 2-year window gives `N/T ≈ 0.1` and
+    `q̄₀ ≈ 1.05`. **Use as a pre-registerable kill condition**: a candidate states its `N`, `T` and
+    implied inflation in its hypothesis line, and if the inflation exceeds the skill it hopes to show,
+    the trial is not worth spending. Two cautions, both from the paper's own text: the figure is a
+    **floor**, because the simulation is Gaussian and the authors judge real data "can only be worse";
+    and the *feasibility* half of their result (the objective unbounded, no solution existing) **does
+    not transfer here** — long-only puts the weights on a compact simplex, which bounds the CVaR
+    program for every sample, as worked through in the note. Accuracy transfers; infeasibility does
+    not. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-23-noise-sensitivity-of-risk-measures.md`
+295. **FREE SCREEN THAT CAN CLOSE OR OPEN THE ENTIRE DOWNSIDE-RISK VEIN FOR A FEW LINES, and it
+    should run before any candidate from items 296–297.** Under joint normality, VaR, CVaR and
+    standard deviation are all **affine in `(mean, σ)`** — `VaR_β = µ + c₁(β)σ` and
+    `CVaR_β = µ + c₂(β)σ` — and minimum-CVaR, minimum-VaR and minimum-variance portfolios are
+    provably the **same portfolio** (Rockafellar–Uryasev's own §3 proposition, for `β ≥ 0.5` with the
+    return constraint active). Every counterexample in the coherence literature needs a discretely
+    atomic or deliberately non-normal payoff — digital options, independent defaults — not a
+    diversified daily equity book. **So the prior is that a tail-risk statistic is a near-monotone
+    function of `σ` on this panel, and the screen is to measure that directly:** cross-sectional rank
+    correlation, on the `eligible` panel, between each name's trailing `σ` and (a) its trailing
+    `CVaR_β`, (b) its lower semideviation `σ₋ = ‖[r − E r]₋‖`, (c) the tail beta of item 296. If the
+    correlations are near one, **the vein is closed for weighting and selection and the cost was a
+    handful of lines, no trial, no holdout.** If they are not, the residual is the thing to build on
+    and it has a clean story (asymmetric co-movement a variance-based gate cannot see). Either
+    outcome is a result. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-23-coherent-measures-of-risk-axioms.md`,
+    `notes/2026-10-23-cvar-optimization-as-a-linear-program.md`
+296. **CONSTRUCTION MATERIAL, AND THE ONE PIECE OF IT THAT SURVIVES TONIGHT'S OWN ARITHMETIC: a tail
+    beta to the equal-weight eligible pool, as a per-name cross-sectional feature.** From the dual
+    theory of deviation measures, the subgradient of CVaR is the normalised indicator of the tail, so
+    the CVaR analogue of a CAPM beta is a ratio of conditional shortfalls:
+    `βᵢ = E[E rᵢ − rᵢ | X* ≤ −VaR_α(X*)] / E[E X* − X* | X* ≤ −VaR_α(X*)]`, with `X*` a reference
+    series. **Take `X*` to be the equal-weight eligible pool**, which is not an arbitrary choice: v3
+    grades every number against that pool, so a name's co-movement with it *in the pool's own worst
+    states* is exactly the risk the gate is implicitly net of. Why this one survives item 294: it is a
+    **univariate conditional mean per column** — no covariance matrix, no LP, no joint estimation,
+    so the `N/T` objection does not apply. **State `T·α` before building**: a 2-year window at
+    `α = 0.1` conditions on ~50 days, at `α = 0.05` on ~25; `α = 0.2` on three years gives ~150 and is
+    the defensible end. **Hard limit to respect, and it comes from the source authors themselves:**
+    their master-fund/CAPM derivation does *not* impose `xᵢ ≥ 0`, and they explicitly criticise
+    earlier work for assuming the non-negativity multipliers can be taken as zero — "no support for
+    such a claim is offered". This book is long-only with most of a ~1,000-name cross-section at the
+    `xᵢ = 0` boundary, so **the equilibrium/expected-return reading of this beta does not hold here
+    and must not be used as a forecast.** It is a measurable feature, not a pricing relation. Also
+    prefer a **mixed** tail level (`Σ λᵢ CVaR_{αᵢ}`, still coherent, still an LP) over a tuned single
+    `α` — one fewer unpriced hyperparameter against a deflation bar that counts every trial.
+    Tier A, `validation_overlap: false`.
+    → `notes/2026-10-23-generalized-deviation-measures.md`
+297. **FREE DIAGNOSTIC, costing no optimisation at all: report the realised tail of a lead's own
+    return series next to its skill number.** CVaR on a discrete sample has a closed form — order the
+    losses, take the mass above the level, and split the atom at the quantile:
+    `CVaR = (1−α)⁻¹[(Σ_{k≤k_α} p_k − α)·z_{k_α} + Σ_{k>k_α} p_k z_k]`. It is a weighted sum of sorted
+    returns, so it can be computed for the champion, each v3 family lead and the equal-weight pool
+    from series the lab already holds, and it answers a question the Sharpe-based gate structurally
+    cannot: **whether a lead's skill comes with a worse tail than the benchmark's.** Two correctness
+    points that are easy to get wrong and are the whole reason to cite the source: the naive estimator
+    "average the losses worse than the `α`-quantile" is *tail conditional expectation*, which is **not
+    coherent**, and on an empirical sample the quantile *always* sits on an atom of mass `1/T`, so the
+    naive and correct estimators always differ; and by the same formula's corollary, when the worst
+    observation's mass exceeds `1−α` the measure **collapses onto that single observation**, which
+    happens whenever `α > 1 − 1/T`. The effective sample behind a tail average is about `T(1−α)`
+    points — state it. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-23-cvar-optimization-as-a-linear-program.md`
+298. **FREE METHOD RULE, and it applies to most stability diagnostics the lab already runs:
+    overlapping windows manufacture apparent structure in data that has none.** Measured directly on
+    synthetic series that are uncorrelated by construction, sample-to-sample weight instability is
+    "conspicuous if we use non-overlapping samples; whereas overlapping samples generate
+    autocorrelations and apparent structure". So a rolling-window picture of a statistic's stability
+    is partly a picture of the window overlap, and should be read as an **upper bound** on genuine
+    persistence. The correction is cheap: re-check any stability claim on **non-overlapping** blocks.
+    This composes with the folder's block-resampling items rather than duplicating them — block
+    resampling repairs the *error bar*, this repairs the *picture*. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-23-noise-sensitivity-of-risk-measures.md`
+299. **ANTI-CANDIDATE, AND IT IS WHAT THIS VEIN TEMPTS SOMEONE INTO BUILDING: minimise CVaR (or any
+    estimated risk measure) over the eligible panel to choose weights.** Three independent reasons,
+    none of which needs a trial to establish. **Dimension:** item 294's arithmetic puts ~1,000 names
+    against at most ~1,510 causal daily rows past CVaR's own critical `N/T`, and variance at a 71%
+    risk inflation. **Tail sample:** the objective at level `β` on a `q`-row window is an average of
+    about `q(1−β)` observations — 25 days at `q = 500`, `β = 0.95` — so a thousand weights would be
+    fitted to the identity of 25 particular days, which is the folder's selected-maximum problem in a
+    new costume. **Normality:** by item 295, if the book's return distribution is near-normal the
+    optimum is the minimum-variance book anyway, so the construction's own best case is a
+    reparameterised scheme the lab's weighting screens already price. A fourth, smaller trap for
+    anyone who builds it regardless: CVaR-deviation is **not strictly convex**, so its optimum can be
+    a *set*, and `causality_check` compares holdings at `1e-6` — a degenerate LP returning different
+    vertices across runs reads as a peek. If such a candidate is ever written, **the burden is to show
+    `N` has been collapsed** (a few dozen groups, not a thousand names) and that a strictly convex
+    tie-breaker is in the objective. Tier A, `validation_overlap: false`.
+    → `notes/2026-10-23-noise-sensitivity-of-risk-measures.md`,
+    `notes/2026-10-23-cvar-optimization-as-a-linear-program.md`
 
 
 ---
@@ -12883,9 +13093,137 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-20 (session 67) | **The first session to read the literature on the *predicted object* — a whole conditional distribution rather than a number — and it closes the last of the three moves available inside `statistical-learning`, with a ceiling rather than another null.** Aim set by the [2026-10-19] open-questions entry, which named the distributional answer "for a later session", plus one grep: across all 204 prior notes `conformal` and `isotonic` returned **zero**, `composite quantile` and `conditional quantile` **zero**, and `quantile regression` appeared exactly **once**, inside last night's elicitability note as an unobtained pointer. Three sources, one chain: the estimator theorem → the global cross-sectional empirics → the calibration layer. Headline: **the map from functionals to losses is not a bijection in the direction that matters, and the prize for exploiting that is bounded by a constant.** Composite quantile regression — `K` check-function losses in one convex program, `K` free intercepts, **one shared slope** — recovers the same location slope as least squares, stays root-`n` consistent **where the least-squares oracle theory breaks down at infinite error variance** (taking SCAD and the adaptive lasso with it), and has asymptotic relative efficiency against least squares bounded below by **`6/(eπ) = 0.7026` for every finite-variance error density**, with `δ(f) = 12σ²(E_ε[f(ε)])²` equal to 0.955 at a normal, 1.097 at a logistic (attaining the Fisher information bound), 1.5 at a double exponential, 1.9 at `t(3)` and **unbounded** at a slightly contaminated normal — while a **single** quantile regression, median included, has efficiency that **can be arbitrarily small**, so the `K`-fold aggregation and not the check function is what buys the floor. Since a `t` scales as the inverse standard error, that bounds any same-class loss swap at **`√δ ≈ 1.38`** on a `t` statistic, against the `+0.28` and `−1.08` rank-IC `t`s `learnings.md` [2026-10-19/20] already recorded here — **so the lab's closure of the objective-function branch survives its one genuine loophole, now with arithmetic instead of an argument** (**#281**). Second, and the night's four-for-one retirement: a peer-reviewed study forecasting **37 conditional quantiles** per name per month across four regions and 23 countries, B-spline-interpolated into a CDF whose moments follow by integration, finds **only the central `τ`-quantiles priced** with the decile spread decaying monotonically to insignificance toward *both* tails, **no higher moment monotonically priced** in either universe or either weighting scheme, and the **integrated mean beating both a direct squared-error mean forecast and the model's own median** — i.e. the distributional route's whole payoff is a better mean, which is the composite-quantile theorem arriving from the empirical side. The discount that matters: the paper prints a **liquid** universe beside its full one, and in that column — top-95% cap *and* dollar volume, the closest published analogue to nine large-cap national indices — **the significant band narrows sharply and the mean-over-median advantage vanishes**, so both gains shrink precisely as the universe becomes this panel (**#280**). Third, the one layer that survives the other two's negatives because it never needed the distribution to be priced: **an interval built from a mean model's pooled residuals has a width that cannot depend on the state**, so it over-covers in calm cross-sections and under-covers in dispersed ones by construction — an analytical fact in `Y = X + X·ε` and measured across twenty volatility bins on nine decades of daily index returns — while permuting the **probability-integral-transform rank**, uniform and independent of the predictors by construction, restores conditional validity and keeps **exact finite-sample unconditional validity under arbitrary misspecification** (**#282**). The night's free cross-link is made by the sources themselves: the conformal paper's equity exercise concludes a **location-*scale*** model fits these returns well, one restriction looser than the **location-*shift*** model composite quantile regression assumes, so a demonstrated need for the scale term is a demonstrated misspecification of the cheaper estimator. One reusable construction block rides along — thirteen free-OHLCV volatility features at named EWMA decays plus negative-return EWMAs plus Parkinson range, each divided by its own cross-sectional mean, and the `σ̄_t`-not-`σ̄_{t+1}` standardisation — carrying its source's own large-cap null (**#283**). New: **#280–#283, all four free, and no trial proposed**, which is the correct output for a night whose three independent sources agree the branch is closed. No lab measurement was taken and the holdout was not read. | Zou–Yuan 2008, *Annals of Statistics* (`2026-10-20-composite-quantile-regression-efficiency-bound.md`); Baruník–Hronec–Tobek 2026, *International Journal of Forecasting* (`2026-10-20-forecasting-the-return-distribution-in-the-cross-section.md`); Chernozhukov–Wüthrich–Zhu 2021, *PNAS* (`2026-10-20-distributional-conformal-prediction.md`) |
 | 2026-10-21 (session 68) | **The first session to read the literature on *selection* rather than *shrinkage* — how a predictor gets into the candidate set — and it supplies the one tension this folder can still raise against the lab's four-fold closure of `statistical-learning`: the two procedures the closure was measured with are the two that fail, by construction, in exactly one named case.** Aim taken from the 2026-10-20 open-questions entry and the 2026-10-20/21 journal's own idea 5, which between them named `feature selection` as "the one of the three [remaining cold veins] that is not downstream of a closure" — `hidden Markov`/`change point` and `transfer entropy` sit in families the lab has closed structurally. One grep confirmed it: across all 207 prior notes `feature selection`, `sure independence`, `stability selection` and `knockoff` returned **zero**, while `lasso` returned 8 and `sparsity` 8 — every one of which treats a penalty as a way to *estimate* a coefficient vector, none as a way to form the candidate set. Four primaries, all read in full, three Tier-A statistics and one Tier-A economics, forming one chain: can a cheap screen find it → is the selection reproducible → is the selection real → should you be selecting at all. Headline: **the lab's refusal rule and the lab's closure were both measured with marginal and one-pass procedures, and there is exactly one failure mode those two share.** Ranking by marginal correlation `ω = Xᵀy` has the sure-screening property `P(M* ⊆ M_γ) → 1` only under a condition the source states in words — it "rules out the situation in which an important variable is marginally uncorrelated with `Y`, but jointly correlated with `Y`" — and in that case the marginal screen recovers the true model **0% of the time *and so does a one-pass lasso over the full candidate set***, at every sample size tried, while the **iterated-residual procedure recovers it 100% of the time**; more data does not help, because the ranked quantity does not hold the information. Two further readings of the same theorem invert intuition: the surviving set must be **larger** when signals are weaker (`θ* > 2κ + τ`) and nothing below root-`n` is detectable at all (`κ < 1/2`), which is the lab's own sd-0.025 noise floor arriving from theory. So the lab's "a penalised linear combination of individually-null features is itself a null here" is sound as a *measurement* and does **not** license the inference that no marginally-null-but-jointly-important feature is in the block — and the test that decides it is free and strengthens the closure if it comes back empty (**#284**). Second, a reporting rule that two independent statistical traditions reach from opposite directions: subsampling-based **selection frequencies** with a finite-sample bound `E(V) ≤ q_Λ²/((2π_thr−1)p)` and consistency **without the irrepresentable condition** (**#285**), and a Bayesian spike-and-slab showing inclusion probability and shrinkage to be **substitutes** — so a method that can only select "might artificially recover sparse model representations simply as a device to reduce estimation error", and the Bayesian lasso, lava, horseshoe and elastic net put no mass on an exact zero and are therefore no evidence about sparsity at all. In five of six unrelated prediction problems no predictor is systematically excluded; the **cross-section of US stock returns is the extreme case**, its predictive-score curve flat to order `10⁻⁶` per observation across all model sizes and the only application where sparsity **could not be induced even by a prior giving under 1% probability to five-or-more-predictor models** (**#286**). Third, the night's one result about the lab's own machinery, recorded as a tension and not a refutation: an FDR filter works by preserving the original-to-decoy **cross**-correlations `XᵀX̃ = Σ − diag{s}`, and a **row permutation** cannot substitute because it preserves `X^πᵀX^π = Σ` while destroying `XᵀX^π ≈ 0` — at a uniform feature correlation of 0.3 and a nominal 20%, the decoy filter realised 12.29% and the permutation construction **45.61%**. The lab's null permutes a weight vector rather than a design matrix, so this transfers as a *question* (a permutation null is only as good as the dependence it preserves) landing on the seam the lab found twice from the inside — [2026-10-14/15]'s null power continuous in concentration, and the **standing 2026-10-18 engine issue** — and on nothing else (**#287**, with **#288** the construction, whose `n ≥ 2p` condition this panel satisfies by orders of magnitude and which answers `program.md`'s charter question *in the units of the question*: a feature set with a bounded false-discovery rate, empty set included). New: **#284–#288, all five free, no trial proposed**, which is the right output for a night whose job was to check an inference rather than to supply a book. No lab measurement was taken and the holdout was not read. | Fan–Lv 2008, *JRSS-B* (`2026-10-21-sure-independence-screening-marginal-vs-joint.md`); Meinshausen–Bühlmann 2010, *JRSS-B* (`2026-10-21-stability-selection-subsampling-error-control.md`); Giannone–Lenza–Primiceri 2021, *Econometrica* (`2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`); Barber–Candès 2015, *Annals of Statistics* (`2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`) |
 | 2026-10-22 | **The `hidden Markov` / `change point` vein — the first of the two named cold veins left by [2026-10-21], aimed at the measurement layer rather than the signal layer, and read against that entry's sharpened acceptance criterion (admit it only if it yields something that is *not* a timing overlay). Zero prior notes on `change point`, `changepoint`, `hidden Markov` or `CUSUM` across 211 notes; `structural break` appeared in 4, none about the estimators. Outcome: the criterion is met on the diagnostic side and fails on the signal side, which is recorded as an anti-candidate.** | Bai–Perron 1998 (Econometrica) + Killick–Fearnhead–Eckley 2012 (JASA) (`2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`); Hansen 2001 (JEP) (`2026-10-22-breakdate-inference-unknown-timing.md`); Ang–Timmermann 2012 (Annual Review of Financial Economics, read as NBER WP 17182) (`2026-10-22-regime-switching-financial-markets.md`). **Three sources recorded as not obtained:** Andrews 1993 (Econometrica, 3065 cites — Cowles legacy PDF path returns an HTML body and the current Cowles record page is a 1.1 MB Drupal shell with no PDF href at all); Hansen 1992 (JAE, 593 cites — fetched cleanly from the author's site but is a text-layerless scan, not rendered); Bai–Perron 2003 (JAE, 4445 cites, the computation companion). Nothing below is attributed to any of the three. |
+| 2026-10-23 (session 70) | **The first session to look at what the word "risk" denotes rather than which risk to take, and the cluster splits cleanly: the tail measures win on axioms and lose on estimation, by a closed form at a ratio this panel already violates.** Aim picked by gap rather than by the two named cold veins — the 2026-10-22 entry downgraded `transfer entropy` to "worth at most one note, not a session" and said a better-aimed session would pick by the gap in the free queue. Greps across all 214 prior notes: **zero** for `Rockafellar`, `Uryasev`, `Artzner`, `coherent risk`, `semivariance`, `lower partial moment`, `spectral risk`, `conditional value at risk`, `turnover constraint`, `robust optimization`; 1 each for `CVaR`, `Sortino`, `expected shortfall`, `drawdown control`; `maximum drawdown` in 5 notes but only ever as a reported *outcome*, never as an objective. `portfolio-learning` by charter, cross-family in effect because it bears on the gate's own statistic. Headline one: the coherence axioms **reject the mean-variance objective on monotonicity and the semi-variance objective on subadditivity**, VaR's acceptance set is **non-convex**, VaR is non-subadditive even for **independent** risks, and in the canonical example **diversifying across a hundred independent defaults raises measured risk** while a single-name pile-up reads as riskless — but every justification offered for the axioms is institutional (margin accounts, per-desk cash limits), so v3's Sharpe-based gate failing axiom M is **not** a reason to change the gate. Headline two: minimising CVaR is a **linear program** via one identity that makes the quantile a free variable, the source paper's own illustrative constraint set is **`xⱼ ≥ 0, Σxⱼ = 1`, exactly this lab's**, and the atom-splitting definition is the only one of three that is coherent — yet **under normality and `β ≥ 0.5`, minimum-CVaR, minimum-VaR and minimum-variance are provably the same portfolio**, both measures being affine in `(µ, σ)`, so the whole vein's value is bounded by the book's departure from normality. Headline three, and the one that closes most of it: `q̄₀ = 1/√(1 − N/T)` is the **exact** mean inflation of realised risk from estimated inputs, scaling in the ratio alone, diverging at a critical `N/T` of **1 for variance, 1/2 for maximal loss, below 1/2 for expected shortfall** and *falling further as the tail level loosens*; worked for this panel (~1,000 eligible names, ≤~1,510 causal daily rows) that is `N/T ≈ 0.66`, a **71% risk inflation for variance and past CVaR's critical ratio outright**. Headline four, the salvage: the dual theory makes CVaR's subgradient the **normalised indicator of the tail**, hence a **tail beta to the equal-weight eligible pool** that is a univariate conditional mean per name and so immune to the `N/T` objection — but the source authors' own derivation omits `xᵢ ≥ 0` and explicitly criticises earlier work for zeroing the non-negativity multipliers, so on this long-only book the beta survives as a feature and **not** as a pricing relation. Two pieces of scrupulousness recorded against over-import: the noise paper's *feasibility* transition (objective unbounded, no solution exists) **does not transfer**, because long-only confines weights to a compact simplex that bounds the CVaR program for every sample — accuracy transfers, infeasibility does not; and the apparent clash between the two axiom papers over "semideviation" is a **definitional** one (standard-deviation-operator-of-the-shortfall versus plain `L²`-norm-of-the-shortfall), resolved in the notes and flagged there as my reading rather than either paper's claim. Six free or cheap items added (294–299), three of them closures. | Artzner–Delbaen–Eber–Heath 1999 (Mathematical Finance, 6846 cites) (`2026-10-23-coherent-measures-of-risk-axioms.md`); Rockafellar–Uryasev 2000 (Journal of Risk, 5550) + 2002 (JBF, 3111) (`2026-10-23-cvar-optimization-as-a-linear-program.md`); Rockafellar–Uryasev–Zabarankin 2006 (Finance and Stochastics, 458) + 2006 (Mathematical Programming, 88) (`2026-10-23-generalized-deviation-measures.md`); Kondor–Pafka–Nagy 2007 (JBF, 105, read as arXiv `physics/0611027`) (`2026-10-23-noise-sensitivity-of-risk-measures.md`). **One source recorded as not obtained:** Lim–Shanthikumar–Vahn 2011, "Conditional value-at-risk in portfolio optimization: Coherent but fragile" (Operations Research Letters, 125 Crossref / 142 Semantic Scholar cites) — the intended fragility counterweight, closed at the publisher, `openAccessPdf` status `CLOSED` on Semantic Scholar, OpenAlex listing only the DOI, and the Berkeley CDAR working-paper copy unreachable (see access notes). Kondor–Pafka–Nagy was substituted for it and is the stronger source for the purpose, being an exact result rather than a simulation study. Nothing below is attributed to the unobtained paper. |
 
 ### Open questions for future sessions
 
+- **[2026-10-23] What should aim the next session: tonight spent a gap rather than a named vein, it
+  paid better than either named vein was projected to, and the method that found it is the thing to
+  reuse — grep the folder for the *objects* a construction needs, not for the strategy families it
+  belongs to.** The 2026-10-22 entry left `transfer entropy` as the last named cold vein and
+  downgraded it itself ("a nonlinear estimator of an object the lab has already measured linearly
+  thirteen times… worth at most one note, not a session"), closing with the instruction to pick by
+  the gap in the free queue instead. Tonight did that, and the gap was not in a *family* but in a
+  *layer*: 214 notes on which signal to hold and how to weight it, and **zero** on what functional
+  the word "risk" denotes. `transfer entropy` is **still zero** after tonight and its case is
+  unchanged.
+  - **The generalisable procedure, and it is cheap: grep for the mathematical objects, not the
+    topics.** The terms that found tonight's vein were `Rockafellar`, `Uryasev`, `Artzner`,
+    `semivariance`, `lower partial moment`, `coherent risk`, `spectral risk` — author names and
+    functional names, not family slugs. Running the same sweep over *other* layers is the cheapest way
+    to aim session 71, and three sweeps came back notably cold tonight and were **not** spent:
+    `Kalman` (0) and `state space` (1) — continuous time-varying-parameter estimation, the
+    continuous-state complement to 2026-10-22's discrete regimes, and a genuinely different object
+    from both an overlay and a break date; `wavelet` (0), `long memory` (0), `Hurst` (1) —
+    multi-scale decomposition, whose honest anchor is the *skeptical* one (the modified-R/S
+    literature finding no long memory once short-range dependence is accounted for), which is the
+    "worth reading for what it rules out" shape 2026-10-22 identified; and `turnover constraint` (0)
+    / `robust optimization` (0), which sit next to v3's genuinely **heterogeneous** per-name cost
+    structure (15/20/30/40 bps tiers plus UK/HK/FR/IT/ES transaction taxes) that no note in this
+    folder has yet been read against. **Of the three, the cost-aware-construction sweep is the
+    best-aimed**, because it is the only one whose binding constraint *changed* when the protocol did,
+    and because tonight's item 294 arithmetic says the *risk* side of a constrained optimisation is
+    closed on this panel while the *cost* side has no such dimensional objection — a turnover penalty
+    estimates nothing.
+  - **The free queue, and tonight added five free items plus one anti-candidate.** `#294` is the one
+    to run first and is the strongest free item since `#284`, on sharper grounds than usual: it is not
+    a diagnostic but a **closed-form kill condition**, it costs nothing, and it decides the fate of an
+    entire construction class by arithmetic on two integers the lab already knows. `#295` should run
+    before `#296` or `#297` and can close the rest of tonight's vein in a few lines — and note that
+    **its null outcome is the informative one**, because a near-one rank correlation between a name's
+    trailing `CVaR_β` and its trailing `σ` would retire the whole downside-weighting idea
+    permanently. `#298` is a *correction to diagnostics the lab already runs* rather than a new one,
+    which makes it unusually cheap to act on and unusually easy to forget. `#296` is the one piece of
+    construction material and it comes with its own stated limit (no equilibrium reading under
+    long-only). `#299` is written as an anti-candidate for the same reason `#293` was.
+  - **Unchanged and still live below those**: `#289` (the train-subperiod-split stability diagnostic,
+    still the item whose likely outcome would change how a standing piece of protocol output is read)
+    and `#290`–`#292` from 2026-10-22; then `#284` (the iterated-residual pass, still the only queue
+    item that can change the status of a *closed* family) and `#285`–`#288` from 2026-10-21; then
+    `#282` and `#281` from 2026-10-20; then the 2026-10-18 pair (`#273`, `#274`, with `#275` gated on
+    its own free screen), then 2026-10-17 (`#272`(a), `#270`, `#269`), then 2026-10-16 (`#263`–`#265`,
+    `#266` as a design rule), then 2026-10-15 and everything carried under it.
+  - **One composition worth flagging explicitly, because it is the first time two sessions' items
+    multiply rather than queue.** `#294`'s `N/T` arithmetic and `#296`'s univariate tail beta were
+    derived from *different* sources on the same night and the first is the reason the second is
+    written the way it is: the dimensional result closes the joint-estimation route, which forces the
+    per-name route, which happens to be the one immune to the objection. **A session that reads a
+    construction paper and an estimation-error paper together gets a sharper candidate than one that
+    reads two construction papers** — worth repeating as a sourcing rule, not just a result.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to) is still a human decision.
+    **Also standing and newly urgent for a different reason:** `origin/main-cozirv` still holds one
+    unlanded commit (`d20f26b`, journal + learnings only; `trials.jsonl` byte-identical on both
+    sides, so the deflated-Sharpe bar is **not** understated), and the strategy sessions of
+    2026-10-22 and 2026-10-23 were both halted by the step-0 integrity sweep over it. This folder
+    cannot merge it — `experiments/learnings.md` is outside a research session's write scope — and
+    tonight did not try. It needs a human merge or cherry-pick.
+  - **Named for a later session rather than summarised:** **Lim–Shanthikumar–Vahn (2011)**, "CVaR in
+    portfolio optimization: coherent but fragile" (ORL, 125 Crossref cites), the paper written to be
+    tonight's counterweight and **not obtained** — closed at the publisher, `CLOSED` on Semantic
+    Scholar's `openAccessPdf`, and its only free copy (Berkeley CDAR working paper) behind a transport
+    failure. Kondor–Pafka–Nagy was substituted and is the better source for the purpose (an exact
+    random-matrix result rather than a simulation study), so this is a **pointer, not a gap** — it
+    would add the performance-based-regularization remedy, which only matters if the lab ever builds a
+    mean-CVaR objective, and items 294/299 argue it should not. **Rockafellar–Uryasev–Zabarankin's
+    "Master funds in portfolio analysis with general deviation measures"** (`rtr195` in the same
+    directory) holds the master-fund existence results the optimality-conditions paper applies, and is
+    worth one fetch only if `#296` is ever built in earnest. **Bai–Perron (2003)** and
+    **Andrews–Ploberger (1994)** carry over unspent from 2026-10-22, as does the **Andrews (2003)
+    corrigendum** pointer, still unverified and still depended on by nothing here.
+- **[2026-10-23] The transferable output, and it is the twenty-third detector: when a source proves
+  that two objectives are optimal under a stated condition, check whether this lab's data satisfies
+  that condition BEFORE reading anything else the source says about the better objective — because if
+  it does, the entire paper is a reparameterisation.** The twenty-two before it are listed in the
+  2026-10-22 and 2026-10-21 entries. Tonight's arrives from a single proposition: under normality and
+  `β ≥ 0.5`, minimum-CVaR, minimum-VaR and minimum-variance are **the same portfolio**, both tail
+  measures being affine in `(µ, σ)`. Read first, that proposition reframes 5550 citations' worth of
+  tail-risk machinery as a reparameterised risk aversion for anything close to Gaussian, and turns the
+  session's main question from "how do I optimise CVaR" into "how far from normal is a diversified
+  long-only daily book" — which is a cheap measurement (item 295) rather than an implementation. This
+  is the mirror of the 2026-10-22 detector (what did the decision-maker know?): that one asks what the
+  *agent* knew, this one asks what the *distribution* was assumed to be, and both are found in a
+  sentence the source states plainly and does not emphasise. **Second transferable, and it is about
+  reading a limitation correctly rather than quoting it:** tonight's counterweight paper derives a
+  *feasibility* phase transition — the tail objective unbounded below, no solution existing — under a
+  budget constraint and nothing else, and flags the omission of other constraints itself. Working
+  through what long-only does to that program (weights on a compact simplex; the objective `→ +∞` in
+  both directions of the auxiliary variable, hence bounded for every sample) shows the transition
+  **does not transfer** while the accuracy result does. The rule: **when a source states a limitation,
+  do the derivation that decides which of its results the limitation kills — a limitation is not a
+  uniform discount on the paper.** A folder that quoted this paper's abstract would have recorded a
+  claim about this lab that is false.
+- **[2026-10-23] Access findings — one excellent new channel, two new refusal modes, and a reminder
+  that `file`'s page count lies.** **The channel, and it is the best kind: `sites.math.washington.edu/~rtr/papers/`
+  is a flat author directory with a printed index.** Rockafellar's `papers.html` lists every paper as
+  `rtr<NNN>-<Slug>.pdf` and all four files fetched from it came back first try with embedded Type-1
+  fonts and clean `pdftotext -layout` output (200–321 KB, 23–34 pages, 359–483 `" the "`, no ASCII
+  shift, no `/xHH` escapes). This extends the 2026-10-13 Hyndman and 2026-10-22 Bruce-Hansen lessons
+  to **optimization theory**, and unlike the Hansen case the files are real text, not scans — so the
+  rule "read the author's own index page before guessing filenames" paid twice tonight, once to find
+  `rtr187-CVaR2.pdf` (my guess `rtr186` was a different paper entirely) and once to notice
+  `rtr192`/`rtr198` existed at all. **`people.math.ethz.ch/~delbaen/ftp/preprints/`** is a second such
+  directory and served the founding coherence paper first try. **New refusal mode 1, and it is a
+  fourteenth "looks like an answer": `escholarship.org` returned HTTP 202 with a ZERO-byte body.**
+  Not a challenge page, not a redirect — an *accepted* status with nothing in it, which `curl -w` only
+  reveals if you print `size_download`. **New refusal mode 2, transport rather than origin:
+  `cdar.berkeley.edu` fails with `curl: (56) CONNECT tunnel failed, response 502`** on three
+  consecutive attempts plus a fourth to a different path — the same signature this file records for
+  `autopapers.ssrn.com` and `api.fatcat.wiki`, so **report it as a transport failure, not an origin
+  refusal.** It closed the only free copy of the intended fourth source. **The reminder, and it cost a
+  minute tonight: `file -b` reported "10 page(s)" and "6 page(s)" for PDFs that `pdfinfo` correctly
+  reported as 24, 25, 26 and 34 pages.** A short page count from `file` is not evidence you fetched an
+  extended abstract; `pdfinfo` is the one to use, and `pdffonts` printing a non-empty table is the
+  text-layer check. **Crossref answered all eight citation lookups on the first call** (6846, 5550,
+  3111, 458, 125, 280, 105, 88) — the fourth consecutive session in which Crossref alone sufficed —
+  while **Semantic Scholar's DOI endpoint also answered first try** and was the only index that
+  reported `openAccessPdf: CLOSED`, which is a *useful* negative that neither Crossref nor OpenAlex
+  supplies. **OpenAlex was spent on two `locations` lists only** and did not hit its budget. One
+  correction worth recording because it wasted a lookup: **a DOI guessed from a journal and volume is
+  worthless** — `10.1007/s10107-005-0684-2`, my guess for the Mathematical Programming paper, resolves
+  to an unrelated article on matrix sum-of-squares relaxations; the Crossref **bibliographic query**
+  endpoint found the right one (`10.1007/s10107-006-0721-9`) in one call and should be the default for
+  any article whose DOI is not in hand.
 - **[2026-10-22] What should aim the next session: `transfer entropy` is now the last named cold vein,
   and tonight's result changes the case for it from "probably already priced" to "probably already
   priced, and here is the one test that would say".** The [2026-10-21] entry named exactly two cold

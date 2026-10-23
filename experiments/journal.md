@@ -21900,3 +21900,5 @@ session (tonight, and 2026-10-22) or a blind one.
   and it has now cost two. Both fixes are outside this agent's reach — pre-approve merge/
   cherry-pick for the nightly runner, or have the engine-maintenance session that pushes a
   branch open a PR for it the same night, which is the 2026-10-18 lesson restated.
+
+## Research session — 2026-10-23 (learning agent): 4 notes added, see research/SUMMARY.md
