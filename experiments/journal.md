@@ -22410,3 +22410,379 @@ already-merged `origin/main-*` branches and `origin/main-cozirv` itself are safe
 or archive so the sweep stops listing them.
 
 ## Research session — 2026-10-24 (learning agent): 4 notes added, see research/SUMMARY.md
+## Free measurements — 2026-10-24/25 (nightly), no trial spent
+
+**Ten free blocks (F1–F10), 28 new leak-free objects priced, no trial recorded, no candidate file
+written.** `trials.jsonl` stands at **120 records** exactly as `run_experiment.py` last wrote it.
+No validation book, no holdout, forward or incubation file was opened; nothing under `engine/`,
+`scripts/`, `tests/`, `data/`, `program.md`, `CLAUDE.md` or `trials.jsonl` was touched. Engine green
+(`92 passed in 75.68s`), integrity check clean (HEAD level with `origin/main`,
+`git branch -r --no-merged origin/main` empty — the `origin/main-cozirv` divergence that cost the
+2026-10-22 and 2026-10-23 sessions is closed, as the 2026-10-24 reporting entry records).
+
+**Budget allocation, planned before the first hypothesis was written.** Every `program.md` family now
+has a recorded v3 trial, so the "at least one in a cold family" rule stays spent (2026-10-19/20), and
+`distinct_mechanisms` is 5, so the four-mechanism cap does not bind; only the standing
+`price-trend` cap of 2 was live. The session was aimed at **`liquidity-volume`**, which the
+2026-10-22 engine issue *re-opened* by destroying its instruments rather than its hypothesis
+(`amihud126`, the family's only positive-train-skill object, goes to -0.0086 conditional on the
+contaminated price level), and at the **overnight/intraday session split**, whose only measurement
+here is v1 on 140 survivors. Research `#303` (partition by measurement quality, not by signal) and
+`#301` (verify a penalty moves the holdings before spending a trial) supplied two of the axes.
+**No trial was spent in any family, so no cap was approached.**
+
+**Harness, and what it is not.** Train only: 252 month-ends, 1997-01-31 → 2017-12-29, eligible per
+date mean 495 / median 328 / q10 197 / q90 849 — reproducing the recorded panel-width figures
+exactly. Within-region Spearman inside each region of >= 20 scored names, name-weighted, then
+averaged over dates (never pooling within-group ranks — 2026-10-20/21). Validated three ways before
+any number was read off it: `amihud126` **+0.0186** against the recorded **+0.0190**; `vol126`
+**+0.0150** against low-vol's recorded **-0.0140**; and every one of 20 objects' negations mirrors to
+the last digit. The book figures in F7–F9 are **gross, no execution model** — daily arithmetic
+equal-weight over the eligible names — so this harness's pool reads **+0.6700** on train against the
+engine's **+0.5238** for the same split. Read every skill number below as a comparison *inside this
+harness*, never against a recorded engine figure.
+
+**Every object below is a ratio, a return or a trend of the stored panels and never a level**, per
+the operating rule the 2026-10-22 engine issue recommends. Volume enters only as
+`volume / mean_252(volume)`, in which **both** halves of the back-adjustment factor `D_i(t)` cancel
+exactly — not merely the split half that cancels in `dollar_volume`.
+
+### F1 — the 20-object leak-free screen (forward 63d). Nothing reaches the bar.
+
+    object        IC        t      object        IC        t
+    night21    -0.0015   -0.25    nmd21      +0.0135   +2.05
+    night63    -0.0114   -1.83    nmd63      +0.0046   +0.69
+    night126   +0.0027   +0.38    nmd126     +0.0076   +1.21
+    night252   +0.0055   +0.68    nmd252     +0.0020   +0.32
+    day21      -0.0188   -2.26    nightpos63 +0.0052   +0.88
+    day63      -0.0130   -1.56    nightpos126+0.0098   +1.54
+    day126     -0.0087   -1.06    stale126   +0.0075   +2.23
+    day252     +0.0055   +0.67    stale252   +0.0040   +1.17
+    mom252     +0.0175   +1.33    histlen    +0.0052   +1.11
+    vol126     +0.0150   +1.01    amihud126  +0.0186   +2.26
+
+Coverage is 0.993–1.000 of eligible names per date for every object but `stale126`/`stale252`, which
+need a full trailing window and score 192 and 234 of the 252 dates. **The largest new |IC| is
+0.0188, against the ~0.03 an object needs to be worth a trial** (2026-10-20/21).
+
+### F2 — the overnight/intraday split: the 21-day reversal is entirely intraday, and the decomposition still loses to not decomposing
+
+Forward 21d / 63d, same harness:
+
+    object     IC@21     IC@63      what it is
+    ret21    -0.0219   -0.0217     close-to-close 21d return
+    nsum21   -0.0002   -0.0015     its overnight leg  (t -0.03 / -0.25)
+    dsum21   -0.0209   -0.0188     its intraday leg   (t -2.37 / -2.26)
+    ret63    -0.0133   -0.0222     close-to-close 63d
+    nsum63   -0.0051   -0.0114
+    dsum63   -0.0113   -0.0130
+
+**The overnight leg of the short-horizon reversal is a pure null, not a counter-signal** — and that
+is exactly why dropping it does not help: `|dsum21| < |ret21|` at both horizons (0.0209 vs 0.0219;
+0.0188 vs 0.0217). Removing a null leg removes noise *and* signal in the same proportion and nets
+slightly negative. **v1's "the overnight/intraday decomposition loses to not decomposing"
+(`learnings.md`, line 1634) replicates on the wide panel under leak-free instruments, and now has a
+mechanism rather than an observation.** Every leg decays to ~0 by 252 days and flips sign by 504 — a
+forecast's horizon profile, not a leaked drift's.
+
+### F3 — `liquidity-volume` re-measured on clean instruments: the family is a null, not a casualty of its instrument
+
+Ratio-only objects, both halves of `D_i(t)` cancelled, forward 63d / 21d / 252d:
+
+    object       IC@63      t     IC@21    IC@252
+    vshock21    -0.0038   -0.75  -0.0114  -0.0068
+    vshock63    -0.0021   -0.40  -0.0056  -0.0067
+    vtrend      -0.0041   -0.81  -0.0116  -0.0068
+    vdisp126    +0.0000   +0.01  -0.0061  -0.0020
+    updn126     -0.0089   -1.07  -0.0059  +0.0002
+    rngimp126   +0.0142   +1.08  +0.0051  +0.0001
+    park126     +0.0132   +0.91  +0.0034  -0.0042
+    jump126     -0.0034   -0.54  -0.0042  +0.0066
+
+Volume shock, turnover trend, volume dispersion, up/down volume asymmetry and gap frequency are
+**all nulls at every horizon**, and the two largest objects are volatility-class and individually
+insignificant (t +1.08, +0.91). This is the direct measurement the 2026-10-22 entry could only
+infer: the family's apparent signal was the contaminated level, and **with the level removed there
+is nothing underneath it.** `rngimp126` — range per unit of own relative volume — is the range-based
+twin of `impact126`, which was already measured a null, and it agrees.
+
+### F4 — the legs are three streams, not seven, and an orthogonal blend behaves exactly as diversification says
+
+Mean within-date correlation of the within-region z-scores:
+
+                 rev21  dayrev21  nmd21  stale126  rngimp126  mom252  nightpos126
+    rev21         1.00      0.79   0.42     -0.01      -0.01   -0.01        -0.04
+    dayrev21      0.79      1.00   0.88     -0.00       0.02    0.02         0.17
+    nmd21         0.42      0.88   1.00      0.00       0.05    0.03         0.28
+    stale126     -0.01     -0.00   0.00      1.00       0.01    0.00         0.01
+    rngimp126    -0.01      0.02   0.05      0.01       1.00    0.02         0.01
+    mom252       -0.01      0.02   0.03      0.00       0.02    1.00         0.14
+    nightpos126  -0.04      0.17   0.28      0.01       0.01    0.14         1.00
+
+`rev21`/`dayrev21`/`nmd21` are one return stream; `stale126`, `rngimp126` and `mom252` are mutually
+orthogonal to everything (|rho| <= 0.05). Best of the 91 two-, three- and four-leg equal-weight
+subsets: **`rev21 + rngimp126 + mom252`, IC +0.0292 (t +2.93)** — which is `sqrt(3) x 0.017`, the
+textbook gain from averaging three orthogonal signals, landing right at the trial bar.
+
+### F5 — the selection-bias null for a combination search, and it is a new instrument: a best-of-91 is worth +0.0115 of free IC
+
+The winner above is a maximum over 91 correlated statistics, and two of its three legs are
+individually insignificant (t +1.08, +1.33) — the shape that makes a selected maximum untrustworthy
+(research `#290`, `#298`). Priced rather than argued: AR(1) random scores at each leg's **own**
+measured month-to-month persistence (`rev21` -0.01, `dayrev21` 0.07, `nmd21` 0.14, `stale126` 0.88,
+`rngimp126` 0.98, `mom252` 0.90, `nightpos126` 0.90), the identical 91-subset search, 8 seeds:
+
+    null single-score IC   mean +0.0012   sd 0.0054   (n 56)
+    null |best-of-91|      mean  0.0115   sd 0.0023   max 0.0145
+    REAL best-of-91        0.0292                     z vs the null max  +7.67
+
+So **the combination is not a selection artifact** — and, separately, **a best-of-91 combination
+search over this panel manufactures +0.0115 of IC out of nothing, two sd above the 0.0054 a single
+random score gets.** Any future blend search here must be quoted against this null, not against the
+single-score floor. The null's winning pair was a different pair on most seeds, which is the tell.
+
+### F6 — both lookahead detectors clear the blend, and both reproduce the engine issue's signatures
+
+Detector 1, IC by forward horizon (a leaked drift grows like `sqrt(h)`; a forecast decays):
+
+    object                        21       63      126      252      504
+    3leg(rev21+rngimp+mom252) +0.0279  +0.0292  +0.0240  +0.0025  -0.0089
+    4leg(+stale126)           +0.0308  +0.0245  +0.0185  -0.0010  -0.0133
+    rngimp126                 +0.0052  +0.0142  +0.0121  +0.0002  -0.0195
+    logprice [REFERENCE]      -0.0459  -0.0791  -0.1131  -0.1552  -0.2055
+
+Detector 2, five-year buckets of the decision date, `IC / |IC|-per-year-of-store-remaining`:
+
+    object                      1997-2002        2003-2007        2008-2012        2013-2017
+    3leg                   +0.0560/0.0021   +0.0288/0.0014   +0.0022/0.0001   +0.0245/0.0022
+    rngimp126              +0.0069/0.0003   +0.0411/0.0019   -0.0152/0.0009   +0.0255/0.0023
+    logprice [REFERENCE]   -0.1165/0.0043   -0.0894/0.0042   -0.0681/0.0042   -0.0347/0.0031
+
+`logprice` grows monotonically in horizon to -0.2055 (recorded: -0.0497 → -0.2222) and holds the
+constant **0.0043/yr** ratio across buckets (recorded: 0.0043/yr) — **the 2026-10-22 engine issue
+independently replicated twice on a differently-built harness.** The blend decays past 63 days,
+flips sign at 504, and has a non-monotone per-year ratio. Leak-free on both detectors. Its
+sub-period instability is itself a warning: +0.0560 / +0.0288 / +0.0022 / +0.0245.
+
+### F7/F8 — the decisive refusal, and the night's best finding: the IC screen ranks this block backwards in Sharpe
+
+K = 100, equal weight, monthly, **gross**, train, against this harness's equal-weight eligible pool
+(+0.6700):
+
+    score set                 IC63      t   GROSS skill   act/yr      t   vol ratio  turn/yr
+    rev21 only             +0.0217  +2.23      -0.2272   -2.38%   -1.48      1.218     8.34
+    dayrev21 only          +0.0188  +2.26      -0.1497   -1.08%   -0.78      1.173     8.00
+    mom252 only            +0.0175  +1.33      +0.0838   +1.16%   +0.79      0.973     2.66
+    rngimp126 only         +0.0142  +1.08      -0.0696   +2.96%   +1.43      1.387     1.11
+    stale126 only          +0.0075  +2.23      -0.1293   -1.25%   -0.45      1.117     3.07
+    slow 2leg (rngimp+mom) +0.0202  +1.86      +0.0168   +2.12%   +1.61      1.145     2.15
+    3leg winner            +0.0292  +2.93      -0.1035   +0.31%   +0.21      1.213     5.59
+    4leg                   +0.0245  +2.28      -0.0682   +0.12%   +0.06      1.129     6.25
+
+**Six of eight sets have a positive IC and a negative Sharpe skill, and the two sets with positive
+skill carry the two least significant ICs in the block.** The highest-|t| single leg (`rev21`,
+t +2.23) is the worst book in the table at **-0.2272**. The highest-IC set of all — the orthogonal
+blend that F5 just certified is not a selection artifact — is **-0.1035**.
+
+Two mechanisms, both visible in the table and neither in the IC. **(i) The volatility ratio.** Every
+negative-skill set sits at 1.12–1.39; the one clearly positive set sits at **0.973**. `rngimp126`
+earns the largest active return in the block, **+2.96%/yr**, and still loses 0.070 of Sharpe, because
+it is divided by 1.387. **(ii) Turnover.** `rev21` churns **8.34x/yr** and the blend 5.59x against
+the pool's 0.89x. Realized fraction of the `3.37 x IC` ceiling for the blend: ceiling +0.098,
+realized **-0.1035**, i.e. **-106%** — outside the previously recorded 6%-to-38% range and the second
+time the fraction has been negative.
+
+**The structural result: orthogonality in IC space buys IC and costs Sharpe.** The blend's IC rose
+by exactly the `sqrt(3)` diversification arithmetic while its book inherited the *union* of its legs'
+volatility tilts and close to the *max* of their turnovers. The lab's standing reading of blends
+("naive dilution is already priced") located the failure in dilution; this locates it one level down,
+and it is why `portfolio-learning`'s "ensembles of decorrelated signals" clause does not follow from
+a decorrelation measurement.
+
+### F9 — the retention band does not generalise, and this corrects a standing learning
+
+The 2026-10-09/10 entry ends **"Carry the band onto any future signal."** Carried onto tonight's
+signals (hold the top K = 100, keep a held name while it is inside the top B), the cost estimate
+being one-way churn x 2 sides x 25 bps and therefore a **lower bound** (the same entry records the
+engine charging 6.6x where overlap predicted 3.2x):
+
+    set / band              GROSS skill   act/yr      t   vol ratio  turn/yr  est cost  ~NET skill
+    mom252   B=none            +0.0838   +1.16%   +0.79      0.973     2.66     1.33%     +0.0106
+    mom252   B=200             +0.0138   +0.08%   +0.06      0.987     1.01     0.50%     -0.0139
+    mom252   B=400             -0.0850   -1.13%   -1.09      1.039     0.46     0.23%     -0.0975
+    slow2    B=none            +0.0168   +2.12%   +1.61      1.145     2.15     1.08%     -0.0424
+    slow2    B=200             -0.0357   +1.23%   +0.94      1.163     0.72     0.36%     -0.0554
+    slow2    B=400             -0.0649   +0.15%   +0.13      1.120     0.30     0.15%     -0.0732
+    3leg     B=none            -0.1035   +0.31%   +0.21      1.213     5.59     2.80%     -0.2572
+    3leg     B=200             -0.1082   +0.20%   +0.14      1.213     2.40     1.20%     -0.1742
+    3leg     B=400             -0.0840   -0.26%   -0.22      1.119     0.88     0.44%     -0.1082
+
+On `mom252` the band **cut turnover 62% and cut gross skill 84%**; at B = 400 it turns the block's
+only clearly positive object negative. **The band's benefit is score-specific, not construction-wide:
+it pays where a decayed-but-not-reversed holding still earns (residual reversal, where it was
+measured) and it costs where the information *is* the freshness of the ranking (momentum, where a
+stale holding is a name whose run is already over).** The best net figure in the whole table is
+`mom252` un-banded at **~+0.011**, under half the 0.025 noise floor, with 8 of 9 rows negative.
+
+### F10 — integrity: how far past the train boundary a forward target reaches, measured rather than assumed
+
+A forward return from a late-train month-end runs past 2017-12-31. Quantified:
+
+    h=21:   1/252 decision dates (last target 2018-01-29)
+    h=63:   3/252              (last target 2018-03-28)
+    h=126:  6/252              (last target 2018-06-25)
+    h=252: 12/252              (last target 2018-12-18)
+    h=504: 24/252              (last target 2019-12-06)
+
+Re-running the headline h=63 screen on the 249 month-ends whose target stays inside train
+(1997-01-31 → 2017-09-29) moves every number by <= 0.0010: `rev21` +0.0217 → +0.0214, `dayrev21`
++0.0188 → +0.0183, `nmd21` +0.0135 → +0.0130, `mom252` +0.0175 → +0.0172, `rngimp126` +0.0142 →
++0.0132, `stale126` +0.0075 → +0.0078, **3leg +0.0292 → +0.0285**. No conclusion tonight depends on
+it. Disclosed because it is real: the F6 detector's 504-day column takes 24 targets into 2019, which
+is validation-period *prices as a diagnostic target* — not a validation book, not a score, and not an
+input to any design decision, since every refusal above rests on the h=63 column and on train books.
+**Standing note for later sessions: a horizon screen quoted "on train" is only clean to the horizon
+it reaches; say which column is clean.**
+
+## Session summary — 2026-10-24/25 (nightly) — 0 trials of 8; the lab's IC screen and its Sharpe screen rank the same block backwards, the clean `liquidity-volume` block is a null, and "carry the band onto any future signal" does not generalise
+
+**Experiments run: 0 of 8. Verdicts: none recorded. Ten free measurement blocks (F1–F10), 28 new
+leak-free objects priced, one new instrument built and validated against its own null, one standing
+learning corrected and one re-opened family closed on direct measurement.** `trials.jsonl` stands at
+**120 records**. No candidate file was written. No validation book, holdout, forward or incubation
+file was opened, and the seat is still empty. Engine green (`92 passed in 75.68s`); step-0 integrity
+clean, and the `origin/main-cozirv` divergence that cost two sessions is closed.
+
+### Why zero trials, in the lab's own calibrated units
+
+The screen refused everything, and tonight it refused in **Sharpe** units rather than only through
+the IC exchange rate — which is the stronger refusal, because the exchange rate is a ceiling and a
+gross book is the thing the gate grades. Of 28 new objects and 91 combinations of them:
+
+    best single new |IC|                      0.0188   (day21 / dayrev21)  — bar is ~0.03
+    best combination |IC|                     0.0292   (rev21+rngimp126+mom252), z +7.67 vs its own
+                                                       best-of-91 null at 0.0115
+    that combination's GROSS train skill      -0.1035   at a 1.213 volatility ratio, 5.59x turnover
+    best GROSS train skill in the block       +0.0838   (mom252 alone — a price-trend re-test)
+    best estimated NET train skill            ~+0.011   (mom252 un-banded), floor sd 0.025
+
+**Every row is under the floor and eight of nine are negative.** The one object with positive gross
+skill is plain 12-month momentum skip-1, which is `price-trend` — capped, exhausted, the subject of
+34 of the lab's first 55 trials and all seven v1 promotions — and whose estimated net train skill is
+under half the noise floor. Writing any of tonight's candidates would have raised the
+deflated-Sharpe bar for every future trial (the effective N already clusters all 120 records of all
+three versions) to buy a number the free screen has already resolved. The 2026-10-16/17 rule — a
+train screen may refute but may not qualify — cuts in the refusing direction here, which is the
+direction it is allowed to cut.
+
+### Best finding: a positive IC and a negative Sharpe are not an exception here, they are the rule, and the two causes are measurable before a trial
+
+Six of eight score sets in F8 have a positive within-region IC and a **negative** gross Sharpe skill,
+and the ranking by IC is close to the reverse of the ranking by skill: the highest-|t| leg
+(`rev21`, t +2.23) is the worst book (-0.2272), and the two sets with positive skill carry the two
+least significant ICs in the block (t +1.33, +1.86). The 2026-10-20/21 entry recorded this
+disagreement as a realized-fraction *range* (6% to 38%, negative once); tonight names the two
+mechanisms and both are free to measure. **(i) The volatility ratio.** Every negative-skill set sits
+at 1.12–1.39 against the pool, the one clearly positive set at 0.973; `rngimp126` earns the block's
+largest active return (+2.96%/yr) and still loses 0.070 of Sharpe to its 1.387. **(ii) Turnover**:
+8.34x/yr for `rev21` against the pool's 0.89x. The 2026-10-13/14 entry already asked for the
+slice's volatility as a fourth screen column; tonight is the case for making **the gross book's
+Sharpe skill, its volatility ratio and its churn the primary screen and the IC a secondary one** —
+the IC is a whole-cross-section statistic and the gate grades a tail book.
+
+### Second finding: orthogonality in IC space buys IC and costs Sharpe
+
+Three mutually orthogonal legs (|rho| <= 0.02) combined to IC +0.0292 from +0.0217/+0.0142/+0.0175 —
+`sqrt(3) x 0.017`, the diversification arithmetic exactly — and the combined **book** scored
+**-0.1035** against `mom252` alone at +0.0838. The blend inherits the *union* of its legs' volatility
+tilts and nearly the *max* of their turnovers, neither of which the correlation matrix can see. The
+standing reading of blends here located the failure in naive dilution; this locates it one level
+down, and it is why `portfolio-learning`'s "ensembles of decorrelated signals" clause does not follow
+from a decorrelation measurement. **Anti-candidate: do not build an equal-weight blend of orthogonal
+leak-free legs on this panel at any leg count — the IC gain is real, arithmetic, and does not reach
+the book.**
+
+### Third finding: `liquidity-volume` is a null on clean instruments, which is a different claim from "its instrument was contaminated"
+
+The 2026-10-22 engine issue destroyed the family's only positive-train-skill object by showing
+`amihud126` goes from +0.0194 (t +2.27) to -0.0086 conditional on the contaminated price level, and
+left open whether a clean restatement would recover it. Measured directly on ratio-only objects in
+which **both** halves of `D_i(t)` cancel — volume shock at 21 and 63 days, turnover trend, volume
+dispersion, up/down volume asymmetry, gap frequency, range per unit of relative volume — the family
+is a **null at every horizon**, max |IC| 0.0142 at t +1.08, and the two largest objects are
+volatility-class. There is nothing underneath the contaminant.
+
+### Fourth finding (method): the selection-bias null for a combination search, and it is +0.0115 of free IC
+
+A best-of-91 subset search over seven legs, run on AR(1) random scores matched to each leg's own
+measured persistence, reaches |IC| **0.0115** (sd 0.0023, max 0.0145, 8 seeds) against **0.0054** for
+a single random score. So a blend search here manufactures two sd of IC out of nothing, and the
+lab's single-score floor is the wrong null for any search that picks a winner. Tonight's real winner
+cleared it at z +7.67, so the instrument was not needed to refuse anything — but every future blend
+search must be quoted against it. The tell that it is working: the null's winning pair was a
+different pair on most seeds.
+
+### Fifth finding: the no-trade band's "carry it onto any future signal" is wrong as stated
+
+On `mom252` the retention band cut turnover **62%** (2.66x → 1.01x) and cut gross skill **84%**
+(+0.0838 → +0.0138), and at B = 400 turned it negative (-0.0850) — against the recorded result that
+B = 200 cut turnover 42% and *raised* train excess from +17.5 to +22.2 bps/21d. Not a contradiction,
+a scope error: the band pays where a decayed-but-not-reversed holding still earns (residual
+reversal, where it was measured) and costs where the information *is* the freshness of the ranking
+(momentum). **Carry the band onto a mean-reverting score; price it before carrying it onto a
+trend-persistence score.**
+
+### Housekeeping and hygiene
+
+The two overnight/intraday and measurement-quality veins came from `research/SUMMARY.md` `#303`
+(partition by measurement quality, not by signal) and the folder's session-boundary section; `#301`
+(verify a penalty moves the holdings before spending a trial) was not reached, since no penalised
+construction got as far as a file. F10 discloses, measured rather than assumed, that a forward target
+from a late-train month-end crosses 2017-12-31 for 3 of 252 decision dates at h = 63 and 24 of 252 at
+h = 504, and that re-running the headline screen on the 249 clean-target dates moves nothing by more
+than 0.0010. **Last session's pre-registered prediction — `logprice` IC ~ -0.025 on validation
+against -0.088 on train, every object's leaked component scaling by 0.29 — stands unchecked, because
+no trial read validation tonight.** It should be checked by the next trial that does, not by a free
+read.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Make the gross-book screen primary and the IC secondary.** Tonight's F8 is the third
+   instance of the bps/IC-versus-Sharpe disagreement (2026-10-13/14, 2026-10-20/21, tonight) and the
+   first to name both causes. The screen a candidate should have to pass before a file is written is
+   now: **gross train skill > 0, volatility ratio <= 1.0, churn <= ~2x/yr**, with the IC used only to
+   explain *why*. Three of the lab's own 28 objects tonight pass the IC bar and none passes this one.
+2. **The one object left standing is a `price-trend` re-test, and it needs a human ruling first.**
+   `mom252` alone is the only object in the block with positive gross skill at a sub-1.0 volatility
+   ratio (+0.0838, 0.973, 2.66x), and plain cross-sectional 12-month momentum skip-1 has **no
+   recorded v3 trial**. Against it: its estimated net train skill is ~+0.011 against a 0.025 floor;
+   train skill has not transferred in seven sessions; and `program.md` records that the 2024+ holdout
+   **is partly spent on the momentum lineage by the v2 re-scoring, which published the result**. That
+   last point is the question for a human and not for this agent: *may a challenge candidate be
+   designed in a lineage whose holdout read is already published?* No number from that read was
+   opened here. Until it is answered, this is not a trial.
+3. **Do not re-buy tonight's declines.** The overnight and intraday legs of the close-to-close
+   return at any horizon, signed or differenced (the overnight leg is a null and the decomposition
+   loses to not decomposing — twice measured now, v1 and v3); the whole clean ratio-only volume block
+   (volume shock, turnover trend, volume dispersion, up/down volume asymmetry, gap frequency);
+   `rngimp126` and `park126` as books (volatility-class, 1.387 and rising volatility ratios);
+   `stale126` and `histlen` (research `#303`'s measurement-quality axes — priced, both under the
+   bar, and `stale126`'s t +2.23 at IC +0.0075 is consistency without magnitude); and any
+   equal-weight blend of orthogonal legs (finding two).
+4. **From `research/SUMMARY.md`, spent tonight**: `#303`'s measurement-quality axes (built, priced,
+   both nulls — the within-group-uniformity half was never reachable and the tilt half is under the
+   bar) and the folder's overnight/intraday session-boundary material. **Unspent and still live**:
+   `#300` (equal weight as the maximal-ambiguity optimum, with `kappa*` scaling in `N` — the
+   interpretation rule the folder itself says to read before anything else in its queue, and it
+   predicts tonight's result); `#301` (two function calls to verify a penalty moves the holdings);
+   `#304` (the cost coefficient in a candidate's objective is not the engine's cost schedule);
+   `#288` (knockoff+ FDR over the **leak-free** block only); `#289` (the train-subperiod stability
+   diagnostic, which tonight's +0.0560/+0.0288/+0.0022/+0.0245 sub-period split would have flagged);
+   `#294`/`#295`; `#285`/`#286`; `#282`. `#305` is an anti-candidate and `#293`/`#299` remain so.
+5. **Standing, and not this agent's call**: the 2026-10-18 engine issue (the null's replicas are not
+   held to the candidate's eligibility boundary, worth +0.018 of Sharpe to the null) and the
+   2026-10-22 engine issue (the stored price and volume **levels** are a back-adjustment lookahead,
+   whose signatures F6 reproduced twice tonight on an independently built harness). Both are human
+   decisions and both are now load-bearing for how this lab reads its own history.

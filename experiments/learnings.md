@@ -5741,3 +5741,104 @@ across experiments; prune entries that later evidence contradicts.
   Third instance of the panel-width family after the 2026-10-13 book-size caveat and the 2026-10-19/20
   median-versus-mean correction: **on a panel whose width triples, a date-selection rule is a
   parameter — quote it with the number.**
+
+- **[Measured 2026-10-24/25, nightly] A POSITIVE IC WITH A NEGATIVE SHARPE SKILL IS THE RULE ON THIS
+  PANEL, NOT THE EXCEPTION — THE IC RANKS A BLOCK CLOSE TO BACKWARDS, AND THE TWO CAUSES ARE BOTH
+  FREE TO MEASURE BEFORE A TRIAL.** K = 100 equal-weight monthly books, gross, train, against the
+  same harness's equal-weight eligible pool (+0.6700 gross; the engine's net pool is +0.5238 on the
+  same split, so these are relative numbers inside one harness):
+
+      score set                 IC63      t   GROSS skill   act/yr   vol ratio  turn/yr
+      rev21 only             +0.0217  +2.23      -0.2272   -2.38%      1.218     8.34
+      dayrev21 only          +0.0188  +2.26      -0.1497   -1.08%      1.173     8.00
+      mom252 only            +0.0175  +1.33      +0.0838   +1.16%      0.973     2.66
+      rngimp126 only         +0.0142  +1.08      -0.0696   +2.96%      1.387     1.11
+      stale126 only          +0.0075  +2.23      -0.1293   -1.25%      1.117     3.07
+      slow 2leg (rngimp+mom) +0.0202  +1.86      +0.0168   +2.12%      1.145     2.15
+      3leg (best of 91)      +0.0292  +2.93      -0.1035   +0.31%      1.213     5.59
+      4leg                   +0.0245  +2.28      -0.0682   +0.12%      1.129     6.25
+
+  **Six of eight sets are IC-positive and Sharpe-negative; the highest-|t| leg is the worst book; the
+  two positive-skill sets carry the two least significant ICs.** The causes: **(i) the volatility
+  ratio** — every negative set 1.12–1.39, the one clearly positive set 0.973, and `rngimp126` earns
+  the block's largest active return and still loses 0.070 of Sharpe to its 1.387; **(ii) turnover** —
+  8.34x/yr against the pool's 0.89x. Realized fraction of the `3.37 x IC` ceiling for the blend:
+  ceiling +0.098, realized **-0.1035**, i.e. **-106%**, outside the recorded 6%-to-38% range.
+  **OPERATIVE CHANGE: the pre-trial screen is now the gross book, not the IC — require gross train
+  skill > 0, volatility ratio <= 1.0 and churn <= ~2x/yr, and use the IC only to explain why.** Three
+  of 28 objects priced that night passed the IC bar; none passed this one. Third instance of the
+  bps/IC-versus-Sharpe family after 2026-10-13/14 and 2026-10-20/21, and the first with both causes
+  named.
+
+- **[Measured 2026-10-24/25, nightly] ORTHOGONALITY IN IC SPACE BUYS IC AND COSTS SHARPE. AN
+  EQUAL-WEIGHT BLEND OF DECORRELATED LEAK-FREE LEGS IS AN ANTI-CANDIDATE ON THIS PANEL AT ANY LEG
+  COUNT.** Three mutually orthogonal legs (|rho| <= 0.02: 21-day reversal, range-per-relative-volume
+  illiquidity, 12-month momentum skip-1) combined to IC **+0.0292** from +0.0217 / +0.0142 / +0.0175
+  — `sqrt(3) x 0.017`, the diversification arithmetic to three figures — while the combined **book**
+  scored **-0.1035** against `mom252` alone at **+0.0838**. The blend inherits the *union* of its
+  legs' volatility tilts (1.213) and close to the *max* of their turnovers (5.59x), neither of which
+  the correlation matrix can see. The standing reading of blends here ("naive dilution is already
+  priced, and already loses") located the failure in dilution; this locates it one level down.
+  **Consequence for `portfolio-learning`: its "ensembles of decorrelated signals" clause does not
+  follow from a decorrelation measurement, and a leaderboard `rho` is not a reason to blend.**
+
+- **[Measured 2026-10-24/25, nightly] `liquidity-volume` IS A NULL ON CLEAN INSTRUMENTS — A DIFFERENT
+  AND STRONGER CLAIM THAN "ITS INSTRUMENT WAS CONTAMINATED".** The 2026-10-22 engine issue showed
+  `amihud126` falling from +0.0194 (t +2.27) to -0.0086 conditional on the contaminated price level,
+  and left open whether a clean restatement recovers the family. Measured on ratio-only objects in
+  which **both** halves of the back-adjustment factor `D_i(t)` cancel exactly — not merely the split
+  half that cancels in `dollar_volume` — the whole family is a null at forward 21 / 63 / 252 days:
+  volume shock 21d **-0.0038** and 63d -0.0021, turnover trend -0.0041, volume dispersion +0.0000,
+  up/down volume asymmetry -0.0089, gap frequency -0.0034, range-per-relative-volume +0.0142
+  (t +1.08), Parkinson +0.0132 (t +0.91). Max |IC| 0.0142 and the two largest objects are
+  volatility-class and individually insignificant. **There is nothing underneath the contaminant;
+  the family is closed on clean measurement, not merely suspended.**
+
+- **[Measured 2026-10-24/25, nightly] THE OVERNIGHT LEG OF THE SHORT-HORIZON REVERSAL IS A PURE NULL,
+  WHICH IS *WHY* THE SESSION DECOMPOSITION LOSES TO NOT DECOMPOSING — v1'S FINDING REPLICATED ON THE
+  WIDE PANEL WITH A MECHANISM.** Forward 21d / 63d: close-to-close `ret21` **-0.0219 / -0.0217**, its
+  overnight leg `nsum21` **-0.0002 / -0.0015** (t -0.03 / -0.25), its intraday leg `dsum21`
+  **-0.0209 / -0.0188** (t -2.37 / -2.26). The 21-day reversal is **entirely intraday** — and because
+  the overnight leg is a null rather than a counter-signal, dropping it removes noise and signal in
+  the same proportion and nets slightly *worse* than not decomposing (0.0209 < 0.0219; 0.0188 <
+  0.0217). Also priced and null: night/day means at 63/126/252 days, night-minus-day at all four
+  horizons (best +0.0135), overnight-positive frequency (+0.0098). Every leg decays to ~0 by 252 days
+  and flips by 504 — a forecast's horizon profile. **Anti-candidate: the two session legs at any
+  horizon, signed or differenced.**
+
+- **[Method, 2026-10-24/25] THE SELECTION-BIAS NULL FOR A COMBINATION SEARCH: A BEST-OF-91 IS WORTH
+  +0.0115 OF FREE IC, TWO sd ABOVE THE SINGLE-SCORE FLOOR. QUOTE A BLEND SEARCH AGAINST THE SEARCH'S
+  OWN NULL, NEVER AGAINST THE SINGLE-SCORE ONE.** AR(1) random scores at each leg's **own** measured
+  month-to-month persistence (which ran -0.01 to 0.98 across seven legs — matching it matters), the
+  identical 91-subset two/three/four-leg search, 8 seeds: null |best-of-91| mean **0.0115**, sd
+  0.0023, max 0.0145, against a single random score's mean +0.0012, **sd 0.0054**. The real winner
+  reached 0.0292, **z +7.67**, so the instrument refused nothing that night — but the lab's standing
+  0.025-in-skill / 0.0054-in-IC floor is the wrong null for any statistic that picks a winner. Free
+  tell that the null is working: its winning pair differs by seed. Companion to the 2026-10-20/21
+  exchange rate and the direct answer to research `#290`/`#298` in this lab's units.
+
+- **[Measured 2026-10-24/25, nightly — CORRECTS THE 2026-10-09/10 BAND ENTRY] THE NO-TRADE BAND'S
+  "CARRY IT ONTO ANY FUTURE SIGNAL" IS WRONG AS STATED: THE BAND'S BENEFIT IS SCORE-SPECIFIC.** On
+  12-month momentum skip-1 the retention band (hold top K = 100, keep a held name while inside top B)
+  cut turnover **62%** (2.66x → 1.01x) and cut gross train skill **84%** (+0.0838 → +0.0138), and at
+  B = 400 turned the block's only clearly positive object **negative** (-0.0850, turnover 0.46x). On
+  the slow 2-leg: +0.0168 → -0.0357 → -0.0649. This does not contradict the recorded result (B = 200
+  cut turnover 42% and *raised* residual-reversal train excess from +17.5 to +22.2 bps/21d) — it
+  bounds its scope. **The band pays where a decayed-but-not-reversed holding still earns (a
+  mean-reverting score) and costs where the information *is* the freshness of the ranking (a
+  trend-persistence score, where a stale holding is a name whose run is already over). Carry it onto
+  a reverting signal; price it before carrying it onto a trending one.** Second standing learning
+  narrowed by re-measurement rather than refuted, after the 2026-10-15/16 bar's retirement.
+
+- **[Method, 2026-10-24/25] A HORIZON SCREEN QUOTED "ON TRAIN" IS ONLY CLEAN TO THE HORIZON IT
+  REACHES — SAY WHICH COLUMN IS CLEAN.** A forward return from a late-train month-end crosses
+  2017-12-31: measured, **3 of 252** decision dates at h = 63, 6 at 126, 12 at 252 and **24 of 252**
+  at h = 504 (last target 2019-12-06), so the long columns of every `sqrt(horizon)` lookahead
+  detector this lab runs take validation-period prices as a diagnostic target. Re-running the
+  headline h = 63 screen on the 249 month-ends whose target stays inside train moves every object by
+  <= 0.0010 (the 3-leg blend +0.0292 → +0.0285), so it changes nothing — but quote it rather than
+  assume it, and rest refusals on the short columns. Also recorded: the 2026-10-22 engine issue's two
+  signatures reproduced on an independently built harness — `logprice` IC growing monotonically in
+  horizon to **-0.2055** at 504 days (recorded -0.2222) and holding a constant **0.0043/yr** ratio to
+  years-of-store-remaining across four five-year buckets (recorded 0.0043/yr). Third independent
+  confirmation of that issue.
