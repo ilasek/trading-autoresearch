@@ -7024,6 +7024,97 @@ to the dimensional objection (296), a free tail diagnostic on series already hel
 correction to stability diagnostics the lab already runs (298).
 
 ---
+
+### The constraint-and-penalty layer — an uncertainty set, a trading cost and an ambiguity radius are the same object, and the equal-weight benchmark is its limit (cross-family, `portfolio-learning`)
+
+Four sources, read 2026-10-24, on the layer that sits between a signal and a book: **not what to
+predict and not how to weight it, but what to add to the objective so the answer survives being
+wrong.** Aim taken from the [2026-10-23] open-questions entry, which named the cost-aware-construction
+sweep "the best-aimed" of its three cold veins on the grounds that it is the only one whose binding
+constraint *changed* when the protocol did, and that "a turnover penalty estimates nothing" — so the
+dimensional objection that closed the risk side does not apply. Greps across all 218 prior notes
+returned **zero** for `turnover constraint`, `robust optimization`/`robust optimisation`, `Ben-Tal`,
+`uncertainty set`, `portfolio norms`, `Goldfarb`, `Iyengar`, `cost penalty` and `regularization
+equivalence`; `no-trade region` appeared in 4 and `quadratic cost` in 2, all of them on the
+*policy* question (how far to let a holding drift) rather than on the *objective* question.
+
+**Finding one, and it is a theorem rather than an analogy: a worst case over a set equals the nominal
+objective plus a dual-norm penalty, and the dictionary is exact.** Bertsimas–Brown–Caramanis (Tier A,
+SIAM Review, 2097 cites) state the general result: for an uncertainty set `U = {A : ‖M(vec A − vec Ā)‖
+≤ Δ}` the robust counterpart is the nominal constraint plus `Δ·‖(Mᵀ)^{-1}xⁱ‖_*`. **The set's size
+becomes the penalty coefficient; the set's shape becomes the penalty's dual norm.** Box/`ℓ∞` set ⇒
+`ℓ1` penalty (an LP); `ℓ1` set ⇒ `ℓ∞` penalty (an LP); ellipsoid ⇒ `ℓ2` penalty (an SOCP). Two further
+facts from the same survey matter more here than the theorem does. **Robustifying a quadratic objective
+is a different order of problem:** the robust counterpart of a QCQP is a semidefinite program for a
+single ellipsoid and **NP-hard for a polyhedral set** — so robust *variance* optimisation is closed on
+this panel computationally, independently of candidate item 294's dimensional closure of the same
+route. And **robustness can be free, with a threshold:** for robust least squares there is a computable
+`ρ_min(A,b)` below which the robust and the ordinary solution *coincide*, which generalises into a free
+pre-trial screen (item 301).
+
+**Finding two, and it is the finding of the night because it is about the gate's own benchmark: the
+equal-weight pool is the exact optimum of the maximally-uncertain problem.** Paç–Pınar (Tier B, 8
+cites), extending Pflug–Pichler–Wozabal (Tier A, 203 cites), prove that for **any convex, law-invariant
+risk measure** and a Wasserstein ambiguity ball of radius `κ`, `sup_{Q∈B_κ(P)} R(⟨X_Q,w⟩) = R(⟨X_P,w⟩)
++ C·κ·‖w‖_q`. The same dual-norm algebra as finding one, applied to *distributional* rather than
+parameter uncertainty — and because minimising `‖w‖_q` on the simplex returns `wᵢ = 1/N`, the uniform
+portfolio is what the problem hands you as `κ` grows, with an explicit finite threshold `κ* ∝ (N−1)`
+in the `p = 1` case. **The consequence for this lab is derived, not measured, and it runs against the
+grain: `κ*` scales with `N`, the panel went from 140 names under v1 to ~1,000 eligible under v2/v3, so
+the ambiguity threshold a candidate must beat to justify leaving the pool is higher now than when every
+weighting-scheme verdict in `learnings.md` was measured.** Equal weight should be *harder* to beat on
+the wide panel. Two honest limits travel with this: the theorem is for convex law-invariant **risk
+measures** and the Sharpe ratio is not one, so the identity is for worst-case risk and not for the
+statistic v3 grades; and the extension's two-market separation assumes **no correlation between the
+groups**, which its authors flag and which does not hold on one equity panel — so the group-tilt
+*direction* transfers (item 303) and the divestment *magnitudes* do not.
+
+**Finding three, and it corrects an easy mistake about the lab's own protocol: the cost coefficient in
+a candidate's objective is not the cost schedule in the simulator.** Olivares-Nadal–DeMiguel (Tier A,
+*Operations Research*, 82 cites) prove the mean-variance problem with a `p`-norm cost term is equivalent
+to three estimation-error remedies at once — a robust problem with a dual-`q`-norm mean-uncertainty set,
+a **regularised regression** (lasso for `p = 1`, ridge for `p = 2`, penalising `w − w₀` rather than
+`w`), and a Bayesian problem with an explicit weight prior. So charging yourself for trading buys
+estimation-error protection for free, which is why robust portfolios are empirically low-turnover: the
+two operations are the same one. The operative half is that `κ` is therefore a **hyperparameter**, and
+the honest value over-deters: the `ℓ1` term's kink at `w₀` creates a no-trade region that widens with
+`κ`, and at the true cost level it swallows nearly every trade, producing an all-or-nothing pattern that
+loses net-of-cost to an intermediate cross-validated trading budget. Of the two standard cost shapes
+only the quadratic one with `Λ = Σ^{1/2}` implies an uncertainty set that **coincides with the Gaussian
+confidence region for the sample mean** — the statistical case for preferring it even when real costs
+are proportional. And the per-name reading is sharp and cautionary: with `Λ` holding v3's 15/20/30/40 bps
+tiers plus the UK/HK/FR/IT/ES transaction taxes, the implied uncertainty box has half-widths `δ·λᵢ`, so
+the construction behaves as if a name's mean were wrong in proportion to its *trading cost*. **That is
+algebra, not economics** — stamp duty is a fact about a tax authority, while estimation error scales
+with volatility and history length — so the free regularization is mis-weighted and `Λ` should be chosen
+for the estimation job, with the engine charging the real schedule separately (item 304).
+
+**Finding four, and it is what the vein rules out.** Ghahtarani–Saif–Ghasemi's review (Tier B, 30
+cites, ~200 classified works) supplies the field's own verdict: robust portfolio selection "has
+received little attention from practitioners", driven "by advancements in operations research methods
+rather than … the real needs of the financial industry", and its "major obstacle" is the perception of
+**over-conservatism** — against which the literature has spent two decades inventing corrections that
+"often lead to models that are challenging to handle". It reports the equivalence result that matters
+(robust mean-variance ≡ mean-variance with Bayesian shrinkage, "no additional marginal value", the
+implied shrinkage "difficult to control", and **no guideline for calibrating the uncertainty-aversion
+parameter** — confirmed against that source's own abstract, read directly), and closes the loop with
+the review's own admission that it "is still unclear which ambiguity sets should be used … and how they
+should be sized". It also supplies the vein's one positive direction: because returns are driven by
+common factors, a set around the **return vector** is large and conservative while a set around the
+**factors** is small and less so, so a penalty belongs on exposure to a few estimated factors rather
+than on a thousand-name weight vector. None of this literature has been through a replication audit,
+because it is an OR literature and not an anomaly literature.
+
+**What the four together say, and it is a clean split.** The *reduction* is a theorem and it is free:
+every robustness device this literature offers is a penalty, the penalty is cheap, and which penalty
+you choose is a statement about which uncertainty you fear. The *optimizer* is closed here three ways
+over — computationally (robust QCQP), dimensionally (item 294), and by the literature's own
+self-assessment. So the session's output is four free rules and one construction idea that estimates a
+single scalar: read the benchmark correctly (300), screen the penalty before paying for a trial (301),
+translate "robust" into its penalty and judge that (302), tilt between measurement-quality groups while
+staying uniform inside them (303), calibrate the cost coefficient rather than copying the schedule
+(304) — and do not build the optimizer (305).
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -13013,6 +13104,127 @@ hypothesis fodder, then anti-candidates.
     tie-breaker is in the objective. Tier A, `validation_overlap: false`.
     → `notes/2026-10-23-noise-sensitivity-of-risk-measures.md`,
     `notes/2026-10-23-cvar-optimization-as-a-linear-program.md`
+300. **FREE INTERPRETATION RULE, and it reframes the benchmark the gate is built on: the equal-weight
+    eligible pool is not a convention, it is the exact optimum of the maximally-uncertain problem —
+    and the threshold it defends rises with the width of the panel.** For any convex, law-invariant
+    risk measure `R` and a Wasserstein/Kantorovich ambiguity ball of radius `κ` around a nominal
+    distribution, the worst case has a closed form: `sup_{Q∈B_κ(P)} R(⟨X_Q,w⟩) = R(⟨X_P,w⟩) +
+    C·κ·‖w‖_q`. The sup is gone and what replaces it is a **dual-norm concentration penalty on the
+    weights**; minimising `‖w‖_q` on the simplex gives `wᵢ = 1/N`. So uniform weighting is not a
+    heuristic that happens to be hard to beat — it is the solution you hold when the distribution is
+    unknown, and it becomes *exactly* optimal once `κ ≥ κ*`, with `κ* = (N−1)·E|⟨X_P,1⟩|·1_{Z̄=0}` in
+    the `p = 1` case. **The operative consequence for this lab: `κ*` scales with `N`, and `N` went from
+    the v1 panel's 140 names to roughly a thousand eligible on a typical v2/v3 validation date.** The
+    ambiguity threshold a candidate must beat to justify departing from the pool is therefore
+    **higher now than when every weighting-scheme verdict in `learnings.md` was measured** — an
+    argument, derived rather than measured, that equal weight should be *harder* to beat on the wide
+    panel, not easier. Read candidate item 1 as a consequence of this rather than as a calibration.
+    **One honest limit, and it must travel with the claim:** the theorem is for convex law-invariant
+    *risk measures*; the Sharpe ratio is not one (a ratio, not convex in `w`), so this gives the
+    equal-weight pool a decision-theoretic identity for worst-case **risk** and does not prove the
+    same for worst-case **Sharpe**, which is the statistic v3 actually grades. Tier B on the paper
+    read, A on the result it extends (203 Crossref cites), `validation_overlap: false`.
+    → `notes/2026-10-24-equal-weight-as-the-maximal-ambiguity-optimum.md`
+301. **FREE SCREEN, two function calls, and it protects the deflation bar: before spending a trial on
+    any penalised or regularised construction, verify the penalty actually moves the holdings.** For
+    robust least squares there is an explicitly computable radius `ρ_min(A,b)` below which the robust
+    and the *ordinary* solution **coincide** — ordinary least squares is already `ρ_min`-robust, so the
+    first increment of robustness is a literal no-op. Generalised as a discipline: a shrinkage,
+    turnover penalty, norm cap or uncertainty budget set below its problem's threshold returns the
+    unregularised portfolio exactly. Cost of the check: call the candidate's own `generate_weights` at
+    two coefficient values on the **visible** window and compare holdings. If they match, the trial
+    would measure the unregularised strategy under a new name and still count against the
+    deflated-Sharpe bar, which under v3 counts every recorded trial of every protocol version. Tier A,
+    `validation_overlap: false`.
+    → `notes/2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`
+302. **FREE TRANSLATION RULE, and it is the twenty-fourth detector: any proposal framed as "robust"
+    must first be rewritten as the equivalent penalised nominal problem, and judged as that penalty.**
+    The reduction is a theorem, not an analogy: for an uncertainty set `U = {A : ‖M(vec A − vec Ā)‖ ≤
+    Δ}` the robust counterpart is the nominal constraint plus `Δ·‖(Mᵀ)^{-1}xⁱ‖_*` — **the set's size
+    becomes the penalty coefficient and the set's shape becomes the penalty's dual norm.** The
+    dictionary: box/`ℓ∞` set → `ℓ1` penalty (LP); `ℓ1` set → `ℓ∞` penalty (LP); ellipsoid → `ℓ2`
+    penalty (SOCP). Two consequences. **(a)** Having written the penalty down, ask whether the lab
+    would have proposed *that* penalty on its own merits; a robust formulation whose twin is an opaque
+    shrinkage with an uncalibratable intensity has bought complexity and nothing else. The warrant is
+    an equivalence result in this literature (robust mean-variance ≡ mean-variance with Bayesian
+    shrinkage, "no additional marginal value", implied shrinkage "difficult to control", no guideline
+    for calibrating the uncertainty-aversion parameter) plus the review literature's own admission
+    that it "is still unclear which ambiguity sets should be used … and how they should be sized to
+    provide the best out-of-sample performance". **(b)** The one positive direction the same source
+    supplies: because returns are driven by common factors, a set around the *return vector* is large
+    and conservative while a set around the *factors* is small and less so — so **put the penalty on
+    exposure to a few estimated factors, not on a thousand-name weight vector.** A direction, not a
+    measured gain; the lab's PCA-residual and absorption-ratio machinery is where it would attach.
+    Also note the protocol's 25% position cap already *is* the `ℓ∞` penalty of the `p = 1` case, in
+    constraint form — usually described here as risk management, it is equally a robustness device with
+    a known reading. Tier A on the reduction, B on the equivalence claim, `validation_overlap: false`.
+    → `notes/2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`,
+    `notes/2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`
+303. **CONSTRUCTION MATERIAL (`portfolio-learning`), and it is the rare weighting proposal that passes
+    item 1's triage because it estimates exactly one scalar: partition the eligible panel by
+    *measurement quality* rather than by signal, hold equal weight inside each group, and tilt only the
+    group budget.** The theorem behind it: as ambiguity rises, the optimal book keeps **uniform weights
+    within** the ambiguous set while **shrinking the total allocation to it** in favour of the
+    better-measured set — so the first thing confidence buys is group selection, and name-by-name
+    reweighting is what the *last* of it buys. Axes available causally from the protocol's own data,
+    none of them a forecast: **length of visible price history** (a column enters `prices` only once
+    its name has been eligible, so a recently-eligible name is directly identifiable without touching
+    any membership file), **trailing dollar-volume tier** (the engine already computes it for the cost
+    model), and **fraction of non-real / forward-filled prints in the trailing window** (a name with
+    many holiday closes is measured worse — and under v3 fills happen at the next *real* print, so this
+    is already a first-class protocol concept). One parameter: the tilt. **The limitation that kills
+    the magnitudes and leaves the direction:** the source model has **no correlation between the two
+    groups** and its authors flag this themselves; here both groups are equities on one panel and
+    strongly correlated, so the divestment rates and the "fully exit the ambiguous market" arithmetic
+    do **not** transfer. What transfers is the within-group uniformity result (which needs no group
+    split at all) and the sign of the tilt. Tier B, `validation_overlap: false`.
+    → `notes/2026-10-24-equal-weight-as-the-maximal-ambiguity-optimum.md`
+304. **DESIGN RULE for every cost-aware construction, and it is a correction to an easy mistake: the
+    cost coefficient a candidate puts in its own objective is NOT the cost schedule the engine charges
+    it.** The portfolio problem with a `p`-norm cost term `κ‖Λ(w−w₀)‖_p^p` is *provably* equivalent to
+    (i) a robust problem whose mean-uncertainty set is the dual `q`-norm ball, (ii) a regularised
+    regression — lasso for `p = 1`, ridge for `p = 2` — penalising `w − w₀`, and (iii) a Bayesian
+    problem with an explicit prior on the weights. So the cost term **is** a regularizer, `κ` **is** a
+    regularization strength, and it should be cross-validated like one. Two sharp sub-rules. **(a) The
+    honest coefficient over-deters trading.** Because the `ℓ1` term is non-differentiable at `w₀` it
+    creates a no-trade region whose width grows with `κ`, and at the true cost level that region
+    swallows nearly every trade — the measured pattern is "all-or-nothing", turnover near zero, and
+    net-of-cost performance below what an intermediate, cross-validated trading budget achieves. The
+    right thing to calibrate is a **trading budget `τ` = `‖w−w₀‖₁`**, which indexes both the
+    proportional and the quadratic penalty (the quadratic optimum is a convex combination of the
+    starting and the cost-free book, i.e. partial movement toward the target — no optimizer needed for
+    a long-only ranked book). Calibrate on a small grid inside the **visible** window only, with the
+    purging discipline of `notes/2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`, or
+    `causality_check` will fail it. **(b) Do not take `Λ` from the cost schedule when the job is
+    estimation error.** With `Λ = diag(λᵢ)` holding v3's per-name round-trip rates (15/20/30/40 bps
+    tiers plus UK/HK/FR/IT/ES transaction taxes), the implied uncertainty box has **per-name
+    half-widths `δ·λᵢ`** — i.e. the construction behaves as if each name's expected return could be
+    wrong in proportion to its *trading cost*. That is algebra, not economics: a UK large-cap's stamp
+    duty is a fact about HMRC, while real estimation error scales with a name's volatility and the
+    length of its history. The free regularization that comes with charging honest costs is therefore
+    **mis-weighted** — over-shrinking expensive-but-well-measured names, under-shrinking
+    cheap-but-noisy ones. Of the two standard shapes only the quadratic one with `Λ = Σ^{1/2}` implies
+    a set that coincides with the Gaussian confidence region for the sample mean, which is the
+    statistical case for preferring it *even when the real costs are proportional*. Tier A,
+    `validation_overlap: false`.
+    → `notes/2026-10-24-transaction-costs-as-robustness-and-regularization.md`
+305. **ANTI-CANDIDATE, written for the same reason as `#299` and `#293`: do not build a robust
+    optimizer — worst-case mean-variance, robust minimum-variance, or a Wasserstein/DRO portfolio —
+    over the eligible panel.** Three independent objections stack, none needing a trial. **Computational:**
+    the robust counterpart of a quadratically-constrained quadratic problem is a semidefinite program
+    for a single ellipsoid and **NP-hard for a polyhedral set**; this repo has `scikit-learn` and
+    `scipy` and no conic solver, against ~1,000 eligible names. **Dimensional:** item `#294`'s `N/T`
+    arithmetic already closes estimated-risk optimisation on this panel, robust or not. **The
+    literature's own:** robust portfolio selection is, by its own review's assessment, over-conservative
+    (its "major obstacle" to adoption), equivalent to a shrinkage estimator in the formulations that
+    have been checked, and lacking any principled way to size the uncertainty set — and it has never
+    been through a Hou–Xue–Zhang- or Jensen–Kelly–Pedersen-style replication audit, because it is an OR
+    literature rather than an anomaly literature. **The constructive residue is the penalty, which
+    estimates nothing and costs nothing** (items `#301`, `#302`, `#304`); the optimizer is the part to
+    leave alone. Tier A on the computational and dimensional objections, B on the literature's,
+    `validation_overlap: false`.
+    → `notes/2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`,
+    `notes/2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`
 
 
 ---
@@ -13094,8 +13306,137 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-21 (session 68) | **The first session to read the literature on *selection* rather than *shrinkage* — how a predictor gets into the candidate set — and it supplies the one tension this folder can still raise against the lab's four-fold closure of `statistical-learning`: the two procedures the closure was measured with are the two that fail, by construction, in exactly one named case.** Aim taken from the 2026-10-20 open-questions entry and the 2026-10-20/21 journal's own idea 5, which between them named `feature selection` as "the one of the three [remaining cold veins] that is not downstream of a closure" — `hidden Markov`/`change point` and `transfer entropy` sit in families the lab has closed structurally. One grep confirmed it: across all 207 prior notes `feature selection`, `sure independence`, `stability selection` and `knockoff` returned **zero**, while `lasso` returned 8 and `sparsity` 8 — every one of which treats a penalty as a way to *estimate* a coefficient vector, none as a way to form the candidate set. Four primaries, all read in full, three Tier-A statistics and one Tier-A economics, forming one chain: can a cheap screen find it → is the selection reproducible → is the selection real → should you be selecting at all. Headline: **the lab's refusal rule and the lab's closure were both measured with marginal and one-pass procedures, and there is exactly one failure mode those two share.** Ranking by marginal correlation `ω = Xᵀy` has the sure-screening property `P(M* ⊆ M_γ) → 1` only under a condition the source states in words — it "rules out the situation in which an important variable is marginally uncorrelated with `Y`, but jointly correlated with `Y`" — and in that case the marginal screen recovers the true model **0% of the time *and so does a one-pass lasso over the full candidate set***, at every sample size tried, while the **iterated-residual procedure recovers it 100% of the time**; more data does not help, because the ranked quantity does not hold the information. Two further readings of the same theorem invert intuition: the surviving set must be **larger** when signals are weaker (`θ* > 2κ + τ`) and nothing below root-`n` is detectable at all (`κ < 1/2`), which is the lab's own sd-0.025 noise floor arriving from theory. So the lab's "a penalised linear combination of individually-null features is itself a null here" is sound as a *measurement* and does **not** license the inference that no marginally-null-but-jointly-important feature is in the block — and the test that decides it is free and strengthens the closure if it comes back empty (**#284**). Second, a reporting rule that two independent statistical traditions reach from opposite directions: subsampling-based **selection frequencies** with a finite-sample bound `E(V) ≤ q_Λ²/((2π_thr−1)p)` and consistency **without the irrepresentable condition** (**#285**), and a Bayesian spike-and-slab showing inclusion probability and shrinkage to be **substitutes** — so a method that can only select "might artificially recover sparse model representations simply as a device to reduce estimation error", and the Bayesian lasso, lava, horseshoe and elastic net put no mass on an exact zero and are therefore no evidence about sparsity at all. In five of six unrelated prediction problems no predictor is systematically excluded; the **cross-section of US stock returns is the extreme case**, its predictive-score curve flat to order `10⁻⁶` per observation across all model sizes and the only application where sparsity **could not be induced even by a prior giving under 1% probability to five-or-more-predictor models** (**#286**). Third, the night's one result about the lab's own machinery, recorded as a tension and not a refutation: an FDR filter works by preserving the original-to-decoy **cross**-correlations `XᵀX̃ = Σ − diag{s}`, and a **row permutation** cannot substitute because it preserves `X^πᵀX^π = Σ` while destroying `XᵀX^π ≈ 0` — at a uniform feature correlation of 0.3 and a nominal 20%, the decoy filter realised 12.29% and the permutation construction **45.61%**. The lab's null permutes a weight vector rather than a design matrix, so this transfers as a *question* (a permutation null is only as good as the dependence it preserves) landing on the seam the lab found twice from the inside — [2026-10-14/15]'s null power continuous in concentration, and the **standing 2026-10-18 engine issue** — and on nothing else (**#287**, with **#288** the construction, whose `n ≥ 2p` condition this panel satisfies by orders of magnitude and which answers `program.md`'s charter question *in the units of the question*: a feature set with a bounded false-discovery rate, empty set included). New: **#284–#288, all five free, no trial proposed**, which is the right output for a night whose job was to check an inference rather than to supply a book. No lab measurement was taken and the holdout was not read. | Fan–Lv 2008, *JRSS-B* (`2026-10-21-sure-independence-screening-marginal-vs-joint.md`); Meinshausen–Bühlmann 2010, *JRSS-B* (`2026-10-21-stability-selection-subsampling-error-control.md`); Giannone–Lenza–Primiceri 2021, *Econometrica* (`2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`); Barber–Candès 2015, *Annals of Statistics* (`2026-10-21-knockoff-filter-fdr-control-vs-permutation.md`) |
 | 2026-10-22 | **The `hidden Markov` / `change point` vein — the first of the two named cold veins left by [2026-10-21], aimed at the measurement layer rather than the signal layer, and read against that entry's sharpened acceptance criterion (admit it only if it yields something that is *not* a timing overlay). Zero prior notes on `change point`, `changepoint`, `hidden Markov` or `CUSUM` across 211 notes; `structural break` appeared in 4, none about the estimators. Outcome: the criterion is met on the diagnostic side and fails on the signal side, which is recorded as an anti-candidate.** | Bai–Perron 1998 (Econometrica) + Killick–Fearnhead–Eckley 2012 (JASA) (`2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`); Hansen 2001 (JEP) (`2026-10-22-breakdate-inference-unknown-timing.md`); Ang–Timmermann 2012 (Annual Review of Financial Economics, read as NBER WP 17182) (`2026-10-22-regime-switching-financial-markets.md`). **Three sources recorded as not obtained:** Andrews 1993 (Econometrica, 3065 cites — Cowles legacy PDF path returns an HTML body and the current Cowles record page is a 1.1 MB Drupal shell with no PDF href at all); Hansen 1992 (JAE, 593 cites — fetched cleanly from the author's site but is a text-layerless scan, not rendered); Bai–Perron 2003 (JAE, 4445 cites, the computation companion). Nothing below is attributed to any of the three. |
 | 2026-10-23 (session 70) | **The first session to look at what the word "risk" denotes rather than which risk to take, and the cluster splits cleanly: the tail measures win on axioms and lose on estimation, by a closed form at a ratio this panel already violates.** Aim picked by gap rather than by the two named cold veins — the 2026-10-22 entry downgraded `transfer entropy` to "worth at most one note, not a session" and said a better-aimed session would pick by the gap in the free queue. Greps across all 214 prior notes: **zero** for `Rockafellar`, `Uryasev`, `Artzner`, `coherent risk`, `semivariance`, `lower partial moment`, `spectral risk`, `conditional value at risk`, `turnover constraint`, `robust optimization`; 1 each for `CVaR`, `Sortino`, `expected shortfall`, `drawdown control`; `maximum drawdown` in 5 notes but only ever as a reported *outcome*, never as an objective. `portfolio-learning` by charter, cross-family in effect because it bears on the gate's own statistic. Headline one: the coherence axioms **reject the mean-variance objective on monotonicity and the semi-variance objective on subadditivity**, VaR's acceptance set is **non-convex**, VaR is non-subadditive even for **independent** risks, and in the canonical example **diversifying across a hundred independent defaults raises measured risk** while a single-name pile-up reads as riskless — but every justification offered for the axioms is institutional (margin accounts, per-desk cash limits), so v3's Sharpe-based gate failing axiom M is **not** a reason to change the gate. Headline two: minimising CVaR is a **linear program** via one identity that makes the quantile a free variable, the source paper's own illustrative constraint set is **`xⱼ ≥ 0, Σxⱼ = 1`, exactly this lab's**, and the atom-splitting definition is the only one of three that is coherent — yet **under normality and `β ≥ 0.5`, minimum-CVaR, minimum-VaR and minimum-variance are provably the same portfolio**, both measures being affine in `(µ, σ)`, so the whole vein's value is bounded by the book's departure from normality. Headline three, and the one that closes most of it: `q̄₀ = 1/√(1 − N/T)` is the **exact** mean inflation of realised risk from estimated inputs, scaling in the ratio alone, diverging at a critical `N/T` of **1 for variance, 1/2 for maximal loss, below 1/2 for expected shortfall** and *falling further as the tail level loosens*; worked for this panel (~1,000 eligible names, ≤~1,510 causal daily rows) that is `N/T ≈ 0.66`, a **71% risk inflation for variance and past CVaR's critical ratio outright**. Headline four, the salvage: the dual theory makes CVaR's subgradient the **normalised indicator of the tail**, hence a **tail beta to the equal-weight eligible pool** that is a univariate conditional mean per name and so immune to the `N/T` objection — but the source authors' own derivation omits `xᵢ ≥ 0` and explicitly criticises earlier work for zeroing the non-negativity multipliers, so on this long-only book the beta survives as a feature and **not** as a pricing relation. Two pieces of scrupulousness recorded against over-import: the noise paper's *feasibility* transition (objective unbounded, no solution exists) **does not transfer**, because long-only confines weights to a compact simplex that bounds the CVaR program for every sample — accuracy transfers, infeasibility does not; and the apparent clash between the two axiom papers over "semideviation" is a **definitional** one (standard-deviation-operator-of-the-shortfall versus plain `L²`-norm-of-the-shortfall), resolved in the notes and flagged there as my reading rather than either paper's claim. Six free or cheap items added (294–299), three of them closures. | Artzner–Delbaen–Eber–Heath 1999 (Mathematical Finance, 6846 cites) (`2026-10-23-coherent-measures-of-risk-axioms.md`); Rockafellar–Uryasev 2000 (Journal of Risk, 5550) + 2002 (JBF, 3111) (`2026-10-23-cvar-optimization-as-a-linear-program.md`); Rockafellar–Uryasev–Zabarankin 2006 (Finance and Stochastics, 458) + 2006 (Mathematical Programming, 88) (`2026-10-23-generalized-deviation-measures.md`); Kondor–Pafka–Nagy 2007 (JBF, 105, read as arXiv `physics/0611027`) (`2026-10-23-noise-sensitivity-of-risk-measures.md`). **One source recorded as not obtained:** Lim–Shanthikumar–Vahn 2011, "Conditional value-at-risk in portfolio optimization: Coherent but fragile" (Operations Research Letters, 125 Crossref / 142 Semantic Scholar cites) — the intended fragility counterweight, closed at the publisher, `openAccessPdf` status `CLOSED` on Semantic Scholar, OpenAlex listing only the DOI, and the Berkeley CDAR working-paper copy unreachable (see access notes). Kondor–Pafka–Nagy was substituted for it and is the stronger source for the purpose, being an exact result rather than a simulation study. Nothing below is attributed to the unobtained paper. |
+| 2026-10-24 (session 71) | **The cost-aware-construction sweep the [2026-10-23] entry nominated as best-aimed, and it pays out as one theorem repeated in three literatures plus a decision-theoretic identity for the gate's own benchmark.** Aim taken directly from that entry (the only cold vein whose binding constraint changed when the protocol did, and the one where "a turnover penalty estimates nothing" so item 294's dimensional objection does not reach). Greps across all 218 prior notes: **zero** for `turnover constraint`, `robust optimization`/`robust optimisation`, `Ben-Tal`, `uncertainty set`, `portfolio norms`, `Goldfarb`, `Iyengar`, `cost penalty`, `regularization equivalence`, `L1 constraint`; `no-trade region` 4 and `quadratic cost` 2, all on the *policy* question rather than the *objective* question. (`Gârleanu` returned 5 — the diacritic, not a gap; the aim-portfolio paper is covered and was not re-read.) Outcome: **the reduction is free and the optimizer is closed three ways over.** Olivares-Nadal–DeMiguel (Tier A, OR, 82 Crossref cites) prove a `p`-norm cost term is simultaneously a robust problem, a lasso/ridge regression and a Bayesian prior — so `κ` is a hyperparameter, the honest value over-deters into all-or-nothing trading, and v3's per-name `Λ` implies an uncertainty box with half-widths proportional to *stamp duty* rather than to estimation error. Paç–Pınar (Tier B, 8 cites) extending Pflug–Pichler–Wozabal (Tier A, 203 cites) prove worst-case risk = nominal + `Cκ‖w‖_q` over a Wasserstein ball, making the equal-weight pool the exact high-ambiguity optimum with a finite threshold `κ* ∝ (N−1)` — which, since the panel went 140 → ~1,000 names, says the pool got **harder** to beat, derived rather than measured. Bertsimas–Brown–Caramanis (Tier A, SIAM Review, 2097 cites) supply the general dual-norm theorem, the `ρ_min` free-robustness threshold, and the NP-hardness that closes robust variance optimisation here. Ghahtarani–Saif–Ghasemi's review (Tier B, 30 cites) supplies the field's self-assessment (over-conservative, equivalent to shrinkage, nobody knows how to size the set) and the one positive direction (robustify the factor, not the name). Five free items (300–304) and one anti-candidate (305). | Olivares-Nadal & DeMiguel 2018 (`2026-10-24-transaction-costs-as-robustness-and-regularization.md`); Paç & Pınar 2018 + Pflug–Pichler–Wozabal 2012 (`2026-10-24-equal-weight-as-the-maximal-ambiguity-optimum.md`); Bertsimas, Brown & Caramanis 2011 (`2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`); Ghahtarani, Saif & Ghasemi 2022 (`2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-24] What should aim session 72: tonight spent the last of the three sweeps the 2026-10-23
+  entry named, and the best-aimed successor is not a new vein but a *primary source for a rule this lab
+  already applies on every weighting proposal.*** The method that found tonight's vein — grep for the
+  mathematical objects, not the strategy families — was reused and worked again; running it over the
+  *inference* layer turns up the sharpest gap in the folder. Candidate-list item 1 (count the
+  noisily-estimated parameters before any weighting trial) is the most-used rule this folder has, and it
+  rests entirely on **calibrations and empirical horse-races** (DeMiguel–Garlappi–Uppal and the
+  naive-vs-optimized note). The exact-inference literature behind it has never been read here:
+  `Britten-Jones` returned **0** before tonight (the 1 hit is tonight's own note, which cites him only
+  for the regression representation), and `sampling error in estimates` is still **0**. Britten-Jones
+  (1999, *Journal of Finance*) gives the regression form of mean-variance *and* exact finite-sample
+  F-tests on the estimated weights, with Jobson–Korkie and Kan–Zhou in the same vein. **Why this is the
+  best aim: it would convert the lab's single most-used screen from a calibration into a theorem with a
+  test statistic**, and the protocol already records everything such a test would need. Tonight's item
+  300 pushes the same way from the other side — it derives *why* the pool should be harder to beat on the
+  wide panel but gives no way to test a given candidate's claim.
+  - **Carried over unspent, in order.** `Kalman` (**0**) and `state space` (1) — continuous
+    time-varying-parameter estimation, the continuous-state complement to 2026-10-22's discrete regimes
+    and still a genuinely different object from both an overlay and a break date. Then `wavelet` (**0**),
+    `long memory` (**0**), `Hurst` (1) — multi-scale decomposition, whose honest anchor is the *skeptical*
+    modified-R/S literature, i.e. the "worth reading for what it rules out" shape. `transfer entropy` is
+    **still 0** after three sessions of being nominated and downgraded; stop nominating it.
+  - **One vein tonight probably closed in advance, and the prediction is cheap to falsify.** `entropic`
+    (**0**) and `Hansen Sargent` (**0**) — robust control with a relative-entropy penalty on the
+    model — is the economics-side cousin of tonight's reduction. **Prediction: it is a third instance of
+    the same theorem** (a divergence ball around the nominal model ⇒ nominal objective plus a penalty,
+    here a KL/entropic one), and so by the 2026-10-22 acceptance criterion it is worth at most one note
+    rather than a session. A session that opens it should state that prediction first and abandon the
+    vein if the first paper confirms it.
+  - **The free queue, and tonight added five free items plus one anti-candidate.** `#300` is an
+    *interpretation* rule and should be read before anything else in the queue, because it changes how the
+    gate's own benchmark is understood and it is the first item in this folder that argues a standing
+    verdict (equal weight wins) should be *more* true under v3 than under v1 rather than merely carried
+    over. `#301` is the cheapest item added in several sessions — two calls to a candidate's own weight
+    function — and it protects the deflation bar, which no other free item does. `#304` is the one that
+    will change code: it says plainly that copying v3's cost schedule into a candidate's objective is a
+    modelling error, which is a thing someone would otherwise do believing it to be rigorous. `#302` is a
+    screen plus one positive direction (robustify the factor, not the name). `#303` is the only
+    construction material and it estimates **one scalar**, which almost no weighting proposal in this
+    folder does — run it after `#300` is understood, because `#300` is the reason to expect the uniform
+    *within*-group part to hold. `#305` is written as an anti-candidate for the same reason `#299` and
+    `#293` were.
+  - **Unchanged and still live below those**: `#294`–`#299` from 2026-10-23 (`#294` and `#295` still the
+    two to run first in that block, and `#295`'s null outcome is still the informative one); `#289`
+    (the train-subperiod-split stability diagnostic) and `#290`–`#292` from 2026-10-22; `#284`
+    (the iterated-residual pass, still the only queue item that can change the status of a *closed*
+    family) and `#285`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair
+    (`#273`, `#274`, with `#275` gated on its own free screen); then 2026-10-17, 2026-10-16, 2026-10-15
+    and everything carried under them.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas are
+    not held to the eligibility boundary the candidate is held to) is still a human decision. **Resolved, and the
+    previous entries in this slot are now stale:** the `origin/main-cozirv` divergence that halted the
+    strategy sessions of 2026-10-22 and 2026-10-23 is **closed** — `git merge-base --is-ancestor
+    d20f26b origin/main` returns true as of 2026-10-24, so that commit's journal and learnings content
+    is on `main` and no content is unlanded. What is left is pure housekeeping a human can do whenever:
+    six stale `origin/main-*` branches (`0xxhh0`, `7iyrzq`, `86aao6`, `cozirv`, `e6mtf5`, `x8h7jq`) are
+    safe to delete so the step-0 integrity sweep stops listing them. **No strategy session should treat
+    this as a blocker any more.**
+  - **Named for a later session rather than summarised:** **Pflug–Pichler–Wozabal (2012)**, *JBF*, the
+    paper behind tonight's finding two, **not obtained** — closed at Elsevier, no OA location in
+    OpenAlex, and the one free copy a search named (University of Vienna Phaidra) is a zero-byte refusal.
+    Its theorem is recorded from Paç–Pınar, who adopt the framework and re-derive it, and is independently
+    confirmed by the review; this is a **pointer, not a gap**, and the only thing a direct read would add
+    is the single-market statement without the uncorrelated-two-market limitation. **Goldfarb–Iyengar
+    (2003)**, *Math. of OR*, 701 Crossref cites — the canonical factor-model uncertainty set, also not
+    obtained (Columbia's `~gi10` directory 403s; `legacy.slmath.org` serves the authors' own MSRI
+    **slides** for it, which were read for orientation and are not a source). Worth one fetch only if
+    `#302`'s factor-level direction is ever built in earnest. **DeMiguel–Garlappi–Nogales–Uppal (2009)**,
+    *Management Science*, 921 Crossref cites — the norm-constraint paper, closed, and its LBS repository
+    record holds **no file**; it is cited in passing in `2026-08-22-long-only-as-l1-regularization.md` and
+    tonight's Proposition 1(iii) generalises its Bayesian reading, so it is a pointer too. **Scherer
+    (2007)**, *JAM*, 62 Crossref cites — abstract read directly at the publisher and quoted as an
+    abstract; full text not obtained and not needed, since the review reports its result and tonight's
+    other sources prove the general version.
+- **[2026-10-24] The transferable output, and it is the twenty-fourth detector: when a source offers
+  protection against uncertainty, find the penalty its protection is *equal to* before reading a word of
+  its empirical section — because the penalty is almost always implementable here and the protection
+  machinery almost never is.** The twenty-three before it are listed in the 2026-10-23, 2026-10-22 and
+  2026-10-21 entries. Tonight this detector fired three times on three independent literatures and
+  returned the same object each time: parameter uncertainty (Bertsimas et al., Theorem 2), trading costs
+  (Olivares-Nadal–DeMiguel, Proposition 1) and distributional ambiguity (Pflug et al., via Paç–Pınar,
+  Proposition 1) all reduce to *nominal objective + coefficient × dual norm of a vector*. **The thing
+  worth carrying is not the reduction but what it does to reading order:** applied first, it turns a
+  survey of two hundred robust-portfolio papers into a question about two choices — which vector is
+  penalised and in which norm — and makes most of the literature's apparatus skippable. Note which vector
+  each one penalises, because that is the whole difference and it is easy to blur: costs penalise
+  `w − w₀` (don't move), ambiguity penalises `w` (stay spread out). **Second transferable, and it is the
+  one I would reuse first: when the protocol contains a benchmark, ask what decision problem that
+  benchmark solves *exactly*.** Finding two came from noticing that v3 grades skill against the
+  equal-weight pool and that a theorem on a nearby shelf says the uniform portfolio is the exact optimum
+  of the maximum-ambiguity problem — which turned a convention into a claim with an `N`-dependent
+  threshold, and produced the only item in this folder arguing a standing verdict is *more* true now than
+  when it was measured. **Third, and it is the 2026-10-23 sourcing rule confirmed rather than restated:**
+  tonight's sharpest output again came from reading a construction paper and an estimation/limitation
+  paper together — Olivares-Nadal's `Λ` matrix is construction material, and it only became the
+  mis-weighted-regularizer caution once it was read against what actually drives estimation error. A
+  session that read two construction papers would have recorded `Λ = diag(cost)` as a feature.
+- **[2026-10-24] Access findings — one excellent new repository, one new "looks like an answer" mode, one
+  host confirming an old one, and a reminder that an institutional *record* is not a *file*.** **The new
+  channel: Bilkent University's DSpace (`repository.bilkent.edu.tr`) served the typeset published PDF of a
+  closed Springer article on the first try**, via `/bitstreams/<uuid>/download` read out of the item page,
+  with `/server/api/core/items/<uuid>/bundles` as the API route if the HTML changes. This extends the
+  2026-10-04 co-authors'-institutions procedure with a Turkish host and is the second time that procedure
+  has produced a *typeset published* PDF rather than a working paper. Also working: **`www.mit.edu/~dbertsim/papers/`**,
+  a flat author directory (the 2026-10-23 Rockafellar lesson again) — but **case-sensitively**, as
+  `…applications%20of%20Robust%20Optimization.pdf` 404s where `…of%20robust%20optimization.pdf` succeeds,
+  so read `papers.html` rather than guessing capitalisation. **New refusal mode, and it is a fifteenth
+  "looks like an answer": a faculty page on a Next.js site returns HTTP 200 with the same ~500 KB
+  application shell for *every* path beneath it.** `faculty.london.edu/avmiguel/` and
+  `faculty.london.edu/avmiguel/<anything>.pdf` return byte-identical HTML, so a 200 from such a host is
+  not evidence the file exists and a guessed filename can never be falsified there. **Confirming an old
+  mode on a new host:** `fedora.phaidra.univie.ac.at/fedora/get/o:<id>/bdef:Content/download` returns
+  **HTTP 200 with a zero-byte body**, the signature recorded for `escholarship.org` on 2026-10-23 — only
+  `curl -w '%{size_download}'` reveals it, and it is now a two-host pattern rather than a one-off.
+  **The reminder, and it cost a fetch: an EPrints/DSpace record is not a file.** `lbsresearch.london.edu/id/eprint/920/`
+  carried a working PDF link; `…/eprint/330/` for a different paper by overlapping authors carried none at
+  all ("Full text not available from this repository"). Check for a `.pdf` href before concluding a
+  repository has the paper. Also: **`api.core.ac.uk` returns HTTP 429 to an unauthenticated client** (a
+  key requirement, not a rate limit to wait out), **`citeseerx.ist.psu.edu` document URLs die with a
+  transport failure** (`code=000`), **Columbia's `www.columbia.edu/~gi10/` returns 403** while
+  `legacy.slmath.org` serves the same authors' workshop slides at 200, and **`file -b` reported "9
+  page(s)" for a PDF `pdfinfo` correctly called 31** — the 2026-10-23 warning, confirmed on a second file.
+  **Crossref answered all eight citation lookups on the first call** (82, 701, 921, 2097, 203, 8, 30, 62)
+  and was the only index that did: **Semantic Scholar 429'd on the very first two DOI calls of the
+  session**, which is earlier than the README's "after a few" suggests, and **OpenAlex answered four
+  `locations` lookups before being left alone** per the small-budget warning. Crossref first, OpenAlex for
+  `locations` only, Semantic Scholar not at all.
 
 - **[2026-10-23] What should aim the next session: tonight spent a gap rather than a named vein, it
   paid better than either named vein was projected to, and the method that found it is the thing to

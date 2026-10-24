@@ -22408,3 +22408,5 @@ Housekeeping left for a human, not done here (outside a reporting session's remi
 needed to resolve the divergence — `d20f26b9` is now an ancestor of `main`): the five
 already-merged `origin/main-*` branches and `origin/main-cozirv` itself are safe to delete
 or archive so the sweep stops listing them.
+
+## Research session — 2026-10-24 (learning agent): 4 notes added, see research/SUMMARY.md
