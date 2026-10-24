@@ -23,6 +23,17 @@ across experiments; prune entries that later evidence contradicts.
 - **Every trial raises the bar**: the deflated-Sharpe benchmark grows with the
   trial count in `experiments/trials.jsonl`. Sweeping parameters wastes shared budget —
   test ideas, not knobs.
+- **The stored price LEVEL and volume LEVEL are not causal** (measured 2026-10-21/22, filed as an
+  engine issue; full entry at the foot of this file). Yahoo's bars are dividend- and split-adjusted
+  **as of the fetch date**, so `adj_i(t) = raw_i(t) * D_i(t)` with `D_i(t)` the product of every
+  distribution factor *after* `t`. That factor cancels in every ratio of two prices inside the
+  visible window and is swamped in every trend, and it **dominates the level**: the log price level
+  scores a within-region rank IC of **-0.0878 (t -12.59)** and a top-100 train skill of **+0.163**,
+  both records here, and `causality_check` cannot see it because hiding the tail of the frame does
+  not change stored numbers. **A candidate may use ratios, returns and trends of the stored panels;
+  it may not use their levels, and may not orthogonalise against a level.** `dollar_volume =
+  close x volume` keeps the dividend half of the factor (the split half cancels), which accounts for
+  Amihud's whole measured IC.
 
 ## Strategy learnings (append below)
 
@@ -5603,3 +5614,130 @@ across experiments; prune entries that later evidence contradicts.
   statistic before reading a number off it: an object and its own negation cannot both be positive.**
   This is the second instrument-validation catch in two nights, and unlike the 2026-10-19/20 one it
   was caught by a free invariant rather than by a replication against a recorded figure.
+
+- **[Measured 2026-10-21/22, nightly — FILED AS AN ENGINE ISSUE, see the journal entry of 2026-10-22]
+  THE STORED PRICE LEVEL AND VOLUME LEVEL EMBED FUTURE CORPORATE ACTIONS. THEY ARE THE LARGEST
+  SIGNAL THIS LAB HAS EVER MEASURED AND THEY ARE A LOOKAHEAD, AND SIX OF THE LAB'S OWN
+  CHARACTERISTICS ARE THEM IN COSTUME.** The store holds Yahoo's dividend- and split-adjusted bars,
+  back-adjusted to the fetch date, and no raw close (`scripts/update_data.py` docstring;
+  `load_ohlcv` has open/high/low/close/volume). So `adj_i(t) = raw_i(t) * D_i(t)` where `D_i(t)` is
+  the product of every distribution factor **after** `t`, and `volume_ratio_for` puts the split half
+  of the same factor into the volume level with the opposite sign. `D_i(t)` is a per-name
+  multiplicative **constant**: it cancels in every ratio of two prices inside the window, it is
+  swamped in every trend (the 504-day trend of an adjusted log price is dominated by the realised
+  return over the window, IC +0.0115, flat in horizon), and **it dominates only where a statistic
+  has no other cross-sectional scale — the price level and the volume level.** Measured, train, 252
+  month-ends, within-region normal-score IC against the forward 63-day return:
+
+      object                    IC          top-100 train skill   vol/pool
+      log price level        -0.0878 (t -12.59)     +0.163          1.082
+      log median volume      +0.0383 (t  +4.82)       --              --
+      previous lab record    +0.0412 (coint slope);  +0.141 (1/sigma^2 weighting)
+
+  **Two signatures, neither with an economic reading.** (i) `|IC| ~= 0.0043 * (years of store left
+  after the decision date)` — -0.1231 / -0.1151 / -0.0652 / -0.0490 across train's four five-year
+  buckets at 27.8 / 22.8 / 17.8 / 11.8 years remaining, monotone across all four while the panel's
+  composition changes once. (ii) **The IC grows like sqrt(horizon)** — -0.0497 at 21 days to -0.2222
+  at 504 — which is what a leaked deterministic drift does (linear in the mean, sqrt in the
+  dispersion) and the opposite of what a forecast does; every leak-free object decays instead.
+  **Neither v3 defence can see it**: `causality_check` hides the tail of the frame, which does not
+  change stored numbers, so a level score recomputes bit-identically; `static_check` looks for named
+  instruments and membership files, and a level names nothing.
+  **The reach.** With the level's IC at -0.0878, an object exposed only through a correlation should
+  carry `rho * -0.0878`:
+
+      object       rho to level   leak-predicted   measured            partial | level
+      amihud126       -0.236         +0.0207       +0.0194 (t +2.27)   -0.0086 (t -1.10)
+      ladv126         +0.181         -0.0159       -0.0139 (t -1.54)   +0.0102 (t +1.19)
+      park126         -0.172         +0.0151       +0.0154 (t +1.08)        --
+      vol126          -0.146         +0.0128       +0.0169 (t +1.16)   +0.0102 (t +0.71)
+      ivol126         -0.158         +0.0139       +0.0090 (t +0.71)        --
+      hi52            +0.166         -0.0146       -0.0098 (t -0.73)        --
+
+  **One number reproduces six of the lab's characteristics to within 0.004.** The standing reading
+  that "several of the lab's features collapse onto the volatility axis" is better stated as: they
+  collapse onto the price level, and the price level is contaminated. **No recorded verdict changes**
+  — no trial ever scored on a level, the `lv_*`/`sl_*` lineage uses `dollar_volume = close x volume`
+  where the split half cancels and only the weaker dividend half remains, and trial #10, which
+  regresses levels on levels and was the obvious place for it to hide, is clean (rho +0.006 to the
+  level, its IC rises when the level is projected out, its horizon profile turns over at 252 days).
+  **What changes is inference, in one direction**: the contaminant decays at ~0.0043 of IC per year
+  of remaining store, so it is about **twice as strong on train as on validation**, which is a
+  mechanical contributor to seven sessions of "a clean train screen is not evidence".
+  **Standing operating rule until a human rules on the engine issue: a candidate may use ratios,
+  returns and trends of the stored panels and may NOT use their levels — and may not orthogonalise
+  against a level either, since projecting on a contaminated regressor moves the contaminant into
+  the residual.** Anti-candidates travelling with this entry: the price level and the volume level
+  at any transformation, and any score whose construction has no cross-sectional scale other than a
+  level.
+
+- **[Measured 2026-10-21/22, nightly] THE WITHIN-MARKET PRICE-IMPACT PREMIUM DOES NOT SURVIVE A
+  PRICE-FREE RESTATEMENT, WHICH CLOSES THE LAB'S ONLY POSITIVE-TRAIN-SKILL MECHANISM.** Amihud
+  divides `|ret|` by **dollar** volume, so its denominator carries the dividend half of the
+  back-adjustment contaminant. The same economic claim with no price in it — `|ret|` divided by the
+  name's volume **relative to its own trailing median**, which is scale-free in share counts and
+  therefore uncontaminated — reads:
+
+      object                          marginal IC        partial | level     horizon profile
+      amihud126 (|ret| / $vol)     +0.0194 (t +2.27)   -0.0086 (t -1.10)   +0.009 -> +0.060 monotone
+      impact126 (|ret| / rel.vol)  +0.0167 (t +1.17)   +0.0097 (t +0.69)   peaks at 63d, then decays
+
+      impact126 high (illiquid), K=100 top:  +52.7 bps/63d (t +1.90), SR skill -0.023, vol/pool 1.386
+      impact126 low  (liquid),   K=100:      -64.1 bps/63d (t -2.34), SR skill +0.020, vol/pool 0.763
+
+  **The contaminated and the clean version of one claim have different horizon signatures and
+  different verdicts.** The clean one is a null (t +1.17, under the 0.03 bar an object needs to be
+  worth a trial), it buys +52.7 bps with a 39% volatility increase for **-0.023** of Sharpe, and its
+  liquid side is the better Sharpe. The 2026-10-13 entry "THE WITHIN-MARKET PRICE-IMPACT PREMIUM IS
+  REAL ON TRAIN" — which produced trial #3, train skill +0.084, the only positive train skill the
+  v3 board has recorded — is **refuted as stated**: what was real on train was a price-level
+  exposure, and the premium is absent in the one construction that cannot carry it. One piece of
+  evidence points the other way and is recorded as such: Amihud's sub-period IC runs +0.0082 then
+  +0.0343, against the level's own gradient. The restatement is what decides it, not the gradient.
+
+- **[Measured 2026-10-21/22, nightly] RESEARCH `#284` ANSWERED AND THE THREE `statistical-learning`
+  CLOSURES STRENGTHENED: THE BLOCK'S JOINT STRUCTURE IS REAL, NO MARGINALLY-NULL FEATURE IS JOINTLY
+  IMPORTANT, AND A CAUSALLY FITTED COMBINATION IS A NULL TO WITHIN 0.003 OF THE RIDGE ON RECORD.**
+  `#284`'s theorem names the one failure mode a marginal screen and a one-pass lasso share. Tested
+  with an iterated-residual (partial-IC) screen on the **leak-free** 12-feature block, against the
+  identical procedure run on 12 iid random scores:
+
+      step   selected   its |partial IC|   big ratios among the rest    NULL max |partial|: mean / p90
+        1    beta252        0.0216          --                                0.0064 / 0.0078
+        2    r252_1         0.0217          maxret21 3.3x                     0.0055 / 0.0071
+        3    r63            0.0260          skew252 5.6x, hi52 2.2x           0.0045 / 0.0060
+        4    skew252        0.0095          --                                0.0042 / 0.0058
+
+      in-sample multiple R, p=12:  observed +0.4291   null +0.2412 (sd 0.0020)
+
+      block                           in-sample direction   CAUSAL expanding-window   implied skill
+      leak-free (p=12)                  +0.0337 (t  +3.47)     +0.0039 (t  +0.35)         +0.013
+      plus the two level columns        +0.0960 (t +14.92)     +0.0744 (t +10.52)         +0.251
+
+  **The three largest partials belong to the three largest marginals**, and every feature with a
+  large partial-to-marginal *ratio* tops out at |partial| 0.0213 — over the 0.015 a train book can
+  resolve, under the ~0.03 worth a trial. So the failure mode was looked for and **not found**, which
+  the note itself called the more likely outcome. The causal combination at **+0.0039** sits within
+  0.003 of the recorded walk-forward ridge (+0.0066, t +0.28) on a different block, a different
+  normalisation and a different estimator — as close to an independent replication as this lab gets.
+  **And adding the two contaminated level columns multiplies it by nineteen**, so the whole apparent
+  upside of a learned combination on this panel is the lookahead. Anti-candidate: a linear
+  combination of the free-OHLCV block at any estimator, fitted causally — now measured twice.
+
+- **[Method, 2026-10-21/22] TWO FREE DETECTORS FOR A LOOKAHEAD THAT RECOMPUTES BIT-IDENTICALLY, AND
+  ONE MORE PANEL-WIDTH TRAP.** (i) **A leaked deterministic drift's IC grows like sqrt(horizon); a
+  forecast's decays.** Run every new score against forward returns at 21 / 63 / 126 / 252 / 504 days
+  before reading anything off it: monotone growth to the longest horizon is the signature, and it
+  separated the contaminated and clean versions of the identical economic claim tonight (Amihud
+  +0.009 -> +0.060 against the price-free version peaking at 63 days). (ii) **A contaminant sourced
+  from the end of the store scales with the distance to it.** Split any suspicious IC by five-year
+  buckets of the decision date and divide by the years of store remaining; a constant ratio is the
+  tell (0.0043/yr across four buckets here). Both are cheaper than the construction they refuse, and
+  both work on a score that passes `causality_check` at 1e-6. (iii) **The lab's most-quoted screen
+  number is convention-dependent.** The recorded Amihud top-100 figure (+33.3 bps/63d, t +2.41, n
+  249) reads **+45.0 (t +3.13)** if narrow early dates are skipped and **+27.5 (t +1.92)** if K is
+  capped at 40% of the scored count — because the panel runs 197 eligible names at its 10th
+  percentile against 849 at its 90th, so the date rule decides which regime the average is over.
+  Third instance of the panel-width family after the 2026-10-13 book-size caveat and the 2026-10-19/20
+  median-versus-mean correction: **on a panel whose width triples, a date-selection rule is a
+  parameter — quote it with the number.**
