@@ -22786,3 +22786,20 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    2026-10-22 engine issue (the stored price and volume **levels** are a back-adjustment lookahead,
    whose signatures F6 reproduced twice tonight on an independently built harness). Both are human
    decisions and both are now load-bearing for how this lab reads its own history.
+## 2026-10-25T15:33:14+00:00 — pt_decade_reversal_band_warm — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_decade_reversal_band_warm.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Adding a 200-name retention band to the ten-year reversal -- holding the 100 eligible names with the lowest trailing ten-year mean monthly return, quota-allocated across trailing-trading-calendar peer groups, and keeping a held name while its score rank stays inside the top 200 -- raises validation skill over the equal-weight eligible pool above the unbanded version's -0.006, because a train-only decomposition of sixteen objects through the engine's own execution model shows selection is positive in six of them and the cost schedule takes all of it in every one except the lowest-turnover book, and a band preserves a mean-reverting score's selection (+0.1148 against +0.1202 unbanded) while taking the book from 2.20x to 1.13x annualised turnover.
+- Verdict: GATE_FAIL — validation sharpe 0.282 <= the random-selection null's 90% quantile 0.347 (median 0.276; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.64, ann_ret +12.8%, maxDD -60.3%, turnover 1.1x, skill vs pool +0.11
+- Validation: sharpe +0.28, ann_ret +5.3%, maxDD -42.3%, turnover 1.4x, skill vs pool -0.06
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.06, 90% CI [-0.35, +0.24]; at 2x costs -0.06; with a 30% delisting haircut -0.06; train +0.11 (1997-2008 +0.10, 2009-2017 +0.04)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 52% percentile of 200 random-selection replicas (median +0.28, 90% +0.35); equal-weight eligible pool +0.34, information ratio vs it -0.09
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the band is a paired, one-operator experiment against trial #5 on validation, and it bought +0.080 of train skill for -0.049 of validation skill.** The two books differ on validation by the retention band alone (the warm-up operator cannot fire there -- a 120-month score is formed on every validation date), so geography, score, dates, K and the quota are held fixed by construction:
+
+      operator            train skill   val skill   null median   selection   pctile   MC p     turn
+      no band (#5)           +0.033       -0.006       +0.297       +0.034      75%    0.254   2.71x
+      band B=200 (this)      +0.113       -0.055       +0.276       +0.006      52%    0.483   1.44x
+
+  The band did exactly what it was predicted to do on the cost axis -- 1.44x against 2.71x, a 47% cut, and **the first pre-registration in seven trials to come in as an UPPER bound** (1.5-4.5x predicted, 1.4x charged) rather than the lower bound the last six were. It did not transfer on the signal axis: the selection term `candidate - null_median` fell from +0.034, the only positive one the v3 board has recorded, to +0.006, and the null percentile from 75% to 52% (p 0.254 -> 0.483). This is the fourth instance of "the operator that adds the most train skill decays the fastest" (2026-10-15/16) and the cleanest, because it is paired on validation rather than on train. **It also closes tonight's own lead**: the free decomposition that motivated this trial found six objects with positive selection and cost taking all of it, and the band was the one operator that recovered the cost without touching the selection on train. On validation it recovered the cost and spent the selection, so the remaining banded candidates in that block (low-volatility + band, net train skill +0.056, is the best of them) are predicted to fail by this measurement and are not worth a trial.
+
