@@ -22803,3 +22803,170 @@ None is holdout-informed; no holdout, forward or incubation number was read.
 
   The band did exactly what it was predicted to do on the cost axis -- 1.44x against 2.71x, a 47% cut, and **the first pre-registration in seven trials to come in as an UPPER bound** (1.5-4.5x predicted, 1.4x charged) rather than the lower bound the last six were. It did not transfer on the signal axis: the selection term `candidate - null_median` fell from +0.034, the only positive one the v3 board has recorded, to +0.006, and the null percentile from 75% to 52% (p 0.254 -> 0.483). This is the fourth instance of "the operator that adds the most train skill decays the fastest" (2026-10-15/16) and the cleanest, because it is paired on validation rather than on train. **It also closes tonight's own lead**: the free decomposition that motivated this trial found six objects with positive selection and cost taking all of it, and the band was the one operator that recovered the cost without touching the selection on train. On validation it recovered the cost and spent the selection, so the remaining banded candidates in that block (low-volatility + band, net train skill +0.056, is the best of them) are predicted to fail by this measurement and are not worth a trial.
 
+
+## Free measurements — 2026-10-25/26 (nightly), one trial spent
+
+Train only. No validation book was scored outside `run_experiment.py`, and no holdout, forward or
+incubation file was opened. Every object below is leak-free by construction — ratios, returns and
+trends of the stored panels, never a level (2026-10-22 engine issue).
+
+### F1-F4. The instrument: an engine-exact pre-trial screen, and it disagrees with the one the lab has been using
+
+Every free screen this lab has run for the last three weeks — bps excess, rank IC, and since
+2026-10-24/25 the "gross book" — lives in a hand-rolled harness. Tonight's blocks are run through
+`engine.backtest.run_backtest` with `setup.execution`, i.e. the same next-real-close fills, drift,
+per-name liquidity tiers, transaction taxes and T-bill cash the gate itself uses, on train only.
+It costs about 10 s per book.
+
+**It is validated against a recorded engine figure, not against another harness.** Running
+`pt_decade_reversal_peer_neutral` (trial #5) verbatim:
+
+    quantity        harness     recorded in trials.jsonl
+    train sharpe    +0.5564     +0.5560
+    train skill     +0.0326     +0.0330
+    turnover         2.02x       2.02
+    avg positions    85.6        85.56
+
+Four decimals on the statistic the hard gate is stated in. The equal-weight pool comes out at
+**+0.5238 net / +0.5361 gross** on the protocol's exact train window, which is the engine's own
+recorded pool number.
+
+**The disagreement with last night's harness is large and it is in the benchmark as well as the
+candidate.** The 2026-10-24/25 block reported its gross pool at **+0.6700** against the engine's
+**+0.5361**, and reported 12-1 momentum's gross skill at **+0.0838** — the one object in 28 that
+passed its screen. Measured here:
+
+    12-1 momentum (skip-21), K=100, monthly, pool during warm-up
+    construction        net SR   NET skill   GROSS skill   97-08    09-17    vol    turn
+    top100 plain        +0.4168   -0.1070      -0.0487    +0.0540  -0.4082  0.990   5.49x
+    top100 region-quota +0.4571   -0.0667      -0.0067    +0.0540  -0.2913  0.979   5.51x
+    quarterly K100 quota +0.4566  -0.0672      -0.0403    +0.0313  -0.2540  0.995   3.06x
+    quarterly K200 quota +0.4649  -0.0589      -0.0432    +0.0189  -0.2155  0.954   2.08x
+
+**Eight constructions, every one negative on both the net and the gross statistic**, against the
+gross pool rather than against a net one. Turnover reconciles (2.66x one-way last night against
+5.5x engine-counted, the both-sides convention of 2026-10-10); the skill does not. What differs is
+the execution model: v3 fills at each name's *next real close* and charges the trades that undo
+drift, and the 2026-10-08 audit built it precisely because the same-close convention flattered
+books that trade. A monthly-rebalanced book trades 12 times a year, so it is flattered too.
+
+**Consequence, and it is the night's most reusable output: the pre-trial screen should be the
+engine's own backtest on train, not a hand-rolled book.** It is validated, it is the gate's exact
+statistic, and it is affordable. Last night's idea 1 ("make the gross-book screen primary") is
+right in spirit and was measured with the wrong instrument.
+
+### F5-F6. Sixteen leak-free objects on the gate's own hard statistic, and all but one fail it
+
+K = 100, calendar-peer quota, monthly, pool held during warm-up, net train skill against the pool:
+
+    object                   NET skill      object                 NET skill
+    decade reversal            +0.1039      skew252                  -0.0836
+    lowvol126                  -0.0078      residrev63               -0.0910
+    lowpark126                 -0.0300      mom126_21                -0.0942
+    lowsemishare252            -0.0373      maxret21 (low)           -0.1265
+    fracpos252                 -0.0485      clv252                   -0.1287
+    lowbeta252                 -0.0511      volshock21               -0.1521
+    mom252_21                  -0.0667      rev21                    -0.1976
+    impact126                  -0.0747      rev756_21                -0.0765
+
+Four of these are new objects priced here for the first time — close location in the daily range
+(`clv`), return consistency (`fracpos252`), the downside share of total volatility
+(`lowsemishare252`) and the short/long volatility ratio — and all four are negative on both signs.
+`min_train_skill = 0.0` is a hard gate, so **fifteen of sixteen would be refused before the null
+gate was reached**. The one survivor is the score trial #5 already traded.
+
+Also confirmed here: **the warm-up operator of 2026-10-15/16 reproduces its recorded +0.071
+exactly** on the decade reversal (+0.0326 skipping warm-up dates, +0.1039 holding the pool through
+them), and tonight's trial is the first to ship it. It cannot change a validation verdict.
+
+### F7. The decomposition, and it reframes the standing diagnosis
+
+Splitting each object's net train skill into SELECTION (gross skill over the **gross** pool) and
+COST (net minus gross):
+
+    object                        SELECTION     COST   NET skill    vol    turn
+    decade reversal                 +0.1202  -0.0163    +0.1039   1.037   2.20x
+    maxret21 (low)                  +0.0761  -0.2027    -0.1265   0.760  12.40x
+    lowvol126                       +0.0386  -0.0464    -0.0078   0.712   3.06x
+    lowsemishare252                 +0.0123  -0.0497    -0.0373   1.065   5.12x
+    fracpos252                      +0.0092  -0.0577    -0.0485   0.940   5.04x
+    residrev63                      +0.0048  -0.0959    -0.0910   1.203  10.09x
+    lowpark126                      +0.0045  -0.0345    -0.0300   0.723   2.45x
+    mom252_21                       -0.0067  -0.0600    -0.0667   0.979   5.51x
+    [eight further objects, all negative on both terms]
+
+**Six of sixteen objects have a positive selection term and the cost schedule takes all of it in
+every one except the lowest-turnover book.** The standing diagnosis — every score is a null, the
+pool cannot be beaten by selection — is too strong as stated: selection is positive about as often
+as not, and **the binding constraint on this panel is turnover.** `maxret21` is the clearest case,
+earning the block's second-largest selection term (+0.0761) and paying -0.2027 for it at 12.40x.
+
+### F8-F9. The lottery-demand object is low volatility in costume, and its own control says so
+
+`maxret21`'s selection survives a slower construction, so the obvious move is to slow it down. It
+does not survive its relabelling control. Rank rho within peer group, averaged over dates:
+
+    maxret21  low : vs -vol126 +0.638   vs -ivol126 +0.619   vs decade reversal +0.171
+    maxret63  low : vs -vol126 +0.740   vs -ivol126 +0.725   vs decade reversal +0.190
+    maxret126 low : vs -vol126 +0.796   vs -ivol126 +0.784   vs decade reversal +0.195
+
+and with an identical band, plain low volatility simply does it better:
+
+    book (K=100, quota, band B=200)      selection    cost   NET skill    vol    turn
+    maxret63 low                           +0.0573  -0.0294    +0.0279   0.765   2.46x
+    lowvol126           [rho +0.74]        +0.0583  -0.0029    +0.0555   0.765   0.94x
+    lowbeta252                             +0.0113  -0.0058    +0.0055   0.729   1.03x
+
+Same selection, 2.6x the churn, half the net skill. The MAX effect adds nothing over the
+volatility axis on this panel, and the volatility axis is refused on its own record (trial #1,
+"Sharpe is flat in beta"), with a 0.765 volatility ratio that makes it the de-risking construction
+that entry closed.
+
+**The band does not manufacture net skill on its own.** Six AR(1) random scores through the
+identical band and K: net skill mean **-0.0369**, sd 0.0279, max +0.0024 — negative, because a
+random score churns. The banded decade reversal's +0.1126 is z +3.3 against that null.
+
+### F10-F12. Choosing the trial, and two free detectors — one of which gives a false positive
+
+Banding every positive-selection object, with each one's rank rho to volatility beside it:
+
+    object             rho(-vol126)   net no band   net band200   selection   vol    turn
+    decade reversal        +0.232       +0.1039       +0.1126      +0.1148  1.019   1.13x
+    lowvol126              +1.000       -0.0078       +0.0555      +0.0583  0.765   0.94x
+    lowpark126             +0.926       -0.0300       +0.0122      +0.0141  0.769   0.88x
+    fracpos252             +0.155       -0.0485       +0.0068      +0.0233  0.959   2.18x
+    lowsemishare252        -0.042       -0.0373       -0.0500      -0.0339  1.081   2.45x
+    maxret21 low           +0.638       -0.1265       -0.0112      +0.0704  0.762   5.52x
+    residrev63             -0.057       -0.0910       -0.0550      -0.0058  1.219   5.97x
+
+The banded decade reversal dominates on every column that matters: the largest net skill and the
+largest selection, a volatility ratio of **1.019** (so not the de-risking bet that the whole
+low-volatility column is), the lowest churn, rho +0.232 to volatility, and both protocol
+sub-periods positive (+0.0981 / +0.0413). That is the book that was traded.
+
+**Detector (i), the negation invariant, passes**: the decade reversal reads +0.1126 and decade
+*momentum* -0.1688 on the identical construction, so the harness is not manufacturing agreement.
+
+**Detector (ii), the sqrt(horizon) leak signature, gives a FALSE POSITIVE here, and this is the
+night's method correction.** The score's within-region IC *grows* monotonically with the forward
+horizon — +0.0080 / +0.0062 / +0.0194 / +0.0521 / +0.0815 at 21 / 63 / 126 / 252 / 504 days —
+which the 2026-10-21/22 entry names as the signature of a back-adjustment lookahead. It is not
+one. The score is a mean of monthly *returns*, so the factor `D_i(t)` cancels algebraically, and
+the discriminating signature of that entry separates the two cleanly. Five-year buckets of the
+decision date, h = 63, targets kept inside train:
+
+    bucket      known-contaminated control   the candidate score
+                (log price LEVEL)            (decade reversal)
+    1995-1999        -0.0591                      -0.1200
+    2000-2004        -0.1555                      +0.0913
+    2005-2009        -0.0603                      +0.0104
+    2010-2014        -0.0268                      +0.0181
+    2015-2019        -0.0073                      -0.0073
+
+**The control is single-signed at every bucket; the candidate's IC alternates.** A contaminant
+sourced from the end of the store cannot change sign with the decision date. So **horizon growth
+alone is not a leak test — a genuinely slow mean-reverting score predicts a long horizon better
+than a short one, which is what the mechanism means.** Use the bucket gradient, which is the
+signature that actually identifies the source, and keep the horizon profile as the cheap flag that
+sends you to it. Noted against the score rather than for it: that alternation also says its IC is
+unstable across decades, and the 2000-2004 value-rebound bucket carries much of the train result.
