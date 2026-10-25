@@ -5842,3 +5842,106 @@ across experiments; prune entries that later evidence contradicts.
   horizon to **-0.2055** at 504 days (recorded -0.2222) and holding a constant **0.0043/yr** ratio to
   years-of-store-remaining across four five-year buckets (recorded 0.0043/yr). Third independent
   confirmation of that issue.
+
+- **[Measured 2026-10-25/26, nightly] THE PRE-TRIAL SCREEN SHOULD BE THE ENGINE'S OWN BACKTEST ON
+  TRAIN. EVERY HAND-ROLLED HARNESS THIS LAB HAS SCREENED WITH MIS-PRICES THE BENCHMARK AS WELL AS
+  THE CANDIDATE, AND THE ERROR DOES NOT CANCEL.** Running a book through
+  `engine.backtest.run_backtest` with `setup.execution`, train only, costs ~10 s and reproduces a
+  **recorded** engine figure to four decimals (`pt_decade_reversal_peer_neutral`: train sharpe
+  +0.5564 against the recorded +0.5560, train skill +0.0326 against +0.0330, turnover 2.02x against
+  2.02). The 2026-10-24/25 harness put its **gross pool at +0.6700 against the engine's +0.5361**,
+  and the one object in 28 that passed its screen — 12-1 momentum at gross skill +0.0838 — reads
+  **-0.0067 selection and -0.0667 net** through the engine, negative in all eight constructions
+  tried (monthly/quarterly x K 100/200 x plain/region-quota) on **both** the net and the gross
+  statistic. Turnover reconciles under the both-sides convention (2.66x one-way against 5.5x
+  engine-counted); the skill does not. The cause is the execution model v3 was built to impose:
+  next-real-close fills and charged drift, which the 2026-10-08 audit introduced *because* the
+  same-close convention flatters books that trade — and a monthly book trades. **The 2026-10-24/25
+  operative change ("make the gross book the primary screen") is right and was stated in the wrong
+  instrument; the instrument is now validated and cheap, so use it.** This also answers that entry's
+  idea 2 without the human ruling it asked for: plain 12-1 momentum fails `min_train_skill` on the
+  gate's own statistic, so no holdout question about the momentum lineage arises.
+
+- **[Measured 2026-10-25/26, nightly] THE BINDING CONSTRAINT ON THIS PANEL IS TURNOVER, NOT
+  SELECTION — SIX OF SIXTEEN LEAK-FREE OBJECTS HAVE A POSITIVE SELECTION TERM AND THE COST SCHEDULE
+  TAKES ALL OF IT IN EVERY ONE EXCEPT THE LOWEST-CHURN BOOK.** Net train skill split into SELECTION
+  (gross skill over the **gross** pool) and COST (net minus gross), K=100, calendar-peer quota,
+  monthly, pool held through warm-up:
+
+      object             selection     cost    net      turn      object        selection    net
+      decade reversal      +0.1202  -0.0163  +0.1039   2.20x      mom252_21       -0.0067  -0.0667
+      maxret21 (low)       +0.0761  -0.2027  -0.1265  12.40x      impact126       -0.0542  -0.0747
+      lowvol126            +0.0386  -0.0464  -0.0078   3.06x      clv252          -0.0815  -0.1287
+      lowsemishare252      +0.0123  -0.0497  -0.0373   5.12x      rev21           -0.0323  -0.1976
+      fracpos252           +0.0092  -0.0577  -0.0485   5.04x      skew252         -0.0415  -0.0836
+      residrev63           +0.0048  -0.0959  -0.0910  10.09x      rev756_21       -0.0493  -0.0765
+
+  The standing diagnosis — "every score is a null, the pool cannot be beaten by selection" — is too
+  strong as stated. **Fifteen of the sixteen still fail the `min_train_skill = 0.0` hard gate**, so
+  the practical conclusion is unchanged, but the *reason* is not the one on record and it points
+  somewhere different: the search should be for a positive-selection score that is **cheap to hold**,
+  not for a bigger selection term. Four of the sixteen are new objects priced here for the first
+  time (close location in the daily range, return consistency, the downside share of total
+  volatility, the short/long volatility ratio) and all four are negative on both signs.
+
+- **[Measured 2026-10-25/26, nightly — trial #11, PAIRED ON VALIDATION] THE RETENTION BAND IS
+  CLOSED AS A VALIDATION OPERATOR: IT BOUGHT +0.080 OF TRAIN SKILL FOR -0.049 OF VALIDATION SKILL
+  ON THE LAB'S BEST MECHANISM.** `pt_decade_reversal_band_warm` differs from trial #5 on validation
+  by the band **alone** — same score, dates, K, quota and geography, and the warm-up operator
+  cannot fire on validation because a 120-month score is formed on every date there:
+
+      operator            train skill   val skill   null median   selection   pctile   MC p    turn
+      no band (#5)           +0.033       -0.006       +0.297       +0.034      75%    0.254  2.71x
+      band B=200 (#11)       +0.113       -0.055       +0.276       +0.006      52%    0.483  1.44x
+
+  The cost axis delivered — a 47% turnover cut, and **the first pre-registration in seven trials to
+  come in as an UPPER bound** (1.5-4.5x predicted, 1.4x charged) rather than the lower bound the
+  previous six were, which narrows the 2026-10-19/20 entry: a band's saving under-delivers out of
+  sample on a *fast* score and over-delivers on a slow one. The signal axis did not: the board's
+  only positive validation selection term fell to +0.006. **Fourth instance of "the operator that
+  adds the most train skill decays the fastest" (2026-10-15/16) and the first measured as a paired
+  comparison on validation rather than on train.** Scope: this does not touch the 2026-10-10 result
+  that a band *raises* a reverting score's train excess — that replicated here (+0.1202 selection
+  unbanded, +0.1148 banded, cost -0.0163 to -0.0022). It says the train gain is not a validation
+  gain. **Anti-candidate travelling with this entry: any banded construction of a
+  positive-selection object in the block above — low volatility + band (net train skill +0.0556,
+  the best of them) most of all.**
+
+- **[Measured 2026-10-25/26, nightly] THE LOTTERY-DEMAND OBJECT IS LOW VOLATILITY IN COSTUME, AND
+  THE CONTROL THAT SHOWS IT IS THE REFUTED OBJECT CARRYING THE SAME OPERATOR.** `maxret21`'s
+  selection term (+0.0761) is the block's second largest and survives a slower construction, but
+  its within-peer-group rank rho to **-vol126** runs +0.638 / +0.740 / +0.796 / +0.738 at the 21 /
+  63 / 126 / 252-day formation, and with an identical band plain low volatility is strictly better:
+  selection +0.0583 against +0.0573, **turnover 0.94x against 2.46x**, net +0.0555 against +0.0279.
+  Same selection, 2.6x the churn, half the skill — so the MAX effect adds nothing over the
+  volatility axis here, and that axis is closed on its own record (trial #1; "Sharpe is flat in
+  beta"), with a 0.765 volatility ratio marking it as exactly the de-risking construction that
+  entry refused. **General form: when a new object's relabelling rho to a refuted one is high but
+  not decisive, do not argue from the rho — run the refuted object through the new object's own
+  construction. If it does as well, the new object is the old one.** Also measured: six AR(1)
+  random scores through the same band and K earn net **-0.0369** (sd 0.0279, max +0.0024), so a
+  band manufactures no net skill of its own.
+
+- **[Method, 2026-10-25/26 — CORRECTS THE 2026-10-21/22 DETECTOR] HORIZON GROWTH ALONE IS NOT A
+  LEAK TEST; IT FALSE-POSITIVES ON ANY SLOW MEAN-REVERTING SCORE. THE FIVE-YEAR-BUCKET GRADIENT IS
+  THE DISCRIMINATING SIGNATURE.** The ten-year reversal's within-region IC grows monotonically with
+  the forward horizon — +0.0080 / +0.0062 / +0.0194 / +0.0521 / +0.0815 at 21 / 63 / 126 / 252 /
+  504 days — which the 2026-10-21/22 entry names as the back-adjustment lookahead's signature. It
+  is not one: the score is a mean of monthly **returns**, so `D_i(t)` cancels algebraically, and
+  the second signature separates them outright. Five-year buckets of the decision date, h = 63,
+  targets kept inside train:
+
+      bucket       log price LEVEL [contaminated control]    decade reversal [clean]
+      1995-1999              -0.0591                               -0.1200
+      2000-2004              -0.1555                               +0.0913
+      2005-2009              -0.0603                               +0.0104
+      2010-2014              -0.0268                               +0.0181
+      2015-2019              -0.0073                               -0.0073
+
+  **The control is single-signed at every bucket; the clean score alternates.** A contaminant
+  sourced from the end of the store cannot change sign with the decision date, whereas a slow
+  mean-reverting score predicting a long horizon better than a short one is the mechanism, not a
+  leak. **Keep the horizon profile as the cheap flag and rest the refusal on the bucket gradient.**
+  Rider worth carrying separately: that same alternation is a statement about the score's own
+  stability across decades, and for this score the 2000-2004 value-rebound bucket carries much of
+  the train result.
