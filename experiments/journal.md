@@ -22970,3 +22970,133 @@ than a short one, which is what the mechanism means.** Use the bucket gradient, 
 signature that actually identifies the source, and keep the horizon profile as the cheap flag that
 sends you to it. Noted against the score rather than for it: that alternation also says its IC is
 unstable across decades, and the 2000-2004 value-rebound bucket carries much of the train result.
+
+## Session summary — 2026-10-25/26 (nightly) — 1 trial of 8; the lab's screening instrument was never checked against the engine, and the binding constraint turns out to be turnover rather than selection
+
+**Experiments run: 1 of 8. Verdict: GATE_FAIL (`pt_decade_reversal_band_warm`, scout,
+price-trend).** `trials.jsonl` stands at **121 records**. Twelve free measurement blocks (F1–F12),
+sixteen leak-free objects priced on the gate's own statistic (four of them new), one new
+instrument validated against a recorded engine figure, one standing detector corrected and one
+standing diagnosis reframed. Engine green (`92 passed in 107.70s`). No holdout, forward or
+incubation file was opened; the champion seat is still empty and was not compared against.
+
+**Step-0 integrity: clean, and the three-night blocker is gone.** `origin/main-cozirv` — which
+cost the sessions of 2026-10-22 and 2026-10-23 — was landed on `main` by a human in `0809ec8` on
+2026-10-24. No remote branch now holds a commit absent from `origin/main`. The six stale
+`origin/main-*` remotes are all ancestors of `main` and remain safe to delete as housekeeping.
+
+### The instrument, which is the night's most reusable output
+
+Every free screen this lab has run for three weeks — bps excess, rank IC, and since last night the
+"gross book" — was computed in a hand-rolled harness that nobody had checked against the engine.
+Checked tonight, it disagrees, **and it disagrees about the benchmark as well as the candidate**:
+last night's gross pool reads +0.6700 where the engine's is +0.5361. Run instead through
+`engine.backtest.run_backtest` with `setup.execution` on train — about 10 s a book — the harness
+reproduces trial #5's *recorded* train sharpe and train skill to **four decimals**.
+
+The first casualty is last night's own headline. **12-1 momentum, the one object in 28 that passed
+the gross-book screen at +0.0838, is negative in all eight constructions measured here, on both
+the net (-0.0667 best) and the gross (-0.0067 best) statistic.** It fails `min_train_skill`, so
+last night's idea 2 is answered and the human ruling it asked for — may a challenge candidate be
+designed in a lineage whose holdout read is published? — **does not need to be made**, because no
+momentum candidate gets as far as needing it.
+
+### Best finding: selection is positive about as often as not, and turnover is what takes it
+
+Splitting sixteen objects' net train skill into selection (gross skill over the gross pool) and
+cost: **six have a POSITIVE selection term, and the cost schedule takes all of it in every one
+except the lowest-turnover book.** `maxret21` earns the block's second-largest selection (+0.0761)
+and pays -0.2027 for it at 12.40x churn. Fifteen of the sixteen still fail the hard gate, so the
+practical position is unchanged — but the standing diagnosis ("every score is a null; the pool
+cannot be beaten by selection") is not what the data says, and the correction points somewhere
+different: **look for a positive-selection score that is cheap to hold, not for a bigger selection
+term.**
+
+### The trial, and it closed its own follow-ups
+
+That decomposition made the retention band the obvious operator and the ten-year reversal the
+obvious vehicle — the only object with positive net train skill, a volatility ratio of 1.019 (so
+not the de-risking bet the whole low-volatility column is), rho +0.232 to volatility, and the v3
+board's only positive **validation** selection term. Banded, its train skill went +0.033 → +0.113
+and its churn 2.20x → 1.13x. On validation, where the two books differ by the band alone:
+
+    operator            train skill   val skill   null median   selection   pctile   MC p    turn
+    no band (#5)           +0.033       -0.006       +0.297       +0.034      75%    0.254  2.71x
+    band B=200 (#11)       +0.113       -0.055       +0.276       +0.006      52%    0.483  1.44x
+
+The cost axis delivered, including **the first pre-registered turnover in seven trials to come in
+as an upper bound** rather than a lower one. The signal axis did not. This is the fourth instance
+of "the operator that adds the most train skill decays the fastest" and the first measured as a
+*paired* comparison on validation rather than on train — and it closes the rest of tonight's own
+lead, because every other banded candidate in the block (low volatility + band, net train skill
++0.0556, is the best) now has a measurement predicting it fails. That is why the session stopped
+at one trial rather than eight: the remaining budget had nothing left that a measurement made
+tonight did not already refuse.
+
+### Second finding: the control that identifies an object in costume is the refuted object wearing its clothes
+
+`maxret21` looked like a new mechanism with a real selection term. Its rank rho to -vol126 is
++0.638 to +0.796 across formations — high, not decisive — and the argument from rho alone would
+have been a judgement call. Running **low volatility through MAX's own banded construction**
+settles it: same selection (+0.0583 against +0.0573), 0.94x churn against 2.46x, net +0.0555
+against +0.0279. The refuted object does the new object's job better, so the new object is the old
+one. Cheaper and sharper than any rho threshold.
+
+### Method correction: the sqrt(horizon) leak detector false-positives on slow scores
+
+The ten-year reversal's IC grows monotonically in horizon (+0.0080 → +0.0815 from 21 to 504 days),
+which the 2026-10-22 engine issue names as the back-adjustment lookahead's signature. It is not
+one — the score is a mean of monthly returns, so `D_i(t)` cancels algebraically — and the second
+signature proves it: across five-year buckets of the decision date the contaminated control (log
+price level) is **single-signed at every bucket** while this score's IC **alternates** (-0.120,
++0.091, +0.010, +0.018, -0.007). A contaminant sourced from the end of the store cannot change
+sign with the decision date; a slow mean-reverting score predicting a long horizon better than a
+short one is the mechanism. **Keep the horizon profile as the cheap flag; rest the refusal on the
+bucket gradient.** Recorded against the score as well: that alternation says its IC is unstable
+across decades and the 2000-2004 value-rebound bucket carries much of its train result.
+
+### Also measured, and worth one line each
+
+- **The warm-up operator of 2026-10-15/16 reproduces its recorded +0.071 exactly** (+0.0326 →
+  +0.1039 on the decade reversal) and this trial is the first to ship it. It cannot change a
+  validation verdict, and did not.
+- **A band manufactures no skill of its own**: six AR(1) random scores through the identical band
+  and K earn net -0.0369 (sd 0.0279, max +0.0024). The banded decade reversal's +0.1126 is z +3.3
+  against that null.
+- **Four new objects priced and all negative on both signs**: close location in the daily range,
+  return consistency (fraction of positive days), the downside share of total volatility, and the
+  short/long volatility ratio.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Re-screen with the validated instrument before trusting any recorded screen number.** Three
+   weeks of bps, IC and gross-book screens were computed in a harness that mis-prices the
+   benchmark by 0.13 of Sharpe. The engine-exact screen costs ~10 s a book and is the gate's own
+   statistic. The highest-value free block available is a retrospective pass over the recorded
+   F-blocks in these units — the 2026-10-20/21 entry already asked for one in Sharpe units and
+   this is the stronger version of that request.
+2. **Search the cheap-to-hold corner, not the big-selection corner.** F7 says a positive selection
+   term is common and survives nothing above ~2x churn. The question that follows is whether any
+   score with a **naturally** persistent ranking — not one made persistent by a band, which is now
+   refuted as a validation operator — carries selection. The decade reversal is the lab's only
+   example and it is already traded twice.
+3. **Do not re-buy tonight's declines.** 12-1 momentum at any K, frequency or quota (negative on
+   both statistics in all eight constructions); the MAX/lottery-demand axis at any formation
+   (low volatility in costume, and strictly worse than it); any banded construction of a
+   positive-selection object, low volatility + band most of all; and the four new objects above.
+4. **From `research/SUMMARY.md`**: `#300` (equal weight as the maximal-ambiguity optimum, with
+   `kappa*` scaling in `N`) is the folder's own prediction of tonight's F5 result and should be
+   read before the next weighting or blending proposal — sixteen concentrated tilts losing to a
+   ~500-name equal-weight pool on a wide panel is the empirical shape it argues for. Unspent and
+   still live: `#301` (two calls to verify a penalty moves the holdings), `#304` (the cost
+   coefficient in a candidate's objective is not the engine's cost schedule — now sharper, since
+   tonight shows cost is the binding constraint), `#288`, `#289` (the train-subperiod stability
+   diagnostic, which tonight's alternating bucket ICs would have flagged), `#294`/`#295`,
+   `#285`/`#286`, `#282`. `#305`, `#293` and `#299` remain anti-candidates.
+5. **Standing, and not this agent's call**: the 2026-10-18 engine issue (the null's replicas are
+   not held to the candidate's eligibility boundary, worth up to +0.018 of Sharpe to the null and
+   rising with holding length — it falls hardest on exactly the banded books tonight refused) and
+   the 2026-10-22 engine issue (the stored price and volume levels are a back-adjustment
+   lookahead, whose discriminating signature F12 used tonight as a control and reproduced).
