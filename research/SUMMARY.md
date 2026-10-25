@@ -7117,6 +7117,118 @@ staying uniform inside them (303), calibrate the cost coefficient rather than co
 
 ---
 
+### Inference on the weight vector itself — the screen the lab uses most, now a theorem with a test statistic, and the width at which the test stops working (cross-family, `portfolio-learning`)
+
+Four sources, read 2026-10-25, on the one layer this folder had never read: **not what to forecast,
+not what to penalise, not which risk to minimise, but the sampling distribution of the weight vector
+a construction emits.** Aim taken verbatim from the [2026-10-24] open-questions entry, which named
+this as the best-aimed successor to its own three sweeps — "candidate-list item 1 is the most-used
+rule this folder has, and it rests entirely on calibrations and empirical horse-races; the
+exact-inference literature behind it has never been read here." Greps across all 222 prior notes:
+`Kan.Zhou`, `Ledoit.Wolf` (as a pair), `Sharpe ratio test` and `sampling error in estimates` all
+returned **zero**; `Britten-Jones` returned **1**, the 2026-10-24 note citing him only for the
+regression representation. The entry named Britten-Jones (1999, *JF*) as the target; that paper is
+**closed and was not obtained** (see the coverage log), so the session took the same question through
+four sources that were, three of them covering the minimum-variance case the entry actually cares
+about and the fourth covering the width at which all of it breaks.
+
+**Finding one, and it is the finding of the night: the lab's most-used screen has an exact closed
+form, and it independently reproduces the one candidate item 294 already rests on.** Kempf–Memmel
+(Tier B, *Schmalenbach Business Review*, 100 cites) prove that the expected out-of-sample variance of
+a book built on an estimated minimum-variance weight vector is
+
+```
+σ²_MV · ( 1 + (N − 1)/(T − N − 1) )
+```
+
+— `N` names, `T` observations, **and nothing else**: not the covariance structure, not the asset
+class, not the sample. This is exact in finite samples, not an asymptotic approximation. Now compare
+it with item `#294`'s `q̄₀ = 1/√(1 − N/T)` from the noise-sensitivity literature, which is a
+*variance*-inflation of `1/(1 − N/T) = T/(T − N)`. The new formula rearranges to `(T − 2)/(T − N − 1)`,
+and at this panel's cell (~1,000 names, ~1,512 validation days) the two give **2.955 and 2.953**.
+**Two literatures that do not cite each other, one derived from Wishart algebra and one from random
+matrices, agree to three digits on this panel's number.** Item `#294` was already Tier A; it is now
+Tier A with an exact finite-sample twin, and the twin arrives with inference attached.
+
+**Finding two, and it is what the open question asked for: the weight vector is an OLS coefficient
+vector, so the whole of regression inference transfers.** Kempf–Memmel's Proposition 1 is an identity
+with no distributional content: regress one asset's return on the `N − 1` *return differences*
+`(r_N − r_i)` with an intercept, and the slopes **are** the minimum-variance weights, the intercept
+**is** that portfolio's expected return, the residual variance **is** its return variance. The plug-in
+estimator and the OLS estimator are numerically the same number (Proposition 2), so this is not an
+alternative estimator to audit. Under normal i.i.d. returns the weights are exactly normal conditional
+on the regressor matrix, `(T−N)σ̂²_ε/σ²_MV` is exactly `χ²(T−N)`, and **any `m` linear restrictions on
+the weight vector** — "these names carry no weight", "all weights are `1/N`", "this book's weights
+equal the pool's" — test as an ordinary restricted-regression `F(m, T−N)`. Okhrin–Schmid (Tier A,
+*Journal of Econometrics*, 184 cites) reach the same law from Wishart algebra as a multivariate `t`
+with `n−k+1` degrees of freedom, so the result has two independent derivations. For heavy tails the
+identity survives untouched and only the standard errors need the White correction.
+
+**Finding three, and it closes a class of `portfolio-learning` candidate for free: the fully-invested
+maximum-Sharpe weight estimator has no moments.** Okhrin–Schmid prove that for
+`ŵ_SR = Σ̂⁻¹µ̂/(1ᵀΣ̂⁻¹µ̂)`, **all moments of order ≥ 1 fail to exist** (moments below order 1 do) — the
+tail index is 1, as for a Cauchy. No mean, no variance, and the authors spell out the practical
+corollary: a Monte-Carlo standard deviation for such an estimator "would lead to misleading results",
+because the simulation always returns a finite number that is converging to nothing. The natural
+sophisticated move inside `portfolio-learning` — estimate the covariance of the family leads' active
+returns and hold their maximum-Sharpe combination — is an instance of exactly this estimator. The
+same paper prices the gentler case: the mean-driven tilt of an expected-utility optimum is biased
+**upward by exactly `(n−1)/(n−k−1)`**, and its variance has `(n−k−3)` in the denominator, so it
+ceases to exist three observations before the estimator does. And a fourth result worth carrying as a
+general rule: the obvious de-biasing correction is available in closed form and **strictly raises
+MSE**, which is proved, not simulated.
+
+**Finding four, and it is the constructive one: a shrinkage toward the pool that dominates the plug-in
+estimator in finite samples and estimates ONE scalar, plus a hypothesis test whose null is "just hold
+equal weight".** Frahm–Memmel (Tier A−, *Journal of Econometrics*, 113 cites) start where
+Kempf–Memmel's Proposition 6 ends — the plug-in estimator is the best *unbiased* one, so improvement
+must be biased — and give `ŵ_S = κ_S w_R + (1−κ_S) ŵ_T` with
+`κ_S = ((d−3)/(n−d+2))·(1/τ̂_R)`, where `τ̂_R = (σ̂²_R − σ̂²_T)/σ̂²_T` is the estimated relative loss of
+the reference portfolio. It dominates the plug-in estimator in out-of-sample variance for **every**
+`n ≥ d+2`, `d ≥ 4` — a strict finite-sample inequality — and the only data-dependent input is the one
+scalar `τ̂_R`. Three further results from it are each worth an item. Its Theorem 9 makes `τ̂_R`
+**conditionally noncentral `F`**, so "should I just hold equal weight?" becomes a hypothesis test with
+the null on the equal-weight side, and the thresholds are brutal: at 50 assets and 120 observations
+you need a *measured* relative loss above 161% before you may reject equal weight, because `τ̂_R`'s
+law is severely right-skewed. Its Theorem 8 shows shrinking weights toward a reference portfolio **is**
+shrinking the precision matrix toward that portfolio's implied precision matrix — the Jagannathan–Ma
+result generalised, which means a candidate that is both long-only and shrunk toward the pool is
+applying two overlapping shrinkages. And its Theorem 7 says that as `n, d → ∞` with `n/d → q`, the
+plug-in estimator's relative loss converges to `1/(q−1) > 0` and never becomes consistent, while the
+shrinkage estimators dominate the reference portfolio uniformly only once `q ≥ 2` — and become
+uniformly **worse** than it as `q → 1⁺`.
+
+**Finding five, and it is a trap rather than a tool: on a rank-deficient covariance matrix these tests
+do not lose power, they lose all of it, while still printing a p-value.**
+Bodnar–Dmytriv–Parolya–Schmid (Tier B, *IEEE TSP*, 28 cites) restate the exact test for
+`H0 : w_GMVP = r` — a Mahalanobis distance between estimated and hypothesised weights, exactly
+`F_{p−1,n−p}` under the null for `n > p`, valid for the whole elliptically-contoured class — and then
+show what dimension does to it. The size stays exact; what degrades is scale, with the null
+dispersion growing as `2/(1−c)` for `c = p/n` (≈ 5.9 at this panel's `c ≈ 0.66`). The decisive result
+is the singular case: when `rank(Σ) = q < p` and the test ignores it, **every non-singular test's
+power function and ROC curve sit near zero in every configuration tried**, because the asymptotic
+variances derived under invertibility are far too large. A monthly rebalance grid over a six-year
+validation window gives ~70 observations against hundreds or thousands of names, so **this is the
+common case in this repo, and a weight test run there would report "indistinguishable from the pool"
+for every book including books that are nothing like it.** The paper supplies Moore–Penrose versions
+that work. One methodological scrap from the same paper: in the non-singular small-`c` case the
+ranking of tests **flips with the criterion**, because the shrinkage test is undersized — power
+comparisons between tests that do not hold their nominal size are not comparisons, and the ROC is
+what survives.
+
+**What the four together say.** The screen the lab applies most was a calibration and is now an exact
+formula that agrees with the one it already trusted (`#306`); the screen now has a *test statistic*,
+computable from returns already held, consuming no trial and no holdout (`#307`); one class of
+`portfolio-learning` candidate is closed by a non-existence proof rather than by a null (`#309`); one
+construction survives, estimates a single scalar, and arrives with its own go/no-go test (`#308`);
+and the whole apparatus has a width above which it silently stops working, which has to be checked
+before any of it is used (`#310`). The unifying caution is the one `learnings.md` already measured
+from the other direction: every result here is second-moment inference on a weight vector, and
+**Sharpe is flat in beta on this panel**, so none of it is a route to skill — it is a route to not
+spending trials on constructions whose arithmetic was already against them.
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -7152,6 +7264,20 @@ hypothesis fodder, then anti-candidates.
    contributions, effective bets, diversification return) should use a plain trailing sample
    covariance — no factor model, no shrinkage estimator. Objectives built on a covariance stay
    closed. → `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md`
+   **Theorem added 2026-10-25, and it replaces this item's calibration with an exact closed
+   form plus a test statistic.** The parenthetical above ("calibrated requirement: thousands of
+   months of data at this universe's breadth") was an empirical horse-race's reading. The exact
+   version: a book built on an estimated minimum-variance weight vector pays expected out-of-sample
+   variance `σ²_MV·(1 + (N−1)/(T−N−1))`, a function of the name count and the observation count and
+   of nothing else, finite only for `T > N + 1` — and at this panel's cell it agrees to three digits
+   with item `#294`'s independently derived `1/(1 − N/T)`. The plug-in estimator is additionally the
+   **best unbiased** one, so the screen cannot be evaded by a cleverer unbiased estimator; the only
+   escape is deliberate bias, which is item `#308` and comes with its own test whose null is "hold
+   the pool". **And the screen now has a hypothesis test**: the weight vector is an OLS coefficient
+   vector, so "this weighting is indistinguishable from equal weight" is a restricted-regression
+   `F`, subject to the rank precondition in item `#310`. Items `#306`–`#310`.
+   → `notes/2026-10-25-gmv-weights-as-regression-coefficients.md`,
+   `notes/2026-10-25-dominating-estimators-and-the-naive-diversification-test.md`
 2. **Design test before any ensemble trial: are the components estimates of the same quantity,
    or different return streams?** Forecast-combination theory endorses only the first — several
    noisy estimates of one target, equal-weighted — where the variance reduction is free. Mixing
@@ -13225,6 +13351,118 @@ hypothesis fodder, then anti-candidates.
     `validation_overlap: false`.
     → `notes/2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`,
     `notes/2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`
+306. **FREE TRIAGE ARITHMETIC, AND IT IS THE EXACT FINITE-SAMPLE TWIN OF `#294` — same number, derived
+    from Wishart algebra instead of random matrices, and it arrives with inference attached.** For a
+    book built on an estimated **minimum-variance** weight vector, the expected out-of-sample variance
+    is exactly `σ²_MV · (1 + (N−1)/(T−N−1))` — `N` names entering the covariance estimate, `T`
+    independent return observations, and **nothing else**: not the covariance structure, not the asset
+    class, not the sample. Exact in finite samples, not asymptotic. It rearranges to `(T−2)/(T−N−1)`,
+    against `#294`'s `1/(1 − N/T) = T/(T−N)`; at this panel's cell (~1,000 eligible names, ~1,512
+    validation days) the two give **2.955 and 2.953**, i.e. two literatures that do not cite each
+    other agree to three digits. Worked table at daily frequency (extra variance as a fraction of the
+    attainable minimum): 25 names on 1 year `0.11`; 50 on 1 year `0.24`; **100 on 1 year `0.66`**;
+    100 on 6 years `0.07`; 250 on 3 years `0.49`; **~1,000 on 6 years `1.95`**. The wall is hard:
+    the quantity is finite only for `T > N + 1`, so at **monthly** frequency over validation (~70
+    observations) it is *undefined* past about 65 names — not large, undefined. Two corollaries that
+    are themselves free: the plug-in estimator is the **best unbiased** estimator of those weights, so
+    no unbiased cleverness reduces this (any improvement must be deliberately biased, which is item
+    `#308`); and the `(T−N−1)` denominator means the cost of widening the book rises faster than
+    linearly in `N`, which adds a third term to the `K`-choice trade-off the band result and the
+    tail-depth confound already govern. **Use as a pre-registerable kill condition:** a candidate
+    whose weights come from a covariance estimate states `N`, `T` and this ratio in its hypothesis
+    line. Tier B on venue, A on the mathematics (it is an identity, independently derived twice).
+    `validation_overlap: false`.
+    → `notes/2026-10-25-gmv-weights-as-regression-coefficients.md`,
+    `notes/2026-10-25-exact-distributions-of-estimated-portfolio-weights.md`
+307. **FREE SCREEN AND THE FIRST ACTUAL TEST STATISTIC THIS FOLDER HAS FOR "IS THIS BOOK'S WEIGHTING
+    DISTINGUISHABLE FROM THE EQUAL-WEIGHT POOL?" — computable from returns the lab already holds, no
+    trial spent, no holdout touched.** Two equivalent routes to the same hypothesis
+    `H0 : w = r` for any pre-specified `r` (the pool, the incumbent's weight vector, the book being
+    held). **Route one, regression:** the minimum-variance weights *are* OLS slopes from regressing
+    one asset's return on the `N−1` return differences `(r_N − r_i)` with an intercept — an identity
+    with no distributional content — so any `m` linear restrictions on the weight vector test as an
+    ordinary restricted-regression `F(m, T−N)`; "all weights equal `1/N`" is `m = N−1` of them. The
+    intercept is that portfolio's expected return and the residual variance is its return variance, so
+    the same regression reports all three. **Route two, Mahalanobis:**
+    `T_n = ((n−p)/(p−1))·(1ᵀΣ̂⁻¹1)·(ŵ* − r*)ᵀ(Q̂*)⁻¹(ŵ* − r*) ~ F_{p−1,n−p}` exactly under the null,
+    for the whole elliptically-contoured class and not just the normal, with the exact power function
+    available in closed form — so a **non-rejection can be reported alongside the deviation the test
+    could have detected**, which is the same discipline the lab already applies in reporting skill
+    intervals instead of point Sharpes. Three hard preconditions, all in item `#310`: `T > N + 1`,
+    `rank(Σ̂) = N`, and `T` counted as *independent* observations. Scope caution: this is
+    second-moment inference on a weight vector — it tests whether the weighting differs, never whether
+    it earns anything. Tier A (the `F` law is a theorem, independently derived as a multivariate `t`
+    by a second paper), `validation_overlap: false`.
+    → `notes/2026-10-25-gmv-weights-as-regression-coefficients.md`,
+    `notes/2026-10-25-testing-portfolio-weights-when-the-panel-is-wide.md`
+308. **CONSTRUCTION MATERIAL (`portfolio-learning`), AND IT IS THE ONE WEIGHTING PROPOSAL IN THIS
+    FOLDER THAT ESTIMATES A SINGLE SCALAR AND ARRIVES WITH ITS OWN GO/NO-GO TEST: shrink the estimated
+    weights toward the equal-weight pool with a James–Stein intensity.** Hold
+    `ŵ_S = κ_S·w_R + (1−κ_S)·ŵ_T` with `κ_S = ((d−3)/(n−d+2))·(1/τ̂_R)`, where `w_R` is the reference
+    portfolio (here: the equal-weight pool, i.e. the thing skill is graded against), `ŵ_T` the plug-in
+    estimate, and `τ̂_R = (σ̂²_R − σ̂²_T)/σ̂²_T` the **estimated relative loss of the reference
+    portfolio** — the only data-dependent input, one scalar, no new matrix. This **dominates** the
+    plug-in estimator in expected out-of-sample variance for every `n ≥ d+2`, `d ≥ 4`: a strict
+    finite-sample inequality, not an asymptotic claim or a prior-averaged one. A modified variant
+    dominates both. **The go/no-go test is in the same paper and its null is the lab's own benchmark:**
+    `τ̂_R` is conditionally noncentral `F` (`((d−1)/(n−d))·F_{d−1,n−d}(τ_R χ²_{n−1}/2)`), so
+    `H0 : τ_N ≤ τ*_N` ("equal weight is good enough") against `H1` puts the burden of proof on the
+    optimiser, and the thresholds are severe — at `d = 50, n = 120` the measured relative loss must
+    exceed **161%** before `H0` may be rejected, because the statistic's law is sharply right-skewed.
+    **Run the test first; build only if it rejects.** Two structural riders. The method is equivalent
+    to shrinking the *precision matrix* toward the reference portfolio's implied precision matrix, so a
+    candidate that is **both** long-only and shrunk toward the pool is applying two overlapping
+    shrinkages (Jagannathan–Ma is the other) and must say which it thinks is working. And the
+    effective sample size `q = n/d` decides whether the method applies at all: the shrinkage
+    estimators beat the reference portfolio uniformly only once `q ≥ 2`, and become uniformly **worse**
+    than simply holding it as `q → 1⁺` — this panel's daily cell is `q ≈ 1.5`, so **a candidate built
+    on the full eligible panel is in the régime where the literature's own answer is "hold the
+    pool"**; a selected book of ≤ 100 names on daily data is not. Scope caution: dominance is in
+    *variance*, and `learnings.md` has measured that Sharpe is flat in beta here, so this is a reason
+    to prefer one weighting among equally-motivated ones, not a route to skill. Tier A−,
+    `validation_overlap: false`.
+    → `notes/2026-10-25-dominating-estimators-and-the-naive-diversification-test.md`
+309. **ANTI-CANDIDATE, closed by a non-existence PROOF rather than by a null, and it is the natural
+    sophisticated move inside `portfolio-learning`: do not hold the fully-invested maximum-Sharpe
+    combination of the family leads (or of anything else).** The estimator
+    `ŵ_SR = Σ̂⁻¹µ̂/(1ᵀΣ̂⁻¹µ̂)` has **no moments of order ≥ 1** — no mean, no variance, tail index 1 as
+    for a Cauchy — proved exactly from its density, with moments below order 1 existing. So whatever
+    such a candidate scores, the score is a draw from a distribution with no centre: re-running it on
+    another window is not sampling noise around a value, because there is no value, and a Monte-Carlo
+    standard deviation for it (which will always come back finite) is converging to nothing. That is a
+    categorically stronger objection than "it is noisy" and it costs nothing to apply. The gentler
+    neighbour is priced too: an expected-utility optimum's **mean-driven tilt is biased upward by
+    exactly `(n−1)/(n−k−1)`** (1.66 at 100 names on a year of daily data, 4.92 at 200), its variance
+    carries `(n−k−3)` in the denominator and so stops existing three observations before the estimator
+    does, and — a general rule worth keeping — the obvious closed-form de-biasing correction **strictly
+    raises MSE**, which is proved. **The constructive residue is to drop the estimated mean from the
+    weighting rule, not to estimate it better:** the minimum-variance case is the only one of the four
+    with usable exact inference, which is why items `#306`–`#308` are all about it. Tier A,
+    `validation_overlap: false`.
+    → `notes/2026-10-25-exact-distributions-of-estimated-portfolio-weights.md`
+310. **FREE METHOD RULE, and it is a precondition on items `#306`–`#308` and on every covariance-based
+    diagnostic the lab already runs: check `n > p` and `rank(Σ̂) = p` BEFORE reading any statistic whose
+    null distribution assumed `Σ̂` is invertible — because on a rank-deficient panel such a test does
+    not lose power, it loses all of it, while still printing a p-value.** When `rank(Σ) = q < p` and
+    the test ignores the singularity, the power function and the ROC curve of every non-singular
+    weight test sit **near zero in every configuration tried**, because the asymptotic variances
+    derived under invertibility are far too large to be reached. This repo's common case *is* the
+    singular one: a monthly rebalance grid over a six-year validation window gives ~70 independent
+    observations against hundreds or thousands of names, so `q = min(p, n−1) ≪ p`. **A weight test run
+    there returns "indistinguishable from the pool" for every book, including books that are nothing
+    like the pool, and the output is indistinguishable from a genuine non-rejection.** Three riders.
+    Even with `n > p`, the null dispersion of the exact test grows as `2/(1−c)` for `c = p/n` — about
+    **5.9** at this panel's `c ≈ 0.66` — so read a non-rejection on the wide panel as uninformative
+    rather than as evidence. `n` must be *independent* observations: overlapping formation windows,
+    forward-filled holiday prints and near-static books all inflate the nominal row count, which is
+    the lab's own "one draw repeated" warning in another dress, so use the smaller honest `n`. And
+    when comparing two tests, **compare ROC curves, not power, unless both hold their nominal size** —
+    in the source's own simulations the ranking of three tests flipped with the criterion purely
+    because one of them was undersized. Moore–Penrose versions of the tests exist for the singular
+    case and are the right tool there. Tier B on venue, A on the mechanism (the explanation is
+    arithmetic, not curve-fitting). `validation_overlap: false`, `published_post_2018: true` — discount
+    the high-dimensional half's novelty, not the exact-`F` half, which dates from 2008.
+    → `notes/2026-10-25-testing-portfolio-weights-when-the-panel-is-wide.md`
 
 
 ---
@@ -13307,8 +13545,131 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-22 | **The `hidden Markov` / `change point` vein — the first of the two named cold veins left by [2026-10-21], aimed at the measurement layer rather than the signal layer, and read against that entry's sharpened acceptance criterion (admit it only if it yields something that is *not* a timing overlay). Zero prior notes on `change point`, `changepoint`, `hidden Markov` or `CUSUM` across 211 notes; `structural break` appeared in 4, none about the estimators. Outcome: the criterion is met on the diagnostic side and fails on the signal side, which is recorded as an anti-candidate.** | Bai–Perron 1998 (Econometrica) + Killick–Fearnhead–Eckley 2012 (JASA) (`2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`); Hansen 2001 (JEP) (`2026-10-22-breakdate-inference-unknown-timing.md`); Ang–Timmermann 2012 (Annual Review of Financial Economics, read as NBER WP 17182) (`2026-10-22-regime-switching-financial-markets.md`). **Three sources recorded as not obtained:** Andrews 1993 (Econometrica, 3065 cites — Cowles legacy PDF path returns an HTML body and the current Cowles record page is a 1.1 MB Drupal shell with no PDF href at all); Hansen 1992 (JAE, 593 cites — fetched cleanly from the author's site but is a text-layerless scan, not rendered); Bai–Perron 2003 (JAE, 4445 cites, the computation companion). Nothing below is attributed to any of the three. |
 | 2026-10-23 (session 70) | **The first session to look at what the word "risk" denotes rather than which risk to take, and the cluster splits cleanly: the tail measures win on axioms and lose on estimation, by a closed form at a ratio this panel already violates.** Aim picked by gap rather than by the two named cold veins — the 2026-10-22 entry downgraded `transfer entropy` to "worth at most one note, not a session" and said a better-aimed session would pick by the gap in the free queue. Greps across all 214 prior notes: **zero** for `Rockafellar`, `Uryasev`, `Artzner`, `coherent risk`, `semivariance`, `lower partial moment`, `spectral risk`, `conditional value at risk`, `turnover constraint`, `robust optimization`; 1 each for `CVaR`, `Sortino`, `expected shortfall`, `drawdown control`; `maximum drawdown` in 5 notes but only ever as a reported *outcome*, never as an objective. `portfolio-learning` by charter, cross-family in effect because it bears on the gate's own statistic. Headline one: the coherence axioms **reject the mean-variance objective on monotonicity and the semi-variance objective on subadditivity**, VaR's acceptance set is **non-convex**, VaR is non-subadditive even for **independent** risks, and in the canonical example **diversifying across a hundred independent defaults raises measured risk** while a single-name pile-up reads as riskless — but every justification offered for the axioms is institutional (margin accounts, per-desk cash limits), so v3's Sharpe-based gate failing axiom M is **not** a reason to change the gate. Headline two: minimising CVaR is a **linear program** via one identity that makes the quantile a free variable, the source paper's own illustrative constraint set is **`xⱼ ≥ 0, Σxⱼ = 1`, exactly this lab's**, and the atom-splitting definition is the only one of three that is coherent — yet **under normality and `β ≥ 0.5`, minimum-CVaR, minimum-VaR and minimum-variance are provably the same portfolio**, both measures being affine in `(µ, σ)`, so the whole vein's value is bounded by the book's departure from normality. Headline three, and the one that closes most of it: `q̄₀ = 1/√(1 − N/T)` is the **exact** mean inflation of realised risk from estimated inputs, scaling in the ratio alone, diverging at a critical `N/T` of **1 for variance, 1/2 for maximal loss, below 1/2 for expected shortfall** and *falling further as the tail level loosens*; worked for this panel (~1,000 eligible names, ≤~1,510 causal daily rows) that is `N/T ≈ 0.66`, a **71% risk inflation for variance and past CVaR's critical ratio outright**. Headline four, the salvage: the dual theory makes CVaR's subgradient the **normalised indicator of the tail**, hence a **tail beta to the equal-weight eligible pool** that is a univariate conditional mean per name and so immune to the `N/T` objection — but the source authors' own derivation omits `xᵢ ≥ 0` and explicitly criticises earlier work for zeroing the non-negativity multipliers, so on this long-only book the beta survives as a feature and **not** as a pricing relation. Two pieces of scrupulousness recorded against over-import: the noise paper's *feasibility* transition (objective unbounded, no solution exists) **does not transfer**, because long-only confines weights to a compact simplex that bounds the CVaR program for every sample — accuracy transfers, infeasibility does not; and the apparent clash between the two axiom papers over "semideviation" is a **definitional** one (standard-deviation-operator-of-the-shortfall versus plain `L²`-norm-of-the-shortfall), resolved in the notes and flagged there as my reading rather than either paper's claim. Six free or cheap items added (294–299), three of them closures. | Artzner–Delbaen–Eber–Heath 1999 (Mathematical Finance, 6846 cites) (`2026-10-23-coherent-measures-of-risk-axioms.md`); Rockafellar–Uryasev 2000 (Journal of Risk, 5550) + 2002 (JBF, 3111) (`2026-10-23-cvar-optimization-as-a-linear-program.md`); Rockafellar–Uryasev–Zabarankin 2006 (Finance and Stochastics, 458) + 2006 (Mathematical Programming, 88) (`2026-10-23-generalized-deviation-measures.md`); Kondor–Pafka–Nagy 2007 (JBF, 105, read as arXiv `physics/0611027`) (`2026-10-23-noise-sensitivity-of-risk-measures.md`). **One source recorded as not obtained:** Lim–Shanthikumar–Vahn 2011, "Conditional value-at-risk in portfolio optimization: Coherent but fragile" (Operations Research Letters, 125 Crossref / 142 Semantic Scholar cites) — the intended fragility counterweight, closed at the publisher, `openAccessPdf` status `CLOSED` on Semantic Scholar, OpenAlex listing only the DOI, and the Berkeley CDAR working-paper copy unreachable (see access notes). Kondor–Pafka–Nagy was substituted for it and is the stronger source for the purpose, being an exact result rather than a simulation study. Nothing below is attributed to the unobtained paper. |
 | 2026-10-24 (session 71) | **The cost-aware-construction sweep the [2026-10-23] entry nominated as best-aimed, and it pays out as one theorem repeated in three literatures plus a decision-theoretic identity for the gate's own benchmark.** Aim taken directly from that entry (the only cold vein whose binding constraint changed when the protocol did, and the one where "a turnover penalty estimates nothing" so item 294's dimensional objection does not reach). Greps across all 218 prior notes: **zero** for `turnover constraint`, `robust optimization`/`robust optimisation`, `Ben-Tal`, `uncertainty set`, `portfolio norms`, `Goldfarb`, `Iyengar`, `cost penalty`, `regularization equivalence`, `L1 constraint`; `no-trade region` 4 and `quadratic cost` 2, all on the *policy* question rather than the *objective* question. (`Gârleanu` returned 5 — the diacritic, not a gap; the aim-portfolio paper is covered and was not re-read.) Outcome: **the reduction is free and the optimizer is closed three ways over.** Olivares-Nadal–DeMiguel (Tier A, OR, 82 Crossref cites) prove a `p`-norm cost term is simultaneously a robust problem, a lasso/ridge regression and a Bayesian prior — so `κ` is a hyperparameter, the honest value over-deters into all-or-nothing trading, and v3's per-name `Λ` implies an uncertainty box with half-widths proportional to *stamp duty* rather than to estimation error. Paç–Pınar (Tier B, 8 cites) extending Pflug–Pichler–Wozabal (Tier A, 203 cites) prove worst-case risk = nominal + `Cκ‖w‖_q` over a Wasserstein ball, making the equal-weight pool the exact high-ambiguity optimum with a finite threshold `κ* ∝ (N−1)` — which, since the panel went 140 → ~1,000 names, says the pool got **harder** to beat, derived rather than measured. Bertsimas–Brown–Caramanis (Tier A, SIAM Review, 2097 cites) supply the general dual-norm theorem, the `ρ_min` free-robustness threshold, and the NP-hardness that closes robust variance optimisation here. Ghahtarani–Saif–Ghasemi's review (Tier B, 30 cites) supplies the field's self-assessment (over-conservative, equivalent to shrinkage, nobody knows how to size the set) and the one positive direction (robustify the factor, not the name). Five free items (300–304) and one anti-candidate (305). | Olivares-Nadal & DeMiguel 2018 (`2026-10-24-transaction-costs-as-robustness-and-regularization.md`); Paç & Pınar 2018 + Pflug–Pichler–Wozabal 2012 (`2026-10-24-equal-weight-as-the-maximal-ambiguity-optimum.md`); Bertsimas, Brown & Caramanis 2011 (`2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`); Ghahtarani, Saif & Ghasemi 2022 (`2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`) |
+| 2026-10-25 (session 72) | **The exact-inference sweep the [2026-10-24] entry named as best-aimed, and it pays out by turning this folder's most-used screen from a calibration into an exact closed form that independently reproduces item 294's number, plus the first test statistic here for "is this weighting distinguishable from the pool?".** Aim taken verbatim from that entry (`Britten-Jones` 0 before it, `sampling error in estimates` 0). Greps across all 222 prior notes: **zero** for `Kan.Zhou`, `Ledoit.Wolf` as a pair, `Sharpe ratio test`; `Britten-Jones` 1, and only for the regression representation. **Britten-Jones (1999, JF, 415 Crossref cites) was NOT obtained** — closed at Wiley, `oa_status: closed` with no OA location in OpenAlex, nothing on LBS Research Online, and no course-page or author mirror found — so the session took the same question through the minimum-variance case, which is the one the entry's screen is about and the only one where exact inference exists. Outcome: **the screen is now a theorem with a test statistic, one `portfolio-learning` class is closed by a non-existence proof, one construction survives estimating a single scalar, and there is a width above which all of it silently stops working.** Kempf–Memmel (Tier B, Schmalenbach BR, 100 cites) prove the minimum-variance weights ARE OLS slopes on return differences (identity, no distributional content), that the plug-in and OLS estimators are the same number, that expected out-of-sample variance is exactly `σ²_MV(1 + (N−1)/(T−N−1))` — which agrees with item 294's `1/(1−N/T)` to **2.955 vs 2.953** at this panel's cell — and that the plug-in estimator is best *unbiased*. Okhrin–Schmid (Tier A, J.Econometrics, 184 cites) give the exact laws for all four standard weight estimators: GMV exactly multivariate-`t` and unbiased, the expected-utility tilt biased by exactly `(n−1)/(n−k−1)` with `(n−k−3)` in its variance, de-biasing proved to *raise* MSE, and the fully-invested maximum-Sharpe weights with **no moments of order ≥ 1 at all**. Frahm–Memmel (Tier A−, J.Econometrics, 113 cites) give a James–Stein shrinkage toward any reference portfolio that dominates the plug-in estimator for every `n ≥ d+2, d ≥ 4` with a one-scalar intensity `κ_S = ((d−3)/(n−d+2))/τ̂_R`, the conditionally-noncentral-`F` law of `τ̂_R` that makes "hold equal weight" a testable null with brutal thresholds (161% at `d=50, n=120`), Theorem 8 generalising Jagannathan–Ma to weight shrinkage, and the `q = n/d → 1⁺` régime where shrinkage is worse than the reference portfolio (this panel's daily cell is `q ≈ 1.5`). Bodnar–Dmytriv–Parolya–Schmid (Tier B, IEEE TSP, 28 cites) restate the exact `F_{p−1,n−p}` Mahalanobis test on a weight vector, show its null dispersion growing as `2/(1−c)`, and find that on a **rank-deficient** `Σ` every non-singular such test has power and ROC near zero while still printing a p-value — which is this repo's common case at monthly frequency. Five free items (306–310), one of them an anti-candidate (309). | Kempf & Memmel 2006 (`2026-10-25-gmv-weights-as-regression-coefficients.md`); Okhrin & Schmid 2006 (`2026-10-25-exact-distributions-of-estimated-portfolio-weights.md`); Frahm & Memmel 2010 (`2026-10-25-dominating-estimators-and-the-naive-diversification-test.md`); Bodnar, Dmytriv, Parolya & Schmid 2019 + Bodnar & Schmid 2008 (`2026-10-25-testing-portfolio-weights-when-the-panel-is-wide.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-10-25] What should aim session 73: the carried-over `Kalman` / `state space` vein is next and
+  still cold, and tonight sharpens its acceptance criterion into a single arithmetic test it must pass
+  before its empirics are read.** Greps across all 222 prior notes: `Kalman` **0**, `state space` 2,
+  `wavelet` **0**, `long memory` **0**, `Hurst` 1, `entropic` **0**, `Hansen Sargent` **0**,
+  `transfer entropy` **still 0** after four nominations — stop nominating it, as the 2026-10-24 entry
+  already said. Against that, the inference-layer veins are now well covered: `HAC` 11, `Newey` 7,
+  `bootstrap` 27, `serial correlation` 10, `autocorrelation` 35, so tonight's "assumes independent
+  observations" limitation does **not** open a new vein; it points back at
+  `notes/2026-08-24-testing-differences-of-sharpe-ratios.md`, which already handles it for the statistic
+  the gate adjudicates. **The criterion tonight adds, and it should be stated before the first paper is
+  opened:** a state-space or Kalman proposal estimates a state vector of dimension `k` from `n`
+  observations, so items `#306` and `#310` apply to it *unchanged* — admit the vein only if it yields a
+  construction whose state dimension is `O(1)` (a single time-varying loading, a scalar volatility
+  state, one blend weight), and abandon it if the first paper's object is an `O(N)` state over the
+  cross-section, because that is the same `k/n` wall three of tonight's four sources run into and the
+  session will have bought a fourth derivation of a closure the folder already owns. **The method that
+  found tonight's vein worked for a third consecutive session and should be reused:** grep for the
+  *mathematical objects* rather than the strategy families, then ask which of the lab's standing rules
+  rests on a calibration rather than a theorem.
+  - **Carried over unspent, in order.** `Kalman`/`state space` first, per the above. Then `wavelet`
+    (**0**), `long memory` (**0**), `Hurst` (1) — multi-scale decomposition, whose honest anchor is the
+    *skeptical* modified-R/S literature, i.e. the "worth reading for what it rules out" shape. Then
+    `entropic` (**0**) / `Hansen Sargent` (**0**), still carrying the 2026-10-24 prediction that it is a
+    third instance of the dual-norm theorem and therefore worth at most one note rather than a session;
+    a session that opens it should state that prediction first and abandon the vein if the first paper
+    confirms it.
+  - **The free queue, and tonight added four free items plus one anti-candidate.** `#307` is the one to
+    read first, because it is the first *test statistic* this folder has for the question the gate
+    actually asks, it consumes no trial and no holdout, and it is computable from returns the lab
+    already holds. `#310` must be read **immediately after it and before it is used**, because it is the
+    precondition, and its failure mode is the dangerous kind: a test that never rejects rather than one
+    that errors. `#306` upgrades item 1 and item `#294` rather than adding to the queue — the news is
+    that two literatures that do not cite each other agree to three digits on this panel's number, so
+    the screen the lab leans on hardest is now as well-founded as anything in this folder. `#308` is the
+    only construction material of the night and the only weighting proposal here that estimates a single
+    scalar *and* ships with its own go/no-go test; note that its own `q ≥ 2` condition rules it out on
+    the full eligible panel and permits it on a selected book of ≤ 100 names at daily frequency, which
+    is a sharper scope statement than this folder usually gets. `#309` is written as an anti-candidate
+    for the same reason `#305`, `#299` and `#293` were, and is the strongest of the four because it
+    rests on a non-existence proof rather than on an arithmetic bound.
+  - **Unchanged and still live below those**: `#300`–`#305` from 2026-10-24 (`#300` still the
+    interpretation rule to read before anything else in the queue, `#301` still the cheapest item in
+    several sessions); `#294`–`#299` from 2026-10-23 (`#294` now carrying tonight's exact twin, and
+    `#295`'s null outcome still the informative one); `#289`–`#292` from 2026-10-22; `#284`–`#288` from
+    2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair (`#273`, `#274`, with `#275` gated on
+    its own free screen); then 2026-10-17, 2026-10-16, 2026-10-15 and everything carried under them.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas are
+    not held to the eligibility boundary the candidate is held to) is still a human decision. The
+    `origin/main-cozirv` divergence remains **closed** (recorded 2026-10-24); what is left is
+    housekeeping a human can do whenever — six stale `origin/main-*` branches (`0xxhh0`, `7iyrzq`,
+    `86aao6`, `cozirv`, `e6mtf5`, `x8h7jq`) are safe to delete so the step-0 integrity sweep stops
+    listing them. **No strategy session should treat this as a blocker.**
+  - **Named for a later session rather than summarised: Britten-Jones (1999)**, *Journal of Finance*
+    54(2), 655–671, `10.1111/0022-1082.00120`, 415 Crossref cites — the paper the 2026-10-24 entry
+    nominated by name, and **not obtained**. Closed at Wiley; OpenAlex reports
+    `oa_status: closed, any_repository_has_fulltext: false` with its `locations` list holding only the
+    DOI itself; LBS Research Online (his own institution's repository, and a channel this folder has
+    used successfully) has no record of it at all; and no course-page, reading-list or author mirror
+    surfaced in two searches. Its two substantive contributions are **covered by substitutes that were
+    read in full**: the regression representation of mean-variance (Kempf–Memmel give the
+    minimum-variance case, which is the case this lab's screen is about, as an identity with proof) and
+    exact tests on efficient weights (Bodnar–Schmid's `F_{p−1,n−p}` Mahalanobis statistic, restated in
+    full by Bodnar–Dmytriv–Parolya–Schmid). **This is a pointer, not a gap**: the only thing a direct
+    read would add is the tangency-portfolio version of the test and the paper's own empirical
+    demonstration, neither of which changes an item in the queue. Also **not obtained and lower
+    priority: Bodnar & Schmid (2008)**, *Metrika* 67, 127–143, 58 Crossref cites — closed at Springer;
+    its statistic, exact null and alternative densities are recorded from the 2019 paper that
+    generalises it, so one fetch would only confirm notation.
+- **[2026-10-25] The transferable output, and it is the twenty-fifth detector: when this lab applies a
+  rule as a calibration, go looking for the theorem the calibration is an approximation of — and read
+  the agreement or disagreement between them as the finding, not as a footnote.** The twenty-four
+  before it are listed in the 2026-10-24, 2026-10-23, 2026-10-22 and 2026-10-21 entries. Tonight the
+  most-used rule in this folder ("count the noisily-estimated parameters") turned out to be the
+  large-sample shadow of an exact finite-sample identity, and the two agreed to three digits on this
+  panel's cell from two literatures that do not cite each other — which is worth more than either
+  derivation alone, because a calibration and a theorem that agree are evidence the *modelling* is right
+  and not just the algebra. The reusable procedure: take the folder's own candidate list, find the items
+  whose evidence line reads "calibrated" or "horse-race", and search for the closed form. **Second
+  transferable, and it is the one I would reuse first: an exact test's assumptions are preconditions to
+  check with one line of linear algebra, and the failure mode is silence rather than an error.** The
+  singular-covariance result is the general shape: a statistic whose null law assumed `Σ̂` is invertible,
+  run on a panel where it is not, does not raise, does not warn, and does not merely lose power — it
+  returns a p-value that can never reject. Any statistic this lab imports should be asked, before it is
+  trusted, *what would this return if its assumption failed* — and if the answer is "a plausible number",
+  the precondition check is mandatory rather than advisable. **Third, and it is the 2026-10-23 sourcing
+  rule confirmed again:** the session's sharpest output came from reading a construction paper and a
+  limitation paper together. Kempf–Memmel alone would have produced "the weights are a regression, run
+  the `F`-test"; it only became "and on this panel that test can never reject" once it was read against
+  the high-dimensional paper. A session that read four construction papers would have shipped a screen
+  that silently does not work.
+- **[2026-10-25] Access findings — one excellent new repository, one old channel re-confirmed twice
+  over, one department directory, and a new "looks like an answer" mode that passes BOTH of this file's
+  integrity checks.** **The new channel: the University of Augsburg's OPUS repository
+  (`opus.bibliothek.uni-augsburg.de/opus4/files/<docId>/<docId>.pdf`) served the typeset *published*
+  version of a closed *Journal of Econometrics* article on the first try, under CC BY-NC-ND**, with the
+  Elsevier citation line on its cover page. The path is simply the numeric `docId` repeated, derivable
+  from the `opus4/frontdoor/index/index/.../docId/<n>` landing URL, so one search result gives both. This
+  is the 2026-10-04 co-authors'-institutions procedure again, now with a German host, and the third time
+  that procedure has produced a *published* PDF rather than a working paper. **`econstor.eu` worked
+  again** (a CFR Cologne working paper, found via `hdl.handle.net/10419/<id>`, whose 24 KB landing page
+  prints the `bitstream/10419/<id>/1/<numeric>.pdf` link three times) — the 2026-10-12 reversal of the
+  2026-10-04 "dark behind Anubis" entry holds, and the host should now be treated as reliable rather than
+  as worth one cheap retry. **A German statistics seminar's flat working-paper directory**
+  (`wisostat.uni-koeln.de/fileadmin/sites/statistik/pdf_publikationen_DP/DP<NN><YY>.pdf`) served the
+  working version of a closed *Journal of Econometrics* article first try — the 2026-10-16
+  department-series lesson, and worth recording that it surfaced as a *side-effect of searching for a
+  different paper by another member of the same department*, which is a cheap extra query when one
+  co-author's institution is known. **New refusal-adjacent mode, and it is the first that passes every
+  integrity check this file prescribes: a two-column IEEE/arXiv layout extracts its PROSE perfectly and
+  its DISPLAYED EQUATIONS out of reading order.** `pdftotext -layout` on arXiv:1710.09587v3 gave 227 KB
+  of clean text, 593 instances of `" the "`, **zero `( )` dropout** — both of this file's tells pass —
+  while the test statistic, its asymptotic distribution and the power function were interleaved with
+  the right-hand column's prose and with figure captions, so a formula read straight off the extract
+  would have been wrong in its grouping. Unlike the 2026-10-05 silent-math-dropout case, nothing is
+  missing and nothing needs an image read: **re-extract the single page WITHOUT `-layout`** and the
+  equations come out in document order, one token per line. Add that to the recipe for any two-column
+  journal PDF carrying mathematics. Index behaviour, all as documented: **Crossref answered every
+  lookup tonight on the first attempt** (including two journal-title searches that found DOIs a title
+  guess would have missed); **Semantic Scholar's `/paper/search` returned HTTP 429 on the session's
+  first unauthenticated call**, so no count came from it; OpenAlex was spent on one `locations` lookup
+  only and answered. **Crossref first remains the right rule.**
 
 - **[2026-10-24] What should aim session 72: tonight spent the last of the three sweeps the 2026-10-23
   entry named, and the best-aimed successor is not a new vein but a *primary source for a rule this lab

@@ -23100,3 +23100,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    rising with holding length — it falls hardest on exactly the banded books tonight refused) and
    the 2026-10-22 engine issue (the stored price and volume levels are a back-adjustment
    lookahead, whose discriminating signature F12 used tonight as a control and reproduced).
+
+## Research session — 2026-10-25 (learning agent): 4 notes added, see research/SUMMARY.md
