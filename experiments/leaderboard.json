@@ -1,32 +1,32 @@
 {
-  "generated_at": "2026-10-25T15:35:11+00:00",
+  "generated_at": "2026-10-26T00:05:05+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
     "price-trend": {
-      "name": "pt_decade_reversal_peer_neutral",
-      "candidate": "strategies/candidates/pt_decade_reversal_peer_neutral.py",
+      "name": "pt_decade_old_half_depth_neutral",
+      "candidate": "strategies/candidates/pt_decade_old_half_depth_neutral.py",
       "track": "scout",
-      "verdict": "GATE_FAIL",
-      "ts": "2026-10-14T23:45:23+00:00",
-      "n_trials": 3,
+      "verdict": "FAMILY_LEAD",
+      "ts": "2026-10-26T00:01:52+00:00",
+      "n_trials": 4,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.331,
-        "ann_return": 0.0626,
-        "max_drawdown": -0.4285,
-        "ann_turnover": 2.71,
-        "avg_positions": 100.04,
-        "skill": -0.006,
-        "skill_cost2x": -0.029,
-        "skill_delist30": -0.006
+        "sharpe": 0.407,
+        "ann_return": 0.0736,
+        "max_drawdown": -0.3912,
+        "ann_turnover": 3.42,
+        "avg_positions": 100.05,
+        "skill": 0.07,
+        "skill_cost2x": 0.038,
+        "skill_delist30": 0.07
       },
-      "train_sharpe": 0.556,
+      "train_sharpe": 0.549,
       "skill_ci90": [
-        -0.288,
-        0.281
+        -0.167,
+        0.346
       ],
-      "train_skill": 0.033,
+      "train_skill": 0.026,
       "mechanism": 1
     },
     "portfolio-learning": {

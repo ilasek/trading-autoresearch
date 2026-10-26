@@ -23102,3 +23102,16 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    lookahead, whose discriminating signature F12 used tonight as a control and reproduced).
 
 ## Research session — 2026-10-25 (learning agent): 4 notes added, see research/SUMMARY.md
+## 2026-10-26T00:01:52+00:00 — pt_decade_old_half_depth_neutral — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/pt_decade_old_half_depth_neutral.py` (family: price-trend, track: scout, trial #12)
+- Hypothesis: Selecting the 100 eligible names with the lowest mean monthly return over the window from ten to five years before the decision date -- the OLD half of the ten-year reversal the lab already traded -- with entries quota-allocated across (trailing-trading-calendar peer group x price-history-depth tercile) cells, earns positive validation skill over the equal-weight eligible pool, because the recent half of that ten-year window is a pure null on train (selection +0.012 against the old half's +0.135) so the traded score averaged a signal with noise, and because neutralising history depth removes the only confound measured large enough to account for it (sorting on depth alone earns +0.047 with no return score at all).
+- Verdict: FAMILY_LEAD — best result yet in family 'price-trend': validation sharpe 0.407 > 0.331 (DSR 0.1053, skill +0.070 vs the equal-weight pool, 90% CI [-0.17, +0.35]; 121 trials across all protocol versions, 45 effective after clustering at rho 0.95)
+- Train: sharpe +0.55, ann_ret +10.6%, maxDD -56.6%, turnover 2.4x, skill vs pool +0.03
+- Validation: sharpe +0.41, ann_ret +7.4%, maxDD -39.1%, turnover 3.4x, skill vs pool +0.07
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.07, 90% CI [-0.17, +0.35]; at 2x costs +0.04; with a 30% delisting haircut +0.07; train +0.03 (1997-2008 +0.05, 2009-2017 -0.02)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 97% percentile of 200 random-selection replicas (median +0.29, 90% +0.38); equal-weight eligible pool +0.34, information ratio vs it +0.24
+- Deflated skill prob: 0.1053 (bar from 121 trials of this validation window across all protocol versions, 45 effective)
+- Scout track: family best before this trial +0.33; the champion was not compared and the holdout was not read
+- Frozen for forward incubation: `strategies/incubating/20261026T000152Z_pt_decade_old_half_depth_neutral.py` (scored only on data after today; see `scripts/incubation_report.py`)
+- Lesson: _(fill in after reflection)_
+
