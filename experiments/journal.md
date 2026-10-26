@@ -23113,5 +23113,322 @@ None is holdout-informed; no holdout, forward or incubation number was read.
 - Deflated skill prob: 0.1053 (bar from 121 trials of this validation window across all protocol versions, 45 effective)
 - Scout track: family best before this trial +0.33; the champion was not compared and the holdout was not read
 - Frozen for forward incubation: `strategies/incubating/20261026T000152Z_pt_decade_old_half_depth_neutral.py` (scored only on data after today; see `scripts/incubation_report.py`)
-- Lesson: _(fill in after reflection)_
+- Lesson: **The ten-year reversal's two halves are not equal contributors, and cutting the null one away produced the first v3 trial with positive validation skill and the first to clear the random-selection null gate** (+0.070, 97th percentile against a 90% bar; the eleven trials before it were all negative and all failed that gate). Three caveats travel with it and none is optional. (i) The 90% skill interval is [-0.17, +0.35] and all thirteen recorded trials are still in tier 1, so this is a positive point estimate that clears a permutation gate, not a measured edge. (ii) The shipped candidate is **not** the book the free screen priced: the screen's old-half score required 60 of the last 120 months plus 48 of the last 60 (about five years of history), the candidate requires 48 of months -120..-61 (about nine), and the stricter rule scored **+0.026 of train skill against the screened +0.103** while scoring better on validation — a sixth instance of train skill carrying no usable information about validation, this time pointing the other way. Pre-register the candidate's own availability rule, not the screen's. (iii) Train's 2009-2017 sub-period is **-0.02** against 1997-2008's +0.05, so the half of train closest to validation disagreed with validation. Turnover came in at 3.4x against a pre-registered 2.5-4.0x — the second pre-registration in a row to land inside its band rather than under it.
 
+## 2026-10-26T00:13:17+00:00 — pt_decade_recent_half_control — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_decade_recent_half_control.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Replacing trial #12's score with the RECENT half of the ten-year window (the mean monthly return of months -60 to -1), masked to trial #12's own scorable set and leaving every other node of that candidate byte-identical, scores validation skill near zero and below trial #12's +0.070, because the recent half's train selection term is +0.012 against the old half's +0.135 -- and if it does not, then trial #12's result is the depth-neutral quota or the nine-year availability rule rather than the old/recent decomposition, which is the alternative this control exists to expose.
+- Verdict: GATE_FAIL — train skill -0.055 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation drawdown -0.4657 worse than -0.45; validation sharpe 0.269 <= the random-selection null's 90% quantile 0.359 (median 0.293; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.47, ann_ret +9.9%, maxDD -65.9%, turnover 2.5x, skill vs pool -0.06
+- Validation: sharpe +0.27, ann_ret +5.3%, maxDD -46.6%, turnover 3.8x, skill vs pool -0.07
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.07, 90% CI [-0.34, +0.19]; at 2x costs -0.10; with a 30% delisting haircut -0.07; train -0.06 (1997-2008 -0.08, 2009-2017 -0.10)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 32% percentile of 200 random-selection replicas (median +0.29, 90% +0.36); equal-weight eligible pool +0.34, information ratio vs it +0.01
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The paired control confirms the decomposition on validation and rules out the construction.** Identical schedule, name universe, peer-group x depth-tercile quota and K; the window is the only difference, and the recent half scores validation skill **-0.068 against the old half's +0.070** (a paired spread of 0.138) at the **32nd null percentile against 97th**, failing three gates where the old half failed none. So trial #12's result is the score window and not the depth-neutral quota, the nine-year availability rule or the warm-up operator — the three nodes that changed with it. This is the second paired-on-validation comparison this lab has run (after trial #11's band) and the first in which the pre-registered direction was confirmed. It also prices the recent half as an **anti-candidate**: the 21-day to 60-month end of this window is refused on train (selection +0.012) and on validation (skill -0.068), at every construction tried.
+
+
+## Free measurements — 2026-10-26/27 (nightly), two trials spent
+
+Train only, through `protocol.evaluate_split(..., "train", setup=setup_v3)` — the engine's own
+backtest, i.e. the gate's exact statistic under v3's next-real-close fills, charged drift, per-name
+liquidity tiers, transaction taxes and T-bill cash. No validation book was scored outside
+`run_experiment.py`, and no holdout, forward or incubation file was opened. Every object is
+leak-free by construction: monthly returns, or a ratio of two prices inside the visible window
+(2026-10-22 engine issue — never a level). SELECTION below is gross skill over the **gross** pool
+with the liquidity tier and the transaction taxes both switched off; COST is net minus gross.
+
+### F1. The instrument, confirmed a second time — now against last night's own figure
+
+Running `pt_decade_reversal_peer_neutral` (trial #5) verbatim reproduces `trials.jsonl`: train
+sharpe **+0.556** against the recorded +0.5560, train skill **+0.033** against +0.0330, turnover
+2.02 against 2.02, avg positions 85.56 against 85.56. With the warm-up operator added it reproduces
+last night's F7 row to three decimals (net **+0.104** against +0.1039, selection **+0.120** against
++0.1202, cost **-0.016** against -0.0163, turnover 2.20x). Net pool +0.524, gross pool +0.536.
+
+### F2. Eight leak-free objects, and the question last night asked is answered
+
+K=100, calendar-peer quota, monthly, pool held through warm-up. AC1 is the month-to-month Spearman
+autocorrelation of the cross-sectional ranking — the "naturally persistent" property last night's
+idea 2 asked for:
+
+    object                        AC1   net skill  selection    cost   turn   volratio   97-08    09-17
+    decade mean      [#5's score] 0.991   +0.104     +0.120   -0.016   2.20    1.037    +0.103  +0.023
+    OLD half (-120..-61)          0.983   +0.112     +0.135   -0.023   2.53    0.952    +0.145  +0.025
+    decade return / decade risk   0.990   +0.058     +0.073   -0.015   2.23    1.114    +0.069  -0.033
+    fraction of positive months   0.993   +0.040     +0.054   -0.014   2.13    1.070    +0.062  -0.035
+    decade skewness, low          0.991   +0.024     +0.031   -0.007   1.57    1.034    +0.001  +0.048
+    RECENT half (-60..-1)         0.977   -0.010     +0.012   -0.022   2.83    1.111    -0.018  -0.097
+    low market correlation        0.974   -0.028     +0.008   -0.036   2.96    0.821    +0.018  -0.068
+    distance below decade peak    0.947   -0.055     -0.044   -0.011   2.37    1.298    -0.055  -0.138
+
+**Idea 2 is answered, and the premise is wrong.** All eight objects are naturally persistent
+(AC1 0.947-0.993) and not one is cheap to hold: churn runs 1.57x-2.96x against the pool's 0.89x.
+**A near-static ranking does not buy low turnover, because what a top-K book pays for is names
+crossing the rank-K boundary, and a boundary crosses even when the ranking barely moves.** The one
+construction that does cut boundary churn is a retention band, which is closed as a validation
+operator (2026-10-25/26). Six of eight have a positive selection term and four clear the
+`min_train_skill` hard gate, against one of sixteen last night — the objects are better, not the
+screen.
+
+**The headline: the decade reversal's two halves are not equal contributors.** The old half
+(months -120..-61) carries selection +0.135; the recent half (months -60..-1) is a pure null at
++0.012. The score trials #5 and #11 traded was the average of a signal and noise.
+
+### F3. Cross-object rank rho, so the block is read as the number of bets it is
+
+Averaged over train month-ends, eligible names only. The old half is rho **+0.777** to the decade
+mean — the same mechanism with a component removed, not a new one. Everything else that matters:
+decade mean vs decade-risk-adjusted +0.795, vs recent half +0.665, vs skewness **+0.129**;
+old half vs recent half **+0.145**, vs skewness +0.100; low market correlation is under 0.13 to
+every other object. **Decade skewness is the only orthogonal object in the block with positive net
+train skill**, and the block's lowest churn (1.57x); it is declined below on its own controls.
+
+### F4-F5. A monotone lag profile, and the negation invariant
+
+Cutting the window into 40-month slices and sliding it back from the decision date:
+
+    window (months back)   net skill  selection   turn   97-08    09-17   avg_pos
+    0 to 40                  -0.042     -0.016   3.31   -0.064  -0.100    101
+    40 to 80                 +0.000     +0.029   3.04   +0.021  -0.068    116
+    80 to 120                +0.024     +0.044   2.59   +0.057  -0.058    143
+    120 to 180               +0.034     +0.042   1.76   +0.004  +0.018    184
+
+Selection rises and turnover falls monotonically as the window recedes. The negation invariant
+passes on the old half: negated it reads selection **-0.137** against +0.135, so the harness is not
+manufacturing agreement.
+
+### F6-F7. The profile survives a common date set — and dies on a common name set
+
+The four slices do not score the same dates (a 15-year window is unavailable before ~2003), so the
+profile was re-run on the 115 train month-ends on which **every** slice has ≥50 scored names, all
+four books holding the pool before that and running the identical schedule. The profile survives
+(selection +0.009 / +0.011 / +0.024 / +0.042), and every number shrinks: 2008-2017 is a harder
+window than full train, so part of F4 was a period effect.
+
+**Then hold the candidate NAME UNIVERSE fixed too** — mask every slice to the names a 15-year score
+can be computed for, so schedule, dates and universe are all fixed and only the score's age varies:
+
+    window (months back)   selection   net skill   turn        on the common NAME set
+    0 to 40                  +0.009 -> +0.056       2.41 -> 2.01
+    40 to 80                 +0.011 -> +0.063       2.38 -> 2.05
+    80 to 120                +0.024 -> +0.063       2.27 -> 2.07
+    120 to 180               +0.042 -> +0.042       1.76 -> 1.76   (unchanged by construction)
+
+**The profile is destroyed. It goes flat and the deepest window becomes the worst of the four.**
+Every shallow slice's selection multiplies by 3-6x once it is restricted to the seasoned names.
+The lag was never the signal; the set of names a deep score can be computed for was.
+
+### F8. Decade skewness is declined, on its own relabelling controls
+
+Rank rho to -vol126 +0.178, to -(decade monthly vol) +0.318, to -(252d daily skew) +0.098 — so
+**not** low volatility in costume, and its book's volatility ratio is 1.034 rather than the
+0.71-0.77 of the low-volatility column. But run the refuted objects through its own construction
+(2026-10-25/26 rule) and it is not a better *selector*, only a cheaper one: -vol126 selection
+**+0.039** at 3.07x churn, -(252d skew) **+0.037** at 4.40x, decade skewness **+0.031** at 1.57x.
+Negated it reads only -0.021 against +0.031, an asymmetry too small to sign. Depth-neutralised
+(F12) it falls to selection +0.019 / net +0.010, and the matched null of F13 has sd 0.026. **Below
+its own null once corrected; not traded, and recorded as such.**
+
+### F9-F11. The history-depth premium: the largest single confound measured on this panel
+
+Hold **no score at all**. Equal-weight every eligible name with at least H months of realized
+monthly return, or take the K=100 with the deepest history under the usual peer quota:
+
+    book (no return information whatsoever)   net skill  selection   turn   avg_pos   97-08    09-17
+    depth >= 12m, every qualifying name         -0.000     -0.000    0.90     489    +0.001  +0.001
+    depth >= 60m, every qualifying name         +0.002     +0.002    0.91     470    +0.007  -0.003
+    depth >= 120m, every qualifying name        -0.005     -0.005    0.92     397    -0.012  -0.035
+    depth >= 180m, every qualifying name        +0.054     +0.053    0.95     329    +0.000  +0.097
+    depth >= 60m, K=100 BY DEPTH                +0.045     +0.047    1.00     111    +0.011  +0.129
+    depth >= 108m, K=100 BY DEPTH               +0.040     +0.041    0.99     141    +0.023  +0.102
+    depth >= 120m, K=100 BY DEPTH               +0.048     +0.049    0.98     149    +0.019  +0.084
+    depth >= 180m, K=100 BY DEPTH               +0.075     +0.075    0.96     224    +0.000  +0.178
+
+**Sorting on price-history depth, with no return score, earns +0.045 to +0.075 of net train skill
+at pool-level turnover (0.96-1.00x).** That is larger than all but two of the twenty-four objects
+this lab has now priced, and it uses no return information. The two structural facts about it:
+
+- **It is not avoided delistings.** Using the engine's `traded` panel (real prints, not the
+  forward-filled frame — F10c read 0.0 everywhere because `prices` is filled to the store end),
+  the share of eligible names whose series terminates within the next 1 or 3 years is **0.000 in
+  every depth group at every train date measured**. There is nothing to avoid; the v3 delisting
+  stress has no purchase on train, which is also why every recorded trial's `skill_delist30`
+  equals its `skill`.
+- **It is confined to 2009-2017** (+0.178 against +0.000 for the 15-year threshold), which is
+  exactly when the panel stops being S&P-500-only and eight non-US indices join it with much
+  shallower Yahoo coverage. Within a calendar-peer group, "deepest history" is then "longest
+  covered", and coverage depth is a property of the data vendor and the fetch date, not of the
+  market.
+
+**Declined as a candidate on the second point, deliberately and not for lack of a number.** A book
+sorted on vendor coverage depth would very likely clear these gates, and the lab would learn
+nothing it wants. It is recorded as a confound to neutralise, in the same place region already sits.
+
+### F12. The confound is in SORTING on depth, not in requiring it — and the decade objects survive
+
+Re-quota'd across (calendar peer group x depth tercile) cells so neither axis can supply the excess:
+
+    object          selection: plain -> depth-neutral   net: plain -> depth-neutral   97-08   09-17
+    decade mean         +0.120 -> +0.116                  +0.104 -> +0.098           +0.092  +0.031
+    OLD half            +0.135 -> +0.127                  +0.112 -> +0.103           +0.134  +0.027
+    decade skewness     +0.031 -> +0.019                  +0.024 -> +0.010           -0.008  +0.025
+
+**My own mid-session hypothesis is refuted by this table and that is the useful part.** Requiring a
+long window through `min_periods` does *not* import the depth premium — F9 shows the filter alone
+is worth +0.002 at 60 months and -0.005 at 120 — so what contaminates an object is correlation with
+depth, not the presence of a minimum. The decade objects have little, and lose 0.004-0.008 of
+selection to neutralisation. The deep-lag slices of F4 have a lot, which is the whole of F7's
+result.
+
+### F13-F14. The two nulls the trial was quoted against
+
+**F13, the selection-bias null for "best of eight objects priced tonight"** (2026-10-24 method
+entry). Six AR(1) random scores at the candidate score's **own** measured rank persistence
+(phi = 0.983), masked to its own scorable set, through its identical construction: net skill mean
+**-0.0477** (sd 0.0253, max -0.0120), selection mean **-0.0217** (sd 0.0260, max +0.0160). The old
+half reads z **+5.9** on net and **+5.7** on selection, and churns 2.63x against the random scores'
+2.86-3.04x — so it is both a better selector and a cheaper book than a random score of the same
+stickiness.
+
+**F14, the gate's own region-matched null, measured on train** (40 replicas, the 2026-10-15/16
+instrument). Old half depth-neutral: candidate 0.627 against null median 0.514, sd 0.024, p90
+**0.542** — margin **+0.085** over where the gate sits. Decade mean depth-neutral: 0.622 against a
+p90 of 0.557, margin +0.065. **Quoted as consistency and not as prediction**: trial #6 carried a
+train margin of +0.100 and failed validation.
+
+## Session summary — 2026-10-26/27 (nightly) — 2 trials of 8; the ten-year reversal's two halves are not equal contributors, and cutting the null one away gave v3 its first positive validation skill
+
+**Experiments run: 2 of 8. Verdicts: FAMILY_LEAD (`pt_decade_old_half_depth_neutral`, scout,
+price-trend, trial #12) and GATE_FAIL (`pt_decade_recent_half_control`, scout, price-trend,
+trial #13).** `trials.jsonl` stands at 123 records. Fourteen free measurement blocks (F1-F14),
+sixteen new leak-free books priced on the gate's own statistic, one new confound found and sized,
+one of my own mid-session hypotheses refuted by my own control, and one object declined on purpose.
+Engine green (`92 passed in 126.30s`). No holdout, forward or incubation file was opened; both
+trials are scouts, so the champion seat was never compared against and the session did not have to
+stop.
+
+**Step-0 integrity: clean.** `git fetch origin --prune`, no remote branch holds a commit absent
+from `origin/main`. HEAD was on a per-run branch `main-24dkyc` pointing at the identical commit as
+`origin/main`, so nothing was split; corrected to `main` and reset to `origin/main` before any
+trial ran, per the integrity rule.
+
+**Family mix, planned before the first hypothesis was written** (as the manual requires): at most 2
+in `price-trend`; the "at most 2 in any one family" cap is lifted (`distinct_mechanisms` 5 >= 4);
+the "at least one cold family" rule is spent (every family has a recorded v3 trial since
+2026-10-19/20). Plan was up to 2 price-trend from the decade-path block plus 1 elsewhere **only if
+the free screen produced a non-price-trend object with positive train skill**. It did not — the one
+non-price-trend object priced (low market correlation, `range-variance`) reads net -0.028 and fails
+`min_train_skill` — so the third trial was not bought. Both price-trend slots were used and the cap
+is now reached for the night.
+
+### The result: v3's first positive validation skill, and the first clearance of the null gate
+
+    trial  candidate                            verdict       val SR  skill   CI90            null %ile  train skill  turn
+    #12    pt_decade_old_half_depth_neutral     FAMILY_LEAD   +0.407  +0.070  [-0.17, +0.35]      97%       +0.026    3.4x
+    #13    pt_decade_recent_half_control        GATE_FAIL     +0.269  -0.068  [-0.34, +0.19]      32%       -0.055    3.8x
+
+The eleven v3 trials before tonight were **all** negative in validation skill and **all** failed the
+random-selection null gate. Trial #12 is the first positive and the first to clear it (97th
+percentile against a 90% bar), and it holds `price-trend`'s lead and the board's highest P(best) at
+42%. It is still tier 1 along with all thirteen trials, and its 90% interval straddles zero widely:
+**a positive point estimate that clears a permutation gate, not a measured edge.** Say it that way.
+
+### Best finding: the decade window's two halves, and a paired validation control that confirms it
+
+The score trials #5 and #11 traded is the mean monthly return over ten years. Split in half on
+train: the **old** half (months -120..-61) carries selection **+0.135**, the **recent** half
+(months -60..-1) **+0.012** — a null. The traded score averaged a signal with noise.
+
+Trial #13 then tested that on validation as a one-node paired experiment: identical schedule, name
+universe, peer-group x depth-tercile quota and K, with the recent-half score masked to the old
+half's own scorable set so only the window differs. **Validation skill -0.068 against +0.070, a
+paired spread of 0.138, at the 32nd null percentile against the 97th**, failing three gates where
+the old half failed none. So trial #12's result is **the score window**, not the depth-neutral
+quota, not the nine-year availability rule and not the warm-up operator — the three nodes that
+changed with it. Second paired-on-validation comparison this lab has run, and the first whose
+pre-registered direction was confirmed.
+
+### Second finding: the history-depth premium, and it is the largest confound on this panel
+
+Sorting on price-history depth with **no return score at all** earns +0.045 (>=60 months) to
+**+0.075** (>=180 months) of net train skill at pool-level turnover. That beats all but two of the
+twenty-four objects this lab has priced. It is **not** avoided delistings — zero eligible series
+terminate within 1 or 3 years anywhere on train, in any depth group — and it is confined to
+2009-2017, when eight non-US indices join an S&P-500-only panel with much shallower Yahoo coverage.
+Within a peer group, "deepest history" is "longest covered", which is a property of the vendor and
+the fetch date. **Declined as a candidate deliberately**: it would probably pass these gates and
+the lab would learn nothing it wants. Recorded as an axis to neutralise, beside region.
+
+### Third finding, and it is a correction of my own hypothesis mid-session
+
+I expected the depth premium to be imported by every long-window object through its `min_periods`,
+and said so before measuring. **It is not.** The filter alone is worth +0.002 at 60 months and
+-0.005 at 120; it is *sorting* on depth that pays. Depth-tercile neutralisation costs the decade
+mean 0.004 of selection and the old half 0.008, so the lab's one positive object is exonerated
+rather than explained away. The deep-lag slices, by contrast, lose everything to it — which is what
+F7 found by holding the name universe fixed and watching a clean monotone profile collapse.
+
+### Also measured, one line each
+
+- **Last night's idea 2 is answered and its premise is wrong.** All eight objects priced tonight are
+  naturally persistent (rank AC1 0.947-0.993) and none is cheap to hold (1.57x-2.96x against the
+  pool's 0.89x). A top-K book pays for boundary crossings, and a boundary crosses even when the
+  ranking barely moves — so **rank persistence does not buy low turnover**, and the only operator
+  that cuts boundary churn is the band, already closed on validation.
+- **The instrument reproduced a recorded engine figure a second time** (trial #5: train sharpe
+  +0.556 vs +0.5560, train skill +0.033 vs +0.0330) and last night's F7 row to three decimals.
+- **A screen is only a pre-registration of the book it actually priced.** The screened old-half
+  score needed ~5 years of history, the shipped candidate ~9, and the stricter rule read +0.026 of
+  train skill against the screened +0.103 — while scoring *better* on validation.
+- **Decade skewness declined on its own controls**: orthogonal to the decade mean (rho +0.129) and
+  not low volatility in costume (volratio 1.034), but no better a selector than -vol126 run through
+  its own construction (+0.031 vs +0.039), and depth-neutralised it falls to +0.019 against a
+  matched-null sd of 0.026.
+- **Four objects priced for the first time and negative**: distance below the decade peak
+  (selection -0.044), low market correlation (+0.008, net -0.028, volratio 0.821 — the de-risking
+  construction trial #1 closed), the decade's fraction of positive months (+0.054 but
+  2009-2017-negative) and decade return per unit decade risk (+0.073, likewise).
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Trial #12 is a scout and the obvious next question is whether it can be a `challenge`.** It is
+   the only v3 object with positive validation skill and a cleared null gate, and under v3 the seat
+   is empty, so a challenge candidate only has to clear the bars. **But DSR is 0.1053 against a
+   0.95 requirement at 45 effective trials**, so on tonight's numbers it does not get close, and a
+   challenge run would read the holdout only if it passed everything else — which it would not.
+   Do not spend a challenge slot on it until the skill estimate is much larger or the interval much
+   narrower, and neither is available from this validation window.
+2. **The depth axis should be neutralised by default in every future candidate**, the way the
+   calendar-peer quota already neutralises region. It costs 0.004-0.008 of selection on a clean
+   object and removes +0.045 to +0.075 of confound on a dirty one. The cheapest version is the
+   (peer group x depth tercile) quota both of tonight's trials used.
+3. **Where the old half's window ends is now the open question, and F7 says do not answer it by
+   sliding the window.** Any deeper window buys the seasoning confound rather than more signal.
+   What is untested is the *shape* inside the old half — e.g. whether the signal is the level of the
+   old-half mean or its dispersion — and that can be screened free in the F2 units.
+4. **Do not re-buy tonight's declines**: the recent half of the decade window at any construction
+   (refused on train *and* on validation, paired); the 0-40 and 40-80 month slices; distance below
+   the decade peak; low market correlation; decade skewness; the depth sort itself; and anything
+   relying on rank persistence to deliver low turnover.
+5. **From `research/SUMMARY.md`**: `#310` is the one that bears on tonight — it says to check
+   `n > p` and `rank(Sigma) = p` before reading any statistic whose null assumed an invertible
+   covariance, and that a wide-panel non-rejection is uninformative rather than evidence. Tonight's
+   gates are permutation- and bootstrap-based rather than covariance-based so it does not bite, but
+   it is the right lens on the 90% interval of trial #12: **a wide interval here is uninformative,
+   not reassuring.** `#307` (an exact `F` test for "is this book's weighting distinguishable from
+   the pool?") remains the folder's cheapest unspent free item and would now be read against trial
+   #12's own weight vector. Still live: `#301`, `#304`, `#308` (shrink toward the pool with a
+   James-Stein intensity, with its own go/no-go test — note its `q = n/d >= 2` precondition, which
+   a K=100 daily book satisfies and a full-panel book does not), `#288`, `#289`, `#294`/`#295`,
+   `#285`/`#286`, `#282`. `#300` still the interpretation rule to read first; `#305`, `#293`,
+   `#299` and `#309` remain anti-candidates.
+6. **Standing, and not this agent's call**: the 2026-10-18 engine issue (the null's replicas are not
+   held to the candidate's eligibility boundary — note that tonight's F11 shows the related
+   delisting stress has no purchase on train at all, since no eligible series terminates there) and
+   the 2026-10-22 engine issue (the stored price and volume levels are a back-adjustment lookahead).
+   **New for the human owner**: the history-depth premium of F9-F11 is a third data-integrity
+   finding of the same kind — a quantity that is causal, passes every guard, and measures the data
+   vendor rather than the market. It may deserve the same treatment region got: a protocol-level
+   neutralisation rather than a convention each candidate has to remember.

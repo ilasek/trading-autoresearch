@@ -5945,3 +5945,88 @@ across experiments; prune entries that later evidence contradicts.
   Rider worth carrying separately: that same alternation is a statement about the score's own
   stability across decades, and for this score the 2000-2004 value-rebound bucket carries much of
   the train result.
+
+- **[Measured 2026-10-26/27, nightly — trials #12 and #13, PAIRED ON VALIDATION] THE TEN-YEAR
+  REVERSAL'S TWO HALVES ARE NOT EQUAL CONTRIBUTORS: THE OLD HALF CARRIES ALL OF IT AND THE RECENT
+  HALF IS A NULL ON TRAIN *AND* ON VALIDATION. CUTTING THE NULL HALF AWAY GAVE v3 ITS FIRST
+  POSITIVE VALIDATION SKILL AND ITS FIRST CLEARANCE OF THE RANDOM-SELECTION NULL GATE.** On train,
+  K=100, calendar-peer quota, monthly: selection **+0.135** for months -120..-61 against **+0.012**
+  for months -60..-1, where the full decade mean (trials #5/#11) reads +0.120 — the traded score
+  averaged a signal with noise. Tested on validation as a one-node paired experiment (identical
+  schedule, name universe, peer-group x depth-tercile quota and K, the recent-half score masked to
+  the old half's own scorable set so only the window differs):
+
+      trial  window        val SR   skill    CI90            null %ile  train skill  turn
+      #12    -120..-61     +0.407  +0.070  [-0.17, +0.35]       97%       +0.026     3.4x
+      #13     -60..-1      +0.269  -0.068  [-0.34, +0.19]       32%       -0.055     3.8x
+
+  A paired spread of **0.138** in validation skill and **65 points** of null percentile, with the
+  old half failing no gate and the control failing three. **So the result is the score window, not
+  the construction** — not the depth-neutral quota, not the nine-year availability rule, not the
+  warm-up operator, the three nodes that changed with it. Scope, and it is not optional: all
+  thirteen v3 trials remain in tier 1, #12's 90% interval straddles zero widely, and its train
+  2009-2017 sub-period is **-0.02** — the half of train closest to validation disagreed with
+  validation. **This is a positive point estimate that clears a permutation gate, not a measured
+  edge**, and its DSR is 0.1053 against the 0.95 a challenge needs. **Anti-candidate travelling
+  with this entry: the recent half of the decade window, and the 0-40 and 40-80 month slices, at
+  any construction.**
+
+- **[Measured 2026-10-26/27, nightly] THE LARGEST SINGLE CONFOUND ON THIS PANEL IS PRICE-HISTORY
+  DEPTH, IT USES NO RETURN INFORMATION, AND IT MEASURES THE DATA VENDOR RATHER THAN THE MARKET.**
+  With no score at all, taking the K=100 eligible names with the deepest realized monthly history
+  under the usual peer quota earns net train skill **+0.045** (>=60 months), +0.040 (>=108), +0.048
+  (>=120) and **+0.075** (>=180), at **0.96-1.00x** turnover — better than all but two of the
+  twenty-four objects this lab has priced. Two structural facts fix what it is. **(i) It is not
+  avoided delistings**: measured on the engine's `traded` panel (real prints — a measurement on the
+  forward-filled `prices` frame reads 0.000 everywhere for a different and uninformative reason),
+  the share of eligible names whose series terminates within the next 1 or 3 years is **0.000 in
+  every depth group at every train date**, which is also why every recorded trial's
+  `skill_delist30` equals its `skill`. **(ii) It is confined to 2009-2017** (+0.178 against +0.000
+  at the 15-year threshold), i.e. to exactly when eight non-US indices join an S&P-500-only panel
+  carrying much shallower Yahoo coverage; within a calendar-peer group "deepest history" is
+  "longest covered", and coverage depth is a property of the vendor and the fetch date.
+  **Declined as a candidate deliberately rather than for want of a number** — it would probably
+  clear these gates. Third member of the family that includes the 2026-10-22 price-level lookahead:
+  a quantity that is causal, passes every guard, and is about the store rather than the market.
+  **Operative change: neutralise depth the way region is already neutralised — a (calendar peer
+  group x depth tercile) entry quota — in every candidate from here.**
+
+- **[Measured 2026-10-26/27, nightly — CORRECTS A HYPOTHESIS OF MY OWN, STATED BEFORE MEASURING]
+  A LONG WINDOW'S `min_periods` DOES NOT IMPORT THE DEPTH PREMIUM; CORRELATION WITH DEPTH DOES.**
+  Equal-weighting every eligible name that merely *qualifies* is worth **+0.002** at 60 months and
+  **-0.005** at 120 — the filter is free, it is the *sort* that pays. Depth-tercile neutralisation
+  costs the decade mean 0.004 of selection (+0.120 -> +0.116) and the old half 0.008 (+0.135 ->
+  +0.127), so **the lab's one positive object is exonerated, not explained away.** The deep-lag
+  slices are the opposite case and the general rule is read off them: **a clean monotone profile in
+  a window's age collapsed entirely once the candidate NAME UNIVERSE was held fixed as well as the
+  dates.** Slid back from the decision date, selection ran +0.009 / +0.011 / +0.024 / +0.042 across
+  40-month slices at 0-40 / 40-80 / 80-120 / 120-180 months on a common date set; masked to the
+  names a 15-year score can be computed for it goes **+0.056 / +0.063 / +0.063 / +0.042** — flat,
+  with the deepest window now the worst. **Method, standing: a profile in any parameter that changes
+  what the score can be computed for is a profile in the scorable set until a common-universe
+  control says otherwise. Fixing the dates is not enough.**
+
+- **[Measured 2026-10-26/27, nightly — ANSWERS THE 2026-10-25/26 IDEA 2 AND REFUTES ITS PREMISE]
+  A NATURALLY PERSISTENT RANKING DOES NOT BUY LOW TURNOVER, BECAUSE A TOP-K BOOK PAYS FOR BOUNDARY
+  CROSSINGS AND A BOUNDARY CROSSES EVEN WHEN THE RANKING BARELY MOVES.** Eight leak-free objects,
+  month-to-month Spearman rank autocorrelation **0.947 to 0.993**, engine-counted churn **1.57x to
+  2.96x** against the pool's 0.89x — and no relation between the two within the block (the highest
+  AC1, 0.993, churns 2.13x; the lowest, 0.947, churns 2.37x). So the search for "a positive-selection
+  score that is *naturally* cheap to hold" has no target: the only operator that cuts boundary churn
+  is a retention band, which the 2026-10-25/26 paired trial closed as a validation operator. Six of
+  the eight have a positive selection term and four clear `min_train_skill`, against one of sixteen
+  the night before — the objects improved, not the screen. **Consequence: stop treating turnover as
+  a property of the score. It is a property of the selection rule, and the two rules this lab has
+  (hard top-K, banded top-K) are respectively expensive and refused.**
+
+- **[Method, 2026-10-26/27] A FREE SCREEN PRE-REGISTERS THE BOOK IT ACTUALLY PRICED, AND AN
+  AVAILABILITY RULE IS PART OF THE BOOK.** The screened old-half score required 60 of the last 120
+  months plus 48 of the last 60 (~5 years of history); the shipped candidate required 48 of months
+  -120..-61 (~9 years). Algebraically the same window, a different scorable set, and the shipped
+  rule read **+0.026 of train skill against the screened +0.103** — while scoring *better* on
+  validation (+0.070). Sixth instance of train skill carrying no usable information about
+  validation (2026-10-16/17) and the first pointing the other way. **Quote a screen against the
+  candidate's own `min_periods`, not the screen's, and re-run the screen on the shipped file if the
+  two differ.** The instrument itself is sound and was confirmed a second time tonight: trial #5
+  verbatim reads train sharpe +0.556 against the recorded +0.5560 and train skill +0.033 against
+  +0.0330, and last night's F7 row reproduces to three decimals.
