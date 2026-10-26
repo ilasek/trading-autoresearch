@@ -7229,6 +7229,99 @@ spending trials on constructions whose arithmetic was already against them.
 
 ---
 
+### The latent state and its one knob — why a scalar-state filter is an EWMA, what sets its span in closed form, and the lookahead the literature does not flag (cross-family, `statistical-learning`, `statistical-arbitrage`)
+
+Four sources, read 2026-10-26, opening the `Kalman` / `state space` vein that the [2026-10-25],
+[2026-10-24], [2026-10-23] and [2026-10-22] entries had carried unspent for four sessions. Greps
+across all 226 prior notes before the session: `Kalman` **0**, `state space` 2 (both incidental —
+one aside in a range-volatility note, one in a salience note). The [2026-10-25] entry set the
+acceptance criterion and it was stated before the first paper was opened: *a state-space proposal
+estimates a `k`-dimensional state from `n` observations, so items `#306` and `#310` apply to it
+unchanged — admit the vein only if it yields a construction whose state dimension is `O(1)`, and
+abandon it if the first paper's object is an `O(N)` state over the cross-section.* **The vein passes
+that test cleanly and is then deflated by its own mathematics**, which is a better outcome than
+either a null or a new candidate.
+
+**Finding one, and it is the structural one: every construction in this literature is `O(1)` per
+series, and the whole exponential-smoothing family IS a state-space model.** Hyndman–Koehler–Snyder–
+Grose (Tier A, *IJF*, 880 Crossref cites) prove the equivalence for all twelve methods of the
+standard taxonomy in both an additive-error and a multiplicative-error version, in single-source-of-
+error form. The state is `(level, slope, seasonal…)`: dimension **1** with no trend or seasonality,
+**2** with trend, `2 + m` with an `m`-season cycle — never a function of how many series are being
+forecast, because each series gets its own independent filter. The level-only cell *is* simple
+exponential smoothing: `μ_t = l_{t−1}`, `l_t = l_{t−1} + α ε_t`, one state and one parameter. On
+the M-competition's 504 non-seasonal series the procedure's own AIC chose that smallest-state cell
+more often than any other. The criterion is met — and the price of meeting it is that **the object
+admitted is an EWMA.**
+
+**Finding two, and it is the night's payout: the smoothing constant is a closed form in one variance
+ratio, so it never has to be fitted.** Muth (1960, *JASA*, 578 cites — **not obtained**; read at one
+remove from Lang's restatement, *JEBO* 1989 / IFN WP 179, obtained in full and its equations read
+from a rendered page image) shows that for a random walk plus white noise the optimal forecast is
+exactly the exponentially weighted sum, with `β` given in closed form by the ratio of permanent-shock
+to transitory-shock variance. Writing `q = σ²_dw/σ²_v` the result rearranges to **`α = √(q + q²/4) −
+q/2`**, whose small-`q` expansion is `α ≈ √q` and hence **`span ≈ 2/√q`** — the EWMA span is twice the
+reciprocal of the square root of the signal-to-noise ratio. Both limits check by hand (`q → 0` ⇒
+`α → 0`, never update; `q → ∞` ⇒ `α → 1`, *a random walk cannot be usefully smoothed*). And `q` is
+itself free: the model implies `corr(Δy_t, Δy_{t−1}) = −1/(2 + q)`, so **`q = −1/r₁ − 2` read off the
+lag-1 autocorrelation of first differences**, one line of pandas, no trial. This is the [2026-10-25]
+detector firing again — *where the lab uses a calibration, find the theorem it approximates* — and
+here the calibration is every lookback and span the lab has ever chosen by sweep.
+
+**Finding three, and it is the trap: the Kalman recursion is causal, its hyperparameters are not, and
+the literature does not flag this because it is not backtesting.** Adrian–Franzoni (Tier B+,
+*J. Empirical Finance*, 104 cites) model a latent factor loading as a two-state filter per asset —
+`(β_t, B_t)`, where investors know neither the current loading nor its long-run mean and learn both
+from realised returns, which makes the belief about the long-run mean a **martingale** and injects a
+slow, highly persistent component into perceived risk. The mechanism is genuine and the state is
+`O(1)`. But the paper states plainly that the persistence `F`, both error variances and the
+conditioning loadings are **estimated by maximum likelihood on the whole history**, with only the
+state filtered recursively — and defends it on identification grounds ("the econometrician needs to
+estimate `F` efficiently, that is, using the entire data set"). **That is the exact lookahead
+`causality_check` is built to catch, presented as standard practice.** Triantafyllopoulos–Montana
+(Tier B− on construction, *Comput Manag Sci*, 36 cites) is the second instance and the one that makes
+it a pattern: a paper whose *stated motivation* is to escape window-based full-sample EM calibration
+still selects its four free knobs `(φ₁, φ₂, δ₁, δ₂)` by maximising the likelihood over the data, and
+its reported `φ₂` values sit far outside the unit circle its own stationarity condition requires.
+**Any Kalman candidate written here must fix its hyperparameters a priori or refit them walk-forward
+— and fixing them a priori is, by finding two, fixing an EWMA span in closed form.**
+
+**Finding four, the constructive residue, and it is an estimation pattern rather than a strategy.**
+Triantafyllopoulos–Montana supply two reusable objects. The **discount factor**: instead of
+estimating an evolution covariance, inflate the prior variance of each state component by `1/δ` per
+step, so one scalar in `(0,1)` per component replaces a matrix, `δ = 1` means "constant parameter",
+and Theorem 2 proves the filter reaches a steady-state gain geometrically — which is the formal
+statement that `δ` and finding two's `α` are the same knob. And **flexible least squares**: a
+time-varying regression coefficient minimising `Σ(y_t − β_t x_t)² + μ Σ(β_{t+1} − β_t)²`, a pure
+recursion with **one scalar `μ` for the whole panel** and `μ → ∞` recovering OLS, with a known
+algebraic connection to the Kalman filter. FLS is the right side of the lab's parameter-count triage
+rule and replaces "choose a rolling-window length" with "choose a change penalty", everywhere the lab
+currently fits a per-name rolling coefficient.
+
+**The one live tension with `learnings.md`, recorded rather than resolved.** The lab has twice closed
+free per-name betas on estimation-error grounds — `SUMMARY.md` #96's free-beta regional residual
+(median beta +0.874, IQR 0.944, 48.8% of names further than 0.5 from unity) and the 2026-09-12
+market-factor rerun (median 1.002, IQR 0.621, 29.1% beyond 0.5). **Both screens used rolling-window
+OLS betas, and Adrian–Franzoni's qualitative finding is precisely that a filtered loading varies more
+slowly than a rolling-window one** — so the measured IQR is in part the estimation noise a filter is
+designed to remove. This does not overturn the closure: the triage rule still prices a filtered beta
+at one parameter per name against a unit loading's zero, and #96 also turned on the group factor
+being priced with the *wrong sign*, which shrinkage does not repair. But the closure was never tested
+against a *shrunk* loading, and item `#313` is the free screen that settles it.
+
+**What the four together say.** The vein passes its own admission test and then collapses into
+something the lab already owns: a scalar-state Kalman filter is an EWMA, its single knob has a closed
+form in a ratio estimable from data already held, and the only two things the state-space wrapper
+genuinely adds — a likelihood for model selection and honest prediction intervals — are orthogonal to
+a gate that scores skill with a bootstrap interval. The vein's real contribution is **negative and
+procedural**: it supplies a free way to set every span the lab currently sweeps (`#312`), a free
+screen on the one closure that may have been drawn too wide (`#313`), a construction pattern that
+keeps a time-varying coefficient causal and one-parameter (`#314`), and a named protocol hazard to
+check in any imported filtering method (`#311`). No new return stream, and no reason to spend a trial
+on one.
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -13464,6 +13557,123 @@ hypothesis fodder, then anti-candidates.
     the high-dimensional half's novelty, not the exact-`F` half, which dates from 2008.
     → `notes/2026-10-25-testing-portfolio-weights-when-the-panel-is-wide.md`
 
+311. **FREE METHOD RULE, and it is a precondition on importing ANY filtering or state-space method:
+    a Kalman recursion is causal, but the hyperparameters that define it are routinely fitted on the
+    whole sample — and the literature does not flag this, because it is not backtesting.** Both
+    filtering sources read tonight do it. Adrian–Franzoni estimate the loading's persistence `F`,
+    both error variances and the conditioning loadings **by maximum likelihood on the entire
+    history**, filtering only the state, and defend it explicitly on identification grounds ("the
+    econometrician needs to estimate `F` efficiently, that is, using the entire data set").
+    Triantafyllopoulos–Montana — whose *stated motivation* is to escape window-based full-sample EM
+    calibration — still select all four of `(φ₁, φ₂, δ₁, δ₂)` by maximising the likelihood over the
+    data. **This is precisely the lookahead `causality_check` exists to catch**: it recomputes
+    weights with the tail hidden and fails anything whose holdings move, and a filter whose variance
+    ratio saw the future *will* move. The rule: when importing a filtering method, separate the
+    **recursion** (causal, keep it) from the **hyperparameters** (not causal as published, replace
+    them). Two legal replacements, in preference order: fix them a priori in closed form via item
+    `#312`, or refit walk-forward, which multiplies runtime by the number of rebalance dates and is
+    usually unaffordable at this panel's width. A third, illegitimate, option — "the parameters are
+    structural, so a full-sample fit is fine" — is the source's own argument and does not transfer
+    to a backtest. Riders worth carrying: Triantafyllopoulos–Montana's reported `φ₂` sits far
+    **outside** the unit circle their own stationarity condition requires, so do not copy published
+    hyperparameter values even when the method is sound; and Hyndman et al. constrain
+    `0.1 ≤ α, β, γ ≤ 0.9` explicitly because the likelihood surface is unstable at the ends, so a
+    candidate that *does* estimate a smoothing constant must bound it rather than let an optimiser
+    reach 0 or 1. Tier A on the mechanism (it is a protocol fact, not an empirical claim).
+    → `notes/2026-10-26-learning-about-beta-kalman-filtered-loadings.md`,
+    `notes/2026-10-26-online-state-space-spreads-discount-factors.md`
+
+312. **FREE METHOD RULE, and it is the cheapest item in several sessions: the lab's commonest free
+    parameter — a lookback, span or half-life chosen by sweep — has a closed form, and both the
+    ratio it depends on and the ratio's estimator come from data already held.** For a random walk
+    plus white noise, Muth's optimal forecast is the exponentially weighted sum with
+    **`α = √(q + q²/4) − q/2`**, where `q = σ²_permanent / σ²_transitory`; the small-`q` expansion is
+    `α ≈ √q`, hence **`span ≈ 2/√q`** (the span is twice the reciprocal of the square root of the
+    signal-to-noise ratio — `q = 0.01` ⇒ span 20, `q = 0.0001` ⇒ span 200). `q` itself is free: the
+    model implies `corr(Δy_t, Δy_{t−1}) = −1/(2 + q)`, so **`q = −1/r₁ − 2` read off the lag-1
+    autocorrelation of first differences**, one line of pandas, no trial and no holdout. Three
+    things make this more than a formula. First, it **converts a swept parameter into a
+    measurement**, and the interesting outcome is disagreement: if the span the formula returns is
+    far from the span the lab's sweeps settled on, that says the series is not
+    random-walk-plus-noise and the model behind the smoothing is wrong even if the smoothing works.
+    Second, it **estimates zero parameters per name**, which is the right side of item 1's triage
+    rule, where a fitted `α` estimates one. Third, it is the legal fix for `#311`. Two mandatory
+    riders. The model's observable is a **price level** observed with noise, not a return — applying
+    it to returns is a strictly stronger claim and must be stated as one. And the precondition is
+    the dangerous-silence kind that item `#310` warns about: the model implies `r₁ ∈ (−1/2, 0)`, but
+    `q = −1/r₁ − 2` returns a plausible number outside that range, so **check `r₁ ∈ (−1/2, 0)`
+    before using `q`**. Separately, under v3's fill-and-drift costing the *cost*-optimal span is
+    longer than the statistically optimal one; quote both whenever either is used. Tier A (a
+    theorem, derived independently twice — Muth via prediction theory, Lang via Wold's
+    representation theory — and verified here at both limits against the standard local-level
+    identity). `validation_overlap: false`.
+    → `notes/2026-10-26-optimal-exponential-weights-signal-to-noise.md`,
+    `notes/2026-10-26-exponential-smoothing-as-a-state-space-model.md`
+
+313. **FREE SCREEN, and it is the only one that can widen or narrow a closure the lab has already
+    drawn twice: smooth the existing per-name rolling betas and re-run the free-beta diagnostics,
+    because both closures were measured on a NOISY loading and the literature's object is a SHRUNK
+    one.** `learnings.md` closed `SUMMARY.md` #96's free-beta regional residual (median beta +0.874,
+    IQR 0.944, **48.8%** of names further than 0.5 from unity) and the 2026-09-12 market-factor
+    rerun (median 1.002, IQR 0.621, **29.1%** beyond 0.5), in both cases reading the IQR as
+    estimation error made visible. Adrian–Franzoni's qualitative finding is that a **filtered**
+    loading varies *more slowly* than a rolling-window OLS one — so some unknown fraction of that
+    IQR is exactly the noise a filter removes, and neither closure tested the construction the
+    source proposes. The screen: take the rolling betas the lab already computes, EWMA them at the
+    span item `#312` derives from the lag-1 autocorrelation of the beta series' own differences, and
+    re-run both diagnostics. **Pre-commit the two readings before looking.** (a) IQR collapses toward
+    unity *and* the score's cross-sectional information content is unchanged or better → the closure
+    was about noise, not about free loadings, and a shrunk-loading candidate is worth one trial.
+    (b) IQR collapses *and* the information content collapses with it → the variation was the
+    signal, both closures stand on wider ground than before, and the vein shuts with a measurement
+    rather than an argument. Either way: no trial spent, no holdout read, the deflated-Sharpe bar
+    unmoved, and a result. Note what the screen cannot repair: #96 also turned on the group factor
+    being priced with the **wrong sign**, and no amount of shrinkage fixes a sign. Tier B+ on the
+    source, A on the arithmetic of the screen.
+    → `notes/2026-10-26-learning-about-beta-kalman-filtered-loadings.md`
+
+314. **CONSTRUCTION PATTERN rather than a strategy, and it is the only constructive residue of the
+    vein: replace "choose a rolling-window length `W`" with "choose a change penalty `μ`" wherever
+    the lab fits a per-name coefficient, via flexible least squares.** FLS minimises
+    `Σ_t (y_t − β_t x_t)² + μ Σ_t (β_{t+1} − β_t)²` and has a purely recursive estimator with a known
+    algebraic connection to the Kalman filter; `μ → ∞` recovers OLS, so **the OLS case is the
+    candidate's own built-in control**. Three reasons it is the right shape here. It estimates **one
+    scalar for the whole panel**, not one parameter per name per date, which is the side of item 1's
+    triage rule the lab's two beta closures were decided on. It is a forward recursion, so it is
+    causal by construction and immune to `#311` once `μ` is fixed. And it removes a discontinuity the
+    lab currently lives with: a rolling window drops an observation abruptly, while a penalty
+    degrades it smoothly. The equivalent knob in the Bayesian presentation is a **discount factor**
+    `δ ∈ (0,1)` inflating each state component's prior variance by `1/δ` per step (`δ = 1` ⇒ constant
+    parameter), with a theorem that the filter's gain converges geometrically to a steady state —
+    which is the formal statement that `δ`, FLS's `μ` and item `#312`'s `α` are the same knob
+    approached from three directions, so **set it from a target half-life in closed form and fit
+    nothing.** Scope: this is a better estimator for a coefficient the lab already uses, not a new
+    signal, and nothing in tonight's sources is evidence that any such coefficient carries skill.
+    Tier B− on the source (the paper contains **no strategy evaluation at all** — no returns, no
+    costs, no P&L; its empirics compare a mean-reversion monitor against cointegration tests), A on
+    the algebra. `validation_overlap: false`.
+    → `notes/2026-10-26-online-state-space-spreads-discount-factors.md`
+
+315. **ANTI-CANDIDATE, and it closes the obvious reading of tonight's one economically-motivated
+    source: do not rank the book by a Kalman-filtered beta.** The Learning-CAPM's direct prediction
+    is that expected return is proportional to the *filtered* loading, so the natural candidate is a
+    long-only tilt toward high filtered beta. That is a beta tilt, and the lab has measured from
+    three directions that **Sharpe is flat in beta on this panel** — the `beta-minus` closure
+    (2026-09-17) found the volatility term to be essentially the whole of `beta⁻`, and the incumbent
+    is not loaded on downside comovement either. The source is an **explanation of measured alpha,
+    not a signal**: its evidence is that a specification test stops rejecting, not that anything is
+    forecastable. Two further reasons the port is weak even on its own terms. The mechanism needs a
+    **long burn-in** — the persistent component only exists because the filter runs from the start of
+    an eight-decade sample — and under protocol v2's point-in-time membership many names' eligibility
+    windows are far too short, so their filtered beta is just the prior of 1. And the paper's assets
+    are 25 **portfolios**; individual-name loadings are far noisier, so both the wedge and the noise
+    are larger at name level and the sign of the net effect is not implied by anything in the source.
+    Also note the conditioning variables (term spread, CAY, value spread) are macro series the lab
+    does not hold and may not fetch, so only the `φ = 0` specification is reachable here — which the
+    paper shows is the weaker one. Tier B+ on the source; the anti-candidate rests on the lab's own
+    measurements, not on the source.
+    → `notes/2026-10-26-learning-about-beta-kalman-filtered-loadings.md`
+
 
 ---
 
@@ -13546,9 +13756,130 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-23 (session 70) | **The first session to look at what the word "risk" denotes rather than which risk to take, and the cluster splits cleanly: the tail measures win on axioms and lose on estimation, by a closed form at a ratio this panel already violates.** Aim picked by gap rather than by the two named cold veins — the 2026-10-22 entry downgraded `transfer entropy` to "worth at most one note, not a session" and said a better-aimed session would pick by the gap in the free queue. Greps across all 214 prior notes: **zero** for `Rockafellar`, `Uryasev`, `Artzner`, `coherent risk`, `semivariance`, `lower partial moment`, `spectral risk`, `conditional value at risk`, `turnover constraint`, `robust optimization`; 1 each for `CVaR`, `Sortino`, `expected shortfall`, `drawdown control`; `maximum drawdown` in 5 notes but only ever as a reported *outcome*, never as an objective. `portfolio-learning` by charter, cross-family in effect because it bears on the gate's own statistic. Headline one: the coherence axioms **reject the mean-variance objective on monotonicity and the semi-variance objective on subadditivity**, VaR's acceptance set is **non-convex**, VaR is non-subadditive even for **independent** risks, and in the canonical example **diversifying across a hundred independent defaults raises measured risk** while a single-name pile-up reads as riskless — but every justification offered for the axioms is institutional (margin accounts, per-desk cash limits), so v3's Sharpe-based gate failing axiom M is **not** a reason to change the gate. Headline two: minimising CVaR is a **linear program** via one identity that makes the quantile a free variable, the source paper's own illustrative constraint set is **`xⱼ ≥ 0, Σxⱼ = 1`, exactly this lab's**, and the atom-splitting definition is the only one of three that is coherent — yet **under normality and `β ≥ 0.5`, minimum-CVaR, minimum-VaR and minimum-variance are provably the same portfolio**, both measures being affine in `(µ, σ)`, so the whole vein's value is bounded by the book's departure from normality. Headline three, and the one that closes most of it: `q̄₀ = 1/√(1 − N/T)` is the **exact** mean inflation of realised risk from estimated inputs, scaling in the ratio alone, diverging at a critical `N/T` of **1 for variance, 1/2 for maximal loss, below 1/2 for expected shortfall** and *falling further as the tail level loosens*; worked for this panel (~1,000 eligible names, ≤~1,510 causal daily rows) that is `N/T ≈ 0.66`, a **71% risk inflation for variance and past CVaR's critical ratio outright**. Headline four, the salvage: the dual theory makes CVaR's subgradient the **normalised indicator of the tail**, hence a **tail beta to the equal-weight eligible pool** that is a univariate conditional mean per name and so immune to the `N/T` objection — but the source authors' own derivation omits `xᵢ ≥ 0` and explicitly criticises earlier work for zeroing the non-negativity multipliers, so on this long-only book the beta survives as a feature and **not** as a pricing relation. Two pieces of scrupulousness recorded against over-import: the noise paper's *feasibility* transition (objective unbounded, no solution exists) **does not transfer**, because long-only confines weights to a compact simplex that bounds the CVaR program for every sample — accuracy transfers, infeasibility does not; and the apparent clash between the two axiom papers over "semideviation" is a **definitional** one (standard-deviation-operator-of-the-shortfall versus plain `L²`-norm-of-the-shortfall), resolved in the notes and flagged there as my reading rather than either paper's claim. Six free or cheap items added (294–299), three of them closures. | Artzner–Delbaen–Eber–Heath 1999 (Mathematical Finance, 6846 cites) (`2026-10-23-coherent-measures-of-risk-axioms.md`); Rockafellar–Uryasev 2000 (Journal of Risk, 5550) + 2002 (JBF, 3111) (`2026-10-23-cvar-optimization-as-a-linear-program.md`); Rockafellar–Uryasev–Zabarankin 2006 (Finance and Stochastics, 458) + 2006 (Mathematical Programming, 88) (`2026-10-23-generalized-deviation-measures.md`); Kondor–Pafka–Nagy 2007 (JBF, 105, read as arXiv `physics/0611027`) (`2026-10-23-noise-sensitivity-of-risk-measures.md`). **One source recorded as not obtained:** Lim–Shanthikumar–Vahn 2011, "Conditional value-at-risk in portfolio optimization: Coherent but fragile" (Operations Research Letters, 125 Crossref / 142 Semantic Scholar cites) — the intended fragility counterweight, closed at the publisher, `openAccessPdf` status `CLOSED` on Semantic Scholar, OpenAlex listing only the DOI, and the Berkeley CDAR working-paper copy unreachable (see access notes). Kondor–Pafka–Nagy was substituted for it and is the stronger source for the purpose, being an exact result rather than a simulation study. Nothing below is attributed to the unobtained paper. |
 | 2026-10-24 (session 71) | **The cost-aware-construction sweep the [2026-10-23] entry nominated as best-aimed, and it pays out as one theorem repeated in three literatures plus a decision-theoretic identity for the gate's own benchmark.** Aim taken directly from that entry (the only cold vein whose binding constraint changed when the protocol did, and the one where "a turnover penalty estimates nothing" so item 294's dimensional objection does not reach). Greps across all 218 prior notes: **zero** for `turnover constraint`, `robust optimization`/`robust optimisation`, `Ben-Tal`, `uncertainty set`, `portfolio norms`, `Goldfarb`, `Iyengar`, `cost penalty`, `regularization equivalence`, `L1 constraint`; `no-trade region` 4 and `quadratic cost` 2, all on the *policy* question rather than the *objective* question. (`Gârleanu` returned 5 — the diacritic, not a gap; the aim-portfolio paper is covered and was not re-read.) Outcome: **the reduction is free and the optimizer is closed three ways over.** Olivares-Nadal–DeMiguel (Tier A, OR, 82 Crossref cites) prove a `p`-norm cost term is simultaneously a robust problem, a lasso/ridge regression and a Bayesian prior — so `κ` is a hyperparameter, the honest value over-deters into all-or-nothing trading, and v3's per-name `Λ` implies an uncertainty box with half-widths proportional to *stamp duty* rather than to estimation error. Paç–Pınar (Tier B, 8 cites) extending Pflug–Pichler–Wozabal (Tier A, 203 cites) prove worst-case risk = nominal + `Cκ‖w‖_q` over a Wasserstein ball, making the equal-weight pool the exact high-ambiguity optimum with a finite threshold `κ* ∝ (N−1)` — which, since the panel went 140 → ~1,000 names, says the pool got **harder** to beat, derived rather than measured. Bertsimas–Brown–Caramanis (Tier A, SIAM Review, 2097 cites) supply the general dual-norm theorem, the `ρ_min` free-robustness threshold, and the NP-hardness that closes robust variance optimisation here. Ghahtarani–Saif–Ghasemi's review (Tier B, 30 cites) supplies the field's self-assessment (over-conservative, equivalent to shrinkage, nobody knows how to size the set) and the one positive direction (robustify the factor, not the name). Five free items (300–304) and one anti-candidate (305). | Olivares-Nadal & DeMiguel 2018 (`2026-10-24-transaction-costs-as-robustness-and-regularization.md`); Paç & Pınar 2018 + Pflug–Pichler–Wozabal 2012 (`2026-10-24-equal-weight-as-the-maximal-ambiguity-optimum.md`); Bertsimas, Brown & Caramanis 2011 (`2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`); Ghahtarani, Saif & Ghasemi 2022 (`2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`) |
 | 2026-10-25 (session 72) | **The exact-inference sweep the [2026-10-24] entry named as best-aimed, and it pays out by turning this folder's most-used screen from a calibration into an exact closed form that independently reproduces item 294's number, plus the first test statistic here for "is this weighting distinguishable from the pool?".** Aim taken verbatim from that entry (`Britten-Jones` 0 before it, `sampling error in estimates` 0). Greps across all 222 prior notes: **zero** for `Kan.Zhou`, `Ledoit.Wolf` as a pair, `Sharpe ratio test`; `Britten-Jones` 1, and only for the regression representation. **Britten-Jones (1999, JF, 415 Crossref cites) was NOT obtained** — closed at Wiley, `oa_status: closed` with no OA location in OpenAlex, nothing on LBS Research Online, and no course-page or author mirror found — so the session took the same question through the minimum-variance case, which is the one the entry's screen is about and the only one where exact inference exists. Outcome: **the screen is now a theorem with a test statistic, one `portfolio-learning` class is closed by a non-existence proof, one construction survives estimating a single scalar, and there is a width above which all of it silently stops working.** Kempf–Memmel (Tier B, Schmalenbach BR, 100 cites) prove the minimum-variance weights ARE OLS slopes on return differences (identity, no distributional content), that the plug-in and OLS estimators are the same number, that expected out-of-sample variance is exactly `σ²_MV(1 + (N−1)/(T−N−1))` — which agrees with item 294's `1/(1−N/T)` to **2.955 vs 2.953** at this panel's cell — and that the plug-in estimator is best *unbiased*. Okhrin–Schmid (Tier A, J.Econometrics, 184 cites) give the exact laws for all four standard weight estimators: GMV exactly multivariate-`t` and unbiased, the expected-utility tilt biased by exactly `(n−1)/(n−k−1)` with `(n−k−3)` in its variance, de-biasing proved to *raise* MSE, and the fully-invested maximum-Sharpe weights with **no moments of order ≥ 1 at all**. Frahm–Memmel (Tier A−, J.Econometrics, 113 cites) give a James–Stein shrinkage toward any reference portfolio that dominates the plug-in estimator for every `n ≥ d+2, d ≥ 4` with a one-scalar intensity `κ_S = ((d−3)/(n−d+2))/τ̂_R`, the conditionally-noncentral-`F` law of `τ̂_R` that makes "hold equal weight" a testable null with brutal thresholds (161% at `d=50, n=120`), Theorem 8 generalising Jagannathan–Ma to weight shrinkage, and the `q = n/d → 1⁺` régime where shrinkage is worse than the reference portfolio (this panel's daily cell is `q ≈ 1.5`). Bodnar–Dmytriv–Parolya–Schmid (Tier B, IEEE TSP, 28 cites) restate the exact `F_{p−1,n−p}` Mahalanobis test on a weight vector, show its null dispersion growing as `2/(1−c)`, and find that on a **rank-deficient** `Σ` every non-singular such test has power and ROC near zero while still printing a p-value — which is this repo's common case at monthly frequency. Five free items (306–310), one of them an anti-candidate (309). | Kempf & Memmel 2006 (`2026-10-25-gmv-weights-as-regression-coefficients.md`); Okhrin & Schmid 2006 (`2026-10-25-exact-distributions-of-estimated-portfolio-weights.md`); Frahm & Memmel 2010 (`2026-10-25-dominating-estimators-and-the-naive-diversification-test.md`); Bodnar, Dmytriv, Parolya & Schmid 2019 + Bodnar & Schmid 2008 (`2026-10-25-testing-portfolio-weights-when-the-panel-is-wide.md`) |
+| 2026-10-26 (session 73) | **The `Kalman` / `state space` vein, carried unspent for four sessions, opened under the arithmetic acceptance criterion the [2026-10-25] entry set — and it passes that test and is then deflated by its own mathematics, which is the most useful of the three possible outcomes.** The criterion was stated before the first paper was opened: admit the vein only if it yields an `O(1)` state, abandon it if the first paper's object is an `O(N)` state over the cross-section. Greps across all 226 prior notes: `Kalman` **0**, `state space` 2 (both incidental). Every construction found is `O(1)` *per series* — and the whole exponential-smoothing taxonomy turns out to **be** a state-space model whose smallest cell is a one-dimensional state with one parameter, i.e. an EWMA. The night's payout is that this parameter has a **closed form in one variance ratio** (`α = √(q + q²/4) − q/2`, `span ≈ 2/√q`) whose input is readable off the lag-1 autocorrelation of first differences, so every span the lab currently sweeps is a measurement rather than a choice (`#312`). The night's hazard is that **both** filtering papers fit their hyperparameters by maximum likelihood on the whole sample while filtering only the state, and neither flags it, because neither is backtesting — the exact lookahead `causality_check` exists to catch, now a named rule (`#311`). Constructive residue: flexible least squares / discount factors as a one-scalar causal replacement for a rolling window (`#314`). One live tension with `learnings.md`, recorded not resolved: both of the lab's free-beta closures were measured on *rolling-window OLS* loadings, and the literature's object is a *filtered* one that varies more slowly, so `#313` is the free screen that settles whether those closures were about noise or about free loadings. One anti-candidate (`#315`: do not rank the book by a filtered beta — Sharpe is flat in beta here, and the source explains measured alpha rather than forecasting anything). Hyndman–Koehler–Snyder–Grose 2002 (`2026-10-26-exponential-smoothing-as-a-state-space-model.md`); Muth 1960 via Lang 1987/1989 (`2026-10-26-optimal-exponential-weights-signal-to-noise.md`); Adrian–Franzoni 2009 (`2026-10-26-learning-about-beta-kalman-filtered-loadings.md`); Triantafyllopoulos–Montana 2009 (`2026-10-26-online-state-space-spreads-discount-factors.md`). Unobtained and named: Dangl–Halling 2012 (*JFE*), Elliott–Van der Hoek–Malcolm 2005 (*QF*), Muth 1960 (*JASA*). |
 
 ### Open questions for future sessions
 
+- **[2026-10-26] What should aim session 74: `wavelet` / `long memory` / `Hurst` is next in the
+  carried queue, and tonight supplies the criterion it must pass — stated here so it is pre-committed
+  before the first paper is opened.** Greps across all 230 notes after tonight: `wavelet` **0**,
+  `long memory` **0**, `Hurst` 1, `entropic` **0**, `Hansen Sargent` **0**, `transfer entropy` **0**
+  (fifth nomination; it stays retired, as 2026-10-24 and 2026-10-25 both said). `Kalman` is now 4 and
+  `state space` 4, so that vein is closed, not merely sampled. **The criterion for the multi-scale
+  vein, and it is the direct descendant of tonight's result:** a wavelet or long-memory proposal
+  decomposes one series into `J` scales and then needs a rule to recombine them, so ask of the first
+  paper *how many free parameters survive the recombination*. Admit it only if the answer is `O(1)`
+  and the recombination weights are fixed a priori; abandon it if each scale carries its own fitted
+  weight, because `J` fitted weights per name is item 1's triage rule failing with extra steps, and
+  because **tonight showed that the `O(1)` end of this kind of literature collapses into a smoother
+  the lab already owns.** The honest anchor for the vein is the *skeptical* modified-R/S literature —
+  it is a "worth reading for what it rules out" shape, not a construction shape — and a session that
+  opens it should say so first. After it: `entropic` / `Hansen Sargent`, still carrying the
+  2026-10-24 prediction that it is a third instance of the dual-norm theorem and therefore worth at
+  most one note rather than a session; state that prediction first and abandon the vein if the first
+  paper confirms it. **The method that found tonight's vein has now worked for a fourth consecutive
+  session and should be reused unchanged:** grep for the *mathematical objects* rather than the
+  strategy families, then ask which of the lab's standing rules rests on a calibration rather than a
+  theorem.
+  - **The free queue, and tonight added three free items, one construction pattern and one
+    anti-candidate.** `#312` is the one to read first and is the cheapest item this folder has
+    produced in several sessions: it turns every swept lookback and span into a closed form in a
+    ratio readable from one line of pandas, it estimates **zero** parameters per name, and its
+    precondition (`r₁ ∈ (−1/2, 0)`) is one comparison. `#311` must be read **before any filtering
+    method is imported**, because it is the protocol hazard and its failure mode is the dangerous
+    kind — a full-sample-fitted variance ratio does not error, it just makes the candidate fail
+    `causality_check` after the work is done, or worse, pass it by coincidence. `#313` is the only
+    item in the queue that can **re-open** a closure the lab has already drawn, and it is free; it
+    should be run before any further loading-based construction is dismissed on the strength of the
+    2026-09-10 and 2026-09-12 results. `#314` is the night's only construction material and is a
+    better *estimator* for coefficients the lab already fits, not a new signal — note explicitly that
+    its source contains **no strategy evaluation of any kind**, so it is tiered on algebra alone.
+    `#315` is an anti-candidate resting on the lab's own measurements rather than on the source,
+    which makes it weaker than `#309`'s non-existence proof and stronger than a null.
+  - **Unchanged and still live below those**: `#306`–`#310` from 2026-10-25 (`#310` is now also the
+    precondition template `#312`'s rider is written against); `#300`–`#305` from 2026-10-24 (`#300`
+    still the interpretation rule to read before anything else in the queue); `#294`–`#299` from
+    2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from
+    2026-10-20; the 2026-10-18 pair (`#273`, `#274`, with `#275` gated on its own free screen); then
+    2026-10-17, 2026-10-16, 2026-10-15 and everything carried under them.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to) is still a human decision. The
+    six stale `origin/main-*` branches (`0xxhh0`, `7iyrzq`, `86aao6`, `cozirv`, `e6mtf5`, `x8h7jq`)
+    remain safe to delete whenever a human gets to it so the step-0 integrity sweep stops listing
+    them. **No strategy session should treat either as a blocker.**
+  - **Named for a later session rather than summarised, three papers, all genuinely unobtained.**
+    **Dangl & Halling (2012)**, *Journal of Financial Economics* 106(1), 157–181,
+    `10.1016/j.jfineco.2012.04.003`, **547 Crossref cites** — the Bayesian time-varying-coefficient
+    predictive regression, and the highest-value unread item this vein leaves behind, because its
+    reported finding is about **where** the time variation lives rather than whether it exists. Its
+    only green location is `orbilu.uni.lu`, which **fails TLS verification under `curl` even with
+    `--cacert /root/.ccr/ca-bundle.crt` and returns HTTP 503 to `WebFetch`** — the 2026-10-12 entry's
+    record of that host holds, now confirmed through two independent clients. TU Wien's `repositum`
+    holds only a 2008 presentation record, not a file. Worth one cheap retry per session on a
+    different channel (Halling's current institution, or the 2006 working-paper title *"Equity Return
+    Prediction: Are Coefficients Time-Varying?"*), **but note the vein-level caution: its object is a
+    market-timing regression, and the [2026-10-22] entry's standing criterion — admit a regime or
+    timing vein only if it yields something that is NOT a timing overlay — applies to it unchanged.**
+    **Elliott, Van der Hoek & Malcolm (2005)**, *Quantitative Finance* 5(3), 271–276,
+    `10.1080/14697680500149370`, 306 cites — closed at Taylor & Francis, and the Adelaide repository
+    handle that indexes it (`hdl.handle.net/2440/17846`, and the legacy
+    `digital.library.adelaide.edu.au/dspace/handle/...` form) now returns **HTTP 404 with a 156-byte
+    body from both**, i.e. the repository moved and the handle was not re-minted. **This is a pointer,
+    not a gap:** its model and its EM calibration are restated in full by the paper that was read, so
+    a direct read would add only its simulation study. **Muth (1960)**, *JASA* 55(290), 299–306, 578
+    cites — closed; its three equations are recorded verbatim from Lang's restatement (obtained in
+    full), so the same applies.
+- **[2026-10-26] The transferable output, and it is the twenty-sixth detector: when a literature
+  presents a recursive estimator, separate the RECURSION from the HYPERPARAMETERS and ask when each
+  was estimated — because a method can be causal in its update and acausal in its calibration, and
+  the papers will not say so, since they are not backtesting.** The twenty-five before it are listed
+  in the 2026-10-25, 2026-10-24, 2026-10-23, 2026-10-22 and 2026-10-21 entries. Tonight the pattern
+  appeared in **both** filtering sources, including the one whose explicit purpose was to escape
+  full-sample calibration, which is what makes it a property of the literature rather than of an
+  author. The reusable question to ask of any imported method: *which quantities in this procedure
+  saw data from after the date at which it claims to produce an estimate?* **Second transferable, and
+  it is the one I would reuse first: when a vein's admission criterion is met, immediately ask what
+  the admitted object reduces to — meeting the criterion is not the same as being new.** Tonight's
+  vein passed its `O(1)` test on the first paper and the `O(1)` object turned out to be an EWMA; the
+  session's value came entirely from pushing one step past the pass, to the closed form for the
+  smoothing constant and the protocol hazard. A session that had stopped at "admitted" would have
+  shipped a restatement. **Third, and it extends the 2026-10-23 sourcing rule a step:** the sharpest
+  output came from reading a *theory* paper, an *application* paper and a *method* paper together.
+  The theory gave the equivalence, the application gave the trap, and the method paper gave the fix
+  — and the trap was only visible as a **pattern** because two independent applications committed it.
+  One construction paper alone would have produced a candidate; three papers of one kind would have
+  produced three restatements.
+- **[2026-10-26] Access findings — two first-try flat-directory channels, one host confirmed dark
+  through two independent clients, one dead repository handle, and a reminder that `file`'s page
+  count still lies.** **`robjhyndman.com/papers/<slug>.pdf` worked first try for a third time**
+  (318 KB → 71 KB of clean text, 263 instances of `" the "`, zero `( )` dropout), confirming the
+  2026-10-13 entry: for a methods paper, try the statistician's own site before the publisher, and
+  expect short slugs. **A faculty page at `people.lu.usi.ch/<user>/<slug>.pdf` served the full text of
+  a closed *Journal of Empirical Finance* article first try** — the 2026-09-18 faculty-page lesson
+  again, now on a Swiss host — and **`newyorkfed.org/research/staff_reports/sr<n>.pdf` served the
+  staff-report version of the same paper**, so a Fed staff-report number is a reliable second channel
+  for any paper with a Federal Reserve co-author (this extends the 2026-10-01 FEDS entry from the
+  Board to the regional banks). **`ifn.se/media/<hash>/wp<n>.pdf` (Research Institute of Industrial
+  Economics, Stockholm) served a 1987 typescript working paper** whose journal version is closed
+  Elsevier. **`orbilu.uni.lu` is dark and the evidence is now two-client:** `curl` dies before TLS
+  completes even with the proxy CA bundle, and `WebFetch` returns **HTTP 503** — report it as the
+  host's own broken chain, not as an egress block, exactly as the 2026-10-12 entry records.
+  **A dead repository handle is its own mode:** `hdl.handle.net/2440/17846` and the legacy
+  `digital.library.adelaide.edu.au/dspace/handle/` form both returned **HTTP 404 with a 156-byte
+  body** for an item a search index still lists — a repository migration that did not re-mint its
+  handles, which is distinct from the 2026-10-16 "record that holds no file" case because here there
+  is no record either. Index behaviour: **Crossref answered every lookup on the first attempt**,
+  including the journal-year enumeration that found a DOI a direct guess had 404'd
+  (`10.1016/j.jempfin.2009.02.003`, not the `.04.` sequence number a search result implied) — the
+  2026-10-07 "a journal's year is a much better key than an article's title" rule, confirmed again.
+  **Semantic Scholar 429'd on the second unauthenticated call** and OpenAlex answered but reported
+  `cited_by_count: 0` for an arXiv DOI whose published twin Crossref counts at 36 — **a preprint's
+  arXiv DOI record and its published DOI record are different works in OpenAlex, so a zero there is a
+  record-splitting artefact and must not be recorded as "uncited"**; always resolve the published DOI
+  before tiering a preprint. Finally, **`file -b` reported "2 page(s)" for a PDF that `pdftotext`
+  turned into 113 KB of text with 883 instances of `" the "`** — the complete article. The 2026-10-07
+  entry stands and should be read as stronger than it was written: **judge completeness by the
+  character count and the `" the "` count, never by the page count, in either direction.**
 - **[2026-10-25] What should aim session 73: the carried-over `Kalman` / `state space` vein is next and
   still cold, and tonight sharpens its acceptance criterion into a single arithmetic test it must pass
   before its empirics are read.** Greps across all 222 prior notes: `Kalman` **0**, `state space` 2,

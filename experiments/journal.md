@@ -23432,3 +23432,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    finding of the same kind — a quantity that is causal, passes every guard, and measures the data
    vendor rather than the market. It may deserve the same treatment region got: a protocol-level
    neutralisation rather than a convention each candidate has to remember.
+
+## Research session — 2026-10-26 (learning agent): 4 notes added, see research/SUMMARY.md
