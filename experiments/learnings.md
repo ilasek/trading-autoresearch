@@ -6030,3 +6030,128 @@ across experiments; prune entries that later evidence contradicts.
   two differ.** The instrument itself is sound and was confirmed a second time tonight: trial #5
   verbatim reads train sharpe +0.556 against the recorded +0.5560 and train skill +0.033 against
   +0.0330, and last night's F7 row reproduces to three decimals.
+
+- **[Measured 2026-10-26/27 late, nightly — trials #14 and #15, PAIRED ON VALIDATION] A TWELVE-WAY
+  MATCHED PERMUTATION RANKED TWO BOOKS FIRST AND LAST ON TRAIN, AND VALIDATION RANKED THEM THE
+  OTHER WAY ROUND. A BETTER-DESIGNED TRAIN SCREEN IS STILL A TRAIN SCREEN.** The old half of the
+  decade window (months -120..-61) was cut twelve ways: exclude the five lags at `k = phi (mod 12)`.
+  Every phase removes five of the same sixty months, so churn (4.06-4.37x), cost (-0.039 to -0.043),
+  scorable set, book size and rank correlation to the parent score (+0.9348 to +0.9355) are held
+  fixed **by construction** and only the calendar phase varies. Phase 0 — the lags sharing the
+  holding month's own calendar month, pre-signed from Heston-Sadka before anything was run — came
+  **1 of 12** on selection (+0.088 against the eleven placebos' mean +0.045, sd 0.012, **z +3.50**),
+  1 of 12 on net skill (+0.046 against +0.003) and 1 of 12 on 2009-2017, where it was the only
+  non-negative value (+0.032 against a mean of -0.082). MC `p = 1/13 = 0.077`. Shipped as trial #14
+  against its antipode phase 6 (last of twelve on train) as trial #15, the two files differing in
+  **one integer**:
+
+      trial  phase          train rank   train skill   val skill   null pct   MC p    2x cost   turn
+      #14    0 ANNIVERSARY     1 of 12      +0.046       +0.021       98%     0.015    -0.047   6.4x
+      #15    6 ANTIPODE       12 of 12      -0.015       +0.088      100%     0.005    +0.016   6.5x
+
+  **The ordering inverts.** #15 is the best validation skill on the v3 board (above #12's +0.070),
+  the only trial ever to reach the 100th percentile of its own region-matched null, and the only v3
+  trial to keep positive skill at 2x costs — **while failing `min_train_skill`**. Ninth instance of
+  "a train screen may refute but may not qualify" (2026-10-16/17) and by a distance the strongest:
+  the previous eight compared different books, and this one is a designed permutation with every
+  nuisance axis pinned. **The lesson is not that the screen lacked power. It is that no amount of
+  design makes train skill transfer.** Anti-candidate travelling with this entry: any calendar-phase
+  exclusion of the old half at any phase — **phase 6 included**, and the discipline there is the
+  point. Its +0.088 is one unregistered draw of twelve on validation, obtained only because it ran
+  as a control for someone else's hypothesis; building on it is the "choose the sign because the
+  number came out that way" the v2 inverted-seasonal entry refused, and resolving it would take a
+  ten-trial sweep of the one split not yet spent.
+
+- **[Measured 2026-10-26/27 late, nightly — CORRECTS THE 2026-10-16/17 FIGURE] WITH FIFTEEN v3
+  TRIALS, `corr(train skill, validation skill)` IS -0.074, NOT -0.345. "WEAKLY INVERTED" WAS AN
+  n = 7 ARTIFACT; THE RIGHT STATEMENT IS NO INFORMATION IN EITHER DIRECTION. AND ON THIS RECORD THE
+  TRAIN GATE SELECTS THE WORSE HALF OF ITS OWN BOARD.** All fifteen, read out of `trials.jsonl`,
+  nothing re-run:
+
+      corr(train skill, validation skill)   -0.074   Spearman -0.034
+      corr(train skill, null percentile)    -0.113   Spearman -0.214
+      corr(09-17 train skill, val skill)    -0.355   Spearman -0.302
+      OLS  val_skill = -0.144 * train_skill - 0.080   (slope SE 0.536, t -0.27, p 0.79)
+
+      mean validation skill | train skill > 0: -0.105 (n 10)   | <= 0: -0.037 (n 5)
+      mean null percentile  | train skill > 0:   38.6 (n 10)   | <= 0:   63.6 (n 5)
+
+  The 2026-10-16/17 entry reported -0.345 / Spearman -0.571 on n = 7 and was careful not to read it
+  as an inverted relationship; eight trials later it is -0.074 / -0.034, so **that caution was
+  right and the magnitude was noise**. Two riders survive and are new. The **2009-2017 sub-period —
+  the half of train nearest validation — is the table's worst predictor** (-0.355), which closes the
+  last intuition that a recency-weighted train read should help; stop quoting sub-period agreement
+  as a point in a candidate's favour. And **`min_train_skill = 0.0` is, on this record, selecting
+  against the board**: ten trials clear it at mean validation skill -0.105 and mean percentile 38.6,
+  five fail it at -0.037 and 63.6, and trial #15 is the first ever to fail it and post the board's
+  best validation number. A selection effect runs through that — candidates are *designed* against
+  the train screen, so the trials that fail it are nearly all controls — and it is a threshold in
+  `engine/protocol.py`, so it is raised for the human owner and **nothing was changed**.
+
+- **[Measured 2026-10-26/27 late, nightly] RESEARCH `#312` IS CLOSED ON THIS PANEL FOR ZERO TRIALS,
+  AND IT IS A FREE REFUSAL RATHER THAN THE FREE SPAN IT WAS FILED AS.** The folder's cheapest item
+  — `alpha = sqrt(q + q^2/4) - q/2`, `span ~ 2/sqrt(q)`, `q = -1/r1 - 2` off the lag-1
+  autocorrelation of the observable level's first differences — ships with a mandatory precondition
+  `r1 in (-1/2, 0)` and its own warning that `q` returns a plausible number outside it. Train,
+  eligible names, log price as the observable:
+
+      sampling    n     r1 median   share in (-1/2,0)   result
+      daily     1012     -0.0257         0.711          q 36.9  alpha 0.974  span 0.33
+      monthly    986     +0.0194         0.415          PRECONDITION FAILS
+      quarterly  986     +0.0167         0.452          PRECONDITION FAILS
+      annual     964     -0.1161         0.675          q  6.6  alpha 0.882  span 0.78
+
+  **At the frequency the lab's signals live at, this panel's returns are positively autocorrelated
+  at lag 1, so the random-walk-plus-noise model is the wrong model** and the closed form cannot
+  replace any lookback the lab sweeps. Where the precondition does hold the answer is degenerate
+  (span under one period — Muth's "a random walk cannot be usefully smoothed"). **General form, and
+  it is the reusable part: an imported closed form whose precondition is stated should be screened
+  on the precondition before it is screened on the answer**; this one took four lines of pandas and
+  retired an item ranked first in the folder's free queue.
+
+- **[Measured 2026-10-26/27 late, nightly] THE FIVE-YEAR BLOCK IS WHERE THE REVERSION IS, AND IT CAN
+  BE SHOWN WITHOUT A BOOK — WHICH MATTERS BECAUSE EVERY PREVIOUS DEMONSTRATION WENT THROUGH A TOP-K
+  CUT.** Rank correlation across names of the market-demeaned log return over months `[-2h,-h]`
+  against `[-h,0]`, averaged over train month-ends, no selection rule and no scorable-set variation:
+
+      h (months)      1       3       6      12      24      36      60
+      mean rank corr  -0.0199 -0.0155 +0.0141 +0.0107 +0.0131 -0.0136 -0.0892
+      t               -2.36   -1.84   +1.53   +0.90   +1.02   -1.05   -6.47
+
+  The five-year scale carries **4-9x any other horizon** and 12/24/36 months are noise. This is an
+  independent confirmation of the mechanism behind trials #5/#11/#12 that cannot be a scorable-set
+  artifact (the 2026-10-26/27 F7 confound) because there is no book. **Rider, not optional**: at
+  h = 60 adjacent monthly decision dates share 59 of 60 months, so the 155 dates are nowhere near
+  independent and `t -6.47` is an upper bound — the point estimate is the content.
+
+- **[Measured 2026-10-26/27 late, nightly] HESTON-SADKA'S CROSS-SECTIONAL SEASONALITY IS PRESENT ON
+  THIS PANEL, CORRECTLY SIGNED, AND UNHARVESTABLE IN BOTH DIRECTIONS — SECOND INSTANCE OF THE
+  WEEKDAY-MOOD PATTERN.** The lags sharing the holding month's calendar month inside the old half
+  are `k = {71, 83, 95, 107, 119}` (annual lags 6-10 years). Pre-signed: buy the high end, the
+  published direction. Train, K=100, peer x depth quota, monthly:
+
+      leg                                net skill  selection    cost   turn   97-08   09-17
+      old ANNIVERSARY   (+, HS sign)       -0.069     +0.027   -0.096   9.16  -0.044  -0.142
+      old ANNIVERSARY   NEGATED (-)        -0.168     -0.070   -0.098   9.25  -0.068  -0.362
+      recent ANNIVERSARY (+, HS sign)      -0.215     -0.088   -0.127  11.75  -0.086  -0.456
+
+  The negation invariant passes (+0.027 against -0.070, not both positive), so the sign is real and
+  is the published one. **And it is dead at both gates at once**: five observations make a ranking
+  that churns 9.2x/yr and the cost schedule takes -0.096 of a +0.027 selection term. Harvested
+  instead as an *exclusion* it led a twelve-phase train permutation and lost on validation (entry
+  above). Second instance of 2026-10-16/17's weekday-mood shape — a characteristic-level seasonal
+  that is genuinely there and that v3's execution model puts out of reach — and `seasonality-
+  calendar`'s one remaining reachable form, the fully-invested cross-sectional seasonal, is now
+  measured here. Anti-candidates travelling with this entry: the anniversary leg as a book at any
+  lag set or horizon, and the recent half's anniversary leg most of all.
+
+- **[Method, 2026-10-26/27 late] A pandas `ME` LABEL CAN FALL AFTER THE MONTH'S LAST TRADING DAY, SO
+  `reindex(..., method="ffill")` ONTO DECISION DATES SILENTLY READS A ONE-MONTH-STALE SCORE ABOUT
+  30% OF THE TIME.** Measured over 336 train decision dates: the label read is the decision month's
+  own on 239 and one month stale on **97**. Harmless for a slow score read as a level — every
+  recorded decade-reversal trial has it — but **fatal to any construction whose content is the
+  calendar phase of a lag**, because 28% of the lags land one month off and the effect is attenuated
+  toward its own placebo. Check it whenever a score's identity depends on *which* month a lag names
+  rather than on how far back it is. The fix (read the decision month's own label) is a correctness
+  repair rather than a knob, but it produces a different book, so under the 2026-10-26/27 rule it
+  needs its screen re-run from scratch before it can be shipped.
