@@ -23794,3 +23794,43 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   predicts for a score whose content is not five years old. Per the rule pre-registered before this
   trial ran, the +0.054 move exceeds 0.010, so the paired control `pt_oldhalf_sync6` is bought.
 
+## 2026-10-27T23:43:24+00:00 — pt_oldhalf_sync6 — **SCOUT**
+- Candidate: `strategies/candidates/pt_oldhalf_sync6.py` (family: price-trend, track: scout, trial #17)
+- Hypothesis: Equal-weighting the union of the six most recent monthly top-100 picks of the old-half reversal score -- each leg 1/(6*100), re-formed in full at every month-end -- earns higher validation skill than trial #12's single-leg version of the identical score, quota and K, because averaging six lagged picks smooths the target weight vector (a name enters at 1/600 and grows to 6/600 rather than jumping to 1/100) and that alone cuts engine-counted churn from 2.36x to 1.44x and the cost term from -0.019 to -0.007 while deferring no trade, which is a different operator from the retention band the 2026-10-25/26 paired trial refused; shipped as the control that separates this smoothing channel from the drift channel in `pt_oldhalf_overlap6`.
+- Verdict: SCOUT — scouted family 'price-trend': validation sharpe 0.443 <= the family's best 0.461 (DSR 0.1075, skill +0.106 vs the equal-weight pool, 90% CI [-0.12, +0.37]; 126 trials across all protocol versions, 45 effective after clustering at rho 0.95)
+- Train: sharpe +0.57, ann_ret +11.1%, maxDD -56.5%, turnover 1.4x, skill vs pool +0.05
+- Validation: sharpe +0.44, ann_ret +7.9%, maxDD -37.1%, turnover 1.8x, skill vs pool +0.11
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.11, 90% CI [-0.12, +0.37]; at 2x costs +0.09; with a 30% delisting haircut +0.11; train +0.05 (1997-2008 +0.06, 2009-2017 +0.03)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 100% percentile of 200 random-selection replicas (median +0.32, 90% +0.38); equal-weight eligible pool +0.34, information ratio vs it +0.34
+- Deflated skill prob: 0.1075 (bar from 126 trials of this validation window across all protocol versions, 45 effective)
+- Scout track: family best before this trial +0.46; the champion was not compared and the holdout was not read
+- Lesson: **The ladder reproduced on validation in the same order as on train — the first time in
+  this lab's v3 record that a train measurement has predicted a validation one, and it is the
+  channel whose source is arithmetic rather than selection.** Three rungs, one node changing between
+  each, same score, quota, K and availability rule throughout:
+
+      rung                     train skill  train turn   VAL skill  VAL turn   2x cost  null %ile
+      #12  hold-1 (one pick)      +0.026       2.63         +0.070     3.4      +0.040     97%
+      #17  sync/H6  (THIS)        +0.048       1.44         +0.106     1.8      +0.093    100%
+      #16  overlap/H6             +0.058       1.31         +0.124     1.6      +0.113    100%
+
+  The smoothing channel (#12 -> #17) is +0.022 on train and **+0.036** on validation; the drift
+  channel (#17 -> #16) is +0.010 on train and **+0.018** on validation. Both paid, both paid ~1.7x
+  MORE on validation than on train, and the reason is mechanical and was predictable: validation
+  churn runs above train churn on every rung (3.4 vs 2.63, 1.8 vs 1.44, 1.6 vs 1.31), so the cost
+  term the operator removes is *larger* on validation. **Correction to the framing in the two
+  candidate files, from the stress columns**: reading the implied cost term off `skill - skill_2x`
+  (one extra multiple of the liquidity tier, taxes unchanged) gives roughly -0.030 / -0.013 / -0.011
+  across the three rungs, so the cost channel accounts for about +0.019 of the +0.054 validation gain
+  and the other ~+0.035 is a GROSS gain. Both halves are still construction arithmetic rather than a
+  return claim — averaging six lagged top-100 draws reduces the book's idiosyncratic variance without
+  changing what it selects, which is exactly why the F6 null gains +0.0167 of the same thing from a
+  meaningless score. **The honest generalisation is therefore narrower and more useful than "train
+  screens do not transfer": a SELECTION term measured on train carries no information about
+  validation (corr -0.074 over fifteen trials), but a COST term and a VARIANCE-REDUCTION term do,
+  because neither is a statement about returns.** Scope: this rung is a SCOUT, not the lead; its 90%
+  interval [-0.12, +0.37] straddles zero, DSR is 0.1075, and all seventeen v3 trials remain in tier
+  1. Turnover pre-registration landed inside its band for the fifth trial running (1.7-2.4x
+  predicted, 1.8x charged). Anti-candidate travelling with this entry: nothing — but note that the
+  two rungs are 94%+ the same book, so they are ONE bet and must be read as one mechanism, not two.
+
