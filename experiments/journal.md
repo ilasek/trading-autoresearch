@@ -23760,3 +23760,37 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    premium. **New tonight**: the `min_train_skill` observation in the section above.
 
 ## Research session — 2026-10-27 (learning agent): 4 notes added, see research/SUMMARY.md
+## 2026-10-27T23:40:08+00:00 — pt_oldhalf_overlap6 — **FAMILY_LEAD**
+- Candidate: `strategies/candidates/pt_oldhalf_overlap6.py` (family: price-trend, track: scout, trial #16)
+- Hypothesis: Holding trial #12's book -- the 100 eligible names with the lowest mean monthly return over months -120..-61, quota-allocated across (trailing-trading-calendar peer group x price-history-depth tercile) cells -- in six overlapping monthly sleeves, one reformed each month and carried six months as shares, earns higher validation skill than trial #12's single-sleeve monthly version of the identical score, because a 60-month mean already lagged 60 months loses no measurable selection to a five-month-old pick (train gross skill is flat at +0.045/+0.046/+0.043 across 1-, 3- and 6-month holding periods, averaged over every calendar phase) while the overlapping rule cuts engine-counted churn from 2.36x to 1.30x and the cost term from -0.019 to -0.005 -- a saving that is arithmetic rather than a forecast, which is the one kind of gain this lab has not yet tested for transfer.
+- Verdict: FAMILY_LEAD — best result yet in family 'price-trend': validation sharpe 0.461 > 0.425 (DSR 0.1635, skill +0.124 vs the equal-weight pool, 90% CI [-0.11, +0.42]; 125 trials across all protocol versions, 45 effective after clustering at rho 0.95)
+- Train: sharpe +0.58, ann_ret +11.3%, maxDD -56.6%, turnover 1.3x, skill vs pool +0.06
+- Validation: sharpe +0.46, ann_ret +8.2%, maxDD -37.2%, turnover 1.6x, skill vs pool +0.12
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.12, 90% CI [-0.11, +0.42]; at 2x costs +0.11; with a 30% delisting haircut +0.12; train +0.06 (1997-2008 +0.06, 2009-2017 +0.05)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 100% percentile of 200 random-selection replicas (median +0.32, 90% +0.37); equal-weight eligible pool +0.34, information ratio vs it +0.38
+- Deflated skill prob: 0.1635 (bar from 125 trials of this validation window across all protocol versions, 45 effective)
+- Scout track: family best before this trial +0.42; the champion was not compared and the holdout was not read
+- Frozen for forward incubation: `strategies/incubating/20261027T234008Z_pt_oldhalf_overlap6.py` (scored only on data after today; see `scripts/incubation_report.py`)
+- Lesson: **The first operator this lab has shipped on an arithmetic argument rather than a train
+  selection number, and it posted v3's best validation skill (+0.124, previous best +0.088) and its
+  first 100th-percentile null.** The pre-trial case was deliberately *not* a train screen: tonight's
+  F2 showed the gross (zero-cost) train skill of this identical book is flat at +0.045/+0.046/+0.043
+  across 1-, 3- and 6-month holding periods when every calendar phase is averaged, so a 60-month
+  score already lagged 60 months cannot notice a five-month-old pick, while the cost term falls
+  -0.019 -> -0.007 -> -0.001 and churn 2.36x -> 1.48x -> 1.04x. Fewer trading events cost less money
+  by arithmetic. **F6 confirms the channel is mechanical and that is the claim, not a hole in it**:
+  six random AR(1) scores at this score's own persistence (phi 0.9803) gain +0.0167 (sd 0.0153) of
+  net skill from the same operator against this book's +0.032, so the delta is z +1.0 — the operator
+  found nothing in the score. What separates the book from those nulls is the LEVEL (net +0.058
+  against -0.0210 at sd 0.0151, z +5.2; gross likewise). **Validation paid +0.054 over trial #12's
+  +0.070 on the identical score, quota, K and availability rule**, at 1.6x churn inside the
+  pre-registered 1.5-2.2x band (fourth consecutive hit) and +0.113 at 2x costs — the first v3 trial
+  whose stressed skill is near its base skill, which is what a 1.6x book should look like. Scope, and
+  it is not optional: the 90% interval is [-0.11, +0.42] and straddles zero widely, DSR is 0.1635
+  against the 0.95 a challenge needs, and all sixteen v3 trials remain in tier 1. **This is a
+  cheaper way to trade the lab's one positive object, not a measured edge**, and the operator is not
+  general — F5 found it collapses the gross term of three slow risk scores (lowvol126 +0.057 ->
+  +0.010) rather than preserving it, exactly as the "the score cannot notice the delay" argument
+  predicts for a score whose content is not five years old. Per the rule pre-registered before this
+  trial ran, the +0.054 move exceeds 0.010, so the paired control `pt_oldhalf_sync6` is bought.
+
