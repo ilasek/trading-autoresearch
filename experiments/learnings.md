@@ -6018,6 +6018,11 @@ across experiments; prune entries that later evidence contradicts.
   the night before — the objects improved, not the screen. **Consequence: stop treating turnover as
   a property of the score. It is a property of the selection rule, and the two rules this lab has
   (hard top-K, banded top-K) are respectively expensive and refused.**
+  **[SUPERSEDED IN PART, 2026-10-27/28 — see the "third selection rule" entry at the foot of this
+  file.] The measurement above stands (no relation between rank persistence and churn within the
+  block), but the conclusion drawn from it does not: there is a THIRD rule. Overlapping sleeves
+  cut churn 2.36x -> 1.31x on train and 3.4x -> 1.6x on validation and defer no trade — a band
+  re-times a trade on an unchanged target, smoothing changes what the target is.**
 
 - **[Method, 2026-10-26/27] A FREE SCREEN PRE-REGISTERS THE BOOK IT ACTUALLY PRICED, AND AN
   AVAILABILITY RULE IS PART OF THE BOOK.** The screened old-half score required 60 of the last 120
