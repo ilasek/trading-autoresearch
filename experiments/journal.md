@@ -23834,3 +23834,294 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   predicted, 1.8x charged). Anti-candidate travelling with this entry: nothing — but note that the
   two rungs are 94%+ the same book, so they are ONE bet and must be read as one mechanism, not two.
 
+
+## Free measurements — 2026-10-27/28 (nightly), two trials spent
+
+Instrument: `protocol.evaluate_split(..., "train")` with the v3 execution model, train
+1997-2017 only — the harness validated on 2026-10-25/26. It reproduced trial #12's recorded
+train skill (**+0.026**) on its hold-1 row through three independently written builders
+tonight (F1, F3/F4's unified builder, F7's shipped-file builder). **No validation, holdout,
+forward or incubation number was read in any free block**; the two trials are recorded above.
+
+**The session's plan, written before the first hypothesis** (as the manual requires): at most
+2 in `price-trend` (hard cap); the "at most 2 in any one family" cap is lifted
+(`distinct_mechanisms` 5 >= 4); the "at least one cold family" rule is spent (every family has
+had a recorded v3 trial since 2026-10-19/20). A free screen first, then up to 2 `price-trend`
+trials, plus up to 2 outside it **only if** the screen produced a non-price-trend object
+clearing the standing screen (net train skill > 0 on the engine's own statistic, volatility
+ratio <= 1.0, pre-registered turnover range). It did not (F5), so no trial was bought outside
+`price-trend` and the session stopped at 2 of 8.
+
+**The question the night was aimed at, and it is the lab's own.** `learnings.md` 2026-10-25/26:
+*"the search should be for a positive-selection score that is cheap to hold"*. 2026-10-26/27:
+*"stop treating turnover as a property of the score. It is a property of the selection rule,
+and the two rules this lab has (hard top-K, banded top-K) are respectively expensive and
+refused."* Read together those say the lab needs a **third selection rule** and has no
+candidate for one. So: is there an operator that cuts boundary churn without deferring a trade?
+
+**Why the v1 closure does not bind.** The 2026-09-27/28 entries bound "every no-trade band,
+wider band, asymmetric band, deferral rule, reduced rebalance frequency and turnover penalty"
+at **+0.0249** — but that bound is `drag / ann_vol` arithmetic on the *v1 seat* (3.01x churn,
+0.1812 vol, flat 10+5 bps), and the entry's own standing instruction is to **re-price it
+whenever the seat moves**. Under v3 the seat is empty, costs are 15-40 bps per side plus
+transaction taxes, drift is charged, and the measured cost term on this very object is -0.019
+of *skill*. The axis is reopened by the protocol change, not by re-litigating the closure.
+
+### F1 — the rebalance grid, and the first sign that something was wrong with reading it
+
+Trial #12's book verbatim except for the grid (`ME`/`QE`/`2QE`/`YE`), K=100, peer x depth
+quota, pool held through warm-up. GROSS is zero-cost skill, so NET - GROSS is the cost term:
+
+    grid    net     gross    cost     turn   97-08   09-17
+    ME    +0.026  +0.045  -0.019    2.36   +0.051  -0.020
+    QE    +0.025  +0.032  -0.007    1.47   +0.050  -0.022
+    2QE   +0.059  +0.060  -0.001    1.06   +0.064  +0.058
+    YE    +0.014  +0.011  +0.003    0.74   +0.017  -0.004
+
+The cost column is monotone and behaves exactly as arithmetic says it should. **The gross
+column is not monotone and varies 5x**, which cannot be a property of a 60-month score read at
+a coarser grid — so the grid is mostly changing *which dates* the book is formed on. F2 was run
+to price that before anything was read off the `2QE` row.
+
+### F2 — it is a phase lottery, and the lottery is bigger than the prize
+
+Reforming every `hold` months at calendar offset `phase`, **every** phase priced (anchored on
+the calendar month so the phase cannot move with the visible window's start):
+
+    hold   gross mean   sd       min      max      net mean   cost     turn
+     1      +0.0450     --     +0.0450  +0.0450    +0.0260   -0.0190   2.36
+     3      +0.0460   0.0171   +0.0320  +0.0650    +0.0387   -0.0073   1.48
+     6      +0.0430   0.0273   +0.0180  +0.0900    +0.0418   -0.0012   1.04
+    12      +0.0278   0.0179   -0.0000  +0.0580    +0.0307   +0.0028   0.73
+
+Per-phase gross at hold 6: `+0.028 +0.090 +0.060 +0.038 +0.018 +0.024`. **Two results.**
+(i) **The selection term is flat in holding period from 1 to 6 months** (+0.045 / +0.046 /
++0.043) and only falls at 12 — a 60-month mean already lagged 60 months genuinely cannot notice
+a five-month-old pick. Six is therefore the corner of the flat region and was **fixed there
+before any overlapping book was run**. (ii) **The phase spread at hold 6 (sd 0.0273) exceeds
+the entire cost saving (0.0178)**, so F1's `2QE` row (+0.060, the 3rd of six phases) was a draw
+from a lottery. This is the 2026-10-26/27 phase-6 pattern caught *before* it was shipped
+instead of after, and it is the reason the night's construction averages the phase away.
+
+### F3/F4 — the overlapping rule, and which of its two channels pays
+
+OVERLAP: H sleeves, one reformed each month-end and carried H months as shares; the emitted row
+is the drifted book plus the reformed sleeve, so only that sleeve trades. SYNC: the same name
+set and the same breadth, every leg re-formed monthly, so drift is undone and the whole book
+trades. SYNC isolates the **weight smoothing** that averaging lagged picks produces; OVERLAP
+minus SYNC isolates the **drift**.
+
+    book                     gross    cost     net     turn    pos   97-08   09-17   2x cost
+    hold-1 (= trial #12)    +0.045  -0.019  +0.026   2.36   140.4  +0.051  -0.020   +0.008
+    overlap/H3              +0.057  -0.010  +0.047   1.66   152.3  +0.053  +0.035   +0.037
+    sync/H6                 +0.055  -0.007  +0.048   1.44   164.4  +0.057  +0.030   +0.042
+    overlap/H6              +0.063  -0.005  +0.058   1.30   164.4  +0.062  +0.053   +0.053
+    overlap/H12             +0.049  -0.002  +0.047   1.05   182.0  +0.066  +0.016   +0.045
+
+About two thirds of the gain (+0.022 of +0.032) is the smoothing and one third (+0.010) the
+drift. **The smoothing is not a retention band and this matters**: a band defers a trade on an
+unchanged target, which the 2026-10-25/26 paired trial refused on this exact mechanism (+0.080
+train for -0.049 validation). Smoothing changes *what the target vector is* — a name enters at
+1/600 and grows to 6/600 over six months instead of jumping to 1/100 — and cuts churn 2.36x ->
+1.44x while deferring nothing. **That is the third selection rule the 2026-10-26/27 entry said
+the lab did not have.**
+
+### F5 — the operator is not a free lunch, and it does not reach the risk axis
+
+Its precondition is a score whose content is older than the holding period. Three slow risk
+scores, each priced at all three rungs:
+
+    score         hold1 gross -> overlap   hold1 net -> overlap net   turn       volratio
+    lowvol126       +0.057 -> +0.010         +0.009 -> -0.006      3.20 -> 1.49    0.72
+    lowvol504       +0.034 -> -0.010         +0.016 -> -0.013      1.60 -> 0.84    0.74
+    lowbeta252      +0.008 -> -0.010         -0.032 -> -0.022      2.64 -> 1.23    0.69
+
+The operator **collapses** their gross term rather than preserving it, which is what the
+precondition predicts for a 126-504 day score; and all three sit at a volatility ratio near
+0.70, the de-risking construction trial #1 closed. Fast scores (`maxret21`, `rev21`,
+`residrev63`) were excluded a priori rather than priced: five of six legs would be stale past
+the signal's own decay (2026-08-30). **No non-price-trend object cleared the standing screen,
+so the two extra trials the plan allowed for were not bought.**
+
+### F6 — the null FOR THE OPERATOR, and it is the block that decided how to argue the trial
+
+Six random AR(1) scores at the real score's own measured month-to-month Spearman rank
+persistence (**phi = 0.9803**), masked to its own scorable set, through the identical
+constructions:
+
+    book            net skill                          gross skill              turn
+    null hold-1    -0.0377 (sd 0.0294, max -0.0010)   -0.0167 (sd 0.0295)      2.67
+    null overlap   -0.0210 (sd 0.0151, max -0.0080)   -0.0158 (sd 0.0153)      1.34
+    null DELTA     +0.0167 (sd 0.0153, min -0.0070, max +0.0410)
+
+(a) **The LEVEL separates the book decisively**: +0.058 against -0.0210 at sd 0.0151 is **z
++5.2** on net and +5.2 on gross, churning 1.31x against the random scores' 1.34x — consistent
+with the 2026-10-26/27 F13 null on the hold-1 version (z +5.9 / +5.7). (b) **The DELTA does
+not**: a meaningless score gains +0.0167 from the same operator against this book's +0.032, so
+**z +1.0**. The operator found nothing in the score. **That was pre-registered as the claim
+rather than discovered as an excuse**: the hypothesis both files state is that an *arithmetic*
+channel transfers where selection channels have not, and a null confirming the channel is
+arithmetic is the null agreeing with the hypothesis.
+
+### F7 — the shipped file's own screen, pruning included
+
+A sleeve held six months can carry a name that leaves its index inside the holding period, and
+the protocol's instruction is to hold only names eligible on the rebalance date. The shipped
+book prunes those names at every month-end. Priced as shipped: `net +0.058, gross +0.063, cost
+-0.005, turn 1.31x, pos 164.3, volratio 0.972, 2x cost +0.053, 97-08 +0.061, 09-17 +0.053` —
+the pruning is free (unpruned +0.058 at 1.30x). The 2026-10-26/27 method rule ("a free screen
+pre-registers the book it actually priced, and an availability rule is part of the book") is
+satisfied: this sheet is the file that ran, not an algebraically-equivalent relative of it.
+
+### Pre-registered before either trial ran
+
+1. **Turnover**, as a range with the wider split's churn in it: #16 **1.5-2.2x** (train 1.31x),
+   #17 **1.7-2.4x** (train 1.44x). Charged: **1.6x** and **1.8x**. Fourth and fifth consecutive
+   hits.
+2. **The shipping rule for the control**: buy `pt_oldhalf_sync6` if and only if
+   `pt_oldhalf_overlap6`'s validation skill moves more than 0.010 (the smaller of the two
+   channels' train deltas) away from trial #12's +0.070. It moved +0.054, so the control was
+   bought. Both files were written and committed before either ran, so neither was designed on
+   the other's result.
+
+## Session summary — 2026-10-27/28 (nightly) — 2 trials of 8; the lab gets its third selection rule, and the first train measurement in the v3 record that predicted a validation one
+
+**Experiments run: 2 of 8. Verdicts: FAMILY_LEAD (`pt_oldhalf_overlap6`, scout, price-trend,
+trial #16) and SCOUT (`pt_oldhalf_sync6`, scout, price-trend, trial #17).** `trials.jsonl`
+stands at 127 records. Seven free measurement blocks (F1-F7), thirty-three books priced on the
+gate's own statistic, one operator-level null, one phase lottery caught before it shipped.
+Engine green (`92 passed in 47.83s`). **No holdout, forward or incubation file was opened**;
+both trials are scouts, so the champion seat was never compared against and the session did not
+have to stop. The `price-trend` cap is now reached and the session stopped with 6 of 8 unspent,
+because nothing outside the family cleared the standing screen (F5).
+
+**Step-0 integrity: clean.** `git fetch origin --prune`; `git branch -r --no-merged origin/main`
+returns empty, so no remote branch holds a commit absent from `origin/main`. HEAD was on the
+per-run branch `main-sdrp6r` pointing at the identical commit as `origin/main` (0d6b65f), so
+nothing was split.
+
+### The result
+
+    trial  book                     train skill  train turn   VAL skill   90% CI          VAL turn  2x cost  null %ile  DSR
+    #12    hold-1 (one pick)           +0.026       2.63       +0.070   [-0.17, +0.35]      3.4     +0.040     97%    0.1053
+    #17    sync/H6                     +0.048       1.44       +0.106   [-0.12, +0.37]      1.8     +0.093    100%    0.1075
+    #16    overlap/H6                  +0.058       1.31       +0.124   [-0.11, +0.42]      1.6     +0.113    100%    0.1635
+
+Three rungs, one node changing between each, same score, quota, K, availability rule and
+geography throughout. **The validation ordering is the train ordering**, both gaps in the same
+direction, and both channels paid about 1.7x MORE on validation than on train (+0.036 against
++0.022 for the smoothing, +0.018 against +0.010 for the drift). #16 is v3's best recorded
+validation skill (previous best +0.088, which failed a hard gate), its first 100th-percentile
+null on a book that passes every gate, and the first v3 trial whose 2x-cost skill (+0.113) sits
+near its base skill rather than far below it.
+
+### Best finding, and it is a narrowing of the lab's central methodological claim
+
+Seven sessions have ended with a version of *"a clean train screen is not evidence"*, and the
+2026-10-26/27 session turned it into a designed refutation: a twelve-way matched permutation,
+z +3.50 on train, completely inverted on validation. Tonight is the complement, and the two
+together say something sharper than either alone.
+
+**The quantity that does not transfer is a SELECTION term. A COST term and a
+VARIANCE-REDUCTION term do, because neither is a statement about returns.** Across seventeen v3
+trials `corr(train skill, validation skill)` is about zero; but tonight's two channels — fewer
+trading events cost less money, and averaging six correlated top-100 draws has lower
+idiosyncratic variance than one — are construction arithmetic, and both reproduced on
+validation, in order, at larger magnitude. The magnitude was itself predictable from the
+mechanism: validation churn runs above train churn on every rung (3.4 vs 2.63, 1.8 vs 1.44,
+1.6 vs 1.31), so the term the operator removes is *larger* on the split it was tested on.
+
+**The split between the two channels, read off the stress columns rather than asserted.**
+`skill - skill_2x` implies a cost term of roughly -0.030 / -0.013 / -0.011 across the three
+rungs, so the cost channel accounts for about +0.019 of #16's +0.054 validation gain over #12
+and the other ~+0.035 is a gross gain. **This corrects the emphasis in both candidate files**,
+which argued the cost half and under-weighted the variance half; the conclusion survives
+because both halves are construction arithmetic, which is also why the F6 null gains +0.0167 of
+the same thing from a meaningless score.
+
+### What the lab now owns: a third selection rule
+
+The 2026-10-26/27 entry recorded that turnover is a property of the selection rule, that the
+lab had exactly two (hard top-K, expensive; banded top-K, refused on validation), and that "the
+search for a positive-selection score that is *naturally* cheap to hold has no target".
+**Overlapping sleeves are the third rule.** It cuts churn 2.36x -> 1.31x on train and 3.4x ->
+1.6x on validation *without deferring a single trade*: a band re-times a trade on an unchanged
+target, smoothing changes what the target is. It is also not general — F5 shows it collapses the
+gross term of three slow risk scores instead of preserving it — and its precondition is explicit
+and checkable before a book is written: **the score's content must be older than the holding
+period.** A 60-month mean lagged 60 months qualifies; 126-day volatility does not.
+
+### The discipline notes, and they matter more than the numbers
+
+1. **This is still mechanism M3 and still one bet.** `rank_trials` puts #16 and #17 in M3 with
+   #12, #15, #14 and #5 — six slugs on one return stream. #16's 90% interval is [-0.11, +0.42]
+   and straddles zero widely; **all seventeen v3 trials remain in tier 1**, so the data cannot
+   separate #16 from #9 at -0.34. DSR 0.1635 against the 0.95 a challenge needs. **A cheaper way
+   to trade the lab's one positive object is not a measured edge, and #16 and #17 must be read as
+   one result, not two.**
+2. **The 2009-2017 term (+0.053, +0.030) is reported, not leant on.** It is the first time the
+   half of train nearest validation has agreed with validation on this mechanism, and it is also
+   the lab's *worst* recorded predictor of validation skill (-0.355 over fifteen trials).
+3. **F1's `2QE` row is an anti-candidate.** +0.059 net at 1.06x churn looks like the cheapest
+   book of the night and is the 3rd of six phases whose gross spread is sd 0.0273. Taking it
+   would have been the 2026-10-26/27 phase-6 mistake made prospectively. The phase was priced in
+   full (F2) *before* anything was read off it, and the construction that shipped averages the
+   phase away rather than choosing one.
+4. **Six of eight trials were left unspent on purpose.** The standing screen refused every
+   non-price-trend object (F5), and the `price-trend` cap is 2.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **The operator's precondition is the generative idea, and it is cheap to apply.** "The score's
+   content must be older than the holding period" is checkable before a book is written. The
+   right next question is not another knob on H but **whether any score in another family meets
+   it**. F5 says the risk axis does not. Untested under the operator and slow enough to qualify:
+   a multi-year dollar-volume or turnover *trend* (`liquidity-volume`), a multi-year
+   pool-correlation level (`range-variance`), and a multi-year realised-skewness level. All three
+   are near-zero-selection objects on the record, so the honest expectation is that the operator
+   lifts them from clearly negative to about zero — but the screen is one free run each and the
+   precondition makes it a real question rather than a sweep.
+2. **Do not re-buy**: H as a parameter (1/3/6/12 are all priced, and 6 was fixed from F2's flat
+   region before any overlapping book ran); any single-phase coarse grid, `2QE` most of all;
+   the operator on a fast score; the operator on the risk axis; the recent half of the decade
+   window and the anniversary leg (standing anti-candidates from 2026-10-26/27).
+3. **The one node inside this object that is a correctness fix rather than a knob** remains the
+   2026-10-26/27 `ME`-label alignment impurity (97 of 336 train decision dates read a one-month
+   stale score). It is harmless for a slow score read as a level — which is what this book does —
+   so it is lower priority here than it was for the calendar-phase construction.
+4. **The structural question the 2026-10-26/27 session posed is partly answered.** It asked what,
+   if anything, could be measured before a trial that has any claim to transfer. Tonight's answer:
+   **a cost term and a variance-reduction term, because they are arithmetic on the book rather
+   than claims about returns.** That is a narrow answer, but it is the first non-empty one, and it
+   suggests the pre-trial screen should report its cost and gross terms *separately* — which the
+   instrument already does — and rest a hypothesis only on the former.
+5. **From `research/SUMMARY.md`** (2026-10-27 session, the wavelet/long-memory/Hurst vein): that
+   vein is **closed for construction and open only as measurement** by its own account, and
+   nothing in it was used tonight. `#319` is directly relevant to this object and is free: it
+   names the alternative the 60-month reversal is betting against (a handful of level shifts in
+   relative valuation generates exactly a long-horizon reversal and nothing shorter) and says the
+   **free discriminator is sub-period stability, which every trial already reports** — on this
+   mechanism 1997-2008 and 2009-2017 are +0.062 and +0.053 for #16, i.e. present in both halves,
+   which is the fractional-integration reading rather than the few-breaks one. Worth a short free
+   block with the Bai-Perron/PELT estimator the note points at. `#316` (the universal `V_n ∈
+   [0.809, 1.862]` acceptance region) and `#317` (null sd of `Ĥ`) are free and kill any
+   `Ĥ`-ranked book before it is written. `#320` (STOPBREAK as an `O(1)` nonlinear alternative to
+   an EWMA) is the vein's one constructive residue. Still live: `#307` (an exact `F` test for
+   "is this book's weighting distinguishable from the pool?", now readable against #16's weight
+   vector and the cheapest unspent free item), `#301`, `#304`, `#308`, `#313`, `#314`, `#288`,
+   `#289`, `#294`/`#295`, `#285`/`#286`, `#282`. `#300` and `#310` remain the interpretation rules
+   to read first; `#305`, `#293`, `#299`, `#309`, `#315` and `#321` remain anti-candidates.
+   `#312` was closed 2026-10-26/27 — and `#319`'s finding five is the rider on that closure:
+   `r₁` is precisely the statistic that cannot see long-horizon dependence, so the `#312` closure
+   must not be read as a finding about this object's window.
+6. **Standing, and not this agent's call**: the 2026-10-18 engine issue (the null's replicas are
+   not held to the candidate's eligibility boundary — this bears on tonight's two 100th
+   percentiles, which are against replicas carrying a +0.005 to +0.017 handicap in their favour,
+   so both are if anything conservative); the 2026-10-22 engine issue (the stored price and
+   volume levels are a back-adjustment lookahead); the 2026-10-26/27 history-depth premium; the
+   2026-10-26/27 `min_train_skill` observation — **which tonight updates**: #16 and #17 both
+   clear that gate (train skill +0.058 and +0.048) and both posted the board's best validation
+   skill, so the n = 15 observation that the gate was selecting the worse half of its own board
+   is weakened by the two newest trials and should be re-read at n = 17 before anyone acts on it.
