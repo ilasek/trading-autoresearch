@@ -23758,3 +23758,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    their favour, so both percentiles are if anything conservative); the 2026-10-22 engine issue (the
    stored price and volume levels are a back-adjustment lookahead); the 2026-10-26/27 history-depth
    premium. **New tonight**: the `min_train_skill` observation in the section above.
+
+## Research session — 2026-10-27 (learning agent): 4 notes added, see research/SUMMARY.md

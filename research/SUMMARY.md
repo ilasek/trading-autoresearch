@@ -7322,6 +7322,120 @@ on one.
 
 ---
 
+### One series, many horizons — what a "scale" actually is, and the three independent reasons a long-memory number is not evidence (cross-family, `range-variance`, `price-trend`)
+
+Four sources, read 2026-10-27, opening the `wavelet` / `long memory` / `Hurst` vein that the
+[2026-10-26] entry placed next in the carried queue. Greps across all 230 prior notes before the
+session: `wavelet` **0**, `long memory` **0** (the HAR note's hyphenated `long-memory` asides are
+the only prior trace), `Hurst` 1, `modified R/S` **0**, `rescaled range` **0**. The [2026-10-26]
+entry set two things in
+advance and both were honoured before the first paper was opened: the **acceptance criterion** —
+*a multi-scale proposal decomposes one series into `J` scales and then needs a rule to recombine
+them, so ask of the first paper how many free parameters survive the recombination; admit it only
+if the answer is `O(1)` with weights fixed a priori* — and the **anchor** — *the honest anchor for
+this vein is the skeptical modified-R/S literature; it is a "worth reading for what it rules out"
+shape, and a session that opens it should say so first.* **Both predictions in that entry came
+true, one of them more sharply than it was written.**
+
+**Finding one, and it is the criterion's answer: the construction paper does not recombine at
+all, which is worse than `J` fitted weights.** Gençay–Selçuk–Whitcher (Tier B, *JIMF*, 258
+Crossref cites) decompose daily premia with an LA(8) filter, compute `β^w_{ij} =
+Cov(w̃_{mj}, w̃_{ij}) / Var(w̃_{mj})` scale by scale, and then form **`J` separate ranked books** —
+six scales × two bucket counts × three markets, with no multiple-testing adjustment and no cost
+model anywhere in the paper. Under this lab's rules that is the most expensive possible shape: the
+deflated-skill bar counts every recorded trial of every protocol version against the same
+2018–2023 window, so a method whose defining act is to multiply one specification by `J` is paying
+`J` times for one idea.
+
+**Finding two, and it is the night's structural result: a wavelet decomposition of a return series
+is a basis of moving-average differences, so the `O(1)` end of the vein collapses into a filter
+the lab already owns.** The paper states it plainly for the Haar filter — the level-`j` wavelet
+coefficient *is* the difference of two averages each formed from `2^{j−1}` consecutive returns,
+and the level-`j` scaling coefficient *is* the average of `2^j` returns; longer Daubechies filters
+"retain this interpretation as the difference of **weighted** averages". Therefore **any
+fixed-weight recombination of Haar scales is `Σ_j c_j (MA_{2^{j−1}} − lagged MA_{2^{j−1}})`, a
+weighted moving average of past returns**, inside the family
+`notes/2026-08-17-moving-average-rules-anatomy.md` already characterises. The transform has unit
+energy, so it adds and removes no information: **a decomposition cannot create a signal, it can
+only re-sort one into passbands.** This is the **second consecutive session** in which an object
+that passed its vein's admission test turned out to be a smoother the lab owns — the first was the
+EWMA, [2026-10-26] — and the pattern is now a prediction to state in advance rather than a
+surprise to report afterwards. What the wavelet basis genuinely adds over a lookback sweep is
+**orthogonality**: a 20-day and a 40-day mean share 20 days, wavelet levels share nothing. That
+makes the right use **diagnostic rather than generative** (`#318`).
+
+**Finding three, and it is why the null side had to be read first: the long-horizon object the
+vein is built on has three independent defects, and they stack.** They are three *different*
+reasons an `Ĥ` or a `d̂` is uninformative, none of which fixes the others:
+
+1. **Short-range contamination.** Lo (Tier A, *Econometrica*, 1554 Crossref cites) shows the
+   classical rescaled range converges not to the range of a Brownian bridge `V` but to `ξV` with
+   `ξ = √((1+ρ)/(1−ρ))`; at `ρ = 0.5` that is a **73% upward bias**, and on the same index series
+   the uncorrected statistic ran about **80%** above the corrected one. Davies–Harte: the
+   log-log Hurst regression rejects `H = 1/2` **47% of the time** for a stationary AR(1) with
+   parameter 0.3. The fix is the modified statistic `Q_n`, whose denominator is a Newey–West
+   long-run variance, and whose null distribution is universal — **the 95% acceptance region is
+   `V_n ∈ [0.809, 1.862]`, no simulation required** (`#316`).
+2. **Estimation noise.** Weron (Tier B, *Physica A*, 357 Crossref cites) prices it under a known
+   white-noise null with 10,000 replications per length: at `L = 1024` the standard deviation of
+   `Ĥ` is **0.074** (Anis–Lloyd-corrected R/S), **0.050** (DFA, `n > 50`) and **0.140** (GPH). At
+   `L ≈ 2500` the 90% no-memory band is `(0.414, 0.581)` for R/S–AL and `(0.318, 0.665)` for GPH.
+   The heuristic `1/√L` band practitioners quote **over-rejects relative even to a 90% interval**
+   (`#317`).
+3. **Non-identification.** Diebold–Inoue (Tier A, *J. Econometrics*, 865 Crossref cites) prove
+   that a mixture model whose break probability shrinks as `p = O(T^{2d−2})` — i.e. a series that
+   contains only a few level shifts however long it is — **is** `I(d)` by the partial-sum
+   definition, one line from `var(Σv_t) = pTσ²_w`. Their Monte Carlo produces `d̂ ≈ 0.79` from a
+   mean-plus-noise process and `d̂ ≈ 0.67` from a STOPBREAK process, neither of which contains any
+   fractional integration. Their own position is the sophisticated one and is worth quoting
+   because it forbids the lazy reading in both directions: *"'structural change' and 'long memory'
+   are effectively different labels for the same phenomenon, in which case attempts to label one
+   as 'true' and the other as 'spurious' are of dubious value."* (`#319`).
+
+**Finding four, and it is the one that touches the lab's live work: this is a stated tension with
+the 2026-10-26/27 60-month reversal, and the discriminator is already computed.** That nightly
+measured the mean cross-sectional rank correlation of market-demeaned returns over `[−2h, −h]`
+against `[−h, 0]` and found `h = 60` months carrying 4–9× any other horizon (`−0.0892`,
+`t −6.47`, with the entry's own rider that 59-of-60-month overlap makes the `t` an upper bound).
+Diebold–Inoue supply a second caution the overlap rider does not cover: **a handful of level
+shifts in relative valuation across a cross-section, over a two-decade window, generates exactly
+a long-horizon reversal at the scale of the window and nothing at shorter scales.** This is not a
+refutation — Lo's and Diebold–Inoue's object is a univariate series and the lab's is
+cross-sectional, and that distinction must not be blurred — but it names the alternative such a
+candidate is implicitly betting against, and the source's position is that the bet may be
+unresolvable. **The free discriminator is sub-period stability, which every trial already
+reports** (1997–2008 vs 2009–2017): fractional integration predicts the effect in both halves, a
+few-breaks story does not predict it anywhere in particular. The sharper version dates the breaks
+directly with the estimator in `notes/2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md`.
+
+**Finding five, the small constructive residue, and it arrives from the null side rather than the
+construction side.** Two items. First, Lo's Table 1 is the cleanest statement in the folder of a
+fact the lab's own tooling needs: a `d = 1/3` fractional process and an `AR(1)` with `ρ = 0.5`
+have **identical lag-1 autocorrelation (0.500)** and differ by two orders of magnitude by lag 10
+(0.235 vs 0.001). The lab closed `#312` on train by measuring `r₁`; that closure is correct as
+stated and **must not be read as a finding about long-horizon dependence**, because `r₁` is
+precisely the statistic that cannot see it. Second, Diebold–Inoue record Engle–Smith's STOPBREAK
+update, `μ_t = μ_{t−1} + (ε²_{t−1}/(α + ε²_{t−1})) ε_{t−1}` — large moves update the level more
+than small ones, **one scalar `α` for the whole panel, zero parameters per name, causal by
+construction** — together with the observation that an exponential smoother is only the best
+*linear* approximation to the same model. That is an `O(1)` nonlinear alternative to an EWMA
+wherever the lab currently smooths a level (`#320`).
+
+**What the four together say.** The vein was opened under a criterion it fails on construction and
+passes only on diagnosis. There is no new return stream here and no reason to spend a trial: what
+the night produced is one universal critical-value pair that costs nothing to apply (`#316`), a
+table of null standard deviations that kills any `Ĥ`-ranked book before it is written (`#317`), a
+free horizon-decomposition of a quantity the lab already computes (`#318`), an identification rule
+plus a null generator for the lab's own long-horizon finding (`#319`), one `O(1)` construction
+pattern (`#320`), and one anti-candidate carrying the vein's two named lookahead routes (`#321`).
+The vein should now be treated as **closed for construction and open only as
+measurement** — and the generalisable form of finding two is strong enough to state as a
+prediction for the next such session: *when a literature's contribution is a decomposition, its
+`O(1)` recombination is a linear filter, and the question to ask is not whether the decomposition
+is elegant but whether the filter is one the lab has already swept.*
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -13674,6 +13788,136 @@ hypothesis fodder, then anti-candidates.
     measurements, not on the source.
     → `notes/2026-10-26-learning-about-beta-kalman-filtered-loadings.md`
 
+316. **FREE SCREEN, and it is the cheapest gate this folder has filed on a whole vein: a
+    long-memory claim about a price series has a universal 95% acceptance region of
+    `[0.809, 1.862]`, and the statistic is four lines of numpy.** Lo's modified rescaled range
+    keeps the classical numerator — the range of the cumulative mean-deviations — and replaces the
+    denominator with a **Newey–West long-run variance**,
+    `σ̂²_n(q) = σ̂²_x + 2 Σ_{j≤q} (1 − j/(q+1)) γ̂_j`; then `V_n = Q_n/√n` converges to the range of
+    a Brownian bridge, whose distribution function `F_V(v) = 1 + 2 Σ_{k≥1}(1 − 4k²v²)e^{−2(kv)²}`
+    has `E[V] = √(π/2) ≈ 1.25`, `sd ≈ 0.27`, and the fractiles tabulated in the note. **No
+    simulation, no bootstrap, no per-panel calibration.** Why it matters out of proportion to its
+    cost: the denominator *is* the whole content. For a stationary `AR(1)` the classical statistic
+    converges to `ξV` with `ξ = √((1+ρ)/(1−ρ))` — a **73% upward bias at `ρ = 0.5`** — and the
+    log-log Hurst regression rejects `H = 1/2` **47% of the time** for an AR(1) with parameter 0.3
+    (Davies–Harte). So an unadjusted "Hurst exponent above a half" is very largely a restatement of
+    the series' first autocorrelation. Use it before writing any multi-scale, fractional-differencing
+    or persistence-ranked candidate: run `V_n(q)` on the pool's own excess-return series and on a
+    sample of eligible names over train, across `q ∈ {5, 21, 63, 126, 252}`, and if nothing leaves
+    `[0.809, 1.862]` the vein has no object on this panel. Two riders. `q` is a hyperparameter in
+    `#311`'s sense — fix it a priori or use Andrews' rule `q = [(2n/3)^{1/3}(ρ̂/(1−ρ̂²))^{2/3}]`
+    computed only on trailing data. And **a non-rejection licenses "do not build on this", not
+    "the effect is absent"**: the source's own conclusion says a long-run effect "will not be easily
+    detected by any of our current statistical tools". Tier A. `validation_overlap: false`,
+    `published_post_2018: false`.
+    → `notes/2026-10-27-modified-rescaled-range-and-the-long-memory-null.md`
+
+317. **FREE SCREEN, and it is the number that kills a `Hurst`-ranked cross-sectional book before
+    it is written: under a pure white-noise null, the sampling standard deviation of an estimated
+    Hurst exponent at this panel's sample lengths is larger than any plausible true dispersion in
+    it.** Weron's Monte Carlo (10,000 replications per length, true `H = 0.5`) gives the sd of `Ĥ`
+    as **0.174 / 0.097 / 0.221** at `L = 256` and **0.074 / 0.050 / 0.140** at `L = 1024` for
+    Anis–Lloyd-corrected R/S (`n > 50`), DFA (`n > 50`) and GPH respectively; at `L ≈ 2500` the 90%
+    no-memory band is `(0.414, 0.581)` for R/S–AL and `(0.318, 0.665)` for GPH. **The screen:**
+    estimate `Ĥ` per eligible name over train with DFA (`n > 50`), then compare the
+    **cross-sectional** sd of `Ĥ` against the table's **null** sd at the same `L`; if it is not
+    materially larger, the sort ranks estimation noise. Four riders, all load-bearing. Use **DFA**,
+    not GPH — GPH is the only one with a textbook standard error and has 2–3× the sampling variance
+    of the best method. Never use **raw** R/S: the Anis–Lloyd small-`n` correction is mandatory and
+    its omission is the family's single biggest avoidable error. Read the band at **each name's own
+    `L`**, because point-in-time membership gives names very different usable lengths and a mixed-`L`
+    sort is confounded exactly as the 2026-10-09/10 liquidity-split-versus-tail-depth result was.
+    And the `1/√L` "significance level" in common use **over-rejects relative even to a 90%
+    interval**. Scope: this prices *estimation noise* under a white-noise null and does **not**
+    correct the short-range contamination `#316` handles — the two defects are independent and both
+    apply. Tier B on venue, A on the evidence (Monte Carlo under a known null transfers unchanged).
+    `validation_overlap: false`.
+    → `notes/2026-10-27-hurst-estimator-finite-sample-confidence-intervals.md`
+
+318. **FREE DIAGNOSTIC, and it is the only generative-adjacent thing the wavelet literature leaves
+    behind once its construction is deflated: decompose a candidate's ACTIVE return against the
+    equal-weight pool by horizon band, and read off where its tracking error and its skill live.**
+    A maximal-overlap wavelet transform splits a daily series into orthogonal passbands — on daily
+    data scale 1 ↔ 2–4 days, 2 ↔ 4–8, 3 ↔ 8–16, 4 ↔ 16–32, 5 ↔ 32–64, 6 ↔ 64–128 — with unit
+    energy, so nothing is added or lost. Under v3 the graded statistic **is** a difference against
+    one portfolio, so "in which frequency band does that difference sit" is a direct statement about
+    the thing the gate scores, and it costs no trial and reads no holdout. The reason to prefer this
+    over the lab's usual horizon sweep is **orthogonality**: a 20-day and a 40-day moving average
+    share 20 days of data, wavelet levels share none, so a band decomposition attributes variance
+    without the double-counting a lookback sweep has. Mechanics: `O(J·L·n)` per series, trivially
+    inside the per-call budget. Use the **Haar** filter, because (a) the level-`j` coefficient then
+    has an exact reading as the difference of two `2^{j−1}`-day averages and (b) it sidesteps the
+    phase-alignment hazard in `#321`. Tier B on the source; the diagnostic itself is arithmetic.
+    → `notes/2026-10-27-wavelet-multiscale-decomposition-and-scale-by-scale-beta.md`
+
+319. **FREE INTERPRETATION RULE plus a null generator, and it is the one item tonight that bears
+    directly on a live lab result: long memory and a small number of level shifts are not
+    distinguishable, so any candidate motivated by long-horizon dependence is unidentified before
+    it is written.** Diebold–Inoue prove it in one line from the partial-sum definition
+    (`var(Σ_{t≤T} v_t) = pTσ²_w`, so `p = O(T^{2d−2})` ⇒ `v_t ~ I(d−1)`): a mean-plus-noise process
+    that contains only a few breaks **however long the sample** is genuinely `I(d)`. Their Monte
+    Carlo returns `d̂ ≈ 0.79` and `d̂ ≈ 0.67` from processes with no fractional integration in them,
+    and the density of `d̂` at small `p` is **bimodal**, mixing "no break happened in this
+    realisation" with "at least one did". The two readings imply **opposite** trades — genuine
+    fractional integration means a smoothly decaying predictable component at every horizon, a few
+    breaks mean a series unpredictable except across dates nobody knows ex ante. **The null
+    generator, usable as-is:** `v_t = w_t w.p. p else 0; μ_t = μ_{t−1} + v_t; y_t = μ_t + ε_t`,
+    simulated at the lab's own `T` and a `p` implying a plausible number of regime changes over the
+    window — the same discipline as `benchmarks.random_null_v3`, compare against a null sharing the
+    nuisance structure rather than against zero. **Applied to the lab's own 2026-10-26/27 result**
+    (60-month cross-sectional reversal, 4–9× any other horizon): a handful of level shifts in
+    relative valuation over a two-decade window produces exactly a long-horizon reversal at the
+    scale of the window and nothing shorter. **Recorded as a tension, not a refutation** — the
+    sources' object is univariate and the lab's is cross-sectional, and that must not be blurred —
+    with the free discriminator being sub-period stability (1997–2008 vs 2009–2017), which every
+    trial already reports. Note the authors explicitly refuse the word "spurious": the two labels
+    may describe one phenomenon, and long memory can remain a useful shorthand for prediction even
+    when the truth is breaks. Tier A. `validation_overlap: false`.
+    → `notes/2026-10-27-long-memory-and-regime-switching-identification.md`
+
+320. **CONSTRUCTION PATTERN, small and `O(1)`: the STOPBREAK update is a nonlinear alternative to an
+    EWMA that estimates zero parameters per name.** `μ_t = μ_{t−1} + (ε²_{t−1}/(α + ε²_{t−1}))
+    ε_{t−1}` — the weight on an innovation rises with its own squared magnitude, so large moves
+    update the level more than small ones, bounded between 0 and 1, **one scalar `α` for the whole
+    panel**, causal in the update by construction. Engle–Smith designed it to bridge transient and
+    permanent shocks, and Diebold–Inoue record that it approximates the mean-plus-noise model
+    **better than an exponential smoother, which is only the best *linear* approximation**. That
+    places it exactly where `#312` and `#314` sit — the right side of item 1's parameter-count
+    triage — and it is the natural thing to try wherever the lab currently smooths a level with a
+    fixed span. Two riders. `α` is a hyperparameter in `#311`'s sense and must be fixed a priori or
+    refit walk-forward; and the folder has **no evidence of any kind** that a level smoothed this
+    way carries skill here — the source contains no strategy evaluation, so this is tiered on
+    algebra alone and is a better estimator, not a new signal. Tier A on the source, and the
+    pattern is a by-product of it rather than its subject.
+    → `notes/2026-10-27-long-memory-and-regime-switching-identification.md`
+
+321. **ANTI-CANDIDATE plus a named protocol hazard, and together they close the construction side
+    of the multi-scale vein: do not rank this panel's book by a scale-wise beta at any scale, and
+    do not import a wavelet transform without checking two lookahead routes.** The paper's own book
+    is a beta sort — equal-weighted deciles on `β^w_{ij} = Cov(w̃_{mj}, w̃_{ij})/Var(w̃_{mj})`,
+    one-year formation, one-year hold — and its finding is that the cross-sectional slope of return
+    on beta **steepens with scale**. In a long-only fully-invested book that is a high-beta tilt,
+    and the lab has measured from three directions that **Sharpe is flat in beta on this panel**
+    (2026-10-09/10: bottom-GK-vol book at beta 0.62 against the pool's 0.98, earning proportionally
+    less, 64th percentile of its own null). A steeper mean-return-on-beta slope is not skill under a
+    pool benchmark. The method's shape is also wrong for this gate: **`J` scales means `J` separate
+    ranked books**, a `J`-fold specification expansion charged against the one validation window the
+    deflated-skill bar counts every trial against, and the source adjusts for none of it and models
+    no costs at all. One thing it *does* get right and worth stealing in isolation: **annual
+    formation, annual hold, equal weights** is ≈ 1× name turnover, squarely inside v3's cheap
+    corner (≈ 14 bps/yr at the lab's measured 1.3× rate). **The hazard, for any wavelet import:**
+    (a) *boundary coefficients* — in a backtest the boundary is the **present**, and a transform
+    computed per window with circular handling wraps that window's end into its start, so drop the
+    first `L_j − 1` coefficients of every window or filter strictly trailing; (b) *phase
+    alignment* — least-asymmetric filters such as LA(8) are conventionally circular-shifted to
+    align coefficients with features in time, and that shift is **forward**, so the aligned
+    coefficient dated `t` draws on observations after `t`. (b) is inference from the filter
+    mechanics, not a claim the source makes, and it is exactly what `causality_check` fails; the
+    safe form is a causal FIR filter of length `L_j` on trailing data with no alignment step, and
+    with Haar the question does not arise. Tier B on the source; the anti-candidate rests on the
+    lab's own measurements.
+    → `notes/2026-10-27-wavelet-multiscale-decomposition-and-scale-by-scale-beta.md`
+
 
 ---
 
@@ -13757,8 +14001,128 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-24 (session 71) | **The cost-aware-construction sweep the [2026-10-23] entry nominated as best-aimed, and it pays out as one theorem repeated in three literatures plus a decision-theoretic identity for the gate's own benchmark.** Aim taken directly from that entry (the only cold vein whose binding constraint changed when the protocol did, and the one where "a turnover penalty estimates nothing" so item 294's dimensional objection does not reach). Greps across all 218 prior notes: **zero** for `turnover constraint`, `robust optimization`/`robust optimisation`, `Ben-Tal`, `uncertainty set`, `portfolio norms`, `Goldfarb`, `Iyengar`, `cost penalty`, `regularization equivalence`, `L1 constraint`; `no-trade region` 4 and `quadratic cost` 2, all on the *policy* question rather than the *objective* question. (`Gârleanu` returned 5 — the diacritic, not a gap; the aim-portfolio paper is covered and was not re-read.) Outcome: **the reduction is free and the optimizer is closed three ways over.** Olivares-Nadal–DeMiguel (Tier A, OR, 82 Crossref cites) prove a `p`-norm cost term is simultaneously a robust problem, a lasso/ridge regression and a Bayesian prior — so `κ` is a hyperparameter, the honest value over-deters into all-or-nothing trading, and v3's per-name `Λ` implies an uncertainty box with half-widths proportional to *stamp duty* rather than to estimation error. Paç–Pınar (Tier B, 8 cites) extending Pflug–Pichler–Wozabal (Tier A, 203 cites) prove worst-case risk = nominal + `Cκ‖w‖_q` over a Wasserstein ball, making the equal-weight pool the exact high-ambiguity optimum with a finite threshold `κ* ∝ (N−1)` — which, since the panel went 140 → ~1,000 names, says the pool got **harder** to beat, derived rather than measured. Bertsimas–Brown–Caramanis (Tier A, SIAM Review, 2097 cites) supply the general dual-norm theorem, the `ρ_min` free-robustness threshold, and the NP-hardness that closes robust variance optimisation here. Ghahtarani–Saif–Ghasemi's review (Tier B, 30 cites) supplies the field's self-assessment (over-conservative, equivalent to shrinkage, nobody knows how to size the set) and the one positive direction (robustify the factor, not the name). Five free items (300–304) and one anti-candidate (305). | Olivares-Nadal & DeMiguel 2018 (`2026-10-24-transaction-costs-as-robustness-and-regularization.md`); Paç & Pınar 2018 + Pflug–Pichler–Wozabal 2012 (`2026-10-24-equal-weight-as-the-maximal-ambiguity-optimum.md`); Bertsimas, Brown & Caramanis 2011 (`2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`); Ghahtarani, Saif & Ghasemi 2022 (`2026-10-24-robust-portfolio-selection-landscape-and-over-conservatism.md`) |
 | 2026-10-25 (session 72) | **The exact-inference sweep the [2026-10-24] entry named as best-aimed, and it pays out by turning this folder's most-used screen from a calibration into an exact closed form that independently reproduces item 294's number, plus the first test statistic here for "is this weighting distinguishable from the pool?".** Aim taken verbatim from that entry (`Britten-Jones` 0 before it, `sampling error in estimates` 0). Greps across all 222 prior notes: **zero** for `Kan.Zhou`, `Ledoit.Wolf` as a pair, `Sharpe ratio test`; `Britten-Jones` 1, and only for the regression representation. **Britten-Jones (1999, JF, 415 Crossref cites) was NOT obtained** — closed at Wiley, `oa_status: closed` with no OA location in OpenAlex, nothing on LBS Research Online, and no course-page or author mirror found — so the session took the same question through the minimum-variance case, which is the one the entry's screen is about and the only one where exact inference exists. Outcome: **the screen is now a theorem with a test statistic, one `portfolio-learning` class is closed by a non-existence proof, one construction survives estimating a single scalar, and there is a width above which all of it silently stops working.** Kempf–Memmel (Tier B, Schmalenbach BR, 100 cites) prove the minimum-variance weights ARE OLS slopes on return differences (identity, no distributional content), that the plug-in and OLS estimators are the same number, that expected out-of-sample variance is exactly `σ²_MV(1 + (N−1)/(T−N−1))` — which agrees with item 294's `1/(1−N/T)` to **2.955 vs 2.953** at this panel's cell — and that the plug-in estimator is best *unbiased*. Okhrin–Schmid (Tier A, J.Econometrics, 184 cites) give the exact laws for all four standard weight estimators: GMV exactly multivariate-`t` and unbiased, the expected-utility tilt biased by exactly `(n−1)/(n−k−1)` with `(n−k−3)` in its variance, de-biasing proved to *raise* MSE, and the fully-invested maximum-Sharpe weights with **no moments of order ≥ 1 at all**. Frahm–Memmel (Tier A−, J.Econometrics, 113 cites) give a James–Stein shrinkage toward any reference portfolio that dominates the plug-in estimator for every `n ≥ d+2, d ≥ 4` with a one-scalar intensity `κ_S = ((d−3)/(n−d+2))/τ̂_R`, the conditionally-noncentral-`F` law of `τ̂_R` that makes "hold equal weight" a testable null with brutal thresholds (161% at `d=50, n=120`), Theorem 8 generalising Jagannathan–Ma to weight shrinkage, and the `q = n/d → 1⁺` régime where shrinkage is worse than the reference portfolio (this panel's daily cell is `q ≈ 1.5`). Bodnar–Dmytriv–Parolya–Schmid (Tier B, IEEE TSP, 28 cites) restate the exact `F_{p−1,n−p}` Mahalanobis test on a weight vector, show its null dispersion growing as `2/(1−c)`, and find that on a **rank-deficient** `Σ` every non-singular such test has power and ROC near zero while still printing a p-value — which is this repo's common case at monthly frequency. Five free items (306–310), one of them an anti-candidate (309). | Kempf & Memmel 2006 (`2026-10-25-gmv-weights-as-regression-coefficients.md`); Okhrin & Schmid 2006 (`2026-10-25-exact-distributions-of-estimated-portfolio-weights.md`); Frahm & Memmel 2010 (`2026-10-25-dominating-estimators-and-the-naive-diversification-test.md`); Bodnar, Dmytriv, Parolya & Schmid 2019 + Bodnar & Schmid 2008 (`2026-10-25-testing-portfolio-weights-when-the-panel-is-wide.md`) |
 | 2026-10-26 (session 73) | **The `Kalman` / `state space` vein, carried unspent for four sessions, opened under the arithmetic acceptance criterion the [2026-10-25] entry set — and it passes that test and is then deflated by its own mathematics, which is the most useful of the three possible outcomes.** The criterion was stated before the first paper was opened: admit the vein only if it yields an `O(1)` state, abandon it if the first paper's object is an `O(N)` state over the cross-section. Greps across all 226 prior notes: `Kalman` **0**, `state space` 2 (both incidental). Every construction found is `O(1)` *per series* — and the whole exponential-smoothing taxonomy turns out to **be** a state-space model whose smallest cell is a one-dimensional state with one parameter, i.e. an EWMA. The night's payout is that this parameter has a **closed form in one variance ratio** (`α = √(q + q²/4) − q/2`, `span ≈ 2/√q`) whose input is readable off the lag-1 autocorrelation of first differences, so every span the lab currently sweeps is a measurement rather than a choice (`#312`). The night's hazard is that **both** filtering papers fit their hyperparameters by maximum likelihood on the whole sample while filtering only the state, and neither flags it, because neither is backtesting — the exact lookahead `causality_check` exists to catch, now a named rule (`#311`). Constructive residue: flexible least squares / discount factors as a one-scalar causal replacement for a rolling window (`#314`). One live tension with `learnings.md`, recorded not resolved: both of the lab's free-beta closures were measured on *rolling-window OLS* loadings, and the literature's object is a *filtered* one that varies more slowly, so `#313` is the free screen that settles whether those closures were about noise or about free loadings. One anti-candidate (`#315`: do not rank the book by a filtered beta — Sharpe is flat in beta here, and the source explains measured alpha rather than forecasting anything). Hyndman–Koehler–Snyder–Grose 2002 (`2026-10-26-exponential-smoothing-as-a-state-space-model.md`); Muth 1960 via Lang 1987/1989 (`2026-10-26-optimal-exponential-weights-signal-to-noise.md`); Adrian–Franzoni 2009 (`2026-10-26-learning-about-beta-kalman-filtered-loadings.md`); Triantafyllopoulos–Montana 2009 (`2026-10-26-online-state-space-spreads-discount-factors.md`). Unobtained and named: Dangl–Halling 2012 (*JFE*), Elliott–Van der Hoek–Malcolm 2005 (*QF*), Muth 1960 (*JASA*). |
+| 2026-10-27 (session 74) | **The `wavelet` / `long memory` / `Hurst` vein, next in the carried queue, opened under the construction criterion the [2026-10-26] entry pre-committed — and it FAILS that criterion on construction while paying for itself three times over on measurement.** The criterion, stated before the first paper was opened: *a multi-scale proposal decomposes a series into `J` scales and then needs a rule to recombine them; admit it only if `O(1)` free parameters survive the recombination with weights fixed a priori.* Greps across all 230 prior notes: `wavelet` **0**, `long memory` **0**, `Hurst` 1, `modified R/S` **0**, `rescaled range` **0**. The construction paper **does not recombine at all** — it forms `J` separate ranked books, a `J`-fold specification expansion against the one validation window the deflated bar counts every trial against, with no cost model and no multiple-testing adjustment. And the structural result is that the `O(1)` end collapses: the level-`j` Haar coefficient **is** the difference of two `2^{j−1}`-day averages, so any fixed-weight recombination is a weighted moving average of past returns — the family `2026-08-17-moving-average-rules-anatomy.md` already owns. **Second consecutive session in which an admitted `O(1)` object turned out to be a smoother the lab holds** (the first was the EWMA), which makes it a prediction to state in advance rather than a surprise. The vein's value is entirely on the null side, and it is three *independent* defects that stack: short-range contamination (classical R/S biased **+73%** at `ρ = 0.5`; the Hurst regression rejects `H = ½` **47%** of the time on an AR(1) with parameter 0.3; fixed by a Newey–West denominator with the universal 95% region `[0.809, 1.862]` — `#316`), estimation noise (null sd of `Ĥ` is **0.074 / 0.050 / 0.140** at `L = 1024` for R/S–AL / DFA / GPH, and the common `1/√L` band over-rejects — `#317`), and non-identification (a mixture with `p = O(T^{2d−2})` **is** `I(d)`; `d̂ ≈ 0.79` from a process with no fractional integration — `#319`). One live tension with the lab's own work, recorded not resolved: the 2026-10-26/27 60-month cross-sectional reversal is exactly what a handful of level shifts over a two-decade window would produce, and the free discriminator (sub-period stability) is already computed for every trial. Residue: a free horizon decomposition of a candidate's active return against the pool (`#318`), the `O(1)` STOPBREAK level update (`#320`), and one anti-candidate carrying two named wavelet lookahead routes — boundary wrap and LA-filter phase alignment (`#321`). Lo 1991 (`2026-10-27-modified-rescaled-range-and-the-long-memory-null.md`); Weron 2002 (`2026-10-27-hurst-estimator-finite-sample-confidence-intervals.md`); Diebold–Inoue 2001 (`2026-10-27-long-memory-and-regime-switching-identification.md`); Gençay–Selçuk–Whitcher 2005 (`2026-10-27-wavelet-multiscale-decomposition-and-scale-by-scale-beta.md`). Unobtained and named: Teverovsky–Taqqu–Willinger 1999 (*JSPI*), Taqqu–Teverovsky–Willinger 1999 (*Finance and Stochastics*). |
 
 ### Open questions for future sessions
+
+- **[2026-10-27] What should aim session 75: the carried queue's next named item is `entropic` /
+  `Hansen Sargent`, and the [2026-10-24] prediction attached to it should be stated and then
+  tested in one paper, not a session.** Greps across all 234 notes after tonight: `entropic`
+  **0**, `Hansen Sargent` **0**, `transfer entropy` **0** (sixth nomination — it stays retired, as
+  2026-10-24, 2026-10-25 and 2026-10-26 all said), `wavelet` 3, `long memory` 2, `Hurst` 5,
+  `modified R/S` 1, `rescaled range` 1 (that vein is now closed, not merely sampled), `Kalman` 4,
+  `state space` 4. The standing prediction
+  for the entropic vein is that it is a **third instance of the dual-norm theorem**
+  (`notes/2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`): a relative-entropy ambiguity
+  ball around a reference measure is a penalty, the penalty is a transaction cost, and the
+  shrinkage limit is the equal-weight pool. **State the prediction before opening the first paper
+  and abandon the vein the moment the first paper confirms it** — one note, not four. Tonight's
+  vein is the template for how that should go: the criterion was pre-committed, the first paper
+  answered it, and the session's value came from pushing one step past the answer rather than
+  from the answer itself.
+  **Two new criteria tonight, both earned rather than guessed.** First, and it generalises the
+  night's structural result: *when a literature's contribution is a **decomposition**, its `O(1)`
+  recombination is a **linear filter**, so the question is never whether the decomposition is
+  elegant but whether the filter is one the lab has already swept.* Two consecutive sessions have
+  now ended with an admitted `O(1)` object collapsing into a smoother the folder owns (the EWMA on
+  2026-10-26, the moving-average difference tonight), so this should be asked **first** of any
+  method whose selling point is a basis, a transform or a multiresolution. Second: *a vein whose
+  honest anchor is its own skeptical literature should be read null-side first.* Tonight the
+  construction paper would have read as a clean `J`-scale opportunity if the three null papers had
+  not already priced what an `Ĥ` is worth; read in the other order it would have produced a
+  candidate.
+  - **The free queue, and tonight added four free items, one construction pattern and one
+    anti-candidate.** `#317` is the one to read first and is the cheapest kill in the queue: it is
+    a table of null standard deviations that retires any `Hurst`-ranked or persistence-ranked
+    cross-sectional book for the cost of one comparison, and the comparison is
+    *cross-sectional dispersion of `Ĥ` versus the null dispersion at the same `L`*. `#316` is the
+    universal `[0.809, 1.862]` acceptance region and should be run on the pool's own series before
+    any further long-horizon construction is attempted. `#319` is the only item in the queue that
+    bears on a result the lab produced **this week** — the 60-month cross-sectional reversal — and
+    it supplies both the alternative hypothesis and a simulable null for it; note carefully that
+    it is filed as a **tension**, because the sources' object is univariate and the lab's is
+    cross-sectional, and a later session that collapses that distinction will have over-read it.
+    `#318` is a measurement the lab can run on any existing trial's returns. `#320` is the night's
+    only construction material and, like `#314`, is a better estimator rather than a new signal.
+    `#321` is an anti-candidate resting on the lab's own flat-in-beta measurements, and it carries
+    the two wavelet lookahead routes any future import must check.
+  - **Unchanged and still live below those**: `#311`–`#315` from 2026-10-26 (`#311` still the
+    protocol hazard to read before importing any filtering or recursive method; `#312` is now
+    **closed on this panel** by the 2026-10-26/27 nightly, which found the precondition
+    `r₁ ∈ (−1/2, 0)` fails at monthly and quarterly sampling — and Lo's Table 1 adds the reason
+    not to over-read that closure: `r₁` is precisely the statistic that cannot see long-lag
+    decay, so the closure is about the random-walk-plus-noise model and **not** about long-horizon
+    dependence); `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24 (`#300` still the
+    interpretation rule to read before anything else in the queue); `#294`–`#299` from 2026-10-23;
+    `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20;
+    the 2026-10-18 pair (`#273`, `#274`, with `#275` gated on its own free screen); then
+    2026-10-17, 2026-10-16, 2026-10-15 and everything carried under them.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's
+    replicas are not held to the eligibility boundary the candidate is held to) and the
+    `min_train_skill = 0.0` threshold raised by the 2026-10-26/27 nightly (ten trials clear it at
+    mean validation skill −0.105, five fail it at −0.037) are both human decisions. The six stale
+    `origin/main-*` branches (`0xxhh0`, `7iyrzq`, `86aao6`, `cozirv`, `e6mtf5`, `x8h7jq`) remain
+    safe to delete whenever a human gets to it. **No strategy session should treat any of these as
+    a blocker.**
+  - **Named for a later session rather than summarised, two papers, both genuinely unobtained, and
+    together they are the vein's own counter-literature — so a session that wants to re-open long
+    memory should start here rather than with another construction paper.**
+    **Teverovsky, Taqqu & Willinger (1999)**, *"A critical look at Lo's modified R/S statistic"*,
+    *Journal of Statistical Planning and Inference* 80(1–2), 211–227,
+    `10.1016/S0378-3758(98)00250-X`, **150 Crossref cites / 196 OpenAlex**. OpenAlex reports
+    `is_oa: true, oa_status: hybrid` and names exactly one location — the ScienceDirect PDF
+    endpoint — which returned **HTTP 403 with an 833 KB Cloudflare body**, the 2026-10-14
+    "`is_oa: true` is not a promise" case again, now on `sciencedirect.com` itself. The authors'
+    own host `math.bu.edu` **fails TLS verification under `curl` even with
+    `--cacert /root/.ccr/ca-bundle.crt` and returns HTTP 503 to `WebFetch`** — a second two-client
+    confirmation of the `orbilu.uni.lu` failure mode, i.e. the host's own chain, not an egress
+    block. `citeseerx.ist.psu.edu` died with `Recv failure: Connection reset by peer` (transport,
+    like `web.archive.org` and `api.fatcat.wiki`). **Its reported finding is the exact converse of
+    `#316`'s and would change how a non-rejection is read**: as the truncation lag `q` grows,
+    `V(q)` is said to be strongly biased toward *accepting* the null even on purely long-range
+    dependent data — i.e. Lo's own stability-across-`q` argument may be the test losing power
+    rather than the data being short-memory. That claim is recorded here as **unread and not
+    relied on**; nothing in tonight's notes rests on it.
+    **Taqqu, Teverovsky & Willinger (1999)**, *"Stock market prices and long-range dependence"*,
+    *Finance and Stochastics* 3(1), 1–13, `10.1007/s007800050049` — the finance-facing companion,
+    not attempted beyond identification. Worth one cheap retry per session on a channel other than
+    `math.bu.edu`: Willinger's AT&T/NIAID-era hosts, or a Boston University technical-report
+    series number.
+- **[2026-10-27] Access findings — one repository API route worth copying verbatim, one scanned
+  NBER working paper that had to be read as images, one host confirmed dark through two
+  independent clients, and Crossref's journal-year key used first rather than as a fallback.**
+  **`repository.bilkent.edu.tr` (DSpace 7) served the typeset Elsevier article on the first try**,
+  and the route generalises to any modern DSpace: the landing page is a ~420 KB Angular shell with
+  dozens of UUIDs in it and grepping for a `.pdf` href finds nothing, so go to the REST API
+  instead — `/server/api/core/items/<item-uuid>/bundles`, read the `ORIGINAL` bundle's
+  `_links.bitstreams.href`, then that bitstream's `_links.content.href`. Three JSON calls, no
+  guessing, and the bundle listing names the `THUMBNAIL` bundle separately so the 2026-10-10
+  "one of the bitstreams is a thumbnail PNG" trap does not arise. **`economics.sas.upenn.edu/sites/default/files/filevault/working-papers/<id>.pdf`**
+  served a PIER working paper first try (402 KB → 96 KB of clean text) — a university department's
+  numbered series again, as on 2026-10-16. **NBER w2984 is a text-layerless scan and it is the
+  first NBER paper this folder has found that way**: `pdffonts` printed an **empty font table** and
+  `pdftotext` returned **47 bytes from 47 pages**, so it was rendered with
+  `pdftoppm -png -r 120 -gray` and read as page images — title/abstract, the statistic's
+  definition, its critical-value tables, and the conclusion, about twelve pages of the
+  forty-seven. Two mechanics worth keeping: the **image page index is offset from the paper's own
+  page numbers** (here by 2), so locate one section and derive the rest rather than guessing each
+  time; and a formula whose subscripts matter can be re-rendered **cropped at 300 dpi**
+  (`pdftoppm -r 300 -x -y -W -H`) for a fraction of a full-page read — which is how the Andrews
+  truncation-lag rule was transcribed exactly, and which revealed that the working paper labels
+  its right-hand side `s_n` while defining `q = [k_n]`. **`math.bu.edu` is dark with two-client
+  evidence**: `curl` fails TLS chain verification even with the proxy CA bundle and `WebFetch`
+  returns HTTP 503 — report it as the host's own incomplete chain, exactly as `orbilu.uni.lu` is
+  recorded. `sciencedirect.com/science/article/pii/<pii>/pdf` returned **HTTP 403 with an 833 KB
+  Cloudflare body** for a DOI OpenAlex flags `is_oa: true, oa_status: hybrid`.
+  `citeseerx.ist.psu.edu` died with `Recv failure: Connection reset by peer` — transport, not an
+  origin refusal. `archive.org/advancedsearch.php` answered cleanly and returned `numFound: 0`,
+  which is a real negative rather than a failure. Index behaviour: **Crossref answered every
+  lookup on the first attempt**, including the journal-year enumeration
+  (`/journals/0378-4371/works?filter=from-pub-date:2002-01-01,until-pub-date:2002-12-31&query.bibliographic=…`)
+  that returned the Physica A DOI, volume, pages and citation count in **one call** — the
+  2026-10-07 rule, and tonight it was used as the *first* move for the preprint-to-published
+  mapping rather than after a title lookup failed, which is the right order. OpenAlex answered one
+  `locations` query and was not spent further.
 
 - **[2026-10-26] What should aim session 74: `wavelet` / `long memory` / `Hurst` is next in the
   carried queue, and tonight supplies the criterion it must pass — stated here so it is pre-committed
