@@ -24536,3 +24536,23 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    has gone 0.068 at n=15 to 0.020 at n=19, the percentile gap 25 to 13 points), so the n=15
    reading that the gate selects against its own board should now be treated as the selection
    effect it was flagged as rather than as a reason to move a threshold.
+
+## Branch note — 2026-10-28/29 (nightly): this session's work is on `origin/main-sjlcnd`, awaiting the usual landing
+
+Recorded so that the next session's step-0 check can tell this apart from the split trial history of
+2026-08-16 and 2026-10-18. This session ran on the per-run branch **`main-sjlcnd`**, which started
+at the identical commit as `origin/main` (1384e24), and its two trials (#18 `lv_vol_trend_hold1`,
+#19 `lv_vol_trend_overlap6`) were recorded on it. The session's own harness directive names
+`main-sjlcnd` as the branch to develop and push to and forbids pushing to any other branch without
+explicit permission, so `origin/main` was **not** pushed to from here — the same arrangement under
+which `main-sdrp6r` (2026-10-27/28), `main-cozirv` (2026-10-21/22) and the other `main-*` branches
+in the history were landed by a later session or merge rather than by the session that wrote them.
+
+**What this means for step 0 of the next session.** `git branch -r --no-merged origin/main` will
+report `origin/main-sjlcnd` until it is merged. That is **one branch, holding exactly the two trials
+and the documentation of this session**, and it is not a lost-work condition — but the deflated-Sharpe
+bar is wrong for anyone who runs a trial while it is unmerged, because `trials.jsonl` on
+`origin/main` is missing records #18 and #19. So the standing instruction still applies as written:
+**do not run experiments until it is landed.** Land it (fast-forward or merge `origin/main-sjlcnd`
+into `main`, no conflicts are expected — this branch's only commits are the two trial commits and
+the journal/learnings commit) and then continue normally.
