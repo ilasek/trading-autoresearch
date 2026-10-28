@@ -24125,3 +24125,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    clear that gate (train skill +0.058 and +0.048) and both posted the board's best validation
    skill, so the n = 15 observation that the gate was selecting the worse half of its own board
    is weakened by the two newest trials and should be re-read at n = 17 before anyone acts on it.
+
+## Research session — 2026-10-28 (learning agent): 4 notes added, see research/SUMMARY.md
