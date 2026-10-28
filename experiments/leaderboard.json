@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-28T23:43:39+00:00",
+  "generated_at": "2026-10-28T23:48:06+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -30,29 +30,29 @@
       "mechanism": 1
     },
     "liquidity-volume": {
-      "name": "lv_vol_trend_hold1",
-      "candidate": "strategies/candidates/lv_vol_trend_hold1.py",
+      "name": "lv_vol_trend_overlap6",
+      "candidate": "strategies/candidates/lv_vol_trend_overlap6.py",
       "track": "scout",
       "verdict": "GATE_FAIL",
-      "ts": "2026-10-28T23:41:27+00:00",
-      "n_trials": 2,
+      "ts": "2026-10-28T23:45:50+00:00",
+      "n_trials": 3,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.349,
-        "ann_return": 0.0643,
-        "max_drawdown": -0.3896,
-        "ann_turnover": 2.13,
-        "avg_positions": 99.86,
-        "skill": 0.012,
-        "skill_cost2x": -0.004,
-        "skill_delist30": 0.012
+        "sharpe": 0.356,
+        "ann_return": 0.0654,
+        "max_drawdown": -0.3868,
+        "ann_turnover": 1.27,
+        "avg_positions": 125.62,
+        "skill": 0.019,
+        "skill_cost2x": 0.014,
+        "skill_delist30": 0.019
       },
-      "train_sharpe": 0.574,
+      "train_sharpe": 0.565,
       "skill_ci90": [
-        -0.105,
-        0.142
+        -0.096,
+        0.141
       ],
-      "train_skill": 0.05,
+      "train_skill": 0.042,
       "mechanism": 3
     },
     "portfolio-learning": {

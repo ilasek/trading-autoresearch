@@ -24155,3 +24155,44 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   2026-10-19/20 reading that a cost pre-registration under-delivers out of sample is now two-sided
   and should be quoted as a range, not a floor.
 
+## 2026-10-28T23:45:50+00:00 — lv_vol_trend_overlap6 — **GATE_FAIL**
+- Candidate: `strategies/candidates/lv_vol_trend_overlap6.py` (family: liquidity-volume, track: scout, trial #0)
+- Hypothesis: Holding trial #18's book -- the 100 eligible names with the most negative multi-year share-turnover trend under the (calendar peer group x price-history-depth tercile) quota -- in six overlapping monthly sleeves instead of one, earns HIGHER validation skill than trial #18's single-sleeve version of the byte-identical score, because the sleeve operator's cost channel is arithmetic and universal (+0.008 to +0.013 of train net skill on all seven objects measured through both constructions tonight) while its gross channel is object-specific and was negative on six of those seven, so on a score where the two nearly cancel on train (cost +0.0096, gross -0.0185) the cost half should dominate on validation, where churn runs higher and the gap the operator removes is therefore larger: trial #18 charged 2.1x against its own train 1.81x, and this book charges 1.07x on train. A result below trial #18 by more than the cost rebate refutes the claim that the cost term is the transferable one.
+- Verdict: GATE_FAIL — validation sharpe 0.356 <= the random-selection null's 90% quantile 0.417 (median 0.328; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.56, ann_ret +10.9%, maxDD -50.7%, turnover 1.1x, skill vs pool +0.04
+- Validation: sharpe +0.36, ann_ret +6.5%, maxDD -38.7%, turnover 1.3x, skill vs pool +0.02
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.02, 90% CI [-0.10, +0.14]; at 2x costs +0.01; with a 30% delisting haircut +0.02; train +0.04 (1997-2008 +0.03, 2009-2017 +0.08)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 66% percentile of 200 random-selection replicas (median +0.33, 90% +0.42); equal-weight eligible pool +0.34, information ratio vs it +0.17
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **PRE-REGISTERED AND CONFIRMED, AND IT IS THE NIGHT'S RESULT: THE SLEEVE OPERATOR'S COST
+  TERM TRANSFERS AT A MAGNITUDE PREDICTABLE FROM CHURN, AND ITS GROSS TERM DOES NOT.** One integer
+  apart from trial #18, same score, quota, K, availability rule and geography:
+
+      trial  book           train net  train turn   VAL skill   90% CI           VAL turn  2x cost  null %ile
+      #18    hold-1           +0.050      1.81       +0.012   [-0.105, +0.142]     2.1     -0.004     55%
+      #19    overlap/H6       +0.042      1.07       +0.019   [-0.096, +0.141]     1.3     +0.014     66%
+
+  **The train ordering INVERTED on validation, in the direction the cost argument predicted and
+  for the reason it gave.** The operator cost this score -0.009 of train net skill; it earned
+  +0.007 on validation. The decisive column is the stress one, not the headline: `skill -
+  skill_2x` puts the cost term at 0.016 for #18 and 0.005 for #19, so the **validation cost rebate
+  is +0.011 against the +0.0096 measured on train** — larger on validation exactly because
+  validation churn is higher — while the **gross tax went -0.0185 on train to -0.004 on
+  validation**, i.e. it did not transfer. Doubling the cost schedule nearly doubles the pair's gap
+  (+0.007 to +0.018), which is the signature of a cost channel and not of a selection one.
+  This narrows the 2026-10-27/28 entry rather than confirming it: that session attributed about
+  two thirds of #16's gain to a "variance-reduction term" it also called construction arithmetic,
+  and tonight's F3 plus this pair say only the cost third is arithmetic. **Second reading, and it
+  is the honest one about the money: the rebate is about +0.011 of skill and the operator takes
+  the cost term from -0.012..-0.019 down to -0.002..-0.005, so the lever is now nearly spent** —
+  at most ~+0.005 of further cost rebate exists anywhere, which is well inside a validation skill
+  interval of +-0.12. **Third: #18 and #19 carry the narrowest 90% CI on the nineteen-trial board
+  (width 0.24 against M3's 0.44-0.56)** because the book is cheap, broad and tracks the pool
+  (volratio 0.96, IR vs pool +0.17) — the one dimension on which this near-null object beats the
+  lab's best mechanism is the precision of its own estimate. **Fourth: `rank_trials` puts #18/#19
+  in a mechanism of their own and `distinct_mechanisms` rises 5 to 6** — the first non-M3 mechanism
+  with positive validation skill in the v3 record, at rank rho -0.164 to M3's score. Still a null:
+  66th percentile against the 90% the gate needs, and the interval straddles zero.
+  Pre-registered turnover 1.2-1.6x, charged **1.3x** — inside the band, after two consecutive
+  trials where the band was an upper bound.
+
