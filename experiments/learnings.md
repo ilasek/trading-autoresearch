@@ -6184,7 +6184,14 @@ across experiments; prune entries that later evidence contradicts.
   top-100 draws has lower idiosyncratic variance than one — which is why the F6 null gains
   +0.0167 of the same thing from a meaningless score (below). **Operative change: a pre-trial
   screen should report its COST and GROSS terms separately (the validated instrument already
-  does) and a hypothesis should rest only on the cost/variance half.** Scope, and it is not
+  does) and a hypothesis should rest only on the cost/variance half.**
+  **[SUPERSEDED IN PART, 2026-10-28/29 — see the seven-object table at the foot of this file.] The
+  COST half of this entry is confirmed and strengthened (+0.008 to +0.013 on all seven objects
+  measured through both constructions; the rebate then transferred to validation at +0.011 against
+  train's +0.0096, larger there because validation churn is higher). The VARIANCE half is NOT
+  construction arithmetic: the operator's gross delta was NEGATIVE on six of seven objects,
+  including the decade mean, which satisfies the precondition as well as any object can. Read the
+  operative change as "rest a hypothesis only on the COST half".** Scope, and it is not
   optional: all seventeen v3 trials remain in tier 1, #16's interval straddles zero widely, its
   DSR is 0.1635 against the 0.95 a challenge needs, and `rank_trials` puts #16, #17, #12, #15,
   #14 and #5 in **one mechanism (M3)** — six slugs on one return stream, to be read as one bet.
@@ -6266,3 +6273,163 @@ across experiments; prune entries that later evidence contradicts.
   entry: any single-phase coarse grid on this score, `2QE` most of all.** The construction that
   ships averages the phase away. Also: anchor a phase on the *calendar* month, not on position
   within the visible window, or the causality check will see the phase move with truncation.
+
+- **[Measured 2026-10-28/29, nightly — trials #18 and #19, PAIRED ON VALIDATION; NARROWS THE
+  2026-10-27/28 ENTRY, WHICH WAS HALF RIGHT] THE SLEEVE OPERATOR HAS TWO CHANNELS AND ONLY THE
+  COST ONE IS ARITHMETIC. THE REBATE IS +0.008 TO +0.013 UNIVERSALLY, IT TRANSFERS AT A MAGNITUDE
+  PREDICTABLE FROM CHURN, AND THE GROSS TERM IS OBJECT-SPECIFIC AND WAS NEGATIVE ON SIX OBJECTS OF
+  SEVEN.** Seven objects, hold-1 against overlap/H6, K=100, peer x depth quota, one node apart in
+  each row, train:
+
+      object                        hold-1 net  overlap net   d net    d gross   d cost
+      old half (#12/#16's score)      +0.0256     +0.0580    +0.0324   +0.0198  +0.0126
+      decade mean (#5's score)        +0.0983     +0.0766    -0.0217   -0.0342  +0.0125
+      decade return / decade risk     +0.0540     +0.0276    -0.0264   -0.0380  +0.0116
+      fraction of positive months     +0.0252     +0.0159    -0.0093   -0.0211  +0.0118
+      decade skewness, low            +0.0105     +0.0065    -0.0040   -0.0118  +0.0078
+      volume trend down 24/36         +0.0175     +0.0241    +0.0066   -0.0031  +0.0097
+      volume trend up 24/36           -0.0453     -0.0588    -0.0135   -0.0216  +0.0081
+
+  **The decade mean is the decisive row**: a 120-month window whose content is maximally older than
+  a six-month hold — the 2026-10-27/28 precondition satisfied as well as any object can satisfy it
+  — and the operator costs it -0.034 of gross. So **the precondition predicts that gross skill does
+  not COLLAPSE (true, nowhere in this block) and does not predict a gross GAIN**; #16's +0.0198 is
+  an exception, not a rule, and carrying the operator forward as "a free lunch with a precondition"
+  is carrying it wrong. Then the pair tested the surviving half on validation and it held, with its
+  magnitude pre-registered from the mechanism:
+
+      trial  book         train net  train turn   VAL skill   90% CI            VAL turn  2x cost  null %ile
+      #18    hold-1         +0.050      1.81       +0.012   [-0.105, +0.142]      2.1     -0.004     55%
+      #19    overlap/H6     +0.042      1.07       +0.019   [-0.096, +0.141]      1.3     +0.014     66%
+
+  **The train ordering INVERTED on validation, in the predicted direction.** Read the stress column,
+  not the headline: `skill - skill_2x` puts the cost term at 0.016 and 0.005, so the **validation
+  cost rebate is +0.011 against train's +0.0096** — larger on validation exactly because validation
+  churn is higher — while the **gross tax went -0.0185 on train to -0.004 on validation**, i.e. did
+  not transfer. Doubling the cost schedule nearly doubles the gap (+0.007 to +0.018), the signature
+  of a cost channel. **Operative consequence, and it closes an axis: the lever is nearly spent.**
+  The operator takes the cost term from -0.012..-0.019 to -0.002..-0.005, so **at most ~+0.005 of
+  further cost rebate exists anywhere on this panel**, against validation skill intervals of ±0.12.
+  The lab's one demonstrated transferable channel is worth about +0.011 and has been collected.
+  Everything left is a selection claim.
+
+- **[Measured 2026-10-28/29, nightly — REFUTES THE BREADTH READING OF THE 2026-10-27/28 OPERATOR]
+  THE OPERATOR'S GROSS CHANNEL IS BOUNDARY-NOISE REDUCTION, NOT DIVERSIFICATION, AND BREADTH PER SE
+  IS ACTIVELY HARMFUL ON THIS PANEL.** The sleeve book holds 164 names against hold-1's 140, so
+  "more names" and "lagged picks" arrived together and the last session read the gross half as
+  idiosyncratic-variance reduction. Separated, same score and quota throughout, train:
+
+      book                              net      gross     cost    turn    pos
+      hold-1  K=100  (= trial #12)    +0.0256  +0.0433  -0.0177   2.36   140.4
+      hold-1  K=120                   +0.0065  +0.0228  -0.0163   2.25   153.8
+      hold-1  K=164  breadth-matched  +0.0174  +0.0305  -0.0131   1.99   183.0
+      hold-1  K=200                   +0.0057  +0.0163  -0.0106   1.80   206.7
+      overlap/H6 K=100 (= trial #16)  +0.0580  +0.0631  -0.0051   1.31   164.3
+      overlap/H6 K=60  breadth ~140   +0.0832  +0.0897  -0.0065   1.44   131.5
+
+  Buying more names **destroys** gross skill (+0.043 to +0.016 as K goes 100 to 200), while the
+  operator at **lower** breadth than #12 reads gross +0.090 against +0.043. So the extra names are
+  not the channel; the fact that they are *lagged top-K picks* is — six near-identical rankings
+  disagree only near the rank-K boundary, and holding the union of six boundary draws is a
+  different object from holding one draw diluted. **Anti-candidates travelling with this entry:
+  `overlap/H6 K=60` most of all** (it is the best number in the block and K was swept to find it),
+  and K as a knob at either holding period.
+
+- **[Measured 2026-10-28/29, nightly] `liquidity-volume` IS CLOSED ON THE TREND AS WELL AS ON THE
+  LEVEL, AND THE SCREEN THAT FAILED TO QUALIFY IT WAS A MATCHED-NULL z — THE TENTH INSTANCE AND THE
+  FIRST THAT WAS NOT A RAW TRAIN NUMBER.** Every earlier reading that closed the family was of a
+  liquidity *level* (Amihud, dollar volume, the region-relative restatement). The multi-year
+  **share-turnover trend** — mean of the within-eligible normal scores of
+  `log(mean share volume over the last r months / mean over the o months before that)` over the six
+  (r, o) pairs with `r >= 24`, negated to buy falling turnover — is the instrument
+  Datar-Naik-Radcliffe actually name, and it has every property the lab's standing screen asks for:
+  **train net skill +0.050 at z +4.21** against six AR(1) scores matched to its own rank
+  persistence (phi 0.9953) through the identical book, positive in both train sub-periods and at 2x
+  costs, negation invariant passing by a distance (-0.075 against +0.050), rank rho at most 0.21 to
+  every refuted or contaminated object and **negative** to M3 (-0.164 old half, -0.204 decade
+  mean), a better *selector* than every refuted object run through its own construction (gross
+  +0.056 against +0.011 / -0.010 / +0.038 / +0.007), volatility ratio 0.96 so not the de-risking
+  axis, and **price-free by construction** so the 2026-10-22 back-adjustment contaminant cannot
+  enter (rho +0.070 to the log price level, worth about -0.006 of IC and of the wrong sign).
+  **Validation: the 55th and 66th percentile of its own region-matched null, against the 90th the
+  gate wants.** So matching a null to the score's own persistence does not rescue a train screen
+  either. Two riders that are not consolation and should be carried: `distinct_mechanisms` rises
+  **5 to 6** and these are the first non-M3 trials with positive validation skill in the v3 record;
+  and they carry the **narrowest 90% interval on the nineteen-trial board (width 0.24 against M3's
+  0.44-0.56)**, because the book is cheap, broad and tracks the pool (IR vs pool +0.17) — the one
+  dimension on which a near-null object beats the lab's best mechanism is the precision of its own
+  estimate, which is the quantity `#323`'s minimax rate says is binding. Anti-candidate travelling
+  with this entry: the liquidity level in any form, and the 12-month recent window of the trend.
+
+- **[Measured 2026-10-28/29, nightly] COMBINING BOOKS DOES NOT ADD CHURN; COMBINING SCORES DOES.
+  THIS NARROWS THE 2026-10-14/15 ENTRY TO THE CONSTRUCTION IT WAS MEASURED ON.** #16's book and
+  #19's book held **side by side** rather than score-combined, train:
+
+      book                      net      gross     cost    turn    pos
+      leg A  #16 overlap/H6   +0.0580  +0.0631  -0.0051   1.31   164.3
+      leg B  #19 overlap/H6   +0.0415  +0.0437  -0.0022   1.07   120.0
+      blend 0.75 A / 0.25 B   +0.0573  +0.0612  -0.0039   1.21   224.3
+      blend 0.50 / 0.50       +0.0543  +0.0574  -0.0031   1.14   224.3
+      blend 0.25 / 0.75       +0.0491  +0.0516  -0.0025   1.09   224.3
+
+  The legs' mean churn is 1.19x and the 50/50 blend charges **1.14x** — slightly *less*, because the
+  two books' trades partly offset at the name level. The 2026-10-14/15 measurement of **+36%** over
+  the mean leg was of *score* combination, where the combined score's top-K is a shifting compromise
+  no single ranking holds still; it does not apply to holding two books, and Chen-Velikov's
+  cost-side argument (which that entry recorded as refuted on this panel) is **correct for
+  book-level combination**. **But no blend beats its better leg** (+0.0573 against +0.0580), with a
+  consistent but tiny convexity bonus over linear interpolation (+0.0034 / +0.0045 / +0.0035), so
+  `program.md`'s "naive dilution is already priced and already loses" holds here too. **The one axis
+  left open, and it is the only reason a `portfolio-learning` trial on this pair would be
+  defensible:** the legs' validation intervals are 0.53 and 0.24 wide, so a blend might buy more
+  deflated-skill probability through a tighter interval than it loses in level. Deciding that needs
+  the blend's own validation interval and **must not be approximated from the legs' stored returns**
+  — the table above shows a real blended book's cost term is not the average of its legs'.
+
+- **[Measured 2026-10-28/29, nightly — SUPERSEDES THE 2026-10-16/17 AND 2026-10-26/27 FIGURES AT
+  n = 19] BOTH APPARENT INVERSIONS BETWEEN TRAIN AND VALIDATION WERE n-ARTIFACTS. THE RIGHT
+  STATEMENT IS NO INFORMATION IN EITHER DIRECTION, AND THE TRAIN-GATE OBSERVATION WEAKENS FOR A
+  SECOND CONSECUTIVE UPDATE.** All nineteen v3 trials out of `trials.jsonl`, nothing re-run:
+
+      corr(train skill, validation skill)      Pearson +0.048   Spearman +0.135
+      corr(train skill, null percentile)       Pearson -0.014   Spearman -0.049
+      corr(09-17 train skill, val skill)       Pearson -0.134   Spearman -0.098
+      OLS  val_skill = +0.107 * train_skill - 0.054   (slope SE 0.540, t +0.20, p 0.84)
+
+      mean validation skill | train skill > 0: -0.057 (n 14)   mean null percentile 50.5
+      mean validation skill | train skill <= 0: -0.037 (n  5)   mean null percentile 63.5
+
+  `corr(train, validation)` ran **-0.345 (n=7) to -0.074 (n=17) to +0.048 (n=19)**, and the
+  2009-2017 sub-period — called the table's worst predictor at -0.355 (n=15) — is **-0.134** at
+  n=19. **Stop quoting either sign.** The `min_train_skill` reading of 2026-10-26/27 also weakens
+  again: the validation-skill gap between trials that clear the gate and trials that fail it has
+  gone **0.068 (n=15) to 0.020 (n=19)** and the percentile gap **25 to 13** points, which is
+  evidence *against* acting on the n=15 observation and for reading it as the selection effect it
+  was flagged as (candidates are designed against the screen, so its failures are nearly all
+  controls). Threshold untouched; raised for the human owner only.
+
+- **[Method, 2026-10-28/29] AN AVERAGE OF CROSS-SECTIONAL RANKS MUST BE FORMED INSIDE THE SET THE
+  BOOK CAN BUY, BECAUSE AVERAGING IS NOT INVARIANT TO THE RE-SCALING A WIDER RANKING APPLIES.** A
+  single score can be ranked on any superset and then masked — a monotone transform preserves the
+  ordering within every subset — which is why the 2026-10-20/21 rule has never bitten a one-cell
+  score here. **An average of several normal-scored cells is different**: each cell's ranking is
+  re-scaled by the set it was formed on, so pooling across the eligible boundary changes the
+  average's ordering. Measured cost of getting it wrong on tonight's score: overlap/H6 net
+  **+0.0537 to +0.0415** and hold-1 +0.0526 to +0.0504, with the operator's train delta flipping
+  sign (+0.0011 to -0.0089). Caught before shipping; the whole sheet was re-run from scratch per the
+  2026-10-26/27 rule and nothing from the uncorrected version entered a hypothesis. **Check it
+  whenever a score is a composite of separately-normalised pieces, and not when it is one piece.**
+
+- **[Method, 2026-10-28/29] A KNOB THAT CANNOT BE REFUSED SHOULD BE AVERAGED OVER THE REGION A
+  PRE-STATED PRECONDITION ADMITS, AND THE PRECONDITION MUST DO THE EXCLUDING BEFORE THE SCORES ARE
+  READ.** The turnover trend's (recent, older) window pair was priced on all nine cells over
+  {12, 24, 36, 60} before any was read: whole grid mean +0.0104 at **sd 0.0250** — lottery bigger
+  than prize, the 2026-10-27/28 phase pattern again. The three `recent = 12` cells were excluded by
+  the operator's own precondition (a 12-month window shares only 7 of 12 months with a five-month-old
+  reading, so its content is not older than the hold), which is a statement made before the grid
+  existed; inside the admissible region all six cells are positive at mean +0.0236, **sd 0.0066**,
+  and the prize exceeds the lottery. Averaging all six then scored **above every individual cell** —
+  consistent with cells that share content and differ by independent boundary noise, and recorded as
+  **unpredicted**, since nothing in the hypothesis forecast it. **The shape to reuse: price the whole
+  grid, let a pre-stated precondition carve it, average what is left, and flag any gain of the
+  average over its parts as a bonus rather than as part of the claim.**
