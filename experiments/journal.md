@@ -24127,3 +24127,31 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    is weakened by the two newest trials and should be re-read at n = 17 before anyone acts on it.
 
 ## Research session — 2026-10-28 (learning agent): 4 notes added, see research/SUMMARY.md
+## 2026-10-28T23:41:27+00:00 — lv_vol_trend_hold1 — **GATE_FAIL**
+- Candidate: `strategies/candidates/lv_vol_trend_hold1.py` (family: liquidity-volume, track: scout, trial #0)
+- Hypothesis: The 100 eligible names with the most negative multi-year share-turnover trend -- the mean, over the six (recent, older) month-pairs whose recent window is at least 24 months, of the within-eligible normal score of log(mean daily share volume over the last `recent` months / mean over the `older` months before that) -- quota-allocated across (trailing-trading-calendar peer group x price-history-depth tercile) cells and re-picked monthly, earns positive validation skill against the equal-weight eligible pool, because Datar-Naik-Radcliffe's low-turnover premium is a statement about a name becoming less liquid and the trend in its own share turnover is that statement's instrument, where every reading that closed `liquidity-volume` on this panel was of a liquidity LEVEL instead. Train net skill is +0.050 at z +4.21 against six AR(1) scores matched to this score's own rank persistence (phi 0.9953) through the identical book, positive in both train sub-periods and at 2x costs, with rank rho at most 0.21 to every refuted or contaminated object on the board and NEGATIVE (-0.16, -0.20) to the lab's one positive mechanism.
+- Verdict: GATE_FAIL — validation sharpe 0.349 <= the random-selection null's 90% quantile 0.411 (median 0.338; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.57, ann_ret +11.1%, maxDD -50.1%, turnover 1.8x, skill vs pool +0.05
+- Validation: sharpe +0.35, ann_ret +6.4%, maxDD -39.0%, turnover 2.1x, skill vs pool +0.01
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.01, 90% CI [-0.10, +0.14]; at 2x costs -0.00; with a 30% delisting haircut +0.01; train +0.05 (1997-2008 +0.03, 2009-2017 +0.12)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 55% percentile of 200 random-selection replicas (median +0.34, 90% +0.41); equal-weight eligible pool +0.34, information ratio vs it +0.14
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The multi-year share-turnover trend is the first object outside the M3 decade-reversal
+  mechanism to post POSITIVE validation skill under v3 (+0.012), and it is still a null**: 55th
+  percentile of its own region-matched null (needs 90%), 90% CI [-0.105, +0.142] straddling zero,
+  and -0.004 at 2x costs, so the whole point estimate is inside the cost schedule. Three readings
+  worth keeping. **(i) A z +4.21 train level against a persistence-matched AR(1) null bought +0.012
+  of validation skill.** That is the tenth instance of "a train screen may refute but may not
+  qualify", and the first where the screen was a *matched-null z* rather than a raw train number —
+  so matching the null to the score's own rank persistence does not rescue a train screen either.
+  **(ii) `liquidity-volume` is closed on the TREND as well as on the LEVEL.** Every earlier reading
+  that closed the family (Amihud, dollar volume, the region-relative restatement) was of a level;
+  this is the instrument Datar-Naik-Radcliffe actually name, it is price-free and so uncontaminated
+  by the 2026-10-22 back-adjustment leak (rho +0.070 to the log price level), its sign is the
+  published one and the negation invariant passes by a distance (-0.075 against +0.050 on train),
+  and it still lands at the 55th percentile. **(iii) The pre-registered turnover band was an UPPER
+  bound for the second time in three trials** — predicted 2.3-2.7x from the last four trials'
+  29-49% train-to-validation churn growth, charged 2.1x against a train 1.81x, i.e. +16%. The
+  2026-10-19/20 reading that a cost pre-registration under-delivers out of sample is now two-sided
+  and should be quoted as a range, not a floor.
+
