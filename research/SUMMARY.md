@@ -7518,6 +7518,125 @@ conclude that the honest answer to "which candidate is best?" on data of this wi
 A session that reads a narrow tier 1 off this board is reading noise, and a session that treats a
 wide one as a failure of the ranking code is misreading the only correct output.
 
+### Spending the error budget FORWARD instead of correcting it backwards — the online multiple-testing layer, the one failure mode this lab is already in, and why the vein is a diary rather than a gate (cross-family, the gate's own statistic)
+
+Four sources, read 2026-10-29. The aim was taken verbatim from the [2026-10-28] entry, which named
+`online FDR` / `alpha-investing` as *"the only vein this folder has ever reached by being blocked
+rather than by grep"* — `#325` closed on a constraint it could not remove (the closure principle runs
+over an `M₀` fixed before the first look, so a roster that gains a candidate every night breaks the
+guarantee) and pointed at online multiple testing as the fix it declined to build. Greps across all
+238 prior notes confirmed the vein cold: `online FDR` **0**, `alpha.investing` **0**,
+`alpha investing` **0**, `Foster` **0**, `Stine` **0**, `Javanmard` **0**, `LORD` **0**,
+`SAFFRON` **0**, `e-BH` **0**, `mFDR` **0**, `false discovery exceedance` **0** (the 12 files matching the bare
+word `investing` are all titles and phrases of the *low-risk / style / factor / index investing*
+kind — none is the α-investing sense). The pre-committed criterion, stated in that entry before any
+paper was opened: *admit the vein only if the first paper yields a rule whose state is `O(1)` in the
+number of hypotheses already tested and whose per-trial spend is computable before the trial is run;
+abandon it if the procedure needs the whole p-value history re-examined at each step.* Plus a harder
+second clause: *state, before importing anything, whether an FDR criterion is even the right target
+at roughly one promotion per several dozen trials, or whether the FWER object the folder already has
+is correct and the vein's value is purely the online bookkeeping.*
+
+**The vein admits on the first clause and the second clause resolves against FDR — which is the
+answer the entry asked for, not a disappointment.** Every multiple-testing note this folder holds
+(`notes/2026-08-24-deflated-sharpe-ratio.md`, `notes/2026-08-24-multiple-testing-haircut.md`,
+`notes/2026-09-15-reality-check-max-statistic-under-dependence.md`,
+`notes/2026-09-16-does-meff-control-the-familywise-error-rate.md`) is fixed-sample and
+retrospective: each recomputes a correction over the trials recorded so far. **Foster–Stine** (Tier A,
+*JRSS-B*, 86 Crossref cites, read as the authors' July-2007 version from UPenn ScholarlyCommons) build
+the forward object: a scalar *alpha-wealth* `W(j)`, charged `α_j/(1−α_j)` on a non-rejection and paid
+`ω` on a rejection, with the level set from the **prior rejection indicators alone** — so the state is
+a float and an integer, the spend is computable before the trial, and both halves of the criterion
+pass cleanly. Their Theorem 3 (`W(0) ≤ αη`, `ω ≤ α`) controls `mFDR_η` at every finite stopping time
+via optional stopping on a sub-martingale, needing **no independence assumption at all**. The usual
+objection — mFDR is a ratio of expectations, weaker than FDR — is formally right and *void at this
+lab's rate*: under the complete null `FDR = FWER`, and their **Theorem 2** makes
+`FDR = mFDR_0 = cFDR = eFDR = pFDR = E[V(r)]/r` **exactly** for a procedure that stops at `r`
+rejections, with `FDR ≤ α(r+2)/(r+1)` (= `1.5α` at `r = 1`). This lab makes roughly one promotion per
+several dozen trials and `CLAUDE.md` stops the session the moment one happens, so it lives precisely in
+the stopped-at-small-`r` regime where the weak criterion and the strong one coincide. **The folder's
+existing error object was never wrong; what was missing was the forward spending.**
+
+**Javanmard–Montanari** (Tier A, *Annals of Statistics*, 66 Crossref cites) generalise the class and
+supply the three things Foster–Stine lack. (i) **Monotone** generalized-alpha-investing rules with
+`w₀ + b₀ ≤ α` control genuine **FDR** under independence (Theorem 3.1) — their LORD 1 and LORD 2
+qualify; LORD 3, the variant everyone actually uses including them, is **not** provably monotone, so a
+result quoted for "LORD" may be empirical rather than theorem. (ii) A general-**dependence** variant
+(Example 3.8): discount by the *total* hypotheses tested rather than time since the last discovery,
+`α_i = ξ_i W(τ_i)` subject to `Σ ξ_i (1 + log i) ≤ α/b₀` — the `(1 + log i)` factor is the entire
+price of abandoning independence, a far cheaper sibling of Benjamini–Yekutieli's harmonic penalty, and
+it is the variant this lab would need, because `program.md`'s own clustering of 109 recorded trials
+into **36 effective** ones is a measurement that the independence hypothesis fails here. (iii) The
+warning that **a controlled mean FDR is not a controlled realised FDP**: in their simulation all rules
+held FDR at 0.05 while *"the actual false discovery proportion has a very broad distribution"*, with
+`FDP` exceeding three times nominal with probability 0.13 for one rule. Their `sup_n FDX` cartoon —
+`FDP = 1/2` infinitely often while the pointwise supremum is controlled — is the **same
+quantifier-placement error and the same fix** as `#325`'s anytime-valid MCS, two instances in two
+sessions, and is filed as a free prediction rule (`#333`).
+
+**Tian–Ramdas** (Tier B, *Statistical Methods in Medical Research*, 15 Crossref cites) build the FWER
+side the second clause points to, and carry **the one finding tonight that is specific to this lab
+rather than generic**. Alpha-spending (online Bonferroni) is valid under arbitrary dependence and its
+proof leaks in exactly two places: inequality (A) is loose **when the nulls are conservative**, (B)
+when a large fraction of the stream is non-null. Their ADDIS-Spending plugs both —
+`α_i = α(τ_i − λ_i)γ_{t(i)}` with `t(i) = 1 + Σ_{j<i}(S_j − C_j)`, so **the budget's index advances
+only on p-values in the band `(λ, τ]`: neither a clear success nor a clear failure moves it.** Validity
+needs *uniformly conservative* nulls (`F(τx) ≤ xF(τ)`), and their worked instance is this lab's exact
+test — a one-sided Gaussian mean, `H₀: µ ≤ 0`, `P = Φ(−Z)`, *"conservative if `µ < 0`, while the
+conservativeness increases as `µ` decreases"*. `experiments/learnings.md` records this lab's typical
+candidate at **negative** validation skill, so the lab is deep in the regime where discarding pays
+most and nowhere near their Theorem 4 boundary (`c* → 1` as `µ_N → 0`, where the discarding gain
+vanishes). Their local-dependence version (Theorem 2, the "principle of pessimism") costs exactly `L`
+positions in the `γ` sequence for a lag-`L` block, which is the honest price for a nightly batch of
+eight. They also measure **two of their own four rules as not worth implementing** (online Sidak and
+online fallback are *"negligible"* improvements on alpha-spending) — methodology honesty in the
+rubric's sense.
+
+**Robertson–Wason–Ramdas** (Tier A, *Statistical Science*, 23 cites on both Crossref and Semantic
+Scholar) is the field's synthesis and supplies the discount on everything above, in its own words:
+online testing is most powerful at `T > 1000`, and the low-`T`-with-known-correlation case is listed
+as an **open problem** — which is exactly where this lab sits. It also names the two failure modes of
+a wealth-based budget, and **this lab is in one of them**. *Alpha-death*: a long run of nulls drains
+the wealth and *"the algorithm may have essentially no power"* — with ~7 promotions across ~109 trials
+and a recent history dominated by `REJECT`/`GATE_FAIL`, a budget started at the beginning of this
+lab's history would now be near zero. *Piggybacking*: a run of rejections loosens later thresholds so
+the error rate spikes **locally in time** while the all-time rate stays controlled — which is the
+mechanism behind the one multi-promotion episode `program.md` records, and the reason the holdout veto
+is doing a job the sequential layer provably **cannot** do (an all-time guarantee is blind to a
+local-in-time spike). The published remedy for alpha-death is **mem-FDR**, a discount factor `δ` that
+*"smoothly forgets the past"*, together with a licence to **abstain from testing** to recover. The
+review's footnote 1 is a quiet gift: if p-values are only approximately valid,
+`Pr(P ≤ x) ≤ x(1+ϵ)`, the FDR proofs still go through at `α(1+ϵ)` — degradation **linear** in
+calibration error, which is what makes any of this thinkable for a bootstrap p-value.
+
+**The arithmetic that settles what the vein is for.** Worked once, at `α = 0.05` with the
+literature's own default `γ_t ∝ log(t∨2)/(t exp(√log t))` (normalising constant re-derived here as
+`C ≈ 0.0772`, matching the published 0.07720838), the required one-sided `z` is: **2.58** at the first
+trial or the trial right after a promotion; **3.70** at the lab's 36 effective trials under
+alpha-spending; **3.98** at its ~110 raw ones; **3.03 → 3.90** across the first twenty band-landings
+under ADDIS-Spending at `λ = 1/4, τ = 1/2`; **4.47 → 4.71** at a hundred to three hundred trials under
+the FDR parameterisation. Against that, `#323` puts this lab's *detectable* full-window gap at
+`|t| ≈ 1.41 / 2.15 / 2.80` at confusion-set sizes `1 / 10 / 50`, and `program.md` records that **no
+promotion in this repo's history has ever cleared `|t| = 2` on validation**. So an online gate,
+honestly parameterised, **would have promoted nothing, ever** — and the binding constraint is the
+width of the 2018–2023 window, not the error rule. That is `#323`'s conclusion reached from a
+completely unrelated direction, which is the strongest agreement available here. **Adopt the vein as
+accounting, never as a gate.**
+
+**And one tension that must be carried rather than resolved.** `experiments/learnings.md`'s second
+entry reads *"Every trial raises the bar ... Sweeping parameters wastes shared budget"*, while the
+same file records that DSR clustering makes within-family tuning *"nearly free in deflation terms"*.
+The online accounting prices trials on an **orthogonal axis**: under ADDIS-Spending a *decisive*
+failure costs nothing however decorrelated it was, and a *near-miss* is the expensive thing however
+correlated it was. Neither price is wrong — they bound different error rates — but they rank trials
+differently, and a session quoting "every trial raises the bar" as the whole cost structure is using
+one axis and calling it the budget.
+
+**What the night did not produce.** No trial, no return stream, no construction material of any kind:
+every item is bookkeeping, a screening rule, or an anti-candidate. That is the right output for a vein
+whose honest verdict is *"the error rule was never the brake"* — the third consecutive session to end
+with the fixed width of the validation window as the binding constraint.
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -14145,6 +14264,125 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-28-entropic-ambiguity-as-an-exponential-tilt.md` with
     `notes/2026-10-24-uncertainty-sets-as-dual-norm-penalties.md`
 
+328. **FREE, AND THE CHEAPEST THING IN THE QUEUE: a `1 − α` upper bound on the false-discovery
+    proportion of this lab's promotions is computable TODAY, from the recorded verdicts alone, with no
+    new trial, no protocol change and no holdout look.** Katsevich–Ramdas simultaneous FDP bounds are
+    finite-sample, closed-form, and — the operative property — **post hoc**: they *"apply to any
+    sequence of rejections produced by any online algorithm, that may or may not have been designed
+    for FDR or FDP control."* So the lab does not have to adopt any of tonight's machinery to get a
+    number out of it; the existing promotion history is a valid input as it stands. This is the only
+    item tonight that needs no human decision about the protocol. The primary (Katsevich & Ramdas,
+    *Annals of Statistics* 48(6), 3465–3487, 2020) was **not read** — it is named by the review, and
+    whoever acts on this should read it first. Tier A on the review's attribution.
+    → `notes/2026-10-29-online-multiple-testing-practical-guidance.md` §5.1.9
+
+329. **FREE ACCOUNTING FACT, and it contradicts a line the lab has repeated since its second learning:
+    under a forward error budget with discarding, a DECISIVE failure costs nothing and a NEAR-MISS is
+    the expensive trial — the opposite ranking to the deflated bar's.** ADDIS-Spending's index
+    advances only on p-values in the band `(λ, τ]`: a candidate whose measured skill is clearly below
+    the pool (`p > τ`) is **discarded free**, and a clear winner (`p ≤ λ`) is also free. Set
+    `τ = 1/2` and that is operationally "anything at or below the pool", i.e. most of this lab's
+    `REJECT` verdicts. `experiments/learnings.md` says *"Every trial raises the bar ... Sweeping
+    parameters wastes shared budget"* and the same file says clustering makes within-family tuning
+    *"nearly free in deflation terms"* — the deflated bar prices **decorrelation**, the online budget
+    prices **where the p-value landed**. Both prices are real and they rank trials differently.
+    **Filed as a tension, not a refutation**: a session must not use this to excuse a sweep (the
+    deflated bar still charges for it) and must not use "every trial raises the bar" as though it
+    were the whole cost structure. Tier B (the mechanism is Tier B; the cross-reading is this
+    folder's). Validity needs uniformly conservative nulls — see `#330`.
+    → `notes/2026-10-29-online-fwer-and-discarding-conservative-nulls.md`
+
+330. **FREE AND SPECIFIC TO THIS LAB: the lab's own test is the textbook case of a *uniformly
+    conservative* null, which is the precondition that makes discarding worth anything — and the lab
+    has already measured that it sits deep inside the favourable regime rather than at its
+    boundary.** Tian–Ramdas's worked instance is a one-sided Gaussian mean, `H₀: µ ≤ 0` against
+    `µ > 0` with `P = Φ(−Z)`: *"uniformly conservative, and is conservative if `µ < 0`, while the
+    conservativeness increases as `µ` decreases."* `program.md`'s gate is one-sided on **skill**
+    (validation Sharpe minus the equal-weight pool's) and `experiments/learnings.md` records this
+    lab's typical candidate at **negative** validation skill. Their Theorem 4 makes the boundary
+    explicit: the discarding gain's admissible region collapses as `µ_N → 0` (`c*` reaches one when
+    the nulls are exactly uniform), so a lab whose candidates clustered at zero skill would get
+    nothing from this. This one does. **Caveat that must travel with the item:** a block-bootstrap
+    p-value is not automatically the UMP p-value of an exponential family, so the Proposition-3 route
+    is an argument by analogy until someone checks the bootstrap's calibration — and the review's
+    footnote 1 says the price of imperfect calibration is **linear** (`Pr(P ≤ x) ≤ x(1+ϵ)` gives
+    `α(1+ϵ)`), not catastrophic. Tier B.
+    → `notes/2026-10-29-online-fwer-and-discarding-conservative-nulls.md` with
+    `notes/2026-10-29-online-multiple-testing-practical-guidance.md`
+
+331. **FREE STRUCTURAL ITEM, and the night's best-aimed one: if any of this vein is ever implemented
+    here the frame is ONLINE-BATCHED BH over nightly batches — not LORD, not SAFFRON, not ADDIS.**
+    The lab does not test one hypothesis at a time. It tests up to eight per night, available
+    simultaneously, dependent within the night (one window, often one family) and far closer to
+    independent across nights. That is precisely the online-batched setting, where the review reports
+    the rules *"have a higher power than the fully online testing algorithms"*, recover BH (or
+    Storey-BH) within a single batch and LORD++ (or SAFFRON) at batch size one, come in a
+    positive-dependence-valid variant, and *"imply FDR control over each constituent batch, and not
+    just over the whole sequence of tests."* Both fully-online families are the wrong shape for this
+    lab's actual experimental design. The primary — Zrnic, Jiang, Ramdas & Jordan, *The power of
+    batching in multiple hypothesis testing*, AISTATS 2020 — was **not read tonight** and is the named
+    first target for whichever session picks this up; the review also lists the batch-size/power
+    trade-off as an open question. Tier A on the review's attribution, unverified on the primary.
+    → `notes/2026-10-29-online-multiple-testing-practical-guidance.md` §5.1.2
+
+332. **FREE, AND IT IS A LICENCE RATHER THAN A SCREEN: running FEWER than the budgeted eight trials on
+    a night with no good hypothesis is a recognised, error-rate-preserving action, and the condition
+    this lab is in has a published name.** The review names **alpha-death** — *"a long stretch of null
+    hypotheses, so that online testing algorithms make (almost) no rejections and lose nearly all of
+    their alpha-wealth[;] subsequently, the algorithm may have essentially no power"* — which is this
+    lab's state with ~7 promotions across ~109 trials. The published remedies are **mem-FDR**, a
+    discount factor `δ ∈ (0,1]` that *"smoothly forgets the past"* under a controlled error rate, and
+    an explicit mechanism **to abstain from testing in order to recover from alpha-death**. Two
+    readings, both for a human and neither for a session to act on alone: (a) `program.md`'s *"the
+    trial count spans every version"* is correct for the reason it gives — v1 and v2 searched the same
+    window — but the literature shows that discounting old trials is a **published error-rate object**
+    rather than a corner-cut, so the question "which window is this lab's history really about?" is
+    answerable rather than merely arguable; (b) a budget-filling instinct is the exact wrong instinct
+    under this accounting. The mirror failure mode, **piggybacking** (a run of rejections loosens
+    later thresholds so the error rate spikes *locally in time* while the all-time rate stays
+    controlled), is the mechanism behind the one multi-promotion episode `program.md` records — which
+    means the **holdout veto is doing a job the sequential layer provably cannot do**, and nothing in
+    this vein is a candidate for replacing it. Tier A (review); the primaries (Ramdas et al. NeurIPS
+    2017) were not read.
+    → `notes/2026-10-29-online-multiple-testing-practical-guidance.md` §5.1.1
+
+333. **FREE PREDICTION RULE, second instance in two sessions, and it is cheap enough to apply before
+    any download: when a criterion is extended from a fixed horizon to a stream, CHECK WHERE THE
+    PAPER PUT THE QUANTIFIER.** Javanmard–Montanari show that controlling `sup_n FDX_γ(n)` — the
+    supremum of a pointwise guarantee — is the wrong object, with a cartoon in which `FDP(n) = 1/2`
+    almost surely for infinitely many `n` while the criterion is satisfied at every `n`; the right
+    object is `sup_θ P(sup_n FDP^θ(n) ≥ γ)`, with the quantifier **inside** the probability. That is
+    the identical move to `#325`'s anytime-valid MCS (`Q(∀t : M*_t ⊆ M̂_t) ≥ 1−α`), reached
+    independently by a different literature. **The rule: a sequential guarantee stated as "for each
+    `t`, ... ≤ α" is almost always weaker than it looks, and a sequential guarantee worth having reads
+    "with probability `1−α`, for all `t`, ...". Check which one a paper proves before reading its
+    construction.** This is a sibling of the 2026-10-27 decomposition rule and the [2026-10-28]
+    `#327` geometry rule: all three turn a literature's defining object into a question answerable
+    before the first paper is opened. Derived here from two notes; neither source states it as a rule.
+    → `notes/2026-10-29-lord-online-fdr-and-the-dependency-price.md` with
+    `notes/2026-10-28-sequential-model-confidence-sets-anytime-valid.md`
+
+334. **ANTI-CANDIDATE, and it closes the vein as a GATE while keeping it as a diary: do not propose
+    replacing or supplementing the deflated-Sharpe bar with an online error-rate rule. Honestly
+    parameterised, every such rule demands a one-sided `z` this validation window cannot produce.**
+    Worked at `α = 0.05` with the literature's own default `γ` sequence: the required `z` is **2.58**
+    at the first trial or the trial right after a promotion, **3.70** at the lab's 36 effective
+    trials under alpha-spending, **3.98** at its ~110 raw trials, **3.03 → 3.90** over the first
+    twenty band-landings under ADDIS-Spending (`λ=1/4, τ=1/2`), and **4.47 → 4.71** at 100–300 trials
+    under the FDR parameterisation (`w₀=0.005, b₀=0.045`). Against `#323`'s detectable gap of
+    `|t| ≈ 1.41 / 2.15 / 2.80` at confusion-set sizes `1 / 10 / 50`, and `program.md`'s record that
+    **no promotion in this repo's history has ever cleared `|t| = 2` on validation**, such a gate
+    would have promoted nothing, ever. Two riders. The review itself says online testing's power
+    advantage lives at `T > 1000` and lists the low-`T`-with-known-correlation case — this lab's case
+    — as an **open problem**, so the weakness is the literature's own admission and not this folder's
+    inference. And this emphatically **does not** license weakening the deflated bar either: it is
+    the third consecutive session to conclude that **the binding constraint is the fixed width of the
+    2018–2023 window**, which no error-rate rule on either side can relax. Tier A on the sources;
+    the arithmetic is this folder's.
+    → `notes/2026-10-29-online-multiple-testing-practical-guidance.md`, with
+    `notes/2026-10-29-alpha-investing-sequential-error-budget.md` and
+    `notes/2026-10-28-argmin-inference-minimax-separation-rate.md`
+
 ---
 
 ## Coverage log
@@ -14229,8 +14467,148 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-26 (session 73) | **The `Kalman` / `state space` vein, carried unspent for four sessions, opened under the arithmetic acceptance criterion the [2026-10-25] entry set — and it passes that test and is then deflated by its own mathematics, which is the most useful of the three possible outcomes.** The criterion was stated before the first paper was opened: admit the vein only if it yields an `O(1)` state, abandon it if the first paper's object is an `O(N)` state over the cross-section. Greps across all 226 prior notes: `Kalman` **0**, `state space` 2 (both incidental). Every construction found is `O(1)` *per series* — and the whole exponential-smoothing taxonomy turns out to **be** a state-space model whose smallest cell is a one-dimensional state with one parameter, i.e. an EWMA. The night's payout is that this parameter has a **closed form in one variance ratio** (`α = √(q + q²/4) − q/2`, `span ≈ 2/√q`) whose input is readable off the lag-1 autocorrelation of first differences, so every span the lab currently sweeps is a measurement rather than a choice (`#312`). The night's hazard is that **both** filtering papers fit their hyperparameters by maximum likelihood on the whole sample while filtering only the state, and neither flags it, because neither is backtesting — the exact lookahead `causality_check` exists to catch, now a named rule (`#311`). Constructive residue: flexible least squares / discount factors as a one-scalar causal replacement for a rolling window (`#314`). One live tension with `learnings.md`, recorded not resolved: both of the lab's free-beta closures were measured on *rolling-window OLS* loadings, and the literature's object is a *filtered* one that varies more slowly, so `#313` is the free screen that settles whether those closures were about noise or about free loadings. One anti-candidate (`#315`: do not rank the book by a filtered beta — Sharpe is flat in beta here, and the source explains measured alpha rather than forecasting anything). Hyndman–Koehler–Snyder–Grose 2002 (`2026-10-26-exponential-smoothing-as-a-state-space-model.md`); Muth 1960 via Lang 1987/1989 (`2026-10-26-optimal-exponential-weights-signal-to-noise.md`); Adrian–Franzoni 2009 (`2026-10-26-learning-about-beta-kalman-filtered-loadings.md`); Triantafyllopoulos–Montana 2009 (`2026-10-26-online-state-space-spreads-discount-factors.md`). Unobtained and named: Dangl–Halling 2012 (*JFE*), Elliott–Van der Hoek–Malcolm 2005 (*QF*), Muth 1960 (*JASA*). |
 | 2026-10-27 (session 74) | **The `wavelet` / `long memory` / `Hurst` vein, next in the carried queue, opened under the construction criterion the [2026-10-26] entry pre-committed — and it FAILS that criterion on construction while paying for itself three times over on measurement.** The criterion, stated before the first paper was opened: *a multi-scale proposal decomposes a series into `J` scales and then needs a rule to recombine them; admit it only if `O(1)` free parameters survive the recombination with weights fixed a priori.* Greps across all 230 prior notes: `wavelet` **0**, `long memory` **0**, `Hurst` 1, `modified R/S` **0**, `rescaled range` **0**. The construction paper **does not recombine at all** — it forms `J` separate ranked books, a `J`-fold specification expansion against the one validation window the deflated bar counts every trial against, with no cost model and no multiple-testing adjustment. And the structural result is that the `O(1)` end collapses: the level-`j` Haar coefficient **is** the difference of two `2^{j−1}`-day averages, so any fixed-weight recombination is a weighted moving average of past returns — the family `2026-08-17-moving-average-rules-anatomy.md` already owns. **Second consecutive session in which an admitted `O(1)` object turned out to be a smoother the lab holds** (the first was the EWMA), which makes it a prediction to state in advance rather than a surprise. The vein's value is entirely on the null side, and it is three *independent* defects that stack: short-range contamination (classical R/S biased **+73%** at `ρ = 0.5`; the Hurst regression rejects `H = ½` **47%** of the time on an AR(1) with parameter 0.3; fixed by a Newey–West denominator with the universal 95% region `[0.809, 1.862]` — `#316`), estimation noise (null sd of `Ĥ` is **0.074 / 0.050 / 0.140** at `L = 1024` for R/S–AL / DFA / GPH, and the common `1/√L` band over-rejects — `#317`), and non-identification (a mixture with `p = O(T^{2d−2})` **is** `I(d)`; `d̂ ≈ 0.79` from a process with no fractional integration — `#319`). One live tension with the lab's own work, recorded not resolved: the 2026-10-26/27 60-month cross-sectional reversal is exactly what a handful of level shifts over a two-decade window would produce, and the free discriminator (sub-period stability) is already computed for every trial. Residue: a free horizon decomposition of a candidate's active return against the pool (`#318`), the `O(1)` STOPBREAK level update (`#320`), and one anti-candidate carrying two named wavelet lookahead routes — boundary wrap and LA-filter phase alignment (`#321`). Lo 1991 (`2026-10-27-modified-rescaled-range-and-the-long-memory-null.md`); Weron 2002 (`2026-10-27-hurst-estimator-finite-sample-confidence-intervals.md`); Diebold–Inoue 2001 (`2026-10-27-long-memory-and-regime-switching-identification.md`); Gençay–Selçuk–Whitcher 2005 (`2026-10-27-wavelet-multiscale-decomposition-and-scale-by-scale-beta.md`). Unobtained and named: Teverovsky–Taqqu–Willinger 1999 (*JSPI*), Taqqu–Teverovsky–Willinger 1999 (*Finance and Stochastics*). |
 | 2026-10-28 (session 75) | **The carried `entropic` / `Hansen–Sargent` vein, opened under the [2026-10-27] instruction to state the prediction first and abandon it the moment the first paper settles it — which took one paper — and then three sources on the object the lab's own ranking script already names and this folder had never written up: the model confidence set.** Vein one: the prediction was *ball → penalty → transaction cost → equal-weight shrinkage limit*, with my own pre-committed refinement that the duality half would confirm and the object half fail. It did. Strzalecki (Tier A, *Econometrica*, 220 Crossref cites, read as the Dec-2008 IGIER working version after `dash.harvard.edu` 429'd) gives the exact duality `min_p[∫(u∘f)dp + θR(p‖q)] = −θ log ∫exp(−(u∘f)/θ)dq`, then **Observation 1**: a multiplier preference **is** an expected-utility preference with index `φ_θ∘u`, `φ_θ(u) = −exp(−u/θ)`, bounded above — boundedness being "the only behavioral consequence of multiplier preferences beyond expected utility" — and **Example 2**: `(u = −exp(−x), θ = ∞)` and `(u = x, θ = 1)` are the *same preference*, so risk aversion and ambiguity concern are **not separately identified** from choice data. No `‖w‖_q`, no `κ*`, no equal-weight limit. The structural reason generalises and is filed as a prediction rule (**#327**): *the dual penalty inherits the ambiguity set's geometry* — a transport ball has a ground metric on outcome vectors and so duals to a norm on `w`; a φ-divergence ball metrises only the measures and so duals to a transform of the utility index. Vein closed as an anti-candidate (**#326**): the objective is mean-minus-variance-plus-skewness on the one axis the lab has measured dead three times, its knob is provably unmeasurable, the `θ → 0` limit is `ess inf` (a worst-day maximin, not a shrinkage target), and the measure is convex but not coherent. Vein two, found by grep rather than by queue — `Diebold.Mariano` **0** across 234 prior notes, `model confidence set` **1** passing mention, `confidence sequence` / `anytime-valid` / `test martingale` / `optional stopping` / `Ville` / `SPRT` / `safe test` / `equivalence test` **0** each (the 13 `e-value` hits are substrings of *relative-value* and *the-value*) — while `scripts/rank_trials.py`'s docstring reads "tier 1 is the model confidence set". Three findings, one chain. **Hansen–Lunde–Nason** (Tier A, *Econometrica*, 2079 cites, read as CREATES RP 2010-76 after the Atlanta Fed path returned a 48 KB JavaScript body) prove the elimination procedure's `lim inf P(M* ⊂ MCS) ≥ 1−α` with one `α` covering the run because "the sequential testing is halted when the first hypothesis is 'accepted'", and state the interpretation the lab needs in as many words: a set that stays large for lack of power is "a strength of the MCS procedure" (**#322**, with MCS p-values as a running maximum and the `T_max`/`T_R` statistics that avoid the order-`m²` covariance; `T_R`'s block is the DM statistic). **Kim–Ramdas** (Tier C, arXiv, 0 cites — but theorem-and-proof, so checkable) give the **minimax separation rate** `ε* = √((1 ∨ log τ)/n)` in the confusion-set size `τ`, attained *and* unbeatable (their Theorem 3.3 / Corollary 3.4). Worked at `2n ≈ 1,510` validation days: the detectable gap is a full-window `|t|` of **1.41 / 2.15 / 2.80** at `τ =` 1 / 10 / 50, against `program.md`'s own record that **no promotion in this repo's history has ever cleared `|t| = 2` on validation** — so the board's width is a theorem, not a defect of its bootstrap (**#323**). Two riders recorded against over-reading it: the rate grows as `√log τ`, so 10 → 50 trials costs a factor **1.30** while halving the window would cost **1.41** — *the binding constraint is the fixed window, not the trial count* — and none of this licenses weakening the deflated bar, which answers a different question. The same paper's Appendix A.10 re-proves HLN's Theorem 1(i) explicitly (credited to Jing Lei) and finds the union bound carrying `|M*| × 2^{|M₀|} × o(1)`, harmless only while `|M₀|` is fixed: "the MCS procedure should be viewed as a fixed-size model selection method" — a scope clarification, since HLN claim nothing else. **Arnold–Gavrilopoulos–Schulz–Ziegel** (Tier B, *JRSS-B*, refereed, 1 cite — too new) rebuild the set as anytime-valid via Ville's inequality on e-processes, `Q(∀t : M*_t ⊆ M̂_t) ≥ 1−α` with the quantifier inside, cheapest construction `E_{ij,t} = Π_r(1 + λ_{ij,r}d_{ij,r})` under a predictable bound; their measured comparison is the keeper — running the **ordinary** MCS over a sequential design drops coverage from nominal 0.9 to **about 0.8**, while the anytime-valid set never wrongly excluded the best model and ran **8.41** wide of 49 against a singleton truth, conservatism that is structural because the arithmetic mean already dominates all symmetric e-merging functions (**#325**). **The axis correction is recorded prominently in the note and the item**, because getting it wrong would waste the finding: the sequential result indexes new *data* with the roster fixed, while the lab's validation board is a fixed window with a growing roster — so it is not the fix for `rank_trials.py`, and its setting is the frozen-roster **incubation** track. One structural recommendation, free and one column wide: **put the equal-weight pool into `M₀`**, because the MCS centres on the surviving candidates' mean while `skill` centres on a fixed benchmark that is not a candidate, and a set over trials alone can consist entirely of books worse than the pool (**#324**). **New: #322–#327, all six free, no trial proposed, no measurement taken, holdout not read** — correct for a night whose three independent sources agree that the honest answer to "which candidate is best?" at this window's width is a wide set. Strzalecki 2011 (`2026-10-28-entropic-ambiguity-as-an-exponential-tilt.md`); Hansen–Lunde–Nason 2011 (`2026-10-28-model-confidence-set-the-set-valued-ranking.md`); Kim–Ramdas 2025 (`2026-10-28-argmin-inference-minimax-separation-rate.md`); Arnold–Gavrilopoulos–Schulz–Ziegel 2026 (`2026-10-28-sequential-model-confidence-sets-anytime-valid.md`). **Named and not obtained:** Hansen & Sargent 2001 (*AER* 91(2), 1008 cites — not attempted; everything used from it is displayed verbatim in Strzalecki, and no later session needs it); the *Econometrica* versions of both 2011 articles (paywalled; the authors' own working-paper versions were read instead); Diebold & Mariano 1995 (*JBES*, 11,055 cites — identified and not read, and nothing is attributed to it beyond what the two read sources quote). |
+| 2026-10-29 (session 76) | **The `online FDR` / `alpha-investing` vein, taken verbatim from the [2026-10-28] entry as the only vein this folder ever reached by being *blocked* rather than by grep — and it ADMITS on the pre-committed `O(1)` criterion while the harder second clause resolves AGAINST FDR, which is the answer that entry asked for.** Greps across all 238 prior notes: `online FDR` 0, `alpha.investing` 0, `alpha investing` 0, `Foster` 0, `Stine` 0, `Javanmard` 0, `LORD` 0, `SAFFRON` 0, `e-BH` 0, `mFDR` 0, `false discovery exceedance` 0 (the 12 files matching the bare word `investing` are all of the *low-risk / style / factor / index investing* kind, none in the α-investing sense). Criterion clause one: **Foster–Stine** (Tier A, *JRSS-B*, 86 Crossref cites, read as the authors' July-2007 version from UPenn ScholarlyCommons bitstream after `www-stat.wharton.upenn.edu/~stine/` 404'd) carry the state in the **prior rejection indicators alone** — *"neither the payout ω nor the cost α/(1−α) reveals `p_j`"* — so under their eq. 9/15 rules it is a float and an integer, and `α_j` is set before `p_j` is seen by construction. **Passes both halves cleanly**; Theorem 3 (`W(0) ≤ αη`, `ω ≤ α`) controls `mFDR_η` at every finite stopping time by optional stopping on a sub-martingale, with **no independence assumption**. Clause two resolves by their own **Theorem 2**: a procedure stopping at `r` rejections has `FDR = mFDR_0 = cFDR = eFDR = pFDR = E[V(r)]/r` exactly, `FDR ≤ α(r+2)/(r+1)` (`1.5α` at `r=1`), and under the complete null `FDR = FWER` — so at ~1 promotion per several dozen trials with the session stopping on it, **the folder's existing FWER-flavoured object was never wrong and the vein's value is purely the forward spending.** **Javanmard–Montanari** (Tier A, *Annals of Statistics*, 66 cites) add: FDR (not just mFDR) for **monotone** GAI rules with `w₀+b₀ ≤ α` (Theorem 3.1 — LORD 1/2 qualify, **LORD 3, the variant everyone uses, does not**); a general-dependence variant (Example 3.8) at a `Σ ξ_i(1+log i) ≤ α/b₀` budget, the `(1+log i)` being the entire price of abandoning independence and the variant this lab needs since `program.md`'s own 109→36 clustering falsifies independence here; and the warning that a controlled mean FDR is **not** a controlled realised FDP (`FDP` past three times nominal with probability 0.13 in their simulation). Their `sup_n FDX` cartoon is the **same quantifier-placement error and fix** as `#325`'s anytime-valid MCS — two instances in two sessions, filed as prediction rule **#333**. **Tian–Ramdas** (Tier B, *Stat. Methods Med. Res.*, 15 cites) build the FWER side and carry the night's one lab-specific finding: alpha-spending's proof leaks when nulls are **conservative** and when non-nulls are **frequent**, and ADDIS-Spending (`α_i = α(τ_i−λ_i)γ_{t(i)}`, `t(i) = 1 + Σ(S_j−C_j)`) plugs both, so **the budget index advances only on p-values in the band `(λ,τ]` — a decisive reject is FREE** (**#329**, filed as a tension with `learnings.md`'s "every trial raises the bar", because the deflated bar prices decorrelation while this prices where the p-value landed). Their worked validity instance is **this lab's exact test** — one-sided Gaussian mean, `P = Φ(−Z)`, *"conservative if `µ < 0`, while the conservativeness increases as `µ` decreases"* — and `learnings.md` records this lab's typical candidate at negative validation skill, so it sits deep inside the favourable regime and nowhere near Theorem 4's `c* → 1` boundary (**#330**). They also measure **two of their own four rules as not worth implementing** (online Sidak, online fallback: *"negligible"*). **Robertson–Wason–Ramdas** (Tier A, *Statistical Science*, 23 cites on Crossref and Semantic Scholar alike) supplies LORD++ in closed form, the post-hoc FDP bound that needs **no protocol change at all** (**#328**, the cheapest item in the queue), the batched frame that is the right shape for nightly groups of eight (**#331**, the night's best-aimed item), the field's names for the two failure modes of a wealth budget — **this lab is in alpha-death**, whose published remedies are mem-FDR's discount and an explicit licence to **abstain from testing** (**#332**), while **piggybacking** is the mechanism behind the one multi-promotion episode `program.md` records, which means the holdout veto does a job the sequential layer provably cannot — and the discount on the whole vein in the authors' own words: power lives at `T > 1000`, and low-`T`-with-known-correlation is an **open problem**. **The arithmetic that closes it as a gate** (**#334**): at `α = 0.05` with the default `γ_t ∝ log(t∨2)/(t exp(√log t))` (constant re-derived here as `C ≈ 0.0772`, matching the published 0.07720838), the required one-sided `z` runs **2.58** (first trial / right after a promotion) → **3.70** (36 effective) → **3.98** (~110 raw) → **4.47–4.71** (100–300 under the FDR parameterisation), against `#323`'s detectable `|t| ≈ 1.41/2.15/2.80` and `program.md`'s record that **no promotion here has ever cleared `|t| = 2`**. An online gate would have promoted nothing, ever; the binding constraint is the **fixed width of the validation window**, third consecutive session to that conclusion. **New: #328–#334, all seven free, no trial proposed, no measurement taken, holdout not read.** Foster–Stine 2008 (`2026-10-29-alpha-investing-sequential-error-budget.md`); Javanmard–Montanari 2018 with Ramdas–Zrnic–Wainwright–Jordan 2018 (`2026-10-29-lord-online-fdr-and-the-dependency-price.md`); Tian–Ramdas 2021 (`2026-10-29-online-fwer-and-discarding-conservative-nulls.md`); Robertson–Wason–Ramdas 2023 (`2026-10-29-online-multiple-testing-practical-guidance.md`). **Named and not obtained:** Zrnic–Jiang–Ramdas–Jordan 2020 (AISTATS, the batched primary behind `#331`); Katsevich–Ramdas 2020 (*Ann. Statist.* 48(6), 3465–3487, the post-hoc primary behind `#328`); Ramdas–Yang–Wainwright–Jordan 2017 (NeurIPS, mem-FDR, behind `#332`); Zrnic–Ramdas–Jordan 2021 (*JMLR* 22, asynchronous — PDF fetched and left unread once the review covered it); Xu–Ramdas 2022 (supLORD); the published JRSS-B, Annals, PMLR and SMMR versions of all four read sources (paywalled; working/author versions read instead, and each note says so). |
 
 ### Open questions for future sessions
+
+- **[2026-10-29] What should aim session 77: the queue now contains, for the first time in weeks, a
+  named PRIMARY whose reading would settle an item already filed — `#331`'s batched rule — and that
+  outranks opening a new vein.** Greps across all 242 notes after tonight (counts are files, and all
+  the non-zero ones below are tonight's four unless stated): `batched` **1**, `batch` **4** (two
+  tonight; the other two are 2026-10-19 and 2026-10-20, both about mini-batch *estimation*, not
+  batched testing), `Zrnic` **3**, `power of batching` **1**, `Katsevich` **1**, `mem-FDR` **1**,
+  `decaying memory` **1**, `supLORD` **2**, `online FDR` **1**, `best-arm` **0**,
+  `pure exploration` **0**, `bandit` **0**, `multi-armed` **0**, `Thompson sampling` **0**,
+  `Bayesian optimisation` **0**, `Gaussian process` **0**, `transfer entropy` **0** (eighth
+  nomination; it stays retired, as 2026-10-22 through 2026-10-28 all said). Every one of those
+  non-zero counts is a *pointer written tonight*, not a reading — which is exactly why the next
+  session's job is to read one of them.
+  **Why the primary and not a new vein.** Everything tonight produced is bookkeeping, and seven of
+  seven items are free — but exactly one of them (`#331`) claims a *structural* improvement that was
+  taken on a review's attribution rather than read: **Zrnic, Jiang, Ramdas & Jordan, *The power of
+  batching in multiple hypothesis testing*, AISTATS 2020.** The claim is specific and checkable — the
+  batched rules recover BH inside one batch and LORD++ at batch size one, interpolate between them,
+  have *higher* power than the fully-online rules, come in a positive-dependence-valid variant, and
+  imply FDR control **per batch** as well as overall. If that holds as stated, it is the only frame in
+  this vein whose shape matches what the lab actually does (eight dependent candidates per night,
+  roughly independent across nights), and every level computed tonight for LORD/ADDIS is the wrong
+  number for this lab. One paper decides it.
+  **Pre-committed criterion, stated now so the next session cannot move the goalposts** (same
+  discipline as the 2026-10-26 `O(1)` criterion, the 2026-10-27 recombination criterion and
+  tonight's, all of which paid): *admit `#331` into the recommended frame only if the paper's batched
+  rule (a) states its per-batch level BEFORE the batch is run, (b) carries state that is `O(1)` in the
+  number of batches already tested, and (c) states a guarantee valid under dependence WITHIN a batch —
+  since that is the only dependence this lab has, and the one an across-batch independence assumption
+  would silently paper over. Abandon it, and downgrade `#331` from "the frame" to "a pointer", if the
+  batched guarantee requires independence inside the batch: that is the case this lab cannot supply,
+  and a rule needing it is no better than the fully-online ones already costed.* A second clause,
+  because the honest answer may be that the gain does not survive the lab's scale: *the review lists
+  the batch-size/power trade-off as an OPEN question. State, before importing anything, what the
+  paper's own arithmetic says the gain is at batch size ≈ 8 and a few hundred total hypotheses — and
+  if the paper gives no number in that range, say so and do not extrapolate one.*
+  **A second nomination, ranked below it and deliberately not taken tonight for the second session
+  running:** `best-arm identification` / `pure exploration` (zero coverage on six separate keys
+  above). The [2026-10-28] entry already set its criterion and it still stands: *admit it only if the
+  first paper's allocation rule is driven by a confidence width rather than by a point estimate of the
+  arm mean, and refuse any rule that assumes i.i.d. draws per arm, since a "draw" here is one
+  hand-written candidate.* Tonight adds a reason to rank it lower still, and it is `#334`'s
+  arithmetic: an allocation rule is only worth having if the measurement can separate the arms, and
+  three independent literatures now agree it cannot at this window's width. **A third nomination, new
+  and cheap:** the review's §5.1.8 names work on online testing *"where the cost of data collection is
+  not negligible ... the choice of sample size for each experiment, as well as prior beliefs about the
+  probability of rejection"*, performing best *"where the aim is to maximise a limited budget of tests
+  to achieve the highest possible power"*. That is `program.md`'s eight-trials-a-night problem stated
+  in the literature's own words, and it is one paper.
+  - **The free queue, and tonight added seven free items with no construction material at all, which
+    is the right output for an accounting night.** `#328` is the cheapest thing in the entire queue
+    and the only item here that needs **no protocol decision at all** — a post-hoc `1−α` bound on the
+    FDP of the existing promotion history, computable from recorded verdicts, no trial, no holdout
+    look; read its primary before acting. `#329` and `#330` are a pair and must be read together:
+    `#330` establishes that the lab's own one-sided skill test is the textbook uniformly-conservative
+    null (and that the lab has *measured* itself deep inside the favourable regime), which is the
+    precondition for `#329`'s accounting fact that a **decisive reject is free and a near-miss is
+    expensive** — the opposite ranking to the deflated bar's, filed as a **tension** that a session
+    must not use to excuse a sweep. `#331` is the structural item and is gated on the criterion above.
+    `#332` is a **licence** rather than a screen (fewer than eight trials on a thin night is a
+    recognised action) plus the finding that the holdout veto covers a local-in-time error spike the
+    sequential layer provably cannot see. `#333` is a prediction rule applicable before any download.
+    `#334` is the anti-candidate that closes the vein as a gate, and its last clause matters as much
+    as its first: it does **not** license weakening the deflated bar either.
+  - **Unchanged and still live below those**: `#322`–`#327` from 2026-10-28 (`#322` still the
+    interpretation rule to read first — *a wide tier 1 is the board working*; `#323` still the night's
+    number and now confirmed from an unrelated direction by `#334`; `#324` still the only item
+    changing an existing artefact; `#325` the incubation-track monitor with its axis correction);
+    `#316`–`#321` from 2026-10-27 (`#317` still the cheapest kill for any persistence-ranked book);
+    `#311`–`#315` from 2026-10-26 (`#311` still the protocol hazard to read before importing any
+    filtering or recursive method); `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24;
+    `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21;
+    `#282`/`#281` from 2026-10-20; the 2026-10-18 pair (`#273`, `#274`, with `#275` gated on its own
+    free screen); then 2026-10-17 and everything carried under it.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18 (the null's replicas
+    are not held to the eligibility boundary the candidate is held to); the `min_train_skill = 0.0`
+    threshold raised by the 2026-10-26/27 nightly; and the deliberate difference `#324` raised (the
+    ranking script collects one protocol version while the deflated bar counts every version). Tonight
+    adds two for the same list, both human decisions and neither a blocker for any strategy session:
+    whether the lab wants a **principled discount on old trials** now that `#332` shows mem-FDR makes
+    that a published error-rate object rather than a corner-cut, and whether the block-bootstrap
+    p-value is calibrated well enough for `#330`'s validity route (the review's footnote 1 prices
+    imperfect calibration **linearly**, `Pr(P ≤ x) ≤ x(1+ϵ)` giving `α(1+ϵ)`, so the question has a
+    bounded answer rather than an all-or-nothing one). **Branch hygiene, and this one is urgent
+    enough to name separately:** at session start `origin/main-sjlcnd` held **four commits absent from
+    `origin/main`** — two trials (`lv_vol_trend_hold1`, `lv_vol_trend_overlap6`, both REJECT), a
+    journal-plus-learnings entry for the 2026-10-28/29 nightly, and a note saying the work was
+    *"awaiting landing"* — together with `experiments/trials.jsonl`, `leaderboard.json`, two trial
+    return files and a new `strategies/lib/vol_trend_book.py`. This is the 2026-08-12..15 split-history
+    failure mode recurring, it understates the deflated bar for every later trial, and **it is not
+    this folder's to fix** (the learning agent writes only inside `research/` plus one journal pointer
+    line). The six older stale `origin/main-*` branches (`0xxhh0`, `7iyrzq`, `86aao6`, `cozirv`,
+    `e6mtf5`, `x8h7jq`) contain nothing unmerged and remain safe to delete.
+- **[2026-10-29] Access findings — one new tiny-bodied "looks like an answer" mode, one working
+  first-try channel for a closed tier-1 article, and a STRUCTURAL citation gap at the ML conference
+  venues that will recur.**
+  **A fifteenth "looks like an answer" mode, and it is the smallest yet: HTTP 200 with a
+  1,161-BYTE HTML body.** `projecteuclid.org/journals/statistical-science/volume-38/issue-4/<slug>/<DOI>.pdf`
+  returned **HTTP 200, `size_download=1161`**, `file` reporting HTML. It is the Incapsula shape of
+  2026-09-18 (212 bytes) and the zero-byte 200 of 2026-10-13 at a third size, which is the point:
+  **the tell is not a particular byte count, it is that a journal PDF under ~20 KB is never a journal
+  PDF.** The `-w 'HTTP %{http_code} size=%{size_download}'` plus `file -b` pair the README mandates
+  caught it in one call; Project Euclid should be treated as closed to an automated client.
+  **`repository.upenn.edu` (UPenn ScholarlyCommons, DSpace 7) served the accepted version of a closed
+  *JRSS-B* article on the first try**, and the route is the 2026-10-10 Arizona recipe unchanged: fetch
+  the handle page (`/handle/20.500.14332/<id>`, a 611 KB Angular shell), grep `bitstreams/<uuid>` out
+  of it, fetch `/server/api/core/bitstreams/<uuid>/content`. Both cautions from that entry recurred in
+  one record: the shell has **no `.pdf` href** to look for, and **one of the two bitstreams is a JPEG
+  thumbnail** — `file -b` separated them. Worth noting the *failure* alongside it, because it narrows
+  the 2026-09-18 faculty-page lesson: **`www-stat.wharton.upenn.edu/~stine/research/` returns HTTP 404
+  with an 85 KB HTML body for every path including the bare directory**, while
+  `faculty.wharton.upenn.edu/wp-content/uploads/<year>/<month>/<file>.pdf` still serves that same
+  author's *other* papers. A school can have one live document host and one dead one, so a 404 on the
+  `~user` form is not evidence the author self-hosts nothing.
+  **The structural finding, and it will recur for every machine-learning source this folder reads:
+  a PMLR conference paper can have NO resolvable citation count at all.** SAFFRON (ICML 2018) has no
+  Crossref DOI, so `api.crossref.org/works/<doi>` is unavailable by construction and a bibliographic
+  search returns only *later* articles citing it; `10.48550/arXiv.<id>` 404'd on Crossref and came
+  back `not found` from Semantic Scholar; OpenAlex answered `Insufficient budget` on the **first call
+  of the session** (shared-IP daily allowance, already spent); and Semantic Scholar's `arXiv:<id>`
+  endpoint returned **429 while its DOI endpoint answered in the same minute** — which sharpens the
+  README's ordering from a host-level rule to an **endpoint-level** one: the DOI endpoint is the
+  reliable one, everything else on that host rate-limits. The honest outcome was
+  `citations: not resolved (Crossref, OpenAlex, Semantic Scholar all tried, 2026-10-29)` with **no
+  tier penalty on that basis alone**, per the rubric. Since NeurIPS, ICML, AISTATS and PMLR hold much
+  of the online-testing, bandit and machine-learning literature this folder is now working through,
+  the lesson to carry is: **budget a conference paper's citation lookup as likely to fail, grade it on
+  venue and on whether its claims are re-derived in a peer-reviewed source, and prefer the
+  peer-reviewed review or journal version as the citable anchor when one exists.** Tonight that worked
+  — the *Statistical Science* review independently restates SAFFRON's and ADDIS's standing, so nothing
+  rests on the unresolvable count.
+  Also noted, all first-try successes needing no workaround: `arxiv.org/pdf/<id>` served four papers
+  with clean `pdftotext -layout` extractions (164 KB / 129 KB / 88.7 KB / 110 KB of text; 645 / 695 /
+  411 / 718 instances of `" the "`; `( )`-dropout zero on three and a single displayed-equation
+  artefact on the fourth; no ASCII shift on any). And a reusable verification: the published
+  normalising constant of the field's default `γ` sequence (`C ≈ 0.07720838` for
+  `γ_m ∝ log(m∨2)/(m e^{√log m})`) **re-derives to ≈ 0.0772** summing to `m ≤ 2×10⁶`, so a paper's
+  stated constant is worth one cheap check — and truncating the tail biases it **upward**, which would
+  overspend the budget rather than underspend it.
 
 - **[2026-10-28] What should aim session 76: the queue's own next item is now named by tonight's one
   unsolved constraint — `online FDR` / `alpha-investing` — and it is the only vein this folder has

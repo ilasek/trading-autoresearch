@@ -24127,3 +24127,52 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    is weakened by the two newest trials and should be re-read at n = 17 before anyone acts on it.
 
 ## Research session — 2026-10-28 (learning agent): 4 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-10-29 (learning agent): `origin/main-sjlcnd` holds TWO TRIAL RECORDS absent from `main` — unlike the 2026-10-22 case, the trial history really is split
+
+Filed because the session-start integrity banner flagged `origin/main-sjlcnd`, and the banner asks
+for this entry when the divergence is not resolved. **A research session cannot resolve it**: the
+learning agent writes only inside `research/` plus this journal, and landing that branch would write
+`experiments/trials.jsonl`, `experiments/leaderboard.json` and `experiments/learnings.md`, none of
+which are its files. Recorded here for a strategy session or a human.
+
+**This is not the 2026-10-22 situation.** That entry verified the diverging branch carried journal
+and learnings content only, with an empty diff on `trials.jsonl`, and correctly concluded the bar was
+not understated. Tonight's branch is the other case.
+
+What was checked, so the next session does not have to repeat it:
+
+- Of the ten `origin/main-*` branches, **nine are fully merged** into `origin/main` (0 commits
+  ahead), including all six that `research/SUMMARY.md` has been listing as stale (`0xxhh0`,
+  `7iyrzq`, `86aao6`, `cozirv`, `e6mtf5`, `x8h7jq`) and the two newer ones (`24dkyc`, `sdrp6r`).
+  Only **`origin/main-sjlcnd` diverges, by four commits**: `b30f43d` and `f999f50` (two trials),
+  `bf87798` (journal + learnings for the 2026-10-28/29 nightly), and `8df7e98`, whose message is
+  *"journal: branch note — 2026-10-28/29 work is on main-sjlcnd, awaiting landing"*. That note is
+  itself only on the branch, so **no session reading `main` can see that anything is pending.**
+- `git diff --numstat origin/main...origin/main-sjlcnd -- experiments/trials.jsonl` is **`2 0`**: two
+  records added, none changed. They are `lv_vol_trend_hold1` and `lv_vol_trend_overlap6`, both
+  family `liquidity-volume`, **both `GATE_FAIL`** (note: the two commit *messages* say `REJECT`
+  while the records say `GATE_FAIL`). The branch also adds two trial-return parquets, the two
+  candidate files, a new `strategies/lib/vol_trend_book.py` (+172), and rewrites
+  `leaderboard.json` (58 lines changed).
+- `git diff --stat origin/main...origin/main-sjlcnd` over `strategies/champion.py`,
+  `strategies/champion_card.json`, `strategies/incubating/`, `experiments/holdout_log.jsonl` and
+  `experiments/incubation.jsonl` is **empty** — so no promotion is stranded, the champion on `main`
+  is correct, and no holdout record is involved.
+
+**What is at stake, stated precisely.** Both stranded trials failed, so nothing good is being lost.
+The damage is the one the banner names: `main`'s `trials.jsonl` holds 127 records and should hold
+**129**, so the deflated-Sharpe bar computed by any later trial on `main` is understated by two
+trials — and `leaderboard.json` on `main` does not know that `liquidity-volume` has been probed twice
+more, which is exactly the blindness that let residual momentum be re-tested four times in the
+2026-08-12..15 incident. A strategy session should **land `origin/main-sjlcnd` into `main` before
+running any new experiment**, or record that it was superseded.
+
+**Scope of what this session read, disclosed because it is at the edge of this agent's permissions:**
+the branch *diff* only — commit messages, file-level numstat, and the `name`/`family`/`verdict`
+fields of the two added records, plus `wc -l` on `main`'s `trials.jsonl`. No returns, no Sharpe, no
+skill, no leaderboard contents, and **nothing from `experiments/holdout_log.jsonl`,
+`reports/incubation.md` or any `*_holdout.parquet`** — the hard rule is intact. No branch was merged,
+no experiment was run, and no file outside `research/` was written except this journal.
+
+## Research session — 2026-10-29 (learning agent): 4 notes added, see research/SUMMARY.md
