@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-27T23:45:01+00:00",
+  "generated_at": "2026-10-28T23:48:06+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -29,6 +29,32 @@
       "train_skill": 0.058,
       "mechanism": 1
     },
+    "liquidity-volume": {
+      "name": "lv_vol_trend_overlap6",
+      "candidate": "strategies/candidates/lv_vol_trend_overlap6.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-10-28T23:45:50+00:00",
+      "n_trials": 3,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.356,
+        "ann_return": 0.0654,
+        "max_drawdown": -0.3868,
+        "ann_turnover": 1.27,
+        "avg_positions": 125.62,
+        "skill": 0.019,
+        "skill_cost2x": 0.014,
+        "skill_delist30": 0.019
+      },
+      "train_sharpe": 0.565,
+      "skill_ci90": [
+        -0.096,
+        0.141
+      ],
+      "train_skill": 0.042,
+      "mechanism": 3
+    },
     "portfolio-learning": {
       "name": "pl_decade_invvol_floored",
       "candidate": "strategies/candidates/pl_decade_invvol_floored.py",
@@ -55,32 +81,6 @@
       "train_skill": 0.12,
       "mechanism": 1
     },
-    "liquidity-volume": {
-      "name": "lv_illiq_peer_neutral_band",
-      "candidate": "strategies/candidates/lv_illiq_peer_neutral_band.py",
-      "track": "scout",
-      "verdict": "GATE_FAIL",
-      "ts": "2026-10-13T23:34:14+00:00",
-      "n_trials": 1,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.285,
-        "ann_return": 0.0576,
-        "max_drawdown": -0.4551,
-        "ann_turnover": 1.31,
-        "avg_positions": 100.0,
-        "skill": -0.052,
-        "skill_cost2x": -0.057,
-        "skill_delist30": -0.052
-      },
-      "train_sharpe": 0.608,
-      "skill_ci90": [
-        -0.272,
-        0.15
-      ],
-      "train_skill": 0.084,
-      "mechanism": 3
-    },
     "statistical-learning": {
       "name": "sl_gbm_seven_nonlinear",
       "candidate": "strategies/candidates/sl_gbm_seven_nonlinear.py",
@@ -105,7 +105,7 @@
         0.096
       ],
       "train_skill": -0.1,
-      "mechanism": 3
+      "mechanism": 6
     },
     "statistical-arbitrage": {
       "name": "sa_resid_rev63_band",
@@ -212,6 +212,6 @@
       "mechanism": 4
     }
   },
-  "distinct_mechanisms": 5,
+  "distinct_mechanisms": 6,
   "mechanism_rho": 0.5
 }
