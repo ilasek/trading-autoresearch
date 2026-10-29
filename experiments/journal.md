@@ -24606,3 +24606,65 @@ skill, no leaderboard contents, and **nothing from `experiments/holdout_log.json
 no experiment was run, and no file outside `research/` was written except this journal.
 
 ## Research session — 2026-10-29 (learning agent): 4 notes added, see research/SUMMARY.md
+
+## Protocol issue resolved — 2026-10-29/30 (nightly): `origin/main-sjlcnd` landed on `main`; no experiments run
+
+The learning agent's `## Protocol issue — 2026-10-29` entry above diagnosed the split and
+left the landing to a strategy session, which is this one. Landed as `cae0b67`. **This
+session ran no trials** — step 0 of the nightly directive says that when a remote branch
+holds commits absent from `origin/main` the session does not run experiments, journals, and
+stops, and that is followed as written even though the divergence is now repaired. The
+repair is the session's whole output; the honest bar it restores is for the next session to
+spend.
+
+**What the landing did.** Not a fast-forward, which the learning agent's entry had expected
+as one option: `main` carried two commits the branch lacked (`ad0e376` the 2026-10-29 data
+refresh, `16ed008` the learning agent's research note), so `git merge --no-ff
+origin/main-sjlcnd` was a real merge. One conflict, `experiments/journal.md`, where both
+sides appended after the `## Research session — 2026-10-28` heading. Resolved by keeping
+both appends in chronological order — the nightly's two trial entries, its free-measurements
+block, its session summary and its branch note first, then the learning agent's
+protocol-issue and research-session entries, which reference them and so must follow. Line
+accounting, since journal history may never be deleted or rewritten: 24129 common lines +
+429 from the branch + 49 from `main` = the 24608 now on disk, with nothing dropped from
+either side. `leaderboard.json`, `learnings.md`, the two trial-return parquets, the two
+candidate files and `strategies/lib/vol_trend_book.py` merged without conflict (`main` had
+not touched them).
+
+**The bar is now right.** `experiments/trials.jsonl` holds **129** records, not 127, and the
+two that were missing are `lv_vol_trend_hold1` (#18) and `lv_vol_trend_overlap6` (#19), both
+`GATE_FAIL`, both family `liquidity-volume` — so any trial run from `main` from now on
+deflates against 129. `leaderboard.json` now knows that `liquidity-volume` was probed twice
+more, which is the specific blindness that let residual momentum be re-tested four times in
+the 2026-08-12..15 incident. Note for whoever reads the branch's own commit messages: the
+two commits say `REJECT` while the records say `GATE_FAIL`; the records are what counts.
+
+**Checked before committing, so the next session need not re-check.** The branch touches no
+frozen path — nothing under `engine/`, `scripts/`, `tests/`, `data/`, and neither
+`program.md` nor `CLAUDE.md`. `strategies/champion.py`, `strategies/champion_card.json`,
+`strategies/incubating/`, `experiments/holdout_log.jsonl` and `experiments/incubation.jsonl`
+are untouched, so no promotion was stranded, the champion on `main` was already correct, and
+no holdout record is in the merge. `strategies/lib/vol_trend_book.py` is an addition (`A`),
+not an edit of an existing lib file, so the CI rule holds. `trials.jsonl` parses as 129
+valid records; its one duplicate `name` (`mom_zscore_overlap6_daily_trim`, a v1-era REJECT
+and a v1-era PROMOTE) was already present twice on `origin/main` and is not a merge artifact.
+`leaderboard.json` parses. Engine green before and after: `92 passed`.
+
+**No holdout or forward file was read.** Not `experiments/holdout_log.jsonl`, not
+`reports/incubation.md`, not any `*_holdout.parquet`, not the holdout columns of any
+`reports/protocol-v2-*.md`. The merge carried no such file. The hard rule is intact.
+
+**Branch hygiene, and why it keeps recurring.** Ten `origin/main-*` branches exist and after
+this push all ten are fully merged into `origin/main`. The cause is structural, not a
+mistake by any one session: each nightly run is handed a per-run branch name as its
+development target, while `CLAUDE.md` and the nightly directive both say to push to `main`.
+When a session follows the harness name instead, its trials strand exactly as these two did,
+and the branch note saying so is itself only on the branch — invisible to anyone reading
+`main`. This session pushed to `main`. Deleting or archiving the ten merged `main-*` branches
+is housekeeping for a human; it is not needed for integrity now that all of them are
+ancestors of `main`, but it would stop the session-start sweep from having to re-clear them.
+
+**Next session.** Step 0 should come back clean: `git branch -r --no-merged origin/main`
+empty, `trials.jsonl` at 129. Run the normal loop, and spend the budget across families per
+`program.md` — `liquidity-volume` now carries two more probes than the leaderboard on `main`
+previously showed, which is worth knowing before planning the family mix.
