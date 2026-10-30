@@ -6433,3 +6433,117 @@ across experiments; prune entries that later evidence contradicts.
   **unpredicted**, since nothing in the hypothesis forecast it. **The shape to reuse: price the whole
   grid, let a pre-stated precondition carve it, average what is left, and flag any gain of the
   average over its parts as a bonus rather than as part of the claim.**
+
+- **[Measured 2026-10-30/31, nightly — ZERO trials spent; CLOSES THE BLEND CLAUSE OF
+  `portfolio-learning` FROM THE GATE'S SIDE] BELOW THE DEFLATION BENCHMARK — WHERE EVERY BOOK THIS
+  LAB HAS EVER BUILT SITS — DSR RISES WITH THE ERROR BAR, SO NO VARIANCE-REDUCTION ARGUMENT CAN BUY
+  DEFLATED PROBABILITY, AND A DECORRELATED BLEND IS STRICTLY WORSE THAN ITS BETTER LEG AT EVERY
+  WEIGHT.** `metrics.deflated_skill` is `Φ((skill − E[max skill of N_eff null trials]) / se)`. At
+  the 19-trial v3 board's dispersion (sd 0.1256) and `N_eff = 45` the benchmark is **+0.2807**,
+  against a board whose best skill is **+0.1240** — so the numerator is negative for every recorded
+  book, and dividing a negative numerator by a smaller `se` makes DSR *smaller*. The 2026-10-28/29
+  handover's one pre-registered question ("a blend may buy more deflated-skill probability through a
+  tighter interval than it loses in level") is therefore sign-inverted. Measured on #16's and #19's
+  stored validation returns, blended as `w·A + (1−w)·B`:
+
+      w (leg A share)   0.00     0.25     0.40     0.50     0.60     0.75     1.00
+      skill           +0.0191  +0.0502  +0.0678  +0.0788  +0.0893  +0.1037  +0.1241
+      se               0.0745   0.0629   0.0721   0.0836   0.0977   0.1217   0.1647
+      DSR              0.0003   0.0001   0.0017   0.0078   0.0242   0.0692   0.1613
+
+  **Monotone in `w`, maximised at the better leg alone, and the variance cut the premise relied on
+  is real and larger than it guessed**: the legs' *active* returns correlate at **−0.1225** and the
+  50/50 book's se is 49% narrower than leg A's, for 64% of its skill. The `w=0.25` row is the
+  finding in one line — the board's smallest se (0.0629) carries the board's smallest DSR (0.0001).
+  **The general closure, which needs no further measurement:** whenever the better leg has both the
+  higher skill and the higher se — the configuration a decorrelated-leg blend always produces —
+  every convex combination lowers both terms, both move DSR down, and `DSR(blend) < DSR(better leg)`
+  strictly. The cost term cannot rescue it: a real blended book is ~+0.005 of skill cheaper than the
+  linear combination (2026-10-28/29 F10: 1.14x churn against the legs' mean 1.19x), which moves the
+  50/50 row to 0.0093, still 17x below leg A. Completes the 2026-10-24/25 closure of **score**-level
+  blends and the 2026-10-28/29 finding that no **book**-level blend beats its better leg in level.
+  **Anti-candidates travelling with this entry: the #16/#19 blend at any weight, and any construction
+  whose case is a tighter error bar or lower active variance — the whole class is dead under this
+  gate until a book's skill exceeds the benchmark.** Board-wide corroboration: of the 171 ordered
+  pairs on the v3 board, **28 are inverted between skill and DSR**, every one the wider-`se` book
+  winning (`lv_vol_trend_overlap6`, skill +0.019, DSR 0.0003 against
+  `pt_decade_reversal_peer_neutral`, skill **−0.006**, DSR 0.0531, on a 2.3x wider error bar).
+
+- **[Measured 2026-10-30/31, nightly] THE GATE'S BAR RESTATED IN THE UNITS A CANDIDATE IS DESIGNED
+  IN: IT NEEDS A RANK IC EIGHT TO TEN TIMES THE LARGEST THIS LAB HAS EVER MEASURED, SO THE CHALLENGE
+  TRACK IS CLOSED ON ARITHMETIC RATHER THAN ON LUCK.** Skill needed for `DSR ≥ 0.95` is
+  `benchmark + 1.645·se` = **+0.552** at #16's se (0.1647), **+0.419** at a 50/50 blend's (0.0836)
+  and **+0.404** at #19's (0.0745) — against a board best of **+0.124**, a shortfall of +0.428.
+  Through the lab's own exchange rate (2026-10-20/21: `train skill = 3.37 × rank IC`, explicitly a
+  **ceiling**, realised fraction **6%–38%** across seven objects):
+
+      required rank IC at the 3.37 ceiling                     0.120 – 0.164
+      required rank IC at the best realised conversion (38%)   0.32  – 0.43
+      required rank IC at the worst realised conversion (6%)   2.0   – 2.7   [impossible, IC ≤ 1]
+
+  **The largest rank IC this lab has measured on any object is +0.0412** (the cointegrating slope,
+  which then traded at validation skill −0.154). So the gate asks for 3x the best-ever at the most
+  generous arithmetic allows, 8–10x at the best conversion rate ever actually observed here, and at
+  the lower half of the observed conversion range it is unreachable at **any** rank correlation.
+  **Operative consequence: a strategy session should not spend a trial arguing a challenge.** No
+  construction operator closes a gap of this size — the one demonstrated transferable channel, the
+  cost rebate, was priced at +0.011 and declared spent on 2026-10-28/29, and the entry above kills
+  the variance channel. The **scout** track is untouched by this and is where a trial still belongs:
+  scouts never face the deflated bar. Independent agreement from the literature, recorded not leant
+  on: research `#340` derives `|t| ≥ 2.93` for 90% power against `program.md`'s record that no
+  promotion here has ever cleared `|t| = 2`, and `#323`'s minimax rate puts the detectable gap at
+  this window at `|t|` 1.41–2.80; five research sessions have now ended on the fixed width of the
+  validation window as the binding constraint, and this is the lab's own number for it.
+
+- **[Measured 2026-10-30/31, nightly — SUPERSEDES `program.md`'s "EXPLORING IS CHEAP" TABLE, WHICH
+  THAT FILE ALREADY FLAGS AS SUPERSEDED] "EVERY TRIAL PERMANENTLY RAISES THE DEFLATED BAR" IS A v1
+  *COUNT* STATEMENT; UNDER v3 THE BINDING TERM IS *DISPERSION*, AND A TRIAL LANDING NEAR THE BOARD
+  MEAN LOWERS THE BAR.** v3's deflator scales its benchmark by `var(recorded skills)`, so what one
+  more trial costs depends on where it lands relative to the board's mean (≈ −0.07), not on the fact
+  that it happened. `N_eff` advanced by one, the new skill entering the dispersion term, #16's DSR
+  as the readout:
+
+      next trial's skill   +0.000  +0.050  +0.124  +0.200  −0.100  −0.200  −0.340  −0.500
+      new benchmark        +0.2755 +0.2790 +0.2881 +0.3019 +0.2753 +0.2842 +0.3101 +0.3548
+      Δ benchmark          −0.0052 −0.0018 +0.0074 +0.0212 −0.0054 +0.0035 +0.0294 +0.0741
+      #16's DSR after       0.1695  0.1651  0.1534  0.1361  0.1685  0.1552  0.1216  0.0767
+
+  A trial landing 0.4 from the board mean in **either** direction costs 0.03–0.07 of benchmark, i.e.
+  0.04–0.09 of DSR for everything already recorded; a near-mean trial is free or better. **Two
+  riders that matter more than the table. (i) This is NOT a design target** — aiming a candidate at
+  a skill value to move the bar is gaming the gate, and no candidate has been or may be designed
+  against it. **(ii) It is NOT an argument against exploring**: the near-mean rows are free, so the
+  scout track is *cheaper* under v3 than the v1 table implied, which is the first measured support
+  `program.md`'s breadth mandate has had under this protocol. **One tension raised for the human
+  owner and not acted on**: the dispersion term is estimated from *designed* candidates, and this
+  lab deliberately ships paired controls built to fail (#13, #15, arguably #9) — a control landing
+  at −0.34 raises the bar for every future candidate by more than any ordinary trial does, so "ship
+  the paired control" and "every trial raises the bar" are in a conflict nobody had priced. Research
+  `#336` is the second, independent instance of the same tension from the error-accounting side
+  (PRDS fails for a batch that pairs a candidate with its own control).
+
+- **[Method, 2026-10-30/31] A RECORDED `dsr` IS NOT COMPARABLE ACROSS TRIALS, BECAUSE EACH WAS
+  COMPUTED AGAINST THE BOARD AS IT STOOD THAT NIGHT — AND THE ENGINE PRINTS ONE FOR ONLY 4 OF 19 v3
+  TRIALS.** Recomputed for all nineteen from stored returns against today's board (benchmark +0.2807
+  throughout), the recorded values move in **both** directions: #12's 0.1053 → **0.0915**, #14's
+  0.0543 → **0.0423**, #17's 0.1075 → **0.1175** (it rose, because the board's dispersion fell),
+  #16's 0.1635 → 0.1612. **The highest deflated-skill probability anywhere in the v3 record is
+  0.1612 against a gate at 0.95**, and the recomputed column — one number per trial rather than a
+  tier label, which is what research `#322` asked for — is the comparable one. `scripts/rank_trials.py`
+  prints the recorded column; that is raised for the human owner and is not a strategy session's
+  call. Companion method rule: recompute a stored gate statistic against the current board before
+  comparing two trials by it, exactly as the 2026-10-25/26 rule requires validating an instrument
+  against a recorded figure before reading anything new off it.
+
+- **[Measured 2026-10-30/31, nightly] RESEARCH `#328` CLOSED ON THE LAB'S OWN COUNTS: THE FREE
+  POST-HOC FDP BOUND IS VACUOUS AT THIS REPO'S TRIAL-TO-PROMOTION RATIO.** Katsevich–Ramdas's
+  simultaneous bound `c(α)·(a + Σ_{j≤k} α_j)/|R_k|`, `c(0.05, a=1) = 2.163`, on the real contents of
+  `trials.jsonl`: **129 records** (REJECT 48, SCOUT 29, FAMILY_LEAD 23, GATE_FAIL 21, **PROMOTE 8**).
+  At a flat per-trial level of 5% / 2.5% / 1.8% / 1.0% the bound is **2.014 / 1.142 / 0.898 / 0.619**,
+  so non-vacuity needs `Σα_j ≤ 2.70` — an average per-trial level of **≤ 2.09%** over 129 trials.
+  Slightly looser than the note's 2.35 / 1.8%, because the note worked from `program.md`'s "seven
+  promotions" (champion *successions*) where the file holds **eight** `PROMOTE` verdicts; the note's
+  own rider — sum over every trial, never over every promotion — is the one that decides it and was
+  followed. **Reported rather than quietly dropped, which is what that note asked for.**
+  Anti-candidate: `#328` as an audit instrument here, at any level this lab could claim to have
+  tested at.
