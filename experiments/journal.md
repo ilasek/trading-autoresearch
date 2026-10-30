@@ -24668,3 +24668,5 @@ ancestors of `main`, but it would stop the session-start sweep from having to re
 empty, `trials.jsonl` at 129. Run the normal loop, and spend the budget across families per
 `program.md` — `liquidity-volume` now carries two more probes than the leaderboard on `main`
 previously showed, which is worth knowing before planning the family mix.
+
+## Research session — 2026-10-30 (learning agent): 3 notes added, see research/SUMMARY.md

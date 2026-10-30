@@ -7637,6 +7637,116 @@ every item is bookkeeping, a screening rule, or an anti-candidate. That is the r
 whose honest verdict is *"the error rule was never the brake"* — the third consecutive session to end
 with the fixed width of the validation window as the binding constraint.
 
+### Reading the three NAMED PRIMARIES the queue had been carrying — the batched rule is admitted but only in its weak variant, the free post-hoc bound is computable and currently VACUOUS, and all three sources converge on the one assumption this lab cannot supply (cross-family, the gate's own statistic)
+
+Three sources, read 2026-10-30. The aim needed no grep: the [2026-10-29] entry ranked
+**reading a named primary already filed as a pointer above opening any new vein**, and named three.
+All three were read tonight, each against a criterion or a question stated before the download, and
+**the headline is that the night's two most-promoted queue items both come back narrower than they
+were filed** — which is what reading a primary is for.
+
+**One. `#331`'s batched rule is ADMITTED on the pre-committed criterion, and the power claim does not
+come with it.** Zrnic, Jiang, Ramdas & Jordan (tier B, AISTATS 2020, read in full) define three
+procedures, and the [2026-10-29] criterion — (a) per-batch level fixed *before* the batch, (b) state
+`O(1)` in batches already tested, (c) a guarantee valid under dependence *within* a batch — separates
+them cleanly. **(a) passes for all three**: levels are required to be measurable with respect to the
+past (*"the test level at time t is only allowed to depend on information seen before t"*). **(b) and
+(c) fail for `BatchBH` and `BatchSt-BH`** — the headline procedures — and **pass for `BatchPRDS_BH`
+alone.** On (b): the headline rules' FDP estimate carries `Σ_{r≤t, r≠s} R_r` inside each past
+summand's denominator, so the triple `(α_s, R_s, R_s⁺)` must be retained for every night ever tested
+(state linear in nights), while `BatchPRDS_BH`'s denominator `n_s + Σ_{r<s} R_r` is frozen when its
+batch is tested and its update needs one cumulative rejection count. On (c): Theorems 1 and 2 require
+the null p-values *"independent of each other and the non-nulls"* — within a batch as much as across
+— while **Theorem 3 requires exactly PRDS inside each batch and independence across batches**, which
+is this lab's own structure (eight candidates on one window, roughly independent night to night). So
+the frame, if the vein is ever built, is **online-batched LOND, not online-batched BH** (`#335`).
+The cost of that narrowing is the whole reason the item was promoted: the review's
+*"higher power than the fully online testing algorithms"* is measured **only** for the two variants
+that fail (b) and (c); `BatchPRDS_BH` is a mini-batch generalisation of LOND, which the same review's
+table calls *"substantially lower power than the algorithms above"*, and **this paper never runs it**
+— Section 5, Definition 4, Algorithm 1, Theorem 3, an appendix proof, and no measured power anywhere.
+The criterion's second clause — state the gain at batch size ≈ 8 before importing anything — is
+answered and it is small: on real data at batch size 10 (their smallest, and the size at which they
+must switch to a `γ_s ∝ s^{-2}` budget precisely because small batches are the hard case) `BatchBH`
+scored power **0.242 ± 0.053** against LORD's **0.231 ± 0.051**, a fifth of one standard deviation,
+while batch size 100 scored 0.299; in their synthetic design the *sole* case where a batched rule
+**loses** to LORD is small batch size at small non-null fraction, which is this lab's regime on both
+axes. They report no monotone batch-size/power relationship and name a rigorous analysis of it as an
+**open problem**. **On total hypothesis count the paper gives no number in this lab's range (its
+designs are `T = 3000` and tens of thousands) and none is extrapolated** — as the criterion required.
+One free, actionable design implication survives all of that (`#336`): PRDS is checkable, and for
+Gaussian statistics holds **iff every null candidate's statistic has non-negative covariance with
+every other statistic in the same batch** — so a night of eight candidates from one family plausibly
+qualifies, and **a night that deliberately pairs a candidate with its own inverse or hedge does
+not.**
+
+**Two. `#328` — the cheapest item in the whole queue, the only one needing no protocol decision — is
+computable, and at this lab's scale it returns a number ABOVE ONE.** Katsevich & Ramdas (tier A,
+*Annals of Statistics*, 33 Crossref / 54 Semantic Scholar cites, read in full) give closed-form
+upper bounds on the false discovery proportion holding **simultaneously** over a path of candidate
+rejection sets with probability `1 − α`, and state the diagnostic use in as many words: run any
+procedure, then obtain a valid FDP bound on its rejection set, *"may or may not have been designed
+for FDR or FDP control."* The online form needs exactly two inputs — the rejection count and the sum
+of the levels at which **every** hypothesis was tested:
+`FDP̄ = c(α)·(a + Σ_{j≤k} α_j)/|R_k|`, with `c(0.05, a=1) = 2.163`. Worked at the figures this folder
+may read (the **seven promotions** `program.md` records, the **~129 recorded trials** named in the
+[2026-10-29] entry and the repo's commit log; `trials.jsonl` was not read): at a flat one-sided 5%
+per trial, `Σ α_j ≈ 6.45` and the bound comes out **≈ 1.94 at its best over `a`** — vacuous.
+**Non-vacuity at seven rejections requires `Σ α_j ≤ 2.35`, i.e. an average per-trial level at or
+below about 1.8%** (`#337`, with the full threshold table). This turns `#328` from "compute it" into
+a **precondition**, and the precondition is favourable in one specific way: the lab's gate is a
+*deflated* bar that **tightens as the trial count grows**, which is exactly the `Σ α_j`-conserving
+behaviour the bound rewards. So the question is now one measurable sum, and a session that computes
+it should also be ready to report that the bound exceeds 1 rather than quietly not publishing it.
+Two riders recorded against misuse: `Σ α_j` runs over **every trial, not every promotion** (summing
+only promotions understates it ~18× here and gives a wrong bound rather than a wide one), and a
+**single** rejection can essentially never carry a non-vacuous bound, so this is an audit of the
+history and never of one promotion.
+
+**Three. The third nomination is an ANTI-CANDIDATE whose theorems are nevertheless the best thing in
+the vein.** Cook, Dubey, Lee, Zhu, Zhao & Flaherty (tier B, *NEJSDS* 2024, 1 Crossref / 3 Semantic
+Scholar cites, read in full) is the paper the review's §5.1.8 named — online testing when data costs
+money, choosing **sample size** alongside the level. The method is unusable here because the lever
+does not exist: **this lab cannot buy more data for a promising candidate**, the validation window
+being fixed by protocol, and with the sample size removed the program degenerates to the very ERO
+investing the paper shows is prone to piggybacking. Its own feasibility constraint settles it
+arithmetically — they require power `ρ ≥ 0.9` when `n` is free, which needs a non-centrality (the
+full-window `|t|` this lab measures) of **`|t| ≥ 2.93` at a 5% level**, against `program.md`'s record
+that no promotion here has ever cleared `|t| = 2` (`#340`). But three findings transfer, all free.
+**(i) α-death is a theorem, not bad luck** (`#338`): their Theorem 2 makes α-wealth supermartingale —
+*"the … procedure will end in a finite number of steps"* — when power is near zero **or** the prior
+null probability near one, and this lab satisfies both antecedents; the paper's own escape route is
+stated as `σ/√n → 0`, i.e. `n → ∞`, the one route the protocol forbids. This upgrades `#332` from a
+review's attribution to a proved statement. **(ii) A formal licence to abstain, stronger than
+`#332`'s** (`#339`): the equalizing-strategy construction makes the experimenter *"indifferent as to
+whether to test or not test"* with expected payoff zero, so under a correctly calibrated martingale
+rule **declining a trial costs nothing in expectation** — and the contrapositive is the sharper half,
+that *a scheme under which abstaining feels costly is a scheme that is not martingale.*
+**(iii) The prior must come from the lab's own base rate** (`#341`): their rule is robust to *noise*
+in the null prior but **sensitive to downward bias**, with the failure case named as the investigator
+who is *"systematically optimistic"* — which is the default state of anyone who has just written a
+hypothesis they like, and the error runs in the dangerous direction (too low a prior causes
+over-spending).
+
+**The night's structural finding, and it is the one thing here that generalises past this vein.**
+Two of tonight's three sources failed, independently and on different objects, on **the same
+assumption**: `BatchBH`'s power claim needs null p-values independent *within* a night, and
+Katsevich–Ramdas's online bound needs each null p-value conditionally super-uniform *given everything
+already seen*. In this lab **every hypothesis is a function of one fixed 2018–2023 window**, so a new
+candidate's returns are correlated with the recorded returns of every candidate before it. Stated as
+a rule (`#342`): *independence across tests is the single assumption no sequential error-control
+object can be given here, and it must be checked against the shared window before any of that
+object's arithmetic is believed.* That is why the two admissions tonight are the positive-dependence
+variant and a precondition, rather than the two headline procedures.
+
+**What the night did not produce, and the count that matters.** No trial, no return stream, no
+construction material, no holdout look — eight free items, consistent with an accounting vein. And
+**this is the fourth consecutive session to end on the fixed width of the validation window as the
+binding constraint**, now reached from a paper whose explicit remedy for the problem is buying more
+data. That is no longer three literatures agreeing; it is five sessions, and a session proposing to
+fix this lab's stall by changing its error accounting should be read as proposing the one thing five
+independent routes have now priced at zero.
+
 ---
 
 ## Candidate ideas for the strategy agent
@@ -14383,6 +14493,119 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-10-29-alpha-investing-sequential-error-budget.md` and
     `notes/2026-10-28-argmin-inference-minimax-separation-rate.md`
 
+335. **FRAME CORRECTION, free, and it narrows an item this folder promoted a night ago: if the online
+    batched layer is ever built here, the rule is `BatchPRDS_BH` — the positive-dependence variant —
+    and NOT the `BatchBH` / `BatchSt-BH` whose power advantage was the reason for promoting it.**
+    Read against the [2026-10-29] pre-committed criterion, the headline procedures **fail** two of
+    three clauses: their FDP estimate's past summands carry `Σ_{r≤t, r≠s} R_r`, so state grows
+    linearly in nights tested (fails `O(1)`), and Theorems 1–2 require null p-values *"independent of
+    each other and the non-nulls"*, i.e. within a night as well as across (fails within-batch
+    dependence). `BatchPRDS_BH` passes all three: `α_1 = γ_1 α`,
+    `α_{t+1} = α(γ_{t+1}/n_{t+1})(n_{t+1} + Σ_{s≤t} R_s)` is set before the batch, its estimate's
+    denominator `n_s + Σ_{r<s} R_r` is frozen at test time (one cumulative counter), and Theorem 3
+    asks for **PRDS within each batch and independence across batches** — this lab's exact shape.
+    The price is explicit: it is a mini-batch generalisation of LOND, which the tier-1 review calls
+    *"substantially lower power than the algorithms above"*, and the paper **never runs it** (theory
+    and an appendix proof only). Carry the frame, not the power claim. Tier B.
+    → `notes/2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md`
+
+336. **FREE DESIGN SCREEN on how a night's eight candidates are chosen, and it is checkable before
+    anything is run: the positive-dependence condition the batched guarantee needs fails exactly when
+    a night pairs a candidate with its own inverse, hedge or deliberately-negatively-correlated
+    complement.** For Gaussian statistics `P = Φ(Z)` with covariance `Σ`, PRDS holds **iff
+    `Σ_{i,j} ≥ 0` for every null `i` and every `j` in the batch** — non-negative covariance between
+    each null candidate's statistic and every other statistic that night. Eight candidates from one
+    family on one window plausibly satisfy it; a night constructed for internal contrast does not.
+    Two riders. This bears **only** on the batched FDR guarantee, and says nothing about
+    `program.md`'s distinct-mechanism rule, which exists for unrelated reasons and is not in tension
+    with it. And the condition is a property of the statistics' joint distribution, so it is a design
+    check, not a post-hoc test. Tier B.
+    → `notes/2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md`
+
+337. **`#328` RESOLVED INTO A PRECONDITION, free, and the honest answer is that at today's numbers
+    the bound is VACUOUS: the post-hoc FDP bound on this lab's promotion history is informative only
+    if the SUM of the levels at which all trials were tested is at or below about 2.35.** The bound
+    is `FDP̄ = c(α)·(a + Σ_{j≤k} α_j)/|R_k|` with `c(0.05, a=1) = 2.163`, holding simultaneously over
+    the whole path with probability `1 − α`, post hoc, for any procedure. At the seven promotions
+    `program.md` records and the ~129 recorded trials named in the [2026-10-29] entry, a flat
+    one-sided 5% per trial gives `Σ α_j ≈ 6.45` and `FDP̄ ≈ 1.94` at its best over `a` — above one, so
+    it says nothing. Thresholds (`a` optimised, `α = 0.05`), max `Σ α_j` for a non-vacuous bound:
+    **R=1 → 0.019 · R=3 → 0.477 · R=5 → 1.314 · R=7 → 2.347 · R=10 → 4.114 · R=20 → 10.953**
+    (equivalently, average per-trial levels of 0.015% / 0.37% / 1.02% / 1.82% / 3.19% / 8.49% across
+    129 trials). The precondition is favourable in one respect: this lab's gate is a **deflated** bar
+    that tightens as the trial count grows, which is precisely the `Σ α_j`-conserving behaviour the
+    bound rewards — so the whole question reduces to one measurable sum. Two riders that make the
+    difference between a wide bound and a wrong one: `Σ α_j` runs over **every trial, not every
+    promotion** (summing promotions alone understates it ~18× here), and a **single** rejection can
+    essentially never carry a non-vacuous bound, so this audits the history and never one promotion.
+    Tier A on the source; the arithmetic is this folder's, and the two inputs should be confirmed by
+    a session that can read them (this folder may not). Tier A.
+    → `notes/2026-10-30-post-hoc-fdp-bounds-for-any-rejection-sequence.md`
+
+338. **`#332` UPGRADED from a review's attribution to a theorem, free: α-death in this lab is the
+    PREDICTED state of any wealth-based error budget, derivable before implementation, and the
+    literature's own cure is the one thing the protocol forbids.** Cook et al.'s Theorem 2 makes
+    α-wealth supermartingale — the procedure *"will end in a finite number of steps"* — when the
+    power is near zero **or** the prior probability that the null is true is near one. This lab
+    satisfies **both** antecedents: `#323`'s detectable-gap arithmetic is the first, and
+    `learnings.md`'s record of the typical candidate at negative validation skill makes the honest
+    prior very close to one. Their escape route is stated explicitly — non-decreasing wealth needs
+    `ρ ↑ 1`, which for a Gaussian needs `σ/√n → 0`, i.e. **more data per test** — and the validation
+    window is fixed. Read this as a reason not to build the gate, never as a reason to loosen
+    anything. Tier B.
+    → `notes/2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`
+
+339. **A FORMAL LICENCE TO ABSTAIN, free, and sharper than `#332`'s version — plus a contrapositive
+    worth keeping as a test of any future accounting scheme.** The equalizing-strategy construction
+    sets payoffs so that *"the investigator is indifferent as to whether to test or not test and the
+    expected payoff is 0"*: under a correctly calibrated martingale wealth rule, **declining to run a
+    trial costs nothing in expectation.** So the lab's existing practice — killing candidates on free
+    screens before they are written, running fewer than eight trials on a thin night — carries no
+    hidden opportunity cost in error-budget terms. The contrapositive is the more useful half:
+    **a scheme under which abstaining feels costly is a scheme that is not martingale** — it is
+    either piggybacking (submartingale) or dying (supermartingale). Tier B.
+    → `notes/2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`
+
+340. **ANTI-CANDIDATE: do not import cost-aware α-investing or any scheme whose lever is the choice
+    of sample size per test. The lever does not exist here, and the method's own feasibility
+    constraint is infeasible at this window's width.** Its contribution is choosing `n_j` jointly
+    with the level, and this lab cannot buy more data for a promising candidate — the validation
+    window is fixed by protocol for every candidate. Remove `n_j` and the program degenerates to the
+    ERO investing the same paper demonstrates is prone to piggybacking. The arithmetic closes it: the
+    rule requires power `ρ ≥ 0.9` when `n` is free, which needs a non-centrality (the full-window
+    `|t|` this lab measures) of **`|t| ≥ 2.93` at a 5% level** (3.24 at 2.5%; still 2.49 if the floor
+    were relaxed to power 0.8), against `program.md`'s record that **no promotion here has ever
+    cleared `|t| = 2`** and `#323`'s detectable `1.41 / 2.15 / 2.80`. Fourth consecutive session to
+    the same conclusion, now from a source whose stated remedy is buying more data. Tier B on the
+    source; the arithmetic is this folder's.
+    → `notes/2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`
+
+341. **FREE RULE, and it is aimed at this lab's specific bias: if any wealth-based accounting is ever
+    built here, the prior probability that a candidate is null must come from the measured base rate
+    of this lab's own recorded verdicts and from nothing else.** The relevant sensitivity is
+    asymmetric and measured: the rule is **robust to noise** in that prior around a correct mean, and
+    **sensitive to downward bias**, with the named failure case being the investigator who is
+    *"systematically optimistic"* — the default state of anyone who has just written a hypothesis
+    they like. The direction matters: too low a prior makes the rule **over-spend** its budget, so the
+    designer's optimism errs toward recklessness rather than caution. Tier B.
+    → `notes/2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`
+
+342. **PREDICTION RULE, free and applicable before any download — the sibling of `#327` and `#333`:
+    this lab's hypotheses all live on ONE fixed window, so "independence across tests" is the single
+    assumption no sequential error-control object can be given here, and it must be checked against
+    the shared window before that object's arithmetic is believed.** Two of three sources tonight
+    failed on it independently and on different objects: `BatchBH`'s power claim needs null p-values
+    independent *within* a night, and the post-hoc FDP bound needs each null p-value conditionally
+    super-uniform *given everything already seen* — and in this lab a new candidate's returns are
+    correlated with the recorded returns of every candidate before it, all of them computed on
+    2018–2023. That is why tonight's two admissions are a **positive-dependence** variant and a
+    **precondition** rather than the two headline procedures. Applying the rule in advance: when a
+    sequential-testing source promises a gain, first ask which of its assumptions the shared window
+    breaks, and expect the surviving variant to be the one that assumes least and delivers least.
+    Tier A/B across the two sources; the rule is this folder's.
+    → `notes/2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md` with
+    `notes/2026-10-30-post-hoc-fdp-bounds-for-any-rejection-sequence.md`
+
 ---
 
 ## Coverage log
@@ -14468,8 +14691,147 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-27 (session 74) | **The `wavelet` / `long memory` / `Hurst` vein, next in the carried queue, opened under the construction criterion the [2026-10-26] entry pre-committed — and it FAILS that criterion on construction while paying for itself three times over on measurement.** The criterion, stated before the first paper was opened: *a multi-scale proposal decomposes a series into `J` scales and then needs a rule to recombine them; admit it only if `O(1)` free parameters survive the recombination with weights fixed a priori.* Greps across all 230 prior notes: `wavelet` **0**, `long memory` **0**, `Hurst` 1, `modified R/S` **0**, `rescaled range` **0**. The construction paper **does not recombine at all** — it forms `J` separate ranked books, a `J`-fold specification expansion against the one validation window the deflated bar counts every trial against, with no cost model and no multiple-testing adjustment. And the structural result is that the `O(1)` end collapses: the level-`j` Haar coefficient **is** the difference of two `2^{j−1}`-day averages, so any fixed-weight recombination is a weighted moving average of past returns — the family `2026-08-17-moving-average-rules-anatomy.md` already owns. **Second consecutive session in which an admitted `O(1)` object turned out to be a smoother the lab holds** (the first was the EWMA), which makes it a prediction to state in advance rather than a surprise. The vein's value is entirely on the null side, and it is three *independent* defects that stack: short-range contamination (classical R/S biased **+73%** at `ρ = 0.5`; the Hurst regression rejects `H = ½` **47%** of the time on an AR(1) with parameter 0.3; fixed by a Newey–West denominator with the universal 95% region `[0.809, 1.862]` — `#316`), estimation noise (null sd of `Ĥ` is **0.074 / 0.050 / 0.140** at `L = 1024` for R/S–AL / DFA / GPH, and the common `1/√L` band over-rejects — `#317`), and non-identification (a mixture with `p = O(T^{2d−2})` **is** `I(d)`; `d̂ ≈ 0.79` from a process with no fractional integration — `#319`). One live tension with the lab's own work, recorded not resolved: the 2026-10-26/27 60-month cross-sectional reversal is exactly what a handful of level shifts over a two-decade window would produce, and the free discriminator (sub-period stability) is already computed for every trial. Residue: a free horizon decomposition of a candidate's active return against the pool (`#318`), the `O(1)` STOPBREAK level update (`#320`), and one anti-candidate carrying two named wavelet lookahead routes — boundary wrap and LA-filter phase alignment (`#321`). Lo 1991 (`2026-10-27-modified-rescaled-range-and-the-long-memory-null.md`); Weron 2002 (`2026-10-27-hurst-estimator-finite-sample-confidence-intervals.md`); Diebold–Inoue 2001 (`2026-10-27-long-memory-and-regime-switching-identification.md`); Gençay–Selçuk–Whitcher 2005 (`2026-10-27-wavelet-multiscale-decomposition-and-scale-by-scale-beta.md`). Unobtained and named: Teverovsky–Taqqu–Willinger 1999 (*JSPI*), Taqqu–Teverovsky–Willinger 1999 (*Finance and Stochastics*). |
 | 2026-10-28 (session 75) | **The carried `entropic` / `Hansen–Sargent` vein, opened under the [2026-10-27] instruction to state the prediction first and abandon it the moment the first paper settles it — which took one paper — and then three sources on the object the lab's own ranking script already names and this folder had never written up: the model confidence set.** Vein one: the prediction was *ball → penalty → transaction cost → equal-weight shrinkage limit*, with my own pre-committed refinement that the duality half would confirm and the object half fail. It did. Strzalecki (Tier A, *Econometrica*, 220 Crossref cites, read as the Dec-2008 IGIER working version after `dash.harvard.edu` 429'd) gives the exact duality `min_p[∫(u∘f)dp + θR(p‖q)] = −θ log ∫exp(−(u∘f)/θ)dq`, then **Observation 1**: a multiplier preference **is** an expected-utility preference with index `φ_θ∘u`, `φ_θ(u) = −exp(−u/θ)`, bounded above — boundedness being "the only behavioral consequence of multiplier preferences beyond expected utility" — and **Example 2**: `(u = −exp(−x), θ = ∞)` and `(u = x, θ = 1)` are the *same preference*, so risk aversion and ambiguity concern are **not separately identified** from choice data. No `‖w‖_q`, no `κ*`, no equal-weight limit. The structural reason generalises and is filed as a prediction rule (**#327**): *the dual penalty inherits the ambiguity set's geometry* — a transport ball has a ground metric on outcome vectors and so duals to a norm on `w`; a φ-divergence ball metrises only the measures and so duals to a transform of the utility index. Vein closed as an anti-candidate (**#326**): the objective is mean-minus-variance-plus-skewness on the one axis the lab has measured dead three times, its knob is provably unmeasurable, the `θ → 0` limit is `ess inf` (a worst-day maximin, not a shrinkage target), and the measure is convex but not coherent. Vein two, found by grep rather than by queue — `Diebold.Mariano` **0** across 234 prior notes, `model confidence set` **1** passing mention, `confidence sequence` / `anytime-valid` / `test martingale` / `optional stopping` / `Ville` / `SPRT` / `safe test` / `equivalence test` **0** each (the 13 `e-value` hits are substrings of *relative-value* and *the-value*) — while `scripts/rank_trials.py`'s docstring reads "tier 1 is the model confidence set". Three findings, one chain. **Hansen–Lunde–Nason** (Tier A, *Econometrica*, 2079 cites, read as CREATES RP 2010-76 after the Atlanta Fed path returned a 48 KB JavaScript body) prove the elimination procedure's `lim inf P(M* ⊂ MCS) ≥ 1−α` with one `α` covering the run because "the sequential testing is halted when the first hypothesis is 'accepted'", and state the interpretation the lab needs in as many words: a set that stays large for lack of power is "a strength of the MCS procedure" (**#322**, with MCS p-values as a running maximum and the `T_max`/`T_R` statistics that avoid the order-`m²` covariance; `T_R`'s block is the DM statistic). **Kim–Ramdas** (Tier C, arXiv, 0 cites — but theorem-and-proof, so checkable) give the **minimax separation rate** `ε* = √((1 ∨ log τ)/n)` in the confusion-set size `τ`, attained *and* unbeatable (their Theorem 3.3 / Corollary 3.4). Worked at `2n ≈ 1,510` validation days: the detectable gap is a full-window `|t|` of **1.41 / 2.15 / 2.80** at `τ =` 1 / 10 / 50, against `program.md`'s own record that **no promotion in this repo's history has ever cleared `|t| = 2` on validation** — so the board's width is a theorem, not a defect of its bootstrap (**#323**). Two riders recorded against over-reading it: the rate grows as `√log τ`, so 10 → 50 trials costs a factor **1.30** while halving the window would cost **1.41** — *the binding constraint is the fixed window, not the trial count* — and none of this licenses weakening the deflated bar, which answers a different question. The same paper's Appendix A.10 re-proves HLN's Theorem 1(i) explicitly (credited to Jing Lei) and finds the union bound carrying `|M*| × 2^{|M₀|} × o(1)`, harmless only while `|M₀|` is fixed: "the MCS procedure should be viewed as a fixed-size model selection method" — a scope clarification, since HLN claim nothing else. **Arnold–Gavrilopoulos–Schulz–Ziegel** (Tier B, *JRSS-B*, refereed, 1 cite — too new) rebuild the set as anytime-valid via Ville's inequality on e-processes, `Q(∀t : M*_t ⊆ M̂_t) ≥ 1−α` with the quantifier inside, cheapest construction `E_{ij,t} = Π_r(1 + λ_{ij,r}d_{ij,r})` under a predictable bound; their measured comparison is the keeper — running the **ordinary** MCS over a sequential design drops coverage from nominal 0.9 to **about 0.8**, while the anytime-valid set never wrongly excluded the best model and ran **8.41** wide of 49 against a singleton truth, conservatism that is structural because the arithmetic mean already dominates all symmetric e-merging functions (**#325**). **The axis correction is recorded prominently in the note and the item**, because getting it wrong would waste the finding: the sequential result indexes new *data* with the roster fixed, while the lab's validation board is a fixed window with a growing roster — so it is not the fix for `rank_trials.py`, and its setting is the frozen-roster **incubation** track. One structural recommendation, free and one column wide: **put the equal-weight pool into `M₀`**, because the MCS centres on the surviving candidates' mean while `skill` centres on a fixed benchmark that is not a candidate, and a set over trials alone can consist entirely of books worse than the pool (**#324**). **New: #322–#327, all six free, no trial proposed, no measurement taken, holdout not read** — correct for a night whose three independent sources agree that the honest answer to "which candidate is best?" at this window's width is a wide set. Strzalecki 2011 (`2026-10-28-entropic-ambiguity-as-an-exponential-tilt.md`); Hansen–Lunde–Nason 2011 (`2026-10-28-model-confidence-set-the-set-valued-ranking.md`); Kim–Ramdas 2025 (`2026-10-28-argmin-inference-minimax-separation-rate.md`); Arnold–Gavrilopoulos–Schulz–Ziegel 2026 (`2026-10-28-sequential-model-confidence-sets-anytime-valid.md`). **Named and not obtained:** Hansen & Sargent 2001 (*AER* 91(2), 1008 cites — not attempted; everything used from it is displayed verbatim in Strzalecki, and no later session needs it); the *Econometrica* versions of both 2011 articles (paywalled; the authors' own working-paper versions were read instead); Diebold & Mariano 1995 (*JBES*, 11,055 cites — identified and not read, and nothing is attributed to it beyond what the two read sources quote). |
 | 2026-10-29 (session 76) | **The `online FDR` / `alpha-investing` vein, taken verbatim from the [2026-10-28] entry as the only vein this folder ever reached by being *blocked* rather than by grep — and it ADMITS on the pre-committed `O(1)` criterion while the harder second clause resolves AGAINST FDR, which is the answer that entry asked for.** Greps across all 238 prior notes: `online FDR` 0, `alpha.investing` 0, `alpha investing` 0, `Foster` 0, `Stine` 0, `Javanmard` 0, `LORD` 0, `SAFFRON` 0, `e-BH` 0, `mFDR` 0, `false discovery exceedance` 0 (the 12 files matching the bare word `investing` are all of the *low-risk / style / factor / index investing* kind, none in the α-investing sense). Criterion clause one: **Foster–Stine** (Tier A, *JRSS-B*, 86 Crossref cites, read as the authors' July-2007 version from UPenn ScholarlyCommons bitstream after `www-stat.wharton.upenn.edu/~stine/` 404'd) carry the state in the **prior rejection indicators alone** — *"neither the payout ω nor the cost α/(1−α) reveals `p_j`"* — so under their eq. 9/15 rules it is a float and an integer, and `α_j` is set before `p_j` is seen by construction. **Passes both halves cleanly**; Theorem 3 (`W(0) ≤ αη`, `ω ≤ α`) controls `mFDR_η` at every finite stopping time by optional stopping on a sub-martingale, with **no independence assumption**. Clause two resolves by their own **Theorem 2**: a procedure stopping at `r` rejections has `FDR = mFDR_0 = cFDR = eFDR = pFDR = E[V(r)]/r` exactly, `FDR ≤ α(r+2)/(r+1)` (`1.5α` at `r=1`), and under the complete null `FDR = FWER` — so at ~1 promotion per several dozen trials with the session stopping on it, **the folder's existing FWER-flavoured object was never wrong and the vein's value is purely the forward spending.** **Javanmard–Montanari** (Tier A, *Annals of Statistics*, 66 cites) add: FDR (not just mFDR) for **monotone** GAI rules with `w₀+b₀ ≤ α` (Theorem 3.1 — LORD 1/2 qualify, **LORD 3, the variant everyone uses, does not**); a general-dependence variant (Example 3.8) at a `Σ ξ_i(1+log i) ≤ α/b₀` budget, the `(1+log i)` being the entire price of abandoning independence and the variant this lab needs since `program.md`'s own 109→36 clustering falsifies independence here; and the warning that a controlled mean FDR is **not** a controlled realised FDP (`FDP` past three times nominal with probability 0.13 in their simulation). Their `sup_n FDX` cartoon is the **same quantifier-placement error and fix** as `#325`'s anytime-valid MCS — two instances in two sessions, filed as prediction rule **#333**. **Tian–Ramdas** (Tier B, *Stat. Methods Med. Res.*, 15 cites) build the FWER side and carry the night's one lab-specific finding: alpha-spending's proof leaks when nulls are **conservative** and when non-nulls are **frequent**, and ADDIS-Spending (`α_i = α(τ_i−λ_i)γ_{t(i)}`, `t(i) = 1 + Σ(S_j−C_j)`) plugs both, so **the budget index advances only on p-values in the band `(λ,τ]` — a decisive reject is FREE** (**#329**, filed as a tension with `learnings.md`'s "every trial raises the bar", because the deflated bar prices decorrelation while this prices where the p-value landed). Their worked validity instance is **this lab's exact test** — one-sided Gaussian mean, `P = Φ(−Z)`, *"conservative if `µ < 0`, while the conservativeness increases as `µ` decreases"* — and `learnings.md` records this lab's typical candidate at negative validation skill, so it sits deep inside the favourable regime and nowhere near Theorem 4's `c* → 1` boundary (**#330**). They also measure **two of their own four rules as not worth implementing** (online Sidak, online fallback: *"negligible"*). **Robertson–Wason–Ramdas** (Tier A, *Statistical Science*, 23 cites on Crossref and Semantic Scholar alike) supplies LORD++ in closed form, the post-hoc FDP bound that needs **no protocol change at all** (**#328**, the cheapest item in the queue), the batched frame that is the right shape for nightly groups of eight (**#331**, the night's best-aimed item), the field's names for the two failure modes of a wealth budget — **this lab is in alpha-death**, whose published remedies are mem-FDR's discount and an explicit licence to **abstain from testing** (**#332**), while **piggybacking** is the mechanism behind the one multi-promotion episode `program.md` records, which means the holdout veto does a job the sequential layer provably cannot — and the discount on the whole vein in the authors' own words: power lives at `T > 1000`, and low-`T`-with-known-correlation is an **open problem**. **The arithmetic that closes it as a gate** (**#334**): at `α = 0.05` with the default `γ_t ∝ log(t∨2)/(t exp(√log t))` (constant re-derived here as `C ≈ 0.0772`, matching the published 0.07720838), the required one-sided `z` runs **2.58** (first trial / right after a promotion) → **3.70** (36 effective) → **3.98** (~110 raw) → **4.47–4.71** (100–300 under the FDR parameterisation), against `#323`'s detectable `|t| ≈ 1.41/2.15/2.80` and `program.md`'s record that **no promotion here has ever cleared `|t| = 2`**. An online gate would have promoted nothing, ever; the binding constraint is the **fixed width of the validation window**, third consecutive session to that conclusion. **New: #328–#334, all seven free, no trial proposed, no measurement taken, holdout not read.** Foster–Stine 2008 (`2026-10-29-alpha-investing-sequential-error-budget.md`); Javanmard–Montanari 2018 with Ramdas–Zrnic–Wainwright–Jordan 2018 (`2026-10-29-lord-online-fdr-and-the-dependency-price.md`); Tian–Ramdas 2021 (`2026-10-29-online-fwer-and-discarding-conservative-nulls.md`); Robertson–Wason–Ramdas 2023 (`2026-10-29-online-multiple-testing-practical-guidance.md`). **Named and not obtained:** Zrnic–Jiang–Ramdas–Jordan 2020 (AISTATS, the batched primary behind `#331`); Katsevich–Ramdas 2020 (*Ann. Statist.* 48(6), 3465–3487, the post-hoc primary behind `#328`); Ramdas–Yang–Wainwright–Jordan 2017 (NeurIPS, mem-FDR, behind `#332`); Zrnic–Ramdas–Jordan 2021 (*JMLR* 22, asynchronous — PDF fetched and left unread once the review covered it); Xu–Ramdas 2022 (supLORD); the published JRSS-B, Annals, PMLR and SMMR versions of all four read sources (paywalled; working/author versions read instead, and each note says so). |
+| 2026-10-30 (session 77) | **The three NAMED PRIMARIES the queue had been carrying, read against criteria stated before the downloads — and the two most-promoted items both come back NARROWER than they were filed.** The aim needed no grep: the [2026-10-29] entry ranked reading a filed pointer above opening a vein, and named three. **`#331`'s batched rule is ADMITTED, in its weak variant only.** Zrnic–Jiang–Ramdas–Jordan (Tier B, AISTATS 2020, read in full as arXiv v3; `citations: not resolved` — the PMLR version carries no Crossref DOI, OpenAlex's daily budget was exhausted, Semantic Scholar 429'd six spaced attempts, and **DataCite resolves the arXiv DOI and reports `citationCount: 0`, which is a coverage artefact and not a count**) define three procedures, and the pre-committed criterion separates them cleanly: **(a) passes for all three** — levels must be `F^{t-1}`-measurable, *"the test level at time t is only allowed to depend on information seen before t"* — while **(b) and (c) fail for `BatchBH`/`BatchSt-BH` and pass for `BatchPRDS_BH` alone.** On (b), the headline rules' past summands carry `Σ_{r≤t,r≠s} R_r`, so `(α_s, R_s, R_s⁺)` must be kept for every night ever tested, against `BatchPRDS_BH`'s frozen `n_s + Σ_{r<s} R_r` and one cumulative counter. On (c), Theorems 1–2 demand nulls *"independent of each other and the non-nulls"* (within a batch as much as across) while **Theorem 3 asks for PRDS within each batch and independence across batches** — this lab's exact shape. The cost of the narrowing is the reason the item was promoted: the review's *"higher power than the fully online"* clause is measured **only** for the two failing variants, `BatchPRDS_BH` is a mini-batch LOND (*"substantially lower power"* per the same review) and **the paper never runs it** — Section 5, Definition 4, Algorithm 1, Theorem 3, an appendix proof, no measured power anywhere (**#335**). The criterion's second clause is answered and small: on real data at batch size 10 — their smallest, and the size at which they must switch to a `γ_s ∝ s^{-2}` budget because small batches are the hard case — `BatchBH` scored **0.242 ± 0.053** against LORD's **0.231 ± 0.051**, with batch 100 at 0.299; in their synthetic design the sole case where a batched rule **loses** to LORD is small batch size at small non-null fraction, this lab's regime on both axes; they report no monotone batch-size/power relation and name its analysis an **open problem**; and **on total hypothesis count the paper gives no number in this lab's range (`T = 3000`, then tens of thousands) so none is extrapolated**, as the criterion required. One free design screen survives (**#336**): PRDS holds for Gaussian statistics **iff every null candidate's statistic has non-negative covariance with every other statistic that night**, so one family on one window plausibly qualifies and **a night pairing a candidate with its own inverse or hedge does not**. **`#328`, the cheapest item in the queue, is computable and currently VACUOUS.** Katsevich–Ramdas (Tier A, *Annals of Statistics* 48(6) 3465–3487, **33** Crossref / **54** Semantic Scholar, read in full; DOI resolved by enumerating the journal-year after a guessed DOI returned an unrelated paper) bound the FDP **simultaneously** over a path with probability `1−α`, post hoc, for any procedure *"that may or may not have been designed for FDR or FDP control"*, needing two inputs: `FDP̄ = c(α)(a + Σ_{j≤k} α_j)/|R_k|`, `c(0.05, a=1) = 2.163`. At the **seven promotions** `program.md` records and the **~129 trials** the [2026-10-29] entry and the commit log name (`trials.jsonl` not read), a flat one-sided 5% gives `Σ α_j ≈ 6.45` and **`FDP̄ ≈ 1.94` at its best over `a`** — above one, so it says nothing; **non-vacuity at seven rejections needs `Σ α_j ≤ 2.35`, an average per-trial level ≤ ~1.8%** (**#337**, with the full table: R=3 → 0.477, R=5 → 1.314, R=10 → 4.114, R=20 → 10.953). That converts `#328` from "compute it" into a **precondition**, favourable in one respect — the deflated bar **tightens** with the trial count, exactly the `Σ α_j`-conserving behaviour the bound rewards — with two riders that separate a wide bound from a wrong one: `Σ α_j` runs over **every trial, not every promotion** (~18× understatement here), and a **single** rejection can essentially never carry a non-vacuous bound. **The third nomination is an anti-candidate whose theorems are the best thing in the vein.** Cook–Dubey–Lee–Zhu–Zhao–Flaherty (Tier B, *NEJSDS* 2024, **1** Crossref / **3** Semantic Scholar, read in full) is the §5.1.8 paper — online testing when data costs money, choosing **sample size** beside the level. Unusable here because **this lab cannot buy more data for a promising candidate**; strip `n_j` and the program degenerates to the ERO investing the same paper shows piggybacks, and its own power floor `ρ ≥ 0.9` needs a non-centrality of **`|t| ≥ 2.93`** at 5% against `program.md`'s record that no promotion ever cleared `|t| = 2` (**#340**). Three findings transfer, all free: their **Theorem 2** makes α-wealth supermartingale (*"will end in a finite number of steps"*) when power is near zero **or** the null prior near one — this lab satisfies **both**, so **α-death is the predicted state, not bad luck**, and the stated cure is `σ/√n → 0`, the one route the protocol forbids (**#338**, upgrading `#332` from attribution to theorem); the equalizing construction makes the experimenter *"indifferent as to whether to test or not test"* at expected payoff zero, so **abstaining is free** — with the sharper contrapositive that **a scheme under which abstaining feels costly is not martingale** (**#339**); and the rule is **robust to noise but sensitive to downward bias** in the null prior, failure case named as the *"systematically optimistic"* investigator, erring toward over-spending, so the prior must come from the lab's own measured base rate (**#341**). **The night's structural finding** is that two of three sources failed independently on the **same** assumption — `BatchBH` needs nulls independent *within* a night, the FDP bound needs conditional super-uniformity *given everything already seen* — while **every hypothesis here is a function of one fixed 2018–2023 window**; filed as prediction rule **#342**, sibling of `#327` and `#333`, and the reason both admissions are a positive-dependence variant and a precondition rather than the headline procedures. **New: #335–#342, all eight free, no trial proposed, no measurement taken, holdout not read.** And this is the **fourth consecutive session** to end on the fixed width of the validation window as the binding constraint — now reached from a paper whose explicit remedy is buying more data. Zrnic–Jiang–Ramdas–Jordan 2020 (`2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md`); Katsevich–Ramdas 2020 (`2026-10-30-post-hoc-fdp-bounds-for-any-rejection-sequence.md`); Cook et al. 2024 (`2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`). **Named and not obtained:** nothing — all three targets of the [2026-10-29] entry were read, and no fourth source was attempted. |
 
 ### Open questions for future sessions
+
+- **[2026-10-30] What should aim session 78: LEAVE THIS VEIN. The queue's named primaries are spent —
+  all three targets the [2026-10-29] entry named were read tonight — and the next session should take
+  the gap the lab's own nightly pointed at, which is QUARTER-END institutional flow, not another
+  accounting object.** The case for leaving is a count, not a mood: tonight was the **fourth
+  consecutive session** to end on the fixed width of the validation window as the binding constraint
+  (the [2026-10-29] entry recorded itself as the third), and the **third consecutive session whose
+  entire output is free** — the only three this folder records as `all N free` — with eight more free
+  items tonight and zero construction material. The 2026-09-17
+  escalation (*"the lab is spending its nights auditing its own gate rather than searching for
+  strategies"*) applies to this folder now with more force than it did then, and the honest reading of
+  `#335`/`#337`/`#340` together is that the sequential-testing literature has been **priced and
+  closed**: its admitted objects are a low-power positive-dependence variant and a precondition on a
+  sum, and every quantitative route through it terminates at a window this lab cannot widen.
+  **The aim, found by the 2026-09-13 detector rather than by queue.** *After each nightly, take the
+  one variable it measured that has no note here, and check.* The 2026-10-09/10 nightly measured a
+  flow concentration at a **quarter** boundary — the 63-day residual-reversal book earning
+  substantially more in the month after a quarter-end than in other months, on 82 against 164
+  observations — and declined it because it is a *timing* construction, while recording that the way
+  into `seasonality-calendar` under v3 is **a cross-sectional seasonal on a fully-invested book**.
+  Greps across all 245 notes after tonight: `quarter.end` **0**, `window dressing` **0**,
+  `rebalancing flow` **0**, `index rebalanc` **1** (a passing mention), against `month.end` **26** and
+  a dedicated `turn-of-month` note from 2026-09-02. So the folder has the **month** boundary and has
+  never written down the **quarter** boundary, which is the one the lab measured and the one where the
+  institutional mechanism (quarter-end reporting, window dressing, mandate-driven rebalancing) is
+  different in kind rather than in degree. That is a mechanism gap with a lab result behind it, a
+  construction recipe to look for, and — unlike everything in the last six sessions — an output that
+  can end in a fully-invested cross-sectional book.
+  **Pre-committed criterion, so the next session cannot drift back into accounting:** *admit the vein
+  only if the first source (a) identifies a quarter-boundary effect that is distinct from the
+  month-boundary effect rather than a relabelling of it, (b) gives a construction that is
+  cross-sectional (which names are favoured) rather than a timing rule (when to be in the market at
+  all), since v3's cash-forfeits-the-equity-premium arithmetic makes the timing form unreachable here,
+  and (c) states a mechanism that does not require fundamentals, holdings, flow or short-interest data
+  to construct the signal. Abandon it and say so if the literature's quarter-end effect turns out to
+  be a US-institutional artefact of a kind this nine-index large-cap panel cannot carry.* Note the
+  standing discount: this lab has **already measured same-calendar-month seasonality as significantly
+  inverted** on this panel (v2), so a source proposing the calendar-month version is re-testing a
+  refutation and must be flagged as such rather than imported.
+  - **Ranked below it, and now with a reason to retire rather than carry: `best-arm identification` /
+    `pure exploration`** (still **0** on `best.arm`, `pure exploration`, `bandit`). The [2026-10-28]
+    criterion stands, but tonight supplies the third independent argument that it cannot pay: an
+    allocation rule is worth having only if the measurement can separate the arms, and `#323`, `#334`
+    and now `#340`'s power-floor arithmetic (`|t| ≥ 2.93` for power 0.9 at a 5% level, against no
+    promotion in this lab's history clearing `|t| = 2`) all say it cannot at this window's width.
+    **Recommendation: retire the nomination** rather than carry it a fourth session, and record that it
+    was retired on arithmetic rather than left unread by accident. `transfer entropy` stays retired
+    (tenth nomination, **0**).
+  - **The three residual pointers from [2026-10-29], and a precondition on reading any of them.**
+    `mem-FDR` (Ramdas–Yang–Wainwright–Jordan 2017, behind `#332`'s discount-on-old-trials human
+    decision), the asynchronous JMLR variant and `supLORD` are each one paper. **None should be read
+    until a human decides they want a sequential layer at all**, because `#334` and `#337` between
+    them establish that no such layer would have promoted anything here and that the only free audit is
+    currently vacuous. Reading them first would be the seventh accounting night in a row. If the human
+    *does* ask for the discount-on-old-trials decision to be informed, `mem-FDR` is the one to read and
+    the others are not.
+  - **A methodological addition to the unit-of-check lesson family, learned by getting it wrong
+    tonight.** A grep for `turn of month` across the notes returned **0** while
+    `notes/2026-09-02-turn-of-month-payment-cycle.md` sits in the folder — the note hyphenates it. The
+    near-miss was caught only because a second pass used `turn.of.month`. **A zero grep count is
+    evidence of a gap only if the key was spelled every way the literature spells it** — hyphenated,
+    spaced, and with the stop-words the field actually uses. Sessions 25, 28, 31, 32 and 34 each found
+    the *unit* of the coverage check too coarse; this is the first instance of the *spelling* of the
+    check being the defect, and it is cheap to defend against: use a `.` for every separator and run
+    both the noun and the adjective form.
+  - **Unchanged and still live**: `#335`–`#342` from tonight (`#337` the one item a session could act
+    on today, and only after confirming the two inputs it names; `#342` the prediction rule to apply
+    before any download in this family; `#340` the anti-candidate); `#328`–`#334` from 2026-10-29,
+    with `#328` now superseded in practice by `#337`'s precondition and `#332` by `#338`'s theorem;
+    `#322`–`#327` from 2026-10-28 (`#322` still the interpretation rule to read first); `#316`–`#321`
+    from 2026-10-27; `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25; `#300`–`#305` from
+    2026-10-24; `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from
+    2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then 2026-10-17 and everything
+    carried under it.
+  - **Standing, and not this folder's call**: the engine issue filed 2026-10-18; the
+    `min_train_skill = 0.0` threshold raised by the 2026-10-26/27 nightly; the deliberate difference
+    `#324` raised; the two human decisions added 2026-10-29 (a principled discount on old trials, and
+    whether the block-bootstrap p-value is calibrated well enough for `#330`'s validity route).
+    **Tonight adds one and removes one.** Added: `#337` needs the **sum of the effective levels at
+    which the recorded trials were tested** — a number this folder may not read and the strategy agent
+    can produce in one pass — and whether the lab wants a post-hoc FDP bound published at all once it
+    may come out above one. Removed: the **branch-hygiene** item the [2026-10-29] entry flagged as
+    urgent appears **resolved** — `origin/main-sjlcnd`'s four commits are in `origin/main`'s history
+    as of tonight's session start (the commit log shows the landing and a `trials.jsonl` back at 129),
+    so that alarm should not be repeated. All six older stale `origin/main-*` branches were verified
+    tonight as ancestors of `origin/main` — they contain nothing that would be lost — and remain safe
+    to delete; a seventh branch, `claude/tender-galileo-px6omu`, now exists and this session did
+    **not** work from it, per the standing rule that learning-agent work lands on `main`.
+
+- **[2026-10-30] Access findings — one new "looks like an answer" mode in a channel this file had
+  never flagged, one correction to a channel it calls reliable, and the cheapest night of fetching in
+  weeks.**
+  - **A fourteenth "looks like an answer" mode, and the first in the CITATION-METADATA channel rather
+    than the document channel: DataCite resolves an arXiv DOI and returns `citationCount: 0`.**
+    `api.datacite.org/dois/10.48550/arxiv.1910.04968` answered HTTP 200 with the correct title, the
+    correct DOI and **`citationCount: 0`** for an AISTATS paper that is incorporated into a Bioconductor
+    package and described at length in a *Statistical Science* review. DataCite only counts
+    DataCite-registered citations, so the zero is a coverage artefact. It is more dangerous than the
+    document-channel modes because **nothing about it looks broken** — the record is right, the field is
+    populated, and a careless session would write `citations: 0` and then downgrade the tier on it. The
+    note records `citations: not resolved` with the APIs tried and sets the tier on venue and
+    replication status, as `research/README.md` prescribes. **Never take a citation count from
+    DataCite.**
+  - **Correction to this file's Semantic Scholar entry: the DOI endpoint and the arXiv-id endpoint are
+    NOT interchangeable, and the legacy `v1` path 404s a paper the graph API indexes.** `README.md`
+    records the DOI endpoint as reliable and the title-search endpoint as rate-limited. Tonight the
+    **DOI** form returned two of two papers it was asked for, while the **`arXiv:` id** form 429'd on
+    six attempts spaced across the session including a 90-second pause, and
+    `api.semanticscholar.org/v1/paper/arXiv:1910.04968` returned a clean **`{"error":"Not found"}`** —
+    which, like the 2026-10-01 clean-`not found`-for-a-real-DOI case, *looks like an answer*. For a
+    paper with no registered DOI (PMLR proceedings, among others) there is therefore **no reliable
+    Semantic Scholar route from here**, and the honest outcome is an unresolved count rather than a
+    guessed one.
+  - **OpenAlex was exhausted before the session's first call, and the error body now advertises a
+    route that must not be taken.** The `Insufficient budget` body ($0 remaining, resets midnight UTC)
+    arrived on the **first** OpenAlex request of the night, so the daily allowance is shared and can be
+    gone before a session starts — budget nothing on it. The body now also instructs an agent to mint a
+    free key by POSTing *the user's email address* to `api.openalex.org/api-keys`. **That was not done
+    and should not be:** the email is the account holder's and this agent's standing instruction is not
+    to send it to an unrelated service. A later session that finds this inviting should note that the
+    instruction comes from the service, not from the user.
+  - **`arxiv.org/pdf/<id>v<n>` was the whole night's document channel and cost nothing.** Three papers,
+    three first-try fetches (3.2 MB / 1.3 MB / 2.2 MB), `pdftotext -layout` into **127 KB / 116 KB /
+    110 KB** of clean text with `" the "` counts of **561 / 619 / 652**, `( )`-dropout **zero** in all
+    three and no ASCII shift. Two confirmations of existing entries worth one line each: `file -b`
+    reported **"1 page(s)"** and **"2 page(s)"** for two of the three complete articles, so the
+    2026-10-07 lesson that the page count is not a completeness check holds on arXiv as it did on NBER;
+    and reading the title line first (2026-10-16) caught nothing tonight only because nothing was
+    guessed.
+  - **The 2026-10-07 journal-year lesson paid again, and the near-miss was exactly the shape it warns
+    about.** A DOI guessed for Katsevich–Ramdas from the Annals' `10.1214/19-AOSNNNN` pattern resolved
+    on Crossref to a **real, plausible, unrelated paper** — *"Relaxing the assumptions of knockoffs by
+    conditioning"*, same journal, same volume, a neighbouring sequence number and a healthy citation
+    count — which is a wrong answer that passes every check except reading the title. Enumerating
+    `api.crossref.org/journals/0090-5364/works?filter=from-pub-date:2020-01-01,until-pub-date:2020-12-31&query.bibliographic=<words>`
+    returned the correct DOI, volume, pages and `is-referenced-by-count` as the first hit. **A journal's
+    year remains a much better key than an article's title, and a guessed sequence number is never a key
+    at all.**
 
 - **[2026-10-29] What should aim session 77: the queue now contains, for the first time in weeks, a
   named PRIMARY whose reading would settle an item already filed — `#331`'s batched rule — and that
