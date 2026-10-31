@@ -7749,6 +7749,119 @@ independent routes have now priced at zero.
 
 ---
 
+### The QUARTER boundary — a second institutional calendar, distinct from the month boundary in two markets, whose signal is holdings in all of them (`seasonality-calendar`)
+
+**Why this section exists, and the one sentence that matters.** The [2026-10-30] open question sent
+this session out of the sequential-testing vein and at the **quarter** boundary: the folder had the
+*month* boundary since 2026-09-02 (`notes/2026-09-02-turn-of-month-payment-cycle.md`) and, across
+245 notes, zero hits for `quarter.end`, `window dressing` or `rebalancing flow` — while the lab's
+own 2026-10-09/10 nightly had measured a flow concentration at a quarter boundary and declined it
+for being a timing construction. Four sources later, the answer is clean and it is negative for the
+right reason: **the quarter boundary is a genuinely distinct institutional calendar, replicated in a
+second market, and in every source the cross-sectional signal is _who holds the stock_ — the two
+price-only proxies a lab like this one could compute are explicitly controlled away before the
+effect appears.** The vein is closed on evidence, not on effort.
+
+**The pre-committed criterion, answered clause by clause.** [2026-10-30] fixed three tests before
+any download: (a) a quarter effect distinct from the month effect rather than a relabelling; (b) a
+*cross-sectional* construction, not a timing rule, since v3's cash-forfeits-the-equity-premium
+arithmetic makes timing unreachable; (c) a mechanism needing no fundamentals, holdings, flow or
+short-interest data to build the signal.
+
+- **(a) passes, and passes twice.** Carhart–Kaniel–Musto–Reed (Tier A, *Journal of Finance*, **362**
+  Semantic Scholar / **321** Crossref, read in full from an author-hosted PDF) report "little or no
+  effect at month-ends that are not quarter-ends", in two fund databases and in the fraction of
+  funds beating the index, with the boundaries estimated as a **joint** dummy set. Shackleton–Yan–Yao
+  (Tier B, *European Financial Management*, **7** citations in both indices, read in full from
+  Lancaster green OA) re-run that design in a second market and again find non-quarter month-ends
+  "almost insignificant". The institutional reason is different in kind from the month cycle:
+  **reporting and ranking dates are quarterly**, where the month boundary is a payment-and-settlement
+  cycle. The folder now has both boundaries and they are separate objects (**#343**).
+- **(b) fails for three of the four sources and passes only for the weakest.** The cross-section the
+  pumping effect lives on is *funds*; its stock-level version is identified **only in the holdings
+  residual** — Carhart et al.'s test sorts 5×5 on capitalisation × past six-month return and finds
+  top-fund-held names more inflated **after** both controls, i.e. the price-only variation is removed
+  before the result appears. Shackleton et al. find the effect in the **top fund-ownership quintile
+  and almost nowhere else**. The only price-only, fully-invested construction in the vein is Sias's
+  quarter-ending-month momentum concentration (Tier B, *Financial Analysts Journal*, **70** / **41**;
+  **paywalled, read from the RePEc abstract and two practitioner summaries, flagged in-note**) with
+  Brown's SSRN working paper (Tier C, **0** citations, read second-hand from one review) as its tax
+  variant.
+- **(c) fails with (b)** for the pumping sources and, decisively, **fails on evidence rather than on
+  data availability** thanks to Hu–McLean–Pontiff–Wang (Tier A, *Review of Financial Studies*,
+  **91** Crossref; the published version is closed, so the authors' own Nov-2008 working paper
+  *"Tape Painting"* was read in full from the EFMA 2009 programme). That paper tests the one
+  price-only story — **window dressing**, buying past winners and selling past losers before a
+  reporting date — directly in institutional trade data and **rejects it**: institutions are not more
+  likely to buy high-past-return stocks or sell low-past-return stocks at quarter- or year-end
+  (**#344**). So the natural proxy is not a data gap to be bridged; it is a tested and failed
+  hypothesis.
+
+**The three structural facts that close the vein for this repo, each from a different source.**
+
+1. **It is an end-of-the-last-day effect and protocol v3 cannot be there.** Carhart et al. localise
+   the price inflation in the final half-hour before the close, with excess trade counts peaking in
+   the last five minutes, and the next day reverses. Under v3 a row emitted on `d` fills at each
+   name's **next real close**, so a close-to-close book can only buy *after* the run-up has printed
+   and sell *into* the reversal — the sign-inverted trade. The folder's 2026-08-30 execution-lag
+   asymmetry (costs a daily effect most, a monthly effect least) bites at its maximum here (**#345**).
+2. **The dominant channel is an absence of trade.** Hu et al.'s decomposition is the vein's best
+   finding: excessive buying is *atypical* and confined to names the institution is overweight,
+   while **depressed selling** — simply not selling what you would have sold — is pervasive, because
+   it costs nothing and is far harder to detect. Missing sell pressure has no signature in a
+   close-only panel, and a daily volume total cannot isolate a last-half-hour phenomenon. The same
+   authors record the channel mix **shifting** toward the harder-to-detect form once the behaviour
+   drew scrutiny, which makes this a mechanism whose *construction recipe* expires — a stronger
+   decay argument than the usual McLean–Pontiff discount (**#346**).
+3. **The capitalisation gradient points away from this panel, and the sources disagree about its
+   sign.** Carhart et al.'s inflation is monotone **decreasing** in capitalisation, down to a few
+   basis points in the largest quintile — below one side of the 15 bps cheapest v3 cost tier, before
+   the UK and Hong Kong stamp duties v3 charges on two of these nine markets. Brown's tax channel
+   predicts the **opposite** (larger-cap, more liquid names, because that is where losses are
+   realised). Either way this repo's panel — nine **large-cap** national indices — sits where at
+   least one of the two mechanisms is smallest, and `research/README.md`'s own clause applies: a
+   mechanism the literature localises to small, thin or retail-held names is excluded here **by
+   construction**, so a null would be *uninformative* rather than evidence (**#347**).
+
+**The one free screen the session produces, and it is the only item here a nightly could act on.**
+Sias's construction is the only one that is cross-sectional, fully invested and price-only: a
+momentum sort whose profits concentrate in the **third month of each calendar quarter** (January
+excluded). It clears the criterion's shape test and then dies on a number the lab already owns —
+**12−1 momentum's region-matched cross-sectional rank IC on this panel is +0.0128 at t = +0.96**, a
+null, so conditioning it on a calendar indicator yields a null on a quarter of the observations with
+a wider standard error. The screen that would settle it costs no trial: **measure the momentum rank
+IC separately in third-months-of-quarter and in other months, January excluded, on train,
+region-matched** (**#348**). Note what this is *not*: the lab's 2026-10-09/10 measurement conditioned
+a **residual-reversal** book on the month **after** a quarter-end, a different signal, a different
+window and a one-sided statistic with no reversal leg.
+
+**Two corrections this session owes, both found while reading rather than by audit.**
+
+- **`SUMMARY.md`'s own standing discount on calendar seasonals is out of date.** The [2026-10-30]
+  open question says "this lab has already measured same-calendar-month seasonality as significantly
+  *inverted*". `experiments/learnings.md` **withdrew that on 2026-10-15**: the inverted reading came
+  from a misaligned score (`features.seasonal_same_month_return` published the month that had just
+  *ended*, not the month a book formed then would hold), and the properly aligned seasonal is a
+  **region-matched null** (t +1.78), orthogonal to the misaligned one. The correct discount to cite
+  on a calendar-seasonal source is **"the lab measured a null, not an inversion"**. Carried as a
+  caution about this file, not about the sources.
+- **The sign of an agency-driven calendar effect is a market-level parameter, not a constant.**
+  Shackleton et al. find the Chinese market resembles the Australian one, where the **worst**
+  performers pump, against the US pattern where the **best** do — because flows in those markets
+  respond weakly to performance rank, so the live incentive is avoiding dismissal rather than
+  harvesting a convex flow response. A pooled test across nine markets with opposite signs averages
+  toward zero, which is a **predicted** null. Generalised: **a mechanism can replicate while its
+  construction does not** (**#347** carries this).
+
+**What the night did not produce.** No trial, no return stream, no holdout look. But — against the
+[2026-10-30] entry's own complaint that three consecutive sessions produced *only* free items — this
+one produces a **mechanism closure with a named reason**, a free screen a nightly can run, and the
+first coverage of a `program.md` calendar object the folder had never written down. One of the six
+items is a construction-relevant screen; the rest are closures and interpretation rules. The vein
+should not be reopened without new data types.
+
+---
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -14606,6 +14719,104 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md` with
     `notes/2026-10-30-post-hoc-fdp-bounds-for-any-rejection-sequence.md`
 
+343. **FREE SPECIFICATION RULE, and the first thing to fix in any calendar screen this lab runs: the
+    quarter boundary and the month boundary are DIFFERENT OBJECTS, and only a joint dummy set
+    separates them.** Estimate `YEND`, `QEND` (quarter-ends other than the fourth) and `MEND`
+    (month-ends that are *not* quarter-ends) in one regression, plus the matching `*BEG` terms for
+    the next period's first day; the re-parameterised form `YEND`, `QEND`,
+    `YEND+QEND+MEND` reads off the quarter's *incremental* effect over being a month-end at all.
+    Two independent markets report the month-end term as near-zero once the quarter term is in the
+    model, so a bare quarter dummy is confounded with the month effect this folder already has a
+    note on — and a pooled "month after a quarter-end versus other months" contrast, which is what
+    the lab measured on 2026-10-09/10, cannot tell the two boundaries apart. Two companion devices
+    from the same sources, both free: define the period-end statistic as a **round trip** (last day
+    of the period minus first day of the next, which differences out common drift and is the object
+    costs are actually paid on), and build its null **from the same year** (standardise by the
+    statistic's distribution over all other non-overlapping two-day windows of that year) instead of
+    from a model. Tier A.
+    → `notes/2026-10-31-quarter-end-marking-the-close.md` with
+    `notes/2026-10-31-nav-inflation-outside-the-us-china.md`
+
+344. **ANTI-CANDIDATE, and the one that closes the vein: do not build a quarter-end tilt on past
+    returns. "Window dressing" is the only price-only story in this literature and it is REJECTED in
+    institutional trade data.** Window dressing — buy past winners, sell past losers before a
+    reporting date — is the hypothesis that would let a close-only lab proxy the effect. The Tier-A
+    trade-level test reports institutions are **not** more likely to buy high-past-return stocks or
+    sell low-past-return stocks at quarter- or year-end; the conditioner that does carry the effect
+    is **overweight**, the stock's share of the holder's own portfolio minus its market-value share.
+    The same conclusion arrives from the return side: the canonical pumping paper finds top-fund-held
+    names more inflated **after** controlling for capitalisation *and* recent return, i.e. the
+    price-only variation is partialled out before the result appears, and a second market finds the
+    effect confined to the top fund-ownership quintile. So the missing signal is not a data gap a
+    proxy might bridge — it is a tested and failed hypothesis. Tier A.
+    → `notes/2026-10-31-tape-painting-buying-versus-selling.md` with
+    `notes/2026-10-31-quarter-end-marking-the-close.md`
+
+345. **ANTI-CANDIDATE, independent of #344 and sufficient on its own: the quarter-end price effect
+    lives in the last half-hour before the close, and protocol v3's fill convention puts a
+    close-to-close book on the wrong side of it.** The inflation is localised in the final
+    thirty minutes, with excess trade counts peaking in the last five, and it reverses the next day.
+    Under v3 a row emitted on date `d` fills at each name's **next real close**, so the only trade
+    available is buying *after* the run-up has printed and selling *into* the reversal — the
+    sign-inverted version. This is the extreme case of the folder's 2026-08-30 finding that the
+    execution lag costs a daily effect most and a monthly effect least, and it means **no fill
+    convention this protocol permits can reach the mechanism**, whatever the panel. Tier A.
+    → `notes/2026-10-31-quarter-end-marking-the-close.md`
+
+346. **FREE SCREEN plus a decay prior stronger than publication decay: require the next-period
+    REVERSAL before calling any boundary effect a flow effect, and treat an agency mechanism's
+    construction recipe as expiring.** The trade-level decomposition splits period-end flow into
+    **excessive buying** (atypical, only where the holder is overweight) and **depressed selling**
+    (pervasive, because not trading is free and nearly undetectable) — and identifies both by
+    showing the *same holder's* flow reverses next period. Two consequences. **(i)** The lab's
+    2026-10-09/10 quarter-boundary measurement is a one-sided window statistic with no reversal leg,
+    so it is currently consistent with a flow story *and* with a mid-month drift story; measuring the
+    round-trip version (#343) costs no trial and would separate them. **(ii)** The dominant channel is
+    an *absence* of trade, which has no signature in a close-only panel and cannot be isolated by a
+    daily volume total. And because the behaviour is partly illegal, detectable, and executed by
+    agents who can switch forms — the same authors record the mix moving toward the harder-to-detect
+    channel once scrutiny arrived — the recipe decays in **form**, not just in size, which
+    invalidates a construction rather than shrinking its payoff. Tier A.
+    → `notes/2026-10-31-tape-painting-buying-versus-selling.md`
+
+347. **INTERPRETATION RULE, free, and general beyond this family: a mechanism can REPLICATE while its
+    construction does not — the cross-sectional sign of an agency-driven effect is a market-level
+    parameter, and the capitalisation gradient of this one points away from this panel.** The
+    quarter-end NAV-inflation phenomenon replicates in a second market; its *direction* does not. In
+    the US the **best** performers inflate (convex flow–performance relation); in the Australian and
+    Chinese markets the **worst** do, because flows there respond weakly to rank so the live
+    incentive is avoiding dismissal. Pooling markets with opposite signs averages toward zero, so a
+    nine-market pooled null on any agency mechanism is a **predicted** null, not an informative one.
+    Separately, the capitalisation gradient is adverse and the two mechanisms in this vein disagree
+    about its sign — pumping is monotone *decreasing* in capitalisation (a few basis points in the
+    largest quintile, below one side of the 15 bps cheapest v3 tier, before the UK and HK stamp
+    duties v3 charges on two of these nine markets), while the tax channel predicts *larger*-cap
+    names. This panel is nine large-cap national indices, so it sits where at least one mechanism is
+    smallest, and `research/README.md`'s clause binds: a mechanism localised to small, thin or
+    retail-held names is excluded **by construction** and a null here is uninformative. Tier A/B
+    across the sources.
+    → `notes/2026-10-31-nav-inflation-outside-the-us-china.md` with
+    `notes/2026-10-31-quarter-end-marking-the-close.md`
+
+348. **THE ONE ITEM A NIGHTLY CAN ACT ON, and it is a free screen that closes or reopens the only
+    price-only construction in the vein: measure the momentum rank IC separately in third-months-of-
+    quarter and in other months.** The single source proposing a cross-sectional, fully-invested,
+    price-only quarter construction reports momentum profits concentrating in the **third month of
+    each calendar quarter** with January excluded — four boundary crossings a year rather than
+    twelve, which makes it much cheaper than anything in the turn-of-month note. It clears the shape
+    test and then runs into a number the lab already has: **12−1 momentum's region-matched
+    cross-sectional rank IC on this panel is +0.0128 at t = +0.96**, a null, and a calendar
+    conditioner can only concentrate content that exists. The screen: **rank IC of the momentum
+    signal in third-months-of-quarter versus other months (January excluded), on train,
+    region-matched, no trial spent.** If the conditional IC is not materially above the pooled
+    +0.0128, record the vein as closed on this panel. Two discounts to apply either way — the tax
+    variant of the mechanism is tied to one nation's capital-gains rules, so it is **diluted by
+    construction** on a nine-market panel, and per that source most of the profit sits in the
+    **loser** leg, which a long-only book cannot reach (the same "only the cheap side is tradeable"
+    problem already recorded for `statistical-arbitrage`). Tier B on the source; the arithmetic is
+    this folder's and the lab's.
+    → `notes/2026-10-31-quarter-ending-month-momentum-seasonality.md`
+
 ---
 
 ## Coverage log
@@ -14692,8 +14903,119 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-28 (session 75) | **The carried `entropic` / `Hansen–Sargent` vein, opened under the [2026-10-27] instruction to state the prediction first and abandon it the moment the first paper settles it — which took one paper — and then three sources on the object the lab's own ranking script already names and this folder had never written up: the model confidence set.** Vein one: the prediction was *ball → penalty → transaction cost → equal-weight shrinkage limit*, with my own pre-committed refinement that the duality half would confirm and the object half fail. It did. Strzalecki (Tier A, *Econometrica*, 220 Crossref cites, read as the Dec-2008 IGIER working version after `dash.harvard.edu` 429'd) gives the exact duality `min_p[∫(u∘f)dp + θR(p‖q)] = −θ log ∫exp(−(u∘f)/θ)dq`, then **Observation 1**: a multiplier preference **is** an expected-utility preference with index `φ_θ∘u`, `φ_θ(u) = −exp(−u/θ)`, bounded above — boundedness being "the only behavioral consequence of multiplier preferences beyond expected utility" — and **Example 2**: `(u = −exp(−x), θ = ∞)` and `(u = x, θ = 1)` are the *same preference*, so risk aversion and ambiguity concern are **not separately identified** from choice data. No `‖w‖_q`, no `κ*`, no equal-weight limit. The structural reason generalises and is filed as a prediction rule (**#327**): *the dual penalty inherits the ambiguity set's geometry* — a transport ball has a ground metric on outcome vectors and so duals to a norm on `w`; a φ-divergence ball metrises only the measures and so duals to a transform of the utility index. Vein closed as an anti-candidate (**#326**): the objective is mean-minus-variance-plus-skewness on the one axis the lab has measured dead three times, its knob is provably unmeasurable, the `θ → 0` limit is `ess inf` (a worst-day maximin, not a shrinkage target), and the measure is convex but not coherent. Vein two, found by grep rather than by queue — `Diebold.Mariano` **0** across 234 prior notes, `model confidence set` **1** passing mention, `confidence sequence` / `anytime-valid` / `test martingale` / `optional stopping` / `Ville` / `SPRT` / `safe test` / `equivalence test` **0** each (the 13 `e-value` hits are substrings of *relative-value* and *the-value*) — while `scripts/rank_trials.py`'s docstring reads "tier 1 is the model confidence set". Three findings, one chain. **Hansen–Lunde–Nason** (Tier A, *Econometrica*, 2079 cites, read as CREATES RP 2010-76 after the Atlanta Fed path returned a 48 KB JavaScript body) prove the elimination procedure's `lim inf P(M* ⊂ MCS) ≥ 1−α` with one `α` covering the run because "the sequential testing is halted when the first hypothesis is 'accepted'", and state the interpretation the lab needs in as many words: a set that stays large for lack of power is "a strength of the MCS procedure" (**#322**, with MCS p-values as a running maximum and the `T_max`/`T_R` statistics that avoid the order-`m²` covariance; `T_R`'s block is the DM statistic). **Kim–Ramdas** (Tier C, arXiv, 0 cites — but theorem-and-proof, so checkable) give the **minimax separation rate** `ε* = √((1 ∨ log τ)/n)` in the confusion-set size `τ`, attained *and* unbeatable (their Theorem 3.3 / Corollary 3.4). Worked at `2n ≈ 1,510` validation days: the detectable gap is a full-window `|t|` of **1.41 / 2.15 / 2.80** at `τ =` 1 / 10 / 50, against `program.md`'s own record that **no promotion in this repo's history has ever cleared `|t| = 2` on validation** — so the board's width is a theorem, not a defect of its bootstrap (**#323**). Two riders recorded against over-reading it: the rate grows as `√log τ`, so 10 → 50 trials costs a factor **1.30** while halving the window would cost **1.41** — *the binding constraint is the fixed window, not the trial count* — and none of this licenses weakening the deflated bar, which answers a different question. The same paper's Appendix A.10 re-proves HLN's Theorem 1(i) explicitly (credited to Jing Lei) and finds the union bound carrying `|M*| × 2^{|M₀|} × o(1)`, harmless only while `|M₀|` is fixed: "the MCS procedure should be viewed as a fixed-size model selection method" — a scope clarification, since HLN claim nothing else. **Arnold–Gavrilopoulos–Schulz–Ziegel** (Tier B, *JRSS-B*, refereed, 1 cite — too new) rebuild the set as anytime-valid via Ville's inequality on e-processes, `Q(∀t : M*_t ⊆ M̂_t) ≥ 1−α` with the quantifier inside, cheapest construction `E_{ij,t} = Π_r(1 + λ_{ij,r}d_{ij,r})` under a predictable bound; their measured comparison is the keeper — running the **ordinary** MCS over a sequential design drops coverage from nominal 0.9 to **about 0.8**, while the anytime-valid set never wrongly excluded the best model and ran **8.41** wide of 49 against a singleton truth, conservatism that is structural because the arithmetic mean already dominates all symmetric e-merging functions (**#325**). **The axis correction is recorded prominently in the note and the item**, because getting it wrong would waste the finding: the sequential result indexes new *data* with the roster fixed, while the lab's validation board is a fixed window with a growing roster — so it is not the fix for `rank_trials.py`, and its setting is the frozen-roster **incubation** track. One structural recommendation, free and one column wide: **put the equal-weight pool into `M₀`**, because the MCS centres on the surviving candidates' mean while `skill` centres on a fixed benchmark that is not a candidate, and a set over trials alone can consist entirely of books worse than the pool (**#324**). **New: #322–#327, all six free, no trial proposed, no measurement taken, holdout not read** — correct for a night whose three independent sources agree that the honest answer to "which candidate is best?" at this window's width is a wide set. Strzalecki 2011 (`2026-10-28-entropic-ambiguity-as-an-exponential-tilt.md`); Hansen–Lunde–Nason 2011 (`2026-10-28-model-confidence-set-the-set-valued-ranking.md`); Kim–Ramdas 2025 (`2026-10-28-argmin-inference-minimax-separation-rate.md`); Arnold–Gavrilopoulos–Schulz–Ziegel 2026 (`2026-10-28-sequential-model-confidence-sets-anytime-valid.md`). **Named and not obtained:** Hansen & Sargent 2001 (*AER* 91(2), 1008 cites — not attempted; everything used from it is displayed verbatim in Strzalecki, and no later session needs it); the *Econometrica* versions of both 2011 articles (paywalled; the authors' own working-paper versions were read instead); Diebold & Mariano 1995 (*JBES*, 11,055 cites — identified and not read, and nothing is attributed to it beyond what the two read sources quote). |
 | 2026-10-29 (session 76) | **The `online FDR` / `alpha-investing` vein, taken verbatim from the [2026-10-28] entry as the only vein this folder ever reached by being *blocked* rather than by grep — and it ADMITS on the pre-committed `O(1)` criterion while the harder second clause resolves AGAINST FDR, which is the answer that entry asked for.** Greps across all 238 prior notes: `online FDR` 0, `alpha.investing` 0, `alpha investing` 0, `Foster` 0, `Stine` 0, `Javanmard` 0, `LORD` 0, `SAFFRON` 0, `e-BH` 0, `mFDR` 0, `false discovery exceedance` 0 (the 12 files matching the bare word `investing` are all of the *low-risk / style / factor / index investing* kind, none in the α-investing sense). Criterion clause one: **Foster–Stine** (Tier A, *JRSS-B*, 86 Crossref cites, read as the authors' July-2007 version from UPenn ScholarlyCommons bitstream after `www-stat.wharton.upenn.edu/~stine/` 404'd) carry the state in the **prior rejection indicators alone** — *"neither the payout ω nor the cost α/(1−α) reveals `p_j`"* — so under their eq. 9/15 rules it is a float and an integer, and `α_j` is set before `p_j` is seen by construction. **Passes both halves cleanly**; Theorem 3 (`W(0) ≤ αη`, `ω ≤ α`) controls `mFDR_η` at every finite stopping time by optional stopping on a sub-martingale, with **no independence assumption**. Clause two resolves by their own **Theorem 2**: a procedure stopping at `r` rejections has `FDR = mFDR_0 = cFDR = eFDR = pFDR = E[V(r)]/r` exactly, `FDR ≤ α(r+2)/(r+1)` (`1.5α` at `r=1`), and under the complete null `FDR = FWER` — so at ~1 promotion per several dozen trials with the session stopping on it, **the folder's existing FWER-flavoured object was never wrong and the vein's value is purely the forward spending.** **Javanmard–Montanari** (Tier A, *Annals of Statistics*, 66 cites) add: FDR (not just mFDR) for **monotone** GAI rules with `w₀+b₀ ≤ α` (Theorem 3.1 — LORD 1/2 qualify, **LORD 3, the variant everyone uses, does not**); a general-dependence variant (Example 3.8) at a `Σ ξ_i(1+log i) ≤ α/b₀` budget, the `(1+log i)` being the entire price of abandoning independence and the variant this lab needs since `program.md`'s own 109→36 clustering falsifies independence here; and the warning that a controlled mean FDR is **not** a controlled realised FDP (`FDP` past three times nominal with probability 0.13 in their simulation). Their `sup_n FDX` cartoon is the **same quantifier-placement error and fix** as `#325`'s anytime-valid MCS — two instances in two sessions, filed as prediction rule **#333**. **Tian–Ramdas** (Tier B, *Stat. Methods Med. Res.*, 15 cites) build the FWER side and carry the night's one lab-specific finding: alpha-spending's proof leaks when nulls are **conservative** and when non-nulls are **frequent**, and ADDIS-Spending (`α_i = α(τ_i−λ_i)γ_{t(i)}`, `t(i) = 1 + Σ(S_j−C_j)`) plugs both, so **the budget index advances only on p-values in the band `(λ,τ]` — a decisive reject is FREE** (**#329**, filed as a tension with `learnings.md`'s "every trial raises the bar", because the deflated bar prices decorrelation while this prices where the p-value landed). Their worked validity instance is **this lab's exact test** — one-sided Gaussian mean, `P = Φ(−Z)`, *"conservative if `µ < 0`, while the conservativeness increases as `µ` decreases"* — and `learnings.md` records this lab's typical candidate at negative validation skill, so it sits deep inside the favourable regime and nowhere near Theorem 4's `c* → 1` boundary (**#330**). They also measure **two of their own four rules as not worth implementing** (online Sidak, online fallback: *"negligible"*). **Robertson–Wason–Ramdas** (Tier A, *Statistical Science*, 23 cites on Crossref and Semantic Scholar alike) supplies LORD++ in closed form, the post-hoc FDP bound that needs **no protocol change at all** (**#328**, the cheapest item in the queue), the batched frame that is the right shape for nightly groups of eight (**#331**, the night's best-aimed item), the field's names for the two failure modes of a wealth budget — **this lab is in alpha-death**, whose published remedies are mem-FDR's discount and an explicit licence to **abstain from testing** (**#332**), while **piggybacking** is the mechanism behind the one multi-promotion episode `program.md` records, which means the holdout veto does a job the sequential layer provably cannot — and the discount on the whole vein in the authors' own words: power lives at `T > 1000`, and low-`T`-with-known-correlation is an **open problem**. **The arithmetic that closes it as a gate** (**#334**): at `α = 0.05` with the default `γ_t ∝ log(t∨2)/(t exp(√log t))` (constant re-derived here as `C ≈ 0.0772`, matching the published 0.07720838), the required one-sided `z` runs **2.58** (first trial / right after a promotion) → **3.70** (36 effective) → **3.98** (~110 raw) → **4.47–4.71** (100–300 under the FDR parameterisation), against `#323`'s detectable `|t| ≈ 1.41/2.15/2.80` and `program.md`'s record that **no promotion here has ever cleared `|t| = 2`**. An online gate would have promoted nothing, ever; the binding constraint is the **fixed width of the validation window**, third consecutive session to that conclusion. **New: #328–#334, all seven free, no trial proposed, no measurement taken, holdout not read.** Foster–Stine 2008 (`2026-10-29-alpha-investing-sequential-error-budget.md`); Javanmard–Montanari 2018 with Ramdas–Zrnic–Wainwright–Jordan 2018 (`2026-10-29-lord-online-fdr-and-the-dependency-price.md`); Tian–Ramdas 2021 (`2026-10-29-online-fwer-and-discarding-conservative-nulls.md`); Robertson–Wason–Ramdas 2023 (`2026-10-29-online-multiple-testing-practical-guidance.md`). **Named and not obtained:** Zrnic–Jiang–Ramdas–Jordan 2020 (AISTATS, the batched primary behind `#331`); Katsevich–Ramdas 2020 (*Ann. Statist.* 48(6), 3465–3487, the post-hoc primary behind `#328`); Ramdas–Yang–Wainwright–Jordan 2017 (NeurIPS, mem-FDR, behind `#332`); Zrnic–Ramdas–Jordan 2021 (*JMLR* 22, asynchronous — PDF fetched and left unread once the review covered it); Xu–Ramdas 2022 (supLORD); the published JRSS-B, Annals, PMLR and SMMR versions of all four read sources (paywalled; working/author versions read instead, and each note says so). |
 | 2026-10-30 (session 77) | **The three NAMED PRIMARIES the queue had been carrying, read against criteria stated before the downloads — and the two most-promoted items both come back NARROWER than they were filed.** The aim needed no grep: the [2026-10-29] entry ranked reading a filed pointer above opening a vein, and named three. **`#331`'s batched rule is ADMITTED, in its weak variant only.** Zrnic–Jiang–Ramdas–Jordan (Tier B, AISTATS 2020, read in full as arXiv v3; `citations: not resolved` — the PMLR version carries no Crossref DOI, OpenAlex's daily budget was exhausted, Semantic Scholar 429'd six spaced attempts, and **DataCite resolves the arXiv DOI and reports `citationCount: 0`, which is a coverage artefact and not a count**) define three procedures, and the pre-committed criterion separates them cleanly: **(a) passes for all three** — levels must be `F^{t-1}`-measurable, *"the test level at time t is only allowed to depend on information seen before t"* — while **(b) and (c) fail for `BatchBH`/`BatchSt-BH` and pass for `BatchPRDS_BH` alone.** On (b), the headline rules' past summands carry `Σ_{r≤t,r≠s} R_r`, so `(α_s, R_s, R_s⁺)` must be kept for every night ever tested, against `BatchPRDS_BH`'s frozen `n_s + Σ_{r<s} R_r` and one cumulative counter. On (c), Theorems 1–2 demand nulls *"independent of each other and the non-nulls"* (within a batch as much as across) while **Theorem 3 asks for PRDS within each batch and independence across batches** — this lab's exact shape. The cost of the narrowing is the reason the item was promoted: the review's *"higher power than the fully online"* clause is measured **only** for the two failing variants, `BatchPRDS_BH` is a mini-batch LOND (*"substantially lower power"* per the same review) and **the paper never runs it** — Section 5, Definition 4, Algorithm 1, Theorem 3, an appendix proof, no measured power anywhere (**#335**). The criterion's second clause is answered and small: on real data at batch size 10 — their smallest, and the size at which they must switch to a `γ_s ∝ s^{-2}` budget because small batches are the hard case — `BatchBH` scored **0.242 ± 0.053** against LORD's **0.231 ± 0.051**, with batch 100 at 0.299; in their synthetic design the sole case where a batched rule **loses** to LORD is small batch size at small non-null fraction, this lab's regime on both axes; they report no monotone batch-size/power relation and name its analysis an **open problem**; and **on total hypothesis count the paper gives no number in this lab's range (`T = 3000`, then tens of thousands) so none is extrapolated**, as the criterion required. One free design screen survives (**#336**): PRDS holds for Gaussian statistics **iff every null candidate's statistic has non-negative covariance with every other statistic that night**, so one family on one window plausibly qualifies and **a night pairing a candidate with its own inverse or hedge does not**. **`#328`, the cheapest item in the queue, is computable and currently VACUOUS.** Katsevich–Ramdas (Tier A, *Annals of Statistics* 48(6) 3465–3487, **33** Crossref / **54** Semantic Scholar, read in full; DOI resolved by enumerating the journal-year after a guessed DOI returned an unrelated paper) bound the FDP **simultaneously** over a path with probability `1−α`, post hoc, for any procedure *"that may or may not have been designed for FDR or FDP control"*, needing two inputs: `FDP̄ = c(α)(a + Σ_{j≤k} α_j)/|R_k|`, `c(0.05, a=1) = 2.163`. At the **seven promotions** `program.md` records and the **~129 trials** the [2026-10-29] entry and the commit log name (`trials.jsonl` not read), a flat one-sided 5% gives `Σ α_j ≈ 6.45` and **`FDP̄ ≈ 1.94` at its best over `a`** — above one, so it says nothing; **non-vacuity at seven rejections needs `Σ α_j ≤ 2.35`, an average per-trial level ≤ ~1.8%** (**#337**, with the full table: R=3 → 0.477, R=5 → 1.314, R=10 → 4.114, R=20 → 10.953). That converts `#328` from "compute it" into a **precondition**, favourable in one respect — the deflated bar **tightens** with the trial count, exactly the `Σ α_j`-conserving behaviour the bound rewards — with two riders that separate a wide bound from a wrong one: `Σ α_j` runs over **every trial, not every promotion** (~18× understatement here), and a **single** rejection can essentially never carry a non-vacuous bound. **The third nomination is an anti-candidate whose theorems are the best thing in the vein.** Cook–Dubey–Lee–Zhu–Zhao–Flaherty (Tier B, *NEJSDS* 2024, **1** Crossref / **3** Semantic Scholar, read in full) is the §5.1.8 paper — online testing when data costs money, choosing **sample size** beside the level. Unusable here because **this lab cannot buy more data for a promising candidate**; strip `n_j` and the program degenerates to the ERO investing the same paper shows piggybacks, and its own power floor `ρ ≥ 0.9` needs a non-centrality of **`|t| ≥ 2.93`** at 5% against `program.md`'s record that no promotion ever cleared `|t| = 2` (**#340**). Three findings transfer, all free: their **Theorem 2** makes α-wealth supermartingale (*"will end in a finite number of steps"*) when power is near zero **or** the null prior near one — this lab satisfies **both**, so **α-death is the predicted state, not bad luck**, and the stated cure is `σ/√n → 0`, the one route the protocol forbids (**#338**, upgrading `#332` from attribution to theorem); the equalizing construction makes the experimenter *"indifferent as to whether to test or not test"* at expected payoff zero, so **abstaining is free** — with the sharper contrapositive that **a scheme under which abstaining feels costly is not martingale** (**#339**); and the rule is **robust to noise but sensitive to downward bias** in the null prior, failure case named as the *"systematically optimistic"* investigator, erring toward over-spending, so the prior must come from the lab's own measured base rate (**#341**). **The night's structural finding** is that two of three sources failed independently on the **same** assumption — `BatchBH` needs nulls independent *within* a night, the FDP bound needs conditional super-uniformity *given everything already seen* — while **every hypothesis here is a function of one fixed 2018–2023 window**; filed as prediction rule **#342**, sibling of `#327` and `#333`, and the reason both admissions are a positive-dependence variant and a precondition rather than the headline procedures. **New: #335–#342, all eight free, no trial proposed, no measurement taken, holdout not read.** And this is the **fourth consecutive session** to end on the fixed width of the validation window as the binding constraint — now reached from a paper whose explicit remedy is buying more data. Zrnic–Jiang–Ramdas–Jordan 2020 (`2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md`); Katsevich–Ramdas 2020 (`2026-10-30-post-hoc-fdp-bounds-for-any-rejection-sequence.md`); Cook et al. 2024 (`2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`). **Named and not obtained:** nothing — all three targets of the [2026-10-29] entry were read, and no fourth source was attempted. |
+| 2026-10-31 (session 78) | **LEFT THE ACCOUNTING VEIN AS INSTRUCTED AND TOOK THE QUARTER BOUNDARY — the folder's first coverage of it, and it CLOSES on evidence rather than on effort.** Aimed by the [2026-10-30] entry (`quarter.end` **0**, `window dressing` **0**, `rebalancing flow` **0** across 245 notes, against `month.end` 26 and a dedicated turn-of-month note) and graded against its three pre-committed clauses. **(a) PASSES TWICE:** Carhart–Kaniel–Musto–Reed (Tier A, *JF*, **362** Semantic Scholar / **321** Crossref, read in full from an author-hosted PDF) report *"little or no effect at month-ends that are not quarter-ends"* with the boundaries in one **joint** dummy set, and Shackleton–Yan–Yao (Tier B, *European Financial Management*, **7** in both indices, read in full from Lancaster green OA) replicate that contrast in a second market — the quarter boundary is a reporting/ranking calendar, different in kind from the month's payment-and-settlement cycle (**#343**). **(b) and (c) FAIL, and (c) fails on evidence rather than on data availability** — which is the night's real result. Hu–McLean–Pontiff–Wang (Tier A, *RFS*, **91** Crossref; published version closed, so the authors' own Nov-2008 *"Tape Painting"* working paper was read in full from the EFMA 2009 programme) test the one price-only story, **window dressing**, directly in institutional trade data and **reject it**: institutions are not more likely to buy high-past-return stocks or sell low-past-return stocks at the boundary, while the conditioner that works is **overweight** (**#344**). The return-side sources agree from the other direction — top-fund-held names are more inflated *after* controlling for capitalisation **and** recent return, and in the second market the effect sits in the **top fund-ownership quintile and almost nowhere else**. Three structural closures, each from a different source: the effect is an **end-of-the-last-day** phenomenon (final half-hour, trade counts peaking in the last five minutes, reversing next day) and **v3's next-real-close fill puts a close-to-close book on the wrong side of it** (**#345**); the **dominant channel is an absence of trade** — *depressed selling* is pervasive because not trading is free and nearly undetectable, has no signature in a close-only panel, and the same authors record the channel mix shifting toward the harder-to-detect form once scrutiny arrived, so the recipe decays in **form** rather than size (**#346**); and the **capitalisation gradient points away from this panel** while the vein's two mechanisms **disagree about its sign** — pumping monotone *decreasing* in cap (a few bps in the largest quintile, under one side of the 15 bps cheapest v3 tier, before the UK/HK stamp duties v3 charges on two of these nine markets), the tax channel predicting *larger* caps (**#347**). **One free screen a nightly can run** (**#348**): Sias (Tier B, *FAJ*, **70**/**41**; **paywalled — read from the RePEc abstract and two practitioner summaries, flagged in-note**), with Brown (Tier C, SSRN, **0** citations, read second-hand from one review) as its tax variant, is the only cross-sectional, fully-invested, **price-only** construction in the vein — momentum profits concentrating in the **third month of each quarter**, January excluded, four boundary crossings a year — and it dies on a number the lab owns: **12−1 momentum's region-matched rank IC here is +0.0128 at t = +0.96**, so measure that IC in third-months-of-quarter versus other months and close it. **Two corrections.** This file's own standing discount — *"same-calendar-month seasonality measured significantly inverted"* — **was withdrawn by the lab on 2026-10-15** as a misaligned score; the aligned seasonal is a region-matched **null** (t +1.78), and that is what should be cited. And the incentive **sign flips across markets** (US: best performers inflate; Australia/China: worst, because flows respond weakly to rank), so a nine-market pooled test of an agency mechanism averages opposite signs toward a **predicted** null — generalised as *a mechanism can replicate while its construction does not* (**#347**). **New: #343–#348; one is an actionable free screen, two are closures, three are rules. No trial, no measurement, holdout not read.** Carhart et al. 2002 (`2026-10-31-quarter-end-marking-the-close.md`); Hu–McLean–Pontiff–Wang 2014 (`2026-10-31-tape-painting-buying-versus-selling.md`); Sias 2007 with Brown (`2026-10-31-quarter-ending-month-momentum-seasonality.md`); Shackleton–Yan–Yao 2020 (`2026-10-31-nav-inflation-outside-the-us-china.md`). **Named and not obtained:** Ben-David–Franzoni–Landier–Moussawi 2013 (*JF*, **142** Crossref) — the hedge-fund sibling of the pumping literature; `publications.ut-capitole.fr` died with a transport reset on four attempts and `tse-fr.eu` answers with a **CrowdSec** interstitial. |
 
 ### Open questions for future sessions
+
+- **[2026-10-31] What should aim session 79: the quarter vein is CLOSED — do not reopen it — and the
+  next session should take the one meta-source this folder has used as a rubric input for eleven
+  weeks without ever reading it. Primary aim: Jensen–Kelly–Pedersen, _Is There a Replication Crisis
+  in Finance?_** The quarter boundary was tonight's target and it is finished: the boundary is real
+  and distinct from the month boundary in two markets (**#343**), and in all four sources the
+  cross-sectional signal is **holdings** — with the one price-only story, window dressing, **tested
+  in trade data and rejected** (**#344**). Three independent closures (v3's fill convention against
+  a last-half-hour effect, **#345**; a dominant channel that is an *absence* of trade, **#346**; an
+  adverse capitalisation gradient on a nine-index large-cap panel, **#347**) mean no new source
+  changes the verdict. The only live item is **#348**, and it belongs to the **lab**, not to this
+  folder: a free train screen of the momentum rank IC in third-months-of-quarter versus other
+  months. Until that screen is run there is nothing left here to read.
+  **Why JKP is the right primary, stated as a criterion rather than a hope.** `research/README.md`
+  names Jensen–Kelly–Pedersen as one of the two replication inputs in its own soundness rubric, and
+  a grep across all 249 notes after tonight returns **1** for `Jensen.Kelly.Pedersen`, **1** for
+  `replication crisis`, **0** for `taxonomy of factors` — i.e. the folder has been *grading* sources
+  against a paper it has never summarised. It is also the one source type that matches what the lab
+  now needs: its design is a large multi-factor, multi-country replication with hierarchical
+  shrinkage of the per-factor estimates, which is precisely the object this folder has been
+  improvising every time it writes "a null here would be uninformative" about a large-cap panel.
+  *Admit it only if (a) it reports results broken out by **size group and by developed-versus-
+  emerging region**, so the folder can say which of its own filed mechanisms are expected to survive
+  on nine large-cap developed indices rather than asserting it; (b) its shrinkage estimates are
+  reported at a granularity that maps onto **mechanism families**, not only onto individual factor
+  definitions; and (c) it is readable in full — if only the abstract is obtainable, write no note and
+  say so, because a meta-source summarised second-hand is worth less than nothing to a folder whose
+  whole job is to discount other people's claims.* The companion rubric input, Hou–Xue–Zhang, has
+  **3** hits and should be read in the same session only if JKP's own treatment of it is thin.
+  - **Ranked below it, and only if JKP proves unreadable: the one direction tonight's greps did NOT
+    close.** Tonight ran the 2026-09-13 detector plus a mechanism sweep and **found nothing
+    uncovered**, which is worth recording so the next session does not repeat it. Covered, with hit
+    counts: `fundamental law` 5, `transfer coefficient` 6, `rank IC` 7, `breadth` 56 (so the lab's
+    new `train skill = 3.37 × rank IC` exchange rate sits on a literature the folder already has);
+    `overnight` 14, `close.to.open` 3, `tug of war` 2, `intraday return` 1 (the `open` column is
+    *not* virgin territory — `learnings.md` has an overnight/intraday decomposition on every leg);
+    `reconstitution` 3, `index addition` 4, `index deletion` 4, `index effect` 3, `demand curves for
+    stocks` 3 (two dedicated notes from 2026-10-09, so index-event flow is **not** the next quarter-
+    adjacent vein, despite the [2026-10-30] entry's `index rebalanc` **1** reading — that grep was
+    too narrow); `52.week high` 4, `residual momentum` 4, `pairs trading` 4, `anchoring` 7,
+    `microcap` 22, `NYSE breakpoint` 6, `large.cap` 69. **This is the fifth time this folder has
+    concluded that mechanism breadth is exhausted, and the previous four times it was wrong at a
+    finer unit** (families → clauses → operators → the pool → an attribute of its members → the
+    selection rule → the vocabulary → the shape of the output → an algebraic identity). The unit
+    tonight's round did *not* check is the **data type**: every mechanism this folder has filed is
+    priced off the panel's own columns, and the honest statement is not "there is nothing left" but
+    "there is nothing left **at this data type**". That is a statement for the human, not a reading
+    target — adding a data type is not this agent's call.
+  - **Retired, and recorded as retired on arithmetic rather than left unread**: `best-arm
+    identification` / `pure exploration` (retired [2026-10-30] on `#323`/`#334`/`#340`);
+    `transfer entropy` (eleventh nomination, still **0**). The three residual sequential-testing
+    pointers from [2026-10-29] — `mem-FDR`, the asynchronous JMLR variant, `supLORD` — stay behind
+    the same precondition: **a human must first decide they want a sequential layer at all.**
+    Tonight adds a reason not to: the 2026-10-30/31 nightly measured the deflation benchmark at
+    **+0.2807** against a board-best skill of **+0.1240**, so the numerator of the gate's own
+    statistic is negative for every book the lab has ever built, and no error-accounting object
+    changes that sign.
+  - **Unchanged and still live**: `#343`–`#348` from tonight (`#348` the one item a nightly can act
+    on; `#343` the specification rule to apply before any calendar screen; `#344`/`#345` the
+    closures); `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29; `#322`–`#327` from
+    2026-10-28; `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26; `#306`–`#310` from
+    2026-10-25; `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23; `#289`–`#292` from
+    2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair;
+    then 2026-10-17 and everything carried under it.
+  - **Standing, and not this folder's call**: the engine issues filed 2026-10-18 and 2026-10-22; the
+    `min_train_skill = 0.0` threshold raised by the 2026-10-26/27 nightly; the deliberate difference
+    `#324` raised; the two human decisions added 2026-10-29; and the three items the 2026-10-30/31
+    nightly raised for its owner (the dispersion-term tension in its F2, the non-comparability of
+    recorded `dsr` values across trials that `rank_trials.py` nonetheless prints in one column, and
+    the two standing engine issues). **Tonight adds two.** First, a documentation correction this
+    file owes itself: its own [2026-10-30] standing discount — *"same-calendar-month seasonality
+    measured significantly inverted"* — **was withdrawn by the lab on 2026-10-15** as a misaligned
+    score, and the aligned seasonal is a region-matched **null** (t +1.78); every future citation of
+    that discount should say null, not inversion. Second, the data-type question in the bullet above:
+    every closure this folder has recorded for three weeks has been a closure *at this data type*,
+    and whether to add one is a decision for the human owner.
+
+- **[2026-10-31] Access findings — one new green-OA channel that worked first try, one host behind a
+  bot wall this file had not recorded, and a reminder that the Semantic Scholar DOI endpoint is NOT
+  the reliable half of that API.**
+  - **`eprints.lancs.ac.uk` is a good channel and its record page names the file path in full.** The
+    DSpace-style record at `eprints.lancs.ac.uk/<id>` lists the accepted version with its licence,
+    and `eprints.lancs.ac.uk/<id>/1/<Title_With_Underscores>.pdf` served a 704 KB CC BY-NC manuscript
+    of a **closed Wiley article** on the first attempt (`pdftotext -layout` → 100 KB, `" the "` 531,
+    no shift, no `( )` dropout). Add it to the institutional-repository list beside
+    `openaccess.city.ac.uk`, `utoronto.scholaris.ca` and `repository.up.ac.za`.
+  - **An EFMA conference-programme PDF is the route to a closed RFS article** when the published
+    version is `oa_status: closed` with an empty `locations` list. `efmaefm.org/0EFMAMEETINGS/EFMA
+    ANNUAL MEETINGS/<year>-<city>/papers/EFMA<year>_<id>_fullpaper.pdf` served the authors' own
+    earlier draft in full. This is the 2026-08-21 "conference-site mirror" lesson confirmed on a
+    second host — and the note records the one place the draft and the refereed version differ, which
+    is the discipline that makes the channel usable rather than misleading.
+  - **`tse-fr.eu` answers a document request with a CrowdSec interstitial** ("Your browser is being
+    verified… Consulting the crowd"), a fifteenth "looks like an answer" mode and the first CrowdSec
+    one; and **`publications.ut-capitole.fr` died with `ws_closed_mid_exchange` on four attempts**,
+    which is a transport failure, not an origin refusal. Together they cost the session its fifth
+    source (Ben-David–Franzoni–Landier–Moussawi 2013, *JF*, **142** Crossref), which is **named and
+    not obtained** rather than summarised from abstracts.
+  - **The Semantic Scholar DOI endpoint returned a clean `not found` for two real, heavily cited
+    Tier-1 DOIs tonight** (`10.1111/jofi.12062` and `10.1093/rfs/hht057`, plus the SSRN preprint
+    `10.2139/ssrn.1786078`), while answering correctly for three others. `README.md` records the DOI
+    form as the reliable one and the title-search form as rate-limited; the sharper statement is that
+    **a clean `not found` from that endpoint is not evidence a paper is unindexed** — the 2026-10-01
+    and 2026-10-30 entries said the same about other paths, and this is the third instance. Crossref
+    answered every lookup tonight, including two that Semantic Scholar refused, and
+    **`api.crossref.org/journals/<ISSN>/works?filter=from-pub-date,until-pub-date&query.bibliographic=`
+    resolved a legacy Wiley DOI on the first call** — the 2026-10-07 "a journal's year is a much
+    better key than an article's title" lesson, confirmed. OpenAlex answered one `locations` call
+    without complaint, so its budget was not exhausted at this hour; it was still spent on `locations`
+    only, per the 2026-10-12 advice.
 
 - **[2026-10-30] What should aim session 78: LEAVE THIS VEIN. The queue's named primaries are spent —
   all three targets the [2026-10-29] entry named were read tonight — and the next session should take

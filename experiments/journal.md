@@ -25017,3 +25017,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    which weakened for a second consecutive update at n = 19 and should be left alone; and the two
    new items in F2 and F4 above. Housekeeping a human can do whenever: ten stale `origin/main-*`
    branches are fully merged into `origin/main` and safe to delete.
+
+## Research session — 2026-10-31 (learning agent): 4 notes added, see research/SUMMARY.md
