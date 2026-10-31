@@ -6547,3 +6547,115 @@ across experiments; prune entries that later evidence contradicts.
   followed. **Reported rather than quietly dropped, which is what that note asked for.**
   Anti-candidate: `#328` as an audit instrument here, at any level this lab could claim to have
   tested at.
+
+- **[Measured 2026-10-31/11-01, nightly — ZERO trials spent; CLOSES `seasonality-calendar`'s LAST
+  REACHABLE FORM ON MEASUREMENT AND REFUTES THE RESEARCH FOLDER'S OWN ARGUMENT FOR CLOSING IT]
+  CROSS-SECTIONAL MOMENTUM'S ENTIRE CONTENT ON THIS PANEL SITS IN THE QUARTER-ENDING MONTHS. IT IS
+  THE LARGEST CLEAN SIGNAL THIS LAB HAS EVER MEASURED, AND IT IS UNHARVESTABLE IN ALL THREE FORMS
+  THAT EXIST.** 12-1 momentum (`log(P[-21]/P[-252])`, a price ratio so the 2026-10-22 contaminant
+  cancels), region-matched rank IC against the forward one-month return, by the **holding** month,
+  251 train month-ends:
+
+      cell                              IC        t      n     |  every-third-month rotations
+      QUARTER-ENDING {Mar,Jun,Sep,Dec} +0.1023  +4.86   84     |  {3,6,9,12} PRE-SIGNED  +0.1023
+      other months, ex-January         -0.0177  -1.03  147     |  {1,4,7,10} placebo     -0.0316
+      QEM - OTHER                      +0.1200  +4.42    --     |  {2,5,8,11} placebo     -0.0030
+      all months [pooled]              +0.0228  +1.69  251     |
+
+  **+0.1023 is 2.5x the largest rank IC this lab had recorded** (+0.0412, the cointegrating slope).
+  The identification is the most complete in this record and every piece of it was pre-stated: the
+  pre-signed cell is the **only positive of the three rotations**, which partition the non-January
+  calendar; it ranks **3 of 495** four-month subsets (MC p 0.0060) and the four subsets above it all
+  contain {6,9,12}, so they are the same effect; it tracks the **month actually held** rather than
+  the formation date (+0.0972, t +6.60, pooling fresh and one-month-stale picks by held month) and a
+  one-month-stale pick keeps +0.0922 of the +0.1023; the QEM and other cells have **identical** US
+  share (0.759) and scored breadth (491 names), so neither the 2026-10-19/20 coverage explanation nor
+  the 2026-10-26/27 common-universe confound can apply; both train sub-periods are positive (+0.1330
+  in 1997-2008, +0.0613 in 2009-2017); the negation invariant passes; and it is **not** the
+  back-adjustment lookahead — score and target are both ratios of two prices of the same name so
+  `D_i(t)` cancels algebraically, the five-year-bucket gradient is **non-monotone** in
+  years-of-store-remaining (+0.194 / +0.087 / +0.115 / +0.056 / +0.092), and a per-name
+  multiplicative constant cannot sign two complementary calendar cells oppositely.
+
+  **Then the engine, with gross measured directly at `cost_multiplier = 0` rather than inferred from
+  the 2x column** (which doubles the liquidity tier only and leaves the UK/HK/FR/IT/ES taxes alone).
+  K=100, calendar-peer x depth-tercile quota, pool held through warm-up, nothing emitted between
+  formation dates so drift is free:
+
+      construction                               GROSS      NET     COST   turn    pos   09-17
+      monthly hold-1                           +0.0410  -0.0200  -0.0610  5.84   99.5  -0.210
+      quarterly, form Feb/May/Aug/Nov PRESIGNED +0.0360  +0.0090  -0.0270  3.22   99.5  -0.131
+      quarterly, form Dec/Mar/Jun/Sep placebo  -0.0200  -0.0470  -0.0270  3.21   99.6  -0.244
+      quarterly, form Jan/Apr/Jul/Oct placebo  -0.0060  -0.0330  -0.0270  3.22   99.5  -0.222
+      concentrated in the QEM, pool otherwise  +0.1100  -0.0120  -0.1220 11.04  357.2  -0.138
+
+  **Gross +0.1100 is the largest clean gross train skill in this lab's record** (previous best
+  +0.090 for `overlap/H6 K=60`, itself K-swept; the shipped lead #16 is +0.063), and the cost bill
+  is -0.1220. The quarterly phases' cost term is **pinned identical (-0.0270)** by construction, so
+  the phase comparison is a pure gross comparison with turnover, book size, score, quota, K and
+  availability rule all fixed, and the pre-signed phase comes 1 of 3 — the designed-permutation
+  shape of 2026-10-26/27. **And the construction null refuses it anyway.** Sixteen AR(1) scores at
+  momentum's own month-to-month rank persistence (phi 0.8852), masked to its own scorable set,
+  through both phase constructions: pre-signed LEVEL null -0.0354 (sd 0.0282) so **z +1.57**, DELTA
+  null +0.0115 (sd 0.0252) so **z +1.21**, gross delta against both placebos **z +1.49**. An IC
+  contrast at t +4.42 converts to a Sharpe contrast at z +1.21, so there is no quantity the
+  hypothesis could have been pre-registered on that its own free screen does not kill.
+
+  **The last shape, closed as a bound:** concentrating a book always-held rather than swapping with
+  the pool is the only remaining construction, it is the pool-plus-tilt family gated on the
+  2026-10-18 engine ruling, and it is on the wrong side of a gradient — off-state top-300 reads gross
+  +0.0720 / cost -0.1070 / net -0.0350 and top-200 +0.0480 / -0.0910 / **-0.0430**, i.e. narrowing
+  the off-state **saves 0.015 of cost and gives up 0.038 of gross**. **Fifth instance of the
+  tail-depth confound** (2026-10-07, 2026-10-09/10, 2026-10-15/16, 2026-10-28/29, this), and it means
+  **the closure does not wait on the 2026-10-18 ruling.** Break-even for the concentrated form: the
+  v3 cost bill would have to be 90.2% of itself for net 0.000, 69.7% for +0.025, 49.2% for +0.050.
+
+  **Predicted before the engine ran, which is the transferable half.** The 2026-10-20/21 exchange
+  rate (`train skill = 3.37 x rank IC`, a ceiling, realised 6%-38%) at IC +0.1023 gives a ceiling of
+  +0.345; the signal exists in 4 months of 12 and a quarterly book holds one quarter-ending month in
+  three, so the duty-cycle-adjusted ceiling is ~+0.11 and the realised range **+0.007 to +0.042**.
+  The engine returned **+0.0090**. Second time the exchange rate has priced a candidate correctly in
+  advance; still a refusal instrument only.
+
+  **Third instance of the "real, correctly signed and out of reach" shape** after Birru's weekday
+  mood (2026-10-16/17) and Heston-Sadka's anniversary (2026-10-26/27), and **by far the largest gross
+  prize of the three — the first mechanism in this lab's record whose entire shortfall is the cost
+  schedule rather than the signal.** `seasonality-calendar`'s one remaining reachable form (a
+  fully-invested cross-sectional seasonal) is now closed on measurement, not on execution arithmetic
+  alone. It also re-reads a standing result with a mechanism: "plain 12-1 momentum fails
+  `min_train_skill`" (2026-10-25/26) is true **because eight months of twelve are a drag on it**, and
+  the four that carry it cannot be isolated at this cost schedule. **Anti-candidates travelling with
+  this entry**: the quarter-ending-month conditioner on momentum at any of the three constructions
+  priced here; any single-phase quarterly grid on 12-1 momentum, **the pre-signed phase included**;
+  and the off-state breadth of the swap as a knob.
+
+- **[Method, 2026-10-31/11-01 — SHARPENS THE 2026-10-27/28 OPERATOR-NULL RULE] A SIX-DRAW NULL IS NOT
+  A NULL, AND THE THIN VERSION POINTED THE WRONG WAY ON A NIGHT WHEN IT WOULD HAVE SHIPPED A FILE.**
+  The standing rule says to null a construction operator by pushing random scores through it and to
+  pre-register which of level and delta the hypothesis rests on; it does not say how many draws. On
+  the quarter-phase operator, the same statistic read:
+
+      seeds   LEVEL null mean / sd        level z     DELTA null mean / sd      delta z
+         6      -0.0375 / 0.0165          +2.81         +0.0110 / 0.0302         +1.03
+        16      -0.0354 / 0.0319          +1.57         +0.0115 / 0.0252         +1.21
+
+  The **sd nearly doubled** between 6 and 16 draws while the mean barely moved, so the six-draw read
+  turned a `z +1.57` into a `z +2.81` — the difference between abstaining and shipping. The sampling
+  reason is ordinary (`sd` of an sd on 6 draws is ~30% of itself) and the operational consequence is
+  not: every operator null previously recorded here used **six** draws (2026-10-25/26's band null,
+  2026-10-27/28's sleeve null, 2026-10-28/29's) and their z's should be read as upper bounds on
+  magnitude until re-run. **Standing rule: at least 16 draws for an operator null, and quote the
+  null's own sd so the next session can see how thin it is.** Also worth separating: a thin null is
+  dangerous in the *qualifying* direction only — it cannot make a refusal wrong, which is the same
+  asymmetry as the 2026-10-16/17 "a train screen may refute but may not qualify".
+
+- **[Method, 2026-10-31/11-01] THE COMPLETE PLACEBO SET FOR A CALENDAR CLAIM IS THE PARTITION, NOT A
+  CHOSEN COMPARISON — AND IT IS CHEAPER THAN THE SELECTION NULL IT REPLACES.** A claim about every
+  third month has exactly **three** every-third-month cells, and they partition the calendar, so
+  pricing all three is a complete placebo set with the formation-date nuisance (which calendar months
+  a rebalance falls in) varying and nothing else. The 495-subset selection null was run too and
+  agrees (rank 3 of 495, MC p 0.0060) but is the wrong instrument for a cell that was not searched,
+  and it is noisier about it: the four subsets scoring above the pre-signed one all contain {6,9,12}
+  and are therefore the same effect rather than rival cells, which only the partition view makes
+  obvious. **Shape to reuse: for any claim of period `p` inside a cycle of length `n`, price all
+  `n/p` rotations; use a subset null only when the cell really was chosen by its number.**

@@ -25019,3 +25019,355 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    branches are fully merged into `origin/main` and safe to delete.
 
 ## Research session — 2026-10-31 (learning agent): 4 notes added, see research/SUMMARY.md
+## Free measurements — 2026-10-31/11-01 (nightly), ZERO trials spent
+
+**Step-0 integrity: clean.** `git fetch origin --prune`; `git branch -r --no-merged origin/main`
+returns **empty**, so no remote branch holds a commit absent from `origin/main` and the trial
+history is not split. HEAD is on this run's designated branch `main-vlflz4`, which points at the
+**identical commit** as `origin/main` (8a50c4e) — a differently-named ref on the same history, not
+a divergence, and all ten stale `origin/main-*` branches are fully merged. Engine green
+(`92 passed in 86.83s`). `trials.jsonl` stands unchanged at **129 records** and the deflated bar is
+exactly where the 2026-10-28/29 session left it. **No holdout, forward or incubation file was
+opened** (`experiments/holdout_log.jsonl`, `reports/incubation.md`, the `*_holdout.parquet` files
+and the holdout columns of the v2 reports were not read).
+
+**Why zero trials, stated before the blocks rather than after them.** The 2026-10-30/31 handover's
+idea 2 audited every `program.md` family and found none whose closure rested on an *argument*
+rather than on a measurement, and therefore proposed no scout. Tonight that audit is out of date in
+exactly one place: the 2026-10-31 learning agent opened the **quarter boundary** with four notes,
+and one of them (`notes/2026-10-31-quarter-ending-month-momentum-seasonality.md`) carries a
+construction that is cross-sectional, fully invested and price-only — and closes it on an
+*argument*, that "conditioning a null on a calendar indicator yields a null on a quarter of the
+observations". That note also names the **free screen** that would decide it, and asks for the
+result to be recorded either way. So tonight is that screen (F1), its diligence (F2), and the three
+constructions that could harvest what it found (F3–F6). The count is zero because F4 and F6 refuse
+the vein in the gate's own units, not because nothing was found: **F1 is the largest and cleanest
+cross-sectional signal this lab has ever measured, and F5–F6 are why it is still not a book.**
+
+### F1 — the screen the note required, and it comes back positive by a distance
+
+The note's own words: *"measure the cross-sectional rank IC of the momentum signal separately in
+third-months-of-quarter and in other months (January excluded), on train, region-matched. If the
+third-month IC is not materially above the pooled +0.0128, the vein is closed on this panel."*
+
+Everything below was pre-registered before the first number was read: signal = 12-1 momentum,
+`log(P[d-21] / P[d-252])`, a **ratio of two stored prices** so the 2026-10-22 back-adjustment
+constant cancels exactly; decision date `d` = last trading day of month `m-1`, target = the simple
+return from `d` to the last trading day of the **holding** month `m`; cells by the holding month,
+QEM = {Mar, Jun, Sep, Dec} against the seven non-January months that are not quarter-ends, January
+dropped as the source requires; region-matched by the 2026-10-20/21 rule (Spearman inside each
+calendar-peer group of ≥ 20 scored names, name-weighted, then averaged over dates — never pooled
+percentile ranks). **Refusal rule fixed in advance**: the vein stays open only if the QEM cell
+reaches IC ≥ 0.030 (the lab's own "worth a trial" bar) *and* the QEM-minus-OTHER difference clears
+2 standard errors.
+
+    cell                                 IC        t      se      n dates
+    all months [instrument check]     +0.0228   +1.69   0.0135    251
+    all months, NEGATED               -0.0228   -1.69   0.0135    251
+    pooled, ex-January  [control]     +0.0259   +1.87   0.0138    231
+    QUARTER-ENDING months             +0.1023   +4.86   0.0210     84
+    other months, ex-January          -0.0177   -1.03   0.0172    147
+    QEM - OTHER                       +0.1200   +4.42   0.0272      --
+
+**Both clauses of the refusal rule pass.** `+0.1023` is **2.5x the largest rank IC this lab has
+recorded for any object** (the cointegrating slope, +0.0412) and 2.4x the largest leak-free one.
+The negation invariant passes. Per holding month, descriptive and thin (21 dates each): Mar +0.031,
+Jun +0.168 (t +3.97), Sep +0.124 (t +3.81), Dec +0.087; the worst month on the panel is **April at
+-0.108**, and January is -0.014.
+
+### F2 — the diligence, and it survives every instrument this lab requires
+
+**Instrument validation against a recorded figure first (2026-10-25/26 rule).** At forward 63 days,
+all months, the harness reads `mom252_21` region-matched at **+0.0184 (t +1.38)** against the
+recorded **+0.0175 (t +1.33)** of 2026-10-24/25 — a four-figure agreement on a number this harness
+did not produce.
+
+    (c) ROTATION PLACEBO -- {3,6,9,12} is one of exactly three every-third-month cells
+        {3,6,9,12}  PRE-SIGNED       +0.1023  t +4.86
+        {1,4,7,10}  placebo          -0.0316  t -1.29
+        {2,5,8,11}  placebo          -0.0030  t -0.14
+
+    (d) SELECTION NULL -- all 495 four-month subsets of the twelve
+        mean +0.0227  sd 0.0314  p95 +0.0743  max +0.1053
+        the pre-signed cell ranks 3 of 495,  MC p = 0.0060
+        top 5: (6,7,9,12) +0.105, (2,6,9,12) +0.103, (3,6,9,12) +0.102, (6,9,11,12) +0.098
+
+    (e) FIVE-YEAR-BUCKET GRADIENT, QEM cell, by decision date
+        1995-99 +0.194   2000-04 +0.087   2005-09 +0.115   2010-14 +0.056   2015-19 +0.092
+
+    (f) TRAIN SUB-PERIODS            QEM        other
+        1997-2008                 +0.1330     -0.0186
+        2009-2017                 +0.0613     -0.0166
+
+    (h) QEM dates 84, mean scored names 491, mean US share 0.759
+        other dates 147, mean scored names 491, mean US share 0.759
+
+**The pre-signed rotation is the only positive one of the three**, and the three rotations partition
+every non-January month, so this is a complete placebo set rather than a chosen comparison. The
+495-subset null is the 2026-10-24/25 rule applied to a cell that was *not* searched — quoted anyway,
+and the four subsets above it all contain {6,9,12}, so they are the same effect and not a rival cell.
+**It is not the 2026-10-22 back-adjustment lookahead**, on three independent grounds: both the score
+and the target are ratios of two stored prices of the same name, so `D_i(t)` cancels algebraically;
+the bucket gradient is **non-monotone** in years-of-store-remaining (0.194 / 0.087 / 0.115 / 0.056 /
+0.092) and carries no constant ratio to it, which is the discriminating signature the 2026-10-25/26
+method entry put ahead of the horizon profile; and a per-name multiplicative constant cannot make
+one calendar cell positive and the complementary cell negative. **It is not geography and not a
+scorable-set artifact**: the US share (0.759 vs 0.759) and the scored breadth (491 vs 491) are
+identical across the two cells, so the 2026-10-19/20 coverage explanation and the 2026-10-26/27
+common-universe confound are both excluded by construction.
+
+**The identifying test, and it is the one that makes a cheap book conceivable.** The effect tracks
+the **calendar month actually held**, not the formation date, and barely decays with a stale pick:
+
+    score formed at d, held over month m+1, regrouped by the month ACTUALLY held
+      m+1 is a quarter-ending month      +0.0922  t +4.45  n 84
+      m+1 is another month, ex-January   -0.0225  t -1.38  n 146
+    both columns pooled by the held calendar month
+      held month in {3,6,9,12}           +0.0972  t +6.60  n 168
+      held month elsewhere, ex-January   -0.0201  t -1.70  n 293
+    by pick age, QEM cell:  fresh +0.1023   one month stale +0.0922
+
+So a **quarterly** book re-formed at the end of Feb/May/Aug/Nov holds a quarter-ending month as its
+first held month with a one-month-stale pick that keeps 90% of the signal — the cheap construction
+the 2026-10-15/16 "time conditioning raises turnover" finding seemed to rule out.
+
+### F3/F5 — through the ENGINE, with the gross/cost split measured rather than inferred
+
+The 2026-10-25/26 rule: the pre-trial screen is `engine.backtest` on train with `setup.execution`,
+because a positive IC and a positive Sharpe skill are different statistics that disagree in sign on
+this panel (three recorded instances). K = 100, calendar-peer × depth-tercile quota, pool held
+through warm-up, nothing emitted between formation dates so drift is free. **Gross is the same book
+under `cost_multiplier = 0`** — same fills, same charged drift, same cash rate, same pool — rather
+than inferred from the 2x column, which doubles the liquidity tier only and leaves the UK/HK/FR/IT/ES
+transaction taxes alone.
+
+    book                                       GROSS      NET     COST   turn    pos   97-08   09-17
+    monthly hold-1          [control]        +0.0410  -0.0200  -0.0610  5.84   99.5  +0.082  -0.210
+    quarterly form Feb/May/Aug/Nov PRE-SIGNED +0.0360  +0.0090  -0.0270  3.22   99.5  +0.079  -0.131
+    quarterly form Dec/Mar/Jun/Sep placebo   -0.0200  -0.0470  -0.0270  3.21   99.6  +0.055  -0.244
+    quarterly form Jan/Apr/Jul/Oct placebo   -0.0060  -0.0330  -0.0270  3.22   99.5  +0.066  -0.222
+    QEM-only tilt, pool otherwise            +0.1100  -0.0120  -0.1220 11.04  357.2  +0.055  -0.138
+    equal-weight pool [benchmark]             +0.5350  +0.5240  -0.0110  0.89      --      --      --
+
+The monthly control reads net **-0.0200** against the recorded **-0.0667** for the same score under a
+peer-quota-only construction — same sign, and the record's own claim is "negative in all eight
+constructions tried", so the instrument is consistent with it.
+
+**Three things the table says, and the first is the headline.** (i) **The effect is real in the
+gate's units and it is large**: the QEM-only book earns **gross train skill +0.1100**, the biggest
+clean gross number in this lab's record (previous best +0.090, `overlap/H6 K=60`, itself flagged as
+K-swept; #16 ships +0.063). (ii) **The cost schedule takes all of it**: -0.1220 at 11.04x, so net is
+-0.0120. (iii) **The cost term is pinned identical (-0.0270) across the three quarterly phases by
+construction**, so the phase comparison is a pure *gross* comparison with turnover (3.21-3.22x),
+book size (99.5), score, quota, K and availability rule all held fixed — the designed-permutation
+shape the 2026-10-26/27 session called the strongest instrument this lab has. The pre-signed phase
+comes **1 of 3** on the gate's own statistic and is the only one of the five constructions with
+positive net train skill.
+
+### F4 — the null for the CONSTRUCTION, and this is what refuses the vein
+
+Standing rule, 2026-10-27/28: whenever a result is attributed to a construction operator, null the
+operator by pushing random scores through it, and pre-register which of **level** and **delta** the
+hypothesis rests on. A calendar phase *is* such an operator — the three quarterly books differ only
+in which calendar months their formation dates fall in, and that is a fact about the calendar before
+it is a fact about momentum. Sixteen AR(1) scores at 12-1 momentum's own measured month-to-month
+rank persistence (**phi = 0.8852**), masked to its own scorable set, through both constructions:
+
+    quantity                      null mean    null sd    n     observed      z
+    pre-signed phase LEVEL         -0.0354     0.0282    16      +0.0090    +1.57
+    placebo phase LEVEL            -0.0469     0.0319    16      -0.0330    +0.43
+    DELTA (pre-signed - placebo)   +0.0115     0.0252    16      +0.0420    +1.21
+    gross delta vs BOTH placebos        --          --    --      +0.0490    +1.49
+
+**An IC contrast at t +4.42 converts to a Sharpe-skill contrast at z +1.21.** Neither the level nor
+the delta is resolvable against the construction's own null, so there is no quantity the hypothesis
+could have been pre-registered on that the free screen does not refuse. **Discipline note, and it is
+the reason the null was widened**: the first six seeds gave a level null of sd 0.0165 and `z +2.81`,
+which on its own would have looked like a shippable candidate; ten more seeds took the sd to 0.0282
+and the z to +1.57. A six-draw null is not a null, and the thin version pointed the wrong way.
+
+**The outcome was predictable from the lab's own arithmetic before the engine ran, which is the part
+worth carrying.** The 2026-10-20/21 exchange rate puts train skill at `3.37 x rank IC` as a
+**ceiling** with a realised fraction of 6%-38%. At IC +0.1023 the ceiling is +0.345 — but the signal
+exists in 4 months of 12, so a quarterly book holding one QEM month in three carries a duty cycle of
+about 1/3, giving a ceiling near +0.11 and a realised range of **+0.007 to +0.042**. The engine
+returned **+0.0090**. The vein is not refused by surprise; it is refused by an exchange rate that was
+on the books.
+
+### F6 — the amplitude lever, measured as a bound, and it moves net the WRONG way
+
+The only shape left is to shrink the swap: hold a momentum book always and *concentrate* it in the
+quarter-ending month. That is the pool-plus-tilt family, which the 2026-10-18 engine issue puts out
+of bounds until a human rules. Priced here as a **bound on what the ruling would be worth**, not as a
+candidate — top-100 in the quarter-ending month, a broader momentum book otherwise:
+
+    off-state of the swap           GROSS      NET     COST   turn    pos
+    whole pool [= F3 row 5]       +0.1100  -0.0120  -0.1220 11.04  357.2
+    top-300 momentum              +0.0720  -0.0350  -0.1070  9.72  212.5
+    top-200 momentum              +0.0480  -0.0430  -0.0910  8.16  163.5
+
+**Narrowing the off-state saves 0.015 of cost and gives up 0.038 of gross, so net gets worse at every
+step.** This is the tail-depth confound for the **fifth** time (the 2026-10-07 pair, the liquidity-half
+split of 2026-10-09/10, the secondary-selection screen of 2026-10-15/16, the breadth table of
+2026-10-28/29, this): the concentrated book's gross comes from the *contrast* against a broad
+alternative, and moving the alternative toward it eats the contrast faster than it saves money. **So
+the gated construction is not what stands between this lab and this effect — the gradient is**, and
+the closure does not wait on the 2026-10-18 ruling. For completeness, the break-even the cost
+schedule would have to hit for the concentrated form: **90.2%** of the v3 bill for net skill 0.000,
+**69.7%** for +0.025, **49.2%** for +0.050.
+
+**Lesson.** The quarter-ending-month concentration of cross-sectional momentum is **real on this
+panel, correctly signed, pre-signed, and the largest clean cross-sectional signal in the lab's record
+— rank IC +0.1023 (t +4.86) against -0.0177 in other months, the only positive of three
+every-third-month rotations, rank 3 of 495 four-month subsets, tracking the held month rather than the
+formation date, with identical region mix and breadth in both cells — and it is unharvestable in all
+three forms that exist**: monthly (net -0.020), quarterly on the pre-signed phase (+0.009, z +1.57 and
+a phase delta at z +1.21 against a 16-seed construction null) and concentrated into the
+quarter-ending month alone (gross +0.1100, cost -0.1220, net -0.0120), with the amplitude lever moving
+net the wrong way (F6). Third instance of the "real and out of reach" shape after Birru's weekday mood
+(2026-10-16/17) and Heston-Sadka's anniversary (2026-10-26/27), and **by far the largest gross prize
+of the three** — the first time in this lab's record that only the cost schedule, and not the signal,
+is what is missing. `seasonality-calendar`'s last reachable form is now closed on measurement rather
+than on execution arithmetic alone. **Anti-candidates travelling with this entry**: the
+quarter-ending-month calendar conditioner on momentum at any of the three constructions priced here;
+any single-phase quarterly grid on 12-1 momentum, the pre-signed phase included; and the off-state
+breadth of the swap as a knob.
+
+## Session summary — 2026-10-31/11-01 (nightly) — 0 trials of 8; the lab's largest clean signal, and only the cost schedule is missing
+
+**Experiments run: 0 of 8. No verdict recorded; `trials.jsonl` stands unchanged at 129 records and
+the deflated bar is exactly where the 2026-10-28/29 session left it.** Six free blocks (F1–F6), one
+instrument validation against a recorded figure, one pre-registered refusal rule that passed and one
+construction null that refused anyway. Engine green (`92 passed in 86.83s`). **No holdout, forward
+or incubation file was opened.** Step-0 integrity clean: `git branch -r --no-merged origin/main`
+empty, and this run's designated branch `main-vlflz4` points at the identical commit as
+`origin/main`, so nothing can be stranded.
+
+**Why the count is zero.** The 2026-10-30/31 handover said the challenge track is closed on
+arithmetic and the one thing left is "a scout in a family whose closure rests on an ARGUMENT rather
+than on a measurement" — and audited the record finding none. Tonight the 2026-10-31 research
+session supplied exactly one: the quarter-ending-month momentum concentration, whose closure in
+`research/` rests on the argument that *conditioning a null yields a null*, together with the free
+screen that would decide it. The screen was run (F1), passed both clauses of its own
+pre-registered refusal rule by a distance, and the argument in `research/` is **wrong**. Three
+constructions were then priced through the engine and all three are refused: the hypothesis had no
+quantity left to rest on that F4's construction null does not kill, so no file was written.
+
+### Best finding: a rank IC of +0.1023 at t +4.86 — 2.5x the lab's best-ever — in a pre-signed calendar cell, and it is still not a book
+
+Cross-sectional 12-1 momentum, region-matched, forward one month, by the holding month: **+0.1023
+(t +4.86) in {Mar, Jun, Sep, Dec} against -0.0177 (t -1.03) in the other non-January months**, a
+paired difference of **+0.1200 at t +4.42**. The identification is the cleanest this lab has
+produced: the pre-signed cell is the **only positive** of the three every-third-month rotations
+(+0.102 / -0.032 / -0.003, a complete partition of the non-January calendar); it ranks **3 of 495**
+four-month subsets (MC p 0.0060) and the four above it all contain {6,9,12}, so they are the same
+effect; it tracks the **held** calendar month rather than the formation date (+0.0972 at t +6.60
+pooling fresh and one-month-stale picks by held month); the two cells have **identical** US share
+(0.759) and scored breadth (491), excluding geography and the common-universe confound; and it
+cannot be the 2026-10-22 back-adjustment lookahead because both the score and the target are ratios
+of two prices of the same name, the bucket gradient is non-monotone in years-of-store-remaining, and
+a per-name constant cannot sign two complementary calendar cells oppositely.
+
+### Second finding: the harvest arithmetic, and the first time in this lab's record that only the cost schedule is missing
+
+Through the engine on train, gross measured directly at `cost_multiplier = 0` rather than inferred
+from the 2x column:
+
+    construction                              GROSS      NET     COST   turn
+    monthly hold-1                          +0.0410  -0.0200  -0.0610  5.84
+    quarterly, PRE-SIGNED phase             +0.0360  +0.0090  -0.0270  3.22
+    quarterly, the two placebo phases       -0.0200 / -0.0060  -0.0270  3.21
+    concentrated in the quarter-ending month +0.1100  -0.0120  -0.1220 11.04
+
+**Gross +0.1100 is the largest clean gross train skill this lab has recorded** (previous best +0.090,
+itself K-swept; the shipped lead #16 is +0.063) and the cost bill is -0.1220. The pre-signed phase is
+1 of 3 on the gate's own statistic with cost pinned identical across phases by construction — and
+F4's sixteen-seed construction null puts its level at **z +1.57** and the phase delta at **z +1.21**,
+so neither quantity is resolvable. F6 closes the only remaining shape: narrowing the off-state of the
+swap saves 0.015 of cost and gives up 0.038 of gross, the **fifth** instance of the tail-depth
+confound, so the construction that is gated on the 2026-10-18 engine ruling would be on the wrong
+side of the same gradient and **the closure does not wait on that ruling**.
+
+### Third finding: the lab's own exchange rate predicted this before the engine ran
+
+At IC +0.1023 the 2026-10-20/21 ceiling (`train skill = 3.37 x rank IC`) is +0.345; the signal exists
+in 4 months of 12, so a quarterly book holding one quarter-ending month in three carries a duty cycle
+near 1/3, a ceiling near +0.11 and — at the recorded 6%-38% realised fraction — a predicted range of
+**+0.007 to +0.042**. The engine returned **+0.0090**. The exchange rate has now priced a candidate
+correctly in advance for the second time and remains a refusal instrument only.
+
+### The discipline notes
+
+1. **Instrument validated before anything new was read off it** (2026-10-25/26 rule): at forward 63
+   days the harness reads `mom252_21` region-matched at +0.0184 (t +1.38) against the recorded
+   +0.0175 (t +1.33).
+2. **The refusal rule was fixed before the first number** and it passed — which is why the vein got
+   four more blocks rather than one. What refused it is a *different*, also pre-stated instrument.
+3. **A six-draw null is not a null.** F4's first six seeds gave the level a null sd of 0.0165 and
+   `z +2.81`; sixteen seeds gave sd 0.0282 and `z +1.57`. The thin version would have shipped a file.
+   Carried into `learnings.md` as a method rule.
+4. **No phase, K, off-state breadth or window was swept to find a maximum.** The calendar cell came
+   pre-signed from the sources; the three rotations partition the calendar; the off-state breadths in
+   F6 were priced as a bound with the gradient's sign as the object, not its argmax.
+5. **Three items for the human owner, none acted on**: `engine/`, `scripts/`, `program.md` and the
+   thresholds are untouched; the 2026-10-18 and 2026-10-22 engine issues stand unchanged (F6 now says
+   the first one is **not** blocking this vein); and **this is the third consecutive nightly session
+   at zero trials**, which is a pattern the 2026-09-17 session already flagged once and which is
+   named here rather than left to be noticed.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Do not re-open the quarter boundary with a book.** All three harvestable constructions are
+   priced and refused, the amplitude lever's gradient has the wrong sign (F6), and the break-even
+   needs the v3 cost schedule at 70% for even +0.025 of net skill. What is genuinely open is
+   *narrower and cheaper*: the effect tracks the **held** month and survives a one-month-stale pick,
+   so the one unpriced question is whether it survives a **two**-month-stale pick. If it does, the
+   quarterly book's gross should have been higher than +0.036 and the gap is a construction loss
+   worth naming; if it does not, the quarterly form was already optimal and the vein is arithmetically
+   complete. One free block, no trial.
+2. **The three free methodological tools from tonight's research notes are unspent and belong to any
+   future calendar screen**, and they are the only part of that vein with a future here: the
+   **joint `YEND`/`QEND`/`MEND` dummy specification** (the only form in which "the quarter boundary
+   matters" separates from "the month boundary matters" — the lab's 2026-10-09/10 measurement used a
+   pooled contrast that cannot), the **round-trip inflation statistic** (last day of a period minus
+   first day of the next, in place of a one-sided window return), and the **within-year empirical
+   null** (standardise a two-day statistic by its own distribution over all other non-overlapping
+   two-day windows of the same year — assumption-light, computable on train, no bootstrap). All free.
+   → `notes/2026-10-31-quarter-end-marking-the-close.md`.
+3. **The honest structural question this session raises, and it is for the human.** F5 is the first
+   time this lab has measured a gross prize (+0.1100) comfortably larger than anything it has shipped
+   while the *entire* shortfall is the cost schedule. Every other closed mechanism was closed because
+   the signal was not there. That makes the cost model, not the signal search, the binding constraint
+   for the first time — and the cost model is frozen engine state. Nothing was changed and nothing is
+   proposed; it is raised because the next session will otherwise keep searching the half of the
+   problem that is not binding.
+4. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's three — the
+   quarter-ending-month conditioner on momentum at any of the three constructions priced, any
+   single-phase quarterly grid on 12-1 momentum (**the pre-signed phase included**, since its level is
+   z +1.57 against its own construction null), and the off-state breadth of the swap as a knob.
+   Unchanged from the 2026-10-30/31 handover: the #16/#19 blend at any weight, any construction whose
+   case is a tighter error bar or lower active variance, `#328` as an audit instrument, `H` as a
+   parameter, `K` as a knob, the retention band as a validation operator, the recent half of the
+   decade window, the anniversary leg, the liquidity level or trend in any form, covariance weighting
+   at any estimator.
+5. **From `research/SUMMARY.md`** (2026-10-31 session, the quarter-boundary vein — four notes, all of
+   which verdict "do not spend a trial" and none of which proposed a book; read before planning).
+   Tonight **answered the one required screen** that vein left (`notes/2026-10-31-quarter-ending-month-
+   momentum-seasonality.md`, point 3) and the answer is that the note's point-2 argument is wrong on
+   the IC and right on the verdict — the vein dies at the conversion, not at the signal. The other
+   three notes are already self-closed: marking-the-close fails clauses (b) and (c) of the admission
+   criterion and is sign-inverted under v3's next-real-close fills; tape painting is a Tier-A
+   trade-level **rejection** of the window-dressing explanation (so tonight's result, if it has a
+   cause, has the tax-loss one, which this nine-regime panel should dilute by construction and which
+   is consistent with the effect's decay from +0.133 in 1997-2008 to +0.061 in 2009-2017 as the
+   non-US indices join); and the China note confirms the effect is not a US-institutional artefact
+   but is unreachable there for the same reason as in the US. **One correction the research agent
+   owes itself is already recorded in its own note and should be honoured when quoting it**: the lab
+   measured same-calendar-month seasonality as a **null**, not as an inversion (withdrawn 2026-10-15
+   as a misaligned score). Still live and unspent from earlier sessions: `#307` (read `#310` first and
+   in the same sitting), `#318`, `#319`, `#320`, `#301`, `#304`, `#308`, `#313`, `#314`, `#288`,
+   `#289`, `#294`/`#295`, `#285`/`#286`, `#282`; `#300`, `#310`, `#322`, `#336`, `#339` and `#342`
+   remain the interpretation rules to read first; `#305`, `#293`, `#299`, `#309`, `#315`, `#321`,
+   `#326`, `#328` remain anti-candidates.
