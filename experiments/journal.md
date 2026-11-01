@@ -25373,3 +25373,371 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    `#326`, `#328` remain anti-candidates.
 
 ## Research session — 2026-11-01 (learning agent): 3 notes added (plus an addendum to an existing note and a coverage-claim correction), see research/SUMMARY.md
+
+## Free measurements — 2026-11-01/02 (nightly), ZERO trials spent
+
+**Step-0 integrity: clean, with one correction made before any work.** `git fetch origin --prune`;
+`git branch -r --no-merged origin/main` returns **empty**, so no remote branch holds a commit absent
+from `origin/main` and the trial history is not split. This run's designated branch `main-cmj0wd`
+pointed at the **identical commit** as `origin/main` (3d2f5db) and held no commits of its own, while
+local `main` was 4 behind; HEAD was moved to `main` at `origin/main` before the first measurement, so
+no trial could be run from a per-run branch. Engine green (`92 passed in 97.76s`). `trials.jsonl`
+stands unchanged at **129 records** and the deflated bar is exactly where the 2026-10-28/29 session
+left it. **No holdout, forward or incubation file was opened** (`experiments/holdout_log.jsonl`,
+`reports/incubation.md`, the `*_holdout.parquet` files and the holdout columns of the v2 reports were
+not read).
+
+**Why the count is zero, stated before the blocks rather than after them.** The 2026-10-30/31
+handover closes the challenge track on arithmetic (the gate asks a rank IC 8–10x the lab's best-ever)
+and leaves the scout track as the only place a trial belongs. Tonight took the two veins the
+2026-11-01 research session opened that end in a construction rather than in a diagnostic — research
+`#356`'s breadth floor (F2–F4) and, from the same cluster's behavioural half, a discreteness
+conditioner on the lab's one positive object (F6–F7) — plus the one free block the previous handover
+explicitly left open (F8) and one decomposition the handover's own structural question required (F1).
+**Every one of them refuses its construction on its own pre-registered rule, and two of the four
+refusals are of the lab's own standing frame rather than of a new idea.** No file was written because
+no screen qualified one.
+
+### F0 — instrument validation against recorded figures, before anything new was read
+
+Standing rule of 2026-10-25/26. Tonight's harness is `protocol.evaluate_split(..., "train")` with the
+v3 execution model, and a parameterised rebuild of the lab's standing construction (score → calendar-peer
+× depth-tercile quota → equal weight → monthly, pool held through warm-up) so that every comparison
+below differs from a **recorded** book by one named thing.
+
+    book                              skill    gross     cost    turn     pos   recorded
+    #16 pt_oldhalf_overlap6 (file)   +0.0580  +0.0630  -0.0050   1.31   164.3   +0.058 / +0.063 / -0.005 / 1.31 / 164.3
+    factory hold-6 (rebuild of #16)  +0.0580  +0.0630  -0.0050   1.31   164.3   identical on all five
+    factory hold-1 (rebuild of #12)  +0.0260  +0.0450  -0.0190   2.36   140.3   +0.026 / +0.045 / -0.019 / 2.36 / 140.4
+
+Five figures reproduced exactly from the file and five more from the rebuild. The IC harness was
+validated separately in F6a and F8.
+
+### F1 — the cost bill decomposed, and it closes the whole market-selective axis for zero trials
+
+The 2026-10-31/11-01 handover raised "the cost model, not the signal search, is the binding
+constraint" as a structural question for the human and named no number. The first thing to ask of
+that claim is **which half of the cost model binds**: v3 charges a liquidity tier of 15/20/30/40 bps
+per side *plus* UK stamp duty at 50 bps on purchases, HK both sides, and the French, Italian and
+Spanish FTTs. 50 bps on a purchase is more than three times the best liquidity tier, so a
+market-selective construction looks like the obvious lever. Measured directly, `taxes=False` against
+`taxes=True` at the same tier, train (gross = the same book at `cost_multiplier = 0`):
+
+    book                      turn    gross      net     cost   no-tax net   TAX part  TIER part  tax %
+    old_half hold-6 (#16)     1.31  +0.0630  +0.0580  -0.0050    +0.0580    +0.0000   -0.0050    -0.0%
+    old_half hold-1 (#12)     2.36  +0.0450  +0.0260  -0.0190    +0.0270    -0.0010   -0.0180     5.3%
+    rev21 hold-1             16.86  -0.0230  -0.1890  -0.1660    -0.1790    -0.0100   -0.1560     6.0%
+
+**The statutory taxes are 0–6% of the cost bill, and at the lead's shippable turnover they are
+0.0000 of skill.** The bill is 94–100% the liquidity tier, which is levied on every name in every
+market and cannot be selected around. Two closures follow and neither needs another measurement:
+
+ (a) **The tax-aware axis is dead.** Its ceiling is the tax part, which is 0.000 at 1.3x turnover and
+     0.010 at 17x. It is also invisible to the one gate that could have graded it: the
+     region-matched null draws each entered name's replacement **in region**, so a book that declines
+     to buy UK or French names has a null that declines too, and the saving is shared move-for-move
+     (the 2026-10-13/14 derivation, applied to cost instead of to return). **Anti-candidate: any
+     construction whose case is avoiding a transaction tax, at any turnover.**
+ (b) **"Only the cost schedule is missing" is true of last night's book and false of the lead.** The
+     quarter-ending-month concentrate paid -0.1220 of cost on gross +0.1100 at 11.04x turnover. #16
+     pays **-0.0050 on gross +0.0630 at 1.31x — 92% of its gross survives execution.** The two cases
+     differ by an order of magnitude in turnover, not in the cost schedule, and the lead's binding
+     constraint is **gross selection**, not cost. Tonight's calibration, usable as a pre-trial
+     refusal: this panel charges **0.007–0.018 of Sharpe skill per unit of engine-counted annual
+     turnover** (14.5 bps/side implied at #12, 17.7 at rev21, 6.9 at #16 where held drift is not
+     re-traded), so a book churning above ~3x/yr cannot keep more than 0.025 of cost, and above ~12x
+     cannot keep 0.10. Irreducible: the floor is the 15 bps tier, not the taxes.
+
+### F2 — the breadth census, and research `#356`'s floor turns out to touch 1.4% of the book
+
+`#356` (literature, unverified here) reports a multi-market study enforcing **at least 25 eligible
+names per country-month before sorting**, and names the consequence of ignoring it as a mechanism:
+too few names → binding filters and failed neutrality → poor diversification → a materially fatter
+left tail. The lab's standing quota operator allots K across calendar-peer × depth-tercile cells in
+proportion to each cell's share of scored names, so it does buy from thin groups by construction.
+How thin, on the panel the lab actually has (167 scored train month-ends, the score needs 120 months
+so scoring starts 2004-02):
+
+    era         dates  groups  scorable  grp<25  names in grp<25  % names  picks from grp<25  % picks
+    1997-2004      11     1.0       235     0.0        0.0          0.0%          0.0           0.0%
+    2005-2008      48     1.0       269     0.0        0.0          0.0%          0.0           0.0%
+    2009-2012      48     2.7       510     0.2        5.2          1.0%          0.9           0.9%
+    2013-2017      60     7.3       786     1.4       24.1          3.1%          3.1           3.1%
+    ALL           167     3.8       522     0.6       10.1          1.9%          1.4           1.4%
+
+Group-size distribution over the 627 group-dates: min 16, 10th pct 19, median **66**, 90th pct 354,
+max 426; 15.0% of group-dates sit below 25 names and 41.1% below 50. **The floor's whole reach is
+1.4 names of a 100-name book.** The reason is the instrument, not the panel: `calendar_peers`
+recovers 3.8 groups on average because it **collapses the European markets into a few clusters**
+(its own docstring says so, and measures 7 groups at purity 0.94–0.96), so the 20-name national
+index the literature worries about is not a cell this panel resolves. **The operator's precondition
+therefore fails on the census, before the operator is priced** — and per the 2026-10-28/29 rule that
+a precondition must do the excluding *before* the scores are read, **F4 was not run.** The ten engine
+rows it would have produced are not in this journal and were never looked at.
+
+### F3 — the mechanism behind the floor, priced as a gradient instead of a threshold, and it is 1/√n and nothing else
+
+The threshold is the wrong instrument but `#356`'s *mechanism* is a free, parameter-free prediction
+in its own words: *"a per-country cross-sectional construction should show more left-tail risk in its
+non-US country legs than in its US leg at matched construction — look at that before the Sharpe."*
+For every group the quota buys from, the active monthly return of that group's own picks over that
+group's own eligible pool, at matched construction (same score, same quota, same dates), bps:
+
+    bucket                            n     mean      sd   5th pct  semidev    worst   mean/sd
+    size < 25   [#356's floor]       94     +1.4   284.7    -458.3    276.8   -724.1   +0.005
+    25 <= size < 50                 164    +25.3   289.0    -430.0    312.5   -850.4   +0.088
+    50 <= size < 150                 97    -20.9   320.9    -367.7    428.4  -1874.5   -0.065
+    size >= 150                     272    +11.9   132.7    -186.9    120.9   -486.7   +0.090
+    LARGEST GROUP (the US leg)      167    +13.0   107.4    -132.2     97.1   -486.7   +0.121
+
+**On the raw statistic `#356` is right by a distance** — the thin legs carry 2.8–4.4x the US leg's
+downside semideviation and 2.8–3.5x its 5th percentile. **Scaled by the leg's own name count it
+inverts**, which is the finding:
+
+    bucket                        mean names in leg   sd x 1/sqrt(n_leg)   5th pct x sqrt(n_leg)
+    size < 25                            2.44                441.4               -660.2
+    25 <= size < 50                      4.58                611.5               -880.5
+    50 <= size < 150                     8.80                896.8               -974.8
+    size >= 150                         54.50                879.8              -1213.2
+    LARGEST GROUP (the US leg)          71.50                905.5              -1200.7
+
+**The entire extra tail is the diversification arithmetic of holding 2.4 names instead of 71, with
+nothing left over** — per name the thin legs are the *least* extreme cells on the panel. So the
+pathology `#356` describes ("binding filters and failed style/sector neutrality") is not present
+here; what is present is 1/√n, and a 100-name book has already averaged it away. The active *mean*
+by group-size decile agrees and refuses the premise outright:
+
+    decile      0      1      2      3      4      5      6      7      8      9
+    size     16-19  20-29  30-35  36-43  48-66 67-165 166-191 192-271 272-353 355-426
+    bps      +47.8   +7.6   +6.1  +12.0  -27.2   -9.8   -1.0  +37.7   -5.0  +21.2
+    t         1.38   0.21   0.18   0.29  -0.79  -0.25  -0.05   2.88  -0.30   1.75
+
+**Non-monotone, and the thinnest decile has the largest positive active mean.** Thin breadth does not
+cost this book anything, so the floor has no noise to remove. Decile 7's t +2.88 is **1 of 10 cells,
+not pre-signed, and is not acted on** — recorded here so that a later session does not rediscover it
+as a finding. **`#356`'s reframing — "part of what is out of reach here may be breadth, not cost" —
+is refuted on this panel: it is neither.**
+
+### F6 — the discreteness conditioner, refused on all three of its own pre-registered clauses
+
+The one behavioural construction in the 2026-11-01 cluster that ends in a book. The lab's only
+positive object is a *reversal*, i.e. an overreaction-correction claim, and Da-Gurun-Warachka's
+information discreteness says the market over-reacts to information arriving in few large pieces and
+under-reacts to gradual information — so the same theory predicts, with the **opposite sign to its
+momentum use**, that the correction is larger where the original decline was discrete. `ID = sgn(PRET)
+× (%neg − %pos)` over months −120..−61, the window **inherited** from the score rather than chosen, so
+the conditioner has no free parameter and is exactly as slow as what it conditions: it would buy gross
+without buying turnover, the one shape 2026-10-25/26 asks for. Not a re-test of the v1 reading, which
+was on the 140-name survivor panel, on momentum, with the continuation sign.
+
+Refusal rule fixed before the first number: (a) discrete-half IC above gradual-half IC, paired by
+date, by ≥ 2 se; (b) discrete-half IC ≥ +0.030, the lab's standing "worth a trial" bar; (c)
+|rank corr(ID, score)| < 0.3, so the split is not a restatement. Region-matched, halves taken
+**inside** each calendar-peer group, 166 train month-ends:
+
+    cell                                    IC       t      se    n dates  breadth
+    mom252_21, all months [INSTRUMENT]  +0.0222   +1.70  0.0130      263      466   recorded +0.0228 (t +1.69)
+    old-half reversal, standalone       +0.0179   +2.19  0.0081      166      513
+    information discreteness, standalone+0.0206   +3.44  0.0060      166      513
+    DISCRETE half  [pre-signed higher]  +0.0138   +1.64  0.0084      166      217
+    GRADUAL half   [placebo]            +0.0138   +1.37  0.0100      166      265
+    DISCRETE - GRADUAL (paired)         +0.0001   +0.01  0.0086      166       --
+
+**All three clauses fail, and (a) fails as precisely as a contrast can: +0.0001 at t +0.01, the two
+halves reading the same +0.0138 to four decimals.** Clause (c) is the transferable half: `rho(ID,
+old-half reversal) = +0.42`, so on this panel **ID over a window is substantially a restatement of
+the mean return over the same window** — a name whose mean monthly return was low has more negative
+months, and the sign-count adds little beyond that. Second instance of the 2026-10-25/26 shape (the
+lottery-demand object was low volatility in costume); the detector is the same one — rank-correlate a
+new behavioural object against the lab's existing scores **before** building the conditioner, not
+after. F7, the engine pricing of the ID partition, **was written and not run**: with the contrast at
+t +0.01 there is no quantity for it to price, and running it would have been fishing for a
+construction effect the screen says is absent.
+
+One free byproduct, reported and **not** actionable: ID standalone reads IC +0.0206 at **t +3.44**
+against the host score's +0.0179 at t +2.19 on the same 166 dates and the same breadth. The higher t
+is not a better object — at rho +0.42 it is mostly the same object measured with less noise, and
+**neither reaches the +0.030 bar**, so neither qualifies a trial.
+
+### F8 — the block the previous handover left open: the stale pick, and the answer is "survives, and there is still no gap"
+
+The 2026-10-31/11-01 handover's idea 1, in its words: *"the one unpriced question is whether it
+survives a two-month-stale pick. If it does, the quarterly book's gross should have been higher than
++0.036 and the gap is a construction loss worth naming; if it does not, the quarterly form was
+already optimal and the vein is arithmetically complete."* That interpretation is the handover's,
+fixed before tonight, and is used exactly as written. 12-1 momentum, region-matched, by the **holding**
+month, staleness `s` = months between formation and the month-end preceding the holding month:
+
+    s    QEM holding months        other holding months, ex-Jan     QEM - OTHER        retention
+    0   +0.0910  (t +4.42, n 88)   -0.0210  (t -1.28, n 154)      +0.1120 (t +4.26)     100.0%
+    1   +0.0811  (t +4.17, n 88)   -0.0163  (t -1.03, n 153)      +0.0974 (t +3.89)      89.1%
+    2   +0.0780  (t +4.13, n 87)   -0.0171  (t -1.10, n 152)      +0.0951 (t +3.89)      85.7%
+    3   +0.0621  (t +3.36, n 87)   -0.0102  (t -0.65, n 152)      +0.0723 (t +2.99)      68.3%
+
+**It survives: 85.7% of the fresh IC at two months and 68.3% at three, with the paired QEM−OTHER
+contrast still at t +3.89 two months stale.** Instrument note, stated rather than glossed: these are
+**not** a four-decimal reproduction of the recorded +0.1023 / +0.0922. Tonight's momentum is formed
+on the **monthly grid** (`log(P[m-1]/P[m-12])` on month-end closes) where the recorded figure used
+21/252 **trading days** from the decision date, and both rows come in ~11–12% lower by the *same*
+offset (+0.0910 vs +0.1023, +0.0811 vs +0.0922), which is what a specification difference looks like
+and not what a bug looks like. The retention column is a ratio inside one specification, which is the
+quantity the handover's question needs.
+
+**And the handover's first branch does not deliver its conclusion, which is the useful part.** It
+predicted that if staleness were not the binding thing then the quarterly book's gross "should have
+been higher than +0.036" and the shortfall would be a recoverable construction loss. Priced through
+the lab's own exchange rate (2026-10-20/21: `train skill = 3.37 × rank IC`, explicitly a **ceiling**,
+realised fraction 6%–38% across seven objects), the quarterly book holds one QEM and two non-QEM
+months, so its duty-weighted IC and ceiling are:
+
+    using tonight's ICs   (+0.0910, -0.0210):  duty IC +0.0163  ->  ceiling +0.0550  ->  engine +0.0360 = 65% of ceiling
+    using recorded ICs    (+0.1023, -0.0177):  duty IC +0.0223  ->  ceiling +0.0752  ->  engine +0.0360 = 48% of ceiling
+
+**On either specification the quarterly book already realised a HIGHER fraction of its ceiling than
+any of the seven objects the exchange rate was calibrated on (6%–38%).** So there is no construction
+loss to recover: the form was not leaving gross on the table, it was converting unusually
+efficiently and the gross simply is not there. **The vein is arithmetically complete** — which is the
+handover's *second* branch, reached by a different route than it expected, and it closes idea 1
+without a trial. Third time the exchange rate has priced this vein in advance, and the first time a
+realisation has come in **above** its observed band, which is recorded as a widening of that band
+rather than as a result.
+
+### The discipline notes
+
+1. **Every instrument was validated against a recorded figure before anything new was read off it**
+   (2026-10-25/26 rule). The engine harness reproduced ten figures exactly (F0). The IC harness
+   reproduced `mom252_21` all-months at +0.0222 (t +1.70) against the recorded +0.0228 (t +1.69) —
+   and in F8 it came in 11% low against a *differently specified* recorded figure, which is reported
+   as a specification difference with its evidence, not quietly absorbed.
+2. **Two blocks were written and deliberately not run**, because their preconditions failed first:
+   F4 (the floor operator through the engine, ten rows) after the F2 census put its reach at 1.4% of
+   the book, and F7 (the ID partition through the engine) after F6's contrast came in at t +0.01.
+   Both scripts exist; neither number was looked at. This is the 2026-10-28/29 rule — a precondition
+   must do the excluding before the scores are read — applied in the direction that costs the session
+   its remaining headline.
+3. **No knob was swept to find a maximum.** The 25-name floor is the *source's* number; ID's window
+   is **inherited** from the score it conditions; the staleness ladder is a decay curve whose
+   question is retention, not an argmax; and the one tempting cell in the whole night (F3's decile 7,
+   t +2.88 of ten cells, not pre-signed) is recorded as noise and left alone.
+4. **The one refusal that is of the lab's own frame, not of an outside idea**, is F1(b): "only the
+   cost schedule is missing" is a statement about an 11x-turnover book and is false of the 1.31x lead,
+   which keeps 92% of its gross. A session that had carried the handover's framing forward would have
+   spent tonight on the cost axis.
+5. **Four items for the human owner, none acted on.** `engine/`, `scripts/`, `program.md`,
+   `CLAUDE.md`, `data/` and `trials.jsonl` are untouched; the 2026-10-18 and 2026-10-22 engine issues
+   stand unchanged; **this is the fourth consecutive nightly session at zero trials**, one more than
+   the run the 2026-09-17 session flagged; and the branch correction in step 0 is noted above rather
+   than left implicit.
+
+## Session summary — 2026-11-01/02 (nightly) — 0 trials of 8; the cost axis is 94–100% liquidity tier, the lead already keeps 92% of its gross, and the binding constraint was never cost
+
+**Experiments run: 0 of 8. No verdict recorded; `trials.jsonl` stands unchanged at 129 records and
+the deflated bar is exactly where the 2026-10-28/29 session left it.** Six free blocks (F0–F3, F6,
+F8), two more written and deliberately not run (F4, F7), two instrument validations and four
+pre-registered refusal rules, all four of which refused. Engine green (`92 passed in 97.76s`). **No
+holdout, forward or incubation file was opened.** Step-0 integrity clean, with HEAD moved off this
+run's per-run branch onto `main` at `origin/main` before any measurement.
+
+**Why the count is zero.** The challenge track is closed on arithmetic (2026-10-30/31) and the scout
+track needs a positive-selection, cheap-to-hold object whose free screen passes. Tonight screened the
+two constructions the 2026-11-01 research session supplied, the one free block the previous handover
+left open, and one decomposition that handover's own structural question required. **Each refused on
+its own pre-registered rule, and the two most useful refusals are of the lab's standing frame rather
+than of a new idea.** Shipping a file anyway would have raised the dispersion term for every future
+candidate on evidence that says no.
+
+### Best finding: the cost bill is 94–100% liquidity tier, which kills the market-selective axis and corrects "only the cost schedule is missing"
+
+v3's headline cost feature is its statutory taxes — UK stamp duty at 50 bps on purchases is more than
+three times the best liquidity tier — so a tax-aware construction looks like the obvious response to
+last night's "the cost model is the binding constraint". Measured directly at `taxes=False`:
+
+    book                      turn    gross      net     cost   TAX part  TIER part   tax %
+    old_half hold-6 (#16)     1.31  +0.0630  +0.0580  -0.0050  +0.0000   -0.0050     -0.0%
+    old_half hold-1 (#12)     2.36  +0.0450  +0.0260  -0.0190  -0.0010   -0.0180      5.3%
+    rev21 hold-1             16.86  -0.0230  -0.1890  -0.1660  -0.0100   -0.1560      6.0%
+
+**The taxes are 0.0000 of skill at the lead's turnover and 6% of the bill at 17x.** The axis is also
+invisible to the only gate that could grade it, because the region-matched null declines the taxed
+markets alongside the candidate. And the second row of the table is the structural correction: **#16
+pays -0.0050 of cost on gross +0.0630 — it already keeps 92% of its gross.** "Only the cost schedule
+is missing" was a true statement about an 11x-turnover concentrate and is false of the 1.31x lead,
+whose binding constraint is gross selection. Tonight's reusable calibration: **0.007–0.018 of Sharpe
+skill per unit of engine-counted annual turnover**, so >3x/yr cannot keep more than 0.025 of cost and
+>12x cannot keep 0.10 — and the floor is the 15 bps tier, which no selection avoids.
+
+### Second finding: research `#356`'s breadth story is 1/√n and nothing else, so breadth is not the constraint either
+
+The literature's 25-name country-month floor reaches **1.4% of this book's picks** (median
+calendar-peer group 66 names; the instrument collapses Europe into ~4 clusters, so the thin national
+index it worries about is not a cell this panel resolves), and its *mechanism* — thin legs carry a
+fatter left tail — is **right on the raw statistic and gone once divided by the leg's own name count**
+(thin legs 2.8–4.4x the US leg's semideviation raw; the *least* extreme cells per name). The active
+mean by group-size decile is non-monotone with the **thinnest** decile largest (+47.8 bps). So
+`#356`'s reframing, "part of what is out of reach here may be breadth, not cost", is refuted: **it is
+neither.** With F1, tonight removes both of the two non-signal explanations the lab had on its books.
+
+### Third finding: the quarter-ending-month vein is arithmetically complete, and the exchange rate's band widens
+
+12-1 momentum's QEM effect survives a stale pick (85.7% of the fresh IC at two months, 68.3% at
+three, QEM−OTHER still t +3.89 at two). By the handover's own pre-stated reading that should have made
+the quarterly book's +0.036 gross a recoverable construction loss — but the duty-weighted ceiling is
++0.055 (tonight's ICs) or +0.075 (the recorded ones), so the book realised **65% / 48% of its
+ceiling against a 6%–38% band across the seven objects the exchange rate was calibrated on.** The
+form was converting unusually *well*; the gross is simply not there. Idea 1 closes with no trial, and
+the exchange rate's realised band is widened on the high side rather than the result being read as a
+gap.
+
+### Fourth finding, method: rank-correlate a new behavioural object against the lab's existing scores before building a conditioner on it
+
+`rho(information discreteness over a window, mean monthly return over the same window) = +0.42`, so
+ID is substantially the host score in costume and its split of that score is a contrast of +0.0001 at
+**t +0.01**. Second instance after the lottery-demand object (2026-10-25/26), and the cheap detector
+is the same one run in the other order: the correlation first, the conditioner second.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Do not spend a night on the cost axis.** F1 settles it: the taxes are ~0, the tier is
+   irreducible, and the lead already keeps 92% of its gross. The only cost lever left is turnover and
+   the lab owns the one operator that works on it (overlapping sleeves). Tonight's per-turnover
+   calibration (0.007–0.018 of skill per unit) is a free pre-trial refusal for any high-churn
+   construction — use it before building, as F8's duty-cycle arithmetic was used.
+2. **Do not re-open `#356`, the ID conditioner, or the quarter boundary.** All three are closed above
+   on measurement, and the floor/partition scripts (F4, F7) exist unrun in case a human wants the rows.
+3. **The honest structural statement, and it is the fourth consecutive zero-trial night.** Every
+   non-signal explanation the lab had — survivorship (closed at v2), execution realism (closed at v3),
+   cost schedule (F1 tonight), breadth (F3 tonight) — is now spent, and what is left is that gross
+   cross-sectional selection on nine large-cap indices over 1997–2017 is about +0.06 of train skill at
+   best and the gate asks +0.43. That is a statement about the **data**, not about the search: the
+   binding constraint is the width of the validation window and the breadth of a large-cap-only
+   panel, both of which are `program.md`'s "future upgrades" and therefore the human owner's call.
+   Four sessions have now ended here by four different routes. **Nothing was changed and nothing is
+   proposed** beyond naming it, because thresholds, `program.md` and the engine are not a session's to
+   touch — but a fifth night of free diagnostics will not move it either, and that is the decision
+   being handed up.
+4. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's four — any
+   construction whose case is avoiding a transaction tax (at any turnover); the `#356` group-size
+   floor at any value; information discreteness as a conditioner on, or a substitute for, a
+   same-window mean-return score; and F3's decile-7 cell. Unchanged from the previous two handovers:
+   the quarter-ending-month conditioner in all three priced constructions and the pre-signed phase
+   with it, the #16/#19 blend at any weight, any construction whose case is a tighter error bar or
+   lower active variance, `#328` as an audit instrument, `H` as a parameter, `K` as a knob, the
+   retention band as a validation operator, the recent half of the decade window, the anniversary leg,
+   the liquidity level or trend in any form, and covariance weighting at any estimator.
+5. **From `research/SUMMARY.md`** (2026-11-01 session, the replication-crisis cluster). Tonight took
+   its only two entries that end in a construction — `#356`'s floor (F2/F3) and the behavioural
+   conditioner (F6) — and both are closed above. Of the rest, `#359` is an **anti-candidate that
+   tonight corroborates from the lab's own side**: no replication rate in that literature models
+   transaction costs, and F1 is this panel's statement of what costs do to a gross number. `#358` is
+   the live one and is explicitly filed as the human owner's, not a session's: the lab's trial record
+   is uncensored by rule, so the empirical-Bayes shrinkage `κ = 1/(1 + σ²/(T·τ²))` is directly
+   estimable here where the literature can only bound it — but what to do about the deflated-skill bar
+   is a protocol-threshold question. `#357` and `#360` are interpretation rules (and `#360` is
+   independent corroboration of `seasonality-calendar`'s closure; quote it as a **null**, per that
+   note's own correction). Still live and unspent from earlier sessions: `#307` (read `#310` first and
+   in the same sitting), `#318`, `#319`, `#320`, `#301`, `#304`, `#308`, `#313`, `#314`, `#288`,
+   `#289`, `#294`/`#295`, `#285`/`#286`, `#282`; `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain
+   the interpretation rules to read first; `#305`, `#293`, `#299`, `#309`, `#315`, `#321`, `#326`,
+   `#328` remain anti-candidates.

@@ -6659,3 +6659,121 @@ across experiments; prune entries that later evidence contradicts.
   and are therefore the same effect rather than rival cells, which only the partition view makes
   obvious. **Shape to reuse: for any claim of period `p` inside a cycle of length `n`, price all
   `n/p` rotations; use a subset null only when the cell really was chosen by its number.**
+
+- **[Measured 2026-11-01/02, nightly — ZERO trials spent; CORRECTS THE 2026-10-31/11-01 FRAMING AND
+  CLOSES THE MARKET-SELECTIVE AXIS WITHOUT A TRIAL] THE v3 COST BILL IS 94–100% LIQUIDITY TIER AND
+  0–6% STATUTORY TAX, SO THERE IS NO TAX-AWARE CONSTRUCTION TO BUILD — AND THE LEAD ALREADY KEEPS 92%
+  OF ITS GROSS, SO "ONLY THE COST SCHEDULE IS MISSING" IS A STATEMENT ABOUT AN 11x-TURNOVER BOOK AND
+  IS FALSE OF THE 1.31x ONE.** v3's headline cost feature is its statutory taxes (UK stamp duty 50 bps
+  on purchases, more than 3x the best liquidity tier; HK both sides; FR/IT/ES on purchases), which
+  makes a market-selective book look like the obvious answer to a cost-bound lab. Measured directly
+  with `CostModel(taxes=False)` against `taxes=True` at the same tier, train, gross at
+  `cost_multiplier = 0`:
+
+      book                      turn    gross      net     cost   TAX part  TIER part   tax %
+      old_half hold-6 (#16)     1.31  +0.0630  +0.0580  -0.0050  +0.0000   -0.0050     -0.0%
+      old_half hold-1 (#12)     2.36  +0.0450  +0.0260  -0.0190  -0.0010   -0.0180      5.3%
+      rev21 hold-1             16.86  -0.0230  -0.1890  -0.1660  -0.0100   -0.1560      6.0%
+
+  **Two closures, neither needing another measurement. (i) The tax-aware axis is dead**: its ceiling
+  is the tax column, 0.000 of skill at the shippable turnover and 0.010 at 17x, and it is *invisible
+  to the only gate that could grade it* — `benchmarks.random_null_v3` draws each entered name's
+  replacement **in region**, so a book declining to buy UK or French names has a null that declines
+  too and the saving is shared move-for-move (the 2026-10-13/14 derivation applied to cost rather than
+  to return). **(ii) The lead is not cost-bound.** -0.0050 of -0.0630 is 8%; the quarter-ending-month
+  concentrate that motivated the "cost is binding" framing paid -0.1220 on +0.1100 at 11.04x. The two
+  differ by an order of magnitude in **turnover**, not in the schedule. **Reusable calibration, which
+  is the transferable half: this panel charges 0.007–0.018 of Sharpe skill per unit of engine-counted
+  annual turnover** (implied per side 14.5 bps at #12, 17.7 at rev21, 6.9 at #16 where held drift is
+  not re-traded), so a book above ~3x/yr cannot keep more than 0.025 of cost and above ~12x cannot
+  keep 0.10 — and the floor is the 15 bps tier, which no selection avoids. Use it to refuse a
+  high-churn construction before building it. **Anti-candidates travelling with this entry: any
+  construction whose case is avoiding a transaction tax, at any turnover; and any session plan whose
+  premise is that the cost schedule is what stands between this lab's lead and the gate.**
+
+- **[Measured 2026-11-01/02, nightly] RESEARCH `#356` CLOSED ON THIS PANEL: THE THIN-BREADTH LEFT TAIL
+  IS EXACTLY 1/√n AND NOTHING ELSE, THE LITERATURE'S 25-NAME FLOOR REACHES 1.4% OF THE BOOK, AND
+  "WHAT IS OUT OF REACH HERE MAY BE BREADTH RATHER THAN COST" IS REFUTED — IT IS NEITHER.** `#356`
+  reports a multi-market study enforcing ≥25 eligible names per country-month before sorting and
+  names the consequence of ignoring it as a *mechanism*: few names → binding filters and failed
+  style/sector neutrality → poor diversification → a materially fatter left tail. Census first, 167
+  scored train month-ends: the calendar-peer instrument resolves **3.8 groups on average** (7.3 by
+  2013–2017) because it collapses the European markets into a few clusters, median group **66**
+  scorable names, and groups below 25 hold **1.9% of scorable names and 1.4% of the picks**. So the
+  operator's precondition fails on the census and **the operator was not priced** — the 2026-10-28/29
+  rule, applied in the direction that costs the session its headline. The *mechanism* then priced as a
+  gradient (active monthly return of a group's picks over that group's own pool, matched
+  construction, bps):
+
+      bucket                        n     mean      sd  5th pct  semidev  | /sqrt(n_leg): sd   5th pct
+      size < 25  [#356's floor]    94     +1.4   284.7   -458.3    276.8  |      441.4      -660.2
+      25 <= size < 50             164    +25.3   289.0   -430.0    312.5  |      611.5      -880.5
+      50 <= size < 150             97    -20.9   320.9   -367.7    428.4  |      896.8      -974.8
+      size >= 150                 272    +11.9   132.7   -186.9    120.9  |      879.8     -1213.2
+      LARGEST GROUP (the US leg)  167    +13.0   107.4   -132.2     97.1  |      905.5     -1200.7
+
+  **Right on the raw statistic by a distance (2.8–4.4x the US leg's semideviation) and GONE once
+  divided by the leg's own name count — per name the thin legs are the LEAST extreme cells on the
+  panel.** The whole excess is the arithmetic of holding 2.4 names instead of 71, which a 100-name
+  book has already averaged away. The active *mean* by group-size decile refuses the premise outright:
+  +47.8 / +7.6 / +6.1 / +12.0 / -27.2 / -9.8 / -1.0 / +37.7 / -5.0 / +21.2 bps over sizes 16→426,
+  **non-monotone with the thinnest decile largest**, nothing significant except decile 7 at t +2.88
+  (1 of 10, not pre-signed, **recorded as noise and not acted on** so a later session does not
+  rediscover it). **Read with the entry above, this spends the lab's last two non-signal
+  explanations**: survivorship closed at v2, execution realism at v3, the cost schedule and breadth
+  here. **Anti-candidate: the `#356` group-size floor at any value on this panel.**
+
+- **[Method, 2026-11-01/02 — SECOND INSTANCE OF THE 2026-10-25/26 SHAPE] RANK-CORRELATE A NEW
+  BEHAVIOURAL OBJECT AGAINST THE LAB'S EXISTING SCORES BEFORE BUILDING A CONDITIONER ON IT, NOT
+  AFTER: INFORMATION DISCRETENESS OVER A WINDOW IS 42% THE MEAN RETURN OVER THE SAME WINDOW.**
+  Da-Gurun-Warachka's `ID = sgn(PRET) × (%neg − %pos)` over months −120..−61 was built as a
+  conditioner on the old-half decade reversal, with the sign **opposite** to its momentum use (a
+  reversal is an overreaction claim, so the correction should be larger where the move was discrete)
+  and with the window **inherited** from the score rather than chosen, so the conditioner is exactly
+  as slow as what it conditions and would have bought gross without buying turnover — the one shape
+  2026-10-25/26 asks for. Region-matched, halves taken inside each calendar-peer group, 166 train
+  month-ends:
+
+      cell                                  IC       t      se    breadth
+      old-half reversal, standalone     +0.0179   +2.19  0.0081      513
+      information discreteness alone    +0.0206   +3.44  0.0060      513
+      DISCRETE half [pre-signed]        +0.0138   +1.64  0.0084      217
+      GRADUAL half  [placebo]           +0.0138   +1.37  0.0100      265
+      DISCRETE - GRADUAL (paired)       +0.0001   +0.01  0.0086       --
+
+  All three pre-registered clauses fail, and the contrast fails as precisely as a contrast can: the
+  halves read the same **+0.0138 to four decimals**. The cause is clause (c): **`rho(ID, old-half
+  reversal) = +0.42`** — a name whose mean monthly return was low has more negative months, so the
+  sign-count is largely the score in costume, exactly as the lottery-demand object was low volatility
+  in costume. **ID's higher standalone t (+3.44 against +2.19) is not a better object**; at rho +0.42
+  it is mostly the same object measured with less noise, and **neither reaches the +0.030 bar**. The
+  engine pricing of the partition was written and **not run** (no quantity for it to price at t
+  +0.01). **Anti-candidate: information discreteness as a conditioner on, or a substitute for, a
+  same-window mean-return score.**
+
+- **[Measured 2026-11-01/02, nightly — CLOSES IDEA 1 OF THE 2026-10-31/11-01 HANDOVER AND WIDENS THE
+  EXCHANGE RATE'S REALISED BAND ON THE HIGH SIDE] THE QUARTER-ENDING-MONTH MOMENTUM EFFECT SURVIVES A
+  TWO-MONTH-STALE PICK AT 86%, AND THE QUARTERLY BOOK STILL HAD NO CONSTRUCTION GAP TO RECOVER —
+  BECAUSE IT WAS ALREADY CONVERTING AT 48–65% OF ITS CEILING AGAINST A 6%–38% OBSERVED BAND.** The
+  handover's own pre-stated dichotomy was: survives ⇒ the quarterly book's +0.036 gross is a
+  recoverable construction loss; decays ⇒ the form was optimal and the vein is complete. 12-1
+  momentum, region-matched, by **holding** month, staleness in months:
+
+      s    QEM holding months      other, ex-Jan           QEM - OTHER       retention of fresh
+      0   +0.0910 (t +4.42, n 88)  -0.0210 (t -1.28)    +0.1120 (t +4.26)        100.0%
+      1   +0.0811 (t +4.17, n 88)  -0.0163 (t -1.03)    +0.0974 (t +3.89)         89.1%
+      2   +0.0780 (t +4.13, n 87)  -0.0171 (t -1.10)    +0.0951 (t +3.89)         85.7%
+      3   +0.0621 (t +3.36, n 87)  -0.0102 (t -0.65)    +0.0723 (t +2.99)         68.3%
+
+  **It survives — and the first branch's conclusion still does not follow.** A quarterly book holds
+  one QEM and two non-QEM months, so its duty-weighted IC is +0.0163 (tonight's ICs) or +0.0223 (the
+  recorded ones); through `train skill = 3.37 × rank IC` (a **ceiling**, realised 6%–38% across seven
+  objects) the ceilings are +0.0550 and +0.0752 against an engine gross of **+0.0360 = 65% / 48% of
+  ceiling**. **Higher than any realisation the exchange rate was calibrated on**, so the form was
+  converting unusually well and the gross is simply not there: the vein closes on the handover's
+  *second* branch by a route it did not anticipate. Two riders. **(i) The exchange rate's realised
+  band widens to ~6%–65%**, which makes it a weaker refusal instrument than the 6%–38% version and
+  should be quoted at the new width. **(ii) Instrument honesty**: tonight's momentum is formed on the
+  **monthly grid** where the recorded +0.1023/+0.0922 used 21/252 trading days, and both rows come in
+  11–12% lower by the *same* offset — a specification difference, reported rather than absorbed, and
+  harmless here because the question is a retention ratio inside one specification.
