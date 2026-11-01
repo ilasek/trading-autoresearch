@@ -307,6 +307,24 @@ never copy performance expectations from it. Entries flagged `validation_overlap
 > score **zero skill** (`experiments/learnings.md`), so treat every pre-v3 performance
 > expectation in this file as superseded rather than merely discounted.
 
+> ## ⚠ Coverage-claim correction — 2026-11-01 (read before planning a session aimed by a grep)
+>
+> The [2026-10-31] open question aimed session 79 at a "never summarised" source on the strength of
+> a grep. **Both of `research/README.md`'s named replication rubric inputs already had dedicated
+> Tier-A notes** — Jensen–Kelly–Pedersen since 2026-08-25, Hou–Xue–Zhang since 2026-10-02. The cause
+> was the *pattern*, not the unit: **a `.`-joined author triple (`Jensen.Kelly.Pedersen`) matches
+> exactly one character between surnames**, while real renderings carry two (`, `), six (`, and `),
+> or a multi-byte en dash that a byte-oriented `.` cannot match. The same error was made again,
+> independently, at the start of session 79.
+>
+> **Standing rule for every coverage check from here: one distinctive surname plus title words, with
+> `grep -ril -F` or an explicit character class (`Jensen[^A-Za-z]{1,8}Kelly`). A zero from a
+> `.`-joined author triple is NOT evidence of absence.** This is the ninth instance of the
+> unit-of-check lesson and the first in which the unit was right and the instrument was broken — so
+> the lesson generalises: *a coverage claim is only as good as the query that produced it, as well as
+> the unit it was checked at.* Hit counts reported in earlier open questions that were produced this
+> way should be re-checked before being relied on.
+
 ## Key findings by strategy family
 
 ### 1. Cross-sectional momentum
@@ -7862,6 +7880,212 @@ should not be reopened without new data types.
 
 ---
 
+### The replication debate's three corners, and the night the folder's own coverage audit was WRONG (cross-family, the gate's own statistic)
+
+**Read this entry for the correction first.** The [2026-10-31] open question named
+Jensen–Kelly–Pedersen, *Is There a Replication Crisis in Finance?*, as session 79's primary aim, on
+the stated ground that "a grep across all 249 notes returns **1** for `Jensen.Kelly.Pedersen`,
+**1** for `replication crisis` … i.e. the folder has been *grading* sources against a paper it has
+never summarised." **That premise was false.** The paper has had a dedicated Tier-A note since
+2026-08-25 (`notes/2026-08-25-hierarchical-bayesian-factor-replication.md`), and its companion
+rubric input, Hou–Xue–Zhang, has had one since 2026-10-02
+(`notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`) — read there from the
+typeset version of record.
+
+**The cause is specific, reproducible, and new to this file's list of ways a coverage check
+fails: the grep pattern's separator.** `Jensen.Kelly.Pedersen` matches exactly **one** character
+between surnames. Every real rendering has more: `Jensen, Kelly, Pedersen` (two), `Jensen–Kelly–
+Pedersen` with an en dash (one *multi-byte* character, which `.` in a byte-oriented regex does not
+match), `Jensen, Kelly, and Pedersen` (six). The hit the entry did find was a `Jensen-Kelly-Pedersen`
+with ASCII hyphens inside the HXZ note. The same mistake was made again at the start of this
+session, independently, before the error was caught — `Hou.Xue.Zhang` returned **0** across 249
+notes while two notes name them — which is the evidence that this is a **systematic** failure of the
+instrument rather than one careless night.
+
+**This is the ninth instance of the unit-of-check lesson and the first in which the unit was
+right.** The previous eight found a finer *unit* (families → clauses → operators → the pool → an
+attribute of its members → the selection rule → the vocabulary → the shape of the output → an
+algebraic identity). Tonight the unit was correct — a named primary source — and the **instrument**
+was broken. **Standing rule, to be applied before any session is aimed by a grep:** check a source
+by a single distinctive **surname** (`Pedersen`, `Zimmermann`, `Velikov`) and by **title words**, with
+`grep -ril` and a *fixed string* (`-F`) or a character class for the separator
+(`Jensen[^A-Za-z]{1,8}Kelly`), never by a `.`-joined author triple. A zero from a `.`-joined triple
+is **not evidence of absence**, and two open questions have now been written on one.
+
+**What the session did instead, and why it is not a wasted night.** The aim's three admission
+criteria were tested against the full text anyway, because the existing note had been written
+without the paper's empirical breakouts, and all three pass: the paper *does* report results by
+**size group** and by **developed-versus-emerging region**, and its hierarchical shrinkage *is*
+estimated at **mechanism-family (theme-cluster) granularity**, and it is readable in full from
+NBER WP 28432. Those breakouts are now in that note's **2026-11-01 addendum**, which is the thing
+the open question actually wanted. The session then took the two genuinely uncovered sources in the
+same debate, plus one on the statistic the debate is settled with, which together complete it.
+
+**The debate has three corners, and they do not disagree about any number.** This is the night's
+substantive finding and it reverses how this file has been framing the pair.
+
+1. **The pessimistic corner** (`2026-10-02`) runs **one uniform construction** — decile sorts, NYSE
+   breakpoints, value weights — on 452 "anomalies" and reports that most fail. 
+2. **The optimistic corner** (`2026-08-25`) runs **a different uniform construction** — tercile
+   spreads, capped value weights, non-micro breakpoints, one holding period — tests **CAPM alpha**
+   rather than raw return, excludes claims the original papers never made, and reports that most
+   survive.
+3. **The reproduction corner** (new tonight, `2026-11-01-reproduction-versus-replication-open-source.md`)
+   runs **each original paper's own construction on each original paper's own sample** and reports
+   that essentially all of it reproduces — with a regression of reproduced on hand-collected
+   original t-statistics giving a **slope of 0.88 and an R² of 82%**, so the reproductions land near
+   the original *magnitudes*, not merely above a threshold.
+
+**The reconciliation is arithmetic, and it is itemised in the sources themselves.** The optimistic
+study publishes a term-by-term decomposition of its gap against the pessimistic one: longer sample
+**+4.3**, one holding period instead of three **+4.0**, capped value weights **+8.5**, 15 added
+factors **+2.4**, minor construction details **+2.7**, excluding never-significant factors **+7.8**,
+and **testing CAPM alpha instead of raw return +20.2** percentage points. The pessimistic study
+publishes its own sensitivity: its failure rate falls from **65.3% to 43.1%** when breakpoints and
+weighting are switched to the permissive convention. And the reproduction study shows the
+denominator itself is constructed: the 452 "anomalies" derive from **240 characteristics** (212 are
+duplicate holding periods), of which only **118 had clear original long-short significance**, and
+**117 of those 118** reproduce above 1.96. **So the single largest term in the whole disagreement is
+not a construction knob at all — it is which statistic is tested — and the second largest is what
+goes in the denominator.** Neither is a fact about markets. **#349.**
+
+**The three magnitudes a cost-charged large-cap panel should carry out of this, all of them
+elasticities rather than performance figures.** The reproduction study measures them as
+cross-predictor distributions over each predictor's own original sample:
+
+- **A liquidity screen costs about one third of the gross.** Any one of a large-exchange-only
+  screen, a market-equity floor at the NYSE 20th percentile, or value-weighting in place of
+  equal-weighting moves the typical in-sample long-short mean return from roughly **60 bps/month to
+  roughly 40**. The three look different and act almost identically, because they are one
+  intervention: removing the small and illiquid tail from the sort. A share-price floor is the soft
+  version. **This repo's universe imposes all three simultaneously, before a candidate is
+  written.** **#350.**
+- **Costs cost about another third, independently** — the cost study this folder already holds
+  (`2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`) finds effective spreads remove roughly
+  a third of in-sample mean return even after mitigation, and protocol v3 is harsher than that
+  because of the statutory taxes on this panel's UK, Hong Kong and continental legs. **Two
+  independent one-third haircuts compound to roughly 4/9 of the published gross surviving.** That
+  is a frame for the lab's recurring "real, correctly signed and out of reach" shape: it is the
+  **predicted** outcome of this panel plus this cost schedule, not a peculiarity of the repo.
+  **#350.**
+- **Gross content falls monotonically as the rebalance interval lengthens** (1 → 3 → 6 → 12
+  months), for the stated reason that exposure to the signal falls. The folder's cost-mitigation
+  note argues the same trade from the cost side only; this is the gross side's shape, and it means
+  there is no free end of that dial. **#351.**
+
+**The size-group answer, which is the most favourable thing this folder has filed about its own
+panel, and its limit.** Rebuilding every factor inside five US size subsamples gives
+empirical-Bayes replication rates of **77.3% in mega-caps and 81.5% in large-caps against 84.0%
+for the full sample** (micro 81.5%, nano 71.4%), and the **cluster-level alpha ordering is broadly
+preserved** — Spearman **73%** between mega and micro cluster alphas, falling to 35% only for nano.
+The authors conclude that replicability criticisms based on size or liquidity are "largely
+groundless". **Consequence for this file: `research/README.md`'s clause that a null here is
+uninformative for a mechanism localised to small, thin or retail-held names must be applied
+NARROWLY** — to the mechanisms whose own literature localises them — **not as a blanket discount on
+a large-cap panel.** The limit is equally important and the two corners agree on it: the
+cross-sectional **dispersion** of anomaly variables is largest in the smallest names (microcaps are
+~61% of US names and ~3.3% of its capitalisation, with the highest cross-sectional return
+dispersion), so a large-cap panel **compresses the spread without removing the sign**. Existence
+survives into mega-caps; magnitude does not. **#352.**
+
+**The region answer, and it is better news than this file has been assuming.** Cluster-level
+alphas correlate **71% (Spearman) between the US and developed-ex-US** and only **48% between the
+US and emerging**, with the size theme the standout exception (much larger in emerging). This panel
+is nine **developed** large-cap indices, so the applicable number is the 71%: **a mechanism filed
+from US evidence should be expected to rank similarly here.** **#353.**
+
+**The international decay result, which says this file's standing novelty discount is TOO HARSH for
+eight of the lab's nine markets.** The second new source
+(`2026-11-01-anomalies-across-the-globe-country-neutral.md`, Tier A, *JFE*, **221** Crossref) applies
+one uniform construction to 231 anomalies across **39 markets** and finds that **only the US shows
+a reliable post-publication decline in long-short returns**, while *unconditional* predictability is
+broadly similar across most developed markets. The decay is therefore a property of the **market**,
+not of the mechanism. The authors test the obvious explanation and **report that it fails**: five
+standard firm-level limits-to-arbitrage proxies — size, turnover, zero-return-day fraction, the
+Corwin–Schultz high-low spread, idiosyncratic volatility — are **roughly comparable** US versus
+pooled other-developed, with holding costs if anything slightly *higher* in the US; and a
+market-integration test dies on its own control, because post-publication comovement rises just as
+much for the **neutral middle-quintile** portfolios. **So the McLean–Pontiff haircut this folder
+applies to every published mechanism should be applied PER MARKET.** Two cautions travel with it:
+the non-US tests are intrinsically noisier (far fewer in-sample country-months), so "no reliable
+decline" is weaker than "no decline"; and the authors' preferred explanation — arbitrage capital
+concentrated in one market — is the one thing they could not measure. **#354.**
+
+**Two construction standards from that source, both free, both about this panel's actual shape.**
+It is the only large study of these signals built on a multi-country panel, and this repo's panel
+is a multi-country panel.
+
+- **Country-neutral is the default and pooling is the special case.** Sort **within country**, long
+  the top quintile and short the bottom quintile of that country that month, aggregate across
+  countries afterwards; never run one global sort, because a global sort confounds the signal with
+  cross-country level differences and with currency. Returns in **local currency**. Accounting
+  timing uniform and conservative rather than matched per-anomaly. The lab found this from the
+  other direction: its one v2 measurement win was a **region-relative** construction, i.e. a
+  country demean. **This is the external argument that the region-relative form is correct by
+  default.** **#355.**
+- **A minimum-breadth filter per country-month, and the literature's number is 25 names** (with a
+  low capitalisation floor applied before sorting). The authors report that at that floor the
+  smaller developed markets already have too few eligible names to carry a broad anomaly universe,
+  and that raising the floor thins even the largest. On nine large-cap national indices a quintile
+  of a 20-name country is four names. **Drop the country-month, do not sort it.** And the paper
+  names the consequence of ignoring this as a **mechanism**, not an artefact: few names → binding
+  filters and failed neutrality → poor diversification → a **materially fatter left tail**, which
+  they document for the pooled non-US developed anomaly months. That reframes part of the lab's
+  "out of reach" finding as a **breadth** problem rather than a **cost** problem, and the two are
+  separable by measurement. **#356.**
+
+**The third new source is about the gate, and it says the lab is in the FAVOURABLE case of its own
+taxonomy.** `2026-11-01-weak-identification-of-t-stat-hurdles.md` (Tier A−, *Management Science*,
+**5** Crossref — young, not low-impact; the working paper circulated from 2018 and the author's
+adjacent paper is already Tier-A here) proves that an FDR-controlling hurdle exceeds 1.96 **if and
+only if** the share of false candidates `π_F` exceeds the realised discovery rate
+`Pr(|t| > 1.96)` — so a multiple-testing correction **can lower** the threshold, and whether it
+raises it is an empirical question, not a consequence of having run many tests. It then shows that
+the two standard algorithms **assume** the answer: Benjamini–Hochberg is isomorphic to `π_F = 1.0`,
+and **Benjamini–Yekutieli Theorem 1.3** — the one the finance literature leans on, and the one the
+optimistic replication study used for its frequentist comparison — is isomorphic to
+`π_F = Σ 1/i ≈ 6.3` at `N ≈ 300`, **six times the largest value a share can take**, so it *always*
+raises hurdles. And it proves that `π_F` is **weakly identified under publication bias**, because
+it lives in the region that is never observed: bootstrapped hurdle estimates have 90% intervals
+spanning roughly **0 to 2.9**. The right tail, by contrast, is well observed, so **shrinkage (at
+most 29%) and the local FDR among published findings (at most 25%) are strongly identified at 95%
+confidence across all 10 specifications.** **#357.**
+
+**The one thing in that source that is specific to this lab, and it is a genuine asymmetry in the
+lab's favour.** The identification failure is caused *entirely* by censoring — results below the
+threshold are unpublished. **`experiments/trials.jsonl` is uncensored by rule**: every `REJECT`,
+`GATE_FAIL`, `SCOUT`, `HOLDOUT_VETO` and `PROMOTE` is recorded and may not be deleted or rewritten.
+**So the objection that makes the hurdle question unanswerable in the literature does not apply
+here, and both sides of the proposition's comparison are directly countable from the lab's own
+record.** Counting them is free. Two cautions that are this folder's: the lab's trials are strongly
+dependent and a knob-sweep is not an independent draw, so the honest count is at the **mechanism**
+level (`distinct_mechanisms`), which is the same denominator lesson as **#349**; and the implication
+for the deflated-skill bar is a **protocol-threshold** question and therefore for the human owner,
+not for a session. **#358.**
+
+**What the whole cluster does NOT say, stated once because all three corners share the gap.**
+**None of the three models transaction costs.** The optimistic study mentions "transaction cost"
+once, in a theory aside; the pessimistic one invokes microcap trading costs as an argument for its
+construction without charging any; the reproduction study explicitly declines the question and names
+the cost study instead. **Every replication rate in this debate is a statement about the statistical
+significance of a GROSS long-short factor return.** A theme replicating at 84% says nothing about
+whether it survives v3's 15/20/30/40 bps tiers plus UK and Hong Kong stamp duty and the French,
+Italian and Spanish FTTs. The replication literature is a source of **priors on existence and on
+construction elasticity**, never of performance expectations — which is what `research/README.md`
+has said all along, now with the reason named. **#359.**
+
+**And the theme-level result that corroborates the lab's own recent nulls.** Ten of the optimistic
+study's 13 algorithmically-defined themes replicate at 75% or better. The three exceptions are
+**seasonality, leverage and size** — and two are explained (size is an illiquidity premium that
+scales with trading-cost differences, hence concentrated in emerging and micro names; leverage
+fails on CAPM alpha but is one of the most heavily weighted clusters once other themes are
+controlled, through its hedging of value and low-risk). **Seasonality is left unexplained and is
+simply weak.** `seasonality-calendar` is the family this lab has spent its most recent effort on,
+and its results there are a run of region-matched nulls plus one mechanism closed on cost
+arithmetic. **The weakest theme in the largest Bayesian replication study of this literature is the
+same family.** That is independent corroboration of the lab's nulls, not a reason to keep looking.
+**#360.**
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -14817,6 +15041,220 @@ hypothesis fodder, then anti-candidates.
     this folder's and the lab's.
     → `notes/2026-10-31-quarter-ending-month-momentum-seasonality.md`
 
+349. **FREE, and it is a rule about counting rather than about markets: the largest terms in the
+    replication disagreement are WHICH STATISTIC IS TESTED and WHAT GOES IN THE DENOMINATOR, not
+    the construction knobs.** The optimistic study's own term-by-term decomposition of its gap
+    against the pessimistic one is: testing **CAPM alpha instead of raw return +20.2** percentage
+    points, **excluding claims the original papers never made +7.8**, capped value weights **+8.5**,
+    one holding period instead of three **+4.0**, longer sample **+4.3**, 15 added factors **+2.4**,
+    minor details **+2.7**. The reproduction study shows the denominator is itself constructed: 452
+    "anomalies" derive from **240 characteristics** (212 are duplicate holding periods), of which
+    only **118 had clear original long-short significance**, and **117 of 118** reproduce above
+    1.96. **Both lessons apply in mirror image to the lab's own trial count, which sets the
+    deflated bar**: a knob-sweep of one idea and a trial testing a hypothesis nobody held both
+    raise the bar as if they were independent claims. `distinct_mechanisms` is the right object;
+    this is the external argument that counting at the **claim** level rather than the **run**
+    level is a substantive methodological choice. The free discipline that makes the comparison
+    possible at all is the reproduction study's: **write the target down before measuring it** —
+    its headline evidence (slope 0.88, R² 82% of reproduced on original t-statistics) exists only
+    because the original t-statistic was hand-collected first. Tier A / B+.
+    → `notes/2026-11-01-reproduction-versus-replication-open-source.md` with
+    `notes/2026-08-25-hierarchical-bayesian-factor-replication.md` (2026-11-01 addendum) and
+    `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`
+
+350. **FREE INTERPRETATION RULE with a magnitude, and it reframes this lab's most repeated finding:
+    TWO INDEPENDENT ONE-THIRD HAIRCUTS, one paid by the universe and one by the cost schedule, so
+    expect roughly 4/9 of a published cross-sectional gross edge to survive here BEFORE anything
+    specific to this repo.** Measured as cross-predictor distributions on each predictor's own
+    original sample: imposing *any one* of a large-exchange-only screen, a market-equity floor at
+    the NYSE 20th percentile, or value-weighting in place of equal-weighting moves the typical
+    in-sample long-short mean return from roughly **60 bps/month to roughly 40** — and the three
+    act almost identically because they are one intervention, removing the small and illiquid tail
+    from the sort. **This repo's panel — nine large-cap national indices — imposes all three at
+    once, before a candidate is written.** The second third is the cost study already in this
+    folder (effective spreads remove about a third even after mitigation), and protocol v3 is
+    harsher than it because of the statutory taxes on this panel's UK, Hong Kong and continental
+    legs. **Use it as a prior, not a constant:** a shortfall of this size is *predicted*, not a
+    failed replication, and the lab's recurring "real, correctly signed and out of reach" shape is
+    the expected outcome of this universe plus this cost schedule. Tier B+ on the elasticity, A on
+    the cost third.
+    → `notes/2026-11-01-reproduction-versus-replication-open-source.md` with
+    `notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`
+
+351. **FREE, and it supplies the missing half of a trade this folder has only ever argued from one
+    side: gross content falls MONOTONICALLY as the rebalance interval lengthens.** Across hundreds
+    of predictors, in-sample mean return declines monotonically from 1- to 3- to 6- to 12-month
+    re-assignment, for the stated reason that exposure to the signal falls; monthly re-sorting
+    beats most originals because many follow the annual-June convention. The folder's
+    cost-mitigation note argues the interval choice from the **cost** side alone. There is
+    therefore no free end of that dial, and the only honest way to choose an interval is to price
+    both sides **on the same construction** — which is also the shape of the lab's own repeated
+    finding that narrowing a book saves less cost than it gives up in gross. Tier B+.
+    → `notes/2026-11-01-reproduction-versus-replication-open-source.md` with
+    `notes/2026-08-17-cost-mitigation-banding-vs-rebalance-frequency.md`
+
+352. **FREE CORRECTION TO THIS FILE'S OWN STANDING DISCOUNT, and it is the most favourable thing
+    filed here about this panel: replication is NOT a small-stock phenomenon, so the
+    "uninformative null" clause must be applied NARROWLY.** Factors rebuilt inside five US size
+    subsamples give empirical-Bayes replication rates of **77.3% (mega) and 81.5% (large)** against
+    **84.0%** for the full sample, with micro 81.5% and nano 71.4%, and the **cluster-level alpha
+    ordering is broadly preserved across size groups** (Spearman **73%** mega versus micro, falling
+    to 35% only for nano). The authors conclude that replicability criticisms based on size or
+    liquidity are "largely groundless". **So `research/README.md`'s clause — that a null here is
+    uninformative for a mechanism whose literature localises it to small, thin or retail-held
+    names — applies to those mechanisms specifically, and is NOT a blanket discount on a large-cap
+    panel.** The limit, on which both corners of the debate agree: the cross-sectional
+    **dispersion** of anomaly variables is largest in the smallest names (microcaps ≈61% of US
+    names, ≈3.3% of its capitalisation, highest cross-sectional return dispersion), so a large-cap
+    panel **compresses the spread without removing the sign**. Existence survives into mega-caps;
+    magnitude does not. Tier A.
+    → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md` (2026-11-01 addendum) with
+    `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`
+
+353. **FREE, and it is the number to use when importing a US-sourced mechanism: cluster-level alphas
+    correlate 71% (Spearman) between the US and DEVELOPED-ex-US, and only 48% between the US and
+    emerging.** This repo's panel is nine **developed** large-cap indices, so the applicable figure
+    is 71%, not 48% — a mechanism filed from US evidence should be expected to **rank** similarly
+    here. The standout exception is the **size** theme, far more important in emerging markets,
+    which is also one of the three themes that fail to replicate. Also recorded: per-region raw OLS
+    replication rates are lower outside the US partly because the non-US panels are shorter and
+    thinner (the study requires ≥5 names per leg and ≥60 monthly observations per country-factor),
+    which is the same thin-cross-section friction that **#356** states as a mechanism. Tier A.
+    → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md` (2026-11-01 addendum)
+
+354. **FREE, and it says this folder's standing novelty discount is TOO HARSH for eight of the
+    lab's nine markets: post-publication decay is reliably documented in ONE market.** One uniform
+    construction applied to 231 anomalies across **39 markets** finds the **US is the only market
+    with a reliable post-publication decline in long-short returns**, while *unconditional*
+    predictability is broadly similar across most developed markets — so the decay attaches to the
+    **market** (who reads, with how much capital, under what frictions), not to the mechanism. The
+    authors test the obvious explanation and **report that it fails**: five standard firm-level
+    limits-to-arbitrage proxies (size, turnover, zero-return-day fraction, Corwin–Schultz high-low
+    spread, idiosyncratic volatility) are roughly comparable US versus pooled other-developed, with
+    holding costs if anything slightly higher in the US; and their market-integration test dies on
+    its own control because the **neutral middle-quintile** portfolios' comovement rises just as
+    much. **Apply the McLean–Pontiff haircut PER MARKET, not globally.** Two cautions: the non-US
+    tests are intrinsically noisier (far fewer in-sample country-months), so "no reliable decline"
+    is weaker than "no decline"; and the authors' own preferred explanation — arbitrage capital
+    concentrated in one market — is the one thing they could not measure. Tier A.
+    → `notes/2026-11-01-anomalies-across-the-globe-country-neutral.md` with
+    `notes/2026-08-17-mclean-pontiff-publication-decay.md`
+
+355. **FREE CONSTRUCTION STANDARD, and the lab already found it empirically from the other
+    direction: for a multi-country panel the literature's default is COUNTRY-NEUTRAL, and a pooled
+    global sort is the special case needing justification.** Sort **within country** each month,
+    long the top quintile and short the bottom quintile of **that country's** eligible names,
+    aggregate across countries afterwards. Returns in **local currency** (so the measured effect is
+    not contaminated by FX), accounting timing uniform and conservative rather than matched
+    per-anomaly, and both equal- and value-weighted versions reported with the rationale separated
+    (value weighting estimates how economically *important* an effect is; equal weighting how
+    *widespread*). The stated reason not to pool is that a global sort confounds the signal with
+    cross-country level differences — and, here, with currency. The lab's one v2 measurement win
+    was a **region-relative** construction, i.e. a country demean; this is the external argument
+    that the region-relative form is correct by **default**. Travels with a second free operator
+    from the same source: **the complete control for "did something about this sorted construction
+    change?" is the SAME construction's MIDDLE quantile**, which shares panel, currency, calendar
+    and formation dates and differs only in carrying no signal — strictly better than an
+    unconditional panel average, and the device that killed the authors' own hypothesis. Same
+    family as this lab's partition-placebo rule for calendar claims. Tier A.
+    → `notes/2026-11-01-anomalies-across-the-globe-country-neutral.md`
+
+356. **FREE PRE-FILTER with the literature's own number, and it reframes part of the lab's "out of
+    reach" finding as a BREADTH problem rather than a COST one: require at least 25 eligible names
+    in a country-month, or drop that country-month rather than sorting it.** The multi-market study
+    enforces exactly that (plus a low capitalisation floor applied **before** sorting) and reports
+    that at that floor the smaller developed markets already have too few eligible names to carry a
+    broad anomaly universe, and that raising the floor thins even the largest. On nine **large-cap
+    national indices** a quintile of a 20-name country is four names. The source states the
+    consequence of ignoring this as a **mechanism**, not an artefact: few names → binding filters
+    and failed style/sector neutrality → poor diversification → a **materially fatter left tail**,
+    which they document for the pooled non-US developed anomaly months. **The testable prediction
+    for this repo, free and on train: a per-country cross-sectional construction should show more
+    left-tail risk in its non-US country legs than in its US leg at matched construction — look at
+    that before the Sharpe.** It also separates two explanations the lab has been conflating: part
+    of what is out of reach here may be breadth, not cost. Tier A.
+    → `notes/2026-11-01-anomalies-across-the-globe-country-neutral.md`
+
+357. **FREE, and it is the sharpest statement in this folder of "shrink the estimate, do not raise
+    the threshold": a multiple-testing hurdle exceeds 1.96 IF AND ONLY IF the share of false
+    candidates exceeds the realised discovery rate — and that share is weakly identified from
+    censored data while the shrinkage factor is not.** Proved: the FDR-controlling hurdle at 5% is
+    `> 1.96` iff `π_F > Pr(|t| > 1.96)`, `= 1.96` iff equal, and **`< 1.96` iff less** — so a
+    correction can *lower* the threshold, and whether it raises it is empirical rather than a
+    consequence of having run many tests. The two standard algorithms **assume** the answer:
+    Benjamini–Hochberg is isomorphic to `π_F = 1.0`, and **Benjamini–Yekutieli Theorem 1.3** — the
+    finance literature's favourite, and the one the optimistic replication study benchmarked
+    against — is isomorphic to `π_F = Σ 1/i ≈ 6.3` at `N ≈ 300`, **six times the largest value a
+    share can take**, so it *always* raises hurdles. Under publication bias `π_F` lives in the
+    unobserved region and the likelihood is flat in it: bootstrapped hurdle estimates span roughly
+    **0 to 2.9** at 90%. The right tail is well observed, so **shrinkage is at most 29% and the
+    local FDR among published findings at most 25%, with 95% confidence, across all 10
+    specifications** (modal shrinkage near 12%). **Two consequences this folder owes elsewhere:**
+    the gap between the optimistic study's Bayesian and frequentist replication rates is
+    substantially a property of the chosen frequentist algorithm, not a measurement of what
+    multiple testing costs; and that study's own numerical parameters imply, by Bayes' rule, a
+    false-discovery rate among published findings of about **8.6%**, in tension with the verbal
+    summary that most findings are likely false. Tier A−.
+    → `notes/2026-11-01-weak-identification-of-t-stat-hurdles.md`
+
+358. **FREE DIAGNOSTIC, and it is a genuine asymmetry in this lab's favour: the identification
+    failure in #357 is caused ENTIRELY by censoring, and `experiments/trials.jsonl` is uncensored
+    by rule — so the comparison that is unanswerable in the literature is directly COUNTABLE
+    here.** Every `REJECT`, `GATE_FAIL`, `SCOUT`, `HOLDOUT_VETO` and `PROMOTE` is recorded and may
+    not be deleted or rewritten, so both sides of the proposition — the realised discovery rate
+    among the lab's own candidates, and the share that were genuinely skill-free — are estimable
+    from the record rather than extrapolated. Running the comparison costs no trial and no data.
+    The empirical-Bayes shrinkage factor is the same object:
+    **`κ = 1 / (1 + σ²/(T·τ²))`**, with `τ` the cross-sectional dispersion of *true* effects in the
+    candidate population (estimable from the dispersion of measured skills net of sampling noise)
+    and `σ²/T` the sampling variance of one measurement, so **expected forward skill = `κ ×`
+    measured skill, with `κ < 1` always** — and the source of that formula reports the realised
+    out-of-sample slope is **below** its own Bayesian benchmark with a **concave** shape, i.e. the
+    shrinkage should be **heaviest at the top of the distribution**, which is exactly the candidate
+    a session wants to promote. **Three cautions.** (i) The lab's trials are strongly dependent and
+    a knob-sweep is not an independent draw, so the honest count is at the **mechanism** level
+    (**#349**). (ii) Do **not** import the source's own `τ` magnitudes (≈0.38% and ≈0.21% per
+    month); they are properties of its factor population and the re-measurement must be on this
+    lab's record. (iii) **What to do about the deflated-skill bar is a protocol-threshold question
+    and therefore the human owner's**, not a session's — filed as such, especially given the
+    standing observation that the deflation benchmark now exceeds the board-best skill. Tier A− /
+    A.
+    → `notes/2026-11-01-weak-identification-of-t-stat-hurdles.md` with
+    `notes/2026-08-25-hierarchical-bayesian-factor-replication.md` (2026-11-01 addendum)
+
+359. **ANTI-CANDIDATE, and it is the gap all three corners of the replication debate share: NONE of
+    them models transaction costs, so no replication rate in this literature is a statement about
+    tradable alpha.** The optimistic study mentions "transaction cost" once, in a theory aside
+    about the size premium; the pessimistic one invokes microcap trading costs as an *argument for
+    its construction* while charging none; the reproduction study explicitly declines the question
+    and names the cost study instead. **Every rate in the debate is about the statistical
+    significance of a GROSS long-short factor return.** A theme replicating at 84% says nothing
+    about whether it survives v3's 15/20/30/40 bps tiers plus UK and Hong Kong stamp duty and the
+    French, Italian and Spanish FTTs. Use this literature for **priors on existence and on
+    construction elasticity** (**#350**–**#353**) and never for performance expectations. Related
+    pitfall from the same cluster: the multi-market study finds the Corwin–Schultz spread and the
+    zero-return-day fraction **do not differentiate** developed markets — which is a statement
+    about those proxies in a study that charges no costs, not licence to skip cost modelling, since
+    protocol v3's statutory taxes differentiate these markets sharply and the proxies are silent
+    about stamp duty by construction. Tier A across the sources.
+    → all four notes in this cluster
+
+360. **CORROBORATION OF THE LAB'S OWN RECENT NULLS, not a candidate: `seasonality-calendar` is one
+    of only three themes out of thirteen that FAIL to replicate in the largest Bayesian replication
+    study of this literature.** Ten of 13 algorithmically-defined themes replicate at 75% or better
+    under the Bayesian estimates. The three exceptions are **seasonality, leverage and size** — and
+    two are explained: *size* is an illiquidity premium that should scale with trading-cost
+    differences and is therefore concentrated in emerging and micro names (also **#353**), and
+    *leverage* fails on CAPM alpha but becomes one of the most heavily weighted clusters once other
+    themes are controlled, through its hedging of the value and low-risk clusters — a benchmark
+    artefact rather than an absence. **Seasonality is left unexplained and is simply weak.** The
+    lab's own recent record in that family is a run of region-matched nulls plus one mechanism
+    closed on cost arithmetic. **Read this as independent corroboration, not as a reason to keep
+    looking.** And when citing this file's seasonality discount, say **null** — the "significantly
+    inverted" reading was withdrawn by the lab on 2026-10-15 as a misaligned score. Tier A.
+    → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md` (2026-11-01 addendum)
+
+
 ---
 
 ## Coverage log
@@ -14904,8 +15342,137 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-29 (session 76) | **The `online FDR` / `alpha-investing` vein, taken verbatim from the [2026-10-28] entry as the only vein this folder ever reached by being *blocked* rather than by grep — and it ADMITS on the pre-committed `O(1)` criterion while the harder second clause resolves AGAINST FDR, which is the answer that entry asked for.** Greps across all 238 prior notes: `online FDR` 0, `alpha.investing` 0, `alpha investing` 0, `Foster` 0, `Stine` 0, `Javanmard` 0, `LORD` 0, `SAFFRON` 0, `e-BH` 0, `mFDR` 0, `false discovery exceedance` 0 (the 12 files matching the bare word `investing` are all of the *low-risk / style / factor / index investing* kind, none in the α-investing sense). Criterion clause one: **Foster–Stine** (Tier A, *JRSS-B*, 86 Crossref cites, read as the authors' July-2007 version from UPenn ScholarlyCommons bitstream after `www-stat.wharton.upenn.edu/~stine/` 404'd) carry the state in the **prior rejection indicators alone** — *"neither the payout ω nor the cost α/(1−α) reveals `p_j`"* — so under their eq. 9/15 rules it is a float and an integer, and `α_j` is set before `p_j` is seen by construction. **Passes both halves cleanly**; Theorem 3 (`W(0) ≤ αη`, `ω ≤ α`) controls `mFDR_η` at every finite stopping time by optional stopping on a sub-martingale, with **no independence assumption**. Clause two resolves by their own **Theorem 2**: a procedure stopping at `r` rejections has `FDR = mFDR_0 = cFDR = eFDR = pFDR = E[V(r)]/r` exactly, `FDR ≤ α(r+2)/(r+1)` (`1.5α` at `r=1`), and under the complete null `FDR = FWER` — so at ~1 promotion per several dozen trials with the session stopping on it, **the folder's existing FWER-flavoured object was never wrong and the vein's value is purely the forward spending.** **Javanmard–Montanari** (Tier A, *Annals of Statistics*, 66 cites) add: FDR (not just mFDR) for **monotone** GAI rules with `w₀+b₀ ≤ α` (Theorem 3.1 — LORD 1/2 qualify, **LORD 3, the variant everyone uses, does not**); a general-dependence variant (Example 3.8) at a `Σ ξ_i(1+log i) ≤ α/b₀` budget, the `(1+log i)` being the entire price of abandoning independence and the variant this lab needs since `program.md`'s own 109→36 clustering falsifies independence here; and the warning that a controlled mean FDR is **not** a controlled realised FDP (`FDP` past three times nominal with probability 0.13 in their simulation). Their `sup_n FDX` cartoon is the **same quantifier-placement error and fix** as `#325`'s anytime-valid MCS — two instances in two sessions, filed as prediction rule **#333**. **Tian–Ramdas** (Tier B, *Stat. Methods Med. Res.*, 15 cites) build the FWER side and carry the night's one lab-specific finding: alpha-spending's proof leaks when nulls are **conservative** and when non-nulls are **frequent**, and ADDIS-Spending (`α_i = α(τ_i−λ_i)γ_{t(i)}`, `t(i) = 1 + Σ(S_j−C_j)`) plugs both, so **the budget index advances only on p-values in the band `(λ,τ]` — a decisive reject is FREE** (**#329**, filed as a tension with `learnings.md`'s "every trial raises the bar", because the deflated bar prices decorrelation while this prices where the p-value landed). Their worked validity instance is **this lab's exact test** — one-sided Gaussian mean, `P = Φ(−Z)`, *"conservative if `µ < 0`, while the conservativeness increases as `µ` decreases"* — and `learnings.md` records this lab's typical candidate at negative validation skill, so it sits deep inside the favourable regime and nowhere near Theorem 4's `c* → 1` boundary (**#330**). They also measure **two of their own four rules as not worth implementing** (online Sidak, online fallback: *"negligible"*). **Robertson–Wason–Ramdas** (Tier A, *Statistical Science*, 23 cites on Crossref and Semantic Scholar alike) supplies LORD++ in closed form, the post-hoc FDP bound that needs **no protocol change at all** (**#328**, the cheapest item in the queue), the batched frame that is the right shape for nightly groups of eight (**#331**, the night's best-aimed item), the field's names for the two failure modes of a wealth budget — **this lab is in alpha-death**, whose published remedies are mem-FDR's discount and an explicit licence to **abstain from testing** (**#332**), while **piggybacking** is the mechanism behind the one multi-promotion episode `program.md` records, which means the holdout veto does a job the sequential layer provably cannot — and the discount on the whole vein in the authors' own words: power lives at `T > 1000`, and low-`T`-with-known-correlation is an **open problem**. **The arithmetic that closes it as a gate** (**#334**): at `α = 0.05` with the default `γ_t ∝ log(t∨2)/(t exp(√log t))` (constant re-derived here as `C ≈ 0.0772`, matching the published 0.07720838), the required one-sided `z` runs **2.58** (first trial / right after a promotion) → **3.70** (36 effective) → **3.98** (~110 raw) → **4.47–4.71** (100–300 under the FDR parameterisation), against `#323`'s detectable `|t| ≈ 1.41/2.15/2.80` and `program.md`'s record that **no promotion here has ever cleared `|t| = 2`**. An online gate would have promoted nothing, ever; the binding constraint is the **fixed width of the validation window**, third consecutive session to that conclusion. **New: #328–#334, all seven free, no trial proposed, no measurement taken, holdout not read.** Foster–Stine 2008 (`2026-10-29-alpha-investing-sequential-error-budget.md`); Javanmard–Montanari 2018 with Ramdas–Zrnic–Wainwright–Jordan 2018 (`2026-10-29-lord-online-fdr-and-the-dependency-price.md`); Tian–Ramdas 2021 (`2026-10-29-online-fwer-and-discarding-conservative-nulls.md`); Robertson–Wason–Ramdas 2023 (`2026-10-29-online-multiple-testing-practical-guidance.md`). **Named and not obtained:** Zrnic–Jiang–Ramdas–Jordan 2020 (AISTATS, the batched primary behind `#331`); Katsevich–Ramdas 2020 (*Ann. Statist.* 48(6), 3465–3487, the post-hoc primary behind `#328`); Ramdas–Yang–Wainwright–Jordan 2017 (NeurIPS, mem-FDR, behind `#332`); Zrnic–Ramdas–Jordan 2021 (*JMLR* 22, asynchronous — PDF fetched and left unread once the review covered it); Xu–Ramdas 2022 (supLORD); the published JRSS-B, Annals, PMLR and SMMR versions of all four read sources (paywalled; working/author versions read instead, and each note says so). |
 | 2026-10-30 (session 77) | **The three NAMED PRIMARIES the queue had been carrying, read against criteria stated before the downloads — and the two most-promoted items both come back NARROWER than they were filed.** The aim needed no grep: the [2026-10-29] entry ranked reading a filed pointer above opening a vein, and named three. **`#331`'s batched rule is ADMITTED, in its weak variant only.** Zrnic–Jiang–Ramdas–Jordan (Tier B, AISTATS 2020, read in full as arXiv v3; `citations: not resolved` — the PMLR version carries no Crossref DOI, OpenAlex's daily budget was exhausted, Semantic Scholar 429'd six spaced attempts, and **DataCite resolves the arXiv DOI and reports `citationCount: 0`, which is a coverage artefact and not a count**) define three procedures, and the pre-committed criterion separates them cleanly: **(a) passes for all three** — levels must be `F^{t-1}`-measurable, *"the test level at time t is only allowed to depend on information seen before t"* — while **(b) and (c) fail for `BatchBH`/`BatchSt-BH` and pass for `BatchPRDS_BH` alone.** On (b), the headline rules' past summands carry `Σ_{r≤t,r≠s} R_r`, so `(α_s, R_s, R_s⁺)` must be kept for every night ever tested, against `BatchPRDS_BH`'s frozen `n_s + Σ_{r<s} R_r` and one cumulative counter. On (c), Theorems 1–2 demand nulls *"independent of each other and the non-nulls"* (within a batch as much as across) while **Theorem 3 asks for PRDS within each batch and independence across batches** — this lab's exact shape. The cost of the narrowing is the reason the item was promoted: the review's *"higher power than the fully online"* clause is measured **only** for the two failing variants, `BatchPRDS_BH` is a mini-batch LOND (*"substantially lower power"* per the same review) and **the paper never runs it** — Section 5, Definition 4, Algorithm 1, Theorem 3, an appendix proof, no measured power anywhere (**#335**). The criterion's second clause is answered and small: on real data at batch size 10 — their smallest, and the size at which they must switch to a `γ_s ∝ s^{-2}` budget because small batches are the hard case — `BatchBH` scored **0.242 ± 0.053** against LORD's **0.231 ± 0.051**, with batch 100 at 0.299; in their synthetic design the sole case where a batched rule **loses** to LORD is small batch size at small non-null fraction, this lab's regime on both axes; they report no monotone batch-size/power relation and name its analysis an **open problem**; and **on total hypothesis count the paper gives no number in this lab's range (`T = 3000`, then tens of thousands) so none is extrapolated**, as the criterion required. One free design screen survives (**#336**): PRDS holds for Gaussian statistics **iff every null candidate's statistic has non-negative covariance with every other statistic that night**, so one family on one window plausibly qualifies and **a night pairing a candidate with its own inverse or hedge does not**. **`#328`, the cheapest item in the queue, is computable and currently VACUOUS.** Katsevich–Ramdas (Tier A, *Annals of Statistics* 48(6) 3465–3487, **33** Crossref / **54** Semantic Scholar, read in full; DOI resolved by enumerating the journal-year after a guessed DOI returned an unrelated paper) bound the FDP **simultaneously** over a path with probability `1−α`, post hoc, for any procedure *"that may or may not have been designed for FDR or FDP control"*, needing two inputs: `FDP̄ = c(α)(a + Σ_{j≤k} α_j)/|R_k|`, `c(0.05, a=1) = 2.163`. At the **seven promotions** `program.md` records and the **~129 trials** the [2026-10-29] entry and the commit log name (`trials.jsonl` not read), a flat one-sided 5% gives `Σ α_j ≈ 6.45` and **`FDP̄ ≈ 1.94` at its best over `a`** — above one, so it says nothing; **non-vacuity at seven rejections needs `Σ α_j ≤ 2.35`, an average per-trial level ≤ ~1.8%** (**#337**, with the full table: R=3 → 0.477, R=5 → 1.314, R=10 → 4.114, R=20 → 10.953). That converts `#328` from "compute it" into a **precondition**, favourable in one respect — the deflated bar **tightens** with the trial count, exactly the `Σ α_j`-conserving behaviour the bound rewards — with two riders that separate a wide bound from a wrong one: `Σ α_j` runs over **every trial, not every promotion** (~18× understatement here), and a **single** rejection can essentially never carry a non-vacuous bound. **The third nomination is an anti-candidate whose theorems are the best thing in the vein.** Cook–Dubey–Lee–Zhu–Zhao–Flaherty (Tier B, *NEJSDS* 2024, **1** Crossref / **3** Semantic Scholar, read in full) is the §5.1.8 paper — online testing when data costs money, choosing **sample size** beside the level. Unusable here because **this lab cannot buy more data for a promising candidate**; strip `n_j` and the program degenerates to the ERO investing the same paper shows piggybacks, and its own power floor `ρ ≥ 0.9` needs a non-centrality of **`|t| ≥ 2.93`** at 5% against `program.md`'s record that no promotion ever cleared `|t| = 2` (**#340**). Three findings transfer, all free: their **Theorem 2** makes α-wealth supermartingale (*"will end in a finite number of steps"*) when power is near zero **or** the null prior near one — this lab satisfies **both**, so **α-death is the predicted state, not bad luck**, and the stated cure is `σ/√n → 0`, the one route the protocol forbids (**#338**, upgrading `#332` from attribution to theorem); the equalizing construction makes the experimenter *"indifferent as to whether to test or not test"* at expected payoff zero, so **abstaining is free** — with the sharper contrapositive that **a scheme under which abstaining feels costly is not martingale** (**#339**); and the rule is **robust to noise but sensitive to downward bias** in the null prior, failure case named as the *"systematically optimistic"* investigator, erring toward over-spending, so the prior must come from the lab's own measured base rate (**#341**). **The night's structural finding** is that two of three sources failed independently on the **same** assumption — `BatchBH` needs nulls independent *within* a night, the FDP bound needs conditional super-uniformity *given everything already seen* — while **every hypothesis here is a function of one fixed 2018–2023 window**; filed as prediction rule **#342**, sibling of `#327` and `#333`, and the reason both admissions are a positive-dependence variant and a precondition rather than the headline procedures. **New: #335–#342, all eight free, no trial proposed, no measurement taken, holdout not read.** And this is the **fourth consecutive session** to end on the fixed width of the validation window as the binding constraint — now reached from a paper whose explicit remedy is buying more data. Zrnic–Jiang–Ramdas–Jordan 2020 (`2026-10-30-online-batched-fdr-and-the-dependence-that-matters.md`); Katsevich–Ramdas 2020 (`2026-10-30-post-hoc-fdp-bounds-for-any-rejection-sequence.md`); Cook et al. 2024 (`2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`). **Named and not obtained:** nothing — all three targets of the [2026-10-29] entry were read, and no fourth source was attempted. |
 | 2026-10-31 (session 78) | **LEFT THE ACCOUNTING VEIN AS INSTRUCTED AND TOOK THE QUARTER BOUNDARY — the folder's first coverage of it, and it CLOSES on evidence rather than on effort.** Aimed by the [2026-10-30] entry (`quarter.end` **0**, `window dressing` **0**, `rebalancing flow` **0** across 245 notes, against `month.end` 26 and a dedicated turn-of-month note) and graded against its three pre-committed clauses. **(a) PASSES TWICE:** Carhart–Kaniel–Musto–Reed (Tier A, *JF*, **362** Semantic Scholar / **321** Crossref, read in full from an author-hosted PDF) report *"little or no effect at month-ends that are not quarter-ends"* with the boundaries in one **joint** dummy set, and Shackleton–Yan–Yao (Tier B, *European Financial Management*, **7** in both indices, read in full from Lancaster green OA) replicate that contrast in a second market — the quarter boundary is a reporting/ranking calendar, different in kind from the month's payment-and-settlement cycle (**#343**). **(b) and (c) FAIL, and (c) fails on evidence rather than on data availability** — which is the night's real result. Hu–McLean–Pontiff–Wang (Tier A, *RFS*, **91** Crossref; published version closed, so the authors' own Nov-2008 *"Tape Painting"* working paper was read in full from the EFMA 2009 programme) test the one price-only story, **window dressing**, directly in institutional trade data and **reject it**: institutions are not more likely to buy high-past-return stocks or sell low-past-return stocks at the boundary, while the conditioner that works is **overweight** (**#344**). The return-side sources agree from the other direction — top-fund-held names are more inflated *after* controlling for capitalisation **and** recent return, and in the second market the effect sits in the **top fund-ownership quintile and almost nowhere else**. Three structural closures, each from a different source: the effect is an **end-of-the-last-day** phenomenon (final half-hour, trade counts peaking in the last five minutes, reversing next day) and **v3's next-real-close fill puts a close-to-close book on the wrong side of it** (**#345**); the **dominant channel is an absence of trade** — *depressed selling* is pervasive because not trading is free and nearly undetectable, has no signature in a close-only panel, and the same authors record the channel mix shifting toward the harder-to-detect form once scrutiny arrived, so the recipe decays in **form** rather than size (**#346**); and the **capitalisation gradient points away from this panel** while the vein's two mechanisms **disagree about its sign** — pumping monotone *decreasing* in cap (a few bps in the largest quintile, under one side of the 15 bps cheapest v3 tier, before the UK/HK stamp duties v3 charges on two of these nine markets), the tax channel predicting *larger* caps (**#347**). **One free screen a nightly can run** (**#348**): Sias (Tier B, *FAJ*, **70**/**41**; **paywalled — read from the RePEc abstract and two practitioner summaries, flagged in-note**), with Brown (Tier C, SSRN, **0** citations, read second-hand from one review) as its tax variant, is the only cross-sectional, fully-invested, **price-only** construction in the vein — momentum profits concentrating in the **third month of each quarter**, January excluded, four boundary crossings a year — and it dies on a number the lab owns: **12−1 momentum's region-matched rank IC here is +0.0128 at t = +0.96**, so measure that IC in third-months-of-quarter versus other months and close it. **Two corrections.** This file's own standing discount — *"same-calendar-month seasonality measured significantly inverted"* — **was withdrawn by the lab on 2026-10-15** as a misaligned score; the aligned seasonal is a region-matched **null** (t +1.78), and that is what should be cited. And the incentive **sign flips across markets** (US: best performers inflate; Australia/China: worst, because flows respond weakly to rank), so a nine-market pooled test of an agency mechanism averages opposite signs toward a **predicted** null — generalised as *a mechanism can replicate while its construction does not* (**#347**). **New: #343–#348; one is an actionable free screen, two are closures, three are rules. No trial, no measurement, holdout not read.** Carhart et al. 2002 (`2026-10-31-quarter-end-marking-the-close.md`); Hu–McLean–Pontiff–Wang 2014 (`2026-10-31-tape-painting-buying-versus-selling.md`); Sias 2007 with Brown (`2026-10-31-quarter-ending-month-momentum-seasonality.md`); Shackleton–Yan–Yao 2020 (`2026-10-31-nav-inflation-outside-the-us-china.md`). **Named and not obtained:** Ben-David–Franzoni–Landier–Moussawi 2013 (*JF*, **142** Crossref) — the hedge-fund sibling of the pumping literature; `publications.ut-capitole.fr` died with a transport reset on four attempts and `tse-fr.eu` answers with a **CrowdSec** interstitial. |
+| 2026-11-01 (session 79) | **TOOK THE NAMED PRIMARY AND FOUND THE AIM'S PREMISE WAS FALSE — both of `research/README.md`'s replication rubric inputs ALREADY HAVE DEDICATED NOTES, and the cause is the grep pattern rather than the unit of check.** The [2026-10-31] entry aimed this session at Jensen–Kelly–Pedersen on the ground that `Jensen.Kelly.Pedersen` returned **1** across 249 notes, i.e. that the folder had been *grading* against a paper it had never summarised. It had: `2026-08-25-hierarchical-bayesian-factor-replication.md` (Tier A) since 2026-08-25, and the companion input Hou–Xue–Zhang since 2026-10-02. **`Jensen.Kelly.Pedersen` matches exactly one character between surnames; every real rendering has more** (`, ` two, an en dash one *multi-byte* character, `, and ` six) — and the same mistake was made again independently at the start of this session (`Hou.Xue.Zhang` → **0** across 249 notes while two notes name them), which makes it a systematic instrument failure, not one careless night. **Ninth instance of the unit-of-check lesson and the first where the unit was RIGHT and the instrument was broken.** Standing rule now: check a source by one distinctive **surname** plus **title words**, with `grep -ril -F` or a character class for the separator; a zero from a `.`-joined author triple is **not evidence of absence**. **The session was still not wasted.** The aim's three admission criteria were tested against the full text anyway, because the existing note had been written without the paper's empirical breakouts, and all three PASS: size groups (mega/large/small/micro/nano), developed-versus-emerging regions, and hierarchical shrinkage at **theme-cluster** granularity, readable in full from NBER WP 28432 (**582** Crossref, re-checked). Those are now the **2026-11-01 addendum** to that note — which is what the open question actually wanted — and the session then took **the two genuinely uncovered sources in the same debate plus one on the statistic it is settled with. The substantive finding: the debate has THREE corners and they do not disagree about any number.** Chen–Zimmermann (*Critical Finance Review*, **384** Crossref, read in full from the journal editor's own site) reproduce each original paper's method on its own sample and get **slope 0.88, R² 82%** of reproduced on hand-collected original t-statistics, then show the pessimistic denominator is constructed (452 "anomalies" from **240** characteristics, 212 duplicate holding periods, only **118** with clear original significance, **117 of 118** reproduce) — **#349**. The optimistic study's own decomposition makes the largest single term **CAPM alpha instead of raw return, +20.2 pp**, i.e. not a construction knob at all. **Three elasticities a cost-charged large-cap panel should carry**: a liquidity screen costs ~**1/3** of gross (≈60 → ≈40 bps/month, and a large-exchange screen, a 20th-NYSE-percentile floor and value-weighting are **one** intervention, all three of which this panel imposes at once), costs cost ~**1/3** more independently, so ~**4/9** of a published gross edge survives before anything specific to this repo (**#350**); and gross content falls **monotonically** as the rebalance interval lengthens, which is the missing gross side of a trade this folder had only costed (**#351**). **Two corrections to this file's own standing discounts, both in the favourable direction**: replication is **not** a small-stock phenomenon (mega **77.3%** / large **81.5%** against **84.0%** full-sample; Spearman **73%** between mega and micro cluster alphas), so the "uninformative null" clause applies **narrowly** and not as a blanket large-cap discount (**#352**); and cluster alphas correlate **71%** US-to-developed-ex-US against **48%** US-to-emerging, so this panel gets the favourable number (**#353**). Jacobs–Müller (Tier A, *JFE*, **221** Crossref, read in full from the **Lancaster FoFI 2018 conference programme**) find **only the US** has a reliable post-publication decline across **39 markets** — so apply the McLean–Pontiff haircut **per market** (**#354**) — and supply the literature's multi-country construction standard: **country-neutral quintiles, local currency, aggregate after**, plus the **middle-quintile control** that killed their own hypothesis (**#355**), and a **25-name per-country-month breadth floor** whose violation is a stated *mechanism* (few names → binding filters → failed neutrality → **fatter left tail**), reframing part of the lab's "out of reach" finding as **breadth** rather than **cost** (**#356**). Chen (Tier A−, *Management Science*, **5** Crossref — young, not low-impact) proves an FDR hurdle exceeds 1.96 **iff** `π_F > Pr(|t| > 1.96)`, that **BH95 ≡ `π_F = 1.0`** and **BY Thm 1.3 ≡ `π_F ≈ 6.3`** at `N ≈ 300` (six times an impossible value, so it *always* raises hurdles), that `π_F` is **weakly identified** under censoring (90% interval ≈ **0 to 2.9**) while **shrinkage ≤29% and local FDR ≤25%** are strongly identified (**#357**) — and the lab is in the **favourable** case because `trials.jsonl` is **uncensored by rule**, making both sides of the comparison countable for free (**#358**). **The gap all three corners share: none models transaction costs**, so no replication rate in this literature is a statement about tradable alpha (**#359**). **And the corroboration**: `seasonality` is one of only **three of thirteen** themes that fail to replicate, alongside leverage (a benchmark artefact) and size (an illiquidity premium localised to emerging and micro names) — the same family the lab has just nulled (**#360**). **New: #349–#360; nine are free rules or diagnostics, one is an anti-candidate, one is corroboration, and ONE item (#358's bar question) is explicitly the human owner's. No trial, no measurement, holdout not read.** Chen–Zimmermann 2022 (`2026-11-01-reproduction-versus-replication-open-source.md`); Jacobs–Müller 2020 (`2026-11-01-anomalies-across-the-globe-country-neutral.md`); Chen 2025 (`2026-11-01-weak-identification-of-t-stat-hurdles.md`); plus a substantial **addendum** to `2026-08-25-hierarchical-bayesian-factor-replication.md` and cross-link corrections into `2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`. **Named and not obtained:** the published Jacobs–Müller (`unicreditgroup.eu` **403**; two **mediaTUM** green locations are records with **no file**) — the January 2017 authors' draft was read instead and the note states exactly where the two differ (231 vs 241 anomalies, identical headline). |
 
 ### Open questions for future sessions
+
+- **[2026-11-01] READ THIS BEFORE AIMING SESSION 80. The [2026-10-31] aim was built on a FALSE
+  GREP and the instrument, not the unit, is what failed — so the first thing session 80 does is
+  re-run its own coverage check correctly.** Both of `research/README.md`'s named replication rubric
+  inputs already had dedicated Tier-A notes when the last entry declared one of them uncovered
+  (Jensen–Kelly–Pedersen since 2026-08-25, Hou–Xue–Zhang since 2026-10-02). The cause is mechanical:
+  **a `.`-joined author triple matches exactly one character between surnames**, and real renderings
+  have two (`, `), six (`, and `), or one *multi-byte* en dash that a byte-oriented `.` will not
+  match. The same error was repeated independently at the start of this session. **Standing rule:
+  check coverage by ONE distinctive surname plus TITLE WORDS, using `grep -ril -F` or an explicit
+  character class (`Jensen[^A-Za-z]{1,8}Kelly`). A zero from a `.`-joined triple is not evidence of
+  absence, and two consecutive open questions have now been written on one.** Record a correction
+  rather than a re-read when this happens again: tonight's full-text read was still worth it, but
+  only because the existing note was genuinely incomplete, and that was luck.
+  - **Primary aim for session 80, and it is NOT another source in this vein — the replication
+    cluster is now closed and should not be reopened.** Four notes cover it (the three corners plus
+    the identification paper) and the night's own conclusion is that the debate's disagreements are
+    arithmetic rather than empirical (**#349**), that all of it is **pre-cost** (**#359**), and that
+    what transfers is a set of elasticities and construction standards already written down
+    (**#350**–**#356**). A fifth source changes none of that. **The live items are #356 and #358,
+    and both are the lab's or the owner's rather than this folder's**: #356 is a free train
+    measurement (left-tail risk of a per-country cross-sectional construction, non-US legs versus
+    the US leg, matched construction) that would separate a **breadth** explanation from a **cost**
+    explanation for the lab's recurring "real, correctly signed and out of reach" shape; #358 is a
+    free count on `trials.jsonl` (realised discovery rate against the share of skill-free
+    candidates) whose consequence — the height of the deflated-skill bar — is a protocol threshold
+    and therefore the **human owner's** decision.
+  - **So aim session 80 by running the corrected detector first, and only then by a vein.** Re-run
+    the 2026-09-13 detector (after each nightly, take the one variable it measured that has no note
+    here) **with fixed-string greps**, and re-check a sample of the hit counts the [2026-10-31]
+    entry reported, because that entry's grep discipline is now known to be unreliable and several
+    of its "covered, with hit counts" readings were produced by the same instrument. Two of them are
+    worth re-checking specifically: `fundamental law` **5** and `transfer coefficient` **6** were
+    used to conclude the lab's new `train skill = 3.37 × rank IC` exchange rate "sits on a
+    literature the folder already has", and `rank IC` **7** to conclude the same.
+  - **Ranked below that, and carried unchanged: the data-type question, which is NOT this agent's
+    call.** Every mechanism this folder has filed is priced off the panel's own columns. The honest
+    statement remains "there is nothing left **at this data type**", and whether to add one is a
+    decision for the human owner. Tonight adds a reason the question is live: **#350**'s arithmetic
+    says this panel plus this cost schedule leaves roughly 4/9 of a published cross-sectional gross
+    edge, which is the structural reason the lab keeps finding correctly-signed mechanisms out of
+    reach — a different data type is one of the few levers that changes that number.
+  - **Retired and recorded as retired**: the whole replication/`p`-hacking/multiple-testing-hurdle
+    vein, now four notes deep and internally consistent — do not open a fifth source in it without
+    a specific question. Still at **0** and still not nominated: `transfer entropy` (twelfth
+    nomination). The three residual sequential-testing pointers from [2026-10-29] (`mem-FDR`, the
+    asynchronous JMLR variant, `supLORD`) stay behind the same precondition, and **#357** adds an
+    argument against them: the gate's conservatism is currently an *input* rather than a
+    measurement, so adding another error-accounting layer on top of it compounds an unidentified
+    choice.
+  - **Unchanged and still live**: `#349`–`#360` from tonight; `#343`–`#348` from 2026-10-31
+    (`#348` the one item a nightly can act on); `#335`–`#342` from 2026-10-30; `#328`–`#334` from
+    2026-10-29; `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27; `#311`–`#315` from
+    2026-10-26; `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24; `#294`–`#299` from
+    2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from
+    2026-10-20; the 2026-10-18 pair; then 2026-10-17 and everything carried under it.
+  - **Standing, and not this folder's call**: the engine issues filed 2026-10-18 and 2026-10-22; the
+    `min_train_skill = 0.0` threshold raised by the 2026-10-26/27 nightly; the deliberate difference
+    `#324` raised; the two human decisions added 2026-10-29; the three items the 2026-10-30/31
+    nightly raised for its owner; and the data-type question above. **Tonight adds one**, and it is
+    the sharpest version of a question this file has circled since 2026-09-15: **the deflated-skill
+    bar's severity is an assumption, not an estimate** (**#357**/**#358**). Whether to replace a
+    trial-count-indexed threshold with an empirical-Bayes shrinkage of the reported skill at the
+    classical threshold is a protocol change for the human owner. What this folder can say is that
+    the lab is in the one situation where the choice is **identified** — its trial record is
+    uncensored by rule — and that the shrinkage factor is computable from that record for free.
+  - **Two documentation corrections this file owes itself, both carried forward.** (i) The
+    seasonality discount is a **null** (region-matched, t +1.78), not an inversion; the inverted
+    reading was withdrawn by the lab on 2026-10-15 and **#360** now adds external corroboration that
+    the family is weak. (ii) Any citation of "the frequentist multiple-testing correction cuts the
+    replication rate by X" must carry **#357**'s result that the correction in question
+    (Benjamini–Yekutieli Theorem 1.3) is isomorphic to an impossible false-factor share and
+    therefore always raises hurdles — the gap is substantially a property of the algorithm, not a
+    measurement of what multiple testing costs.
+
+- **[2026-11-01] Access findings — one new first-try channel, one conference-programme host
+  confirmed for the fourth time, one green-OA platform that holds records without files, and the
+  Semantic Scholar DOI endpoint failing on THREE of four real Tier-1 DOIs in one session.**
+  - **A journal editor's own site is a first-try channel for that journal's articles, and this is a
+    new shape beside the faculty-page and author-site lessons.** `cfr.ivo-welch.info/published/papers/<author><year><slug>.pdf`
+    served the complete published *Critical Finance Review* article on the first attempt (3.2 MB →
+    186 KB of clean text, 615 instances of `" the "`, no shift, no `( )` dropout), where the
+    publisher endpoints (Now Publishers, Emerald) were not attempted and `papers.ssrn.com` is on
+    this file's dark list. **For a small or society-run journal, try the editor's personal site
+    before the publisher's.**
+  - **`wp.lancs.ac.uk/fofi2018/files/<year>/<month>/<Paper-Id>-<Author>.pdf` — the Frontiers of
+    Finance conference-programme repository — served the authors' complete working draft of a closed
+    *JFE* article.** Fourth confirmed instance of the 2026-08-21 conference-mirror lesson (after
+    `top1000funds.com`, the EFMA programme and `aeaweb.org/conference`) and the second Lancaster
+    host after `eprints.lancs.ac.uk`. **Conference programmes are now a standing first-tier channel,
+    not a fallback.**
+  - **`mediatum.ub.tum.de` (TU Munich) holds RECORDS WITHOUT FILES**, which is the 2026-10-04 /
+    2026-10-16 Pure-and-DSpace caution on a third platform. Both locations OpenAlex names as green
+    for one work returned a ~45 KB **JavaScript shell with no `.pdf` href at all**, and the
+    conventional `doc/<id>/<id>.pdf` and `download/<id>` paths returned **404** and **400**. The
+    work's `open_access` block read `is_oa: true, oa_status: green,
+    any_repository_has_fulltext: true` while no repository held a fetchable file. Separately
+    `unicreditgroup.eu/content/dam/.../<file>.pdf` answered with **HTTP 403 and a 13.8 KB HTML
+    body** — a sponsoring institution's working-paper library closed to an automated client.
+  - **A fourth instance of the authors'-own-slide-deck trap, and it is the 2026-10-14 "valid PDF of
+    the right title" mode.** `suerf.org/wp-content/uploads/.../<hash>_suerf.pdf` returned a genuine
+    **2.7 MB, 28-page PDF with the exact right title and authors** that `pdftotext` turned into
+    **11.6 KB of text with 12 instances of `" the "`** — a workshop deck, not the paper. It was
+    read only to confirm the published version's anomaly count and headline wording against the
+    draft actually used, and is **cited for nothing**. The tell remains the character count and the
+    `" the "` count, both of which are already in hand from the shift-detection check.
+  - **`file -b` reported "PDF document, version 1.5, 1 page(s)" for an arXiv preprint from which
+    `pdftotext` extracted the complete 40-page article** (130 KB, 600 `" the "`). This is the
+    2026-10-07 "page count is not a completeness check" lesson in its most extreme form yet — a
+    **one**-page report for a full paper. Judge by the character count, always.
+  - **The Semantic Scholar DOI endpoint returned a clean `not found` for three of the four real,
+    heavily-cited DOIs queried tonight** (`10.1561/104.00000112`, `10.1016/j.jfineco.2019.06.004`,
+    and `10.1111/jofi.13249` — the last for the third session running), while answering correctly
+    for `10.1287/mnsc.2023.03083`. **Crossref answered all four on the first call and was never
+    rate-limited.** The [2026-10-31] entry's sharpened statement is confirmed: the DOI endpoint is
+    not the reliable half of that API, Crossref is the right first call, and a lone Semantic Scholar
+    `not found` is **never** grounds to record a source as unindexed.
+  - **A journal-year enumeration found a DOI a title search would have been slower at.**
+    `api.crossref.org/journals/<ISSN>/works?filter=from-pub-date:…,until-pub-date:…&query.bibliographic=<words>&select=DOI,title,author,volume,page,published,is-referenced-by-count`
+    returned the target's DOI, volume, pages **and** citation count in one call for both of the
+    journal articles resolved tonight. The 2026-10-07 lesson — a journal's year is a better key
+    than an article's title — holds, and the `select=` list makes it a one-call citation check too.
+  - **`fisher.osu.edu` fails TLS verification with `self-signed certificate in certificate chain`,
+    with and without `--cacert /root/.ccr/ca-bundle.crt`.** That is the origin's own incomplete
+    chain, as recorded for `orbilu.uni.lu` on 2026-10-12 — **not** the proxy interfering, and not a
+    policy denial. Report it as such. It cost nothing here because the paper in question already
+    has a note read from the author's project site (`theinvestmentcapm.com`), which remains the
+    working route to that author's work.
 
 - **[2026-10-31] What should aim session 79: the quarter vein is CLOSED — do not reopen it — and the
   next session should take the one meta-source this folder has used as a rubric input for eleven

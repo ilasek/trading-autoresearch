@@ -3,9 +3,9 @@ title: "Is There a Replication Crisis in Finance?"
 authors: Jensen, Kelly, Pedersen
 year: 2023
 venue: Journal of Finance (tier 1)
-url: https://doi.org/10.1111/jofi.13249
-citations: 513 (Crossref, checked 2026-08-25; Semantic Scholar's DOI endpoint does not resolve this DOI)
-sample_period: US from 1926; global panel 1990–2020; 153 factors across 93 countries
+url: https://doi.org/10.1111/jofi.13249 · full text read 2026-11-01 from NBER Working Paper 28432 (February 2021), https://www.nber.org/system/files/working_papers/w28432/w28432.pdf
+citations: 513 (Crossref, checked 2026-08-25); 582 (Crossref, re-checked 2026-11-01). Semantic Scholar's DOI endpoint still returns a clean `not found` for this DOI (re-checked 2026-11-01) — third session in a row, and the note below treats it as that API's failure mode rather than an indexing fact.
+sample_period: "US from 1926 (CRSP); non-US from Compustat, beginning 1986 for most developed countries, with a 60-month minimum per country-factor; 153 factors across 93 countries. Sample end read as 2019/2020 in the February 2021 working paper. (This corrects the \"global panel 1990–2020\" recorded on 2026-08-25, which was taken from the abstract rather than the data section.)"
 markets: 93 countries, global equities, long-short characteristic factors
 tier: A
 validation_overlap: true
@@ -197,8 +197,153 @@ argument about a chosen `τ`. (c) The out-of-sample attenuation result assumes t
 was the thing selected on; in this repo it was, which is why the point applies, but it is not a
 general licence to expect decay everywhere.
 
+## Addendum — 2026-11-01: the breakouts by size group, region and theme, read from the full text
+
+The 2026-08-25 note was written without the paper's empirical breakouts. Session 79 read the full
+text (NBER WP 28432) specifically to answer the question the [2026-10-31] open question had posed —
+*which of this folder's filed mechanisms should be expected to survive on nine large-cap developed
+indices, rather than asserted* — and the paper does report the three things that question asked for.
+Recorded here rather than in a new note, per `research/README.md`'s rule on revisiting a source.
+
+**(a) By size group: replication is NOT a small-stock phenomenon, and this is the strongest
+available answer to the pessimistic reading.** Factors rebuilt from five US size subsamples defined
+on NYSE breakpoints — mega (top 20%), large (80th–50th), small (50th–20th), micro (20th–1st) and
+nano (below the 1st percentile) — give empirical-Bayes replication rates of **77.3% (mega) and
+81.5% (large)** against **84.0% for the full US sample**, with micro at 81.5% and nano at 71.4%.
+The authors' conclusion is that "criticisms of factor replicability based on arguments around stock
+size or liquidity are largely groundless". More useful than the rates: the **cluster-level alpha
+ordering is broadly similar across size groups**, with a Spearman rank correlation of **73% between
+mega-cap and micro-cap cluster alphas** and only the nano sample deviating (35% against mega).
+
+  **What this does and does not license for this repo.** It is direct evidence that *most* of this
+  literature is not a microcap artefact, so `research/README.md`'s clause — a null here is
+  uninformative for a mechanism the literature localises to small, thin or retail-held names —
+  should be applied **narrowly**, to the mechanisms whose own literature localises them, not as a
+  blanket excuse for a large-cap panel. It does **not** overturn the cross-sectional-dispersion
+  fact from `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`: the *existence*
+  of these effects survives into mega-caps; their *magnitude* is still largest where dispersion is
+  largest. Both can hold, and the reconciliation is that a large-cap panel compresses the spread
+  without removing the sign.
+
+**(b) By theme: three of the thirteen fail, and one of the three is a `program.md` family.** Ten of
+13 themes replicate at **75% or better** under the Bayesian estimates. The exceptions are
+**seasonality, leverage and size** — and the paper explains two of them rather than leaving them as
+noise. *Size* is stronger in emerging markets and in micro and nano stocks, which the authors tie to
+the illiquidity-premium theory: the premium should scale with trading-cost differences, and those
+differences are much larger in emerging and micro names. *Leverage* fails on CAPM alpha but becomes
+**one of the most heavily weighted clusters** once other themes are controlled for, through its
+hedging of the value and low-risk clusters — i.e. its failure is a benchmark artefact, not an
+absence. **Seasonality is left unexplained and is simply weak.**
+
+  **This matters for the lab's own record.** `seasonality-calendar` is the family this lab has spent
+  the most recent effort on, and its results there are a run of region-matched nulls and one
+  mechanism closed on cost arithmetic. The weakest theme in the largest Bayesian replication study
+  of this literature is **the same family**. That is independent corroboration of the lab's own
+  nulls rather than a reason to keep looking, and it should be read alongside the standing
+  correction that this folder's "significantly inverted" seasonality discount was withdrawn by the
+  lab on 2026-10-15 and is a **null**, not an inversion.
+
+**(c) By region, and the ordering is the actionable part.** Cluster-level alphas across US,
+developed-ex-US and emerging are broadly consistent, with Spearman rank correlations of **71%
+between US and developed-ex-US** and **48% between US and emerging**. The standout exception is the
+**size theme**, far more important in emerging markets than in developed ones. Separately, raw OLS
+replication rates in developed and emerging markets are **lower** than in the US, and the
+frequentist Benjamini–Yekutieli correction hits them especially hard, while the Bayesian posterior
+conditioned on the global cross-section recovers much of the loss by borrowing precision across
+regions.
+
+  **Two consequences.** First, this repo's panel is nine **developed** large-cap indices, and the
+  relevant correlation is therefore the 71% one, not the 48% one: a mechanism filed from US
+  evidence should be expected to rank similarly here, which is a materially more favourable prior
+  than this folder has been assuming. Second, the per-region OLS rates being lower is partly a
+  **sample-length and breadth** effect — the paper requires at least 5 names per leg and 60 monthly
+  observations per country-factor, and the non-US panels are shorter — which is the same
+  thin-cross-section friction stated as a mechanism in
+  `notes/2026-11-01-anomalies-across-the-globe-country-neutral.md`.
+
+**(d) The construction choices, now recorded, because they are the measurement.** Terciles, not
+deciles. Breakpoints computed on **non-micro names only** (above the NYSE 20th percentile), with
+micro-caps then distributed into those same buckets rather than setting the cuts. **Capped
+value weighting** — market equity winsorised at the NYSE 80th percentile — chosen so that neither
+tiny names nor a single mega name dominates (their stated example: one stock was over 70% of a
+national market's capitalisation). Accounting data assumed public **four months** after fiscal
+period end. A four-quarter aggregation of quarterly flow items to defuse business seasonality.
+Valuation ratios always on the most recent price. Factors signed as the original paper claimed.
+At least 5 names per leg, at least 60 monthly observations per country-factor, at least 3 countries
+for a regional aggregate; country factors aggregated **capitalisation-weighted**. Performance-based
+delistings assigned **−30%** where delisting returns are unavailable. Themes formed by
+**hierarchical agglomerative clustering with Ward linkage on `1 − correlation` of CAPM-residual
+returns**, cut at 13 clusters; within-cluster average pairwise correlation exceeds 0.5 in 10 of 13.
+
+  The decomposition of their gap against the pessimistic study is construction, item by item:
+  longer sample **+4.3**, one holding period instead of three **+4.0**, **capped value weights
+  +8.5**, 15 added factors **+2.4**, other construction details **+2.7**, excluding factors the
+  original papers found insignificant **+7.8**, and **CAPM alpha instead of raw return +20.2**
+  percentage points. **The single largest term is not a construction choice at all — it is testing
+  the right statistic.** The folder's general form of this is in
+  `notes/2026-11-01-reproduction-versus-replication-open-source.md`.
+
+**(e) The alpha-hacking test, and the shrinkage benchmark it is run against.** The paper embeds
+hacking as an in-sample return inflation with both a mean bias and an extra variance, and shows the
+posterior then becomes `E(α|α̂) = −κ₀ + κ_hacking · α̂` with `κ_hacking ≤ κ` and `κ₀ ≥ 0`: pure
+hacking implies a **zero slope and a negative intercept** in a cross-sectional regression of
+out-of-sample alpha on in-sample alpha. Empirically the slope is **significantly positive and the
+intercept is positive**, so pure alpha-hacking is rejected. But the slope is also **well below the
+Bayesian benchmark**: with no hacking and no arbitrage the expected slope is
+
+```
+κ = 1 / (1 + σ²/(T τ²))
+```
+
+which their own empirical-Bayes hyperparameters put at about **0.9**, against realised slopes
+materially lower, plus a concave shape in the scatter. Their reading: not p-hacking, but the
+**highest in-sample alphas** are either data-mined or arbitraged down.
+
+  **This is a usable screen and it is the sharpest form of the "shrink, don't re-threshold" idea
+  this folder holds.** The formula is the one already in this note's Mechanism section, now with its
+  two inputs identified: `τ` is the **cross-sectional dispersion of true effects in the candidate
+  population**, estimable by empirical Bayes from the dispersion of measured effects net of sampling
+  noise, and `σ²/T` is the sampling variance of one measurement. The lab's analogue is immediate:
+  given a candidate's measured skill and the dispersion of skills across its own recorded trial
+  population, the **expected forward skill is `κ × measured`, with `κ < 1` always**, and the
+  concavity result says the shrinkage should be **heavier at the top of the distribution** — i.e.
+  heaviest for exactly the candidate a session wants to promote. Two cautions that are this
+  folder's: the magnitudes `τ_c ≈ 0.38%` and `τ_w ≈ 0.21%` per month are properties of *their*
+  factor population and must not be carried here (the required re-measurement is on this lab's own
+  trial record); and estimating `τ` from the lab's record is only honest because that record is
+  **uncensored**, which is the precondition `notes/2026-11-01-weak-identification-of-t-stat-hurdles.md`
+  shows the published literature fails.
+
+**(f) One correction this addendum owes the 2026-08-25 text.** The frequentist comparison the
+original note reports — that the Benjamini–Yekutieli correction cuts the replication rate sharply
+while the Bayesian treatment does not — must now be read with the result that **BY Theorem 1.3 is
+isomorphic to assuming a false-factor share of about 6.3 at this study's factor count**, an
+impossible value, and therefore *always* raises the hurdle. The size of that gap is substantially a
+property of the chosen frequentist algorithm rather than a measurement of what multiple testing
+costs. See `notes/2026-11-01-weak-identification-of-t-stat-hurdles.md`, item 4.
+
+**(g) What still is NOT in this paper, and it is the binding one.** **Costs are not modelled** —
+the phrase "transaction cost" appears once, in a theory aside about the size premium. Every
+replication rate above is a statement about a **gross long-short factor return's statistical
+significance**, not about tradable alpha. A theme replicating at 84% says nothing about whether it
+survives v3's 15/20/30/40 bps tiers plus UK and Hong Kong stamp duty and the continental FTTs. The
+whole replication debate — all three corners of it — is pre-cost, and the cost third is estimated
+elsewhere (`notes/2026-10-14-net-expected-returns-of-the-anomaly-zoo.md`,
+`notes/2026-11-01-reproduction-versus-replication-open-source.md`).
+
 ## Related
 
+- `notes/2026-11-01-reproduction-versus-replication-open-source.md` — the "pure reproduction"
+  complement this paper names in its own introduction, and the source of the construction-elasticity
+  magnitudes that addendum item (g) says are missing here.
+- `notes/2026-11-01-anomalies-across-the-globe-country-neutral.md` — the international
+  post-publication study this paper cites, and the country-neutral construction convention behind
+  addendum item (c).
+- `notes/2026-11-01-weak-identification-of-t-stat-hurdles.md` — the identification argument behind
+  addendum items (e) and (f), and the reason the shrinkage half of this paper's machinery is the
+  transferable half.
+- `notes/2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md` — the study this one
+  responds to, read here in full on 2026-10-02; addendum items (a) and (d) are the reconciliation.
 - `notes/2026-08-25-prior-weighted-multiple-testing.md` — the grouped "sieve" weighting scheme this
   paper's theme taxonomy realises empirically: partition into economically coherent clusters,
   estimate at the cluster level, so no single test can up-weight itself.

@@ -194,7 +194,21 @@ promotion here is worth, and it is worth one line in a weekly report.
 ## Related
 
 - `2026-08-25-hierarchical-bayesian-factor-replication.md` — Jensen-Kelly-Pedersen, the opposing
-  Tier-A verdict on the same literature. Read the two together or neither.
+  Tier-A verdict on the same literature. Read the two together or neither. **Its 2026-11-01
+  addendum carries the size-group, region and theme breakouts plus the item-by-item decomposition
+  of its gap against this paper** — the largest single term in which is not a construction choice
+  but testing CAPM alpha instead of raw return.
+- `2026-11-01-reproduction-versus-replication-open-source.md` — the third corner: the open-source
+  **reproduction** of the same literature, which dissects this paper's denominator (452 "anomalies"
+  from 240 characteristics, only 118 with clear original long-short significance) and prices the
+  three construction knobs as elasticities rather than as one verdict. **It is the right place to
+  go for the reconciliation, because it disagrees with this paper about what to count rather than
+  about any number.**
+- `2026-11-01-weak-identification-of-t-stat-hurdles.md` — shows that this paper's own numerical
+  parameters imply a false-discovery rate among published findings of roughly 8.6%, against its
+  verbal summary that most findings are likely false; and that the 2.78-style raised cutoff is
+  weakly identified from censored published data while a shrinkage factor is not. Read with the
+  caveat already recorded above about the cutoff not being interchangeable with this lab's bar.
 - `2026-10-01-discovery-sample-and-anomaly-decay.md` and `2026-10-01-limits-of-p-hacking-publication-bias.md`
   — the discovery-window and publication-bias halves of the same problem.
 - `2026-10-02-delisting-returns-the-other-half-of-survivorship.md` — this paper's Appendix B is the
