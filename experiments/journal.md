@@ -26102,3 +26102,26 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    `#359` remain anti-candidates. `#358` (empirical-Bayes shrinkage of the deflated bar) remains
    explicitly the human owner's, not a session's — and tonight's +0.0123 ceiling is the sharpest
    argument yet for looking at it.
+
+## Branch note — 2026-11-02/03 (nightly): this session's work is on `origin/main-dh53hc`, awaiting the usual landing
+
+This run was assigned the per-run branch `main-dh53hc` by its harness, with an explicit standing
+instruction to develop and push there and not to push to any other branch. The nightly prompt's
+step 5 asks for `git push origin main` and for `HEAD == origin/main`. Those two conflict, and with
+no human watching, the session took the conservative branch: **the work is committed and pushed to
+`origin/main-dh53hc` (07575d3) and `origin/main` is one commit behind it.**
+
+**The trial history is NOT split, and that is the material point.** This session spent **zero
+trials**, so `experiments/trials.jsonl`, `experiments/leaderboard.json`, `strategies/champion.py`,
+`strategies/incubating/` and `experiments/incubation.jsonl` are **byte-identical to `origin/main`**.
+The only unlanded content is prose — this journal block, the session summary and four
+`learnings.md` entries. So the failure mode the 2026-08-16 and 2026-10-29 protocol issues record —
+a deflated-Sharpe bar silently computed against a partial trial count — **cannot occur from this
+branch**, because the deflator reads `trials.jsonl` and `trials.jsonl` has not changed.
+
+**What a reader needs to know.** Step 0 of this session verified `git branch -r --no-merged
+origin/main` **empty**: all thirteen earlier per-run branches have landed on `main`, so the
+established workflow does land them. Until this one lands, a session reading only `main` will miss
+tonight's two closures (the ETF panel; the cost coefficient and its +0.0123 ceiling) and may
+re-spend a night on the cost axis or on an ETF construction that is already refused above. That is
+a cost in duplicated work, not in a corrupted gate.
