@@ -8086,6 +8086,121 @@ arithmetic. **The weakest theme in the largest Bayesian replication study of thi
 same family.** That is independent corroboration of the lab's nulls, not a reason to keep looking.
 **#360.**
 
+### The COUNTRY INDEX as the traded unit — the one object this panel holds and has never ranked, its term structure, and the two design choices this lab is pinned at (`lead-lag-spillover`, `price-trend`)
+
+**Why this was the aim, and it is a real zero rather than a grep artefact.** Session 79 ended on a
+standing rule that a `.`-joined author triple is not a coverage test. Re-run with fixed strings
+across all 252 prior notes, the reported counts that mattered held (`fundamental law` 5,
+`transfer coefficient` 6, `rank IC` 7 — all confirmed, so that entry's readings on those were
+sound). The genuine zeros are elsewhere and they are about the **traded unit**: `index momentum`
+**0**, `Bhojraj` **0**, `Hameed` **0**, `macromomentum` **0**, `winner-loser reversal` **0**,
+`country rotation` **0**, `region rotation` **0**, `global tactical` **0**, `asset allocation`
+**1**. Meanwhile the folder's two `country momentum` notes
+(`2026-08-28-international-momentum-country-neutral.md`,
+`2026-11-01-anomalies-across-the-globe-country-neutral.md`) are both about **removing** the
+country bet from a stock book. **The folder had written twice about neutralising a bet it had
+never written about taking** — and the lab's own instrument demeans within region, so it throws
+this bet away by construction while holding 42 ETFs that could express it.
+
+**Pre-committed admission criteria, stated before the first paper was opened.** (a) admit only on
+evidence that country-level predictability is **not** the stock-level effect relabelled — "momentum
+also works on indices" would make it one mechanism with two labels and the leaderboard's
+`distinct_mechanisms` rule would collapse them; (b) the construction must survive at **~15
+country/region ETFs with staggered inception, long-only**; (c) at least one source must model
+costs.
+
+**(a) PASSES, and in the strongest available form — a sign flip.** The country-level short-horizon
+signal is **continuation**, where the stock-level one-month signal is **reversal**. Cakici–Fieberg–
+Neszveda–Piljak–Zaremba define `StMom` as the previous month's total return sorted **High-minus-Low**
+and state it is momentum "rather than reversal"; Chan–Hameed–Tong find index continuation strongest
+at **2–4 weeks**. A mechanism that changes sign when the unit of aggregation changes is a different
+mechanism, not a different label (**#361**). The long-horizon end flips again — reversal at ~3 years
+(Richards), with the behavioural story being **sentiment-driven cross-border fund flow**, which is
+country-level by construction and has no stock-level counterpart (**#365**).
+
+**(c) FAILS COMPLETELY, and this is the single most important qualifier on everything below.**
+**None of the three sources models transaction costs.** A grep of the multiverse paper's full text
+returns **zero** mentions of transaction or trading costs; Chan–Hameed–Tong's economic-significance
+measure is an explicitly frictionless zero-cost arbitrage return; Richards' contrarian portfolio is
+zero-net-investment. **Every magnitude in this vein is gross** — including, critically, the
+near-zero developed-market result, which is a *pre-cost* near-zero (**#366**). This is the third
+consecutive vein in which `#359`'s observation holds from the literature's side.
+
+**(b) SPLITS, and the split is the night's result.** The *generic* country-rotation idea fails (b)
+on the multiverse paper's own direct measurement rather than by this folder's analogy — and that
+distinction matters, because the folder's habitual hedge is "a null on a large-cap panel would be
+uninformative." **Here the literature actually ran the large-cap, ETF-instrument version.** Across
+13,824 research designs varying nine decision nodes, the two most influential nodes are **data
+source** and **geographic scope**, and **this lab's panel is pinned at the worse end of both**:
+representing countries by **ETFs or futures** rather than full-market aggregates cuts spread
+payoffs by roughly **0.13–0.16 pp/month** (the authors' own phrasing: **two to three times lower**),
+because ETFs and futures hold large liquid stocks while the aggregates include the small and
+micro-cap names that are "the primary source of return predictability"; and restricting to
+**developed markets** gives average spread returns **statistically indistinguishable from zero**.
+ETF-based designs also carry **higher** nonstandard errors, so the route is lower-payoff *and*
+noisier. Two honest narrowings the paper states itself and which must travel with the number: the
+scope effect is significant **univariate only and vanishes in multivariate**, because data source
+and sample length already absorb it — so scope and instrument are largely **the same finding seen
+twice and must not be stacked** (**#362**); and most country signals are significant in only
+**15–20%** of implementations, so the fragility is general, not specific to this panel.
+
+**But one object survives all three criteria, and two independent sources converge on it.** The
+only price-computable signal among the four that survive the multiverse plus a block bootstrap plus
+out-of-sample design selection is **short-term (one-month) momentum** — the other three (sovereign
+rating, dividend yield, market size) need data this repo does not have and localise to emerging and
+frontier markets this panel excludes. Chan–Hameed–Tong reach the same place from a different sample,
+a different method and 26 years earlier: after world-market beta adjustment, index-momentum alphas
+are **near zero and jointly insignificant at 1 week**, **significant at the 1% level at 2 and 4
+weeks**, and **gone at 12 and 26 weeks** (**#363**). And the multiverse paper's one geographic
+finding that points *toward* this panel is that, unlike value and size, **"momentum effects prevail
+in developed countries."**
+
+**Three facts from Chan–Hameed–Tong that change what a long-only lab should think.** First and
+largest: **the long leg carries the effect** — "buying winner portfolios yields significant profits
+consistently, but selling loser portfolios creates either insignificant profits or losses." That is
+the opposite of the usual anomaly shape, and it inverts `program.md`'s standing caveat that
+long-only is a real constraint because only the cheap side is tradeable (**#364**). Second,
+**cap-weighting shrinks the effect but it stays significant at short horizons** — the test the
+authors set up specifically to expose it as a small/illiquid-market artefact, which it fails to be
+at short horizons even though the five largest markets are ~75% of world capitalisation. Third, the
+**USD decomposition**: with `R ≅ r + e`, the equity-on-equity term π1 is **>90%** of total profit at
+1 week and **>80%** at 2 and 26 weeks, while the currency-on-past-currency and currency-on-past-equity
+terms are small — so a USD-denominated country score is **not** mostly a currency bet at short
+horizons.
+
+**The currency tension resolves on horizon, and the resolution is a reusable rule.** Bhojraj–
+Swaminathan (abstract obtained, **body not obtained** — closed at the publisher, no OA location,
+Cornell eCommons returns 0 for the title; nothing is attributed to it beyond its abstract) report
+that positive currency momentum predicts **lower** future index returns, weakening momentum and
+strengthening reversal in USD terms. Chan–Hameed–Tong say the currency channel "does not add much."
+**Both report the same sign**: CHT's π3 is **negative at 12 and 26 weeks**. The disagreement is
+magnitude at different horizons, and the transferable rule neither paper states in this form is that
+**a USD-denominated country score is cleanest at short horizons and increasingly self-contaminating
+as the horizon lengthens** (**#367**) — which independently explains why the multiverse finds
+one-month `StMom` robust and 12-1 `LtMom` fragile at the country level.
+
+**The small-market localisation is confirmed twice, 29 years apart, by unrelated methods — and the
+older source supplies the hedge the newer one does not.** Richards finds reversals roughly twice as
+large when the extreme portfolios hold mainly smaller countries, and roughly **1.7× larger** in an
+eight-smaller-market subgroup than in his **eight-largest** subgroup (US, Japan, UK, Canada, Germany,
+France, Australia, Switzerland — close in composition to this lab's nine-index panel). **But that
+difference is not statistically significant**, and the large-market subgroup still shows a positive
+contrarian return at roughly 60% of the small-market one. So the correct statement for this folder
+is **"the gradient runs against this panel", not "the effect is absent from it"** (**#368**).
+
+**What is refused outright.** The long-horizon (~3-year) country reversal is refused **on window
+width before any question of whether it is real**: a 3-year ranking and 3-year test horizon against
+a six-year validation split is **two non-overlapping test periods**, and overlapping windows would
+add rows without adding independent information (**#369**). Richards' own construction (`LtRev`) is
+also **not** among the four signals surviving the multiverse — a real tension between a Tier-A 1997
+result that passed its own risk tests and a 2026 design sweep, recorded rather than resolved.
+
+**One caution on using the discount as a refusal.** The multiverse paper's unit is a **long-short
+spread**; Chan–Hameed–Tong find the effect lives almost entirely in the **long leg**. A spread can
+be near zero while its long half is not, and nothing in the multiverse paper measures the long leg.
+**It can refuse the spread; it cannot by itself refuse a long-only construction** (**#370**). Say
+which is being refused.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -15254,6 +15369,163 @@ hypothesis fodder, then anti-candidates.
     inverted" reading was withdrawn by the lab on 2026-10-15 as a misaligned score. Tier A.
     → `notes/2026-08-25-hierarchical-bayesian-factor-replication.md` (2026-11-01 addendum)
 
+361. **FREE SCREEN, and it is the test that decides whether the country index is a distinct
+    mechanism or a relabel: the country-level short-horizon signal is CONTINUATION where the
+    stock-level one is REVERSAL.** At the country-index level the previous month's return sorted
+    High-minus-Low is one of only four signals surviving a 13,824-design multiverse, and index
+    momentum alphas survive world-market beta adjustment at 2–4 weeks; at the stock level that
+    same horizon is the classic reversal window. **A mechanism that changes sign when the unit of
+    aggregation changes is not the same mechanism relabelled**, so a country-index book would not
+    collapse into the incumbent's stream under the leaderboard's `distinct_mechanisms` rule. The
+    free version of this screen costs no trial: rank-correlate a country/region-level previous-month
+    score against the lab's existing stock-level scores on the same dates — the 2026-11-01/02
+    nightly's own method (`rho(ID, mean monthly return) = +0.42` killed a conditioner before it was
+    built). **Run the correlation first, the construction second.** Tier B/A, overlap on the
+    multiverse source only.
+    → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`,
+    `notes/2026-11-02-multiverse-of-country-level-research-designs.md`
+
+362. **INTERPRETATION RULE, and it corrects the obvious misuse of the item below it: the ETF-instrument
+    penalty and the developed-market-scope penalty are LARGELY THE SAME FINDING SEEN TWICE, and must
+    not be stacked.** Each is worth roughly 0.13–0.16 pp/month in the multiverse regressions, which
+    invites the reading that this lab's panel pays both. The paper states otherwise: the scope effect
+    is significant in **univariate** regressions and **vanishes in multivariate** ones, because data
+    source and sample length already absorb it. Both are the same underlying channel — exposure to
+    small, illiquid, partially segmented markets — measured through two different design knobs.
+    **Quote one penalty, not two.** Tier B, validation overlap.
+    → `notes/2026-11-02-multiverse-of-country-level-research-designs.md`
+
+363. **HYPOTHESIS FODDER, the only survivor of this vein, and it is pre-registered as a narrow
+    horizon window rather than a family: short-horizon (2–4 week) cross-sectional continuation among
+    country/region ETFs, long leg only.** Two independent sources converge: the multiverse finds
+    one-month `StMom` robust to 13,824 designs plus a block bootstrap plus out-of-sample design
+    selection (and it is the **only** one of the four survivors computable from prices), while
+    Chan–Hameed–Tong find index-momentum alphas **jointly insignificant at 1 week, significant at
+    the 1% level at 2 and 4 weeks, and gone at 12 and 26 weeks** after world-market beta adjustment.
+    **Do not build the 12-1 version** — that is the one both sources refuse. Construction: weights
+    proportional to the cross-sectionally demeaned past-`k`-week return, positive half only,
+    renormalised; `k` ∈ {2, 4} weeks for evaluation and holding; v3's next-real-close fill already
+    supplies the causality offset the source builds by hand. Tier A on the construction source.
+    **This is hypothesis fodder, not a recommendation — see #366 and #371 for what has to be
+    checked before it costs a trial.**
+    → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
+
+364. **THE REASON THIS VEIN IS WORTH A LOOK AT ALL, and it inverts a standing `program.md` caveat:
+    at the country-index level the LONG LEG carries the effect.** Chan–Hameed–Tong split the book
+    and find "buying winner portfolios yields significant profits consistently, but selling loser
+    portfolios creates either insignificant profits or losses." `program.md` warns that long-only is
+    a real constraint because only the cheap side of a residual is tradeable, and the lab's recurring
+    shape is a mechanism that is "real, correctly signed and out of reach" partly because the short
+    leg is where the money was. **Here the constraint is cheap rather than expensive.** Cap-weighting
+    also shrinks but does not kill the short-horizon effect — the authors' own test for whether it is
+    a small/illiquid-market artefact, which it fails to be at short horizons. Tier A, no overlap.
+    → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
+
+365. **MECHANISM, recorded because it is country-level by construction and has no stock-level
+    counterpart: sentiment-driven cross-border fund flow.** Richards leaves this standing after
+    rejecting the risk explanation on every test he runs — flows into country and region funds track
+    recent country performance, country-fund premia and discounts swing with sentiment about foreign
+    countries, and career risk pushes even "prudent" allocators toward recent winners. The unusual
+    corollary is that **increasing cross-border flows could increase rather than arbitrage away the
+    mispricing**, because they supply more investors to chase the move — a mechanism that does not
+    predict decay with liberalisation, and Chan–Hameed–Tong indeed expected and did not find decay
+    after capital-control relaxation. Tier A, no overlap.
+    → `notes/2026-11-02-winner-loser-reversals-in-national-indices.md`
+
+366. **THE QUALIFIER ON EVERYTHING IN THIS VEIN, and the third consecutive confirmation of `#359`
+    from the literature's side: NONE of the three country-level sources models transaction costs.**
+    Zero mentions of transaction or trading costs in the multiverse paper's full text; an explicitly
+    frictionless zero-cost arbitrage return in Chan–Hameed–Tong; a zero-net-investment contrarian
+    portfolio in Richards. **Every magnitude here is gross, including the near-zero developed-market
+    result — which is therefore a pre-cost near-zero.** Tier spread, mixed overlap.
+    → all three `2026-11-02-*` notes
+
+367. **INTERPRETATION RULE for every USD-denominated score this lab computes, and it resolves an
+    apparent contradiction between two sources: a USD score is cleanest at SHORT horizons and
+    increasingly SELF-CONTAMINATING as the horizon lengthens.** Chan–Hameed–Tong decompose a USD
+    index momentum profit into four terms and find equity-predicted-by-past-equity is **>90%** of it
+    at 1 week and **>80%** at 2 and 26 weeks — but their currency term π3 (equity predicted by past
+    currency) is **negative at 12 and 26 weeks**. Bhojraj–Swaminathan (abstract only) report the same
+    sign at annual horizons, strongly enough to help turn continuation into reversal. **The two
+    sources agree on sign and differ only on magnitude-by-horizon.** This independently explains why
+    the country-level one-month signal is robust while 12-1 is fragile, and it is a rule about this
+    repo's data type rather than about one family. Complements
+    `notes/2026-09-10-currency-component-in-usd-converted-returns.md`, which covers the same `R = r + e`
+    split for **variance and hedging** but not for predictability. Recorded as a reconciliation
+    hypothesis, not as a finding of either paper.
+    → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
+
+368. **STRUCTURAL FACT ABOUT THIS FAMILY, confirmed twice 29 years apart by unrelated methods — WITH
+    the hedge the newer source does not supply.** Country-level predictability concentrates in small,
+    illiquid, partially segmented markets: the multiverse finds every design choice raising their
+    weight raises measured performance (value-weighting "almost wipes out all gains"; equal- and
+    rank-weighting add ~0.05–0.06 pp/month), and Richards finds reversals ~2× larger when the extreme
+    portfolios hold mainly smaller countries. **But Richards' eight-largest subgroup — US, Japan, UK,
+    Canada, Germany, France, Australia, Switzerland, close in composition to this lab's nine-index
+    panel — still shows a positive contrarian return at ~60% of the small-market one, and the
+    small-versus-large difference is NOT statistically significant.** So the folder's statement is
+    **"the gradient runs against this panel", not "the effect is absent from it"** — which is a
+    weaker and more accurate claim than the one this file has been making by analogy about large-cap
+    panels. Tier A + B, mixed overlap.
+    → `notes/2026-11-02-winner-loser-reversals-in-national-indices.md`,
+    `notes/2026-11-02-multiverse-of-country-level-research-designs.md`
+
+369. **ANTI-CANDIDATE, refused on ARITHMETIC before any question of whether the effect is real:
+    long-horizon (~3-year) country-index reversal.** The effect is strongest at a 3-year ranking and
+    3-year test horizon. This lab's validation split is six years — **two non-overlapping test
+    periods** — and overlapping windows would add rows while adding almost no independent
+    information, leaving the engine's bootstrap interval measuring autocorrelation rather than skill.
+    **Refused on window width.** Worth recording because it is the same binding constraint the
+    2026-11-01/02 nightly named from the lab's own side, now reached independently from the
+    literature. Note separately that Richards' construction (`LtRev`) is **not** among the four
+    signals surviving the multiverse — a real tension between a Tier-A 1997 result that passed its
+    own risk tests and a 2026 design sweep, recorded rather than resolved. Also refused: the 12-1
+    country momentum book, country-level beta and idiosyncratic-volatility books, and country
+    value/size books (the last need data this repo lacks **and** localise to markets this panel
+    excludes).
+    → `notes/2026-11-02-winner-loser-reversals-in-national-indices.md`,
+    `notes/2026-11-02-multiverse-of-country-level-research-designs.md`
+
+370. **CAUTION ON USING #368's DISCOUNT AS A REFUSAL, and it is the one thing that keeps #363 alive:
+    the multiverse paper's unit is a LONG-SHORT SPREAD, and the country effect lives in the LONG
+    LEG.** A spread can be near zero while its long half is not, and **nothing in the multiverse
+    paper measures the long leg** — no long-leg-only breakout is reported anywhere in it. So that
+    source **can refuse the country-rotation spread; it cannot by itself refuse a long-only
+    construction.** Whenever this file's country discount is quoted, say which of the two is being
+    refused. Tier B, validation overlap.
+    → `notes/2026-11-02-multiverse-of-country-level-research-designs.md`,
+    `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
+
+371. **PRE-TRIAL REFUSAL TEST the lab already owns, and it is the binding constraint on #363:
+    run the turnover arithmetic before writing the file.** A 2–4-week rebalance is 13–26 rebalances a
+    year. The 2026-11-01/02 nightly calibrated **0.007–0.018 of Sharpe skill per unit of
+    engine-counted annual turnover**, concluding >3×/yr cannot keep more than 0.025 of cost and
+    >12×/yr cannot keep 0.10. Two things push the other way and belong in the same calculation:
+    US-listed ETFs carry **no stamp duty or FTT** (F1 measured taxes at ~0 of skill at low turnover),
+    and liquid ETFs sit in the **cheapest 15 bps tier**, which F1 found is the irreducible floor.
+    **This is the one family where the cost floor is lowest and the horizon is shortest, and those
+    pull against each other — the arithmetic decides it, not a note.** Two further checks before any
+    trial: (i) v3 grades skill against the **equal-weight eligible pool** of ~1,000 mostly-stock
+    names, so an ETF-only book's skill is dominated by that active bet rather than by the country
+    signal — say in the hypothesis which is being tested; (ii) ~15 country/region ETFs with staggered
+    inception is a far thinner cross-section than the stock panel, and while the 2026-11-01/02 F3
+    measurement refuted the general claim that thin legs are worse per name, it did not establish
+    that a 15-name book clears a bar calibrated on a 1,000-name one.
+    → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
+
+372. **FREE AND ALREADY-ANSWERED OBJECTION, recorded so it is not re-raised: the volume conditioner
+    in this vein survives the lab's own ETF-volume objection.** Chan–Hameed–Tong find index
+    continuation is **stronger following an increase in trading volume**, with a market labelled high
+    or low purely by **its own change** — volume at `t-1` versus volume at `t-2`, no cross-market
+    level comparison and no normalisation. `learnings.md` records that ETF dollar volume fails as a
+    liquidity proxy because creation/redemption puts securities the ETF does not trade in the
+    numerator. **That is a level and cross-sectional objection; this is a within-instrument
+    time-series change, so it does not reach.** Worth saying explicitly because the lab's standing
+    anti-candidate list refuses "the liquidity level or trend in any form" — and this is neither a
+    level nor a trend but a one-lag change used only as a conditioner. Tier A, no overlap.
+    → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
+
+
 
 ---
 
@@ -15344,7 +15616,116 @@ hypothesis fodder, then anti-candidates.
 | 2026-10-31 (session 78) | **LEFT THE ACCOUNTING VEIN AS INSTRUCTED AND TOOK THE QUARTER BOUNDARY — the folder's first coverage of it, and it CLOSES on evidence rather than on effort.** Aimed by the [2026-10-30] entry (`quarter.end` **0**, `window dressing` **0**, `rebalancing flow` **0** across 245 notes, against `month.end` 26 and a dedicated turn-of-month note) and graded against its three pre-committed clauses. **(a) PASSES TWICE:** Carhart–Kaniel–Musto–Reed (Tier A, *JF*, **362** Semantic Scholar / **321** Crossref, read in full from an author-hosted PDF) report *"little or no effect at month-ends that are not quarter-ends"* with the boundaries in one **joint** dummy set, and Shackleton–Yan–Yao (Tier B, *European Financial Management*, **7** in both indices, read in full from Lancaster green OA) replicate that contrast in a second market — the quarter boundary is a reporting/ranking calendar, different in kind from the month's payment-and-settlement cycle (**#343**). **(b) and (c) FAIL, and (c) fails on evidence rather than on data availability** — which is the night's real result. Hu–McLean–Pontiff–Wang (Tier A, *RFS*, **91** Crossref; published version closed, so the authors' own Nov-2008 *"Tape Painting"* working paper was read in full from the EFMA 2009 programme) test the one price-only story, **window dressing**, directly in institutional trade data and **reject it**: institutions are not more likely to buy high-past-return stocks or sell low-past-return stocks at the boundary, while the conditioner that works is **overweight** (**#344**). The return-side sources agree from the other direction — top-fund-held names are more inflated *after* controlling for capitalisation **and** recent return, and in the second market the effect sits in the **top fund-ownership quintile and almost nowhere else**. Three structural closures, each from a different source: the effect is an **end-of-the-last-day** phenomenon (final half-hour, trade counts peaking in the last five minutes, reversing next day) and **v3's next-real-close fill puts a close-to-close book on the wrong side of it** (**#345**); the **dominant channel is an absence of trade** — *depressed selling* is pervasive because not trading is free and nearly undetectable, has no signature in a close-only panel, and the same authors record the channel mix shifting toward the harder-to-detect form once scrutiny arrived, so the recipe decays in **form** rather than size (**#346**); and the **capitalisation gradient points away from this panel** while the vein's two mechanisms **disagree about its sign** — pumping monotone *decreasing* in cap (a few bps in the largest quintile, under one side of the 15 bps cheapest v3 tier, before the UK/HK stamp duties v3 charges on two of these nine markets), the tax channel predicting *larger* caps (**#347**). **One free screen a nightly can run** (**#348**): Sias (Tier B, *FAJ*, **70**/**41**; **paywalled — read from the RePEc abstract and two practitioner summaries, flagged in-note**), with Brown (Tier C, SSRN, **0** citations, read second-hand from one review) as its tax variant, is the only cross-sectional, fully-invested, **price-only** construction in the vein — momentum profits concentrating in the **third month of each quarter**, January excluded, four boundary crossings a year — and it dies on a number the lab owns: **12−1 momentum's region-matched rank IC here is +0.0128 at t = +0.96**, so measure that IC in third-months-of-quarter versus other months and close it. **Two corrections.** This file's own standing discount — *"same-calendar-month seasonality measured significantly inverted"* — **was withdrawn by the lab on 2026-10-15** as a misaligned score; the aligned seasonal is a region-matched **null** (t +1.78), and that is what should be cited. And the incentive **sign flips across markets** (US: best performers inflate; Australia/China: worst, because flows respond weakly to rank), so a nine-market pooled test of an agency mechanism averages opposite signs toward a **predicted** null — generalised as *a mechanism can replicate while its construction does not* (**#347**). **New: #343–#348; one is an actionable free screen, two are closures, three are rules. No trial, no measurement, holdout not read.** Carhart et al. 2002 (`2026-10-31-quarter-end-marking-the-close.md`); Hu–McLean–Pontiff–Wang 2014 (`2026-10-31-tape-painting-buying-versus-selling.md`); Sias 2007 with Brown (`2026-10-31-quarter-ending-month-momentum-seasonality.md`); Shackleton–Yan–Yao 2020 (`2026-10-31-nav-inflation-outside-the-us-china.md`). **Named and not obtained:** Ben-David–Franzoni–Landier–Moussawi 2013 (*JF*, **142** Crossref) — the hedge-fund sibling of the pumping literature; `publications.ut-capitole.fr` died with a transport reset on four attempts and `tse-fr.eu` answers with a **CrowdSec** interstitial. |
 | 2026-11-01 (session 79) | **TOOK THE NAMED PRIMARY AND FOUND THE AIM'S PREMISE WAS FALSE — both of `research/README.md`'s replication rubric inputs ALREADY HAVE DEDICATED NOTES, and the cause is the grep pattern rather than the unit of check.** The [2026-10-31] entry aimed this session at Jensen–Kelly–Pedersen on the ground that `Jensen.Kelly.Pedersen` returned **1** across 249 notes, i.e. that the folder had been *grading* against a paper it had never summarised. It had: `2026-08-25-hierarchical-bayesian-factor-replication.md` (Tier A) since 2026-08-25, and the companion input Hou–Xue–Zhang since 2026-10-02. **`Jensen.Kelly.Pedersen` matches exactly one character between surnames; every real rendering has more** (`, ` two, an en dash one *multi-byte* character, `, and ` six) — and the same mistake was made again independently at the start of this session (`Hou.Xue.Zhang` → **0** across 249 notes while two notes name them), which makes it a systematic instrument failure, not one careless night. **Ninth instance of the unit-of-check lesson and the first where the unit was RIGHT and the instrument was broken.** Standing rule now: check a source by one distinctive **surname** plus **title words**, with `grep -ril -F` or a character class for the separator; a zero from a `.`-joined author triple is **not evidence of absence**. **The session was still not wasted.** The aim's three admission criteria were tested against the full text anyway, because the existing note had been written without the paper's empirical breakouts, and all three PASS: size groups (mega/large/small/micro/nano), developed-versus-emerging regions, and hierarchical shrinkage at **theme-cluster** granularity, readable in full from NBER WP 28432 (**582** Crossref, re-checked). Those are now the **2026-11-01 addendum** to that note — which is what the open question actually wanted — and the session then took **the two genuinely uncovered sources in the same debate plus one on the statistic it is settled with. The substantive finding: the debate has THREE corners and they do not disagree about any number.** Chen–Zimmermann (*Critical Finance Review*, **384** Crossref, read in full from the journal editor's own site) reproduce each original paper's method on its own sample and get **slope 0.88, R² 82%** of reproduced on hand-collected original t-statistics, then show the pessimistic denominator is constructed (452 "anomalies" from **240** characteristics, 212 duplicate holding periods, only **118** with clear original significance, **117 of 118** reproduce) — **#349**. The optimistic study's own decomposition makes the largest single term **CAPM alpha instead of raw return, +20.2 pp**, i.e. not a construction knob at all. **Three elasticities a cost-charged large-cap panel should carry**: a liquidity screen costs ~**1/3** of gross (≈60 → ≈40 bps/month, and a large-exchange screen, a 20th-NYSE-percentile floor and value-weighting are **one** intervention, all three of which this panel imposes at once), costs cost ~**1/3** more independently, so ~**4/9** of a published gross edge survives before anything specific to this repo (**#350**); and gross content falls **monotonically** as the rebalance interval lengthens, which is the missing gross side of a trade this folder had only costed (**#351**). **Two corrections to this file's own standing discounts, both in the favourable direction**: replication is **not** a small-stock phenomenon (mega **77.3%** / large **81.5%** against **84.0%** full-sample; Spearman **73%** between mega and micro cluster alphas), so the "uninformative null" clause applies **narrowly** and not as a blanket large-cap discount (**#352**); and cluster alphas correlate **71%** US-to-developed-ex-US against **48%** US-to-emerging, so this panel gets the favourable number (**#353**). Jacobs–Müller (Tier A, *JFE*, **221** Crossref, read in full from the **Lancaster FoFI 2018 conference programme**) find **only the US** has a reliable post-publication decline across **39 markets** — so apply the McLean–Pontiff haircut **per market** (**#354**) — and supply the literature's multi-country construction standard: **country-neutral quintiles, local currency, aggregate after**, plus the **middle-quintile control** that killed their own hypothesis (**#355**), and a **25-name per-country-month breadth floor** whose violation is a stated *mechanism* (few names → binding filters → failed neutrality → **fatter left tail**), reframing part of the lab's "out of reach" finding as **breadth** rather than **cost** (**#356**). Chen (Tier A−, *Management Science*, **5** Crossref — young, not low-impact) proves an FDR hurdle exceeds 1.96 **iff** `π_F > Pr(|t| > 1.96)`, that **BH95 ≡ `π_F = 1.0`** and **BY Thm 1.3 ≡ `π_F ≈ 6.3`** at `N ≈ 300` (six times an impossible value, so it *always* raises hurdles), that `π_F` is **weakly identified** under censoring (90% interval ≈ **0 to 2.9**) while **shrinkage ≤29% and local FDR ≤25%** are strongly identified (**#357**) — and the lab is in the **favourable** case because `trials.jsonl` is **uncensored by rule**, making both sides of the comparison countable for free (**#358**). **The gap all three corners share: none models transaction costs**, so no replication rate in this literature is a statement about tradable alpha (**#359**). **And the corroboration**: `seasonality` is one of only **three of thirteen** themes that fail to replicate, alongside leverage (a benchmark artefact) and size (an illiquidity premium localised to emerging and micro names) — the same family the lab has just nulled (**#360**). **New: #349–#360; nine are free rules or diagnostics, one is an anti-candidate, one is corroboration, and ONE item (#358's bar question) is explicitly the human owner's. No trial, no measurement, holdout not read.** Chen–Zimmermann 2022 (`2026-11-01-reproduction-versus-replication-open-source.md`); Jacobs–Müller 2020 (`2026-11-01-anomalies-across-the-globe-country-neutral.md`); Chen 2025 (`2026-11-01-weak-identification-of-t-stat-hurdles.md`); plus a substantial **addendum** to `2026-08-25-hierarchical-bayesian-factor-replication.md` and cross-link corrections into `2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`. **Named and not obtained:** the published Jacobs–Müller (`unicreditgroup.eu` **403**; two **mediaTUM** green locations are records with **no file**) — the January 2017 authors' draft was read instead and the note states exactly where the two differ (231 vs 241 anomalies, identical headline). |
 
+| 2026-11-02 (session 80) | **RAN THE CORRECTED COVERAGE DETECTOR FIRST, AS INSTRUCTED — the three hit counts the [2026-11-01] entry flagged for re-checking all HOLD, and the real gap is the TRADED UNIT.** Re-run with fixed strings across 252 notes: `fundamental law` **5**, `transfer coefficient` **6**, `rank IC` **7** — all confirmed, so that entry's readings on those were sound and no correction is owed. The genuine zeros are about what is ranked rather than how: `index momentum` **0**, `Bhojraj` **0**, `Hameed` **0**, `macromomentum` **0**, `winner-loser reversal` **0**, `country rotation` **0**, `region rotation` **0**, `global tactical` **0**, `asset allocation` **1** — while the folder's two `country momentum` notes are both about **neutralising** the country bet in a stock book. **The folder had written twice about removing a bet it had never written about taking**, and the lab holds 42 ETFs that could express it. Graded against three criteria stated before the first paper: **(a) PASSES in the strongest available form — a SIGN FLIP** (country short-horizon = continuation, stock short-horizon = reversal), so it is not the incumbent relabelled (**#361**). **(c) FAILS COMPLETELY — none of the three sources models transaction costs**, so every magnitude here is gross and the near-zero developed-market result is a *pre-cost* near-zero (**#366**, third consecutive confirmation of `#359` from the literature's side). **(b) SPLITS, and that split is the night's result.** Cakici–Fieberg–Neszveda–Piljak–Zaremba (Tier B, *JBF*, **0** Crossref cites — an age artefact; read in full from the Vaasa repository) vary **nine** design nodes over **13,824** implementations and find the two most influential are **data source** and **geographic scope** — **exactly the two this lab is pinned at the worse end of**: ETF/futures representations pay **two to three times less** than full-market aggregates (~0.13–0.16 pp/month) and developed-only scope gives spread returns **indistinguishable from zero**, with ETF designs also carrying **higher** nonstandard errors. **This is the folder's usual 'a null on a large-cap panel would be uninformative' hedge replaced by a direct measurement of that exact case.** Two honest narrowings travel with it: the two penalties are **largely the same finding seen twice** and must not be stacked (**#362**), and the paper is entirely **long-short** with **no long-leg breakout** (**#370**). **One object survives all three criteria and two independent sources converge on it**: short-horizon country-index continuation — the only price-computable member of the four signals surviving the multiverse plus bootstrap plus out-of-sample selection, and Chan–Hameed–Tong (Tier A, *JFQA*, **326** Crossref, read in full from an NUS-hosted working version) independently find index-momentum alphas **jointly insignificant at 1 week, significant at 1% at 2 and 4 weeks, and gone at 12 and 26 weeks** after world-market beta adjustment (**#363**). **The finding that changes what a long-only lab should think: the LONG LEG carries it** — "buying winner portfolios yields significant profits consistently, but selling loser portfolios creates either insignificant profits or losses" — inverting `program.md`'s standing caveat that long-only is expensive because only the cheap side is tradeable (**#364**); and cap-weighting shrinks but does not kill it, failing the authors' own small-market-artefact test at short horizons. The **currency tension resolves on horizon**: CHT's π3 is **negative at 12 and 26 weeks**, the same sign Bhojraj–Swaminathan report at annual horizons, giving the reusable rule that **a USD score is cleanest short and self-contaminating long** (**#367**) — which independently explains why one-month `StMom` is robust and 12-1 `LtMom` fragile. Richards (Tier A, *JF*, **135** + **45** across two Crossref records; read as IMF WP/97/182, a **text-layerless scan** rendered to images) supplies the long-horizon end and the **hedge the multiverse does not**: his **eight-largest** subgroup (US, Japan, UK, Canada, Germany, France, Australia, Switzerland — close to this lab's panel) still shows a positive contrarian return at ~60% of the small-market one, and the difference is **not significant**, so the honest claim is **"the gradient runs against this panel", not "the effect is absent"** (**#368**). His own horizon is **refused on arithmetic** — 3-year ranking and 3-year test against a six-year validation split is two non-overlapping periods (**#369**). **One source recorded as body-not-obtained:** Bhojraj–Swaminathan 2006 (*J.Business*, `10.1086/497416`, **156** Crossref) — closed, no OA location, Cornell eCommons **0** for the title; abstract read from the RePEc record and nothing beyond it used. | Cakici, Fieberg, Neszveda, Piljak & Zaremba 2026 (`2026-11-02-multiverse-of-country-level-research-designs.md`); Chan, Hameed & Tong 2000 + Bhojraj & Swaminathan 2006 abstract (`2026-11-02-country-index-momentum-and-the-currency-component.md`); Richards 1997 (`2026-11-02-winner-loser-reversals-in-national-indices.md`) |
+
 ### Open questions for future sessions
+
+- **[2026-11-02] READ THIS BEFORE AIMING SESSION 81. The country-index vein is CLOSED on the
+  discount side and has exactly ONE live construction; do not reopen the family for a fourth
+  source.** Three notes now cover it and they are mutually reinforcing rather than additive: the
+  design sweep (what the family is worth at this panel's settings), the construction source (what
+  survives and on which leg), and the long-horizon source (what is refused on arithmetic). A fourth
+  country-level paper changes none of **#361**–**#372**. **The live item is #363, and it belongs to
+  the lab, not to this folder** — short-horizon (2–4 week) cross-sectional continuation among
+  country/region ETFs, long leg only — and **#371 is the pre-trial refusal test it must pass first**
+  (the turnover arithmetic the 2026-11-01/02 nightly already calibrated). **#361 is the free screen
+  that should run before either**: rank-correlate a country-level previous-month score against the
+  lab's existing stock-level scores, the same cheap detector that killed the ID conditioner.
+  - **The corrected detector was run and it worked; keep running it this way.** `fundamental law`
+    **5**, `transfer coefficient` **6**, `rank IC` **7** all reproduced under fixed-string greps, so
+    the [2026-11-01] entry's readings on those were sound and **no correction is owed** — the
+    instrument failure was specific to `.`-joined author triples, exactly as that entry diagnosed.
+    The standing rule stands: check coverage by **one distinctive surname plus title words**, with
+    `grep -ril -F`. Tonight's useful extension is that **the productive axis was not a method name
+    at all but the TRADED UNIT** — the folder had 252 notes on how to rank things and none on
+    ranking country indices. **Worth repeating as a detector: ask what object the lab ranks, and
+    grep for the objects it does not.**
+  - **Primary aim for session 81, and it is a genuine zero on the same axis.** Having asked what
+    object is ranked, the remaining unranked objects in this panel are **pairs and residuals**
+    (`statistical-arbitrage` has notes but the folder has never covered what survives the long-only
+    constraint when only the cheap side of a residual is tradeable — `program.md` names this as the
+    family's binding question and the folder has not answered it) and **the cash/pool boundary**.
+    Before opening either, **run the corrected detector on `program.md`'s own sentence**: "say how
+    the short leg's absence is handled" is a question this folder has never written a note about,
+    and **#364** has just shown that the answer can invert a family's verdict — the country vein
+    went from refused to live precisely because the long leg carried it. **Admit a
+    `statistical-arbitrage` source only if it reports a long-leg-only or long-only-constrained
+    result**; a long-short residual-reversion paper without that breakout cannot answer the question
+    and should be left unread.
+  - **Ranked below that, and carried unchanged: the data-type question, which is NOT this agent's
+    call.** Tonight sharpens it from a new direction. **#368** says country-level predictability
+    concentrates in small, segmented markets and **#362** says the ETF instrument and the
+    developed-only scope are the same exposure measured twice — so the country vein fails here for
+    the *same structural reason* the stock vein does, which is that this panel is large-cap and
+    liquid by construction. **That is now four independent literatures pointing at one input.**
+    Whether to add a data type remains the human owner's decision.
+  - **A documentation correction this file owes itself, and it is a weakening of its own habit.**
+    This file has repeatedly written that "a null on a large-cap panel would be uninformative"
+    about mechanisms whose literature localises them to small or illiquid names. **#368** shows the
+    honest form of that claim is weaker: Richards' large-market subgroup still carried a positive
+    effect at ~60% of the small-market one with the difference **not significant**. The defensible
+    statement is **"the gradient runs against this panel"**, not "the effect is absent" and not "a
+    null would be uninformative." Apply this to the existing small/illiquid-localisation hedges in
+    this file when they are next quoted.
+  - **Unchanged and still live**: `#361`–`#372` from tonight; `#349`–`#360` from 2026-11-01;
+    `#343`–`#348` from 2026-10-31; `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29;
+    `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26;
+    `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23;
+    `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20;
+    the 2026-10-18 pair; then 2026-10-17 and everything carried under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein
+    (unchanged from 2026-11-01 — tonight's multiverse source is **not** a fifth entry in it; its
+    unit is a research *design*, not a *factor*, and its cross-section is countries); and now the
+    **country-level cross-section** itself, on the terms in the first paragraph above. Still at
+    **0** and still not nominated: `transfer entropy` (thirteenth nomination).
+  - **Standing, and not this folder's call**: the engine issues filed 2026-10-18 and 2026-10-22;
+    `min_train_skill = 0.0`; `#324`'s deliberate difference; the two human decisions added
+    2026-10-29; the three items the 2026-10-30/31 nightly raised; `#357`/`#358`'s question of
+    whether the deflated-skill bar's severity should be an estimate rather than an assumption; and
+    the data-type question above.
+
+- **[2026-11-02] Access findings — one new DSpace route that matters because the advertised one
+  lies, one first-try government-institution channel, and a confirmed text-layerless scan.**
+  - **`osuva.uwasa.fi` (University of Vaasa) serves files from the DSpace REST path, NOT from the
+    advertised `/bitstreams/<uuid>/download` path — and the advertised one is a fourteenth "looks
+    like an answer" mode.** The download path returned **HTTP 200 with a 353 KB HTML body**: a
+    Finnish-language **login page** (`Sisäänkirjautuminen`), for a **CC BY open-access** article.
+    `curl` exits 0, a large file is written, and only `file` reveals it is HTML — the same shape as
+    the Anubis and Incapsula cases but with a *login* rather than a bot challenge, on a repository
+    whose content is genuinely open. The working route is
+    `/server/api/core/items/<item-uuid>/bundles` → `/server/api/core/bundles/<bundle-uuid>/bitstreams`
+    → `/server/api/core/bitstreams/<bitstream-uuid>/content`, which served the genuine 3.97 MB PDF.
+    **The ORIGINAL bundle's sibling TEXT bundle also holds the repository's own extracted text**, a
+    free alternative to running `pdftotext`. Generalises the 2026-10-10 Arizona lesson: on modern
+    DSpace, **walk the bundle API rather than trusting a path printed on the landing page.**
+  - **`imf.org/external/pubs/ft/wp/wp<YY><NNN>.pdf` is a first-try channel for IMF working papers**,
+    and it is the route to Tier-1 journal articles by IMF staff whose published version is closed.
+    It served WP/97/182 — the working version of a *Journal of Finance* article that OpenAlex
+    reports `oa_status: closed, any_repository_has_fulltext: false` — on the first attempt. Note the
+    **year-prefixed directory form `/wp/1997/wp97182.pdf` returns HTTP 404 with a JSON body**; the
+    flat form is the right one. IMF working papers also carry their own DOIs (`10.5089/...`).
+  - **That IMF paper is a text-layerless scan, and the detection cost nothing.** `pdffonts` printed
+    an **empty font table** and `pdftotext` extracted **22 characters from 22 pages**. Rendered with
+    `pdftoppm -png -r 130 -gray` and read visually — **6 of 22 pages** (contents, summary,
+    methodology, two discussion pages, conclusion), per this file's own instruction to read the
+    abstract, the model section and the conclusion rather than the whole document. Tables were not
+    read and **no number in the resulting note comes from a table**, which is stated in the note.
+  - **Crossref answered all five DOIs queried tonight on the first call and was never rate-limited;
+    Semantic Scholar returned HTTP 429.** Sixth consecutive session confirming the ordering. Also
+    confirmed: **the journal-year enumeration is still the fastest key** —
+    `api.crossref.org/journals/<ISSN>/works?filter=from-pub-date:…,until-pub-date:…&query.bibliographic=<words>&select=…`
+    resolved Bhojraj–Swaminathan, Chan–Hameed–Tong and Richards in **one call each**, returning DOI,
+    volume, pages and citation count together.
+  - **A work's citations can be SPLIT ACROSS TWO CROSSREF RECORDS, and reporting either alone
+    understates it.** Richards (1997) has **135** on the Wiley DOI `10.1111/j.1540-6261.1997.tb02755.x`
+    and **45** on the JSTOR DOI `10.2307/2329478` — the same article, two registered records. For a
+    pre-2000 journal article, **check both the publisher and the JSTOR DOI before recording a
+    count**; the honest figure is the sum, stated as a sum.
+  - **A zero citation count is not always a coverage artefact to work around — sometimes it is just
+    a new paper, and the tier should absorb it.** The multiverse article returned **0** from
+    Crossref. Rather than hunting a count across indexes, it was recorded as 0 with the age noted,
+    and the **tier set to B on that basis plus the absence of replication**, despite an unusually
+    honest design. This is the rubric working as intended and is cheaper than the alternative.
 
 - **[2026-11-01] READ THIS BEFORE AIMING SESSION 80. The [2026-10-31] aim was built on a FALSE
   GREP and the instrument, not the unit, is what failed — so the first thing session 80 does is
