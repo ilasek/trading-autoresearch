@@ -6684,9 +6684,15 @@ across experiments; prune entries that later evidence contradicts.
   concentrate that motivated the "cost is binding" framing paid -0.1220 on +0.1100 at 11.04x. The two
   differ by an order of magnitude in **turnover**, not in the schedule. **Reusable calibration, which
   is the transferable half: this panel charges 0.007–0.018 of Sharpe skill per unit of engine-counted
-  annual turnover** (implied per side 14.5 bps at #12, 17.7 at rev21, 6.9 at #16 where held drift is
+  annual turnover** [**SUPERSEDED 2026-11-02/03**: the band is exact, not a range —
+  `skill cost = -0.0134*T + 0.0123`, measured on nine books over a 57-fold turnover range. The
+  0.007-0.018 spread is the `0.0123/T` term (the pool's own cost bill, which skill subtracts), not
+  instrument heterogeneity, and the low end was never reachable by choosing cheaper instruments.
+  Break-even is T ~ 0.92x and the cost axis is bounded at +0.0123 of skill. Use the relation.] (implied per side 14.5 bps at #12, 17.7 at rev21, 6.9 at #16 where held drift is
   not re-traded), so a book above ~3x/yr cannot keep more than 0.025 of cost and above ~12x cannot
-  keep 0.10 — and the floor is the 15 bps tier, which no selection avoids. Use it to refuse a
+  keep 0.10 — and the floor is the 15 bps tier, which no selection avoids. [**2026-11-02/03**: "no
+  selection avoids it" is now measured rather than argued — the cheapest lines on the panel (tier-1,
+  US-listed, tax-free ETFs) pay the same 0.0134 per unit as a stock book.] Use it to refuse a
   high-churn construction before building it. **Anti-candidates travelling with this entry: any
   construction whose case is avoiding a transaction tax, at any turnover; and any session plan whose
   premise is that the cost schedule is what stands between this lab's lead and the gate.**
@@ -6777,3 +6783,120 @@ across experiments; prune entries that later evidence contradicts.
   **monthly grid** where the recorded +0.1023/+0.0922 used 21/252 trading days, and both rows come in
   11–12% lower by the *same* offset — a specification difference, reported rather than absorbed, and
   harmless here because the question is a retention ratio inside one specification.
+
+- **[Measured 2026-11-02/03, nightly — ZERO trials spent; REPLACES THE 2026-11-01/02 PER-TURNOVER
+  BAND AND PUTS A MEASURED CEILING ON THE ENTIRE COST AXIS] COST IS 0.0134 ± 0.0007 OF SHARPE PER
+  UNIT OF ENGINE-COUNTED ANNUAL TURNOVER, FLAT ACROSS A 57-FOLD TURNOVER RANGE AND IDENTICAL ON THE
+  CHEAPEST AND THE DEAREST INSTRUMENTS ON THE PANEL — SO `skill cost = −0.0134·T + 0.0123`,
+  BREAK-EVEN IS T ≈ 0.92x, AND NO CONSTRUCTION CAN EVER BE WORTH MORE THAN +0.0123 OF SKILL ON THE
+  COST AXIS.** Nine books, each priced net and gross (`cost_multiplier = 0`, `taxes=False`) **with the
+  benchmark re-priced under the candidate's own execution model** — the step whose omission is the
+  method finding below:
+
+      book                           turn   net sh   gross sh     cost   per unit
+      ETF  sector sleeve monthly     0.32   +0.3783   +0.3830   -0.0047   0.0147
+      ETF  country sleeve monthly    0.43   +0.3145   +0.3204   -0.0059   0.0137
+      POOL (the gate benchmark)      0.89   +0.5238   +0.5361   -0.0123   0.0138
+      STK  #16 oldhalf overlap6      1.31   +0.5818   +0.5994   -0.0176   0.0134
+      STK  #12 oldhalf hold-1        2.36   +0.5495   +0.5806   -0.0311   0.0132
+      ETF  country relstr monthly   10.00   +0.1342   +0.2577   -0.1235   0.0123
+      ETF  sector relstr monthly    12.16   +0.0970   +0.2593   -0.1623   0.0133
+      ETF  country relstr semi-mth  15.19   +0.1280   +0.3136   -0.1856   0.0122
+      ETF  sector relstr semi-mth   18.18   +0.0803   +0.3275   -0.2472   0.0136
+
+  **The ETF rows are the cheapest lines on the panel** — tier-1 liquidity, US-listed, no UK stamp
+  duty and no FTT — **and they pay the same coefficient as a stock book, so there is no
+  cheap-instrument rebate.** The relation reproduces every recorded point: #16 predicted −0.0047
+  against recorded −0.0050, #12 −0.0184 against −0.0190, and the hold-12 variant of #16 **+0.0025
+  against the recorded +0.0028** — the positive cost term the lab recorded on 2026-10-27/28 and never
+  explained. `rev21` at 16.86x is the one looser fit (implies 0.0106). **This replaces the
+  2026-11-01/02 "0.007–0.018 of Sharpe skill per unit" band as stated: that spread is the `0.0123/T`
+  term, not instrument heterogeneity, and its low end was never reachable by choosing instruments —
+  #16's "6.9 bps implied per side" is this arithmetic, not a property of its book.** **Two
+  consequences, neither needing another measurement. (i) Break-even turnover is T = 0.0123/0.0134 ≈
+  0.92x**: below it a candidate is cost-*advantaged*, because the gate's benchmark itself churns 0.89x
+  and pays 0.0123, which is why every sub-0.5x sleeve measured tonight carries a **positive** cost
+  term. **(ii) The whole cost axis is bounded at +0.0123 of skill**, reached only at zero turnover,
+  because the pool's own cost bill is all a candidate can decline to pay — **2.9% of the gate's +0.43
+  shortfall** (2026-10-30/31), and now a bound on every book writable under v3 rather than an
+  observation about one book. **Anti-candidates travelling with this entry: any construction whose
+  case is cost, at any turnover, any instrument class, or any tax jurisdiction — the ceiling is
+  +0.0123 and it is arithmetic.**
+
+- **[Measured 2026-11-02/03, nightly] THE ETF SLEEVE IS CLOSED AS A TRADED UNIT, AND IT CLOSES ON THE
+  GATE'S BENCHMARK RATHER THAN ON COST, BREADTH OR SIGNAL — THE FIRST CANDIDATE CLASS ON THIS PANEL
+  REFUSED BY WHAT THE BENCHMARK *IS*.** The 2026-11-02 research session opened the country index as
+  the traded unit (Chan–Hameed–Tong, 2–4-week cross-sectional relative strength among country
+  indices), the one panel this lab had never scored a v3 book on and the one where the cost floor is
+  lowest. **Pre-registered rule, written before the run: if an equal-weight sleeve of the
+  cross-section a signal would select inside has train skill below −0.10, the asset-class bet
+  dominates any plausible selection effect and the construction is refused before it is built.**
+  Equal-weight monthly, eligible-masked, through the engine's own backtest on train:
+
+      sleeve                     train sh   skill    turn    pos      mdd
+      all 42 ETFs                 +0.3713  -0.1525  0.49    31.6   -0.455
+      10 country ETFs             +0.3145  -0.2093  0.43     7.7   -0.634
+      9 US sector ETFs            +0.3783  -0.1455  0.32     8.2   -0.533
+      11 broad equity ETFs        +0.3252  -0.1986  0.32     7.9   -0.577
+      8 bond ETFs                 +0.5931  +0.0693  0.18     5.3   -0.099
+      GLD/SLV/DBC/VNQ             +0.2393  -0.2845  0.30     2.4   -0.462
+      equal-weight pool (ref)     +0.5238      --   0.89      --       --
+
+  **Every equity sleeve is a −0.15 to −0.28 skill bet before any signal, i.e. 1.5–2.8x the refusal
+  threshold, at the cheapest turnover ever priced here.** Identified by exclusion: **not breadth**
+  (2026-11-01/02 F3 refuted thin-leg penalties per name; 2026-10-13 puts random region-proportional
+  books at K = 25–400 within ±0.03 of the pool, so a 9-name cross-section is not what costs 0.21),
+  **not cost** (0.3–0.5x turnover), **not the taxes** (US-listed), and **not the wrapper** — the bond
+  sleeve is +0.069 in the same wrapper. **It is the composition of index products against a gate that
+  grades skill versus an equal-weight book of ~1,000 index constituents: a cap-weighted tracker is
+  the opposite portfolio.** Census riders the note's "~15 country/region ETFs" premise needs: the
+  panel resolves **9 distinct countries** (FXI and MCHI are both China), 5 of them exist at the 1997
+  train start and INDA only from 2012. **The signal inside it is refused twice over.** Score = mean
+  of the cross-sectionally demeaned, dispersion-standardised trailing log return over {10,15,21}d
+  (averaged, not chosen), long-only positive half, with the **complete sign partition** as placebo:
+
+      cross-section   SELECTION (gross, vs gross sleeve)            net paired delta vs own sleeve
+      COUNTRY (10)    top -0.0626  bottom +0.0450  spread -0.1076   top -0.1804  bottom -0.0705
+      US SECTOR (9)   top -0.1237  bottom +0.0381  spread -0.1618   top -0.2813  bottom -0.1078
+      BROAD EQ (11)   (net only)                                    top -0.1433  bottom -0.1407
+
+  **Negative in every cell of three independent cross-sections, on both signs, at both frequencies,
+  and the pre-signed direction is WORSE than its own placebo in all three** — so Chan–Hameed–Tong's
+  2–4-week country-index continuation does not replicate here and what is present has the opposite
+  sign. Turnover is 8–19x, which tonight's coefficient refuses on its own. **The placebo's +0.045 /
+  +0.038 is not taken**: flipping a sign because the number came out that way is fitting the screen,
+  it is a fifth of the sleeve deficit it must overcome, and the companion note that *does* pre-sign
+  index-level reversal uses a **3-year** horizon and refuses itself on this validation window's width.
+  **Anti-candidates travelling with this entry: any equity-ETF book at any cross-section, selection
+  rule or frequency; the bond sleeve as a duration bet (the second instance of 2026-10-09/10's
+  "disguised beta bet" — recorded with NO validation number read for it, and none is to be sought);
+  and the 2–4-week index-level relative-strength score on either sign.**
+
+- **[Method, 2026-11-02/03 — EXTENDS THE 2026-10-25/26 INSTRUMENT RULE INTO THE STRESS DIMENSION] A
+  HARNESS THAT PRICES A STRESS MUST RE-PRICE THE *BENCHMARK* UNDER THE SAME STRESS, AND MUST BE
+  VALIDATED ON THE STRESSED FIGURE AS WELL AS THE BASE ONE. VALIDATING ON NET ALONE PASSED A HARNESS
+  WHOSE EVERY GROSS NUMBER WAS WRONG BY THE POOL'S OWN COST BILL.** Tonight's harness reproduced
+  `pt_oldhalf_overlap6`'s recorded **net** sheet exactly on first run — skill +0.0580 against +0.058,
+  turnover 1.31, positions 164.3, sub-periods +0.061/+0.053 — and read its **gross** as +0.0756
+  against the recorded +0.063, a cost term of −0.0176 against −0.005. Cause: it cached one pool series
+  under `setup.execution` and reused it for every stress, so a *gross* candidate was scored against a
+  *net* pool. **The error is one-signed and flatters exactly the books v3 was built to penalise** — a
+  high-turnover candidate's gross looks better by the benchmark's 0.0123 whatever its own churn.
+  Fixed, the harness reproduces four recorded figures plus one recorded engine internal (the gross
+  pool at +0.5361). This is the 2026-10-25/26 finding ("every hand-rolled harness this lab has
+  screened with mis-prices the benchmark as well as the candidate, and the error does not cancel")
+  reproduced one layer deeper: the *same* harness can be right on the engine dimension and wrong on
+  the stress dimension, so the validation has to cover every column that will be quoted.
+
+- **[Measured 2026-11-02/03, nightly] RESEARCH `#319`'s FREE DISCRIMINATOR FOR THE LAB'S ONE LIVE
+  MECHANISM DOES NOT DISCRIMINATE, BECAUSE THE TWO HOLDING RULES OF ONE SCORE DISAGREE ON IT.**
+  `#319` (Diebold–Inoue) names the alternative the 60-month reversal bets against — a few level
+  shifts in relative valuation generate a long-horizon reversal at the scale of the window and
+  nothing shorter — and names sub-period stability as the free test: fractional integration predicts
+  the effect in both train halves, a few-breaks story does not predict it anywhere in particular.
+  From the recorded rows, no new computation: **#16 reads +0.061 / +0.053 (positive in both halves,
+  favouring the persistent reading) and #12, the identical score under a one-month holding rule,
+  reads +0.051 / −0.020 (not).** So the statistic is measuring the construction as much as the
+  mechanism and cannot settle the question. Recorded so a later session does not run it expecting an
+  answer; `#319`'s sharper version (dating the breaks directly) has no construction attached and is
+  not a trial's to spend.

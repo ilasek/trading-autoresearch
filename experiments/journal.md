@@ -25743,4 +25743,387 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    `#328` remain anti-candidates.
 ## Research session — 2026-11-02 (learning agent): 3 notes added, see research/SUMMARY.md
 
+## Free measurements — 2026-11-02/03 (nightly), ZERO trials spent
+
+**Step-0 integrity: clean.** `git fetch origin --prune`; `git branch -r --no-merged origin/main`
+returns **empty**, so no remote branch holds a commit absent from `origin/main` and the trial
+history is not split (all thirteen earlier per-run branches have landed). This run's designated
+branch `main-dh53hc` points at the **identical commit** as `origin/main` (6d4c683) and holds no
+commits of its own; local `main` was 6 behind. Engine green (`92 passed in 92.19s`).
+`trials.jsonl` stands unchanged at **129 records** and the deflated bar is exactly where the
+2026-10-28/29 session left it. **No holdout, forward or incubation file was opened**
+(`experiments/holdout_log.jsonl`, `reports/incubation.md`, the `*_holdout.parquet` files and the
+holdout columns of the v2 reports were not read).
+
+**Why the count is zero, stated before the blocks rather than after them.** The 2026-10-30/31
+handover closes the challenge track on arithmetic, so a trial belongs only on the scout track, and
+the scout track needs a positive-selection, cheap-to-hold object whose free screen passes. Tonight
+took the one vein the 2026-11-02 research session opened that ends in a construction — **the
+country index as the traded unit** (`research/notes/2026-11-02-country-index-momentum-and-the-
+currency-component.md`, short-horizon cross-sectional relative strength among country ETFs) — which
+is also the one panel this lab has never scored a v3 book on, and the one where the cost floor is
+lowest. It refuses on its own pre-registered rule, and the refusal turns out to be structural rather
+than about the signal. The block that followed it (F4) replaces one of the lab's own standing
+calibrations with an exact two-term relation and puts a measured ceiling on the entire cost axis.
+
+### F0 — the ETF census, because the note's premise was a count
+
+The note reasons about "~15 country/region ETFs". The panel's 42 ETF columns resolve differently:
+
+    class                      n   ids
+    single-country            10   EWA EWG EWJ EWU EWY EWT EWZ FXI MCHI INDA  (9 distinct
+                                   countries: FXI and MCHI are both China)
+    broad / regional equity   11   SPY DIA QQQ IWM VTI EFA EEM VWO VEA ACWI VT
+    US sector                  9   XLB XLE XLF XLI XLK XLP XLU XLV XLY
+    bonds                      8   IEF LQD SHY TLT AGG TIP BND HYG
+    real assets / REIT         4   GLD SLV DBC VNQ
+
+Inception is staggered and matters for train: only SPY, EWA, EWG, EWJ, EWU exist at the 1997 train
+start; EWY/EWT/EWZ arrive 2000, FXI 2004, MCHI 2011, **INDA 2012**. So the country cross-section is
+5 names for the first three years of train and 9 distinct countries at most thereafter. The US
+sector sleeve is a cleaner cross-section (9 names, all from 1998-12, no FX, no segmentation) and was
+carried through every block below as an independent replication rather than a sweep.
+
+### F1 — the refusal, and it is the gate's benchmark rather than the signal or the cost
+
+**Pre-registered rule, written before the run:** *if an equal-weight sleeve of the cross-section a
+signal would select inside has train skill below −0.10, the asset-class bet dominates any plausible
+selection effect and the construction is refused before it is built.* The note itself asks for this
+("the benchmark is not the country pool … whoever builds this should say which of the two they are
+testing"). Equal-weight, monthly, eligible-masked, through the engine's own backtest on train:
+
+    sleeve (equal-weight monthly)      train sh   skill    turn    pos     mdd    97-08   09-17
+    all 42 ETFs                         +0.3713  -0.1525  0.49   31.6   -0.455  -0.155  -0.158
+    10 country ETFs                     +0.3145  -0.2093  0.43    7.7   -0.634  -0.128  -0.394
+    9 US sector ETFs                    +0.3783  -0.1455  0.32    8.2   -0.533  -0.289  -0.027
+    11 broad equity ETFs                +0.3252  -0.1986  0.32    7.9   -0.577  -0.236  -0.199
+    8 bond ETFs                         +0.5931  +0.0693  0.18    5.3   -0.099  +0.071  -0.068
+    GLD/SLV/DBC/VNQ                     +0.2393  -0.2845  0.30    2.4   -0.462  -0.239  -0.521
+    country + sector                    +0.3483  -0.1756  0.45   15.9   -0.572  -0.183  -0.224
+    equal-weight eligible pool (ref)    +0.5238      --   0.89     --       --      --      --
+
+**Every equity-ETF sleeve is a −0.15 to −0.28 skill bet before any signal at all, so the rule
+refuses the construction by a factor of 1.5 to 2.8.** The identification is the point: this is not
+breadth (2026-11-01/02 F3 refuted thin-leg penalties per name, and 2026-10-13 put random
+region-proportional books at K = 25–400 within ±0.03 of the pool, so a 9-name cross-section is not
+what costs 0.21), it is not cost (turnover is 0.3–0.5x, the cheapest books ever priced here), and it
+is not the taxes (these are US-listed, tier-1-liquidity, tax-free lines). **It is the composition of
+index products against the gate's benchmark**: v3 grades skill against an equal-weight book of ~1,000
+index constituents, and a cap-weighted index tracker is the opposite portfolio. The bond row is the
+control that proves the term is composition and not the ETF wrapper — same wrapper, +0.069.
+
+**The bond row is recorded and explicitly refused, not banked.** +0.069 of train skill at 0.18x
+turnover and a −0.099 drawdown is the only sleeve on this panel that would clear
+`min_train_skill`, and it is a 21-year duration rally wearing a portfolio's clothes — the second
+instance of 2026-10-09/10's "a disguised beta bet", against standing results that the whole risk
+axis is worth nothing (2026-10-17/18) and that Sharpe is flat in beta here (2026-10-09/10). **No
+validation number was read for it and none will be: it is an anti-candidate on its mechanism, not on
+a number.**
+
+### F2 — the selection term, paired against its own sleeve, with the complete sign placebo
+
+The note pre-specifies a 2–4-week horizon and explicitly refuses the 12- and 26-week versions, so
+the score is the mean of the cross-sectionally demeaned, dispersion-standardised trailing log return
+over **{10, 15, 21} days averaged rather than chosen** (2026-10-28/29: a knob that cannot be refused
+should be averaged over the region a hypothesis licenses). Long-only adaptation is the note's own:
+the positive half of demeaned relative strength, equal-weighted. The placebo is the **complete**
+partition of the sign — the bottom half of the identical sort, same dates, same K, same frequency —
+so the comparison is a pure score comparison. Read only as the paired delta against the same
+cross-section's own equal-weight sleeve:
+
+    cross-section   book                        skill    turn   pos   PAIRED delta vs own sleeve
+    COUNTRY (10)    sleeve EW monthly         -0.2093   0.43   7.7            --
+                    top-half monthly          -0.3897  10.00   4.3         -0.1804
+                    bottom-half PLACEBO       -0.2798  10.24   4.3         -0.0705
+                    top-half semi-monthly     -0.3958  15.19   4.3         -0.1865
+                    bottom-half PLACEBO       -0.3757  15.56   4.3         -0.1664
+    US SECTOR (9)   sleeve EW monthly         -0.1455   0.32   8.2            --
+                    top-half monthly          -0.4268  12.16   3.6         -0.2813
+                    bottom-half PLACEBO       -0.2533  12.29   3.6         -0.1078
+                    top-half semi-monthly     -0.4436  18.18   3.6         -0.2981
+                    bottom-half PLACEBO       -0.3650  19.03   3.6         -0.2195
+    BROAD EQ (11)   sleeve EW monthly         -0.1986   0.32   7.9            --
+                    top-half monthly          -0.3419   8.15   4.3         -0.1433
+                    bottom-half PLACEBO       -0.3393   8.19   4.3         -0.1407
+
+**Negative in every cell, in three independent cross-sections, on both signs, at both frequencies —
+and the pre-signed direction is WORSE than its own placebo in all three** (top−bottom −0.1099,
+−0.1735, −0.0026 monthly). Chan–Hameed–Tong's 2–4-week country-index continuation does not
+replicate on this panel's ETF cross-section; what is there has the opposite sign. Turnover is the
+other half of the refusal: 8–19x, where the lab's own arithmetic already refuses anything above ~3x.
+
+### F3 — selection split from cost, so the refusal names its own cause
+
+Gross measured directly at `cost_multiplier = 0` with `taxes=False` (the 2026-11-01/02 rule: the 2x
+column doubles the tier only). **The pool is re-priced under the candidate's own execution model on
+every row** — see F4a for why that is not optional.
+
+    cross-section   SELECTION (gross, vs gross sleeve)        COST (net − gross)
+    COUNTRY (10)    top -0.0626   bottom +0.0450   spread -0.1076     top -0.1113  bottom -0.1090  sleeve +0.0065
+    US SECTOR (9)   top -0.1237   bottom +0.0381   spread -0.1618     top -0.1500  bottom -0.1383  sleeve +0.0076
+
+**Both halves of the refusal are real and they are independent.** The pre-signed direction's gross
+selection is negative in both cross-sections before a basis point of cost is charged, so the signal
+is refused on its own content; and the cost term then takes 0.11–0.15 more. The placebo's +0.045 /
++0.038 is the only positive selection number in the block and is **not** taken: flipping a sign
+because the number came out that way is fitting the screen (the standing rule from the v2 seasonal),
+it is a fifth of the sleeve deficit it would have to overcome, and the other research note of the
+same cluster (`2026-11-02-winner-loser-reversals-in-national-indices.md`) pre-signs index-level
+reversal at a **3-year** horizon, which that note itself refuses on this validation window's width —
+so a 2–4-week reversal is nobody's pre-registered claim. **Sleeve rows positive is not an error**;
+it is F4's result arriving early.
+
+### F4a — instrument validation, which caught a live error in tonight's own harness
+
+Standing rule of 2026-10-25/26, and tonight is the clearest demonstration of why it exists. The
+harness reproduced `pt_oldhalf_overlap6`'s recorded **net** sheet exactly on its first run — skill
++0.0580 against the recorded +0.058, turnover 1.31 against 1.31, positions 164.3 against 164.3,
+sub-periods +0.061 / +0.053 against +0.061 / +0.053 — and read its **gross** as +0.0756 against the
+recorded +0.063, a cost term of −0.0176 against −0.005. Cause: the harness priced a *gross* candidate
+against a *net* pool, because it cached one pool series under `setup.execution` and reused it for
+every stress. **That is exactly the error the 2026-10-25/26 entry names — "every hand-rolled harness
+this lab has screened with mis-prices the benchmark as well as the candidate, and the error does not
+cancel" — reproduced one layer deeper, in the stress dimension rather than the engine dimension.**
+Fixed, the harness reproduces four recorded figures and one previously-recorded engine internal:
+
+    quantity                     harness    recorded
+    #16 train skill (net)        +0.0580    +0.058
+    #16 train skill (gross)      +0.0633    +0.063
+    #16 cost term                -0.0053    -0.005
+    #16 turnover / positions    1.31/164.3  1.31/164.3
+    gross equal-weight pool      +0.5361    +0.5361   (2026-10-25/26 entry)
+
+**Standing rule to add: a harness that prices a stress must re-price the BENCHMARK under the same
+stress, and must validate on the stressed figure as well as the base one.** Validating on net alone
+would have passed this harness and every gross number in F3 would have been wrong by the pool's own
+cost bill, in the direction that flatters a high-turnover book.
+
+### F4b — the cost coefficient, measured across a 57-fold turnover range, and it is one number
+
+With the benchmark priced correctly, the cost term is measurable in **absolute Sharpe** rather than in
+skill, which is what makes it a constant. Nine books, ETFs and stocks and the benchmark itself:
+
+    book                           turn   net sh   gross sh     cost   per unit
+    ETF  sector sleeve monthly     0.32   +0.3783   +0.3830   -0.0047   0.0147
+    ETF  country sleeve monthly    0.43   +0.3145   +0.3204   -0.0059   0.0137
+    POOL (the gate benchmark)      0.89   +0.5238   +0.5361   -0.0123   0.0138
+    STK  #16 oldhalf overlap6      1.31   +0.5818   +0.5994   -0.0176   0.0134
+    STK  #12 oldhalf hold-1        2.36   +0.5495   +0.5806   -0.0311   0.0132
+    ETF  country relstr monthly   10.00   +0.1342   +0.2577   -0.1235   0.0123
+    ETF  sector relstr monthly    12.16   +0.0970   +0.2593   -0.1623   0.0133
+    ETF  country relstr semi-mth  15.19   +0.1280   +0.3136   -0.1856   0.0122
+    ETF  sector relstr semi-mth   18.18   +0.0803   +0.3275   -0.2472   0.0136
+
+    coefficient: min 0.0122  max 0.0147  mean 0.0134  sd 0.0007  (n = 9)
+
+**0.0134 ± 0.0007 of Sharpe per unit of engine-counted annual turnover, over a 57-fold range of
+turnover, and the same on ETFs as on stocks.** The ETF rows are the cheapest instruments on the
+panel — tier-1 liquidity, US-listed, no stamp duty and no FTT — and they pay the same coefficient as
+a stock book. **There is no cheap-instrument rebate.**
+
+**What this does to the lab's own calibration.** The 2026-11-01/02 entry quotes "0.007–0.018 of
+Sharpe skill per unit of engine-counted annual turnover" from three books. That band is wide because
+it is measured in *skill*, and skill subtracts the pool's own cost bill. The exact relation is
+
+        skill cost  =  −0.0134 · T_candidate  +  0.0123
+
+and it reproduces every recorded point the lab has: #16 predicted −0.0047 against recorded −0.0050;
+#12 predicted −0.0184 against recorded −0.0190; the hold-12 variant of #16 predicted **+0.0025**
+against recorded **+0.0028** (the positive sign the lab recorded and never explained). `rev21` at
+16.86x is the one looser fit, implying 0.0106 rather than 0.0134. **So the 0.007–0.018 spread is the
+`0.0123/T` term and not instrument heterogeneity**, and the low end was never reachable by choosing
+cheaper instruments — #16's "6.9 bps implied per side" is this arithmetic, not a property of its book.
+
+**Two operative consequences, neither needing another measurement.**
+
+1. **Break-even turnover is T = 0.0123/0.0134 ≈ 0.92x.** Below ~0.9x a candidate is cost-*advantaged*
+   against the gate's benchmark, because the pool itself churns 0.89x and pays 0.0123. This is why
+   F1's and F3's sleeve rows carry a **positive** cost term, and it is a number the lab did not have.
+2. **The entire cost axis has a measured ceiling of +0.0123 of skill, reached only at zero
+   turnover.** No construction, operator, instrument choice or tax avoidance can be worth more than
+   the pool's own cost bill, because that is all a candidate can decline to pay. Against a gate that
+   asks +0.43 (2026-10-30/31) the cost axis is **2.9% of the shortfall**, and that is now a bound
+   rather than an observation about one book. This strictly sharpens the 2026-11-01/02 closure ("the
+   lead already keeps 92% of its gross"), which was a statement about #16; this one is a statement
+   about every book that can ever be written under v3.
+
+### F5 — a free read on the lab's one live mechanism, from research `#319`
+
+`#319` (Diebold–Inoue) names the alternative the 60-month reversal is implicitly betting against — a
+handful of level shifts in relative valuation generates exactly a long-horizon reversal at the scale
+of the window and nothing shorter — and names the free discriminator: sub-period stability, which
+every trial already reports. Fractional integration predicts the effect in both train halves; a
+few-breaks story does not predict it anywhere in particular. The recorded rows, no new computation:
+
+    book                      1997-2008   2009-2017
+    #12 oldhalf hold-1          +0.051      -0.020
+    #16 oldhalf overlap6        +0.061      +0.053
+
+**Read as what it is: the discriminator does not discriminate here.** #16 is positive in both halves
+(favouring the persistent reading) and #12, the same score under a different holding rule, is not —
+so the two holding rules of one score disagree on the diagnostic, which means the statistic is
+measuring the construction as much as the mechanism. Recorded so a later session does not run it
+again expecting an answer; `#319`'s sharper version (dating the breaks directly) is a diagnostic
+with no construction attached and is not a session's to spend a trial on.
+
+**Lesson (F1–F5).** The one panel on this lab's books where the cost floor is lowest is closed, and
+it is closed by the *benchmark*: an ETF sleeve is a −0.15 to −0.28 skill bet against a 1,000-name
+equal-weight pool before any signal, which is 1.5–2.8x the refusal threshold and 3–5x the largest
+selection term measurable inside it. The night's transferable half is arithmetic rather than a
+mechanism: cost is **0.0134 ± 0.0007 of Sharpe per unit of engine-counted annual turnover**, flat
+across a 57-fold turnover range and identical on the cheapest and the dearest instruments on the
+panel, so `skill cost = −0.0134·T + 0.0123`, break-even is **T ≈ 0.92x**, and **the whole cost axis is
+bounded at +0.0123 of skill** — 2.9% of the gate's shortfall. And the night's method finding is that
+validating a harness on its base figure does not validate its stress figures: tonight's gross
+numbers were wrong by the pool's own cost bill until F4a caught it.
+
+## Session summary — 2026-11-02/03 (nightly) — 0 trials of 8; the one panel with the lowest cost floor closes on the BENCHMARK, and the cost axis gets a measured ceiling of +0.0123
+
+**Experiments run: 0 of 8. No verdict recorded; `trials.jsonl` stands unchanged at 129 records and
+the deflated bar is exactly where the 2026-10-28/29 session left it.** Six free blocks (F0–F5,
+with F4 split into a validation and a measurement half), one instrument validation that **caught a
+live error in tonight's own harness before anything was read off it**, and two pre-registered
+refusal rules, both of which refused. Engine green (`92 passed in 92.19s`). **No holdout, forward
+or incubation file was opened.** Step-0 integrity clean: `git branch -r --no-merged origin/main`
+empty, and this run's branch at the identical commit as `origin/main`.
+
+**Why the count is zero.** The challenge track is closed on arithmetic (2026-10-30/31), so a trial
+belongs only on the scout track, and the scout track needs a positive-selection, cheap-to-hold
+object whose free screen passes. Tonight took the one vein the 2026-11-02 research session opened
+that ends in a construction — the country index as the traded unit — which is also the one panel
+this lab has never scored a v3 book on. It refused on a rule written before the run, by a factor of
+1.5–2.8, and the pre-signed signal inside it came in **worse than its own placebo in all three
+cross-sections tested**. Shipping a file anyway would have landed a trial 0.3–0.5 from the board
+mean, which the 2026-10-30/31 dispersion table prices at 0.03–0.07 of benchmark for every future
+candidate — on evidence that says no.
+
+### Best finding: cost is one number per unit of turnover, and that bounds the whole cost axis at +0.0123
+
+Nine books spanning a **57-fold** turnover range (0.32x to 18.18x), ETFs and stocks and the gate's
+own benchmark, each priced net and gross with the benchmark re-priced under the candidate's own
+execution model:
+
+    coefficient of cost on engine-counted annual turnover, in absolute Sharpe:
+    min 0.0122   max 0.0147   mean 0.0134   sd 0.0007   (n = 9)
+
+The ETF rows are the cheapest instruments on the panel — tier-1 liquidity, US-listed, no stamp duty,
+no FTT — and pay the **same** coefficient as a stock book, so there is no cheap-instrument rebate.
+Stated in skill, which is what the gate grades:
+
+        skill cost  =  −0.0134 · T_candidate  +  0.0123
+
+It reproduces every recorded point the lab has (#16 −0.0047 vs −0.0050; #12 −0.0184 vs −0.0190; the
+hold-12 variant **+0.0025 vs +0.0028**, a positive sign the lab recorded and never explained), and it
+**replaces** the 2026-11-01/02 band of "0.007–0.018 per unit": that spread was the `0.0123/T` term,
+not instrument heterogeneity, and its low end was never reachable by choosing cheaper instruments.
+Two numbers fall out that the lab did not have. **Break-even turnover is T ≈ 0.92x** — below it a
+candidate is cost-*advantaged* against a benchmark that itself churns 0.89x. And **the entire cost
+axis is bounded at +0.0123 of skill**, reached only at zero turnover, because the pool's own cost
+bill is all a candidate can ever decline to pay. Against the gate's +0.43 shortfall that is **2.9%**,
+and it is now a bound on every book writable under v3 rather than an observation about one book.
+
+### Second finding: the ETF panel is closed, and by the benchmark rather than by cost, breadth or signal
+
+Every equity-ETF sleeve is a **−0.15 to −0.28** train-skill bet before any signal (country −0.209,
+US sector −0.146, broad equity −0.199, real assets −0.285, all 42 −0.153), at 0.3–0.5x turnover.
+The cause is identified by exclusion: not breadth (2026-11-01/02 F3; and 2026-10-13 puts random
+region-proportional books at K = 25–400 within ±0.03 of the pool), not cost (these are the cheapest
+books ever priced here), not the taxes, and not the wrapper — the **bond** sleeve is +0.069 in the
+same wrapper. It is the composition of index products against a gate that grades skill versus an
+equal-weight book of ~1,000 index constituents: a cap-weighted tracker is the opposite portfolio.
+This matters beyond the ETFs because it is the first measured case on this panel of a candidate
+refused by *what the benchmark is* rather than by its signal or its churn.
+
+The research note's own caution was the right one and is now quantified: the selection term
+measurable inside these cross-sections is −0.06 / −0.12 in the pre-signed direction and +0.045 /
++0.038 in the placebo, i.e. **a fifth to a third of the sleeve deficit it would have to overcome,
+and the wrong sign.**
+
+### Third finding, method: validating a harness on its base figure does not validate its stresses
+
+The harness reproduced #16's recorded **net** sheet on five figures exactly and its **gross** figure
+wrong by 0.013 — it priced a gross candidate against a net pool. Every gross number in F3 would have
+been wrong by the pool's own cost bill, in the direction that flatters a high-turnover book. This is
+the 2026-10-25/26 finding reproduced one layer deeper, in the stress dimension rather than the engine
+dimension. **Standing rule to add: a harness that prices a stress must re-price the BENCHMARK under
+the same stress, and must validate on the stressed figure as well as the base one.**
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Use `skill cost = −0.0134·T + 0.0123` as the pre-build refusal, not the 0.007–0.018 band.** It
+   is exact on every recorded point, it gives break-even at T ≈ 0.92x, and it caps the cost axis at
+   +0.0123. Any construction whose case is cost is refused by arithmetic before a file is written.
+2. **Do not re-open the ETF panel in any equity form.** Closed above on the benchmark, which no
+   selection rule, holding rule or instrument subset changes. The bond sleeve in particular is an
+   anti-candidate on its *mechanism* (a disguised duration bet) and no validation number was read
+   for it — do not go looking for one.
+3. **Do not flip F3's placebo sign.** Short-horizon index-level reversal came out positive at +0.045
+   / +0.038 gross selection. It is a fifth of the deficit it must overcome, it was not pre-signed by
+   either research note (the reversal note's horizon is 3 years and it refuses itself on window
+   width), and taking it would be fitting the screen.
+4. **The structural statement, and it is the fifth consecutive zero-trial night.** Every non-signal
+   explanation is now spent and each by its own measurement: survivorship (v2), execution realism
+   (v3), the cost schedule (2026-11-01/02 F1, and tonight bounded at +0.0123), breadth
+   (2026-11-01/02 F3), and now the benchmark on the one panel where cost is lowest. What is left is
+   that gross cross-sectional selection on nine large-cap indices over 1997–2017 is about +0.06 of
+   train skill at best while the gate asks +0.43, and **tonight is the first night able to put a
+   number on how little of that gap any construction can close: 2.9%.** That is a statement about
+   the data, not the search — the width of the validation window and the breadth of a large-cap-only
+   panel, both of which are `program.md`'s "future upgrades" and therefore the human owner's call.
+   Five sessions have now reached it by five routes. **Nothing was changed and nothing is proposed**
+   beyond naming it with the arithmetic attached; thresholds, `program.md` and the engine are not a
+   session's to touch.
+5. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — any equity-ETF
+   book at any cross-section, selection rule or frequency; the bond sleeve as a duration bet; the
+   2–4-week index-level relative-strength score on either sign; and any construction whose case is
+   cost at any turnover (now bounded, not merely discouraged). Unchanged from the previous three
+   handovers: any construction whose case is avoiding a transaction tax, the `#356` group-size floor,
+   information discreteness as a conditioner on a same-window mean-return score, the
+   quarter-ending-month conditioner in all three priced constructions and the pre-signed phase with
+   it, the #16/#19 blend at any weight, any construction whose case is a tighter error bar or lower
+   active variance, `#328` as an audit instrument, `H` as a parameter, `K` as a knob, the retention
+   band as a validation operator, the recent half of the decade window, the anniversary leg, the
+   liquidity level or trend in any form, 52-week-high proximity (already closed, IC −0.0248 on this
+   panel — re-checked tonight before considering it), and covariance weighting at any estimator.
+6. **From `research/SUMMARY.md`** (2026-11-02 session, the country-level cluster). Its three notes
+   are now spent: the country-index momentum note supplied tonight's F1–F3 and is **closed on the
+   benchmark**; the winner-loser-reversal note refuses itself on validation-window width and its one
+   transferable fact (cap-weighting shrinks country effects) is corroborated by F1's sleeve rows; the
+   multiverse note's small-market localisation runs *against* this panel's composition, which F1
+   now measures rather than argues. `#319` was read as a free discriminator on the lab's one live
+   mechanism (F5) and **does not discriminate** — #16 is positive in both train halves, #12 is not,
+   so the statistic measures the holding rule as much as the mechanism; recorded so it is not run
+   again. Still live and unspent from earlier sessions: `#307` (read `#310` first and in the same
+   sitting), `#318`, `#320`, `#301`, `#304`, `#308`, `#313`, `#314`, `#288`, `#289`, `#294`/`#295`,
+   `#285`/`#286`, `#282`; `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation
+   rules to read first; `#305`, `#293`, `#299`, `#309`, `#315`, `#321`, `#326`, `#328`, `#356`,
+   `#359` remain anti-candidates. `#358` (empirical-Bayes shrinkage of the deflated bar) remains
+   explicitly the human owner's, not a session's — and tonight's +0.0123 ceiling is the sharpest
+   argument yet for looking at it.
+
+## Branch note — 2026-11-02/03 (nightly): this session's work is on `origin/main-dh53hc`, awaiting the usual landing
+
+This run was assigned the per-run branch `main-dh53hc` by its harness, with an explicit standing
+instruction to develop and push there and not to push to any other branch. The nightly prompt's
+step 5 asks for `git push origin main` and for `HEAD == origin/main`. Those two conflict, and with
+no human watching, the session took the conservative branch: **the work is committed and pushed to
+`origin/main-dh53hc` (07575d3) and `origin/main` is one commit behind it.**
+
+**The trial history is NOT split, and that is the material point.** This session spent **zero
+trials**, so `experiments/trials.jsonl`, `experiments/leaderboard.json`, `strategies/champion.py`,
+`strategies/incubating/` and `experiments/incubation.jsonl` are **byte-identical to `origin/main`**.
+The only unlanded content is prose — this journal block, the session summary and four
+`learnings.md` entries. So the failure mode the 2026-08-16 and 2026-10-29 protocol issues record —
+a deflated-Sharpe bar silently computed against a partial trial count — **cannot occur from this
+branch**, because the deflator reads `trials.jsonl` and `trials.jsonl` has not changed.
+
+**What a reader needs to know.** Step 0 of this session verified `git branch -r --no-merged
+origin/main` **empty**: all thirteen earlier per-run branches have landed on `main`, so the
+established workflow does land them. Until this one lands, a session reading only `main` will miss
+tonight's two closures (the ETF panel; the cost coefficient and its +0.0123 ceiling) and may
+re-spend a night on the cost axis or on an ETF construction that is already refused above. That is
+a cost in duplicated work, not in a corrupted gate.
+
 ## Research session — 2026-11-03 (learning agent): 3 notes added, see research/SUMMARY.md
