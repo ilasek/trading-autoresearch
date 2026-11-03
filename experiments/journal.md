@@ -25742,3 +25742,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    the interpretation rules to read first; `#305`, `#293`, `#299`, `#309`, `#315`, `#321`, `#326`,
    `#328` remain anti-candidates.
 ## Research session — 2026-11-02 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Research session — 2026-11-03 (learning agent): 3 notes added, see research/SUMMARY.md

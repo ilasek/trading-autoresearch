@@ -8201,6 +8201,100 @@ be near zero while its long half is not, and nothing in the multiverse paper mea
 **It can refuse the spread; it cannot by itself refuse a long-only construction** (**#370**). Say
 which is being refused.
 
+### The SHORT LEG'S ABSENCE as a construction object — the attainable underweight, the breadth-independent ceiling, and the one leg that is measurably not a null (cross-family, `portfolio-learning`, `statistical-arbitrage`)
+
+**Why this was the aim, and it is `program.md`'s own sentence.** The [2026-11-02] entry nominated
+`statistical-arbitrage`'s binding question — *what survives the long-only constraint when only the
+cheap side of a residual is tradeable* — and sharpened it into a coverage test on
+`program.md`'s clause **"say how the short leg's absence is handled."** Run with fixed strings
+across all 255 prior notes: `enhanced active` **0**, `130/30` **0**, `long-only portfolio
+optimization` **0**, `Levy, Ritov` **0**, `many assets` **0**, `Chen, Da` **0**, `Zhi Da` **0**,
+`net arbitrage trading` **0** — against `long-only constraint` **27** and `short leg` **28**. The
+folder had **twenty-seven notes that invoke the constraint and none about the constraint itself**.
+That is the same detector the [2026-11-02] entry recommended (*ask what object the lab ranks, and
+grep for the objects it does not*) applied one level down: ask what object the lab's **caveats**
+name, and grep for the caveat's own literature.
+
+**The entry's acceptance criterion was stated before the first download and it held.** Admit a
+source only if it reports a **long-leg-only or long-only-constrained result**. Two sources that do
+not — Clarke–de Silva–Thorley (2002) and Clarke–de Silva–Sapra (2004), the transfer-coefficient
+primaries that `2026-08-19-fundamental-law-breadth-and-strategy-risk.md` has flagged as unread
+since session 5 — were **not admitted as notes**, because neither body could be obtained (both
+closed, `any_repository_has_fulltext: false`, no repository copy found) and the only text reached
+was a CFA Digest editorial summary. It is recorded as second-hand inside tonight's first note and
+is explicitly **not** a measured quantity for this repo.
+
+**The first finding is arithmetic, and it has no sample.** A long-only weight satisfies
+`w_i >= 0`, so the active weight satisfies `w_i - b_i >= -b_i`: **the maximum attainable
+underweight of any name is its benchmark weight.** Overweights have no matching bound. Jacobs and
+Levy's arithmetic is that for a capitalisation-weighted index this bound is near zero almost
+everywhere (about **fifteen** names above 1% in the S&P 500, Russell 1000 and Russell 3000 alike;
+half the S&P 500 below **0.10%**, half the Russell 1000 below **0.03%**, half the Russell 3000
+below **0.01%**), which has a second-order consequence this folder had never written down: **the
+constraint also caps overweights**, because active weights sum to zero and the only names with
+enough benchmark weight to sell are the mid-ranked ones. Under a concentrated benchmark a
+long-only book's implicit bet is *long the top, short the middle* (**#373**).
+
+**And the first finding does NOT transfer to this lab unchanged — which is the night's most useful
+correction.** Protocol v3 grades against the **equal-weight** eligible pool, so every
+`b_i = 1/N ≈ 0.07%`. Per name that is the Russell 3000 case; in aggregate it is the opposite case.
+Excluding `k` of `N` equally weighted names frees exactly `k/N` of capital, so a 20-name book at
+5% each carries `+4.93%` on twenty names and `-0.0714%` on 1,380, the underweights summing to
+**98.6%** and funding the overweights exactly. **A long-only book on an equal-weight pool can run
+a ~99% active position**, and Jacobs–Levy's "not holding these stocks frees only a minuscule amount
+of capital" is a cap-weighted statement that does not reach here (**#374**). What does reach is a
+**resolution** limit rather than a capital limit: every excluded name gets the identical active
+weight `-1/N`, so the ranking is usable above the inclusion threshold and **quantised to one bit
+below it**. Hence the rule that replaces the folder's looser discount: **a score is reachable here
+iff its information is in identifying the best names, and unreachable iff its information is in
+ordering the bad ones** (**#375**) — with a new free screen that tests exactly that, the one-bit
+truncation test (**#376**).
+
+**The second finding is a theorem, and it is about the lab's own widening.** Levy–Ritov prove that
+for `C = M + α11'` (Wishart plus a constant common component `α` = average covariance) the
+attainable Sharpe grows like `√N` when shorting is allowed and **levels off** when it is not, with
+the closed-form ceiling
+
+```
+max_{ω ≥ 0} (ω'µ)/√(ω'Cω)  ≤  (max_i µ_i)/√α
+```
+
+whose right-hand side **contains no `N`**. The intuition is the durable part: with positive average
+covariance, adding an asset to a long-only frontier produces combinations interior to it, so the
+new asset's optimal weight is zero and the frontier does not extend. The prediction for this lab is
+direct and free to check: **protocol v2's 10× panel widening should buy selection quality and not a
+higher reachable ceiling** (**#377**), while the same paper's equal-correlation closed form gives a
+scaled optimal weight `w_i → ((µ_i − µ̄)/µ̄)·(ρ/(1−ρ))` that **contains no `N` either** — so the
+unconstrained optimum's concentration does not fall with breadth, and the lab's measured
+de-concentration price and its `≤25%` cap are not narrow-panel artifacts (**#378**).
+
+**The third finding is the only one measured on returns, and it runs against the folder's own
+discount.** Chen–Da–Huang separate the long and short sides of arbitrage activity with different
+data on each side (13F hedge-fund holdings versus short interest, each abnormalised against its own
+recent history, differenced into `NAT`) and report each leg. Five-factor-adjusted, the **traded long
+leg alone is significant** — **+0.017%/day, t = 2.51** at a ten-day horizon, against **−0.021%**
+(t = −2.69) on the short leg, so the reachable leg carries about **45%** of a traded spread of
+0.038%/day (t = 2.72), while the not-traded legs are insignificant throughout. Tier A, RFS, 124
+Crossref cites, with randomised Regulation SHO identification. **The honest revision is the same
+shape as the [2026-11-02] documentation correction: the gradient runs against the long leg, and the
+long leg is not a null** (**#379**).
+
+**That source also closes a would-be candidate before anyone writes it, by agreeing with the lab.**
+Its own substitution test shows that replacing hedge-fund holdings with **general institutional
+ownership destroys the predictability entirely** — the informative quantity is *who* trades, not
+*how much*. Volume is a broader measure still, and `learnings.md` has the whole volume axis as a
+twelve-session null on clean instruments. So the lab's null and this paper's null are **the same
+finding from two directions**, the mechanism is structurally unreachable on price-only data rather
+than untested, and no trial should be spent on a volume-conditioned re-test of it (**#380**).
+
+**The cross-cutting shape, stated once.** All three sources describe the same object and none of
+them is about the signal: the long-only constraint is a property of the **feasible set**, and it
+bites in three separable ways — a *resolution* limit on the bottom of the ranking (Jacobs–Levy), a
+breadth-independent *ceiling* on attainable Sharpe (Levy–Ritov), and a *share* of the correctable
+mispricing that sits out of reach (Chen–Da–Huang). The lab has been treating these as one discount.
+They are three, they are measured by three different quantities, and only the first two are
+computable on this repo's data.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -15525,6 +15619,109 @@ hypothesis fodder, then anti-candidates.
     level nor a trend but a one-lag change used only as a conditioner. Tier A, no overlap.
     → `notes/2026-11-02-country-index-momentum-and-the-currency-component.md`
 
+373. **MECHANISM, and it is arithmetic rather than evidence: the long-only constraint caps
+    OVERWEIGHTS too, not only underweights.** A long-only active weight obeys
+    `w_i - b_i >= -b_i`, so the attainable underweight of a name is its benchmark weight — and
+    since active weights sum to zero, every overweight must be funded by an underweight. Under a
+    capitalisation-weighted benchmark the only names with enough weight to sell are the mid-ranked
+    ones, so the book's implicit bet is **long the top, short the middle**, not long the top short
+    the bottom. Record it because the folder has repeatedly described the constraint as "the short
+    leg is missing" when the sharper statement is "the funding leg is misplaced". Tier B, no
+    overlap. → `notes/2026-11-03-attainable-underweight-and-the-long-only-constraint.md`
+
+374. **CORRECTION TO #373 FOR THIS LAB, and it must be applied before any of that literature's
+    numbers are quoted here: the capital half of the argument does NOT reach an equal-weight
+    benchmark.** Protocol v3 grades against the equal-weight eligible pool, so `b_i = 1/N ≈ 0.07%`
+    for every name. Excluding `k` of `N` frees exactly `k/N` of capital: a 20-name book at 5% each
+    carries `-0.0714%` on 1,380 names, summing to **98.6%**, which funds its overweights exactly.
+    **A long-only book on an equal-weight pool can run a ~99% active position**, and the
+    "underweighting frees only a minuscule amount of capital" claim is cap-weighted and does not
+    apply. Do not import the 0.10% / 0.03% / 0.01% median-weight figures or the 120–20 augmented
+    underweights into this repo. Tier B, no overlap.
+    → `notes/2026-11-03-attainable-underweight-and-the-long-only-constraint.md`
+
+375. **INTERPRETATION RULE replacing the folder's loose long-only discount, and it is sharper
+    because it names which scores are affected.** What survives #374 is a **resolution** limit, not
+    a capital limit: every excluded name receives the identical active weight `-1/N`, so the
+    ranking is usable above the inclusion threshold and **quantised to one bit below it** (in or
+    out). Therefore **a score is reachable on this panel iff its information is in identifying the
+    best names, and unreachable iff its information is in ordering the bad ones** — and no
+    weighting scheme can change that. This is a construction-level cause for the lab's own
+    repeated shape ("real, large, significant, and structurally unreachable": 5–10 day reversal,
+    regional neutralisation, the `calendar` half of `seasonality-calendar`, the
+    ETF-versus-constituent asymmetry). Tier B, no overlap.
+    → `notes/2026-11-03-attainable-underweight-and-the-long-only-constraint.md`
+
+376. **FREE SCREEN, new, and strictly more informative than the top-minus-pool comparison the
+    folder already proposes: the ONE-BIT TRUNCATION TEST.** For any score the lab already has,
+    recompute its rank IC after collapsing everything below the book's inclusion threshold to a
+    single value (`score_trunc = max(rank, threshold)`). If the IC largely survives, the score's
+    content is in the top band and the long-only constraint costs little. If it collapses, the
+    content was in the ordering of names the book will never hold and the candidate can be
+    **refused before it is written**. Strictly stronger than comparing top-minus-pool against
+    pool-minus-bottom (`#375`'s weaker sibling, and the return-side screen of
+    `2026-09-22-anomaly-profits-short-leg-asymmetry.md`), because a score can show a spread while
+    having a flat top and a steep bottom. Costs no trial; train/validation only. Tier B.
+    → `notes/2026-11-03-attainable-underweight-and-the-long-only-constraint.md`
+
+377. **STRUCTURAL PREDICTION ABOUT PROTOCOL v2's OWN WIDENING, from a theorem rather than a
+    regression.** For `C = M + α11'` (Wishart plus constant common component `α` = average
+    covariance) the attainable Sharpe is of order `√N` when shorting is allowed and **levels off**
+    when it is not, with ceiling `(max_i µ_i)/√α` — **no `N` on the right-hand side**. Mechanism:
+    with positive average covariance, adding an asset to a long-only frontier yields combinations
+    interior to it, so its optimal weight is zero and the frontier does not extend. Prediction:
+    the move from ~140 to ~1,400 eligible names should buy **selection quality and not a higher
+    reachable ceiling**, where a long–short lab would have gained ~`√10`. Computable on
+    train/validation for free (average pairwise covariance plus the largest realized mean), with
+    two caveats that must travel with it: the bound is **loose** (an extreme order statistic over
+    1,400 names) and it is an **oracle** quantity, so it is a diagnostic and never a gate
+    benchmark. Tier B, no overlap.
+    → `notes/2026-11-03-no-short-constraint-cost-and-panel-breadth.md`
+
+378. **MECHANISM FOR TWO RESULTS THE LAB HAS ALREADY MEASURED, and it says neither will be
+    relieved by a wider panel.** The same paper's equal-correlation closed form gives the scaled
+    optimal weight `w_i → ((µ_i − µ̄)/µ̄)·(ρ/(1−ρ))`, which **contains no `N`**: the unconstrained
+    optimum's concentration does not fall as the panel widens, and the scale factor rises with the
+    panel's average correlation. Together with the common component `α` binding the long-only
+    feasible set, this is what predicts (a) the lab's five nominally distinct family leads
+    correlating **0.75–0.85** on validation because every one of them is a long-only book over a
+    panel with a large common component, and (b) the measured de-concentration price and the
+    binding `≤25%` cap being structural rather than narrow-panel artifacts. **Also carries a
+    tension the folder must hold both halves of**: `2026-08-22-long-only-as-l1-regularization.md`
+    (Jagannathan–Ma) says the no-short constraint *helps* out of sample as shrinkage; this says it
+    is costly against true parameters. Both are right — oracle problem versus estimated problem —
+    and a score-ranking book that estimates no covariance matrix collects **neither**, only the
+    ceiling in `#377`. Tier B, no overlap.
+    → `notes/2026-11-03-no-short-constraint-cost-and-panel-breadth.md`
+
+379. **SOFTENING OF THIS FOLDER'S STRONGEST LONG-ONLY DISCOUNT, measured on the reachable leg
+    alone — the first such measurement here.** Chen–Da–Huang separate arbitrage activity's two
+    sides with different data on each (13F hedge-fund holdings versus short interest, each
+    abnormalised against its own recent history) and report the legs separately. Five-factor
+    adjusted, the **traded long leg alone is significant: +0.017%/day, t = 2.51** at ten days,
+    against **−0.021%** (t = −2.69) short, i.e. the reachable leg carries about **45%** of a traded
+    spread of 0.038%/day (t = 2.72); the not-traded legs are insignificant on both sides. The
+    honest revision, in the shape of the [2026-11-02] correction: **the gradient runs against the
+    long leg, but the long leg is not a null** — a long-only null is weaker evidence against an
+    effect than a long–short null, not *no* evidence. Pair with `#380`. Tier A, no validation
+    overlap, `published_post_2018: true`.
+    → `notes/2026-11-03-which-leg-arbitrage-capital-trades.md`
+
+380. **ANTI-CANDIDATE, closed by the source itself AGREEING with the lab's own null — record it so
+    the obvious adaptation is not attempted.** The natural reachable version of `#379` is to
+    condition a long-only book on abnormal volume or a volume shock as a proxy for informed capital
+    arriving. The same paper's substitution test shows that replacing hedge-fund holdings with
+    **general institutional ownership destroys the predictability entirely**: the informative
+    quantity is *who* trades, not *how much*. Volume is broader still, and `learnings.md` records
+    the whole axis as a twelve-session null on clean instruments (volume shock 21d **−0.0038**, 63d
+    −0.0021, turnover trend −0.0041, volume dispersion +0.0000). **The lab's null and the paper's
+    null are the same finding from two directions**, so the mechanism is structurally unreachable
+    on price-only data rather than untested. Spend no trial here. Also note that `#379`'s discount
+    must **not** be stacked naively with `2026-09-22-anomaly-profits-short-leg-asymmetry.md`'s —
+    the two share the same mispricing composite, so they partly measure the same thing (same
+    caution as `#362`). Tier A.
+    → `notes/2026-11-03-which-leg-arbitrage-capital-trades.md`
+
 
 
 ---
@@ -15617,8 +15814,137 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-01 (session 79) | **TOOK THE NAMED PRIMARY AND FOUND THE AIM'S PREMISE WAS FALSE — both of `research/README.md`'s replication rubric inputs ALREADY HAVE DEDICATED NOTES, and the cause is the grep pattern rather than the unit of check.** The [2026-10-31] entry aimed this session at Jensen–Kelly–Pedersen on the ground that `Jensen.Kelly.Pedersen` returned **1** across 249 notes, i.e. that the folder had been *grading* against a paper it had never summarised. It had: `2026-08-25-hierarchical-bayesian-factor-replication.md` (Tier A) since 2026-08-25, and the companion input Hou–Xue–Zhang since 2026-10-02. **`Jensen.Kelly.Pedersen` matches exactly one character between surnames; every real rendering has more** (`, ` two, an en dash one *multi-byte* character, `, and ` six) — and the same mistake was made again independently at the start of this session (`Hou.Xue.Zhang` → **0** across 249 notes while two notes name them), which makes it a systematic instrument failure, not one careless night. **Ninth instance of the unit-of-check lesson and the first where the unit was RIGHT and the instrument was broken.** Standing rule now: check a source by one distinctive **surname** plus **title words**, with `grep -ril -F` or a character class for the separator; a zero from a `.`-joined author triple is **not evidence of absence**. **The session was still not wasted.** The aim's three admission criteria were tested against the full text anyway, because the existing note had been written without the paper's empirical breakouts, and all three PASS: size groups (mega/large/small/micro/nano), developed-versus-emerging regions, and hierarchical shrinkage at **theme-cluster** granularity, readable in full from NBER WP 28432 (**582** Crossref, re-checked). Those are now the **2026-11-01 addendum** to that note — which is what the open question actually wanted — and the session then took **the two genuinely uncovered sources in the same debate plus one on the statistic it is settled with. The substantive finding: the debate has THREE corners and they do not disagree about any number.** Chen–Zimmermann (*Critical Finance Review*, **384** Crossref, read in full from the journal editor's own site) reproduce each original paper's method on its own sample and get **slope 0.88, R² 82%** of reproduced on hand-collected original t-statistics, then show the pessimistic denominator is constructed (452 "anomalies" from **240** characteristics, 212 duplicate holding periods, only **118** with clear original significance, **117 of 118** reproduce) — **#349**. The optimistic study's own decomposition makes the largest single term **CAPM alpha instead of raw return, +20.2 pp**, i.e. not a construction knob at all. **Three elasticities a cost-charged large-cap panel should carry**: a liquidity screen costs ~**1/3** of gross (≈60 → ≈40 bps/month, and a large-exchange screen, a 20th-NYSE-percentile floor and value-weighting are **one** intervention, all three of which this panel imposes at once), costs cost ~**1/3** more independently, so ~**4/9** of a published gross edge survives before anything specific to this repo (**#350**); and gross content falls **monotonically** as the rebalance interval lengthens, which is the missing gross side of a trade this folder had only costed (**#351**). **Two corrections to this file's own standing discounts, both in the favourable direction**: replication is **not** a small-stock phenomenon (mega **77.3%** / large **81.5%** against **84.0%** full-sample; Spearman **73%** between mega and micro cluster alphas), so the "uninformative null" clause applies **narrowly** and not as a blanket large-cap discount (**#352**); and cluster alphas correlate **71%** US-to-developed-ex-US against **48%** US-to-emerging, so this panel gets the favourable number (**#353**). Jacobs–Müller (Tier A, *JFE*, **221** Crossref, read in full from the **Lancaster FoFI 2018 conference programme**) find **only the US** has a reliable post-publication decline across **39 markets** — so apply the McLean–Pontiff haircut **per market** (**#354**) — and supply the literature's multi-country construction standard: **country-neutral quintiles, local currency, aggregate after**, plus the **middle-quintile control** that killed their own hypothesis (**#355**), and a **25-name per-country-month breadth floor** whose violation is a stated *mechanism* (few names → binding filters → failed neutrality → **fatter left tail**), reframing part of the lab's "out of reach" finding as **breadth** rather than **cost** (**#356**). Chen (Tier A−, *Management Science*, **5** Crossref — young, not low-impact) proves an FDR hurdle exceeds 1.96 **iff** `π_F > Pr(|t| > 1.96)`, that **BH95 ≡ `π_F = 1.0`** and **BY Thm 1.3 ≡ `π_F ≈ 6.3`** at `N ≈ 300` (six times an impossible value, so it *always* raises hurdles), that `π_F` is **weakly identified** under censoring (90% interval ≈ **0 to 2.9**) while **shrinkage ≤29% and local FDR ≤25%** are strongly identified (**#357**) — and the lab is in the **favourable** case because `trials.jsonl` is **uncensored by rule**, making both sides of the comparison countable for free (**#358**). **The gap all three corners share: none models transaction costs**, so no replication rate in this literature is a statement about tradable alpha (**#359**). **And the corroboration**: `seasonality` is one of only **three of thirteen** themes that fail to replicate, alongside leverage (a benchmark artefact) and size (an illiquidity premium localised to emerging and micro names) — the same family the lab has just nulled (**#360**). **New: #349–#360; nine are free rules or diagnostics, one is an anti-candidate, one is corroboration, and ONE item (#358's bar question) is explicitly the human owner's. No trial, no measurement, holdout not read.** Chen–Zimmermann 2022 (`2026-11-01-reproduction-versus-replication-open-source.md`); Jacobs–Müller 2020 (`2026-11-01-anomalies-across-the-globe-country-neutral.md`); Chen 2025 (`2026-11-01-weak-identification-of-t-stat-hurdles.md`); plus a substantial **addendum** to `2026-08-25-hierarchical-bayesian-factor-replication.md` and cross-link corrections into `2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md`. **Named and not obtained:** the published Jacobs–Müller (`unicreditgroup.eu` **403**; two **mediaTUM** green locations are records with **no file**) — the January 2017 authors' draft was read instead and the note states exactly where the two differ (231 vs 241 anomalies, identical headline). |
 
 | 2026-11-02 (session 80) | **RAN THE CORRECTED COVERAGE DETECTOR FIRST, AS INSTRUCTED — the three hit counts the [2026-11-01] entry flagged for re-checking all HOLD, and the real gap is the TRADED UNIT.** Re-run with fixed strings across 252 notes: `fundamental law` **5**, `transfer coefficient` **6**, `rank IC` **7** — all confirmed, so that entry's readings on those were sound and no correction is owed. The genuine zeros are about what is ranked rather than how: `index momentum` **0**, `Bhojraj` **0**, `Hameed` **0**, `macromomentum` **0**, `winner-loser reversal` **0**, `country rotation` **0**, `region rotation` **0**, `global tactical` **0**, `asset allocation` **1** — while the folder's two `country momentum` notes are both about **neutralising** the country bet in a stock book. **The folder had written twice about removing a bet it had never written about taking**, and the lab holds 42 ETFs that could express it. Graded against three criteria stated before the first paper: **(a) PASSES in the strongest available form — a SIGN FLIP** (country short-horizon = continuation, stock short-horizon = reversal), so it is not the incumbent relabelled (**#361**). **(c) FAILS COMPLETELY — none of the three sources models transaction costs**, so every magnitude here is gross and the near-zero developed-market result is a *pre-cost* near-zero (**#366**, third consecutive confirmation of `#359` from the literature's side). **(b) SPLITS, and that split is the night's result.** Cakici–Fieberg–Neszveda–Piljak–Zaremba (Tier B, *JBF*, **0** Crossref cites — an age artefact; read in full from the Vaasa repository) vary **nine** design nodes over **13,824** implementations and find the two most influential are **data source** and **geographic scope** — **exactly the two this lab is pinned at the worse end of**: ETF/futures representations pay **two to three times less** than full-market aggregates (~0.13–0.16 pp/month) and developed-only scope gives spread returns **indistinguishable from zero**, with ETF designs also carrying **higher** nonstandard errors. **This is the folder's usual 'a null on a large-cap panel would be uninformative' hedge replaced by a direct measurement of that exact case.** Two honest narrowings travel with it: the two penalties are **largely the same finding seen twice** and must not be stacked (**#362**), and the paper is entirely **long-short** with **no long-leg breakout** (**#370**). **One object survives all three criteria and two independent sources converge on it**: short-horizon country-index continuation — the only price-computable member of the four signals surviving the multiverse plus bootstrap plus out-of-sample selection, and Chan–Hameed–Tong (Tier A, *JFQA*, **326** Crossref, read in full from an NUS-hosted working version) independently find index-momentum alphas **jointly insignificant at 1 week, significant at 1% at 2 and 4 weeks, and gone at 12 and 26 weeks** after world-market beta adjustment (**#363**). **The finding that changes what a long-only lab should think: the LONG LEG carries it** — "buying winner portfolios yields significant profits consistently, but selling loser portfolios creates either insignificant profits or losses" — inverting `program.md`'s standing caveat that long-only is expensive because only the cheap side is tradeable (**#364**); and cap-weighting shrinks but does not kill it, failing the authors' own small-market-artefact test at short horizons. The **currency tension resolves on horizon**: CHT's π3 is **negative at 12 and 26 weeks**, the same sign Bhojraj–Swaminathan report at annual horizons, giving the reusable rule that **a USD score is cleanest short and self-contaminating long** (**#367**) — which independently explains why one-month `StMom` is robust and 12-1 `LtMom` fragile. Richards (Tier A, *JF*, **135** + **45** across two Crossref records; read as IMF WP/97/182, a **text-layerless scan** rendered to images) supplies the long-horizon end and the **hedge the multiverse does not**: his **eight-largest** subgroup (US, Japan, UK, Canada, Germany, France, Australia, Switzerland — close to this lab's panel) still shows a positive contrarian return at ~60% of the small-market one, and the difference is **not significant**, so the honest claim is **"the gradient runs against this panel", not "the effect is absent"** (**#368**). His own horizon is **refused on arithmetic** — 3-year ranking and 3-year test against a six-year validation split is two non-overlapping periods (**#369**). **One source recorded as body-not-obtained:** Bhojraj–Swaminathan 2006 (*J.Business*, `10.1086/497416`, **156** Crossref) — closed, no OA location, Cornell eCommons **0** for the title; abstract read from the RePEc record and nothing beyond it used. | Cakici, Fieberg, Neszveda, Piljak & Zaremba 2026 (`2026-11-02-multiverse-of-country-level-research-designs.md`); Chan, Hameed & Tong 2000 + Bhojraj & Swaminathan 2006 abstract (`2026-11-02-country-index-momentum-and-the-currency-component.md`); Richards 1997 (`2026-11-02-winner-loser-reversals-in-national-indices.md`) |
+| 2026-11-03 (session 81) | **TOOK THE AIM VERBATIM AND IT PAID OUT AS A CORRECTION TO THE FOLDER'S OWN HABIT — the folder had 27 notes that invoke the long-only constraint and none about the constraint itself.** Aim taken from the [2026-11-02] entry, which sharpened `statistical-arbitrage`'s binding question into a coverage test on `program.md`'s clause *"say how the short leg's absence is handled"*. Fixed-string greps across all 255 prior notes: `enhanced active` **0**, `130/30` **0**, `long-only portfolio optimization` **0**, `Levy, Ritov` **0**, `many assets` **0**, `Chen, Da` **0**, `Zhi Da` **0**, `net arbitrage trading` **0** — against `long-only constraint` **27** and `short leg` **28**. **That entry's acceptance criterion (admit a source only if it reports a long-leg-only or long-only-constrained result) was stated before the first download and it excluded two sources**: Clarke–de Silva–Thorley (2002) and Clarke–de Silva–Sapra (2004), the transfer-coefficient primaries that `2026-08-19-fundamental-law-breadth-and-strategy-risk.md` has flagged as unread since session 5, were **not written up** — both closed, `any_repository_has_fulltext: false`, no repository copy found, and the only text reached was a **CFA Digest editorial summary**, recorded second-hand inside tonight's first note and explicitly not a measured quantity for this repo. **Three notes, three separable mechanisms, and the lab has been treating them as one discount.** *(a)* **The arithmetic.** `w_i >= 0` gives `w_i - b_i >= -b_i`, so the attainable underweight is the benchmark weight; and since active weights sum to zero, the constraint **also caps overweights**, making a cap-weighted long-only book's implicit bet *long the top, short the middle* (**#373**). *(b)* **The night's most useful result is a CORRECTION rather than an import: the capital half of that argument does not reach an equal-weight benchmark.** With `b_i = 1/N ≈ 0.07%`, excluding `k` of `N` names frees exactly `k/N`, so a 20-name book's 1,380 underweights of `-0.0714%` sum to **98.6%** and fund its overweights exactly — **a long-only book on this pool can run a ~99% active position**, and "underweighting frees only a minuscule amount of capital" is cap-weighted and does not apply (**#374**). What survives is a **resolution** limit: every excluded name gets the identical `-1/N`, so the ranking is **quantised to one bit below the inclusion threshold**, giving the rule that **a score is reachable here iff its information is in identifying the best names and unreachable iff it is in ordering the bad ones** (**#375**) — a construction-level cause for the lab's own repeated "real, large, significant, structurally unreachable" shape — plus a new free screen that tests exactly it, the **one-bit truncation test** (`score_trunc = max(rank, threshold)`, then re-measure rank IC), strictly stronger than the top-minus-pool comparison because a score can show a spread with a flat top and a steep bottom (**#376**). *(c)* **The theorem, and it is about protocol v2's own widening.** Levy–Ritov prove that for `C = M + α11'` the attainable Sharpe is of order `√N` with shorting and **levels off** without, with closed-form ceiling `(max_i µ_i)/√α` — **no `N` on the right**; mechanism: with positive average covariance, adding an asset to a long-only frontier gives combinations interior to it, so its weight is zero and the frontier does not extend. Prediction: the ~140 → ~1,400 widening buys **selection quality and not a higher reachable ceiling**, where a long–short lab would have gained ~`√10` (**#377**), and the companion closed form `w_i → ((µ_i − µ̄)/µ̄)·(ρ/(1−ρ))` **also contains no `N`**, so the measured de-concentration price and the binding `≤25%` cap are structural rather than narrow-panel artifacts (**#378**). That note also records a tension the folder must hold both halves of: Jagannathan–Ma says the constraint *helps* as shrinkage, this says it is costly against true parameters — oracle problem versus estimated problem, and a score-ranking book collects **neither**, only the ceiling. *(d)* **The one measurement on returns runs AGAINST the folder's strongest discount.** Chen–Da–Huang (Tier A, *RFS*, **124** Crossref, randomised Regulation SHO identification, read in full from a Notre Dame faculty page) report the legs separately and five-factor-adjusted the **traded long leg alone is significant: +0.017%/day, t = 2.51** at ten days against **−0.021%** (t = −2.69) short, so the reachable leg carries ~**45%** of a 0.038%/day traded spread while both not-traded legs are insignificant. **The honest revision is the [2026-11-02] shape: the gradient runs against the long leg, and the long leg is not a null** (**#379**). *(e)* **And that source closes its own would-be adaptation by AGREEING with the lab**: substituting general institutional ownership for hedge-fund holdings destroys the predictability, so what matters is *who* trades rather than *how much* — volume is broader still, and `learnings.md` has the whole volume axis as a twelve-session null. **The lab's null and the paper's null are the same finding from two directions**; the mechanism is structurally unreachable on price-only data rather than untested, and no trial should be spent on it (**#380**). **Anti-lookahead note:** the RFS paper has a substantial crisis-period section and several period-attributed anomaly statements; **none of it is recorded**, and the note says so. | Jacobs & Levy 2006 (*JPM*) + 2007 (*FAJ*) (`2026-11-03-attainable-underweight-and-the-long-only-constraint.md`); Levy & Ritov 2001/2011 (`2026-11-03-no-short-constraint-cost-and-panel-breadth.md`); Chen, Da & Huang 2019 (`2026-11-03-which-leg-arbitrage-capital-trades.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-03] READ THIS BEFORE AIMING SESSION 82. The long-only-constraint vein is CLOSED on
+  construction and has exactly ONE unread primary; do not open a fourth source on the constraint
+  itself.** Three notes now cover it and they are separable rather than additive: the attainable
+  underweight (what the constraint does to weights), the breadth-independent ceiling (what it does
+  to attainable Sharpe), and the leg-level measurement (what share of correctable mispricing is out
+  of reach). A fourth construction paper changes none of **#373**–**#380**.
+  - **The named primary for session 82, and it is the one thing tonight could not get.**
+    **Clarke, de Silva & Thorley (2002)**, *FAJ* 58(5), 48–66, `10.2469/faj.v58.n5.2468`, **197
+    Crossref / 252 OpenAlex** cites, and its companion **Clarke, de Silva & Sapra (2004)**, *JPM*
+    31(1), 54–63. Both resolve `oa_status: closed, any_repository_has_fulltext: false`; OpenAlex
+    lists only the publisher DOI and a RePEc handle; ResearchGate reports no full text. **The
+    transfer coefficient has been cited in this folder since session 5 and has never been read
+    first-hand**, and `2026-08-19-fundamental-law-breadth-and-strategy-risk.md` says so in-note.
+    Routes not yet tried: the authors' co-author institutions via OpenAlex `locations` (the
+    2026-10-04 procedure), BYU for Thorley, and a RePEc working-paper listing for either (the
+    2026-10-12 econstor lesson). **Acceptance criterion to state before downloading: admit it only
+    if the body gives the TC under a long-only constraint as a function of something this lab
+    controls** — benchmark concentration, name count, or risk target. If it only reports a single
+    TC number for one tracking-error setting, it adds nothing to `#373`–`#376` and should be
+    recorded as read-and-closed rather than written up.
+  - **Ranked below that: the CASH/POOL BOUNDARY, which the [2026-11-02] entry named as the second
+    unranked object and which tonight did not reach.** The lab's book may sit in cash earning the
+    13-week bill, so the feasible set has one more vertex than the long-only simplex the two
+    construction notes describe, and **`#377`'s ceiling is derived for a fully-invested
+    non-negative book**. Greps standing at **0**: `cash holding`, `risk-free allocation`,
+    `partial investment`, `optimal fraction in cash`; `cash position` **1**, `holding cash` **1**.
+    The lab has its own structural result here (2026-09-01: a long-only book whose only alternative
+    is cash can exploit a calendar effect only if the complement window's return is at or below
+    zero), so **the criterion is the same shape: admit a source only if it treats the cash weight
+    as a decision rather than a residual.** A paper that merely allows a risk-free asset in a
+    mean–variance problem does not reach.
+  - **The detector worked again, one level down, and that generalisation is worth keeping.** The
+    [2026-11-02] entry's rule was *ask what object the lab ranks, and grep for the objects it does
+    not.* Tonight's extension: **ask what object the lab's CAVEATS name, and grep for the caveat's
+    own literature.** `long-only constraint` **27** and `short leg` **28** against `enhanced
+    active` **0** and `130/30` **0** is the signature of a concept the folder uses constantly and
+    has never sourced. Other caveats worth running the same detector on, in descending order of how
+    often this folder leans on them: *survivorship* (the panel's pre-2009 thinness),
+    *publication decay*, *the deflated-skill bar's severity*, and *"this panel is large-cap and
+    liquid by construction"* — the last being four independent literatures deep now (see below) and
+    still never sourced as a claim about panel construction in its own right.
+  - **A documentation correction this file owes itself, and it is the second in two nights.** The
+    [2026-11-02] entry weakened "a null on a large-cap panel would be uninformative" to "the
+    gradient runs against this panel". Tonight supplies the same weakening on the **long-only** side
+    and from the opposite direction: **#379** measures the reachable leg alone and finds it
+    significant. So the standing phrase "the effect sits on the leg long-only cannot reach" should
+    be read as **"most of the effect sits there"**, and a long-only null as weaker evidence rather
+    than no evidence. Apply this wherever the long-only discount is quoted as a refusal.
+  - **Carried unchanged and still live from [2026-11-02]**: `#363` (short-horizon country-index
+    continuation, long leg only) remains the single live construction in that vein and `#371` its
+    pre-trial refusal test; `#361` remains the free screen that should run before either. Tonight
+    adds a second free screen that should run before **any** cross-sectional candidate, in any
+    family: **`#376`'s one-bit truncation test.** It is cheaper than `#361` and it applies to
+    scores the lab already has.
+  - **Unchanged and still live**: `#373`–`#380` from tonight; `#361`–`#372` from 2026-11-02;
+    `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31; `#335`–`#342` from 2026-10-30;
+    `#328`–`#334` from 2026-10-29; `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27;
+    `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24;
+    `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21;
+    `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then 2026-10-17 and everything carried
+    under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); and now **the long-only constraint as a
+    construction object**, on the terms in the first paragraph above — with the single exception of
+    the named primary. Still at **0** and still not nominated: `transfer entropy` (fourteenth
+    nomination).
+  - **Standing, and not this folder's call**: the engine issues filed 2026-10-18 and 2026-10-22;
+    `min_train_skill = 0.0`; `#324`'s deliberate difference; the two human decisions added
+    2026-10-29; the three items the 2026-10-30/31 nightly raised; `#357`/`#358`'s question of
+    whether the deflated-skill bar's severity should be an estimate rather than an assumption; and
+    **the data-type question, now FIVE independent literatures deep** — the four the [2026-11-02]
+    entry counted, plus tonight's `#378`, which says the panel's large common covariance component
+    is what caps a long-only book's attainable Sharpe. Whether to add a data type remains the human
+    owner's decision; this file's job is only to keep counting.
+  - **Standing, and a factual note for the next STRATEGY session rather than for this folder.**
+    This session's startup banner flagged `origin/main-dh53hc` as holding commits absent from
+    `origin/main`, with the 2026-08-12..15 split-trial-history precedent attached. Checked, because
+    a research session can check it without touching anything it may not: `git rev-list --count
+    origin/main..origin/main-dh53hc` is **2**, and `git diff --stat origin/main...origin/main-dh53hc`
+    touches **only `experiments/journal.md` and `experiments/learnings.md`** — **no
+    `experiments/trials.jsonl`, no `experiments/trial_returns/`, no `strategies/`**. Both commits are
+    from a **0-trial** session ("free: 2026-11-02/03 — 0 trials", plus its own branch note). So
+    **the trial history is not split and no deflated-Sharpe bar is understated by it**; what is
+    stranded is two journal/learnings entries. Recorded here because this folder may not write to
+    those files; landing them is a strategy-session or human action, not this agent's.
+    **Every other `origin/main-*` branch is 0 commits ahead of `main`.**
+
+- **[2026-11-03] Access findings — three first-try author/firm channels, one confirmed-closed pair,
+  and the seventh consecutive confirmation of the Crossref-first ordering.**
+  - **A research firm's own open article library is a first-try channel for its principals'
+    journal articles, and it served a *JPM* and an *FAJ* paper in one call each.**
+    `jlem.com/documents/FG/jlem/articles/<id>_<Name>.pdf` returned genuine PDFs (553 KB and
+    251 KB, both `file`-verified) for two closed-access articles. Generalises the 2026-09-18
+    faculty-page lesson from *academics* to *practitioner firms*: when the authors are principals
+    of a named firm, try that firm's site before any repository. Caveat that travels with it —
+    **a firm hosting its principals' papers is the firm selling the product those papers argue
+    for**, so the methodology-honesty column of the rubric should be filled in accordingly; it was,
+    and the note is Tier B partly for that reason.
+  - **A university department's working-paper directory is a first-try channel too**, and it
+    served the pre-publication version of a *Quantitative Finance* article:
+    `anderson.ucla.edu/documents/areas/fac/finance/<N>-<YY>.pdf` (377 KB, clean
+    `pdftotext -layout`). The numbering is `<paper>-<year>`, which is guessable from a search
+    snippet.
+  - **`academicweb.nd.edu/~<user>/<FILE>.pdf` served the TYPESET RFS advance article**, not a
+    working version — 753 KB, 39 pages, 196 KB of clean extracted text including every table. Worth
+    recording because the folder's faculty-page lesson usually yields a working paper; here the
+    publisher's own typeset PDF was on the author's page, complete with the OUP download watermark.
+  - **The confirmed-closed pair, recorded so no future session re-spends the effort.**
+    `10.2469/faj.v58.n5.2468` (Clarke–de Silva–Thorley 2002) returns OpenAlex
+    `oa_status: closed, any_repository_has_fulltext: false` with only the publisher DOI and an
+    `hdl.handle.net/10.2469/...` RePEc handle — **a handle that is the DOI, i.e. not a deposit**,
+    which is a fifteenth "looks like an answer" mode: a RePEc record whose handle resolves back to
+    the paywall. `10.3905/jpm.2004.443319` (Clarke–de Silva–Sapra 2004) **is not in Crossref at
+    all** (`Expecting value: line 1 column 1` on the works endpoint), so the JPM DOI pattern for
+    2004 should not be trusted as constructed. The CFA Digest summary of the latter *is* openly
+    hosted on an advisory firm's site and is a legitimate second-hand route — three pages, the
+    numbers attributed to a named CFA Institute summariser — but it is **not** the article.
+  - **Crossref answered every DOI queried tonight on the first call; Semantic Scholar returned
+    HTTP 429 to all of them.** Seventh consecutive session confirming the ordering. The
+    **journal-ISSN enumeration remains the fastest key** —
+    `api.crossref.org/journals/<ISSN>/works?query.bibliographic=<words>&filter=from-pub-date:…`
+    resolved both Jacobs–Levy papers in one call each, returning DOI, volume, pages, authors and
+    citation count together. Two cautions: the `works/<doi>` route **rejects `select`**
+    (`parameter-not-allowed`), so parse the full record; and **OpenAlex misreported the RFS
+    paper's publication year as 2015** against Crossref's 2018 advance / 2019 issue, which is the
+    second instance this folder has of OpenAlex metadata being wrong on a field that is right in
+    Crossref.
 
 - **[2026-11-02] READ THIS BEFORE AIMING SESSION 81. The country-index vein is CLOSED on the
   discount side and has exactly ONE live construction; do not reopen the family for a fourth
