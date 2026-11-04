@@ -2198,6 +2198,27 @@ smoothed: the calendar-named mood months are chosen partly on their own realized
 post-selection problem of the `inference-on-winners` shape, mitigated but not removed by the ex ante
 SAD/turn-of-year rationale and the independent best/worst labelling.
 → `notes/2026-10-16-mood-beta-and-seasonal-recurrence.md`
+
+**Added 2026-11-04, and it is a REFUSAL TEST for this family read as a TIMING family rather than
+another mechanism in it.** `learnings.md` already carries the structural half: v3 measures Sharpe on
+returns in excess of T-bills and the benchmark pool is **fully invested**, so a book that sits in
+cash forfeits the equity premium the pool keeps earning, which is what makes
+`seasonality-calendar` mostly unreachable as a timing family. Campbell–Thompson supply the missing
+quantitative half, from the one source this folder has that treats the **cash weight as the
+decision** rather than a residual. For a mean–variance investor the proportional gain in expected
+portfolio return from seeing a predictor is `(R²/(1−R²))·((1+S²)/S²) ≈ R²/S²` — so **the yardstick
+for a timing `R²` is the squared Sharpe of the thing being timed, at the same frequency**, not zero
+and not statistical significance. The composed test (`#386`) is: compute the pool's `S²` and the
+signal's out-of-sample `R²` against the prevailing mean at the candidate's rebalance frequency; if
+`R²/S²` cannot cover the implied v3 cost bill *plus* the pool's head start, refuse before writing.
+The rider is stricter here than in the source: its feasible weight range is `[0, 1.5]` and it
+reports its own gains as *limited by* that cap, so at gross leverage `≤ 1.0` **only the
+move-to-cash half of the conditional response is reachable — and that is precisely the half that
+gives up the premium.** The family's way in therefore remains a *cross-sectional* seasonal on a
+fully-invested book, as the v3 learning already says; what is new is that the timing route can now
+be **refused on arithmetic** instead of declined on judgement. Tier A, no overlap.
+→ `notes/2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`,
+`notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
 ---
 
 ### 12. `lead-lag-spillover`
@@ -8294,6 +8315,137 @@ breadth-independent *ceiling* on attainable Sharpe (Levy–Ritov), and a *share*
 mispricing that sits out of reach (Chen–Da–Huang). The lab has been treating these as one discount.
 They are three, they are measured by three different quantities, and only the first two are
 computable on this repo's data.
+
+### What BREADTH is worth once the SIGNAL ITSELF is risky, and what a CASH DECISION has to clear — the strategy-risk ceiling, the `R²`-versus-`S²` yardstick, and the curve that has to rise (cross-family, `portfolio-learning`, `seasonality-calendar`)
+
+**Why this was the aim, and both halves came from the [2026-11-03] entry verbatim.** That entry
+named one unread primary — **Clarke, de Silva & Thorley (2002)**, the transfer-coefficient source
+this folder has cited since session 5 — and ranked one vein below it: the **cash/pool boundary**,
+with the criterion *admit a source only if it treats the cash weight as a decision rather than a
+residual.* Fixed-string greps across all 258 prior notes: `Portfolio Constraints and the
+Fundamental Law` **0**, `cash holding` **0**, `risk-free allocation` **0**, `partial investment`
+**0**, `optimal fraction in cash` **0**, `cash weight` **0**, `utility gain` **0**,
+`timing the market` **0**, `Thompson` **0**, `Can Anything Beat the Historical Average` **0**,
+`Comprehensive Look at the Empirical Performance` **0** — against `transfer coefficient` **7**,
+`cash position` **1**, `holding cash` **1**. Both gaps confirmed.
+
+**The named primary was NOT obtained for the second night running, but the criterion is answered
+anyway — negatively, from inside its own literature.** The routes tried are in the access section
+below; the material point is that **OpenAlex now flags `10.2469/faj.v58.n5.2468` as
+`is_oa: true, oa_status: green` with an SSRN `oa_url`, reversing the [2026-11-03] record of
+"closed, `any_repository_has_fulltext: false`"** — and the flag is a metadata improvement, not an
+access improvement, because that SSRN landing page is behind the usual Cloudflare 403. What
+substitutes for it is a paper that follows Clarke et al.'s own framework and notation and then
+**breaks their definition**: Ding (Tier B, SSRN working paper read in full from an NYU mirror, 4
+Crossref / 10 Semantic Scholar cites, peer-reviewed successor in *Journal of Empirical Finance*
+not obtained) shows that `TC = corr(Δw·σ_r, α/σ_r)` has the property `IR_c = TC·IR_unc` **only
+when the cross-sectional IC is constant over time and the residual covariance is diagonal**. Once
+the IC varies, the conditional covariance carries a rank-one common component and the diagonal-only
+adjustment is the wrong metric; carried through, it makes the **constraint's cost appear to vanish
+as breadth grows**, which is an artifact of the mis-specification and not a result (**#384**). The
+repair is to adjust by the total conditional covariance,
+`TC = Δw'α / √(Δw'Ω Δw · α'Ω⁻¹α)`. **Every one of this folder's seven TC mentions should be read
+with that caveat**, because `σ_IC = 0` is the one case this lab never faces.
+
+**The night's most valuable result is a ceiling, and it reproduces `#377`'s shape with NO
+constraint anywhere in the derivation.** The generalized fundamental law is
+
+```
+IR = IC̄ / sqrt( 1/(φN) + σ_IC² ) ,        φ ≥ 1 ,        IR → IC̄/σ_IC  as N → ∞
+```
+
+where `σ_IC` is the standard deviation over time of the cross-sectional IC — Qian–Hua's **strategy
+risk** — and `φ` is set by the cross-sectional dispersion of residual volatilities. Grinold's
+`IC·√N` is the `σ_IC = 0` corner; Qian–Hua's `IC̄/σ_IC` is the `N → ∞` corner. **Breadth
+diversifies idiosyncratic risk only.** The bet on the signal has an uncertain payoff common to
+every name in the book, that risk does not diversify, and the limit **contains no `N`** (**#381**).
+`#377` derived a breadth-independent *Sharpe* ceiling for a **long-only** book from covariance
+structure; this derives a breadth-independent *IR* ceiling for the **unconstrained optimum** from
+signal risk. **Two literatures, two derivations, one conclusion: at this panel's width `N` is not
+the lever** — and a long–short lab would not have collected the `√10` either, for a second and
+independent reason. The paper also locates the crossover below this panel's width: `φ` sits in
+roughly the 1.5–2.1 range on its universes and it reports `σ_IC·√(φN)` **in the range 4 to 10**, so
+the breadth term is already spent and Grinold-style projections overstate attainable `IR` by about
+that multiple (**#382**). Both figures are its own panel's and must be re-measured here.
+
+**Two further imports from the same source, both free.** The expected **cross-sectional** IC is a
+residual-volatility-weighted average of per-name **time-series** ICs, `IC_cs = IC_ts·σ̃_r/δ` when
+the latter are equal, so the two coincide only under homogeneous residual volatility — and the lab
+screens candidates on cross-sectional rank IC (**#383**). And the multi-factor form,
+`IR ≈ √(IC'Σ_IC⁻¹IC)`, says what `program.md`'s "ensembles of decorrelated signals" has to mean:
+decorrelated **ICs over time**, not decorrelated scores cross-sectionally and not decorrelated
+realised returns — three different matrices, one of which is in the law. Dropping a signal costs
+`1/√(1−ρ²)` through covariance mis-specification alone, so omitting a **risk** factor whose IC is
+uncorrelated with the return factor's is nearly free (**#385**).
+
+**The cash/pool boundary resolves into one arithmetic test, and the two sources that give it
+disagree about everything except the test.** Campbell–Thompson (Tier A, *RFS*, 2776 Crossref,
+read in full from Harvard DASH) write the risky-asset weight as the decision —
+`w_t = (1/γ)(µ + x_t)/σ_ε²`, complement in the riskless rate, clipped to a feasible range — and
+derive that the proportional gain in expected portfolio return from seeing the predictor is
+`(R²/(1−R²))·((1+S²)/S²) ≈ R²/S²`. **The yardstick for a timing `R²` is the squared Sharpe ratio
+of the thing being timed, at the same frequency** (**#386**). Composed with `learnings.md`'s own
+structural fact — v3's Sharpe is on excess returns and the benchmark pool is **fully invested**, so
+a cash position forfeits the premium the pool keeps earning — this is a **pre-trial refusal test
+for the whole `seasonality-calendar` family as a timing family**, and it costs no trial. Two riders
+sharpen it against the lab rather than softening it: the paper's feasible range is `[0, 1.5]` and
+it reports its gains as *limited by* that cap, so at gross leverage `≤ 1.0` **only the
+move-to-cash half of the conditional response is reachable, and that is the half that gives up the
+premium** — the edge the test must clear here is larger than the paper's, not equal to it. Run the
+same arithmetic backwards and it is also an **overfitting alarm**: because a small `R²` already
+implies a large portfolio gain, a large `R²` implies a gain too large to believe, with horizon the
+one legitimate reason a bigger `R²` is credible (`S²` scales with it) (**#387**).
+
+**The construction half transfers unchanged and should be a default.** Two weak restrictions —
+zero a slope whose estimated sign contradicts theory, and floor the predicted premium at zero —
+**never worsen and almost always improve** out-of-sample performance, need no fundamentals, and
+apply cross-sectionally as well. The forecast floor is the long-only constraint imposed one step
+earlier, on the forecast instead of the weight, which is the same mechanism as `#376`'s one-bit
+truncation seen from the forecast side (**#388**).
+
+**And the counterparty is where the night's honesty lives.** Goyal–Welch (Tier A, *RFS*, 3527
+Crossref, read in full as the Yale ICF working version) reach the opposite verdict on the same
+question, and the folder records the tension rather than picking a side. Their most portable
+contribution is a **diagnostic**: plot the cumulative difference in squared errors against the
+*prevailing* (expanding-window) unconditional forecast, and require **all four** of significance
+in and out of sample, a generally upward drift, a drift not concentrated in one short stretch, and
+a drift still positive over the most recent decades. The level is arbitrary, so start-date
+sensitivity is visible by sliding the zero line instead of hidden. The repo's translation is
+immediate and free — **the cumulative active-return curve against the equal-weight pool, graded on
+those four conditions** — and it is strictly finer than v3's two train sub-periods, which evaluate
+conditions 3 and 4 at two points instead of every point (**#389**). It comes with a **failure
+taxonomy** the lab has needed: a *low-powered* model looks poor early and improves as the window
+lengthens, a *mis-specified* one looks fine early and deteriorates; they report the second and
+confirm it with a parameter-stability test that rejects stability for essentially every variable.
+`learnings.md`'s repeated "sign inverts across train sub-periods" declines are exactly this
+signature, and `#381`'s `σ_IC` is the same phenomenon measured as a dispersion rather than
+diagnosed from a shape (**#390**). Two smaller rules travel with it: when two results on the same
+data conflict, check **sample window and observation weighting** before method — that is where
+they located every disagreement they replicated (**#391**) — and when a weight constraint binds on
+the **benchmark** as well as the candidate, part of the measured difference is constraint-hitting
+rather than forecast quality, which at `γ = 3` happened to their *unconditional* strategy in a
+non-trivial minority of months and is worth one line of check wherever v3's `≤25%` cap binds
+(**#392**).
+
+**The disagreement, stated and not resolved.** Restricted models beat the prevailing mean
+(Campbell–Thompson); the models do not warrant an investment endorsement (Goyal–Welch). Both are
+right about different objects. A weak prior imposed on a noisy estimator does improve it — and the
+improvement runs mostly through **replacing the estimator with the benchmark on a large fraction of
+dates** (about half, in the cases where the restriction changed the verdict), the residual edge is
+not stable across sub-periods, and the economic magnitude moves with the risk-aversion parameter
+and the leverage cap. For this lab the usable synthesis is narrow: **adopt the restrictions, grade
+with `R²/S²`, and require the cumulative curve before believing either.** Goyal–Welch also state
+the two ways their own test is too generous — it is not a true out-of-sample test, since the
+evaluation data are the data the models were found on, and it ignores how an investor would have
+known in advance which model to pick — which is the deflated-skill bar's job described from the
+outside.
+
+**The cross-cutting shape, stated once.** All three sources are about the same thing and none is
+about a signal: **what a number has to clear before it is worth anything.** Breadth has a ceiling
+set by the signal's own risk (`IC̄/σ_IC`, no `N`); a timing `R²` has a yardstick set by the asset's
+squared Sharpe (`R²/S²`); and an accumulated edge has a shape test set by its own time path (the
+four conditions). None of the three costs a trial, all three are computable on data this repo
+already holds, and all three refuse candidates rather than proposing them.
 
 ## Candidate ideas for the strategy agent
 
@@ -15722,6 +15874,154 @@ hypothesis fodder, then anti-candidates.
     caution as `#362`). Tier A.
     → `notes/2026-11-03-which-leg-arbitrage-capital-trades.md`
 
+381. **FREE DIAGNOSTIC, and it is the quantity that bounds everything else: `σ_IC`, the standard
+    deviation over time of the cross-sectional IC.** The fundamental law in its general form is
+    `IR = IC̄/√(1/(φN) + σ_IC²)` with `φ ≥ 1` set by the cross-sectional dispersion of residual
+    volatilities, so **the large-`N` ceiling is `IC̄/σ_IC` and contains no `N`.** Breadth
+    diversifies idiosyncratic risk only; the bet on the signal itself has an uncertain payoff
+    common to every name in the book and does not diversify. The lab's diagnostics report a mean
+    cross-sectional IC and a `t`-statistic; the quantity that caps attainable `IR` is the
+    **standard deviation of that same IC series**, which is already computable from what a trial
+    runs. A signal with a respectable mean IC and a large `σ_IC` has a low ceiling at any panel
+    width. Costs no trial. Tier B, no overlap.
+    → `notes/2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`
+
+382. **INDEPENDENT CONFIRMATION OF `#377`, with no constraint anywhere in the derivation — so
+    breadth-independence is NOT a long-only artifact.** `#377` got a breadth-independent Sharpe
+    ceiling for a long-only book from covariance structure; `#381` gets a breadth-independent `IR`
+    ceiling for the **unconstrained mean–variance optimum** from signal risk. The source locates
+    the crossover below this panel's width: on its universes `φ` sits in roughly the 1.5–2.1 range
+    and `σ_IC·√(φN)` **in the range 4 to 10**, i.e. the breadth term is already spent and
+    Grinold-style `IC·√N` projections overstate attainable `IR` by about that multiple. **The
+    practical reading: protocol v2's ~140 → ~1,400 widening buys selection quality and not a
+    higher ceiling, and a long–short lab would not have gained the `√10` either.** Both figures are
+    the paper's own panel's and must be re-measured here before being quoted. Tier B, no overlap.
+    → `notes/2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`
+
+383. **INTERPRETATION RULE for the screen this lab uses most: a cross-sectional IC is not a
+    time-series IC.** If every name shares the same time-series IC, the expected cross-sectional
+    IC is `IC_cs = IC_ts·σ̃_r/δ`; in general it is a **residual-volatility-weighted average** of
+    per-name time-series ICs, `IC_cs = (1/N)·Σ IC_ts,i·σ_ri/δ`. The two coincide only when residual
+    volatilities are homogeneous — which on a nine-index global panel they are not. So a
+    cross-sectional rank IC is partly a statement about the panel's volatility dispersion, and
+    reading it as per-name predictability is a specification error. Free check: measure the
+    cross-sectional dispersion of trailing residual volatility before quoting an IC as skill.
+    Tier B, no overlap.
+    → `notes/2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`
+
+384. **CORRECTION TO THIS FOLDER'S OWN USAGE, affecting seven notes: the transfer coefficient as
+    Clarke et al. define it does not have the property it is quoted for.** `TC = corr(Δw·σ_r,
+    α/σ_r)` satisfies `IR_constrained = TC·IR_unconstrained` **only** when the cross-sectional IC
+    is constant over time *and* the residual covariance is diagonal. With a time-varying IC the
+    conditional covariance carries a rank-one common component (`σ_IC²δ²zz'`), the diagonal-only
+    adjustment is the wrong metric, and carried through it makes the **constraint's cost appear to
+    vanish as breadth grows** — an artifact, not a result, and the origin of any claim that
+    "breadth buys back what the constraint costs". The repair uses the total conditional
+    covariance: `TC = Δw'α / √(Δw'ΩΔw · α'Ω⁻¹α)`, which restores the identity exactly. Read every
+    `transfer coefficient` mention in this folder with that caveat; `σ_IC = 0` is the one case this
+    lab never faces. Tier B, no overlap.
+    → `notes/2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`
+
+385. **DESIGN RULE for `portfolio-learning`, and it names which matrix "decorrelated" refers to.**
+    The multi-factor law is `IR ≈ √(IC'Σ_IC⁻¹IC)`, where `Σ_IC` is the covariance matrix of the
+    signals' **cross-sectional ICs over time**. `program.md` asks for "ensembles of decorrelated
+    signals"; this says decorrelation must be measured on **ICs over time** — not on scores
+    cross-sectionally, not on realised returns. Those are three different matrices and only the
+    first is in the law. Corollary with a sign: for two signals, dropping one costs
+    `1/√(1−ρ²)` through covariance mis-specification alone (`ρ` = time-series correlation of the two
+    ICs), so omitting a **risk** factor whose IC is uncorrelated with the return factor's is nearly
+    free, while omitting a **return** factor costs twice. Free to compute from existing trial
+    diagnostics. Tier B, no overlap.
+    → `notes/2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`
+
+386. **FREE SCREEN, and it is a pre-trial refusal test for the whole `seasonality-calendar` family
+    read as a TIMING family: compare the timing `R²` to the squared Sharpe `S²`, not to zero.** For
+    a mean–variance investor whose risky-asset weight is the decision and whose complement is cash,
+    the proportional gain in expected portfolio return from seeing the predictor is
+    `(R²/(1−R²))·((1+S²)/S²) ≈ R²/S²`, both quantities measured at the same frequency. Composed
+    with `learnings.md`'s structural fact (v3's Sharpe is on excess returns and the benchmark pool
+    is **fully invested**, so cash forfeits the premium the pool keeps earning), the test is: at
+    the candidate's rebalance frequency compute the pool's `S²` and the signal's out-of-sample `R²`
+    against the prevailing mean; if `R²/S²` cannot cover the implied v3 cost bill plus the pool's
+    head start, **refuse before writing.** Rider that makes it stricter here, not looser: the
+    source's feasible range is `[0, 1.5]` and it reports its gains as *limited by* that cap, so at
+    gross leverage `≤ 1.0` only the **move-to-cash** half of the conditional response is reachable,
+    and that is the half that gives up the premium — the edge must clear a **larger** bar than the
+    paper's. Tier A, no overlap.
+    → `notes/2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`
+
+387. **FREE SCREEN RUN BACKWARDS — a plausibility bound on `R²` and IC that complements the
+    deflated-skill bar from the other side.** Because a *small* `R²` already implies a large
+    portfolio gain, a *large* `R²` implies a gain too large to be credible: a candidate whose
+    in-sample `R²` or IC implies an improvement far beyond what `S²` permits should be treated as
+    mis-specified or leaking, not as a discovery. The one legitimate reason a bigger `R²` is
+    believable is **horizon**, since `S²` scales roughly linearly with it — which is also why a
+    persistent predictor's `R²` rises with horizon without that being evidence of anything. The
+    deflator asks whether a result survives the search; this asks whether the result is too good to
+    be a result. Tier A, no overlap.
+    → `notes/2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`
+
+388. **CONSTRUCTION DEFAULT, free and transferable without fundamentals: two weak sign
+    restrictions.** (i) Zero a slope coefficient whose estimated sign contradicts the theoretically
+    expected sign — a short window easily produces a perverse sign and no real user would act on
+    one, so setting it to zero imposes the prior explicitly instead of pretending it is absent.
+    (ii) **Floor the predicted excess return at zero.** Qualitatively these **never worsen and
+    almost always improve** out-of-sample performance. Both apply cross-sectionally as well as in
+    time series, and (ii) is the long-only constraint imposed one step earlier — on the forecast
+    rather than the weight — which is `#376`'s one-bit truncation seen from the forecast side. The
+    general principle underneath: **a false restriction improves a forecast when it cuts the
+    predictor's variance by more than it adds bias.** One mandatory accompaniment, from the
+    counterparty (`#389`'s source): **report the fraction of dates on which the restriction is
+    active.** A candidate that is the pool on most dates and a tilt on a few is mostly the
+    benchmark, and its skill interval is narrow for that reason rather than from precision. Tier A,
+    no overlap.
+    → `notes/2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`,
+    `notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
+
+389. **FREE SCREEN, strictly finer than what v3 already reports: the CUMULATIVE ACTIVE-RETURN CURVE
+    against the pool, graded on four conditions.** Plot cumulative (candidate return − equal-weight
+    eligible pool return) over the train window — the repo's translation of the source's cumulative
+    squared-error difference against the *prevailing* unconditional forecast. Require **all four**:
+    (1) significance in and out of sample over the whole window; (2) a generally upward drift,
+    irregular being fine; (3) a drift **not concentrated in one short or unusual stretch**; (4) a
+    drift still positive over the most recent part of the window. The level is arbitrary, so
+    **start-date sensitivity is inspected by sliding the zero line** instead of being hidden, and
+    the curve's best and worst points are invariant to it. v3's two train sub-periods evaluate
+    conditions 3 and 4 at two points; this evaluates them at every point, costs nothing beyond what
+    a trial already computes, and is complementary to `scripts/rank_trials.py` (which answers
+    whether two candidates can be separated, not whether one candidate's edge accrued recurrently).
+    Tier A, no overlap.
+    → `notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
+
+390. **FAILURE TAXONOMY that names an inference the lab has been making without a warrant.** A
+    *low-powered* model looks poor early and improves as the estimation window lengthens; a
+    *mis-specified / unstable* model looks acceptable early and **deteriorates late**. The source
+    reports the second pattern across its variables and confirms it with a parameter-stability test
+    that rejects stability for essentially all of them — so the diagnosis is instability, not
+    sample size, and **a longer sample does not fix it.** `learnings.md` records several signals
+    declined because their sign **inverts across train sub-periods**; this is the inference that
+    justifies those declines, and `#381`'s `σ_IC` is the same phenomenon measured as a dispersion
+    rather than diagnosed from a shape. Compute both together. Tier A, no overlap.
+    → `notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
+
+391. **REPRODUCTION RULE: when two results on the same data conflict, check the sample window and
+    the observation weighting before the method.** The source replicated every paper it disagreed
+    with and traced the differences to exactly those two knobs — the evaluation period, and the
+    down-weighting or exclusion of extreme observations — not to estimator choice. Cheap and
+    directly applicable whenever a `research/` note contradicts a `learnings.md` refutation, which
+    is the situation this folder's own rules tell it to flag rather than resolve. Tier A, no
+    overlap.
+    → `notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
+
+392. **CAVEAT on any comparison where a weight constraint binds on BOTH sides.** At the source's
+    risk-aversion setting even the **unconditional benchmark** strategy hit its leverage cap in a
+    non-trivial minority of months. When a cap binds on the benchmark as well as the candidate,
+    part of the measured difference is **which of them hits the constraint more often**, not which
+    forecast is better. Worth one line of check in any v3 trial where the `≤25%` per-position cap
+    or the gross-leverage limit binds, and a reason to report cap-binding frequency alongside
+    skill. Tier A, no overlap.
+    → `notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
+
 
 
 ---
@@ -15815,8 +16115,150 @@ hypothesis fodder, then anti-candidates.
 
 | 2026-11-02 (session 80) | **RAN THE CORRECTED COVERAGE DETECTOR FIRST, AS INSTRUCTED — the three hit counts the [2026-11-01] entry flagged for re-checking all HOLD, and the real gap is the TRADED UNIT.** Re-run with fixed strings across 252 notes: `fundamental law` **5**, `transfer coefficient` **6**, `rank IC` **7** — all confirmed, so that entry's readings on those were sound and no correction is owed. The genuine zeros are about what is ranked rather than how: `index momentum` **0**, `Bhojraj` **0**, `Hameed` **0**, `macromomentum` **0**, `winner-loser reversal` **0**, `country rotation` **0**, `region rotation` **0**, `global tactical` **0**, `asset allocation` **1** — while the folder's two `country momentum` notes are both about **neutralising** the country bet in a stock book. **The folder had written twice about removing a bet it had never written about taking**, and the lab holds 42 ETFs that could express it. Graded against three criteria stated before the first paper: **(a) PASSES in the strongest available form — a SIGN FLIP** (country short-horizon = continuation, stock short-horizon = reversal), so it is not the incumbent relabelled (**#361**). **(c) FAILS COMPLETELY — none of the three sources models transaction costs**, so every magnitude here is gross and the near-zero developed-market result is a *pre-cost* near-zero (**#366**, third consecutive confirmation of `#359` from the literature's side). **(b) SPLITS, and that split is the night's result.** Cakici–Fieberg–Neszveda–Piljak–Zaremba (Tier B, *JBF*, **0** Crossref cites — an age artefact; read in full from the Vaasa repository) vary **nine** design nodes over **13,824** implementations and find the two most influential are **data source** and **geographic scope** — **exactly the two this lab is pinned at the worse end of**: ETF/futures representations pay **two to three times less** than full-market aggregates (~0.13–0.16 pp/month) and developed-only scope gives spread returns **indistinguishable from zero**, with ETF designs also carrying **higher** nonstandard errors. **This is the folder's usual 'a null on a large-cap panel would be uninformative' hedge replaced by a direct measurement of that exact case.** Two honest narrowings travel with it: the two penalties are **largely the same finding seen twice** and must not be stacked (**#362**), and the paper is entirely **long-short** with **no long-leg breakout** (**#370**). **One object survives all three criteria and two independent sources converge on it**: short-horizon country-index continuation — the only price-computable member of the four signals surviving the multiverse plus bootstrap plus out-of-sample selection, and Chan–Hameed–Tong (Tier A, *JFQA*, **326** Crossref, read in full from an NUS-hosted working version) independently find index-momentum alphas **jointly insignificant at 1 week, significant at 1% at 2 and 4 weeks, and gone at 12 and 26 weeks** after world-market beta adjustment (**#363**). **The finding that changes what a long-only lab should think: the LONG LEG carries it** — "buying winner portfolios yields significant profits consistently, but selling loser portfolios creates either insignificant profits or losses" — inverting `program.md`'s standing caveat that long-only is expensive because only the cheap side is tradeable (**#364**); and cap-weighting shrinks but does not kill it, failing the authors' own small-market-artefact test at short horizons. The **currency tension resolves on horizon**: CHT's π3 is **negative at 12 and 26 weeks**, the same sign Bhojraj–Swaminathan report at annual horizons, giving the reusable rule that **a USD score is cleanest short and self-contaminating long** (**#367**) — which independently explains why one-month `StMom` is robust and 12-1 `LtMom` fragile. Richards (Tier A, *JF*, **135** + **45** across two Crossref records; read as IMF WP/97/182, a **text-layerless scan** rendered to images) supplies the long-horizon end and the **hedge the multiverse does not**: his **eight-largest** subgroup (US, Japan, UK, Canada, Germany, France, Australia, Switzerland — close to this lab's panel) still shows a positive contrarian return at ~60% of the small-market one, and the difference is **not significant**, so the honest claim is **"the gradient runs against this panel", not "the effect is absent"** (**#368**). His own horizon is **refused on arithmetic** — 3-year ranking and 3-year test against a six-year validation split is two non-overlapping periods (**#369**). **One source recorded as body-not-obtained:** Bhojraj–Swaminathan 2006 (*J.Business*, `10.1086/497416`, **156** Crossref) — closed, no OA location, Cornell eCommons **0** for the title; abstract read from the RePEc record and nothing beyond it used. | Cakici, Fieberg, Neszveda, Piljak & Zaremba 2026 (`2026-11-02-multiverse-of-country-level-research-designs.md`); Chan, Hameed & Tong 2000 + Bhojraj & Swaminathan 2006 abstract (`2026-11-02-country-index-momentum-and-the-currency-component.md`); Richards 1997 (`2026-11-02-winner-loser-reversals-in-national-indices.md`) |
 | 2026-11-03 (session 81) | **TOOK THE AIM VERBATIM AND IT PAID OUT AS A CORRECTION TO THE FOLDER'S OWN HABIT — the folder had 27 notes that invoke the long-only constraint and none about the constraint itself.** Aim taken from the [2026-11-02] entry, which sharpened `statistical-arbitrage`'s binding question into a coverage test on `program.md`'s clause *"say how the short leg's absence is handled"*. Fixed-string greps across all 255 prior notes: `enhanced active` **0**, `130/30` **0**, `long-only portfolio optimization` **0**, `Levy, Ritov` **0**, `many assets` **0**, `Chen, Da` **0**, `Zhi Da` **0**, `net arbitrage trading` **0** — against `long-only constraint` **27** and `short leg` **28**. **That entry's acceptance criterion (admit a source only if it reports a long-leg-only or long-only-constrained result) was stated before the first download and it excluded two sources**: Clarke–de Silva–Thorley (2002) and Clarke–de Silva–Sapra (2004), the transfer-coefficient primaries that `2026-08-19-fundamental-law-breadth-and-strategy-risk.md` has flagged as unread since session 5, were **not written up** — both closed, `any_repository_has_fulltext: false`, no repository copy found, and the only text reached was a **CFA Digest editorial summary**, recorded second-hand inside tonight's first note and explicitly not a measured quantity for this repo. **Three notes, three separable mechanisms, and the lab has been treating them as one discount.** *(a)* **The arithmetic.** `w_i >= 0` gives `w_i - b_i >= -b_i`, so the attainable underweight is the benchmark weight; and since active weights sum to zero, the constraint **also caps overweights**, making a cap-weighted long-only book's implicit bet *long the top, short the middle* (**#373**). *(b)* **The night's most useful result is a CORRECTION rather than an import: the capital half of that argument does not reach an equal-weight benchmark.** With `b_i = 1/N ≈ 0.07%`, excluding `k` of `N` names frees exactly `k/N`, so a 20-name book's 1,380 underweights of `-0.0714%` sum to **98.6%** and fund its overweights exactly — **a long-only book on this pool can run a ~99% active position**, and "underweighting frees only a minuscule amount of capital" is cap-weighted and does not apply (**#374**). What survives is a **resolution** limit: every excluded name gets the identical `-1/N`, so the ranking is **quantised to one bit below the inclusion threshold**, giving the rule that **a score is reachable here iff its information is in identifying the best names and unreachable iff it is in ordering the bad ones** (**#375**) — a construction-level cause for the lab's own repeated "real, large, significant, structurally unreachable" shape — plus a new free screen that tests exactly it, the **one-bit truncation test** (`score_trunc = max(rank, threshold)`, then re-measure rank IC), strictly stronger than the top-minus-pool comparison because a score can show a spread with a flat top and a steep bottom (**#376**). *(c)* **The theorem, and it is about protocol v2's own widening.** Levy–Ritov prove that for `C = M + α11'` the attainable Sharpe is of order `√N` with shorting and **levels off** without, with closed-form ceiling `(max_i µ_i)/√α` — **no `N` on the right**; mechanism: with positive average covariance, adding an asset to a long-only frontier gives combinations interior to it, so its weight is zero and the frontier does not extend. Prediction: the ~140 → ~1,400 widening buys **selection quality and not a higher reachable ceiling**, where a long–short lab would have gained ~`√10` (**#377**), and the companion closed form `w_i → ((µ_i − µ̄)/µ̄)·(ρ/(1−ρ))` **also contains no `N`**, so the measured de-concentration price and the binding `≤25%` cap are structural rather than narrow-panel artifacts (**#378**). That note also records a tension the folder must hold both halves of: Jagannathan–Ma says the constraint *helps* as shrinkage, this says it is costly against true parameters — oracle problem versus estimated problem, and a score-ranking book collects **neither**, only the ceiling. *(d)* **The one measurement on returns runs AGAINST the folder's strongest discount.** Chen–Da–Huang (Tier A, *RFS*, **124** Crossref, randomised Regulation SHO identification, read in full from a Notre Dame faculty page) report the legs separately and five-factor-adjusted the **traded long leg alone is significant: +0.017%/day, t = 2.51** at ten days against **−0.021%** (t = −2.69) short, so the reachable leg carries ~**45%** of a 0.038%/day traded spread while both not-traded legs are insignificant. **The honest revision is the [2026-11-02] shape: the gradient runs against the long leg, and the long leg is not a null** (**#379**). *(e)* **And that source closes its own would-be adaptation by AGREEING with the lab**: substituting general institutional ownership for hedge-fund holdings destroys the predictability, so what matters is *who* trades rather than *how much* — volume is broader still, and `learnings.md` has the whole volume axis as a twelve-session null. **The lab's null and the paper's null are the same finding from two directions**; the mechanism is structurally unreachable on price-only data rather than untested, and no trial should be spent on it (**#380**). **Anti-lookahead note:** the RFS paper has a substantial crisis-period section and several period-attributed anomaly statements; **none of it is recorded**, and the note says so. | Jacobs & Levy 2006 (*JPM*) + 2007 (*FAJ*) (`2026-11-03-attainable-underweight-and-the-long-only-constraint.md`); Levy & Ritov 2001/2011 (`2026-11-03-no-short-constraint-cost-and-panel-breadth.md`); Chen, Da & Huang 2019 (`2026-11-03-which-leg-arbitrage-capital-trades.md`) |
+| 2026-11-04 (session 82) | **TOOK BOTH AIMS THE [2026-11-03] ENTRY SET, AND THE NAMED PRIMARY'S CRITERION IS ANSWERED NEGATIVELY FROM INSIDE ITS OWN LITERATURE WITHOUT THE PRIMARY EVER BEING OBTAINED.** Aims taken verbatim: (1) the named primary **Clarke, de Silva & Thorley (2002)** on the transfer coefficient, admissible only if its body gives the TC under a long-only constraint as a function of something this lab controls; (2) ranked below it, the **cash/pool boundary**, admissible only if the source treats the cash weight as a **decision** rather than a residual. Fixed-string greps across all 258 prior notes: `Portfolio Constraints and the Fundamental Law` **0**, `cash holding` **0**, `risk-free allocation` **0**, `partial investment` **0**, `optimal fraction in cash` **0**, `cash weight` **0**, `utility gain` **0**, `timing the market` **0**, `Thompson` **0**, `Can Anything Beat the Historical Average` **0**, `Comprehensive Look at the Empirical Performance` **0** — against `transfer coefficient` **7**, `Clarke` **4**, `cash position` **1**, `holding cash` **1**. Both gaps confirmed. **(a) The named primary was NOT obtained for the second night running and should now be CLOSED as a target.** `10.2469/faj.v58.n5.2468` resolves on Crossref (197 cites, confirming the [2026-11-03] figure) but **OpenAlex now flags it `is_oa: true, oa_status: green, any_repository_has_fulltext: true` with `oa_url` = an SSRN DOI — reversing that entry's "closed, no full text" record** — and the flag is a metadata improvement only, because the SSRN landing page returns the standard Cloudflare 403; `core.ac.uk` 429'd its API and challenged its search page. **What answers the criterion instead is a paper that follows Clarke et al.'s own framework and notation and then breaks their definition.** Ding (Tier B, SSRN working paper read in full, 33 pp., from an NYU mirror; 4 Crossref / 10 Semantic Scholar cites; peer-reviewed successor in *Journal of Empirical Finance* 2017 not obtained) shows `TC = corr(Δw·σ_r, α/σ_r)` satisfies `IR_c = TC·IR_unc` **only when the cross-sectional IC is constant over time and the residual covariance is diagonal**; with a time-varying IC the conditional covariance carries a rank-one common component, the diagonal-only adjustment is the wrong metric, and carried through it makes the **constraint's cost appear to vanish as breadth grows** — an artifact, and the origin of any claim that "breadth buys back what the constraint costs". The repair is `TC = Δw'α/√(Δw'ΩΔw·α'Ω⁻¹α)` (**#384**), and **all seven of this folder's `transfer coefficient` mentions now carry that caveat.** **(b) The night's most valuable result is a ceiling that reproduces `#377`'s shape with NO constraint in the derivation.** The generalized law `IR = IC̄/√(1/(φN) + σ_IC²)` has large-`N` limit **`IC̄/σ_IC`, containing no `N`** (**#381**): breadth diversifies idiosyncratic risk only, while the bet on the signal itself has an uncertain payoff common to every name and does not diversify. `#377` derived a breadth-independent *Sharpe* ceiling for a **long-only** book from covariance structure; this derives a breadth-independent *IR* ceiling for the **unconstrained optimum** from signal risk — **two literatures, two derivations, one conclusion: at this width `N` is not the lever, and a long–short lab would not have gained the `√10` either.** The source puts the crossover below this panel's width (`φ` ≈ 1.5–2.1 on its universes, `σ_IC·√(φN)` **in the range 4–10**, so Grinold-style projections overstate `IR` by about that multiple) — its own panel's figures, flagged as needing re-measurement here (**#382**). Two further free imports: `IC_cs` is a **residual-volatility-weighted average** of per-name `IC_ts` and equals it only under homogeneous residual volatility, which bears directly on the lab's most-used screen (**#383**); and the multi-factor form `IR ≈ √(IC'Σ_IC⁻¹IC)` says `program.md`'s "decorrelated signals" must mean decorrelated **ICs over time** — not scores cross-sectionally, not realised returns — with a missing *risk* factor costing only `1/√(1−ρ²)` and a missing *return* factor costing twice (**#385**). **(c) The cash/pool boundary resolves into ONE ARITHMETIC TEST, and the two Tier A sources that give it disagree about everything else.** Campbell–Thompson (*RFS*, **2776** Crossref / 2676 Semantic Scholar, read in full from Harvard DASH) write the risky-asset weight as the decision with the complement in the riskless rate and derive the proportional return gain from seeing a predictor as `(R²/(1−R²))·((1+S²)/S²) ≈ R²/S²` — **the yardstick for a timing `R²` is the squared Sharpe of the thing being timed** (**#386**). Composed with `learnings.md`'s own structural fact (v3's Sharpe is on excess returns and the pool is **fully invested**, so cash forfeits the premium the pool keeps earning) this is a **pre-trial refusal test for `seasonality-calendar` read as a timing family**, and the rider makes it stricter rather than looser: the paper's feasible range is `[0, 1.5]` and it calls its own gains *limited by* that cap, so at gross leverage `≤ 1.0` only the **move-to-cash half** of the response is reachable and that is the half that gives up the premium. Run backwards the same arithmetic is an **overfitting alarm** — a large `R²` implies a gain too large to believe, with horizon the one legitimate reason a bigger one is credible (**#387**) — and the construction half transfers unchanged: zero a wrong-signed slope, **floor the predicted premium at zero**, which **never worsens and almost always improves** out-of-sample performance and is the long-only constraint imposed on the forecast instead of the weight, i.e. `#376` from the forecast side (**#388**). **(d) The counterparty is where the honesty is, and the folder records the tension rather than picking a side.** Goyal–Welch (*RFS*, **3527** Crossref; Semantic Scholar's split record reports 1457 and is the "disbelieve a lone low count" pattern again; read in full as the Yale ICF working version) reach the opposite verdict on the same question. Their portable contribution is a **diagnostic**: the cumulative squared-error difference against the *prevailing* expanding-window mean, graded on **four** conditions (significant in and out of sample; generally upward drift; drift not concentrated in one short stretch; drift still positive late), whose arbitrary level makes start-date sensitivity inspectable by sliding the zero line. The repo's translation — **the cumulative active-return curve against the equal-weight pool** — is free and **strictly finer than v3's two train sub-periods**, which test conditions 3 and 4 at two points rather than every point (**#389**). With it comes a **failure taxonomy**: low power looks poor early and improves, mis-specification looks fine early and **deteriorates late**; they report the second and confirm it with a stability test that rejects stability for essentially every variable, so `learnings.md`'s repeated "sign inverts across train sub-periods" declines now have their warrant, and `#381`'s `σ_IC` is the same thing measured as a dispersion (**#390**). Two smaller rules: conflicting results on the same data trace to **sample window and observation weighting** before method (**#391**), and when a weight cap binds on the **benchmark** as well as the candidate, part of the measured difference is constraint-hitting rather than forecast quality (**#392**). **(e) The disagreement, stated and not resolved.** A weak prior on a noisy estimator does improve it — and the improvement runs mostly through **replacing the estimator with the benchmark on about half the dates** where the restriction changed the verdict, the residual edge is not sub-period stable, and the economic magnitude moves with the risk-aversion parameter and the leverage cap. Usable synthesis: **adopt the restrictions, grade with `R²/S²`, require the cumulative curve before believing either.** Goyal–Welch also state the two ways their own test is too generous — it is not a true out-of-sample test, and it ignores how an investor would have known which model to pick — which is the deflated-skill bar described from outside. **Anti-lookahead note:** all three sources have substantial dated empirical sections (factor-level IR tables; named-predictor `R²`s and utility gains; sub-period and event narratives). **None of it is recorded**, each note says so in as many words, and every sample ends by 2009 so `validation_overlap: false` throughout. | Ding 2010 (+ Ding & Martin 2017, successor, not obtained) (`2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`); Campbell & Thompson 2008 (`2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`); Goyal & Welch 2008 (`2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-04] READ THIS BEFORE AIMING SESSION 83. The named primary is now CLOSED as a target —
+  do not spend a third night on it — and the cash/pool boundary is closed on construction.**
+  Two nights have been spent trying to obtain **Clarke, de Silva & Thorley (2002)**
+  (`10.2469/faj.v58.n5.2468`). Tonight's `#384` answers its acceptance criterion from inside its own
+  literature: the TC as that paper defines it does **not** have the property this folder quotes it
+  for, so reading the body would change nothing that `#381`–`#385` do not already settle. Record it
+  as **read-and-closed by substitution**. The specific trap for a future session is that
+  **OpenAlex now flags the DOI as `green` OA with an SSRN `oa_url`**, which looks like a route and
+  is not — every location is paywalled. The companion Clarke–de Silva–Sapra (2004) remains absent
+  from Crossref entirely. Likewise the **cash/pool boundary** now has its two canonical poles
+  (`#386`–`#392`) and a fourth timing paper would change none of them; what is *not* closed there is
+  **whether the lab should ever run a timing candidate at all**, and `#386` is the test that decides
+  it, not another note.
+  - **Primary aim for session 83, and it is the cleanest caveat-detector hit since the long-only
+    one. The folder has FORTY notes about discounting a result it found and ZERO about whether the
+    design could have detected one.** Fixed-string greps across all 261 notes: `minimum detectable`
+    **0**, `detectable effect size` **0**, `sample size calculation` **0**, `ex ante power` **0**,
+    `design sensitivity` **0** — against `haircut` **40**, `deflated Sharpe` **4**,
+    `effective number of trials` **3**. Every multiple-testing note in this folder corrects a
+    statistic *after* it is computed. Nobody has asked the prior question: **given 2018–2023 of
+    validation on a ~1,000-name panel against a fully-invested pool, with skill intervals of about
+    ±0.33 and a deflated bar near 0.95, what is the smallest true skill this design can detect?**
+    That number decides whether the lab's long run of near-misses is evidence of absent effects or
+    of an underpowered test, and `#357`/`#358` (is the bar's severity an estimate or an assumption?)
+    cannot be settled without it. **It is also the exact complement of tonight's `#387`**: that item
+    bounds results from above (too big to believe), this would bound them from below (too small to
+    detect), and together they bracket the admissible range — which is a far more useful object than
+    either end alone.
+    **Acceptance criterion, stated before any download: admit a source only if it yields a
+    computable minimum detectable effect as a function of something this lab controls** — the number
+    of rebalance dates, the number of names, the benchmark correlation, the number of trials. A
+    paper that reports a power simulation for one estimator on one dataset, or that only re-derives
+    a post-hoc correction, **does not reach** and should be recorded as read-and-closed rather than
+    written up. Search terms that have never been used here: minimum detectable effect, ex ante
+    power for Sharpe-ratio differences, design sensitivity, sample-size requirements for
+    performance-difference tests, the power of Sharpe-ratio tests under dependence.
+  - **Ranked below that: PANEL CONSTRUCTION as a claim in its own right, which the [2026-11-03]
+    entry nominated and which tonight did not reach.** Greps standing at **0**: `large-cap bias`,
+    `investable universe`, `free float`, `index inclusion criteria`, `capitalization threshold`,
+    `universe construction`; `float adjustment` **1**, `index construction` **1**,
+    `size threshold` **1**, `Russell reconstitution` **1** — against `index membership` **10**. The
+    folder has notes on membership as an *event* and on look-ahead benchmark bias, but none on
+    **what an index's own inclusion rules select for**, which is the premise behind the standing
+    phrase "this panel is large-cap and liquid by construction" that five independent literatures now
+    lean on. Criterion of the same shape: admit a source only if it characterises the selection rule
+    (size, float, liquidity, turnover screens) and what it does to a measured cross-sectional effect
+    — not another paper on the price impact of being added to an index, which is already covered.
+  - **The detector worked a third consecutive night and the generalisation is now stable enough to
+    state as a rule.** [2026-11-02]: *ask what object the lab ranks, and grep for the objects it does
+    not.* [2026-11-03]: *ask what object the lab's caveats name, and grep for the caveat's own
+    literature.* Tonight: **ask what the lab does to a number after it has it, and grep for the
+    literature about the number before it exists.** `haircut` 40 against `minimum detectable` 0 is
+    the same signature as `long-only constraint` 27 against `130/30` 0. Remaining caveats not yet
+    run through it, in descending order: *survivorship* (the panel's pre-2009 thinness),
+    *publication decay*, and *"the cost model is lethal only to books that trade"*.
+  - **A correction this file owes itself, and it is about this folder's own screens rather than a
+    source.** Tonight's `#383` says a cross-sectional IC is a residual-volatility-weighted average
+    of per-name time-series ICs and coincides with the latter only under homogeneous residual
+    volatility. **This folder recommends a rank IC as a free screen in a large number of items**, and
+    the 2026-10-09/10 learning already records one case where a rank correlation was scale-free in
+    exactly the dimension the hypothesis turned on. Those two are the same defect from two
+    directions. Wherever a rank IC is proposed as a screen, the accompanying instruction should now
+    be: **report the cross-sectional dispersion of trailing residual volatility alongside it.**
+  - **Carried unchanged and still live from [2026-11-03]**: the long-only-constraint vein stays
+    closed on construction (`#373`–`#380`); `#376`'s one-bit truncation test remains the free screen
+    that should run before **any** cross-sectional candidate, and tonight adds two more that should
+    run before any candidate at all — **`#389`'s cumulative-curve test** (shape of the accrual) and
+    **`#381`'s `σ_IC`** (ceiling on the accrual). `#363` (short-horizon country-index continuation,
+    long leg only) remains the single live *construction* in the carried queue, with `#371` its
+    pre-trial refusal test and `#361` the free screen before either.
+  - **Unchanged and still live**: `#381`–`#392` from tonight; `#373`–`#380` from 2026-11-03;
+    `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31;
+    `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29; `#322`–`#327` from 2026-10-28;
+    `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25;
+    `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22;
+    `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then
+    2026-10-17 and everything carried under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); the long-only constraint as a construction object
+    (2026-11-03), now including its named primary; and **the cash/pool boundary as a construction
+    object**, on the terms in the first paragraph above. Still at **0** and still not nominated:
+    `transfer entropy` (fifteenth nomination).
+  - **Standing, and not this folder's call**: the engine issues filed 2026-10-18 and 2026-10-22;
+    `min_train_skill = 0.0`; `#324`'s deliberate difference; the two human decisions added
+    2026-10-29; the three items the 2026-10-30/31 nightly raised; `#357`/`#358`'s question of
+    whether the deflated-skill bar's severity should be an estimate rather than an assumption —
+    **which tonight's primary aim for session 83 is the way to answer**; and the data-type question,
+    unchanged at five independent literatures. Also standing and unchanged from [2026-11-03]: the
+    two commits stranded on `origin/main-dh53hc` touch only `experiments/journal.md` and
+    `experiments/learnings.md`, so **the trial history is not split and no deflated bar is
+    understated**; landing them is a strategy-session or human action, not this agent's. This
+    session's own integrity check found the container checked out on a per-run branch
+    (`claude/tender-galileo-2zzrbn`) at the same commit as `origin/main`; it was reset to `main`
+    before any work, per `research/README.md`'s rule that research work never sits on a per-run
+    branch.
+
+- **[2026-11-04] Access findings — one channel reversal in this folder's favour, one new refusal
+  mode, one third-party-hosting lesson, and the seven-session Semantic Scholar drought BREAKS.**
+  - **`dash.harvard.edu` serves green-OA deposits of closed top-journal articles on the first
+    try**, and that reverses a prior session's 429 on the same host. A
+    `dash.harvard.edu/bitstreams/<uuid>/download` request returned a genuine 525 KB PDF of an *RFS*
+    article that `pdftotext -layout` parsed into 79 KB of clean text. The uuid comes straight out of
+    **OpenAlex's `locations[].pdf_url`**, so the 2026-10-04 "read the locations list" procedure
+    found it without a search engine.
+  - **`repec.som.yale.edu/icfpub/publications/<id>.pdf` is a first-try channel for Yale ICF
+    working papers**, and it served the pre-publication version of a closed *RFS* article (743 KB,
+    59 pp., clean extraction). The companion **NBER route
+    `nber.org/system/files/working_papers/w<N>/w<N>.pdf` also returned a genuine PDF** for an
+    earlier version of the same paper, so a closed article with an NBER working-paper ancestor has
+    two independent open routes. Both ids were in OpenAlex's `locations` list.
+  - **`dspace.mit.edu` bitstream downloads are behind a "Web Firewall · 429" and its LANDING PAGES
+    ARE NOT** — a new refusal mode, and the asymmetry is the lesson. `dspace.mit.edu/handle/<h>`
+    returns full HTML including the `/bitstreams/<uuid>/download` link, and that download then
+    returns **HTTP 429 with a ~1.5 KB styled HTML page** reading "Web Firewall · 429 — The
+    service…". A 25-second wait and a descriptive User-Agent did not clear it. Unlike the Anubis and
+    Incapsula cases this one at least *reports* 429, but it is a firewall decision rather than rate
+    limiting, so "wait and retry" is not the fix. Two MIT Sloan working papers were lost to it
+    tonight.
+  - **A faculty or memorial page can host a paper by a COMPLETELY DIFFERENT AUTHOR, and that is
+    worth fetching rather than skipping.** The working paper read for tonight's first note was
+    served from `math.nyu.edu/inmemoriam/<other-author>/<FILE>.pdf` — an NYU mathematician's
+    memorial page hosting a third party's finance working paper. Generalises the 2026-09-18
+    faculty-page lesson in a direction this folder had not recorded: **a search hit whose host
+    matches a different name than the one being sought is still a candidate**, because course pages,
+    reading lists and memorial pages carry other people's PDFs.
+  - **The Semantic Scholar drought breaks, and the ordering advice in `research/README.md` should be
+    softened rather than inverted.** Its DOI endpoint answered **on the first call for three of four
+    DOIs** tonight, after seven consecutive sessions of 429s — while **OpenAlex exhausted its free
+    daily budget after about four single-work lookups** (`Insufficient budget`, $0 remaining). So:
+    **Crossref first still, Semantic Scholar second and no longer presumed dark, OpenAlex spent only
+    on `locations` lists.** Confirming the standing "disbelieve a lone low count" rule, Semantic
+    Scholar reported **1457** against Crossref's **3527** for one article, because its record is a
+    split duplicate carrying a `… Prediction II` title.
+  - **Two dead ends recorded so no future session re-spends them.** A search result naming
+    `joim.com/wp-content/uploads/emember/downloads/<id>.pdf` **404s** — the `emember` path is
+    member-only, so a *Journal of Investment Management* PDF named in a snippet is not evidence it
+    can be fetched. And **`core.ac.uk` is now closed to an automated client on both routes**: its v3
+    search API returns HTTP 429 without a key and its web search page returns a Cloudflare
+    `Just a moment...` challenge. Also: `faculty.washington.edu/<user>/` 404s outright, so UW
+    faculty directories are not a usable channel by guessed path.
 
 - **[2026-11-03] READ THIS BEFORE AIMING SESSION 82. The long-only-constraint vein is CLOSED on
   construction and has exactly ONE unread primary; do not open a fourth source on the constraint

@@ -26278,3 +26278,5 @@ runner/process issue, and this repo's convention keeps those in the journal unde
   expected cost of this misconfiguration is roughly one session per fork — and the variance,
   not the mean, is what matters, because the first fork to carry a trial record corrupts the
   gate permanently.
+
+## Research session — 2026-11-04 (learning agent): 3 notes added, see research/SUMMARY.md
