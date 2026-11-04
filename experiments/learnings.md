@@ -6900,3 +6900,147 @@ across experiments; prune entries that later evidence contradicts.
   mechanism and cannot settle the question. Recorded so a later session does not run it expecting an
   answer; `#319`'s sharper version (dating the breaks directly) has no construction attached and is
   not a trial's to spend.
+
+- **[Measured 2026-11-04/05, nightly — ZERO trials spent; THE HEADLINE, AND IT REFRAMES EVERY CEILING
+  THE LAST FIVE SESSIONS MEASURED] THE v3 BOARD'S SKILL IS THE BENCHMARK'S PATH, NOT THE BOOKS'. THE
+  LEAD'S OWN SHARPE IS UNCHANGED ACROSS ITS VALIDATION SPLIT (+0.463 → +0.469) WHILE THE POOL'S FELL
+  0.648, ITS SKILL IS NEGATIVE IN 51% OF ROLLING TWO-YEAR WINDOWS, AND 185% OF IT IS SEVEN MONTHS.**
+  Research `#389`'s cumulative-active-return diagnostic (the repo translation of Goyal–Welch's
+  cumulative-SSE curve, strictly finer than v3's two train sub-periods) run on the stored
+  **validation** returns of eight v3 books. Goyal–Welch condition 3 — drift must not be concentrated
+  in one stretch — **fails on all eight, at 185%–7721%** of the total earned in the best 7 of 72
+  months. In the gate's own units:
+
+      book                     2018-2019  2020-2021  2022-2023  2018-2021       FULL
+      #16 oldhalf_overlap6        -0.094     -0.056     +0.589     -0.065     +0.124
+      #17 oldhalf_sync6           -0.156     -0.032     +0.534     -0.068     +0.106
+      #12 oldhalf_depth_neut      -0.268     -0.031     +0.488     -0.101     +0.070
+      #14 oldhalf_ex_anniv        -0.332     -0.047     +0.381     -0.129     +0.021
+      #19 lv_vol_trend_ovl6       +0.106     -0.089     +0.117     -0.021     +0.019
+      #13 recent_half_ctrl        -0.414     -0.164     +0.303     -0.225     -0.068
+
+  **Eight of eight negative on 2018–2021 and positive on 2022–2023, including two mechanisms whose
+  monthly active returns correlate −0.36** — so it is not one score's loading on one regime. The
+  cause is the denominator: pool Sharpe **+0.335 / +0.666 / −0.120** over the three sub-windows, and
+  decomposed, `d(book Sharpe)` is **+0.006** for #16 against `d(pool Sharpe)` **−0.648**. The lead is
+  *worse than the pool* in two of the three two-year sub-windows of its own split (+0.241 vs +0.335;
+  +0.610 vs +0.666; +0.469 vs −0.120); January 2022 alone is 43% of its whole validation active
+  return and the other 65 months are **−10.5%**. Not a boundary artifact — rolling cuts are larger
+  (2y pool Sharpe −1.065..+1.947, range **3.012**; calendar-year pool Sharpe −1.118, +2.001, +0.420,
+  +1.574, −0.787, +0.905) and **#16's skill is negative in 51% of rolling two-year windows.** The
+  benchmark's own sub-window swing (3.0 of Sharpe) is **6.5x the entire measured skill range of the
+  19-trial board** (0.464) and 7x the gate's +0.43 shortfall. **Not an engine bug — the engine
+  computes exactly what `program.md` specifies — and nothing is proposed:** this is a property of a
+  six-year skill estimate whose sign is set by regime mix, and the recorded error bar (#16: se
+  0.1647) cannot express it, because the block bootstrap resamples blocks from *inside* a window
+  containing one of each regime and cannot ask "what if the window had ended in 2021". **Operative
+  consequences. (i) This is why no train statistic has ever predicted validation skill here
+  (`corr` −0.074 over fifteen trials): there is no stable quantity to predict.** (ii) Every ceiling
+  2026-10-30 → 11-03 measured — the +0.43 gate gap, the +0.0123 cost bound, the breadth-independent
+  limits, the ETF benchmark deficit — was computed against this statistic, so each is a statement
+  about one regime mix rather than about the panel. (iii) The validation-window question is
+  `program.md`'s "Future upgrades" and the human owner's; it is named here with arithmetic attached
+  and nothing else. **Anti-candidate: any hypothesis whose case rests on a recorded v3 validation
+  skill being a property of its mechanism — including #16's +0.124.**
+
+- **[Measured 2026-11-04/05, nightly] RESEARCH `#375`/`#376` PRICED: A LONG-ONLY BOOK HARVESTS ONE BIT
+  PER NAME, SO THE LAB'S RANK-IC SCREEN OVERSTATES REACHABLE SIGNAL BY 1.7x–5.6x — AND ORDERING
+  INSIDE THE HELD SLICE IS WORTH EXACTLY NOTHING ON ALL EIGHT OBJECTS.** A top-K book expresses only
+  `in or out`, so a score's full rank IC decomposes into `bit` = IC of `1[rank > 1-f]`, `top` = IC of
+  `max(rank, 1-f)` (bit + ordering inside the slice), `bot` = IC of `min(rank, 1-f)`, and `full`.
+  Train, region-matched, group floor 50 (validated — see the method entry below), `f = 0.10` = the
+  lab's own K/N:
+
+      score               full      bit      top      bot  t(full)  t(bit)  bit/full
+      mom12_1          +0.0216  +0.0111  +0.0111  +0.0216    +1.65   +1.36      0.52
+      oldhalf_rev      +0.0189  +0.0088  +0.0088  +0.0190    +2.30   +1.66      0.46
+      rev21            +0.0218  +0.0039  +0.0030  +0.0223    +2.18   +0.55      0.18
+      illiq            +0.0129  +0.0046  +0.0044  +0.0129    +1.77   +1.00      0.35
+      turn_trend       +0.0065  +0.0091  +0.0089  +0.0066    +1.05   +1.99      1.41
+      lowvol_gk        -0.0110  -0.0210  -0.0214  -0.0107    -0.83   -2.89      1.91
+      info_discr       +0.0207  +0.0121  +0.0121  +0.0207    +3.37   +2.51      0.58
+
+  **(a) `bit` = `top` to four decimals on every object** (max gap 0.0008). Ordering inside the held
+  slice carries nothing — the IC-side proof of 2026-10-15/16 (risk weighting inside a selected slice)
+  and 2026-10-17/18 (the risk axis), and **more general than either: it holds for any weighting
+  derived from the selecting score, not just a risk one.** **(b) `bot` = `full` and `bit/full` is
+  0.18–0.58**, so `#376`'s mechanism is real and large here. **This corrects the lab's most-used
+  instrument in the direction that costs it:** the 2026-10-30/31 bar of "rank IC 0.120–0.164 at the
+  3.37 ceiling" becomes a **full** IC of **0.24–0.33** at `bit/full ≈ 0.5`, against a largest-ever
+  measured +0.0412. **Anti-candidates: any construction whose case is weighting inside the selected
+  slice, at any estimator; and quoting a full-cross-section rank IC as a reachable quantity.**
+
+- **[Measured 2026-11-04/05, nightly — REFUTES THE RATIO CLAIM OF THE 2026-09-06 ENTRY AND KEEPS ITS
+  VERDICT] ON THE POINT-IN-TIME PANEL THE BOTTOM CARRIES AS MUCH AS THE TOP FOR FIVE OF EIGHT
+  OBJECTS, SO "NOT ONE SCORE HAS A BOTTOM CARRYING MORE THAN ITS TOP" IS v1-ONLY — BUT THE EXCLUSION
+  BOOK STAYS REFUSED, ON THE LEVERAGE TERM ALONE.** 2026-09-06 declined `SUMMARY.md` `#84`'s
+  exclusion book on two grounds; re-priced in return units on the v2 panel (bps/month active against
+  each name's own calendar-peer group; both `f` taken from the record, 0.10 = the lab's K/N and
+  0.20 = that entry's quintile):
+
+      score            top10   bot10  |b|/|t|  levered  |  top20   bot20  |b|/|t|  levered
+      mom12_1          +35.8    +1.0     0.03     0.00  |  +17.6    -7.2     0.41     0.10
+      oldhalf_rev      +23.7   -20.2     0.85     0.09  |  +19.5   -20.0     1.02     0.26
+      rev21             +5.5   -25.6     4.65     0.52  |  +11.5   -20.8     1.82     0.45
+      illiq            +26.0   -22.4     0.86     0.10  |  +17.4   -18.9     1.09     0.27
+      lowvol_gk        -40.6   +43.2     1.06     0.12  |  -26.8   +25.9     0.97     0.24
+      info_discr       +29.0   -26.8     0.92     0.10  |  +20.6   -23.2     1.12     0.28
+
+  The v1 bound of 0.717 is exceeded by five objects and **1.0 is exceeded by four at `f = 0.20`**;
+  `rev21` at 4.65 is nearly pure bottom, agreeing with its `bit/full = 0.18` from the other
+  instrument. **The decision is made entirely by `levered` = `(f/(1-f))·|b|/|t|`, the exclusion
+  book's active return as a fraction of the top-K book's: 0.00–0.52, and 0.09 for the lab's live
+  object.** The widest book gives up 48–100% of the active return by construction. **The information
+  is in the bottom and the weight you may place on the bottom is capped at `f/(1-f)` — the same
+  constraint in two units, which closes "recover the bottom's information" from both ends.**
+  **Anti-candidate (re-confirmed on the right panel): the exclusion / pool-minus-worst book at any
+  `f`.**
+
+- **[Measured 2026-11-04/05, nightly] `#381`'s BREADTH-INDEPENDENT IR CEILING IS IDENTICALLY
+  `t/sqrt(years)`, IT BINDS ON SIX SCORES AND IS VIOLATED 3-FOR-3 BY ONE — AND THE VIOLATION IS THE
+  USEFUL HALF, BECAUSE IT SEPARATES SELECTION FROM CONSTRUCTION IN A TRAIN NUMBER.** `#381`'s
+  large-`N` limit `IR = IC_bar/sigma_IC` contains no `N`; over `m` monthly observations it is exactly
+  `t/sqrt(years)`, so **this lab's IC t-statistics are its annualised IR ceilings divided by the root
+  of the window length.** Checked against the recorded **train** `ir_vs_pool` of every v3 book whose
+  score was read out of its candidate file:
+
+      score            ceil_bit   recorded train ir_vs_pool                   verdict
+      oldhalf_rev        +0.447   #12 +0.046, #16 +0.218, #17 +0.189          HOLDS (lead at 49%)
+      illiq              +0.213   #3  +0.189                                  HOLDS (89%)
+      turn_trend         +0.451   #18 +0.147, #19 +0.107                      HOLDS
+      lowvol_gk          -0.617   #1  -0.336                                  HOLDS, right sign
+      recenthalf_rev     -0.204   #13 +0.003                                  HOLDS
+      decade_rev_120     -0.012   #5 +0.038, #6 +0.317, #11 +0.419            VIOLATED 3 of 3
+
+  `decade_rev_120`'s one-bit IC is **−0.0003 at t −0.05** — no selection content — yet books on it
+  hold the two highest train IRs in the v3 record. **So `t/sqrt(years)` bounds the SELECTION channel
+  only, and a train IR above it locates the number in construction** (retention band, inverse-vol
+  weighting, the warm-up pool default). The decomposition then agrees with validation where the raw
+  train number does not: the violators scored validation skill −0.006 / −0.039 / −0.055, the
+  respecters +0.070 / +0.106 / +0.124. **Stated weakly on purpose: the violating side is ONE score
+  under three constructions, not three independent observations, so the discrimination may be
+  entirely the known old-half/recent-half asymmetry. NOT claimed as a screen. PRE-REGISTERED for a
+  later session: the next candidate whose train `ir_vs_pool` exceeds its own score's
+  `t_bit/sqrt(years)` should be expected to carry negative validation skill.** Companion closure:
+  the eight objects' monthly bit-IC series correlate at mean |rho| 0.23 and `#385`'s
+  `sqrt(IC' Sigma^-1 IC)` gives a combined ceiling of **1.181 against a best single 0.675, a 1.75x
+  multiplier — which is UNREACHABLE, because the gate grades the LEVEL of skill and a blend's level
+  is a convex combination of its legs'** (2026-10-30/31 measured it: monotone in `w`, maximised at
+  the better leg alone, on a pair whose active returns already correlate −0.1225). **Recorded so a
+  later session does not read the 1.75x as an opening. `#385` is closed as a route for zero trials.**
+
+- **[Method, 2026-11-04/05 — THIRD INSTANCE OF THE 2026-10-25/26 RULE, AND THE FIRST WHERE VALIDATION
+  CHANGED A HEADLINE RATHER THAN A DECIMAL] THE FREE PARAMETER IN A REGION-MATCHED IC HARNESS IS THE
+  GROUP-SIZE FLOOR, NOT THE AVERAGING CONVENTION, AND AT THE WRONG FLOOR THE LAB'S OWN LIVE OBJECT
+  READS 40% LOW.** Validating against the recorded old-half IC (+0.0179, t +2.19, se 0.0081,
+  breadth 513, **n 166**): "IC inside each peer group, size-weighted" and "demean ranks inside the
+  group, then one IC" agree to four decimals at every floor, so the convention is not the knob. The
+  floor is — floor 2/10/25 all give **+0.0113 at t +1.16 over n 226**, and floor **50** gives
+  **+0.0189, t +2.30, se 0.0082, n 166**, matching the recorded `n` exactly and `se` to 0.0001.
+  Floor 50 is also what every shipped candidate uses (`if len(groups) >= 50`). Adopted; second
+  near-exact check, information discreteness **+0.0207/t +3.37** against a recorded +0.0206/t +3.44;
+  residual gap (IC +0.0189 vs +0.0179, breadth 477 vs 513) reported rather than absorbed per the
+  2026-11-01/02 honesty convention. **The first run used floor 25 and would have computed every
+  `bit/full` ratio in that night's headline on a denominator 40% too small.** Shape to reuse: when a
+  harness aggregates over groups, validate on the recorded **`n` and `se`** and not only on the
+  level — `n` identifies the inclusion rule, which is the parameter that actually moves the answer.
