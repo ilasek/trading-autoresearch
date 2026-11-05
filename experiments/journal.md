@@ -26684,3 +26684,30 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   condition 3 outright, and the difference is not a refinement but the whole finding.
 
 ## Research session — 2026-11-05 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-11-05T23:33:26+00:00 — rv_clv_momneutral_overlap6 — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_clv_momneutral_overlap6.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: The 100 eligible names with the lowest mean closing location value -- (close - low) / (high - low), averaged over 756 trading days and lagged 21 -- quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells and held in six overlapping monthly sleeves, earn positive validation skill against the equal-weight eligible pool, because persistent closing weakness inside a name's own daily range is end-of-day price PRESSURE rather than information and pressure abates, and because the score is a within-day ratio and therefore the first object in the v3 record that cannot carry either the close-to-close return path (rank rho +0.063 to 12-1 momentum inside the quota cells, against +0.439 outside them) or the back-adjusted price level the 2026-10-22 engine issue records.
+- Verdict: GATE_FAIL — validation drawdown -0.4613 worse than -0.45; validation sharpe 0.349 <= the random-selection null's 90% quantile 0.394 (median 0.325; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.53, ann_ret +11.0%, maxDD -57.0%, turnover 1.5x, skill vs pool +0.01
+- Validation: sharpe +0.35, ann_ret +6.7%, maxDD -46.1%, turnover 1.9x, skill vs pool +0.01
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.01, 90% CI [-0.22, +0.29]; at 2x costs +0.00; with a 30% delisting haircut +0.01; train +0.01 (1997-2008 +0.05, 2009-2017 -0.09)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 68% percentile of 200 random-selection replicas (median +0.33, 90% +0.39); equal-weight eligible pool +0.34, information ratio vs it +0.16
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the first score in the v3 record that cannot carry the close-to-close return path or the
+  back-adjusted price level is NOT a null — it is a 68th-percentile near-tie, and it fails on the
+  two gates nobody was watching.** Validation skill **+0.012 [-0.216, +0.295]** on a 1.9x book
+  (inside the pre-registered 1.7-2.3x band, the second time this lab's turnover pre-registration
+  has not been a lower bound), skill at 2x costs +0.001 and under the delisting haircut +0.012, so
+  neither cost nor delisting is the story. The two refusals are both about SHAPE rather than
+  selection: validation drawdown **-46.1% against the -45% gate**, and the random-selection null at
+  the **68th** percentile against the 90th the gate wants. Both trace to the same fact — the book
+  runs a volatility ratio of **1.073** to the pool, i.e. it is the first v3 object that is *more*
+  volatile than its benchmark rather than less, which is the opposite corner from the de-risking
+  axis trial #1 closed and is a corner the gate set punishes just as hard. Second lesson, and it
+  is about the instrument: **the matched-null LEVEL screen read z +1.00 on train and validation
+  came in at +0.012, the fourth-best validation skill of the twenty-trial board.** Taken with
+  2026-10-28/29 (`vol_trend_down` read z +4.21 on train and the 55th-66th validation percentile),
+  the matched-null z now has one high reading that under-delivered and one low reading that
+  over-delivered: **it is not a predictor of validation in either direction, and it should be
+  quoted only as what it is — a test of whether a train number is construction arithmetic.**
+
