@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T23:35:34+00:00",
+  "generated_at": "2026-11-05T23:38:50+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -61,7 +61,7 @@
       "track": "scout",
       "verdict": "GATE_FAIL",
       "ts": "2026-11-05T23:33:26+00:00",
-      "n_trials": 2,
+      "n_trials": 3,
       "rho_to_champion": null,
       "validation": {
         "sharpe": 0.349,

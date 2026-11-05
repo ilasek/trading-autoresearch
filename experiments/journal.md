@@ -26711,3 +26711,28 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   over-delivered: **it is not a predictor of validation in either direction, and it should be
   quoted only as what it is — a test of whether a train number is construction arithmetic.**
 
+## 2026-11-05T23:36:59+00:00 — rv_clv_depthquota_control — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_clv_depthquota_control.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: The identical low-closing-location-value top-100 book, with its quota crossed against price-history-depth terciles instead of 12-1-momentum terciles and every other node unchanged, earns LOWER validation skill than the momentum-neutral version, because leaving the score's +0.439 rank correlation to 12-1 momentum un-neutralised imports a momentum tilt whose own top-100 slice loses 11-20 bps per 63 days at every horizon on this panel -- a drag already visible on train at -0.017 against +0.007, which this pair tests for transfer rather than assuming.
+- Verdict: GATE_FAIL — train skill -0.017 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation drawdown -0.4753 worse than -0.45; validation sharpe 0.345 <= the random-selection null's 90% quantile 0.394 (median 0.32; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.51, ann_ret +10.8%, maxDD -61.6%, turnover 1.4x, skill vs pool -0.02
+- Validation: sharpe +0.34, ann_ret +6.9%, maxDD -47.5%, turnover 1.6x, skill vs pool +0.01
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.01, 90% CI [-0.27, +0.31]; at 2x costs +0.00; with a 30% delisting haircut +0.01; train -0.02 (1997-2008 +0.01, 2009-2017 -0.10)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 66% percentile of 200 random-selection replicas (median +0.32, 90% +0.39); equal-weight eligible pool +0.34, information ratio vs it +0.18
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the paired reading: the momentum-neutralisation node is worth +0.024 of TRAIN skill and
+  +0.004 of VALIDATION skill, so five sixths of it did not transfer — and the CLV score's small
+  positive skill is in the score, not in the second quota axis.** Scout +0.012 against control
+  +0.008 on validation (train +0.007 against -0.017), null percentile 68% against 66%, IR vs pool
+  +0.16 against +0.18, drawdown -46.1% against -47.5%: **the two books are the same book in every
+  respect the gates can see.** So the +0.439 raw rank rho to 12-1 momentum, which is what motivated
+  crossing the quota with momentum terciles at all, costs almost nothing either way once the score
+  is read within calendar-peer cells — and the honest consequence is that the scout's own
+  neutralisation argument, while correct on train, was not load-bearing. Fourth consecutive
+  instance of a train DELTA failing to transfer (#12→#16's gross half, #18/#19's gross tax,
+  tonight's two), against a cost delta that has transferred every time it was measured; the
+  2026-10-28/29 statement "rest a hypothesis only on the COST half" now has a fourth confirmation
+  and no counter-example. Second lesson: **both books fail the drawdown gate (-46.1%, -47.5%
+  against -45%) and both sit near the 2/3 point of their own null, so the refusal is a property of
+  the SCORE's shape — a slice 7% more volatile than the pool — and not of either quota axis.**
+
