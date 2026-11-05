@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T23:38:50+00:00",
+  "generated_at": "2026-11-05T23:52:18+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -81,6 +81,32 @@
       "train_skill": 0.007,
       "mechanism": 1
     },
+    "seasonality-calendar": {
+      "name": "sc_overnight_drift_sleeves",
+      "candidate": "strategies/candidates/sc_overnight_drift_sleeves.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-11-05T23:50:20+00:00",
+      "n_trials": 2,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.34,
+        "ann_return": 0.0582,
+        "max_drawdown": -0.328,
+        "ann_turnover": 1.8,
+        "avg_positions": 166.47,
+        "skill": 0.003,
+        "skill_cost2x": -0.012,
+        "skill_delist30": 0.003
+      },
+      "train_sharpe": 0.554,
+      "skill_ci90": [
+        -0.153,
+        0.141
+      ],
+      "train_skill": 0.031,
+      "mechanism": 4
+    },
     "portfolio-learning": {
       "name": "pl_decade_invvol_floored",
       "candidate": "strategies/candidates/pl_decade_invvol_floored.py",
@@ -158,32 +184,6 @@
       ],
       "train_skill": -0.001,
       "mechanism": 2
-    },
-    "seasonality-calendar": {
-      "name": "sc_weekday_mood_band",
-      "candidate": "strategies/candidates/sc_weekday_mood_band.py",
-      "track": "scout",
-      "verdict": "GATE_FAIL",
-      "ts": "2026-10-16T23:54:16+00:00",
-      "n_trials": 1,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.072,
-        "ann_return": 0.0171,
-        "max_drawdown": -0.4371,
-        "ann_turnover": 4.2,
-        "avg_positions": 99.99,
-        "skill": -0.265,
-        "skill_cost2x": -0.305,
-        "skill_delist30": -0.265
-      },
-      "train_sharpe": 0.582,
-      "skill_ci90": [
-        -0.509,
-        -0.011
-      ],
-      "train_skill": 0.058,
-      "mechanism": 4
     },
     "lead-lag-spillover": {
       "name": "ll_peer_delay_band",

@@ -26736,3 +26736,34 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   against -45%) and both sit near the 2/3 point of their own null, so the refusal is a property of
   the SCORE's shape — a slice 7% more volatile than the pool — and not of either quota axis.**
 
+## 2026-11-05T23:50:20+00:00 — sc_overnight_drift_sleeves — **GATE_FAIL**
+- Candidate: `strategies/candidates/sc_overnight_drift_sleeves.py` (family: seasonality-calendar, track: scout, trial #0)
+- Hypothesis: The 100 eligible names whose daily OVERNIGHT session has persistently contributed the least to their own daily range -- the lowest trailing 756-day mean of (open - previous close) / (high - low), lagged 21 days -- quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells and held in six overlapping monthly sleeves, earn positive validation skill against the equal-weight eligible pool, because a persistent overnight gain is attention- and retail-flow-driven demand arriving when the exchange cannot absorb it and is therefore a transient price component, and because the score is a ratio of two quotes one day apart (rank rho +0.029 to 12-1 momentum, -0.003 to the log price level, at most 0.230 to any object on the v3 board) and so is neither a return-path relabelling nor a carrier of the back-adjusted price level the 2026-10-22 engine issue records.
+- Verdict: GATE_FAIL — validation sharpe 0.340 <= the random-selection null's 90% quantile 0.392 (median 0.331; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.55, ann_ret +10.6%, maxDD -55.5%, turnover 1.3x, skill vs pool +0.03
+- Validation: sharpe +0.34, ann_ret +5.8%, maxDD -32.8%, turnover 1.8x, skill vs pool +0.00
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.00, 90% CI [-0.15, +0.14]; at 2x costs -0.01; with a 30% delisting haircut +0.00; train +0.03 (1997-2008 +0.01, 2009-2017 +0.02)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 59% percentile of 200 random-selection replicas (median +0.33, 90% +0.39); equal-weight eligible pool +0.34, information ratio vs it -0.12
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the night's strongest train sheet produced its weakest validation skill, and the one
+  thing that DID transfer was the only thing predicted from a ratio rather than from a return.**
+  Train skill +0.031 at matched-null z **+2.24** — the best train profile of the session, both
+  sub-periods positive, negation invariant passing by 0.125 — came in at validation **+0.003
+  [-0.153, +0.141]** and the 59th percentile of its own null, the lowest null percentile of the
+  four trials run tonight. What transferred was the **volatility ratio**: 0.954 on train, and the
+  validation drawdown is **-32.8%** against a -45% gate, where tonight's two CLV books at a ratio
+  of 1.073 were both refused at -46.1% and -47.5%. **A book's shape transfers; its selection does
+  not.** This is the fifth instance in the v3 record and the first where train, the matched-null z
+  and both sub-periods agreed with each other and all three were wrong together, which rules out
+  the reading that the earlier failures were about any one instrument. Second lesson: **the
+  session boundary inside the daily bar is NOT a reachable selection axis on this panel, measured
+  two ways.** The overnight gap as a share of daily range is the cleanest object this lab has
+  screened — rank rho +0.029 to 12-1 momentum, **-0.003 to the log price level** (so it cannot
+  carry the 2026-10-22 back-adjustment contaminant), at most 0.230 to anything on the board — and
+  being orthogonal to everything refuted bought it a 59th-percentile near-tie. Orthogonality
+  remains a necessary condition and not a source of skill (2026-10-19/20), now demonstrated on the
+  most orthogonal score the lab owns. Third, as a positive result worth carrying: **the 90% skill
+  interval is 0.294 wide, the second-narrowest on the twenty-two-trial board**, and the book is
+  cheap (1.8x), low-drawdown and tracks the pool — the same precision corner the share-turnover
+  trend occupies, reached by a mechanically unrelated score.
+
