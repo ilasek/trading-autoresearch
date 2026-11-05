@@ -8447,6 +8447,158 @@ squared Sharpe (`R²/S²`); and an accumulated edge has a shape test set by its 
 four conditions). None of the three costs a trial, all three are computable on data this repo
 already holds, and all three refuse candidates rather than proposing them.
 
+### Whether the design could have DETECTED an effect — the minimum detectable skill, what a search costs it, and the price of the threshold in misses (cross-family, the gate's own statistic)
+
+Covered 2026-11-05. **This folder has forty notes about discounting a result after it is found and,
+until tonight, none about whether the design could have found one.** The three sources answer that
+from its three sides: the effect side (how long a record a stated gap needs), the search side (how
+long a record a stated number of trials needs), and the cost side (what the threshold buys and
+what it destroys). All three are methodological; none contains a tradeable mechanism; and the
+payload is one table.
+
+**A correction this section owes before its own findings.** The [2026-11-04] entry wrote that the
+folder had **zero** notes bearing on ex-ante detectability. Overstated. `#323`
+(`notes/2026-10-28-argmin-inference-minimax-separation-rate.md`) gives a minimax *separation* rate
+— the gap needed to tell two candidates apart — and says in-note that it bears only on separation
+between candidates; and `notes/2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`
+already carries a level–power–sample-size link, inside a sequential testing budget rather than for
+a Sharpe. What was genuinely absent, and is supplied below, is **the minimum detectable value of
+the lab's own statistic: skill against the fully-invested equal-weight pool.** The grep that found
+the gap (`minimum detectable` 0, `detectable effect size` 0, `ex ante power` 0, `design
+sensitivity` 0, against `haircut` 40) was right about the vocabulary and wrong about the content,
+which is the second time in five sessions the detector has over-claimed a cold spot.
+
+**The number, and it is the night's whole point.** Bailey–López de Prado's **Minimum Track Record
+Length** inverts Mertens'/Christie's asymptotic variance of the Sharpe estimator into a required
+sample size, `MinTRL = 1 + [1 − γ₃·ŜR + ((γ₄−1)/4)·ŜR²]·(Z_α/(ŜR − SR*))²` observations — a
+minimum detectable effect read in units of time rather than units of effect, every input set by
+the designer. As printed it is the wrong variance for v3, because it treats the benchmark level
+`SR*` as a known constant while v3's pool Sharpe is estimated **on the same days and at very high
+correlation** with the candidate's. Keeping the inversion and substituting the paired standard
+error this folder already holds (`√(2(1−ρ)/T)`, from
+`notes/2026-08-24-testing-differences-of-sharpe-ratios.md`) gives, at the validation window's
+`T = 1562` daily observations and a one-sided 95% test, **the minimum detectable skill** (**#393**):
+
+| `ρ` (candidate vs pool) | `SE(skill)` | MDE at 50% power | MDE at 80% power |
+|---|---|---|---|
+| 0.99 | 0.057 | 0.09 | 0.14 |
+| 0.98 | 0.080 | 0.13 | 0.20 |
+| 0.95 | 0.127 | 0.21 | 0.32 |
+| 0.90 | 0.180 | 0.30 | 0.45 |
+| 0.80 | 0.254 | 0.42 | 0.63 |
+
+A third input is free and currently unused: the bracket `1 − γ₃·ŜR + ((γ₄−1)/4)·ŜR²`, evaluated on
+a candidate's own daily active-return series, says in one number how much longer a record this
+construction needs than a Normal one with the same Sharpe — which is where the reversal and
+tail-selecting books this lab keeps building should show up, since their active returns are
+negatively skewed by construction (**#395**).
+
+Two readings follow at once. First, **the familiar question "is the interval clear of zero?" is a
+50%-power statement** — it asks whether the *observed* effect is significant, i.e. detectability at
+a coin flip. Demanding an 80% chance of detecting a real effect multiplies the required
+observations by `((1.645+0.842)/1.645)² = 2.29`, so the lab's window would have to be **2.3 times
+longer** to have that chance at the smallest skill its intervals currently call significant. Any
+sentence of the form "the design would have seen it" must say which of the two it means (**#394**).
+Second, **detectability is governed by one number, and it is a construction choice rather than a
+statistic**: a small deliberate tilt on the pool has a minimum detectable skill three to four times
+smaller than a structurally distinct book. That pulls against `program.md`'s instruction to spend
+the budget across families, and the honest formulation of the trade-off is a question a candidate's
+designer can answer before building it — **does the construction's attainable skill fall slower
+than `√(1−ρ)`?** The resolution is the human owner's; this file's job is to state that the two
+rules point opposite ways.
+
+**The search side, from the same authors, and it sharpens rather than replaces the above.** The
+*Notices* paper derives the expected maximum of `N` null Sharpe estimates as a Gumbel blend,
+`E[max_N] ≈ (1−γ)Z⁻¹(1−1/N) + γZ⁻¹(1−1/(Ne))` with `γ` the Euler–Mascheroni constant and upper
+bound `√(2 ln N)`, and inverts it into **Minimum Backtest Length**, `MinBTL ≈ (E[max_N]/S_target)²`
+years. Rescaling `E[max_N]` by the paired SE instead of by `y^(−1/2)` gives **the expected maximum
+spurious skill of a search** — what the search alone is expected to manufacture, in the lab's own
+statistic (**#396**):
+
+| `ρ` | `N = 10` | `N = 50` | `N = 100` | `N = 200` |
+|---|---|---|---|---|
+| 0.99 | 0.09 | 0.13 | 0.14 | 0.16 |
+| 0.95 | 0.20 | 0.29 | 0.32 | 0.35 |
+| 0.90 | 0.28 | 0.41 | 0.45 | 0.50 |
+| 0.80 | 0.40 | 0.58 | 0.64 | 0.70 |
+
+and, adding `Z_0.80`, a **search-adjusted** minimum detectable skill of 0.19 at `ρ = 0.99` and
+0.86 at `ρ = 0.80` for a hundred-trial search. **The trial count is the mild axis and the benchmark
+correlation is the brutal one**: ten trials to two hundred raises the requirement about 1.2×, while
+`ρ = 0.99` to `ρ = 0.80` raises it about 4.5×. That ordering is `#323`'s conclusion — a crowded
+board is cheap, a short window is not — arrived at from extreme-value theory instead of minimax
+theory, and the two derivations agreeing is the strongest thing in tonight's reading. Read
+backwards against a window that cannot be lengthened, MinBTL becomes a **trial budget**: at
+`S_target = 1` in raw-Sharpe units, 6.2 years supports about **89 independent** configurations — a
+pressure gauge on the *effective* number of mechanisms (`distinct_mechanisms` is the lab's crude
+version), not a verdict on the recorded trial count, which is far more correlated than independent
+(**#397**).
+
+**The uncomfortable composition, stated plainly.** The lab's own reported skill intervals of about
+±0.33 at 90% imply `SE ≈ 0.20`, i.e. a benchmark correlation near 0.87. At that correlation, after
+a search of the order the trial history records, **the smallest true skill this design could detect
+with 80% confidence is around 0.5–0.6.** Nothing in this folder's reading suggests a long-only
+daily-close mechanism on a large-cap panel delivers that. So the long run of near-zero skill
+readings is **evidence-compatible with both** an absence of effects and a design whose floor sits
+above the effects the literature describes, and `#357`/`#358`'s standing question — is the bar's
+severity an estimate or an assumption? — now has its answer in the second direction: it is an
+assumption, and the design is underpowered against the effect sizes on offer. This is not a reason
+to lower the bar. It is a reason to **say what a null bounds** (below) and to prefer constructions
+whose `ρ` to the pool is high, which is the only lever the arithmetic leaves.
+
+**The third side: what the threshold costs, and the one object that prices it.** Harvey–Liu (Tier A,
+*JF*, read in full from the first author's page) put Type II error on the same footing as Type I
+under multiple testing, defining the false-omission rate `FN/(FN+TN)` as the Type II analogue of the
+FDR and the **odds ratio `ORATIO = FP/FN`** as the object that joins them, with a one-line decision
+rule: *if a Type I error is `k` times as costly as a Type II error, target `ORATIO = 1/k`.* Their
+method — a double bootstrap, with the alternative collapsed to a single assumed fraction `p₀` of
+true candidates — returns both rates as functions of the threshold for *any* testing procedure,
+including one that is itself a bootstrap. Three things transfer. (a) **A reporting rule that costs
+nothing**: composed with `#393`, every `REJECT` / `GATE_FAIL` / `SCOUT` line can read **"no skill
+above `X` found"** instead of "no skill found", with `X` the design's MDE at that candidate's own
+`ρ` — which converts a null from an absence of evidence into a bounded statement, and is exactly the
+distinction the paper exists to draw (**#399**). (b) **The bar's severity is equivalent to a named
+cost ratio.** The current gate never observes a miss, so its implied `k` is infinite; naming a
+finite `k` is a decision about the lab's purpose, and it is the human owner's, but the equivalence
+is arithmetic (**#399**). (c) **The optimal hurdle *falls* as `p₀` rises**, and also rises with the
+number of candidates tested and falls with the pool's signal-to-noise — so a hurdle imported from
+another data set means something different here. The trap is circularity: `p₀` estimated from this
+lab's own outcomes is contaminated by the design's own power, so it must come from the external
+literature's hit rate instead, which makes it this folder's number to supply rather than the lab's
+(**#400**). Neither `t = 2.0` nor Harvey–Liu–Zhu's `t = 3.0` is optimal under either criterion on
+the strategy sets they study; both authors say the 3.0 was never meant as a universal rule.
+
+**One mechanism-level result nobody was looking for, and it is the cheapest high-stakes check on
+the list.** The *Notices* paper's Sections 5–6 ask what in-sample selection does out of sample and
+find the answer turns entirely on whether the two sub-samples share a **conserved quantity**. With
+independent increments the in-sample/out-of-sample scatter is a circular cloud on the origin:
+selection lifts the in-sample Sharpe and leaves the expected out-of-sample Sharpe at zero —
+overfitting buys nothing and costs nothing. Impose **one** global constraint (re-centre each path
+so its full-sample mean is fixed) and the slope goes significantly **negative** on a trendless
+process, with their Proposition 6.1 making it exact: with equal volatilities and a pinned
+full-sample mean, `SR_IS(A) > SR_IS(B) ⟺ SR_OOS(A) < SR_OOS(B)`. **In-sample ranking inverts, by
+construction.** This is the precise boundary between "selection is noise" (where the haircut
+literature is the right tool) and "selection is poison" (where no multiple-testing correction helps,
+because the sign is wrong rather than the size). The lab has three candidate conserved quantities —
+consecutive slices of one realised path, one fixed benchmark pool, and long-only weights summing to
+a constant — and which case it is in is **measurable from data already stored**: regress validation
+skill on train skill across recorded trials. Slope ≈ 0 is the benign case; a significantly negative
+slope would invalidate the "clear the train gate, then test on validation" ordering and would be an
+engine-level finding rather than a strategy one (**#398**). **The lab has already produced the
+statistic**: the 2026-11-04/05 nightly reports that correlation at **−0.074 over fifteen trials**,
+and attributes it to regime mix — "there is no stable quantity to predict". Proposition 6.1 offers a
+second explanation for the same observation, and the two are **distinguishable by sign**: regime mix
+predicts zero, a conserved aggregate predicts negative. At `n = 15` the estimate cannot tell them
+apart, which is tonight's own argument turned on tonight's own diagnostic; the useful instruction is
+to re-read the sign as trials accumulate rather than to treat −0.074 as closed.
+
+**The cross-cutting shape, stated once.** The 2026-11-04 section said all its sources were about
+what a number has to clear before it is worth anything. Tonight's are the complement: **what a
+number has to be before the design can see it at all.** MinTRL bounds it from the effect side,
+MinBTL from the search side, and the odds ratio prices the threshold that separates them. None of
+the three costs a trial; all three are computable from series the repo already has; and unlike the
+forty haircut notes, all three can make a *null* say something.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -16022,6 +16174,133 @@ hypothesis fodder, then anti-candidates.
     skill. Tier A, no overlap.
     → `notes/2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`
 
+393. **THE DESIGN'S OWN MINIMUM DETECTABLE SKILL, in closed form — the number this folder had
+    never computed.** Keep MinTRL's inversion of the Sharpe variance into a required sample size,
+    substitute v3's *paired* standard error for its known-benchmark one, and the minimum detectable
+    skill at `T = 1562` daily validation observations and a one-sided 95% test is
+    `MDE = (Z_α + Z_power)·√(2(1−ρ)/T)` — **0.09 / 0.13 / 0.21 / 0.30 / 0.42** at 50% power and
+    **0.14 / 0.20 / 0.32 / 0.45 / 0.63** at 80% power, for `ρ = 0.99 / 0.98 / 0.95 / 0.90 / 0.80`
+    against the equal-weight pool. Use it two ways: before a trial, to ask whether the construction
+    could plausibly produce a skill above its own floor; after one, to bound what the null means.
+    The corresponding inversion, `T_required = 2(1−ρ)·((Z_α+Z_power)/Δ)²`, prices any target skill
+    `Δ` in observations. Tier B+, no overlap.
+    → `notes/2026-11-05-minimum-track-record-length-and-the-probabilistic-sharpe-ratio.md`,
+    `notes/2026-08-24-testing-differences-of-sharpe-ratios.md`
+
+394. **INTERPRETATION RULE, and it changes how every existing skill interval should be read: a
+    confidence interval clear of zero is a 50%-POWER statement.** It says the *observed* effect is
+    significant, i.e. that the design detects an effect of that size half the time. Requiring an 80%
+    chance of detecting a real effect of the same size multiplies the needed observations by
+    `((Z_0.95 + Z_0.80)/Z_0.95)² = ((1.645+0.842)/1.645)² = 2.29`, so **the validation window would
+    have to be 2.3× longer.** Consequence for the journal: a sentence of the form "the design would
+    have seen it" is ambiguous and should name the power it means. Composed with `#393`, the lab's
+    reported ±0.33 intervals imply `SE ≈ 0.20` and `ρ ≈ 0.87`, at which the smallest detectable true
+    skill at 80% power is **around 0.5** before any search adjustment — which makes a long run of
+    near-zero readings compatible with absent effects *and* with an underpowered design, and answers
+    `#357`/`#358` in the second direction. Not a reason to lower the bar; a reason to state what a
+    null bounds. Tier B+, no overlap.
+    → `notes/2026-11-05-minimum-track-record-length-and-the-probabilistic-sharpe-ratio.md`
+
+395. **FREE SCREEN, one number, computable on a candidate's own active returns: the non-Normality
+    bracket.** `1 − γ₃·ŜR + ((γ₄−1)/4)·ŜR²` (all in native daily units; `γ₄ = 3` is Normal, so the
+    bracket is `1 + ŜR²/2` there) is the factor by which non-Normality inflates the required record
+    length. Negative skew and fat tails raise it; positive skew lowers it. v3's bootstrap interval
+    already absorbs this implicitly, but the bracket makes it explicit, one-dimensional and
+    comparable across candidates — and it is where short-horizon reversal and tail-selecting
+    constructions, whose active returns are negatively skewed by construction, should declare
+    themselves. Print it beside the interval. Caveat from the source itself: the **fourth** moment
+    needs the longest series of the four to estimate, with both bias and scale effects, so read a
+    large bracket as a flag rather than a measurement. Tier B+, no overlap.
+    → `notes/2026-11-05-minimum-track-record-length-and-the-probabilistic-sharpe-ratio.md`
+
+396. **WHAT THE SEARCH ALONE IS EXPECTED TO MANUFACTURE, in the lab's own statistic.** The expected
+    maximum of `N` null Sharpe estimates is the Gumbel blend
+    `E[max_N] ≈ (1−γ)Z⁻¹(1−1/N) + γZ⁻¹(1−1/(Ne))`, `γ = 0.5772156649`, bounded above by `√(2 ln N)`
+    — **1.57 / 1.90 / 2.28 / 2.53 / 2.77** at `N = 10 / 20 / 50 / 100 / 200`. Rescaled by the paired
+    SE instead of by `y^(−1/2)`, the **expected maximum spurious skill** at this window is
+    0.09–0.16 (`ρ = 0.99`), 0.20–0.35 (0.95), 0.28–0.50 (0.90) and 0.40–0.70 (0.80) across
+    `N = 10 → 200`; adding `Z_0.80` gives a search-adjusted MDE of 0.19 (`ρ = 0.99`) to 0.86
+    (`ρ = 0.80`) for a hundred-trial search. **The trial count is the mild axis (×1.2 from 10 to 200)
+    and the benchmark correlation the brutal one (×4.5 from 0.99 to 0.80)** — the same ordering
+    `#323` reached from minimax theory, by a completely different derivation. The lever is therefore
+    `ρ`, which is a construction choice, and the question a design must answer is whether attainable
+    skill falls slower than `√(1−ρ)`. Tier B+, no overlap.
+    → `notes/2026-11-05-minimum-backtest-length-and-the-expected-maximum-sharpe.md`
+
+397. **MinBTL READ BACKWARDS AS A TRIAL BUDGET, and the quantity it actually constrains is `N_eff`.**
+    `MinBTL ≈ (E[max_N]/S_target)²` years; inverted at the fixed 6.2-year validation window and
+    `S_target = 1` in raw-Sharpe units, that window supports about **89 independent** configurations
+    before a zero-skill strategy is expected to show an in-sample Sharpe of 1. Two reasons this is a
+    pressure gauge and not a verdict: it is for a *raw* Sharpe rather than the paired skill statistic
+    the gate adjudicates, and it counts **independent** trials, where this lab's are heavily
+    overlapping (`distinct_mechanisms` in the leaderboard is the crude effective count, and the right
+    one is smaller still). Use it as a standing check that `N_eff` is nowhere near ~90, not as a cap
+    on recorded trials. Companion caveat from the same derivation: at the null the Sharpe's variance
+    is set by **calendar time, not bar count**, so measuring the same six years more finely buys
+    nothing against a search — the opposite of `#395`'s frequency result, which applies when there is
+    a real effect to resolve. Tier B+, no overlap.
+    → `notes/2026-11-05-minimum-backtest-length-and-the-expected-maximum-sharpe.md`
+
+398. **THE CHEAPEST HIGH-STAKES CHECK ON THIS LIST, and it is an engine-level question: regress
+    validation skill on train skill across the recorded trials.** Proposition 6.1 of the *Notices*
+    paper: for two configurations with equal in- and out-of-sample volatilities, pinning the
+    **full-sample mean** implies `SR_IS(A) > SR_IS(B) ⟺ SR_OOS(A) < SR_OOS(B)` — in-sample ranking
+    **inverts** out of sample, exactly, on a trendless process. With independent increments and no
+    such constraint the scatter is a circular cloud on the origin: selection is pure noise. So one
+    conserved sample aggregate is the entire difference between "selection is noise", where the
+    haircut machinery is the right tool, and "selection is poison", where **no multiple-testing
+    correction helps because the sign is wrong rather than the size.** The lab has three candidate
+    conserved quantities (consecutive slices of one realised path; one fixed benchmark pool;
+    long-only weights summing to a constant) and the test is one regression on data already stored.
+    Slope ≈ 0 is benign. A significantly **negative** slope would invalidate the "clear the train
+    gate, then test on validation" ordering and belongs in the journal under `## Engine issue`, not
+    in a strategy write-up. **The lab has already run the statistic the diagnostic needs**: the
+    2026-11-04/05 nightly reports `corr(train statistic, validation skill) = −0.074` over fifteen
+    trials, which reads as the benign case — but at `n = 15` that estimate cannot separate a mild
+    negative slope from zero, which is tonight's own point applied to the diagnostic itself. **Two
+    things remain worth doing.** Re-read the sign as trials accumulate rather than treating
+    −0.074 as settled; and read it against Proposition 6.1 as a *second* candidate explanation,
+    because that nightly attributed the zero correlation to regime mix ("there is no stable quantity
+    to predict") while a conserved aggregate predicts something different — a **negative** slope,
+    not a zero one. The two explanations are distinguishable by sign, and only one of them makes
+    in-sample selection actively harmful. Tier B+, no overlap.
+    → `notes/2026-11-05-minimum-backtest-length-and-the-expected-maximum-sharpe.md`
+
+399. **REPORTING RULE that costs nothing and makes every past null say something: "no skill above
+    `X`", not "no skill".** When a study's headline is a non-rejection, test power *is* the
+    credibility of the finding. Composed with `#393`, every `REJECT` / `GATE_FAIL` / `SCOUT` line can
+    carry the design's MDE at that candidate's own benchmark correlation, turning an absence of
+    evidence into a bound. Travelling with it, the object that prices the threshold: the **odds
+    ratio** `ORATIO = FP/FN` of false discoveries to misses, with the rule *if a Type I error is `k`
+    times as costly as a Type II error, target `ORATIO = 1/k`*. The lab's gate never observes a miss,
+    so its implied `k` is infinite; naming a finite `k` is a decision about the lab's purpose and is
+    the human owner's, but **the equivalence between the bar's severity and a named cost ratio is
+    arithmetic.** Read the odds ratio rather than the Type II rate alone: under multiple testing the
+    Type II rate is defined as the false-omission rate `FN/(FN+TN)`, which is mechanically tiny
+    whenever true effects are rare — i.e. reassuring and uninformative in exactly this lab's regime.
+    Tier A, no overlap.
+    → `notes/2026-11-05-missed-discoveries-type-ii-error-and-the-odds-ratio-hurdle.md`
+
+400. **HOW A HURDLE SHOULD MOVE, and the circularity to avoid when setting it.** The optimal
+    t-statistic threshold **falls** as `p₀`, the prior fraction of genuinely good candidates, rises;
+    it rises with the number of candidates tested and falls with the pool's signal-to-noise ratio.
+    Consequences: a hurdle imported from another data set means something different here, and neither
+    the conventional `2.0` nor Harvey–Liu–Zhu's `3.0` is optimal on the strategy sets studied (whose
+    authors never intended `3.0` as a universal rule). The trap is that **`p₀` estimated from this
+    lab's own outcomes is contaminated by the design's own power** — a low hit rate is what `#394`
+    predicts under a true-but-small effect — so the non-circular `p₀` has to come from the external
+    literature's hit rate, which makes it this folder's number to supply rather than the lab's. The
+    apparatus that turns a `(threshold, p₀)` pair into both error rates is a **double bootstrap**:
+    resample time periods to build a world where the truth is known, then apply the testing
+    procedure inside it; runnable here retrospectively on the stored trial return streams, which is
+    how `#357`/`#358` would be answered empirically rather than by calibration. Structural mismatch
+    to respect: that apparatus is a **batch** framework and this lab tests **sequentially**, so the
+    `p₀` sweep and the odds-ratio criterion transfer while the bootstrap needs the trial history read
+    as a batch. Tier A, no overlap.
+    → `notes/2026-11-05-missed-discoveries-type-ii-error-and-the-odds-ratio-hurdle.md`,
+    `notes/2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md`
+
+
 
 
 ---
@@ -16116,8 +16395,158 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-02 (session 80) | **RAN THE CORRECTED COVERAGE DETECTOR FIRST, AS INSTRUCTED — the three hit counts the [2026-11-01] entry flagged for re-checking all HOLD, and the real gap is the TRADED UNIT.** Re-run with fixed strings across 252 notes: `fundamental law` **5**, `transfer coefficient` **6**, `rank IC` **7** — all confirmed, so that entry's readings on those were sound and no correction is owed. The genuine zeros are about what is ranked rather than how: `index momentum` **0**, `Bhojraj` **0**, `Hameed` **0**, `macromomentum` **0**, `winner-loser reversal` **0**, `country rotation` **0**, `region rotation` **0**, `global tactical` **0**, `asset allocation` **1** — while the folder's two `country momentum` notes are both about **neutralising** the country bet in a stock book. **The folder had written twice about removing a bet it had never written about taking**, and the lab holds 42 ETFs that could express it. Graded against three criteria stated before the first paper: **(a) PASSES in the strongest available form — a SIGN FLIP** (country short-horizon = continuation, stock short-horizon = reversal), so it is not the incumbent relabelled (**#361**). **(c) FAILS COMPLETELY — none of the three sources models transaction costs**, so every magnitude here is gross and the near-zero developed-market result is a *pre-cost* near-zero (**#366**, third consecutive confirmation of `#359` from the literature's side). **(b) SPLITS, and that split is the night's result.** Cakici–Fieberg–Neszveda–Piljak–Zaremba (Tier B, *JBF*, **0** Crossref cites — an age artefact; read in full from the Vaasa repository) vary **nine** design nodes over **13,824** implementations and find the two most influential are **data source** and **geographic scope** — **exactly the two this lab is pinned at the worse end of**: ETF/futures representations pay **two to three times less** than full-market aggregates (~0.13–0.16 pp/month) and developed-only scope gives spread returns **indistinguishable from zero**, with ETF designs also carrying **higher** nonstandard errors. **This is the folder's usual 'a null on a large-cap panel would be uninformative' hedge replaced by a direct measurement of that exact case.** Two honest narrowings travel with it: the two penalties are **largely the same finding seen twice** and must not be stacked (**#362**), and the paper is entirely **long-short** with **no long-leg breakout** (**#370**). **One object survives all three criteria and two independent sources converge on it**: short-horizon country-index continuation — the only price-computable member of the four signals surviving the multiverse plus bootstrap plus out-of-sample selection, and Chan–Hameed–Tong (Tier A, *JFQA*, **326** Crossref, read in full from an NUS-hosted working version) independently find index-momentum alphas **jointly insignificant at 1 week, significant at 1% at 2 and 4 weeks, and gone at 12 and 26 weeks** after world-market beta adjustment (**#363**). **The finding that changes what a long-only lab should think: the LONG LEG carries it** — "buying winner portfolios yields significant profits consistently, but selling loser portfolios creates either insignificant profits or losses" — inverting `program.md`'s standing caveat that long-only is expensive because only the cheap side is tradeable (**#364**); and cap-weighting shrinks but does not kill it, failing the authors' own small-market-artefact test at short horizons. The **currency tension resolves on horizon**: CHT's π3 is **negative at 12 and 26 weeks**, the same sign Bhojraj–Swaminathan report at annual horizons, giving the reusable rule that **a USD score is cleanest short and self-contaminating long** (**#367**) — which independently explains why one-month `StMom` is robust and 12-1 `LtMom` fragile. Richards (Tier A, *JF*, **135** + **45** across two Crossref records; read as IMF WP/97/182, a **text-layerless scan** rendered to images) supplies the long-horizon end and the **hedge the multiverse does not**: his **eight-largest** subgroup (US, Japan, UK, Canada, Germany, France, Australia, Switzerland — close to this lab's panel) still shows a positive contrarian return at ~60% of the small-market one, and the difference is **not significant**, so the honest claim is **"the gradient runs against this panel", not "the effect is absent"** (**#368**). His own horizon is **refused on arithmetic** — 3-year ranking and 3-year test against a six-year validation split is two non-overlapping periods (**#369**). **One source recorded as body-not-obtained:** Bhojraj–Swaminathan 2006 (*J.Business*, `10.1086/497416`, **156** Crossref) — closed, no OA location, Cornell eCommons **0** for the title; abstract read from the RePEc record and nothing beyond it used. | Cakici, Fieberg, Neszveda, Piljak & Zaremba 2026 (`2026-11-02-multiverse-of-country-level-research-designs.md`); Chan, Hameed & Tong 2000 + Bhojraj & Swaminathan 2006 abstract (`2026-11-02-country-index-momentum-and-the-currency-component.md`); Richards 1997 (`2026-11-02-winner-loser-reversals-in-national-indices.md`) |
 | 2026-11-03 (session 81) | **TOOK THE AIM VERBATIM AND IT PAID OUT AS A CORRECTION TO THE FOLDER'S OWN HABIT — the folder had 27 notes that invoke the long-only constraint and none about the constraint itself.** Aim taken from the [2026-11-02] entry, which sharpened `statistical-arbitrage`'s binding question into a coverage test on `program.md`'s clause *"say how the short leg's absence is handled"*. Fixed-string greps across all 255 prior notes: `enhanced active` **0**, `130/30` **0**, `long-only portfolio optimization` **0**, `Levy, Ritov` **0**, `many assets` **0**, `Chen, Da` **0**, `Zhi Da` **0**, `net arbitrage trading` **0** — against `long-only constraint` **27** and `short leg` **28**. **That entry's acceptance criterion (admit a source only if it reports a long-leg-only or long-only-constrained result) was stated before the first download and it excluded two sources**: Clarke–de Silva–Thorley (2002) and Clarke–de Silva–Sapra (2004), the transfer-coefficient primaries that `2026-08-19-fundamental-law-breadth-and-strategy-risk.md` has flagged as unread since session 5, were **not written up** — both closed, `any_repository_has_fulltext: false`, no repository copy found, and the only text reached was a **CFA Digest editorial summary**, recorded second-hand inside tonight's first note and explicitly not a measured quantity for this repo. **Three notes, three separable mechanisms, and the lab has been treating them as one discount.** *(a)* **The arithmetic.** `w_i >= 0` gives `w_i - b_i >= -b_i`, so the attainable underweight is the benchmark weight; and since active weights sum to zero, the constraint **also caps overweights**, making a cap-weighted long-only book's implicit bet *long the top, short the middle* (**#373**). *(b)* **The night's most useful result is a CORRECTION rather than an import: the capital half of that argument does not reach an equal-weight benchmark.** With `b_i = 1/N ≈ 0.07%`, excluding `k` of `N` names frees exactly `k/N`, so a 20-name book's 1,380 underweights of `-0.0714%` sum to **98.6%** and fund its overweights exactly — **a long-only book on this pool can run a ~99% active position**, and "underweighting frees only a minuscule amount of capital" is cap-weighted and does not apply (**#374**). What survives is a **resolution** limit: every excluded name gets the identical `-1/N`, so the ranking is **quantised to one bit below the inclusion threshold**, giving the rule that **a score is reachable here iff its information is in identifying the best names and unreachable iff it is in ordering the bad ones** (**#375**) — a construction-level cause for the lab's own repeated "real, large, significant, structurally unreachable" shape — plus a new free screen that tests exactly it, the **one-bit truncation test** (`score_trunc = max(rank, threshold)`, then re-measure rank IC), strictly stronger than the top-minus-pool comparison because a score can show a spread with a flat top and a steep bottom (**#376**). *(c)* **The theorem, and it is about protocol v2's own widening.** Levy–Ritov prove that for `C = M + α11'` the attainable Sharpe is of order `√N` with shorting and **levels off** without, with closed-form ceiling `(max_i µ_i)/√α` — **no `N` on the right**; mechanism: with positive average covariance, adding an asset to a long-only frontier gives combinations interior to it, so its weight is zero and the frontier does not extend. Prediction: the ~140 → ~1,400 widening buys **selection quality and not a higher reachable ceiling**, where a long–short lab would have gained ~`√10` (**#377**), and the companion closed form `w_i → ((µ_i − µ̄)/µ̄)·(ρ/(1−ρ))` **also contains no `N`**, so the measured de-concentration price and the binding `≤25%` cap are structural rather than narrow-panel artifacts (**#378**). That note also records a tension the folder must hold both halves of: Jagannathan–Ma says the constraint *helps* as shrinkage, this says it is costly against true parameters — oracle problem versus estimated problem, and a score-ranking book collects **neither**, only the ceiling. *(d)* **The one measurement on returns runs AGAINST the folder's strongest discount.** Chen–Da–Huang (Tier A, *RFS*, **124** Crossref, randomised Regulation SHO identification, read in full from a Notre Dame faculty page) report the legs separately and five-factor-adjusted the **traded long leg alone is significant: +0.017%/day, t = 2.51** at ten days against **−0.021%** (t = −2.69) short, so the reachable leg carries ~**45%** of a 0.038%/day traded spread while both not-traded legs are insignificant. **The honest revision is the [2026-11-02] shape: the gradient runs against the long leg, and the long leg is not a null** (**#379**). *(e)* **And that source closes its own would-be adaptation by AGREEING with the lab**: substituting general institutional ownership for hedge-fund holdings destroys the predictability, so what matters is *who* trades rather than *how much* — volume is broader still, and `learnings.md` has the whole volume axis as a twelve-session null. **The lab's null and the paper's null are the same finding from two directions**; the mechanism is structurally unreachable on price-only data rather than untested, and no trial should be spent on it (**#380**). **Anti-lookahead note:** the RFS paper has a substantial crisis-period section and several period-attributed anomaly statements; **none of it is recorded**, and the note says so. | Jacobs & Levy 2006 (*JPM*) + 2007 (*FAJ*) (`2026-11-03-attainable-underweight-and-the-long-only-constraint.md`); Levy & Ritov 2001/2011 (`2026-11-03-no-short-constraint-cost-and-panel-breadth.md`); Chen, Da & Huang 2019 (`2026-11-03-which-leg-arbitrage-capital-trades.md`) |
 | 2026-11-04 (session 82) | **TOOK BOTH AIMS THE [2026-11-03] ENTRY SET, AND THE NAMED PRIMARY'S CRITERION IS ANSWERED NEGATIVELY FROM INSIDE ITS OWN LITERATURE WITHOUT THE PRIMARY EVER BEING OBTAINED.** Aims taken verbatim: (1) the named primary **Clarke, de Silva & Thorley (2002)** on the transfer coefficient, admissible only if its body gives the TC under a long-only constraint as a function of something this lab controls; (2) ranked below it, the **cash/pool boundary**, admissible only if the source treats the cash weight as a **decision** rather than a residual. Fixed-string greps across all 258 prior notes: `Portfolio Constraints and the Fundamental Law` **0**, `cash holding` **0**, `risk-free allocation` **0**, `partial investment` **0**, `optimal fraction in cash` **0**, `cash weight` **0**, `utility gain` **0**, `timing the market` **0**, `Thompson` **0**, `Can Anything Beat the Historical Average` **0**, `Comprehensive Look at the Empirical Performance` **0** — against `transfer coefficient` **7**, `Clarke` **4**, `cash position` **1**, `holding cash` **1**. Both gaps confirmed. **(a) The named primary was NOT obtained for the second night running and should now be CLOSED as a target.** `10.2469/faj.v58.n5.2468` resolves on Crossref (197 cites, confirming the [2026-11-03] figure) but **OpenAlex now flags it `is_oa: true, oa_status: green, any_repository_has_fulltext: true` with `oa_url` = an SSRN DOI — reversing that entry's "closed, no full text" record** — and the flag is a metadata improvement only, because the SSRN landing page returns the standard Cloudflare 403; `core.ac.uk` 429'd its API and challenged its search page. **What answers the criterion instead is a paper that follows Clarke et al.'s own framework and notation and then breaks their definition.** Ding (Tier B, SSRN working paper read in full, 33 pp., from an NYU mirror; 4 Crossref / 10 Semantic Scholar cites; peer-reviewed successor in *Journal of Empirical Finance* 2017 not obtained) shows `TC = corr(Δw·σ_r, α/σ_r)` satisfies `IR_c = TC·IR_unc` **only when the cross-sectional IC is constant over time and the residual covariance is diagonal**; with a time-varying IC the conditional covariance carries a rank-one common component, the diagonal-only adjustment is the wrong metric, and carried through it makes the **constraint's cost appear to vanish as breadth grows** — an artifact, and the origin of any claim that "breadth buys back what the constraint costs". The repair is `TC = Δw'α/√(Δw'ΩΔw·α'Ω⁻¹α)` (**#384**), and **all seven of this folder's `transfer coefficient` mentions now carry that caveat.** **(b) The night's most valuable result is a ceiling that reproduces `#377`'s shape with NO constraint in the derivation.** The generalized law `IR = IC̄/√(1/(φN) + σ_IC²)` has large-`N` limit **`IC̄/σ_IC`, containing no `N`** (**#381**): breadth diversifies idiosyncratic risk only, while the bet on the signal itself has an uncertain payoff common to every name and does not diversify. `#377` derived a breadth-independent *Sharpe* ceiling for a **long-only** book from covariance structure; this derives a breadth-independent *IR* ceiling for the **unconstrained optimum** from signal risk — **two literatures, two derivations, one conclusion: at this width `N` is not the lever, and a long–short lab would not have gained the `√10` either.** The source puts the crossover below this panel's width (`φ` ≈ 1.5–2.1 on its universes, `σ_IC·√(φN)` **in the range 4–10**, so Grinold-style projections overstate `IR` by about that multiple) — its own panel's figures, flagged as needing re-measurement here (**#382**). Two further free imports: `IC_cs` is a **residual-volatility-weighted average** of per-name `IC_ts` and equals it only under homogeneous residual volatility, which bears directly on the lab's most-used screen (**#383**); and the multi-factor form `IR ≈ √(IC'Σ_IC⁻¹IC)` says `program.md`'s "decorrelated signals" must mean decorrelated **ICs over time** — not scores cross-sectionally, not realised returns — with a missing *risk* factor costing only `1/√(1−ρ²)` and a missing *return* factor costing twice (**#385**). **(c) The cash/pool boundary resolves into ONE ARITHMETIC TEST, and the two Tier A sources that give it disagree about everything else.** Campbell–Thompson (*RFS*, **2776** Crossref / 2676 Semantic Scholar, read in full from Harvard DASH) write the risky-asset weight as the decision with the complement in the riskless rate and derive the proportional return gain from seeing a predictor as `(R²/(1−R²))·((1+S²)/S²) ≈ R²/S²` — **the yardstick for a timing `R²` is the squared Sharpe of the thing being timed** (**#386**). Composed with `learnings.md`'s own structural fact (v3's Sharpe is on excess returns and the pool is **fully invested**, so cash forfeits the premium the pool keeps earning) this is a **pre-trial refusal test for `seasonality-calendar` read as a timing family**, and the rider makes it stricter rather than looser: the paper's feasible range is `[0, 1.5]` and it calls its own gains *limited by* that cap, so at gross leverage `≤ 1.0` only the **move-to-cash half** of the response is reachable and that is the half that gives up the premium. Run backwards the same arithmetic is an **overfitting alarm** — a large `R²` implies a gain too large to believe, with horizon the one legitimate reason a bigger one is credible (**#387**) — and the construction half transfers unchanged: zero a wrong-signed slope, **floor the predicted premium at zero**, which **never worsens and almost always improves** out-of-sample performance and is the long-only constraint imposed on the forecast instead of the weight, i.e. `#376` from the forecast side (**#388**). **(d) The counterparty is where the honesty is, and the folder records the tension rather than picking a side.** Goyal–Welch (*RFS*, **3527** Crossref; Semantic Scholar's split record reports 1457 and is the "disbelieve a lone low count" pattern again; read in full as the Yale ICF working version) reach the opposite verdict on the same question. Their portable contribution is a **diagnostic**: the cumulative squared-error difference against the *prevailing* expanding-window mean, graded on **four** conditions (significant in and out of sample; generally upward drift; drift not concentrated in one short stretch; drift still positive late), whose arbitrary level makes start-date sensitivity inspectable by sliding the zero line. The repo's translation — **the cumulative active-return curve against the equal-weight pool** — is free and **strictly finer than v3's two train sub-periods**, which test conditions 3 and 4 at two points rather than every point (**#389**). With it comes a **failure taxonomy**: low power looks poor early and improves, mis-specification looks fine early and **deteriorates late**; they report the second and confirm it with a stability test that rejects stability for essentially every variable, so `learnings.md`'s repeated "sign inverts across train sub-periods" declines now have their warrant, and `#381`'s `σ_IC` is the same thing measured as a dispersion (**#390**). Two smaller rules: conflicting results on the same data trace to **sample window and observation weighting** before method (**#391**), and when a weight cap binds on the **benchmark** as well as the candidate, part of the measured difference is constraint-hitting rather than forecast quality (**#392**). **(e) The disagreement, stated and not resolved.** A weak prior on a noisy estimator does improve it — and the improvement runs mostly through **replacing the estimator with the benchmark on about half the dates** where the restriction changed the verdict, the residual edge is not sub-period stable, and the economic magnitude moves with the risk-aversion parameter and the leverage cap. Usable synthesis: **adopt the restrictions, grade with `R²/S²`, require the cumulative curve before believing either.** Goyal–Welch also state the two ways their own test is too generous — it is not a true out-of-sample test, and it ignores how an investor would have known which model to pick — which is the deflated-skill bar described from outside. **Anti-lookahead note:** all three sources have substantial dated empirical sections (factor-level IR tables; named-predictor `R²`s and utility gains; sub-period and event narratives). **None of it is recorded**, each note says so in as many words, and every sample ends by 2009 so `validation_overlap: false` throughout. | Ding 2010 (+ Ding & Martin 2017, successor, not obtained) (`2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`); Campbell & Thompson 2008 (`2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`); Goyal & Welch 2008 (`2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`) |
+| 2026-11-05 (session 83) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT AS A NUMBER THE LAB HAS NEVER HAD — and the aim's own premise needed one correction.** Aim taken from the [2026-11-04] entry: admit a source only if it yields a **computable minimum detectable effect as a function of something this lab controls**. Fixed-string greps across all 261 prior notes: `minimum detectable` **0**, `detectable effect size` **0**, `sample size calculation` **0**, `ex ante power` **0**, `design sensitivity` **0** — against `haircut` **40**, `deflated Sharpe` **3**, `effective number of trials` **3**. **The vocabulary gap is real; the content gap was overstated** and this entry records the correction: `#323` (`2026-10-28-argmin-inference-minimax-separation-rate.md`) already gives a minimax *separation* rate between candidates and says in-note that it is only that, and `2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md` already carries a level–power–sample-size link inside a sequential testing budget. What was genuinely absent is **the minimum detectable value of the lab's own statistic**, skill against the fully-invested equal-weight pool. Second over-claim by the detector in five sessions. **(a) The number.** Bailey–López de Prado's **MinTRL** (*J. Risk*, 149 Crossref / 187 OpenAlex, read in full from the first author's own page) inverts Mertens'/Christie's asymptotic Sharpe variance into a required sample size, `MinTRL = 1 + [1 − γ₃·ŜR + ((γ₄−1)/4)·ŜR²]·(Z_α/(ŜR − SR*))²` observations. **As printed it is the wrong variance for v3**, which treats `SR*` as known while the pool's Sharpe is estimated on the same days at high correlation; keeping the inversion and substituting this folder's own paired SE `√(2(1−ρ)/T)` gives, at `T = 1562`, a minimum detectable skill of **0.14 / 0.20 / 0.32 / 0.45 / 0.63 at 80% power** for `ρ = 0.99 / 0.98 / 0.95 / 0.90 / 0.80` (**#393**). All three of the paper's own MinTRL examples were reproduced to the printed decimal here (2.731 / 2.829 / 3.240 years), which was necessary because the equation glyphs survive no text extraction. **(b) The interpretation rule that changes how every existing interval reads.** “Is the interval clear of zero?” is a **50%-power** question; 80% power costs `((1.645+0.842)/1.645)² = 2.29×` the observations, i.e. a window **2.3× longer** (**#394**). Composed: the lab's ±0.33 intervals imply `SE ≈ 0.20`, `ρ ≈ 0.87`, and a detectable skill near **0.5** before any search adjustment — so the long run of near-zero readings is **evidence-compatible with absent effects AND with an underpowered design**, which answers `#357`/`#358` in the second direction. Not a reason to lower the bar. **(c) The search side, and the two derivations agree.** The *Notices* paper (178 Crossref / 166 Semantic Scholar; `ams.org` 403s an automated client, the author's page serves it) gives `E[max_N] ≈ (1−γ)Z⁻¹(1−1/N) + γZ⁻¹(1−1/(Ne))` bounded by `√(2 ln N)`, and **MinBTL** `≈ (E[max_N]/S_target)²` years; rescaled by the paired SE this is the **expected maximum spurious skill of a search** (**#396**), and the ordering is that **the trial count is the mild axis (×1.2 from `N`=10 to 200) and the benchmark correlation the brutal one (×4.5 from 0.99 to 0.80)** — `#323`'s “crowded board cheap, short window expensive” conclusion from extreme-value theory instead of minimax theory. Inverted at the fixed 6.2-year window, `S_target = 1` supports ~**89 independent** configurations, which is a pressure gauge on `N_eff` rather than a cap on recorded trials (**#397**). The lever the arithmetic leaves is `ρ`, a **construction choice**, and it pulls against `program.md`'s spend-across-families rule: the design question is whether attainable skill falls slower than `√(1−ρ)`. **Stated as a tension, not resolved — it is the human owner's call.** **(d) The result nobody was looking for, and it is the cheapest high-stakes check on the list.** The *Notices* paper's Proposition 6.1: with equal volatilities, pinning the **full-sample mean** implies `SR_IS(A) > SR_IS(B) ⇔ SR_OOS(A) < SR_OOS(B)` — in-sample ranking **inverts**, exactly, on a trendless process, where with independent increments the IS/OOS scatter is a circular cloud on the origin. One conserved sample aggregate is the whole difference between **selection-is-noise** (haircut machinery applies) and **selection-is-poison** (no correction helps; the sign is wrong, not the size). The lab has three candidate conserved quantities and the test is **one regression on data already stored** — validation skill on train skill across recorded trials; a negative slope would be an `## Engine issue`, not a strategy finding (**#398**). **The lab has already produced that statistic and this entry records it rather than re-proposing it**: the 2026-11-04/05 nightly reports `corr = −0.074` over fifteen trials and attributes it to regime mix. Proposition 6.1 is a **second** explanation of the same observation and the two are distinguishable **by sign** — regime mix predicts zero, a conserved aggregate predicts negative — and at `n = 15` the estimate separates neither, which is tonight's own argument applied to tonight's own diagnostic. **(e) The cost side.** Harvey–Liu (*JF*, 117 Crossref / 120 OpenAlex, Tier A, read in full) put Type II on the same footing as Type I, define the Type II analogue of the FDR as the **false-omission rate** `FN/(FN+TN)`, and join them with **`ORATIO = FP/FN`** plus the rule *if a Type I error is `k` times as costly as a Type II, target `ORATIO = 1/k`*. Free import: a null becomes **“no skill above `X`”** rather than “no skill” (**#399**), and the bar's severity is **arithmetically equivalent to a named `k`** — currently infinite, since the gate never observes a miss. Their hurdle result: the optimal threshold **falls** as `p₀` rises, rises with the number tested, falls with signal-to-noise, and **neither 2.0 nor HLZ's 3.0 is optimal**; the trap is that `p₀` read off this lab's own outcomes is contaminated by its own power, so it must come from the external literature's hit rate — this folder's number to supply (**#400**). Their double bootstrap is runnable here retrospectively on stored trial return streams, with the mismatch that it is a **batch** framework and the lab tests **sequentially**. **Admission note, stated rather than glossed:** sources (a) and (c) reach the acceptance criterion in closed form; (e) reaches it **procedurally** — error rates as functions of `(threshold, p₀)` for an arbitrary procedure, not a formula — and is admitted on that reading because it is the general machine rather than one estimator's power simulation. **Anti-lookahead note:** (a)'s illustration is dated hedge-fund style indices, (c) has no market data at all, (e)'s samples end 2016. **No performance figure, ranking, style or event narrative from any of them is recorded**; each note says so in as many words; `validation_overlap: false` throughout. The threshold and cutoff magnitudes recorded are **decision cutoffs**, not performance. | Bailey & López de Prado 2012 (`2026-11-05-minimum-track-record-length-and-the-probabilistic-sharpe-ratio.md`); Bailey, Borwein, López de Prado & Zhu 2014 (`2026-11-05-minimum-backtest-length-and-the-expected-maximum-sharpe.md`); Harvey & Liu 2020 (`2026-11-05-missed-discoveries-type-ii-error-and-the-odds-ratio-hurdle.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-05] READ THIS BEFORE AIMING SESSION 84. The detectability vein is CLOSED on
+  construction and there is no named primary left in it — do not open a fourth source on power,
+  minimum detectable effect or backtest length.** Three notes now cover it and they are the three
+  sides of one object rather than three papers on one side: the effect side (`#393`–`#395`), the
+  search side (`#396`–`#398`), and the cost-of-the-threshold side (`#399`–`#400`). A fourth source
+  would change none of them, because **what remains is arithmetic the lab runs, not literature this
+  folder reads**: the `ρ` of each candidate to the pool, the `N_eff` of the trial history, and the
+  sign of the regression `#398` describes — which the 2026-11-04/05 nightly has already estimated
+  once, at `−0.074` over fifteen trials, and which needs re-reading as trials accumulate rather
+  than a fourth paper. Record the vein as closed on the same terms the long-only
+  constraint was closed on 2026-11-03.
+  - **Primary aim for session 84: PANEL CONSTRUCTION as a claim in its own right.** This is the
+    [2026-11-04] entry's own second-ranked item, which tonight did not reach, and it is carried
+    forward unchanged because nothing tonight touched it. Greps standing at **0**: `large-cap bias`,
+    `investable universe`, `free float`, `index inclusion`, `capitalization threshold`,
+    `universe construction`; `float adjustment` **1**, `index construction` **1**,
+    `size threshold` **1**, `Russell reconstitution` **1** — against `index membership` **9**
+    (all re-run 2026-11-05 across the 261 pre-tonight notes; the nine zero-and-one counts hold
+    exactly, and `index membership` comes back **9** against the **10** that entry recorded, which is
+    a one-note discrepancy worth nothing except as a reminder to re-run rather than copy a count).
+    The folder has notes on membership as
+    an *event* and on look-ahead benchmark bias, but none on **what an index's own inclusion rules
+    select for**, which is the premise behind the standing phrase "this panel is large-cap and
+    liquid by construction" that five independent literatures now lean on — and, after tonight, a
+    sixth: `#393`'s `ρ` is high precisely because the candidate and the pool are drawn from the same
+    narrow selection. **Acceptance criterion, stated before any download: admit a source only if it
+    characterises the selection rule (size, float, liquidity, turnover screens) and what that rule
+    does to a measured cross-sectional effect** — not another paper on the price impact of index
+    addition, which is already covered, and not another survivorship-bias paper.
+  - **Ranked below it, and it is a WRITING task rather than a reading one, so it fits in the same
+    session: supply `p₀`.** `#400` says the prior fraction of true candidates must come from the
+    external literature's hit rate rather than from this lab's outcomes, because the latter is
+    contaminated by the design's own power, and it says that makes `p₀` **this folder's number to
+    supply**. The inputs are already here: the [2026-11-01] entry established that both of
+    `research/README.md`'s replication-rubric sources (Hou–Xue–Zhang; Jensen–Kelly–Pedersen) have
+    dedicated notes, and the McLean–Pontiff decay note has been here since session 1. The task is to
+    read those three notes against each other and write down a defensible range for **the fraction
+    of published cross-sectional equity effects that survive independent replication under a
+    long-only, daily-close, large-cap constraint** — with the discount for each of those three
+    constraints stated separately. Do it as a short cross-cutting subsection, not as a note, since
+    it cites no new source. If the range comes out wide, say so and give the bounds; a wide
+    defensible range is still strictly better than the implicit `p₀ = 0` the gate currently uses.
+  - **The detector's standing rule, and its third over-claim in five sessions.** The rule
+    ([2026-11-04]) is: *ask what the lab does to a number after it has it, and grep for the
+    literature about the number before it exists.* It worked tonight — `haircut` 40 against
+    `minimum detectable` 0 found a real gap — but it **over-stated the gap's size**, because two
+    existing notes (`#323`'s separation rate; the α-investing sample-size lever) bear on
+    detectability under other vocabulary. This is the same failure mode as the [2026-11-01] entry's
+    replication-rubric miss and the [2026-11-02] re-check. **Procedural fix, to apply before writing
+    any future coverage claim: after a zero-count grep on the target vocabulary, run a second grep
+    on the *mechanism* rather than the term** (here: `statistical power`, `Type II`, `noncentral`,
+    which return 4, 1 and 2 respectively and would have caught both notes). Report the gap as "never named" when
+    that is what the evidence supports, and reserve "never covered" for when both greps are empty.
+    Remaining caveats not yet run through the detector, in descending order of how often this folder
+    leans on them: *survivorship* (the panel's pre-2009 thinness), *publication decay*, and
+    *"the cost model is lethal only to books that trade"*.
+  - **Carried unchanged and still live from [2026-11-04]**: the cash/pool boundary stays closed on
+    construction (`#386`–`#392`), with `#386`'s `R²/S²` test still the thing that decides whether a
+    timing candidate should ever run; the long-only vein stays closed (`#373`–`#380`); `#376`'s
+    one-bit truncation test, `#389`'s cumulative-curve test and `#381`'s `σ_IC` remain the three
+    free screens that should run before any candidate. Tonight adds a fourth that is cheaper than
+    all three and applies to the *design* rather than the candidate: **`#393`'s MDE at the
+    candidate's intended `ρ`, computed before the file is written.** `#363` (short-horizon
+    country-index continuation, long leg only) remains the single live *construction* in the carried
+    queue, with `#371` its pre-trial refusal test — and it should now be read against `#393`,
+    because a country-ETF book is a low-`ρ` construction and therefore sits in the expensive column
+    of that table.
+  - **Unchanged and still live**: `#393`–`#400` from tonight; `#381`–`#392` from 2026-11-04;
+    `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01;
+    `#343`–`#348` from 2026-10-31; `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29;
+    `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26;
+    `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23;
+    `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20;
+    the 2026-10-18 pair; then 2026-10-17 and everything carried under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); the long-only constraint as a construction object
+    (2026-11-03); the cash/pool boundary as a construction object (2026-11-04); and now **ex-ante
+    detectability / statistical power as a design object**, on the terms in the first paragraph
+    above. Still at **0** and still not nominated: `transfer entropy` (sixteenth nomination).
+  - **Standing, and not this folder's call** — tonight adds one item to this list and it is the
+    most consequential one on it. The engine issues filed 2026-10-18 and 2026-10-22;
+    `min_train_skill = 0.0`; `#324`'s deliberate difference; the two human decisions added
+    2026-10-29; the three items the 2026-10-30/31 nightly raised; the data-type question, unchanged
+    at five independent literatures. **`#357`/`#358` can now be struck from this list as answered:**
+    the deflated-skill bar's severity is an *assumption*, and `#394`'s arithmetic says the design is
+    underpowered against the effect sizes this folder's own sources describe. The new item: **`#396`
+    puts `program.md`'s spend-across-families rule in direct tension with what the design can
+    measure** — a structurally different book costs three to four times the detectable skill of a
+    small tilt on the pool — and resolving that is a decision about the lab's purpose, not a
+    research finding. This file states the trade-off and does not take a side. Also standing and
+    unchanged: the two commits on `origin/main-dh53hc` touch only `experiments/journal.md` and
+    `experiments/learnings.md`, so the trial history is not split and no deflated bar is understated;
+    landing them is a strategy-session or human action. This session's integrity check again found
+    the container checked out on a per-run branch (`claude/tender-galileo-rz0fed`) at the same commit
+    as `origin/main`; it was reset to `main` before any work, per `research/README.md`'s rule that
+    research work never sits on a per-run branch. **That is now three consecutive sessions with the
+    same finding, so it is the container's default rather than an anomaly, and the reset step should
+    be treated as part of the routine rather than as an incident.**
+
+- **[2026-11-05] Access findings — one general lesson worth more than the channels, two new first-try
+  personal-site channels, one nominally-open publisher that refuses automated clients, and the
+  Crossref-first ordering confirmed for the eighth time.**
+  - **THE LESSON: when a PDF's equation glyphs do not extract, recover the formula from the paper's
+    own worked numeric examples, not from memory.** All three of tonight's PDFs extracted their prose
+    cleanly while their display equations came out as bare brackets and spaces — a *subsetted
+    Cambria Math* CID font with no usable ToUnicode map, which `pdftotext -layout`, `pdftotext -raw`
+    and `pdftotext -enc UTF-8` all drop identically (`pdffonts` names the font; that is the tell).
+    The formula still had to be written down exactly, and the route that worked was to take the
+    paper's three printed worked examples and solve for the formula that reproduces all three to the
+    printed decimal — which it did (2.731 / 2.829 / 3.240 years), pinning down both parts a reader
+    would otherwise guess (an additive `1 +`, and a `(γ₄−1)/4` rather than `γ₄/4` coefficient).
+    **This is a verification procedure, not a convenience**: a formula reconstructed from memory and
+    one reconstructed from the paper's own arithmetic are not the same evidence, and this folder
+    should never record the first as if it were the second. Generalises to any source whose maths is
+    lost in extraction.
+  - **`davidhbailey.com/dhbpapers/` is a first-try channel for the Bailey–Borwein–López de Prado
+    cluster, and the INDEX PAGE is the key rather than the guessed path.** The directory listing is a
+    ~180 KB HTML page carrying href links to 180+ PDFs; `grep -oE 'href="[^"]*\.pdf"'` on it returns
+    every filename, and the finance ones are short unguessable slugs (`sharpe-frontier.pdf`,
+    `backtest-pseudo.pdf`, `deflated-sharpe.pdf`, `overfitting.pdf`, `backtest-prob.pdf`). Both
+    papers read tonight came back as genuine PDFs (2.2 MB / 5.1 MB, `file`-verified) on the first
+    request. Note the direction this extends the 2026-09-18 faculty-page lesson and the 2026-11-04
+    memorial-page one: this is a **mathematician's** page hosting finance papers, so the host's
+    discipline is not a filter either.
+  - **`people.duke.edu/~charvey/research.htm` is the same pattern and independently confirms it.**
+    Campbell Harvey's research index lists every paper with a
+    `Research/Published_Papers/P<N>_<slug>.pdf` link, and the paper number is **not derivable** — a
+    plausible guess (`P137_False_and_missed.pdf`) 404s while the real one (`P143_…`) is in the index.
+    Fetching the index and grepping the slug resolved it in one call; guessing cost two 404s.
+    **Two independent confirmations in one night that the index page, not the constructed path, is
+    the key to a personal academic site**, which is worth promoting from a tactic to a default.
+  - **`ams.org/notices/<yyyymm>/rnoti-p<page>.pdf` returns HTTP 403 with a ~29 KB HTML body**, even
+    though *Notices of the AMS* is nominally open access and the URL is the canonical one printed in
+    citations. An origin refusal of an automated client, not an egress block, and not one of the
+    "looks like an answer" modes — the status code is honest. Recorded because the publisher's
+    openness is no guide to its bot policy, and because the author's own page served the identical
+    article immediately.
+  - **Crossref answered all three DOIs on the first call; Semantic Scholar resolved one of three;
+    OpenAlex answered two single-work lookups without exhausting its budget.** Eighth consecutive
+    session confirming **Crossref first, Semantic Scholar second and not presumed dark, OpenAlex
+    spent on `locations` lists**. Two specifics: the *Journal of Risk* DOI `10.21314/jor.2012.255`
+    **does not resolve in Semantic Scholar at all** while its SSRN sibling carries only 10 Crossref
+    cites against the article's 149 — the split-record / "disbelieve a lone low count" pattern again,
+    and a reminder to check whether a low count belongs to a working-paper record. And
+    `api.crossref.org/works?query.bibliographic=<title words + authors>` resolved a journal article
+    whose DOI prefix (`10.21314`, Risk.net) this folder had never queried, returning DOI, venue,
+    volume and `is-referenced-by-count` together, which remains the cheapest key when the journal's
+    ISSN is unknown.
 
 - **[2026-11-04] READ THIS BEFORE AIMING SESSION 83. The named primary is now CLOSED as a target —
   do not spend a third night on it — and the cash/pool boundary is closed on construction.**

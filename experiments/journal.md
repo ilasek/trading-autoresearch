@@ -26682,3 +26682,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   every point of its window, rather than at two sub-period midpoints, can overturn a number that
   passed every gate** — #16 passes v3's two train sub-periods (+0.061/+0.053) and fails Goyal–Welch
   condition 3 outright, and the difference is not a refinement but the whole finding.
+
+## Research session — 2026-11-05 (learning agent): 3 notes added, see research/SUMMARY.md
