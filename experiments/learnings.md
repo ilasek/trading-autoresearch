@@ -7044,3 +7044,103 @@ across experiments; prune entries that later evidence contradicts.
   `bit/full` ratio in that night's headline on a denominator 40% too small.** Shape to reuse: when a
   harness aggregates over groups, validate on the recorded **`n` and `se`** and not only on the
   level — `n` identifies the inclusion rule, which is the parameter that actually moves the answer.
+
+- **[Measured 2026-11-05/06, nightly — trials #20-#23, TWO PAIRS] A SCORE CAN BE ORTHOGONAL TO
+  EVERY REFUTED SCORE IN RANK SPACE AND STILL PRODUCE A RETURN STREAM INSIDE A MECHANISM THE LAB
+  ALREADY OWNS — AND THE TWO SPACES CAN DISAGREE IN SIGN. CHECK NOVELTY WHERE THE GATE SCORES, NOT
+  WHERE THE SCORE LIVES.** Two mechanically new scores were chosen on the lab's standing novelty
+  screen (mean rank rho against every refuted or contaminated object, 252 train month-ends) and both
+  were the cleanest it has ever read. `rank_trials` then clustered all four books into two existing
+  mechanisms on **active-return** correlation, and `distinct_mechanisms` did not move off 6:
+
+      score                  rank rho to the object       active-return rho to THAT book     cluster
+      clv756   (#20/#21)     +0.113 old half              +0.55 / +0.50  to #16              M3
+                             -0.039 decade mean           +0.56 / +0.55  to #12              M3
+      ndrift756 (#22/#23)    -0.116 lowvol126             +0.50 / +0.59  to #1 lowvol_gk     M1
+                             (n/a)                        +0.32 / +0.47  to #4 arb_risk      M1
+                             (n/a)                        +0.30 / +0.42  to #9 peer_delay    M1
+
+  **The overnight row settles it: rank rho -0.12, active-return rho +0.59 — opposite signs, five
+  times the magnitude.** M1 is the de-risking cluster trial #1 closed; M3 is the decade-reversal
+  lineage. So the two most rank-orthogonal objects in the lab's record bought seats in its two
+  biggest existing bets. **Operative change, and it is free because the standing screen already
+  prices the book: correlate the candidate's TRAIN active-return stream against the stored train
+  streams of every recorded trial, and refuse a candidate above ~0.5 to a cluster already closed.**
+  It would have refused both of tonight's pairs before either file was written, where the rank table
+  passed both. The two pairs are mutually orthogonal (-0.00 and -0.25 across pairs), so the
+  instrument separates what it should. **Anti-candidate travelling with this entry: any hypothesis
+  whose novelty case is a cross-sectional rank correlation.**
+
+- **[Measured 2026-11-05/06, nightly — trials #20-#23] A BOOK'S SHAPE TRANSFERS TRAIN-TO-VALIDATION;
+  ITS SELECTION DOES NOT. FOUR OF FIVE PAIRED SELECTION DELTAS HAVE NOW FAILED TO TRANSFER AND ONE
+  INVERTED, AGAINST A COST REBATE THAT HAS TRANSFERRED EVERY TIME.**
+
+      pair                   node                       train delta    validation delta
+      #20 / #21              momentum-tercile quota        +0.024          +0.004
+      #22 / #23              range normalisation           +0.006          -0.008  (INVERTED)
+      #16 / #12              sleeve gross half             +0.020          did not transfer
+      #18 / #19              sleeve gross tax              -0.019          -0.004
+      every pair measured    sleeve COST rebate         +0.008..+0.013     +0.011
+
+  The 2026-10-28/29 instruction **"rest a hypothesis only on the COST half"** now has four
+  confirmations and no counter-example. What transferred tonight instead is the **volatility ratio
+  to the pool**: 0.954 on train for the overnight book gave a validation drawdown of **-32.8%**
+  against the -45% gate, while the CLV pair at 1.073 was refused **twice** at -46.1% and -47.5%.
+  **The drawdown gate is a shape gate and shape is predictable from train — report the vol ratio and
+  expect the drawdown gate to follow it.** Note the corollary that closes a corner nobody had named:
+  the risk axis is worth nothing in Sharpe (2026-10-09/10, 2026-10-17/18) but a book MORE volatile
+  than the pool is punished by the drawdown gate, so the gate set admits only the narrow band around
+  volatility parity — which is a construction constraint, not a signal one.
+
+- **[Measured 2026-11-05/06, nightly] THE WITHIN-DAY RATIO IS THE FIRST SCORE CLASS STRUCTURALLY
+  IMMUNE TO THE BACK-ADJUSTMENT CONTAMINANT, AND IMMUNITY BOUGHT A 59th-PERCENTILE NEAR-TIE.** The
+  2026-10-18 and 2026-10-22 engine issues record that stored price and volume LEVELS embed future
+  corporate actions invisibly to both `causality_check` and the hindsight guard. A ratio of quotes
+  from the same day (`(close-low)/(high-low)`) or one day apart on the same adjusted series
+  (`(open-prev close)/(high-low)`) cannot carry a multiplicative adjustment factor: measured rank
+  rho to the log price level is **+0.202** and **-0.003** respectively, against the +0.070 that was
+  worth about -0.006 of IC on the share-turnover trend. Both scores then delivered validation skill
+  of +0.012 and +0.003 at the 68th and 59th percentile of their own nulls. **Orthogonality to the
+  contaminant, like orthogonality to refuted scores (2026-10-19/20), is a necessary condition for a
+  result and not a source of one** — now demonstrated on the cleanest objects available. Keep the
+  class as the cheapest available control if the data-type question is ever revisited; do not keep
+  it as a source of candidates.
+
+- **[Measured 2026-11-05/06, nightly] THE TURN-OF-MONTH DIFFERENTIAL IS REFUTED AS A BOOK AND ITS
+  NEGATION IS BETTER, WHICH CLOSES `seasonality-calendar`'s LAST UNTESTED CROSS-SECTIONAL FORM.**
+  The 2026-10-14/15 free screen priced it at +21.5 bps/63d region-matched (t +1.77), the strongest
+  of four free-OHLCV scores that night and never shipped. As a 5-year trailing per-name differential
+  (mean daily return on turn-of-month days minus other days) in a K=100 peer x depth quota book:
+  train skill **-0.125** against its own negation's **-0.045**, at 2.87x churn. **The negation
+  invariant fails in the direction that matters** — the published, pre-signed direction is the worse
+  one — so the sign is not real. Eleventh instance of 2026-10-24/25's "a positive slice excess with
+  negative Sharpe skill is the rule on this panel", and the third characteristic-level seasonal
+  (after weekday mood and Heston-Sadka) that is visible in a slice screen and unreachable as a book.
+  Anti-candidates travelling with this entry: the turn-of-month differential on either sign, and the
+  coefficient of variation of daily share volume (rank rho +0.287 to the share-turnover trend,
+  +0.278 to the dollar-volume level, +0.212 to Amihud — the liquidity level in costume, declined
+  without a book).
+
+- **[Method, 2026-11-05/06] A SCREEN THE LAB HAS MEASURED AS UNINFORMATIVE CANNOT BE THE THING THAT
+  VETOES A TRIAL, AND THE BAR IT WAS PROTECTING IS NOT CLOSE TO BINDING.** Five of the six nightly
+  sessions before this one recorded zero trials, each declining on a train screen. The arithmetic:
+  `corr(train skill, validation skill)` is **+0.048** over nineteen trials (having run -0.345 at
+  n=7 and -0.074 at n=17); the deflator clusters 129 records of all versions to roughly **36
+  effective**; the best DSR on the board is **0.1635** against the 0.95 a challenge needs; four more
+  decorrelated trials move a future candidate's DSR by about **0.004**. **So the cost of a trial is
+  about three orders of magnitude smaller than the gap it would have to close, and a train number
+  is not evidence about the quantity being protected.** What a pre-trial screen is entitled to do
+  here is refuse relabellings, check the gates are mechanically reachable, and check the negation
+  invariant. Tonight's headline revises only *which space* the relabelling check runs in — it does
+  not restore the train level as a veto. Rider, and it is the honest half: all four of tonight's
+  trials were near-ties that `#393`'s minimum-detectable-skill arithmetic says the design could not
+  have distinguished from a real small effect, so shipping them bought clustering information rather
+  than selection information. **Ship for the information the verdict adds that the free screen
+  cannot, and say in the file which that is.**
+
+- **[Method, 2026-11-05/06] TURNOVER PRE-REGISTRATION IS NOW RELIABLE: SIX CONSECUTIVE SUCCESSES,
+  FOUR OF THEM TONIGHT.** 1.9x inside a pre-registered 1.7-2.3x; 1.6x inside 1.6-2.0x; 1.8x inside
+  1.5-2.0x; 1.8x inside 1.6-2.1x. The 2026-10-13/14 method — predict a RANGE with the wider split's
+  churn in it, taking the recorded train-to-validation churn ratio of the same construction
+  (21-49%, and 27% on tonight's first trial) — has replaced the era in which this lab's turnover
+  pre-registration was a lower bound. Use the construction's own recorded ratio, not a generic one.
