@@ -26796,3 +26796,176 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   1.6-2.0, 1.8x in 1.5-2.0, 1.8x in 1.6-2.1); the 2026-10-13/14 method of predicting a range with
   the wider split's churn in it now has four more confirmations and the "lower bound" era is over.
 
+
+## Session summary — 2026-11-05/06 (nightly) — 4 trials of 8; the lab's novelty screen is in the wrong space, and two mechanically new scores landed inside two mechanisms it already owns
+
+**Experiments run: 4 of 8, all `scout`, all GATE_FAIL; `trials.jsonl` goes 129 → 133 records and the
+v3 board 19 → 23 trials.** Two paired designs, one node apart in each. Three further scores were
+declined free before any trial was spent. Engine green on this session's tree
+(`.venv/bin/python -m pytest tests/ -q` → **92 passed in 93.75s**). Step-0 integrity clean:
+`git branch -r --no-merged origin/main` **empty**, and the container's per-run branch
+(`main-cq4euk`) sat at the identical commit as `origin/main` and was reset to `main` before any
+work — the fifth consecutive session to find that, and it is the container's default rather than an
+anomaly. **No holdout, forward or incubation file was opened**: `experiments/holdout_log.jsonl`,
+`reports/incubation.md`, `experiments/incubation.jsonl` and the `*_holdout.parquet` files were
+never read, and the scout track reaches no holdout gate.
+
+**Verdicts.** `#20 rv_clv_momneutral_overlap6` GATE_FAIL (val skill **+0.012** [-0.216, +0.295]);
+`#21 rv_clv_depthquota_control` GATE_FAIL (**+0.008** [-0.267, +0.314]);
+`#22 sc_overnight_drift_sleeves` GATE_FAIL (**+0.003** [-0.153, +0.141]);
+`#23 sc_overnight_return_control` GATE_FAIL (**+0.011** [-0.159, +0.180]). All four are in tier 1 of
+the twenty-three-trial board, as is everything else on it. `distinct_mechanisms` stays at **6**.
+
+### Why this session shipped trials at all, stated as arithmetic rather than as a change of mood
+
+Five of the previous six nightly sessions recorded zero trials, each declining on a train screen.
+This session's planning step read that record against the lab's own measurement of what a train
+screen is worth here — `corr(train skill, validation skill)` **+0.048** over nineteen trials,
+having run -0.345 at n=7 and -0.074 at n=17 — and against the marginal cost of a trial: the
+deflator clusters 129 records of all versions to roughly 36 effective, the best DSR on the board is
+**0.1635** against the 0.95 a challenge needs, and four more decorrelated trials move a future
+candidate's DSR by about 0.004. **A screen the lab has measured as carrying no information about
+validation cannot be the thing that vetoes a trial, and the bar it was protecting is not close to
+binding.** What a pre-trial screen legitimately does here is (a) refuse relabellings of objects
+already measured, (b) check the gates are mechanically reachable, (c) check the negation invariant.
+That is the policy this session ran, and it is the policy the headline below revises — not away
+from shipping, but about which space the relabelling check belongs in.
+
+### Best finding: a score can be orthogonal to every refuted score in RANK space and still produce a return stream inside an already-measured mechanism — and the two spaces can disagree in SIGN
+
+Both of tonight's scores were chosen for novelty measured as mean rank rho against every refuted or
+contaminated object, over 252 train month-ends. Both were the cleanest the lab has screened. Both
+books landed inside a mechanism the lab already owns, and `rank_trials` put them there on
+**active-return** correlation:
+
+    score                 rank rho to the object        active-return rho to THAT object's book    cluster
+    clv756   (#20/#21)    +0.113 to the old half        +0.55 / +0.50 to #16 pt_oldhalf_overlap6     M3
+                          -0.039 to the decade mean     +0.56 / +0.55 to #12                         M3
+    ndrift756 (#22/#23)   -0.116 to lowvol126           +0.50 / +0.59 to #1 pt_lowvol_gk_quarterly   M1
+                                                        +0.32 / +0.47 to #4 rv_arbrisk_peer_neutral  M1
+                                                        +0.30 / +0.42 to #9 ll_peer_delay_band       M1
+
+**The overnight row is the one that settles it: the rank correlation is -0.12 and the active-return
+correlation is +0.59 — opposite signs, and the magnitude is five times larger.** M1 is the
+de-risking cluster trial #1 closed ("Sharpe is flat in beta on this panel"); M3 is the
+decade-reversal lineage whose own lead reads +0.124 with an interval straddling zero. So the night's
+two most orthogonal scores bought two seats in the lab's two biggest existing bets, and
+`distinct_mechanisms` did not move.
+
+**The operative change, and it is free.** The standing pre-trial screen ranks scores
+cross-sectionally. It should instead — or also — correlate the candidate's own **active return
+stream on TRAIN** against the stored train streams of every recorded trial, which the standing
+screen already produces as a by-product of pricing the book. Both of tonight's outcomes were
+predictable from that column and from nothing in the rank table: a book landing in M1 is buying the
+closed risk axis whatever its score is called, and a book landing in M3 is buying the incumbent
+lineage. The two pairs are mutually orthogonal (**-0.00** and **-0.25** across pairs), so the
+instrument separates what it should.
+
+### Second finding: a book's SHAPE transfers train-to-validation; its SELECTION does not, and the paired deltas now number five
+
+    pair                      node                        train delta    validation delta
+    #20 / #21                 momentum-tercile quota         +0.024          +0.004
+    #22 / #23                 range normalisation            +0.006          -0.008  (INVERTED)
+    #16 / #12  (2026-10-27)   sleeve gross half              +0.020          not transferred
+    #18 / #19  (2026-10-28)   sleeve gross tax               -0.019          -0.004
+    every pair measured       sleeve COST rebate          +0.008..+0.013    +0.011
+
+**Four of five selection-side deltas did not transfer and one inverted; the cost rebate has
+transferred every time it has been measured.** The 2026-10-28/29 instruction "rest a hypothesis
+only on the COST half" now has four confirmations and no counter-example. What *did* transfer
+tonight is the volatility ratio: 0.954 on train for the overnight book → validation drawdown
+**-32.8%** against a -45% gate, while the CLV pair at 1.073 was refused **twice** at -46.1% and
+-47.5%. The drawdown gate is a shape gate, and shape is predictable.
+
+### Third finding: turnover pre-registration succeeded four times out of four
+
+1.9x inside the pre-registered 1.7-2.3x; 1.6x inside 1.6-2.0x; 1.8x inside 1.5-2.0x; 1.8x inside
+1.6-2.1x. The 2026-10-13/14 method — predict a range with the wider split's churn in it — is now
+confirmed six times running, and the era in which this lab's turnover pre-registration was a lower
+bound is over.
+
+### Free declines, each a recorded result and none of them costing a trial
+
+1. **The turn-of-month differential is refuted as a book, and its negation is BETTER.** The
+   2026-10-14/15 screen priced it at +21.5 bps/63d region-matched (t +1.77), the strongest of the
+   four free-OHLCV scores measured that night and never shipped. As a 5-year trailing per-name
+   differential in a K=100 peer x depth quota book it reads train skill **-0.125**, against
+   **-0.045** for its own negation, at 2.87x churn. **The negation invariant fails and fails in the
+   direction that matters** — the pre-signed, published direction is the worse one — so the sign is
+   not real and `seasonality-calendar`'s last untested cross-sectional form closes. Eleventh
+   instance of "a positive slice excess with negative Sharpe skill is the rule here".
+2. **The coefficient of variation of daily share volume is the liquidity level in costume.** Rank
+   rho +0.287 to the share-turnover trend, +0.278 to the dollar-volume level and +0.212 to Amihud —
+   all closed objects. Declined on the rho screen without pricing a book.
+3. **The range-normalised INTRADAY drift is a relabelling of tonight's own CLV score's negation.**
+   Rank rho **-0.706** to `clv756`, whose negated leg was priced at train -0.087. Declined before
+   any book was built, which is the rho screen working as designed on a score invented the same
+   night.
+
+### What tonight's two mechanisms are worth, stated plainly
+
+Both pairs are near-ties with the pool: +0.012, +0.008, +0.003, +0.011 against intervals 0.29-0.58
+wide, and three of the four refusals are the random-selection null (68%, 66%, 59%, 62% against the
+90% the gate wants) rather than anything about cost, delisting or turnover. Read against `#393`'s
+arithmetic — at these books' correlation to the pool the design's minimum detectable skill is of
+order 0.2-0.5 at 80% power — **these are readings the design could not have distinguished from a
+real small effect even if there were one**, which is the 2026-11-04/05 F5/`#394` point arriving
+from the measurement side. Nothing here is evidence of a mechanism; what is evidence is the
+clustering, and the clustering says both scores bought existing bets.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Run the active-return novelty screen before the rank screen.** Price the candidate's book on
+   train (the standing screen already does), then correlate its train active-return stream against
+   the stored train streams of all 23 v3 trials, and refuse a candidate that exceeds ~0.5 to any
+   cluster the lab has already closed. Free, falsifiable, and it would have refused both of
+   tonight's pairs before they were written. Provenance: tonight's own measurement.
+2. **The gap between rank rho and active-return rho is itself a measurable quantity and nobody has
+   measured it.** Tonight gives three points (+0.113 → +0.55, -0.039 → +0.56, -0.116 → +0.59). If
+   the relation is systematic — long-only top-K books on ANY score inherit the panel's dominant
+   active-return factors — then the lab's whole score-hunting programme is mis-specified, and the
+   test is a regression of pairwise active-return rho on pairwise rank rho across the 23 stored
+   streams. One script, no trial. Provenance: tonight.
+3. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — the
+   closing-location value at any window or quota axis; the overnight session at either normaliser;
+   the range-normalised intraday drift (a relabelling of the first); the turn-of-month differential
+   as a book on either sign; the coefficient of variation of share volume; and **any hypothesis
+   whose novelty case is a cross-sectional rank correlation**, which is tonight's headline.
+   Unchanged from the previous handovers: any construction whose case is cost at any turnover, any
+   equity-ETF book, the bond sleeve as a duration bet, the 2-4-week index-level relative-strength
+   score on either sign, the `#356` group-size floor, information discreteness as a conditioner on
+   a same-window mean-return score, the quarter-ending-month conditioner, the #16/#19 blend, any
+   construction whose case is a tighter error bar, `#328` as an audit instrument, `H` as a
+   parameter, `K` as a knob, the retention band as a validation operator, the recent half of the
+   decade window, the anniversary leg, the liquidity level or trend in any form, 52-week-high
+   proximity, covariance weighting at any estimator, weighting inside the selected slice,
+   the exclusion / pool-minus-worst book at any `f`, `#385`'s IC-decorrelation blend, high range-vol
+   as a sign flip on `lowvol_gk`, and any hypothesis resting on a recorded v3 skill being a
+   mechanism property.
+4. **From `research/SUMMARY.md`.** Spent tonight: nothing, which should be said plainly — the two
+   scores came from the within-day-ratio axis, which this session opened from the 2026-10-22 engine
+   issue (price LEVELS carry future corporate actions; a same-day quote ratio cannot) rather than
+   from the folder. The folder's live constructions are therefore unspent: `#388` (floor the
+   forecast at zero — still the one note F1(a) does not close), `#386`/`#387` (the `R²/S²` yardstick
+   as a refusal test for a timing read of `seasonality-calendar`), `#363` (short-horizon
+   country-index continuation, long leg only, with `#371` its refusal test and `#393` saying it sits
+   in the expensive low-`ρ` column). Still live: `#393`-`#400`, `#381`-`#392`, `#373`-`#380`,
+   `#361`-`#372`, and everything carried under them; `#300`, `#310`, `#322`, `#336`, `#339`, `#342`
+   remain the interpretation rules to read first.
+5. **For the human owner, and tonight adds one item.** The within-day ratio is the first score class
+   in this lab's record that is structurally immune to the back-adjustment contaminant the
+   2026-10-18 and 2026-10-22 engine issues describe (`ndrift756` reads rank rho **-0.003** to the
+   log price level). That immunity is a property worth having independently of tonight's verdicts,
+   and if the data-type question is ever revisited it is the cheapest available control. Standing
+   and unchanged: the two engine issues, `min_train_skill = 0.0`, `#324`'s deliberate difference,
+   `#358`'s empirical-Bayes shrinkage of the bar, the data-type question, and the per-run-branch
+   generator (five consecutive sessions).
+
+- Lesson: **check novelty in the space the gate scores, not in the space the score lives in.** A
+  mean rank correlation of -0.116 and an active-return correlation of +0.59 are the same pair of
+  objects, and only the second one predicted the verdict. Second lesson: **the reason to ship a
+  trial is that the screen vetoing it has been measured as uninformative, and the reason tonight's
+  four trials were still the wrong four is that a BETTER screen existed and was free** — which is a
+  stronger argument for shipping than the one this session started with, not a weaker one.
