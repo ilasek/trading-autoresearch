@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-05T23:52:18+00:00",
+  "generated_at": "2026-11-05T23:55:29+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -82,29 +82,29 @@
       "mechanism": 1
     },
     "seasonality-calendar": {
-      "name": "sc_overnight_drift_sleeves",
-      "candidate": "strategies/candidates/sc_overnight_drift_sleeves.py",
+      "name": "sc_overnight_return_control",
+      "candidate": "strategies/candidates/sc_overnight_return_control.py",
       "track": "scout",
       "verdict": "GATE_FAIL",
-      "ts": "2026-11-05T23:50:20+00:00",
-      "n_trials": 2,
+      "ts": "2026-11-05T23:53:34+00:00",
+      "n_trials": 3,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.34,
-        "ann_return": 0.0582,
-        "max_drawdown": -0.328,
-        "ann_turnover": 1.8,
-        "avg_positions": 166.47,
-        "skill": 0.003,
-        "skill_cost2x": -0.012,
-        "skill_delist30": 0.003
+        "sharpe": 0.348,
+        "ann_return": 0.0584,
+        "max_drawdown": -0.3221,
+        "ann_turnover": 1.84,
+        "avg_positions": 166.42,
+        "skill": 0.011,
+        "skill_cost2x": -0.005,
+        "skill_delist30": 0.011
       },
-      "train_sharpe": 0.554,
+      "train_sharpe": 0.549,
       "skill_ci90": [
-        -0.153,
-        0.141
+        -0.159,
+        0.18
       ],
-      "train_skill": 0.031,
+      "train_skill": 0.025,
       "mechanism": 4
     },
     "portfolio-learning": {

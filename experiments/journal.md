@@ -26767,3 +26767,32 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   cheap (1.8x), low-drawdown and tracks the pool — the same precision corner the share-turnover
   trend occupies, reached by a mechanically unrelated score.
 
+## 2026-11-05T23:53:34+00:00 — sc_overnight_return_control — **GATE_FAIL**
+- Candidate: `strategies/candidates/sc_overnight_return_control.py` (family: seasonality-calendar, track: scout, trial #0)
+- Hypothesis: The identical lowest-overnight-session book with its normaliser changed from the day's own trading range to the previous close -- a plain overnight RETURN instead of a share of daily travel, every other node unchanged -- earns LOWER validation skill than the range-normalised version, because an un-normalised overnight return ranks names partly by their own volatility scale rather than by the share of their movement that happens out of hours, a defect already visible on train as a sign flip in the 1997-2008 sub-period (-0.010 against +0.007) while 2009-2017 is unchanged to 0.001.
+- Verdict: GATE_FAIL — validation sharpe 0.348 <= the random-selection null's 90% quantile 0.402 (median 0.335; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.55, ann_ret +10.4%, maxDD -54.6%, turnover 1.4x, skill vs pool +0.03
+- Validation: sharpe +0.35, ann_ret +5.8%, maxDD -32.2%, turnover 1.8x, skill vs pool +0.01
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.01, 90% CI [-0.16, +0.18]; at 2x costs -0.01; with a 30% delisting haircut +0.01; train +0.03 (1997-2008 -0.01, 2009-2017 +0.02)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 62% percentile of 200 random-selection replicas (median +0.34, 90% +0.40); equal-weight eligible pool +0.34, information ratio vs it -0.12
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the range normalisation is worth +0.006 on train and -0.008 on validation: the pair
+  INVERTED, and this is the fifth consecutive paired train delta to fail to transfer.** The
+  un-normalised overnight return reads validation **+0.011 [-0.159, +0.180]** against the
+  range-normalised scout's +0.003, with train +0.025 against +0.031 — so the node this lab would
+  have called the better-motivated one (unit-free, and the only one with both train sub-periods
+  positive) is the worse one on the split that counts, by about the size of the gap it won by on
+  train. Running tally of paired deltas measured train-then-validation in the v3 record: the
+  sleeve operator's gross half (did not transfer), #18/#19's gross tax (did not transfer),
+  tonight's momentum-neutralisation node (+0.024 → +0.004), tonight's normalisation node (+0.006
+  → **-0.008**, inverted). **The only delta that has transferred every time is the cost rebate**,
+  and the 2026-10-28/29 instruction "rest a hypothesis only on the COST half" is now confirmed four
+  times with no counter-example. Second lesson: **the two books are indistinguishable on every
+  column the gates read** — null percentile 62% against 59%, drawdown -32.2% against -32.8%,
+  turnover 1.8x against 1.8x, IR vs pool -0.12 against -0.12, 2x-cost skill -0.005 against -0.012
+  — which means the overnight-session axis delivers the same near-tie whichever way it is scaled,
+  and the family is closed on measurement rather than on the choice of normaliser. Third:
+  **turnover pre-registration succeeded on all four trials tonight** (1.9x in 1.7-2.3, 1.6x in
+  1.6-2.0, 1.8x in 1.5-2.0, 1.8x in 1.6-2.1); the 2026-10-13/14 method of predicting a range with
+  the wider split's churn in it now has four more confirmations and the "lower bound" era is over.
+
