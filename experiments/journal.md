@@ -27334,7 +27334,17 @@ train skill +0.102); `#25 rv_coskew_low_overlap6` GATE_FAIL (**-0.193** [-0.354,
 percentile, train skill -0.013 so the train gate refused it too). Both are the first v3 trials
 whose 90% skill intervals **exclude zero on the negative side** other than `#9`; they are the
 board's 2nd and 4th worst results. `distinct_mechanisms` and the family leads are untouched — this
-family has no recorded lead, so neither trial set one.
+family has no recorded lead, so neither trial set one (`range-variance`'s lead stays
+`rv_clv_momneutral_overlap6` at +0.012, and `distinct_mechanisms` stays **6**).
+
+**An independent confirmation of the screen, from an instrument that had no part in it.**
+`scripts/rank_trials.py` clusters trials on their VALIDATION active returns, knows nothing about
+tonight's train harness, and placed `#24` in **M1 — the de-risking cluster** — which is exactly
+where the train active-return screen said it would land, from a train rho of +0.592 to
+`lowvol_gk_neg` measured before the file was written. It placed `#25` in a mechanism of its own,
+**M7**: the coskewness book really is a new bet, it simply has negative skill. So the night's two
+trials separate cleanly — **one object was new and wrong, the other was not new and also wrong** —
+and the screen called which was which in advance.
 
 ### What the night bought, stated without inflation
 
