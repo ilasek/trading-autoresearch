@@ -27009,3 +27009,38 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   at any window, the downside loading in any form (beta or correlation), and any construction whose
   case is that a quota neutralises a score's volatility character.**
 
+## 2026-11-06T23:29:42+00:00 — rv_coskew_low_overlap6 — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_coskew_low_overlap6.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: The 100 eligible names with the most NEGATIVE coskewness with the equal-weight eligible panel -- E[e_i e_m^2] / sqrt(E[e_i^2] E[e_m^2]) over a trailing 756-day window lagged 21 days, with e_i the market-model residual and e_m the demeaned panel return -- quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells and held in six overlapping monthly sleeves, earn positive validation skill against that pool, because an asset that makes a diversified portfolio more left-skewed must be paid for so the premium on coskewness is negative and its most-negative third is the long-only tradeable bucket, and because the one reconciliation research #118 offers for the literature's disagreement is that the sceptical replication estimates this third moment from a single month of daily returns while odd moments are not persistent and cubed noise is larger than squared noise -- which the 756-day window tests.
+- Verdict: GATE_FAIL — train skill -0.013 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.143 <= the random-selection null's 90% quantile 0.361 (median 0.305; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.51, ann_ret +10.2%, maxDD -55.0%, turnover 1.7x, skill vs pool -0.01
+- Validation: sharpe +0.14, ann_ret +2.9%, maxDD -38.4%, turnover 2.0x, skill vs pool -0.19
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.19, 90% CI [-0.35, -0.05]; at 2x costs -0.21; with a 30% delisting haircut -0.19; train -0.01 (1997-2008 -0.07, 2009-2017 +0.03)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 0% percentile of 200 random-selection replicas (median +0.30, 90% +0.36); equal-weight eligible pool +0.34, information ratio vs it -0.93
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **research `#118`'s one reconciliation for the coskewness literature is refuted: the
+  long estimation window does not rescue the premium, it makes it worse.** The note's account of
+  why Hou-Xue-Zhang read coskewness as right-signed but insignificant while others recover it is
+  that HXZ estimate the third moment from a single month of daily returns, while Harvey-Siddique
+  are explicit that odd moments are not persistent and cubed noise is larger than squared noise.
+  Tested at 756 days — the short end of Harvey-Siddique's own 36-72 month grid — the pre-signed
+  most-negative-coskewness bucket reads train skill **-0.013** (failing the train gate outright)
+  and validation **-0.193 [-0.354, -0.054]** at the **0th** percentile of its own null. **The
+  window is not the explanation; on this panel the effect is simply absent, and the sceptical
+  replication is the one that transfers.** Harvey-Siddique's own specification curve already
+  warned that this estimate moves by a factor of two across weighting, window and missing-value
+  limit, so no further window is worth a trial: `#118` is closed. Second lesson, and it is the
+  night's methodological pair to trial #24: **this book had the CLEANEST novelty profile of
+  anything priced tonight and the screen passed it, and validation refused it at the 0th
+  percentile.** Max train active-return rho to the board **+0.306** (against #24's +0.592), max
+  rank rho 0.115, -0.065 to the log price level — and skill -0.193. Set beside #24, where the
+  screen refused at +0.592 and validation agreed, the two trials demonstrate the same instrument's
+  two sides in one night: **the train active-return screen is 2-for-2 when it refuses and blind
+  when it passes**, which is exactly the one-sided shape of every other screen this lab owns
+  (2026-10-14/15 appraisal ratio, 2026-10-19/20 relabelling rho, 2026-10-20/21 rank IC). Third:
+  **the volatility-ratio shape rule holds a fourth time.** A ratio of 1.020 — parity, the closest
+  of any book priced tonight — predicted a comfortable drawdown and validation came in at
+  **-38.4%** against the -45% gate. Fourth: turnover 2.0x landed inside the pre-registered
+  **1.8-2.4x**, the eighth consecutive success. **Anti-candidates travelling with this trial:
+  coskewness at any estimation window, and the third co-moment in any form.**
+
