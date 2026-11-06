@@ -26971,3 +26971,41 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   stronger argument for shipping than the one this session started with, not a weaker one.
 
 ## Research session — 2026-11-06 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-11-06T23:26:14+00:00 — rv_dcorr_low_overlap6 — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_dcorr_low_overlap6.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: The 100 eligible names with the LOWEST downside correlation -- corr(r_i, r_m) over the days in a trailing 756-day window on which the equal-weight eligible panel's return was below its own window mean, lagged 21 days -- quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells and held in six overlapping monthly sleeves, earn positive validation skill against the equal-weight eligible pool, because a name that comoves less with the market when the market falls does not fail its holder when diversification is worth most and disappointment aversion says that service is paid for, and because dividing the name's own downside volatility out of the loading is the one form of the Ang-Chen-Xing sort that research #116 records as never measured -- the raw downside-beta version being refuted precisely because the volatility term dominates its extreme bucket.
+- Verdict: GATE_FAIL — validation sharpe 0.037 <= the random-selection null's 90% quantile 0.372 (median 0.314; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.63, ann_ret +11.2%, maxDD -50.6%, turnover 1.4x, skill vs pool +0.10
+- Validation: sharpe +0.04, ann_ret +1.5%, maxDD -28.8%, turnover 1.8x, skill vs pool -0.30
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.30, 90% CI [-0.65, -0.02]; at 2x costs -0.32; with a 30% delisting haircut -0.30; train +0.10 (1997-2008 +0.08, 2009-2017 +0.17)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 0% percentile of 200 random-selection replicas (median +0.31, 90% +0.37); equal-weight eligible pool +0.34, information ratio vs it -0.70
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **every train-side instrument this lab owns read its MAXIMUM on this object and
+  validation read near its minimum.** Train skill **+0.102** (the highest in the v3 record),
+  matched-null level z **+6.07** (the highest, previous best #16's +5.2), negation-invariant margin
+  **0.222** (the largest, previous best 0.125), and both train sub-periods positive (+0.083/+0.167)
+  — against validation skill **-0.300 [-0.651, -0.017]** at the **0th** percentile of its own null,
+  the second-worst result on the twenty-four-trial board. `corr(train skill, validation skill)` =
+  +0.048 has been a statistic in this journal since 2026-11-05; this is that statistic as a single
+  object, and it should end the practice of quoting a train sheet as anything but a reachability
+  check. Second lesson, and it is the one with forward value: **the one screen that refused this
+  candidate was right, and its refusal side is now 2-for-2.** Tonight's F3 priced the book's TRAIN
+  active-return rho at **+0.592 to `lowvol_gk_neg`**, the M1 de-risking cluster trial #1 closed, and
+  the file shipped saying the trial existed to give that refusal side a second observation. It got
+  one. The rank rho to the same object was **-0.123** — opposite sign, five times smaller — so the
+  rank table would have passed it, which is the fourth instance of the 2026-11-05/06 inversion.
+  Third: **research `#116` is answered and `price-trend`'s de-risking axis is closed from the
+  correlation side.** The axis was closed twice before through quantities carrying a SCALE (trial
+  #1's GK volatility, slice beta 0.623; trial #10's cointegrating slope); `#116` named the
+  volatility-divided-out downside loading as the never-measured form, and it is the de-risking bet
+  in costume — `rho_minus` selects low-volatility names inside every volatility tercile, which
+  tonight's F5 showed by making research `#406`'s volatility pre-sort a no-op (rho +0.953 to this
+  book, overlap RISING to +0.631). Fourth, as the night's one successful prediction: **the
+  volatility ratio again predicted the drawdown gate.** 0.865 on train was pre-registered in the
+  file as "should land well inside the gate", and validation came in at **-28.8%** against -45% —
+  the 2026-11-05/06 shape rule now has a third confirmation (0.954 -> -32.8%, 1.073 -> -46.1% and
+  -47.5%, 0.865 -> -28.8%). Turnover 1.8x landed inside the pre-registered **1.6-2.1x**, the
+  seventh consecutive success. **Anti-candidates travelling with this trial: downside correlation
+  at any window, the downside loading in any form (beta or correlation), and any construction whose
+  case is that a quota neutralises a score's volatility character.**
+
