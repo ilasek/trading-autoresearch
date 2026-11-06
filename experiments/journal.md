@@ -26969,3 +26969,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   trial is that the screen vetoing it has been measured as uninformative, and the reason tonight's
   four trials were still the wrong four is that a BETTER screen existed and was free** — which is a
   stronger argument for shipping than the one this session started with, not a weaker one.
+
+## Research session — 2026-11-06 (learning agent): 3 notes added, see research/SUMMARY.md
