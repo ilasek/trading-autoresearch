@@ -27044,3 +27044,373 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   **1.8-2.4x**, the eighth consecutive success. **Anti-candidates travelling with this trial:
   coskewness at any estimation window, and the third co-moment in any form.**
 
+
+## Free measurements — 2026-11-06/07 (nightly), run BEFORE either of the night's two trials
+
+Six blocks, none of which scored a return outside train or read a stored **validation** stream for
+anything but a correlation. **No holdout, forward or incubation file was opened**:
+`experiments/holdout_log.jsonl`, `reports/incubation.md`, `experiments/incubation.jsonl` and the
+`*_holdout.parquet` files were never read. Engine green on this tree
+(`.venv/bin/python -m pytest tests/ -q` → **92 passed in 67.01s**). Step-0 integrity clean:
+`git branch -r --no-merged origin/main` **empty**, and the container's per-run branch
+(`main-2wypxl`) sat at the identical commit as `origin/main` and was reset to `main` before any
+work — the sixth consecutive session to find exactly that.
+
+The whole block exists to discharge the 2026-11-05/06 handover's two top ideas, which were
+**(1)** build a TRAIN active-return novelty screen and refuse a candidate above ~0.5 to a closed
+cluster, and **(2)** regress pairwise active-return rho on pairwise rank rho across the stored
+streams. Both were done. **The second one came out well and the first one does not work**, and the
+second half of F4 below is a correction to an entry written into `learnings.md` last night.
+
+### F1 — the v3 board's active-return space has no dominant inherited factor
+
+PCA on the correlation matrix of all 23 v3 trials' stored **validation** active returns
+(`ret - pool`, 1562 days):
+
+    PC1 35.3%   PC2 20.7%   PC3 10.9%   PC4 5.8%   PC5 5.4%   PC1+PC2 = 56.0%
+
+PC1's loadings run **+0.311** (`pt_decade_reversal_peer_neutral`) to **-0.172**
+(`rv_arbrisk_peer_neutral`) — **both signs**, so it is a contrast and not a common factor every
+long-only top-K book is forced to carry. 55.2% of the 253 pairs are positive and 20.0% exceed +0.5.
+**The handover's worst case — "long-only top-K books on ANY score inherit the panel's dominant
+active-return factors, so the lab's whole score-hunting programme is mis-specified" — is refuted as
+stated.** The board is genuinely multi-dimensional; it is also genuinely clustered, and those are
+different facts.
+
+### F2 — rank rho DOES predict active-return rho, and the slope, intercept and residual together say why the screen still fails
+
+121 different-score book pairs, from 11 scores reconstructed on train month-ends and the 17 v3
+books whose score could be reconstructed:
+
+    act_rho = +0.113 + 0.654 * rank_rho      pearson +0.574, R2 0.330
+                                             spearman +0.487, p < 0.001, n 121
+    bootstrap 90% CI    slope [+0.560, +0.744]    intercept [+0.065, +0.161]
+    residual sd 0.284
+
+Three readings, and the third is the operative one.
+
+1. **The intercept is only +0.113.** Two books whose scores are exactly rank-orthogonal share about
+   a tenth of their active return and no more. That is the quantitative version of F1: there is no
+   floor of inherited factor exposure.
+2. **The slope is real** (+0.654, 90% CI excluding zero by a distance). Rank rho is not noise; the
+   previous handover's framing, that the two spaces are unrelated, overstates it.
+3. **The screen still cannot work at the rank rhos it is run at.** The rank rho that predicts a
+   *mean* active rho of 0.5 is **+0.592** — far outside anything a novelty screen ever sees, since
+   a score is only proposed here when |rank rho| ≤ ~0.35. At rank_rho = 0 the prediction is
+   +0.113 with a 90% interval of **[-0.355, +0.580]** and **P(act_rho > 0.5) = 8.7%**. Observed:
+   **32 of 121 pairs exceed +0.5, and 12 of those had rank rho below +0.2.** The instrument's
+   signal is real and its prediction interval swallows the whole decision.
+
+**And the companion fact, which is the one that should change how sessions are planned:
+SAME-SCORE pairs — identical score, different construction — correlate at active-return rho
++0.909, range [+0.852, +0.980], n 15.** Construction does not create a new bet. It re-prices the
+same one. Five of this lab's last seven trials were construction-node pairs.
+
+### F3 — the TRAIN active-return screen, built, validated, and run on two new objects
+
+Every book below is priced in **one shared construction** (calendar-peer × momentum-tercile quota,
+K = 100, six overlapping monthly sleeves) so that the only thing varying is the score, through
+`protocol.evaluate_split` on train.
+
+*Harness validation against recorded figures, per the 2026-10-25/26 rule — three checks, two of
+them exact:*
+
+    object          reproduced here          recorded
+    clv756          skill +0.007, volr 1.073   #20  +0.007, 1.073
+    ndrift756       skill +0.031, volr 0.954   #22  +0.031, 0.954
+    old_half_rev    skill +0.052               #16  +0.058
+
+*The board, and tonight's two new objects (train 1997-2017):*
+
+    book                      skill   sharpe  turn   pos   volr   97-08   09-17
+    dcorr_low  (rho^-)       +0.102   +0.626  1.44x  144  0.865  +0.083  +0.167
+    decade_rev               +0.067   +0.591  1.37x  152  0.964  +0.084  -0.004
+    old_half_rev             +0.052   +0.576  1.42x  166  0.969  +0.058  +0.042
+    ndrift756                +0.031   +0.554  1.34x  138  0.954  +0.007  +0.022
+    vol_trend_down           +0.018   +0.542  1.24x  154  0.959  -0.023  +0.103
+    clv756                   +0.007   +0.531  1.50x  145  1.073  +0.050  -0.090
+    lowvol_gk_neg            -0.001   +0.523  1.88x  200  0.773  +0.015  +0.033
+    coskew_low (beta_SKD)    -0.013   +0.511  1.67x  154  1.020  -0.069  +0.032
+    mom252                   -0.035   +0.489  2.78x  277  0.985  -0.002  -0.088
+    coskew_high (negation)   -0.067   +0.457  1.60x  153  1.052  +0.019  -0.210
+    dcorr_high (negation)    -0.120   +0.404  1.30x  145  1.161  -0.079  -0.217
+    amihud126_neg            -0.125   +0.399  1.00x  131  0.992  -0.086  -0.164
+    equal-weight pool           --    +0.524    --    --  1.000      --      --
+
+**`dcorr_low` is research `#116`'s named open object** — the Ang-Chen-Xing downside loading with
+the volatility term divided out, which the note records as never measured while the raw
+downside-BETA sort is refuted. It posts **the highest train skill and the largest
+negation-invariant margin in this lab's v3 record** (+0.102 against its own negation's -0.120, a
+margin of **0.222** against the previous best 0.125), with **both sub-periods positive** and skill
+at 2× costs of +0.093. Its matched-null LEVEL check (six AR(1) draws at its own
+phi = 0.9913) reads **z +6.07**, also the lab's highest.
+
+**And the screen refuses it.** Train active-return rho **+0.592 to `lowvol_gk_neg`** — the M1
+de-risking cluster trial #1 closed. Rank rho to the same object: **-0.123**. Opposite signs, five
+times the magnitude: **third instance of the 2026-11-05/06 inversion and the first caught before a
+trial was written.** `coskew_low` (research `#118`, Harvey-Siddique's third co-moment at the long
+estimation window the note's reconciliation calls for) is the clean one: max board overlap
+**+0.306**, max rank rho 0.115, **-0.065 to the log price level**, volatility ratio **1.020**, and
+a negation invariant that holds in the right direction by a thin 0.054 on a negative level.
+
+### F4 — the handover's operative instrument does not work, and `learnings.md` 2026-11-05/06 needs a correction
+
+The screen built in F3 predicts a book's **train** cluster. The claim it was invented for is about
+its **validation** cluster. That step had never been checked. Over the 21 score-pairs for which
+both a matched-construction train rho and a recorded validation rho exist:
+
+    instrument                        -> validation rho     R2       p        slope
+    pairwise RANK rho                                     0.056    0.670     +0.362
+    pairwise TRAIN active-return rho                      0.146    0.119     +0.631
+
+**Neither is significant.** The train screen is about 2.6× the rank screen's R² and still explains
+a seventh of the variance. The failures are the specific ones that matter:
+
+    pair                              train rho   validation rho
+    clv756 / old_half_rev               +0.069        +0.525      <-- the handover's own case
+    clv756 / decade_rev                 +0.217        +0.519
+    amihud126_neg / clv756              +0.214        +0.507
+    amihud126_neg / lowvol_gk_neg       +0.157        -0.548      <-- sign inversion
+    decade_rev / old_half_rev           +0.536        +0.591      <-- the one it refused
+
+**A 0.5 train screen passes four of the five pairs validation put above |0.5|.** Mean train rho is
++0.211 against mean validation rho +0.069, so the structure does not merely rearrange between
+splits, it compresses.
+
+> **CORRECTION.** `experiments/learnings.md`, entry of 2026-11-05/06, states of the proposed train
+> active-return screen: *"It would have refused both of tonight's pairs before either file was
+> written, where the rank table passed both."* **It would not have.** That sentence was read off
+> **validation** correlations (`rank_trials`' clustering), and the proposed instrument runs on
+> **train**. Built and run, it scores `clv756`/`old_half_rev` at **+0.069** and passes it. The
+> operative change the handover recommended is therefore not available as described.
+
+What survives is one-sided and thin: the single pair the train screen refused did come in high on
+validation, so the instrument is **blind when it passes and 1-for-1 when it refuses, n = 1**. That
+is the same shape as every other screen this lab owns (2026-10-20/21) and it is why tonight ships
+the object the screen refused — it is the only way to get the refusal side a second observation.
+
+### F5 — research `#406`'s "design the confound out" operator is a NO-OP on this panel, for zero trials
+
+The 2026-11-06 research note's best construction idea is Amihud-Hameed-Kang-Zhang's: pre-sort into
+volatility terciles and sort on the signal *within* tercile, so the score is orthogonal to the
+volatility level **by construction** rather than by assumption. Implemented as the quota's second
+axis (calendar-peer × volatility tercile in place of calendar-peer × momentum tercile):
+
+    book                        skill    volr   max board overlap   rho to the mom-cell version
+    dcorr_low,  mom cells      +0.102   0.865        +0.592                   --
+    dcorr_low,  VOL cells      +0.102   0.859        +0.631                 +0.953
+    coskew_low, mom cells      -0.013   1.020        +0.306                   --
+    coskew_low, VOL cells      -0.010   1.025        +0.301                 +0.301 (score-identical)
+
+**Nothing moves.** Skill is unchanged to three decimals, the volatility ratio is unchanged, and the
+overlap with the de-risking cluster **rises**. `rho_minus` selects low-volatility names *inside
+every volatility tercile*, so the book's low-risk character is intrinsic to the score and is not an
+artifact of the cell choice — which is independent evidence for the F3 refusal and against the
+reading that a quota can rescue the object. **Anti-candidate: the volatility-tercile pre-sort as a
+construction operator.** It is also the sixth consecutive confirmation of F2's same-score finding:
+a construction node moves a book by 0.05 of correlation, not by a mechanism.
+
+### F6 — the matched-null level check for `dcorr_low`
+
+Six AR(1) scores at the score's own month-to-month Spearman rank persistence (phi = **0.9913**,
+over 261 month pairs), masked to its own scorable set, through the identical construction:
+
+    null net: mean -0.0187  sd 0.0199  min -0.0410  max +0.0110
+    book     +0.1020   ->   z +6.07
+
+The lab's highest (previous best #16's +5.2), and quoted as exactly what it is entitled to be:
+evidence that the train number is not construction arithmetic. The same instrument read z +4.21 on
+`vol_trend_down` (which landed at the 55th-66th validation percentile) and z +1.00 on the CLV book
+(validation +0.012), so it has failed to predict validation in both directions, and six draws give
+its sd five degrees of freedom.
+
+### Free declines, each a recorded result and none of them costing a trial
+
+1. **The volatility-tercile pre-sort (`#406`)** — a no-op, F5 above.
+2. **`coskew_low`'s and `dcorr_low`'s vol-cell variants** — not shipped as paired controls, because
+   F2 and F5 together price a construction-node pair at +0.91 to +0.95 correlation with its
+   sibling, i.e. at almost no information. Five of the lab's last seven trials were such pairs and
+   four of the five deltas did not transfer; tonight spends its two trials on two **scores** that
+   are rank-orthogonal to each other (+0.009) instead.
+3. **The raw downside-BETA sort** — not built, on `#116`'s own negative verdict plus Hou-Xue-Zhang's
+   eight specifications; only the correlation form is measured here.
+
+## Session summary — 2026-11-06/07 (nightly) — 2 trials of 8; every train-side instrument the lab owns read its maximum on one object and validation read near its minimum, and the screen last night's handover proposed does not work
+
+**Experiments run: 2 of 8, both `scout`, both GATE_FAIL; `trials.jsonl` goes 133 → 135 records and
+the v3 board 23 → 25 trials.** Two mechanically unrelated scores (rank rho **+0.009** to each
+other), one from research `#116` and one from `#118`, both shipped on the same night precisely so
+that the night's conclusions would not rest on one object. Six free blocks ran first and three
+further constructions were declined free. Engine green on this session's tree
+(`.venv/bin/python -m pytest tests/ -q` → **92 passed in 67.01s**). Step-0 integrity clean:
+`git branch -r --no-merged origin/main` **empty**, and the container's per-run branch
+(`main-2wypxl`) sat at the identical commit as `origin/main` and was reset to `main` before any
+work — the sixth consecutive session to find that, and it remains the container's default rather
+than an anomaly. **No holdout, forward or incubation file was opened**:
+`experiments/holdout_log.jsonl`, `reports/incubation.md`, `experiments/incubation.jsonl` and the
+`*_holdout.parquet` files were never read, and the scout track reaches no holdout gate.
+
+### Headline: one object read the MAXIMUM on every train-side instrument this lab owns and came in second-worst on validation
+
+`#24 rv_dcorr_low_overlap6` is research `#116`'s named open object — the Ang-Chen-Xing downside
+loading with the volatility term divided out, `rho_minus = corr(r_i, r_m | r_m < mu)`, which the
+note records as never measured while the raw downside-BETA sort is refuted. Its train sheet is the
+best this lab has ever produced, on four independent instruments at once:
+
+    instrument                              this object      previous v3 record
+    train skill                               +0.102          +0.067 (decade_rev)
+    matched-null LEVEL z                      +6.07           +5.2   (#16)
+    negation-invariant margin                 0.222           0.125  (#22)
+    train sub-periods                    +0.083 / +0.167      one other object positive in both
+
+    validation skill                     -0.300 [-0.651, -0.017]   0th percentile of its own null
+
+**That is the second-worst result on the twenty-five-trial board** (only `#9 ll_peer_delay_band`
+at -0.340 is worse). `corr(train skill, validation skill) = +0.048` has been a number in this
+journal since 2026-11-05; tonight it is a single object, and it should end the practice of quoting
+a train sheet as anything except a reachability check. The honest corollary is uncomfortable and is
+stated rather than buried: **had this lab's standing pre-trial screen still been the train-level
+screen that vetoed five of the six sessions before 2026-11-05, this object would have been its
+star.**
+
+### Second finding: the screen that DID refuse it was right, and its refusal side is now 2-for-2 — but the instrument the handover specified is not that screen
+
+Tonight built the 2026-11-05/06 handover's operative change — correlate a candidate's TRAIN
+active-return stream against the recorded board, refuse above ~0.5 to a closed cluster — and it
+refused `dcorr_low` at **+0.592 to `lowvol_gk_neg`**, the M1 de-risking cluster trial #1 closed.
+Validation agreed emphatically. The rank table would have passed it (**-0.123**, opposite sign,
+five times smaller): fourth instance of the 2026-11-05/06 inversion, and the first two caught
+before the file was written.
+
+**But F4 shows the screen does not work in general, and corrects a sentence now in
+`learnings.md`.** Over the 21 score-pairs with both a matched-construction train rho and a recorded
+validation rho, train rho predicts validation rho at **R² 0.146, p 0.119** (rank rho: R² 0.056,
+p 0.670) — and **a 0.5 train screen passes four of the five pairs validation put above |0.5|**,
+including the handover's own headline case `clv756`/`old_half_rev` at train **+0.069** against
+validation **+0.525**. The entry written last night says that screen *"would have refused both of
+tonight's pairs."* It would not have; that claim was read off validation correlations, and the
+instrument it describes runs on train. What survives is one-sided: **blind when it passes, 2-for-2
+when it refuses.** Use it to refuse and never to qualify — the same shape as the rank IC screen,
+the appraisal ratio and the matched-null z before it.
+
+### Third finding: the law relating the two correlation spaces, and why neither screen can be a gate
+
+121 different-score book pairs: **`act_rho = +0.113 + 0.654 * rank_rho`**, pearson +0.574,
+R² **0.330**, residual sd **0.284**, bootstrap 90% CI on the slope [+0.560, +0.744]. So the two
+spaces are genuinely related — the handover's "mis-specified programme" worry is refuted, and PCA
+on all 23 validation streams agrees (PC1 only **35.3%**, loadings running +0.311 to **-0.172**, a
+contrast rather than a common factor, so there is no inherited-factor floor). **The problem is the
+range the screen is run at.** The rank rho that would predict a *mean* overlap of 0.5 is **+0.592**,
+and no score proposed in this lab has ever carried half that; at rank_rho = 0 the 90% prediction
+interval is [-0.355, +0.580]. A screen whose prediction interval is four times its usable signal
+range cannot be a gate, however real its slope.
+
+### Fourth finding: construction does not create a bet, and research `#406` is a no-op here
+
+**Same-score pairs — identical score, different construction — correlate at active-return rho
++0.909, range [+0.852, +0.980], n 15.** Tested again deliberately: the 2026-11-06 research note's
+best construction idea (`#406`, Amihud-Hameed-Kang-Zhang's "design the volatility confound out
+rather than regress it out" — pre-sort into volatility terciles, sort on the signal within tercile)
+leaves `dcorr_low` at rho **+0.953** to its momentum-cell sibling, skill unchanged at +0.102,
+volatility ratio unchanged at 0.86, and the overlap with the de-risking cluster **RISING** to
++0.631. A score that picks low-volatility names does so inside every volatility tercile, so a quota
+cannot neutralise it. **Taken with the five paired selection deltas of 2026-11-05/06, of which four
+did not transfer and one inverted, the planning rule is now general: spend trials on SCORES, not on
+construction nodes.** Tonight's two trials were two scores (rank rho +0.009 to each other), not one
+score and its control, for exactly this reason.
+
+### Fifth: the one prediction that worked, and the seventh consecutive turnover success
+
+The 2026-11-05/06 shape rule — the volatility ratio to the pool predicts the validation drawdown —
+now has a third confirmation, and this one was **pre-registered in the candidate file before the
+trial ran**: ratio 0.865 was written up as "should land well inside the gate", and validation came
+in at **-28.8%** against -45% (prior points: 0.954 → -32.8%; 1.073 → -46.1% and -47.5%). Turnover
+also landed inside its pre-registered band for the seventh consecutive trial.
+
+### Verdicts
+
+`#24 rv_dcorr_low_overlap6` GATE_FAIL (val skill **-0.300** [-0.651, -0.017], 0th null percentile,
+train skill +0.102); `#25 rv_coskew_low_overlap6` GATE_FAIL (**-0.193** [-0.354, -0.054], 0th null
+percentile, train skill -0.013 so the train gate refused it too). Both are the first v3 trials
+whose 90% skill intervals **exclude zero on the negative side** other than `#9`; they are the
+board's 2nd and 4th worst results. `distinct_mechanisms` and the family leads are untouched — this
+family has no recorded lead, so neither trial set one.
+
+### What the night bought, stated without inflation
+
+Two negative trials and five free findings. The two trials closed two named research gaps —
+`#116`'s volatility-divided-out downside loading and `#118`'s long-window coskewness — and
+contributed one observation each to the two sides of the lab's only surviving novelty instrument.
+Neither was a near-tie: at -0.300 and -0.193 with intervals excluding zero, these are among the
+few v3 results that `#393`'s minimum-detectable-skill arithmetic says the design *could* resolve,
+which is a change from the run of 0.00-to-0.01 near-ties that preceded them. **What the night did
+not buy is any evidence of a mechanism, and the board still has no v3 champion and no positive
+skill interval that excludes zero.**
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Stop proposing construction pairs.** F2 and F5 price a same-score pair at +0.909 to +0.953 in
+   active returns; five of the lab's last seven trials were such pairs and four of five deltas did
+   not transfer. A session's trials should be *n* distinct scores, not *n/2* scores and their
+   controls. Provenance: tonight.
+2. **The only surviving pre-trial instrument is the train active-return screen's REFUSAL side
+   (2-for-2).** Run it on every candidate, refuse above ~0.5 to a closed cluster, and treat a pass
+   as carrying no information whatsoever — tonight's `#25` passed at +0.306 and scored -0.193.
+   Do not re-derive the rank screen: F2 gives its law and its prediction interval, and the
+   interval is four times the usable range.
+3. **The open methodological question tonight could not answer.** `corr(train, validation)` is
+   +0.048 over 19 trials and tonight added the single largest inversion in the record. If train
+   carries nothing and the free screens are one-sided, the lab currently has **no way to choose
+   among candidate scores except the literature's prior**. The 2026-11-06 research note supplies
+   exactly that — `p0 ~ 0.25-0.55` for a momentum-shaped mechanism against `0.02-0.06` for a
+   frictions-shaped one, an order of magnitude. **Almost every v3 trial has been
+   frictions-shaped.** A session that selected candidates on category prior rather than on any
+   train statistic would be a genuinely new policy and is the one this handover recommends.
+   Provenance: `research/SUMMARY.md` 2026-11-06, `#401`-`#406` and the `p0` subsection.
+4. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — downside
+   correlation at any window; the downside loading in any form, beta or correlation; coskewness at
+   any estimation window and the third co-moment in any form; the volatility-tercile pre-sort
+   (`#406`) as a construction operator; any paired candidate whose two legs share a score; and any
+   candidate whose case is a train sheet, a matched-null z, or a negation-invariant margin, all
+   three of which set lab records tonight on the board's second-worst result. Unchanged from the
+   previous handovers: any hypothesis whose novelty case is a cross-sectional rank correlation; the
+   closing-location value at any window or quota axis; the overnight session at either normaliser;
+   the turn-of-month differential on either sign; the coefficient of variation of share volume; any
+   construction whose case is cost at any turnover; any equity-ETF book; the bond sleeve as a
+   duration bet; the 2-4-week index-level relative-strength score on either sign; the `#356`
+   group-size floor; information discreteness as a conditioner on a same-window mean-return score;
+   the quarter-ending-month conditioner; the #16/#19 blend; any construction whose case is a
+   tighter error bar; the recent half of the decade window; the anniversary leg; the liquidity
+   level or trend in any form; 52-week-high proximity; covariance weighting at any estimator;
+   weighting inside the selected slice; the exclusion / pool-minus-worst book at any `f`; `#385`'s
+   IC-decorrelation blend; high range-vol as a sign flip on `lowvol_gk`; `#328` as an audit
+   instrument; `H` as a parameter; `K` as a knob; the retention band as a validation operator; and
+   any hypothesis resting on a recorded v3 skill being a mechanism property.
+5. **From `research/SUMMARY.md`.** Spent tonight: `#116` (closed, trial #24), `#118` (closed, trial
+   #25), `#406` (closed free, F5). Still live and unspent: `#388` (floor the forecast at zero —
+   still the one note F1(a) does not close), `#386`/`#387` (the `R²/S²` yardstick as a refusal test
+   for a timing read of `seasonality-calendar`), `#363` (short-horizon country-index continuation,
+   long leg only, with `#371` its refusal test and `#393` placing it in the expensive low-`rho`
+   column), and the whole `p0` apparatus of `#400`-`#405` which idea 3 above would put to work.
+   `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation rules to read first.
+6. **For the human owner.** Tonight adds one item and it is about the gate set rather than a book:
+   **both of tonight's trials sat at the 0th percentile of their own region-matched null while the
+   pool sat at +0.34, and the null's median (+0.31, +0.30) was above the candidate both times.**
+   Nine of the last eleven v3 trials have been refused by that gate rather than by cost, drawdown,
+   turnover or delisting. If the lab is to keep spending nights here, the question worth a human
+   decision is whether a 90th-percentile bar against a null that permutes the candidate's own
+   weight vector within region is the intended severity, given `#393`'s finding that the design's
+   minimum detectable skill is of order 0.2-0.5 at 80% power. Standing and unchanged: the two
+   engine issues (back-adjusted price and volume LEVELS embed future corporate actions),
+   `min_train_skill = 0.0`, `#324`'s deliberate difference, `#358`'s empirical-Bayes shrinkage of
+   the bar, the data-type question, and the per-run-branch generator (six consecutive sessions).
+
+- Lesson: **a train sheet that sets four simultaneous lab records is worth nothing, and tonight is
+  the cleanest demonstration this journal will get.** Train skill +0.102, matched-null z +6.07,
+  negation margin 0.222, both sub-periods positive — validation -0.300 at the 0th percentile.
+  Second lesson: **the handover's proposed screen was built, validated and found not to work as
+  described, and the `learnings.md` sentence claiming it would have caught last night's pairs is
+  corrected in this journal and in that file.** What is left of it is a refusal side that is now
+  2-for-2 and a pass side demonstrated blind on the same night, by the two trials above.

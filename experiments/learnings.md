@@ -7067,7 +7067,14 @@ across experiments; prune entries that later evidence contradicts.
   prices the book: correlate the candidate's TRAIN active-return stream against the stored train
   streams of every recorded trial, and refuse a candidate above ~0.5 to a cluster already closed.**
   It would have refused both of tonight's pairs before either file was written, where the rank table
-  passed both. The two pairs are mutually orthogonal (-0.00 and -0.25 across pairs), so the
+  passed both. [**CORRECTED 2026-11-06/07 -- the preceding sentence is FALSE of the
+  instrument it describes.** The screen was built and validated the next night: it runs on TRAIN,
+  while the clustering quoted above is on VALIDATION. Built on train it scores
+  `clv756`/`old_half_rev` at **+0.069** and PASSES it, against the +0.525 validation rho that
+  motivated this entry. Over the 21 score-pairs that have both, train rho predicts validation rho
+  at R2 0.146 (p 0.119), and a 0.5 train screen passes **four of the five** pairs validation put
+  above |0.5|. What survives is a one-sided REFUSAL rule, 2-for-2 as of trials #24/#25. See the
+  2026-11-06/07 entries below.] The two pairs are mutually orthogonal (-0.00 and -0.25 across pairs), so the
   instrument separates what it should. **Anti-candidate travelling with this entry: any hypothesis
   whose novelty case is a cross-sectional rank correlation.**
 
@@ -7144,3 +7151,125 @@ across experiments; prune entries that later evidence contradicts.
   churn in it, taking the recorded train-to-validation churn ratio of the same construction
   (21-49%, and 27% on tonight's first trial) — has replaced the era in which this lab's turnover
   pre-registration was a lower bound. Use the construction's own recorded ratio, not a generic one.
+
+- **[Measured 2026-11-06/07, nightly — CORRECTS THE 2026-11-05/06 ENTRY ABOVE] THE TRAIN
+  ACTIVE-RETURN SCREEN WAS BUILT AND IT DOES NOT WORK. THE SENTENCE "IT WOULD HAVE REFUSED BOTH OF
+  TONIGHT'S PAIRS" WAS READ OFF VALIDATION CORRELATIONS AND IS FALSE OF THE INSTRUMENT IT
+  DESCRIBES.** The 2026-11-05/06 entry's operative change was: price the candidate's book on train,
+  correlate its train active-return stream against the stored streams of every recorded trial, and
+  refuse above ~0.5 to a closed cluster. Built — all books in one matched construction
+  (calendar-peer x momentum-tercile quota, K=100, six sleeves) through `protocol.evaluate_split` on
+  train — and validated against the recorded **validation** streams over the 21 score-pairs that
+  have both:
+
+      instrument                        -> validation rho     R2       p        slope
+      pairwise RANK rho                                     0.056    0.670     +0.362
+      pairwise TRAIN active-return rho                      0.146    0.119     +0.631
+
+  Neither is significant, and **a 0.5 train screen passes four of the five pairs validation put
+  above |0.5|** — including the entry's own headline case, `clv756`/`old_half_rev`, at train
+  **+0.069** against validation **+0.525**. `amihud126_neg`/`lowvol_gk_neg` goes train +0.157 to
+  validation **-0.548**, a sign inversion. Mean train rho +0.211 against mean validation rho
+  +0.069: the structure does not just rearrange between splits, it compresses. **What survives is
+  one-sided and rests on one observation**: the single pair the train screen refused
+  (`decade_rev`/`old_half_rev`, +0.536) did come in at +0.591 on validation. So the instrument is
+  blind when it passes and 1-for-1 when it refuses, n=1 — the same shape as the rank IC screen
+  (2026-10-20/21), the appraisal ratio (2026-10-14/15) and the matched-null z. **Use it to refuse
+  and never to qualify, and do not quote it as having caught the 2026-11-05/06 pairs.**
+
+- **[Measured 2026-11-06/07, nightly] RANK RHO AND ACTIVE-RETURN RHO ARE RELATED BY A REAL LINEAR
+  LAW, AND THE LAW IS WHY THE RANK SCREEN CANNOT WORK: THE RANK RHO THAT WOULD PREDICT A 0.5
+  OVERLAP IS +0.59, WHICH NO SCORE PROPOSED HERE HAS EVER CARRIED.** 121 different-score book pairs
+  (11 reconstructed scores, 17 of the 23 v3 books, validation active returns):
+
+      act_rho = +0.113 + 0.654 * rank_rho    pearson +0.574, R2 0.330, spearman +0.487 (p<0.001)
+      bootstrap 90% CI   slope [+0.560,+0.744]   intercept [+0.065,+0.161]   residual sd 0.284
+
+  Three things fall out. (i) **The intercept is +0.113**, so two rank-orthogonal books share a tenth
+  of their active return and no more — there is no inherited-factor floor, which PCA on all 23
+  streams confirms (PC1 **35.3%**, PC2 20.7%, loadings running +0.311 to **-0.172**, i.e. a contrast
+  not a common factor). The 2026-11-05/06 worry that the whole score-hunting programme is
+  mis-specified is **refuted as stated**. (ii) **The slope is real**, so rank rho is not noise
+  either. (iii) **The decision is all residual.** At rank_rho = 0 the prediction is +0.113 with a
+  90% interval of [-0.355, +0.580] and P(act_rho > 0.5) = **8.7%**; observed, 32 of 121 pairs exceed
+  +0.5 and **12 of those sat below rank rho +0.2**. A screen whose prediction interval is four times
+  its usable signal range cannot be a gate. **Quote the law, use neither screen to qualify, and
+  stop proposing scores on a rank table.**
+
+- **[Measured 2026-11-06/07, nightly] CONSTRUCTION DOES NOT CREATE A BET: SAME-SCORE PAIRS CORRELATE
+  AT +0.909 IN ACTIVE RETURNS, AND RESEARCH `#406`'s VOLATILITY PRE-SORT IS A NO-OP.** Across the 15
+  book-pairs that share a score and differ only in construction (sleeve phase, quota axis,
+  retention), validation active-return rho is **mean +0.909, range [+0.852, +0.980]**. Tested again
+  as a deliberate operator: crossing the peer quota with a **volatility tercile** instead of a
+  momentum tercile — Amihud-Hameed-Kang-Zhang's "design the confound out rather than regress it
+  out", the 2026-11-06 research note's best construction idea — leaves `dcorr_low` at rho **+0.953**
+  to its sibling, skill unchanged at +0.102, volatility ratio unchanged at 0.86, and the overlap
+  with the closed de-risking cluster **RISES** from +0.592 to +0.631; `coskew_low` moves from -0.013
+  to -0.010. **A score that selects low-volatility names does so inside every volatility tercile, so
+  a quota cannot neutralise it.** Taken with the five paired selection deltas of which four did not
+  transfer and one inverted (2026-11-05/06), the rule is now general and should govern session
+  planning: **spend trials on scores, not on construction nodes.** Anti-candidates travelling with
+  this entry: the volatility-tercile pre-sort as a construction operator, and any paired candidate
+  whose two legs share a score.
+
+- **[Measured 2026-11-06/07, nightly — trials #24/#25] THE CLEANEST DEMONSTRATION THIS LAB WILL GET
+  THAT A TRAIN SHEET IS WORTH NOTHING: ONE OBJECT SET FOUR SIMULTANEOUS LAB RECORDS ON TRAIN AND
+  CAME SECOND-WORST ON VALIDATION.** `rv_dcorr_low_overlap6` is research `#116`'s named open object
+  — the Ang-Chen-Xing downside loading with the volatility term divided out,
+  `rho_minus = corr(r_i, r_m | r_m < mu)` over 756 days lagged 21, which the note records as never
+  measured while the raw downside-BETA sort is refuted by Hou-Xue-Zhang in all eight
+  specifications.
+
+      instrument                        this object     previous v3 record
+      train skill                         +0.102          +0.067  (decade_rev)
+      matched-null LEVEL z                +6.07           +5.2    (#16)
+      negation-invariant margin            0.222           0.125  (#22)
+      train sub-periods              +0.083 / +0.167      one other object positive in both
+      ------------------------------------------------------------------------------
+      VALIDATION skill            -0.300 [-0.651, -0.017]   0th percentile of its own null
+
+  `corr(train skill, validation skill)` = +0.048 over nineteen trials has been a statistic in this
+  file since 2026-11-05; this is that statistic as a single object. **Had the train-level screen
+  that vetoed five of the six sessions before 2026-11-05 still been standing, this would have been
+  its star.** Companion result: `#116` is answered and the de-risking axis is closed from the
+  CORRELATION side. It was closed twice before through quantities carrying a scale — trial #1's GK
+  volatility (slice beta 0.623) and trial #10's cointegrating slope — and `rho_minus` divides the
+  scale out of the SCORE without dividing it out of the BOOK, because it selects low-volatility
+  names inside every volatility tercile (F5: `#406`'s volatility pre-sort leaves the book at rho
+  +0.953 and raises the de-risking overlap to +0.631). **Anti-candidates: downside correlation at
+  any window, and the downside loading in any form, beta or correlation.**
+
+- **[Measured 2026-11-06/07, nightly — trial #25] RESEARCH `#118`'s RECONCILIATION FOR THE
+  COSKEWNESS LITERATURE IS REFUTED: THE LONG ESTIMATION WINDOW DOES NOT RESCUE THE PREMIUM, IT
+  MAKES IT WORSE, AND THE THIRD CO-MOMENT CLOSES.** The note's account of why Hou-Xue-Zhang read
+  coskewness as right-signed but insignificant while others recover it is that HXZ estimate the
+  third moment from one month of daily returns, while Harvey-Siddique are explicit that odd
+  moments are not persistent and that cubed noise is larger than squared noise. Built to the note's
+  own unit-free formula `beta_SKD = E[e_i e_m^2] / sqrt(E[e_i^2] E[e_m^2])` at **756 days** — the
+  short end of Harvey-Siddique's own 36-72 month grid — the pre-signed most-negative-coskewness
+  bucket reads train skill **-0.013** (failing the train gate outright, both sub-periods
+  disagreeing at -0.069 / +0.032) and validation **-0.193 [-0.354, -0.054]** at the **0th**
+  percentile of its own null. **The window is not the explanation; on this panel the effect is
+  absent and the sceptical replication is the one that transfers.** Harvey-Siddique's own
+  specification curve already moves the estimate by a factor of two across weighting, window and
+  missing-value limit, so no further window is worth a trial. Note the book's own realised daily
+  skewness was **+0.03** against its negation's -0.08, so the Harvey-Siddique warning that a Sharpe
+  on a negatively-skewed book is partly compensation did not bite here — the object simply has no
+  content. **Anti-candidates: coskewness at any estimation window, and the third co-moment in any
+  form.**
+
+- **[Method, 2026-11-06/07] THE TWO SIDES OF THE SAME SCREEN, DEMONSTRATED IN ONE NIGHT BY TWO
+  TRIALS, AND IT IS THE ONE-SIDED SHAPE EVERY SCREEN HERE TURNS OUT TO HAVE.** `#24` was REFUSED by
+  the train active-return screen at **+0.592** to the closed de-risking cluster and validation
+  agreed at -0.300; `#25` was PASSED at **+0.306** — the cleanest novelty profile priced that night
+  on every column, including max rank rho 0.115 and -0.065 to the log price level — and validation
+  refused it at -0.193, 0th percentile. **Refusal side 2-for-2; pass side demonstrated blind.**
+  That is the same shape as the rank IC screen (2026-10-20/21), the train appraisal ratio
+  (2026-10-14/15), the relabelling rho (2026-10-19/20) and the matched-null z (2026-11-05/06):
+  **every pre-trial instrument this lab has built refuses usefully and qualifies not at all.** The
+  standing consequence for session planning: a passing screen is not a reason to prefer one
+  candidate over another, and with train level, train delta, matched-null z and both correlation
+  spaces all spent, **the only non-circular ordering left is the literature's category prior** —
+  `research/SUMMARY.md` 2026-11-06 prices it at `p0 ~ 0.25-0.55` for a momentum-shaped mechanism
+  against `0.02-0.06` for a frictions-shaped one, and almost every v3 trial so far has been
+  frictions-shaped.
