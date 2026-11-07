@@ -27426,3 +27426,23 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   2-for-2 and a pass side demonstrated blind on the same night, by the two trials above.
 
 ## Research session — 2026-11-07 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-11-07T23:47:15+00:00 — sl_trend_span_wf — **GATE_FAIL**
+- Candidate: `strategies/candidates/sl_trend_span_wf.py` (family: statistical-learning, track: scout, trial #0)
+- Hypothesis: A walk-forward ridge over the six moving-average-to-price ratios log(MA_L/P) at L = 5, 21, 63, 126, 252 and 504 days -- the term structure of a name's own trend, with the sign at each horizon learned monthly from realized forward returns measured FROM THE FILL rather than from the decision date, the forecast floored at zero, and the hundred highest forecasts quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells and held in six overlapping monthly sleeves -- earns positive validation skill against the equal-weight eligible pool, because the momentum category is the one reachable from daily closes that the external replication literature puts at a 63.2% hit rate against trading frictions' 4%, and because the linear span of multi-horizon own-trend can express the sign reversal between horizons that every single-horizon sort refuted here could not.
+- Verdict: GATE_FAIL — causality: holdings change when future data is hidden (max diff 9.90e-03 with last 63 days removed) — strategy is peeking ahead
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **the COLUMN-AXIS leak, for the second time in this repo and by the same mechanism as
+  `sl_ridge_six_features` on 2026-10-07 — and the lesson that was already written down is the one
+  I did not read first.** `features.xs_rank` is row-wise, so it is causal in the TIME axis and not
+  in the COLUMN axis: `protocol.visible_frame` drops columns that have not yet been eligible, so a
+  frame truncated by 63 days holds fewer names, and every rank in every earlier row shifts with the
+  denominator. The six `log(MA_L/P)` features and the forward-return target were all ranked over
+  the whole visible frame rather than over the eligible names, which is exactly what
+  `strategies/candidates/sl_ridge_six_masked.py`'s header says to fix and how: **mask before
+  ranking, not after.** Max holdings difference 9.90e-03 against the 1e-6 tolerance. The free
+  train sheet quoted in this candidate's header (tradeable IC +0.0250 at t +2.57, gross skill
+  -0.0200, net -0.0430) was computed with the same unmasked ranks and is therefore **withdrawn**;
+  every number re-measured under the masked ranks is in the `sl_trend_span_masked` entry below.
+  Standing rule to re-read before any walk-forward candidate: a row-wise normaliser's denominator
+  is a column count, and under protocol v2/v3 the column axis is where the look-ahead lives.
+
