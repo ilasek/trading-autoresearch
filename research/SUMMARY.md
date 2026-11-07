@@ -8773,6 +8773,136 @@ do not bind in the order the folder assumed**: the large-cap panel costs least, 
 restriction costs most by forcing a category choice, and long-only costs nothing in `p₀` while
 costing roughly four times the sample.
 
+### The INDEX'S OWN RULE as the object — price weighting, float weighting, and what admission to a non-US national index does to the measured cross-section (`lead-lag-spillover`, `statistical-arbitrage`, `portfolio-learning`, the panel itself)
+
+Three notes, read for the aim the [2026-11-06] entry set: **every claim in that night's
+panel-construction section was US, S&P 500, one committee**, while this repo's panel is nine
+indices and the folder had **zero** sources on any of the other eight. The acceptance criterion
+was stated before any download — *admit a source only if it characterises a NON-US index's own
+eligibility or weighting rule and what that rule does to the measured cross-section*, excluding
+international factor-premia papers, country-level cross-section papers and index providers' own
+methodology documents. **The criterion was met three times and the vein is now open rather than
+thin**, which is the opposite of what that entry predicted.
+
+The three notes are three sides of one object, and the object is not a signal: it is **the index
+rule as an input to the covariance matrix this lab estimates**.
+
+**(a) The rule held fixed — a price-weighted index manufactures comovement among its own members,
+in proportion to how arbitrarily it weights them.** Greenwood (Tier A, *RFS*, 198 Crossref cites,
+read in full as HBS WP 05-069) uses the Nikkei 225 because its rule makes index weight nearly
+unrelated to anything economic: the weight is the face-value-adjusted **price** divided by the sum
+of all 225 such prices, and the divisor is adjusted to preserve the index *level*, explicitly not
+the weights, so a split halves a constituent's effective weight. Measured against the
+value-weighted TOPIX, the average constituent is overweighted by a factor of about **5.7** and
+individual names by **ten or more**, with the *smaller* names the overweighted ones — the rule tilts
+index demand **away** from capitalisation. Under limits to arbitrage, index capital buys and sells
+in proportion to that weight, so a constituent's return acquires a weight-proportional common
+component. The measured relation: a one-standard-deviation rise in overweighting goes with an index
+beta higher by about **0.22**, and overweighting alone explains something above **a fifth** of the
+cross-sectional variation in index beta — with comovement against **non**-members falling in
+overweighting, which is the signature of index capital being funded from outside the index.
+Identification is cross-weight rather than event-based, which is why it discriminates against the
+information-diffusion account: diffusion has no reason to care *how much* weight the rule assigns.
+Honest on robustness — Newey–West drops the key `t` from ~10 to ~6.5, and **unscaled** index weight
+loses significance, so the effect is about weight *relative to a name's capacity to absorb demand*,
+not about weight (**#407**, **#408**).
+
+**(b) The rule changing — a float-weighting redefinition is a shock to the market benchmark itself,
+and it moves every beta mechanically.** Hau (Tier A venue, *RFS*, 42 Crossref cites, published
+version of record read in full from Geneva's Archive ouverte) supplies the chain this folder lacked:
+index capital does not re-optimise, so the *residual* actively managed capital is what the market
+benchmark consists of; an index revision reallocates index capital and therefore changes the
+benchmark by an amount proportional to the observable weight-change vector `w_new − w_old`; a beta
+is a covariance with the benchmark, so **benchmark change ⇒ beta change ⇒ discount-rate change ⇒
+price change**, with cash flows untouched. The rule in question defines free float by **classifying
+holders** (households, funds, pensions, insurers, brokers float; governments, corporates, banks
+ex-trusts, officers, directors, employees do not), so the operative variable is **ownership
+concentration** from family and state stakes — and it raised the market-representation target from
+60% capitalisation-based to **85% free-float-adjusted within each country and industry**. Both
+changes are **rule-based with no judgment about prospects**, which is exactly why the weight changes
+were computable in advance: 489 stocks added, 298 removed, a **median absolute country-level weight
+change of ~42%**. Two exports. First, the **test in differences** needs only the benchmark *change*,
+never the benchmark level, which sidesteps the joint-hypothesis problem. Second, and the one that
+bears on tonight's other notes: **the announcement is anticipated and the anticipation leaves its own
+footprint** — a mean–variance arbitrageur's optimal portfolio splits into a return-seeking and a
+**risk-hedging** leg, and the hedging leg prints a second, transitory, correlated cross-sectional
+pattern that is not the effect being measured, so the design needs a position-buildup window *and* a
+hedge-liquidation window (**#409**, **#410**).
+
+**(c) The generalisation test, and it answers the question `2026-10-09` left open.** That note's US
+index-effect source left the non-US case open and named the TOPIX and Nikkei 225 as the gap.
+Claessens–Yafeh (*Review of Finance*, 58 Crossref cites, read in full as IMF WP 11/47) close the
+comovement half across **40 national markets, including six of this panel's nine indices by name —
+CAC 40, DAX, FTSE 100, AEX, Hang Seng and Nikkei 225**. Admission raises beta against the rest of
+the index in **30 of 40** markets on daily data and 26 on weekly, with `R²` rising in 32 and 34 —
+and the heterogeneity is reported rather than buried, with a named group (the Scandinavian markets)
+showing zero or negative effects while turnover still rises. The discriminating finding is
+**structural, and it is the one to carry: the admission effect is WEAKER when the index is
+concentrated.** If a few names carry most of the capitalisation there is no point replicating the
+index, so habitat demand for a newly added small member is weak; if it is dispersed, replication
+means buying everything. Magnitude: a top-five weight higher by 10 percentage points goes with a
+post-admission beta increase **lower by ~0.03**, against a sample-average increase of **~0.07** — a
+moderator the same order as the effect, and one information diffusion has no reason to predict.
+Neither GDP per capita nor market-cap-to-GDP is significant in any specification, so this is not a
+developed-versus-emerging story. The information channel is not empty (coverage and turnover rise
+almost everywhere) but controlling for it leaves the result standing. One finding fits neither
+theory and matters most here: **the comovement increase is largest for names whose pre-admission
+beta was LOW** (**#411**, **#412**).
+
+**What the cluster does to this lab, and the honest headline is a warning rather than a
+candidate.** This panel is the union of nine indices' members, and one of the nine weights by price
+while the rest weight by float with caps. So **the panel's covariance matrix contains a slab of
+rule-induced, non-fundamental correlation**, concentrated differently in each of nine
+sub-populations. Every construction that estimates a covariance, extracts principal components,
+counts factors or clusters this panel is estimating that slab along with the economics — which
+lands directly on `statistical-arbitrage` (a residual against this panel's PCs is residual to
+index-demand commonality as well as to fundamentals) and on `portfolio-learning` (a cluster may be
+an index rather than an industry). It also gives a **third structural explanation for `#393`'s high
+`ρ`**, alongside `#404`'s single-committee selection: candidate and pool share not only a selection
+rule but a weighting rule's comovement.
+
+**And the cluster closes off more than it opens, which is the useful part.** Greenwood's actual
+measure is **not reconstructible here** and the reason is specific: the Nikkei weight is the *raw*
+price with the divisor deliberately not holding weights constant through splits, while this panel is
+**USD-adjusted** closes; the denominator needs market capitalisation, i.e. a share count, which is a
+fundamental and outside the contract; the face-value adjustment (50 versus 500 / 5,000 / 50,000) is
+a rulebook constant; and identifying which names the rule applies to would mean identifying the
+listing market, for which protocol v2 leaves no sanctioned label. Claessens–Yafeh's design is
+**half-reproducible at best**: `eligible`'s first `True` per column *is* an admission event and is
+contract-supplied, but `program.md` states a column appears in `prices` only once the name has been
+eligible, so **the pre-admission window does not exist** and the change-in-beta design — along with
+its deliberate 90-day stand-off — cannot be run. Only a *cohort* comparison survives. And the
+moderator that makes (c) discriminating, index concentration, is **not measurable by a candidate**,
+so admission effects on this panel are a **mixture across nine regimes**, attenuated by
+construction. Hau's weight vectors, float classifications and announcement dates are all outside the
+contract entirely.
+
+**One tension with the lab's own measured results, stated rather than resolved.** Hau rejects
+segmentation along **national markets** for developed-market stocks — a global benchmark's beta
+change explains the cross-section, a national one's does not — and this panel is eight
+developed-market national indices plus the S&P 500, exactly that population. But
+`experiments/learnings.md` records the lab *measuring* region-relative scoring beating
+sector-relative scoring on an illiquidity score, with venue properties (tick size, lot size,
+settlement, listed float) as the stated mechanism. These are compatible, and the distinction is
+reusable: Hau is about **where risk is priced** (which covariance earns a premium); the lab's result
+is about **where a characteristic's measurement units live** (which grouping makes a score mean the
+same thing for every name). Region-demeaning an *illiquidity* score is a units correction and
+nothing here speaks against it. Region-demeaning an *expected-return or beta* estimate is a
+segmentation assumption, and Hau is evidence against it for this population. A candidate that
+country-neutralises its **risk model** makes the claim Hau rejects; one that country-neutralises its
+**signal construction** does not. Blunter constraint either way: a v2 candidate cannot read
+`data/universe.yaml`, so the region labels those learnings were measured with are not available to
+new code at all.
+
+**Anti-lookahead.** Samples end **2003** (Greenwood), **2002** (Hau's event and staged
+implementation) and **2010** (Claessens–Yafeh); `validation_overlap: false` on all three. No
+performance figure, return, Sharpe, event narrative or dated market claim is recorded from any of
+them, and each note states its omission in as many words — specifically, Greenwood's reversion-trade
+profitability is named as excluded, and Claessens–Yafeh's year-by-year detail contains a dated
+interruption to its trend which is omitted with the trend kept only as the mechanism-linked
+monotone statement. Every magnitude recorded above is a **beta, an `R²` share, a weight ratio or a
+count of markets** — second moments and structural shares, never a return.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -16559,6 +16689,183 @@ hypothesis fodder, then anti-candidates.
     the folder that addresses it structurally. Tier A, no overlap.
     → `notes/2026-11-06-illiquidity-premium-and-where-the-size-screen-sits.md`
 
+407. **STRUCTURAL WARNING, free, and it is the most load-bearing thing in tonight's cluster: this
+    panel's covariance matrix contains rule-induced correlation, and one of the nine indices weights
+    its members by PRICE.** A price-weighted index's weight is the face-value-adjusted price over the
+    sum of such prices, with the divisor preserving the index *level* and explicitly not the weights.
+    Measured against the value-weighted benchmark of the same market, the average constituent is
+    overweighted by a factor of ~**5.7** and individual names by **ten or more**, with the *smaller*
+    names overweighted — so index demand is tilted **away** from capitalisation, and under limits to
+    arbitrage each member's return carries a weight-proportional common component. Measured
+    magnitude: +1 s.d. of overweighting ⇒ index beta higher by ~**0.22**, with overweighting alone
+    explaining **>20%** of cross-sectional variation in index beta, and comovement with
+    **non**-members *falling* in overweighting. **Consequence for this lab:** any construction that
+    estimates a covariance, extracts principal components, counts factors or clusters this panel is
+    estimating that slab alongside the economics. A residual against this panel's PCs is residual to
+    index-demand commonality as well as to fundamentals; a cluster may be an **index** rather than an
+    industry. Third structural explanation for `#393`'s high `ρ`, alongside `#404`. Tier A, no
+    overlap. → `notes/2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`
+
+408. **ANTI-CANDIDATE, and it kills the obvious port before anyone spends a night on it: index
+    overweighting is NOT reconstructible from this panel, and the nearest observable proxy is
+    actively wrong.** Four independent blocks. (i) The weight is the **raw** price and the divisor is
+    designed not to hold weights constant through splits, while this panel is **USD-adjusted** closes
+    — a split-adjusted series does not track the weight it would proxy. (ii) The denominator needs
+    market capitalisation, i.e. a share count, which is a fundamental and outside the contract
+    (`prices` plus `aux`'s open / high / low / volume / dollar_volume). (iii) The face-value
+    adjustment (50 versus 500 / 5,000 / 50,000) is a rulebook constant, unobservable here, so even
+    the numerator's cross-sectional *ranking* is unavailable. (iv) Knowing which names the rule
+    applies to means identifying the listing market, for which protocol v2 leaves no sanctioned
+    label. **Do not substitute nominal price level for overweighting** — it is split-adjusted away
+    and is already entangled with effects the lab has measured. The source's own robustness result
+    makes the point independently: **unscaled** index weight loses significance because it mislabels
+    large liquid names as overweighted, so the effect is about weight *relative to capacity to absorb
+    demand*. Tier A, no overlap.
+    → `notes/2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`
+
+409. **READING RULE, free, and it qualifies this folder's country-grouping cluster without
+    overturning it: separate "where risk is priced" from "where a score's measurement units live".**
+    A float-weighting redefinition is a shock to the market benchmark itself — index capital does not
+    re-optimise, so the residual actively managed capital *is* the benchmark; the revision changes it
+    by an amount proportional to the observable `w_new − w_old`; a beta is a covariance with the
+    benchmark, so benchmark change ⇒ beta change ⇒ discount-rate change ⇒ price change with cash
+    flows untouched. Tested that way, segmentation along **national markets** is rejected for
+    developed-market stocks and global integration cannot be rejected — and this panel is eight
+    developed-market national indices plus the S&P 500, exactly that population (segmentation
+    survives only among emerging names that are **neither cross-listed nor liquid**). This sits in
+    apparent tension with `learnings.md`'s measured result that region-relative scoring beats
+    sector-relative scoring on an illiquidity score. **The resolution, which is the reusable part:**
+    region-demeaning an *illiquidity* score is a **units** correction and nothing here speaks against
+    it; region-demeaning an *expected-return or beta* estimate is a **segmentation assumption** and
+    this is evidence against it for this population. A candidate that country-neutralises its **risk
+    model** makes the rejected claim; one that country-neutralises its **signal construction** does
+    not. Note the blunter constraint either way: a v2 candidate cannot read `data/universe.yaml`, so
+    those region labels are unavailable to new code. Tier A, no overlap.
+    → `notes/2026-11-07-free-float-redefinition-as-a-benchmark-change.md`,
+    `notes/2026-09-10-country-demeaned-versus-country-mean-characteristics.md`
+
+410. **DESIGN RULE for any candidate keying on an index event, free, and it is the skip-month logic
+    arriving for an unrelated reason: a known, dated, rule-driven flow is ANTICIPATED, and the
+    anticipation prints its own cross-sectional pattern that is not the effect.** A mean–variance
+    arbitrageur's optimal position splits into a **return-seeking** and a **risk-hedging** leg; the
+    hedging leg generates a second, transitory, correlated return pattern across names, with
+    different sign and timing from the effect of interest. The source's remedy is two windows rather
+    than one — a **position-buildup** window ending at the announcement and a **hedge-liquidation**
+    window starting after it — with both components entering the cross-sectional regression. **For
+    this lab:** `eligible`'s first `True` is an admission event, so any candidate conditioning on
+    time-since-first-eligible is sampling a window containing a front-running footprint on top of
+    whatever persistent effect it wants. Cheap instruction: **skip a window around the eligibility
+    date rather than trading into it, and state the skip length as a design choice.** Tier A, no
+    overlap. → `notes/2026-11-07-free-float-redefinition-as-a-benchmark-change.md`
+
+411. **THE ONE REACHABLE CONSTRUCTION IN TONIGHT'S CLUSTER, and it is a SCOUT question about the
+    panel's structure rather than a return prediction: are names in their first months of
+    eligibility distinguishable from seasoned members?** Admission to a national index raises beta
+    against the rest of that index in **30 of 40** markets (daily; 26 weekly), with `R²` rising in 32
+    and 34, across a sample that **includes six of this panel's nine indices by name** — CAC 40, DAX,
+    FTSE 100, AEX, Hang Seng, Nikkei 225. The demand channel predicts a newly-eligible cohort carries
+    a **higher loading on the pool**, **less idiosyncratic variance**, and **elevated turnover**, and
+    all three are measurable from the contract: pool beta and `R²` from `prices`, turnover from
+    `aux`'s `volume` and `dollar_volume`. **What is NOT reproducible, and it is binding:**
+    `program.md` states a column appears in `prices` only once the name has been eligible, so the
+    **pre-admission window does not exist** and the source's central change-in-beta design — with its
+    deliberate 90-day stand-off — cannot be run. A candidate may ask "do newly admitted names behave
+    differently from seasoned members?"; it may **not** ask "did this name's beta rise on admission?"
+    — that question measures a truncation artefact. Three further cautions: the discriminating
+    moderator (**index concentration** — the effect is weaker in concentrated indices, by ~0.03 of
+    beta per 10pp of top-five weight against a ~0.07 average) is **not measurable by a candidate**, so
+    admission effects here are a **mixture across nine regimes**; the eight non-US indices are only
+    tracked **from 2009**, so cohort composition shifts across the train window for non-market
+    reasons; and time-since-first-eligible proxies simultaneously for admission comovement, listing
+    age (`#` 2026-09-13) and the committee's selection (`#403`/`#404`), so a trial keyed on it
+    **cannot attribute its result** — write it as a **scout** and say so in the hypothesis. Tier A,
+    no overlap. → `notes/2026-11-07-index-addition-comovement-across-forty-national-indices.md`,
+    `notes/2026-09-13-listing-age-as-a-level-effect.md`
+
+412. **ANTI-CANDIDATE attached to `#411`, and it is the reason that scout must not be written as a
+    long book: the biggest comovement increases accrue to previously LOW-BETA names, and the source
+    contains no return prediction at all.** The comovement increase is largest for names whose
+    pre-admission beta was low (highly significant, daily and weekly), and larger for larger firms —
+    and the source pre-empts the weight objection by measuring comovement against the index
+    **excluding the added firm**. Two consequences. (i) An admission-conditioned long book would be
+    buying names whose beta is **about to rise**, i.e. shedding exactly the defensive exposure where
+    this folder's low-risk literature locates the measured premium, with **no compensating return
+    claim** anywhere in the source. (ii) The source is about **second moments only**; nothing in it
+    licenses an expected-return hypothesis, and `research/README.md`'s rule against importing
+    performance expectations from the literature applies at full force. Also note the gate already
+    absorbs part of it: protocol v2 draws 200 random portfolios from the same point-in-time pool with
+    the same holdings schedule, so a cohort effect shared by all newly-eligible names is **partly in
+    the null**. Tier A, no overlap.
+    → `notes/2026-11-07-index-addition-comovement-across-forty-national-indices.md`,
+    `notes/2026-08-18-low-risk-investing-industry-neutral.md`
+
+413. **THE COMPOSED PRE-TRIAL RULE — no new source, and it exists because `#393`, `#399` and the
+    `p₀` subsection each held one half of it in a different section.** This is the
+    [2026-11-06] entry's first ranked writing task, and it is free.
+
+    **Step 1 — state the null as a LEVEL, not as zero.** `#399`'s import: a null reads **"no skill
+    above `X`"**, never "no skill". `#393` makes `X` computable *before the file is written* — the
+    minimum detectable skill at **80% power** over this lab's `T ≈ 1562`, as a function of the
+    candidate's intended correlation to the equal-weight pool:
+
+    | `ρ` to pool | 0.99 | 0.98 | 0.95 | 0.90 | 0.80 |
+    |---|---|---|---|---|---|
+    | min detectable skill | 0.14 | 0.20 | 0.32 | 0.45 | 0.63 |
+
+    **Step 2 — apply the long-only multiplier to the EFFECT, not to the hurdle.** Long-only enters
+    as a **≈0.45 multiplier on effect size** (hence ≈4× the sample for equal power), so a mechanism
+    whose long–short form would deliver skill `S` is expected to deliver ≈`0.45·S` here. Composed
+    with step 1: **for the design to see a mechanism at all, its long–short form must be worth
+    roughly `X/0.45 ≈ 2.2·X` in the same skill units.** Used as an **order-of-magnitude screen on
+    the mechanism**, never as a forecast — `research/README.md` forbids importing a performance
+    expectation from a source into a hypothesis, and this rule is a check on whether the *design can
+    resolve* the mechanism, not a prediction of what it will pay.
+
+    **Step 3 — report the null at the level, with `ρ` named.** A negative trial should be written
+    *"no skill above 0.32 at `ρ = 0.95`"*, which is a result; *"no skill"* overstates what a
+    ±0.33-interval design measured. `#394`: "is the interval clear of zero?" is a **50%-power**
+    question, and 80% power costs **2.29×** the observations.
+
+    **Step 4 — note that the one real lever is `ρ`, and it pulls against the family rule.** The
+    trial count is the mild axis (×1.2 from `N`=10 to 200) and benchmark correlation the brutal one
+    (×4.5 from `ρ`=0.99 to 0.80). `ρ` is a **construction choice**; whether attainable skill falls
+    slower than `√(1−ρ)` is `#396`'s open tension with `program.md`'s spend-across-families rule and
+    is **the human owner's call, not resolved here**.
+    → `notes/2026-11-05-minimum-track-record-length-and-the-probabilistic-sharpe-ratio.md`,
+    `notes/2026-11-05-minimum-backtest-length-and-the-expected-maximum-sharpe.md`,
+    `notes/2026-11-05-missed-discoveries-type-ii-error-and-the-odds-ratio-hurdle.md`
+
+414. **CATEGORY-PRIOR TAGS on the live constructions — no new source, and it is the
+    [2026-11-06] entry's second ranked writing task.** That entry supplied `p₀` and observed that
+    **no entry in this list is tagged with which side of the per-category split it sits on**, while
+    the split is the actionable half: **momentum-shaped ≈0.25–0.55 against frictions-shaped
+    ≈0.02–0.06** — an order of magnitude in prior hit rate, on a working range of `p₀ ≈ 0.05–0.25`
+    (outer envelope 0.03–0.58). Tagging costs no trial and changes which candidate is worth a night.
+    Tags for the live constructions in the carried queue:
+
+    - `#406` **volatility-tercile conditioning** — **category-neutral**: it is a *construction
+      operator* applied to whatever signal it wraps, so it inherits the prior of the signal rather
+      than carrying one. This is why it is the best item in the section: it raises the attainable
+      effect at **no cost in prior**.
+    - `#363` **short-horizon country-index continuation, long leg only** — **momentum-shaped,
+      ≈0.25–0.55**. The most favourable prior in the queue, which is consistent with `#371` being its
+      pre-trial refusal test and `#393` placing it in the expensive low-`ρ` column: good prior,
+      costly to resolve.
+    - `#405` **illiquidity book on this panel** — **frictions-shaped, ≈0.02–0.06**, and `#405`
+      already argues against it on screen severity. Prior and mechanism agree; **do not spend a night
+      here.**
+    - `#411` **newly-eligible cohort scout** — **frictions-shaped, ≈0.02–0.06** (an
+      institutional-demand effect, not a return-continuation one), and it has **no return claim at
+      all** per `#412`. Correctly a scout; the prior says it should not be promoted to a challenger
+      on this literature.
+
+    **Composed with `#413`:** a frictions-shaped candidate carries both the low prior *and*
+    (typically) a high `ρ` to the pool, so it is the combination the design resolves worst. The
+    arithmetic consequence — `#400`'s rule that the optimal hurdle **falls** as `p₀` rises — is
+    recorded here as arithmetic and **explicitly not as a recommendation to move the bar**, which
+    remains the human owner's decision.
+    → the `p₀` subsection above; `notes/2026-11-05-missed-discoveries-type-ii-error-and-the-odds-ratio-hurdle.md`
+
 
 
 
@@ -16656,8 +16963,155 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-04 (session 82) | **TOOK BOTH AIMS THE [2026-11-03] ENTRY SET, AND THE NAMED PRIMARY'S CRITERION IS ANSWERED NEGATIVELY FROM INSIDE ITS OWN LITERATURE WITHOUT THE PRIMARY EVER BEING OBTAINED.** Aims taken verbatim: (1) the named primary **Clarke, de Silva & Thorley (2002)** on the transfer coefficient, admissible only if its body gives the TC under a long-only constraint as a function of something this lab controls; (2) ranked below it, the **cash/pool boundary**, admissible only if the source treats the cash weight as a **decision** rather than a residual. Fixed-string greps across all 258 prior notes: `Portfolio Constraints and the Fundamental Law` **0**, `cash holding` **0**, `risk-free allocation` **0**, `partial investment` **0**, `optimal fraction in cash` **0**, `cash weight` **0**, `utility gain` **0**, `timing the market` **0**, `Thompson` **0**, `Can Anything Beat the Historical Average` **0**, `Comprehensive Look at the Empirical Performance` **0** — against `transfer coefficient` **7**, `Clarke` **4**, `cash position` **1**, `holding cash` **1**. Both gaps confirmed. **(a) The named primary was NOT obtained for the second night running and should now be CLOSED as a target.** `10.2469/faj.v58.n5.2468` resolves on Crossref (197 cites, confirming the [2026-11-03] figure) but **OpenAlex now flags it `is_oa: true, oa_status: green, any_repository_has_fulltext: true` with `oa_url` = an SSRN DOI — reversing that entry's "closed, no full text" record** — and the flag is a metadata improvement only, because the SSRN landing page returns the standard Cloudflare 403; `core.ac.uk` 429'd its API and challenged its search page. **What answers the criterion instead is a paper that follows Clarke et al.'s own framework and notation and then breaks their definition.** Ding (Tier B, SSRN working paper read in full, 33 pp., from an NYU mirror; 4 Crossref / 10 Semantic Scholar cites; peer-reviewed successor in *Journal of Empirical Finance* 2017 not obtained) shows `TC = corr(Δw·σ_r, α/σ_r)` satisfies `IR_c = TC·IR_unc` **only when the cross-sectional IC is constant over time and the residual covariance is diagonal**; with a time-varying IC the conditional covariance carries a rank-one common component, the diagonal-only adjustment is the wrong metric, and carried through it makes the **constraint's cost appear to vanish as breadth grows** — an artifact, and the origin of any claim that "breadth buys back what the constraint costs". The repair is `TC = Δw'α/√(Δw'ΩΔw·α'Ω⁻¹α)` (**#384**), and **all seven of this folder's `transfer coefficient` mentions now carry that caveat.** **(b) The night's most valuable result is a ceiling that reproduces `#377`'s shape with NO constraint in the derivation.** The generalized law `IR = IC̄/√(1/(φN) + σ_IC²)` has large-`N` limit **`IC̄/σ_IC`, containing no `N`** (**#381**): breadth diversifies idiosyncratic risk only, while the bet on the signal itself has an uncertain payoff common to every name and does not diversify. `#377` derived a breadth-independent *Sharpe* ceiling for a **long-only** book from covariance structure; this derives a breadth-independent *IR* ceiling for the **unconstrained optimum** from signal risk — **two literatures, two derivations, one conclusion: at this width `N` is not the lever, and a long–short lab would not have gained the `√10` either.** The source puts the crossover below this panel's width (`φ` ≈ 1.5–2.1 on its universes, `σ_IC·√(φN)` **in the range 4–10**, so Grinold-style projections overstate `IR` by about that multiple) — its own panel's figures, flagged as needing re-measurement here (**#382**). Two further free imports: `IC_cs` is a **residual-volatility-weighted average** of per-name `IC_ts` and equals it only under homogeneous residual volatility, which bears directly on the lab's most-used screen (**#383**); and the multi-factor form `IR ≈ √(IC'Σ_IC⁻¹IC)` says `program.md`'s "decorrelated signals" must mean decorrelated **ICs over time** — not scores cross-sectionally, not realised returns — with a missing *risk* factor costing only `1/√(1−ρ²)` and a missing *return* factor costing twice (**#385**). **(c) The cash/pool boundary resolves into ONE ARITHMETIC TEST, and the two Tier A sources that give it disagree about everything else.** Campbell–Thompson (*RFS*, **2776** Crossref / 2676 Semantic Scholar, read in full from Harvard DASH) write the risky-asset weight as the decision with the complement in the riskless rate and derive the proportional return gain from seeing a predictor as `(R²/(1−R²))·((1+S²)/S²) ≈ R²/S²` — **the yardstick for a timing `R²` is the squared Sharpe of the thing being timed** (**#386**). Composed with `learnings.md`'s own structural fact (v3's Sharpe is on excess returns and the pool is **fully invested**, so cash forfeits the premium the pool keeps earning) this is a **pre-trial refusal test for `seasonality-calendar` read as a timing family**, and the rider makes it stricter rather than looser: the paper's feasible range is `[0, 1.5]` and it calls its own gains *limited by* that cap, so at gross leverage `≤ 1.0` only the **move-to-cash half** of the response is reachable and that is the half that gives up the premium. Run backwards the same arithmetic is an **overfitting alarm** — a large `R²` implies a gain too large to believe, with horizon the one legitimate reason a bigger one is credible (**#387**) — and the construction half transfers unchanged: zero a wrong-signed slope, **floor the predicted premium at zero**, which **never worsens and almost always improves** out-of-sample performance and is the long-only constraint imposed on the forecast instead of the weight, i.e. `#376` from the forecast side (**#388**). **(d) The counterparty is where the honesty is, and the folder records the tension rather than picking a side.** Goyal–Welch (*RFS*, **3527** Crossref; Semantic Scholar's split record reports 1457 and is the "disbelieve a lone low count" pattern again; read in full as the Yale ICF working version) reach the opposite verdict on the same question. Their portable contribution is a **diagnostic**: the cumulative squared-error difference against the *prevailing* expanding-window mean, graded on **four** conditions (significant in and out of sample; generally upward drift; drift not concentrated in one short stretch; drift still positive late), whose arbitrary level makes start-date sensitivity inspectable by sliding the zero line. The repo's translation — **the cumulative active-return curve against the equal-weight pool** — is free and **strictly finer than v3's two train sub-periods**, which test conditions 3 and 4 at two points rather than every point (**#389**). With it comes a **failure taxonomy**: low power looks poor early and improves, mis-specification looks fine early and **deteriorates late**; they report the second and confirm it with a stability test that rejects stability for essentially every variable, so `learnings.md`'s repeated "sign inverts across train sub-periods" declines now have their warrant, and `#381`'s `σ_IC` is the same thing measured as a dispersion (**#390**). Two smaller rules: conflicting results on the same data trace to **sample window and observation weighting** before method (**#391**), and when a weight cap binds on the **benchmark** as well as the candidate, part of the measured difference is constraint-hitting rather than forecast quality (**#392**). **(e) The disagreement, stated and not resolved.** A weak prior on a noisy estimator does improve it — and the improvement runs mostly through **replacing the estimator with the benchmark on about half the dates** where the restriction changed the verdict, the residual edge is not sub-period stable, and the economic magnitude moves with the risk-aversion parameter and the leverage cap. Usable synthesis: **adopt the restrictions, grade with `R²/S²`, require the cumulative curve before believing either.** Goyal–Welch also state the two ways their own test is too generous — it is not a true out-of-sample test, and it ignores how an investor would have known which model to pick — which is the deflated-skill bar described from outside. **Anti-lookahead note:** all three sources have substantial dated empirical sections (factor-level IR tables; named-predictor `R²`s and utility gains; sub-period and event narratives). **None of it is recorded**, each note says so in as many words, and every sample ends by 2009 so `validation_overlap: false` throughout. | Ding 2010 (+ Ding & Martin 2017, successor, not obtained) (`2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md`); Campbell & Thompson 2008 (`2026-11-04-timing-r2-against-the-squared-sharpe-ratio.md`); Goyal & Welch 2008 (`2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md`) |
 | 2026-11-05 (session 83) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT AS A NUMBER THE LAB HAS NEVER HAD — and the aim's own premise needed one correction.** Aim taken from the [2026-11-04] entry: admit a source only if it yields a **computable minimum detectable effect as a function of something this lab controls**. Fixed-string greps across all 261 prior notes: `minimum detectable` **0**, `detectable effect size` **0**, `sample size calculation` **0**, `ex ante power` **0**, `design sensitivity` **0** — against `haircut` **40**, `deflated Sharpe` **3**, `effective number of trials` **3**. **The vocabulary gap is real; the content gap was overstated** and this entry records the correction: `#323` (`2026-10-28-argmin-inference-minimax-separation-rate.md`) already gives a minimax *separation* rate between candidates and says in-note that it is only that, and `2026-10-30-cost-aware-alpha-investing-and-the-sample-size-lever.md` already carries a level–power–sample-size link inside a sequential testing budget. What was genuinely absent is **the minimum detectable value of the lab's own statistic**, skill against the fully-invested equal-weight pool. Second over-claim by the detector in five sessions. **(a) The number.** Bailey–López de Prado's **MinTRL** (*J. Risk*, 149 Crossref / 187 OpenAlex, read in full from the first author's own page) inverts Mertens'/Christie's asymptotic Sharpe variance into a required sample size, `MinTRL = 1 + [1 − γ₃·ŜR + ((γ₄−1)/4)·ŜR²]·(Z_α/(ŜR − SR*))²` observations. **As printed it is the wrong variance for v3**, which treats `SR*` as known while the pool's Sharpe is estimated on the same days at high correlation; keeping the inversion and substituting this folder's own paired SE `√(2(1−ρ)/T)` gives, at `T = 1562`, a minimum detectable skill of **0.14 / 0.20 / 0.32 / 0.45 / 0.63 at 80% power** for `ρ = 0.99 / 0.98 / 0.95 / 0.90 / 0.80` (**#393**). All three of the paper's own MinTRL examples were reproduced to the printed decimal here (2.731 / 2.829 / 3.240 years), which was necessary because the equation glyphs survive no text extraction. **(b) The interpretation rule that changes how every existing interval reads.** “Is the interval clear of zero?” is a **50%-power** question; 80% power costs `((1.645+0.842)/1.645)² = 2.29×` the observations, i.e. a window **2.3× longer** (**#394**). Composed: the lab's ±0.33 intervals imply `SE ≈ 0.20`, `ρ ≈ 0.87`, and a detectable skill near **0.5** before any search adjustment — so the long run of near-zero readings is **evidence-compatible with absent effects AND with an underpowered design**, which answers `#357`/`#358` in the second direction. Not a reason to lower the bar. **(c) The search side, and the two derivations agree.** The *Notices* paper (178 Crossref / 166 Semantic Scholar; `ams.org` 403s an automated client, the author's page serves it) gives `E[max_N] ≈ (1−γ)Z⁻¹(1−1/N) + γZ⁻¹(1−1/(Ne))` bounded by `√(2 ln N)`, and **MinBTL** `≈ (E[max_N]/S_target)²` years; rescaled by the paired SE this is the **expected maximum spurious skill of a search** (**#396**), and the ordering is that **the trial count is the mild axis (×1.2 from `N`=10 to 200) and the benchmark correlation the brutal one (×4.5 from 0.99 to 0.80)** — `#323`'s “crowded board cheap, short window expensive” conclusion from extreme-value theory instead of minimax theory. Inverted at the fixed 6.2-year window, `S_target = 1` supports ~**89 independent** configurations, which is a pressure gauge on `N_eff` rather than a cap on recorded trials (**#397**). The lever the arithmetic leaves is `ρ`, a **construction choice**, and it pulls against `program.md`'s spend-across-families rule: the design question is whether attainable skill falls slower than `√(1−ρ)`. **Stated as a tension, not resolved — it is the human owner's call.** **(d) The result nobody was looking for, and it is the cheapest high-stakes check on the list.** The *Notices* paper's Proposition 6.1: with equal volatilities, pinning the **full-sample mean** implies `SR_IS(A) > SR_IS(B) ⇔ SR_OOS(A) < SR_OOS(B)` — in-sample ranking **inverts**, exactly, on a trendless process, where with independent increments the IS/OOS scatter is a circular cloud on the origin. One conserved sample aggregate is the whole difference between **selection-is-noise** (haircut machinery applies) and **selection-is-poison** (no correction helps; the sign is wrong, not the size). The lab has three candidate conserved quantities and the test is **one regression on data already stored** — validation skill on train skill across recorded trials; a negative slope would be an `## Engine issue`, not a strategy finding (**#398**). **The lab has already produced that statistic and this entry records it rather than re-proposing it**: the 2026-11-04/05 nightly reports `corr = −0.074` over fifteen trials and attributes it to regime mix. Proposition 6.1 is a **second** explanation of the same observation and the two are distinguishable **by sign** — regime mix predicts zero, a conserved aggregate predicts negative — and at `n = 15` the estimate separates neither, which is tonight's own argument applied to tonight's own diagnostic. **(e) The cost side.** Harvey–Liu (*JF*, 117 Crossref / 120 OpenAlex, Tier A, read in full) put Type II on the same footing as Type I, define the Type II analogue of the FDR as the **false-omission rate** `FN/(FN+TN)`, and join them with **`ORATIO = FP/FN`** plus the rule *if a Type I error is `k` times as costly as a Type II, target `ORATIO = 1/k`*. Free import: a null becomes **“no skill above `X`”** rather than “no skill” (**#399**), and the bar's severity is **arithmetically equivalent to a named `k`** — currently infinite, since the gate never observes a miss. Their hurdle result: the optimal threshold **falls** as `p₀` rises, rises with the number tested, falls with signal-to-noise, and **neither 2.0 nor HLZ's 3.0 is optimal**; the trap is that `p₀` read off this lab's own outcomes is contaminated by its own power, so it must come from the external literature's hit rate — this folder's number to supply (**#400**). Their double bootstrap is runnable here retrospectively on stored trial return streams, with the mismatch that it is a **batch** framework and the lab tests **sequentially**. **Admission note, stated rather than glossed:** sources (a) and (c) reach the acceptance criterion in closed form; (e) reaches it **procedurally** — error rates as functions of `(threshold, p₀)` for an arbitrary procedure, not a formula — and is admitted on that reading because it is the general machine rather than one estimator's power simulation. **Anti-lookahead note:** (a)'s illustration is dated hedge-fund style indices, (c) has no market data at all, (e)'s samples end 2016. **No performance figure, ranking, style or event narrative from any of them is recorded**; each note says so in as many words; `validation_overlap: false` throughout. The threshold and cutoff magnitudes recorded are **decision cutoffs**, not performance. | Bailey & López de Prado 2012 (`2026-11-05-minimum-track-record-length-and-the-probabilistic-sharpe-ratio.md`); Bailey, Borwein, López de Prado & Zhu 2014 (`2026-11-05-minimum-backtest-length-and-the-expected-maximum-sharpe.md`); Harvey & Liu 2020 (`2026-11-05-missed-discoveries-type-ii-error-and-the-odds-ratio-hurdle.md`) |
 | 2026-11-06 (session 84) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT, AND THE MANDATED SECOND GREP DOWNGRADED THE CLAIM FROM "never covered" TO "never named" — fourth consecutive session in which the detector's headline count overstated a gap and the fix caught it.** Aim from the [2026-11-05] entry: **panel construction as a claim in its own right**, admitting a source only if it **characterises the selection rule (size, float, liquidity, turnover screens) and what that rule does to a measured cross-sectional effect** — explicitly not another index-addition price-impact paper and not another survivorship paper. All eleven of that entry's fixed-string counts re-ran and **hold exactly** across the 264 pre-tonight notes (`large-cap bias`/`investable universe`/`free float`/`index inclusion`/`capitalization threshold`/`universe construction` **0**; `float adjustment`/`index construction`/`size threshold`/`Russell reconstitution` **1**; `index membership` **10** against the 9 recorded, the extra hit being tonight's own neighbourhood). The [2026-11-05] procedural fix then returned `microcap` **26**, `market capitalisation` **22**, `selection rule` **12**, `eligibility` **10**, `size effect` **9**, `liquidity screen` **7** — so the folder's coverage of *where in the size distribution an effect lives* is strong (Fama–French 2008; Hou–Xue–Zhang) and the genuine gap is the narrower object the aim named: **what an index's own eligibility rule selects for.** A committee applying stated criteria is not a cap percentile. Four candidate sources were checked and **rejected as already covered** before any download — Israel–Moskowitz (`2026-09-06`), Fama–French 2012 (`2026-08-28`), Cremers–Petajisto–Zitzewitz (`2026-10-08`) and the whole index-price-impact strand (`2026-10-09` ×2) — which is the aim's exclusion clause doing real work. **Three Tier-A sources, all read in full.** **(a)** Patton–Weller (*JFE* 137(2), 78 Crossref; Duke faculty page) frame a universe screen as a **shadow cost** that prices *trades that were never available*, hence invisible to v3's trade-pricing cost model (**#401**); supply the structural fact that the 20th-NYSE-percentile screen removes **~a fifth of the portfolios and ~3% of market capitalisation**, killing the inference that a large-cap panel holds most of the measurable effect (**#402**); decompose the universe restriction as ~**one third** of value's implementation gap and ~**one sixth** of momentum's (shares of a gap, not returns); and — most pointed for this lab — find **long-only implementation costs "significant and comparable to short-side costs"**, with only about half the all-in cost traceable to the shorting inability, so **long-only forgoes most of the profit and keeps about half of the cost.** **(b)** Denis, McConnell, Ovtchinnikov & Yu (*JF* 58(5), 295 Crossref, typeset version of record) test the "information-free event" premise and find index inclusion is not one. The durable export is the reasoning: the provider's disclaimer addresses *information → inclusion* while the premise needs *inclusion → information* — **an institution's statement that it uses no private information does not make its selection uninformative** (**#403**). Admissible under the criterion because they match added firms on the provider's **entire stated rule** (12 Fama–French industries × 3 cap terciles × 3 turnover terciles = 108 cells) **and the effect survives**, i.e. matching on size and liquidity is **not sufficient** to control for membership — which makes the v3 equal-weight eligible pool the output of nine committees' selection rules rather than a neutral basket, a second structural explanation for `#393`'s high `ρ`, and the reason the **1997–2008 train sub-period runs on a single committee's selection** (**#404**). **(c)** Amihud, Hameed, Kang & Zhang (*JFE* 117(2), 314 Crossref, 45 countries / 22 years, NUS host) survive removal of the smallest **decile** at a lower point estimate; their challenger **Cakici & Zaremba** (*JBF* 127, 106123, 42 Crossref) is **unobtained through every channel** (OpenAlex `closed`, `any_repository_has_fulltext: false`, **no repository location at all**; ScienceDirect and SSRN the known refusals) and **nothing in it is summarised or relied upon** — only its indexed keyword list is recorded as evidence that it tests the question. Read as a pair they **bracket a monotone relation between screen severity and measured premium**, and this panel sits far out on the severe end, so the honest reading is **pessimistic and inverts the comfortable one**: no support for an illiquidity book here, and `lv_illiq_region_relative` has the right *shape* while both v2 leads score zero skill under v3 (**#405**). Its transferable construction is the section's best: **design the volatility level out by sorting the signal within volatility terciles**, plus a non-overlapping three-month window and a skipped month before a three-month hold (**#406**). **The [2026-11-05] second-ranked WRITING task was also completed: `p₀` is supplied** as a cross-cutting subsection citing only notes already here (Hou–Xue–Zhang 0.35 / 0.179; Jensen–Kelly–Pedersen ≈0.84 with mega **77.3%** and large **81.5%** against full-US **84.0%**; McLean–Pontiff). Headline: **working range `p₀ ≈ 0.05–0.25`, outer envelope `0.03–0.58`**, and the decision-relevant split is by reachable category — **momentum-shaped ≈0.25–0.55 versus frictions-shaped ≈0.02–0.06**, an order of magnitude. The surprise is the ordering: **the large-cap panel is the MILDEST of the three constraints (×0.92 on JKP's own size breakout), the daily-closes restriction is the severest because it forces a category choice rather than applying a multiplier, and long-only belongs on EFFECT SIZE (≈0.45, hence ≈4× the sample for equal power) rather than on `p₀` at all.** `#400`'s rule implies a non-zero `p₀` lowers the optimal hurdle; that is recorded as arithmetic and **explicitly not as a recommendation to lower the bar.** **Anti-lookahead:** all three samples end 2016 / 1999 / 2011, `validation_overlap: false` throughout; no performance figure, event narrative or dated return is recorded from any of them, the omissions are stated in-note, and the shares recorded (one third, one sixth, 3%, 45%) are **shares of a gap or of a capitalisation**, not returns. | Patton & Weller 2020 (`2026-11-06-investability-frictions-and-the-microcap-screen.md`); Denis, McConnell, Ovtchinnikov & Yu 2003 (`2026-11-06-index-membership-is-not-an-information-free-selection.md`); Amihud, Hameed, Kang & Zhang 2015, with Cakici–Zaremba 2021 as a named unobtained pointer (`2026-11-06-illiquidity-premium-and-where-the-size-screen-sits.md`) |
+| 2026-11-07 (session 85) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT THREE TIMES, AGAINST THAT AIM'S OWN PREDICTION THAT THE LITERATURE MIGHT NOT EXIST — and for once the detector did NOT over-claim.** Aim from the [2026-11-06] entry: **the other eight index providers**, admitting a source only if it **characterises a NON-US index's own eligibility or weighting rule and what that rule does to the measured cross-section** — explicitly not international factor premia (covered 2026-08-28), not country-level cross-section (vein retired 2026-11-02), and not an index provider's own methodology document. That entry predicted the vein might be thin and instructed falling through to the ranked writing task after two failed searches. **It was not thin: three on-criterion sources, all Tier A, all read in full, covering a price-weighting rule, a float-weighting rule change, and admission to forty national indices.** Detector run first, on the target vocabulary across 267 prior notes: `free float` **0**, `price weighted` **0**, `index weighting` **0**, `float adjust` **1**, `TOPIX` **1**, `divisor` **2**, `weight cap` **1** — against `Nikkei` **8**, `FTSE` **8**, `DAX` **7**, `Euro Stoxx` **6**, `Hang Seng` **5**, `Japan` **16**. The [2026-11-04/05] second grep then **confirmed rather than downgraded** the gap: the six files matching `price-weighted`/`divisor`/`TOPIX` mention them only in passing, and the decisive check was on the **source** rather than the vocabulary — `2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md` **states in its own text that it leaves the non-US case open and names the TOPIX and Nikkei 225 as the gap**, which is the folder certifying the aim from the inside. **First session in five in which the headline count did not overstate the gap**; the cheap third step the [2026-11-06] entry added (check candidate *sources* against the folder before downloading) rejected two on-topic candidates and confirmed the Greenwood hits were **Greenwood–Sammon**, a different paper. **(a)** Greenwood (*RFS* 21(3), 198 Crossref, HBS WP 05-069 read in full) identifies off the **Nikkei 225's price-weighting rule**: weight = face-value-adjusted price / sum of such prices, divisor adjusted to preserve the index **level and explicitly not the weights**, so a split halves a constituent's effective weight; average constituent overweighted **~5.7×** versus the value-weighted benchmark and individual names **10×+**, with the **smaller** names overweighted, i.e. index demand tilted **away** from capitalisation. +1 s.d. of overweighting ⇒ index beta **+~0.22**, overweighting alone explaining **>20%** of cross-sectional index-beta variation, and comovement with **non**-members *falling* in overweighting (**#407**). Honest: Newey–West drops the key `t` from ~10 to ~6.5, and **unscaled** weight loses significance because it mislabels large liquid names — the effect is weight *relative to capacity to absorb demand* (**#408**). **(b)** Hau (*RFS* 24(12), 42 Crossref, published version of record from Geneva's Archive ouverte) supplies the chain this folder lacked — index capital does not re-optimise, so the **residual** actively managed capital *is* the benchmark; a revision changes it by the observable `w_new − w_old`; benchmark change ⇒ beta change ⇒ discount-rate change ⇒ price change with cash flows fixed — giving a test **in differences** needing only the benchmark *change*, never its level. The rule: free float defined by **classifying holders**, market representation raised from **60% cap-based to 85% float-adjusted within each country and industry**, 489 added / 298 removed, **median absolute country weight change ~42%**, all **rule-based with no judgment about prospects** and therefore computable in advance. National-market segmentation **rejected** for developed markets, surviving only among emerging names **neither cross-listed nor liquid** (**#409**). The export that bites: the announcement is anticipated and the **risk-hedging leg** of the arbitrageur's optimal position prints a second transitory cross-sectional pattern, so the design needs a buildup **and** a liquidation window (**#410**). **(c)** Claessens–Yafeh (*Review of Finance* 17(1), 58 Crossref, IMF WP 11/47 read in full) close the comovement half of `2026-10-09`'s open question across **40 markets including six of this panel's nine indices by name** — CAC 40, DAX, FTSE 100, AEX, Hang Seng, Nikkei 225: beta up in **30 of 40** markets (daily; 26 weekly), `R²` up in 32 / 34, heterogeneity reported rather than buried (a named group shows zero or negative effects while turnover still rises). Discriminating finding, **structural**: the admission effect is **WEAKER in concentrated indices** (~**0.03** of beta per 10pp of top-five weight against a ~**0.07** average) — a moderator the same order as the effect, which information diffusion has no reason to predict; neither GDP per capita nor market-cap-to-GDP is significant in any specification (**#411**). The finding fitting neither theory is the one that matters here: **the increase is largest for previously LOW-beta names** (**#412**). **The cluster CLOSES more than it opens, and that is the useful part.** Greenwood's measure is **not reconstructible** (raw price versus this panel's **USD-adjusted** closes; market cap needs a share count; the face-value constant is a rulebook fact; the listing market has no sanctioned v2 label). Claessens–Yafeh's design is **half-reproducible**: `eligible`'s first `True` *is* a contract-supplied admission event, but `program.md` states a column appears in `prices` only once eligible, so **the pre-admission window does not exist** and the change-in-beta design with its 90-day stand-off cannot be run — only a **cohort** comparison survives, and its moderator (index concentration) is **unmeasurable by a candidate**, so admission effects here are a **mixture across nine regimes**. **One tension stated rather than resolved:** Hau rejects national-market segmentation for exactly this panel's population, while `learnings.md` records region-relative scoring beating sector-relative scoring — compatible once *where risk is priced* is separated from *where a score's measurement units live*, so region-demeaning a **score** is a units correction while region-demeaning a **beta or expected return** is the rejected segmentation assumption (**#409**). **Both of the [2026-11-06] entry's ranked WRITING tasks were also completed:** the composed pre-trial rule (`#399`'s level-valued null × `#393`'s MDE table × the **≈0.45 long-only effect multiplier** ⇒ a mechanism must be worth **~2.2× `X`** long–short for the design to resolve it; nulls to be written *"no skill above `X` at `ρ = …`"*) as **#413**, and **category-prior tags on the live constructions** as **#414** — `#406` category-**neutral** (a construction operator inheriting its signal's prior, which is why it is free), `#363` **momentum-shaped ≈0.25–0.55**, `#405` and `#411` **frictions-shaped ≈0.02–0.06**. **Anti-lookahead:** samples end **2003 / 2002 / 2010**, `validation_overlap: false` on all three; every magnitude recorded is a **beta, an `R²` share, a weight ratio or a count of markets** — second moments and structural shares, never a return. Two omissions are named in-note rather than glossed: Greenwood's reversion-trade profitability (a performance claim), and Claessens–Yafeh's dated interruption to its time trend (an event narrative), with the trend kept only as the mechanism-linked monotone statement. | Greenwood 2008 (`2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`); Hau 2011 (`2026-11-07-free-float-redefinition-as-a-benchmark-change.md`); Claessens & Yafeh 2013 (`2026-11-07-index-addition-comovement-across-forty-national-indices.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-07] READ THIS BEFORE AIMING SESSION 86. The index-rule vein is OPEN, not closed, and
+  that is the one place tonight differs from the last five sessions — do not retire it.** Three
+  notes now cover the rule as three sides of one object: the rule held fixed (`#407`–`#408`), the
+  rule changing (`#409`–`#410`), and admission under it across forty markets (`#411`–`#412`). The
+  [2026-11-06] entry predicted this might be a literature that does not exist in Tier A and
+  authorised falling through after two failed searches; **it exists, three sources met the criterion
+  verbatim, and the aim's own exclusion clauses did real work.** What is *not* yet covered is named
+  below.
+  - **Primary aim for session 86: the CAPPED and COMMITTEE-DISCRETION halves of the same object,
+    which tonight's three sources do not touch.** Tonight covered **price** weighting (one index)
+    and **float** weighting (one provider's redefinition). Neither covers the two rules that
+    actually bind on most of this panel: (i) **weight caps** — several of the nine cap individual
+    constituents at a stated percentage and re-cap on a review cadence, so a capped name's weight
+    **drifts between reviews and is reset**, which is a mechanical, dated, index-wide rebalance that
+    no note here describes; and (ii) **committee discretion versus mechanical rules** — `#403` is a
+    US committee, and tonight's Nikkei source records that **deletions were names the rule had
+    overweighted by a factor above ten**, i.e. the committee removes names *because* the weighting
+    rule distorted them, which is a feedback loop between eligibility and weighting that no source
+    here characterises. **Acceptance criterion, stated before any download: admit a source only if
+    it characterises a CAPPING or RE-CAPPING rule, or a committee's discretion against a mechanical
+    alternative, AND measures what that rule does to a cross-section or to a measured premium** —
+    not another index-addition price-impact event study (covered, `2026-10-09` ×2, and the exclusion
+    that worked tonight), not another float-adjustment paper (covered tonight), and not a provider's
+    methodology document. **Expect this to be genuinely thinner than tonight's vein.** One named
+    lead worth one cheap try and no more: a US working paper on **discretionary versus rule-based
+    index entry** surfaced in tonight's searching and was *not* pursued because it is US and
+    `#403`/`#404` already hold the US committee — admit it only if its design compares the two
+    **admission mechanisms** rather than measuring an inclusion effect. If two searches do not meet
+    the criterion, **say so and fall through to the ranked item below** rather than admitting a
+    Tier-C substitute or a second float paper.
+  - **Ranked below it, and it is a WRITING task that fits the same session: the folder now has a
+    covariance-contamination claim and has not carried it into the three constructions it
+    invalidates.** `#407` says this panel's covariance matrix contains rule-induced, non-fundamental
+    correlation, concentrated differently in nine sub-populations. Three existing items are built on
+    that matrix and none is annotated with it:
+    `2026-08-30-pca-residual-statistical-arbitrage-long-only.md` (a residual against this panel's
+    PCs is residual to index-demand commonality too),
+    `2026-09-07-hierarchical-risk-parity-clustering-allocation.md` (a cluster may be an index rather
+    than an industry), and the counting-factors cluster
+    (`2026-09-27-counting-factors-eigenvalue-estimators.md`,
+    `2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md` — whose **noise null is the
+    wrong null** if part of the non-noise spectrum is a weighting rule). Annotating the three costs
+    no trial and would change how a `statistical-arbitrage` or `portfolio-learning` candidate is
+    written. **Do not open a new source for this**; it is composition of notes already here, exactly
+    as `#413`/`#414` were tonight.
+  - **The detector's standing rule, and the FIRST session in five in which the headline count did
+    not over-claim.** The rule ([2026-11-04], amended [2026-11-05], extended [2026-11-06]) is: ask
+    what the lab does to a number after it has it, grep for the literature about the number before
+    it exists, run a **second grep on the mechanism** after a zero-count on the vocabulary, and
+    **check candidate sources against the folder before downloading**. Tonight all four steps ran
+    and the second grep **confirmed** the gap instead of shrinking it — the decisive evidence being
+    that an existing note *states in its own text* that it leaves the aim's question open. **That is
+    the cheapest possible confirmation of a gap and it should be the first thing checked from now
+    on: grep the folder for the phrase "open question" and "leave(s) ... open" before grepping
+    vocabulary**, because a note that names its own gap is the folder certifying an aim from the
+    inside. The source-level check also paid: it caught that eight `Greenwood` hits were
+    **Greenwood–Sammon**, a different paper, which a vocabulary grep would have read as coverage.
+    Caveats still not run through the detector, unchanged in order: *publication decay*, and *"the
+    cost model is lethal only to books that trade"*.
+  - **Carried unchanged and still live**: `#406`'s volatility-tercile conditioning remains the best
+    construction in the file and is now tagged **category-neutral** (`#414`), which strengthens it —
+    it raises attainable effect at no cost in prior. `#363` (short-horizon country-index
+    continuation, long leg only) remains the single live *construction* in the carried queue, now
+    tagged **momentum-shaped** (`#414`, the most favourable prior in the queue) with `#371` its
+    pre-trial refusal test and `#393` placing it in the expensive low-`ρ` column — **and tonight
+    bears on it directly**: it is a country-index book, and `#409` is evidence against
+    country-grouping as a *risk-pricing* device for exactly this population, while leaving
+    country-grouping as a *units* correction untouched. Read `#363`'s construction against that
+    distinction before writing it. `#413` is now the composed pre-trial rule and should run before
+    any candidate file is written; `#376`'s one-bit truncation test, `#389`'s cumulative-curve test
+    and `#381`'s `σ_IC` remain the three free screens. The detectability vein stays closed
+    (`#393`–`#400`); the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays
+    closed (`#373`–`#380`); the panel-admission vein stays closed on construction (`#401`–`#406`) —
+    tonight **extended** it rather than reopening it, by moving from the admission rule to the
+    weighting rule.
+  - **Unchanged and still live**: `#407`–`#414` from tonight; `#401`–`#406` from 2026-11-06;
+    `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03;
+    `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31;
+    `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29; `#322`–`#327` from 2026-10-28;
+    `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25;
+    `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22;
+    `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then
+    2026-10-17 and everything carried under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); the long-only constraint as a construction object
+    (2026-11-03); the cash/pool boundary (2026-11-04); ex-ante detectability (2026-11-05); the
+    panel's admission rule as a construction object (2026-11-06). **The index's WEIGHTING rule is
+    explicitly NOT retired** — see the primary aim. Still at **0** and still not nominated:
+    `transfer entropy` (eighteenth nomination).
+  - **Standing, and not this folder's call.** The engine issues filed 2026-10-18 and 2026-10-22;
+    `min_train_skill = 0.0`; `#324`'s deliberate difference; the two human decisions added
+    2026-10-29; the three items the 2026-10-30/31 nightly raised; the data-type question; `#396`'s
+    tension between `program.md`'s spend-across-families rule and what the design can measure;
+    `#404`'s spinoff/merger/name-change question about how the nine membership series were built;
+    and `p₀` now being a supplied number while the gate still behaves as though it were zero
+    (`#400`'s arithmetic implies a hurdle above the optimum; stated as arithmetic, no side taken).
+    **Tonight adds one, and it is a question about the panel rather than the engine:** `#407` means
+    the equal-weight eligible pool — the benchmark every skill number is measured against —
+    contains a price-weighted index's rule-induced comovement in one of its nine sub-populations.
+    Whether that is worth the human knowing about when reading `ρ` is their call; this file records
+    it as a third structural explanation for `#393`'s high `ρ` and takes no position on the gate.
+    Also standing and unchanged: the two commits on `origin/main-dh53hc` touch only
+    `experiments/journal.md` and `experiments/learnings.md`, so the trial history is not split and
+    no deflated bar is understated; landing them is a strategy-session or human action.
+    **The integrity check again found the container on a per-run branch
+    (`claude/tender-galileo-sriajn`) at the same commit as `origin/main`, reset to `main` before any
+    work — fifth consecutive session, confirmed as the container's default and part of the routine,
+    not an incident.**
+  - **[2026-11-07] Access findings — one new derivable channel, one meta-tag mechanic worth
+    copying, two new "looks like an answer" instances and one closed paper abandoned on the
+    folder's own rule.** **(1) `hbs.edu/ris/Publication%20Files/<wp-number>.pdf` is a first-try
+    channel and — unusually for this family of hosts — its filename is DERIVABLE**: it is the
+    working-paper number and nothing else (`05-069`), so a search result naming the WP number is
+    enough to build the URL. This extends the flat-directory lesson (2026-10-13
+    `robjhyndman.com/papers/`, 2026-10-15 `burns-stat.com`, 2026-11-06
+    `web2-bschool.nus.edu.sg`) to a US business school, and it is the **first** in that family whose
+    path does not need an opaque id out of a search result. **(2) For a modern repository, grep the
+    landing page's `<meta name="citation_pdf_url">` BEFORE grepping bitstream UUIDs.**
+    `archive-ouverte.unige.ch` served a closed *RFS* article's **published version**; its record page
+    is a 661 KB Angular shell with no `.pdf` href (the 2026-10-10 Arizona shape) and contained **ten
+    bare UUIDs, only one of them the document** — while the citation meta tag named the exact
+    `access.archive-ouverte.unige.ch/access/metadata/<uuid>/download` path. This generalises the
+    2026-10-13 EDHEC meta-tag lesson from *abstracts* to *files*. **(3) `imf.org/external/pubs/ft/wp/<year>/wp<yynn>.pdf`
+    is fully derivable from the series number** and is the right route to an IMF working-paper version
+    of a closed journal article; note the two versions carried **different titles and reversed author
+    order** across catalogues, the 2026-10-01 FEDS lesson again. **(4) Two refusals.
+    `people.hbs.edu/<user>/` returns `HTTP 000` — the connection is never established, a
+    **transport** failure, not an origin refusal — so the 2026-09-18 faculty-page lesson does **not**
+    extend to HBS personal pages, and the HBS faculty profile separately 403s. And
+    **`dash.harvard.edu` (Harvard DSpace) answered with HTTP 202 and `size_download=0`** — the
+    zero-byte-2xx mode now on a **third** host after `escholarship.org` (2026-10-16) and
+    `sci2s.ugr.es` (2026-10-13), which makes
+    `-w 'HTTP %{http_code} size=%{size_download}\n'` on every document fetch the single
+    highest-value habit in this file. **(5) One paper abandoned on the 2026-10-15 rule rather than
+    chased.** Vespro (*European Financial Management* 12(1), 25 Crossref) covers **CAC 40, SBF 120
+    and FTSE 100 composition changes** — three panel-relevant indices and squarely on criterion —
+    but OpenAlex reports `closed` with `any_repository_has_fulltext: false`, the ULB Pure record and
+    its `dipot.ulb.ac.be` bitstream path both hold **no file** (the 2026-10-04 Pure/DSpace caution),
+    and SSRN is the known refusal. Per the 2026-10-15 lesson the budget went to **a different source
+    for the same mechanism** — Claessens–Yafeh, which covers FTSE 100, CAC 40 and four more of this
+    panel's indices in one Tier-A paper — and **the note is better for it**. Recorded as a named
+    unobtained pointer, not summarised at second hand. Also noted: a **German DAX-family
+    reorganisation** paper (*Financial Markets and Portfolio Management* 19, 13 Crossref) surfaced in
+    the same Crossref call and was **not pursued** on citation count and venue tier; it is a
+    legitimate lead for the capping aim above if nothing stronger appears.
 
 - **[2026-11-06] READ THIS BEFORE AIMING SESSION 85. The panel-construction vein is CLOSED on
   construction and `p₀` is SUPPLIED — do not open a fourth source on index eligibility, and do not

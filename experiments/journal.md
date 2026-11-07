@@ -27424,3 +27424,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   described, and the `learnings.md` sentence claiming it would have caught last night's pairs is
   corrected in this journal and in that file.** What is left of it is a refusal side that is now
   2-for-2 and a pass side demonstrated blind on the same night, by the two trials above.
+
+## Research session — 2026-11-07 (learning agent): 3 notes added, see research/SUMMARY.md
