@@ -187,3 +187,37 @@ is answered without a trial and `portfolio-learning` closes on its fourth operat
   lab's three closures are signal-side operators, HRP is a portfolio-side one.
 - `experiments/learnings.md` — the twice-measured inverse-vol/sleeve result that point 3 rests on,
   and the "blending beats switching" entry.
+
+## Panel annotation [2026-11-08] — a cluster on this panel may be an INDEX, not an industry
+
+Added after the index-rule cluster (`#407`–`#414`, 2026-11-07); no new source, composition of
+notes already in this folder.
+
+`notes/2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md` measures a
+rule-induced, non-fundamental component of comovement in exactly this panel's population: a
+name its index's weighting rule overweights comoves more with that index and *less* with
+non-members. Since the nine sub-populations are governed by different weighting rules, the
+correlation matrix a hierarchical clustering is run on contains **within-index comovement
+that no industry or risk story produced**.
+
+What that does to HRP specifically, which is worse than what it does to a factor model:
+
+- **The dendrogram can recover membership groups and present them as risk clusters.** HRP's
+  whole premise is that the tree's blocks are meaningful quasi-independent risk sources; if a
+  block is "names a national index's rule overweights", the recursive bisection is budgeting
+  risk across **selection rules**, and the resulting weights encode a rulebook rather than a
+  diversification judgment.
+- **Cluster stability is not validation here.** An index's rule is stable by construction, so
+  rule-induced blocks will be *more* stable across re-estimations than economically motivated
+  ones. The usual reassurance — "the tree does not move much out of sample" — is therefore
+  evidence the clustering has latched onto the most mechanical feature of the panel, not
+  evidence it has found structure worth allocating against.
+- **The quasi-diagonalisation inherits it.** Ordering the covariance matrix by the tree places
+  rule-linked names adjacent, so the off-diagonal mass the recursive step treats as small is
+  small *because* the rule made the near-diagonal mass large.
+
+Cheap mitigation if this is ever built: cluster on residuals taken *after* removing each
+sub-population's own mean (the `#409` distinction — demeaning a **score** or a measurement
+unit is a units correction, and nothing in the segmentation evidence speaks against it; it is
+demeaning an expected return or a beta that makes the rejected claim), and report the tree
+with and without that step. If the blocks survive, they are not the rulebook.

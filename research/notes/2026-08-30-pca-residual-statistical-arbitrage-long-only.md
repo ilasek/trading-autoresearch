@@ -236,3 +236,40 @@ extension (reported as adding nothing).
 - `experiments/learnings.md` — the declined `statistical-arbitrage` screen this note is in
   tension with, and the long-only decorrelation finding that bounds what the family can be
   worth here.
+
+## Panel annotation [2026-11-08] — what this panel's principal components actually contain
+
+Added after the index-rule cluster (`#407`–`#414`, 2026-11-07) and the committee-discretion
+pair (2026-11-08) made a claim that bears directly on this construction and was not carried
+into it. No new source; composition of notes already in this folder.
+
+`notes/2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md` establishes
+that index demand tracks the **weighting rule** rather than capitalisation: a name the rule
+overweights comoves *more* with its index and *less* with non-members, with the overweighting
+measure alone explaining a fifth of cross-sectional index-beta variation. So this panel's
+correlation matrix carries a rule-induced, non-fundamental slab, and — because the nine
+indices weight differently — the slab is concentrated differently in each of the nine
+sub-populations. Three consequences for a residual-reversion candidate built on it:
+
+1. **A residual against this panel's PCs is residual to index-demand commonality as well as
+   to fundamentals.** Whether that is a feature or a bug depends on which reversion the
+   candidate wants. If the target is fundamental mispricing, removing index-demand
+   commonality is a free improvement. **If the target is the index-demand flow itself —
+   which is what most short-horizon reversal stories on an index panel implicitly are — then
+   the PCA step has hedged away the signal before the residual is formed**, and the candidate
+   will read as a null for a reason that has nothing to do with the hypothesis.
+2. **A globally chosen `K` pools nine contamination structures.** The leading components
+   partly span the nine rulebooks; the number of dimensions that costs is not the same in a
+   price-weighted sub-population as in a float-weighted or capped one. A `K` fitted on the
+   pooled panel is therefore not the `K` any one sub-population wants, and a `K` that moves
+   when the sub-population mix moves is not evidence about factor structure.
+3. **Long-only interacts with this asymmetrically.** Only the cheap side of a residual is
+   tradeable here, and the rule-overweighted names are not spread evenly across the two tails
+   of a residual distribution, so the half of the book this lab can actually hold is not a
+   random half with respect to the contamination.
+
+Separately, `notes/2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`
+and `notes/2026-11-08-committee-discretion-versus-the-published-admission-rule.md` add that
+the **membership** side carries a discretionary component too — the columns entering and
+leaving this panel are not a mechanical function of any observable, so the cross-section the
+PCA is estimated on is itself a selection with a non-mechanical part.

@@ -233,3 +233,36 @@ with.** No trial is implied by anything below.
 - `experiments/learnings.md` [2026-09-26] — `EffRank`'s free parameter, and the tenth instance of
   "check the statistic is invariant to the thing it is not supposed to measure".
 - `experiments/learnings.md` [2026-09-25] — the `K = 3` / `K = 5` PCA residual readings.
+
+## Panel annotation [2026-11-08] — what the count counts on THIS panel
+
+Added after the index-rule cluster (`#407`–`#414`, 2026-11-07); no new source, composition of
+notes already in this folder.
+
+`notes/2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md` establishes a
+rule-induced, non-fundamental component of comovement in this panel's population, differently
+concentrated across its nine sub-populations because the nine indices weight constituents by
+different rules. An eigenvalue-based factor count run on this panel therefore counts
+**economic factors plus however many dimensions the nine weighting rules' demand spans**.
+
+Three consequences, all free:
+
+1. **An estimated `K` here is an upper bound on the economic count, not an estimate of it.**
+   The estimators in this note are consistent for the number of factors *in the data-generating
+   process*; index demand is in that process. Nothing in the estimator distinguishes a factor
+   that prices risk from a factor that is a rulebook.
+2. **A `K` that moves with the panel's composition is not evidence about the economy.** The
+   eligible cross-section changes as membership series add and drop columns, and the mix of
+   sub-populations changes with it; the rule-induced dimensions move with that mix. So the
+   familiar diagnostic "`K` is unstable, therefore the factor structure is unstable" has a
+   mechanical explanation available before any economic one.
+3. **It sharpens this note's existing disqualification rather than contradicting it.** The
+   screen this note argued against was already rejected for being non-invariant to something it
+   was not supposed to measure. This adds a second, independent thing it is not invariant to —
+   the panel's index-rule mix — and that one is not fixable by standardisation.
+
+Also worth carrying from the same night: the panel's **membership** side has a discretionary
+component as well (`notes/2026-11-08-committee-discretion-versus-the-published-admission-rule.md`,
+`notes/2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`), so the
+columns the count is taken over are a selection with a non-mechanical part — which is a
+sampling caveat on `K`, separate from the contamination of the spectrum itself.

@@ -27804,3 +27804,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    relative-strength score on both signs and every equity-ETF book with it, which the research
    folder's carried queue has not yet recorded. `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain
    the interpretation rules to read first.
+
+## Research session — 2026-11-08 (learning agent): 2 notes added, see research/SUMMARY.md

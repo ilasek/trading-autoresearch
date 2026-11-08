@@ -164,3 +164,37 @@ file, no holdout.
 - `experiments/learnings.md` [2026-09-03] — the refuted #70 eigenvalue/mean-return screen.
 - `experiments/learnings.md` [2026-09-26] — `EffRank`'s free parameter, the 0.775·P i.i.d. control
   and the 0.875·P placebo, which this note reinterprets as an un-standardized bulk.
+
+## Panel annotation [2026-11-08] — on this panel the noise null is the WRONG null
+
+Added after the index-rule cluster (`#407`–`#414`, 2026-11-07); no new source, composition of
+notes already in this folder. **This is the sharpest of the four annotations written that
+night, because it is not a caveat on a magnitude — it is a statement that the null this note
+describes does not test what a candidate would use it for.**
+
+The Marchenko–Pastur bulk is the spectrum of a correlation matrix of **i.i.d. noise**. The
+inference it licenses is binary: an eigenvalue inside the bulk is indistinguishable from
+noise, an eigenvalue above the edge is *not noise*. "Not noise" is then read, in every
+application, as "signal" — a factor, a priced common component, something to keep.
+
+`notes/2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md` measures a
+component of this panel's comovement that is **neither noise nor fundamental**: index demand
+following a weighting rule, with a name's rule-induced overweighting alone explaining a
+substantial share of cross-sectional index-beta variation, and with the component concentrated
+differently in each of the nine sub-populations. That component is systematic, so it lands
+**above** the MP edge, and the test reports it as signal.
+
+Therefore, on this panel:
+
+- **An above-edge eigenvalue is not evidence of a priced factor.** It is evidence of
+  non-i.i.d. structure, of which at least one known source is a rulebook.
+- **The honest null would exclude rule-induced commonality as well as noise, and MP does not
+  provide it.** Nothing in this note's machinery can be patched to do so: the null is defined
+  by the absence of *any* structure, and the contaminating structure is real.
+- **The count/threshold readings this note reinterpreted inherit the same problem.** A control
+  or placebo calibrated to an i.i.d. bulk is calibrated against the wrong alternative, so
+  agreement with it is not reassurance.
+- **What survives.** The *negative* direction of the inference is untouched: an eigenvalue
+  inside the bulk is still indistinguishable from noise, so MP remains usable as a device for
+  *discarding* dimensions and unusable as a device for *admitting* them. That asymmetry is the
+  one reusable sentence from this annotation.
