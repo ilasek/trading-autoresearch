@@ -27510,7 +27510,10 @@ None is holdout-informed; no holdout, forward or incubation number was read.
 Five blocks. Nothing scored a return outside **train**; no stored validation stream was read for
 anything but a correlation. **No holdout, forward or incubation file was opened**:
 `experiments/holdout_log.jsonl`, `reports/incubation.md`, `experiments/incubation.jsonl` and the
-`*_holdout.parquet` files were never touched, and the scout track reaches no holdout gate. Engine
+`*_holdout.parquet` files were never opened, and the scout track reaches no holdout gate. Stated
+precisely because it is the one rule worth being pedantic about: `experiments/protocol_v2/returns/`
+was listed once to find out what the directory holds, so the *names* of the `*_holdout.parquet`
+files were seen and **no holdout file's contents were read**. Engine
 green on this tree (`.venv/bin/python -m pytest tests/ -q` → **92 passed in 39.39s**). Step-0
 integrity clean: `git branch -r --no-merged origin/main` **empty**, and the container's per-run
 branch (`main-1kn9za`) sat at the identical commit as `origin/main` and was reset to `main` before
