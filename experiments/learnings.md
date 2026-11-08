@@ -7273,3 +7273,117 @@ across experiments; prune entries that later evidence contradicts.
   `research/SUMMARY.md` 2026-11-06 prices it at `p0 ~ 0.25-0.55` for a momentum-shaped mechanism
   against `0.02-0.06` for a frictions-shaped one, and almost every v3 trial so far has been
   frictions-shaped.
+
+- **[Measured 2026-11-07/08, nightly — trials #27/#28, A MATCHED PAIR ACROSS THE CATEGORY PRIOR;
+  ANSWERS THE 2026-11-06/07 HANDOVER'S IDEA 3 AND REFUSES IT] THE LITERATURE'S PER-CATEGORY
+  REPLICATION RATE — THE ONLY NON-CIRCULAR ORDERING INSTRUMENT THE LAB HAD LEFT — IS INVERTED ON
+  VALIDATION BY 0.171 OF SKILL, AND THE IC ORDERING IS INVERTED WITH IT.** The handover's position
+  was that `corr(train skill, validation skill)` is +0.048 over nineteen trials and every pre-trial
+  instrument here qualifies not at all, so the remaining ordering is `research/SUMMARY.md`'s `p0`
+  split: Hou-Xue-Zhang replicate **momentum at 63.2%** against **trading frictions at ~4%**, i.e.
+  `p0 ~ 0.25-0.55` against `0.02-0.06`. Tested as a pair matched on every node but the category —
+  six features each, 504 days of required own history each, the same closed-form ridge at the same
+  12000-row release floor, the same monthly grid, the same fill-lagged cross-sectional rank target,
+  the same zero floor, and `moment_book`'s K=100 calendar-peer x momentum-tercile quota in six
+  overlapping sleeves, byte-identical to #24/#25:
+
+      arm                                     literature  tradeable IC      t  | val skill        90% CI    null pct
+      #27 log(MA_L/P), L = 5..504 days            63.2%       +0.0212  +2.25  |   -0.116  [-0.266,-0.007]      2%
+      #28 rho_k = corr(r_t, r_{t-k}), k = 1..6      ~4%       -0.0030  -0.44  |   +0.055  [-0.103,+0.199]     86%
+
+  **The 4% arm beat the 63% arm by 0.171 of skill, and the IC ordering ran the other way too**, so
+  the recommended policy would have chosen the worse arm on *both* available grounds. One pair, so
+  stated weakly on purpose: what survives is that the prior ordered the two arms' **IC** correctly
+  and the IC did not order the **skill**, which is the twelfth instance of 2026-10-24/25's "a
+  positive IC with a negative Sharpe skill is the rule on this panel" and the first where the IC was
+  already fill-corrected. **Operative consequence: do not plan a session on category prior; if a
+  hypothesis quotes one, say that it has been tested once and inverted.** Anti-candidates travelling
+  with this entry: the `log(MA_L/P)` term structure at any scale set or estimator, and plain
+  multi-horizon own-trend in any learned combination.
+
+- **[Measured 2026-11-07/08, nightly — CORRECTS THE LAB'S MOST-USED INSTRUMENT, AND THE CORRECTION
+  IS MONOTONE IN HORIZON] THE REGION-MATCHED IC HARNESS SCORES A SIGNAL AGAINST A RETURN v3's
+  EXECUTION MODEL GIVES AWAY. EVERY FAST-SCORE IC IN THIS RECORD IS OVERSTATED BY UP TO 1.8x; EVERY
+  SLOW ONE IS UNTOUCHED.** The harness validated 2026-11-04/05 scores a signal at `d` against
+  `P[d+21]/P[d]`. v3 fills a row emitted at `d` at each name's **next real close**, so a book earns
+  `P[d+22]/P[d+1]`. Region-matched, floor 50, 262 train month-ends, breadth ~433 (identical under
+  masked and unmasked ranks — Spearman inside the scored set does not see the rank denominator):
+
+      feature          decision IC      t  |  TRADEABLE IC      t  | retained
+      log(MA_5/P)          +0.0484  +6.35  |       +0.0273  +3.64  |    56%
+      log(MA_21/P)         +0.0349  +3.82  |       +0.0290  +3.27  |    83%
+      log(MA_63/P)         +0.0245  +2.33  |       +0.0244  +2.30  |   100%
+      log(MA_126/P)        +0.0173  +1.53  |       +0.0183  +1.59  |   106%
+
+  **Monotone and gone beyond 63 days**, which is a one-close discount and not a specification
+  choice. This is why the record has not noticed: it is made almost entirely of 756-day and
+  ten-year scores. Two standing rules. (i) **A learner is trained on the fill-lagged target**, which
+  is the protocol's convention and not a knob. (ii) **The exchange rate `train skill = 3.37 x rank
+  IC` was calibrated on slow scores and must be applied to the TRADEABLE IC.** Rider from the same
+  night: the momentum span's gross train skill of **-0.0440** against its ceiling of
+  3.37 x 0.0212 = +0.0714 is **-62% of ceiling**, so **the rate's realised band is no longer
+  6%-65% — it includes large negative realisations** and is a weaker refusal instrument than the
+  2026-11-01/02 width suggested.
+
+- **[Method, 2026-11-07/08 — THE FIRST PRE-TRIAL INSTRUMENT IN THIS LAB WITH A MECHANISM RATHER THAN
+  A REGRESSION BEHIND IT] COMPOSE THE FILL LAG WITH `#376`'s ONE-BIT TRUNCATION AND YOU GET THE ONLY
+  IC A LONG-ONLY TOP-K v3 BOOK CAN REACH. ON A FAST SCORE IT IS A QUARTER OF THE HEADLINE.** `#376`:
+  a top-K book expresses only `in or out`, so its reachable IC is the IC of `1[rank > 1-f]`. At
+  `f = 0.10` (the lab's own K/N) on the tradeable target:
+
+      object           full      t  |      BIT      t  |      bot      t  | bit/full
+      log(MA_5/P)   +0.0273  +3.64  |  +0.0124  +2.19  |  +0.0275  +3.66  |   +0.45
+      log(MA_21/P)  +0.0290  +3.27  |  +0.0071  +1.08  |  +0.0293  +3.32  |   +0.25
+      log(MA_63/P)  +0.0244  +2.30  |  +0.0041  +0.52  |  +0.0247  +2.33  |   +0.17
+      SPAN trend    +0.0212  +2.25  |  +0.0076  +1.18  |  +0.0213  +2.26  |   +0.36
+      SPAN micro    -0.0030  -0.44  |  -0.0055  -1.14  |  -0.0030  -0.45  |   +1.87
+
+  `bot` equals `full` to four decimals on **every** row — `#376`'s result reproduced on a new object
+  family — so the information is in the bottom and a long-only book cannot have it. The composed
+  chain for #27 is **+0.0311 (t +3.24) -> x0.68 fill lag -> +0.0212 (t +2.25) -> x0.36 one bit ->
+  +0.0076 (t +1.18)**, a **4.1x** end-to-end overstatement whose remainder is not distinguishable
+  from zero, and the trial then scored -0.116. **Standing rule: quote the one-bit TRADEABLE IC,
+  never the full decision IC.** Like every instrument here it is one-sided — it read -0.0055 on the
+  arm that scored +0.055 — but its discount is derived rather than fitted.
+
+- **[Measured 2026-11-07/08, nightly] THE NOVELTY SCREEN'S PASS SIDE FAILED IN BOTH DIRECTIONS ON
+  ONE NIGHT, WHICH IS THE END OF ITS PASS COLUMN.** Max train active-return |rho| to any recorded
+  book was **0.216** (#27) and **0.224** (#28) — the two cleanest profiles ever priced here, both far
+  inside the ~0.5 refusal line. `rank_trials` then placed #27 in **M3, the decade-reversal lineage
+  and the largest bet on the board**, and #28 in a **new** mechanism (M8). So the pass column missed
+  a book buying into the lab's biggest existing bet *and* withheld credit from the night's one
+  genuinely new bet. Fourth and fifth demonstrations after 2026-11-06/07's two. **The refusal side
+  stands at 2-for-2 and is still the only thing to use; the pass column does not belong in a
+  hypothesis.**
+
+- **[Measured 2026-11-07/08, nightly — trial #28] THE BEST NON-`price-trend` RESULT IN THE v3 RECORD
+  CAME FROM THE ARM EVERY TRAIN-SIDE AND IC-SIDE INSTRUMENT POINTED DOWN AT, AND IT IS 0.007 OF
+  SHARPE FROM CLEARING THE NULL GATE.** `sl_micro_span_masked` — the walk-forward span of own-return
+  autocorrelations `rho_k`, `k = 1..6`, over 504 printed days lagged 21 — read train skill
+  **-0.057** with sub-periods disagreeing (+0.009 / -0.201), gross **-0.045**, its negation better by
+  0.034, span tradeable IC **-0.0030**, one-bit IC **-0.0055**, and not one of its six lags clearing
+  |t| = 1.4. Validation: skill **+0.055** [-0.103, +0.199], **4th of 27**, the board's **narrowest
+  positive-skill interval**, the **second-highest `P(best)` at 17%** (against #16's 29%), a
+  **mechanism of its own**, and validation Sharpe **0.392 against the random-selection null's 0.399
+  bar** — the closest any v3 trial has come. Read with #24 the night before (four simultaneous train
+  records, validation second-worst), the two nights together say **the train sheet and the
+  validation sheet on this panel are not weakly related, they are unrelated — and the free IC
+  instruments are no better.** Companion closure: `rho_1` IS Roll's implied effective spread and
+  reads **+0.0003 at t +0.05**, so the frictions axis is now closed on the level (2026-10-24/25),
+  the trend (2026-10-28/29) and the serial-correlation form — while the *span* of six lags is the
+  result above, so whatever is there is not in any single lag.
+
+- **[Method, 2026-11-07/08 — SECOND INSTANCE OF THE COLUMN-AXIS LEAK, AND THE LESSON WAS ALREADY IN
+  THE REPO] A ROW-WISE NORMALISER'S DENOMINATOR IS A COLUMN COUNT, AND UNDER PROTOCOL v2/v3 THE
+  COLUMN AXIS IS WHERE THE LOOK-AHEAD LIVES. MASK BEFORE RANKING, NOT AFTER.** `features.xs_rank` is
+  causal in the time axis and not in the column axis; `protocol.visible_frame` drops columns that
+  have not yet been eligible, so a frame truncated by 63 days holds fewer names and every rank in
+  every earlier row shifts. Trial `sl_trend_span_wf` was refused at max holdings difference
+  **9.90e-03** for exactly this, after `sl_ridge_six_features` was refused for exactly this on
+  2026-10-07 and `sl_ridge_six_masked.py`'s header was written to record the fix. **One trial record
+  spent on a lesson the repo already owned**; the operative change is procedural — before writing a
+  walk-forward or any row-normalised candidate, read the header of the last candidate in its family
+  that the causality check refused. Second item from the same night, same shape: **`dataclasses.replace`
+  shares `setup.pool_cache`**, so a harness that builds a stressed setup that way scores a stressed
+  candidate against an UNSTRESSED pool — the one-signed 2026-11-02/03 error, reachable in one line
+  and caught here only because the gross pool was validated against the recorded +0.5361.

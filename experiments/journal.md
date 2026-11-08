@@ -27504,3 +27504,300 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   gate refused it as predicted -- but by **0.007 of Sharpe** (0.392 against the 0.399 bar), the
   closest any v3 trial has come to clearing it.
 
+
+## Free measurements — 2026-11-07/08 (nightly), run BEFORE the night's trials
+
+Five blocks. Nothing scored a return outside **train**; no stored validation stream was read for
+anything but a correlation. **No holdout, forward or incubation file was opened**:
+`experiments/holdout_log.jsonl`, `reports/incubation.md`, `experiments/incubation.jsonl` and the
+`*_holdout.parquet` files were never touched, and the scout track reaches no holdout gate. Engine
+green on this tree (`.venv/bin/python -m pytest tests/ -q` → **92 passed in 39.39s**). Step-0
+integrity clean: `git branch -r --no-merged origin/main` **empty**, and the container's per-run
+branch (`main-1kn9za`) sat at the identical commit as `origin/main` and was reset to `main` before
+any work — the **seventh** consecutive session to find exactly that.
+
+*Harness validation first, per the 2026-10-25/26 rule — four checks, three of them exact.*
+`dcorr_low` (#24) reproduced at train skill **+0.1020** / sharpe **+0.6260** / turnover **1.44** /
+**144.2** positions against the recorded +0.102 / +0.626 / 1.44 / 144; `old_half_rev` at **+0.052**,
+the same figure last night's harness read against #16's +0.058 (the residual is #16's own cell
+machinery, reported rather than absorbed); and the engine's **gross pool at +0.535** against the
+recorded +0.5361. The gross runs also caught a live instance of the 2026-11-02/03 error:
+`dataclasses.replace` **shares `setup.pool_cache`**, so a stressed setup silently reuses the
+unstressed pool and scores a gross candidate against a net pool. Rebuilt the cache; the +0.535
+check above is what certifies it.
+
+### F1 — THE ONE-DAY FILL GAP: the lab's region-matched IC harness scores a signal against a return v3's execution model gives away, and the discount is monotone in horizon
+
+The harness validated on 2026-11-04/05 scores a signal at date `d` against `P[d+21]/P[d]`. v3 fills
+a row emitted at `d` at each name's **next real close**, so what a book earns is `P[d+22]/P[d+1]`.
+Region-matched, group floor 50, 262 train month-ends, breadth ~433 (the per-feature figures are
+identical under masked and unmasked ranks, because Spearman inside the scored set does not see the
+rank denominator):
+
+    feature                 decision IC      t  |  TRADEABLE IC      t  | retained
+    log(MA_5/P)                 +0.0484  +6.35  |       +0.0273  +3.64  |    56%
+    log(MA_21/P)                +0.0349  +3.82  |       +0.0290  +3.27  |    83%
+    log(MA_63/P)                +0.0245  +2.33  |       +0.0244  +2.30  |   100%
+    log(MA_126/P)               +0.0173  +1.53  |       +0.0183  +1.59  |   106%
+    log(MA_252/P)               +0.0019  +0.15  |       +0.0028  +0.22  |     --
+    log(MA_504/P)               -0.0029  -0.21  |       -0.0010  -0.07  |     --
+
+**Monotone in horizon and gone beyond 63 days**, which is the signature of a one-close discount
+rather than of a specification choice. Two standing consequences. (i) **Every fast-score IC this
+lab has ever quoted is overstated**, by up to **1.8x** at a 5-day horizon; the slow scores the
+record is mostly made of (756-day and 10-year windows) are unaffected, which is why this has not
+bitten before. (ii) The exchange rate `train skill = 3.37 × rank IC` was calibrated entirely on
+slow scores and must be applied to the **tradeable** IC. A learner should be trained on the
+fill-lagged target, which is the protocol's own convention and not a knob; both of tonight's
+candidates are.
+
+### F2 — COMPOSE F1 WITH `#376`'s ONE-BIT TRUNCATION AND THE REACHABLE IC IS A QUARTER OF THE HEADLINE. THIS IS THE FIRST PRE-TRIAL INSTRUMENT HERE WITH A MECHANISM RATHER THAN A CORRELATION
+
+`research/SUMMARY.md` `#376`: a top-K long-only book expresses only `in or out`, so the IC it can
+reach is the IC of `1[rank > 1−f]`, not the full rank IC. Nobody had composed that with F1. At
+`f = 0.10` (the lab's own K/N), on the **tradeable** target:
+
+    object           full      t  |      BIT      t  |      bot      t  | bit/full
+    log(MA_5/P)   +0.0273  +3.64  |  +0.0124  +2.19  |  +0.0275  +3.66  |   +0.45
+    log(MA_21/P)  +0.0290  +3.27  |  +0.0071  +1.08  |  +0.0293  +3.32  |   +0.25
+    log(MA_63/P)  +0.0244  +2.30  |  +0.0041  +0.52  |  +0.0247  +2.33  |   +0.17
+    log(MA_126/P) +0.0183  +1.59  |  +0.0069  +0.83  |  +0.0185  +1.61  |   +0.38
+    rho_1         +0.0003  +0.05  |  -0.0047  -0.90  |  +0.0003  +0.04  |     --
+    rho_3         +0.0071  +1.37  |  +0.0019  +0.42  |  +0.0072  +1.39  |   +0.26
+    SPAN trend    +0.0212  +2.25  |  +0.0076  +1.18  |  +0.0213  +2.26  |   +0.36
+    SPAN micro    -0.0030  -0.44  |  -0.0055  -1.14  |  -0.0030  -0.45  |   +1.87
+
+`bot` equals `full` to four decimals on **every** row — `#376`'s own result reproduced on a new
+object family, and it says the information is in the bottom where a long-only book cannot reach it.
+The composed chain for the momentum span is
+
+    decision full IC  +0.0311 (t +3.24)   [the number the lab's harness would have reported]
+      ×0.68 fill lag  +0.0212 (t +2.25)
+      ×0.36 one bit   +0.0076 (t +1.18)   [the only IC this book can reach]
+
+a **4.1x** overstatement end to end, and what survives is not distinguishable from zero. **Shape to
+reuse: quote the one-bit tradeable IC, never the full decision IC.** It is cheap, it has an
+argument rather than a regression behind it, and tonight it predicted a null book before the file
+was written — the trial then came in at validation skill −0.116.
+
+### F3 — the two spans, and why a SPAN is the unit
+
+`learnings.md` records this lab refuting one functional of the own price path at a time: the mean at
+three horizons, the dispersion, the third moment, the maximum, the sign count, the within-day
+location, the session split. Each closure is one direction in a space. A walk-forward
+cross-sectional regression over a whole family prices the span, so an empty answer closes every
+remaining direction inside it. Both spans below are six features, 504 days of required own history,
+ranked over the eligible names, fitted by the same closed-form ridge at the same release floor
+against the same fill-lagged rank target, and poured into `moment_book` unchanged from #24/#25.
+
+    span                                 train skill  GROSS   negation  turn   pos    volr  97-08   09-17
+    trend  log(MA_L/P), L = 5..504          -0.0650  -0.0440   -0.0330  2.89  298.4  1.046 -0.040  -0.137
+    micro  rho_k = corr(r_t, r_{t-k}), k=1..6 -0.0570  -0.0450  -0.0230  2.03  186.3  1.002 +0.009  -0.201
+    equal-weight pool                            --   (net +0.5240, gross +0.5350)
+
+Both gross terms are negative, so **cost is not what refuses either** (−0.021 and −0.012 at these
+churns). Both negations are **better** than their books, by 0.032 and 0.034 — the negation invariant
+fails on both, and because the sign here is *learned walk-forward* that is a statement about the
+learner rather than about a researcher's post-hoc sign choice. And the momentum span's gross
+**−0.0440** against its exchange-rate ceiling of 3.37 × 0.0212 = **+0.0714** is a realisation of
+**−62% of ceiling**, against the 6%–65% band the rate was calibrated on: **the band must now be
+quoted as including large negative realisations.**
+
+### F4 — the novelty screen (refusal side only) passed both books, and both passes were wrong in different directions
+
+Train active-return correlations, every book in one matched construction:
+
+                          lowvol_gk_neg  old_half_rev  turn_trend_down  dcorr_low  SPAN trend
+    SPAN trend                   -0.216        +0.053           +0.184     -0.072          --
+    SPAN micro                   +0.169        +0.149           +0.198     +0.224      +0.193
+
+Max |rho| **0.216** and **0.224** — the two cleanest novelty profiles this lab has priced, both far
+inside the ~0.5 refusal line. `rank_trials` then placed `sl_trend_span_masked` in **M3, the
+decade-reversal lineage and the biggest bet on the board**, and `sl_micro_span_masked` in a
+mechanism of its own, **M8**. So the pass side was blind in *both* directions on the same night:
+it failed to flag a book that bought into the lab's largest existing bet, and it carried no credit
+for the one that did open a new one. Fourth and fifth demonstrations, and the sharpest: the screen's
+pass column should not appear in a hypothesis at all.
+
+### F5 — `#388` is spent, and it is inert
+
+`research/SUMMARY.md` `#388`(ii) is "floor the predicted excess return at zero", with a **mandatory**
+accompaniment: report the share of dates on which the restriction is active. Imposed on both spans
+(the score is set to NaN wherever the forecast is not strictly positive): 324.0 and 387.1 names
+clear the floor on an average date, it binds on **0.0%** of 190 and 195 dates, and it empties the
+book on **0.0%**. A top-K book already expresses one bit, so flooring the forecast is the same
+restriction one step earlier and has nothing left to do — `#376` seen from the forecast side, now
+measured on two unrelated feature families rather than argued. `#388` closes for zero trials.
+
+## Session summary — 2026-11-07/08 (nightly) — 2 scored trials of 8 (plus one refused by the causality check); the one ordering instrument the lab had left is INVERTED on a matched pair, and the lab's most-used instrument loses a factor of four
+
+**Experiments: 3 records, 2 scored.** `trials.jsonl` goes 135 → 138 and the v3 board 25 → 27
+scored trials (`sl_trend_span_wf` produced no split numbers — the causality check refused it — and
+is recorded at `n_trials 0`). Both scored trials are `scout`, both `GATE_FAIL`. Five free blocks ran
+first. **No holdout, forward or incubation file was opened.** Engine green (**92 passed in 39.39s**).
+Step-0 integrity clean: no remote branch holds work absent from `origin/main`, and the container's
+per-run branch (`main-1kn9za`) sat at `origin/main`'s commit and was reset to `main` before any work
+— seventh consecutive session, still the container's default rather than an incident.
+
+### Headline: the category prior inverted, in the one design that can test it
+
+The 2026-11-06/07 handover's idea 3 was explicit: `corr(train skill, validation skill)` is **+0.048**
+over nineteen trials, every pre-trial instrument this lab owns refuses usefully and qualifies not at
+all, so **"the only non-circular ordering left is the literature's category prior"** — and a session
+that selected on it "would be a genuinely new policy and is the one this handover recommends".
+`research/SUMMARY.md` prices the two categories reachable from daily closes an order of magnitude
+apart: Hou-Xue-Zhang replicate **momentum at 63.2%** against **trading frictions at ≈4%**, giving
+`p0 ≈ 0.25–0.55` against `0.02–0.06`.
+
+Tonight ran that policy as a **matched pair** — six features each, 504 days of required own history
+each, the same closed-form ridge at the same release floor, the same monthly grid, the same
+fill-lagged cross-sectional rank target, `#388`'s zero floor, and `moment_book`'s K=100
+calendar-peer × momentum-tercile quota in six overlapping sleeves, byte-identical to #24/#25. The
+**only** thing that differs is which category the six features live in.
+
+    arm                                        literature  tradeable IC      t  | val skill        90% CI      null pct
+    #27 trend  log(MA_L/P), L = 5..504 days         63.2%       +0.0212  +2.25  |   -0.116  [-0.266,-0.007]       2%
+    #28 micro  rho_k = corr(r_t,r_{t-k}), k=1..6      ≈4%       -0.0030  -0.44  |   +0.055  [-0.103,+0.199]      86%
+
+**A spread of 0.171 of skill in the wrong direction, and the IC ordering is the opposite of the
+skill ordering as well.** The recommended policy would have picked the worse arm on *both* of the
+only two grounds available — the literature's prior and the lab's own IC harness. That is one
+observation, from one pair, and it cannot settle the policy; it is also the first observation ever
+taken, and it points the wrong way on both axes at once.
+
+### Second finding: the lab's region-matched IC harness scores a return the execution model gives away, and composing that with `#376` costs a factor of 4.1
+
+F1/F2. The harness scores a signal at `d` against `P[d+21]/P[d]`; v3 fills at the next real close,
+so a book earns `P[d+22]/P[d+1]`. The discount is **monotone in horizon and zero beyond 63 days** —
+56% retained at 5 days, 83% at 21, 100% at 63 and 126 — so every fast-score IC in this record is
+overstated by up to 1.8x while the slow scores the record is mostly made of are untouched. Compose
+it with `#376`'s one-bit truncation at the lab's own `f = 0.10` and the momentum span's chain reads
+**+0.0311 (t +3.24) → +0.0212 (t +2.25) → +0.0076 (t +1.18)**: a 4.1x end-to-end overstatement, with
+`bot = full` to four decimals at every horizon. **This is the first pre-trial instrument in this lab
+with a mechanism attached rather than a correlation, and it called a null book before the file was
+written.** Standing rule: quote the one-bit tradeable IC, never the full decision IC.
+
+### Third: the best non-`price-trend` result in the v3 record came from the arm every train-side instrument pointed down at
+
+`#28 sl_micro_span_masked`: train skill **−0.057** with sub-periods disagreeing (+0.009 / −0.201),
+gross **−0.045**, its negation better by 0.034, its tradeable span IC **−0.0030**, not one of its six
+lags clearing |t| = 1.4 — and validation skill **+0.055**, 4th of 27 on the board, the **narrowest
+positive-skill interval** on it, the **second-highest `P(best)` (17% against #16's 29%)**, a
+**mechanism of its own (M8)**, and the closest any v3 trial has come to clearing the
+random-selection null: **0.392 against the 0.399 bar, a gap of 0.007 of Sharpe.** Read against #24
+last night — four simultaneous train records, validation second-worst — the pair of nights is the
+cleanest statement available that **the train sheet and the validation sheet are not weakly related
+on this panel, they are unrelated**, and tonight adds that the free IC instruments are no better.
+
+### Fourth: the novelty screen's pass side failed in both directions on one night
+
+F4. Max train active-return |rho| to any recorded book was **0.216** and **0.224** — the two
+cleanest novelty profiles ever priced here. `rank_trials` then put `#27` in **M3**, the
+decade-reversal lineage and the largest bet on the board, and `#28` in a **new** mechanism. So the
+pass column both missed a book buying into the lab's biggest existing bet and withheld credit from
+the one genuinely new bet of the night. Fourth and fifth demonstrations that the pass side is blind;
+it should not appear in a hypothesis.
+
+### Fifth: the process failure, and it was already written down
+
+`sl_trend_span_wf` was refused by the causality check at max holdings difference **9.90e-03**. Cause:
+`features.xs_rank` is row-wise, so it is causal in the time axis and **not** in the column axis;
+`protocol.visible_frame` drops columns not yet eligible, so a frame truncated by 63 days holds fewer
+names and every rank in every earlier row shifts with the denominator. The fix — **mask before
+ranking, not after** — is in `strategies/candidates/sl_ridge_six_masked.py`'s header, written after
+exactly this failure on 2026-10-07, and I did not read it before writing the file. One trial record
+spent on a lesson the repo already owned.
+
+### Pre-registration scorecard
+
+* **Turnover:** 3.8x inside the pre-registered 3.5–4.3x; 2.5x inside 2.4–3.0x. **Ninth consecutive
+  success** for the 2026-10-13/14 range method.
+* **The volatility-ratio shape rule** gained two points and the monotone relation held
+  (1.002 → **−33.6%**, inside my −33% to −41%; 1.046 → **−39.0%**, against my −40% to −47%). The
+  second is the rule's first recorded **miss**, by 1pp, and it is a miss in my band rather than in
+  the rule — at six points the relation now reads 0.865 → −28.8, 0.954 → −32.8, 1.002 → −33.6,
+  1.046 → −39.0, 1.073 → −46.1 and −47.5.
+* **The null gate refuses it:** predicted for both, true for both — tenth and eleventh of the last
+  thirteen v3 trials refused by that gate rather than by cost, drawdown or turnover. But `#28` came
+  within **0.007 of Sharpe** of clearing it, which no trial has done before.
+* **`#388`'s floor is inert**, pre-registered as such and measured on two unrelated feature
+  families: 0.0% of dates binding, 0.0% emptying.
+
+### Verdicts
+
+`#27 sl_trend_span_masked` GATE_FAIL (val skill **−0.116** [−0.266, −0.007], 2nd null percentile,
+train skill −0.065, drawdown −39.0%, turnover 3.8x, M3). `#28 sl_micro_span_masked` GATE_FAIL (val
+skill **+0.055** [−0.103, +0.199], 86th null percentile, train skill −0.057, drawdown −33.6%,
+turnover 2.5x, **M8**). `#28` takes `statistical-learning`'s family best from `sl_gbm_seven_nonlinear`
+(−0.055 → +0.055); `distinct_mechanisms` stays **6** on the leaderboard's own family-lead clustering,
+while `rank_trials` — which clusters all 27 trials — gives `#28` an eighth mechanism. All 27 trials
+remain in tier 1; the board still has no v3 champion and no positive skill interval excluding zero.
+
+### What the night bought, stated without inflation
+
+Two negative verdicts, one self-inflicted trial record, and five free findings of which two are
+corrections to instruments the lab uses constantly (the IC harness's fill gap; the composed
+reachable-IC screen) and one closes a carried research note (`#388`) for zero trials. The headline is
+a **negative result about the lab's own planning policy**, which is worth more than either book: the
+last instrument standing does not order validation skill on the one pair built to test it.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Do not plan the next session on category prior, and say why in the hypothesis if you do.** One
+   matched pair put it 0.171 of skill the wrong way round. Provenance: tonight, and it answers the
+   2026-11-06/07 handover's idea 3 directly. What remains of the idea is narrow and worth stating:
+   the prior ordered the two arms' **IC** correctly (+0.0212 against −0.0030) and the IC did not
+   order the **skill**, so the prior may be sound about signal and irrelevant about reachability.
+2. **`#28`'s span is the one live object on the board and the only one in its mechanism.** It is the
+   best non-`price-trend` v3 result, the narrowest positive interval, and 0.007 of Sharpe from
+   clearing the null gate — on a score every train-side instrument refused. Deepening it means a
+   different SCORE in the same frictions-shaped family (2026-11-06/07: spend trials on scores, not
+   construction nodes; same-score pairs correlate at +0.909, and `K`, `H` and the retention band are
+   standing anti-candidates). The honest caution: its train skill is −0.057 with sub-periods at
+   +0.009 / −0.201, which `research/SUMMARY.md` `#390` reads as instability rather than low power, so
+   a second score in the family is a test of the *family*, not a follow-up on a result.
+3. **Use the one-bit tradeable IC as the pre-trial number from now on.** F1+F2 give it a mechanism
+   and a 4.1x correction on the lab's standard harness. It refused tonight's momentum arm correctly
+   and read −0.0055 on the arm that scored +0.055, so it is one-sided like everything else here —
+   but it is the first instrument whose discount is derived rather than regressed.
+4. **For the human owner, one item and it is the same gate as last night's.** `#28` was refused by
+   the region-matched null at **0.392 against 0.399** — eleven of the last thirteen v3 trials have
+   been refused by that gate rather than by cost, drawdown, turnover or delisting, and this is the
+   first near-tie. Standing and unchanged: the two engine issues (back-adjusted price and volume
+   LEVELS embed future corporate actions), `min_train_skill = 0.0`, `#324`'s deliberate difference,
+   `#358`'s empirical-Bayes shrinkage of the bar, the data-type question, `#393`'s
+   minimum-detectable-skill arithmetic, and the per-run-branch generator (seven consecutive
+   sessions). Tonight adds one of mine: `dataclasses.replace` shares `setup.pool_cache`, so any
+   future harness that builds a stressed setup that way scores a stressed candidate against an
+   unstressed pool — the 2026-11-02/03 error, reachable in one line.
+5. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — the
+   `log(MA_L/P)` term structure at any scale set or estimator; plain multi-horizon own-trend in any
+   learned combination; `#388`'s forecast floor (inert, spent); the full-cross-section decision IC as
+   a reachable quantity; and any hypothesis whose novelty case is the pass side of the train
+   active-return screen. Unchanged from previous handovers: downside correlation and the downside
+   loading in any form; coskewness and the third co-moment in any form; the volatility-tercile
+   pre-sort as a construction operator; any paired candidate whose two legs share a score; any
+   hypothesis whose case is a train sheet, a matched-null z or a negation-invariant margin; any
+   hypothesis whose novelty case is a cross-sectional rank correlation; the closing-location value;
+   the overnight session at either normaliser; the turn-of-month differential on either sign; the
+   coefficient of variation of share volume; the quarter-ending-month conditioner on momentum and
+   any single-phase quarterly grid on 12-1 momentum; plain 12-1 momentum (it fails
+   `min_train_skill`, eight constructions); any equity-ETF book; the bond sleeve as a duration bet;
+   the 2–4-week index-level relative-strength score on either sign; the liquidity level or trend in
+   any form; 52-week-high proximity; information discreteness as a conditioner on a same-window
+   mean-return score; covariance weighting at any estimator; weighting inside the selected slice;
+   the exclusion / pool-minus-worst book at any `f`; `#385`'s IC-decorrelation blend; the #16/#19
+   blend; `H` as a parameter; `K` as a knob; the retention band as a validation operator; and any
+   construction whose case is cost at any turnover or a tighter error bar.
+6. **From `research/SUMMARY.md`.** Spent tonight: **`#388`** (closed free, F5), **`#376`** (extended
+   — composed with the fill lag into F2's screen), and **`#414`**'s category tags (put to work and
+   answered in the direction that refuses the policy). Still live and unspent: `#386`/`#387` (the
+   `R²`/`S²` yardstick as a refusal test for a timing read of `seasonality-calendar`), `#389`'s
+   cumulative-active-return curve, `#381`'s `σ_IC`, and `#407`–`#413` from the last two research
+   sessions — of which `#413`'s composed pre-trial rule should run before any candidate file.
+   **`#363` is NOT live**: the 2026-11-02/03 nightly closed the 2–4-week index-level
+   relative-strength score on both signs and every equity-ETF book with it, which the research
+   folder's carried queue has not yet recorded. `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain
+   the interpretation rules to read first.
