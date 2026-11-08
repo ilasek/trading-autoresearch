@@ -27446,3 +27446,61 @@ None is holdout-informed; no holdout, forward or incubation number was read.
   Standing rule to re-read before any walk-forward candidate: a row-wise normaliser's denominator
   is a column count, and under protocol v2/v3 the column axis is where the look-ahead lives.
 
+## 2026-11-08T00:14:33+00:00 — sl_trend_span_masked — **GATE_FAIL**
+- Candidate: `strategies/candidates/sl_trend_span_masked.py` (family: statistical-learning, track: scout, trial #0)
+- Hypothesis: A walk-forward ridge over the six moving-average-to-price ratios log(MA_L/P) at L = 5, 21, 63, 126, 252 and 504 days -- the term structure of a name's own trend, ranked over the eligible names only, with the sign at each horizon learned monthly from realized forward returns measured FROM THE FILL rather than from the decision date, the forecast floored at zero, and the hundred highest forecasts quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells and held in six overlapping monthly sleeves -- earns positive validation skill against the equal-weight eligible pool, because the momentum category is the one reachable from daily closes that the external replication literature puts at a 63.2% hit rate against trading frictions' 4%, and because the linear span of multi-horizon own-trend can express the sign reversal between horizons that no single-horizon sort refuted here could express.
+- Verdict: GATE_FAIL — train skill -0.065 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.221 <= the random-selection null's 90% quantile 0.319 (median 0.281; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.46, ann_ret +9.3%, maxDD -57.2%, turnover 2.9x, skill vs pool -0.07
+- Validation: sharpe +0.22, ann_ret +4.3%, maxDD -39.0%, turnover 3.8x, skill vs pool -0.12
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.12, 90% CI [-0.27, -0.01]; at 2x costs -0.15; with a 30% delisting haircut -0.12; train -0.07 (1997-2008 -0.04, 2009-2017 -0.14)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 2% percentile of 200 random-selection replicas (median +0.28, 90% +0.32); equal-weight eligible pool +0.34, information ratio vs it -0.32
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **a fill-corrected rank IC of +0.0212 at t +2.25 -- the second-largest clean rank IC
+  in this lab's record -- converted to validation skill of -0.116 at the 2nd percentile of its own
+  null, and the composed free screen predicted it from the IC side before the file was written.**
+  `#376`'s one-bit truncation applied to the *tradeable* IC leaves **+0.0076 at t +1.18**, a 4.1x
+  discount on the headline, and `bot` equals `full` to four decimals at every horizon: the
+  information is in the bottom and a long-only top-K book cannot have it. Second lesson, and it
+  is the one that costs the lab something: the novelty screen PASSED this book at max train
+  active-return |rho| **0.216** -- the cleanest profile ever priced here -- and `rank_trials`
+  placed it in **M3, the decade-reversal lineage**, the biggest bet on the board. Third
+  demonstration that the screen's pass side is blind, and the most emphatic. Pre-registration
+  scored: turnover **3.8x** inside the pre-registered 3.5-4.3x (eighth consecutive success); the
+  volatility-ratio shape rule's monotone relation held (1.046 -> **-39.0%**, between the recorded
+  0.954 -> -32.8% and 1.073 -> -46.1%) but my band of -40% to -47% was **1pp too pessimistic**,
+  which is the rule's first recorded miss and is a miss in my band rather than in the rule.
+
+## 2026-11-08T00:19:49+00:00 — sl_micro_span_masked — **GATE_FAIL**
+- Candidate: `strategies/candidates/sl_micro_span_masked.py` (family: statistical-learning, track: scout, trial #0)
+- Hypothesis: A walk-forward ridge over the six own-return autocorrelations rho_k = corr(r_t, r_{t-k}) for k = 1..6, estimated over a 504-day window of the name's own PRINTED daily returns lagged 21 days and ranked over the eligible names only -- the term structure of a name's own serial dependence, which nests Roll's implied effective spread at k = 1 and the slow-diffusion half at k = 2..6, with signs learned monthly against forward returns measured from the fill, the forecast floored at zero, and the hundred highest forecasts quota-allocated across (trailing-trading-calendar peer group x 12-1-momentum tercile) cells held in six overlapping monthly sleeves -- earns LOWER validation skill than its momentum-shaped twin sl_trend_span_masked, because the external replication literature puts the trading-frictions category at a 4% hit rate against momentum's 63.2%, and this pair is matched on every node except which of those two categories its features live in.
+- Verdict: GATE_FAIL — train skill -0.057 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.392 <= the random-selection null's 90% quantile 0.399 (median 0.344; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.47, ann_ret +9.2%, maxDD -56.3%, turnover 2.0x, skill vs pool -0.06
+- Validation: sharpe +0.39, ann_ret +7.0%, maxDD -33.6%, turnover 2.5x, skill vs pool +0.06
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.06, 90% CI [-0.10, +0.20]; at 2x costs +0.04; with a 30% delisting haircut +0.06; train -0.06 (1997-2008 +0.01, 2009-2017 -0.20)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 86% percentile of 200 random-selection replicas (median +0.34, 90% +0.40); equal-weight eligible pool +0.34, information ratio vs it +0.22
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE CATEGORY PRIOR INVERTED, IN A MATCHED PAIR, AND IT IS THE ONLY ORDERING
+  INSTRUMENT THE LAB HAD LEFT.** The 2026-11-06/07 handover recommended selecting candidates on
+  `research/SUMMARY.md`'s per-category replication rate because nothing else is non-circular.
+  Tonight's pair was built to test exactly that -- six features each, 504 days of required
+  history each, the same ridge, the same grid, the same fill-lagged rank target, the same
+  `moment_book` construction, differing ONLY in whether the features are momentum-shaped
+  (`log(MA_L/P)`, literature hit rate 63.2%) or frictions-shaped (own-return autocorrelation, 4%).
+  The 4% arm scored validation skill **+0.055** [-0.103, +0.199] at the **86th** null percentile;
+  the 63% arm scored **-0.116** [-0.266, -0.007] at the **2nd**. **A spread of 0.171 of skill in
+  the wrong direction**, and the IC ordering was the opposite of the skill ordering as well
+  (momentum span tradeable IC +0.0212 at t +2.25 against this one's -0.0030 at t -0.44). So the
+  handover's recommended policy would have chosen the worse arm on both of the only two grounds
+  available. Second lesson: **this book is the board's narrowest positive-skill interval and its
+  second-highest `P(best)` (17% against #16's 29%), it is the best non-`price-trend` result in the
+  v3 record, and `rank_trials` puts it in a mechanism of its own (M8)** -- while its own train
+  skill was **-0.057** with sub-periods disagreeing (+0.009 / -0.201) and its negation better by
+  0.034. Every train-side instrument pointed down and validation came in 4th of 27. Third:
+  `rho_1` is Roll's implied spread and reads +0.0003 at t +0.05, so the frictions axis is now
+  closed on the level, the trend and the serial-correlation form -- yet the *span* of the six lags
+  is the result above, which means the content is not in any one lag. Pre-registration scored:
+  turnover **2.5x** inside the pre-registered 2.4-3.0x (ninth consecutive success), drawdown
+  **-33.6%** inside the pre-registered -33% to -41% from a volatility ratio of 1.002, and the null
+  gate refused it as predicted -- but by **0.007 of Sharpe** (0.392 against the 0.399 bar), the
+  closest any v3 trial has come to clearing it.
+

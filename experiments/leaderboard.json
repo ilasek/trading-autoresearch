@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-07T23:48:23+00:00",
+  "generated_at": "2026-11-08T00:23:06+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -28,6 +28,32 @@
       ],
       "train_skill": 0.058,
       "mechanism": 1
+    },
+    "statistical-learning": {
+      "name": "sl_micro_span_masked",
+      "candidate": "strategies/candidates/sl_micro_span_masked.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-11-08T00:19:49+00:00",
+      "n_trials": 3,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.392,
+        "ann_return": 0.0701,
+        "max_drawdown": -0.3357,
+        "ann_turnover": 2.48,
+        "avg_positions": 199.57,
+        "skill": 0.055,
+        "skill_cost2x": 0.035,
+        "skill_delist30": 0.055
+      },
+      "train_sharpe": 0.466,
+      "skill_ci90": [
+        -0.103,
+        0.199
+      ],
+      "train_skill": -0.057,
+      "mechanism": 5
     },
     "liquidity-volume": {
       "name": "lv_vol_trend_overlap6",
@@ -132,32 +158,6 @@
       ],
       "train_skill": 0.12,
       "mechanism": 1
-    },
-    "statistical-learning": {
-      "name": "sl_gbm_seven_nonlinear",
-      "candidate": "strategies/candidates/sl_gbm_seven_nonlinear.py",
-      "track": "scout",
-      "verdict": "GATE_FAIL",
-      "ts": "2026-10-17T23:47:39+00:00",
-      "n_trials": 1,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.282,
-        "ann_return": 0.0588,
-        "max_drawdown": -0.4511,
-        "ann_turnover": 4.41,
-        "avg_positions": 99.75,
-        "skill": -0.055,
-        "skill_cost2x": -0.082,
-        "skill_delist30": -0.055
-      },
-      "train_sharpe": 0.424,
-      "skill_ci90": [
-        -0.269,
-        0.096
-      ],
-      "train_skill": -0.1,
-      "mechanism": 5
     },
     "statistical-arbitrage": {
       "name": "sa_resid_rev63_band",

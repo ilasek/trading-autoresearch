@@ -54,9 +54,19 @@ which of those two categories their features live in:
          -correlation form -- and `rho_2..rho_6` are the slow-diffusion half,
          which no object in the v3 record touches.
 
+THE COLUMN AXIS, AND IT IS WHY EVERY `.where(elig)` BELOW COMES BEFORE ITS
+RANK. `features.xs_rank` is row-wise, so it is causal in the TIME axis and
+**not** in the COLUMN axis. `protocol.visible_frame` drops columns that have
+not yet been eligible, so a frame truncated by 63 days holds fewer names and
+every rank in every earlier row shifts with its denominator -- the leak that
+cost trial `sl_ridge_six_features` on 2026-10-07 and this file's own first run
+on 2026-11-07. The fix recorded there is the one used here: **mask to the
+eligible names BEFORE ranking, not after**, so a row's rank denominator is the
+pool the book could actually have bought from.
+
 Both families have exactly SIX features, both need 504 days of a name's own
-history and nothing more, both are cross-sectionally ranked row-wise (causal
-in the time axis, 2026-10-07), both are fitted by the same closed-form ridge
+history and nothing more, both are cross-sectionally ranked row-wise over the
+ELIGIBLE names only, both are fitted by the same closed-form ridge
 at the same monthly grid against the same cross-sectional rank of the forward
 one-month return, and both are then poured into the one construction the v3
 board is built on. The pair is therefore the first PAIRED test of the category
@@ -113,19 +123,35 @@ MIN_TRAIN_ROWS = 12000
 # Feature families
 # ---------------------------------------------------------------------------
 
-def trend_features(prices: pd.DataFrame, aux: dict | None = None) -> dict[str, pd.DataFrame]:
-    """`log(MA_L / P)` at six horizons, cross-sectionally ranked."""
+def _elig_frame(prices: pd.DataFrame, eligible) -> pd.DataFrame:
+    if eligible is None:
+        return pd.DataFrame(True, index=prices.index, columns=prices.columns)
+    return (eligible.reindex(index=prices.index, columns=prices.columns)
+            .fillna(False).astype(bool))
+
+
+def _masked_rank(frame: pd.DataFrame, elig: pd.DataFrame) -> pd.DataFrame:
+    """Row-wise rank over the ELIGIBLE names only (see the header's column-axis
+    note), centred on zero."""
+    return F.xs_rank(frame.where(elig)) - 0.5
+
+
+def trend_features(prices: pd.DataFrame, aux: dict | None = None,
+                   eligible=None) -> dict[str, pd.DataFrame]:
+    """`log(MA_L / P)` at six horizons, ranked over the eligible names."""
+    elig = _elig_frame(prices, eligible)
     px = prices.ffill()
     out: dict[str, pd.DataFrame] = {}
     for L in TREND_SCALES:
         ma = px.rolling(L, min_periods=L).mean()
         with np.errstate(divide="ignore", invalid="ignore"):
             ratio = np.log(ma.where(ma > 0) / px.where(px > 0))
-        out[f"ma{L:04d}"] = F.xs_rank(ratio) - 0.5
+        out[f"ma{L:04d}"] = _masked_rank(ratio, elig)
     return out
 
 
-def micro_features(prices: pd.DataFrame, aux: dict | None = None) -> dict[str, pd.DataFrame]:
+def micro_features(prices: pd.DataFrame, aux: dict | None = None,
+                   eligible=None) -> dict[str, pd.DataFrame]:
     """Own-return autocorrelation at lags 1-6, cross-sectionally ranked.
 
     Returns are masked to days the name actually PRINTED (`volume` is not
@@ -135,6 +161,7 @@ def micro_features(prices: pd.DataFrame, aux: dict | None = None) -> dict[str, p
     `%zero` artifact; with it, every pair `(r_t, r_{t-k})` entering the
     estimate is a pair of real prints.
     """
+    elig = _elig_frame(prices, eligible)
     r = prices.pct_change(fill_method=None)
     if aux is not None and "volume" in aux:
         printed = aux["volume"].reindex(index=r.index, columns=r.columns).notna()
@@ -147,7 +174,7 @@ def micro_features(prices: pd.DataFrame, aux: dict | None = None) -> dict[str, p
         prod = (r * r.shift(k)).rolling(w, min_periods=mp).mean()
         with np.errstate(divide="ignore", invalid="ignore"):
             rho = (prod - m * m) / v.where(v > 0)
-        out[f"rho{k}"] = F.xs_rank(rho.shift(MICRO_LAG).clip(-1.0, 1.0)) - 0.5
+        out[f"rho{k}"] = _masked_rank(rho.shift(MICRO_LAG).clip(-1.0, 1.0), elig)
     return out
 
 
@@ -158,22 +185,23 @@ FAMILIES = {"trend": trend_features, "micro": micro_features}
 # The walk-forward score, with #388's floor
 # ---------------------------------------------------------------------------
 
-def tradeable_rank_target(prices: pd.DataFrame, horizon: int = HORIZON,
+def tradeable_rank_target(prices: pd.DataFrame, eligible=None, horizon: int = HORIZON,
                           fill_lag: int = FILL_LAG) -> pd.DataFrame:
-    """Cross-sectional rank, centred on zero, of the forward return measured
-    FROM THE FILL. `walkforward.rank_target` measures from the decision date,
-    which includes the one close the v3 execution model gives away."""
+    """Rank, over the ELIGIBLE names and centred on zero, of the forward return
+    measured FROM THE FILL. `walkforward.rank_target` measures from the decision
+    date, which includes the one close the v3 execution model gives away, and
+    ranks over the frame's whole column set, which is the column-axis leak."""
     fwd = prices.shift(-(horizon + fill_lag)) / prices.shift(-fill_lag) - 1.0
-    return F.xs_rank(fwd) - 0.5
+    return _masked_rank(fwd, _elig_frame(prices, eligible))
 
 
-def _forecast(prices: pd.DataFrame, aux: dict | None, family: str,
+def _forecast(prices: pd.DataFrame, aux: dict | None, family: str, eligible=None,
               fill_lag: int = FILL_LAG) -> pd.DataFrame:
-    panels = FAMILIES[family](prices, aux)
+    panels = FAMILIES[family](prices, aux, eligible)
     dates = W.rebalance_dates(prices)
     return W.walk_forward_scores(
         panels,
-        tradeable_rank_target(prices, HORIZON, fill_lag),
+        tradeable_rank_target(prices, eligible, HORIZON, fill_lag),
         dates,
         HORIZON + fill_lag,
         W.ridge_fit_predict(RIDGE_ALPHA),
@@ -190,7 +218,7 @@ def learned_score(family: str, floor: bool = True):
     family's own and its sign is learned.
     """
     def _score(prices, aux=None, eligible=None, window=None, sign: float = 1.0):
-        fc = _forecast(prices, aux, family)
+        fc = _forecast(prices, aux, family, eligible)
         if floor:
             fc = fc.where(fc > 0.0)             # research `#388`(ii)
         return fc.reindex(index=prices.index, columns=prices.columns)
@@ -198,7 +226,7 @@ def learned_score(family: str, floor: bool = True):
 
 
 def active_share_of_dates(prices: pd.DataFrame, aux: dict | None, family: str,
-                          k: int = 100) -> dict:
+                          eligible=None, k: int = 100) -> dict:
     """`#388`'s mandatory accompaniment: how often the floor actually binds.
 
     A restriction that is never active is not doing any work, and a book that
@@ -206,7 +234,7 @@ def active_share_of_dates(prices: pd.DataFrame, aux: dict | None, family: str,
     forecast dates, the share on which fewer than `k` names survive the floor
     and the mean count that does.
     """
-    fc = _forecast(prices, aux, family)
+    fc = _forecast(prices, aux, family, eligible)
     pos = (fc > 0.0).sum(axis=1)
     return {
         "n_dates": int(len(pos)),
