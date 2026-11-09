@@ -7387,3 +7387,115 @@ across experiments; prune entries that later evidence contradicts.
   shares `setup.pool_cache`**, so a harness that builds a stressed setup that way scores a stressed
   candidate against an UNSTRESSED pool — the one-signed 2026-11-02/03 error, reachable in one line
   and caught here only because the gross pool was validated against the recorded +0.5361.
+
+- **[Measured 2026-11-08/09, nightly — ZERO trials spent; THE HEADLINE, AND IT IS A DERIVED THRESHOLD
+  WHERE THIS LAB PREVIOUSLY HAD ONLY DIRECTIONS] THE REGION-MATCHED NULL GATE IS A PURE SELECTION
+  TEST, ITS BAR IS `1.28 x (null sd)`, AND THE WHOLE FAST-SCORE BRANCH IS SHORT OF IT BY A FACTOR OF
+  SIX.** The gate (`min_null_percentile = 0.90`) is hard and runs *before* the scout verdict, so it is
+  the binding constraint on the entire v3 board; it has refused **11 of the last 13** trials. Put a
+  synthetic oracle of controlled quality, `q·z(forward tradeable rank) + sqrt(1-q^2)·z(noise)`, through
+  `third_moment.moment_book` (K=100, peer x momentum-tercile quota, six sleeves) and score it against
+  its own null on train, 40 draws:
+
+      oracle              1bit IC      t  | book SR  skill | null p50     sd       z   pct | pos
+      h= 21 q=0.00        +0.0049  +1.39  | +0.4944 -0.029 |  +0.4994 0.0128   -0.39  38% | 324
+      h= 21 q=0.05        +0.0488 +14.48  | +0.5253 +0.002 |  +0.5018 0.0106   +2.22  98% | 324
+      h= 21 q=0.20        +0.1896 +60.12  | +0.6594 +0.136 |  +0.5031 0.0132  +11.85 100% | 324
+      h=252 q=0.05        +0.0167  +4.67  | +0.5659 +0.042 |  +0.5059 0.0139   +4.33 100% | 323
+      h=252 q=0.20        +0.0567 +14.19  | +0.7846 +0.261 |  +0.5113 0.0136  +20.06 100% | 315
+      REAL dcorr_low #24       --     --  | +0.6263 +0.102 |  +0.5227 0.0255   +4.07 100% | 144
+
+  **(i) The null is calibrated** — a no-information score lands at its median (z −0.39, 38th
+  percentile), the first direct check of that gate in this repo — so the gate asks exactly
+  `book Sharpe − null median >= 1.28 x null sd`, with the sd a property of BREADTH and not of the
+  score (**0.0255 at 144 positions, 0.0128 at 324**, on train's 5450 days).
+  **(ii) The exchange rate from the lab's standing pre-trial number to that edge is NOT a constant**:
+  **+0.80** of Sharpe edge per unit of one-bit tradeable IC when the score's information decays inside
+  a month, **+3.6 to +4.8** when it lasts a year, and **+4.05** measured on a real unit-free object.
+  So the one-bit IC_21 adopted on 2026-11-07/08 is a LOWER BOUND, and the multiplier is set by the
+  horizon over which the information is realised, which must therefore be measured as a TERM
+  STRUCTURE (with the score's month-to-month rank persistence beside it) and not at one horizon.
+  **(iii) Composed with the bar read off all 27 recorded validation nulls** (`null_p90 − null_p50`:
+  mean **+0.0693**, median +0.0710, range [+0.038, +0.089], the narrow end belonging to the board's
+  broadest book): required one-bit IC at the score's own information horizon is **~0.086 for a fast
+  score and ~0.017 for a slow one**. The largest clean one-bit IC_21 ever measured here is
+  `log(MA_5/P)`'s **+0.0140**, whose information does not survive the month (IC_252 **+0.0024**), so
+  its edge ceiling is **+0.011** against a bar of **+0.069**. **Every fast cross-sectional score
+  reachable from this panel's daily closes is arithmetically closed against the null gate, which is a
+  derived explanation for the most-repeated fact in the v3 record.** Second instrument in this lab
+  with a mechanism rather than a regression behind it — and like the first, **refusal-only**: its pass
+  side was built and buried the same night (entry below). Anti-candidates travelling with this entry:
+  any fast cross-sectional score as a route to the null gate, and the one-bit IC_21 quoted at a single
+  horizon as if it were the reachable quantity.
+
+- **[Measured 2026-11-08/09, nightly — WORSENS THE 2026-10-18 / 2026-10-22 ENGINE ISSUES IN TWO
+  DIRECTIONS AT ONCE] THE BACK-ADJUSTMENT CONTAMINANT IS HORIZON-AMPLIFIED FIVEFOLD, AND IT RIDES ON
+  RANK CORRELATION RATHER THAN ON UNITS — SO IT IS A CONFOUND IN UNIT-FREE SCORES TOO, AND AT ONE YEAR
+  IT DECIDES THEIR SIGN.** `adj_i(t) = raw_i(t)·D_i(t)` with `D_i(t)` the product of every
+  distribution factor AFTER `t`. Measured as a score in its own right (one-bit, region-matched, top
+  decile, lagged 21d, 252 train month-ends):
+
+      object                          h=21      t  |  h=63      t  | h=126      t  | h=252      t  | h=504      t
+      log PRICE level [contaminant] -0.0300  -7.88 | -0.0507 -12.3 | -0.0732 -16.7 | -0.1087 -22.0 | -0.1501 -27.5
+      Amihud 126d (raw)             +0.0220  +5.02 | +0.0436  +9.4 | +0.0669 +14.0 | +0.1024 +20.5 | +0.1457 +29.5
+      Amihud 126d | log price       -0.0062  -1.37 | -0.0118  -2.5 | -0.0149  -3.1 | -0.0163  -3.0 | -0.0188  -3.2
+      volume CV 252d                +0.0103  +2.87 | +0.0194  +5.0 | +0.0291  +7.2 | +0.0418 +10.8 | +0.0553 +14.1
+
+  Monotone, a factor of five across the horizons, and raw Amihud is the contaminant's mirror image at
+  every one of them (the record's +0.0194 -> -0.0086 reproduced and extended to the whole term
+  structure). **The sharper half: partialling the log price level out WITHIN REGION inverts the sign
+  of the lab's clean, unit-free slow objects** — `dcorr_low` IC_252 **+0.0263 -> -0.0224** (t -4.10)
+  and the five-year reversal **+0.0187 -> -0.0258** (t -3.41), on rank correlations to the level of
+  only -0.246 and -0.303. Unit-free construction does NOT solve this; only the explicit control does.
+  **Two standing rules. (a) Any screen at a forward horizon beyond 63 days must partial out the log
+  price level, within region, before it is read** — and the arithmetic of the entry above is precisely
+  a recommendation to screen at longer horizons, so this is now on the critical path. **(b) Quote every
+  long-horizon `t` as an upper bound and lead with the point estimate**: adjacent month-ends share 11
+  of 12 months of a 252-day forward window, so the effective n is nearer **21** than 252 (the
+  2026-10-26/27 rider, now applying to a whole class of screen).
+
+- **[Measured 2026-11-08/09, nightly] THERE IS NO CONSTRUCTION ROUTE TO THE NULL GATE, AND THE
+  STANDING ANTI-CANDIDATES "K AS A KNOB" / "H AS A PARAMETER" / "BREADTH BUYS NOTHING" NOW HAVE A
+  MECHANISM AND EXTEND FROM SKILL TO THE GATE.** Two routes were proposed from the entry above's
+  arithmetic and both were refuted free. **Breadth** (the bar is 1.28·sd and sd falls with breadth;
+  the board's broadest book does carry its narrowest recorded bar, +0.038 against a mean of +0.069;
+  the tail-mean arithmetic `z ~ phi(z_f)/sqrt(f)` predicts z flat and peaking ~14% above f = 0.10
+  near f ~ 0.3) — measured on a refuted score at K = 100 / 250 / 400, z runs **+4.07 / +2.57 /
+  −1.29**: the edge collapses 3.6x and changes sign while the sd falls only 2.3x then 1.75x, so the
+  prediction is **wrong in sign**. **Concentration** — varying only the sleeve count, concentrating
+  raises the edge and the bar *together* (`dcorr_low` edge +0.1036 -> +0.1359, bar 0.0326 -> 0.0403,
+  net z +4.07 -> +4.32), and most of that edge gain is not selection at all: **the replicas inherit
+  the candidate's SCHEDULE, so a higher-turnover book's null pays more cost and its median falls**
+  (+0.5227 -> +0.4865). On a score with no selection the operator does nothing (#28's span z −1.96 /
+  −0.34 / −1.25 at H = 6 / 2 / 1, non-monotone). **The gate amplifies whatever selection is there,
+  including its absence.** Anti-candidates: breadth, `K` and the sleeve count as routes to the null
+  gate, all three now refused with a mechanism rather than by precedent.
+
+- **[Measured 2026-11-08/09, nightly — SIXTH DEMONSTRATION IN FOUR NIGHTS, AND THE FIRST WHERE THE
+  INSTRUMENT WAS BUILT AND BURIED ON ONE NIGHT] THE COMPOSED BAR'S PASS SIDE FAILED ON ITS FIRST
+  APPLICATION BY 0.144 IN ITS OWN UNITS.** Of twenty objects screened at the derived bar, exactly one
+  passed: the **scale-free left-tail exponent** (Hill's estimator on the worst 5% of a name's own
+  756-day returns, which divides the tail's scale out), residualised IC_252 **+0.0195** — the only
+  object in the screen whose residualised reading exceeded its raw one — and clean on every novelty
+  column: rank rho **+0.087** to 756-day volatility, −0.100 to `dcorr_low`, −0.008 to coskewness,
+  −0.044 to the old-half decade score, **−0.028** to the contaminant, +0.201 to own skewness. So it is
+  **not** the de-risking axis in costume, which is the one check 2026-11-06/07 demanded. The engine's
+  own train backtest then read **skill −0.0810** (sub-periods −0.014 / −0.251), volatility ratio
+  **1.175**, maxDD **−60.5%**, null **z −3.04 at the 2nd percentile**, and **the negation better by
+  0.130**. Predicted edge **+0.078**; realised **−0.066**. Not shipped: the negation-invariance screen
+  (the one screen whose refusal side is 2-for-2) refuses it, and a book with no stated direction has
+  nothing for a validation reading to be about. **Every pre-trial instrument this lab has ever built
+  refuses usefully and qualifies not at all — now six demonstrations in four nights, and the newest
+  instrument did not survive its own night.** Anti-candidates: the scale-free left-tail exponent at
+  any window or quantile and the own-return tail index in any form; the up/down semi-deviation ratio;
+  time-underwater at any horizon; annual-rank stability.
+
+- **[Measured 2026-11-08/09, nightly — CORRECTS THE STANDING READING OF THE BOARD'S ONLY LIVE RESULT]
+  #28'S TRAIN EDGE AGAINST ITS OWN NULL IS −0.0358, THE 2nd PERCENTILE, AGAINST THE 86th ON
+  VALIDATION.** The 2026-11-07/08 handover named `sl_micro_span_masked` the one live object on the
+  board and "0.007 of Sharpe from clearing the null gate". Priced against its own region-matched null
+  on **train**, the same book sits at the **2nd** percentile with a negative edge, at every sleeve
+  count tried. So the near-miss is a validation-only fact with no train support whatever — the twelfth
+  instance of this panel's train and validation sheets being unrelated, and the first on the object a
+  handover proposed to build on. **Carry this figure with every future reading of #28**: it does not
+  refute the validation number, but it removes the only corroboration anyone could have assumed it had.

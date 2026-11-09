@@ -27806,3 +27806,441 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    the interpretation rules to read first.
 
 ## Research session — 2026-11-08 (learning agent): 2 notes added, see research/SUMMARY.md
+## Free measurements — 2026-11-08/09 (nightly), ZERO trials spent
+
+Nine blocks, all on **train** only. Nothing scored a return outside train; no stored validation
+stream was read for anything but the recorded `null_p50`/`null_p90`/`null_pctile` columns of
+`experiments/trials.jsonl`, which are validation and are not holdout. **No holdout, forward or
+incubation file was opened**: `experiments/holdout_log.jsonl`, `reports/incubation.md`,
+`experiments/incubation.jsonl` and `experiments/protocol_v2/returns/*_holdout.parquet` were never
+opened or listed, and no trial was recorded, so no holdout gate existed to reach. Engine green on
+this tree (`.venv/bin/python -m pytest tests/ -q` → **92 passed in 59.74s**).
+
+Step-0 integrity: `git fetch origin --prune` clean, `git branch -r --no-merged origin/main`
+**empty** — no remote branch holds work absent from `origin/main`. The container again started on a
+per-run branch (`main-wdfgwd`) sitting at the identical commit as `origin/main`, with no commits of
+its own; reset to `main` before any work. **Eighth consecutive session** to find exactly that, still
+the container's default rather than an incident.
+
+*Harness validation first, per the 2026-10-25/26 rule.* `dcorr_low` (#24) reproduced through
+`protocol.evaluate_split` on train at skill **+0.1020** / sharpe **+0.6260** / turnover **1.44** /
+**144.2** positions / pool **+0.5240** against the recorded +0.102 / +0.626 / 1.44 / 144 / +0.5240 —
+exact on all five.
+
+### F1 — THE NULL GATE, CALIBRATED: IT IS A PURE SELECTION TEST, AND ITS BAR IS 1.28 × THE NULL'S OWN sd
+
+The region-matched null gate (`min_null_percentile = 0.90` in `GATES_V2`, inherited by v3) is a
+**hard** gate that runs before the scout verdict is assigned, and it has refused **11 of the last 13**
+v3 trials — more than cost, drawdown, turnover and the delisting stress combined. Nobody had asked
+what a book has to *deliver* to clear it.
+
+Method: a synthetic **oracle** score of controlled quality,
+`score(q) = q·z(forward tradeable rank) + √(1−q²)·z(noise)`, poured through the one construction the
+v3 board is built on (`third_moment.moment_book`, K=100, calendar-peer × momentum-tercile quota, six
+overlapping monthly sleeves) and scored against its **own** region-matched null on train. The oracle
+peeks by construction; that is the point — it is an instrument for the *gate's* transfer function,
+cannot be traded, was never run on validation, and scores no candidate idea. 40 draws, train
+(5450 days), pool sharpe +0.5240.
+
+    oracle                  | 1bit IC   t     | book SR  skill | null p50     sd       z   pct | pos  turn
+    h= 21 q=0.00            | +0.0049  +1.39  | +0.4944 -0.029 |  +0.4994 0.0128   -0.39  38% | 324  2.98
+    h= 21 q=0.02            | +0.0210  +6.05  | +0.5052 -0.019 |  +0.5022 0.0116   +0.26  65% | 324  2.97
+    h= 21 q=0.05            | +0.0488 +14.48  | +0.5253 +0.002 |  +0.5018 0.0106   +2.22  98% | 324  2.97
+    h= 21 q=0.10            | +0.0967 +28.73  | +0.5690 +0.045 |  +0.5058 0.0135   +4.67 100% | 324  2.97
+    h= 21 q=0.20            | +0.1896 +60.12  | +0.6594 +0.136 |  +0.5031 0.0132  +11.85 100% | 324  2.95
+    h=252 q=0.05            | +0.0167  +4.67  | +0.5659 +0.042 |  +0.5059 0.0139   +4.33 100% | 323  2.82
+    h=252 q=0.10            | +0.0301  +8.20  | +0.6361 +0.112 |  +0.5050 0.0150   +8.72 100% | 322  2.82
+    h=252 q=0.20            | +0.0567 +14.19  | +0.7846 +0.261 |  +0.5113 0.0136  +20.06 100% | 315  2.80
+    REAL dcorr_low  (#24)   |     --      --  | +0.6263 +0.102 |  +0.5227 0.0255   +4.07 100% | 144  1.44
+    REAL coskew_low (#25)   |     --      --  | +0.5112 -0.013 |  +0.5052 0.0242   +0.25  62% | 154  1.67
+
+**The null is calibrated**: a score with *no* information lands at the null's median (z −0.39, 38th
+percentile), which is the first direct check this lab has run on that gate. The gate is therefore a
+pure selection test, and in its own units it asks for
+
+    book Sharpe − null median  ≥  1.28 × (null sd)
+
+with the null sd a property of the book's breadth, not of the score: **0.0255 at 144 positions,
+0.0128 at 324** on train.
+
+### F2 — THE EXCHANGE RATE FROM ONE-BIT IC TO SHARPE EDGE IS NOT A CONSTANT: 0.80 PER UNIT AT A 21-DAY INFORMATION HORIZON AND ≈4 AT A ONE-YEAR HORIZON
+
+Reading the edge column of F1 against the one-bit tradeable IC column:
+
+    arm                                   edge per unit of one-bit IC
+    h= 21 oracle (information decays in a month)        +0.80
+    h=252 oracle (information lasts a year)             +3.6 to +4.8
+    REAL dcorr_low, against its one-bit IC_252 (+0.0256)  +4.05
+
+So the quantity the lab adopted as its pre-trial number on 2026-11-07/08 — the **one-bit tradeable
+IC at 21 days** — is a *lower bound* on what a book earns, and the multiplier is set by the horizon
+over which the score's information is realised. Measured term structures (region-matched, floor 50,
+252 train month-ends, one-bit at `f = 0.10`, all scores lagged 21 days), with each score's
+month-to-month rank persistence:
+
+    object               IC21 1bit     t  | IC63 1bit    t  | IC252 1bit     t  | persistence
+    dcorr_low (-rho_-)     +0.0046  +0.98 |   +0.0086 +1.90 |    +0.0256  +7.32 |   +0.988
+    coskew_low (-b_SKD)    +0.0040  +0.93 |   +0.0048 +1.03 |    +0.0127  +2.74 |   +0.952
+    log(MA_5/P)            +0.0140  +2.94 |   +0.0088 +1.89 |    +0.0024  +0.46 |   -0.005
+    log(MA_21/P)           +0.0099  +1.79 |   +0.0087 +1.53 |    +0.0002  +0.03 |   -0.026
+    log(MA_63/P)           +0.0060  +0.94 |   +0.0091 +1.48 |    -0.0034  -0.51 |   +0.454
+
+### F3 — COMPOSED: THE FAST-SCORE BRANCH IS ARITHMETICALLY CLOSED AGAINST THIS GATE
+
+The bar in the gate's own units, read off the **recorded** validation nulls of all 27 v3 trials
+(`null_p90 − null_p50`): mean **+0.0693**, median +0.0710, range [+0.038, +0.089] — the narrow end
+belonging to the broadest book on the board (#27, 442 positions) and the wide end to the
+hundred-name books. The exchange rate of F2 is an expected-Sharpe-difference quantity and carries
+from train to validation unchanged; the bar is a sampling quantity and is taken from the record.
+Composed:
+
+    required one-bit IC at the score's own information horizon  ≈  0.069 / rate
+      fast score  (rate 0.80)   →   ≈ 0.086
+      slow score  (rate 4.0)    →   ≈ 0.017
+
+The largest **clean** one-bit tradeable IC_21 this lab has ever measured on a real object is
+`log(MA_5/P)`'s **+0.0140** (recorded +0.0124 last night under a slightly different mask), and its
+information does not survive the month — IC_252 **+0.0024**. Its edge ceiling is therefore
+0.80 × 0.0140 = **+0.011** against a bar of **+0.069**: a factor of **six**. **Every fast
+cross-sectional score reachable from this panel's daily closes is arithmetically closed against the
+null gate, and that is why 11 of the last 13 trials died there.** This is the second pre-trial
+instrument in this lab with a mechanism rather than a regression behind it, after the fill-lag/one-bit
+composition of 2026-11-07/08 — and like it, it refuses rather than qualifies (F7/F8 below are its
+first application, and its pass side failed immediately).
+
+### F4 — THE 252-DAY SCREEN THE ARITHMETIC RECOMMENDS, RUN ON THE RECORD'S OBJECTS
+
+Every IC in this lab's record is at 21 or 63 days. Re-screened at 252 days, one-bit, region-matched,
+all lagged 21 days (edge ceiling = 4 × IC252):
+
+    object (pre-signed)            IC21 1bit   IC252 1bit      t   ceiling
+    CONTROL old-half decade rev      +0.0054      +0.0086   +1.15   +0.035
+    CONTROL five-year reversal       -0.0083      +0.0187   +2.05   +0.075
+    12-1 momentum                    +0.0064      -0.0047   -0.61   -0.019
+    21-day reversal                  -0.0062      -0.0047   -0.75   -0.019
+    three-year reversal              -0.0043      +0.0082   +0.91   +0.033
+    log(MA_252/P)                    -0.0060      +0.0005   +0.06   +0.002
+    Amihud 126d (illiquid long)      +0.0220      +0.1024  +20.45   +0.410
+    volume shock 21d                 +0.0013      +0.0099   +2.45   +0.040
+    share-turnover trend (-)         +0.0090      +0.0207   +5.46   +0.083
+    volume CV 252d                   +0.0103      +0.0418  +10.82   +0.167
+    Parkinson 252d (low vol)         -0.0026      -0.0024   -0.27   -0.010
+    close-close vol 252d (low)       -0.0027      -0.0043   -0.47   -0.017
+    CLV 252d                         +0.0004      +0.0028   +0.67   +0.011
+    MAX 252d (low)                   -0.0015      -0.0065   -0.85   -0.026
+    own skewness 252d (low)          +0.0009      +0.0007   +0.17   +0.003
+    info discreteness 252d           +0.0021      -0.0112   -2.31   -0.045
+
+Amihud at **+0.1024, t +20.45** is four times any other object and is not a result. It is F5.
+
+### F5 — ENGINE ISSUE, HORIZON-AMPLIFIED: THE BACK-ADJUSTMENT CONTAMINANT'S OWN ONE-BIT IC GROWS FIVEFOLD FROM h=21 TO h=504
+
+The engine issues filed 2026-10-18 and 2026-10-22 record that the stored price and volume **levels**
+embed future corporate actions: `adj_i(t) = raw_i(t)·D_i(t)` with `D_i(t)` the product of every
+distribution factor **after** `t`. Measured as a score in its own right:
+
+    object                          h=21      t  |   h=63      t  |  h=126      t  |  h=252      t  |  h=504      t
+    log PRICE level [contaminant] -0.0300  -7.88 | -0.0507 -12.30 | -0.0732 -16.74 | -0.1087 -22.01 | -0.1501 -27.48
+    log DOLLAR-VOLUME level       -0.0186  -3.34 | -0.0293  -4.84 | -0.0449  -6.99 | -0.0653  -8.87 | -0.0909 -11.05
+    log SHARE-VOLUME level        -0.0015  -0.28 | +0.0092  +1.73 | +0.0078  +1.37 | +0.0094  +1.46 | +0.0072  +1.08
+    Amihud 126d (raw)             +0.0220  +5.02 | +0.0436  +9.35 | +0.0669 +13.96 | +0.1024 +20.45 | +0.1457 +29.47
+    Amihud 126d | log price       -0.0062  -1.37 | -0.0118  -2.50 | -0.0149  -3.05 | -0.0163  -3.00 | -0.0188  -3.18
+    volume CV 252d                +0.0103  +2.87 | +0.0194  +5.03 | +0.0291  +7.16 | +0.0418 +10.82 | +0.0553 +14.11
+    five-year reversal            -0.0083  -1.07 | -0.0006  -0.07 | +0.0050  +0.55 | +0.0187  +2.05 | +0.0200  +2.32
+
+**Monotone in horizon and a factor of five across it.** Raw Amihud is the contaminant's mirror image
+at every horizon and collapses to −0.0163 once the log price level is partialled out — the record's
+2026-10-22 finding (+0.0194 → −0.0086) reproduced and extended to the whole term structure. The
+standing consequence is a warning, because the lab has only ever screened at the shallow end: **any
+session that screens at a longer forward horizon — which F2/F3's arithmetic recommends — walks into
+a contaminant five times larger than the one the record was filed on.**
+
+### F6 — THE BREADTH ROUTE TO THE GATE, PROPOSED AND REFUTED BEFORE A TRIAL WAS SPENT ON IT
+
+F1 shows the gate's bar is 1.28 × the null's sd and that the sd falls with breadth, so a broader book
+faces a numerically smaller bar — and the record agrees that the broadest book on the board (#27, 442
+positions) had the narrowest bar on it (+0.038 against a mean of +0.069). The tail-mean arithmetic
+`z ∝ φ(z_f)/√f` predicts z roughly flat, peaking near `f ≈ 0.25–0.35` about 14% above its value at
+the lab's own `f = 0.10`. Measured on a score the lab has already **refuted** (`dcorr_low`, so no live
+object is tuned on train), varying only `K`:
+
+    K     pos  turn |  book SR   skill |  null p50      sd    edge       z   pct | bar = 1.28sd
+    100  144.2  1.44 |  +0.6263  +0.102 |   +0.5227  0.0255 +0.1036   +4.07  100% |     0.0326
+    250  285.2  0.95 |  +0.5516  +0.028 |   +0.5228  0.0112 +0.0288   +2.57   98% |     0.0143
+    400  361.2  0.78 |  +0.5255  +0.002 |   +0.5337  0.0064 -0.0082   -1.29   10% |     0.0081
+
+**The prediction is wrong and the sign is the opposite of what it says.** The edge collapses by a
+factor of 3.6 and then changes sign while the sd falls by only 2.3 and then 1.75, so z falls
+monotonically with breadth. Breadth is not a route to the gate.
+
+### F7 — THE DERIVED BAR APPLIED: FOUR NEW SLOW UNIT-FREE OBJECTS, AND EVERY CLEAN SLOW OBJECT ON THE RECORD INVERTS ONCE THE CONTAMINANT IS PARTIALLED OUT
+
+One-bit region-matched IC against the forward 252-day tradeable return, raw and residualised on the
+log price level within region, 252 train month-ends:
+
+    object (pre-signed)                 RAW       t  |  | log P      t  | rank rho to log P
+    CONTAMINANT log price level      -0.1087  -22.01  |  -0.0128  -2.09 |   +0.994
+    dcorr_low  [traded, refused]     +0.0263   +7.73  |  -0.0224  -4.10 |   -0.246
+    five-year reversal  [M3]         +0.0187   +2.05  |  -0.0258  -3.41 |   -0.303
+    old-half decade rev [M3]         +0.0086   +1.15  |  -0.0053  -0.92 |   -0.104
+    semi-dev ratio up/down 756d      +0.0122   +2.40  |  +0.0077  +1.68 |   +0.087
+    time underwater 5y (high)        -0.0123   -1.72  |  -0.0207  -3.04 |   -0.226
+    Hill left-tail 756d (thin)       +0.0171   +2.54  |  +0.0195  +2.28 |   -0.030
+    annual-rank stability 10y        +0.0035   +0.95  |  -0.0031  -0.80 |   +0.039
+
+**This is the sharper half of F5 and it is worse than F5 says.** The contaminant does not only ride
+in a score's *units*; it rides in any score merely **rank-correlated** with the price level, and at
+252 days it is large enough to **flip signs**: `dcorr_low` +0.0263 → **−0.0224** and the five-year
+reversal +0.0187 → **−0.0258**, both at |t| > 3. Every clean slow object the lab owns dies or inverts
+on that control. The one exception is the scale-free **left-tail exponent** (Hill's estimator on the
+worst 5% of a name's own 756-day returns, which divides the tail's scale out), whose residualised
+reading is *larger* than its raw one and whose rank rho to the contaminant is **−0.030**.
+
+Caveat carried, not buried: adjacent month-ends share 11 of 12 months of a 252-day forward window,
+so the effective n is nearer **21** than 252 and every `t` in F4/F5/F7 is an upper bound. The point
+estimate is the content — the 2026-10-26/27 rider, applied to a new table.
+
+### F8 — AND THE NIGHT'S OWN INSTRUMENT FAILED ON ITS FIRST APPLICATION. THE PASS SIDE IS DEAD; THE REFUSAL SIDE STANDS
+
+The left-tail exponent is a genuinely clean object on every novelty column — rank rho **+0.087** to
+756-day volatility, −0.100 to `dcorr_low`, −0.008 to coskewness, −0.044 to the old-half decade score,
+**−0.028** to the contaminant, +0.201 to own skewness — so it is *not* the de-risking axis in costume,
+which is the one thing the 2026-11-06/07 rule said to check. Then the engine's own backtest on train
+(2026-10-25/26 rule), K=100, peer × momentum-tercile quota, six sleeves:
+
+    skill       -0.0810   (sub-periods -0.014 / -0.251)      NEGATION skill  +0.0490
+    sharpe      +0.4424   against the pool's +0.5240
+    turnover      1.74x   positions 149.9   volatility ratio 1.175   maxDD -60.5%
+    null        p50 +0.5086  sd 0.0218  edge -0.0662  z -3.04  2nd percentile  (bar 0.0279)
+
+**Predicted edge +0.078 from its residualised IC_252 of +0.0195 at the F2 rate; realised −0.066.**
+The negation is better by **0.130**, so the pre-signed direction carries no sign content and the
+negation-invariance screen — the one screen in this lab whose refusal side is 2-for-2 — refuses it.
+It is therefore **not shipped**: a book with no stated direction has nothing for a validation reading
+to be about. Sixth demonstration in four nights that a pre-trial instrument here refuses usefully and
+qualifies not at all, and the first where the instrument was built the same night it died.
+
+### F9 — THE VISE, AND IT RETIRES THE CONSTRUCTION LEVER WITH A MECHANISM RATHER THAN A RULE
+
+If breadth is the wrong direction (F6), concentration is the other one. Measured on the board's one
+live object (#28's walk-forward `rho_k` span, validation null percentile **86%**, 0.007 of Sharpe
+short of its bar) and on the refuted `dcorr_low` as the paired control, varying only the sleeve count:
+
+    book                          |   pos  turn  volr   maxDD |  skill      SR | null p50     sd    edge      z   bar  pct
+    #28 span, as traded (H=6)     | 186.3  2.03 1.002  -56.3% | -0.057 +0.4665 |  +0.5023 0.0183 -0.0358  -1.96 .0234   2%
+    #28 span, H=2                 | 139.9  3.56 0.994  -51.5% | -0.057 +0.4672 |  +0.4736 0.0186 -0.0064  -0.34 .0239  32%
+    #28 span, H=1                 | 121.5  5.05 0.998  -51.9% | -0.082 +0.4422 |  +0.4666 0.0195 -0.0244  -1.25 .0250  12%
+    dcorr_low control, H=6        | 144.2  1.44 0.865  -50.6% | +0.102 +0.6263 |  +0.5227 0.0255 +0.1036  +4.07 .0326 100%
+    dcorr_low control, H=1        |  99.8  4.08 0.871  -49.6% | +0.099 +0.6225 |  +0.4865 0.0314 +0.1359  +4.32 .0403 100%
+
+Two things, and the second is the mechanism. (i) Concentrating raises the edge **and** the bar
+together: `dcorr_low` goes edge +0.1036 → +0.1359 while its bar goes 0.0326 → 0.0403, for a net z of
++4.07 → +4.32. Most of that edge gain is not better selection — the replicas inherit the candidate's
+**schedule**, so a higher-turnover book's null pays more cost and its median falls (+0.5227 →
++0.4865). (ii) On a score with no selection the same operator does nothing: #28's span is negative at
+every setting (z −1.96 / −0.34 / −1.25, non-monotone). **The null gate amplifies whatever selection is
+there, including its absence, so there is no construction route to passing it.** That is the standing
+anti-candidate list ("K as a knob", "H as a parameter", "weighting and breadth buy nothing") given a
+mechanism instead of a precedent — and it is now also a statement about the *gate*, not only about
+skill, which is the distinction F6 was proposed to exploit and which neither F6 nor F9 supports.
+
+**Rider on the board's live object, and it should travel with every future reading of #28.** Its
+train edge against its **own** null is **−0.0358, the 2nd percentile**, against the **86th** on
+validation. The "0.007 of Sharpe from clearing the null gate" is a validation-only fact with no train
+support whatever — the twelfth instance of this panel's train and validation sheets being unrelated,
+and the first on the object the last handover named as the one thing to build on.
+
+## Session summary — 2026-11-08/09 (nightly) — 0 trials of 8; the gate that refuses everything is calibrated, the fast-score branch is closed by arithmetic, and the contaminant turns out to ride on rank correlation
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 27 scored v3 trials**, the v3 board is
+unchanged, the deflated bar is unchanged, and no candidate file was written. Nine free blocks ran.
+**No holdout, forward or incubation file was opened**, and with no trial recorded there was no
+holdout gate to reach. Engine green (**92 passed in 59.74s**). Step-0 integrity clean: no remote
+branch holds work absent from `origin/main`; the container's per-run branch (`main-wdfgwd`) sat at
+`origin/main`'s commit with no commits of its own and was reset to `main` before any work — eighth
+consecutive session.
+
+**Why zero.** The night's first block calibrated the gate that has refused 11 of the last 13 trials
+and produced a quantitative bar; the bar then refused, in order, every object in the lab's existing
+inventory, the breadth route, the concentration route, and the one new object that passed its own
+screen. Writing a candidate anyway would have been a trial with no case, and every trial permanently
+raises the bar for all future ones. Five of the last ten sessions have spent zero; this is the first
+to spend zero because a *derived* instrument refused everything rather than because the night was
+spent on diagnostics.
+
+### Headline: the region-matched null gate is a pure selection test, its bar is 1.28 × its own sd, and the whole fast-score branch cannot reach it
+
+The gate is hard and runs *before* the scout verdict, so it is the binding constraint on the entire
+board. F1 put an oracle of controlled quality through the board's own construction and found the
+null **calibrated** — a score with no information lands at the null's median (z −0.39, 38th
+percentile), which had never been checked. The gate therefore asks exactly
+`book Sharpe − null median ≥ 1.28 × null sd`, and the sd is a property of breadth, not of the score
+(0.0255 at 144 positions, 0.0128 at 324, on train).
+
+F2 then measured the exchange rate from the lab's standing pre-trial number to that edge, and it is
+**not a constant**: **+0.80** of Sharpe edge per unit of one-bit tradeable IC when the score's
+information decays inside a month, **+3.6 to +4.8** when it lasts a year — and 4.05 on a real
+unit-free object. Composed with the bar read off all 27 recorded validation nulls
+(`null_p90 − null_p50`, mean **+0.0693**):
+
+> the largest clean one-bit IC_21 this lab has ever measured is `log(MA_5/P)`'s **+0.0140**, its
+> information does not survive the month (IC_252 **+0.0024**), so its edge ceiling is
+> 0.80 × 0.0140 = **+0.011** against a bar of **+0.069** — short by a factor of **six**.
+
+**Every fast cross-sectional score reachable from this panel's daily closes is arithmetically closed
+against the null gate.** That is a derived explanation for the single most-repeated fact in the v3
+record, and it is the second pre-trial instrument here with a mechanism rather than a regression
+behind it.
+
+### Second: the back-adjustment contaminant is horizon-amplified AND rides on rank correlation, not only on units
+
+The engine issues of 2026-10-18 / 2026-10-22 were filed about scores that *carry* the stored level.
+Measured as a score in its own right, the log price level's one-bit IC runs **−0.0300 → −0.0507 →
+−0.0732 → −0.1087 → −0.1501** at h = 21 / 63 / 126 / 252 / 504: monotone, and a factor of five across
+the horizons. Raw Amihud is its mirror image at every horizon and collapses to −0.0163 once the level
+is partialled out, reproducing the record's figure and extending it to the term structure.
+
+The sharper half is F7. **Partialling the level out of the lab's clean, unit-free slow objects
+inverts their signs**: `dcorr_low` goes IC_252 **+0.0263 → −0.0224** (t −4.10) and the five-year
+reversal **+0.0187 → −0.0258** (t −3.41), on rank correlations to the level of only −0.25 and −0.30.
+So the contaminant is not a units problem that unit-free construction solves; it is a **confound**
+that any score correlated with the price level inherits, and at a one-year horizon it is large enough
+to decide the sign. Standing consequence: the arithmetic of F2/F3 recommends screening at a longer
+horizon, and a session that does so without partialling out the log price level will be reading the
+contaminant.
+
+### Third: both construction routes to the gate are refuted, and the refutation has a mechanism
+
+F6 proposed the breadth route — the bar is 1.28 × sd and sd falls with breadth, and the broadest book
+on the board does have the narrowest recorded bar (+0.038 against a mean of +0.069). Measured on a
+refuted score at K = 100 / 250 / 400, z runs **+4.07 / +2.57 / −1.29**: the edge collapses by 3.6 and
+then changes sign while the sd falls by only 2.3, so the tail-mean prediction (`z ∝ φ(z_f)/√f`, flat
+and peaking near f ≈ 0.3) is wrong in sign. F9 then tried concentration and found that it raises the
+edge and the bar **together**, with most of the edge gain coming from the null's own median falling
+as the replicas inherit a higher-turnover schedule — and that on a score with no selection the
+operator does nothing at all (#28's span negative at every sleeve count). **The gate amplifies
+whatever selection is present, including its absence; there is no construction route to it.** This
+gives "K as a knob", "H as a parameter" and "weighting and breadth buy nothing" a mechanism instead
+of a precedent, and extends them from skill to the gate.
+
+### Fourth: the night's own instrument died on its first application, and one new object is closed
+
+The composed bar nominated exactly one object out of twenty screened: the **scale-free left-tail
+exponent** (Hill's estimator on the worst 5% of a name's own 756-day returns), residualised IC_252
+**+0.0195**, and clean on every novelty column — rank rho +0.087 to volatility, −0.100 to `dcorr_low`,
+−0.028 to the contaminant — so it is *not* the de-risking axis in costume, the one check
+2026-11-06/07 demanded. The engine's own train backtest then read skill **−0.0810** with sub-periods
+−0.014 / −0.251, volatility ratio **1.175**, maxDD **−60.5%**, null z **−3.04** at the 2nd percentile,
+and **the negation better by 0.130**. Predicted edge +0.078; realised −0.066. It is not shipped
+because the negation-invariance screen — the one screen whose refusal side is 2-for-2 — refuses it,
+and a book with no stated direction has nothing for a validation reading to be about. Sixth
+demonstration in four nights that every pre-trial instrument here refuses usefully and qualifies not
+at all, and the first where the instrument was built and buried on the same night.
+
+### Fifth, and it bears on what the last handover recommended building on
+
+**#28's train edge against its own null is −0.0358, the 2nd percentile, against the 86th on
+validation.** The "0.007 of Sharpe from clearing the null gate" is a validation-only fact with no
+train support whatever. Twelfth instance of this panel's two sheets being unrelated, and the first on
+the object the previous handover named as the one thing to deepen.
+
+### Pre-registration scorecard
+
+* **F6's tail-mean prediction** (z flat in f, peaking ~14% above f = 0.10 near f ≈ 0.3): **wrong, and
+  wrong in sign.** Stated before measuring and recorded as a miss.
+* **F8's predicted edge** from the composed bar (+0.078): **realised −0.066.** A miss of 0.144 in the
+  instrument's own units, on its first out-of-sample use.
+* **F1's calibration check** (a no-information score should sit at the null's median): **passed**,
+  z −0.39 at the 38th percentile.
+* **F5's prediction** before the run (raw Amihud's IC_252 is the contaminant, and partialling the log
+  price level out will collapse it): **passed**, +0.1024 → −0.0163.
+* **No turnover or drawdown pre-registration was due** — no candidate was run.
+
+### Verdicts
+
+None. No trial was recorded, no verdict was assigned, the leaderboard and `trials.jsonl` are
+untouched, and the board still has no v3 champion and no positive skill interval excluding zero.
+
+### What the night bought, stated without inflation
+
+No book, no verdict, no movement on the board — and one instrument with a derived threshold where the
+lab previously had only directions, plus a structural closure of the fast-score branch, plus a
+materially worse reading of a filed engine issue than the record carried, plus two construction
+routes refuted before a trial was spent on either, plus one new object closed free, plus a correction
+to the standing reading of the board's only live result. The honest summary is that the night's
+product is a **negative result about what this design can resolve at all**, and its most useful line
+is the one that says a one-year-horizon screen on this panel is a contaminant reader unless the price
+level is partialled out.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Use the composed bar as a refusal test and state it in the hypothesis.** Required one-bit IC at
+   the score's own information horizon ≈ 0.069 / rate, with rate 0.80 at a 21-day horizon and ~4 at a
+   one-year horizon. Quote it with the score's measured IC *term structure* and its month-to-month
+   persistence, because the rate is set by the horizon and not by the score. Provenance: tonight.
+   Do **not** quote its pass side — it was built and buried in one night (F8).
+2. **Any screen at a horizon beyond 63 days must partial out the log price level, within region,
+   before it is read.** Two of the lab's clean slow objects invert sign on that control. Provenance:
+   tonight, extending the 2026-10-18 / 2026-10-22 engine issues. This is the cheapest standing change
+   available and it applies to scores the record currently treats as clean.
+3. **Quote every long-horizon `t` as an upper bound and lead with the point estimate.** Adjacent
+   month-ends share 11 of 12 months of a 252-day forward window, so the effective n is nearer 21 than
+   252. The 2026-10-26/27 rider, now applying to a whole class of screen the arithmetic recommends.
+4. **What is actually left, said plainly.** The fast branch is closed by F3's arithmetic; the slow
+   branch's clean objects either invert on F7's control or have already been traded and refused
+   (`dcorr_low`, `coskew_low`, the share-turnover trend, the decade lineage); both construction routes
+   are refuted with a mechanism. A next session that wants a *scored* trial needs a slow, unit-free
+   score that is **new**, is **rank-orthogonal to the log price level**, and survives the
+   negation-invariance screen — three conditions tonight's twenty-object screen produced exactly one
+   candidate for, and that one failed the third. It is worth saying that this may be a statement about
+   the design rather than about the panel: F3's bar is what a **±0.069** gate on 1562 days demands,
+   and `#393`'s minimum-detectable-skill arithmetic says the same design cannot resolve a 0.12 skill
+   either.
+5. **For the human owner, two items and one of them is new tonight.** New: **F5/F7 — the
+   back-adjustment contaminant is horizon-amplified (one-bit IC −0.030 at 21 days to −0.150 at 504)
+   and it transmits through rank correlation, so it is a confound in unit-free scores and not only a
+   units bug in scale-carrying ones.** That is a strictly worse reading of the 2026-10-18 /
+   2026-10-22 filings than the record carries, it is not fixable from a strategy session, and it
+   affects which of the lab's past screens are believable. Standing and unchanged: the two engine
+   issues as filed, `min_train_skill = 0.0`, `#324`'s deliberate difference, `#358`'s
+   empirical-Bayes shrinkage of the bar, the data-type question, `#393`'s minimum-detectable-skill
+   arithmetic, `#396`'s tension between `program.md`'s spend-across-families rule and what the design
+   can measure, `#407`'s rule-induced comovement inside the equal-weight pool, `#418`'s discretionary
+   component in the benchmark's membership, the note format's missing holdout-overlap flag, the
+   `dataclasses.replace`/`pool_cache` trap, and the per-run-branch generator (eight consecutive
+   sessions).
+6. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — the scale-free
+   left-tail exponent at any window or quantile, and the own-return tail index in any form; the
+   semi-deviation ratio; time-underwater at any horizon; annual-rank stability; breadth as a route to
+   the null gate; sleeve count or `K` as a route to the null gate (now refuted with a mechanism, not
+   only by precedent); and any screen quoted at a horizon beyond 63 days without the log-price-level
+   control. Unchanged from previous handovers: the `log(MA_L/P)` term structure at any scale set;
+   plain multi-horizon own-trend in any learned combination; `#388`'s forecast floor; the
+   full-cross-section decision IC as a reachable quantity; downside correlation and the downside
+   loading in any form; coskewness and the third co-moment in any form; the volatility-tercile
+   pre-sort as a construction operator; any paired candidate whose two legs share a score; any
+   hypothesis whose case is a train sheet, a matched-null z or a negation-invariant margin; any
+   hypothesis whose novelty case is a cross-sectional rank correlation or the pass side of the train
+   active-return screen; the closing-location value; the overnight session at either normaliser; the
+   turn-of-month differential on either sign; the coefficient of variation of share volume; the
+   quarter-ending-month conditioner on momentum; plain 12-1 momentum; any equity-ETF book; the bond
+   sleeve as a duration bet; the 2–4-week index-level relative-strength score on either sign; the
+   liquidity level or trend in any form; 52-week-high proximity; information discreteness;
+   covariance weighting at any estimator; weighting inside the selected slice; the exclusion /
+   pool-minus-worst book at any `f`; `#385`'s IC-decorrelation blend; the #16/#19 blend; and any
+   construction whose case is cost at any turnover or a tighter error bar.
+7. **From `research/SUMMARY.md`.** Spent tonight: **`#376`** (the one-bit truncation, used as the
+   unit of F2/F3's bar), **`#393`** (its minimum-detectable-skill reading now has a second,
+   independent arithmetic pointing the same way), and **`#413`**'s composed pre-trial rule (run, and
+   F3 is its missing third step — the null gate's bar, which `#413` does not contain). Closed free
+   tonight without a trial: the reference-point vein's remaining shape (already closed 2026-09-19),
+   and the four new slow objects of F7. Still live and unspent: `#386`/`#387`'s `R²`/`S²` yardstick,
+   `#389`'s cumulative-active-return curve, `#381`'s `σ_IC`, `#411`'s newly-eligible cohort scout
+   (but note the index-entry premium was measured and **declined at every horizon** on 2026-10-17/18,
+   so what is left of `#411` is a second-moment question with no return claim per `#412`), `#415`'s
+   free refusal test, `#416`'s reading rule, and `#407`–`#410`, `#417`–`#419`. **`#363` is NOT live**
+   (closed 2026-11-02/03). `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation
+   rules to read first.
+
