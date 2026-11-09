@@ -166,6 +166,29 @@ is an index committee's rule, and
 `2026-11-06-index-membership-is-not-an-information-free-selection.md` is the note on why that
 difference matters.
 
+## Annotation added 2026-11-09 — the panel this screen is being reasoned about is not a size selection
+
+`#416` (`notes/2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`) supplies a
+number this note was written without. Building the mechanical counterfactual — the *N* largest names
+by capitalisation, reselected annually — and cross-tabulating it against a committee index's actual
+membership leaves roughly **28%** of the index's names outside the mechanical top-*N*, and **the
+median excluded name is slightly LARGER than the median index constituent** (significant at 1%).
+
+So the lab's `eligible` panel is **not a size cut with noise at the boundary**: the index selection
+and a size selection share a middle and differ in opposite tails. Everything in this note about
+*where a size screen sits* therefore describes an operation that is **not the one that produced this
+panel**, and the two should not be equated in a hypothesis. The practical consequences:
+
+- A candidate that re-screens this panel on a size-like proxy is applying a **second, different**
+  selection on top of a non-size one, not tightening the first.
+- The attrition and value-share arithmetic in this note is about moving a threshold within a
+  size-ordered universe. On `eligible` there is no such ordering to move along, and the sharper
+  half is that the ordering is **not constructible here at all**, since capitalisation needs a share
+  count (`#408`).
+- Nothing in this note is withdrawn: it remains the right reasoning for a universe built by a size
+  rule, which is what most of its literature studies. It is the *transfer* to `eligible` that the
+  annotation blocks.
+
 ## Related
 
 - `2026-10-02-replicating-anomalies-microcaps-and-breakpoints.md` — Hou–Xue–Zhang, whose microcap

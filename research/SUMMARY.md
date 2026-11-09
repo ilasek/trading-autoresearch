@@ -8993,6 +8993,157 @@ Both notes name their omissions explicitly — (a)'s multi-year relative-return 
 entrant groups are left in the source with only the sign and the ordering carried, and (b)'s
 turnover-impact magnitudes are left in the source with only the direction carried.
 
+### The NOMINAL PRICE LEVEL as an object — a chosen quantity, a convention that differs by three orders of magnitude across this panel's markets, a cost variable, and the one return claim about it that did not replicate (cross-family, the panel itself, `price-trend`)
+
+**Why this section exists.** It was aimed by the lab rather than by a vocabulary grep. The
+2026-11-08/09 nightly measured the **log price level** as a score in its own right, found its
+one-bit IC running **−0.030 → −0.051 → −0.073 → −0.109 → −0.150** across horizons of 21 to 504 days,
+and — the sharper half — found that **partialling it out inverts the sign** of two of the lab's
+clean, unit-free slow objects at rank correlations to the level of only −0.25 and −0.30. The
+nightly's standing recommendation became "any screen beyond 63 days must partial out the log price
+level, within region". A fixed-string grep across all 272 prior notes returned `nominal share price`
+**0**, `low price effect` **0**, `price illusion` **0**, `back-adjust` **0**, `nominal price` **3**,
+`price level` **7**, `stock split` **4** — and the mandated **second grep on the mechanism**
+confirmed rather than shrank the gap: all three `nominal price` hits are passing mentions (a
+data-screen threshold, an anomaly-list entry, and a warning against substituting price level for an
+index overweight), and **no note characterised what the nominal price level is, what it proxies for,
+or whether it carries return-relevant content.** The lab was controlling for a variable the folder
+had never written down.
+
+**(a) The level is CHOSEN, and in the US it is a seventy-five-year-old convention.** The
+equal-weighted average NYSE/AMEX share price has sat near \$25 from 1933 through 2007
+(value-weighted near \$37) while the price level of the rest of the economy rose by an order of
+magnitude, so holding nominal price constant through splits produced a decline of more than 90% in
+the *real* price per share, with no trend in cross-sectional dispersion either. IPO prices and
+open-end fund prices show the same constancy, and a separate NYSE series back to 1815 shows the norm
+sitting at a clearly different level before the Depression — stable but not immutable. **Four
+economic explanations are tested and all four fail** (marketability, pay-to-play, signalling, and
+the trading-cost version of marketability, which the paper's own spread evidence contradicts); what
+survives is customs and norms, which the author concedes cannot be formally tested. The
+operationally useful residue is that **the norm is peer-relative**: a model predicting the
+post-split target price from the firm's price deviation from its **size and industry peers**
+explains over **62%** of post-split price variance, over **78%** on genuine splits (ratio ≥ 1.25:1).
+Larger firms have systematically higher prices, and this is a choice rather than an arithmetic
+necessity (**#420**).
+→ `notes/2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`
+
+**(b) Across markets the level is a CONVENTION AND A CURRENCY, not a firm characteristic, and this
+is the fact that binds hardest on a nine-index panel.** The US constancy does **not** replicate: on
+sixteen other exchanges the level, its drift and its covariation with the local index all differ
+sharply, and the average share price in current USD spans roughly **\$0.02 to \$37** — three orders
+of magnitude. Tokyo's and London's average nominal prices move substantially with their indices;
+the NYSE's does not. This lab's panel spans Tokyo, Hong Kong, London (quoted in pence), Zurich,
+Amsterdam, Paris, Frankfurt and the US, all converted to USD. **A pooled cross-sectional rank on
+price level is therefore close to a set of country dummies with a currency overlay**, which is the
+reason the nightly's *within-region* form of the control is the right one and a pooled control would
+not be (**#421**).
+→ `notes/2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`
+
+**(c) The level is also a COST variable that protocol v3's tiering cannot see.** In a Fama–MacBeth
+panel of ~198,000 firm-years of spread estimates spanning about eighty years, **higher-priced firms
+have significantly lower relative bid-ask spreads** (price coefficient t ≈ −13) **after controlling
+for volume, turnover and market capitalisation**, and the result survives a non-parametric
+specification for price. v3 assigns liquidity tiers from trailing median USD volume alone, so two
+names in the same tier with different nominal prices do not have the same true cost and the error is
+**signed**: the lower-priced name is undercharged. **For the human; no tiering change is proposed
+here** (**#422**).
+→ `notes/2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`
+
+**(d) The level is an endogenous managerial decision, and there is an accounting identity for it
+that says exactly what a back-adjusted series does to it.** Ignoring dividends,
+`p_{i,t} ≈ p_{i,IPO} + Σ_k r_{i,t−k} + Σ_k s_{i,t−k}·n` — the IPO price, plus accumulated
+capital-gain return, plus accumulated split decisions, with the first and third chosen by the firm.
+The catering theory makes the third term a response to a **time-varying low-price premium** (log
+average market-to-book of stocks below the 30th price percentile minus that of stocks above the
+70th), and finds that proxy explaining a large share of annual variation in split frequency, a very
+large share of log IPO offer and first-day prices, and about half the variation in chosen post-split
+prices — with firm-level tests run specifically to rule out composition shifts, and the effect on
+post-split prices concentrated in **larger** firms, i.e. large firms "acting small" when small is in
+favour. Sign only on the return leg: heavier splitting and lower chosen post-split prices predict
+**lower** subsequent returns on low-priced relative to high-priced stocks and on small relative to
+large caps; magnitudes are left in the source. **Consequence for this lab**: back-adjustment strips
+the `Σ s·n` term and re-bases `Σ r` on the end of the sample, so the stored level is, up to a
+constant, **the negative of the name's future cumulative adjustment** — and the split component of
+that future is a *deliberate, size-correlated managerial choice*, not noise. That is a mechanism for
+the nightly's horizon amplification and for its sign inversions, and it is a materially worse object
+than "a units problem" (**#423**).
+→ `notes/2026-11-09-catering-through-nominal-share-prices.md`
+
+**(e) The one return-side claim that the price level is a real categorisation variable DID NOT
+REPLICATE, and the replication's by-product is the more valuable half.** The claim — that stocks of
+similar price comove beyond fundamentals, identified off stock splits — rests on the change in
+coefficients of a **bivariate** regression of the stock's return on an old-group and a new-group
+return. A tier-1 replication shows those coefficients are **extremely sensitive to parameters
+unrelated to excess comovement** (both regressors proxy for the same fundamental factor, so the
+relative idiosyncratic variances set the split of weight), identifies the **univariate regression on
+the abandoned group** as the discriminating statistic that neither original paper ran, and finds
+that run properly the splitting stock's beta rises against the low-priced group **and by nearly as
+much against the high-priced group it left**. With each event stock matched on size decile and
+past-year return, betas Dimson-adjusted for non-synchronous trading, and a
+difference-in-difference-in-difference across event and matched samples, **the beta changes of event
+and control stocks are not significantly different** — for stock splits *and* for S&P 500 additions.
+The reason is selection on past performance: **57%** of the split sample sits in the top two
+momentum deciles, 37% for index additions (**#424**).
+→ `notes/2026-11-09-price-based-comovement-and-its-failed-replication.md`
+
+**(f) The by-product: a WINNER'S MARKET BETA has a term structure, and this lab's skill measure does
+not net it out.** On annual June sorts 1976–2011 of stocks priced ≥ \$10 outside the smallest NYSE
+size decile, 252-day rolling betas with a 21-day skip, the top momentum decile's beta runs
+**0.964 → 0.976 → 1.143 → 1.271 → 1.166** from two years before formation to two years after, with
+the middle six deciles flat at ~0.82–0.84 and the bottom decile drifting **down**. So a winner's
+beta rises through the formation year, keeps rising through the first holding year, and only then
+decays. **Skill here is a difference of Sharpes** (book minus equal-weight pool on the same days),
+which does **not** net out a beta difference — so a winner-selected book carries a structurally
+higher beta than the pool for about a year after formation, and part of its measured skill has that
+sign attached to the pool's own return. This is a candidate explanation for the lab's repeated
+train-versus-validation sign instability **that requires neither sheet to be wrong**, and it is
+testable for free (**#425**).
+→ `notes/2026-11-09-price-based-comovement-and-its-failed-replication.md`
+
+**Tension with this folder, stated rather than smoothed over.** Two existing notes rest on the
+design the replication criticises — `2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`
+(Nikkei weight variation) and `2026-11-07-index-addition-comovement-across-forty-national-indices.md`
+(forty markets) — and both are named inside the replication's own list of the excess-comovement
+literature. **Neither is refuted**: the Nikkei paper identifies off a continuous weighting rule
+rather than a before/after event window, and the forty-market paper is not a US event study. But the
+criticism of the bivariate statistic is general, so **their magnitudes should be read as upper
+bounds**, and any comovement result measured on this panel without a momentum-matched control should
+be treated as unestablished.
+
+**The primary aim of this session was NOT this, and it failed cleanly.** The [2026-11-08] entry
+aimed session 87 at **Geppert, Ivanov & Karels**, *An analysis of the importance of S&P 500
+discretionary constituent changes* (*Review of Quantitative Finance and Accounting* 37(1), 21–34,
+`10.1007/s11156-010-0193-0`, **12** Crossref citations, checked 2026-11-09), with an acceptance
+criterion stated before any download and a four-request budget. **All four requests failed**: the
+second author's institutional repository is bepress and returned **HTTP 403** (re-confirming the
+2026-10-01 finding); the first author's department dissertation path returned **HTTP 404**; the
+EconPapers record for the `kap:rqfnac` series confirmed *"access to full text is restricted to
+subscribers"* and named no deposit; and `link.springer.com/article/<doi>` answered with **HTTP 303
+into an `idp.springer.com/authorize` OpenID flow** — the same refusal mode this file records for
+`pm-research.com`, now on a second publisher. It is a **named unobtained pointer**, and per that
+entry's instruction **no macro-conditioning substitute was taken**. One thing the failure did yield
+for free: the RePEc record's keyword list is **Beta changes · S&P500 constituents changes · Spectral
+analysis**, which says the paper's method is a frequency decomposition of **betas**, not a study of
+an index committee's objective function. The second-hand relay that aimed the session —
+"discretionary changes made the index more representative of macroeconomic business-cycle measures"
+— may well be a secondary result of a beta paper rather than its subject. **A later session should
+not re-spend four requests on it on the strength of that relay.**
+
+**The ranked writing task from the same entry was completed in full**, with no new source:
+`#416`'s median result is now annotated into all three notes that reason about where a size screen
+sits — `2026-11-06-investability-frictions-and-the-microcap-screen.md`,
+`2026-11-06-illiquidity-premium-and-where-the-size-screen-sits.md` and
+`2026-11-06-index-membership-is-not-an-information-free-selection.md`.
+
+**Anti-lookahead.** Samples: 1933–2007 plus sixteen exchanges inside 1975–2005 and an ~80-year
+spread panel (a–c); 1963–2006 (d); 1971–2012 and 1976–2012 with a 1976–2011 beta panel (e–f). Every
+source is `validation_overlap: false` and `published_post_2018: false`. Every magnitude recorded
+above is an average price **level**, an `R²`, a **beta**, a share of a sample, a correlation or a
+t-statistic — no return, no Sharpe, no dated market claim, and no event narrative. The catering
+paper's multi-year relative-return magnitudes are deliberately left in the source with only the sign
+carried, and the replication's sample-average returns are left out with only the momentum-decile
+composition carried.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -17061,6 +17212,136 @@ hypothesis fodder, then anti-candidates.
     → the "RULE AS WRITTEN versus the DECISION AS MADE" section above
 
 
+
+420. **READING RULE about the lab's own panel, free, and it is the one the nightly was missing when
+    it built its newest control: the NOMINAL price level is a CHOSEN quantity, and within a market
+    the thing that is chosen is a size-and-industry peer position.** A board can set any per-share
+    price it likes through the split ratio without changing firm value, and boards do: the
+    equal-weighted average US share price has sat near \$25 for about seventy-five years while the
+    rest of the economy's nominal prices rose by an order of magnitude, with no trend in
+    cross-sectional dispersion; IPO prices and open-end fund prices show the same constancy; and a
+    price series reaching back to 1815 shows the norm at a clearly different level before the
+    Depression. Four economic explanations — marketability, pay-to-play, signalling, trading costs —
+    are tested and all four fail; what survives is a norm the author concedes cannot be formally
+    tested. **The usable residue is that the norm is peer-relative:** post-split target prices are
+    predicted from the firm's price deviation from its **size and industry peers** at an `R²` over
+    **62%**, over **78%** on genuine splits, and larger firms carry systematically higher prices as
+    a matter of choice rather than arithmetic. **Consequence:** "control for the log price level
+    within region" is **not** a neutral nuisance removal — within region it removes a sizeable part
+    of whatever size-and-industry tilt a score carries. A score whose sign flips under that control
+    has not been *cleaned*; it has been told what its content was. Report the control as what it
+    removed. Tier A, overlap `false`.
+    → `notes/2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`
+
+421. **FREE REFUSAL TEST, and it is the strongest single fact for a nine-market panel: across
+    markets the price level is a CONVENTION AND A CURRENCY with no firm-level content.** The US
+    constancy does not replicate abroad — on sixteen other exchanges the level, its drift and its
+    covariation with the local index all differ sharply, and the average share price in **current
+    USD** spans roughly **\$0.02 to \$37**, three orders of magnitude. This lab's panel spans
+    Tokyo, Hong Kong, London (quoted in pence), Zurich, Amsterdam, Paris, Frankfurt and the US, all
+    converted to USD. **A pooled cross-sectional rank on price level is therefore approximately a
+    set of country dummies with a currency overlay.** Two consequences, both free: the nightly's
+    *within-region* form of the `log P` control is the only form that can be read as a firm-level
+    control, and a **pooled** price-level control (or any pooled score correlated with the level)
+    is a region bet in costume. Also kills a screen shape by construction: a single USD price floor
+    cannot be a data-quality screen on a multi-exchange panel, which narrows
+    `2026-10-03-international-panel-screens-datastream.md`'s low-price screen. Tier A, overlap
+    `false`.
+    → `notes/2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`
+
+422. **FOR THE HUMAN, not a candidate: the price level is a COST variable and protocol v3's
+    liquidity tiering cannot see it, with a signed error.** In a Fama–MacBeth panel of ~198,000
+    firm-years of spread estimates over about eighty years, **higher-priced firms have significantly
+    lower relative bid-ask spreads** (price coefficient t ≈ −13) after controlling for volume,
+    turnover **and** market capitalisation, robust to a non-parametric specification for price. v3
+    assigns 15/20/30/40 bps tiers from trailing median USD volume alone. Two names in the same tier
+    with different nominal prices therefore do not have the same true cost, and the lower-priced one
+    is **undercharged** — so any book tilting toward low nominal prices is flattered by an amount
+    this panel cannot measure. Stated as an observation about the cost model, which is the engine's;
+    **no change is proposed and none should be made from a strategy session.** Tier A, overlap
+    `false`.
+    → `notes/2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`
+
+423. **FREE REFUSAL TEST with a mechanism, and it upgrades the standing engine issue from a units
+    bug to a confound: the stored adjusted price level is, up to a constant, the NEGATIVE OF THE
+    NAME'S FUTURE CUMULATIVE ADJUSTMENT, and the split part of that future is a deliberate,
+    size-correlated managerial decision.** The accounting identity for a nominal price is
+    `p_{i,t} ≈ p_{i,IPO} + Σ_k r_{i,t−k} + Σ_k s_{i,t−k}·n` — IPO price, plus accumulated
+    capital-gain return, plus accumulated split decisions. Back-adjustment strips the split term and
+    re-bases the return term on the **end** of the sample, so what `prices` stores at date `t` is a
+    function of what happens **after** `t`. The catering literature then says the split term is not
+    noise: splits respond to a time-varying **low-price premium** (log average market-to-book of
+    sub-30th-percentile-price stocks minus that of above-70th-percentile stocks), the response is
+    concentrated in **larger** firms, and the chosen post-split price is itself predicted by that
+    premium. **Consequence:** a candidate that sorts this panel on anything monotone in the stored
+    level — *including a unit-free score that merely correlates with it at low rank correlation* —
+    is partly sorting on a future managerial decision predicted by the firm's size and by a
+    market-wide valuation state. Refuse it before writing it, or state the within-region `log P`
+    control in the hypothesis and report the score both ways. Filed as **support for** the
+    2026-10-18 / 2026-10-22 engine issues and the 2026-11-08/09 nightly's F5/F7, not as a new one.
+    Tier A, overlap `false`.
+    → `notes/2026-11-09-catering-through-nominal-share-prices.md`
+
+424. **ANTI-CANDIDATE, and it closes the only return-side case for the price level: price-based
+    categorisation DID NOT REPLICATE.** The claim that similarly-priced stocks comove beyond
+    fundamentals, identified off stock splits, rests on coefficient changes in a **bivariate**
+    regression of the stock's return on an old-group and a new-group return. A tier-1 replication
+    shows that statistic is **extremely sensitive to parameters unrelated to excess comovement** —
+    both regressors proxy for the same fundamental factor, so their relative idiosyncratic variances
+    decide the split of weight — identifies the **univariate regression on the abandoned group** as
+    the discriminating test neither original paper ran, and finds the splitting stock's beta rises
+    against the low-priced group **and by nearly as much against the high-priced group it left**.
+    With event stocks matched on size decile and past-year return, betas Dimson-adjusted for
+    non-synchronous trading and a difference-in-difference-in-difference applied, **event and
+    control beta changes are statistically indistinguishable — for splits and for S&P 500
+    additions alike.** The cause is selection on past performance: **57%** of the split sample sits
+    in the top two momentum deciles (37% for index additions). **Do not write a candidate whose
+    economic case is price-level categorisation**, and attach a **momentum-matched control** to any
+    hypothesis of the form "names joining group *G* comove more with *G*" — which on this panel
+    covers the newly-`eligible` cohort (`#410`, `#411`) and any band-entry construction. Tier A,
+    overlap `false`. **Stated tension** with `2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`
+    and `2026-11-07-index-addition-comovement-across-forty-national-indices.md`: neither is refuted
+    — one identifies off a continuous weighting rule, the other is not a US event study — but both
+    report bivariate-style loading changes and their magnitudes should now be read as upper bounds.
+    → `notes/2026-11-09-price-based-comovement-and-its-failed-replication.md`
+
+425. **FREE DIAGNOSTIC, and it is the night's best candidate for a thing the lab keeps seeing and
+    cannot explain: a WINNER'S MARKET BETA has a term structure, and `skill` does not net it out.**
+    On 36 annual June sorts (1976–2011) of stocks priced ≥ \$10 outside the smallest NYSE size
+    decile, with 252-day rolling betas and a 21-day skip, the **top momentum decile's beta runs
+    0.964 → 0.976 → 1.143 → 1.271 → 1.166** from two years before formation to two years after;
+    the middle six deciles sit flat at ~0.82–0.84 and the bottom decile drifts **down**. The winner
+    changes are significant at every step through Year +1 and insignificant thereafter. **This lab
+    measures skill as a DIFFERENCE OF SHARPES** (book minus equal-weight pool on the same days),
+    which does not net out a beta difference — so a winner-selected book carries a structurally
+    higher beta than the pool for about a year after formation, and part of its measured skill
+    inherits the **sign of the pool's own return over the window**. That is a candidate explanation
+    for the repeated train-versus-validation sign instability **that requires neither sheet to be
+    wrong**. **The test costs no trial**: compute each book's realised beta to the equal-weight pool
+    separately on train and on validation and report both next to the skill. Note this is a
+    *diagnostic*, not a construction — nothing here says to hedge the beta, and `program.md`'s
+    objective is the raw Sharpe difference, which is the gate's definition and not this folder's to
+    reinterpret. Tier A, overlap `false`.
+    → `notes/2026-11-09-price-based-comovement-and-its-failed-replication.md`
+
+426. **NOT A CANDIDATE — the session's PRIMARY AIM, recorded as a named unobtained pointer so no
+    later session re-spends the budget.** The [2026-11-08] entry aimed session 87 at **Geppert,
+    Ivanov & Karels**, *An analysis of the importance of S&P 500 discretionary constituent changes*
+    (*Review of Quantitative Finance and Accounting* 37(1), 21–34, `10.1007/s11156-010-0193-0`,
+    **12** Crossref citations, checked 2026-11-09), on the second-hand relay that it finds
+    discretionary constituent changes make an index more representative of macroeconomic
+    business-cycle measures. **Four requests, four failures**: `scholarworks.sjsu.edu` (bepress)
+    **403**; the first author's department dissertation path **404**; the EconPapers `kap:rqfnac`
+    record confirms *"access to full text is restricted to subscribers"* and names no deposit; and
+    `link.springer.com/article/<doi>` returns **HTTP 303 into `idp.springer.com/authorize`**, the
+    OpenID refusal mode previously recorded only for `pm-research.com`. **The free finding is in the
+    RePEc keywords**: *Beta changes · S&P500 constituents changes · Spectral analysis*, i.e. the
+    paper is a frequency decomposition of **betas**, so the relayed macro-representativeness claim
+    is plausibly a secondary result rather than the subject. Per that entry's own instruction, **no
+    macro-conditioning substitute was taken** — the lab observes prices and volume only, so a macro
+    state variable is not a conditioning layer any candidate here could compute. Tier n/a.
+    → the "NOMINAL PRICE LEVEL as an object" section above
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -17155,8 +17436,133 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-06 (session 84) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT, AND THE MANDATED SECOND GREP DOWNGRADED THE CLAIM FROM "never covered" TO "never named" — fourth consecutive session in which the detector's headline count overstated a gap and the fix caught it.** Aim from the [2026-11-05] entry: **panel construction as a claim in its own right**, admitting a source only if it **characterises the selection rule (size, float, liquidity, turnover screens) and what that rule does to a measured cross-sectional effect** — explicitly not another index-addition price-impact paper and not another survivorship paper. All eleven of that entry's fixed-string counts re-ran and **hold exactly** across the 264 pre-tonight notes (`large-cap bias`/`investable universe`/`free float`/`index inclusion`/`capitalization threshold`/`universe construction` **0**; `float adjustment`/`index construction`/`size threshold`/`Russell reconstitution` **1**; `index membership` **10** against the 9 recorded, the extra hit being tonight's own neighbourhood). The [2026-11-05] procedural fix then returned `microcap` **26**, `market capitalisation` **22**, `selection rule` **12**, `eligibility` **10**, `size effect` **9**, `liquidity screen` **7** — so the folder's coverage of *where in the size distribution an effect lives* is strong (Fama–French 2008; Hou–Xue–Zhang) and the genuine gap is the narrower object the aim named: **what an index's own eligibility rule selects for.** A committee applying stated criteria is not a cap percentile. Four candidate sources were checked and **rejected as already covered** before any download — Israel–Moskowitz (`2026-09-06`), Fama–French 2012 (`2026-08-28`), Cremers–Petajisto–Zitzewitz (`2026-10-08`) and the whole index-price-impact strand (`2026-10-09` ×2) — which is the aim's exclusion clause doing real work. **Three Tier-A sources, all read in full.** **(a)** Patton–Weller (*JFE* 137(2), 78 Crossref; Duke faculty page) frame a universe screen as a **shadow cost** that prices *trades that were never available*, hence invisible to v3's trade-pricing cost model (**#401**); supply the structural fact that the 20th-NYSE-percentile screen removes **~a fifth of the portfolios and ~3% of market capitalisation**, killing the inference that a large-cap panel holds most of the measurable effect (**#402**); decompose the universe restriction as ~**one third** of value's implementation gap and ~**one sixth** of momentum's (shares of a gap, not returns); and — most pointed for this lab — find **long-only implementation costs "significant and comparable to short-side costs"**, with only about half the all-in cost traceable to the shorting inability, so **long-only forgoes most of the profit and keeps about half of the cost.** **(b)** Denis, McConnell, Ovtchinnikov & Yu (*JF* 58(5), 295 Crossref, typeset version of record) test the "information-free event" premise and find index inclusion is not one. The durable export is the reasoning: the provider's disclaimer addresses *information → inclusion* while the premise needs *inclusion → information* — **an institution's statement that it uses no private information does not make its selection uninformative** (**#403**). Admissible under the criterion because they match added firms on the provider's **entire stated rule** (12 Fama–French industries × 3 cap terciles × 3 turnover terciles = 108 cells) **and the effect survives**, i.e. matching on size and liquidity is **not sufficient** to control for membership — which makes the v3 equal-weight eligible pool the output of nine committees' selection rules rather than a neutral basket, a second structural explanation for `#393`'s high `ρ`, and the reason the **1997–2008 train sub-period runs on a single committee's selection** (**#404**). **(c)** Amihud, Hameed, Kang & Zhang (*JFE* 117(2), 314 Crossref, 45 countries / 22 years, NUS host) survive removal of the smallest **decile** at a lower point estimate; their challenger **Cakici & Zaremba** (*JBF* 127, 106123, 42 Crossref) is **unobtained through every channel** (OpenAlex `closed`, `any_repository_has_fulltext: false`, **no repository location at all**; ScienceDirect and SSRN the known refusals) and **nothing in it is summarised or relied upon** — only its indexed keyword list is recorded as evidence that it tests the question. Read as a pair they **bracket a monotone relation between screen severity and measured premium**, and this panel sits far out on the severe end, so the honest reading is **pessimistic and inverts the comfortable one**: no support for an illiquidity book here, and `lv_illiq_region_relative` has the right *shape* while both v2 leads score zero skill under v3 (**#405**). Its transferable construction is the section's best: **design the volatility level out by sorting the signal within volatility terciles**, plus a non-overlapping three-month window and a skipped month before a three-month hold (**#406**). **The [2026-11-05] second-ranked WRITING task was also completed: `p₀` is supplied** as a cross-cutting subsection citing only notes already here (Hou–Xue–Zhang 0.35 / 0.179; Jensen–Kelly–Pedersen ≈0.84 with mega **77.3%** and large **81.5%** against full-US **84.0%**; McLean–Pontiff). Headline: **working range `p₀ ≈ 0.05–0.25`, outer envelope `0.03–0.58`**, and the decision-relevant split is by reachable category — **momentum-shaped ≈0.25–0.55 versus frictions-shaped ≈0.02–0.06**, an order of magnitude. The surprise is the ordering: **the large-cap panel is the MILDEST of the three constraints (×0.92 on JKP's own size breakout), the daily-closes restriction is the severest because it forces a category choice rather than applying a multiplier, and long-only belongs on EFFECT SIZE (≈0.45, hence ≈4× the sample for equal power) rather than on `p₀` at all.** `#400`'s rule implies a non-zero `p₀` lowers the optimal hurdle; that is recorded as arithmetic and **explicitly not as a recommendation to lower the bar.** **Anti-lookahead:** all three samples end 2016 / 1999 / 2011, `validation_overlap: false` throughout; no performance figure, event narrative or dated return is recorded from any of them, the omissions are stated in-note, and the shares recorded (one third, one sixth, 3%, 45%) are **shares of a gap or of a capitalisation**, not returns. | Patton & Weller 2020 (`2026-11-06-investability-frictions-and-the-microcap-screen.md`); Denis, McConnell, Ovtchinnikov & Yu 2003 (`2026-11-06-index-membership-is-not-an-information-free-selection.md`); Amihud, Hameed, Kang & Zhang 2015, with Cakici–Zaremba 2021 as a named unobtained pointer (`2026-11-06-illiquidity-premium-and-where-the-size-screen-sits.md`) |
 | 2026-11-07 (session 85) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT THREE TIMES, AGAINST THAT AIM'S OWN PREDICTION THAT THE LITERATURE MIGHT NOT EXIST — and for once the detector did NOT over-claim.** Aim from the [2026-11-06] entry: **the other eight index providers**, admitting a source only if it **characterises a NON-US index's own eligibility or weighting rule and what that rule does to the measured cross-section** — explicitly not international factor premia (covered 2026-08-28), not country-level cross-section (vein retired 2026-11-02), and not an index provider's own methodology document. That entry predicted the vein might be thin and instructed falling through to the ranked writing task after two failed searches. **It was not thin: three on-criterion sources, all Tier A, all read in full, covering a price-weighting rule, a float-weighting rule change, and admission to forty national indices.** Detector run first, on the target vocabulary across 267 prior notes: `free float` **0**, `price weighted` **0**, `index weighting` **0**, `float adjust` **1**, `TOPIX` **1**, `divisor` **2**, `weight cap` **1** — against `Nikkei` **8**, `FTSE` **8**, `DAX` **7**, `Euro Stoxx` **6**, `Hang Seng` **5**, `Japan` **16**. The [2026-11-04/05] second grep then **confirmed rather than downgraded** the gap: the six files matching `price-weighted`/`divisor`/`TOPIX` mention them only in passing, and the decisive check was on the **source** rather than the vocabulary — `2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md` **states in its own text that it leaves the non-US case open and names the TOPIX and Nikkei 225 as the gap**, which is the folder certifying the aim from the inside. **First session in five in which the headline count did not overstate the gap**; the cheap third step the [2026-11-06] entry added (check candidate *sources* against the folder before downloading) rejected two on-topic candidates and confirmed the Greenwood hits were **Greenwood–Sammon**, a different paper. **(a)** Greenwood (*RFS* 21(3), 198 Crossref, HBS WP 05-069 read in full) identifies off the **Nikkei 225's price-weighting rule**: weight = face-value-adjusted price / sum of such prices, divisor adjusted to preserve the index **level and explicitly not the weights**, so a split halves a constituent's effective weight; average constituent overweighted **~5.7×** versus the value-weighted benchmark and individual names **10×+**, with the **smaller** names overweighted, i.e. index demand tilted **away** from capitalisation. +1 s.d. of overweighting ⇒ index beta **+~0.22**, overweighting alone explaining **>20%** of cross-sectional index-beta variation, and comovement with **non**-members *falling* in overweighting (**#407**). Honest: Newey–West drops the key `t` from ~10 to ~6.5, and **unscaled** weight loses significance because it mislabels large liquid names — the effect is weight *relative to capacity to absorb demand* (**#408**). **(b)** Hau (*RFS* 24(12), 42 Crossref, published version of record from Geneva's Archive ouverte) supplies the chain this folder lacked — index capital does not re-optimise, so the **residual** actively managed capital *is* the benchmark; a revision changes it by the observable `w_new − w_old`; benchmark change ⇒ beta change ⇒ discount-rate change ⇒ price change with cash flows fixed — giving a test **in differences** needing only the benchmark *change*, never its level. The rule: free float defined by **classifying holders**, market representation raised from **60% cap-based to 85% float-adjusted within each country and industry**, 489 added / 298 removed, **median absolute country weight change ~42%**, all **rule-based with no judgment about prospects** and therefore computable in advance. National-market segmentation **rejected** for developed markets, surviving only among emerging names **neither cross-listed nor liquid** (**#409**). The export that bites: the announcement is anticipated and the **risk-hedging leg** of the arbitrageur's optimal position prints a second transitory cross-sectional pattern, so the design needs a buildup **and** a liquidation window (**#410**). **(c)** Claessens–Yafeh (*Review of Finance* 17(1), 58 Crossref, IMF WP 11/47 read in full) close the comovement half of `2026-10-09`'s open question across **40 markets including six of this panel's nine indices by name** — CAC 40, DAX, FTSE 100, AEX, Hang Seng, Nikkei 225: beta up in **30 of 40** markets (daily; 26 weekly), `R²` up in 32 / 34, heterogeneity reported rather than buried (a named group shows zero or negative effects while turnover still rises). Discriminating finding, **structural**: the admission effect is **WEAKER in concentrated indices** (~**0.03** of beta per 10pp of top-five weight against a ~**0.07** average) — a moderator the same order as the effect, which information diffusion has no reason to predict; neither GDP per capita nor market-cap-to-GDP is significant in any specification (**#411**). The finding fitting neither theory is the one that matters here: **the increase is largest for previously LOW-beta names** (**#412**). **The cluster CLOSES more than it opens, and that is the useful part.** Greenwood's measure is **not reconstructible** (raw price versus this panel's **USD-adjusted** closes; market cap needs a share count; the face-value constant is a rulebook fact; the listing market has no sanctioned v2 label). Claessens–Yafeh's design is **half-reproducible**: `eligible`'s first `True` *is* a contract-supplied admission event, but `program.md` states a column appears in `prices` only once eligible, so **the pre-admission window does not exist** and the change-in-beta design with its 90-day stand-off cannot be run — only a **cohort** comparison survives, and its moderator (index concentration) is **unmeasurable by a candidate**, so admission effects here are a **mixture across nine regimes**. **One tension stated rather than resolved:** Hau rejects national-market segmentation for exactly this panel's population, while `learnings.md` records region-relative scoring beating sector-relative scoring — compatible once *where risk is priced* is separated from *where a score's measurement units live*, so region-demeaning a **score** is a units correction while region-demeaning a **beta or expected return** is the rejected segmentation assumption (**#409**). **Both of the [2026-11-06] entry's ranked WRITING tasks were also completed:** the composed pre-trial rule (`#399`'s level-valued null × `#393`'s MDE table × the **≈0.45 long-only effect multiplier** ⇒ a mechanism must be worth **~2.2× `X`** long–short for the design to resolve it; nulls to be written *"no skill above `X` at `ρ = …`"*) as **#413**, and **category-prior tags on the live constructions** as **#414** — `#406` category-**neutral** (a construction operator inheriting its signal's prior, which is why it is free), `#363` **momentum-shaped ≈0.25–0.55**, `#405` and `#411` **frictions-shaped ≈0.02–0.06**. **Anti-lookahead:** samples end **2003 / 2002 / 2010**, `validation_overlap: false` on all three; every magnitude recorded is a **beta, an `R²` share, a weight ratio or a count of markets** — second moments and structural shares, never a return. Two omissions are named in-note rather than glossed: Greenwood's reversion-trade profitability (a performance claim), and Claessens–Yafeh's dated interruption to its time trend (an event narrative), with the trend kept only as the mechanism-linked monotone statement. | Greenwood 2008 (`2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`); Hau 2011 (`2026-11-07-free-float-redefinition-as-a-benchmark-change.md`); Claessens & Yafeh 2013 (`2026-11-07-index-addition-comovement-across-forty-national-indices.md`) |
 | 2026-11-08 (session 86) | **TOOK THE PRIMARY AIM VERBATIM AND IT SPLIT: the committee half paid out twice and the capping half paid out ZERO — and the capping failure is the night's real finding, because one of its two sources was refused by this folder's own holdout ban rather than by a paywall.** Aim from the [2026-11-07] entry: admit a source only if it **characterises a CAPPING or RE-CAPPING rule, or a committee's discretion against a mechanical alternative, AND measures what that rule does to a cross-section or to a measured premium** — not an index-addition price-impact event study, not a float-adjustment paper, not a provider methodology document. That entry predicted the vein would be thinner than the previous night's and authorised falling through to the ranked writing task after two failed searches. **Detector run first, on the target vocabulary across 270 prior notes:** `capped weight` **0**, `diversification requirement` **0**, `capped index` **0**, `UCITS` **0**, `Herfindahl cap` **0**, `position limit` **0**, `weight cap` **1**, `re-cap` **1**, `concentration limit` **1**, `5/50` **1**, `discretion` **2**, `discretionary` **2**, `index committee` **3**, `capping` **4**, `committee` **6** — and the **second grep on the mechanism confirmed rather than shrank the gap**: all four `capping` hits are about portfolio-level weight caps, the six `committee` hits are index-effect and membership notes, and **no note characterises an index's capping rule or compares a committee against a mechanical admission rule**. **The [2026-11-06] source-level check then did the most work it has ever done, twice rejecting a download before it happened:** the obvious capping primary (Jagannathan–Ma, upper weight bound ≡ covariance shrinkage) is **already covered** by `2026-08-21-weight-constraints-as-covariance-shrinkage.md`, and the obvious index-level alternative (Fernholz diversity weighting) is **already covered** by `2026-08-22-excess-growth-and-return-decomposition.md`. Two nights' work avoided by two greps. **(a) ADMITTED.** Li, Liu & Wei (Tier **B** — NBER WP 29365, **4** Crossref / **1** Semantic Scholar, unpublished, publicly disputed by the provider; read in full) code a provider's published admission criteria as regressors on all minimum-eligible names 1980–2018: the criteria give ~3/5 of the membership **level** (≈7/10 on the best-documented subperiod) against **single-digit percentages of the addition events**, while a mechanically-ruled index yields the great majority of the level and a large majority of the additions **from one size-rank dummy**. The rank table carries the shape: mechanical ≈ **step function**, committee ≈ gradient across four bins with the second a **coin flip**. ~1/3 of additions violated a published criterion in a year while **100+ fully-qualified names went un-added** — choice, not shortage (**#415**). Its discretionary/rules-based split orders subsequent relative outcomes discretionary-worst → passed-over → rules-based, magnitudes left in the source by the folder's own practice (**#417**). **(b) ADMITTED.** Robertson (Tier **B** on the methodology column alone — a law review, **no DOI, not indexed in Crossref or OpenAlex**, Semantic Scholar 429'd; read in full) builds the mechanical counterfactual instead of regressing: **~72%** of a committee index's names sit in the mechanical top-*N*, **~28%** do not, index-only names are **~5%** of aggregate value and mechanical-only names **~17%** — and **the median EXCLUDED name is slightly LARGER than the median constituent** (1%), so **no size threshold recovers membership**. In return space a live low-fee fund tracks its index **~20× more closely than the index tracks the mechanical alternative**, stable across subperiods, every robustness variant widening it (**#416**). An independent leg — counting daily eligibles under conservatively coded criteria — puts the committee's slack above **20% of index size** and lands on the same **~5% of aggregate value** from the other direction. **(c) THE CAPPING HALF FAILED, with both halves of the reason named.** Five searches; four returned **providers' own capping methodologies**, which the aim excluded — and the night's reusable lesson is that **for a rule only providers write down, "excluded by criterion" and "no literature exists" are indistinguishable from a search result unless the provider documents are named and recorded as refused** (**#419**). The one on-criterion academic paper (a 2023 *JOIM* article simulating capping and diversity-weighting alternatives and reporting their **turnover** cost) was **unobtained across four channels** — `escholarship.org` HTTP **202 size=0** (second confirmation of the 2026-10-16 finding), `cdar.berkeley.edu` **gateway 502 to CONNECT** (transport, not an origin refusal), journal paywalled, not on arXiv — and is a named pointer. The other (an NBER working paper on the US **50/5/10** rule as a binding fund constraint, squarely on criterion) was **refused on this folder's own rules: its sample extends into 2024, i.e. into the locked holdout**, so nothing from it is recorded, and the format gap that makes this invisible — `validation_overlap` and `published_post_2018` exist, **no holdout-overlap flag does** — is filed for the human (**#419**). **THE RANKED WRITING TASK WAS ALSO COMPLETED IN FULL**, as that entry asked and with no new source: `#407`'s covariance-contamination claim is now annotated into all four items it invalidates — `2026-08-30-pca-residual-statistical-arbitrage-long-only.md` (a residual against this panel's PCs is residual to index demand, so a candidate whose target *is* the index-demand flow has hedged away its signal before forming the residual; a global `K` pools nine contamination structures), `2026-09-07-hierarchical-risk-parity-clustering-allocation.md` (a cluster may be an **index**, and rule-induced blocks are **more** stable out of sample, so the usual stability reassurance is evidence of latching onto the rulebook), `2026-09-27-counting-factors-eigenvalue-estimators.md` (an estimated `K` is an **upper bound** on the economic count), and `2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md` — **the sharpest of the four: MP's null is i.i.d. noise, rule-induced commonality is neither noise nor fundamental, so it lands above the edge and is read as signal; MP survives as a device for DISCARDING dimensions and not for ADMITTING them.** **Anti-lookahead.** Samples **1980–2018** (`validation_overlap: true` on its final year, one of 39) and **1989–2017** (`false`). Every magnitude recorded is an `R²`, a share of names, a share of aggregate value, a size ratio or a tracking-error **ratio** — no return, no Sharpe, no event narrative; both notes name their omissions in-text (the entrant-group return magnitudes, and the turnover-impact magnitudes). **Nothing from the two excluded capping sources appears anywhere in this file.** | Li, Liu & Wei 2021 (`2026-11-08-committee-discretion-versus-the-published-admission-rule.md`); Robertson 2023 (`2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`) |
+| 2026-11-09 (session 87) | **THE PRIMARY AIM FAILED CLEANLY ON FOUR CHANNELS AND THE RANKED WRITING TASK WAS DONE — then the session was aimed by the LAB's own newest measurement and paid out three notes on a variable the folder had been controlling for without ever writing it down.** Aim from the [2026-11-08] entry: **Geppert, Ivanov & Karels** (RQFA 37(1), 21–34, `10.1007/s11156-010-0193-0`, **12** Crossref, checked 2026-11-09), admissible only if its body characterises the objective a discretionary index change serves against a stated alternative objective, four requests maximum. **All four failed** — `scholarworks.sjsu.edu` **403** (bepress, re-confirming 2026-10-01), the first author's department dissertation path **404**, the EconPapers `kap:rqfnac` record *"restricted to subscribers"* with no deposit named, and `link.springer.com/article/<doi>` **HTTP 303 into `idp.springer.com/authorize`**, the OpenID refusal mode this file had recorded only for `pm-research.com`. Per that entry's instruction **no macro-conditioning substitute was taken**; the free scrap is the RePEc keyword list (*Beta changes · S&P500 constituents changes · Spectral analysis*), which says the paper is a frequency decomposition of betas and the relayed macro claim is probably a side result — so **do not re-spend four requests on that relay** (**#426**). **The ranked writing task was completed in full**: `#416`'s median result is annotated into all three notes that reason about where a size screen sits. **The session's own aim came from the detector's newest step — after each nightly, take the one variable it measured that has no note here.** The 2026-11-08/09 nightly's headline was the **log price level** as a horizon-amplified confound (one-bit IC −0.030 → −0.150 across 21–504 days) that **inverts the sign** of two clean unit-free slow objects at rank correlations of only −0.25 and −0.30. Fixed-string greps across all 272 prior notes: `nominal share price` **0**, `low price effect` **0**, `price illusion` **0**, `back-adjust` **0**, `Comovement revisited` **0**, `Barberis, Shleifer` **0**, `Green and Hwang` **0**, `excess comovement` **1**, `nominal price` **3**, `stock split` **4**, `price level` **7** — and the **mandated second grep on the mechanism confirmed the gap**: all three `nominal price` hits are passing mentions (a data screen, an anomaly-list entry, a warning not to substitute price for index overweight) and **no note said what the price level is or what it proxies for**. **(a) ADMITTED.** Weld–Michaely–Thaler–Benartzi (Tier **A**, *JEP* 23(2), **117** Crossref; **published article unobtained — `aeaweb.org` and `pubs.aeaweb.org` both 403** — read in full as the lead author's Cornell dissertation of the same title): the US equal-weighted average share price has sat near \$25 since 1933 against an order-of-magnitude rise in everything else, so real price per share fell by >90%; IPO and fund prices likewise; four economic explanations tested and all four fail; what survives is a **peer-relative norm**, with post-split target prices predicted from the firm's deviation from its **size and industry peers** at `R²` > **62%** (> **78%** on genuine splits) (**#420**). Across **sixteen** other exchanges the pattern does not replicate and average price in **current USD** spans **\$0.02 to \$37** — so on this nine-market panel a **pooled** price rank is approximately country dummies plus a currency overlay, and only the *within-region* control is a firm-level control (**#421**). And in ~198,000 firm-years of spread data over ~80 years, **higher-priced firms have lower relative spreads** (t ≈ −13) after controlling for volume, turnover **and** capitalisation — a cost gradient v3's volume-only tiering cannot see, with the lower-priced name **undercharged** (**#422**, for the human). **(b) ADMITTED.** Baker–Greenwood–Wurgler (Tier **A**, *JF* 64(6), **199** Crossref, read in full as NBER WP 13762): the identity `p_t ≈ p_IPO + Σr + Σ s·n` plus a catering theory in which the split term responds to a time-varying **low-price premium**, concentrated in **larger** firms acting small. **The lab-facing consequence is the sharpest thing in the session**: back-adjustment strips `Σ s·n` and re-bases `Σ r` on the sample's end, so the stored level is up to a constant **the negative of the name's future cumulative adjustment**, and the split half of that future is a deliberate size-correlated **decision**, not noise — upgrading the 2026-10-18 / 2026-10-22 engine issues from a units bug to a confound and giving the nightly's F5/F7 a mechanism (**#423**). **(c) ADMITTED, and it is a REFUTATION.** Chen–Singal–Whitelaw (Tier **A**, *JFE* 121(3), **78** Crossref, typeset published version read in full from `pages.stern.nyu.edu`) revisit Green–Hwang's price-based comovement (*JFE* 93(1), **213** Crossref, **unobtained** — SSRN 403 on a `Delivery.cfm` path, CiteSeerX HTTP 000, ScienceDirect closed — claims relayed from the replication and flagged throughout): the bivariate loading-shift statistic is **uninformative** because both regressors proxy for the same factor; the discriminating **univariate regression on the abandoned group** was never run; run properly the splitting stock's beta rises against the low-priced group **and nearly as much against the high-priced group it left**; and with size-and-momentum-matched controls, Dimson adjustment and a triple difference, **event and control beta changes are indistinguishable for splits AND for S&P 500 additions**. Cause: **57%** of the split sample is in the top two momentum deciles (37% for index additions) (**#424**). **The by-product is the more valuable half**: a winner's market beta runs **0.964 → 0.976 → 1.143 → 1.271 → 1.166** from two years before formation to two years after, middle deciles flat at ~0.82–0.84, losers drifting down — and since this lab's **skill is a difference of Sharpes it does not net that out**, which is a candidate explanation for the repeated train-vs-validation sign instability that requires neither sheet to be wrong, testable free by reporting each book's realised beta to the pool on both splits (**#425**). **Tension stated, not smoothed:** the folder's Nikkei-weight and forty-market comovement notes are named inside the replication's own literature list; neither is refuted (one identifies off a continuous weighting rule, the other is not a US event study) but both report bivariate-style loading changes and their magnitudes are now upper bounds. **Anti-lookahead.** Samples 1933–2007 / 1975–2005 / ~80 years (a), 1963–2006 (b), 1971–2012 and 1976–2012 with a 1976–2011 beta panel (c) — **all three `validation_overlap: false`, all `published_post_2018: false`**. Every magnitude recorded is a price **level**, an `R²`, a **beta**, a sample share, a correlation or a t-statistic; the catering paper's multi-year relative-return magnitudes are left in the source with only the sign carried, and the replication's sample-average returns are left out entirely. | Weld, Michaely, Thaler & Benartzi 2009 (`2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`); Baker, Greenwood & Wurgler 2009 (`2026-11-09-catering-through-nominal-share-prices.md`); Green & Hwang 2009 + Chen, Singal & Whitelaw 2016 (`2026-11-09-price-based-comovement-and-its-failed-replication.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-09] READ THIS BEFORE AIMING SESSION 88. The nominal-price vein is CLOSED on all four
+  of its sides in one session, and the detector step that found it was the cheapest one in the
+  procedure: take the single variable last night's nightly measured and grep for it.** The four
+  sides are `#420` (the level is chosen and the choice is a size-and-industry peer position),
+  `#421` (across markets it is a convention and a currency), `#422` (it is a cost gradient the cost
+  model cannot see), `#423` (back-adjustment makes the stored level a function of the name's
+  future), and `#424` kills the one return-side claim that it is a categorisation variable. **Do
+  not reopen it.** There is no fifth side worth a night: nominal price is not recoverable from a
+  back-adjusted series without a share count or an adjustment-factor series (`#408`), so every
+  remaining question about it is a question for the human about the data, not a question for the
+  literature.
+  - **Primary aim for session 88, and it is named from inside tonight's own notes rather than by
+    grep: the MOMENTUM-MATCHED CONTROL as a design object, and whether anything in the literature
+    says how to build one when the matching variable is the treatment.** `#424`'s decisive move is
+    matching each event stock to a same-size-decile firm with the closest past-year return and
+    differencing three ways. On this panel the obvious "events" — a name becoming `eligible`
+    (`#410`, `#411`), a name entering a liquidity or volatility band — are **all selected on past
+    performance**, and the lab has no matched-control practice at all: a grep across the 275 notes
+    for `matched control`, `matched sample`, `difference-in-difference`, `propensity` and
+    `synthetic control` should be run first and is expected to be near zero. **Acceptance criterion,
+    stated before any download: admit a source only if it gives a CONSTRUCTION for the control
+    group — the matching variables, the caliper, and what is differenced — AND says what the
+    estimate means when the match is imperfect in a known direction.** Not another event study, not
+    another anomaly whose identification happens to use matching, and explicitly not a causal-
+    inference textbook chapter: the folder already holds nine notes on inference and does not need a
+    tenth that cannot be built. If two searches fail, **fall through to the ranked item** rather
+    than widening to the general treatment-effects literature, which this panel cannot use.
+  - **Ranked below it, and it is a WRITING task that fits the same session and needs no source:
+    `#425` is not carried into the `price-trend` cluster, which is the family it is about.** The
+    winner-beta term structure (0.964 → 0.976 → 1.143 → 1.271 → 1.166 from two years before
+    formation to two after, middle deciles flat) bears directly on
+    `2026-08-17-jegadeesh-titman-overlapping-momentum.md`,
+    `2026-08-17-momentum-horizon-echo.md` and `2026-08-17-momentum-crash-risk-management.md` — none
+    of which says that a winner portfolio's market beta is **rising** through the holding year, and
+    the crash-risk note in particular is about exactly the window in which it peaks. Annotating the
+    three costs no trial and changes how a momentum book's measured skill against the pool should be
+    read. **Do not open a new source for this**; it is composition, exactly as tonight's three
+    `#416` annotations were.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06], [2026-11-07], [2026-11-08]) is: **check candidate sources
+    against the folder before downloading**, then grep for `open question` / `leave(s) … open`, then
+    ask what the lab does to a number after it has it and grep for the literature about the number
+    before it exists, then run a **second grep on the mechanism** after a zero-count. All ran, and
+    the second grep again confirmed rather than shrank the gap. **Tonight's amendment is about the
+    first step of all: when the aim handed down by the previous entry is a single named primary, the
+    session needs a SECOND aim prepared before the first request is spent.** Four requests failed
+    and the session had nothing queued; what rescued it was the nightly-variable detector, which
+    should be run **at the start of every session regardless of the handover**, not held in reserve.
+    Caveats still not run through the detector, unchanged in order: *publication decay*, and *"the
+    cost model is lethal only to books that trade"*.
+  - **Carried unchanged and still live**: `#406`'s volatility-tercile conditioning remains the best
+    construction in the file, category-**neutral** per `#414`. `#413` is the composed pre-trial rule
+    and should run before any candidate file is written; `#376`'s one-bit truncation test, `#389`'s
+    cumulative-curve test and `#381`'s `σ_IC` remain the three free screens, and `#415`'s
+    eligibility-forecasting refusal joins them. **Tonight adds three to the free list**: `#421`
+    (a pooled price-level control, or any pooled score correlated with the level, is a region bet),
+    `#423` (refuse any score monotone in the stored price level, or state the within-region `log P`
+    control in the hypothesis and report both ways — which is the nightly's own recommendation now
+    with a mechanism), and `#424`'s momentum-matched-control requirement for any group-change
+    hypothesis. `#425` is a free **diagnostic** rather than a screen and should be reported next to
+    skill, not used to refuse. The index-rule vein stays closed (`#401`–`#419`, including the
+    capping sub-half); the detectability vein stays closed (`#393`–`#400`); the cash/pool boundary
+    stays closed (`#386`–`#392`); the long-only vein stays closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#420`–`#426` from tonight; `#415`–`#419` from 2026-11-08;
+    `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05;
+    `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02;
+    `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31; `#335`–`#342` from 2026-10-30;
+    `#328`–`#334` from 2026-10-29; `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27;
+    `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24;
+    `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21;
+    `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then 2026-10-17 and everything carried
+    under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); the long-only constraint as a construction object
+    (2026-11-03); the cash/pool boundary (2026-11-04); ex-ante detectability (2026-11-05); the
+    panel's admission rule as a construction object (2026-11-06); the index's weighting rule
+    (2026-11-07); the index rule as a whole including capping (2026-11-08); and **tonight the
+    nominal price level on all four of its sides**. Still at **0** and still not nominated:
+    `transfer entropy` (twentieth nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-08], unchanged: the
+    engine issues filed 2026-10-18 and 2026-10-22; `min_train_skill = 0.0`; `#324`'s deliberate
+    difference; the two human decisions added 2026-10-29; the three items the 2026-10-30/31 nightly
+    raised; the data-type question; `#396`'s tension between `program.md`'s spend-across-families
+    rule and what the design can measure; `#404`'s spinoff/merger/name-change question; `#407`'s
+    rule-induced comovement inside the equal-weight pool; `#418`'s discretionary component in the
+    benchmark's membership; the note format's **missing holdout-overlap flag**; and `p₀` now being a
+    supplied number while the gate still behaves as though it were zero. **Tonight adds two.**
+    (1) **`#422` — the v3 liquidity tier is volume-only and the true spread gradient also runs in
+    nominal price, so the tier's error is signed and favours low-priced names.** Not acted on, and
+    not actionable from a strategy session. (2) **`#423` upgrades the two standing engine issues:
+    the back-adjusted level is not a units bug but a function of the name's future split and
+    dividend decisions, and the split half of that is a deliberate, size-correlated choice** — which
+    is the literature-side counterpart of the nightly's F5/F7 and makes the issue worse than the
+    record carries. **The integrity check again found the container on a per-run branch
+    (`claude/tender-galileo-yai7gf`) at the same commit as `origin/main`, reset to `main` before any
+    work — ninth consecutive session, confirmed as the container's default and part of the routine,
+    not an incident.**
+  - **[2026-11-09] Access findings — one new publisher refusal mode, one host that looks dark and is
+    not, one that is nominally open and is not, and a DSpace response that is not what `file` says.**
+    (1) **`link.springer.com/article/<doi>` answers an automated client with HTTP 303 into
+    `idp.springer.com/authorize?response_type=cookie&client_id=springerlink`** — the OpenID
+    redirect-into-authorization mode this file had recorded only for `pm-research.com`. Second
+    publisher, same mode; record the article as closed rather than blocked. (2) **`aeaweb.org` and
+    `pubs.aeaweb.org` both return HTTP 403 with a ~5.5 KB Cloudflare body on their PDF endpoints**,
+    including for a *Journal of Economic Perspectives* article, which is nominally free to read.
+    **"The venue is open access" is not evidence the file can be fetched** — the same lesson the
+    bepress (2026-10-01) and bronze-OA (2026-10-14) entries teach, now for a society publisher.
+    (3) **A DSpace `server/api/core/bitstreams/<uuid>/content` response can be the EXTRACTED-TEXT
+    derivative rather than the PDF.** `file` reported `Unicode text, UTF-8` and `pdftotext` failed —
+    and the body was the complete 113 KB dissertation. **Read the first 400 bytes before discarding
+    a bitstream that is not a PDF**; this is the inverse of the usual "looks like an answer" failure
+    and would have cost the session its best source. (4) **`pages.stern.nyu.edu/~<user>/papers/<Title
+    With Spaces>.pdf` served a typeset published JFE article on the first try** — the faculty-page
+    lesson (2026-09-18) with a third filename shape after short slugs and title-derived names:
+    percent-encoded natural-language titles. (5) Re-confirmed: `scholarworks.sjsu.edu` (bepress)
+    **403**; `papers.ssrn.com` **403**, now on a `sol3/Delivery.cfm` path a search surfaced
+    directly. (6) Transport failures, not refusals: **`citeseerx.ist.psu.edu` HTTP 000 with zero
+    bytes**, and **`efmaefm.org` HTTP 503 with a 326-byte IIS "Service Unavailable" body on two
+    attempts** — the latter cost the session a fourth source (a conference version of the
+    nominal-price-illusion paper) that is worth one cheap retry in a later session. (7) Method
+    rather than host: **the `extended` web-search mode surfaced three author-hosted PDFs that the
+    `standard` mode had not**, on a query combining a distinctive phrase with `filetype:pdf`. Worth
+    the cost when a standard search returns only aggregator and record pages.
 
 - **[2026-11-08] READ THIS BEFORE AIMING SESSION 87. The index-rule vein is now CLOSED on both of
   its sides, and one of its two sub-halves closed for a reason that is not "no literature":

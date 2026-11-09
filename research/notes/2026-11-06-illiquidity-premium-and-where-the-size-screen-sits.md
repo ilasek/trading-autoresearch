@@ -202,6 +202,27 @@ microcaps and delisted names; this panel includes neither in any comparable prop
 estimate is not transportable even in sign without the caveat in point 1. (d) The challenger is
 unread: do not cite its conclusion.
 
+## Annotation added 2026-11-09 — the threshold's location is the right question, and this panel has no threshold
+
+This note's central finding is that **where the size screen sits decides the answer**. `#416`
+(`notes/2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`) says the lab's
+`eligible` panel was not produced by a screen with a location: about **28%** of a committee index's
+names fall outside the mechanical top-*N* by capitalisation, a comparable count of mechanical names
+falls outside the index, and **the median excluded name is slightly larger than the median
+constituent** (significant at 1%). No size threshold recovers membership.
+
+Two consequences for reading this note against the lab's panel:
+
+- The sensitivity analysis here — move the breakpoint, watch the premium move — has **no analogue**
+  on `eligible`, because there is no breakpoint to move. A null measured on this panel is therefore
+  not a reading at any particular point on the size axis; it is a reading on a differently-shaped
+  selection, and `research/README.md`'s standing caution that a mechanism localised to small or
+  thinly-traded names is excluded **by construction** is the relevant one, not a threshold argument.
+- The illiquidity premium's own measurement on this panel inherits the same problem from the other
+  side: the names that a size screen would have excluded and the names the committees excluded are
+  **different sets with overlapping middles**, so neither this note's attrition arithmetic nor its
+  value-share arithmetic transfers.
+
 ## Related
 
 - `2026-08-29-amihud-illiquidity-measure-and-replication.md` — the measure itself and its

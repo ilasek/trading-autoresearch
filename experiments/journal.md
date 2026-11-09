@@ -28244,3 +28244,4 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    (closed 2026-11-02/03). `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation
    rules to read first.
 
+## Research session — 2026-11-09 (learning agent): 3 notes added, see research/SUMMARY.md

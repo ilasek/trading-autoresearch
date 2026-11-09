@@ -170,6 +170,26 @@ US rule generalises. (c) The disclaimer-versus-premise distinction is the transf
 not the earnings result: **an institution's statement that it uses no private information does not
 make its selection uninformative.**
 
+## Annotation added 2026-11-09 — and it is specifically not a size selection
+
+This note establishes that membership is a **selection** rather than a neutral sample. `#416`
+(`notes/2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`) adds the missing
+half: it says **which** selection it is not. Against a mechanical top-*N*-by-capitalisation
+counterfactual reselected annually, about **72%** of a committee index's names sit inside the
+mechanical set and **28%** do not; the index-only names are about **5%** of aggregate index value
+and the mechanical-only names about **17%**; and **the median excluded name is slightly larger than
+the median constituent** (significant at 1%). In return space a live low-fee index fund tracks its
+index roughly **20× more closely** than the index tracks the mechanical alternative, stable across
+subperiods.
+
+The sentence this note should be read as carrying from now on: *membership is a selection, and it is
+not a size selection with noise at the boundary — the two selections share a middle and differ in
+opposite tails.* Combined with `#415` (the published admission rule explains the membership level
+well and the membership **events** barely at all) and `#418` (the equal-weight pool therefore has a
+discretionary component, not merely a rule-induced one), the standing reading is that neither
+"`eligible` is just the big names" nor "`eligible` is a mechanical rule" is an available motivation
+for a candidate or for a benchmark description.
+
 ## Related
 
 - `2026-11-06-investability-frictions-and-the-microcap-screen.md` — the size half of the same
