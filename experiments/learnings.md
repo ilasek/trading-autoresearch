@@ -7499,3 +7499,131 @@ across experiments; prune entries that later evidence contradicts.
   instance of this panel's train and validation sheets being unrelated, and the first on the object a
   handover proposed to build on. **Carry this figure with every future reading of #28**: it does not
   refute the validation number, but it removes the only corroboration anyone could have assumed it had.
+
+- **[Measured 2026-11-09/10, nightly — ZERO trials spent; THE HEADLINE, AND IT CORRECTS LAST NIGHT'S
+  DERIVED BAR INTO THE UNITS EVERY CANDIDATE IS WRITTEN IN] THE NULL GATE'S THRESHOLD IN **SKILL**
+  UNITS IS +0.030 ON AVERAGE, NOT +0.069; IT IS CANDIDATE-SPECIFIC OVER [−0.094, +0.145]; AND IT IS
+  PREDICTED BEFORE THE TRIAL BY `ln(turnover)` AT R² 0.554, CALLING 26 OF 27 HELD-OUT GATE
+  OUTCOMES.** The 2026-11-08/09 entry derived the bar as `1.28 × null sd` = `null_p90 − null_p50` ≈
+  **+0.069**. That is the bar measured from the **null median**. Every pre-trial screen here, and every
+  number `run_experiment.py` prints, is **skill** = Sharpe − **pool**. The two spaces are 0.039 apart,
+  because the 200 replicas inherit the candidate's holdings schedule and pay its costs, so a
+  no-information book built the candidate's way **loses to the pool**. Off all 27 recorded v3 trials:
+
+      null_p90 − null_p50  (the bar as recorded):  mean +0.0693  median +0.0710  [+0.038, +0.089]
+      null_p50 − pool      (the gap, unmeasured):  mean -0.0390  median -0.0400  [-0.168, +0.087]
+      REQUIRED SKILL = null_p90 − pool:            mean +0.0302  median +0.0310  [-0.094, +0.145]
+
+  The gate is **exactly** `skill ≥ null_p90 − pool` and that identity calls all 27 recorded outcomes
+  (27/27). **(i) 57% of the +0.069 bar is the construction's own drag**, paid equally by candidate and
+  replicas, cancelling in the z-score and not in the skill the lab reports. **(ii) The bar's dispersion
+  exceeds its mean** (sd 0.0449 vs +0.0302): `#28` was refused at skill **+0.055** against a bar of
+  **+0.062** while `#14` passed at skill **+0.021** against a bar of **−0.013**, so two books with
+  identical skill can land on opposite sides. **(iii) It is predictable from the one quantity this lab
+  pre-registers reliably**:
+
+      required skill = +0.0862 − 0.0542·ln(ann_turnover)    R² 0.554, t(slope) −5.57, resid sd 0.0306
+      turnover  1.0x   1.3x   1.6x   2.0x   2.5x   3.5x   5.0x  10.0x
+      bar     +0.086 +0.072 +0.061 +0.049 +0.037 +0.018 -0.001 -0.039
+      leave-one-out MAE 0.0243 (vs 0.0310 for the mean); LOO gate call **26/27**, miss = `#28`
+
+  `avg_positions` adds nothing (t −1.10), so it is a **schedule** effect and not a breadth effect — the
+  2026-11-08/09 z-space conclusion reached by a second route, now with an exchange rate. **First
+  pre-trial instrument in this lab that predicts the GATE rather than the skill**, and the gate refused
+  11 of the last 13 trials. Standing use: quote the predicted bar in every hypothesis from the
+  pre-registered turnover, beside the candidate's predicted skill. **Refusal-only**, like every
+  instrument here — see the entry below for why its pass side is cancelled.
+
+- **[Measured 2026-11-09/10, nightly — THE NEW INSTRUMENT'S OWN ROUTE, PRICED AND REFUTED THE SAME
+  NIGHT, AND ITS PAIRED PROOF RECORDED AS UNAVAILABLE] TURNOVER BUYS A CHEAPER GATE AND PAYS FOR IT
+  SLIGHTLY MORE THAN IN FULL: THE TWO SLOPES ARE −0.054 AND −0.074 AND THE MARGIN SLOPE IS −0.020 AT
+  t −0.53.** Both legs on the same 27 trials:
+
+      d(required skill)/d(ln turnover) = -0.0542  (t -5.57, R² 0.554)
+      d(skill)         /d(ln turnover) = -0.0744  (t -2.01, R² 0.139)
+      d(MARGIN)        /d(ln turnover) = -0.0202  (t -0.53, R² 0.011)
+
+  Extrapolated from the build point to 10x: the bar falls 0.099, skill falls 0.136, net **−0.037** of
+  margin. **Turnover joins breadth, `K` and the sleeve count as a refuted route to the null gate** —
+  the fourth, and the first with a measured exchange rate rather than a z-space argument. **The honest
+  limit, recorded because it was run before the conclusion was written**: the *paired* version is
+  **uninformative on this board**. Six same-lineage pairs exist but vary turnover by only 1.02x–1.70x,
+  so per-pair margin slopes explode — **−1.102, −0.294, −0.091, −0.002, +0.022, +4.822; mean +0.559,
+  sd 2.130, t +0.64**. The one pair with a real schedule contrast and an unchanged score (`#18` 2.13x
+  vs `#19` 1.27x) moved margin by **0.001** (−0.062 → −0.061); `#20`/`#21` and `#22`/`#23` moved it
+  0.004 and 0.002; the three pairs whose *score* also changed moved it 0.029–0.119. So the refutation
+  rests on a cross-sectional null plus **one** clean paired observation. **The cheap measurement that
+  would settle it**: build one score at ~1.6x and at ~8x (the sleeve count is the free knob) and
+  compare margins. Free, no trial, and it either confirms or breaks an anti-candidate.
+
+- **[Measured 2026-11-09/10, nightly — RESEARCH `#425` RUN IN FULL AND CLOSED AS AN EXPLANATION, WITH
+  ITS MECHANISM CONFIRMED] THE BETA/TRACKING CHANNEL OF SKILL IS REAL, UNIFORMLY NEGATIVE, AND 2.5% OF
+  THE BOARD'S SKILL VARIANCE — SO IT IS A TOLL EVERY BOOK PAYS AND NOT A VARIABLE THAT SEPARATES
+  BOOKS.** `#425` records a winner portfolio's market beta running 0.964 → 1.271 → 1.166 across the
+  formation/holding window and names the lab-facing consequence (skill is a difference of Sharpes and
+  does not net beta out), asking for it beside skill rather than as a refusal. Run on all 27 recorded
+  v3 trials' stored validation returns through the exact identity
+  `skill = a/s_r·√252 + mu_p·(b/s_r − 1/s_p)·√252 = ALPHA + BETA/TRACKING` (residual 6.9e-17):
+
+      beta to the pool        mean +0.984  sd 0.158  [+0.653, +1.419]
+      R² to the pool          mean  0.896           [ 0.807,  0.964]
+      BETA/TRACKING channel   mean -0.0182 sd 0.0081 [-0.0343, -0.0060]   <- never positive, all 27
+      ALPHA channel           mean -0.0373 sd 0.1223 [-0.3292, +0.1427]
+      corr(skill, alpha)  pearson +0.998 (R² 0.996) | corr(skill, beta ch) +0.157 (R² 0.025)
+
+  Realised betas really do span 0.65–1.42, so `#425`'s mechanism is confirmed and the board is not
+  beta-neutral — but the channel **never changes sign** and is 0.008 of sd, so it is far too small and
+  far too uniform to flip a verdict. **`#425` is closed as an explanation of the board's ordering and
+  of the train/validation sign instability.** What it leaves is a floor the record did not carry:
+  because `b·s_p ≠ s_r` for any book with idiosyncratic variance, **a book with exactly zero alpha
+  scores skill ≈ −0.018, not 0.000** — the skill metric charges tracking error, and the charge now has
+  a number. Composed with the entry above, the complete requirement at the lab's **1.6x** build point
+  is skill **+0.061** → alpha channel **+0.079** → **information ratio vs the pool ≈ 0.24** over 1562
+  days. `#16` reads **+0.435**, five books have cleared the gate (`#12`, `#14`, `#15`, `#16`, `#17`,
+  all `price-trend`, all one mechanism), and the best non-`price-trend` reading is `#28`'s **+0.262**.
+  **The gate is a bar one mechanism on this board clears, not a factor-of-six wall.**
+
+- **[Measured 2026-11-09/10, nightly — REFRAMES THE 2026-11-08/09 LEVEL-CONTROL RULE WITHOUT WEAKENING
+  IT] A SLOW, LEVEL-ORTHOGONAL SCORE IS CONSTRUCTIBLE; THE INVERSION LAST NIGHT FOUND BELONGS TO TWO
+  OBJECTS' PRICE-LEVEL CORRELATION AND NOT TO SLOW OBJECTS IN GENERAL. TONIGHT'S TWO WERE CLOSED BY
+  ORDINARY ABSENCE OF SIGNAL.** Two new objects built from **returns only** (so no stored level can
+  enter) and screened one-bit, region-matched, top decile, lagged 21d, over 251 train month-ends from
+  1997-01-31, raw and with the mandatory within-region log-`P` control:
+
+      object                                 h=21     h=63    h=126    h=252
+      segmentation R²_region − R²_global    -0.0006  +0.0001  -0.0010  +0.0030
+        ^ | within-region log P             -0.0028  -0.0045  -0.0073  -0.0074
+      segmentation NEGATED                  -0.0122  -0.0182  -0.0262  -0.0313
+        ^ | within-region log P             -0.0063  -0.0096  -0.0129  -0.0105
+      beta_trend (252d beta − prior 252d)   +0.0023  +0.0014  -0.0017  -0.0064
+        ^ | within-region log P             +0.0007  -0.0025  -0.0062  -0.0110
+      beta_trend NEGATED                    -0.0066  -0.0016  -0.0096  -0.0224
+        ^ | within-region log P             -0.0060  -0.0005  -0.0061  -0.0196
+      novelty: segmentation rho to log P -0.044, vol756 -0.177, mom12-1 -0.017
+               beta_trend   rho to log P -0.015, vol756 -0.004, mom12-1 -0.039
+
+  `segmentation` = the extra share of a name's 756-day return variance explained by its own region's
+  equal-weight return over the global pool's (Bekaert-Harvey segmentation). `beta_trend` = the
+  year-on-year change in its 252-day beta to the pool, the object `#425` most directly suggests,
+  pre-signed low (Hong-Sraer speculative beta). **Both null, and both fail informatively: every reading
+  on both signs is non-positive**, i.e. neither tail beats its region's middle — a U-shape, not a
+  direction — so the **negation-invariance screen refuses both** and its refusal side is **3-for-3**.
+  **The by-product outranks the objects.** Both were genuinely level-orthogonal (rho **−0.044** and
+  **−0.015** against the **−0.246** / **−0.303** that inverted `dcorr_low` and the five-year reversal),
+  and consequently **their ICs barely move under the control** (segmentation negated h=252
+  −0.0313 → −0.0105; `beta_trend` −0.0224 → −0.0196). So the 2026-11-08/09 control rule is **necessary
+  and is not what closes the slow branch**: the three conditions that entry set are satisfiable, two of
+  them were satisfied twice tonight, and the binding condition is ordinary signal. **Procedural
+  consequence: screen both signs before writing anything** — a single-sign screen would have read
+  segmentation's negated −0.0313 (t −3.3) as a signal and missed that the raw side is also non-positive.
+  Anti-candidates: `segmentation` (R²_region − R²_global) at any window or sign, and `beta_trend` at any
+  window or sign.
+
+- **[Method, 2026-11-09/10] A BAR AND A SCREEN MUST BE QUOTED IN THE SAME SPACE, AND THIS LAB HAS TWO
+  THAT LOOK ALIKE.** `edge = book Sharpe − null_p50` and `skill = book Sharpe − pool` differ by
+  `pool − null_p50`, which is **+0.039 on average and spans [−0.087, +0.168]** across the 27 recorded
+  trials — not a constant, and set by the candidate's own schedule. The 2026-11-08/09 composition
+  ("required one-bit IC = 0.069 / rate") is internally consistent in **edge** space and its fast-branch
+  closure is unaffected (the shortfall is 0.058 either way); what it cannot do is be read against a
+  predicted **skill**, which is what a candidate file states. Standing rule: when quoting a bar, name
+  the subtrahend — pool or null median — and convert explicitly before comparing it to anything.

@@ -28245,3 +28245,398 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    rules to read first.
 
 ## Research session — 2026-11-09 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Free measurements — 2026-11-09/10 (nightly), ZERO trials spent
+
+Four blocks, all on **train** only, plus two that read nothing but already-recorded columns.
+Nothing scored a return outside train. The only validation numbers touched are the recorded
+`ret`/`pool`/`rf` columns of `experiments/trial_returns/*.parquet` and the recorded
+`null_p50`/`null_p90`/`null_pctile`/`ew_sharpe` columns of `experiments/trials.jsonl` — validation,
+not holdout, and the same files `scripts/rank_trials.py` reads. **No holdout, forward or incubation
+file was opened**: `experiments/holdout_log.jsonl`, `reports/incubation.md`,
+`experiments/incubation.jsonl` and `experiments/protocol_v2/returns/*_holdout.parquet` were never
+opened or listed, and no trial was recorded, so no holdout gate existed to reach. Engine green on
+this tree (`.venv/bin/python -m pytest tests/ -q` → **92 passed in 56.65s**).
+
+Step-0 integrity: `git fetch origin --prune` clean, `git branch -r --no-merged origin/main`
+**empty** — no remote branch holds work absent from `origin/main`. The container again started on a
+per-run branch (`main-t331nv`) sitting at the identical commit as `origin/main`, with no commits of
+its own; local `main` was 8 behind and strictly an ancestor, so `git checkout main && git reset
+--hard origin/main` before any work. **Tenth consecutive session** to find exactly that — the
+container's default, not an incident.
+
+*Harness validation first, per the 2026-10-25/26 rule.* The one-bit region-matched IC harness built
+tonight was pointed at the **contaminant itself** and reproduced the 2026-11-08/09 term structure
+from an independently written implementation:
+
+    object                      h=21     h=63    h=126    h=252
+    log price level  tonight  -0.0283  -0.0470  -0.0700  -0.1051
+    log price level  recorded -0.0300  -0.0507  -0.0732  -0.1087
+
+Monotone, same sign at every horizon, within 6% of the record throughout. (Tonight's `t` runs
+smaller — −5.7 against −7.88 at h=21 — because this harness averages per-date ICs over the 251
+screened month-ends and takes `t` across dates, which is the 2026-11-08/09 rule-3 treatment of
+overlapping windows rather than a pooled regression. Point estimates lead; the `t`s are upper
+bounds.)
+
+### F1 — RESEARCH `#425`'s BETA CHANNEL, MEASURED: IT IS REAL, IT IS UNIFORMLY NEGATIVE, AND IT IS A TOLL AND NOT A CONFOUND
+
+`#425` (2026-11-09 research session) records that a winner portfolio's market beta runs
+0.964 → 0.976 → 1.143 → 1.271 → 1.166 from two years before formation to two after, and names the
+lab-facing consequence: **this lab's skill is a difference of Sharpes and does not net beta out**, so
+the beta path is a candidate explanation for the repeated train-versus-validation sign instability.
+The note asks for it to be reported next to skill rather than used to refuse. Done, on all 27
+recorded v3 trials' stored validation returns, with the identity
+
+    skill = SR_r − SR_p = a/s_r·√252  +  mu_p·(b/s_r − 1/s_p)·√252
+          = ALPHA channel + BETA/TRACKING channel,       r = a + b·p + e on excess returns.
+
+The decomposition is exact (max residual 6.9e-17). Twenty-seven trials:
+
+    quantity                         mean      sd        range
+    beta to the pool               +0.984   0.158   [+0.653, +1.419]
+    R² to the pool                  0.896     --    [ 0.807,  0.964]
+    BETA/TRACKING channel          -0.0182  0.0081  [-0.0343, -0.0060]
+    ALPHA channel                  -0.0373  0.1223  [-0.3292, +0.1427]
+
+    corr(skill, alpha channel)  spearman +0.987   pearson +0.998   (R² 0.996)
+    corr(skill, beta  channel)  spearman +0.240   pearson +0.157   (R² 0.025)
+    corr(skill, beta)           spearman +0.146   pearson +0.209
+    corr(skill, R²  to pool)    spearman +0.240   pearson +0.154
+
+**Three readings, and the second is the one that matters.** (i) The channel exists and `#425`'s
+mechanism is confirmed: realised betas span 0.65 to 1.42, so the board is genuinely not beta-neutral.
+(ii) **It is signed and it never changes sign** — the beta/tracking channel is negative for all 27
+trials, between −0.006 and −0.034, mean −0.018. It is therefore a **toll every book pays**, not a
+variable that separates books: it explains **2.5%** of the board's skill variance against the alpha
+channel's **99.6%**. So `#425` is **closed as an explanation of the board's ordering and of the
+train/validation sign instability** — it is far too small (0.008 of sd) and far too uniform to move a
+sign. (iii) What it *does* buy is a structural floor the record did not carry: because
+`b·s_p ≠ s_r` for any book with idiosyncratic variance, **a book with exactly zero alpha scores
+skill ≈ −0.018, not 0.000**, and a book must earn an alpha channel of **+0.018** merely to report zero
+skill. The lab's skill metric charges tracking error, and now the charge has a number.
+
+### F2 — THE HEADLINE: THE NULL GATE'S THRESHOLD IN **SKILL** UNITS IS +0.030 ON AVERAGE, VARIES BY 0.24 ACROSS THE BOARD, AND IS PREDICTED BY THE CANDIDATE'S OWN PRE-REGISTERED TURNOVER AT R² 0.554
+
+Last night derived the gate's bar as `1.28 × null sd` ≈ **+0.069**, measured as `null_p90 − null_p50`
+— i.e. in **edge-over-the-null-median** units. Every candidate screen in this lab, and every number
+`run_experiment.py` reports, is in **skill** units (Sharpe minus the *pool*). Those are not the same
+space, and the gap between them had never been measured. It is large:
+
+    null_p90 − null_p50  (the bar, as recorded):  mean +0.0693  median +0.0710  range [+0.038, +0.089]
+    null_p50 − pool      (the gap, unmeasured):   mean -0.0390  median -0.0400  range [-0.168, +0.087]
+    ------------------------------------------------------------------------------------------------
+    REQUIRED SKILL = null_p90 − pool:             mean +0.0302  median +0.0310  range [-0.094, +0.145]
+
+The algebra is trivial — the gate is `validation Sharpe > null_p90` and skill is `Sharpe − pool`, so
+the gate is **exactly** `skill ≥ null_p90 − pool`, and that identity calls all 27 recorded gate
+outcomes correctly (27/27). The content is in the two columns nobody had put side by side:
+
+**(i) The null median sits BELOW the pool, by a mean of 0.039.** The 200 replicas inherit the
+candidate's holdings schedule and pay its costs, so a no-information book built the candidate's way
+is *worse* than the pool. **57% of the +0.069 bar is therefore the construction's own drag, which the
+candidate and its replicas pay equally and which cancels in the z-score but not in the skill the lab
+reports.** The required *skill* is +0.030, not +0.069.
+
+**(ii) The bar is candidate-specific and its dispersion exceeds its mean** (sd 0.0449 against a mean
+of 0.0302), spanning **[−0.094, +0.145]** — a 0.24-wide range, twice the entire skill range of the
+board's top half. `#2` and `#9` faced *negative* thresholds; `#3` faced +0.145. The gate is not a
+constant bar, and two books with identical skill can land on opposite sides of it. That is why
+`#28` (skill **+0.055**, bar **+0.062**) was refused while `#14` (skill **+0.021**, bar **−0.013**)
+passed.
+
+**(iii) And the bar is predictable, before the trial, from a quantity the lab already
+pre-registers.** Ordinary least squares on all 27:
+
+    required skill  =  +0.0862  −  0.0542 · ln(ann_turnover)
+                       (t +7.40)  (t −5.57)      R² 0.554,  residual sd 0.0306,  n 27
+
+    turnover    1.0x    1.3x    1.6x    2.0x    2.5x    3.5x    5.0x   10.0x
+    bar       +0.086  +0.072  +0.061  +0.049  +0.037  +0.018  -0.001  -0.039
+
+    leave-one-out: mean abs error 0.0243  (R² 0.454)   vs 0.0310 for predicting the mean
+    leave-one-out GATE CALL (skill ≥ predicted bar):  **26 of 27 correct**
+      the single miss: #28 sl_micro_span_masked, skill +0.055, predicted bar +0.036, actual +0.062
+
+Adding `avg_positions` does nothing (t −1.10, R² 0.554 → 0.576), so this is a **schedule** effect and
+not a breadth effect — which is the same conclusion last night reached from the other direction, by a
+different route, and it is the mechanism: a churning candidate's replicas pay its churn, so its
+median falls and its bar with it.
+
+**This is the first pre-trial instrument in this lab that predicts the GATE rather than the skill**,
+and the gate is what refused 11 of the last 13 trials. Composed with F1 it gives the complete
+requirement at the lab's usual build point: at **1.6x** turnover a candidate needs **skill ≥ +0.061**,
+hence an **alpha channel ≥ +0.079**, hence (at the board's median `R²` to the pool of 0.896) an
+**information ratio against the pool of ≈ 0.24** sustained over the 1562 validation days. The board's
+best is `#16`'s **+0.435**, and the best outside `price-trend` is `#28`'s **+0.262** — so the gate is
+*reachable*, and five recorded books have reached it (`#12`, `#14`, `#15`, `#16`, `#17` — all of them
+`price-trend`, all of them one mechanism). It is not a factor-of-six wall in these units.
+
+### F3 — AND IT IS REFUSAL-ONLY, LIKE EVERY OTHER INSTRUMENT HERE: THE TURNOVER DISCOUNT IS CANCELLED BY TURNOVER'S COST TO SKILL
+
+The obvious move from F2 — buy a lower bar with churn — is priced and it is a wash. Both legs
+estimated separately on the same 27 trials:
+
+    d(required skill) / d(ln turnover)   =  -0.0542   (t -5.57,  R² 0.554)
+    d(skill)          / d(ln turnover)   =  -0.0744   (t -2.01,  R² 0.139)
+    ----------------------------------------------------------------------
+    d(MARGIN = skill − bar) / d(ln turn) =  -0.0202   (t -0.53,  R² 0.011)
+
+The candidate's own skill falls *faster* with churn (−0.074) than its bar does (−0.054), so the net
+is **indistinguishable from zero and signed against the move**. Extrapolated from the lab's build
+point to 10x turnover: the bar falls 0.099 and skill falls 0.136, a net loss of 0.037 of margin. So
+"turnover as a route to the null gate" joins breadth, `K` and the sleeve count on the anti-candidate
+list, with a mechanism and a measured exchange rate rather than by precedent.
+
+**The honest limit on this block, stated rather than buried.** The paired version of the test — the
+one that would be a proof rather than a cross-section of different scores — is **uninformative on this
+board**, and I ran it before writing the conclusion above. Six same-lineage pairs exist, but they vary
+turnover by only 1.02x–1.70x, so dividing a margin difference by `ln(turnover ratio)` explodes:
+per-pair slopes run −1.102, −0.294, −0.091, −0.002, +0.022, +4.822, mean +0.559, sd 2.130, **t +0.64**.
+The one pair with a real schedule contrast and an unchanged score (`#18` 2.13x vs `#19` 1.27x,
+a 1.68x change) moved its margin by **0.001** (−0.062 → −0.061), and the next two
+(`#20`/`#21`, `#22`/`#23`) moved it by 0.004 and 0.002; the three pairs whose *score* also changed
+moved it by 0.029 to 0.119. So the claim rests on the cross-sectional null plus **one** clean paired
+observation, which is exactly the evidentiary weight the 2026-10-27/28 and 2026-10-31/11-01 entries
+say a six-draw instrument carries. The cheap measurement that would settle it is named in the
+handover: build **one** score at ~1.6x and at ~8x and compare margins directly.
+
+### F4 — TWO NEW SLOW OBJECTS, BOTH LEVEL-ORTHOGONAL BY CONSTRUCTION, BOTH NULL ON BOTH SIGNS — AND THE STANDING LEVEL-CONTROL RULE IS NECESSARY BUT IS NOT WHAT CLOSES THE SLOW BRANCH
+
+Last night's handover asks for a slow, unit-free score that is **new**, **rank-orthogonal to the log
+price level**, and survives the **negation-invariance** screen. Two were built from returns only (so
+they cannot carry a stored level at all) and screened one-bit, region-matched, top decile, lagged 21
+days, over the 251 train month-ends from 1997-01-31, raw and with the mandatory within-region log-`P`
+control:
+
+    object                                     h=21     h=63    h=126    h=252
+    segmentation  R²_region − R²_global      -0.0006  +0.0001  -0.0010  +0.0030
+      ^ | within-region log P                -0.0028  -0.0045  -0.0073  -0.0074
+    segmentation  NEGATED                    -0.0122  -0.0182  -0.0262  -0.0313
+      ^ | within-region log P                -0.0063  -0.0096  -0.0129  -0.0105
+    beta_trend  (252d beta − prior 252d)     +0.0023  +0.0014  -0.0017  -0.0064
+      ^ | within-region log P                +0.0007  -0.0025  -0.0062  -0.0110
+    beta_trend  NEGATED                      -0.0066  -0.0016  -0.0096  -0.0224
+      ^ | within-region log P                -0.0060  -0.0005  -0.0061  -0.0196
+
+    novelty columns (mean within-region Spearman over the screened month-ends)
+    segmentation   rho to log P -0.044   to vol756 -0.177   to 12-1 momentum -0.017
+    beta_trend     rho to log P -0.015   to vol756 -0.004   to 12-1 momentum -0.039
+
+`segmentation` is the extra share of a name's 756-day return variance explained by its own region's
+equal-weight return over that explained by the global pool's (Bekaert-Harvey segmentation: a locally
+priced name is one global investors do not hold). `beta_trend` is the year-on-year change in a name's
+252-day beta to the pool — the object `#425` most directly suggests, pre-signed *low* (Hong-Sraer
+speculative beta: accumulating speculative demand raises beta and is subsequently paid back).
+
+**Both are nulls, and both fail in the same informative way: every reading on both signs is
+non-positive.** Neither tail of either score beats its region's middle, which is the signature of a
+U-shape rather than of a direction, so the **negation-invariance screen refuses both** — the screen
+whose refusal side is now 3-for-3. Against the F2 bar at the lab's build point (+0.061 of skill, hence
+a required one-bit IC of roughly 0.061/4 ≈ **0.015** at a one-year information horizon, using last
+night's slow-branch rate), neither object produces a positive reading at any horizon on either sign,
+so neither is worth a trial.
+
+**The by-product is worth more than the two objects.** Both were **genuinely** level-orthogonal — rho
+to the contaminant **−0.044** and **−0.015**, against the **−0.246** and **−0.303** that inverted
+`dcorr_low` and the five-year reversal last night — and consequently **their ICs barely move under the
+control** (segmentation's negated h=252 reading goes −0.0313 → −0.0105; `beta_trend`'s −0.0224 →
+−0.0196). So the inversion last night found is a property of **those two objects' correlation with the
+price level**, not a property of slow objects in general: **a slow, level-orthogonal score is
+constructible, and the standing control rule is necessary without being what closes the slow branch.**
+What closed it tonight was ordinary absence of signal. That reframes idea 4 of last night's handover:
+the three conditions it set are satisfiable — tonight satisfied two of them twice — and the binding
+one is the ordinary one.
+
+### Pre-registration scorecard
+
+* **F2's leave-one-out gate call**, stated as a prediction before it was computed (the fit should
+  call the gate better than chance on held-out trials): **passed**, 26 of 27, single miss `#28`.
+* **F3's prediction** before measuring the margin regression (the discount should be cancelled,
+  because last night found edge and bar move together in z space): **passed in sign and magnitude**,
+  margin slope −0.020 at t −0.53.
+* **F3's paired test**, run as the stronger version of the same claim: **uninformative**, t +0.64 on
+  six pairs, and recorded as uninformative rather than as support.
+* **F4's prediction** before screening (both objects are level-orthogonal by construction, so their
+  ICs should *not* move much under the within-region log-`P` control, unlike `dcorr_low`): **passed**,
+  rho −0.044 / −0.015 and ICs stable.
+* **F4's hypothesis** that either object carries a tradeable slow signal: **refuted**, both signs
+  non-positive at all four horizons.
+* **No turnover or drawdown pre-registration was due** — no candidate was run.
+
+## Session summary — 2026-11-09/10 (nightly) — 0 trials of 8; the gate that refuses everything now has a bar in the units candidates are written in, it is half what the record carried, and it is predictable before the trial
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 27 scored v3 trials** (28 recorded, one
+with no returns), the v3 board is unchanged, the deflated bar is unchanged, and no candidate file was
+written. Four free blocks ran. **No holdout, forward or incubation file was opened**, and with no
+trial recorded there was no holdout gate to reach. Engine green (**92 passed in 56.65s**). Step-0
+integrity clean: no remote branch holds work absent from `origin/main`; the container's per-run
+branch (`main-t331nv`) sat at `origin/main`'s commit with no commits of its own and was reset to
+`main` before any work — **tenth consecutive session**.
+
+**Why zero.** The night's second block produced the instrument and its own refutation in the same
+hour: the gate's threshold is predictable at R² 0.554 from a candidate's turnover, and the only way
+to exploit that is cancelled by turnover's cost to skill. The fourth block then built the two slow,
+level-orthogonal, genuinely new objects last night's handover asked for and both were nulls on both
+signs. Writing a candidate anyway would have been a trial with no case. Six of the last eleven
+sessions have spent zero.
+
+### Headline: the null gate's bar, in skill units, is +0.030 on average — not +0.069 — and it is candidate-specific over a 0.24-wide range
+
+Last night derived the bar as `1.28 × null sd` = `null_p90 − null_p50` ≈ **+0.069**. That is the bar
+in **edge-over-the-null-median** units. Every screen in this lab and every number
+`run_experiment.py` reports is in **skill** units, Sharpe minus the **pool** — and the two are
+0.039 apart, because **the null median sits below the pool**: the 200 replicas inherit the
+candidate's schedule and pay its costs, so a no-information book built the candidate's way loses to
+the pool. Reading it off all 27 recorded trials:
+
+> `null_p90 − null_p50` = **+0.0693**;  `null_p50 − pool` = **−0.0390**;
+> **required skill = `null_p90 − pool` = +0.0302**, median +0.0310, range **[−0.094, +0.145]**.
+
+The gate is therefore *exactly* `skill ≥ null_p90 − pool`, which calls all 27 recorded outcomes
+(27/27), and **57% of the +0.069 bar is construction drag that cancels in the z-score but not in the
+skill the lab reports**. Its dispersion (sd 0.0449) exceeds its mean, which is why `#28` was refused
+at skill +0.055 against a bar of +0.062 while `#14` passed at skill +0.021 against a bar of −0.013.
+
+**And it is predictable before the trial, from a quantity the lab already pre-registers reliably:**
+
+    required skill = +0.0862 − 0.0542 · ln(ann_turnover)     R² 0.554, t(slope) −5.57, resid sd 0.031
+    leave-one-out mean abs error 0.0243 (vs 0.0310 for the mean); LOO GATE CALL 26 of 27 correct
+
+`avg_positions` adds nothing (t −1.10), so it is a schedule effect, not breadth — the same conclusion
+last night reached from the z-space side, now with the exchange rate attached. **This is the first
+pre-trial instrument here that predicts the GATE rather than the skill**, and the gate is what
+refused 11 of the last 13 trials.
+
+### Second: composed with the beta toll, the complete requirement is an IR of 0.24 — and five recorded books already clear it
+
+Research `#425` asked for each book's realised beta to the pool to be reported next to skill. Done on
+all 27, through the exact decomposition `skill = alpha channel + beta/tracking channel`. The beta
+channel is **real, uniformly negative, and tiny**: between −0.006 and −0.034 for every trial, mean
+−0.018, **2.5%** of the board's skill variance against the alpha channel's 99.6%. So `#425` is
+**closed as an explanation of the board's ordering and of the train/validation sign instability** —
+too small and far too uniform to move a sign — while leaving a floor the record did not carry: a book
+with exactly zero alpha scores **−0.018**, not zero, because the skill metric charges tracking error.
+
+Composing: at the lab's usual **1.6x** turnover a candidate needs skill **+0.061**, hence an alpha
+channel of **+0.079**, hence an **information ratio against the pool of ≈ 0.24** over the 1562
+validation days. `#16` has **+0.435** and five books have cleared the gate (`#12`, `#14`, `#15`,
+`#16`, `#17` — all `price-trend`, all one mechanism). **The gate is not a factor-of-six wall in these
+units; it is a bar that one mechanism on this board clears and no other has.**
+
+### Third: the one route the new instrument suggests is cancelled, and the paired proof is not available on this board
+
+`d(bar)/d(ln turnover)` = **−0.054** (t −5.57) but `d(skill)/d(ln turnover)` = **−0.074** (t −2.01),
+so `d(margin)/d(ln turnover)` = **−0.020** (t −0.53, R² 0.011): churn buys a cheaper gate and pays
+for it slightly more than in full. Turnover joins breadth, `K` and the sleeve count as a refuted route
+to the gate. **Stated with its limit**: the paired version — six same-lineage pairs — is
+**uninformative**, because they vary turnover by only 1.02x–1.70x (per-pair slopes −1.10 to +4.82,
+t +0.64), and it is recorded as uninformative rather than as support. The one clean paired observation
+(`#18` 2.13x vs `#19` 1.27x, same score) moved margin by **0.001**.
+
+### Fourth: the slow branch is not closed by the level control — it was closed tonight by ordinary absence of signal
+
+Last night's handover set three conditions for a next scored trial: slow, **new**, **rank-orthogonal
+to the log price level**, and surviving negation invariance. Two objects were built from returns only
+and screened one-bit/region-matched over 251 train month-ends: **`segmentation`** (the extra share of
+a name's 756-day variance explained by its own region's equal-weight return over the global pool's)
+and **`beta_trend`** (the year-on-year change in its 252-day beta, the object `#425` most directly
+suggests). Both are **genuinely level-orthogonal** — rho to the contaminant **−0.044** and **−0.015**
+against the −0.246 / −0.303 that inverted `dcorr_low` and the five-year reversal — and consequently
+**their ICs barely move under the within-region log-`P` control**. Both are also **nulls on both
+signs** at all four horizons, so the negation-invariance screen refuses both (its refusal side is now
+3-for-3). **The by-product outranks the objects: the inversion last night found is a property of those
+two objects' price-level correlation, not of slow objects in general, so a slow level-orthogonal score
+is constructible** and the standing control rule is necessary without being the thing that closes the
+branch.
+
+### Verdicts
+
+None. No trial was recorded, no verdict was assigned, the leaderboard and `trials.jsonl` are
+untouched, and the board still has no v3 champion and no positive skill interval excluding zero.
+
+### What the night bought, stated without inflation
+
+No book, no verdict, no movement on the board. What it bought: the bar of the gate that refuses
+everything, restated in the units candidates are actually written in and found to be **less than half**
+the figure the record carried there; the first instrument here that predicts that gate, at 26/27 on
+held-out trials, from a number candidates already pre-register; the complete requirement composed into
+an information ratio, which makes the bar legible as something one mechanism on this board clears;
+`#425` closed as an explanation with its channel measured and signed; the one new route refuted with
+its own exchange rate; and two new objects closed free with a reframing of why the slow branch is hard.
+The honest summary is that the night moved the lab's picture of its **own gate** rather than its board,
+and the most useful line is that the gate is reachable and has been reached — by exactly one mechanism.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Use F2's bar as the refusal test, in skill units, and state the predicted bar in the hypothesis
+   from the pre-registered turnover.** `required skill = 0.0862 − 0.0542·ln(turnover)`; at the lab's
+   build points that is +0.072 / +0.061 / +0.049 at 1.3x / 1.6x / 2.0x. Quote it beside the
+   candidate's predicted skill, and add F1's **+0.018** tracking toll before comparing to an alpha
+   estimate. Provenance: tonight. **Do not quote a pass side** — the instrument is refusal-only by
+   F3's own arithmetic, and every instrument this lab has built has failed on its pass side.
+2. **The one cheap measurement that would settle F3, named precisely.** Build a *single* score at
+   ~1.6x and at ~8x turnover (the overlapping-sleeve count is the free knob) and compare margins
+   directly. Tonight's board cannot do it — its matched pairs span 1.02x–1.70x — and the whole
+   "turnover as a route to the gate" refutation currently rests on a cross-sectional null plus one
+   paired observation. Free, no trial, and it either confirms or breaks an anti-candidate.
+3. **A slow level-orthogonal score is constructible — the two built tonight prove the construction,
+   not the signal.** The binding condition is ordinary signal, not the level control. Build from
+   returns only (so no stored level can enter), check rho to the contaminant and expect |rho| < 0.05,
+   and screen **both signs** before writing anything: tonight's two failed by being U-shaped, which no
+   single-sign screen would have caught.
+4. **What is left, said plainly, and it is narrower than last night's version.** The fast branch stays
+   closed (F2 lowers the bar but last night's edge-space arithmetic is unaffected — the shortfall is
+   0.058 either way). The slow branch is open as a *construction* and empty as an *inventory*: the
+   lab's clean slow objects are either traded and refused, inverted by the level control, or (as of
+   tonight) measured and null. The gate is reachable at IR ≈ 0.24 and exactly one mechanism on this
+   board reaches it, so the honest target is a **second** mechanism with an alpha channel above
+   **+0.079**, against a best-ever non-`price-trend` reading of `#28`'s **+0.066**. That is a factor of
+   1.2, not a factor of six — which is the most encouraging sentence written here in two weeks, and it
+   is a restatement of the bar, not new evidence that anything clears it.
+5. **For the human owner, one new item and the standing list.** New: **F2 — the null gate's threshold
+   in skill units is candidate-specific over [−0.094, +0.145] and falls with the candidate's own
+   turnover at −0.054 per log unit, because the replicas inherit its schedule and pay its costs.** The
+   gate therefore charges a low-turnover book up to +0.145 of skill and a 10x book nothing at all.
+   F3 shows the incentive is cancelled in expectation, so this is a fairness/variance observation
+   rather than an exploit, but it is a property of a **hard** gate that is not in `program.md` and is
+   not visible in any trial record. Standing and unchanged: the two engine issues as filed (2026-10-18
+   / 2026-10-22, worsened by `#423`), `min_train_skill = 0.0`, `#324`'s deliberate difference,
+   `#358`'s empirical-Bayes shrinkage of the bar, the data-type question, `#393`'s
+   minimum-detectable-skill arithmetic, `#396`'s tension between `program.md`'s spend-across-families
+   rule and what the design can measure, `#407`'s rule-induced comovement inside the equal-weight
+   pool, `#418`'s discretionary component in the benchmark's membership, `#422`'s volume-only
+   liquidity tier against a spread gradient that also runs in nominal price, the note format's missing
+   holdout-overlap flag, the `dataclasses.replace`/`pool_cache` trap, and the per-run-branch generator
+   (ten consecutive sessions).
+6. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — **`segmentation`
+   (R²_region − R²_global) at any window or sign**, and **`beta_trend` (the year-on-year change in a
+   name's beta) at any window or sign**; and **turnover as a route to the null gate** (now refuted with
+   an exchange rate, joining breadth, `K` and the sleeve count). Unchanged from previous handovers: the
+   scale-free left-tail exponent and the own-return tail index in any form; the semi-deviation ratio;
+   time-underwater; annual-rank stability; any screen beyond 63 days without the within-region log-`P`
+   control; the `log(MA_L/P)` term structure at any scale set; plain multi-horizon own-trend in any
+   learned combination; `#388`'s forecast floor; the full-cross-section decision IC as a reachable
+   quantity; downside correlation and the downside loading in any form; coskewness and the third
+   co-moment in any form; the volatility-tercile pre-sort as a construction operator; any paired
+   candidate whose two legs share a score; any hypothesis whose case is a train sheet, a matched-null z
+   or a negation-invariant margin; any hypothesis whose novelty case is a cross-sectional rank
+   correlation or the pass side of the train active-return screen; the closing-location value; the
+   overnight session at either normaliser; the turn-of-month differential on either sign; the
+   coefficient of variation of share volume; the quarter-ending-month conditioner on momentum; plain
+   12-1 momentum; any equity-ETF book; the bond sleeve as a duration bet; the 2–4-week index-level
+   relative-strength score on either sign; the liquidity level or trend in any form; 52-week-high
+   proximity; information discreteness; covariance weighting at any estimator; weighting inside the
+   selected slice; the exclusion / pool-minus-worst book at any `f`; `#385`'s IC-decorrelation blend;
+   the #16/#19 blend; and any construction whose case is cost at any turnover or a tighter error bar.
+7. **From `research/SUMMARY.md`.** Spent tonight: **`#425`** (its free diagnostic run in full, its
+   channel measured, and the note closed as an explanation while its mechanism is confirmed) and
+   **`#423`**'s within-region log-`P` control (applied to both of tonight's objects, as the standing
+   rule requires). `#424`'s momentum-matched-control requirement was not triggered — neither object is
+   a group-change hypothesis. Still live and unspent: `#386`/`#387`'s `R²`/`S²` yardstick, `#389`'s
+   cumulative-active-return curve, `#381`'s `σ_IC`, `#411`'s newly-eligible cohort scout (second-moment
+   only, per `#412`), `#415`'s free refusal test, `#416`'s reading rule, `#420`–`#422`, `#426`, and
+   `#407`–`#410`, `#417`–`#419`. **`#363` is NOT live** (closed 2026-11-02/03). `#300`, `#310`, `#322`,
+   `#336`, `#339`, `#342` remain the interpretation rules to read first.
