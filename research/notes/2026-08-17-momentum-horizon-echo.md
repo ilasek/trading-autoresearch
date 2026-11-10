@@ -115,3 +115,16 @@ toward the 12-month reversal boundary Jegadeesh–Titman warn about.
 - `experiments/learnings.md`: the 52-week-high / residual-momentum / information-discreteness
   cluster, and the "open axes are portfolio construction and rebalance mechanics, not signal
   definition" conclusion — this note supplies literature backing for that conclusion.
+
+## Annotation added 2026-11-10 — the horizon choice is also a beta choice
+
+The beta term structure recorded in `notes/2026-11-09-price-based-comovement-and-its-failed-replication.md`
+(top momentum decile: 0.964 → 0.976 → 1.143 → 1.271 → 1.166 from two years before formation to two
+after; middle deciles flat at ~0.82–0.84) bears directly on the 12-7 versus 12-2 question this note
+is about. Those are two *different points on that curve*: a window that discards the most recent six
+months selects on a stale position in the beta path, and a window that includes them selects at a
+later, higher point. So the echo debate is not only about which slice of the formation window
+carries return information — **the two windows also hand the book different market exposures**, and
+on a long-only book graded on skill against the equal-weight pool that difference is not netted out.
+Any comparison of the two horizons should report realised beta to the pool alongside skill (`#425`),
+or the horizon effect and the beta effect are confounded by construction.

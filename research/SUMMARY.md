@@ -9144,6 +9144,144 @@ paper's multi-year relative-return magnitudes are deliberately left in the sourc
 carried, and the replication's sample-average returns are left out with only the momentum-decile
 composition carried.
 
+### The CONTROL GROUP as a construction — what a matched control is made of, what it costs when the matching variable is the treatment, and the two biases it removes from this lab's own benchmark (cross-family, the gate's own statistic, the panel itself)
+
+**[2026-11-10] Read this first: the folder had 275 notes and no construction for a control group,
+and the lab has been building them by hand.** The [2026-11-09] entry named the aim from inside its
+own note — `#424`'s decisive move was matching each event stock to a same-size-decile firm with the
+closest past-year return and differencing three ways — and predicted the detector greps would come
+back near zero. They did: across all 275 prior notes, `matching variable` **0**, `caliper` **0**,
+`synthetic control` **0**, `matched sample` **1**, `matched firm` **1**, `difference-in-difference`
+**2**, `matched control` **4**, `control group` **3**, `propensity` **5**. **The mandated second
+grep on the mechanism confirmed the gap rather than shrinking it**: all five `propensity` hits are
+the unrelated phrase *selling propensity* (the V-shaped-disposition cluster), and the four
+`matched control` hits are other people's event studies relayed inside notes about something else —
+**no note said how to build one.** Meanwhile `experiments/learnings.md` shows the lab running
+hand-built controls constantly (`pt_raw_reversal_control`, "turnover matched holdings-only in
+advance", "fails its own control"), i.e. the practice exists and the design literature behind it
+did not. Four tier-1 primaries, all read in full, close it.
+
+**(a) The rule, and it is the aim's question answered head-on: when a sample is selected on a
+mean-reverting variable, ONLY a control matched on that variable is well specified — and the
+misspecification is large even when the difference is SLIGHT.** Barber–Lyon's accounting paper runs
+the grid: control groups matched on industry, or on industry *and size*, yield misspecified test
+statistics whenever the sample's pre-event level of the performance measure differs from the
+controls'. The cause is mechanical and transfers past accounting — selection on an extreme value of
+a variable with a transitory component selects on the transitory component, which then dissipates,
+manufacturing a post-event change with no event effect at all. Their framing is the part to carry:
+**a control group is a model of expected performance, and naming the matching variables is writing
+that model down.** Matching on industry alone asserts the firm's own history is irrelevant;
+comparing *changes* asserts the firm keeps its own level and inherits only the group's change. These
+are different assumptions, and change models dominate level models throughout (**#427**).
+→ `notes/2026-11-10-performance-matched-controls-and-mean-reversion.md`
+
+**(b) The construction, with both calipers stated and a shape that is transferable where the
+constants are not.** The scheme well specified in *every* cell: window the candidate controls to
+**70%–130%** on the nuisance variable (size), **discard those outside 90%–110%** on the **selection
+variable**, and if the survivors are empty fall back to the **nearest on the selection variable**
+among those meeting the size window — so no observation is silently dropped. The returns paper's
+scheme is the same shape one notch looser: **70%–130%** on size, then **nearest** on book-to-market.
+Three design rules come with them. **The ORDER of a two-stage match changes specification** — same
+two variables, same data: filtering on book-to-market then matching on size "works well in most
+sampling situations", filtering on size then matching on book-to-market is well specified in
+virtually all of them. **The match is struck once and held** for the horizon; letting the comparison
+group drift does not break specification but erodes power. And **power decays as the matching lag
+lengthens** from one year to three — a stale match is a weak match. A nonparametric (rank) statistic
+dominates the `t` throughout (**#428**).
+→ `notes/2026-11-10-performance-matched-controls-and-mean-reversion.md`,
+`notes/2026-11-10-control-firm-versus-reference-portfolio-biases.md`
+
+**(c) What the estimate means when the match is imperfect in a known direction — answered twice,
+once in words and once with a rate.** In words, from the finance side: **the tendency to mean-revert
+is itself cross-sectionally heterogeneous**, so matching on the *level* of the selection variable is
+sufficient only when the *speed* of reversion is common across the matched pair. That is why the
+authors' one unfixable cell is small firms with strong past performance, and their closing
+instruction is to ask whether the sample reverts faster or slower than its controls. With a rate,
+from the econometrics side: matching on `k` **continuous** covariates has conditional bias
+`O_p(N^{−1/k})` against sampling error `O_p(N^{−1/2})`, so **for `k ≥ 2` the bias need not be
+dominated and the estimator is not `√N`-consistent — standard confidence intervals are not valid,
+not merely wide.** The exception is sharp: at `k = 1` the bias is `O_p(N^{−1})` and ignorable, and
+**discrete matching variables do not count toward `k`**. Two traps attached: the **bootstrap is not
+valid** for the simple matching estimator (an analytic variance estimator is supplied), and matching
+with a fixed number of matches does not attain the semiparametric efficiency bound (**#429**).
+→ `notes/2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`
+
+**(d) The repair is a REGRESSION, not a fourth matching variable — which inverts the folder's
+instinct.** The bias-corrected estimator imputes `Y_j + μ̂₀(X_i) − μ̂₀(X_j)` instead of `Y_j`,
+adjusting each pair by the predicted outcome gap across the covariate distance the match failed to
+close; it removes the bias **without affecting the asymptotic variance**, and the authors' own
+working implementation uses a plain **linear** regression for `μ̂₀`. So adding a characteristic to
+the *match* makes the match worse at a known rate, while adding the same characteristic as a
+*regressor* costs nothing asymptotically. The implied design on this panel: match exactly on region
+(discrete, free), match on **past return alone** among continuous variables, regress away the rest —
+which is also what the finance literature reached empirically, and what `#424`'s decisive test did
+(a size **decile**, discrete, plus past return) (**#430**).
+→ `notes/2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`
+
+**(e) The matched-PORTFOLIO form, whose third matching dimension is PRIOR-YEAR RETURN, and the
+three-way decomposition the folder does not have anywhere.** DGTW build **125** passive benchmark
+portfolios by cutting the universe into **quintiles on size, book-to-market and momentum (the
+stock's prior-year return)**, with **NYSE-only breakpoints**, **value-weighted and buy-and-hold
+within each cell**, re-formed annually and re-assigned quarterly. **The triple sort is NESTED, not
+independent** — size quintiles first, book-to-market quintiles *within* each size quintile, momentum
+quintiles *within* each of the 25 — so every cell is populated by construction, which is what makes
+the design feasible on a narrow panel at all. **The momentum variable skips the month before
+formation** (twelve-month return through end-May for a June/July formation), expressly to avoid
+bid-ask bounce and monthly reversal. A holding's benchmark-adjusted return is its return minus the
+month-`t` return of the cell it occupied at `t−1`. On top of that they split a book's
+excess return three ways — **CS** (picking within a cell), **CT** (shifting *into* a cell before the
+cell pays, measured by differencing the same stock's cell return at the current weight against its
+weight and cell assignment **twelve months earlier**), and **AS** (what the book earns by *sitting*
+in high-premium cells). Their motivating sentence transfers verbatim with two words swapped: earlier
+favourable results "may have been due to a simple momentum screen in the selection criteria", not to
+skill. **Because the cells are quintiles rather than continuous distances, this construction keeps
+`k` at zero** in item `#429`'s accounting — which is an argument for cell-based benchmarking over
+nearest-neighbour matching on a panel this narrow, and it is not an argument the finance papers make
+(**#431**).
+→ `notes/2026-11-10-characteristic-matched-benchmark-portfolios.md`
+
+**(f) The by-product, and it is the most valuable half of the session: TWO of the four biases that
+make a reference portfolio the wrong benchmark are present in THIS LAB'S OWN POOL, with known
+signs.** Barber–Lyon's returns paper enumerates why a long-horizon abnormal return computed against
+a *reference portfolio* is misspecified where one computed against a *matched firm* is not.
+**Rebalancing bias**: a reference portfolio's compound return assumes periodic rebalancing while the
+sample security's does not; restoring fixed weights sells what beat the average and buys what lagged
+it, and they show by direct sort that month-`t−1` winners are month-`t` losers and vice versa — so
+the rebalanced benchmark's compounded return is **inflated** and the buy-and-hold difference is
+biased **negative**. **New listing bias**: the benchmark keeps admitting names that began trading
+after the event month while the sample security does not, biasing the difference **positive**.
+Protocol v3 grades every candidate on skill against the **equal-weight eligible pool** — a
+rebalanced reference portfolio — and under protocol v2 a column enters `prices` only once the name
+has been eligible, so the pool admits names **at the moment they enter an index**, which `#401` and
+`#411` establish is not an information-free selection. Both biases are therefore structural here,
+and they run in opposite directions. **The check is free and currently unreported**: compute the
+pool's own **buy-and-hold** counterpart over the measurement window — same eligible names, equal
+weights struck once, left to drift — and report the gap against the rebalanced pool next to skill.
+That gap *is* the rebalancing channel, measured rather than argued, and it is the amount by which a
+low-turnover candidate's skill is understated (**#432**).
+→ `notes/2026-11-10-control-firm-versus-reference-portfolio-biases.md`
+
+**Consistency with what the folder already holds, stated rather than smoothed.** `#432` is not a new
+claim about the equal-weight pool: `2026-08-22-rebalancing-return-attribution-critique.md` already
+proves rebalancing trades have **exactly zero** expected value under IID returns and pay only where
+relative prices mean-revert, and the 2026-10-13 pair already records the pool as a size/value tilt
+plus a constant-weight rebalancing channel. What is new is the **antecedent measured on a wide
+cross-section**, and the reframing from an attribution question into **a bias in a measured abnormal
+return with a sign**. Also new, and not held anywhere in that cluster, is the **new-listing** half.
+Two further items transfer without qualification because they are arithmetic rather than empirical:
+long-horizon abnormal returns must be accumulated in **simple**, never continuously compounded,
+returns — log abnormal returns are inherently negatively biased whenever there is cross-sectional
+dispersion — and long-horizon paired differences on single names are **strongly positively skewed**,
+so a rank-based or bootstrap statistic is the right default and a plain `t` is not.
+
+**Anti-lookahead.** Samples 1977–1992 (a, b-accounting), July 1963 – December 1994 (b-returns),
+1974–1994 holdings (e), and none at all for (c)/(d), which are theory plus a 1970s training-programme
+dataset — **all four `validation_overlap: false`, all four `published_post_2018: false`**. Every
+magnitude recorded above is a **caliper**, a **cell count**, a **skewness coefficient**, a
+**stochastic order**, or a statement about test specification. No return, Sharpe or dated performance
+figure from any of the four sources is carried, and DGTW's sample-period style and performance
+numbers are left in the source.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -17342,6 +17480,118 @@ hypothesis fodder, then anti-candidates.
     state variable is not a conditioning layer any candidate here could compute. Tier n/a.
     → the "NOMINAL PRICE LEVEL as an object" section above
 
+427. **FREE PRE-TRIAL RULE, and it is the design counterpart of `#424`'s refusal test: when a
+    cohort is defined by an event that SELECTS ON PAST PERFORMANCE, only a control matched on past
+    performance is well specified — and the misspecification is large even when the difference is
+    slight.** The grid result is unambiguous: controls matched on industry, or industry *and size*,
+    are misspecified whenever the sample's pre-event level of the selection variable differs at all
+    from the controls'. The mechanism transfers past accounting — selecting on an extreme value of a
+    variable with a transitory component selects the transitory component, which dissipates,
+    manufacturing a post-event change with no event effect. On this panel the natural "events" are
+    **all** selected on past return: a name becoming `eligible` (`#410`, `#411`), a name entering a
+    volatility or liquidity band, a name entering a momentum decile. **State the matching variable
+    in the hypothesis, and make it the selection variable.** Carry the framing too: a control group
+    *is* a model of expected performance, so naming the matching variables is writing that model
+    down, and **change models dominate level models**. Tier A, overlap `false`.
+    → `notes/2026-11-10-performance-matched-controls-and-mean-reversion.md`
+
+428. **FREE CONSTRUCTION RECIPE — the caliper shape, the two-stage order, and three rules, none of
+    whose CONSTANTS transfer.** Shape: **hard window on the nuisance variable, tight window on the
+    selection variable, nearest-neighbour fallback so no observation is dropped** (the scheme well
+    specified in every cell used 70%–130% on size then 90%–110% on performance with a
+    closest-in-performance fallback; the returns paper's looser variant is 70%–130% on size then
+    nearest on book-to-market). Three rules that are free and do transfer: **(i) the ORDER of a
+    two-stage match changes specification** — same two variables, same data, and only one ordering
+    was well specified in virtually all sampling situations, so *test the order rather than assume
+    it*; **(ii) strike the match once and hold it for the horizon** — letting the comparison group
+    drift preserves specification but erodes power, and re-matching on the control's later behaviour
+    is the standard lookahead; **(iii) a rank-based statistic dominates the `t`**, and power decays
+    monotonically as the matching lag lengthens from one year to three. **Do not import the
+    percentages** — they are calibrated to a US accounting panel and a ~1.8M firm-month return panel;
+    on ~1,000 eligible names a ±30% window may return a handful or hundreds, so **measure the
+    window's yield before fixing it**. Tier A, overlap `false`.
+    → `notes/2026-11-10-performance-matched-controls-and-mean-reversion.md`,
+    `notes/2026-11-10-control-firm-versus-reference-portfolio-biases.md`
+
+429. **FREE REFUSAL TEST, and it is a rate rather than an opinion: COUNT THE CONTINUOUS MATCHING
+    VARIABLES before writing a matched-control scout.** Matching on `k` continuous covariates carries
+    conditional bias `O_p(N^{−1/k})` against sampling error `O_p(N^{−1/2})`, so **at `k ≥ 2` the bias
+    need not be dominated, the estimator is not `√N`-consistent, and standard confidence intervals
+    are not valid — not wide, invalid.** At `k = 1` the bias is `O_p(N^{−1})` and ignorable.
+    **Discrete matching variables do not count toward `k`**, so exact matching on region or on a
+    decile label is free. With a cohort in the hundreds this is a statement about the regime the lab
+    operates in, not a remote asymptotic limit. Two attached traps: **the bootstrap is NOT valid for
+    the simple matching estimator** — which matters because a paired block bootstrap is this lab's
+    default uncertainty tool everywhere else, and an analytic variance estimator is supplied instead
+    — and a fixed number of matches does not attain the semiparametric efficiency bound. Also:
+    **match WITH replacement**, which both admits better matches and is what the theory covers. Tier
+    A, overlap `false`.
+    → `notes/2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`
+
+430. **FREE INTERPRETATION RULE that inverts the obvious instinct: the repair for an imperfect match
+    is a REGRESSION, not a fourth matching variable.** The bias-corrected estimator imputes
+    `Y_j + μ̂₀(X_i) − μ̂₀(X_j)` in place of `Y_j`, adjusting each matched pair by the predicted
+    outcome gap across the covariate distance the match left open; it removes the bias **without
+    affecting the asymptotic variance**, and a plain **linear** `μ̂₀` is the authors' own working
+    choice. So adding a characteristic to the *match* degrades it at `#429`'s rate while adding the
+    same characteristic as a *regressor* is asymptotically free. **The implied design on this panel**:
+    match exactly on region (discrete), match on **past return alone** among continuous variables,
+    and regress away volatility and dollar-volume rank — which is also what the finance literature
+    reached empirically and what `#424`'s decisive test did (a size **decile**, discrete, plus past
+    return). One constraint: `μ̂₀` is fitted **on the control group only** (fitting it pooled is
+    circular) and **walk-forward**, like any model here. Tier A, overlap `false`.
+    → `notes/2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`
+
+431. **CONSTRUCTION — the matched-PORTFOLIO benchmark whose third dimension is PRIOR-YEAR RETURN,
+    plus a three-way decomposition of any book's excess return that costs no trial.** Cut the
+    universe into **quintiles on size, book-to-market and momentum (prior-year return)** → **125**
+    cells, **breakpoints from the large-cap sub-universe only**, **value-weighted within each cell**
+    (the authors' stated reason is to avoid rebalancing bias in the benchmark — see `#432`),
+    re-formed annually and re-assigned quarterly; a holding's benchmark-adjusted return is its return
+    minus the month-`t` return of the cell it occupied at **`t−1`**. Then split a book's excess return
+    into **CS** (picking *within* a cell), **CT** (shifting into a cell before it pays — measured by
+    differencing the same stock's cell return at today's weight against its weight *and cell
+    assignment* **twelve months earlier**) and **AS** (what the book earns by *sitting* in
+    high-premium cells). **On this panel it must become 2-D**: prior-year return is computable, but
+    market capitalisation is not (`#408`, `#423`) and book-to-market does not exist here — so the
+    honest grid is prior-year return × trailing dollar-volume quintile, breakpoints from the
+    `eligible` panel, and the second axis must be *described as* a liquidity match, not a size match.
+    **Measure cell occupancy before adding region as a third axis** (`#421` wants region-neutral
+    cells; 5 × 5 × 9 against ~1,000 eligible names is ~4 names per cell, which is noise). Two uses:
+    CS/CT/AS reported next to skill says **which of three different claims** a candidate's number is
+    making — the general form of the lab's hand-diagnosed "style tilt in costume" — and running the
+    existing `price-trend` leads against a prior-return-matched benchmark says how much of their
+    skill is within-cell picking. **A null there is informative, not a failure.** This is a
+    *diagnostic*: the gate's null is the equal-weight pool and `engine/protocol.py` owns it. Tier A,
+    overlap `false`.
+    → `notes/2026-11-10-characteristic-matched-benchmark-portfolios.md`
+
+432. **FREE DIAGNOSTIC, and it is about the LAB'S OWN BENCHMARK rather than any candidate: the
+    equal-weight eligible pool is a REFERENCE PORTFOLIO, and two of the four biases that make a
+    reference portfolio the wrong benchmark are structural here, with opposite signs.**
+    **Rebalancing bias** — a reference portfolio's compound return assumes periodic rebalancing
+    while a buy-and-hold book's does not; restoring fixed weights sells what beat the average and
+    buys what lagged it, and a direct sort shows month-`t−1` winners are month-`t` losers, so the
+    rebalanced benchmark's compounded return is **inflated** and a low-turnover candidate's measured
+    difference is biased **down**, by an amount growing with horizon and with the strength of
+    short-horizon reversal in the panel. **New listing bias** — the benchmark keeps admitting names
+    that began trading after formation while the book does not; under protocol v2 a column enters
+    `prices` only once the name has been eligible, so the pool admits names **at the moment they
+    enter an index**, which `#401`/`#411` establish is not an information-free selection, biasing
+    the difference the other way. **The check costs no trial and is currently unreported**: compute
+    the pool's own **buy-and-hold** counterpart over the measurement window — same eligible names,
+    equal weights struck once, left to drift — and report the gap against the rebalanced pool next to
+    skill. That gap is the rebalancing channel measured rather than argued. Pair it with `#425`'s
+    realised-beta diagnostic: both are properties of the **benchmark** rather than the book, both are
+    free, and both carry the sign of the lab's standing train-versus-validation puzzle. **Not an
+    argument for changing the gate** — `program.md` owns the objective. Two riders that are
+    arithmetic and transfer unconditionally: accumulate long-horizon differences in **simple**
+    returns, never continuously compounded (log abnormal returns are inherently negatively biased
+    whenever there is cross-sectional dispersion), and expect long-horizon paired differences on
+    single names to be **strongly positively skewed**, so use a rank-based or bootstrap statistic
+    rather than a plain `t`. Tier A, overlap `false`.
+    → `notes/2026-11-10-control-firm-versus-reference-portfolio-biases.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -17437,8 +17687,165 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-07 (session 85) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT THREE TIMES, AGAINST THAT AIM'S OWN PREDICTION THAT THE LITERATURE MIGHT NOT EXIST — and for once the detector did NOT over-claim.** Aim from the [2026-11-06] entry: **the other eight index providers**, admitting a source only if it **characterises a NON-US index's own eligibility or weighting rule and what that rule does to the measured cross-section** — explicitly not international factor premia (covered 2026-08-28), not country-level cross-section (vein retired 2026-11-02), and not an index provider's own methodology document. That entry predicted the vein might be thin and instructed falling through to the ranked writing task after two failed searches. **It was not thin: three on-criterion sources, all Tier A, all read in full, covering a price-weighting rule, a float-weighting rule change, and admission to forty national indices.** Detector run first, on the target vocabulary across 267 prior notes: `free float` **0**, `price weighted` **0**, `index weighting` **0**, `float adjust` **1**, `TOPIX` **1**, `divisor` **2**, `weight cap` **1** — against `Nikkei` **8**, `FTSE` **8**, `DAX` **7**, `Euro Stoxx` **6**, `Hang Seng` **5**, `Japan` **16**. The [2026-11-04/05] second grep then **confirmed rather than downgraded** the gap: the six files matching `price-weighted`/`divisor`/`TOPIX` mention them only in passing, and the decisive check was on the **source** rather than the vocabulary — `2026-10-09-index-effect-decay-migrations-and-liquidity-provision.md` **states in its own text that it leaves the non-US case open and names the TOPIX and Nikkei 225 as the gap**, which is the folder certifying the aim from the inside. **First session in five in which the headline count did not overstate the gap**; the cheap third step the [2026-11-06] entry added (check candidate *sources* against the folder before downloading) rejected two on-topic candidates and confirmed the Greenwood hits were **Greenwood–Sammon**, a different paper. **(a)** Greenwood (*RFS* 21(3), 198 Crossref, HBS WP 05-069 read in full) identifies off the **Nikkei 225's price-weighting rule**: weight = face-value-adjusted price / sum of such prices, divisor adjusted to preserve the index **level and explicitly not the weights**, so a split halves a constituent's effective weight; average constituent overweighted **~5.7×** versus the value-weighted benchmark and individual names **10×+**, with the **smaller** names overweighted, i.e. index demand tilted **away** from capitalisation. +1 s.d. of overweighting ⇒ index beta **+~0.22**, overweighting alone explaining **>20%** of cross-sectional index-beta variation, and comovement with **non**-members *falling* in overweighting (**#407**). Honest: Newey–West drops the key `t` from ~10 to ~6.5, and **unscaled** weight loses significance because it mislabels large liquid names — the effect is weight *relative to capacity to absorb demand* (**#408**). **(b)** Hau (*RFS* 24(12), 42 Crossref, published version of record from Geneva's Archive ouverte) supplies the chain this folder lacked — index capital does not re-optimise, so the **residual** actively managed capital *is* the benchmark; a revision changes it by the observable `w_new − w_old`; benchmark change ⇒ beta change ⇒ discount-rate change ⇒ price change with cash flows fixed — giving a test **in differences** needing only the benchmark *change*, never its level. The rule: free float defined by **classifying holders**, market representation raised from **60% cap-based to 85% float-adjusted within each country and industry**, 489 added / 298 removed, **median absolute country weight change ~42%**, all **rule-based with no judgment about prospects** and therefore computable in advance. National-market segmentation **rejected** for developed markets, surviving only among emerging names **neither cross-listed nor liquid** (**#409**). The export that bites: the announcement is anticipated and the **risk-hedging leg** of the arbitrageur's optimal position prints a second transitory cross-sectional pattern, so the design needs a buildup **and** a liquidation window (**#410**). **(c)** Claessens–Yafeh (*Review of Finance* 17(1), 58 Crossref, IMF WP 11/47 read in full) close the comovement half of `2026-10-09`'s open question across **40 markets including six of this panel's nine indices by name** — CAC 40, DAX, FTSE 100, AEX, Hang Seng, Nikkei 225: beta up in **30 of 40** markets (daily; 26 weekly), `R²` up in 32 / 34, heterogeneity reported rather than buried (a named group shows zero or negative effects while turnover still rises). Discriminating finding, **structural**: the admission effect is **WEAKER in concentrated indices** (~**0.03** of beta per 10pp of top-five weight against a ~**0.07** average) — a moderator the same order as the effect, which information diffusion has no reason to predict; neither GDP per capita nor market-cap-to-GDP is significant in any specification (**#411**). The finding fitting neither theory is the one that matters here: **the increase is largest for previously LOW-beta names** (**#412**). **The cluster CLOSES more than it opens, and that is the useful part.** Greenwood's measure is **not reconstructible** (raw price versus this panel's **USD-adjusted** closes; market cap needs a share count; the face-value constant is a rulebook fact; the listing market has no sanctioned v2 label). Claessens–Yafeh's design is **half-reproducible**: `eligible`'s first `True` *is* a contract-supplied admission event, but `program.md` states a column appears in `prices` only once eligible, so **the pre-admission window does not exist** and the change-in-beta design with its 90-day stand-off cannot be run — only a **cohort** comparison survives, and its moderator (index concentration) is **unmeasurable by a candidate**, so admission effects here are a **mixture across nine regimes**. **One tension stated rather than resolved:** Hau rejects national-market segmentation for exactly this panel's population, while `learnings.md` records region-relative scoring beating sector-relative scoring — compatible once *where risk is priced* is separated from *where a score's measurement units live*, so region-demeaning a **score** is a units correction while region-demeaning a **beta or expected return** is the rejected segmentation assumption (**#409**). **Both of the [2026-11-06] entry's ranked WRITING tasks were also completed:** the composed pre-trial rule (`#399`'s level-valued null × `#393`'s MDE table × the **≈0.45 long-only effect multiplier** ⇒ a mechanism must be worth **~2.2× `X`** long–short for the design to resolve it; nulls to be written *"no skill above `X` at `ρ = …`"*) as **#413**, and **category-prior tags on the live constructions** as **#414** — `#406` category-**neutral** (a construction operator inheriting its signal's prior, which is why it is free), `#363` **momentum-shaped ≈0.25–0.55**, `#405` and `#411` **frictions-shaped ≈0.02–0.06**. **Anti-lookahead:** samples end **2003 / 2002 / 2010**, `validation_overlap: false` on all three; every magnitude recorded is a **beta, an `R²` share, a weight ratio or a count of markets** — second moments and structural shares, never a return. Two omissions are named in-note rather than glossed: Greenwood's reversion-trade profitability (a performance claim), and Claessens–Yafeh's dated interruption to its time trend (an event narrative), with the trend kept only as the mechanism-linked monotone statement. | Greenwood 2008 (`2026-11-07-price-weighted-index-and-the-cross-section-of-comovement.md`); Hau 2011 (`2026-11-07-free-float-redefinition-as-a-benchmark-change.md`); Claessens & Yafeh 2013 (`2026-11-07-index-addition-comovement-across-forty-national-indices.md`) |
 | 2026-11-08 (session 86) | **TOOK THE PRIMARY AIM VERBATIM AND IT SPLIT: the committee half paid out twice and the capping half paid out ZERO — and the capping failure is the night's real finding, because one of its two sources was refused by this folder's own holdout ban rather than by a paywall.** Aim from the [2026-11-07] entry: admit a source only if it **characterises a CAPPING or RE-CAPPING rule, or a committee's discretion against a mechanical alternative, AND measures what that rule does to a cross-section or to a measured premium** — not an index-addition price-impact event study, not a float-adjustment paper, not a provider methodology document. That entry predicted the vein would be thinner than the previous night's and authorised falling through to the ranked writing task after two failed searches. **Detector run first, on the target vocabulary across 270 prior notes:** `capped weight` **0**, `diversification requirement` **0**, `capped index` **0**, `UCITS` **0**, `Herfindahl cap` **0**, `position limit` **0**, `weight cap` **1**, `re-cap` **1**, `concentration limit` **1**, `5/50` **1**, `discretion` **2**, `discretionary` **2**, `index committee` **3**, `capping` **4**, `committee` **6** — and the **second grep on the mechanism confirmed rather than shrank the gap**: all four `capping` hits are about portfolio-level weight caps, the six `committee` hits are index-effect and membership notes, and **no note characterises an index's capping rule or compares a committee against a mechanical admission rule**. **The [2026-11-06] source-level check then did the most work it has ever done, twice rejecting a download before it happened:** the obvious capping primary (Jagannathan–Ma, upper weight bound ≡ covariance shrinkage) is **already covered** by `2026-08-21-weight-constraints-as-covariance-shrinkage.md`, and the obvious index-level alternative (Fernholz diversity weighting) is **already covered** by `2026-08-22-excess-growth-and-return-decomposition.md`. Two nights' work avoided by two greps. **(a) ADMITTED.** Li, Liu & Wei (Tier **B** — NBER WP 29365, **4** Crossref / **1** Semantic Scholar, unpublished, publicly disputed by the provider; read in full) code a provider's published admission criteria as regressors on all minimum-eligible names 1980–2018: the criteria give ~3/5 of the membership **level** (≈7/10 on the best-documented subperiod) against **single-digit percentages of the addition events**, while a mechanically-ruled index yields the great majority of the level and a large majority of the additions **from one size-rank dummy**. The rank table carries the shape: mechanical ≈ **step function**, committee ≈ gradient across four bins with the second a **coin flip**. ~1/3 of additions violated a published criterion in a year while **100+ fully-qualified names went un-added** — choice, not shortage (**#415**). Its discretionary/rules-based split orders subsequent relative outcomes discretionary-worst → passed-over → rules-based, magnitudes left in the source by the folder's own practice (**#417**). **(b) ADMITTED.** Robertson (Tier **B** on the methodology column alone — a law review, **no DOI, not indexed in Crossref or OpenAlex**, Semantic Scholar 429'd; read in full) builds the mechanical counterfactual instead of regressing: **~72%** of a committee index's names sit in the mechanical top-*N*, **~28%** do not, index-only names are **~5%** of aggregate value and mechanical-only names **~17%** — and **the median EXCLUDED name is slightly LARGER than the median constituent** (1%), so **no size threshold recovers membership**. In return space a live low-fee fund tracks its index **~20× more closely than the index tracks the mechanical alternative**, stable across subperiods, every robustness variant widening it (**#416**). An independent leg — counting daily eligibles under conservatively coded criteria — puts the committee's slack above **20% of index size** and lands on the same **~5% of aggregate value** from the other direction. **(c) THE CAPPING HALF FAILED, with both halves of the reason named.** Five searches; four returned **providers' own capping methodologies**, which the aim excluded — and the night's reusable lesson is that **for a rule only providers write down, "excluded by criterion" and "no literature exists" are indistinguishable from a search result unless the provider documents are named and recorded as refused** (**#419**). The one on-criterion academic paper (a 2023 *JOIM* article simulating capping and diversity-weighting alternatives and reporting their **turnover** cost) was **unobtained across four channels** — `escholarship.org` HTTP **202 size=0** (second confirmation of the 2026-10-16 finding), `cdar.berkeley.edu` **gateway 502 to CONNECT** (transport, not an origin refusal), journal paywalled, not on arXiv — and is a named pointer. The other (an NBER working paper on the US **50/5/10** rule as a binding fund constraint, squarely on criterion) was **refused on this folder's own rules: its sample extends into 2024, i.e. into the locked holdout**, so nothing from it is recorded, and the format gap that makes this invisible — `validation_overlap` and `published_post_2018` exist, **no holdout-overlap flag does** — is filed for the human (**#419**). **THE RANKED WRITING TASK WAS ALSO COMPLETED IN FULL**, as that entry asked and with no new source: `#407`'s covariance-contamination claim is now annotated into all four items it invalidates — `2026-08-30-pca-residual-statistical-arbitrage-long-only.md` (a residual against this panel's PCs is residual to index demand, so a candidate whose target *is* the index-demand flow has hedged away its signal before forming the residual; a global `K` pools nine contamination structures), `2026-09-07-hierarchical-risk-parity-clustering-allocation.md` (a cluster may be an **index**, and rule-induced blocks are **more** stable out of sample, so the usual stability reassurance is evidence of latching onto the rulebook), `2026-09-27-counting-factors-eigenvalue-estimators.md` (an estimated `K` is an **upper bound** on the economic count), and `2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md` — **the sharpest of the four: MP's null is i.i.d. noise, rule-induced commonality is neither noise nor fundamental, so it lands above the edge and is read as signal; MP survives as a device for DISCARDING dimensions and not for ADMITTING them.** **Anti-lookahead.** Samples **1980–2018** (`validation_overlap: true` on its final year, one of 39) and **1989–2017** (`false`). Every magnitude recorded is an `R²`, a share of names, a share of aggregate value, a size ratio or a tracking-error **ratio** — no return, no Sharpe, no event narrative; both notes name their omissions in-text (the entrant-group return magnitudes, and the turnover-impact magnitudes). **Nothing from the two excluded capping sources appears anywhere in this file.** | Li, Liu & Wei 2021 (`2026-11-08-committee-discretion-versus-the-published-admission-rule.md`); Robertson 2023 (`2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`) |
 | 2026-11-09 (session 87) | **THE PRIMARY AIM FAILED CLEANLY ON FOUR CHANNELS AND THE RANKED WRITING TASK WAS DONE — then the session was aimed by the LAB's own newest measurement and paid out three notes on a variable the folder had been controlling for without ever writing it down.** Aim from the [2026-11-08] entry: **Geppert, Ivanov & Karels** (RQFA 37(1), 21–34, `10.1007/s11156-010-0193-0`, **12** Crossref, checked 2026-11-09), admissible only if its body characterises the objective a discretionary index change serves against a stated alternative objective, four requests maximum. **All four failed** — `scholarworks.sjsu.edu` **403** (bepress, re-confirming 2026-10-01), the first author's department dissertation path **404**, the EconPapers `kap:rqfnac` record *"restricted to subscribers"* with no deposit named, and `link.springer.com/article/<doi>` **HTTP 303 into `idp.springer.com/authorize`**, the OpenID refusal mode this file had recorded only for `pm-research.com`. Per that entry's instruction **no macro-conditioning substitute was taken**; the free scrap is the RePEc keyword list (*Beta changes · S&P500 constituents changes · Spectral analysis*), which says the paper is a frequency decomposition of betas and the relayed macro claim is probably a side result — so **do not re-spend four requests on that relay** (**#426**). **The ranked writing task was completed in full**: `#416`'s median result is annotated into all three notes that reason about where a size screen sits. **The session's own aim came from the detector's newest step — after each nightly, take the one variable it measured that has no note here.** The 2026-11-08/09 nightly's headline was the **log price level** as a horizon-amplified confound (one-bit IC −0.030 → −0.150 across 21–504 days) that **inverts the sign** of two clean unit-free slow objects at rank correlations of only −0.25 and −0.30. Fixed-string greps across all 272 prior notes: `nominal share price` **0**, `low price effect` **0**, `price illusion` **0**, `back-adjust` **0**, `Comovement revisited` **0**, `Barberis, Shleifer` **0**, `Green and Hwang` **0**, `excess comovement` **1**, `nominal price` **3**, `stock split` **4**, `price level` **7** — and the **mandated second grep on the mechanism confirmed the gap**: all three `nominal price` hits are passing mentions (a data screen, an anomaly-list entry, a warning not to substitute price for index overweight) and **no note said what the price level is or what it proxies for**. **(a) ADMITTED.** Weld–Michaely–Thaler–Benartzi (Tier **A**, *JEP* 23(2), **117** Crossref; **published article unobtained — `aeaweb.org` and `pubs.aeaweb.org` both 403** — read in full as the lead author's Cornell dissertation of the same title): the US equal-weighted average share price has sat near \$25 since 1933 against an order-of-magnitude rise in everything else, so real price per share fell by >90%; IPO and fund prices likewise; four economic explanations tested and all four fail; what survives is a **peer-relative norm**, with post-split target prices predicted from the firm's deviation from its **size and industry peers** at `R²` > **62%** (> **78%** on genuine splits) (**#420**). Across **sixteen** other exchanges the pattern does not replicate and average price in **current USD** spans **\$0.02 to \$37** — so on this nine-market panel a **pooled** price rank is approximately country dummies plus a currency overlay, and only the *within-region* control is a firm-level control (**#421**). And in ~198,000 firm-years of spread data over ~80 years, **higher-priced firms have lower relative spreads** (t ≈ −13) after controlling for volume, turnover **and** capitalisation — a cost gradient v3's volume-only tiering cannot see, with the lower-priced name **undercharged** (**#422**, for the human). **(b) ADMITTED.** Baker–Greenwood–Wurgler (Tier **A**, *JF* 64(6), **199** Crossref, read in full as NBER WP 13762): the identity `p_t ≈ p_IPO + Σr + Σ s·n` plus a catering theory in which the split term responds to a time-varying **low-price premium**, concentrated in **larger** firms acting small. **The lab-facing consequence is the sharpest thing in the session**: back-adjustment strips `Σ s·n` and re-bases `Σ r` on the sample's end, so the stored level is up to a constant **the negative of the name's future cumulative adjustment**, and the split half of that future is a deliberate size-correlated **decision**, not noise — upgrading the 2026-10-18 / 2026-10-22 engine issues from a units bug to a confound and giving the nightly's F5/F7 a mechanism (**#423**). **(c) ADMITTED, and it is a REFUTATION.** Chen–Singal–Whitelaw (Tier **A**, *JFE* 121(3), **78** Crossref, typeset published version read in full from `pages.stern.nyu.edu`) revisit Green–Hwang's price-based comovement (*JFE* 93(1), **213** Crossref, **unobtained** — SSRN 403 on a `Delivery.cfm` path, CiteSeerX HTTP 000, ScienceDirect closed — claims relayed from the replication and flagged throughout): the bivariate loading-shift statistic is **uninformative** because both regressors proxy for the same factor; the discriminating **univariate regression on the abandoned group** was never run; run properly the splitting stock's beta rises against the low-priced group **and nearly as much against the high-priced group it left**; and with size-and-momentum-matched controls, Dimson adjustment and a triple difference, **event and control beta changes are indistinguishable for splits AND for S&P 500 additions**. Cause: **57%** of the split sample is in the top two momentum deciles (37% for index additions) (**#424**). **The by-product is the more valuable half**: a winner's market beta runs **0.964 → 0.976 → 1.143 → 1.271 → 1.166** from two years before formation to two years after, middle deciles flat at ~0.82–0.84, losers drifting down — and since this lab's **skill is a difference of Sharpes it does not net that out**, which is a candidate explanation for the repeated train-vs-validation sign instability that requires neither sheet to be wrong, testable free by reporting each book's realised beta to the pool on both splits (**#425**). **Tension stated, not smoothed:** the folder's Nikkei-weight and forty-market comovement notes are named inside the replication's own literature list; neither is refuted (one identifies off a continuous weighting rule, the other is not a US event study) but both report bivariate-style loading changes and their magnitudes are now upper bounds. **Anti-lookahead.** Samples 1933–2007 / 1975–2005 / ~80 years (a), 1963–2006 (b), 1971–2012 and 1976–2012 with a 1976–2011 beta panel (c) — **all three `validation_overlap: false`, all `published_post_2018: false`**. Every magnitude recorded is a price **level**, an `R²`, a **beta**, a sample share, a correlation or a t-statistic; the catering paper's multi-year relative-return magnitudes are left in the source with only the sign carried, and the replication's sample-average returns are left out entirely. | Weld, Michaely, Thaler & Benartzi 2009 (`2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`); Baker, Greenwood & Wurgler 2009 (`2026-11-09-catering-through-nominal-share-prices.md`); Green & Hwang 2009 + Chen, Singal & Whitelaw 2016 (`2026-11-09-price-based-comovement-and-its-failed-replication.md`) |
+| 2026-11-10 (session 88) | **THE PRIMARY AIM WAS MET IN FULL ON THE FIRST VEIN TRIED, THE RANKED WRITING TASK WAS COMPLETED, AND THE SESSION'S BY-PRODUCT IS ABOUT THE LAB'S OWN BENCHMARK RATHER THAN ANY CANDIDATE.** Aim from the [2026-11-09] entry: **the momentum-matched control as a design object** — admit a source only if it gives a CONSTRUCTION for the control group (matching variables, caliper, what is differenced) AND says what the estimate means when the match is imperfect in a known direction; not another event study, not an anomaly whose identification happens to use matching, explicitly not a causal-inference textbook chapter. **The detector greps ran first and the gap was as predicted**: across 275 prior notes `matching variable` **0**, `caliper` **0**, `synthetic control` **0**, `matched sample` **1**, `matched firm` **1**, `difference-in-difference` **2**, `control group` **3**, `matched control` **4**, `propensity` **5** — and the **mandated second grep on the mechanism confirmed rather than shrank it**: all five `propensity` hits are the unrelated phrase *selling propensity*, and all four `matched control` hits are other people's event studies relayed inside notes about something else, so **no note said how to build one**. The **source-level check also paid**, rejecting nothing but confirming the vein was clean: `Lyon` **0**, `Wermers` **0**, `Abadie` **0**, `Imbens` **0**, `DGTW` **0**, `buy-and-hold abnormal` **0**, `new listing bias` **0**, `rebalancing bias` **0**, while all six `Barber` hits were a different Barber paper and all nine `Grinblatt` hits were Grinblatt–Han / Grinblatt–Moskowitz. **(a) ADMITTED.** Barber & Lyon 1996 (Tier **A**, *JFE* 41(3), 359–399, **1255** Crossref, checked 2026-11-10; read in full from `leeds-faculty.colorado.edu`): when a sample is selected on a mean-reverting variable, **only** a control matched on that variable is well specified, and the misspecification is large even when the pre-event difference is **slight**; a control group *is* a model of expected performance; change models dominate level models (**#427**). Caliper stated exactly — **70%–130%** on the nuisance variable, **90%–110%** on the selection variable, nearest-on-selection-variable fallback; match struck once and held; rank statistic over `t`; power decays as the matching lag goes one → three years (**#428**). Its own answer to the imperfect-match half: **the speed of mean reversion is cross-sectionally heterogeneous**, which is why one cell resisted every design they tried. **(b) ADMITTED.** Barber & Lyon 1997 (Tier **A**, *JFE* 43(3), 341–372, **2102** Crossref; read in full from the same host): the matched **firm** beats any reference portfolio because three biases enter through the portfolio side — **new listing** (benchmark keeps admitting names that began trading after the event; biases the difference **positive**), **rebalancing** (benchmark's compounding assumes periodic rebalancing while the sample security's does not; the restoring trades buy month-`t−1` losers, which are month-`t` winners, so the benchmark is **inflated** and the difference biased **negative**), and **skewness** (isolated against a χ² of known mean and skewness **2.83**). **The by-product is the more valuable half**: protocol v3 grades skill against the **equal-weight eligible pool**, which is a rebalanced reference portfolio, and protocol v2's panel admits a column only once the name has been eligible — so **both biases are structural in this lab's own measurement, with opposite signs**, and the free check is to report the pool's **buy-and-hold** counterpart next to the rebalanced one (**#432**). Two riders that are arithmetic: **simple returns, never log** (log abnormal returns are inherently negatively biased under cross-sectional dispersion), and rank/bootstrap statistics over a plain `t` on skewed long-horizon differences. **(c) ADMITTED.** Daniel, Grinblatt, Titman & Wermers 1997 (Tier **A**, *JF* 52(3), 1035–1058, **1560** Crossref; body and Appendix read in full from page images of a complete JSTOR scan on `kentdaniel.net`): **125** cells from **5×5×5** sorts on size, book-to-market and **prior-year return**, large-cap-only breakpoints, **value-weighted and buy-and-hold within cell** expressly to avoid the rebalancing bias in (b), re-formed annually, re-assigned quarterly, differenced at `t−1` cell assignment; plus the **CS / CT / AS** decomposition separating within-cell picking from cell timing (the twelve-month-lagged weight-and-assignment term) from static cell occupancy (**#431**). **The Appendix supplies the two details that decide whether this is buildable here, and the draft note had both wrong before it was read**: the triple sort is **NESTED, not independent** (so every cell is populated by construction, and the empty-corner objection to running it on a narrow panel disappears), and the momentum variable **skips the month before formation**. On this panel it becomes a nested **region → dollar-volume → past-return** grid, because capitalisation (`#408`, `#423`) and book-to-market are unavailable — with region as the outer, *discrete* level, which `#421` wants and which `#429` makes free. **(d) ADMITTED.** Abadie & Imbens 2006 + 2011 (Tier **A**, *Econometrica* 74(1), 235–267, **2164** Crossref, typeset published version read in full from `economics.mit.edu`; *JBES* 29(1), 1–11, **1126** Crossref, read in full as NBER Technical WP 283): matching on `k` **continuous** covariates has conditional bias `O_p(N^{−1/k})` against sampling error `O_p(N^{−1/2})`, so **at `k ≥ 2` the estimator is not `√N`-consistent and standard intervals are not valid**; `k = 1` is the clean case; **discrete covariates do not count toward `k`**; **the bootstrap is not valid** for the simple matching estimator (**#429**). And the repair is a **regression, not a fourth matching variable** — impute `Y_j + μ̂₀(X_i) − μ̂₀(X_j)`, which removes the bias **without affecting the asymptotic variance**, with a plain linear `μ̂₀` fitted on the control group only (**#430**). **Cross-source synthesis worth more than any one of them:** DGTW's quintile **cells** keep `k` at **zero** in the Abadie–Imbens accounting, which is an argument for cell-based benchmarking over nearest-neighbour matching on a panel this narrow — **an argument none of the four sources makes**. **The ranked writing task was completed in full**: `#425`'s winner-beta term structure is now annotated into all three `price-trend` notes it bears on (`2026-08-17-jegadeesh-titman-overlapping-momentum.md` — the overlapping-tranche stack averages over the beta curve; `2026-08-17-momentum-horizon-echo.md` — 12-7 versus 12-2 are two different points on it, so the horizon and beta effects are confounded by construction; `2026-08-17-momentum-crash-risk-management.md` — the beta peak sits **inside** the crash-exposed window and that half survives into a long-only book where the long-short fixes do not reach). **Consistency, stated rather than smoothed:** `#432` does not contradict `2026-08-22-rebalancing-return-attribution-critique.md` (rebalancing trades have exactly zero expected value under IID and pay only where relative prices revert) or the 2026-10-13 pair — it supplies the **antecedent measured on a wide cross-section** and reframes an attribution question as a **signed bias in a measured difference**; the **new-listing** half is genuinely new to that cluster. **Anti-lookahead.** Samples 1977–1992 (a), July 1963 – December 1994 (b), 1974–1994 holdings (c), and none at all for (d) — **all four `validation_overlap: false`, all four `published_post_2018: false`**. Every magnitude carried is a **caliper**, a **cell count**, a **skewness coefficient**, a **stochastic order**, a **citation count** or a statement about test specification; DGTW's sample-period style and performance numbers and both Barber–Lyon papers' rejection-rate tables are left in the sources. | Barber & Lyon 1996 (`2026-11-10-performance-matched-controls-and-mean-reversion.md`); Barber & Lyon 1997 (`2026-11-10-control-firm-versus-reference-portfolio-biases.md`); Daniel, Grinblatt, Titman & Wermers 1997 (`2026-11-10-characteristic-matched-benchmark-portfolios.md`); Abadie & Imbens 2006 + 2011 (`2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-10] READ THIS BEFORE AIMING SESSION 89. The matched-control vein is OPEN on exactly one
+  side and it is named from inside tonight's own notes, not by grep — do not retire it, and do not
+  widen it.** Tonight closed the *construction* question (`#427`, `#428`), the *imperfect-match*
+  question (`#429`, `#430`) and the *matched-portfolio* alternative (`#431`). What `#429` leaves
+  open is the thing it creates: it says matching on `k ≥ 2` continuous covariates gives an estimator
+  whose intervals are **not valid**, and that `k = 1` is clean — and the standard device for
+  collapsing `k` to 1 is a **scalar summary of the covariates**, which this folder has **zero**
+  coverage of. All five `propensity` hits across 276 notes are the unrelated phrase *selling
+  propensity*.
+  - **Primary aim for session 89: the SCALAR MATCHING SCORE — what it is, what matching on it buys
+    relative to matching on the covariates themselves, and what ESTIMATING it does to the
+    estimator's variance.** The named primary is **Rosenbaum & Rubin (1983)**, *The Central Role of
+    the Propensity Score in Observational Studies for Causal Effects*, *Biometrika* 70, 41–55 — which
+    is cited in the reference list of tonight's own Econometrica source, so the folder is certifying
+    this aim from the inside. The modern complement, if it comes cheaply, is **Abadie & Imbens on
+    matching on the *estimated* score**, whose content is that using an estimated rather than a true
+    score changes the variance in a direction that must be accounted for. **Acceptance criterion,
+    stated before any download: admit a source only if it (i) defines the scalar score, (ii) states
+    the theorem about what conditioning on it is equivalent to, and (iii) says what changes when the
+    score is estimated rather than known.** Not another application of matching; not a survey of
+    treatment-effect estimators; and — restating the [2026-11-09] exclusion because it still binds —
+    **explicitly not a causal-inference textbook chapter**. The folder holds ten inference notes and
+    does not need an eleventh that cannot be built. **Spend at most four requests.** `Biometrika`
+    is Oxford University Press and likely closed; the channels worth trying in order are the second
+    author's own site (a prolific methodologist's flat `/papers/` directory — the 2026-10-13 lesson),
+    a statistics department's reprint directory, and the paper's own reproduction inside a later
+    open-access article that restates the theorem. **If two searches fail, fall through to the ranked
+    item** rather than substituting a general matching survey.
+  - **Ranked below it, and it is a WRITING task that fits the same session and needs no source:
+    `#432`'s NEW-LISTING half is not carried into the benchmark's-own-return cluster, which is the
+    cluster it is about.** Three notes reason about what the equal-weight pool mechanically earns —
+    `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md`,
+    `notes/2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md` and
+    `notes/2026-08-22-rebalancing-return-attribution-critique.md` — and **all three treat the pool's
+    membership as fixed**. None says that under protocol v2 the pool admits a name **at the moment it
+    becomes eligible**, that this is the new listing bias in a panel built to have it, or that it
+    runs **opposite in sign** to the rebalancing channel those notes do discuss. Annotating the three
+    costs no trial and changes how the `#432` diagnostic should be read — the buy-and-hold
+    counterpart isolates the rebalancing half and leaves the admission half standing. **Do not open a
+    new source for this**; it is composition, exactly as tonight's three `#425` annotations were.
+  - **The detector's standing rule, with tonight's amendment, and the night the SOURCE-LEVEL step was
+    cheapest.** The rule ([2026-11-04], amended [2026-11-05], extended [2026-11-06], [2026-11-07],
+    [2026-11-08], [2026-11-09]) is: **check candidate sources against the folder before downloading**,
+    then grep for `open question` / `leave(s) … open`, then ask what the lab does to a number after it
+    has it and grep for the literature about the number before it exists, then run a **second grep on
+    the mechanism** after a zero-count, and **run the nightly-variable detector at the start of every
+    session regardless of the handover**. All ran. The second grep again confirmed rather than shrank
+    the gap, and the decisive evidence was the cheapest kind: **five `propensity` hits that were all
+    the wrong `propensity`**, which a vocabulary count alone would have read as coverage. **Tonight's
+    amendment is about aiming rather than detecting: when a session's own new note creates a
+    refusal test, the thing that test forbids is the next session's aim.** `#429` forbids `k ≥ 2`
+    matching; the aim above is the standard escape from it. That is a second way to name an aim from
+    inside, alongside the [2026-11-07] "a note that states it leaves a question open" route, and it is
+    available on any night the session produces a constraint rather than a construction. Caveats still
+    not run through the detector, unchanged in order: *publication decay*, and *"the cost model is
+    lethal only to books that trade"*.
+  - **Carried unchanged and still live**: `#406`'s volatility-tercile conditioning remains the best
+    construction in the file, category-**neutral** per `#414`. `#413` is the composed pre-trial rule
+    and should run before any candidate file is written; `#376`'s one-bit truncation test, `#389`'s
+    cumulative-curve test and `#381`'s `σ_IC` remain the three free screens, with `#415`'s
+    eligibility-forecasting refusal, `#421`'s pooled-price-control refusal and `#423`'s
+    monotone-in-stored-price refusal joining them. **Tonight adds two refusal tests and three free
+    diagnostics.** Refusals: `#427` (a cohort hypothesis must name its matching variable, and that
+    variable must be the one that did the selecting) and `#429` (count the continuous matching
+    variables; at `k ≥ 2` the intervals are invalid, and the bootstrap is not valid for a matching
+    estimator at any `k`). Diagnostics, all free and none of them a screen: `#430`'s
+    regress-don't-match rule, `#431`'s CS/CT/AS decomposition, and `#432`'s buy-and-hold pool
+    counterpart — which should be read next to `#425`'s realised beta, both being properties of the
+    **benchmark** rather than the book. The nominal-price vein stays closed (`#420`–`#426`); the
+    index-rule vein stays closed (`#401`–`#419`); the detectability vein stays closed
+    (`#393`–`#400`); the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays
+    closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#427`–`#432` from tonight; `#420`–`#426` from 2026-11-09;
+    `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06;
+    `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03;
+    `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31;
+    `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29; `#322`–`#327` from 2026-10-28;
+    `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25;
+    `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22;
+    `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then
+    2026-10-17 and everything carried under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); the long-only constraint as a construction object
+    (2026-11-03); the cash/pool boundary (2026-11-04); ex-ante detectability (2026-11-05); the
+    panel's admission rule (2026-11-06); the index's weighting rule (2026-11-07); the index rule as a
+    whole including capping (2026-11-08); the nominal price level on all four sides (2026-11-09); and
+    **tonight the matched control as a construction, on three of its four sides** — the scalar-score
+    side is the one left open and is the aim above. Still at **0** and still not nominated:
+    `transfer entropy` (twenty-first nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-09], unchanged: the
+    engine issues filed 2026-10-18 and 2026-10-22 (upgraded by `#423`); `min_train_skill = 0.0`;
+    `#324`'s deliberate difference; the two human decisions added 2026-10-29; the three items the
+    2026-10-30/31 nightly raised; the data-type question; `#396`'s tension between `program.md`'s
+    spend-across-families rule and what the design can measure; `#404`'s spinoff/merger/name-change
+    question; `#407`'s rule-induced comovement inside the equal-weight pool; `#418`'s discretionary
+    component in the benchmark's membership; the note format's **missing holdout-overlap flag**;
+    `#422`'s signed error in the volume-only liquidity tier; and `p₀` now being a supplied number
+    while the gate still behaves as though it were zero. **Tonight adds one, and it is a sharpening
+    of `#407`/`#418` rather than a new issue.** `#432` gives the pool's membership problem a **name
+    from the measurement literature and a sign**: the equal-weight eligible pool carries a **new
+    listing bias** (it admits names at the moment they become eligible, which `#401`/`#411` show is
+    not an information-free selection) and a **rebalancing bias** (its compounded return is inflated
+    by restoring trades that buy short-horizon relative losers), and the two run in **opposite
+    directions**. Neither is an argument for changing the gate, `program.md` owns the objective, and
+    neither is acted on here — but the free buy-and-hold counterpart in `#432` would measure the
+    second half and is currently unreported. **The integrity check again found the container on a
+    per-run branch (`claude/tender-galileo-jc29p3`) at the same commit as `origin/main`, reset to
+    `main` before any work — tenth consecutive session, confirmed as the container's default and part
+    of the routine, not an incident.**
+  - **[2026-11-10] Access findings — one new channel confirmed twice in one night, a FIFTEENTH
+    "looks like an answer" mode that is the subtlest yet, two transport failures, and a flat
+    directory whose listing page cannot be used.** **(1) A THIRD-PARTY faculty member's teaching
+    library, `leeds-faculty.colorado.edu/<user>/<AuthorAuthorYear>.pdf`, served BOTH halves of a
+    closed JFE pair on the first try** (3.0 MB and 1.8 MB; `pdftotext -layout` → 116 KB and 104 KB of
+    clean text, **695** and **636** instances of `" the "`, zero `( )` dropout, no ASCII shift). The
+    filename is `AuthorLastnameAuthorLastnameYear.pdf` and was **derivable from the citation**. This
+    is the 2026-10-05 "a prolific author's own site often hosts *other people's* canonical papers"
+    lesson, now on a *course-reading* directory rather than a research page — but note the limit: a
+    guess at a sibling paper in the same series (`LyonBarberTsai1999.pdf`) returned **404**, so the
+    pattern is per-file, not per-series. **(2) `file -b`'s PAGE COUNT IS NOT MERELY UNRELIABLE, IT IS
+    WRONG IN A DIRECTION THAT FABRICATES A TRUNCATED DOCUMENT — and this session nearly recorded a
+    complete article as partial because of it.** `file -b` reported **"10 page(s)"** for a JSTOR scan
+    of an article Crossref gives as pp. 1035–1058; `pdfinfo` reported **25**, which is correct
+    (cover + 24 article pages). The draft note had already been written with a caveat saying the
+    Appendix was *not in the copy read*, and the Appendix turned out to be on rendered pages 24–25
+    and to **overturn two construction claims in that same draft** — the triple sort is nested rather
+    than independent, and the momentum variable carries a skip-month. The 2026-10-07 entry in this
+    file already says the page count is not a completeness check; **it understates the problem. The
+    rule is: never read a page count from `file`; use `pdfinfo | grep Pages`, and where a document is
+    a text-layerless scan, render the LAST page and compare its printed page number against the
+    article's page range from Crossref.** Note what did *not* catch it: the `" the "` count and the
+    character count are undefined for a scan with no text layer, so the checks this file prescribes
+    were unavailable, and the cover page carries the correct full page range whether or not the file
+    holds it. **(3) A flat `/papers/published/<slug>.pdf` directory whose listing page
+    cannot be used to pick the slug.** `kentdaniel.net/research.php` is the usual recommended shape
+    and yields 40 hrefs, but the slugs are opaque (`jf97`, `jf97_2`, `md_97`) and the de-tagged page
+    text **did not contain the paper titles at all** — a grep for the article's title returned
+    index −1. Both 1997 candidates were text-layerless scans (`pdffonts` empty), so identification
+    cost two fetches plus two `pdftoppm` cover renders. **When a flat directory's slugs are opaque,
+    render the cover rather than grepping the listing.** **(4) Two transport failures, not origin
+    refusals**: `terpconnect.umd.edu` fails TLS verification **even with
+    `--cacert /root/.ccr/ca-bundle.crt`** — its own chain is incomplete, the same signature this file
+    records for `orbilu.uni.lu` — and `faculty.gsm.ucdavis.edu` dies with
+    `curl: (56) CONNECT tunnel failed, response 502`, the signature recorded for
+    `autopapers.ssrn.com` and `cdar.berkeley.edu`. Between them they closed both authors' own
+    institutional routes, and the third-party library in (1) is what rescued the session. **(5) Two
+    channels that worked first try and extend shapes already in this file**:
+    `economics.mit.edu/sites/default/files/publications/<TITLE IN CAPS WITH SPACES>.pdf` served the
+    **typeset published Econometrica article** (percent-encoded natural-language-title filenames, the
+    2026-11-09 shape, now on a *department publications* directory), and **NBER's technical
+    working-paper series `t<NNNN>` resolves exactly like `w<NNNN>`** at
+    `/system/files/working_papers/t0283/t0283.pdf`. **(6) Method**: `api.crossref.org/journals/<ISSN>/works?filter=from-pub-date:<Y>-01-01,until-pub-date:<Y>-12-31&query.bibliographic=<words>`
+    returned both legacy-Elsevier DOIs, volumes, pages and `is-referenced-by-count` in **one call per
+    year** — the 2026-10-07 "a journal's year is a much better key than an article's title" lesson,
+    re-confirmed, and it remains the right first call.
 
 - **[2026-11-09] READ THIS BEFORE AIMING SESSION 88. The nominal-price vein is CLOSED on all four
   of its sides in one session, and the detector step that found it was the cheapest one in the

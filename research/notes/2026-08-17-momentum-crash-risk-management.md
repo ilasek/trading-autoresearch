@@ -138,3 +138,21 @@ What is left that is genuinely worth considering, ranked honestly:
   defensive-cohort finding), "De-risking overlays on momentum reliably backfire
   out-of-sample", "Drawdown-state braking is refuted", and the cadence lesson — all four are
   load-bearing for how this note should be used.
+
+## Annotation added 2026-11-10 — the crash window is also the beta peak, which neither source says
+
+`notes/2026-11-09-price-based-comovement-and-its-failed-replication.md` measures the winner decile's
+market beta across the formation and holding years: **0.964 → 0.976 → 1.143 → 1.271 → 1.166** from
+two years before formation to two after, with the middle six deciles flat at ~0.82–0.84 and losers
+drifting down. The maximum sits roughly one year after formation — **inside** the window this note's
+two papers describe as the crash-exposed one.
+
+This is an independent, non-tail account of part of what the crash literature attributes to the
+long-short construction: a winner basket is simply carrying more market beta at the moment the
+market's worst realisations are most costly, and that half of the exposure is present in a
+**long-only** book too, where the long-short-specific fixes do not reach. It does not refute either
+source — their mechanism is about the loser leg's option-like behaviour after a drawdown — but it
+means a long-only momentum book's drawdown profile has a component that a volatility scaler is not
+the right instrument for, since the scaler responds to realised volatility rather than to the book's
+beta against the pool. Report realised beta to the pool next to skill on both splits (`#425`) before
+concluding that any de-risking overlay is or is not working.

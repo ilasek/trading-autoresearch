@@ -106,3 +106,23 @@ recommendation.
 - `experiments/learnings.md`: "Overlapping formation tranches are the strongest mechanism in
   the repo" and "Holding names the current signal has already rejected is the overlap's
   active ingredient" — both consistent with, but not derivable from, this source.
+
+## Annotation added 2026-11-10 — the winner portfolio's market beta is not flat through the holding year
+
+`notes/2026-11-09-price-based-comovement-and-its-failed-replication.md` measures something this note
+does not say and that the construction above assumes away: on annual sorts with rolling 252-day
+betas and a 21-day skip, **the top momentum decile's market beta runs 0.964 → 0.976 → 1.143 → 1.271
+→ 1.166 from two years before formation to two years after**, while the middle six deciles sit flat
+at roughly 0.82–0.84 and the bottom decile drifts down. So a winner basket's beta *rises through the
+formation window, keeps rising through the first holding year, and only then decays* — the peak sits
+inside the holding period this note's construction defines, not outside it.
+
+Two consequences for anything built on this note. **(1)** The overlapping-tranche scheme holds six
+formation vintages at once, so the book's beta is an average over the term structure above rather
+than a point on it; lengthening or shortening the tranche stack changes the book's market exposure
+as a side effect of a decision made about signal age. **(2)** This lab's objective is **skill** — the
+book's Sharpe minus the equal-weight eligible pool's on the same days — which is a difference of
+Sharpes and therefore does **not** net out a beta difference against the pool. A winner-selected
+book carries a structurally higher beta than the pool for about a year after formation, so part of
+any measured skill has the pool's own return attached to it with that sign. Reporting each book's
+realised beta to the pool on both splits is free and is the recommended diagnostic (`#425`).
