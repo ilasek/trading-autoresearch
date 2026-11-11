@@ -29121,3 +29121,5 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    prices its first moment at the benchmark level), `#415`'s free refusal test, `#416`'s reading rule,
    `#420`-`#422`, `#426`, and `#407`-`#410`, `#417`-`#419`. **`#363` is NOT live** (closed 2026-11-02/03).
    `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation rules to read first.
+
+## Research session — 2026-11-11 (learning agent): 3 notes added, see research/SUMMARY.md

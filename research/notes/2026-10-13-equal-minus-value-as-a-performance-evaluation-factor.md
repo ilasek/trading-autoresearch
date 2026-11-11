@@ -178,6 +178,23 @@ consequence rather than a momentum one.
   benchmarked to one index in one sample. They are recorded as evidence that the tilt is
   *pervasive and near-orthogonal*, which is a qualitative claim, and for nothing else.
 
+**Annotation added [2026-11-11] — this note treats the pool's MEMBERSHIP as fixed, and under
+protocol v2 it is not.** `#432` names two biases that make a reference portfolio the wrong
+benchmark, and this note reasons about only one of them. The **rebalancing** channel is the one
+discussed above: restoring fixed weights sells what beat the average and buys what lagged it, so
+the rebalanced pool's compounded return carries a term a buy-and-hold book does not. The one
+missing here is **new listing bias** — the equal-weight `eligible` pool admits a name **at the
+moment that name first becomes eligible**, i.e. at index admission, which `#401`/`#411` establish
+is *not* an information-free selection. The two run in **opposite directions**: the rebalancing
+channel inflates the benchmark's compounded return and biases a low-turnover candidate's measured
+skill **down**, while the admission channel pushes the other way by the sign of whatever index
+admission does to a name's subsequent return. Neither is an argument for changing the gate —
+`program.md` owns the objective — but **every statement in this note about what the equal-weight
+pool mechanically earns is a statement about the rebalancing half only**, and the free
+buy-and-hold counterpart in `#432` (same eligible names, equal weights struck once, left to drift)
+is what isolates it. Read with
+`notes/2026-11-06-index-membership-is-not-an-information-free-selection.md`.
+
 ## Related
 
 - `notes/2026-10-13-equal-weighting-and-the-rebalancing-component.md` — tonight's companion and

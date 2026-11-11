@@ -9282,6 +9282,115 @@ magnitude recorded above is a **caliper**, a **cell count**, a **skewness coeffi
 figure from any of the four sources is carried, and DGTW's sample-period style and performance
 numbers are left in the source.
 
+### The SCALAR MATCHING SCORE — the one dimension at which a matched design's intervals are valid, what estimating it does to them, and the argument that reaching it costs more balance than it buys (cross-family, the gate's own statistic, the panel itself)
+
+**[2026-11-11] Read this first: the vein was opened by a REFUSAL this folder wrote itself, and it
+closes with the two sides disagreeing — which is the useful part.** `#429` ([2026-11-10]) said a
+nearest-neighbour matching estimator on `k ≥ 2` **continuous** covariates has bias `O_p(N^{−1/k})`
+against sampling error `O_p(N^{−1/2})`, so its intervals are **not valid**, and only `k = 1` is
+clean. The standard escape is a **scalar summary of the covariates**, and the detector greps run
+at the start of tonight confirmed the folder held none: across 279 notes, `balancing score` **0**,
+`propensity score` **0**, `scalar summary` **0**, and all `propensity` hits still the unrelated
+*selling propensity*. Three sources close it — two that build the escape and one that says it is a
+trap.
+
+**(a) The theorem that licenses the dimension reduction, and the condition attached to it.**
+Rosenbaum–Rubin define a **balancing score** `b(x)` as any function of the covariates with
+`x ⊥ z | b(x)`, and the **propensity score** as `e(x) = pr(z = 1 | x)`. Five results follow:
+`e(x)` is a balancing score **for any distribution of `x`** (Theorem 1, generalising the earlier
+normal-theory discriminant result); `b(x)` is a balancing score **if and only if** it is finer than
+`e(x)`, so **`e(x)` is the coarsest balancing score and `x` the finest** (Theorem 2); strong
+ignorability given `x` implies strong ignorability given any balancing score (Theorem 3); at any
+value of a balancing score the treated-minus-control difference is unbiased for the effect there
+(Theorem 4); and sample estimates of the score produce **sample** balance, not merely population
+balance (Theorem 5). The licence is Theorem 2 and the condition is in the same sentence: **the one
+scalar that can stand in for `k` covariates is a fitted probability of selection, not any other
+one-dimensional index.** A z-score blend or a first principal component is not a balancing score
+unless it happens to be a monotone function of `e(x)` — which, under multivariate normal covariates
+with a common covariance matrix, is exactly when the linear discriminant qualifies. Three uses are
+given with their own corollaries: **pair matching** (4.1), **subclassification at the quintiles of
+the fitted score** (4.2), and **covariance adjustment on the score** (4.3) — with the explicit
+warning that covariance adjustment on the **raw covariates** "cannot be relied upon" and can
+*increase* bias when the two groups' covariance matrices differ. (**#433**)
+→ `notes/2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md`
+
+**(b) What ESTIMATING the score does — and the sign is backwards from the naive expectation.**
+This was the aim's criterion (iii) and it has two independent answers that agree. Rosenbaum–Rubin's
+own simulation (nearest-available matching, bivariate normal covariates, varying control
+reservoirs) finds the **sample** and **population** scores "approximately equally effective in
+removing bias, so that no substantial loss is incurred by having to estimate the propensity score"
+— the *bias* side. Abadie–Imbens supply the *variance* side, and it is the stronger statement:
+matching on the estimated score has asymptotic variance **`σ² − c' I_θ⁻¹ c`**, where `σ²` is the
+variance of the estimator that matches on the **true** score, `I_θ` is the score model's Fisher
+information and `c` depends on `cov(X, Y | score, W)`. The adjustment is a quadratic form in an
+inverse information matrix, hence **non-positive: estimating the nuisance parameter REDUCES the
+variance**, because the fitted score adapts to the realised sample. The practical corollary runs
+the opposite way to the usual two-step problem — the naive plug-in variance is biased **upward** and
+its intervals **over-cover**, so the lazy procedure loses power rather than manufacturing
+significance. **Two limits that bind here**: the sign is established for the average effect over the
+population and the authors say explicitly it "need not be the case" for the **effect on the
+treated**, which is the estimand any event-cohort question on this panel actually has; and the
+**bootstrap is still not valid** for a matching estimator, which the paper restates as its own
+motivation — `#429`'s refusal, confirmed from a second direction. (**#434**)
+→ `notes/2026-11-11-matching-on-the-estimated-score-and-its-variance.md`
+
+**(c) The adversarial side, and it accepts (a)'s theorem while rejecting its target.** King–Nielsen
+grant Theorem 1 is "mathematically correct" and argue the design it certifies aims too low. A
+method matching in the space of `X` (Mahalanobis, coarsened exact matching) has a parameter that
+can be driven to exact matching, so it approximates a **fully blocked** experiment — zero imbalance
+by construction. A method matching on a scalar probability can only approximate a **completely
+randomized** one, which has imbalance `≥ 0` in any finite sample, because it is blind to every
+component of `X` orthogonal to the score. The asymmetry is the sentence to carry: **exact matching
+on `X` implies matched scores, but equal scores do not imply matched covariates** — the theorem
+runs one way and the useful direction is false. From this comes the **PSM Paradox**: once the score
+match has approximated complete randomization, further pruning is random with respect to `X` given
+the score, and **random pruning increases imbalance** (three arguments: the `n^{−1/k}`
+nearest-neighbour distance — the *same* rate as `#429`, borrowed from the same source; a
+four-observation discrete toy; and the continuous case where the squared difference in group means
+*is* the squared standard error, `∝ 1/n`). So **tightening the caliper makes balance worse**, which
+is invisible to the instinct that would catch it, and the standard quarter-standard-deviation
+caliper is already past the turn. Their content analysis of 230 applied articles found **94% use
+the simplest one-to-one greedy form**, so the critique is aimed at practice rather than a straw man.
+Graded **tier B**, not A: the analytic core is solid, but the empirical sweep is the authors' own
+reanalyses (two published studies plus >20 private datasets), it is one discipline's corpus with no
+financial data, and this folder has not read the published responses to a critique that is
+contested. (**#435**)
+→ `notes/2026-11-11-the-psm-paradox-and-random-pruning.md`
+
+**(d) The resolution, and it falls out of the DISAGREEMENT rather than from either side.** The lab
+is caught between two true statements: the dimension reduction that makes a matching estimator's
+interval valid (`#429`'s `k = 1`) is the same reduction that caps achievable balance (`#435`). They
+are about different estimators — `#429` is about a **matching estimator's bias and interval**,
+`#435` about **imbalance and model dependence in the retained sample** — and **subclassification
+sidesteps both**. Five quintile strata of the fitted score with every name retained, combined by
+direct adjustment with stratum weights: nothing is pruned, so the paradox (a statement *about*
+pruning) cannot fire; nothing is a nearest-neighbour matching estimator, so the `N^{−1/k}` rate does
+not apply; no covariance matrix is estimated, so screen `#1` does not fire; and at ~1,000 eligible
+names, five strata leave ~200 names each. It is also a construction this lab already runs — it is
+`#431`'s cell grid with a fitted probability as the sorting variable, and `#406`'s tercile
+conditioning in the same shape. **That is the buildable output of tonight.**
+
+**(e) One thing that transfers PAST matching and is free.** `#435`'s §5.1 argument is not about
+matching at all: **pruning a sample for a reason uncorrelated with the comparison being made raises
+the variance of that comparison**, and the continuous version is the arithmetic identity that the
+squared difference in group means equals the squared standard error, `∝ 1/n`. This lab prunes
+constantly — eligibility screens, liquidity floors, volatility bands, tail trimming — and has never
+asked of any screen whether it removes names for a reason *correlated with the thing being measured*.
+Two more of the paper's own corollaries point the same way and both agree with the folder's existing
+`statistical-learning` conclusion from the other direction: **including every available weak
+predictor in a selection model pushes the fitted score toward noise** and therefore the selection
+toward random, and **a scalar score does not solve the variable-scaling problem, it only hides it.**
+
+**Anti-lookahead.** None of the three sources holds financial data. Samples: none for (a) beyond a
+simulation and a clinical observational dataset; none for (b), which is asymptotic theory plus a
+Monte Carlo; none for (c) beyond simulations and reanalyses of published observational studies in
+civic education and development. **All three `validation_overlap: false`**; (c) is
+`published_post_2018: true` (2019) and (a)/(b) are false. Every quantity recorded above is a
+**rate of convergence**, a **variance formula**, a **count of strata**, a **share of a surveyed
+literature**, or a statement about test specification. No return, Sharpe, or dated performance
+figure appears in any of the three sources or is carried from them.
+
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -17592,6 +17701,85 @@ hypothesis fodder, then anti-candidates.
     rather than a plain `t`. Tier A, overlap `false`.
     → `notes/2026-11-10-control-firm-versus-reference-portfolio-biases.md`
 
+433. **CONSTRUCTION — the SCALAR SELECTION SCORE, and the theorem that says it is the only legal
+    way to collapse several covariates into one.** A **balancing score** is any `b(x)` with
+    `x ⊥ z | b(x)`; the **propensity score** `e(x) = pr(z = 1 | x)` is a balancing score **for any
+    distribution of the covariates**, and is the **coarsest** one — `b(x)` balances if and only if
+    `e(x) = f{b(x)}`. This is the escape from `#429`'s `k ≥ 2` refusal, and it comes with a
+    condition: **the scalar must be a fitted probability of the selection event itself**, not a
+    z-score blend, not a first principal component, not any other one-dimensional index (those
+    qualify only if monotone in `e(x)`, which under normal covariates with a common covariance is
+    exactly the linear discriminant). On this panel the "selection" is an event the lab already has:
+    a name **becoming `eligible`** (`#401`/`#411`), or entering a liquidity or volatility band. Fit
+    it by a **walk-forward logit** on features the panel holds — trailing returns over a few
+    horizons, trailing range volatility, trailing dollar volume and its trend — matching **exactly**
+    on region/market as a **discrete** covariate, which is free under `#429`'s accounting and is
+    also the paper's own EPBR-within-subpopulations corollary. **Prefer subclassification to
+    matching, and the reason is arithmetic**: five quintile strata of the fitted score against
+    ~1,000 eligible names leaves ~200 per stratum, retains every name, needs no caliper, estimates
+    no covariance (so screen `#1` does not fire), and is a direct-adjustment weighted average rather
+    than a matching estimator. **Refusal carried with it**: covariance adjustment on the **raw**
+    covariates — regress the outcome on the covariates and read the treatment dummy, which is this
+    lab's instinct — can *increase* bias when the two groups' covariance matrices differ, and newly
+    eligible names are plausibly the more homogeneous subset the paper warns about. And since index
+    admission is a committee decision on partly unpublished criteria (`#418`), **strong ignorability
+    is not available here**, so everything built on this score is a *descriptive balance diagnostic*
+    and never an effect estimate. Tier A, overlap `false`.
+    → `notes/2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md`
+
+434. **FREE INTERPRETATION RULE, plus a refusal test: the naive interval around a score-matched
+    number is TOO WIDE, not too narrow — but only for one estimand, and the one this panel actually
+    has is the other one.** Matching on the **estimated** score has asymptotic variance
+    `σ² − c' I_θ⁻¹ c`, where `σ²` is the variance when matching on the **true** score; the
+    correction is a quadratic form in an inverse Fisher information and is therefore **non-positive**
+    — estimating the nuisance parameter **reduces** the variance, because the fitted score adapts to
+    the realised sample. So the plug-in variance that ignores first-step estimation is biased
+    **upward** and its intervals **over-cover**: a wide null from a score-matched cohort diagnostic
+    is **weak evidence of nothing**, and the adjusted variance should be computed before concluding
+    "no difference". Every ingredient is a local average over same-arm nearest neighbours in a
+    **one-dimensional** score (a sort and a merge, not a `k`-d tree) plus one logit information
+    matrix — comfortably inside the per-call budget. **Refusal test**: the sign is proved for the
+    average effect over the population and the authors say it "need not" hold for the **effect on
+    the treated**, which is the estimand of every event-cohort question on this panel ("what happens
+    to names that *become* eligible"). A cohort design here must **state its estimand**; if it is
+    the treated cohort, the naive interval may not be called conservative. **And the bootstrap is
+    still out** — restated here as the paper's own motivation, confirming `#429` from a second
+    direction, so the only route to a valid interval on a matching estimator is the analytic one.
+    **Free diagnostic that falls out**: `ĉ` is built from `cov(X, Y | score, W)`; if that is near
+    zero the whole adjustment is near zero, and a near-zero `ĉ` is itself the informative statement
+    that the covariates carry no outcome information beyond the score. Tier A, overlap `false`.
+    → `notes/2026-11-11-matching-on-the-estimated-score-and-its-variance.md`
+
+435. **REFUSAL TEST — the imbalance/pruning curve, and one arithmetic fact about SCREENS that
+    transfers past matching entirely.** A scalar-score match can only approximate a **completely
+    randomized** experiment (imbalance `≥ 0` in any finite sample); a match in the space of the
+    covariates can approximate a **fully blocked** one (imbalance zero by construction), because
+    **exact matching on `X` implies matched scores but equal scores do not imply matched
+    covariates**. Past the point where the score match has approximated complete randomization,
+    further pruning is random with respect to `X` given the score, and **random pruning increases
+    imbalance** — so *tightening the caliper makes balance worse*, and the standard
+    quarter-standard-deviation caliper is already past the turn. **The test, and it costs no
+    trial**: plot imbalance measured **in the space of the covariates** against the number of
+    observations pruned, from the full sample down, marking the unpruned level and the
+    complete-randomization level; a curve that **rises** means the design is in the paradox and its
+    output is not evidence. **Substitution**: the recommended alternative — coarsened exact matching
+    for mixed continuous/discrete covariates — is on this panel just a **cell sort** (prior-return
+    quintile × dollar-volume quintile, region exact), i.e. `#431`'s grid and `#406`'s tercile
+    conditioning, now endorsed as the *better* matching design rather than the cheaper one.
+    **The part that transfers past matching and is the most valuable line here**: pruning a sample
+    for a reason **uncorrelated with the comparison being made** raises that comparison's variance —
+    the continuous version is the identity that the squared difference in group means *is* the
+    squared standard error, `∝ 1/n`. This lab prunes constantly (eligibility screens, liquidity
+    floors, volatility bands, tail trimming) and has never asked of a screen whether what it removes
+    is correlated with what is being measured. Two corollaries agree with the folder's existing
+    `statistical-learning` conclusion from the other direction: **adding weak predictors to a
+    selection model pushes it toward noise** and the selection toward random, and **a scalar score
+    does not solve variable scaling, it only hides it**. Read as the boundary on `#433`, not as a
+    refutation of it: the authors are explicit that the score has productive non-matching uses, and
+    `#433`'s subclassification prunes nothing, so the paradox cannot fire on it. Tier B, overlap
+    `false`, `published_post_2018: true`.
+    → `notes/2026-11-11-the-psm-paradox-and-random-pruning.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -17688,8 +17876,178 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-08 (session 86) | **TOOK THE PRIMARY AIM VERBATIM AND IT SPLIT: the committee half paid out twice and the capping half paid out ZERO — and the capping failure is the night's real finding, because one of its two sources was refused by this folder's own holdout ban rather than by a paywall.** Aim from the [2026-11-07] entry: admit a source only if it **characterises a CAPPING or RE-CAPPING rule, or a committee's discretion against a mechanical alternative, AND measures what that rule does to a cross-section or to a measured premium** — not an index-addition price-impact event study, not a float-adjustment paper, not a provider methodology document. That entry predicted the vein would be thinner than the previous night's and authorised falling through to the ranked writing task after two failed searches. **Detector run first, on the target vocabulary across 270 prior notes:** `capped weight` **0**, `diversification requirement` **0**, `capped index` **0**, `UCITS` **0**, `Herfindahl cap` **0**, `position limit` **0**, `weight cap` **1**, `re-cap` **1**, `concentration limit` **1**, `5/50` **1**, `discretion` **2**, `discretionary` **2**, `index committee` **3**, `capping` **4**, `committee` **6** — and the **second grep on the mechanism confirmed rather than shrank the gap**: all four `capping` hits are about portfolio-level weight caps, the six `committee` hits are index-effect and membership notes, and **no note characterises an index's capping rule or compares a committee against a mechanical admission rule**. **The [2026-11-06] source-level check then did the most work it has ever done, twice rejecting a download before it happened:** the obvious capping primary (Jagannathan–Ma, upper weight bound ≡ covariance shrinkage) is **already covered** by `2026-08-21-weight-constraints-as-covariance-shrinkage.md`, and the obvious index-level alternative (Fernholz diversity weighting) is **already covered** by `2026-08-22-excess-growth-and-return-decomposition.md`. Two nights' work avoided by two greps. **(a) ADMITTED.** Li, Liu & Wei (Tier **B** — NBER WP 29365, **4** Crossref / **1** Semantic Scholar, unpublished, publicly disputed by the provider; read in full) code a provider's published admission criteria as regressors on all minimum-eligible names 1980–2018: the criteria give ~3/5 of the membership **level** (≈7/10 on the best-documented subperiod) against **single-digit percentages of the addition events**, while a mechanically-ruled index yields the great majority of the level and a large majority of the additions **from one size-rank dummy**. The rank table carries the shape: mechanical ≈ **step function**, committee ≈ gradient across four bins with the second a **coin flip**. ~1/3 of additions violated a published criterion in a year while **100+ fully-qualified names went un-added** — choice, not shortage (**#415**). Its discretionary/rules-based split orders subsequent relative outcomes discretionary-worst → passed-over → rules-based, magnitudes left in the source by the folder's own practice (**#417**). **(b) ADMITTED.** Robertson (Tier **B** on the methodology column alone — a law review, **no DOI, not indexed in Crossref or OpenAlex**, Semantic Scholar 429'd; read in full) builds the mechanical counterfactual instead of regressing: **~72%** of a committee index's names sit in the mechanical top-*N*, **~28%** do not, index-only names are **~5%** of aggregate value and mechanical-only names **~17%** — and **the median EXCLUDED name is slightly LARGER than the median constituent** (1%), so **no size threshold recovers membership**. In return space a live low-fee fund tracks its index **~20× more closely than the index tracks the mechanical alternative**, stable across subperiods, every robustness variant widening it (**#416**). An independent leg — counting daily eligibles under conservatively coded criteria — puts the committee's slack above **20% of index size** and lands on the same **~5% of aggregate value** from the other direction. **(c) THE CAPPING HALF FAILED, with both halves of the reason named.** Five searches; four returned **providers' own capping methodologies**, which the aim excluded — and the night's reusable lesson is that **for a rule only providers write down, "excluded by criterion" and "no literature exists" are indistinguishable from a search result unless the provider documents are named and recorded as refused** (**#419**). The one on-criterion academic paper (a 2023 *JOIM* article simulating capping and diversity-weighting alternatives and reporting their **turnover** cost) was **unobtained across four channels** — `escholarship.org` HTTP **202 size=0** (second confirmation of the 2026-10-16 finding), `cdar.berkeley.edu` **gateway 502 to CONNECT** (transport, not an origin refusal), journal paywalled, not on arXiv — and is a named pointer. The other (an NBER working paper on the US **50/5/10** rule as a binding fund constraint, squarely on criterion) was **refused on this folder's own rules: its sample extends into 2024, i.e. into the locked holdout**, so nothing from it is recorded, and the format gap that makes this invisible — `validation_overlap` and `published_post_2018` exist, **no holdout-overlap flag does** — is filed for the human (**#419**). **THE RANKED WRITING TASK WAS ALSO COMPLETED IN FULL**, as that entry asked and with no new source: `#407`'s covariance-contamination claim is now annotated into all four items it invalidates — `2026-08-30-pca-residual-statistical-arbitrage-long-only.md` (a residual against this panel's PCs is residual to index demand, so a candidate whose target *is* the index-demand flow has hedged away its signal before forming the residual; a global `K` pools nine contamination structures), `2026-09-07-hierarchical-risk-parity-clustering-allocation.md` (a cluster may be an **index**, and rule-induced blocks are **more** stable out of sample, so the usual stability reassurance is evidence of latching onto the rulebook), `2026-09-27-counting-factors-eigenvalue-estimators.md` (an estimated `K` is an **upper bound** on the economic count), and `2026-09-27-marchenko-pastur-noise-null-for-correlation-spectra.md` — **the sharpest of the four: MP's null is i.i.d. noise, rule-induced commonality is neither noise nor fundamental, so it lands above the edge and is read as signal; MP survives as a device for DISCARDING dimensions and not for ADMITTING them.** **Anti-lookahead.** Samples **1980–2018** (`validation_overlap: true` on its final year, one of 39) and **1989–2017** (`false`). Every magnitude recorded is an `R²`, a share of names, a share of aggregate value, a size ratio or a tracking-error **ratio** — no return, no Sharpe, no event narrative; both notes name their omissions in-text (the entrant-group return magnitudes, and the turnover-impact magnitudes). **Nothing from the two excluded capping sources appears anywhere in this file.** | Li, Liu & Wei 2021 (`2026-11-08-committee-discretion-versus-the-published-admission-rule.md`); Robertson 2023 (`2026-11-08-the-mechanical-counterfactual-index-and-its-tracking-error.md`) |
 | 2026-11-09 (session 87) | **THE PRIMARY AIM FAILED CLEANLY ON FOUR CHANNELS AND THE RANKED WRITING TASK WAS DONE — then the session was aimed by the LAB's own newest measurement and paid out three notes on a variable the folder had been controlling for without ever writing it down.** Aim from the [2026-11-08] entry: **Geppert, Ivanov & Karels** (RQFA 37(1), 21–34, `10.1007/s11156-010-0193-0`, **12** Crossref, checked 2026-11-09), admissible only if its body characterises the objective a discretionary index change serves against a stated alternative objective, four requests maximum. **All four failed** — `scholarworks.sjsu.edu` **403** (bepress, re-confirming 2026-10-01), the first author's department dissertation path **404**, the EconPapers `kap:rqfnac` record *"restricted to subscribers"* with no deposit named, and `link.springer.com/article/<doi>` **HTTP 303 into `idp.springer.com/authorize`**, the OpenID refusal mode this file had recorded only for `pm-research.com`. Per that entry's instruction **no macro-conditioning substitute was taken**; the free scrap is the RePEc keyword list (*Beta changes · S&P500 constituents changes · Spectral analysis*), which says the paper is a frequency decomposition of betas and the relayed macro claim is probably a side result — so **do not re-spend four requests on that relay** (**#426**). **The ranked writing task was completed in full**: `#416`'s median result is annotated into all three notes that reason about where a size screen sits. **The session's own aim came from the detector's newest step — after each nightly, take the one variable it measured that has no note here.** The 2026-11-08/09 nightly's headline was the **log price level** as a horizon-amplified confound (one-bit IC −0.030 → −0.150 across 21–504 days) that **inverts the sign** of two clean unit-free slow objects at rank correlations of only −0.25 and −0.30. Fixed-string greps across all 272 prior notes: `nominal share price` **0**, `low price effect` **0**, `price illusion` **0**, `back-adjust` **0**, `Comovement revisited` **0**, `Barberis, Shleifer` **0**, `Green and Hwang` **0**, `excess comovement` **1**, `nominal price` **3**, `stock split` **4**, `price level` **7** — and the **mandated second grep on the mechanism confirmed the gap**: all three `nominal price` hits are passing mentions (a data screen, an anomaly-list entry, a warning not to substitute price for index overweight) and **no note said what the price level is or what it proxies for**. **(a) ADMITTED.** Weld–Michaely–Thaler–Benartzi (Tier **A**, *JEP* 23(2), **117** Crossref; **published article unobtained — `aeaweb.org` and `pubs.aeaweb.org` both 403** — read in full as the lead author's Cornell dissertation of the same title): the US equal-weighted average share price has sat near \$25 since 1933 against an order-of-magnitude rise in everything else, so real price per share fell by >90%; IPO and fund prices likewise; four economic explanations tested and all four fail; what survives is a **peer-relative norm**, with post-split target prices predicted from the firm's deviation from its **size and industry peers** at `R²` > **62%** (> **78%** on genuine splits) (**#420**). Across **sixteen** other exchanges the pattern does not replicate and average price in **current USD** spans **\$0.02 to \$37** — so on this nine-market panel a **pooled** price rank is approximately country dummies plus a currency overlay, and only the *within-region* control is a firm-level control (**#421**). And in ~198,000 firm-years of spread data over ~80 years, **higher-priced firms have lower relative spreads** (t ≈ −13) after controlling for volume, turnover **and** capitalisation — a cost gradient v3's volume-only tiering cannot see, with the lower-priced name **undercharged** (**#422**, for the human). **(b) ADMITTED.** Baker–Greenwood–Wurgler (Tier **A**, *JF* 64(6), **199** Crossref, read in full as NBER WP 13762): the identity `p_t ≈ p_IPO + Σr + Σ s·n` plus a catering theory in which the split term responds to a time-varying **low-price premium**, concentrated in **larger** firms acting small. **The lab-facing consequence is the sharpest thing in the session**: back-adjustment strips `Σ s·n` and re-bases `Σ r` on the sample's end, so the stored level is up to a constant **the negative of the name's future cumulative adjustment**, and the split half of that future is a deliberate size-correlated **decision**, not noise — upgrading the 2026-10-18 / 2026-10-22 engine issues from a units bug to a confound and giving the nightly's F5/F7 a mechanism (**#423**). **(c) ADMITTED, and it is a REFUTATION.** Chen–Singal–Whitelaw (Tier **A**, *JFE* 121(3), **78** Crossref, typeset published version read in full from `pages.stern.nyu.edu`) revisit Green–Hwang's price-based comovement (*JFE* 93(1), **213** Crossref, **unobtained** — SSRN 403 on a `Delivery.cfm` path, CiteSeerX HTTP 000, ScienceDirect closed — claims relayed from the replication and flagged throughout): the bivariate loading-shift statistic is **uninformative** because both regressors proxy for the same factor; the discriminating **univariate regression on the abandoned group** was never run; run properly the splitting stock's beta rises against the low-priced group **and nearly as much against the high-priced group it left**; and with size-and-momentum-matched controls, Dimson adjustment and a triple difference, **event and control beta changes are indistinguishable for splits AND for S&P 500 additions**. Cause: **57%** of the split sample is in the top two momentum deciles (37% for index additions) (**#424**). **The by-product is the more valuable half**: a winner's market beta runs **0.964 → 0.976 → 1.143 → 1.271 → 1.166** from two years before formation to two years after, middle deciles flat at ~0.82–0.84, losers drifting down — and since this lab's **skill is a difference of Sharpes it does not net that out**, which is a candidate explanation for the repeated train-vs-validation sign instability that requires neither sheet to be wrong, testable free by reporting each book's realised beta to the pool on both splits (**#425**). **Tension stated, not smoothed:** the folder's Nikkei-weight and forty-market comovement notes are named inside the replication's own literature list; neither is refuted (one identifies off a continuous weighting rule, the other is not a US event study) but both report bivariate-style loading changes and their magnitudes are now upper bounds. **Anti-lookahead.** Samples 1933–2007 / 1975–2005 / ~80 years (a), 1963–2006 (b), 1971–2012 and 1976–2012 with a 1976–2011 beta panel (c) — **all three `validation_overlap: false`, all `published_post_2018: false`**. Every magnitude recorded is a price **level**, an `R²`, a **beta**, a sample share, a correlation or a t-statistic; the catering paper's multi-year relative-return magnitudes are left in the source with only the sign carried, and the replication's sample-average returns are left out entirely. | Weld, Michaely, Thaler & Benartzi 2009 (`2026-11-09-the-nominal-share-price-puzzle-and-the-price-norm.md`); Baker, Greenwood & Wurgler 2009 (`2026-11-09-catering-through-nominal-share-prices.md`); Green & Hwang 2009 + Chen, Singal & Whitelaw 2016 (`2026-11-09-price-based-comovement-and-its-failed-replication.md`) |
 | 2026-11-10 (session 88) | **THE PRIMARY AIM WAS MET IN FULL ON THE FIRST VEIN TRIED, THE RANKED WRITING TASK WAS COMPLETED, AND THE SESSION'S BY-PRODUCT IS ABOUT THE LAB'S OWN BENCHMARK RATHER THAN ANY CANDIDATE.** Aim from the [2026-11-09] entry: **the momentum-matched control as a design object** — admit a source only if it gives a CONSTRUCTION for the control group (matching variables, caliper, what is differenced) AND says what the estimate means when the match is imperfect in a known direction; not another event study, not an anomaly whose identification happens to use matching, explicitly not a causal-inference textbook chapter. **The detector greps ran first and the gap was as predicted**: across 275 prior notes `matching variable` **0**, `caliper` **0**, `synthetic control` **0**, `matched sample` **1**, `matched firm` **1**, `difference-in-difference` **2**, `control group` **3**, `matched control` **4**, `propensity` **5** — and the **mandated second grep on the mechanism confirmed rather than shrank it**: all five `propensity` hits are the unrelated phrase *selling propensity*, and all four `matched control` hits are other people's event studies relayed inside notes about something else, so **no note said how to build one**. The **source-level check also paid**, rejecting nothing but confirming the vein was clean: `Lyon` **0**, `Wermers` **0**, `Abadie` **0**, `Imbens` **0**, `DGTW` **0**, `buy-and-hold abnormal` **0**, `new listing bias` **0**, `rebalancing bias` **0**, while all six `Barber` hits were a different Barber paper and all nine `Grinblatt` hits were Grinblatt–Han / Grinblatt–Moskowitz. **(a) ADMITTED.** Barber & Lyon 1996 (Tier **A**, *JFE* 41(3), 359–399, **1255** Crossref, checked 2026-11-10; read in full from `leeds-faculty.colorado.edu`): when a sample is selected on a mean-reverting variable, **only** a control matched on that variable is well specified, and the misspecification is large even when the pre-event difference is **slight**; a control group *is* a model of expected performance; change models dominate level models (**#427**). Caliper stated exactly — **70%–130%** on the nuisance variable, **90%–110%** on the selection variable, nearest-on-selection-variable fallback; match struck once and held; rank statistic over `t`; power decays as the matching lag goes one → three years (**#428**). Its own answer to the imperfect-match half: **the speed of mean reversion is cross-sectionally heterogeneous**, which is why one cell resisted every design they tried. **(b) ADMITTED.** Barber & Lyon 1997 (Tier **A**, *JFE* 43(3), 341–372, **2102** Crossref; read in full from the same host): the matched **firm** beats any reference portfolio because three biases enter through the portfolio side — **new listing** (benchmark keeps admitting names that began trading after the event; biases the difference **positive**), **rebalancing** (benchmark's compounding assumes periodic rebalancing while the sample security's does not; the restoring trades buy month-`t−1` losers, which are month-`t` winners, so the benchmark is **inflated** and the difference biased **negative**), and **skewness** (isolated against a χ² of known mean and skewness **2.83**). **The by-product is the more valuable half**: protocol v3 grades skill against the **equal-weight eligible pool**, which is a rebalanced reference portfolio, and protocol v2's panel admits a column only once the name has been eligible — so **both biases are structural in this lab's own measurement, with opposite signs**, and the free check is to report the pool's **buy-and-hold** counterpart next to the rebalanced one (**#432**). Two riders that are arithmetic: **simple returns, never log** (log abnormal returns are inherently negatively biased under cross-sectional dispersion), and rank/bootstrap statistics over a plain `t` on skewed long-horizon differences. **(c) ADMITTED.** Daniel, Grinblatt, Titman & Wermers 1997 (Tier **A**, *JF* 52(3), 1035–1058, **1560** Crossref; body and Appendix read in full from page images of a complete JSTOR scan on `kentdaniel.net`): **125** cells from **5×5×5** sorts on size, book-to-market and **prior-year return**, large-cap-only breakpoints, **value-weighted and buy-and-hold within cell** expressly to avoid the rebalancing bias in (b), re-formed annually, re-assigned quarterly, differenced at `t−1` cell assignment; plus the **CS / CT / AS** decomposition separating within-cell picking from cell timing (the twelve-month-lagged weight-and-assignment term) from static cell occupancy (**#431**). **The Appendix supplies the two details that decide whether this is buildable here, and the draft note had both wrong before it was read**: the triple sort is **NESTED, not independent** (so every cell is populated by construction, and the empty-corner objection to running it on a narrow panel disappears), and the momentum variable **skips the month before formation**. On this panel it becomes a nested **region → dollar-volume → past-return** grid, because capitalisation (`#408`, `#423`) and book-to-market are unavailable — with region as the outer, *discrete* level, which `#421` wants and which `#429` makes free. **(d) ADMITTED.** Abadie & Imbens 2006 + 2011 (Tier **A**, *Econometrica* 74(1), 235–267, **2164** Crossref, typeset published version read in full from `economics.mit.edu`; *JBES* 29(1), 1–11, **1126** Crossref, read in full as NBER Technical WP 283): matching on `k` **continuous** covariates has conditional bias `O_p(N^{−1/k})` against sampling error `O_p(N^{−1/2})`, so **at `k ≥ 2` the estimator is not `√N`-consistent and standard intervals are not valid**; `k = 1` is the clean case; **discrete covariates do not count toward `k`**; **the bootstrap is not valid** for the simple matching estimator (**#429**). And the repair is a **regression, not a fourth matching variable** — impute `Y_j + μ̂₀(X_i) − μ̂₀(X_j)`, which removes the bias **without affecting the asymptotic variance**, with a plain linear `μ̂₀` fitted on the control group only (**#430**). **Cross-source synthesis worth more than any one of them:** DGTW's quintile **cells** keep `k` at **zero** in the Abadie–Imbens accounting, which is an argument for cell-based benchmarking over nearest-neighbour matching on a panel this narrow — **an argument none of the four sources makes**. **The ranked writing task was completed in full**: `#425`'s winner-beta term structure is now annotated into all three `price-trend` notes it bears on (`2026-08-17-jegadeesh-titman-overlapping-momentum.md` — the overlapping-tranche stack averages over the beta curve; `2026-08-17-momentum-horizon-echo.md` — 12-7 versus 12-2 are two different points on it, so the horizon and beta effects are confounded by construction; `2026-08-17-momentum-crash-risk-management.md` — the beta peak sits **inside** the crash-exposed window and that half survives into a long-only book where the long-short fixes do not reach). **Consistency, stated rather than smoothed:** `#432` does not contradict `2026-08-22-rebalancing-return-attribution-critique.md` (rebalancing trades have exactly zero expected value under IID and pay only where relative prices revert) or the 2026-10-13 pair — it supplies the **antecedent measured on a wide cross-section** and reframes an attribution question as a **signed bias in a measured difference**; the **new-listing** half is genuinely new to that cluster. **Anti-lookahead.** Samples 1977–1992 (a), July 1963 – December 1994 (b), 1974–1994 holdings (c), and none at all for (d) — **all four `validation_overlap: false`, all four `published_post_2018: false`**. Every magnitude carried is a **caliper**, a **cell count**, a **skewness coefficient**, a **stochastic order**, a **citation count** or a statement about test specification; DGTW's sample-period style and performance numbers and both Barber–Lyon papers' rejection-rate tables are left in the sources. | Barber & Lyon 1996 (`2026-11-10-performance-matched-controls-and-mean-reversion.md`); Barber & Lyon 1997 (`2026-11-10-control-firm-versus-reference-portfolio-biases.md`); Daniel, Grinblatt, Titman & Wermers 1997 (`2026-11-10-characteristic-matched-benchmark-portfolios.md`); Abadie & Imbens 2006 + 2011 (`2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`) |
+| 2026-11-11 (session 89) | **THE PRIMARY AIM WAS MET WITH THE NAMED PRIMARY ON THE FIRST REQUEST, THE RANKED WRITING TASK WAS COMPLETED, AND THE VEIN CLOSES WITH ITS TWO SIDES IN OPEN DISAGREEMENT — WHICH IS WHAT PRODUCED THE BUILDABLE ANSWER.** Aim from the [2026-11-10] entry: **the scalar matching score** — admit a source only if it (i) defines the scalar score, (ii) states the theorem about what conditioning on it is equivalent to, and (iii) says what changes when the score is estimated rather than known; not another application of matching, not a survey of treatment-effect estimators, explicitly not a causal-inference textbook chapter; **at most four requests**. **The detector greps ran first and the gap was exactly as predicted**: across 279 prior notes `balancing score` **0**, `propensity score` **0**, `scalar summary` **0**, and every `propensity` hit still the unrelated *selling propensity*; `Abadie` **1** and `Rosenbaum` **2**, all incidental citations inside notes about something else. **(a) ADMITTED, and it meets all three criteria by itself.** Rosenbaum & Rubin 1983 (Tier **A**, *Biometrika* 70(1), 41–55, **26586** Crossref, checked 2026-11-11; complete 15-page article read from page images of a JSTOR scan served by `stat.cmu.edu` on the first try): a **balancing score** is any `b(x)` with `x ⊥ z | b(x)`; the **propensity score** `e(x) = pr(z = 1 | x)` is one **for any distribution of `x`** (Thm 1); `b(x)` balances **iff** it is finer than `e(x)`, so **`e(x)` is the coarsest balancing score** (Thm 2 — the licence `#429` needed, with the condition that the scalar must be a fitted **selection probability** and not any other one-dimensional index); strong ignorability transfers to any balancing score (Thm 3); the treated-minus-control difference at a score value is unbiased for the effect there (Thm 4); **sample** estimates of the score produce **sample** balance (Thm 5). Three uses with their own corollaries — pair matching, **subclassification at the quintiles of the fitted score**, covariance adjustment **on the score** — plus the explicit warning that covariance adjustment on the **raw covariates** can *increase* bias when the groups' covariance matrices differ, and the EPBR condition and its within-subpopulation extension (**#433**). Criterion (iii) is answered on the **bias** side by its own simulation: sample and population scores are *approximately equally effective*, so **no substantial loss from estimating the score**. **(b) ADMITTED, and it answers (iii) on the variance side with the sign backwards from the naive expectation.** Abadie & Imbens 2016 (Tier **A**, *Econometrica* 84(2), 781–807, **708** Crossref; read in full as NBER WP **w15301**, which OpenAlex lists as a location for the published work and whose abstract is **verbatim identical** to the published one): matching on the **estimated** score has asymptotic variance **`σ² − c' I_θ⁻¹ c`** — a quadratic form in an inverse Fisher information, hence **non-positive**, so estimating the nuisance parameter **REDUCES** the variance and the naive plug-in interval **over-covers** rather than under-covering (**#434**). **Two limits that bind here and are easy to miss**: the sign is proved for the average effect over the population and the authors say it "need not" hold for the **effect on the treated**, which is the estimand of every event-cohort question on this panel; and the **bootstrap remains invalid** for matching estimators, restated as the paper's own motivation — `#429` confirmed from a second direction. **(c) ADMITTED as the adversarial side, graded TIER B on purpose.** King & Nielsen 2019 (*Political Analysis* 27(4), 435–454, **1398** Crossref; read in full from `gking.harvard.edu`, located via the landing page's `citation_pdf_url` meta tag after the obvious flat-directory path returned HTML): accepts Thm 1 as "mathematically correct" and attacks its target — a scalar-score match can only approximate a **completely randomized** experiment while an `X`-space match can approximate a **fully blocked** one, because **exact matching on `X` implies matched scores but equal scores do not imply matched covariates**. Hence the **PSM Paradox**: past the point of complete randomization, further pruning is random with respect to `X` and **random pruning increases imbalance**, so tightening the caliper makes balance worse and the standard quarter-SD caliper is already past the turn; their three arguments include the **same `n^{−1/k}` rate** `#429` records, borrowed from the same source. Their content analysis of 230 applied articles found **94%** use the simplest one-to-one greedy form, so the critique is aimed at practice (**#435**). **Tier B and the reason is stated in the note**: the analytic core is solid, but the empirical sweep is the authors' own reanalyses (two published studies plus >20 private datasets), it is one discipline's corpus with no financial data, and this folder has **not read the published responses** to a contested critique. **The synthesis is the session's output and belongs to no single source**: the lab is caught between the reduction that makes an interval valid (`#429`'s `k = 1`) and the reduction that caps achievable balance (`#435`) — and **subclassification sidesteps both**, because it prunes nothing (so the paradox, a statement *about* pruning, cannot fire) and is not a nearest-neighbour matching estimator (so the `N^{−1/k}` rate does not apply), while being `#431`'s cell grid with a fitted probability as the sorting variable. **One finding transfers past matching entirely**: pruning a sample for a reason **uncorrelated with the comparison being made** raises that comparison's variance — the continuous version is the identity that the squared difference in group means *is* the squared standard error, `∝ 1/n` — and this lab prunes constantly without ever having asked that question of a screen. **The ranked writing task was completed in full**: `#432`'s **new-listing** half is now annotated into all three notes that reason about what the equal-weight pool mechanically earns (`2026-10-13-equal-weighting-and-the-rebalancing-component.md`, `2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`, `2026-08-22-rebalancing-return-attribution-critique.md`), each of which previously treated pool membership as fixed and discussed only the rebalancing channel. **Anti-lookahead.** No financial data in any of the three sources. Samples: a simulation plus a clinical observational dataset (a); asymptotic theory plus a Monte Carlo (b); simulations plus reanalyses of published observational studies (c). **All three `validation_overlap: false`**; (c) is `published_post_2018: true` (2019), (a) and (b) are false. Every magnitude carried is a **rate of convergence**, a **variance formula**, a **count of strata**, a **share of a surveyed literature**, a **citation count**, or a statement about test specification. | Rosenbaum & Rubin 1983 (`2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md`); Abadie & Imbens 2016 (`2026-11-11-matching-on-the-estimated-score-and-its-variance.md`); King & Nielsen 2019 (`2026-11-11-the-psm-paradox-and-random-pruning.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-11] READ THIS BEFORE AIMING SESSION 90. The scalar-score vein is CLOSED on all three
+  of its sides in one session, and what it leaves behind is not a question about the score — it is
+  a REFUSAL TEST THIS FOLDER CANNOT CURRENTLY RUN.** `#433` gives the construction (the propensity
+  score is the coarsest balancing score, and subclassification at its quintiles is the form that
+  fits this panel), `#434` gives the inference (estimating the score *reduces* the asymptotic
+  variance, so the naive interval over-covers — for the population estimand only), and `#435` gives
+  the boundary (a scalar-score match can only approximate complete randomization, and pruning past
+  that point increases imbalance). **Do not reopen it.** There is no fourth side: strong
+  ignorability is unavailable on this panel by construction (`#418`), so every remaining question
+  about the score is a question about what this lab is allowed to *claim*, not about the method.
+  - **Primary aim for session 90, and it is named by tonight's own refusal rather than by grep: the
+    IMBALANCE METRIC, and the matching class defined by bounding it.** `#435`'s refusal test says
+    plot imbalance **in the space of the covariates** against the number of observations pruned, and
+    reject a design whose curve rises. **The folder holds no definition of that metric.** A grep
+    before any download should confirm it: `imbalance metric`, `L1 imbalance`, `Mahalanobis
+    discrepancy`, `monotonic imbalance bounding`, `coarsened exact matching` are all expected at
+    **0**, and the one incidental `Mahalanobis` hit is tonight's own note relaying King–Nielsen. The
+    named primary is **Iacus, King & Porro (2011)**, *Multivariate Matching Methods That Are
+    Monotonic Imbalance Bounding*, *JASA* 106(493), 345–361 — cited inside tonight's `#435` source
+    for both the `L1` measure and the MIB class, so the folder is certifying the aim from the
+    inside, and `#435` names coarsened exact matching as the construction this panel should prefer
+    while **saying nothing about how to choose the coarsening**. **Acceptance criterion, stated
+    before any download: admit a source only if it (i) DEFINES a multivariate imbalance measure
+    computable from the two groups' empirical distributions, (ii) states what property the matching
+    class guarantees as its parameter is varied, and (iii) says how the coarsening or caliper is
+    CHOSEN rather than merely that one exists.** Not another critique of propensity scores; not a
+    software description; not a general survey of matching. **The channel is already confirmed**:
+    the second author's site served tonight's `#435` source, via the `citation_pdf_url` meta-tag
+    route in the access findings below. **Spend at most three requests.**
+  - **Ranked second, and prepared NOW so the session has somewhere to go if the first aim fails —
+    this is the [2026-11-09] amendment, which still binds: the NUMBER OF SUBCLASSES.** `#433`'s
+    recommended construction is **five** quintile strata, and the only justification carried for
+    that number is Rosenbaum–Rubin relaying Cochran's observation that five subclasses remove at
+    least 90% of the bias for many continuous distributions. The folder has the number and not the
+    result. The named primary is **Cochran (1968)**, *The effectiveness of adjustment by
+    subclassification in removing bias in observational studies*, *Biometrics* 24, 295–313.
+    **Acceptance criterion: admit it only if it (i) states how bias removal varies with the NUMBER
+    of subclasses, (ii) says what it assumes about the distribution of the subclassifying variable,
+    and (iii) says what happens when that variable is measured with error or estimated.** A 1968
+    *Biometrics* article is Wiley and almost certainly closed; the channels worth trying, in order,
+    are a statistics department's reprint directory, a third-party teaching library of the shape
+    that worked tonight and on 2026-11-10, and the result restated inside a later open-access
+    article. **If two searches fail, fall through to the writing task** rather than substituting a
+    general stratification survey.
+  - **Ranked below both, and it is a WRITING task that fits the same session and needs no source:
+    `#433`/`#434` are not carried into the ADMISSION-RULE cluster, which is the vein they are
+    about.** `notes/2026-11-06-index-membership-is-not-an-information-free-selection.md` establishes
+    that a name becoming `eligible` is a selection on past performance, and
+    `notes/2026-11-08-committee-discretion-versus-the-published-admission-rule.md` establishes that
+    the rule as written is not the decision as made. Neither says that this selection is a
+    **treatment with a propensity score**, that a fitted `pr(eligible | x)` is therefore
+    constructible from features this panel holds, or — decisively — that the second note is exactly
+    **why strong ignorability fails** and why everything built on that score is a descriptive
+    balance diagnostic rather than an effect estimate. Annotating the two costs no trial and turns a
+    pair of standing caveats into a named, buildable object. **Do not open a new source for this**;
+    it is composition, exactly as tonight's three `#432` annotations were.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06] through [2026-11-10]) is: **check candidate sources against
+    the folder before downloading**, then grep for `open question` / `leave(s) … open`, then ask
+    what the lab does to a number after it has it and grep for the literature about the number
+    before it exists, then run a **second grep on the mechanism** after a zero-count, and **run the
+    nightly-variable detector at the start of every session regardless of the handover**. All ran;
+    the vocabulary greps came back at a clean zero and needed no second pass, because
+    [2026-11-10] had already done the disambiguating work on `propensity`. **Tonight's amendment is
+    about what counts as closure: a vein is not closed when its construction is written down, it is
+    closed when the ADVERSARIAL source has been read too.** `#433` and `#434` alone would have left
+    this folder recommending a method whose leading critique it had never opened, and `#435` changed
+    the recommendation (subclassify, do not prune) rather than merely qualifying it. **Budget one
+    request of every vein for the source that says the vein is a mistake** — and grade it honestly
+    when its own evidence is thinner than its claim, as tonight's tier B does. Caveats still not run
+    through the detector, unchanged in order: *publication decay*, and *"the cost model is lethal
+    only to books that trade"*.
+  - **Carried unchanged and still live**: `#406`'s volatility-tercile conditioning remains the best
+    construction in the file, category-**neutral** per `#414`, and `#435` now independently endorses
+    its *shape* (a cell sort) over nearest-neighbour matching. `#413` is the composed pre-trial rule
+    and should run before any candidate file is written; `#376`'s one-bit truncation test, `#389`'s
+    cumulative-curve test and `#381`'s `σ_IC` remain the three free screens, with `#415`'s
+    eligibility-forecasting refusal, `#421`'s pooled-price-control refusal, `#423`'s
+    monotone-in-stored-price refusal and `#427`/`#429`'s matched-design refusals joining them.
+    **Tonight adds two refusal tests and two free diagnostics.** Refusals: `#434` (a cohort design
+    must state whether its estimand is the population or the **treated cohort**; if the latter, the
+    naive interval may NOT be called conservative) and `#435` (plot the imbalance/pruning curve in
+    covariate space before reading any pruned design's output — a rising curve means the output is
+    not evidence). Diagnostics, both free: `#434`'s near-zero `ĉ` test (if `cov(X, Y | score, W)`
+    is near zero, the covariates carry no outcome information beyond the score, which is itself the
+    finding), and `#435`'s screen question — **does this screen remove names for a reason
+    correlated with what is being measured?**, which applies to every eligibility, liquidity and
+    volatility filter the lab runs and has never been asked of any of them. The matched-control vein
+    is now closed on its fourth and last side; the nominal-price vein stays closed (`#420`–`#426`);
+    the index-rule vein stays closed (`#401`–`#419`); the detectability vein stays closed
+    (`#393`–`#400`); the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays
+    closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#433`–`#435` from tonight; `#427`–`#432` from 2026-11-10;
+    `#420`–`#426` from 2026-11-09; `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07;
+    `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04;
+    `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01;
+    `#343`–`#348` from 2026-10-31; `#335`–`#342` from 2026-10-30; `#328`–`#334` from 2026-10-29;
+    `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27; `#311`–`#315` from 2026-10-26;
+    `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24; `#294`–`#299` from 2026-10-23;
+    `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21; `#282`/`#281` from 2026-10-20;
+    the 2026-10-18 pair; then 2026-10-17 and everything carried under it.
+  - **Retired and recorded as retired**: the replication/`p`-hacking/multiple-testing-hurdle vein;
+    the country-level cross-section (2026-11-02); the long-only constraint as a construction object
+    (2026-11-03); the cash/pool boundary (2026-11-04); ex-ante detectability (2026-11-05); the
+    panel's admission rule (2026-11-06); the index's weighting rule (2026-11-07); the index rule as
+    a whole including capping (2026-11-08); the nominal price level on all four sides (2026-11-09);
+    the matched control as a construction on three of its four sides (2026-11-10); and **tonight the
+    fourth side, the scalar matching score, on all three of its own**. Still at **0** and still not
+    nominated: `transfer entropy` (twenty-second nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-10], unchanged: the
+    engine issues filed 2026-10-18 and 2026-10-22 (upgraded by `#423`); `min_train_skill = 0.0`;
+    `#324`'s deliberate difference; the two human decisions added 2026-10-29; the three items the
+    2026-10-30/31 nightly raised; the data-type question; `#396`'s tension between `program.md`'s
+    spend-across-families rule and what the design can measure; `#404`'s spinoff/merger/name-change
+    question; `#407`'s rule-induced comovement inside the equal-weight pool; `#418`'s discretionary
+    component in the benchmark's membership; the note format's **missing holdout-overlap flag**;
+    `#422`'s signed error in the volume-only liquidity tier; `#432`'s two opposite-signed biases in
+    the equal-weight pool; and `p₀` now being a supplied number while the gate still behaves as
+    though it were zero. **Tonight adds one, and it is a question about the lab's SCREENS rather
+    than its gate.** `#435` establishes that pruning a sample for a reason uncorrelated with the
+    comparison being made **raises that comparison's variance** — arithmetically, in the univariate
+    case the squared difference in group means *is* the squared standard error and grows as `1/n`.
+    The lab's eligibility, liquidity and volatility screens all prune, none has been checked against
+    that question, and the check is free. This is **not** an argument for removing any screen —
+    `program.md` and `engine/protocol.py` own the universe — but the folder has now recorded that
+    the question exists and has never been asked. **The integrity check again found the container on
+    a per-run branch (`claude/tender-galileo-25nxxl`) at the same commit as `origin/main`, reset to
+    `main` before any work — eleventh consecutive session, confirmed as the container's default and
+    part of the routine, not an incident.**
+  - **[2026-11-11] Access findings — a SIXTEENTH "looks like an answer" mode whose remedy is a meta
+    tag, a third-party channel shape confirmed for the second night running, and one cheap trick for
+    deciding whether a working paper is the right document.** **(1) A FLAT-DIRECTORY PDF PATH THAT
+    RETURNS AN HTML SITE PAGE, WITH ZERO `.pdf` HREFS IN IT — AND THE FILE IS NAMED IN A `<meta>`
+    TAG.** `gking.harvard.edu/files/gking/files/<slug>.pdf` is exactly the flat-directory shape this
+    file keeps recommending, and it answered **HTTP 200 with a 39.8 KB HTML body** (a Hugo site
+    page). Grepping it for `href="*.pdf"` returned **nothing**, which is the careless reading "this
+    page holds no file" — but the page's `<meta name="citation_pdf_url">` named
+    `gking.harvard.edu/files/<publisher-id>_rev.pdf`, which served the complete typeset 20-page
+    article (707 KB → 86 KB of text, **495** instances of `" the "`, zero `( )` dropout). **The rule:
+    when a document path returns HTML, grep the body for `citation_pdf_url` before anything else.**
+    This extends the 2026-10-13 "grep a landing page's meta tags" lesson from `<meta
+    name="description">` (an *abstract* channel) to the Highwire `citation_*` family (a *file*
+    channel), which a great many academic sites emit and which names the file even when no link
+    does. **(2) A third-party JOURNAL-CLUB directory served a 1983 Biometrika article's complete
+    JSTOR scan on the first try**: `stat.cmu.edu/~ryantibs/journalclub/<firstauthor>_<year>.pdf`,
+    with the slug **derivable from the citation** (lowercase first-author surname, underscore, year).
+    This is the 2026-11-10 `leeds-faculty.colorado.edu` lesson — a third party's *teaching* library
+    holding other people's canonical papers — now confirmed on a second host and a second shape, and
+    it is the right second move for any pre-1990 closed article. Caveat carried from 2026-11-10: the
+    pattern is **per-file, not per-series**. The file was a text-layerless scan (`pdffonts` empty,
+    1.5 KB extracted from 16 pages), handled with `pdftoppm -png -r 130 -gray` and read as page
+    images; **the last rendered page's printed number (55) matched Crossref's page range (41–55),
+    which is the [2026-11-10] completeness check and the only one available for a scan.** **(3)
+    `file -b`'s page count was WRONG AGAIN, in the same direction**: it reported **"10 page(s)"** for
+    an NBER working paper that `pdfinfo` correctly reports as **22**, and from which 70 KB of text
+    extracted. That is the second consecutive session in which `file` would have fabricated a
+    truncated document. **The [2026-11-10] rule stands and should now be treated as absolute: never
+    read a page count from `file`; use `pdfinfo | grep Pages`.** **(4) A cheap test for whether a
+    working paper may stand in for a closed published article**: OpenAlex's `locations[]` for the
+    published DOI **listed the NBER PDF itself**, and its `abstract_inverted_index`, reassembled,
+    was **verbatim identical** to the working paper's abstract. Two signals, one OpenAlex call, and
+    the version question is settled without fetching the publisher. The reassembly is four lines of
+    Python and the inverted index doubles as an **abstract channel** for closed articles — the
+    2026-10-13 `vilkov.net` lesson, available from an API rather than an author's goodwill. **(5)
+    Method, re-confirmed for the fourth session**: `api.crossref.org/works/<doi>` returned title,
+    container, volume, pages and `is-referenced-by-count` for all four DOIs looked up tonight,
+    first try, never rate-limited. It remains the right first call, with OpenAlex second and
+    Semantic Scholar third.
 
 - **[2026-11-10] READ THIS BEFORE AIMING SESSION 89. The matched-control vein is OPEN on exactly one
   side and it is named from inside tonight's own notes, not by grep — do not retire it, and do not

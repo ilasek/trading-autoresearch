@@ -152,6 +152,17 @@ small (a handful of covariates), so `strategies/lib/walkforward.py` carries it c
 
 ## Related
 
+- **[2026-11-11] The `k = 1` escape this note creates has been taken, and it has two sides.**
+  `notes/2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md` gives the theorem that
+  licenses collapsing `k` covariates to a single fitted selection probability — and shows that
+  nothing coarser than that probability can balance the covariates;
+  `notes/2026-11-11-matching-on-the-estimated-score-and-its-variance.md` gives the same authors'
+  later result on what *estimating* that score does to the asymptotic variance (it reduces it, for
+  the population estimand) and restates this note's bootstrap refusal;
+  `notes/2026-11-11-the-psm-paradox-and-random-pruning.md` argues the reduction costs more balance
+  than it buys, and borrows this note's own `N^{−1/k}` rate to argue it. The folder's resolution is
+  **subclassification**, which is neither a matching estimator nor a pruning rule.
+
 - `notes/2026-11-10-performance-matched-controls-and-mean-reversion.md` — the design this constrains;
   its ±10%/±30% two-window scheme is a `k = 2` match and therefore in the regime where the bias is
   not ignorable.
