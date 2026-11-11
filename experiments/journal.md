@@ -28642,3 +28642,482 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    `#336`, `#339`, `#342` remain the interpretation rules to read first.
 
 ## Research session — 2026-11-10 (learning agent): 4 notes added, see research/SUMMARY.md
+## Free measurements — 2026-11-10/11 (nightly)
+
+Four blocks. Everything scored outside already-recorded columns was scored on **train only**
+(1997-2017) except F1, which also reads the **validation** returns of three variants of the
+*benchmark* — the equal-weight eligible pool — which is the split `run_experiment.py` reports and
+`scripts/rank_trials.py` reads. **No holdout, forward or incubation file was opened**:
+`experiments/holdout_log.jsonl`, `reports/incubation.md`, `experiments/incubation.jsonl` and
+`experiments/protocol_v2/returns/*_holdout.parquet` were never opened or listed. The price frame
+loaded by `data.load_prices` necessarily extends to 2026-11-10, and every window scored below is
+explicitly bounded at 2017-12-31 or 2023-12-31 with an assertion on the visible frame's last row.
+Engine green on this tree (`.venv/bin/python -m pytest tests/ -q` -> **92 passed in 65.65s**).
+
+Step-0 integrity: `git fetch origin --prune` clean, `git branch -r --no-merged origin/main`
+**empty** — no remote branch holds work absent from `origin/main`. The container again started on a
+per-run branch (`main-8utunp`) sitting at the identical commit as `origin/main` with no commits of
+its own; local `main` was 11 behind and strictly an ancestor, so `git checkout main && git reset
+--hard origin/main` before any work. **Eleventh consecutive session** to find exactly that.
+
+*Harness validation first, per the 2026-10-25/26 rule.* F2/F3's one-bit region-matched IC harness
+was written independently and pointed at the back-adjustment contaminant before it was pointed at
+anything new:
+
+    object                       h=21     h=63    h=126    h=252   dates
+    log price level  tonight   -0.0321  -0.0555  -0.0784  -0.1170    251
+    log price level  recorded  -0.0300  -0.0507  -0.0732  -0.1087    251
+
+Monotone, same sign at every horizon, within 8% throughout, same date count. F1's three pool
+variants were validated differently and the first attempt **failed** — see F1's fill-ramp note.
+
+### F1 — RESEARCH `#432`: THE POOL'S TWO REFERENCE-PORTFOLIO BIASES ARE BOTH REAL AND CORRECTLY SIGNED, THE NET RUNS THE OPPOSITE WAY TO THE NOTE'S PREDICTION, AND NEITHER CAN CHANGE A GATE OUTCOME
+
+`#432` (2026-11-10 research session) records Barber-Lyon's enumeration of why a long-horizon
+abnormal return measured against a **rebalanced reference portfolio** is misspecified where one
+measured against a **matched firm** is not, and observes that protocol v3 grades every candidate
+against exactly such a portfolio — the monthly-rebalanced equal-weight eligible pool. Two of the
+four biases are structural here, with known and opposing signs: **rebalancing bias** (the
+benchmark's compounded return is inflated, biasing the difference negative) and **new listing
+bias** (the benchmark keeps admitting names the sample security does not hold, biasing it
+positive). The note calls the check "free and currently unreported". Run, as a three-way
+decomposition over each window:
+
+    REB         the official pool: month-end rows, equal weight over that date's eligible set
+    FROZEN      month-end rows, equal weight over the roster eligible at the window start
+    BH          ONE row before the window start, equal weight, then pure drift
+    REB-FROZEN  = the NEW-LISTING channel   (same schedule, different roster)
+    FROZEN-BH   = the REBALANCING channel   (same roster, different schedule)
+
+All Sharpes on excess returns under the v3 execution model, through `benchmarks.equal_weight_targets`
+and `backtest.simulate` — the engine's own objects, not a re-implementation:
+
+    window        days    n0      REB   FROZEN       BH  newlist    rebal    total
+    train         5450   127   +0.524   +0.570   +0.542   -0.046   +0.027   -0.018
+    train 97-08   3109   127   +0.300   +0.276   +0.211   +0.024   +0.065   +0.090
+    train 09-17   2341   352   +0.936   +0.974   +0.920   -0.038   +0.054   +0.016
+    validation    1562   904   +0.337   +0.369   +0.369   -0.032   +0.000   -0.032
+    val 18-19      521   904   +0.335   +0.344   +0.300   -0.009   +0.044   +0.035
+    val 20-21      521   935   +0.666   +0.681   +0.674   -0.015   +0.007   -0.008
+    val 22-23      520   986   -0.120   -0.112   -0.125   -0.009   +0.014   +0.005
+
+    paired (Memmel/Jobson-Korkie, validation):
+      REB - BH      delta -0.0319  se 0.0573  t -0.56  rho 0.9898
+      REB - FROZEN  delta -0.0320  se 0.0256  t -1.25  rho 0.9980
+      FROZEN - BH   delta +0.0001  se 0.0608  t +0.00  rho 0.9885
+
+**(0) The measurement failed once and the failure is recorded rather than smoothed.** Struck *at*
+the window start, the BH book is only **23% invested** on the window's first day — v3 fills each
+name at its own next real close, and a 904-name book across four time zones takes days to fill. That
+ramp alone manufactured a rebalancing channel of **+0.063 / +0.024 / +0.074** on the three validation
+sub-windows. Striking BH one month earlier, so it is fully filled when scoring starts, cuts those to
+**+0.044 / +0.007 / +0.014**. The table above is the corrected run. **Standing rule: any
+benchmark variant whose first decision row lands inside its own scoring window is measuring its own
+fill ramp**, and the check is one line — assert gross exposure is 1.0 on the window's first day.
+
+**(1) Both channels are confirmed in sign, and neither is resolvable.** New-listing is negative in
+6 of 7 windows, rebalancing positive in 7 of 7. Every |t| is at or below **1.25**, so these are
+point estimates with error bars wider than themselves, and nothing below leans on their
+significance.
+
+**(2) The new-listing channel is the larger and the steadier of the two on validation** (−0.032),
+and it is also the tightest-paired comparison in the block (rho **0.998**, se **0.026**) because the
+two books differ only in 133 names. The names the pool admits mid-window *underperform* the roster
+it started with, which is `#401`/`#411`'s "index admission is not an information-free selection"
+turning up in the benchmark rather than in a candidate.
+
+**(3) The rebalancing channel is a train fact and not a validation one.** +0.065 and +0.054 on the
+two train sub-periods and +0.027 over the full 21 years, against **+0.000** over validation. Over
+2018-2023, monthly rebalancing of the eligible pool earned nothing at all over leaving it to drift —
+consistent with `2026-08-22-rebalancing-return-attribution-critique.md`'s theorem that rebalancing
+trades pay only where relative prices mean-revert, and 2018-2023 is the window in which they did
+not. (The BH book's effective name count falls **899 -> 604** and its largest weight runs
+0.0015 -> 0.0102 over validation, so it really does concentrate; it simply was not punished for it.)
+
+**(4) The net inverts the note's prediction.** `#432` reasons that the rebalancing channel
+understates a low-turnover candidate's skill. On this panel over validation the *net* is
+`REB − BH` = **−0.032**: every recorded skill is **overstated** by about +0.032 against a
+buy-and-hold pool, not understated, because the new-listing channel dominates the rebalancing one
+over this window. The note's **mechanisms** are confirmed; its **net sign** on this panel is not.
+
+**(5) THE PUNCHLINE, AND IT IS ALGEBRA RATHER THAN A MEASUREMENT: THE CHOICE OF BENCHMARK CANNOT
+CHANGE A SINGLE GATE OUTCOME.** The hard gate that refused 11 of the last 13 trials is
+`validation Sharpe > null_p90`, and the pool appears nowhere in it. Replacing the pool `P` by any
+benchmark `B` shifts the reported skill and the 2026-11-09/10 bar by *exactly* the same
+`−(SR_B − SR_P)`, so
+
+    margin = skill − bar = (SR_book − SR_B) − (null_p90 − SR_B) = SR_book − null_p90
+
+is **invariant**. What a benchmark change does move is (i) the **train gate**,
+`min_train_skill >= 0`, by **+0.018** in every candidate's favour (train total −0.018), and (ii) the
+**deflated-skill probability**, which deflates skill and would fall for every book by 0.032 of
+Sharpe. So `#432` is a question about the lab's reported *units* and about one soft gate — not about
+which candidates pass the gate that is actually binding. **Recorded for the human owner as a
+reporting question, not as an engine issue.**
+
+**(6) Reconciliation with the record, because the numbers look inconsistent and are not.**
+2026-10-17/18 declined the index-entry premium as a book at "about −9 bp/yr of pool return, ~0.005 of
+Sharpe". That entry priced the *fresh-entrant slice* (1.27% of the pool at 21 days, 11.05% at a
+year). F1's −0.032 is the **cumulative six-year** effect of a roster that grows 904 -> 1037 and is
+then held, which is a different and larger object. The two do not conflict.
+
+**(7) And the tradeable version is closed free, with a number, by the lab's own bar.** A
+**membership-tenure book** — hold the eligible pool minus every name admitted since the window
+start — *is* the FROZEN variant, and its whole validation prize is `FROZEN − REB` = **+0.032** of
+skill. Its own schedule is a monthly rebalance of the full pool; measured at
+**0.686x**, which puts its 2026-11-09/10 bar at **+0.107**. The prize is
+**0.30** of the bar. **Declined**, and this is a second and much larger estimate of the
+same effect than 2026-10-17/18's, reaching the same verdict from the benchmark side.
+
+### F2 — A NEW SLOW, GENUINELY LEVEL-ORTHOGONAL OBJECT BUILT AND CLOSED THE SAME NIGHT: THE LO-MACKINLAY ANNUAL VARIANCE RATIO IS A NULL ON BOTH SIGNS
+
+The 2026-11-09/10 handover's idea 3 asked for a slow score built from **returns only** (so no stored
+price level can enter), with |rho| < 0.05 to the contaminant, screened on **both signs** before
+anything is written. Built:
+
+    vr_i(d) = Var_w( log P_i(t) - log P_i(t-252) ) / ( 252 * Var_w( log P_i(t) - log P_i(t-1) ) )
+
+over a trailing `w` = 2520-day window, lagged 21 days — Lo-MacKinlay's variance ratio at the annual
+scale, per name. `vr < 1` means the name's own returns mean-revert, `> 1` that they trend. It is
+built from log **differences** only, so a per-name back-adjustment constant `D_i(t)` cancels
+identically rather than by a post-hoc control, and the measurement confirms the construction:
+
+    rank rho (mean over 251 train month-ends):  log price level -0.082 | vol756 +0.305
+                                                mom12-1        -0.012 | rev5 (M3's score) -0.131
+    vr distribution: p5 0.319  p25 0.512  p50 0.695  p75 0.932  p95 1.404
+
+So **−0.082 against the −0.246 / −0.303 that inverted `dcorr_low` and the five-year reversal** — the
+third object in two nights to satisfy last night's construction test. (Its p50 of 0.695 also records
+a panel fact: at the annual scale the typical name on this panel mean-reverts.)
+
+One-bit region-matched IC, top decile within region, lagged 21d, 251 train month-ends, **both
+signs**, raw and under the mandatory within-region log-`P` control:
+
+    object                                   h=21      t     h=63      t    h=126      t    h=252      t
+    vr  (high VR = trending)               +0.0085  +1.31  +0.0106  +1.64  +0.0105  +1.65  +0.0059  +1.03
+      ^ | within-region log P              +0.0053  +0.83  +0.0053  +0.82  +0.0025  +0.42  -0.0054  -0.98
+    vr  NEGATED (low VR = reverting)       +0.0006  +0.12  -0.0030  -0.53  -0.0024  -0.42  -0.0020  -0.35
+      ^ | within-region log P              +0.0026  +0.51  +0.0003  +0.06  +0.0023  +0.42  +0.0041  +0.77
+
+**Null on both signs at every horizon.** The largest reading anywhere is **+0.0106** at `t +1.64`,
+and the mandatory control takes it to +0.0025 and then to −0.0054. Against the 2026-11-08/09 derived
+requirement of a one-bit IC of **~0.017** at a slow score's own information horizon, it is short by a
+factor of 1.6 raw and by 3-7x controlled. **Closed.** Third genuinely level-orthogonal slow object in
+two nights to die of ordinary absence of signal, after `segmentation` and `beta_trend` — which
+*strengthens* last night's conclusion that the binding condition on the slow branch is signal and
+not the level control, now on an object built by a different author on a different night.
+
+### F3 — THE PRE-SIGNED CONDITIONAL CLAIM FROM `#427`/`#428`, AND THE FIRST OBJECT IN THIS LAB THAT SURVIVES EACH OF ITS TWO MANDATORY CONTROLS SINGLY AND DIES UNDER BOTH
+
+`#427`/`#428` (2026-11-10) record Barber-Lyon's rule that **selection on a mean-reverting variable
+is selection on its transitory component**, which then dissipates — and their closing instruction,
+that the estimate is only interpretable once you ask **whether the sample reverts faster or slower
+than its controls**, because the speed of reversion is itself cross-sectionally heterogeneous. This
+lab's one working score, mechanism M3's old-half reversal `rev5`, is exactly a selection on an
+extreme past-return level. So the claim is a **difference**, pre-signed before measuring: `rev5`'s
+one-bit IC should be larger inside the **low-VR** (fast-reverting) half of each region than inside
+the high-VR half. `vr` is the reversion speed F2 just built.
+
+The confound that has to be settled first is named on the standing anti-candidate list — "**the
+volatility-tercile pre-sort as a construction operator**" — and `vr`'s rho to 756-day volatility is
++0.305. So all three conditioners were run: `vr`, plain `vol756`, and **`vr | vol756`** (VR
+residualised on volatility within region, in rank space). Top decile of `rev5` taken within
+(region x conditioner half):
+
+                                             h=21      t     h=63      t    h=126      t    h=252      t
+    rev5 | vr        low                   +0.0191  +2.44  +0.0294  +3.66  +0.0379  +4.47  +0.0452  +6.16
+    rev5 | vr        high                  +0.0104  +1.77  +0.0157  +2.56  +0.0246  +3.89  +0.0259  +3.73
+      DIFFERENCE (low - high), paired      +0.0087  +1.00  +0.0138  +1.52  +0.0133  +1.40  +0.0193  +2.15
+    rev5 | vol756    low                   +0.0101  +1.44  +0.0137  +1.88  +0.0304  +3.97  +0.0424  +5.58
+    rev5 | vol756    high                  +0.0172  +2.57  +0.0273  +3.81  +0.0330  +4.43  +0.0351  +4.83
+      DIFFERENCE (low - high), paired      -0.0071  -0.78  -0.0137  -1.46  -0.0026  -0.28  +0.0073  +0.83
+    rev5 | vr|vol    low                   +0.0165  +2.13  +0.0246  +3.21  +0.0319  +3.99  +0.0388  +5.89
+    rev5 | vr|vol    high                  +0.0094  +1.61  +0.0137  +2.21  +0.0242  +3.49  +0.0261  +3.44
+      DIFFERENCE (low - high), paired      +0.0071  +0.84  +0.0108  +1.28  +0.0078  +0.86  +0.0128  +1.51
+    --- the same three under the mandatory within-region log-P control ---
+    rev5 | vr        DIFFERENCE   | logP   +0.0079  +0.91  +0.0133  +1.47  +0.0123  +1.31  +0.0147  +1.70
+    rev5 | vol756    DIFFERENCE   | logP   -0.0049  -0.55  -0.0086  -0.98  +0.0039  +0.45  +0.0135  +1.74
+    rev5 | vr|vol    DIFFERENCE   | logP   +0.0056  +0.66  +0.0078  +0.90  +0.0027  +0.29  +0.0032  +0.37
+
+    anchor: rev5 unconditional (whole region)  +0.0126  +2.45  +0.0201  +3.81  +0.0309  +5.67  +0.0369  +7.02
+
+**(1) The raw effect is there and correctly signed at all four horizons** (+0.0087 -> +0.0193), and
+the conditioned score reads IC_252 **+0.0452** against the unconditional **+0.0369**, a 22% lift at
+the horizon where M3's information lives. On the raw sheet this looked like a candidate.
+
+**(2) Each mandatory control alone leaves it standing. The two together kill it.** At h = 252:
+
+    raw                                      +0.0193
+    within-region log P only                 +0.0147   (-24%)
+    volatility-residualised only             +0.0128   (-34%)
+    BOTH                                     +0.0032   (-83%,  t +0.37)
+
+Multiplying the two marginal attenuations predicts **+0.0098**; the measured joint is **+0.0032**, a
+third of that. **This is the first object in this lab recorded as surviving each of its mandatory
+controls singly and dying under both**, and the lab's standing practice applies them one at a time —
+the level control on its own schedule (2026-11-08/09) and the de-risking-in-costume check on its own
+(2026-11-06/07). **Standing rule: when an object owes a confound on two axes, the controls go in
+together, because their joint attenuation is not the product of their marginals.** That is worth more
+than the object was.
+
+**(3) A free, independent corroboration of a standing anti-candidate — with a term structure
+instead of a precedent.** The plain `vol756` pre-sort's own difference is **sign-unstable across
+horizons**: −0.0071 at h=21 and +0.0073 at h=252, |t| <= 1.46 throughout, and the sign flips again
+under the level control. So "the volatility-tercile pre-sort as a construction operator" is not only
+refused by precedent; conditioning the lab's one working score on volatility has **no stable sign**
+at any horizon. Note also that the naive confound story is wrong in direction — a vol pre-sort does
+not produce F3's lift, it produces the opposite at short horizons — which is why only the
+*residualised* conditioner settles the question and why the single-control readings were misleading.
+
+**(4) No candidate was written.** Under both controls the conditioned book's predicted edge is
+indistinguishable from the unconditional book's, and the book would have been mechanism **M3 for the
+sixth time** in a family capped at 2 trials a session.
+
+### F4 — THE MEASUREMENT THE 2026-11-09/10 HANDOVER NAMED (ITS IDEA 2), DISCHARGED: MARGIN IS FLAT IN TURNOVER OVER A 10x SPAN ON AN UNCHANGED SCORE, AND THE RECORD'S −0.020 SLOPE WAS NOISE
+
+Last night refuted "turnover as a route to the null gate" from a cross-sectional slope over 27
+trials (`d(margin)/d(ln turnover)` = **−0.020**, t −0.53, R² 0.011) and recorded the limit honestly:
+the *paired* version is unavailable on that board, because its six same-lineage pairs span only
+1.02x-1.70x. The handover named the fix precisely — "build one score at ~1.6x and at ~8x (the sleeve
+count is the free knob) and compare margins; free, no trial". Done, on **train only**, with the score
+and the construction held byte-identical inside each block and **only** the overlapping-sleeve count
+varied. Two scores were used to straddle the range one score cannot reach: `rev5` (M3's slow score)
+and `rev21` (the 21-day market-demeaned reversal — a **refuted** score used purely as a
+high-turnover vehicle; no claim whatever is made for it). Top-K = 100, no quota, 200-draw
+region-matched nulls through `benchmarks.random_null_v3`, train pool Sharpe +0.5238:
+
+    score  hold   turn    pos   bookSR    skill  nullp50  nullp90    drag      bar   MARGIN  pctile
+    rev5     12   1.10  180.4  +0.5640  +0.0402  +0.5184  +0.5450  -0.0055  +0.0211  +0.0191    99%
+    rev5      6   1.34  163.1  +0.5670  +0.0432  +0.5079  +0.5397  -0.0159  +0.0159  +0.0273   100%
+    rev5      3   1.67  151.5  +0.5595  +0.0357  +0.5065  +0.5295  -0.0174  +0.0056  +0.0301   100%
+    rev5      1   2.33  140.0  +0.5412  +0.0174  +0.4937  +0.5205  -0.0302  -0.0033  +0.0207    98%
+    rev21    12   1.63  386.5  +0.4619  -0.0619  +0.5085  +0.5266  -0.0153  +0.0028  -0.0647     0%
+    rev21     6   3.01  308.4  +0.4558  -0.0680  +0.4884  +0.5042  -0.0354  -0.0196  -0.0484     0%
+    rev21     3   5.77  217.9  +0.4324  -0.0915  +0.4486  +0.4681  -0.0752  -0.0557  -0.0358    16%
+    rev21     1  16.69   99.6  +0.3173  -0.2066  +0.3379  +0.3708  -0.1859  -0.1531  -0.0535    21%
+
+    `drag` = null_p50 - pool;  `bar` = null_p90 - pool (the F2 instrument's quantity);
+    `MARGIN` = book Sharpe - null_p90 = skill - bar, which is what the hard gate tests.
+
+    PAIRED slopes, inside each score (the contrast the recorded board cannot supply):
+      rev5   (1.10x ->  2.33x)   d(bar) -0.0334   d(skill) -0.0322   d(MARGIN) +0.0011   d(drag) -0.0304
+      rev21  (1.63x -> 16.69x)   d(bar) -0.0679   d(skill) -0.0634   d(MARGIN) +0.0045   d(drag) -0.0746
+    pooled over all 8:           d(bar) -0.0626   d(skill) -0.0892   d(MARGIN) -0.0265   d(drag) -0.0639
+      (R² 0.961 / 0.842 / 0.343 / 0.930;  recorded on 27 validation trials: -0.0542 / -0.0744 / -0.0202)
+
+**(1) The anti-candidate is confirmed, and now by the design that was missing.** Across a **10.2x**
+turnover span with the score unchanged, margin moves from −0.0647 to −0.0535 — **+0.011 in total** —
+and across `rev5`'s 2.1x span from +0.0191 to +0.0207, **+0.0016**. The bar and the skill fall
+together, at −0.033 against −0.032 and −0.068 against −0.063. **Turnover buys a cheaper gate and
+pays for it almost exactly in full, per-score and paired, not just on average across a board.**
+
+**(2) And it corrects the record's point estimate, in sign.** The paired margin slopes are
+**+0.0011** and **+0.0045** against the recorded cross-sectional **−0.0202**. The honest statement is
+no longer "churn costs slightly more than it buys" but **"margin is flat in turnover to within
+±0.005 per log unit over a 10x span"**, and last night's −0.020 was noise, exactly as its own
+`t −0.53` and `R² 0.011` said. The pooled slope here (−0.027) reproduces the cross-sectional artifact
+and is the number *not* to use: pooling two scores of different quality across turnover confounds the
+score with the schedule, which is precisely why the paired design was asked for.
+
+**(3) An independent reproduction of last night's instrument from a different design.** Pooled
+`d(bar)/d(ln turnover)` = **−0.0626** at R² 0.961 on train, against **−0.0542** measured on 27
+validation trials — within 15%, from a paired train design with two scores rather than a
+cross-section of 27 unrelated candidates. The F2 instrument is real and it is a schedule mechanism,
+not a board artifact.
+
+**(4) The drag term is now measured directly rather than inferred.** Last night read
+`null_p50 − pool` off the recorded trials at a mean of −0.039 and attributed it to the replicas
+inheriting the candidate's schedule. Here it is traced as a curve: **−0.0055 at 1.10x, −0.0302 at
+2.33x, −0.0752 at 5.77x, −0.1859 at 16.69x**, slope **−0.0639 per log unit at R² 0.930**. The
+mechanism is confirmed with an exchange rate, and a near-zero-turnover book's null median sits
+essentially *on* the pool.
+
+**(5) The gate separates the two scores decisively at every holding rule, which is the useful half.**
+`rev5` sits at the 98th-100th percentile of its own null at all four schedules; `rev21` at the
+0th-21st. 2026-11-08/09's "the gate amplifies whatever selection is there, including its absence" now
+has a turnover-invariant demonstration: no holding rule rescued the refuted score and none was needed
+by the working one. **A shallow interior maximum in `rev5`'s margin at hold = 3 (+0.0301 against
++0.0191 and +0.0207 at the ends) spans 0.011 and is NOT offered as a knob** — "hold as a knob" is a
+standing anti-candidate and this is inside its own noise.
+
+## Session summary — 2026-11-10/11 (nightly) — 0 trials of 8; every construction axis is now proven not to move the binding quantity, so the lab's whole remaining degree of freedom is the score
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 27 scored v3 trials**, the v3 board is
+unchanged, the deflated bar is unchanged, and no candidate file was written. Four free blocks ran.
+**No holdout, forward or incubation file was opened**, and with no trial recorded there was no
+holdout gate to reach. Engine green (**92 passed in 65.65s**). Step-0 integrity clean: no remote
+branch holds work absent from `origin/main`; the container's per-run branch (`main-8utunp`) sat at
+`origin/main`'s commit with no commits of its own and was reset to `main` before any work —
+**eleventh consecutive session**.
+
+**Why zero, stated plainly.** F2 built the slow, returns-only, level-orthogonal object last night's
+handover asked for and it was a null on both signs. F3 took the one hypothesis of the night with a
+pre-signed literature mechanism behind it, found the effect on the raw sheet, and watched it lose 83%
+of itself under the two controls the lab already mandates — applied together for the first time.
+F1 and F4 were measurements of the lab's own instruments, not of candidates. Writing a candidate
+after that would have been a trial whose case had just been withdrawn. **This is the seventh
+zero-trial session of the last thirteen, and that rate is itself the finding the human owner should
+weigh** — see the note to the owner below.
+
+### Headline: the benchmark, the schedule, the breadth and the concentration are all now proven not to move `margin` — and `margin` is the whole gate
+
+The hard gate that refused 11 of the last 13 trials is `validation Sharpe > null_p90`. Two of
+tonight's blocks, by completely different routes, show that the quantities the lab has been
+reasoning about do not enter it:
+
+- **F1, by algebra.** Swapping the equal-weight pool for any other benchmark `B` shifts the reported
+  skill and the 2026-11-09/10 bar by exactly the same `−(SR_B − SR_P)`, so
+  `margin = skill − bar = SR_book − null_p90` is **invariant to the benchmark**. `#432`'s
+  misspecification question is a question about the lab's reported *units* and about the soft train
+  gate (worth **+0.018** to every candidate), not about who passes.
+- **F4, by paired measurement.** Across a **10.2x** turnover span with the score unchanged, margin
+  moves **+0.011**; across a second score's 2.1x span, **+0.0016**. Bar and skill fall together at
+  −0.068/−0.063 and −0.033/−0.032.
+
+Put beside what the record already closed with a mechanism — **breadth**, **`K`**, the **sleeve
+count** and **concentration** (2026-11-08/09) — the construction axis is now closed from every
+direction the lab has instruments for, and `margin` responds to **selection and nothing else**. That
+is a narrower and more actionable statement of the lab's position than "the gate refuses everything".
+
+### Second: `#432` priced — both of Barber-Lyon's biases are present in the lab's own benchmark, correctly signed, and the net runs the other way
+
+Three variants of the pool, through the engine's own objects:
+`REB` +0.337 / `FROZEN` +0.369 / `BH` +0.369 on validation, so the **new-listing** channel is
+**−0.032** (the pool is made *worse* by the 133 names it admits mid-window — `#401`/`#411` showing up
+in the benchmark rather than in a candidate) and the **rebalancing** channel is **+0.000** on
+validation against **+0.065 / +0.054** on the two train sub-periods. Both channels confirmed in sign
+(new-listing negative in 6 of 7 windows, rebalancing positive in 7 of 7); every |t| <= 1.25, so
+nothing leans on significance. **Net: every recorded skill is *overstated* by +0.032 against a
+buy-and-hold pool, not understated as `#432` predicts** — its mechanisms transfer, its net sign on
+this panel does not. The by-product closes the tradeable version free: a **membership-tenure book**
+is exactly the `FROZEN` variant, its whole prize is **+0.032**, its own turnover is **0.686x** which
+puts its bar at **+0.107**, so the prize is **0.30 of the bar**. Declined — the same verdict
+2026-10-17/18 reached from the candidate side, now from the benchmark side and with an estimate
+**6x larger** that still is not close.
+
+### Third: the method finding, and it changes how screens are run here
+
+F3's object survived the within-region log-`P` control alone (+0.0147 of +0.0193) and the
+volatility residualisation alone (+0.0128), and died under both (**+0.0032, t +0.37**) — a joint
+attenuation of 83% where the product of the marginals predicts 49%. **Standing rule added: when an
+object owes a confound on two axes, the controls go in together.** The lab has been applying them on
+separate schedules, and on this object either one alone would have licensed a trial.
+
+### Fourth: three instruments reproduced or corrected, none of them by assertion
+
+- The **one-bit region-matched IC harness** was rebuilt independently and reproduces the recorded
+  contaminant term structure (−0.0321/−0.0555/−0.0784/−0.1170 against −0.0300/−0.0507/−0.0732/−0.1087)
+  to within 8% on the same 251 dates.
+- The **F2 bar instrument** is reproduced from a different design: paired, train, two scores,
+  `d(bar)/d(ln turnover)` = **−0.0626** at R² 0.961 against the recorded **−0.0542** on 27 validation
+  trials.
+- The **drag term** `null_p50 − pool`, inferred last night at a mean of −0.039, is now a measured
+  curve: −0.0055 / −0.0302 / −0.0752 / −0.1859 at 1.10x / 2.33x / 5.77x / 16.69x, slope −0.0639 at
+  R² 0.930.
+- **Corrected**: last night's `d(margin)/d(ln turnover)` = −0.0202 was noise (its own t was −0.53).
+  The paired slopes are **+0.0011** and **+0.0045**.
+- **Corrected, my own**: F1's first run struck the buy-and-hold pool *at* the window start, where it
+  is only 23% invested on day one because v3 fills each name at its own next real close. That ramp
+  alone manufactured a rebalancing channel of +0.063/+0.024/+0.074 on the three validation
+  sub-windows, against +0.044/+0.007/+0.014 once the book is struck a month earlier. The corrected
+  run is the one above.
+
+### Verdicts
+
+None. No trial was recorded, no verdict assigned, `trials.jsonl` and `leaderboard.json` untouched.
+The board still has no v3 champion and no positive skill interval excluding zero.
+
+### What the night bought, stated without inflation
+
+No book, no verdict, no movement on the board. What it bought: `#432` priced and closed, with both of
+its channels signed and its net sign on this panel found to be the reverse of its prediction; the
+proof that the benchmark cannot change a gate outcome, which retires a whole class of "the pool is
+the wrong benchmark" reasoning; the handover's named paired measurement discharged across a 10x span,
+confirming an anti-candidate while correcting the number the record carried for it in sign; a new
+slow level-orthogonal object built and closed; a pre-signed literature hypothesis built, measured and
+withdrawn before it cost a trial; one standing anti-candidate independently corroborated with a term
+structure; and one method rule that would have prevented tonight's near-miss. The honest summary is
+that the night **narrowed the lab's remaining search space to the score alone** and spent nothing to
+do it.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Stop screening construction and screen scores.** F1 and F4 together, with 2026-11-08/09's
+   breadth/`K`/sleeve/concentration closures, leave `margin = SR_book − null_p90` responding to
+   selection only. Every remaining construction idea is therefore refused on arithmetic before it is
+   written, including any future version of "make it cheaper", "make it broader", "make it more
+   concentrated" or "benchmark it better". Provenance: tonight.
+2. **Run the two mandatory controls jointly from now on.** The within-region log-`P` control (for any
+   screen beyond h = 63) and the de-risking residualisation (for any object with rho > ~0.2 to
+   volatility) go in **together**; tonight's object passed each singly and failed jointly by a factor
+   of three more than the marginals predict. Provenance: tonight, F3.
+3. **The slow branch is open as a construction and its inventory is now three-for-three empty.**
+   `segmentation`, `beta_trend` (both 2026-11-09/10) and `vr` (tonight) were all genuinely
+   level-orthogonal (rho −0.044 / −0.015 / −0.082) and all null on both signs. The construction test
+   is satisfiable and cheap; what the lab does not have is a slow object with signal. Any next
+   proposal should come with a mechanism that predicts a **cross-sectional** first moment, not a
+   second moment — tonight's `vr` and last night's two were all second-moment or variance-share
+   objects, and that is now 3 of 3 failures of the same shape.
+4. **One thing F4 measured that nobody asked for and that is worth a look.** A near-zero-turnover
+   book's null median sits essentially **on** the pool (drag −0.0055 at 1.10x), so at low turnover the
+   bar and the skill requirement converge: `required skill -> null_p90 − null_p50 ≈ +0.069`. The F2
+   regression predicts +0.086 at 1.0x; the direct measurement says +0.021 at 1.10x. **The F2
+   instrument's intercept is therefore wrong at the low-turnover end** — it was fitted on a board whose
+   lowest-turnover trial is 1.27x — and a low-turnover candidate's bar should be read off F4's direct
+   curve rather than off the regression. Free to check further; no trial.
+5. **For the human owner, one new item and the standing list.** New: **the lab has spent 7 of its last
+   13 sessions at zero trials, and tonight's reason is the strongest one yet** — every construction
+   axis is closed with a mechanism, and the one axis left (the score) has had every object this panel's
+   daily OHLCV can express screened and refused. That is not a failure of the sessions; it is the
+   design telling the owner that **the binding constraint is the data, not the search**. `program.md`'s
+   "Future upgrades" list (point-in-time fundamentals, intraday bars, pre-2009 coverage) is now the
+   only thing that would change a verdict here, and it needs human approval. Standing and unchanged:
+   the two engine issues as filed (2026-10-18 / 2026-10-22, worsened by `#423`), `min_train_skill = 0.0`,
+   `#324`'s deliberate difference, `#358`'s empirical-Bayes shrinkage of the bar, the data-type
+   question, `#393`'s minimum-detectable-skill arithmetic, `#396`'s tension between `program.md`'s
+   spend-across-families rule and what the design can measure, `#407`'s rule-induced comovement inside
+   the pool, `#418`'s discretionary component in the benchmark's membership, `#422`'s volume-only
+   liquidity tier, the note format's missing holdout-overlap flag, the `dataclasses.replace`/`pool_cache`
+   trap, and the per-run-branch generator (eleven consecutive sessions). **Plus tonight's reporting
+   question**: skill is quoted against a rebalanced reference portfolio that is 0.032 of Sharpe below
+   its own buy-and-hold counterpart on validation; this moves no gate (F1) but it does move every
+   reported skill and every DSR, and it is not flagged anywhere.
+6. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — **the
+   Lo-MacKinlay variance ratio at any scale, window or sign, standalone**; **the variance ratio as a
+   conditioner on the old-half reversal** (or on any selection score, by F3's controls); **the
+   membership-tenure / pool-minus-recent-entrants book at any tenure threshold** (prize +0.032 against
+   a bar of +0.107); and **turnover as a route to the null gate**, now refuted a third time and with
+   the paired design the record lacked. Unchanged from previous handovers: `segmentation` and
+   `beta_trend` at any window or sign; the scale-free left-tail exponent and the own-return tail index
+   in any form; the semi-deviation ratio; time-underwater; annual-rank stability; any screen beyond 63
+   days without the within-region log-`P` control; the `log(MA_L/P)` term structure at any scale set;
+   plain multi-horizon own-trend in any learned combination; `#388`'s forecast floor; the
+   full-cross-section decision IC as a reachable quantity; downside correlation and the downside
+   loading in any form; coskewness and the third co-moment in any form; the volatility-tercile pre-sort
+   as a construction operator (now with a term structure, tonight); any paired candidate whose two legs
+   share a score; any hypothesis whose case is a train sheet, a matched-null z or a negation-invariant
+   margin; any hypothesis whose novelty case is a cross-sectional rank correlation or the pass side of
+   the train active-return screen; the closing-location value; the overnight session at either
+   normaliser; the turn-of-month differential on either sign; the coefficient of variation of share
+   volume; the quarter-ending-month conditioner on momentum; plain 12-1 momentum; any equity-ETF book;
+   the bond sleeve as a duration bet; the 2-4-week index-level relative-strength score on either sign;
+   the liquidity level or trend in any form; 52-week-high proximity; information discreteness;
+   covariance weighting at any estimator; weighting inside the selected slice; the exclusion /
+   pool-minus-worst book at any `f`; `#385`'s IC-decorrelation blend; the #16/#19 blend; and any
+   construction whose case is cost at any turnover or a tighter error bar.
+7. **From `research/SUMMARY.md`.** Spent tonight: **`#432`** (its free check run in full, both channels
+   signed, the net inverted, and the tradeable version closed with a number) and **`#427`/`#428`**
+   (their matched-control rule turned into tonight's one pre-signed hypothesis, built and withdrawn
+   under the joint controls). **`#423`**'s within-region log-`P` control was applied to every reading in
+   F2 and F3, as the standing rule requires. `#429`/`#430`/`#431` were read and not spent: `#430`'s
+   "repair is a regression, not a fourth matching variable" is in fact what F3's residualised
+   conditioner implements, and `#431`'s nested-quintile cell benchmark is what `third_moment.moment_book`
+   and the lab's peer x tercile quota already do, so both are **endorsements of existing practice rather
+   than new builds** — recorded so a later session does not re-import them as novel. Still live and
+   unspent: `#386`/`#387`'s `R²`/`S²` yardstick, `#389`'s cumulative-active-return curve, `#381`'s
+   `σ_IC`, `#411`'s newly-eligible cohort scout (second-moment only, per `#412` — and note F1 now
+   prices its first moment at the benchmark level), `#415`'s free refusal test, `#416`'s reading rule,
+   `#420`-`#422`, `#426`, and `#407`-`#410`, `#417`-`#419`. **`#363` is NOT live** (closed 2026-11-02/03).
+   `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation rules to read first.

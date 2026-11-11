@@ -7627,3 +7627,133 @@ across experiments; prune entries that later evidence contradicts.
   closure is unaffected (the shortfall is 0.058 either way); what it cannot do is be read against a
   predicted **skill**, which is what a candidate file states. Standing rule: when quoting a bar, name
   the subtrahend — pool or null median — and convert explicitly before comparing it to anything.
+
+- **[Measured 2026-11-10/11, nightly — ZERO trials spent; THE HEADLINE, AND IT IS A CLOSURE RATHER THAN
+  A THRESHOLD] `margin = book Sharpe − null_p90` IS INVARIANT TO THE BENCHMARK (ALGEBRA) AND FLAT IN
+  TURNOVER OVER A 10x SPAN (PAIRED MEASUREMENT), SO WITH BREADTH, `K`, THE SLEEVE COUNT AND
+  CONCENTRATION ALREADY CLOSED, THE CONSTRUCTION AXIS IS CLOSED FROM EVERY DIRECTION AND `margin`
+  RESPONDS TO SELECTION AND NOTHING ELSE.** Two independent routes to one conclusion. **(i) The
+  benchmark, by algebra.** The hard gate is `validation Sharpe > null_p90`; the pool appears nowhere in
+  it. Replacing the pool `P` by any benchmark `B` shifts both the reported skill and the 2026-11-09/10
+  bar by exactly `−(SR_B − SR_P)`, so `margin = skill − bar = SR_book − null_p90` is unchanged. What a
+  benchmark swap *does* move: the soft train gate `min_train_skill >= 0` (by **+0.018** in every
+  candidate's favour on this panel) and the deflated-skill probability, which deflates skill. **(ii)
+  Turnover, by the paired design the record lacked.** Score and construction held identical, only the
+  overlapping-sleeve count varied, 200-draw region-matched nulls on train:
+
+      score  hold   turn    skill      bar   MARGIN  null pctile
+      rev5     12   1.10  +0.0402  +0.0211  +0.0191     99%
+      rev5      6   1.34  +0.0432  +0.0159  +0.0273    100%
+      rev5      3   1.67  +0.0357  +0.0056  +0.0301    100%
+      rev5      1   2.33  +0.0174  -0.0033  +0.0207     98%
+      rev21    12   1.63  -0.0619  +0.0028  -0.0647      0%
+      rev21     6   3.01  -0.0680  -0.0196  -0.0484      0%
+      rev21     3   5.77  -0.0915  -0.0557  -0.0358     16%
+      rev21     1  16.69  -0.2066  -0.1531  -0.0535     21%
+
+      PAIRED:  rev5  (2.1x span)  d(bar) -0.0334  d(skill) -0.0322  d(MARGIN) +0.0011
+               rev21 (10.2x span) d(bar) -0.0679  d(skill) -0.0634  d(MARGIN) +0.0045
+
+  **Turnover buys a cheaper gate and pays for it almost exactly in full, per-score.** This also
+  **corrects the record in sign**: 2026-11-09/10's cross-sectional `d(margin)/d(ln turnover)` = −0.0202
+  was noise (its own t −0.53, R² 0.011); the paired slopes are **+0.0011** and **+0.0045**, so the
+  statement is "**flat to within ±0.005 per log unit over 10x**". Do not quote the pooled slope
+  (−0.0265) — pooling two scores of different quality across turnover confounds score with schedule,
+  which is the artifact the paired design exists to remove. Two by-products. **The F2 bar instrument is
+  reproduced from a different design**: pooled `d(bar)/d(ln turnover)` **−0.0626** at R² 0.961 on train
+  against **−0.0542** on 27 validation trials. **The drag term is now a measured curve, not an
+  inference**: `null_p50 − pool` = −0.0055 / −0.0302 / −0.0752 / −0.1859 at 1.10x / 2.33x / 5.77x /
+  16.69x, slope −0.0639 at R² 0.930 — so at near-zero turnover the null median sits essentially *on*
+  the pool, and **F2's regression intercept is wrong at the low-turnover end** (+0.086 predicted at
+  1.0x against +0.021 measured at 1.10x; it was fitted on a board whose lowest-turnover trial is 1.27x).
+  Standing use: a low-turnover candidate's bar comes off this curve, not off that regression.
+  Anti-candidates: turnover as a route to the null gate (third refutation, first paired); any
+  construction whose case is the benchmark's specification.
+
+- **[Measured 2026-11-10/11, nightly — RESEARCH `#432` RUN IN FULL, BOTH CHANNELS SIGNED, AND ITS NET
+  PREDICTION INVERTED ON THIS PANEL] THE EQUAL-WEIGHT POOL REALLY IS A REBALANCED REFERENCE PORTFOLIO
+  WITH BOTH OF BARBER-LYON'S BIASES IN IT, BUT THE NEW-LISTING CHANNEL DOMINATES THE REBALANCING ONE,
+  SO EVERY RECORDED SKILL IS *OVER*STATED BY +0.032 RATHER THAN UNDERSTATED.** Three variants of the
+  pool through the engine's own `equal_weight_targets` / `simulate`: `REB` (official, month-end rows
+  over that date's eligible set), `FROZEN` (same schedule, roster frozen at the window start), `BH`
+  (one row struck before the window, then pure drift). `REB−FROZEN` is the new-listing channel,
+  `FROZEN−BH` the rebalancing channel:
+
+      window        days    n0      REB   FROZEN       BH  newlist    rebal    total
+      train         5450   127   +0.524   +0.570   +0.542   -0.046   +0.027   -0.018
+      train 97-08   3109   127   +0.300   +0.276   +0.211   +0.024   +0.065   +0.090
+      train 09-17   2341   352   +0.936   +0.974   +0.920   -0.038   +0.054   +0.016
+      validation    1562   904   +0.337   +0.369   +0.369   -0.032   +0.000   -0.032
+      val 18-19      521   904   +0.335   +0.344   +0.300   -0.009   +0.044   +0.035
+      val 20-21      521   935   +0.666   +0.681   +0.674   -0.015   +0.007   -0.008
+      val 22-23      520   986   -0.120   -0.112   -0.125   -0.009   +0.014   +0.005
+
+  Both channels confirmed in sign (new-listing negative in 6 of 7 windows, rebalancing positive in 7 of
+  7) and **neither resolvable** — every |t| <= 1.25 (REB−BH −0.032 at t −0.56; REB−FROZEN −0.032 at
+  t −1.25, rho 0.998; FROZEN−BH +0.000 at t +0.00). Three readings. **(i) The rebalancing channel is a
+  train fact and not a validation one**: +0.065 / +0.054 on the train sub-periods, **+0.000** over
+  2018-2023 — consistent with the standing theorem that rebalancing trades pay only where relative
+  prices mean-revert, and this window is where they did not. **(ii) The new-listing channel is the
+  larger and steadier half on validation**: the 133 names the pool admits mid-window underperform the
+  roster it started with, which is the index-admission selection turning up *in the benchmark*.
+  **(iii) The tradeable version is closed free, with a number**: a membership-tenure book (pool minus
+  every name admitted since the window start) *is* `FROZEN`, its whole prize is **+0.032**, its own
+  turnover is **0.686x** and so its bar is **+0.107** — **0.30 of the bar**. Same verdict as
+  2026-10-17/18's index-entry declination, reached from the benchmark side with an estimate **6x
+  larger** (that entry priced the fresh-entrant slice at ~0.005; this is the cumulative six-year effect
+  of a roster growing 904 -> 1037) and still not close. **Method rule that cost the first run**: a
+  benchmark variant whose first decision row lands inside its own scoring window measures its own fill
+  ramp — struck at the window start the BH book is only **23% invested on day one**, because v3 fills
+  each name at its own next real close, and that artifact alone manufactured a rebalancing channel of
+  +0.063/+0.024/+0.074 against the true +0.044/+0.007/+0.014. Assert gross exposure is 1.0 on the
+  window's first day. Anti-candidates: the membership-tenure / pool-minus-recent-entrants book at any
+  threshold.
+
+- **[Method, 2026-11-10/11 — AND IT WOULD HAVE COST A TRIAL TONIGHT] WHEN AN OBJECT OWES A CONFOUND ON
+  TWO AXES, THE CONTROLS GO IN TOGETHER: THEIR JOINT ATTENUATION IS NOT THE PRODUCT OF THEIR
+  MARGINALS.** The lab mandates two controls on separate schedules — the within-region log-`P` control
+  for any screen beyond h = 63 (2026-11-08/09) and the de-risking-in-costume check for any object
+  correlated with volatility (2026-11-06/07). Tonight's conditional object (below) at h = 252:
+
+      raw                                      +0.0193
+      within-region log P only                 +0.0147   (-24%)
+      volatility-residualised only             +0.0128   (-34%)
+      BOTH                                     +0.0032   (-83%,  t +0.37)
+
+  The product of the marginals predicts **+0.0098**; the measured joint is a third of that. **Either
+  control alone would have licensed a trial.** First instance recorded here of an object surviving each
+  mandatory control singly and dying under both. Related trap in the same block: the naive confound
+  story was also wrong in *direction* — a plain volatility pre-sort does not produce the lift, it
+  produces the opposite sign at short horizons — so only the *residualised* conditioner settles the
+  question, and reading the raw and the vol-sorted sheets side by side is actively misleading.
+
+- **[Measured 2026-11-10/11, nightly] THE SLOW BRANCH'S INVENTORY IS NOW THREE-FOR-THREE EMPTY ON
+  SECOND-MOMENT OBJECTS, AND `#427`/`#428`'s REVERSION-SPEED CONDITIONER IS THE THIRD.** The
+  Lo-MacKinlay annual variance ratio, `VR = Var(252-day log return) / (252 · Var(1-day log return))`
+  over a trailing 2520 days lagged 21 — built from log **differences** only, so the back-adjustment
+  constant cancels identically (rank rho to the log price level **−0.082**, against the −0.246 / −0.303
+  that inverted `dcorr_low` and the five-year reversal; rho +0.305 to vol756, −0.012 to mom12-1, −0.131
+  to the old-half score; panel median VR **0.695**, i.e. the typical name mean-reverts at the annual
+  scale). One-bit region-matched IC, top decile within region, 251 train month-ends, **both signs**:
+
+      object                                 h=21     h=63    h=126    h=252
+      vr  (high VR = trending)             +0.0085  +0.0106  +0.0105  +0.0059
+        ^ | within-region log P            +0.0053  +0.0053  +0.0025  -0.0054
+      vr  NEGATED (low VR = reverting)     +0.0006  -0.0030  -0.0024  -0.0020
+        ^ | within-region log P            +0.0026  +0.0003  +0.0023  +0.0041
+
+  Max |reading| **+0.0106** at t +1.64, dead under the mandatory control, against a required slow-score
+  one-bit IC of ~0.017: short by 1.6x raw and 3-7x controlled. **Null on both signs.** Its conditional
+  use — `#427`/`#428`'s rule that selection on an extreme past return is selection on a *transitory*
+  component, so the old-half reversal should work better where the name's own reversion is fast —
+  reads +0.0452 (low-VR half) against +0.0259 (high-VR half) and +0.0369 unconditional, correctly
+  signed at all four horizons, and is **the object killed by the joint controls in the entry above**.
+  **Pattern across three nights: `segmentation`, `beta_trend` and `vr` were all genuinely
+  level-orthogonal and all null on both signs, and all three are second-moment or variance-share
+  objects.** The construction test last night set is satisfiable and cheap; the shape that keeps
+  failing is the *object class*. Standing consequence: a next slow proposal needs a mechanism that
+  predicts a cross-sectional **first** moment. Anti-candidates: the Lo-MacKinlay variance ratio at any
+  scale, window or sign, standalone; the variance ratio as a conditioner on any selection score; and
+  (independently corroborated here with a term structure rather than a precedent) the volatility
+  pre-sort as a construction operator — its own conditional difference is **sign-unstable across
+  horizons**, −0.0071 at h=21 against +0.0073 at h=252, |t| <= 1.46 throughout.
