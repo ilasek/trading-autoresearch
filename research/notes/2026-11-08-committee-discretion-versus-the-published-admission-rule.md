@@ -159,6 +159,42 @@ by index.
   needs, because the passed-over names are by definition non-members and therefore not
   columns.
 
+## Annotation added 2026-11-12 — this note is WHY strong ignorability fails on this panel
+
+Written as a fact about index committees, this note turns out to be the load-bearing premise of the
+matched-design vein the folder closed over 2026-11-10/11/12, and the connection should be stated
+rather than left for a reader to assemble.
+
+`notes/2026-11-06-index-membership-is-not-an-information-free-selection.md` establishes that
+admission to the panel is a selection on past performance — i.e. a **treatment** with a propensity
+score `pr(eligible | x)` constructible from characteristics the panel holds. The matched-design
+literature then says that conditioning on such a score suffices for a causal claim **only under
+strong ignorability**: assignment must be independent of the potential outcomes given the observed
+covariates (`notes/2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md`, `#433`).
+
+**This note is the reason that assumption is unavailable here.** If the rule as written is not the
+decision as made — if a committee's judgement enters the assignment — then part of the assignment
+mechanism is unobserved *by construction*, not merely unmeasured for want of effort. No enrichment
+of the observable covariate set fixes it, because the missing variable is a deliberation. That is
+the content of `#418`'s standing caveat, and this note is its source.
+
+Three consequences worth carrying:
+
+1. **Everything the lab builds on an eligibility propensity score is descriptive.** A matched
+   comparison between admitted and not-yet-admitted names is a statement about covariate balance,
+   not an effect estimate. The folder's scalar-score notes are filed on that basis and this is why.
+2. **The same discretion is inside the benchmark.** Protocol v3 scores every candidate against the
+   equal-weight eligible pool, whose membership is produced by the same discretionary rule. So the
+   unobserved component is not confined to the treatment side of a lab comparison; it is in the
+   subtrahend of every skill number. `#418` records this; the point here is that it follows from
+   *this* note rather than from a property of the pool's weighting.
+3. **It does not make the diagnostics worthless, and it says which ones survive.** An imbalance
+   measure computed between two groups — `L₁` (`notes/2026-11-12-monotonic-imbalance-bounding-and-the-l1-measure.md`,
+   `#436`) or the C statistic (`notes/2026-11-12-does-the-matching-paradox-bite-in-practice.md`,
+   `#438`) — needs no ignorability assumption at all, because it makes no counterfactual claim. It
+   reports how far apart two observed distributions are. That is the class of statement this panel
+   supports, and the class the folder should keep building.
+
 ## Related
 
 - `notes/2026-11-06-index-membership-is-not-an-information-free-selection.md` — the same

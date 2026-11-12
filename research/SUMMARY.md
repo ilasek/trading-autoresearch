@@ -9391,6 +9391,145 @@ literature**, or a statement about test specification. No return, Sharpe, or dat
 figure appears in any of the three sources or is carried from them.
 
 
+### The IMBALANCE METRIC itself — the measure `#435`'s refusal test presupposed, the class that bounds it ex ante, and the independent test of whether the refusal fires too early (cross-family, the gate's own statistic, the panel itself)
+
+**[2026-11-12] Read this first: the vein `#435` opened by writing a refusal test this folder could
+not run is now closed on all three of its sides, and the night's single most useful output is that
+the refusal test as adopted one night ago is TOO STRONG.** [2026-11-11] ended by instructing session
+90 to find a multivariate imbalance measure, because `#435` had said "plot imbalance **in the space
+of the covariates** against the number of observations pruned, and reject a design whose curve
+rises" — and the folder held no definition of the quantity on the vertical axis. The mandated greps
+confirmed the gap before any download: `imbalance metric`, `L1 imbalance`, `monotonic imbalance
+bounding` and `coarsened exact matching` all resolved to last night's own `#435` note relaying
+King–Nielsen, or to this file's statement of the aim, with every `Mahalanobis` hit a
+portfolio-distance use unrelated to matching; `Cochran` hit five notes, in all of which it is an
+incidental citation. The named primary was obtained on the **first request** and meets all three
+stated criteria by itself.
+
+**(a) The measure, and the bin problem solved rather than assumed away (`#436`).** Iacus, King &
+Porro 2011 (Tier **A**, *JASA* 106(493), 345–361, **839** Crossref, checked 2026-11-12; complete
+typeset 17-page article from the first author's institutional repository). `L₁ = ½ Σ |f_cell −
+g_cell|` over the cells of a cross-tabulation of coarsened covariates, on **relative** frequencies
+so that unequal group sizes do not enter, with `0` = coinciding distributions, `1` = complete
+separation, and a direct overlap reading (`0.6` ⇒ 40% of the two histograms overlap). Empty cells
+contribute nothing, so the sum has at most `n` terms. The apparently arbitrary bin choice is handled
+by sampling the **`L₁`-profile** over random bin definitions and reporting `L̄₁` at the **median of
+the raw data's profile**; the ranking of methods is approximately invariant across the profile, but
+that is an **empirical regularity from non-financial datasets** and the authors' own instruction is
+to check the profile rather than assume it. Bins must be held fixed across any comparison, which is
+a reporting requirement if this lab ever quotes the number.
+
+**(b) The class, and the ex-ante/ex-post inversion that is the vein's real recommendation (`#436`,
+`#437`).** **Monotonic Imbalance Bounding** replaces the older Equal Percent Bias Reducing class on
+three counts: EPBR's guarantee is in **expectation** rather than in sample, it is about **means
+only** (its `γ` is a scalar precisely because it asserts proportional improvement on every covariate
+and linear combination at once), and it needs data assumptions — ellipsoidal symmetry, proportional
+covariance — that "rarely hold and are almost never known to hold". MIB drops all of them and
+guarantees instead that **tightening one covariate's tuning parameter leaves every other covariate's
+imbalance bound unchanged**. The practical consequence is the inversion: **EPBR fixes the matched
+count ex ante and reads balance off ex post; MIB fixes the maximum tolerable imbalance ex ante and
+the matched count falls out.** Neither class can deliver both — that is a limitation of matching, not
+of either class — and the authors defend the MIB side on the ground that bias matters more than
+variance in observational work, adding, against the obvious objection, that **matching can reduce
+variance by removing heterogeneity.** The buildable member is **coarsened exact matching**: coarsen,
+exact-match on the coarsened values, keep only cells holding both groups. The chosen width `ε_j` is
+the MIB parameter, and it bounds the difference in **means** (`≤ ε_j`), in every **centered `k`th
+moment** (`≤ ε_j^k (θ_j+1)^k`), and in every **quantile** (`≤ ε_j`), with no distributional
+assumption. Cost is `O(n)` via an integer-key tabulation, so panel width is not the obstacle — the
+cell space `m^k` is, which caps this panel at three or four coarsened covariates.
+
+**(c) How the width is chosen — the one thing (a) leaves substantive, answered by the companion
+(`#437`).** Iacus, King & Porro 2012 (Tier **A**, *Political Analysis* 20(1), 1–24, **3082**
+Crossref — the most-cited source in the vein). The recommended route is substantive indifference,
+which this panel's covariates do not supply, so three automated routes carry the weight:
+**histogram bin-width rules** (Sturges on the range, Scott on an assumed normal, Freedman–Diaconis
+on the IQR, Shimazaki–Shinomoto — **prefer Freedman–Diaconis here**, because its IQR base does not
+assume the normality a return or volatility cross-section violates, and Sturges' range base is worst
+because this panel's ranges are set by its extremes); a **Lipschitz-based error bound**
+`max_j L_j ε_j` whose `L̂_j ε_j` products **rank which covariate to tighten first**, estimated from
+**control units only** so no selection bias is induced, though it remains outcome-informed and its
+premise is what a fat left tail breaks; and **progressive coarsening**, a selective-relaxation search
+that breaks ties between equal-matched-count solutions by **minimising `L₁`** and outputs which
+covariate is hardest to match on. Three further properties: **common support comes free** (a cell is
+kept only if both groups appear in it); the method meets the **congruence principle**, working in the
+units the covariates were measured in, so a coarsening can respect meaningful thresholds that a
+caliper — a width, not a set of cut points — cannot; and it is **approximately invariant to
+measurement error**, *exactly* invariant when `ε_j` exceeds the error and the error respects stratum
+boundaries. That last result is the strongest argument in the vein for this lab specifically, because
+several of its matching variables are measured with known error (`#422`'s signed liquidity-tier
+error, estimated trailing volatility, the back-adjusted price level) — so **bucket widths are
+derivable from the lab's own error estimates, and a finer match is on the wrong side of the result.**
+
+**(d) The adversarial side, and it changes the recommendation rather than qualifying it (`#438`).**
+Ripollone, Huybrechts, Rothman, Ferguson & Franklin 2018 (Tier **B**, *AJE* 187(9), 1951–1961, **88**
+Crossref; read in full from PubMed Central), graded B deliberately: a single-domain evaluation study
+whose headline is a negative about someone else's result, itself unreplicated, with modest citations.
+Budgeted under the [2026-11-11] amendment that **a vein is closed only when the source saying the
+vein is a mistake has been read too** — except that here the adversary is aimed at `#435`, which this
+folder adopted one night ago, rather than at tonight's construction. They reproduce the paradox's
+qualitative behaviour in two large claims cohorts and then ask the question `#435` does not: **does
+the curve rise before the stopping rule you would actually have used fires?** It did not — the
+conventional calipers landed **near the lowest region of the imbalance curve** in every scenario,
+with imbalance rising only on continued pruning and sooner with richer covariate sets, which is
+`#435`'s own mechanism. **So `#435`'s refusal test is restated, and this is the night's operational
+output**: plot the curve, mark where the lab's selection rule actually stops, and refuse only if
+imbalance *at that point* is worse than at the unmatched starting level. The **boundary condition**
+is what transfers: the paradox threatens designs whose groups were **already well balanced before
+matching** — and this lab is *nearer* that regime than these authors were, since its controls come
+from the same eligible panel as the candidate's selections and differ only on the selection variable,
+so the reassurance does **not** transfer and the lab's own pre-match imbalance is the thing to
+measure. Two metrics cheaper than `L₁` come with it: the **C statistic** (AUC of a logit predicting
+group membership inside the matched set; `0.5` is balance), which needs no bin choice and no matrix
+inversion and asks exactly the right question — *read it, never optimise it*; and **Mahalanobis
+balance** `(X̄₁ − X̄₀)' Σ⁻¹ (X̄₁ − X̄₀)`, which accounts for covariate correlation but is built from
+means and so inherits the first-moment blindness `#436` demonstrates, and whose `Σ` must be inverted
+at **covariate** width, never at name width.
+
+**The synthesis, and it resolves the tension this folder was carrying rather than recording it.**
+`#435` says pruning raises the variance of the comparison; `#437` says CEM's error *falls* as it
+coarsens more and drops more units. Both are right, and the reconciliation is stated in each source
+independently: the variance of an estimate depends on `n` **and on the heterogeneity of the units
+compared**, and matching in covariate space reduces the second while shrinking the first, whereas
+pruning that is *uncorrelated with the comparison* buys no heterogeneity reduction and pays the `1/n`
+cost in full. `#438` confirms it from outside the authorship: pruning on **the actual components of
+`X`** is not expected to increase imbalance, "because distances between the original covariate values
+inform the matching and pruning decisions." So the rule is **pruning is justified exactly to the
+extent that it removes heterogeneity in covariate space, and `#435`'s curve — read at the lab's own
+stopping point — is the diagnostic that says whether it did.** Two refusals survive intact and are
+now construction-side rather than inference-side: a control validated by agreeing per-covariate
+**means** is unvalidated, because propensity-score weighting zeroes all mean imbalance by
+construction while leaving the joint distribution essentially unchanged; and a method reasoning from
+a **scalar** imbalance metric is excluded from the MIB class by definition, which is why the cell sort
+beats the scalar-score match on construction grounds and not merely on cost. **One disagreement is
+recorded and not resolved**: `#437` argues the balance-checking loop should be *eliminated*, `#438`
+stresses that balance must be checked. The asymmetry is the resolution — the licence to skip checking
+comes from the imbalance bound, and no matched control this lab has built carries one, because all of
+them fixed the count first. **And one thing the lab's gate does not model at all**: a matched control
+**changes the estimand**, because the retained group is a different population, so what it licenses
+is a statement about that subpopulation rather than a more precise version of the original — the
+construction-side arrival of the caveat `#434` attaches from the inference side.
+
+**What was NOT obtained.** The [2026-11-11] second-ranked aim, **Cochran (1968)** on how bias removal
+varies with the **number** of subclasses (*Biometrics* 24(2), 295–313, DOI `10.2307/2528036`, **703**
+Crossref, checked 2026-11-12) — the missing justification for `#433`'s recommended five quintile
+strata — **failed on both of the two searches its own instruction budgeted** and was abandoned per
+that instruction rather than replaced with a general stratification survey. The folder still holds
+the number and not the result. One consolation arrived from inside tonight's own sources: `#437`
+records that CEM "may equally be called **Cochran** Exact Matching", since Cochran 1968 is the first
+formal analysis of any subclassification-based method — so the lineage is certified even though the
+result is not.
+
+**Anti-lookahead.** No financial data in any of the three sources. Samples: an analytic class
+definition with proved propositions, a Monte Carlo, and two previously published non-financial
+observational datasets (a, c); two US insurance-claims cohorts, 1999–2002 and 2000–2007 (d). **All
+three `validation_overlap: false`, and all three `published_post_2018: false`** (2011, 2012, 2018 —
+the last sitting exactly at the boundary and therefore incapable of being fit to a 2018–2023 window).
+Every quantity carried above is a **bound in terms of a chosen tolerance**, a **bin-width formula**, a
+**complexity order**, a **share of matched units surviving a perturbation**, a **count of covariates
+or scenarios**, a **citation count**, or a statement about what a metric's value means. No return,
+Sharpe, or dated performance figure appears in any of the four sources or is carried from them.
+
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -17780,6 +17919,120 @@ hypothesis fodder, then anti-candidates.
     `false`, `published_post_2018: true`.
     → `notes/2026-11-11-the-psm-paradox-and-random-pruning.md`
 
+436. **FREE DIAGNOSTIC, and it is the object `#435`'s refusal test needs and this folder did not
+    hold: a MULTIVARIATE IMBALANCE MEASURE computable from the two groups' empirical
+    distributions.** `L₁ = ½ Σ_cells |f_cell − g_cell|`, where `f` and `g` are the **relative**
+    frequencies of the two groups in the cells of a cross-tabulation of coarsened covariates.
+    Reads directly as overlap: `0` means the two empirical distributions coincide, `1` means they
+    are completely separated at that resolution, and `L₁ = 0.6` means 40% of the area under the two
+    histograms overlaps. Relative frequencies make it insensitive to the groups having different
+    sizes; empty cells contribute nothing, so the sum has at most `n` terms however large the cell
+    space is. **The bin choice is resolved, not assumed away**: sample the `L₁`-profile (the
+    distribution of `L₁` over random bin definitions) and report `L̄₁`, the value at the bin set
+    sitting at the **median of the raw data's profile** — the method ranking is usually
+    approximately invariant across the profile, but that is an empirical regularity from
+    non-financial data and the source's own instruction is to **check the profile rather than assume
+    it**. Bins must be held fixed across any comparison. **The matching class that goes with it**:
+    Monotonic Imbalance Bounding, whose guarantee is that **tightening one covariate's tuning
+    parameter leaves every other covariate's imbalance bound unchanged**, and whose trade is the
+    reverse of the usual one — *fix the maximum tolerable imbalance ex ante and let the matched
+    count fall out*, rather than fixing the count and reading balance off afterwards. Coarsened
+    exact matching is the member to build: coarsen each covariate into intervals of width `ε_j`,
+    exact-match on the coarsened values, keep only cells holding both groups. The one number `ε_j`
+    then bounds the difference in **means** (`≤ ε_j`), in every **centered `k`th moment**
+    (`≤ ε_j^k (θ_j+1)^k` with `θ_j ≈ ⌈R_j/ε_j⌉` bins), and in every **quantile** (`≤ ε_j`), with no
+    assumption about the data at all. **Two refusals fall out.** (a) A control validated by "the
+    per-covariate means agree" is **unvalidated**: propensity-score weighting drives *all* mean
+    imbalance to zero by construction while leaving multivariate imbalance essentially unchanged.
+    (b) A method that reasons from a **scalar** imbalance metric is excluded from the class by
+    definition — which is the construction-side reason `#435`'s cell sort beats a scalar-score
+    match. **And one thing a matched control does that the lab's gate does not model**: it changes
+    the **estimand**, because the retained group is a different population, so the comparison is
+    local to that subpopulation rather than a more precise version of the original. Costs `O(n)` —
+    the complexity of a frequency tabulation, via an integer-key group-by — so panel width is not
+    an obstacle. Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-12-monotonic-imbalance-bounding-and-the-l1-measure.md`
+
+437. **CONSTRUCTION — how the COARSENING is chosen, which is the one thing `#436` leaves
+    substantive, plus the measurement-error result that is the strongest argument in the vein for
+    coarsening this lab's covariates rather than matching them finely.** The recommended route is
+    substantive — set `ε_j` to the largest imbalance in that covariate you are indifferent to — but
+    this panel's covariates have no natural indifference thresholds, so the **automated** routes
+    carry the weight here, and there are three. (a) **Histogram bin-width rules**: Sturges
+    `(x_n − x_1)/(log₂ n + 1)` on the range, Scott `3.5 · s_n · n^(−1/3)` on an assumed normal,
+    Freedman–Diaconis `2 · (Q₃ − Q₁) · n^(−1/3)` on the interquartile range, and
+    Shimazaki–Shinomoto. **Prefer Freedman–Diaconis on this panel**: its IQR base does not assume
+    the normality return and volatility cross-sections violate, and Sturges' range base is the worst
+    choice because this panel's ranges are set by its extremes. (b) **An error bound that doubles as
+    a covariate ranking**: under a Lipschitz restriction on the unknown outcome function, the
+    effect-estimation error is bounded by `max_j L_j ε_j`, so **finer coarsening directly lowers the
+    maximum possible estimation error**, and the products `L̂_j ε_j` rank *which covariate is
+    contributing most of the bound*, i.e. which coarsening to tighten first. `L̂_j` is estimated as
+    a maximum of outcome differences over **control units only**, which is why it induces no
+    selection bias — but it is still outcome-informed and belongs in the record as such; the
+    Lipschitz premise is also the thing a fat-tailed return cross-section breaks, so use it as a
+    ranking device and never quote the bound. (c) **Progressive coarsening**, the search procedure
+    for the lab's recurring failure (match too tight → control too thin → comparison is noise):
+    relax bin counts selectively in decrements of 2 down to 10 then by 1 to a user floor, then over
+    pairs, triples, …; **break ties between relaxations with equal matched counts by minimising
+    `L₁`**; keep a dropped covariate at one bin rather than removing it, and hold the `L₁` bins
+    fixed, because `L₁` depends on the covariate count. Output is a plot of matched count against
+    `L₁` that names **which covariate is hardest to match on**. **The measurement-error result, and
+    it is the actionable one**: if the coarsening exceeds the measurement error in a covariate
+    (`ε_j > max|η_j|`) and the error respects the stratum boundaries, the matched set is *identical*
+    whether you match on the true or the mismeasured covariate — exactly invariant, and
+    approximately invariant under the first condition alone. Several of this lab's matching variables
+    are measured with known error, so **bucket widths should be derived from the lab's own error
+    estimates rather than guessed**, and a *finer* volatility or liquidity match is on the wrong side
+    of this result. Two more properties: **common support comes free** (a cell is kept only if both
+    groups appear in it, which is the definition of non-extrapolation), and the method satisfies the
+    **congruence principle** — it works in the units the covariates were measured in, so the
+    coarsening can respect meaningful thresholds in the variable itself, which a caliper (a width,
+    not a set of cut points) cannot. **The claim NOT to import**: the authors argue the
+    balance-checking loop should be *eliminated*. That licence comes from the imbalance bound, and a
+    control whose count was fixed first carries no such bound — so for every matched control this
+    lab has built, checking remains mandatory. Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-12-coarsened-exact-matching-as-applied-construction.md`
+
+438. **AMENDMENT TO `#435`'s REFUSAL TEST — adopted one night ago and already too strong — plus the
+    cheapest balance diagnostic in the vein.** An independent team reproduced the paradox's
+    qualitative behaviour in two large real observational datasets and then asked the question
+    `#435` does not: **does the curve rise before the stopping rule you would actually have used
+    fires?** It did not. Imbalance did eventually rise with continued pruning, and sooner with
+    richer covariate sets (more covariates ⇒ units with similar scores have more dissimilar
+    profiles, which is `#435`'s own mechanism), but the conventional calipers were reached **near
+    the lowest region of the imbalance curve** in every scenario. **So the refusal test should be
+    restated**: plot the curve, mark where your selection rule actually stops, and refuse only if
+    imbalance *at that point* is worse than at the unmatched starting point. Strictly weaker,
+    strictly more defensible, same single plot. **The boundary condition is the transferable
+    content**: the paradox is a practical threat only when the groups were **already well balanced
+    before matching**, or when pruning runs far past a sensible stopping rule — and **the lab is
+    nearer the dangerous regime than these authors were**, because its controls are drawn from the
+    same eligible panel as the candidate's selections and differ only on the selection variable. So
+    the reassurance does not transfer, and the honest next step is to **measure the lab's own
+    pre-match imbalance** (one `L₁` or one C statistic on the unmatched cross-section) before
+    deciding how much weight the refusal carries. **Two metrics cheaper than `L₁`.** The **C
+    statistic**: fit a logit predicting group membership from the covariates *within* the matched
+    set and read its AUC — `0.5` is balance, above `0.5` is imbalance. No bin choice, no matrix
+    inversion, distribution-free in the covariates, and it asks exactly the right question (*can
+    anything tell the selected names apart from the control names?*). Read it, never optimise it —
+    optimising it reintroduces the specification search `#437` exists to remove. **Mahalanobis
+    balance**: `(X̄_1 − X̄_0)' Σ⁻¹ (X̄_1 − X̄_0)` on the pre-match covariance, in the actual covariate
+    space, accounting for covariate correlation — but built from group **means**, so it inherits
+    exactly the first-moment blindness `#436` demonstrates, and `Σ` must be inverted at **covariate**
+    width, never at name width. **One mechanism statement worth keeping verbatim**: pruning on the
+    actual components of `X` rather than on a scalar score is *not* expected to increase imbalance,
+    because the original covariate distances inform the pruning — independent confirmation, from
+    authors with no stake in it, that the paradox is a property of scalar-summary pruning and not of
+    pruning as such. **Direct disagreement with `#437`, recorded rather than resolved**: these
+    authors stress that balance must be checked after matching; `#437` argues the check is
+    unnecessary. Both hold — the bound is what buys the right not to check — though note that the
+    univariate comparison they fall back on is the check `#436` shows can pass while the joint
+    distribution is untouched. Also recorded: varying treatment prevalence moved score balance much
+    more than covariate balance, so **the fraction of names selected is not the lever that decides
+    whether a matched control is balanced**. Tier B, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-12-does-the-matching-paradox-bite-in-practice.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -17878,7 +18131,164 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-10 (session 88) | **THE PRIMARY AIM WAS MET IN FULL ON THE FIRST VEIN TRIED, THE RANKED WRITING TASK WAS COMPLETED, AND THE SESSION'S BY-PRODUCT IS ABOUT THE LAB'S OWN BENCHMARK RATHER THAN ANY CANDIDATE.** Aim from the [2026-11-09] entry: **the momentum-matched control as a design object** — admit a source only if it gives a CONSTRUCTION for the control group (matching variables, caliper, what is differenced) AND says what the estimate means when the match is imperfect in a known direction; not another event study, not an anomaly whose identification happens to use matching, explicitly not a causal-inference textbook chapter. **The detector greps ran first and the gap was as predicted**: across 275 prior notes `matching variable` **0**, `caliper` **0**, `synthetic control` **0**, `matched sample` **1**, `matched firm` **1**, `difference-in-difference` **2**, `control group` **3**, `matched control` **4**, `propensity` **5** — and the **mandated second grep on the mechanism confirmed rather than shrank it**: all five `propensity` hits are the unrelated phrase *selling propensity*, and all four `matched control` hits are other people's event studies relayed inside notes about something else, so **no note said how to build one**. The **source-level check also paid**, rejecting nothing but confirming the vein was clean: `Lyon` **0**, `Wermers` **0**, `Abadie` **0**, `Imbens` **0**, `DGTW` **0**, `buy-and-hold abnormal` **0**, `new listing bias` **0**, `rebalancing bias` **0**, while all six `Barber` hits were a different Barber paper and all nine `Grinblatt` hits were Grinblatt–Han / Grinblatt–Moskowitz. **(a) ADMITTED.** Barber & Lyon 1996 (Tier **A**, *JFE* 41(3), 359–399, **1255** Crossref, checked 2026-11-10; read in full from `leeds-faculty.colorado.edu`): when a sample is selected on a mean-reverting variable, **only** a control matched on that variable is well specified, and the misspecification is large even when the pre-event difference is **slight**; a control group *is* a model of expected performance; change models dominate level models (**#427**). Caliper stated exactly — **70%–130%** on the nuisance variable, **90%–110%** on the selection variable, nearest-on-selection-variable fallback; match struck once and held; rank statistic over `t`; power decays as the matching lag goes one → three years (**#428**). Its own answer to the imperfect-match half: **the speed of mean reversion is cross-sectionally heterogeneous**, which is why one cell resisted every design they tried. **(b) ADMITTED.** Barber & Lyon 1997 (Tier **A**, *JFE* 43(3), 341–372, **2102** Crossref; read in full from the same host): the matched **firm** beats any reference portfolio because three biases enter through the portfolio side — **new listing** (benchmark keeps admitting names that began trading after the event; biases the difference **positive**), **rebalancing** (benchmark's compounding assumes periodic rebalancing while the sample security's does not; the restoring trades buy month-`t−1` losers, which are month-`t` winners, so the benchmark is **inflated** and the difference biased **negative**), and **skewness** (isolated against a χ² of known mean and skewness **2.83**). **The by-product is the more valuable half**: protocol v3 grades skill against the **equal-weight eligible pool**, which is a rebalanced reference portfolio, and protocol v2's panel admits a column only once the name has been eligible — so **both biases are structural in this lab's own measurement, with opposite signs**, and the free check is to report the pool's **buy-and-hold** counterpart next to the rebalanced one (**#432**). Two riders that are arithmetic: **simple returns, never log** (log abnormal returns are inherently negatively biased under cross-sectional dispersion), and rank/bootstrap statistics over a plain `t` on skewed long-horizon differences. **(c) ADMITTED.** Daniel, Grinblatt, Titman & Wermers 1997 (Tier **A**, *JF* 52(3), 1035–1058, **1560** Crossref; body and Appendix read in full from page images of a complete JSTOR scan on `kentdaniel.net`): **125** cells from **5×5×5** sorts on size, book-to-market and **prior-year return**, large-cap-only breakpoints, **value-weighted and buy-and-hold within cell** expressly to avoid the rebalancing bias in (b), re-formed annually, re-assigned quarterly, differenced at `t−1` cell assignment; plus the **CS / CT / AS** decomposition separating within-cell picking from cell timing (the twelve-month-lagged weight-and-assignment term) from static cell occupancy (**#431**). **The Appendix supplies the two details that decide whether this is buildable here, and the draft note had both wrong before it was read**: the triple sort is **NESTED, not independent** (so every cell is populated by construction, and the empty-corner objection to running it on a narrow panel disappears), and the momentum variable **skips the month before formation**. On this panel it becomes a nested **region → dollar-volume → past-return** grid, because capitalisation (`#408`, `#423`) and book-to-market are unavailable — with region as the outer, *discrete* level, which `#421` wants and which `#429` makes free. **(d) ADMITTED.** Abadie & Imbens 2006 + 2011 (Tier **A**, *Econometrica* 74(1), 235–267, **2164** Crossref, typeset published version read in full from `economics.mit.edu`; *JBES* 29(1), 1–11, **1126** Crossref, read in full as NBER Technical WP 283): matching on `k` **continuous** covariates has conditional bias `O_p(N^{−1/k})` against sampling error `O_p(N^{−1/2})`, so **at `k ≥ 2` the estimator is not `√N`-consistent and standard intervals are not valid**; `k = 1` is the clean case; **discrete covariates do not count toward `k`**; **the bootstrap is not valid** for the simple matching estimator (**#429**). And the repair is a **regression, not a fourth matching variable** — impute `Y_j + μ̂₀(X_i) − μ̂₀(X_j)`, which removes the bias **without affecting the asymptotic variance**, with a plain linear `μ̂₀` fitted on the control group only (**#430**). **Cross-source synthesis worth more than any one of them:** DGTW's quintile **cells** keep `k` at **zero** in the Abadie–Imbens accounting, which is an argument for cell-based benchmarking over nearest-neighbour matching on a panel this narrow — **an argument none of the four sources makes**. **The ranked writing task was completed in full**: `#425`'s winner-beta term structure is now annotated into all three `price-trend` notes it bears on (`2026-08-17-jegadeesh-titman-overlapping-momentum.md` — the overlapping-tranche stack averages over the beta curve; `2026-08-17-momentum-horizon-echo.md` — 12-7 versus 12-2 are two different points on it, so the horizon and beta effects are confounded by construction; `2026-08-17-momentum-crash-risk-management.md` — the beta peak sits **inside** the crash-exposed window and that half survives into a long-only book where the long-short fixes do not reach). **Consistency, stated rather than smoothed:** `#432` does not contradict `2026-08-22-rebalancing-return-attribution-critique.md` (rebalancing trades have exactly zero expected value under IID and pay only where relative prices revert) or the 2026-10-13 pair — it supplies the **antecedent measured on a wide cross-section** and reframes an attribution question as a **signed bias in a measured difference**; the **new-listing** half is genuinely new to that cluster. **Anti-lookahead.** Samples 1977–1992 (a), July 1963 – December 1994 (b), 1974–1994 holdings (c), and none at all for (d) — **all four `validation_overlap: false`, all four `published_post_2018: false`**. Every magnitude carried is a **caliper**, a **cell count**, a **skewness coefficient**, a **stochastic order**, a **citation count** or a statement about test specification; DGTW's sample-period style and performance numbers and both Barber–Lyon papers' rejection-rate tables are left in the sources. | Barber & Lyon 1996 (`2026-11-10-performance-matched-controls-and-mean-reversion.md`); Barber & Lyon 1997 (`2026-11-10-control-firm-versus-reference-portfolio-biases.md`); Daniel, Grinblatt, Titman & Wermers 1997 (`2026-11-10-characteristic-matched-benchmark-portfolios.md`); Abadie & Imbens 2006 + 2011 (`2026-11-10-matching-estimator-bias-and-the-dimension-of-the-match.md`) |
 | 2026-11-11 (session 89) | **THE PRIMARY AIM WAS MET WITH THE NAMED PRIMARY ON THE FIRST REQUEST, THE RANKED WRITING TASK WAS COMPLETED, AND THE VEIN CLOSES WITH ITS TWO SIDES IN OPEN DISAGREEMENT — WHICH IS WHAT PRODUCED THE BUILDABLE ANSWER.** Aim from the [2026-11-10] entry: **the scalar matching score** — admit a source only if it (i) defines the scalar score, (ii) states the theorem about what conditioning on it is equivalent to, and (iii) says what changes when the score is estimated rather than known; not another application of matching, not a survey of treatment-effect estimators, explicitly not a causal-inference textbook chapter; **at most four requests**. **The detector greps ran first and the gap was exactly as predicted**: across 279 prior notes `balancing score` **0**, `propensity score` **0**, `scalar summary` **0**, and every `propensity` hit still the unrelated *selling propensity*; `Abadie` **1** and `Rosenbaum` **2**, all incidental citations inside notes about something else. **(a) ADMITTED, and it meets all three criteria by itself.** Rosenbaum & Rubin 1983 (Tier **A**, *Biometrika* 70(1), 41–55, **26586** Crossref, checked 2026-11-11; complete 15-page article read from page images of a JSTOR scan served by `stat.cmu.edu` on the first try): a **balancing score** is any `b(x)` with `x ⊥ z | b(x)`; the **propensity score** `e(x) = pr(z = 1 | x)` is one **for any distribution of `x`** (Thm 1); `b(x)` balances **iff** it is finer than `e(x)`, so **`e(x)` is the coarsest balancing score** (Thm 2 — the licence `#429` needed, with the condition that the scalar must be a fitted **selection probability** and not any other one-dimensional index); strong ignorability transfers to any balancing score (Thm 3); the treated-minus-control difference at a score value is unbiased for the effect there (Thm 4); **sample** estimates of the score produce **sample** balance (Thm 5). Three uses with their own corollaries — pair matching, **subclassification at the quintiles of the fitted score**, covariance adjustment **on the score** — plus the explicit warning that covariance adjustment on the **raw covariates** can *increase* bias when the groups' covariance matrices differ, and the EPBR condition and its within-subpopulation extension (**#433**). Criterion (iii) is answered on the **bias** side by its own simulation: sample and population scores are *approximately equally effective*, so **no substantial loss from estimating the score**. **(b) ADMITTED, and it answers (iii) on the variance side with the sign backwards from the naive expectation.** Abadie & Imbens 2016 (Tier **A**, *Econometrica* 84(2), 781–807, **708** Crossref; read in full as NBER WP **w15301**, which OpenAlex lists as a location for the published work and whose abstract is **verbatim identical** to the published one): matching on the **estimated** score has asymptotic variance **`σ² − c' I_θ⁻¹ c`** — a quadratic form in an inverse Fisher information, hence **non-positive**, so estimating the nuisance parameter **REDUCES** the variance and the naive plug-in interval **over-covers** rather than under-covering (**#434**). **Two limits that bind here and are easy to miss**: the sign is proved for the average effect over the population and the authors say it "need not" hold for the **effect on the treated**, which is the estimand of every event-cohort question on this panel; and the **bootstrap remains invalid** for matching estimators, restated as the paper's own motivation — `#429` confirmed from a second direction. **(c) ADMITTED as the adversarial side, graded TIER B on purpose.** King & Nielsen 2019 (*Political Analysis* 27(4), 435–454, **1398** Crossref; read in full from `gking.harvard.edu`, located via the landing page's `citation_pdf_url` meta tag after the obvious flat-directory path returned HTML): accepts Thm 1 as "mathematically correct" and attacks its target — a scalar-score match can only approximate a **completely randomized** experiment while an `X`-space match can approximate a **fully blocked** one, because **exact matching on `X` implies matched scores but equal scores do not imply matched covariates**. Hence the **PSM Paradox**: past the point of complete randomization, further pruning is random with respect to `X` and **random pruning increases imbalance**, so tightening the caliper makes balance worse and the standard quarter-SD caliper is already past the turn; their three arguments include the **same `n^{−1/k}` rate** `#429` records, borrowed from the same source. Their content analysis of 230 applied articles found **94%** use the simplest one-to-one greedy form, so the critique is aimed at practice (**#435**). **Tier B and the reason is stated in the note**: the analytic core is solid, but the empirical sweep is the authors' own reanalyses (two published studies plus >20 private datasets), it is one discipline's corpus with no financial data, and this folder has **not read the published responses** to a contested critique. **The synthesis is the session's output and belongs to no single source**: the lab is caught between the reduction that makes an interval valid (`#429`'s `k = 1`) and the reduction that caps achievable balance (`#435`) — and **subclassification sidesteps both**, because it prunes nothing (so the paradox, a statement *about* pruning, cannot fire) and is not a nearest-neighbour matching estimator (so the `N^{−1/k}` rate does not apply), while being `#431`'s cell grid with a fitted probability as the sorting variable. **One finding transfers past matching entirely**: pruning a sample for a reason **uncorrelated with the comparison being made** raises that comparison's variance — the continuous version is the identity that the squared difference in group means *is* the squared standard error, `∝ 1/n` — and this lab prunes constantly without ever having asked that question of a screen. **The ranked writing task was completed in full**: `#432`'s **new-listing** half is now annotated into all three notes that reason about what the equal-weight pool mechanically earns (`2026-10-13-equal-weighting-and-the-rebalancing-component.md`, `2026-10-13-equal-minus-value-as-a-performance-evaluation-factor.md`, `2026-08-22-rebalancing-return-attribution-critique.md`), each of which previously treated pool membership as fixed and discussed only the rebalancing channel. **Anti-lookahead.** No financial data in any of the three sources. Samples: a simulation plus a clinical observational dataset (a); asymptotic theory plus a Monte Carlo (b); simulations plus reanalyses of published observational studies (c). **All three `validation_overlap: false`**; (c) is `published_post_2018: true` (2019), (a) and (b) are false. Every magnitude carried is a **rate of convergence**, a **variance formula**, a **count of strata**, a **share of a surveyed literature**, a **citation count**, or a statement about test specification. | Rosenbaum & Rubin 1983 (`2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md`); Abadie & Imbens 2016 (`2026-11-11-matching-on-the-estimated-score-and-its-variance.md`); King & Nielsen 2019 (`2026-11-11-the-psm-paradox-and-random-pruning.md`) |
 
+| 2026-11-12 (session 90) | **TOOK THE PRIMARY AIM VERBATIM, GOT THE NAMED PRIMARY ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY WEAKENING A REFUSAL TEST THIS FOLDER ADOPTED ONE NIGHT AGO.** Aim from the [2026-11-11] entry: **the imbalance metric, and the matching class defined by bounding it** — admit a source only if it (i) **defines** a multivariate imbalance measure computable from the two groups' empirical distributions, (ii) states what property the matching class guarantees as its parameter is varied, and (iii) says how the coarsening or caliper is **chosen**; not another critique of propensity scores, not a software description, not a general matching survey; **at most three requests**. **The mandated greps ran first and the gap was as predicted**: `imbalance metric`, `L1 imbalance`, `monotonic imbalance bounding`, `coarsened exact matching` all resolved only to last night's own `#435` note or to this file's statement of the aim; all eight `Mahalanobis` hits were portfolio-distance uses unrelated to matching; `Cochran` hit five notes as an incidental citation. **The nightly-variable detector also ran** on the 2026-11-11/12 session's headline (the log-space correction to the bps screen) and returned **covered** — `2026-10-02-noisy-prices-and-biased-premium-estimates.md` and `2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md` already hold the arithmetic-versus-log result — so the primary aim stood. **(a) ADMITTED, meets all three criteria alone.** Iacus, King & Porro 2011 (Tier **A**, *JASA* 106(493), 345–361, **839** Crossref, checked 2026-11-12; complete typeset 17-page article, 124 KB of text, 786 `" the "`, zero `( )` dropout): **`L₁ = ½ Σ |f_cell − g_cell|`** on relative frequencies over a cross-tabulation of coarsened covariates, reading as overlap (`0` coinciding, `1` separated), with the bin choice resolved by the **`L₁`-profile** and `L̄₁` reported at the **median of the raw data's profile**; and the **Monotonic Imbalance Bounding** class, whose guarantee is that tightening one covariate's parameter leaves every other covariate's bound unchanged, and whose trade reverses the usual one — **fix maximum imbalance ex ante, let the matched count fall out** (EPBR does the reverse, in expectation, on means only, under data assumptions that "rarely hold"). **Coarsened exact matching** is the member to build, and its one width `ε_j` bounds the difference in means, in every centered `k`th moment, and in every quantile, with no distributional assumption; cost `O(n)` by integer-key tabulation, with the cell space `m^k` the real ceiling (**#436**). **(b) ADMITTED as the construction half, and it answers (iii) in depth.** Iacus, King & Porro 2012 (Tier **A**, *Political Analysis* 20(1), 1–24, **3082** Crossref — the most-cited source in the vein; complete typeset 24-page article, 116 KB of text, 793 `" the "`): the coarsening is chosen substantively, or by **histogram bin-width rules** (Sturges / Scott / Freedman–Diaconis / Shimazaki–Shinomoto — **Freedman–Diaconis preferred here** on its IQR base), or by a **Lipschitz error bound `max_j L_j ε_j`** whose `L̂_j ε_j` products rank which covariate to tighten first (estimated from **control units only**, so no selection bias, but still outcome-informed), or by **progressive coarsening** with `L₁` as the tie-breaker between equal-matched-count solutions. Three further properties: **common support comes free**, the **congruence principle** (works in the units the covariates were measured in, so a coarsening can respect meaningful thresholds a caliper cannot), and **approximate invariance to measurement error** — *exact* when `ε_j` exceeds the error and the error respects stratum boundaries, which is the vein's strongest argument for this lab specifically given `#422`'s liquidity-tier error and estimated trailing volatility (**#437**). **(c) ADMITTED as the adversarial side under the [2026-11-11] closure amendment, graded TIER B on purpose.** Ripollone, Huybrechts, Rothman, Ferguson & Franklin 2018 (*AJE* 187(9), 1951–1961, **88** Crossref; read in full from PubMed Central): reproduces the paradox in two large claims cohorts and asks the question `#435` does not — **does the curve rise before the stopping rule you would actually have used fires?** It did not; conventional calipers landed near the **lowest region** of the imbalance curve in every one of 36 scenarios, with imbalance rising only on continued pruning and sooner with richer covariate sets. **So `#435`'s refusal test is restated** — plot the curve, mark where the lab's rule stops, refuse only if imbalance *there* is worse than unmatched — and the **boundary condition** is that the paradox threatens designs whose groups were *already* well balanced, which is **nearer the lab's own position** than these authors', so the reassurance does not transfer. Two cheaper metrics come with it: the **C statistic** (AUC of a logit predicting group membership inside the matched set; `0.5` is balance — read it, never optimise it) and **Mahalanobis balance** (correlation-aware but first-moment only, and `Σ` invertible at covariate width only) (**#438**). **The synthesis resolves the tension the folder was carrying**: pruning is justified exactly to the extent that it removes **heterogeneity in covariate space**, which is why `#437`'s error falls as it prunes while `#435`'s rises — stated independently in both camps, and confirmed by (c) from outside the authorship. **One disagreement recorded, not resolved**: (b) argues the balance-checking loop should be *eliminated*, (c) stresses it must be run; the asymmetry is the answer, since the licence to skip checking comes from the imbalance bound and **no matched control this lab has built carries one**. **The ranked writing task was completed in full**: `#433`/`#434` are now annotated into both notes of the admission-rule cluster — `2026-11-06-index-membership-is-not-an-information-free-selection.md` gains the statement that eligibility is a **treatment** with a constructible `pr(eligible\|x)` (and that CEM strata proportions estimate it nonparametrically), and `2026-11-08-committee-discretion-versus-the-published-admission-rule.md` gains the statement that **it is itself why strong ignorability fails** on this panel, with the consequence that the same unobserved component sits inside v3's benchmark. **NOT OBTAINED**: the second-ranked aim, **Cochran (1968)** on bias removal versus the **number** of subclasses (*Biometrics* 24(2), 295–313, `10.2307/2528036`, **703** Crossref) — failed on both budgeted searches and abandoned per that instruction rather than replaced; the folder still holds `#433`'s five-strata number without its justification, though (b) records that CEM "may equally be called **Cochran** Exact Matching". **Anti-lookahead.** No financial data in any source. Samples: analytic propositions, Monte Carlo, and two previously published non-financial observational datasets (a, b); two US insurance-claims cohorts 1999–2002 and 2000–2007 (c). **All three `validation_overlap: false` and all three `published_post_2018: false`** (2011, 2012, 2018). Every magnitude carried is a **bound in terms of a chosen tolerance**, a **bin-width formula**, a **complexity order**, a **share of matched units surviving a perturbation**, a **count of covariates or scenarios**, a **citation count**, or a statement about what a metric's value means. | Iacus, King & Porro 2011 (`2026-11-12-monotonic-imbalance-bounding-and-the-l1-measure.md`); Iacus, King & Porro 2012 (`2026-11-12-coarsened-exact-matching-as-applied-construction.md`); Ripollone et al. 2018 (`2026-11-12-does-the-matching-paradox-bite-in-practice.md`) |
+
 ### Open questions for future sessions
+
+- **[2026-11-12] READ THIS BEFORE AIMING SESSION 91. The matched-design vein is now CLOSED on all
+  five of its sides, and the night's most consequential output is a WEAKENING of a refusal test this
+  folder adopted the night before.** `#436` gives the metric (`L̄₁` on a coarsened cross-tabulation,
+  with the bin choice resolved by the profile median) and the class that bounds it ex ante (MIB, with
+  CEM as the member to build); `#437` gives the construction (how the coarsening is chosen —
+  Freedman–Diaconis here, progressive coarsening with `L₁` as tie-breaker, and the measurement-error
+  invariance that makes coarse buckets a *defence*); `#438` gives the bound on `#435` (the paradox is
+  a practical threat only when the groups were already well balanced, and the refusal must be read
+  **at the lab's own stopping point**, not anywhere on the curve). **Do not reopen it.** The
+  construction, the metric, the inference and the critique have all been read, and `#418` still makes
+  every object in the vein a balance diagnostic rather than an effect estimate.
+  - **Primary aim for session 91, and it is named by tonight's own source rather than by grep: the
+    CLASSIFIER TWO-SAMPLE TEST — turning `#438`'s C statistic from a number into a TEST with a null
+    distribution.** `#438` hands the lab the cheapest balance diagnostic in the vein (fit a logit
+    predicting group membership, read its AUC, `0.5` is balance) and says nothing whatever about
+    **what value of `C` is significantly above `0.5`**, about **computing it on held-out rather than
+    in-sample data**, or about **how much power it gives up** relative to a purpose-built test. That
+    is a real and well-developed statistics literature and the folder holds **none** of it. A grep
+    before any download should confirm it: `classifier two-sample` is **0**, `Kolmogorov` is **0**,
+    `energy distance` is **0**, and — **run the second grep, because the first one lies here** — the
+    apparent 10 hits on `C statistic` and 12 on `AUC` are **substring artifacts** of *rank IC
+    statistic* and a single relayed lab measurement (*rank-AUC*), not coverage; only tonight's own
+    `#438` and its two annotations are real. The named primary is **Kim, Ramdas, Singh & Wasserman**,
+    *Classification accuracy as a proxy for two-sample testing*, *Annals of Statistics* 49(1) (2021),
+    with **Lopez-Paz & Oquab**, *Revisiting Classifier Two-Sample Tests* (ICLR 2017), as the
+    construction complement if it comes cheaply. **Acceptance criterion, stated before any download:
+    admit a source only if it (i) gives a VALID TEST — a null distribution or an exact/permutation
+    procedure — for classification accuracy computed on held-out data, (ii) states how its POWER
+    compares to a purpose-built two-sample test, and (iii) says what the SAMPLE SPLITTING costs.**
+    Not a survey of two-sample tests; not a machine-learning benchmark paper; not another
+    goodness-of-fit chapter. **Spend at most three requests.** *Annals of Statistics* is closed, so
+    the channels in order are the authors' own sites (the fourth author's CMU page and the
+    `stat.cmu.edu` teaching library both served sources on 2026-11-11 and 2026-11-12), then arXiv,
+    then a department working-paper directory. **Why this is worth a session rather than a footnote**:
+    the lab's existing null is 200 random portfolios, which tests whether a *return difference* could
+    have arisen by chance; a classifier two-sample test asks the different and prior question of
+    whether the *selected names themselves* are distinguishable from the control's — and if they are
+    not, no return difference needs explaining.
+  - **Ranked second, carried down rather than retired, and the two searches it was budgeted are
+    SPENT: the NUMBER OF SUBCLASSES.** **Cochran (1968)**, *The effectiveness of adjustment by
+    subclassification in removing bias in observational studies*, *Biometrics* 24(2), 295–313, DOI
+    `10.2307/2528036`, **703** Crossref (checked 2026-11-12). `#433`'s recommended construction is
+    **five** quintile strata and the only justification the folder carries is Rosenbaum–Rubin
+    relaying Cochran's observation that five subclasses remove at least 90% of the bias for many
+    continuous distributions — the number without the result. **Two searches failed tonight** (a
+    statistics-department reprint directory and a third-party teaching library, including the
+    `stat.cmu.edu/~ryantibs/journalclub/cochran_1968.pdf` slug the 2026-11-11 access finding would
+    predict, which 404s), so per that instruction it was abandoned rather than substituted. **The one
+    channel NOT yet tried is the third one the [2026-11-11] entry named: the result restated inside a
+    later open-access article** — and the specific target is Rubin's *Matched Sampling for Causal
+    Effects* (Cambridge, 2006), which reprints the subclassification literature and whose chapter
+    landing pages are indexed. **Acceptance criterion unchanged**: admit it only if it (i) states how
+    bias removal varies with the **number** of subclasses, (ii) says what it assumes about the
+    distribution of the subclassifying variable, and (iii) says what happens when that variable is
+    measured with error or estimated. **Budget: one request.** If it fails a third time, **record
+    Cochran (1968) as a permanently named unobtained pointer and stop re-ranking it** — three
+    sessions of channel-hunting for one constant is more than the constant is worth, and `#437`
+    already supplies the lineage (CEM "may equally be called Cochran Exact Matching").
+  - **Ranked below both, a WRITING task that needs no source, and it is the one `#435` created and
+    this folder has still not discharged: the SCREEN QUESTION is not carried into any note about the
+    lab's screens.** `#435` established — and `#438` bounded — that pruning a sample for a reason
+    *uncorrelated with the comparison being made* raises that comparison's variance, and asked of
+    every screen: **does what this removes correlate with what is being measured?** The lab's three
+    free screens (`#376`'s one-bit truncation test, `#389`'s cumulative-curve test, `#381`'s `σ_IC`)
+    and the eligibility/liquidity/volatility filters all prune, and **no note about any of them
+    carries the question.** `notes/2026-10-21-sure-independence-screening-marginal-vs-joint.md` is the
+    folder's one note whose subject *is* a screen and it reasons about which predictors survive, never
+    about what the screening does to the variance of the subsequent comparison. Annotating it, plus
+    whichever note holds the truncation test, costs no trial and turns a standing observation into a
+    named precondition. **Do not open a new source for this**; it is composition, exactly as tonight's
+    two admission-rule annotations were.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06] through [2026-11-11]) is: **check candidate sources against
+    the folder before downloading**, grep for `open question` / `leave(s) … open`, ask what the lab
+    does to a number after it has it and grep for the literature about the number before it exists,
+    **run a second grep on the mechanism after a zero-count**, **run the nightly-variable detector at
+    the start of every session regardless of the handover**, and **budget one request of every vein
+    for the source that says the vein is a mistake**. All ran. The nightly-variable detector returned
+    **covered** for the first time in several sessions (the lab's log-space correction is already held
+    by `2026-10-02-noisy-prices-and-biased-premium-estimates.md` and
+    `2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md`), which is a *successful*
+    detector run and not a failed one — it is what let the primary aim stand unchanged.
+    **Tonight's amendment inverts the second-grep rule: a NON-zero count can lie in the same way a
+    zero one can.** `C statistic` returned 10 hits and `AUC` returned 12, and **every one was a
+    substring artifact** — *rank IC statistic*, *rank-AUC* — so a vein that looked well covered was
+    untouched. The [2026-11-06] rule was "after a zero-count, grep the mechanism"; the rule is now
+    **after any count, open the hits before believing them**, because a short metric name is a
+    substring of something this folder says constantly. Caveats still not run through the detector,
+    unchanged in order: *publication decay*, and *"the cost model is lethal only to books that
+    trade"*.
+  - **Carried unchanged and still live**: `#406`'s volatility-tercile conditioning remains the best
+    construction in the file, category-**neutral** per `#414`, now endorsed on a third ground — it is
+    a one-covariate CEM at `θ = 3`, and `#437`'s measurement-error result says a *finer* volatility
+    match would be on the wrong side of the panel's own estimation error. `#413` is the composed
+    pre-trial rule and should run before any candidate file is written; `#376`'s one-bit truncation
+    test, `#389`'s cumulative-curve test and `#381`'s `σ_IC` remain the three free screens, with
+    `#415`'s eligibility-forecasting refusal, `#421`'s pooled-price-control refusal, `#423`'s
+    monotone-in-stored-price refusal and `#427`/`#429`/`#434`/`#435`'s matched-design refusals joining
+    them. **Tonight adds two refusals, amends one, and adds three free diagnostics.** New refusals,
+    both construction-side: a control validated by agreeing per-covariate **means** is **unvalidated**
+    (propensity-score weighting zeroes all mean imbalance by construction while leaving the joint
+    distribution essentially unchanged — `#436`), and a matching design reasoning from a **scalar**
+    imbalance metric is excluded from the bounding class **by definition** (`#436`), which is the
+    construction-side reason the cell sort beats the scalar-score match. **Amended**: `#435`'s
+    imbalance/pruning curve is now read **at the lab's own stopping point** against the **unmatched**
+    level, not refused for rising anywhere (`#438`). Diagnostics, all free: `L̄₁` between any two
+    groups the lab forms (`#436`); the **C statistic** as a balance reading, to be read and never
+    optimised (`#438`); and the lab's **own pre-match imbalance**, which decides how much weight the
+    amended refusal carries and which nobody has measured (`#438`). The matched-control vein is now
+    closed on its fifth and last side; the nominal-price vein stays closed (`#420`–`#426`); the
+    index-rule vein stays closed (`#401`–`#419`); the detectability vein stays closed
+    (`#393`–`#400`); the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays
+    closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#436`–`#438` from tonight; `#433`–`#435` from 2026-11-11;
+    `#427`–`#432` from 2026-11-10; `#420`–`#426` from 2026-11-09; `#415`–`#419` from 2026-11-08;
+    `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05;
+    `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02;
+    `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31; `#335`–`#342` from 2026-10-30;
+    `#328`–`#334` from 2026-10-29; `#322`–`#327` from 2026-10-28; `#316`–`#321` from 2026-10-27;
+    `#311`–`#315` from 2026-10-26; `#306`–`#310` from 2026-10-25; `#300`–`#305` from 2026-10-24;
+    `#294`–`#299` from 2026-10-23; `#289`–`#292` from 2026-10-22; `#284`–`#288` from 2026-10-21;
+    `#282`/`#281` from 2026-10-20; the 2026-10-18 pair; then 2026-10-17 and everything carried under
+    it.
+  - **Retired and recorded as retired**: everything carried under [2026-11-11], and **tonight the
+    fifth and last side of the matched control — the imbalance metric — on all three of its own
+    sides** (the measure, the construction, and the critique of the critique). Still at **0** and
+    still not nominated: `transfer entropy` (twenty-third nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-11], unchanged: the
+    engine issues filed 2026-10-18 and 2026-10-22 (upgraded by `#423`); `min_train_skill = 0.0`;
+    `#324`'s deliberate difference; the two human decisions added 2026-10-29; the three items the
+    2026-10-30/31 nightly raised; the data-type question; `#396`'s tension between `program.md`'s
+    spend-across-families rule and what the design can measure; `#404`'s spinoff/merger/name-change
+    question; `#407`'s rule-induced comovement inside the equal-weight pool; `#418`'s discretionary
+    component in the benchmark's membership — **now traced to its source**, since tonight's annotation
+    establishes that `2026-11-08-committee-discretion-versus-the-published-admission-rule.md` is
+    *why* strong ignorability fails and therefore why the same unobserved component sits in the
+    subtrahend of every v3 skill number; the note format's **missing holdout-overlap flag**; `#422`'s
+    signed error in the volume-only liquidity tier — **now upgraded in consequence**, because `#437`'s
+    measurement-error result makes that error a direct input to how coarsely the liquidity control
+    must be bucketed; `#432`'s two opposite-signed biases in the equal-weight pool; the screen-variance
+    question added 2026-11-11; and `p₀` now being a supplied number while the gate still behaves as
+    though it were zero. **Tonight adds one, and it is about the lab's ESTIMAND rather than its
+    gate.** `#436` establishes that a matched control **changes what is being estimated** — the
+    retained group is a different population, so the comparison is local to that subpopulation — and
+    the lab's gate models a matched control as a *more precise* version of the same comparison. This
+    is not a request to change the gate; it is a record that any matched-control result the lab
+    promotes is a statement about a subpopulation it has not named. **The integrity check found the
+    container on a per-run branch (`claude/tender-galileo-29ocuk`) for the twelfth consecutive
+    session and, for the first time, found REAL UNLANDED WORK: the 2026-11-11/12 nightly's
+    journal-and-learnings commit (`f0f68e6`) was on `origin/main-a5dglb` and absent from `main`,
+    which had moved on with only the data-refresh commit. It touched no trial, leaderboard or champion
+    file, so the deflated-Sharpe bar was never at risk; it was cherry-picked onto `main` before any
+    research work began and is in tonight's push. The per-run-branch default is routine; an unlanded
+    nightly is not, and the startup hook's warning was correct.**
 
 - **[2026-11-11] READ THIS BEFORE AIMING SESSION 90. The scalar-score vein is CLOSED on all three
   of its sides in one session, and what it leaves behind is not a question about the score — it is

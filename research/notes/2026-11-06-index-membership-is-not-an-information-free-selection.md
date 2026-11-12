@@ -190,6 +190,42 @@ discretionary component, not merely a rule-induced one), the standing reading is
 "`eligible` is just the big names" nor "`eligible` is a mechanical rule" is an available motivation
 for a candidate or for a benchmark description.
 
+## Annotation added 2026-11-12 — eligibility is a TREATMENT, and that gives it a propensity score
+
+This note establishes that a name becoming `eligible` is a selection on past performance. The
+matched-design vein closed over 2026-11-10/11/12 supplies the vocabulary in which that sentence
+becomes a buildable object, and the mapping is exact enough to be worth writing down.
+
+- **The selection is a treatment.** `eligible = 1` on a date is a treatment assignment, the
+  pre-treatment covariates are the name's observable characteristics before admission (trailing
+  volatility, trailing return, liquidity tier, nominal price level, region, listing market), and
+  the outcome is whatever the lab measures afterwards. Every statement in the matched-design
+  literature about non-random treatment assignment applies to it directly.
+- **A propensity score for it is therefore constructible from features this panel already holds.**
+  `pr(eligible | x)` — the conditional probability of admission given pre-admission characteristics
+  — is exactly Rosenbaum–Rubin's scalar balancing score
+  (`notes/2026-11-11-the-propensity-score-as-the-coarsest-balancing-score.md`, `#433`), and nothing
+  about fitting it needs data the lab does not have. The cheap route does not even need a fitted
+  model: `notes/2026-11-12-monotonic-imbalance-bounding-and-the-l1-measure.md` (`#436`) shows that
+  the share of admitted names within each coarsened covariate cell *is* a nonparametric estimate of
+  the same score, and expects it to balance better than a fitted logit because a logit optimises fit
+  rather than balance.
+- **And it is a balance diagnostic, not an effect estimate — because of the other note in this
+  cluster.** `notes/2026-11-08-committee-discretion-versus-the-published-admission-rule.md`
+  establishes that the admission rule as written is not the decision as made. A discretionary
+  component in the assignment is unobserved by construction, which is precisely the failure of
+  **strong ignorability** that `#418` records for this panel. So `pr(eligible | x)` built from
+  observable characteristics cannot be a sufficient conditioning set: no matched comparison on it
+  licenses a causal claim about what admission did. What it does license is a *description* of how
+  far the admitted and non-admitted groups differ on the covariates the lab can see — which is the
+  question the standing caveats in this note have been gesturing at without a name for it.
+- **What this changes in practice.** The caveat in this note stops being a warning and becomes a
+  measurement: `L₁` or the C statistic (`notes/2026-11-12-does-the-matching-paradox-bite-in-practice.md`,
+  `#438`) computed between eligible and not-yet-eligible names on a date is a number, free, and it
+  says how much of the admission selection the panel's observable covariates can account for. A
+  near-zero reading would mean admission is unpredictable from what the lab can see; a large reading
+  bounds how much of any measured effect is admission selection rather than the mechanism under test.
+
 ## Related
 
 - `2026-11-06-investability-frictions-and-the-microcap-screen.md` — the size half of the same

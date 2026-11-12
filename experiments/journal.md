@@ -29430,3 +29430,4 @@ corrupting the deflated-Sharpe bar for every later trial) **does not apply to th
 For the human owner: this is the twelfth consecutive session to start on a per-run branch and the
 first in which the branch could not be reset to `main` before work began. The per-run-branch
 generator remains the standing item.
+## Research session — 2026-11-12 (learning agent): 3 notes added, see research/SUMMARY.md
