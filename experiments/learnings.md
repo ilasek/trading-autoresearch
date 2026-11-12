@@ -7757,3 +7757,74 @@ across experiments; prune entries that later evidence contradicts.
   (independently corroborated here with a term structure rather than a precedent) the volatility
   pre-sort as a construction operator — its own conditional difference is **sign-unstable across
   horizons**, −0.0071 at h=21 against +0.0073 at h=252, |t| <= 1.46 throughout.
+
+- **[Measured 2026-11-11/12, nightly — a correction to this file's PRIMARY INSTRUMENT, not to any
+  gate] THE ONE-BIT REGION-MATCHED bps SCREEN IS UPWARD BIASED IN A SCORE'S CORRELATION TO
+  VOLATILITY, THE BIAS IS MONOTONE AND MEASURED ON INFORMATION-FREE SCORES, AND IT IS THE MECHANISM
+  BEHIND THIS FILE'S OWN "A CLEAN SCREEN IS NOT EVIDENCE".** The screen — mean forward return of the
+  top decile *within region* minus that region's eligible mean, in bps — is an **arithmetic** mean of
+  **simple** returns read against a **Sharpe** gate, which is approximately a log objective. For a
+  fixed median an arithmetic mean of simple returns rises with the slice's variance, so any score
+  that sorts on volatility in *either* tail reads positive with no signal at all. At h = 252, on
+  scores `w·rank(vol126) + (1−w)·rank(noise)` whose noise is i.i.d. and **carries no information
+  about returns**:
+
+      w on volrank   rho to vol126    simple bps        log bps         gap
+         0.00           +0.039        +55.8(+0.31)    +12.0(+0.07)     +43.9
+         0.25           +0.294       +222.8(+1.05)    -48.8(-0.28)    +271.7
+         0.50           +0.643       +290.2(+0.86)   -296.1(-1.02)    +586.3
+         0.75           +0.915       +531.2(+1.04)   -349.0(-0.73)    +880.2
+         1.00           +1.000       +512.5(+0.92)   -525.5(-1.03)   +1038.0
+
+  The gap is ~`1000 × rho_vol` bps at h252 and ~`230 × rho_vol` bps at h63, and it is **~zero for a
+  vol-orthogonal score** (+44 bps, t +0.07) — which is the clean form of the claim: the artifact is
+  the Jensen term, it is proportional to the score's volatility loading, and it vanishes when that
+  loading does. **Repair, one line: read the screen on `log1p` forward returns, and report
+  `simple − log` beside it as the variance toll the Sharpe gate will charge.** Three riders.
+  (i) **No gate, trial or recorded number is wrong because of this** — the gates were always
+  Sharpe-based; it is every *screen* reading in this file whose magnitude is affected.
+  (ii) **Entries closed on a null stay closed**: the bias inflates, it does not hide, so a bps null
+  is a log null or better. It is the entries whose case was a *positive* bps reading later refused by
+  a trial whose record should now carry the correction. (iii) **The negation-invariance screen's
+  verdicts stand but its stated reason was wrong**: an object positive on both signs in simple bps is
+  vol-correlated, not U-shaped — tonight's two jump objects read +499.8/+98.7 and +285.2/+178.0 at
+  h252 in simple bps and are flat nulls on both signs in log space. Re-read in log space before
+  calling anything U-shaped.
+
+- **[Measured 2026-11-11/12, nightly] M3 — THE OLD-HALF REVERSAL, THE ONLY OBJECT ON THE v3 BOARD
+  THAT CLEARS THE NULL GATE — SURVIVES THAT CORRECTION, AND BOTH ITS CONTROLS INVERT UNDER IT. THE
+  LAB'S ONE MECHANISM IS A GENUINE CROSS-SECTIONAL FIRST-MOMENT EFFECT.**
+
+      object                 sign  rho_vol    h63 simple / LOG          h252 simple / LOG
+      m3_oldhalf (lead)        +1   -0.178   +72.6(+2.36) +66.4(+2.29)  +299.9(+2.14) +259.3(+2.14)
+      m3_oldhalf (lead)        -1   -0.178   -29.0(-0.58) -56.4(-1.03)  -308.8(-1.45) -319.3(-1.16)
+      recent_half (control)    +1   -0.129   +90.5(+0.93) -29.7(-0.36)  +666.9(+1.14) -108.3(-0.23)
+      amihud126 (refuted)      +1   +0.085   +62.9(+1.26) +36.2(+0.78)  +527.2(+1.64) +297.1(+1.38)
+      -vol126 (refuted)        -1   -0.992   +92.7(+1.02)-135.0(-1.36)  +512.5(+0.92) -525.5(-1.03)
+
+  M3 attenuates **9% at h63 and 14% at h252 with no movement in `t`**, its `rho` to volatility is
+  **−0.178** so the artifact runs *against* it, its negation side stays correctly signed in log
+  space, and it reads the same on both date grids (quarterly: +64.8/+61.3 and +508.7/+444.9). Its own
+  matched control **inverts** — so `#13`'s recorded refusal was right and its apparent +667 bps at
+  h252 was the artifact in full — and `-vol126` inverts completely. `amihud126` loses 44% of its h252
+  reading and stays a null, so `liquidity-volume`'s closure is unaffected in verdict while part of
+  its magnitude was artifact. **Scope, stated because it is easy to over-read:** this changes no
+  recorded number. M3's validation skill is still **+0.124, 90% CI [−0.11, +0.42], DSR 0.1635**, and
+  `#393`'s power constraint is untouched. What it removes is the live possibility that the lab's only
+  positive object was a variance artifact, and it does so with an instrument that does not share the
+  bias every earlier screen of M3 shared.
+
+- **[Method, 2026-11-11/12] THE PHASE LOTTERY LIVES IN THE SCREEN AS WELL AS IN THE REBALANCE GRID,
+  AND ITS WORKED EXAMPLE COST NOTHING.** 2026-10-27/28 established that a coarse rebalance grid is a
+  phase lottery. The same is true of the *screen's* date grid at long horizons, where ~20
+  non-overlapping observations are all there are: `pead_sign_skip21` read **+510.4 bps (t +2.08)** at
+  h252 on the monthly grid and **+43.1 (t +0.12)** on the quarterly one — the same statistic, the same
+  object, a factor of twelve apart on a phase choice. **Standing rule added: read every long-horizon
+  screen cell on both date grids before believing it.** It is one line, and tonight it separated a
+  real object (M3, which agrees across grids) from an artifact (the PEAD proxy, which does not).
+  Anti-candidates travelling with this entry: **the jump/diffusion partition of the trailing return at
+  any threshold, window or sign, standalone or as a volume-split contrast** (3σ/63d and 2σ/126d, both
+  signs, four horizons, all null — and genuinely level- and vol-orthogonal, rho ≤ 0.06, so the null is
+  not a confound); **the signed PEAD proxy — the sign or standardised magnitude of the largest
+  volume-confirmed move in the trailing quarter, with or without a 21-day skip**; and **any object
+  whose case is a positive one-bit reading in simple bps alone**.

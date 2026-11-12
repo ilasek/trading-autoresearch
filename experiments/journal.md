@@ -29123,3 +29123,310 @@ None is holdout-informed; no holdout, forward or incubation number was read.
    `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation rules to read first.
 
 ## Research session — 2026-11-11 (learning agent): 3 notes added, see research/SUMMARY.md
+## Free measurements — 2026-11-11/12 (nightly), ZERO trials spent
+
+Six blocks. **Everything below is scored on train only (1997-01-01 → 2017-12-31)**: the price and
+aux frames are hard-truncated at `2017-12-31` in the harness's own loader before any score, rank,
+mask or forward return is formed, so no validation row entered any number on this page. **No
+holdout, forward or incubation file was opened**: `experiments/holdout_log.jsonl`,
+`reports/incubation.md`, `experiments/incubation.jsonl` and
+`experiments/protocol_v2/returns/*_holdout.parquet` were never opened or listed, and with no trial
+recorded there was no holdout gate to reach. Engine green on this tree
+(`.venv/bin/python -m pytest tests/ -q` → **92 passed in 30.31s**).
+
+Step-0 integrity: `git fetch origin --prune` clean; `git branch -r --no-merged origin/main`
+**empty** — no remote branch holds work absent from `origin/main`. The container again started on a
+per-run branch (`main-a5dglb`) sitting at the identical commit as `origin/main` (`4dc6a60`) with no
+commits of its own — **twelfth consecutive session**. This session's harness pins the branch name,
+so the work is pushed to `main-a5dglb` and needs the usual fast-forward onto `main`; see the branch
+note at the end.
+
+### Headline: the lab's most-used free instrument is UPWARD BIASED in a score's correlation to VOLATILITY, the bias is monotone, and it is measured on INFORMATION-FREE scores
+
+The one-bit region-matched screen — mean forward return of the top decile *within region* minus
+that region's eligible mean, in bps — is the first column of the standing screen quadruple and the
+instrument that has priced essentially every object in `learnings.md`. It is an **arithmetic** mean
+of **simple** forward returns. For a fixed median, an arithmetic mean of simple returns rises with
+the slice's variance, so any score that sorts on volatility in *either* tail reads positive with no
+signal at all. Measured, at h = 252, on scores built as `w·rank(vol126) + (1−w)·rank(noise)` where
+the noise is an i.i.d. draw and **carries no information about returns whatsoever** (F5a, 84
+quarterly train dates, 20 non-overlapping observations):
+
+    w on volrank   rho to vol126    simple bps        log bps         gap
+       0.00           +0.039        +55.8(+0.31)    +12.0(+0.07)     +43.9
+       0.25           +0.294       +222.8(+1.05)    -48.8(-0.28)    +271.7
+       0.50           +0.643       +290.2(+0.86)   -296.1(-1.02)    +586.3
+       0.75           +0.915       +531.2(+1.04)   -349.0(-0.73)    +880.2
+       1.00           +1.000       +512.5(+0.92)   -525.5(-1.03)   +1038.0
+
+So an information-free score with a 0.64 within-region rank correlation to volatility manufactures
+**+290 bps** of apparent decile excess in the units this lab screens in, and **the sign reverses in
+log space**. The gap is monotone in `rho` and is ~zero (+44 bps, t +0.07) for a score orthogonal to
+volatility, which is the clean form of the statement: **the artifact is exactly the Jensen term, it
+is proportional to the score's volatility loading, and it vanishes when that loading does.**
+At h = 63 the same curve runs +43.9 → +228 bps (F3: `vol126` simple +92.7 against log −135.0).
+
+**The repair, and it is one line of harness code:** read the one-bit screen on `log1p` forward
+returns, or report both and treat `simple − log` as the variance toll the Sharpe gate will charge.
+A Sharpe objective is approximately a log objective; a bps screen is an arithmetic one; the gap
+between them is the slice's variance. **This is the mechanism behind the lab's twelve-session
+pattern of "a clean screen is not evidence" and behind "every instrument this lab has built has
+failed on its pass side"** — the pass side was passing variance.
+
+**And it corrects the negation-invariance screen's REASON without changing its verdicts.** That
+screen refuses an object positive on both signs ("U-shaped"; refusal side was 3-for-3). Tonight's
+own objects read positive on both signs in simple bps (F2: `j2_all126` +499.8/+98.7, `j2_contrast126`
++285.2/+178.0 at h252) and are **flat nulls on both signs in log space** (F5b: −93.9/−73.1 for the
+contrast). They were never U-shaped; they were vol-correlated. The refusals stand; the stated reason
+for them was wrong, and a future object should be re-read in log space before being called U-shaped.
+
+### Second, and this is the better news: turned on the lab's OWN working mechanism, M3 SURVIVES the correction, while both controls INVERT
+
+F6 ran the corrected instrument on M3's parent score (the old-half reversal: minus the mean monthly
+return over months −120..−61, the score behind `#12`/`#16`/`#17`, the only object on the v3 board
+that clears the null gate), beside its own matched control and two refuted objects, on both date
+grids:
+
+    object                 sign  rho_vol    h63 simple / LOG          h252 simple / LOG
+    m3_oldhalf (lead)        +1   -0.178   +72.6(+2.36) +66.4(+2.29)  +299.9(+2.14) +259.3(+2.14)
+    m3_oldhalf (lead)        -1   -0.178   -29.0(-0.58) -56.4(-1.03)  -308.8(-1.45) -319.3(-1.16)
+    recent_half (control)    +1   -0.129   +90.5(+0.93) -29.7(-0.36)  +666.9(+1.14) -108.3(-0.23)
+    amihud126 (refuted)      +1   +0.085   +62.9(+1.26) +36.2(+0.78)  +527.2(+1.64) +297.1(+1.38)
+    -vol126 (refuted)        -1   -0.992   +92.7(+1.02)-135.0(-1.36)  +512.5(+0.92) -525.5(-1.03)
+    [monthly grid, 252 train dates; quarterly grid in F6 agrees: M3 h63 +64.8(+2.03)/+61.3(+1.96),
+     h252 +508.7(+2.84)/+444.9(+3.04)]
+
+Read it line by line, because each line is a different fact:
+
+- **M3 attenuates 9% at h63 and 14% at h252 and its `t` does not move** (+2.36 → +2.29; +2.14 →
+  +2.14). Its `rho` to volatility is **−0.178**, i.e. it mildly selects *low*-volatility names, so
+  the Jensen channel runs **against** it. **M3 is a genuine cross-sectional first-moment effect and
+  not a variance artifact.** This is the first corroboration M3 has had from an instrument that does
+  not share the bias every earlier screen of it shared, and it is the strongest positive statement
+  made about the lab's one mechanism under v3.
+- **Its own matched control INVERTS**: `recent_half` reads +90.5 / +666.9 in simple bps and
+  **−29.7 / −108.3** in log space. The recorded refusal of `pt_decade_recent_half_control`
+  (`#13`, skill −0.07) was right, and its apparent +667 bps at h252 was the artifact in full.
+- **The negation side is signed correctly** for M3 (−29.0 / −56.4 / −308.8 / −319.3) and stays so in
+  log space, so the object passes negation invariance in the corrected instrument too.
+- **M3 is stable across date grids**; the night's apparent survivor was not (next block).
+- `amihud126` loses 44% of its h252 reading (+527.2 → +297.1, t 1.64 → 1.38) and stays a null, so
+  `liquidity-volume`'s closure is unaffected in verdict and was partly resting on the artifact.
+
+### Third: the night's four new objects, all nulls, and the one that looked like a survivor was the artifact plus a phase lottery
+
+The night's hypotheses were aimed at the handover's one open requirement — a **cross-sectional
+first-moment** object, slow, level-orthogonal, from daily OHLCV (the previous three sessions'
+objects were all second-moment or variance-share, 3 of 3 failures of the same shape). The partition
+chosen was by **move size**, which the information-versus-pressure literature signs and which this
+lab had never run: it has partitioned the trailing return by *session* (overnight leg a null,
+2026-10-24/25) and never by *magnitude*.
+
+- **F1 — the 3σ jump/diffusion partition of the trailing 63-day return** (`jump_all`, `jump_hi`
+  restricted to days with volume ≥ 2× the trailing median, `jump_lo`, the `hi − lo` contrast, and
+  the diffusion complement). Null on both signs at all four horizons; max |t| 1.79 in 48 cells and
+  the same object reads +36.9 at the opposite sign. All four objects are genuinely level- and
+  vol-orthogonal (rho to log `P` ≤ +0.023, to `vol126` ≤ +0.061) so no control was even needed.
+  The partition is **thin**: 0.92 jump days per 63 at 3σ, so a null here could be power.
+- **F2 — the power repair**: 2σ over 126 days gives 6.7 events per window. Still null, and now in
+  the both-signs-positive shape the bias produces (+499.8/+98.7 and +285.2/+178.0 at h252).
+- **F4 — the signed PEAD proxy**, the object the limited-attention drift literature actually signs:
+  the sign and the standardised magnitude of the largest **volume-confirmed** move in the trailing
+  quarter, with and without a 21-day skip (coverage 467 names per date). `pead_sign_skip21` on the
+  monthly grid was the one object of the night with a monotone, single-signed, rising-in-horizon
+  profile and a correctly-signed negation side: **+30.3(+1.31) / +69.2(+0.97) / +133.1(+0.90) /
+  +510.4(+2.08)** against −12.4 / +4.0 / −48.8 / −92.9. It passed the lab's standing screen.
+- **F5b killed it twice over.** In log space it is **+28.1(+0.34)** at h63 and **+76.3(+0.23)** at
+  h252; and on the quarterly grid the simple-space h252 cell is **+43.1(+0.12)** against the monthly
+  grid's **+510.4(+2.08)** — the *same statistic on the same object*, a factor of twelve apart on a
+  phase choice, with ~20 non-overlapping observations either way. So the 2026-10-27/28 finding that
+  "a coarser rebalance grid is a phase lottery" **applies to the screen as well as to the book**, and
+  the screen's long-horizon cells are the lottery tickets. M3 is the counter-example that makes this
+  readable rather than nihilistic: it reads the same on both grids.
+
+### Fourth: what tonight did NOT establish, said plainly
+
+The corrected instrument does **not** move the board, the gate or the deflator. M3's recorded
+validation skill is **+0.124 with a 90% interval of [−0.11, +0.42] and a DSR of 0.1635**; nothing
+tonight changes any of those numbers, and nothing tonight is a validation reading. The binding
+constraint named by the last two sessions — that the design's power, not its search, is what refuses
+everything (`#393`) — is untouched. What changed is that the lab's one positive object is now
+corroborated by an instrument that does not share the bias its earlier screens shared, and that
+every future object has a screen whose pass side is not measuring variance.
+
+### Verdicts
+
+None. No trial was recorded, no verdict was assigned, no candidate file was written.
+`experiments/trials.jsonl` stays at **138 records / 27 scored v3 trials**, `leaderboard.json` is
+untouched, the board still has no v3 champion and no positive skill interval excluding zero.
+
+### What the night bought, stated without inflation
+
+No book, no verdict, no movement on the board. What it bought: a **signed, monotone, quantified bias
+in the lab's most-used free instrument**, demonstrated on information-free scores and repaired in one
+line; the **reason** behind two of the lab's own standing meta-findings (the pass side of every
+instrument failing, and "a clean screen is not evidence"), which were descriptions and are now a
+mechanism with an exchange rate; a **correction to the stated reason of the negation-invariance
+screen** that leaves its verdicts standing; **the first bias-independent corroboration of M3**, with
+its own matched control inverting under the same correction, which is the single most load-bearing
+thing on this page; the phase lottery shown to live in the screen and not only in the rebalance
+grid; and four new objects built, screened and closed free — with the honest note that one of them
+would have cost a trial under last night's instrument.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Run the one-bit screen on `log1p` forward returns from now on, and report `simple − log` beside
+   it.** The gap *is* the variance toll the Sharpe gate will charge, it is ~`1000 × rho_vol` bps at
+   h252 and ~`230 × rho_vol` bps at h63, and it is ~zero for a vol-orthogonal score. Provenance:
+   tonight, F3/F5a. **Do not quote a pass side even in log space** — the standing rule holds; what
+   tonight bought is a refusal side that is no longer confounded.
+2. **Read every long-horizon screen cell on BOTH date grids before believing it.** `pead_sign_skip21`
+   moved from +510(+2.08) to +43(+0.12) on a phase choice at the same ~20 non-overlapping
+   observations; M3 moved from +299.9 to +508.7 and kept its `t`. Agreement across grids is cheap and
+   it separated a real object from an artifact tonight in one line. Provenance: tonight, F5b/F6.
+3. **M3 deserves one bias-independent *construction* question, not another score.** Its edge survives
+   in log space with `rho_vol = −0.178`, so the one thing worth asking is whether the **long-only
+   log-space edge is in the top decile or spread across the upper half** — F6 measured a decile, and
+   `#16`'s book holds 100 of ~1,000. Free, train-only, no trial: run the log-space decile statistic
+   at frac = 0.05 / 0.10 / 0.25 / 0.50 and read the shape. If it is flat to 0.25, the family's
+   breadth question reopens *in the corrected instrument*, which is the one axis 2026-11-08/09 closed
+   using the biased one.
+4. **Re-read the standing anti-candidate list's bps-based entries in log space before trusting their
+   magnitudes — but do NOT reopen them as candidates on that basis alone.** `amihud126` lost 44% of
+   its h252 reading tonight and stayed a null; `recent_half` inverted. Every entry closed on a *null*
+   stays closed (the bias inflates, it does not hide). The entries whose case was a *positive* bps
+   reading later refused by a trial are the ones whose record should carry the correction, because
+   the lab now knows where that gap came from. Provenance: tonight, F6.
+5. **For the human owner, one new item and the standing list.** New: **the lab's primary free screen
+   has been reading an arithmetic-mean statistic against a Sharpe gate for the whole of v3, and the
+   gap between them is a monotone function of the score's volatility loading worth up to +1038 bps at
+   h252 on information-free scores.** No gate, trial or recorded number is wrong because of it — the
+   gates were always Sharpe-based — but every *screen* in `learnings.md` that passed a vol-correlated
+   object on bps was reading partly that artifact, and the one object on the board that clears the
+   null gate is now shown *not* to be one of them. Standing and unchanged: the two engine issues as
+   filed (2026-10-18 / 2026-10-22), `min_train_skill = 0.0`, `#324`'s deliberate difference, `#358`'s
+   empirical-Bayes shrinkage of the bar, the data-type question, `#393`'s minimum-detectable-skill
+   arithmetic, `#396`'s tension between `program.md`'s spend-across-families rule and what the design
+   can measure, `#407`'s rule-induced comovement inside the pool, `#418`'s discretionary component in
+   the benchmark's membership, `#422`'s volume-only liquidity tier, the note format's missing
+   holdout-overlap flag, the `dataclasses.replace`/`pool_cache` trap, last night's reporting question
+   about the rebalanced reference portfolio, and the per-run-branch generator (**twelve** consecutive
+   sessions, and tonight's run additionally pins the branch name so the work needs a fast-forward).
+6. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — **the
+   jump/diffusion partition of the trailing return at any threshold, window or sign**, standalone or
+   as a volume-split contrast (3σ/63d and 2σ/126d both measured, both signs, all four horizons);
+   **the signed PEAD proxy — the sign or standardised magnitude of the largest volume-confirmed move
+   in the trailing quarter — with or without a 21-day skip** (its one passing cell is the artifact
+   plus a phase choice, and it is now the cleanest worked example of both); and **any object whose
+   case is a positive one-bit reading in simple bps alone**. Unchanged from previous handovers: the
+   Lo-MacKinlay variance ratio at any scale, window or sign; the variance ratio as a conditioner on
+   the old-half reversal or any selection score; the membership-tenure / pool-minus-recent-entrants
+   book at any tenure threshold; turnover as a route to the null gate; `segmentation` and `beta_trend`
+   at any window or sign; the scale-free left-tail exponent and the own-return tail index in any form;
+   the semi-deviation ratio; time-underwater; annual-rank stability; any screen beyond 63 days without
+   the within-region log-`P` control; the `log(MA_L/P)` term structure at any scale set; plain
+   multi-horizon own-trend in any learned combination; `#388`'s forecast floor; the full-cross-section
+   decision IC as a reachable quantity; downside correlation and the downside loading in any form;
+   coskewness and the third co-moment in any form; the volatility-tercile pre-sort as a construction
+   operator; any paired candidate whose two legs share a score; any hypothesis whose case is a train
+   sheet, a matched-null z or a negation-invariant margin; any hypothesis whose novelty case is a
+   cross-sectional rank correlation or the pass side of the train active-return screen; the closing-
+   location value; the overnight session at either normaliser; the turn-of-month differential on
+   either sign; the coefficient of variation of share volume; the quarter-ending-month conditioner on
+   momentum; plain 12-1 momentum; any equity-ETF book; the bond sleeve as a duration bet; the 2–4-week
+   index-level relative-strength score on either sign; the liquidity level or trend in any form;
+   52-week-high proximity; information discreteness; covariance weighting at any estimator; weighting
+   inside the selected slice; the exclusion / pool-minus-worst book at any `f`; `#385`'s
+   IC-decorrelation blend; the #16/#19 blend; and any construction whose case is cost at any turnover
+   or a tighter error bar.
+7. **From `research/SUMMARY.md`.** Spent tonight: nothing was spent as a *build*, and that is worth
+   recording precisely. `#433`–`#435` (2026-11-11: the propensity score as the coarsest balancing
+   score, matching on the estimated score, the PSM paradox) were read in full and are **methodology
+   for matched designs, not scores**; `#433` says in its own text that everything built on it here is
+   "a descriptive balance diagnostic and never an effect estimate", so none of the three is a
+   candidate and none was treated as one. **`#435`'s most valuable line was used tonight in a form
+   its author did not intend**: "pruning a sample for a reason uncorrelated with the comparison being
+   made raises that comparison's variance … this lab prunes constantly and has never asked of a screen
+   whether what it removes is correlated with what is being measured." Tonight's finding is the same
+   question asked of the *statistic* rather than the *sample* — whether what the screen **measures**
+   is correlated with what it is being read as — and the answer was yes, at up to +1038 bps.
+   **`#380`'s refusal was respected and then tested free**: it says no trial should be spent on a
+   volume-conditioned re-test, and no trial was; the volume conditioning entered only as an event
+   classifier inside a free screen, and it was a null there too, which corroborates `#380` from a
+   third direction. `#406`'s construction was **not** built: its volatility-tercile pre-sort is on the
+   standing anti-candidate list, so the note is closed here by the lab's own record rather than by
+   measurement. Still live and unspent: `#386`/`#387`'s `R²`/`S²` yardstick, `#389`'s cumulative
+   active-return curve, `#381`'s `σ_IC`, `#411`'s newly-eligible cohort scout (second-moment only per
+   `#412`, and its first moment is priced at the benchmark level by 2026-11-10/11's F1), `#415`'s free
+   refusal test, `#416`'s reading rule, `#420`–`#422`, `#426`, `#431`, and `#407`–`#410`,
+   `#417`–`#419`. **`#363` is NOT live** (closed 2026-11-02/03); **`#432` is NOT live** (priced and
+   closed 2026-11-10/11). `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation
+   rules to read first.
+
+## Session summary — 2026-11-11/12 (nightly) — 0 trials of 8; the lab's primary free screen was measuring variance on its pass side, and the one object on the board that clears the gate is NOT one of the things it was measuring
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 27 scored v3 trials**, the v3 board is
+unchanged, the deflated bar is unchanged, no candidate file was written, and no verdict was assigned.
+Six free blocks ran. **No holdout, forward or incubation file was opened**, and with no trial
+recorded there was no holdout gate to reach. Engine green (**92 passed in 30.31s**). Step-0 integrity
+clean: no remote branch holds work absent from `origin/main`; the container's per-run branch
+(`main-a5dglb`) sat at `origin/main`'s commit (`4dc6a60`) with no commits of its own — twelfth
+consecutive session.
+
+**Why zero.** The night built the object class the handover asked for — cross-sectional,
+first-moment, slow, level-orthogonal, from daily OHLCV, partitioned by move size rather than by
+session — in four variants, and all four were nulls. One of them (`pead_sign_skip21`) **passed the
+lab's standing screen** on the monthly grid at +510 bps and t +2.08, and would have cost a trial.
+It was then shown to be the Jensen artifact plus a phase choice. **This is the eighth zero-trial
+session of the last fourteen, and tonight is the first of them whose reason is that an instrument
+was wrong rather than that the objects were empty.**
+
+**Best finding.** The one-bit region-matched bps screen — the first column of the standing screen
+quadruple and the instrument behind most of `learnings.md` — is an arithmetic mean of simple returns
+read against a Sharpe gate. On **information-free** scores its reading rises monotonically with the
+score's within-region rank correlation to volatility: **+55.8 → +222.8 → +290.2 → +531.2 → +512.5
+bps** at `rho` **+0.04 → +0.29 → +0.64 → +0.92 → +1.00** (h252), inverting to **+12.0 → −525.5** in
+log space, a gap of **+44 → +1038 bps**. Repair: read it on `log1p` forward returns and report
+`simple − log` as the variance toll. **Second finding, and the more consequential one:** turned on
+M3 — the old-half reversal, the only object on the v3 board that clears the null gate — the
+correction costs it **9% at h63 and 14% at h252 with no movement in `t`** (+2.36 → +2.29; +2.14 →
++2.14), its `rho_vol` is **−0.178** so the artifact runs against it, and it reads the same on both
+date grids; while its own matched control `recent_half` **inverts** (+666.9 → −108.3) and `-vol126`
+**inverts** (+512.5 → −525.5). M3 is a genuine cross-sectional first-moment effect.
+
+**Next ideas** (full list in the block above): adopt the log-space screen and the two-grid
+agreement check as standing rules; ask M3's breadth question in the corrected instrument (`frac` =
+0.05/0.10/0.25/0.50, free, train-only), since the breadth axis was closed in 2026-11-08/09 using the
+biased statistic; and carry the correction into the record of every anti-candidate whose case was a
+positive bps reading, without reopening any of them as candidates on that basis. Provenance from
+`research/SUMMARY.md`: `#433`–`#435` read and recorded as matched-design methodology rather than
+scores; **`#435`'s "has never asked of a screen whether what it removes is correlated with what is
+being measured" is the line tonight's headline answers**, asked of the statistic instead of the
+sample; `#380`'s refusal respected and corroborated a third time; `#406` closed against the lab's own
+anti-candidate list rather than by measurement.
+
+**Verdicts:** none.
+
+## Branch note — 2026-11-11/12 (nightly): this session's work is on `main-a5dglb`, awaiting the usual fast-forward
+
+Step 0 was clean — `HEAD` was exactly `origin/main` (`4dc6a60`), `git branch -r --no-merged
+origin/main` was empty, and no previous session's work is stranded. What is different from the last
+eleven sessions is that this run's harness **pins the branch name** (`main-a5dglb`) and forbids
+pushing to any other branch, so the integrity check's prescribed `git checkout main` was not
+available to this session and the night's commits are on `main-a5dglb` rather than on `main`.
+
+`main-a5dglb` branched from `origin/main`'s tip and carries only this session's journal and learnings
+commits, so **a fast-forward merge of `main-a5dglb` into `main` lands it with no conflict and no
+history rewrite**. Until that happens, the next session's step 0 will correctly report
+`main-a5dglb` under `git branch -r --no-merged origin/main` and should treat it as *this* entry
+rather than as an unexplained stranded branch: it is named here, its content is this night's two
+findings and zero trials, and **no trial record, leaderboard entry or champion file is in it** — so
+the split-history hazard the 2026-08-16 protocol issue describes (a divided `trials.jsonl` silently
+corrupting the deflated-Sharpe bar for every later trial) **does not apply to this branch**, because
+`trials.jsonl` was not touched.
+
+For the human owner: this is the twelfth consecutive session to start on a per-run branch and the
+first in which the branch could not be reset to `main` before work began. The per-run-branch
+generator remains the standing item.
