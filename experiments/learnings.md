@@ -7828,3 +7828,110 @@ across experiments; prune entries that later evidence contradicts.
   not a confound); **the signed PEAD proxy — the sign or standardised magnitude of the largest
   volume-confirmed move in the trailing quarter, with or without a 21-day skip**; and **any object
   whose case is a positive one-bit reading in simple bps alone**.
+
+- **[Measured 2026-11-12/13, nightly — free, train only] A SCORE'S OWN-HISTORY DEPTH IS A HARD
+  CONSTRAINT ON THIS PANEL, AND IT IS THE BINDING ONE FOR THE LAB'S ONE LIVE OBJECT.** M3's parent
+  score (the old-half reversal) needs ~108 months of a *name's own* monthly history. On this panel
+  that yields **0 scorable eligible names before 1999, 33-36 — all US — through 2003, 242 in 2005,
+  and 818 by 2017**, with **one** region clearing 20 scorable names until 2009 and six from 2013.
+  `#16` requires `len(sc) >= 50` to pick and holds the equal-weight pool otherwise, so **its book
+  does not exist for the first seven to eight years of the train split**, and the protocol's reported
+  `1997-2008` sub-period is a window in which the book held the pool for about two thirds of its
+  length. **Standing rule: screen every new score for own-history depth before anything else.** A
+  score needing `m` months of own history has a usable cross-section on this panel only from roughly
+  `1990 + m/12 + 5`; at `m = 108` that is 2005. This applies to all six M3-lineage trials (`#12`-`#17`),
+  so the protocol's train sub-period columns mean something different for them than for a 126-day
+  score. One block, and it was worth running before each of those six.
+
+- **[Measured 2026-11-12/13, nightly — free, train only] `#389`'s CUMULATIVE ACTIVE-RETURN CURVE RUN
+  FOR THE FIRST TIME, AND M3's TRAIN CASE IS FOUR YEARS ON A 23-NAME SINGLE-REGION BOOK.** Gross,
+  monthly, within-region top-10%, against the equal-weight eligible pool on the same days:
+
+      start   n    total      t     2nd half (t)    ex-best-12m      max underwater   up-months
+      1997   166  +4643bps  +2.66   +1115(+0.95)    +3046 ( 66%)          72m            60%
+      2005   155  +3048bps  +1.87   +1149(+0.99)    +1916 ( 63%)          72m            59%
+      2009   107   +558bps  +0.44    +484(+0.51)     -383 (-69%)          72m            54%
+
+  **82% of the twenty-one-year drift is 2004-2008** (+3803 of +4643), on a book of **23-29 names, all
+  US**. From 2009 — the only era with a real cross-section — the whole gross selection channel is
+  **+558 bps over nine years, `t` +0.44**, and it goes **negative** once its best twelve months are
+  removed. Graded on Goyal-Welch's four conditions as `#389` translates them: significance and upward
+  drift pass; **condition 3 (drift not concentrated in one short stretch) fails outright**; condition 4
+  fails on power. By `#390`'s taxonomy that is the **low-power** signature (poor late, not negative)
+  rather than mis-specification, so the object is **weakened, not closed** — n = 107 at `t` +0.44
+  cannot tell a null from a +190 bps/yr effect. **Standing rule: run `#389` on every object before a
+  candidate file is written, and read the ex-best-12-months statistic** — it is one line and it
+  separated M3 (66% of the drift survives) from its own matched control `recent_half` (**9%**) and from
+  two objects that go *more* negative. **Consequence for the record:** `#16`'s reported 2009-2017 train
+  skill of +0.053 is **not its selection channel**, which is +93 bps/yr at `t` +0.64 all-region over
+  that window — consistent with `#16`'s own F6 null, where the overlapping-sleeve operator hands a
+  *meaningless* score +0.0167 of net skill. Nothing here moves a recorded number, the board, the gate
+  or the deflator; M3's validation skill is still +0.124, 90% CI [−0.11, +0.42], DSR 0.1635. What it
+  removes is the basis for building on M3.
+  **Anti-candidate travelling with this entry: the US-only (or non-US-only) restriction of M3, or of
+  any score, justified by a region split.** M3 is a US effect — US +189 bps/yr (`t` +1.25) against the
+  five non-US regions' **−72 (`t` −0.35)** over 2009-2017 — but the claim exists only in paired form,
+  where it is **+224 bps/yr, `t` +1.05, 90% CI [−127, +574]**. The interval contains zero comfortably;
+  this is "a hypothesis whose case is a train sheet".
+
+- **[Method, 2026-11-12/13 — CORRECTS the 2026-11-11/12 entry above in half its domain] THE JENSEN
+  TOLL IS CONFIRMED ON REAL SCORES AT THE PREDICTED SLOPE, AND IT HIDES AS WELL AS INFLATES.** The
+  toll (`simple − log` bps) measured on nine real scores at frac 0.10, each with its own within-region
+  `rho_vol`, is monotone and **crosses zero where `rho_vol` does** — an independent corroboration of
+  the information-free calibration:
+
+      rho_vol   -1.00  -0.69  -0.43  -0.24  -0.17  +0.02  +0.08  +0.17  +0.24  +0.43  +0.69  +1.00
+      toll h252  -401   -328   -184    -58    +79    -53    +61   +261   +413   +749   +780   +991
+
+  **So "every entry closed on a null stays closed — the bias inflates, it does not hide" is true only
+  for `rho_vol > 0`.** For a score whose selected slice is *low* volatility the toll is negative and
+  the simple-bps screen reads **below** the truth. Three standing anti-candidates were closed on
+  readings the bias ran against (h63 → h252, simple → log): `lowvol126` −79.0/−286.7 → **+19.0/+114.1**;
+  `lowbeta252` −88.5/−293.0 → **−9.5/+34.5**; `prox52w` −46.2/−146.7 → **+4.6/+37.1**. All three move
+  from clearly negative to **flat**; **every verdict stands** (none reaches a positive with a usable
+  `t`) and only the recorded reason changes. The correction is worth more than the verdicts: it
+  **unifies the log-space screen with the lab's own "Sharpe is flat in beta on this panel" mechanism**
+  (2026-10-09/10, measured directly), which predicts exactly zero log-space excess and a toll equal to
+  the whole simple-bps reading for a pure risk score. The simple-bps screen had been contradicting the
+  direct measurement; the log-space one agrees with it.
+
+- **[Method, 2026-11-12/13] RUN THE JOINT MANDATORY CONTROLS *BEFORE* ANY REGION OR BREADTH SWEEP, NOT
+  AFTER — THE ORDERING IS WORTH A `t` OF +2.80.** A region sweep of the nine-score battery over
+  2009-2017, run **without** the within-region log-`P` control at a horizon far beyond 63 days,
+  nominated `amihud126` at **+1036 bps/yr (`t` +2.80) on US and +510 (`t` +2.77) on non-US** — the only
+  score positive and significant in *both* halves of the panel, four times M3's US reading. Amihud is
+  `|r| / (close × volume)`, i.e. proportional to `1/price`, and therefore a direct function of the
+  back-adjusted level the engine issues of 2026-10-18 / 2026-10-22 are filed about. Under **both**
+  controls applied jointly (rank-space OLS residual on log `P` and `vol126`, within region, before any
+  selection) it is **−99, `t` −0.66**: **110% of the reading gone and the sign inverted.** Third
+  independent reproduction of the contaminant, now at book level rather than IC level, and
+  `liquidity-volume`'s closure is reconfirmed from a direction the record did not have. Two riders from
+  the same table: **`rank_stability` is the only score the control strengthens into significance**
+  (US +212 → **+483, `t` +2.10**) and its non-US twin dies (+235 → +45, `t` +0.27), so by the paired
+  logic above it is not evidence and `annual-rank stability` **stays closed** — with the new note that
+  the control *raises* it; and **`lowvol126` has now been read as a negative by two independent biases
+  that both run against it** (the Jensen toll and the level contaminant), reading +376 bps/yr (`t` +1.14)
+  on US and +22 (`t` +0.10) on non-US once corrected for both — a null, which is the third instrument to
+  converge on "flat in beta". **Anti-candidate: raw Amihud or any `1/price`-proportional construction
+  at any window.**
+
+- **[Measured 2026-11-12/13] THE BREADTH AXIS IS CONFIRMED CLOSED IN THE CORRECTED INSTRUMENT, FROM
+  BOTH DIRECTIONS.** The 2026-11-11/12 handover asked for M3's breadth question at frac =
+  0.05/0.10/0.25/0.50 in log space, to reopen the axis if the reading were "flat to 0.25". **It is not
+  flat** (log bps, monthly grid; quarterly in parentheses):
+
+      frac    names        h63 LOG              h252 LOG
+      0.05      19    +124.1 (+96.0)        +287.4 (+250.5)
+      0.10      37     +72.4 (+63.8)        +326.3 (+269.8)
+      0.25      93     +55.1 (+61.7)        +217.1 (+222.2)
+      0.50     186     +20.5 (+13.2)        +127.3 (+111.0)
+
+  The per-name reading **decays** — 0.10 → 0.25 costs 18-33% across the four cells, 0.25 → 0.50 a
+  further 62-79% — and a book earns the per-name excess on its whole book, so that is a declining
+  active return. **The 2026-11-08/09 closure is confirmed rather than reopened**, now from an
+  instrument that does not share the bias the original used, and the two compose into a refusal from
+  both directions: widening lowers the bar but collapses the edge (z +4.07/+2.57/−1.29 at
+  K = 100/250/400), narrowing raises the edge but raises the bar with it (null sd 0.0255 at 144
+  positions against 0.0128 at 324). `#16` already sits at frac ≈ 0.17. **No construction route remains
+  in either direction**, which together with 2026-11-10/11's benchmark and turnover closures leaves
+  `margin` responding to selection alone.

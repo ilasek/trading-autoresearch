@@ -29431,3 +29431,388 @@ For the human owner: this is the twelfth consecutive session to start on a per-r
 first in which the branch could not be reset to `main` before work began. The per-run-branch
 generator remains the standing item.
 ## Research session — 2026-11-12 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Free measurements — 2026-11-12/13 (nightly), ZERO trials spent
+
+Six blocks. **Everything below is scored on train only.** The harness's own loader
+(`loader.load_train`) hard-truncates `prices` and every `aux` panel at `2017-12-31` before any
+score, rank, mask, residual or forward return is formed, and the eligibility panel is rebuilt from
+the truncated frames, so no validation row entered any number on this page. Decision dates are
+additionally restricted to the train split proper (`1997-01-01` onward) except where a block states
+otherwise. **No holdout, forward or incubation file was opened**: `experiments/holdout_log.jsonl`,
+`reports/incubation.md`, `experiments/incubation.jsonl` and
+`experiments/protocol_v2/returns/*_holdout.parquet` were never opened or listed, and with no trial
+recorded there was no holdout gate to reach. Engine green on this tree
+(`.venv/bin/python -m pytest tests/ -q` → **92 passed in 37.35s**).
+
+Step-0 integrity: `git fetch origin --prune` clean. `git branch -r --no-merged origin/main` reported
+**`origin/main-a5dglb`**, and the startup hook escalated it as possible stranded work. It is not:
+`git cherry origin/main origin/main-a5dglb` returns **`- f0f68e6`**, i.e. the branch's single commit
+is already patch-equivalent upstream (it landed on `main` as `e865fd9`), and
+`git diff origin/main origin/main-a5dglb` shows the branch strictly *behind* — it lacks the
+2026-11-12 data refresh and research notes and holds nothing `main` does not. **The 2026-11-11/12
+branch note's requested fast-forward has happened; no trial record, leaderboard entry or champion
+file was ever in it.** `origin/main-a5dglb` is now a stale duplicate and can be deleted by the human
+owner at will. The container started on a per-run branch (`main-prbqmr`) sitting at `origin/main`'s
+commit (`065272c`) with no commits of its own; it was reset to `main` before any work —
+**thirteenth consecutive session**.
+
+### Headline: the lab's one live object is THINNER than the record says — 82% of M3's train drift is a four-year stretch on a 23-29-name SINGLE-REGION book, and its post-2009 selection channel is +93 bps/yr at t +0.64
+
+F3's coverage audit is the load-bearing measurement of the night, and it was not the question the
+night set out to ask. M3's parent score (the old-half reversal: minus the mean monthly return over
+months −120..−61) needs ~108 months of a name's own monthly history, and on this panel that is
+far scarcer than the train split's length suggests. Scorable eligible names, by year:
+
+    1997  1998  1999  2000  2001  2002  2003  2004  2005  2006  2007  2008  2009 ... 2017
+       0     0     0    33    34    35    36    36   242   257   265   291   305 ...  818
+    regions with >=20 scorable names:
+       0     0     0     1     1     1     1     1     1     1     1     1     1       6
+
+So the score is **computable for zero names before 1999**, for **33-36 names, all US, from 1999 to
+2003**, and only reaches a real cross-section in 2005. `#16`'s own file requires `len(sc) >= 50` to
+pick and holds the equal-weight pool otherwise, so **its book does not exist for the first seven to
+eight years of the train split**, and the protocol's reported `1997-2008` sub-period is a window in
+which the book held the pool for roughly two thirds of its length. This is not in the record.
+
+Run `#389`'s cumulative active-return curve (gross, monthly, within-region top-10%, against the
+equal-weight eligible pool on the same days) and the consequence is visible at every point rather
+than at the two the protocol reports:
+
+    start   n    total      t     1st half  2nd half (t)   ex-best-12m        max uw   up-months
+    1997   166  +4643bps  +2.66    +3528     +1115(+0.95)  +3046 ( 66%)        72m        60%
+    2005   155  +3048bps  +1.87    +1899     +1149(+0.99)  +1916 ( 63%)        72m        59%
+    2009   107   +558bps  +0.44      +73      +484(+0.51)   -383 (-69%)        72m        54%
+
+    per calendar year (bps):  2004 +1257 | 2005 +663 | 2006 +649 | 2007 +634 | 2008 +600
+                              2009 +277 | 2010 -425 | 2011 -146 | 2012 -146 | 2013 +607
+                              2014   -5 | 2015 +416 | 2016 +105 | 2017 +157
+    mean names selected:      2004  23  ...  2008  29  ...  2012  53  ...  2017  77
+
+Graded on Goyal-Welch's four conditions as `#389` translates them: **(1) significant** — yes gross,
+t +2.66, and M3 is the only object in tonight's battery whose up-month share clears 50% (60% against
+45-48%); **(2) generally upward drift** — yes, no inversion; **(3) drift not concentrated in one
+short stretch** — **fails**: 2004-2008 is +3803 of +4643, **82% of twenty-one years in four**, and
+removing only the best twelve months leaves 66%, against 9% for its own matched control
+`recent_half` and a *more negative* total for `lowvol126` and for M3's own negation; **(4) still
+positive late** — **fails on power**: from 2009, the only era with more than ~30 names or more than
+one region, the whole gross selection channel is **+558 bps over nine years, t +0.44**, and it goes
+**negative** once its best twelve months are removed. Six years is the longest the cumulative curve
+spends underwater, at every start date.
+
+By `#390`'s taxonomy this is the **low-power** signature (poor late but not negative) rather than the
+mis-specification one (fine early, deteriorating into negative territory) — so the correct reading
+is *absence of support in the only well-covered window*, not evidence that M3 is dead. The
+distinction matters and tonight cannot settle it: n = 107 months at t +0.44 cannot tell a null from
+a +190 bps/yr effect.
+
+**What this does to the record, stated precisely.** It does not move the board, the gate, the
+deflator or any recorded number, and it is not a validation reading. It does not contradict
+2026-11-11/12's F6, which established that M3 is not a *variance* artifact (`rho_vol` −0.178, the
+Jensen channel running against it); tonight's finding is about the *sample*, not the statistic, and
+both can be true. What it does do is remove the basis for building on M3: **`#16`'s reported
+2009-2017 train skill of +0.053 is not its selection channel**, because the selection channel over
+that window is +93 bps/yr all-region at t +0.64. That is consistent with `#16`'s own F6 null, which
+measured the overlapping-sleeve operator handing a *meaningless* score +0.0167 of net skill — i.e.
+the record already says two thirds of `#16`'s gain over `#12` is mechanical, and tonight says the
+remaining third has no train support after 2009.
+
+### Second: M3 is a US effect, non-US carries none of it, and the tradeable version of that is refused on arithmetic
+
+Pre-2009 the within-region screen has exactly one region; from 2009 it has six. Holding the region
+fixed separates epoch from region (gross, monthly, top-10% within region):
+
+    window                       n    bps/yr      t     up-months
+    US   1999-03..2004-12       70     +321    +0.46      54%     (33-36 scorable names)
+    US   2005-01..2008-12       48     +643    +2.59      69%
+    US   2009-01..2017-12      108     +189    +1.25      56%
+    non-US 2009-03..2017-12    106      -72    -0.35      48%     (157-429 scorable names)
+    all-region 2009-2017       108      +93    +0.64      55%
+
+So the post-2009 weakness is **part** region dilution: US alone is +189 bps/yr where all-region is
++93, and the five non-US regions — which are all of the panel's post-2009 breadth growth — carry
+**−72 bps/yr over nine years**. The obvious candidate is a US-only M3 book. **It is refused before
+it is written**, because the region claim has an error bar only in paired form:
+
+    US minus non-US, same 106 months, 2009-03..2017-12:
+      +18.6 bps/month = +224 bps/yr, sd 183, t +1.05, 90% CI [-127, +574] bps/yr
+
+The interval contains zero comfortably. A candidate whose entire case is a t +1.05 paired train
+difference is exactly "a hypothesis whose case is a train sheet", which the standing list refuses.
+**Declined, and added to the anti-candidate list with the number so a later session does not re-buy
+it.** The same arithmetic refuses the complement (a non-US-only book) more firmly.
+
+### Third: last night's correction is confirmed on REAL scores with the predicted slope — and its stated consequence is WRONG in one half, where the bias HIDES instead of inflating
+
+2026-11-11/12 demonstrated the Jensen toll on *information-free* scores and predicted
+`toll ≈ 1000 × rho_vol` bps at h252. F2 reproduces it from a different design — nine real scores,
+each with its own measured within-region `rho_vol`, read at frac 0.10 on both date grids, both signs
+— and the toll is monotone in `rho_vol` and **crosses zero where `rho_vol` does**:
+
+    rho_vol   -1.00  -0.69  -0.43  -0.24  -0.17  +0.02  +0.08  +0.17  +0.24  +0.43  +0.69  +1.00
+    toll h252  -401   -328   -184    -58    +79    -53    +61   +261   +413   +749   +780   +991
+
+That is an independent corroboration of the slope and of the mechanism. **But handover idea #4 said
+"every entry closed on a null stays closed (the bias inflates, it does not hide)", and that is true
+only for `rho_vol > 0`.** For a score whose selected slice is *low* volatility the toll is negative,
+so the simple-bps screen reads **below** the log-space truth, and three of the lab's standing
+anti-candidates were closed on readings the bias was running against (monthly grid, frac 0.10):
+
+    score         rho_vol   h63 simple -> LOG      h252 simple -> LOG
+    lowvol126      -1.000    -79.0 ->  +19.0       -286.7 ->  +114.1
+    lowbeta252     -0.688    -88.5 ->   -9.5       -293.0 ->   +34.5
+    prox52w        -0.426    -46.2 ->   +4.6       -146.7 ->   +37.1
+
+All three move from **clearly negative** to **flat**. **Every verdict stands — none reaches a
+positive with a usable `t`** — but the recorded *reason* was wrong in sign, and the correction is
+worth more than the verdicts: it **unifies the log-space screen with the lab's own strongest
+mechanism-level finding.** "Sharpe is flat in beta on this panel, so risk-reduction is not a source
+of skill" (2026-10-09/10, measured directly off beta and slice returns) predicts that a pure risk
+score earns exactly the pool's return — i.e. **zero** log-space excess and a toll equal to its whole
+simple-bps reading. That is what the table says. The simple-bps screen disagreed with the direct
+measurement; the log-space screen agrees with it. Two instruments that were in conflict now are not.
+
+M3 remains the only object in the battery positive in log space at both horizons, on both grids, with
+a correctly-signed negation side (h63 +72.4/+63.8, h252 +326.3/+269.8; negation −55.1/−94.7 and
+−226.6/−289.0).
+
+### Fourth: the handover's named task, discharged NEGATIVELY — breadth does not reopen
+
+Idea #3 asked for M3's breadth question in the corrected instrument at frac = 0.05/0.10/0.25/0.50,
+with "if it is flat to 0.25, the family's breadth question reopens". **It is not flat.** Log-space
+readings (monthly grid; quarterly in parentheses):
+
+    frac    names        h63 LOG              h252 LOG
+    0.05      19    +124.1 (+96.0)        +287.4 (+250.5)
+    0.10      37     +72.4 (+63.8)        +326.3 (+269.8)
+    0.25      93     +55.1 (+61.7)        +217.1 (+222.2)
+    0.50     186     +20.5 (+13.2)        +127.3 (+111.0)
+
+The per-name reading **decays** in breadth — 0.10 → 0.25 costs 18-33% across the four cells, and
+0.25 → 0.50 costs a further 62-79%. Since a book earns the per-name excess on its whole book, that
+is a declining active return, not a flat one. **The 2026-11-08/09 breadth closure is therefore
+CONFIRMED rather than reopened, now from an instrument that does not share the bias the original
+used** — and the two closures compose into a complete refusal: widening lowers the bar but collapses
+the edge (F6 there: z +4.07/+2.57/−1.29 at K = 100/250/400), narrowing raises the edge but raises the
+bar with it (the null sd is a property of breadth, 0.0255 at 144 positions against 0.0128 at 324).
+`#16` already sits at frac ≈ 0.17. **No construction route remains in either direction.**
+
+### Fifth, and it is my own error caught by the lab's own rule: the night's one big positive was the contaminant, at 110% of its reading
+
+F5 swept the battery by region over the common window and produced a standout:
+**`amihud126` at +1036 bps/yr (t +2.80) on US and +510 (t +2.77) on non-US** — the only score
+positive and significant in *both* halves of the panel, and four times M3's US reading. It was run
+**without** the mandatory within-region log-`P` control, in a block whose horizon is well beyond 63
+days. The standing rule exists for exactly this, and Amihud is `|r| / (close × volume)`, i.e.
+proportional to `1/price` and therefore a direct function of the back-adjusted level the engine
+issues of 2026-10-18 / 2026-10-22 are filed about. F6 re-ran the whole battery under **both**
+mandatory controls applied jointly (rank-space OLS residual on log `P` and `vol126`, within region,
+before any selection):
+
+    score             US RAW -> CTRL          nonUS RAW -> CTRL       attenuation
+    amihud126     +1036(+2.80) ->  -99(-0.66)   +510(+2.77) -> +242(+1.46)     78%
+    lowvol126      -649(-1.58) -> +376(+1.14)   -428(-1.19) ->  +22(+0.10)     63%
+    lowbeta252     -806(-1.73) -> -247(-1.36)   -480(-1.19) ->  +49(+0.25)     77%
+    prox52w        -763(-2.09) -> -291(-1.27)   -526(-1.75) -> -152(-0.76)     66%
+    time_underwater -323(-1.29) ->  +56(+0.29)  -169(-0.66) ->  -36(-0.17)     81%
+    semidev_ratio  +125(+0.60) ->  +83(+0.46)   +186(+0.87) ->  -20(-0.10)     67%
+    info_discrete  -308(-1.48) -> -311(-2.16)   -336(-2.07) -> -276(-1.76)      9%
+    rank_stability +212(+1.29) -> +483(+2.10)   +235(+1.37) ->  +45(+0.27)    -18%
+    m3_oldhalf     +160(+1.07) -> +346(+1.52)    -72(-0.35) ->  -24(-0.12)    -59%
+
+**`amihud126` loses 110% of its US reading and inverts.** That is a third independent reproduction of
+the contaminant, now at book level rather than at IC level, and it reconfirms `liquidity-volume`'s
+closure from a direction the record did not have. It is also a worked demonstration that the joint
+control is load-bearing and not ceremonial: without it tonight would have nominated an object the
+lab closed a month ago, on a `t` of +2.80.
+
+Two further readings. **`rank_stability` is the only score the control STRENGTHENS into
+significance** (US +483, t +2.10) — and its non-US twin dies (+45, t +0.27), so by F4b's paired
+logic it is not evidence; `annual-rank stability` is already on the standing list and **stays
+closed**, now with a number and with the note that the control raises rather than lowers it.
+**`lowvol126` has now been read as a negative by two independent biases that both run against it**
+(the Jensen toll and the level contaminant); corrected on both it is +376 bps/yr at t +1.14 on US and
++22 at t +0.10 on non-US — a null, which is what "flat in beta" predicts, and the third instrument
+tonight to converge on that mechanism.
+
+### A discrepancy recorded and NOT resolved
+
+2026-11-08/09's F7 reports that partialling the log price level out **inverts** "the five-year
+reversal" (IC_252 +0.0187 → −0.0258, t −3.41). Tonight's joint control moves M3's US book-level
+reading the **other** way (+160 → +346). Four differences could carry it and tonight separates none
+of them: horizon (IC_252 against a one-month holding period), window (train-wide against 2009-2017),
+statistic (full-cross-section IC against a top-decile book), and control set (log `P` alone against
+log `P` and `vol126` jointly). The full-cross-section decision IC is on the standing list as an
+unreachable quantity, which is itself a reason the two need not agree. **Recorded as open; no number
+in the record is asserted to be wrong.**
+
+### Verdicts
+
+None. No trial was recorded, no verdict was assigned, no candidate file was written.
+`experiments/trials.jsonl` stays at **138 records / 27 scored v3 trials**, `leaderboard.json` is
+untouched, the board still has no v3 champion and no positive skill interval excluding zero.
+
+### What the night bought, stated without inflation
+
+No book, no verdict, no movement on the board. What it bought: a **coverage audit that materially
+weakens the lab's own best object**, showing the score behind every M3 trial is computable for 0
+names before 1999 and 33-36 before 2004, that `#16`'s book holds the pool for most of the sub-period
+the protocol reports as `1997-2008`, and that 82% of M3's twenty-one-year drift is four years on a
+23-29-name single-region cross-section; `#389` run for the first time, which is strictly finer than
+the two sub-periods and fails condition 3 outright and condition 4 on power; M3's region structure
+measured and its tradeable version **refused on a paired interval rather than on a preference**; the
+previous night's toll confirmed on real scores with the predicted slope **and its stated consequence
+corrected in the half where the bias hides**, which moves three anti-candidates from negative to null
+and brings the log-space screen into agreement with the lab's "flat in beta" mechanism; the
+handover's named breadth task discharged negatively, composing with 2026-11-08/09 into a closure from
+both directions; and the contaminant reproduced a third time at 110% of a `t` +2.80 reading — my own
+screen error, caught by the lab's own standing rule in the block after the one that made it.
+
+### Ideas for the next session
+
+None is holdout-informed; no holdout, forward or incubation number was read.
+
+1. **Treat M3's coverage profile as a property of every price-trend trial on the board, not of
+   tonight's harness.** `#12`, `#13`, `#14`, `#15`, `#16` and `#17` all use a score needing ~108
+   months of own history, so all six have the same hole, and the protocol's `1997-2008` column means
+   something different for them than for a 126-day score. Before any further M3 work, ask what the
+   book *was* over 1997-2004 — `#16` holds the equal-weight pool there, which is skill ≈ 0 by
+   construction and dilutes rather than informs. Free to check. Provenance: tonight, F3/F3b.
+2. **Any new score should be screened for own-history depth before anything else.** Tonight's audit
+   took one block and would have been worth running before each of the last six price-trend trials.
+   A score requiring `m` months of own history on this panel has a usable cross-section only from
+   about `1990 + m/12 + 5` years; at `m = 108` that is 2005. Add it to the pre-trial battery beside
+   the log-`P` control, the joint-control rule and the two-grid agreement check. Provenance: tonight.
+3. **Run the joint control BEFORE the region or breadth sweep, not after.** Tonight's F5 produced a
+   `t` +2.80 nomination that F6 destroyed and inverted. The ordering cost nothing here because both
+   blocks were free, but in a session with budget pressure F5's table is exactly what buys a trial
+   with no case. Provenance: tonight, F5/F6.
+4. **`#389` should run on every object before a candidate file is written, and its condition 3 is the
+   one that bites here.** Of the four conditions, significance and upward drift are what the lab
+   already measures; "not concentrated in one short stretch" and "still positive late" are what it
+   does not, and M3 fails the first outright. The ex-best-12-months statistic is one line and it
+   separated M3 (66% left) from `recent_half` (9% left) and from two objects that go *more* negative.
+   Provenance: tonight, F3c; `#389`/`#390` now **spent**.
+5. **For the human owner, one new item and the standing list.** New, and it is the most important
+   thing on this page: **the lab's one live object is materially thinner than its record says.** M3
+   clears the null gate on validation, but its train case is four years on a 23-29-name single-region
+   book, its post-2009 selection channel is +93 bps/yr at `t` +0.64, and the half of its reported
+   train skill that is not the mechanical sleeve operator has no train support after 2009. Combined
+   with 2026-11-10/11's closure of every construction axis and tonight's confirmation of the breadth
+   closure, **the lab now has no object with a case and no axis with a knob**, which is a sharper
+   statement of `#393`'s minimum-detectable-skill position than the record has carried. `program.md`'s
+   "Future upgrades" list — point-in-time fundamentals, intraday bars, and above all **pre-2009 price
+   coverage**, which is precisely what tonight's audit shows is the binding limit on the one score
+   that works — is the only thing that would change a verdict here, and it needs human approval.
+   Standing and unchanged: the two engine issues as filed (2026-10-18 / 2026-10-22, reproduced a third
+   time tonight at 110% of a reading), `min_train_skill = 0.0`, `#324`'s deliberate difference,
+   `#358`'s empirical-Bayes shrinkage of the bar, the data-type question, `#393`'s
+   minimum-detectable-skill arithmetic, `#396`'s tension between `program.md`'s spend-across-families
+   rule and what the design can measure, `#407`'s rule-induced comovement inside the pool, `#418`'s
+   discretionary component in the benchmark's membership, `#422`'s volume-only liquidity tier, the note
+   format's missing holdout-overlap flag, the `dataclasses.replace`/`pool_cache` trap, the reporting
+   question about the rebalanced reference portfolio, and the per-run-branch generator (**thirteen**
+   consecutive sessions). **Resolved this session**: `origin/main-a5dglb` is a stale duplicate, not
+   stranded work, and is safe to delete.
+6. **Do not re-buy**: everything on the standing anti-candidate list, plus tonight's — **the US-only
+   (or non-US-only) restriction of M3, or of any score, justified by a region split** (paired
+   +224 bps/yr, `t` +1.05, 90% CI [−127, +574] over the only common window); **`annual-rank
+   stability` under the joint control**, whose US `t` of +2.10 has a non-US twin at +0.27; and **raw
+   Amihud or any `1/price`-proportional construction at any window** (−99, `t` −0.66 on US once the
+   level is partialled out, from +1036 at `t` +2.80 before). Unchanged from previous handovers: the
+   jump/diffusion partition of the trailing return at any threshold, window or sign; the signed PEAD
+   proxy with or without a skip; any object whose case is a positive one-bit reading in simple bps
+   alone; the Lo-MacKinlay variance ratio at any scale, window or sign, standalone or as a
+   conditioner; the membership-tenure / pool-minus-recent-entrants book at any tenure threshold;
+   turnover as a route to the null gate; `segmentation` and `beta_trend` at any window or sign; the
+   scale-free left-tail exponent and the own-return tail index in any form; the semi-deviation ratio;
+   time-underwater; any screen beyond 63 days without the within-region log-`P` control; the
+   `log(MA_L/P)` term structure at any scale set; plain multi-horizon own-trend in any learned
+   combination; `#388`'s forecast floor; the full-cross-section decision IC as a reachable quantity;
+   downside correlation and the downside loading in any form; coskewness and the third co-moment in
+   any form; the volatility-tercile pre-sort as a construction operator; any paired candidate whose
+   two legs share a score; any hypothesis whose case is a train sheet, a matched-null z or a
+   negation-invariant margin; any hypothesis whose novelty case is a cross-sectional rank correlation
+   or the pass side of the train active-return screen; the closing-location value; the overnight
+   session at either normaliser; the turn-of-month differential on either sign; the coefficient of
+   variation of share volume; the quarter-ending-month conditioner on momentum; plain 12-1 momentum;
+   any equity-ETF book; the bond sleeve as a duration bet; the 2-4-week index-level relative-strength
+   score on either sign; the liquidity level or trend in any form; 52-week-high proximity; information
+   discreteness; covariance weighting at any estimator; weighting inside the selected slice; the
+   exclusion / pool-minus-worst book at any `f`; `#385`'s IC-decorrelation blend; the #16/#19 blend;
+   and any construction whose case is cost at any turnover or a tighter error bar.
+7. **From `research/SUMMARY.md`.** Spent tonight: **`#389`** (the cumulative active-return curve, read
+   in full and run for the first time — it is the instrument behind the night's headline, and its
+   condition 3 is what fails) and **`#390`** (the failure taxonomy, used to classify M3 as low power
+   rather than mis-specification, which is the reading that keeps the object open rather than closing
+   it). `#423`'s within-region log-`P` control was applied — late, in F6 rather than F5, and the cost
+   of that ordering is block five's whole subject. `#436`-`#438` (2026-11-12: the multivariate
+   imbalance metric, monotonic imbalance bounding, coarsened exact matching, and the adversarial
+   evaluation of the matching paradox) were **read in full and not spent**: all three are matched-design
+   methodology rather than scores, and `#438`'s operational output — plot the imbalance curve, mark
+   where the selection rule actually stops, refuse only if imbalance *there* is worse than unmatched —
+   is a diagnostic for a matched control, of which tonight built none. Recorded so a later session does
+   not re-import them as candidates. Worth noting that `#438`'s stated **boundary condition** is
+   adverse to this lab: the paradox threatens designs already well balanced before matching, which is
+   nearer this lab's regime than the authors', so its reassurance does not transfer. Still live and
+   unspent: `#386`/`#387`'s `R²`/`S²` yardstick, `#381`'s `σ_IC`, `#411`'s newly-eligible cohort scout
+   (second-moment only per `#412`), `#415`'s free refusal test, `#416`'s reading rule, `#420`-`#422`,
+   `#426`, `#431`, and `#407`-`#410`, `#417`-`#419`. **`#363` is NOT live** (closed 2026-11-02/03);
+   **`#432` is NOT live** (closed 2026-11-10/11); **`#389`/`#390` are NOT live** (spent tonight).
+   `#300`, `#310`, `#322`, `#336`, `#339`, `#342` remain the interpretation rules to read first.
+
+## Session summary — 2026-11-12/13 (nightly) — 0 trials of 8; the lab's one live object is four years on a 23-name single-region book, and the night's one big positive was the contaminant at a t of +2.80
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 27 scored v3 trials**, the v3 board is
+unchanged, the deflated bar is unchanged, no candidate file was written, and no verdict was assigned.
+Six free blocks ran. **No holdout, forward or incubation file was opened**, and with no trial recorded
+there was no holdout gate to reach. Engine green (**92 passed in 37.35s**). Step-0: the startup hook's
+stranded-branch escalation was **investigated and cleared** — `origin/main-a5dglb`'s single commit is
+patch-equivalent upstream (`git cherry` → `-`) and its tree is strictly behind `main`; the
+2026-11-11/12 branch note's fast-forward has happened and nothing is stranded. Container again started
+on a per-run branch (`main-prbqmr`) at `origin/main`'s commit, reset to `main` before any work —
+thirteenth consecutive session.
+
+**Why zero.** The night discharged the handover's named task and it came back **negative** (breadth
+does not reopen in the corrected instrument; the 2026-11-08/09 closure is confirmed from both
+directions). It then audited the object that task was about and found it thinner than the record
+says. The one object that cleared a screen with a convincing `t` (+2.80) was destroyed and **inverted**
+by the lab's own mandatory control in the next block. Every other object in a nine-score battery is a
+null under the joint control. There was no candidate with a case, and a trial without one permanently
+raises the bar for every future candidate. **This is the ninth zero-trial session of the last fifteen,
+and that rate is the finding the human owner should weigh** — see item 5 of the handover.
+
+**Best finding.** M3 — the old-half reversal, the only object on the v3 board that clears the null
+gate — has a far thinner train case than its record. Its score needs ~108 months of a name's own
+history, which on this panel means **0 scorable names before 1999 and 33-36, all US, through 2003**;
+`#16`'s book therefore holds the equal-weight pool for most of the sub-period the protocol reports as
+`1997-2008`. `#389`'s cumulative curve puts **82% of the twenty-one-year gross drift in 2004-2008**, on
+a 23-29-name single-region book, and the post-2009 selection channel — the only era with a real
+cross-section — at **+93 bps/yr, t +0.64** all-region (US +189 at t +1.25; the five non-US regions
+**−72 at t −0.35**). Condition 3 of `#389` fails outright; condition 4 fails on power, which by `#390`'s
+taxonomy is the low-power signature and not the mis-specification one, so the object is weakened rather
+than closed. The tradeable version of the region split is refused on its own interval: paired
+**+224 bps/yr, t +1.05, 90% CI [−127, +574]**.
+
+**Second finding.** Last night's Jensen toll is confirmed on nine real scores at the predicted slope
+and crossing zero where `rho_vol` does — **and its stated consequence is wrong in half the domain.**
+"The bias inflates, it does not hide" holds only for `rho_vol > 0`; for a low-volatility slice the
+simple-bps screen reads *below* the truth, and `lowvol126`, `lowbeta252` and `prox52w` all move from
+clearly negative to flat. No verdict changes, but the correction **unifies the log-space screen with
+the lab's own "Sharpe is flat in beta" mechanism**, which the simple-bps screen had been contradicting.
+
+**Third, and it is an error of mine.** F5's region sweep nominated `amihud126` at **+1036 bps/yr,
+t +2.80** on US — run without the mandatory within-region log-`P` control at a horizon far beyond 63
+days. Amihud is proportional to `1/price`. Under the joint control it is **−99, t −0.66**: 110% of the
+reading gone and the sign inverted. A third independent reproduction of the engine issues as filed, and
+a worked demonstration that the ordering of the controls is load-bearing.
+
+**Next ideas** (full list above): screen every new score for **own-history depth** before anything else,
+and treat the coverage hole as a property of all six M3-lineage trials rather than of tonight's harness;
+run the joint control *before* any region or breadth sweep; run `#389` on every object before a candidate
+file is written, with the ex-best-12-months statistic as the sharp instrument. Provenance from
+`research/SUMMARY.md`: **`#389`/`#390` spent** (the curve and its failure taxonomy are the night's
+headline instrument); `#423`'s control applied, late, at the cost of block five; `#436`-`#438` read in
+full and **not** spent as builds, with `#438`'s boundary condition recorded as adverse to this lab.
+
+**Verdicts:** none.
