@@ -29816,3 +29816,4 @@ headline instrument); `#423`'s control applied, late, at the cost of block five;
 full and **not** spent as builds, with `#438`'s boundary condition recorded as adverse to this lab.
 
 **Verdicts:** none.
+## Research session — 2026-11-13 (learning agent): 3 notes added, see research/SUMMARY.md

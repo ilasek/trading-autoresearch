@@ -193,6 +193,43 @@ never the holdout):
   in the previous paragraph is panel-independent, and only the *capitalisation* half of their
   story weakens.
 
+## Annotation added 2026-11-13 — the SCREEN QUESTION, applied to the one-bit truncation test this note supplies
+
+`#376`, the one-bit truncation test, is the lab's purest example of a **deliberate** prune: it
+collapses everything below the book's inclusion threshold to a single value and asks whether the
+score's rank IC survives. `#435` established, and `#438` bounded, a question that has never been
+asked of it:
+
+> **Does what this screen removes correlate with what is being measured?**
+
+For the truncation test the answer is **yes, by construction, and that is the whole design** — the
+test prunes on exactly the dimension whose content it is interrogating. That is the benign case in
+`#435`'s taxonomy, where the variance cost of pruning is paid for by the heterogeneity removed. So
+the question, asked here, *validates* the screen rather than qualifying it, and it is worth stating
+so the validation is on the record rather than assumed.
+
+Two consequences that are not merely bookkeeping:
+
+1. **The comparison the truncation test licenses is local to the retained band.** `#436`'s estimand
+   point transfers directly: a design that prunes is making a statement about the subpopulation it
+   kept, not a more precise version of the statement about everyone. A score whose IC survives
+   truncation has content **in the top band**, which is the claim this note wants — but the surviving
+   IC is not an estimate of the full-cross-section IC and should never be compared to one.
+2. **Everything else attached to the screen is an uncorrelated prune.** The truncation itself is
+   correlated with the comparison; the eligibility, minimum-history and liquidity preconditions that
+   decide which names reach the screen are not, and `#435`'s arithmetic says those raise the variance
+   of the resulting IC for nothing. The 2026-11-12/13 nightly's own finding that an M3-lineage score
+   needs ~108 months of a name's history, leaving a handful of single-region names scorable in the
+   early train years, is this cost arriving by a different route.
+
+**Free diagnostics, same three as the companion annotation**: `L̄₁` between retained and truncated
+names (`#436`); the pre-screen imbalance level `#438` says decides how much weight a refusal carries;
+and a two-sample test on the lab's standing covariates
+(`2026-11-13-classification-accuracy-as-a-two-sample-test.md`) — with the caveat from that note's
+adversarial companion that for a handful of named covariates a regularized location test beats a
+classifier AUC, and with the arithmetic that a held book of a few dozen names makes **book size, not
+panel size**, the binding constraint on what such a test can detect.
+
 ## Related
 
 - `notes/2026-09-22-anomaly-profits-short-leg-asymmetry.md` — Stambaugh–Yu–Yuan: the

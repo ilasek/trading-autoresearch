@@ -248,6 +248,53 @@ of the same information.
   failure is partial — a feature whose marginal rank IC is depressed rather than annihilated. The
   mode is a direction, not a magnitude.
 
+## Annotation added 2026-11-13 — the SCREEN QUESTION, which this note's subject is a screen and has never been asked of it
+
+This note reasons throughout about *which predictors survive* a marginal screen, and about the
+failure modes of the screening rule itself (marginal-but-not-joint, joint-but-not-marginal, the
+iterated repair). It has never asked the question `#435` established and `#438` bounded, which is
+about what the screening does to the **variance of the comparison made afterwards**:
+
+> **Does what this screen removes correlate with what is being measured?**
+
+The arithmetic behind the question, restated so it travels with this note: pruning a sample for a
+reason *uncorrelated* with the comparison being made raises that comparison's variance. In the
+univariate case the squared difference in group means *is* the squared standard error and grows as
+`1/n`, so dropping observations for an irrelevant reason buys nothing and costs precision — and,
+when the pruning is done on a **scalar summary** rather than on the covariates themselves, can leave
+the groups *less* alike than before. `#438` then narrowed when this bites: the curve has to be read
+**at the stopping point the rule actually uses**, against the unmatched level, not refused for rising
+anywhere past it.
+
+Applied to a screen of the kind this note describes, the question has two halves and both are free
+to answer:
+
+- **Does the screen prune on the comparison variable?** A marginal-correlation screen prunes on an
+  estimate of the very quantity the later test is about, so the pruning is *maximally* correlated
+  with what is being measured. That is the benign side of `#435`: it is the uncorrelated prunes that
+  cost variance for nothing. But it is also the side that creates the selection problem this note's
+  own subject exists to manage, and which `#422`'s post-selection caveat prices.
+- **What does the screen prune on *besides* that?** This is where the question bites. A screen with
+  a minimum-history, minimum-liquidity or eligibility precondition attached removes names for reasons
+  that are **not** the comparison variable — and those are the prunes `#435` says raise the variance
+  of everything measured downstream. The lab's eligibility, liquidity and volatility filters are all
+  of this kind, and none has been checked.
+
+**The free diagnostics, in the order they cost.** `L̄₁` on a coarsened cross-tabulation
+(`2026-11-12-monotonic-imbalance-bounding-and-the-l1-measure.md`, `#436`) between kept and dropped
+names; the lab's own **pre-screen** imbalance, which `#438` says decides how much weight any refusal
+carries and which nobody has measured; and — now that it has a null distribution — a **two-sample
+test** between the kept and dropped sets on the lab's standing covariates
+(`2026-11-13-classification-accuracy-as-a-two-sample-test.md`). Note the recommendation that falls
+out of that last note and its adversarial companion: for a handful of named covariates against ~1,000
+eligible names, a regularized **location** test is the right instrument and a classifier AUC is the
+wrong one, because `d/n → 0` is exactly the regime where Hotelling's `T²` is minimax optimal.
+
+**This is not an argument for removing any screen.** `program.md` and `engine/protocol.py` own the
+universe, and a screen that prunes on the comparison variable is doing its job. It is a record that
+the question exists, is free, and has never been asked of the lab's screens — the standing item
+[2026-11-11] opened and [2026-11-12] left undischarged.
+
 ## Related
 
 - The three other notes written tonight complete the chain this one starts: how to make a selection
