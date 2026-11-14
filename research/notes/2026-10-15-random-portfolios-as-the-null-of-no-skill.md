@@ -193,6 +193,57 @@ readable in a research session, and `program.md`'s "same holdings schedule, weig
 mix" does not settle whether successive draws are linked. It is a question for the nightly, not an
 assumption to build on.
 
+## Annotation [2026-11-14] — the prior question this null does not ask, and the instrument for it
+
+Added by the learning agent as composition, not from a new source; it carries `#439`–`#441` into the
+note about the object they are the prior question to.
+
+**The two nulls ask different questions and the relation was never stated.** Everything above reasons
+in **return space**: could this *return difference* have arisen from an unskilled draw? `#439`
+establishes the question that logically precedes it, in **selection space**: are the names a
+candidate holds distinguishable, on observable characteristics, from the names it passed over?
+
+The relation is a two-by-two and each cell has a reading the lab currently has no vocabulary for:
+
+- **Selections indistinguishable, returns significant.** A candidate whose holdings look like a
+  random draw on every observable has **no mechanism to defend**, whatever the return null says. This
+  is the cell the return null cannot see, and it is the one most likely to be a lucky path.
+- **Selections distinguishable, returns significant.** The test has **named the covariate the return
+  difference must be controlled for**. This is the 2026-11-12/13 nightly's `amihud126` case arriving
+  by a different route: a `t +2.80` that inverts under the within-region log-price control was a
+  reading whose selection was distinguishable on log price, and a selection-space test would have
+  said so before the return reading was taken rather than after.
+- **Selections distinguishable, returns not.** The candidate is tilting on something that does not
+  pay — a clean, cheap negative.
+- **Neither.** Nothing to report, and `#441` governs how to say so.
+
+**What to compute, and it is not what `#438` first proposed.** `#438` suggested a classifier AUC;
+`#440` overturned that for any difference the lab can *name*. With a handful of named covariates
+against ~1,000 eligible names, `d/n → 0`, and in that regime **Hotelling's `T²` is asymptotically
+minimax optimal** — so the instrument is a two-sample location test on the named covariates, not a
+classifier. `notes/2026-11-14-hotelling-t2-under-high-dimension.md` has the construction and the
+`y = p/n` arithmetic that confirms the lab's cell is the benign one; the classifier form survives only
+for the genuinely open-ended question (*can anything at all tell the two sets apart*).
+
+**Two properties this null and that one share, which is why the pairing works.** Both are
+**permutation/resampling** arguments over the same cross-section, so neither needs a distributional
+assumption; and both must be run **one rebalance date at a time**, permuting over names within that
+date, because name-dates are not exchangeable. The selection-space test is strictly cheaper — it
+reads holdings, never returns — and it is computable on train alone, so it carries none of this
+note's pitfall (b).
+
+**The detectability floor that belongs beside this note's own.** `#439`: with `n_te ≈ 500` the null
+sd of the held-out balanced accuracy is `≈ 0.022`, so a reading below about `0.54` is chance; and
+with a 25-name book **the smaller class governs, so book size, not panel size, bounds what the
+selection test can see**. `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`
+adds the complementary bound in alternative-shape terms, with a consequence worth repeating here:
+**adding control covariates to a joint balance test weakens it** unless the book actually shifts them.
+A short, pre-named covariate list is the better design.
+
+**A non-rejection is `#441`'s reading** — *not detectably different at this `n`* — never balance, and
+never "the selection is random". The same caution this note already applies to a non-significant
+return percentile applies in selection space, for the same reason.
+
 ## Related
 
 - `notes/2026-10-15-random-weight-indices-and-the-equal-weight-centre.md` — why this null's *centre*
@@ -211,3 +262,8 @@ assumption to build on.
 - `experiments/learnings.md` [2026-10-07] (the K-table and "the gate reduces to beat pool +
   1.28·sd(K)"), [2026-10-13/14] and [2026-10-14/15] (the geography/selection split, and the three
   recorded null percentiles) are the lab's own measurements of the object described here.
+- `notes/2026-11-14-hotelling-t2-under-high-dimension.md`,
+  `notes/2026-11-14-two-sample-location-test-without-a-dimension-condition.md` and
+  `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md` — the instrument for the
+  selection-space question in the annotation above, and the arithmetic that keeps it on Hotelling's
+  `T²` rather than on a high-dimensional replacement.

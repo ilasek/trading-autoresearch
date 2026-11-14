@@ -9667,6 +9667,75 @@ count**, or a statement about what a statistic's value means. No return, Sharpe,
 figure appears in any of the three sources or is carried from them.
 
 
+### The LOCATION TEST itself — the instrument `#440` demanded, the arithmetic that says this lab should use the CLASSICAL one, and the dependence assumption that binds on all of them (cross-family, the gate's own statistic, the panel itself)
+
+**[2026-11-14] Read this first: the vein closes by LICENSING an instrument rather than by supplying a
+new one, and that is the useful outcome.** [2026-11-13] left `#440` as a refusal with no
+replacement — the lab told not to compute a classifier AUC for a difference it can name, and not
+told what to compute instead. Three sources answer it, and the answer is that the lab was already
+holding the right tool. **Hotelling's `T²`, computed at covariate width with its exact `F`
+reference, is the instrument** (`#442`). What makes that a finding rather than a shrug is the
+arithmetic Bai & Saranadasa (1996, *Statistica Sinica*; tier **A**, overlap `false`,
+`published_post_2018: false`) supply for *when it stops being true*: with `y = p/n`, the sample
+covariance's limiting condition number is `(1+√y)²/(1−√y)²` — **1.494 at `y = 0.01`, 3.705 at
+`y = 0.1`, ≈ 3039 at `y = 0.93`** — and Hotelling's non-centrality carries the factor `√(1−y)`. The
+lab's balance cell is `d ≈ 3–6` named covariates against `n ≈ 1,000` eligible names, so `y ≈ 0.005`:
+condition number below 1.3, power factor 0.998. **The high-dimensional replacements buy this panel
+nothing and cost it affine invariance**, and the threshold at which that reverses — a covariate count
+in the hundreds against the same thousand names — is now written down.
+→ `notes/2026-11-14-hotelling-t2-under-high-dimension.md`
+
+**The replacements, held in reserve with the conditions that would make them right** (`#443`).
+Bai–Saranadasa drop the covariance inverse and standardise a squared Euclidean norm by a
+**bias-corrected** estimator of `tr Σ²`; Chen & Qin (2010, *Annals of Statistics*; tier **A**,
+overlap `false`, `published_post_2018: false`) rebuild it as a U-statistic that never forms the
+diagonal terms, which removes **any condition linking `p` to `n`** and — the reason to prefer it on
+this panel if it is ever needed — **removes the assumption `Σ₁ = Σ₂`**, which a 25-name book against
+~975 passed-over names cannot credibly satisfy. Two mechanisms from that paper generalise past the
+test: reducing a high-dimensional hypothesis to **one scalar** is what buys freedom from a dimension
+condition, and the **leave-out** device in its variance estimator (exclude an observation from the
+mean it is compared against) is the hygiene the lab already applies to walk-forward fitting, arriving
+as a variance-estimation technique — and the lab's own within-region demean is an instance where the
+correction has never been applied. Both statistics use a **raw Euclidean norm and are not
+scale-invariant**, so heterogeneous covariates must be standardised first.
+→ `notes/2026-11-14-two-sample-location-test-without-a-dimension-condition.md`
+
+**The adversarial source bounds the vein's own recommendation, and produces the session's most
+actionable rule** (`#444`). Cai, Liu & Xia (2014, *JRSS-B*; tier **A**, overlap `false`,
+`published_post_2018: false`) group Bai–Saranadasa, Srivastava–Du and Chen–Qin as one
+**sum-of-squares family** and give its detectability condition — `n‖δ‖₂²/√p → ∞` — against the
+max-type family's `maxᵢ|δᵢ|/σᵢᵢ^{1/2} ≳ √(2β log p / n)`, the latter proved **minimax rate optimal**
+against sparse alternatives by a matching lower bound. Signal enters the first through the *total*
+squared difference against `√p` and the second through the *largest single* standardised coordinate
+against `√(log p / n)`. The consequence the lab will find counter-intuitive: **adding control
+covariates to a joint balance test weakens it** unless the book actually shifts them, so a short,
+pre-named covariate list is the better design *by the detectability condition* rather than by
+parsimony. The rule to pre-register: **choose sum-type versus max-type by the expected number of
+moving coordinates, and write that number down before computing either.** Their own precision-
+transform mechanism — `(Ωδ)ᵢ ≈ δᵢωᵢᵢ` with `ωᵢᵢσᵢᵢ ≥ 1`, so whitening a correlated cross-section
+*increases* standardised signal — is worth keeping independently of the test, because it says the
+lab's joint control **raising** a reading rather than lowering it is not suspicious in itself.
+→ `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`
+
+**One anti-candidate binds on every statistic in the vein, and it is the thing most likely to go
+wrong in practice** (`#445`). Hotelling's `F`, Bai–Saranadasa's and Chen–Qin's `N(0,1)` and
+Cai–Liu–Xia's Gumbel are all derived for **i.i.d. observations**. The lab's observations are *names
+in one cross-section*, correlated through region and through the common factor, so the effective
+sample size is far below the name count and **every one of those references is anti-conservative —
+it will reject too often**, manufacturing balance findings the way the 2004–2008 window nominates
+objects. The repair is free: use `T²` as the **statistic** and a **permutation of the hold/not-hold
+labels within the date's cross-section** as the **null**, one rebalance date at a time, accounting
+for the sequence of tests under `#328`–`#342`. Never report an `F` or Gumbel `p`-value from a
+correlated cross-section, and read a non-rejection as `#441` says — *not detectably different at this
+`n`*, never balance.
+
+**Anti-lookahead.** No financial data appears in any of the three sources: analytic asymptotics plus
+Monte Carlo throughout, with one microarray application in Chen & Qin. Every magnitude carried above
+is a **limiting condition number as a function of `p/n`**, a **detectability condition**, a **null
+distribution**, a **bias-corrected trace estimator**, a **minimax rate**, or a **citation count**. No
+return, Sharpe, or dated performance figure appears in any of the three sources or is carried from
+them.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -18237,6 +18306,89 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-11-13-accuracy-tests-are-underpowered-for-signal-detection.md`,
     `notes/2026-11-13-classification-accuracy-as-a-two-sample-test.md`
 
+442. **CONSTRUCTION — the two-sample location test `#440` demanded and did not supply, with the
+    arithmetic that says the lab should use the CLASSICAL one.** `#440` told the lab to test a named
+    mean difference with a location test rather than a classifier AUC, and left it with no statistic.
+    The statistic is **Hotelling's `T²`**, computed at **covariate** width: pool
+    `A = Σᵢ Σⱼ (x_{ij} − x̄ᵢ)(x_{ij} − x̄ᵢ)'`, `n = N₁+N₂−2`, `S_n = A/n`, then
+    `T² = (N₁N₂/(N₁+N₂))(x̄₁−x̄₂)' S_n⁻¹ (x̄₁−x̄₂)`, referred via `((n−p+1)/(np))·T² ~ F(p, n−p+1)` —
+    **exact under normality, not asymptotic.** **The number that decides the instrument choice and
+    that nothing in the folder previously held:** with `y = p/n`, the limiting condition number of the
+    sample covariance is `(1+√y)²/(1−√y)²`, which is **1.494 at `y = 0.01`, 3.705 at `y = 0.1` and
+    ≈ 3039 at `y = 0.93`**, and the power penalty on `T²` is the factor `√(1−y)`. The lab's balance
+    cell is `d ≈ 3–6` covariates against `n ≈ 1,000` eligible names, i.e. `y ≈ 0.005`: condition
+    number below 1.3, power factor 0.998. **So the high-dimensional replacements buy the lab nothing
+    and cost it affine invariance**, and `#440`'s refusal is now quantitative with a threshold
+    attached — the replacements become right only if the covariate count reaches the hundreds against
+    the same thousand names. Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-14-hotelling-t2-under-high-dimension.md`
+
+443. **CONSTRUCTION, held in reserve rather than recommended — the sum-of-squares tests for when the
+    covariate set widens or the two groups' covariances plainly differ.** Bai–Saranadasa:
+    `M_n = (x̄₁−x̄₂)'(x̄₁−x̄₂) − τ tr(S_n)` standardised by the **bias-corrected**
+    `B_n² = n²/((n+2)(n−1))·(tr S_n² − (1/n)(tr S_n)²)` — the naive `tr S_n²` is neither unbiased nor
+    ratio-consistent once `p` is not fixed. Chen–Qin's rebuild drops the diagonal terms instead of
+    cancelling them, giving a U-statistic with `E(T_n) = ‖μ₁−μ₂‖²` exactly, **no condition linking `p`
+    to `n`** (only `tr Σ⁴ = o{tr²Σ²}`, trivial when eigenvalues are bounded), and — the reason to
+    prefer it here — **no assumption that `Σ₁ = Σ₂`**, which a 25-name book against ~975 passed-over
+    names cannot credibly satisfy. Its trace estimators use a **leave-out** device (exclude an
+    observation from the mean it is compared against), which is the same hygiene the lab applies to
+    walk-forward fitting arriving as a variance-estimation technique; the lab's own within-region
+    demean is an instance where the correction has never been applied. **Three cautions carried
+    explicitly**: both statistics use a raw Euclidean norm and are **not scale-invariant**, so
+    heterogeneous covariates must be standardised first; Bai–Saranadasa needs
+    `λ_max = o(√(tr Σ²))`, which a panel with one dominant common factor can break outright; and the
+    reduction of a high-dimensional hypothesis to **one scalar** is what buys freedom from a dimension
+    condition, which is reusable beyond this test. Tier A, overlap `false`,
+    `published_post_2018: false`.
+    → `notes/2026-11-14-two-sample-location-test-without-a-dimension-condition.md`,
+    `notes/2026-11-14-hotelling-t2-under-high-dimension.md`
+
+444. **FREE PRE-REGISTRATION RULE, from the vein's adversarial source, and it has a consequence the
+    lab will find counter-intuitive: ADDING CONTROL COVARIATES TO A JOINT BALANCE TEST WEAKENS IT.**
+    Sum-of-squares tests (Bai–Saranadasa, Srivastava–Du, Chen–Qin) all require
+    **`(n₁+n₂)‖δ‖₂²/√p → ∞`** to discriminate; max-type tests require
+    **`maxᵢ|δᵢ|/σᵢᵢ^{1/2} ≳ √(2β log p / n)`**. Signal enters the first through the *total* squared
+    difference against `√p` and the second through the *largest single* standardised coordinate
+    against `√(log p / n)`. So **widening the covariate list without widening the number of
+    coordinates the book actually shifts strictly reduces power** — a short, pre-named covariate list
+    is the better design, and that is an argument from the detectability condition rather than from
+    parsimony. **The rule: choose sum-type versus max-type by the expected number of moving
+    coordinates, and write that number down before computing either.** Choosing after seeing which
+    rejects is the specification search `#437` exists to remove, and here it would be free to run,
+    which makes it more dangerous rather than less. **The max-type test itself is a bounded refusal
+    for this lab**: at `d ≈ 5`, `log p` and `√p` are indistinguishable, the precision transform has
+    nothing to magnify, and its extreme-value null is a limit in `p` being asked to hold at `p = 5`.
+    Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`
+
+445. **ANTI-CANDIDATE / MANDATORY CALIBRATION — every test in this vein assumes i.i.d. observations,
+    and the lab's observations are NAMES IN ONE CROSS-SECTION, which are not.** Hotelling's `F`
+    reference, Bai–Saranadasa's and Chen–Qin's `N(0,1)`, and Cai–Liu–Xia's Gumbel are all derived for
+    independent draws. A cross-section correlated through region and through the common factor has an
+    effective sample size far below its name count, so **every one of those references is
+    anti-conservative — it will reject too often** — and a balance test calibrated that way would
+    manufacture imbalance findings the way the 2004–2008 window nominates objects. **The fix is free
+    and needs no theory: use `T²` as the STATISTIC and a permutation of the hold/not-hold labels
+    WITHIN the date's cross-section as the NULL**, which preserves the cross-sectional dependence
+    exactly. Run it one rebalance date at a time (name-dates are not exchangeable, `#439`), account
+    for the resulting sequence of tests under `#328`–`#342`, and read a non-rejection as `#441` says —
+    *not detectably different at this `n`*, never balance. **Do not report an `F` or Gumbel `p`-value
+    from a cross-section of correlated names.** Tier A, overlap `false`.
+    → all three notes of 2026-11-14
+
+446. **COMPOSITION, no source — `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md` now
+    carries the selection-space/return-space relation.** The lab's random-selection gate reasons in
+    **return space**; `#439` asks the prior question in **selection space**. The annotation states the
+    two-by-two: selections indistinguishable + returns significant = **no mechanism to defend**, the
+    cell the return null cannot see; selections distinguishable + returns significant = **the test has
+    named the covariate the return reading must be controlled for**, which is the 2026-11-12/13
+    `amihud126` inversion arriving *before* the return reading rather than after. Both nulls are
+    permutation arguments over the same cross-section and both must run one rebalance date at a time;
+    the selection test is strictly cheaper, reads holdings and never returns, and is computable on
+    train alone.
+    → `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md` (annotation [2026-11-14])
+
 
 ## Coverage log
 
@@ -18339,8 +18491,112 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-12 (session 90) | **TOOK THE PRIMARY AIM VERBATIM, GOT THE NAMED PRIMARY ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY WEAKENING A REFUSAL TEST THIS FOLDER ADOPTED ONE NIGHT AGO.** Aim from the [2026-11-11] entry: **the imbalance metric, and the matching class defined by bounding it** — admit a source only if it (i) **defines** a multivariate imbalance measure computable from the two groups' empirical distributions, (ii) states what property the matching class guarantees as its parameter is varied, and (iii) says how the coarsening or caliper is **chosen**; not another critique of propensity scores, not a software description, not a general matching survey; **at most three requests**. **The mandated greps ran first and the gap was as predicted**: `imbalance metric`, `L1 imbalance`, `monotonic imbalance bounding`, `coarsened exact matching` all resolved only to last night's own `#435` note or to this file's statement of the aim; all eight `Mahalanobis` hits were portfolio-distance uses unrelated to matching; `Cochran` hit five notes as an incidental citation. **The nightly-variable detector also ran** on the 2026-11-11/12 session's headline (the log-space correction to the bps screen) and returned **covered** — `2026-10-02-noisy-prices-and-biased-premium-estimates.md` and `2026-10-03-mean-return-computation-rebalanced-vs-buy-and-hold.md` already hold the arithmetic-versus-log result — so the primary aim stood. **(a) ADMITTED, meets all three criteria alone.** Iacus, King & Porro 2011 (Tier **A**, *JASA* 106(493), 345–361, **839** Crossref, checked 2026-11-12; complete typeset 17-page article, 124 KB of text, 786 `" the "`, zero `( )` dropout): **`L₁ = ½ Σ |f_cell − g_cell|`** on relative frequencies over a cross-tabulation of coarsened covariates, reading as overlap (`0` coinciding, `1` separated), with the bin choice resolved by the **`L₁`-profile** and `L̄₁` reported at the **median of the raw data's profile**; and the **Monotonic Imbalance Bounding** class, whose guarantee is that tightening one covariate's parameter leaves every other covariate's bound unchanged, and whose trade reverses the usual one — **fix maximum imbalance ex ante, let the matched count fall out** (EPBR does the reverse, in expectation, on means only, under data assumptions that "rarely hold"). **Coarsened exact matching** is the member to build, and its one width `ε_j` bounds the difference in means, in every centered `k`th moment, and in every quantile, with no distributional assumption; cost `O(n)` by integer-key tabulation, with the cell space `m^k` the real ceiling (**#436**). **(b) ADMITTED as the construction half, and it answers (iii) in depth.** Iacus, King & Porro 2012 (Tier **A**, *Political Analysis* 20(1), 1–24, **3082** Crossref — the most-cited source in the vein; complete typeset 24-page article, 116 KB of text, 793 `" the "`): the coarsening is chosen substantively, or by **histogram bin-width rules** (Sturges / Scott / Freedman–Diaconis / Shimazaki–Shinomoto — **Freedman–Diaconis preferred here** on its IQR base), or by a **Lipschitz error bound `max_j L_j ε_j`** whose `L̂_j ε_j` products rank which covariate to tighten first (estimated from **control units only**, so no selection bias, but still outcome-informed), or by **progressive coarsening** with `L₁` as the tie-breaker between equal-matched-count solutions. Three further properties: **common support comes free**, the **congruence principle** (works in the units the covariates were measured in, so a coarsening can respect meaningful thresholds a caliper cannot), and **approximate invariance to measurement error** — *exact* when `ε_j` exceeds the error and the error respects stratum boundaries, which is the vein's strongest argument for this lab specifically given `#422`'s liquidity-tier error and estimated trailing volatility (**#437**). **(c) ADMITTED as the adversarial side under the [2026-11-11] closure amendment, graded TIER B on purpose.** Ripollone, Huybrechts, Rothman, Ferguson & Franklin 2018 (*AJE* 187(9), 1951–1961, **88** Crossref; read in full from PubMed Central): reproduces the paradox in two large claims cohorts and asks the question `#435` does not — **does the curve rise before the stopping rule you would actually have used fires?** It did not; conventional calipers landed near the **lowest region** of the imbalance curve in every one of 36 scenarios, with imbalance rising only on continued pruning and sooner with richer covariate sets. **So `#435`'s refusal test is restated** — plot the curve, mark where the lab's rule stops, refuse only if imbalance *there* is worse than unmatched — and the **boundary condition** is that the paradox threatens designs whose groups were *already* well balanced, which is **nearer the lab's own position** than these authors', so the reassurance does not transfer. Two cheaper metrics come with it: the **C statistic** (AUC of a logit predicting group membership inside the matched set; `0.5` is balance — read it, never optimise it) and **Mahalanobis balance** (correlation-aware but first-moment only, and `Σ` invertible at covariate width only) (**#438**). **The synthesis resolves the tension the folder was carrying**: pruning is justified exactly to the extent that it removes **heterogeneity in covariate space**, which is why `#437`'s error falls as it prunes while `#435`'s rises — stated independently in both camps, and confirmed by (c) from outside the authorship. **One disagreement recorded, not resolved**: (b) argues the balance-checking loop should be *eliminated*, (c) stresses it must be run; the asymmetry is the answer, since the licence to skip checking comes from the imbalance bound and **no matched control this lab has built carries one**. **The ranked writing task was completed in full**: `#433`/`#434` are now annotated into both notes of the admission-rule cluster — `2026-11-06-index-membership-is-not-an-information-free-selection.md` gains the statement that eligibility is a **treatment** with a constructible `pr(eligible\|x)` (and that CEM strata proportions estimate it nonparametrically), and `2026-11-08-committee-discretion-versus-the-published-admission-rule.md` gains the statement that **it is itself why strong ignorability fails** on this panel, with the consequence that the same unobserved component sits inside v3's benchmark. **NOT OBTAINED**: the second-ranked aim, **Cochran (1968)** on bias removal versus the **number** of subclasses (*Biometrics* 24(2), 295–313, `10.2307/2528036`, **703** Crossref) — failed on both budgeted searches and abandoned per that instruction rather than replaced; the folder still holds `#433`'s five-strata number without its justification, though (b) records that CEM "may equally be called **Cochran** Exact Matching". **Anti-lookahead.** No financial data in any source. Samples: analytic propositions, Monte Carlo, and two previously published non-financial observational datasets (a, b); two US insurance-claims cohorts 1999–2002 and 2000–2007 (c). **All three `validation_overlap: false` and all three `published_post_2018: false`** (2011, 2012, 2018). Every magnitude carried is a **bound in terms of a chosen tolerance**, a **bin-width formula**, a **complexity order**, a **share of matched units surviving a perturbation**, a **count of covariates or scenarios**, a **citation count**, or a statement about what a metric's value means. | Iacus, King & Porro 2011 (`2026-11-12-monotonic-imbalance-bounding-and-the-l1-measure.md`); Iacus, King & Porro 2012 (`2026-11-12-coarsened-exact-matching-as-applied-construction.md`); Ripollone et al. 2018 (`2026-11-12-does-the-matching-paradox-bite-in-practice.md`) |
 
 | 2026-11-13 (session 91) | **TOOK THE PRIMARY AIM VERBATIM, GOT BOTH NAMED PRIMARIES ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY OVERTURNING THE INSTRUMENT THE AIM WAS ABOUT.** Aim from the [2026-11-12] entry: **the classifier two-sample test — turn `#438`'s C statistic from a number into a TEST** — admit a source only if it (i) gives a **valid test** (null distribution or exact/permutation procedure) for classification accuracy computed on **held-out** data, (ii) states how its **power** compares to a purpose-built two-sample test, and (iii) says what the **sample splitting** costs; not a survey of two-sample tests, not an ML benchmark paper; **at most three requests**. **The mandated greps ran first and the gap held**: `classifier two-sample`, `Kolmogorov` and `energy distance` resolved only to this file's own statement of the aim; `maximum mean discrepancy` and `kernel test` were at **0**; all ten `Ramdas` hits were the 2026-10-28/30 online-multiple-testing vein, and the [2026-11-12] amendment (open the hits before believing a non-zero count) is what established that. **The nightly-variable detector also ran** on the 2026-11-12/13 session's headline — a score's **own-history depth**, and the pre-2004 coverage hole it opens — and returned **covered** (this file's "What conditions a continuation effect, and what a name's vintage does to it"), so the primary aim stood. **(a) ADMITTED, meets all three criteria alone.** Kim, Ramdas, Singh & Wasserman 2021 (Tier **A**, *Annals of Statistics* 49(1), 411–434, **33** Crossref / **105** Semantic Scholar on the arXiv record, checked 2026-11-13; 72-page article, 220 KB of text, 933 `" the "`): an **asymptotic** test (studentized held-out balanced error vs `−z_α`, consistent whenever true accuracy is `1/2 + ε` for any `ε > 0`, as `d, n → ∞` at any relative rate) and an **exact permutation** test in half- and full-permutation forms, with consistency needing only **`P > (1−α)/α` ≈ 20 permutations at `α = 0.05`, independent of sample size**; the power price as a constant — **`ARE ≤ 1/√π ≈ 0.564`, i.e. `√π ≈ 1.77×` the sample size** against Hotelling's `T²`, with power expressions matching exactly in `n, d, δ, Σ`; a **balanced train/test split** as the power-maximising ratio, with sample-splitting beating resubstitution in high dimensions and losing in low ones so **neither dominates**; **chance level exactly `1/2` whatever the class ratio** provided the balanced error is used; and the side result the lab will actually use — **Hotelling's `T²` is asymptotically minimax optimal whenever `d/n → 0`**. Remark 6.1 is the interpretation rule: a classifier can be **useless while the test on it has power**, so a low AUC is weak evidence of balance (**#439**, **#441**). **(b) ADMITTED as the construction half, graded TIER B on purpose.** Lopez-Paz & Oquab 2017 (ICLR, **666** Semantic Scholar, checked 2026-11-13, no registered DOI; 15 pages, 72 KB, 409 `" the "`): the five-step recipe, the **exact `Binomial(n_te, 1/2)` null** approximated by **`N(1/2, 1/(4 n_te))`** with no permutation and no nuisance parameter, the power theorem whose content is the **`ε`-versus-`n_te` trade-off** (classifier flexibility buys edge by spending test-set size), **model selection inside `D_tr` permitted** and feature choice across the sample not, per-point probabilities that **localise** where the sets differ, and Remark 2's concession that a zero-one loss is a **high-variance** statistic (**#439**). **(c) ADMITTED as the adversarial side under the [2026-11-11] closure amendment, TIER B.** Rosenblatt, Benjamini, Gilron, Mukamel & Goeman (*Biostatistics* 22(2), **14** Crossref; read from arXiv:1608.08873v2, 30 pages, 77 KB, 386 `" the "`): agrees on the ordering, disagrees on the cause, and its cause is **invisible to (a)'s method** — an accuracy statistic is **discrete** and so cannot exhaust the permissible false-positive rate, with random tie-breaking helping only marginally. Four causes of lost power: discretization, the conceded shift-alternative framing, **inefficient use of the data when validating on a holdout**, and **inappropriate regularization, because testing requires less regularization than predicting**. Construction: bias in the accuracy estimate **does not matter for testing**; **`V`-fold CV is dominated and never recommended**; use the **leave-one-out bootstrap (bLOO)**; regularize. **Level was controlled by every statistic in every simulation**, so the dispute is entirely about power (**#440**, **#441**). **The synthesis is a REFUSAL the handover did not anticipate**: with a handful of named covariates against ~1,000 eligible names, `d/n → 0` is this panel's cell, so the right instrument for the lab's balance question is a regularized high-dimensional **location** test and **not** the AUC `#438` recommended; the classifier form is reserved for the open-ended *can anything tell them apart* question. **One arithmetic fact carried**: at `n_te ≈ 500` the null sd of held-out accuracy is `≈ 0.022`, so a reading below about **`0.54`** is not distinguishable from chance on a single date, and **book size, not panel size, bounds the diagnostic**. **One disagreement recorded, not resolved**: (b) sells interpretability, (c) cites evidence that practitioners find accuracy tests *less* interpretable than location tests. **The ranked writing task was completed in full**: `#435`'s screen question is now carried into both screen notes — `2026-10-21-sure-independence-screening-marginal-vs-joint.md` (a marginal screen prunes on the comparison variable, the benign case; its **history, liquidity and eligibility preconditions do not**) and `2026-11-03-attainable-underweight-and-the-long-only-constraint.md` (`#376`'s truncation test prunes on **exactly** the dimension it interrogates and is therefore validated by the question, with `#436`'s estimand caveat attached). **NOT OBTAINED AND NOW PERMANENTLY RETIRED**: **Cochran (1968)** (*Biometrics* 24(2), 295–313, `10.2307/2528036`, **703** Crossref) failed its **third and last** budgeted channel and is recorded as a permanently named unobtained pointer, not to be re-ranked. The attempt reached Stuart's *Statistical Science* matching review, which restates (i) in summary — analytic expressions for bias reduction by subclassification on a univariate continuous covariate, **five subclasses removing at least 90% of the initial bias** due to it, extended by Rosenbaum–Rubin (1985b) to five propensity-score subclasses — but gives neither (ii) nor (iii), so it is **not admitted as a note**. One improvement kept anyway: the convention is **5–10 subclasses, 10–20 feasible at larger `n`**, and the review states that more work is needed to determine the optimum, so `#433`'s "five" is a floor rather than an optimum. **Anti-lookahead.** No financial data in any source. Samples: analytic propositions plus Monte Carlo over Gaussian and multivariate-`t` laws (a); synthetic distributions and image benchmarks (b); Monte Carlo under varied covariance structures plus one previously published fMRI dataset (c). **All three `validation_overlap: false`**; `published_post_2018` **true** for (a) and (c), **false** for (b). Every magnitude carried is an **asymptotic relative efficiency**, a **permutation count**, a **null variance in terms of a sample size**, a **split ratio**, a **bias-removal share for a stated number of strata**, a **citation count**, or a statement about what a statistic's value means. | Kim, Ramdas, Singh & Wasserman 2021 (`2026-11-13-classification-accuracy-as-a-two-sample-test.md`); Lopez-Paz & Oquab 2017 (`2026-11-13-classifier-two-sample-tests-construction.md`); Rosenblatt et al. 2021 (`2026-11-13-accuracy-tests-are-underpowered-for-signal-detection.md`) |
+| 2026-11-14 (session 92) | **TOOK THE NAMED PRIMARY AIM AND THE VEIN ANSWERED IT, BUT THE ANSWER IS THAT THE LAB SHOULD USE THE CLASSICAL INSTRUMENT AND THE WHOLE HIGH-DIMENSIONAL LITERATURE IS RESERVE MATERIAL.** [2026-11-13] left `#440` as a refusal with no replacement — the lab told not to compute an AUC and not told what to compute instead — and named Chen & Qin with Bai & Saranadasa as the primaries, with a three-part acceptance criterion (a computable statistic with a stated null; the `d/n` condition and where it beats or loses to Hotelling; the covariance assumption) and a budget of three requests. **All three criteria met by all three sources, all read in full text, and the budget was not exceeded**: Chen & Qin from arXiv (the Project Euclid PDF endpoint returned a 1.2 KB HTML body — the destination-chooser failure mode again), Bai & Saranadasa from the *Statistica Sinica* open archive, and the adversarial third from `tony-cai.com/assets/pdf/papers/` after the old `www-stat.wharton.upenn.edu/~tcai/paper/` directory 404'd — the author's own flat `/assets/pdf/papers/<slug>.pdf` directory, this file's repeatedly-rediscovered channel shape, now confirmed on a rebuilt Jekyll site where the *old* faculty path is dead. **Headline, and it goes against the vein that supplied it**: Bai–Saranadasa's own arithmetic says the sample covariance's limiting condition number is `(1+√y)²/(1−√y)²` at `y = p/n` — **1.494 at `y = 0.01`, 3.705 at `y = 0.1`, ≈ 3039 at `y = 0.93`** — and the lab's balance cell is `d ≈ 3–6` against `n ≈ 1,000`, i.e. `y ≈ 0.005`, condition number below 1.3 and a `√(1−y)` power factor of 0.998. **`#440`'s refusal is now quantitative with a threshold attached, and the instrument is plain Hotelling's `T²` with its exact `F` reference** (`#442`); the replacements are reserve material for a covariate set in the hundreds or for plainly unequal group covariances (`#443`). Headline two, from the adversarial source, and it is the session's most actionable output: the sum-type family needs `n‖δ‖₂²/√p → ∞` and the max-type family needs `maxᵢ|δᵢ|/σᵢᵢ^{1/2} ≳ √(2β log p/n)`, so **adding control covariates to a joint balance test WEAKENS it** unless the book actually shifts them — a short pre-named covariate list is the better design, by the detectability condition rather than by parsimony (`#444`). Headline three is an **anti-candidate that binds on every statistic in the vein**: all of these nulls assume i.i.d. observations and the lab's observations are names in one correlated cross-section, so **every asymptotic reference here is anti-conservative** and the calibration must be a within-date permutation of the hold/not-hold labels (`#445`). The second-ranked handover item — a writing task needing no source — was **also discharged**: `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md` now carries the selection-space/return-space two-by-two (`#446`). **Anti-lookahead.** No financial data in any source: analytic asymptotics plus Monte Carlo (a, c), plus one microarray application (b). All three `validation_overlap: false` and all three `published_post_2018: false`. Every magnitude carried is a **limiting condition number as a function of `p/n`**, a **detectability condition**, a **null distribution**, a **bias-corrected trace estimator**, a **minimax rate**, or a **citation count**. **Citation counts**: 452 and 207 from Crossref; Bai–Saranadasa **not resolved** — Crossref's journal-year enumeration for *Statistica Sinica* 1996 returns zero deposits, and OpenAlex and Semantic Scholar both answered **HTTP 429**, which are rate limits and **not** clean negatives; recorded as such and the tier not downgraded on that basis. | Bai & Saranadasa 1996 (*Statistica Sinica*) (`2026-11-14-hotelling-t2-under-high-dimension.md`); Chen & Qin 2010 (*Annals of Statistics*) (`2026-11-14-two-sample-location-test-without-a-dimension-condition.md`); Cai, Liu & Xia 2014 (*JRSS-B*) (`2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`) — all three read in full text |
 
 ### Open questions for future sessions
+
+- **[2026-11-14] READ THIS BEFORE AIMING SESSION 93. The high-dimensional two-sample vein is CLOSED
+  on all three of its sides, and its verdict is that the lab's instrument is the CLASSICAL one —
+  which means `#440` is no longer a refusal without a replacement.** `#442` gives the statistic
+  (Hotelling's `T²` at covariate width, exact `F` reference) and the arithmetic that selects it
+  (`(1+√y)²/(1−√y)²`; the lab's `y ≈ 0.005`); `#443` gives the two replacements and the conditions
+  under which they would become right; `#444` gives the pre-registration rule and the
+  widening-weakens-the-test consequence; `#445` gives the anti-candidate that binds on all of them
+  (i.i.d. observations versus a correlated cross-section) and the within-date permutation that
+  repairs it. **Do not reopen it.** The test, the two generalisations and the adversarial critique
+  have all been read, and the vein's own verdict is that the lab was already holding the right tool.
+  - **Primary aim for session 93, and it is the one thing this vein named and could not supply: WHAT
+    THE COVARIATES SHOULD BE.** `#444` establishes that a joint balance test is *weakened* by every
+    covariate the book does not shift, so the covariate list is now a load-bearing design choice with
+    a stated cost — and the lab has never written down where its list comes from. The list in use
+    (trailing realised volatility, log dollar volume or liquidity tier, region, log price level) was
+    assembled by accretion: `vol126` and `amihud126` from the lab's own closures, region from the
+    2026-09-03 `lv_illiq_region_relative` win, log price from `#420`–`#426`. **The literature on
+    choosing a conditioning set under a cost per variable is the gap**, and the shape of it is
+    variable selection for *balance* or for *confounding control*, which is a different objective
+    from variable selection for *prediction* — `#441`'s "testing requires less regularization than
+    predicting" says so directly and then stops. **A grep before any download**, per the [2026-11-12]
+    amendment, and **open the hits**: candidate patterns are `confounder selection`,
+    `variable selection for confounding`, `bias-variance tradeoff covariate`, `M-bias`,
+    `collider`, `instrument` and `pre-treatment variable`. If those come back genuinely covered, the
+    fallback aim is the **estimation of `Σ` at covariate width from a correlated cross-section** —
+    `#445` says the permutation fixes the *null* but says nothing about whether `S_n` itself is a
+    sensible estimate when the rows are dependent, and that is a question the three notes of
+    2026-11-14 raise and none of them answers. **Acceptance criterion, stated before any download:
+    admit a source only if it (i) gives a RULE for including or excluding a covariate, not merely a
+    warning that the choice matters; (ii) states what the rule costs when it is wrong in each
+    direction; and (iii) is about a conditioning set, not about forecasting.** Not a general
+    variable-selection paper; not another matching paper (that vein is closed on five sides).
+    **Spend at most three requests.**
+  - **Ranked second, and it is a WRITING task needing no source: `#445` is not carried into the three
+    free screens it binds on.** `#376`'s one-bit truncation test, `#389`'s cumulative-curve test and
+    `#381`'s `σ_IC` are all computed across a correlated cross-section, and all three are read against
+    references that assume independence somewhere. The i.i.d. caution was written tonight for the
+    *balance* test and applies verbatim to them. Annotating those notes costs no trial and is exactly
+    the composition tonight's `#446` was.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06] through [2026-11-13]) ran in full: the pre-download grep
+    returned **0** for `Bai and Saranadasa`, `T-squared`, `shrinkage covariance` and `Dempster`, and
+    the hits were **opened** — all five `Hotelling` hits were last night's two notes, one annotation
+    made last night to the SIS note, and two *relayed finance results* where other authors ran a `T²`
+    and this folder recorded the conclusion without the method. The adversarial budget was spent and
+    **it worked the way [2026-11-13] said it should: as a veto, not a tie-breaker** — Cai–Liu–Xia
+    supplied the detectability condition that turned "use a sum-of-squares test" into "use a sum-type
+    test only if you expect many coordinates to move", and that is a *bound* on the vein's own
+    recommendation rather than an endorsement of it. **Tonight's amendment is about what a vein
+    answering in the negative is worth.** Three sources were read and the net recommendation is *keep
+    using the statistic you already had*. That is not a wasted session: `#440` was a refusal with no
+    replacement, which [2026-11-13] itself called the worst state for a free diagnostic to be left in,
+    and the vein closed it by **licensing** an instrument rather than by supplying a new one. **A vein
+    that ends in a licence is as closed as one that ends in a construction** — record it as closed and
+    do not re-open it in the hope of a more exciting answer. The nightly-variable detector was run and
+    returned **covered** for the third consecutive session. Caveats still not run through the
+    detector, unchanged in order: *publication decay*, and *"the cost model is lethal only to books
+    that trade"*.
+  - **Carried unchanged and still live**: everything carried under [2026-11-13] — `#406`'s
+    volatility-tercile conditioning, category-**neutral** per `#414`; `#413`'s composed pre-trial
+    rule; `#376`/`#389`/`#381` as the three free screens, with the preconditions attached to them
+    still not discharged; and the refusals `#415`, `#421`, `#423`, `#427`/`#429`/`#434`/`#435`/`#436`/
+    `#438` and `#440`. **Tonight adds one licence, one rule and one anti-candidate.** New licence:
+    `#442` — **use Hotelling's `T²` for a named balance difference**, with the `y = p/n` table as the
+    check on when that stops being true. New rule: `#444` — **choose sum-type versus max-type by the
+    expected number of moving coordinates and pre-register that number**, with the corollary that
+    widening the covariate list weakens the test. New anti-candidate: `#445` — **never report an `F`
+    or Gumbel `p`-value from a correlated cross-section**; permute within the date instead. The
+    classifier-accuracy vein stays closed (`#439`–`#441`); the matched-control vein stays closed on
+    all five sides (`#427`–`#438`); the nominal-price vein stays closed (`#420`–`#426`); the index-rule
+    vein stays closed (`#401`–`#419`); the detectability vein stays closed (`#393`–`#400`); the
+    cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#442`–`#446` from tonight; `#439`–`#441` from 2026-11-13;
+    `#436`–`#438` from 2026-11-12; `#433`–`#435` from 2026-11-11; `#427`–`#432` from 2026-11-10;
+    `#420`–`#426` from 2026-11-09; `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07;
+    `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04;
+    `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01;
+    `#343`–`#348` from 2026-10-31; and everything carried under those.
+  - **Retired and recorded as retired**: everything carried under [2026-11-13], and **tonight the
+    high-dimensional two-sample location vein on all three of its sides**. **Cochran (1968) remains
+    permanently unobtained and must not be re-ranked.** Still at **0** and still not nominated:
+    `transfer entropy` (twenty-fifth nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-13], unchanged —
+    including the engine issues filed 2026-10-18 and 2026-10-22, `min_train_skill = 0.0`, the note
+    format's missing holdout-overlap flag, `#422`'s signed error in the volume-only liquidity tier,
+    `#432`'s two opposite-signed biases in the equal-weight pool, the still-unmeasured pre-screen
+    imbalance, and the **zero-trial-rate question raised to the human owner on 2026-11-13**, which
+    tonight neither advances nor retracts: this session supplied one licence and two refusals, which
+    is the same mixture the owner was asked to weigh. **The integrity check is different tonight and
+    the difference should be read.** The container was again on a per-run branch
+    (`claude/tender-galileo-r7oevf`) at `origin/main`'s commit, for the fifteenth consecutive session,
+    and was reset to `main` before any work. The startup hook escalated **two** branches.
+    `origin/main-a5dglb` **cleared for the third consecutive session** — `git cherry` reports it `-`,
+    i.e. patch-equivalent upstream, exactly as [2026-11-13] predicted would keep happening until
+    somebody deletes it. **`origin/claude/determined-darwin-brkls1` is NOT a false positive**:
+    `git cherry` reports it `+`, and it holds one unlanded commit — the **2026-W46 weekly report and
+    its chart**, which are absent from `main` (`reports/` holds no `2026-W46.md`). It contains **no
+    trials**: `trials.jsonl`, `leaderboard.json`, `incubation.jsonl`, `strategies/` and `engine/` are
+    byte-identical to `main`, so **no trial history is split and no deflated-Sharpe bar is
+    understated** — the hook's stated hazard does not obtain. But a weekly report was written and
+    never landed, and recovering or rewriting it is a human's call, as is deleting
+    `origin/main-a5dglb`.
 
 - **[2026-11-13] READ THIS BEFORE AIMING SESSION 92. The classifier-accuracy vein is CLOSED on all
   three of its sides, and the night's most consequential output is that the instrument `#438` handed

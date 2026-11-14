@@ -30188,3 +30188,5 @@ rule agreeing with the instrument actually built; **`#411`** again declined, bec
 second-moment only per `#412` and the standing requirement is a first-moment mechanism.
 
 **Verdicts:** none.
+
+## Research session — 2026-11-14 (learning agent): 3 notes added, see research/SUMMARY.md
