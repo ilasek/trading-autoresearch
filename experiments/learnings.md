@@ -7935,3 +7935,145 @@ across experiments; prune entries that later evidence contradicts.
   positions against 0.0128 at 324). `#16` already sits at frac ≈ 0.17. **No construction route remains
   in either direction**, which together with 2026-11-10/11's benchmark and turnover closures leaves
   `margin` responding to selection alone.
+
+- **[Measured 2026-11-13/14, nightly — ZERO trials spent; THE HEADLINE, AND IT IS THE MISSING NULL
+  FOR THIS FILE'S MOST-USED INSTRUMENT] THE ONE-BIT REGION-MATCHED LOG-SPACE SCREEN IS UNBIASED IN
+  LOCATION AT EVERY PERSISTENCE LEVEL, BUT ITS DISPERSION RISES ~4.5x IN THE SCORE'S OWN
+  MONTH-TO-MONTH RANK PERSISTENCE — SO EVERY SLOW OBJECT EVER PRICED HERE WAS READ AGAINST AN
+  IMPLICIT ZERO INSTEAD OF A BAR OF ~32 log bps AT h63 AND ~102 AT h252.** The 2026-11-11/12
+  calibration used `w·rank(vol126) + (1−w)·noise` with the noise **reseeded every date**, i.e. it
+  calibrated this screen at *zero* persistence and found a location bias proportional to `rho_vol`.
+  That result is untouched and correct. What it never asked is the null's **dispersion**, and every
+  slow object this lab screens sits at the far end of the persistence axis: measured `phi_1m`
+  (within-region month-to-month rank autocorrelation) is **+0.977** for M3's parent score, **+0.966**
+  `vol126`, **+0.962/+0.965** the signed-volume imbalance, **+0.884** 12−1 momentum. A
+  zero-information AR(1)-in-rank-space score, 24 draws per level, h252 LOG bps, grid ME, raw:
+
+      phi_1m     0.000    0.700    0.900    0.970    0.995
+      mean        -0.2     -4.6     -4.2     +1.2    +13.2      <- location stays at zero
+      sd          22.9     59.8     71.0    107.7     97.9      <- dispersion rises 4.5x
+
+  Fixed at `phi = 0.96`, 40 draws, full train window, both date grids (LOG bps):
+
+      grid ME   h21    h63   h126   h252        grid QE   h21    h63   h126   h252
+      raw  sd   11.0   32.0   57.2  102.1       raw  sd   17.5   32.0   60.6  120.3
+      raw p90  +15.5  +32.9  +65.4 +117.3       raw p90  +25.1  +36.3  +58.9 +116.6
+      ctl  sd   11.5   32.1   60.5  110.9       ctl  sd   15.7   32.3   60.3  119.4
+      ctl p90  +10.9  +42.6  +87.0 +185.9       ctl p90  +20.2  +37.5  +70.4 +154.6
+
+  **Two standing rules. (i) Read a long-horizon cell as a `z` against a persistence-matched null,
+  never as the date-level `t`.** The 2026-11-08/09 rule ("quote every long-horizon `t` as an upper
+  bound … effective n nearer 21 than 252") is a heuristic with one number in it; the inflation is
+  **not** a constant, because it depends on the score's own autocorrelation structure and not only on
+  the horizon — M3's h252 ME reading carries `t +7.4` and **z +3.93** (1.9x), the signed-volume
+  imbalance `t +6.6` and **z +1.79** (3.7x). **(ii) Measure the bar on the reading's OWN window.**
+  Same horizon and persistence, h252 raw sd by window: **164** (144 month-ends, 1997-2008, 0-279
+  scorable names), **217** (60, 2004-2008), **100** (48, 2009-2012, 282-520 names), **80** (48,
+  2011-2014), **77** (60, 2013-2017, 530-804), **62** (108, 2009-2017), **102** (252, full train).
+  It is not `1/sqrt(n_dates)` — dispersion falls with the cross-section's width too, and on this
+  panel width and date count move together. **Any sub-period comparison in this file that compared
+  raw bps across windows compared numbers drawn from different nulls.** Scope, stated because it is
+  easy to over-read: **no gate, trial, verdict, DSR or recorded number changes** — the gates were
+  never built on this screen. What changes is the *reason* attached to a screen-based closure, and
+  in the direction of making the closures firmer. Anti-candidates travelling with this entry: any
+  long-horizon screen reading quoted as a date-level `t`; any sub-period claim read against a bar
+  measured on a different window.
+
+- **[Measured 2026-11-13/14, nightly — CORRECTS THIS SESSION'S OWN FIRST TABLE, AND REPRODUCES THE
+  2026-11-12/13 COVERAGE AUDIT BY AN INDEPENDENT INSTRUMENT] M3 CLEARS THE PERSISTENCE-MATCHED BAR
+  ON THE FULL TRAIN WINDOW AND IS A NULL ON THE ONLY ERA WITH A REAL CROSS-SECTION: z +0.18
+  CONTROLLED OVER 2009-2017, AND SIGN-UNSTABLE ACROSS ADJACENT SUB-WINDOWS.** The full-window sheet
+  qualified exactly one of six objects, which read as two independent instruments converging on the
+  board's one live result. With the bar re-measured on each sub-window (h252, grid ME, LOG bps):
+
+      window      dates  M3-scorable   bar sd raw/ctl    M3 raw         M3 ctl
+      1997-2008    144      0-279         164 / 155     +723.0 z+4.18  +595.9 z+3.35
+      2004-2008     60     35-279         217 / 238     +731.4 z+3.37  +703.5 z+2.97
+      2009-2012     48    282-520         100 / 113     -234.6 z-2.09  -390.1 z-3.34
+      2011-2014     48    469-728          80 /  70     +192.3 z+3.10   +44.6 z+1.67
+      2013-2017     60    530-804          77 /  79     +218.6 z+2.91  +162.7 z+2.27
+      2009-2017    108    282-804          62 /  69      +84.0 z+1.58   +10.8 z+0.18
+
+  The full-train **z +3.93** is carried by 1997-2008 — the window the coverage audit showed holds 0
+  scorable names before 1999 and 33-36, all US, through 2003 — plus a 2013-2017 stretch, with an
+  **opposite-signed** hole between them. **So the new instrument does not corroborate M3**; it
+  sharpens the previous session's finding from "82% of the drift is four years" to "sign-unstable
+  across adjacent sub-windows of the era that has the names". **Multiplicity caveat, and it is
+  load-bearing**: the sweep is 3 objects x 6 windows x 2 horizons x 2 control states = **72 cells**,
+  so a |z| near 4 somewhere in it is expected under the global null, and the individual readings are
+  **not** claimed — not M3's 2009-2012 negative, not the flow imbalance's +4.03 nor 12−1 momentum's
+  +3.48 at 2011-2014 h252 ctl (both nulls in every adjacent window). The one asserted reading is the
+  **pre-registered** one: 2009-2017, the window the preceding handover named in advance. **Standing
+  rule: name the window before measuring it** — a 48-to-60-month window on this panel will produce a
+  `z` of 3 on request. Nothing here moves M3's recorded validation skill (+0.124, 90% CI [−0.11,
+  +0.42], DSR 0.1635), the board, the gate or the deflator.
+
+- **[Measured 2026-11-13/14, nightly] THE MANDATORY JOINT CONTROL IS CALIBRATED FOR THE FIRST TIME
+  AND IT PASSES CLEANLY: IT REMOVES WHAT IT SHOULD AND MANUFACTURES NOTHING.** Mandated on
+  2026-11-08/09 (within-region log-`P` for any screen beyond h = 63) and jointly with `vol126` on
+  2026-11-10/11, applied nine times since, never checked — and the record contains a precedent for
+  the control *creating* a reading (2026-11-12/13's `rank_stability`, US +212 → +483). Checked
+  because the night's new object flipped sign under the control by far more than its `rho` to the
+  controls (+0.09, −0.11) could explain. Information-free and reference scores, h252 LOG bps, grid
+  ME, through the within-region rank-space OLS residual:
+
+      score                                   rho_logP     raw     controlled
+      noise_iid (reseeded each date)            +0.00      +3.4       -0.4
+      noise with the new object's logP load     +0.10    -163.9      -18.8
+      noise with the new object's vol load      +0.01     +51.5       +4.0
+      log P itself                              +1.00   -1020.9       +0.1
+      vol126 itself                                --    -482.7     -145.0
+
+  **Log `P` itself goes from −1021 to +0.1.** So controlled positives elsewhere are not control
+  artifacts — which is what made the previous entry's era decomposition the right next question
+  rather than an instrument hunt. Two re-reads fall out free, each reconfirming a standing closure
+  from a direction the record did not have: **`vol126` is a null under the joint control** (z −1.0 to
+  −1.6 against raw −4.7 to −5.7), the third independent instrument to converge on "Sharpe is flat in
+  beta on this panel"; and **`amihud126` is a null under it** (z −0.7 to −1.0 against raw +1.0 to
+  +2.1), reproducing the back-adjustment contaminant a **fourth** time and reconfirming
+  `liquidity-volume`'s closure. **Plain 12−1 momentum** is the one cell that looked capable of
+  reopening a closed object — controlled z +2.05 to +2.45 on the full window, both grids — and it
+  collapses to **z −0.06 (h63) / +0.25 (h252) over 2009-2017**, its positive coming entirely from
+  1997-2008 (z +2.61/+2.62). It stays closed, with the note that the joint control *raises* it on the
+  thin window exactly as it raised `rank_stability`.
+
+- **[Measured 2026-11-13/14, nightly] THE SIGNED-VOLUME IMBALANCE IS A NULL, AND IT IS THE FIRST
+  OBJECT IN SEVERAL SESSIONS TO CLEAR THE OWN-HISTORY-DEPTH PRE-SCREEN OUTRIGHT AND STILL FAIL ON
+  SIGNAL.** `imb = sum(sign(r)·w) / sum(w)` over W trading days lagged 21, `w` = share volume or
+  dollar volume, W ∈ {252, 756}. Chosen because it meets all three conditions the record puts on a
+  next slow proposal: it predicts a cross-sectional **first** moment (the standing requirement after
+  `segmentation`, `beta_trend` and the variance ratio went three-for-three empty on second-moment
+  objects), it is a **volume ratio** so the back-adjustment level cancels by construction, and it is
+  **slow**, so its branch of the derived bar is ~0.017 one-bit IC and not the arithmetically-closed
+  ~0.086. Mechanism: Chordia-Subrahmanyam / Campbell-Grossman-Wang order-imbalance persistence.
+  **Depth: 153 scorable eligible stocks in 1997 rising to 806 in 2015 — no coverage hole at all**,
+  against M3's 0-before-1999. Novelty, within-region name-weighted Spearman: log `P` +0.07/+0.10,
+  `vol126` −0.11, `amihud126` +0.02, `m3_oldhalf` +0.08/+0.13, **12−1 momentum +0.65 at W=252 and
+  +0.39 at W=756** — so the 252-day version is substantially momentum in costume and was never the
+  live one. Readings (LOG bps, `z` against the `phi`-matched bar):
+
+      cell                      h21     h63    h126    h252
+      ME raw                   +9.2   +14.2    +9.3   -95.8   (z +0.96/+0.49/+0.16/-0.99)
+      ME controlled           +14.7   +54.6  +108.6  +212.5   (z +1.29/+1.66/+1.75/+1.79)
+      QE raw                  -41.6    +1.0   -35.4  -168.2   (z -2.41/+0.17/-0.48/-1.31)
+      QE controlled           -18.2   +57.9   +94.4  +203.4   (z -1.02/+1.88/+1.56/+1.73)
+      2009-2017 raw / ctl        --   -49.3/+1.2      -86.3/+60.4  (z -2.35/+0.05, -1.16/+0.90)
+
+  **Raw is non-positive at every horizon beyond h63 on both grids**; the controlled h252 reading of
+  +212.5 is `t +6.6` by the screen's own date-level statistic and **z +1.79** against the matched
+  bar. Its only convincing cells are in **2004-2008** (h63 raw z +2.87) — the same thin-cross-section
+  window that flatters M3, which was the fourth demonstration in one night that that window will
+  nominate almost anything. **Anti-candidates: the signed-volume imbalance at any window, either
+  weight, standalone; and any nomination coming out of the 2004-2008 window alone.**
+
+- **[Method, 2026-11-13/14 — AN ERROR OF MINE, FOUND AND QUANTIFIED INSIDE THE SESSION] A FREE
+  "TRAIN-ONLY" SCREEN LEAKS VALIDATION UNLESS THE FORWARD WINDOW IS TRUNCATED TOO, NOT JUST THE
+  DECISION DATES.** Restricting decision dates to `<= 2017-12-31` is not enough: at h = 252 the last
+  ~12 monthly dates read forward returns out of 2018. The fix is to **drop** any date whose forward
+  window passes the train boundary rather than truncate it (truncating silently shortens the horizon
+  and biases the cell toward the shorter one). Recorded with its magnitude because a suppressed one
+  is worse than a disclosed one: it moved M3's h252 ME raw reading +380.3 → +406.5 (z +3.89 → +3.93)
+  and the bar's h252 raw sd 96.5 → 102.1, and no conclusion turned on it. The general form, and it is
+  why this was caught at all: **the first thing an uncalibrated instrument needs calibrating against
+  is its own harness** — the block's subject was that this screen had never had a null, which is
+  exactly the frame in which one checks the plumbing.
