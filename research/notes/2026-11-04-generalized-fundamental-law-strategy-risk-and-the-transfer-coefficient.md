@@ -234,3 +234,20 @@ Not a strategy — a set of measurements and a specification discipline.
   `Σ_IC` formula gives an asset-pricing-specific objective for.
 - `experiments/learnings.md`, protocol-v3 section — the measured instances of IC sign inversion
   across train sub-periods, which is `σ_IC` showing up as a symptom without being named.
+
+
+## Annotation [2026-11-15] — the i.i.d. caution from `#445`, which binds on `σ_IC`
+
+`σ_IC` is a **dispersion of per-date information coefficients**, and the two ways it is read are
+both exposed to the caution `#445` raised for the balance test. (i) Each date's IC is itself a
+rank correlation across a **correlated cross-section**, so its sampling variance is larger than a
+name count implies; the dependence inflates the *within-date* noise that `σ_IC` is supposed to be
+measuring *across* dates, and the two are not separable by inspection. (ii) The sequence of per-date
+ICs is **not independent across dates** either — overlapping trailing windows and persistent
+regional loadings induce autocorrelation — so a standard error on `σ_IC` computed as if the dates
+were independent draws is anti-conservative in the same direction. **Neither point changes the
+quantity's role as the bound on everything else**; both change what may be attached to it. The free
+repairs: state `σ_IC` as a magnitude with the window named, never with an analytic interval; where
+an interval is wanted, bootstrap **blocks of dates** rather than dates; and where a single date's
+IC is being tested, permute within that date's cross-section. The measured IC sign inversions
+across train sub-periods that `learnings.md` records are the symptom this annotation is about.

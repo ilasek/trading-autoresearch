@@ -207,3 +207,19 @@ before believing either.**
 - `notes/2026-10-28-model-confidence-set-the-set-valued-ranking.md` — the complementary question
   (which candidates can be separated) to this paper's question (did this candidate's edge accrue
   recurrently).
+
+
+## Annotation [2026-11-15] — the i.i.d. caution from `#445`, which binds on the cumulative-curve test
+
+The cumulative active-return curve is read **along the time axis**, which is the one place this
+folder's dependence problem is usually remembered — and it is exactly where the references behind
+the formal versions of this diagnostic assume independence. Active returns on this panel are
+**autocorrelated and heteroskedastic in clusters**, so a critical value derived for independent
+increments understates the chance that a monotone-looking stretch arose by accident; the honest
+reading of the curve is therefore **the shape** (did the edge accrue recurrently, or in one
+stretch?), not a `p`-value on the shape. This is not a weakening of the screen — it is what makes
+it the right screen, because the question it answers is qualitative and the lab's own instance
+(a positive confined to 1997-2008) was read off the shape. The free repairs: name the window
+before reading the curve (`learnings.md`'s standing rule, for the same reason); where an interval
+is wanted, resample **blocks** of dates, never single dates; and treat a flat stretch as *not
+detectably accruing* rather than as evidence of decay (`#441`).

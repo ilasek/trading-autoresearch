@@ -30335,3 +30335,4 @@ assuming the last report on `main` is the last report written. **Provenance from
 `research/SUMMARY.md`: none — no research note was read or spent tonight, because no
 hypothesis was written.** The next session inherits the full 8-trial budget and the
 family allocation in `program.md` unspent.
+## Research session — 2026-11-15 (learning agent): 3 notes added, see research/SUMMARY.md

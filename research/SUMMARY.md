@@ -9736,6 +9736,115 @@ distribution**, a **bias-corrected trace estimator**, a **minimax rate**, or a *
 return, Sharpe, or dated performance figure appears in any of the three sources or is carried from
 them.
 
+### WHICH COVARIATES BELONG IN THE CONDITIONING SET — the rule `#444` demanded and could not supply, the price of each covariate type, and the ceiling on "add another control" (cross-family, the gate's own statistic, the panel itself)
+
+**[2026-11-15] Read this first: the vein answers the question `#444` left open, and its answer
+contradicts the lab's current practice in one specific place.** [2026-11-14] established that a
+joint balance test is *weakened* by every covariate the book does not shift, which made the
+covariate list a load-bearing design choice with a stated cost — and then observed that the lab has
+never written down where its list comes from. The list in use (`vol126` and `amihud126` from the
+lab's own closures, region from the 2026-09-03 `lv_illiq_region_relative` win, log `P` from
+`#420`–`#426`) was assembled by accretion. Three sources supply the missing layer. The transferable
+output is **one rule, one free screen the lab has never run, one over-determined refusal, one
+anti-candidate and one stated tension** — and the screen is the session's most actionable item
+because the lab has been judging its controls on exactly the wrong side of the problem.
+
+**The rule, and the reason to prefer it is a theorem rather than a convention** (`#447`).
+VanderWeele (2019, *European Journal of Epidemiology*; tier **A**, overlap `false`,
+`published_post_2018: **true**`) orders the selection criteria by how much structural knowledge each
+needs and shows the two that practitioners actually use **both fail, in opposite directions**. The
+liberal one — adjust for everything measured before the treatment — fails on the **M-diagram**: a
+pre-treatment covariate that is a common *effect* of two independent unmeasured causes is a
+**collider**, the unadjusted analysis is unbiased, and conditioning *opens* the path. The
+conservative one — adjust for common causes only — fails the other way, declining a covariate that
+would have sufficed when the true common cause is unmeasured. The **disjunctive cause criterion**
+sits between them: control for each pre-treatment covariate that is a cause of the treatment, **or**
+of the outcome, **or** of both. Its property is the reason it is a rule and not a preference: **for
+every causal diagram, if any subset of the measured covariates suffices, the disjunctive set
+suffices too** — which neither of the other two has. The recommendation adds two qualifications:
+**exclude any variable known to be an instrument** (`#450`), and **include a proxy for an unmeasured
+common cause** — restricted to proxies of *common* causes, because a variable that proxies a
+treatment-only cause and an outcome-only cause simultaneously *is* the M-diagram collider. The paper
+is also the folder's cleanest statement of why the data cannot do this alone: **no test separates a
+confounder from a mediator**, because temporal order is not in the joint distribution.
+→ `notes/2026-11-15-the-modified-disjunctive-cause-criterion.md`
+
+**The price list, and it names the side of the problem the lab has been measuring** (`#448`,
+`#449`). Brookhart et al. (2006, *American Journal of Epidemiology*; tier **A**, overlap `false`,
+`published_post_2018: false`) price three covariate types by bias, variance and MSE. An
+**outcome-only** covariate **lowers variance and leaves bias unchanged** — roughly **30% / 25%** less
+variance than the confounder-only conditioning set at their two sample sizes — and the mechanism is a
+finite-sample one worth keeping: a covariate that is *population*-unrelated to the treatment still
+carries a chance association with it in any actual sample, so if it is outcome-related it is an
+**empirical confounder for that realisation**, and adjusting removes that realisation's
+non-systematic bias. A **treatment-only** covariate **raises variance and reduces no bias** —
+about **40% more** variance — and damages a *stratified* analysis more than a smooth one. And the
+headline: **the model that best predicted the treatment was not the best conditioning set.** The
+lowest-MSE set had a `c` statistic of **0.67**; the highest-`c` set (**0.82**) carried the 40% variance
+penalty. *"The goal of a PS model is to efficiently control confounding, not to predict treatment."*
+The one case for dropping a true confounder — strongly treatment-related, weakly outcome-related,
+small sample — **shrinks as `n` grows**, because variance falls at `1/n` and omission bias does not
+fall at all.
+→ `notes/2026-11-15-covariate-selection-for-the-propensity-score.md`
+
+**The adversarial source is the ceiling on the lab's own instinct, and it is a theorem** (`#450`).
+Ding, VanderWeele & Robins (2017, *Biometrika*; tier **A**, overlap `false`,
+`published_post_2018: false`) take the treatment-only covariate one step past a variance cost: when
+the confounder that matters is **unmeasured**, adjusting for an **instrument** leaves the estimate
+**more biased than not adjusting at all**. The mechanism is about the *composition* of the
+treatment's variance — the instrument is one of the innocent sources of that variation, so removing
+it leaves the treatment driven proportionally more by the unmeasured confounder. Their phrasing of
+the paradox is the usable one: *without* adjusting, the study is **more like a randomised
+experiment**. Previously proved only for linear models; this paper proves it for a wide
+non-parametric class under monotonicity, with a fully general theorem that assumes **no causal
+diagram at all** (take `U = {Y(1), Y(0)}`, which is forced rather than assumed). The magnitude of
+coverage is the number to carry: over `10⁶` draws of the binary model's ten probabilities from
+independent uniforms, the adjusted estimator is more biased in **0.6805 of the parameter space
+(s.e. 0.0005)** — about **68%** — and more than **half** the space satisfies their weaker sufficient
+condition even when interactions are present. The conditions are **sufficient, not necessary**, and
+a counterexample is supplied. **The boundary matters more than the theorems for this lab**: if the
+covariate has *any* direct arrow to the outcome, or any unmeasured common cause with it, the
+interpretable theorems fail, and the authors say their remaining general result is *"of little use
+in practice without strong substantive knowledge about the size of the direct effect"*. On a panel
+of nine large-cap national indices essentially no observable is clean in that sense, so the lab
+lives in the **near-instrument** regime and should carry the mechanism, the 68%, and the procedure —
+**not** the monotonicity conditions as a test.
+→ `notes/2026-11-15-instrumental-variables-as-bias-amplifiers.md`
+
+**What all three say about the one pattern in the lab's record that currently has no
+explanation.** Twice the mandatory joint control has **raised** a reading rather than lowering it
+(`rank_stability` US `+212 → +483, t +2.10`; plain 12−1 momentum to controlled `z +2.05`–`+2.45` on
+the full window). There are now **three** live explanations and **none of them is corroboration**:
+`#444`'s precision transform (whitening a correlated cross-section genuinely raises standardised
+signal), `#448`'s treatment-only case (the control inflates the variance of whatever is read through
+it, which comes out larger as readily as smaller), and `#450`'s Z-bias (the control can make the
+estimate worse while moving it either way). The three are **distinguishable by `#448`'s screen**:
+the precision-transform story predicts a real increase in standardised signal, the treatment-only
+story predicts a noisier estimate with an unchanged centre, and the controls' **outcome-side**
+associations separate them. **The lab should stop reading "the control raised it" as a strengthened
+result** — and `#450` says the right response to a disagreement between the raw and controlled
+readings is to report both and treat it as unresolved, which makes the nightlies' existing habit of
+reporting both the *recommended* procedure rather than a redundancy.
+
+**What is NOT being claimed, because the lab's log-`P` control would otherwise read as refused.**
+That control was admitted because Amihud is proportional to `1/price` and the stored level carries a
+known engine artifact (issues filed 2026-10-18 / 2026-10-22) — i.e. log `P` is a **proxy for an
+unmeasured common cause**, which is an *inclusion* under `#447` step 4, and the 2026-11-13/14
+calibration (information-free noise carrying the object's loadings → ≈0; log `P` itself
+`−1021 → +0.1`) is strong direct evidence it removes what it should. Nothing in this vein weakens
+it. What the vein does establish is that **`vol126`'s outcome-side justification has never been
+written down**, and that the *direction* in which a control moves a reading is not evidence about
+either control.
+
+**Anti-lookahead.** No financial data appears in any of the three sources: a synthesis argued on
+causal diagrams, two Monte Carlo simulation studies, and analytic theorems, with the only applied
+illustrations being an education effect and a class-size effect. Every magnitude carried above is a
+**simulation variance ratio**, a **`c` statistic from a simulated conditioning set**, a **volume of a
+probability parameter space**, or a **citation count**. No return, Sharpe, or dated performance
+figure appears in any of the three sources or is carried from them. Flags: overlap `false` for all
+three; `published_post_2018: true` for VanderWeele (2019) only, and since that source contains no
+data at all the flag carries no pre-fitting risk — it is recorded because the rubric requires it.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -18390,6 +18499,107 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md` (annotation [2026-11-14])
 
 
+447. **FREE RULE — the one thing `#444` named and could not supply: HOW THE COVARIATE LIST IS
+    CHOSEN, with a theorem rather than a convention behind it.** The **modified disjunctive cause
+    criterion**: restrict to covariates prior to the treatment; **include** each one that is a cause
+    of the treatment, **or** of the outcome, **or** of both; **exclude** any variable known to be an
+    instrument; **add** any variable that fails the rule but is a **proxy for an unmeasured common
+    cause** — proxies of *common* causes only, because a variable proxying a treatment-only cause and
+    an outcome-only cause at once **is** the M-diagram collider. The property that makes it a rule:
+    **for every causal diagram, if any subset of the measured covariates suffices to control
+    confounding, this set suffices too** — which neither "adjust for everything pre-treatment" (fails
+    on the collider) nor "adjust for common causes only" (fails when the true common cause is
+    unmeasured) has. In the lab's terms: treatment = what the candidate does (a score's rank,
+    `eligible = 1`, hold/not-hold), outcome = the forward return, covariates = the observables.
+    Three vetoes are the transferable part: **do not select controls by how well they predict the
+    score** (`#448`/`#449`); **do not admit a control because it moved a reading** — a
+    change-in-estimate threshold can fire on sampling variation and the lab's record holds a control
+    that *created* a reading; and **a data-chosen control set costs the validity of the interval that
+    follows it**, a selection the deflator does not count because it counts trials and a control
+    choice is not one. The repair is the same as `#437`'s and `#444`'s: **pre-register the control
+    set before the reading.** Free — a checklist, alongside `#413`. Tier A, overlap `false`,
+    `published_post_2018: true` (a source with no data, so the flag carries no pre-fitting risk).
+    → `notes/2026-11-15-the-modified-disjunctive-cause-criterion.md`
+
+448. **FREE SCREEN, one cross-sectional association per control, and the lab has been measuring the
+    OTHER SIDE of the problem every time: JUDGE A CANDIDATE CONTROL BY ITS ASSOCIATION WITH THE
+    FORWARD RETURN, NOT BY ITS CORRELATION TO THE SCORE.** The price list: an **outcome-only**
+    covariate **lowers variance, leaves bias unchanged** (≈30% / 25% less variance than the
+    confounder-only set at the source's two sample sizes) — because a covariate that is
+    *population*-unrelated to the treatment still carries a chance association with it in any actual
+    sample, making it an **empirical confounder for that realisation**, so adjusting removes that
+    realisation's non-systematic bias. A **treatment-only** covariate **raises variance and reduces
+    no bias** (≈40% more), and damages a *stratified* analysis more than a smooth one. Every reading
+    the lab has taken on its controls is on the score side — the 2026-11-13/14 calibration reports
+    `rho_logP` per object, the 2026-11-12/13 entry reasons about `rho` to the controls (`+0.09`,
+    `−0.11`) — and the score side is what predicts the **variance cost**, not what licenses
+    inclusion. So: **before admitting a variable to the joint control, measure its association with
+    the forward return.** Computable on train alone with the existing within-region rank-space
+    residual pipeline; no trial, no holdout. The one exclusion case — drop a true confounder that is
+    strongly treatment-related and weakly outcome-related — **shrinks as `n` grows**, because variance
+    falls at `1/n` and omission bias does not fall at all, so it is an edge case rather than a
+    licence. **The three percentages are properties of one simulated data-generating process and are
+    NOT a calibration for this panel.** Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-15-covariate-selection-for-the-propensity-score.md`
+
+449. **REFUSAL, NOW OVER-DETERMINED — the `c` statistic is refused a second time, on a wholly
+    independent ground, by a literature that has never heard of `#440`.** `#438` recommended it;
+    `#440`/`#441` demoted it on detection efficiency (`ARE ≤ 1/√π` plus a discretization penalty,
+    against a location test that is minimax optimal when `d/n → 0`). The conditioning-set literature
+    refuses the same statistic because **maximising it selects the wrong set**: the lowest-MSE
+    conditioning set had `c = 0.67` while the highest-`c` set (`0.82`) carried ≈40% more variance, and
+    the set with the highest `c` is always one containing everything related to the treatment. A
+    criterion built on predicting the treatment **misses covariates related only to the outcome** and
+    misses confounders weakly related to the treatment but strongly related to the outcome. Two
+    unrelated literatures, two unrelated arguments, one verdict — **`#440` is now over-determined
+    rather than merely supported**, and this is the conditioning-set twin of `#441`'s "testing
+    requires less regularization than predicting". Tier A, overlap `false`,
+    `published_post_2018: false`.
+    → `notes/2026-11-15-covariate-selection-for-the-propensity-score.md`
+
+450. **ANTI-CANDIDATE + FREE PROCEDURE — "add another control to make the no-unmeasured-confounding
+    assumption more plausible" is NOT a free robustness move, and with unmeasured contamination
+    present a score-related/return-unrelated control leaves the estimate MORE biased than no control
+    at all.** Z-bias, proved for a wide non-parametric class under monotonicity (previously only for
+    linear models), with a general theorem that assumes **no causal diagram**: take
+    `U = {Y(1), Y(0)}`, which is forced rather than assumed, and the condition becomes
+    `pr{A=1 | Y(a)}` non-decreasing — which *is* self-selection — plus `cov{Π, ν_a(Π)} ≤ 0`, a
+    collider-bias measure. Mechanism: the instrument is one of the innocent sources of the
+    treatment's variation, so conditioning on it leaves the treatment driven proportionally more by
+    the unmeasured confounder; *without* the adjustment the study is **more like a randomised
+    experiment**. Coverage: **0.6805 of the parameter space (s.e. 0.0005)** over `10⁶` uniform draws
+    of the binary model's ten probabilities — about **68%** — and **more than half** the space
+    satisfies the weaker sufficient condition even with interactions. Sufficient, **not necessary**;
+    a counterexample exists. **The lab's residual confounder is not hypothetical** — the engine issues
+    of 2026-10-18 / 2026-10-22 are unmeasured contamination in the stored level, and `#432` is two
+    opposite-signed biases in the pool. **The free procedure, which the nightlies are already running
+    by accident: report every reading with AND without the control.** Raw ≈ controlled → the choice
+    does not matter; controlled much smaller → consistent with removing a real confound (the
+    `amihud126` `+1036 → −99` and log `P` `−1021 → +0.1` cases, which the 2026-11-13/14 calibration
+    independently supports); **controlled LARGER → unresolved, and never corroboration** — there are
+    three live explanations (`#444`'s precision transform, `#448`'s variance inflation, this note's
+    bias amplification) and one of them is "worse". **Boundary that binds here**: every interpretable
+    theorem needs a *clean* instrument, and on nine large-cap national indices no observable is clean,
+    so carry the mechanism, the 68% and the procedure — **not** the monotonicity conditions as a test.
+    Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-15-instrumental-variables-as-bias-amplifiers.md`
+
+451. **STATED TENSION, not an addition — `#444` and `#448` point in opposite directions, and the
+    split is by OBJECT rather than by one of them being wrong.** `#444`: adding covariates to a joint
+    balance test **weakens** it, because the detectability condition puts total squared difference
+    against `√p`. `#448`: adding **outcome-related** covariates to a conditioning set **improves** the
+    estimate, and the set should **grow** with sample size. Both hold; they are about the **power of a
+    test** and the **MSE of an estimator**. The operational split, to be stated in any session that
+    runs both: **a short pre-named list for the balance test; outcome-related inclusion for the
+    control used in a reading.** A second boundary from the same source, and the lab is on the wrong
+    side of it: the simulation's own stated gap is the **hybrid** design, where a variable may sit in
+    the score model, the outcome model, or both — which is exactly what a rank-space residual control
+    feeding a return reading is. So the three qualitative rules transfer and **the magnitudes do
+    not**, for the same reason `learnings.md`'s constants do not transfer across families.
+    → `notes/2026-11-15-covariate-selection-for-the-propensity-score.md`,
+    `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`
+
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -18493,7 +18703,131 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-13 (session 91) | **TOOK THE PRIMARY AIM VERBATIM, GOT BOTH NAMED PRIMARIES ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY OVERTURNING THE INSTRUMENT THE AIM WAS ABOUT.** Aim from the [2026-11-12] entry: **the classifier two-sample test — turn `#438`'s C statistic from a number into a TEST** — admit a source only if it (i) gives a **valid test** (null distribution or exact/permutation procedure) for classification accuracy computed on **held-out** data, (ii) states how its **power** compares to a purpose-built two-sample test, and (iii) says what the **sample splitting** costs; not a survey of two-sample tests, not an ML benchmark paper; **at most three requests**. **The mandated greps ran first and the gap held**: `classifier two-sample`, `Kolmogorov` and `energy distance` resolved only to this file's own statement of the aim; `maximum mean discrepancy` and `kernel test` were at **0**; all ten `Ramdas` hits were the 2026-10-28/30 online-multiple-testing vein, and the [2026-11-12] amendment (open the hits before believing a non-zero count) is what established that. **The nightly-variable detector also ran** on the 2026-11-12/13 session's headline — a score's **own-history depth**, and the pre-2004 coverage hole it opens — and returned **covered** (this file's "What conditions a continuation effect, and what a name's vintage does to it"), so the primary aim stood. **(a) ADMITTED, meets all three criteria alone.** Kim, Ramdas, Singh & Wasserman 2021 (Tier **A**, *Annals of Statistics* 49(1), 411–434, **33** Crossref / **105** Semantic Scholar on the arXiv record, checked 2026-11-13; 72-page article, 220 KB of text, 933 `" the "`): an **asymptotic** test (studentized held-out balanced error vs `−z_α`, consistent whenever true accuracy is `1/2 + ε` for any `ε > 0`, as `d, n → ∞` at any relative rate) and an **exact permutation** test in half- and full-permutation forms, with consistency needing only **`P > (1−α)/α` ≈ 20 permutations at `α = 0.05`, independent of sample size**; the power price as a constant — **`ARE ≤ 1/√π ≈ 0.564`, i.e. `√π ≈ 1.77×` the sample size** against Hotelling's `T²`, with power expressions matching exactly in `n, d, δ, Σ`; a **balanced train/test split** as the power-maximising ratio, with sample-splitting beating resubstitution in high dimensions and losing in low ones so **neither dominates**; **chance level exactly `1/2` whatever the class ratio** provided the balanced error is used; and the side result the lab will actually use — **Hotelling's `T²` is asymptotically minimax optimal whenever `d/n → 0`**. Remark 6.1 is the interpretation rule: a classifier can be **useless while the test on it has power**, so a low AUC is weak evidence of balance (**#439**, **#441**). **(b) ADMITTED as the construction half, graded TIER B on purpose.** Lopez-Paz & Oquab 2017 (ICLR, **666** Semantic Scholar, checked 2026-11-13, no registered DOI; 15 pages, 72 KB, 409 `" the "`): the five-step recipe, the **exact `Binomial(n_te, 1/2)` null** approximated by **`N(1/2, 1/(4 n_te))`** with no permutation and no nuisance parameter, the power theorem whose content is the **`ε`-versus-`n_te` trade-off** (classifier flexibility buys edge by spending test-set size), **model selection inside `D_tr` permitted** and feature choice across the sample not, per-point probabilities that **localise** where the sets differ, and Remark 2's concession that a zero-one loss is a **high-variance** statistic (**#439**). **(c) ADMITTED as the adversarial side under the [2026-11-11] closure amendment, TIER B.** Rosenblatt, Benjamini, Gilron, Mukamel & Goeman (*Biostatistics* 22(2), **14** Crossref; read from arXiv:1608.08873v2, 30 pages, 77 KB, 386 `" the "`): agrees on the ordering, disagrees on the cause, and its cause is **invisible to (a)'s method** — an accuracy statistic is **discrete** and so cannot exhaust the permissible false-positive rate, with random tie-breaking helping only marginally. Four causes of lost power: discretization, the conceded shift-alternative framing, **inefficient use of the data when validating on a holdout**, and **inappropriate regularization, because testing requires less regularization than predicting**. Construction: bias in the accuracy estimate **does not matter for testing**; **`V`-fold CV is dominated and never recommended**; use the **leave-one-out bootstrap (bLOO)**; regularize. **Level was controlled by every statistic in every simulation**, so the dispute is entirely about power (**#440**, **#441**). **The synthesis is a REFUSAL the handover did not anticipate**: with a handful of named covariates against ~1,000 eligible names, `d/n → 0` is this panel's cell, so the right instrument for the lab's balance question is a regularized high-dimensional **location** test and **not** the AUC `#438` recommended; the classifier form is reserved for the open-ended *can anything tell them apart* question. **One arithmetic fact carried**: at `n_te ≈ 500` the null sd of held-out accuracy is `≈ 0.022`, so a reading below about **`0.54`** is not distinguishable from chance on a single date, and **book size, not panel size, bounds the diagnostic**. **One disagreement recorded, not resolved**: (b) sells interpretability, (c) cites evidence that practitioners find accuracy tests *less* interpretable than location tests. **The ranked writing task was completed in full**: `#435`'s screen question is now carried into both screen notes — `2026-10-21-sure-independence-screening-marginal-vs-joint.md` (a marginal screen prunes on the comparison variable, the benign case; its **history, liquidity and eligibility preconditions do not**) and `2026-11-03-attainable-underweight-and-the-long-only-constraint.md` (`#376`'s truncation test prunes on **exactly** the dimension it interrogates and is therefore validated by the question, with `#436`'s estimand caveat attached). **NOT OBTAINED AND NOW PERMANENTLY RETIRED**: **Cochran (1968)** (*Biometrics* 24(2), 295–313, `10.2307/2528036`, **703** Crossref) failed its **third and last** budgeted channel and is recorded as a permanently named unobtained pointer, not to be re-ranked. The attempt reached Stuart's *Statistical Science* matching review, which restates (i) in summary — analytic expressions for bias reduction by subclassification on a univariate continuous covariate, **five subclasses removing at least 90% of the initial bias** due to it, extended by Rosenbaum–Rubin (1985b) to five propensity-score subclasses — but gives neither (ii) nor (iii), so it is **not admitted as a note**. One improvement kept anyway: the convention is **5–10 subclasses, 10–20 feasible at larger `n`**, and the review states that more work is needed to determine the optimum, so `#433`'s "five" is a floor rather than an optimum. **Anti-lookahead.** No financial data in any source. Samples: analytic propositions plus Monte Carlo over Gaussian and multivariate-`t` laws (a); synthetic distributions and image benchmarks (b); Monte Carlo under varied covariance structures plus one previously published fMRI dataset (c). **All three `validation_overlap: false`**; `published_post_2018` **true** for (a) and (c), **false** for (b). Every magnitude carried is an **asymptotic relative efficiency**, a **permutation count**, a **null variance in terms of a sample size**, a **split ratio**, a **bias-removal share for a stated number of strata**, a **citation count**, or a statement about what a statistic's value means. | Kim, Ramdas, Singh & Wasserman 2021 (`2026-11-13-classification-accuracy-as-a-two-sample-test.md`); Lopez-Paz & Oquab 2017 (`2026-11-13-classifier-two-sample-tests-construction.md`); Rosenblatt et al. 2021 (`2026-11-13-accuracy-tests-are-underpowered-for-signal-detection.md`) |
 | 2026-11-14 (session 92) | **TOOK THE NAMED PRIMARY AIM AND THE VEIN ANSWERED IT, BUT THE ANSWER IS THAT THE LAB SHOULD USE THE CLASSICAL INSTRUMENT AND THE WHOLE HIGH-DIMENSIONAL LITERATURE IS RESERVE MATERIAL.** [2026-11-13] left `#440` as a refusal with no replacement — the lab told not to compute an AUC and not told what to compute instead — and named Chen & Qin with Bai & Saranadasa as the primaries, with a three-part acceptance criterion (a computable statistic with a stated null; the `d/n` condition and where it beats or loses to Hotelling; the covariance assumption) and a budget of three requests. **All three criteria met by all three sources, all read in full text, and the budget was not exceeded**: Chen & Qin from arXiv (the Project Euclid PDF endpoint returned a 1.2 KB HTML body — the destination-chooser failure mode again), Bai & Saranadasa from the *Statistica Sinica* open archive, and the adversarial third from `tony-cai.com/assets/pdf/papers/` after the old `www-stat.wharton.upenn.edu/~tcai/paper/` directory 404'd — the author's own flat `/assets/pdf/papers/<slug>.pdf` directory, this file's repeatedly-rediscovered channel shape, now confirmed on a rebuilt Jekyll site where the *old* faculty path is dead. **Headline, and it goes against the vein that supplied it**: Bai–Saranadasa's own arithmetic says the sample covariance's limiting condition number is `(1+√y)²/(1−√y)²` at `y = p/n` — **1.494 at `y = 0.01`, 3.705 at `y = 0.1`, ≈ 3039 at `y = 0.93`** — and the lab's balance cell is `d ≈ 3–6` against `n ≈ 1,000`, i.e. `y ≈ 0.005`, condition number below 1.3 and a `√(1−y)` power factor of 0.998. **`#440`'s refusal is now quantitative with a threshold attached, and the instrument is plain Hotelling's `T²` with its exact `F` reference** (`#442`); the replacements are reserve material for a covariate set in the hundreds or for plainly unequal group covariances (`#443`). Headline two, from the adversarial source, and it is the session's most actionable output: the sum-type family needs `n‖δ‖₂²/√p → ∞` and the max-type family needs `maxᵢ|δᵢ|/σᵢᵢ^{1/2} ≳ √(2β log p/n)`, so **adding control covariates to a joint balance test WEAKENS it** unless the book actually shifts them — a short pre-named covariate list is the better design, by the detectability condition rather than by parsimony (`#444`). Headline three is an **anti-candidate that binds on every statistic in the vein**: all of these nulls assume i.i.d. observations and the lab's observations are names in one correlated cross-section, so **every asymptotic reference here is anti-conservative** and the calibration must be a within-date permutation of the hold/not-hold labels (`#445`). The second-ranked handover item — a writing task needing no source — was **also discharged**: `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md` now carries the selection-space/return-space two-by-two (`#446`). **Anti-lookahead.** No financial data in any source: analytic asymptotics plus Monte Carlo (a, c), plus one microarray application (b). All three `validation_overlap: false` and all three `published_post_2018: false`. Every magnitude carried is a **limiting condition number as a function of `p/n`**, a **detectability condition**, a **null distribution**, a **bias-corrected trace estimator**, a **minimax rate**, or a **citation count**. **Citation counts**: 452 and 207 from Crossref; Bai–Saranadasa **not resolved** — Crossref's journal-year enumeration for *Statistica Sinica* 1996 returns zero deposits, and OpenAlex and Semantic Scholar both answered **HTTP 429**, which are rate limits and **not** clean negatives; recorded as such and the tier not downgraded on that basis. | Bai & Saranadasa 1996 (*Statistica Sinica*) (`2026-11-14-hotelling-t2-under-high-dimension.md`); Chen & Qin 2010 (*Annals of Statistics*) (`2026-11-14-two-sample-location-test-without-a-dimension-condition.md`); Cai, Liu & Xia 2014 (*JRSS-B*) (`2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`) — all three read in full text |
 
+| 2026-11-15 | **Confounder / conditioning-set selection — the primary aim [2026-11-14] named and could not supply ("WHAT THE COVARIATES SHOULD BE"), taken on the literature of variable selection for CONFOUNDING CONTROL rather than for prediction.** Pre-download grep per the standing rule: `confounder selection` **0**, `variable selection for confounding` **0**, `confounding` **0**, `M-bias` **0**, `collider` **0**, `backdoor` **0**, `instrumental variable` **0**, `bias-variance tradeoff covariate` **0**; `pre-treatment` **1** and `conditioning set` **4** — **hits opened**, and none is about *choosing* a set (the one `pre-treatment` hit is `2026-11-06-index-membership-is-not-an-information-free-selection.md` using the phrase for the lab's own selection-as-treatment framing; the four `conditioning set` hits use it for a Kalman state, a CVaR tail, and survival conditioning). `confound` as a loose word appears in 52 notes as prose and in none as an object. Vein genuinely untouched. **Acceptance criterion applied as stated**: all three sources give a RULE for including or excluding a covariate, state what the rule costs when wrong in each direction, and are about a conditioning set rather than forecasting. **Output: one rule (`#447`), one free screen never run (`#448`), one over-determined refusal (`#449`), one anti-candidate with a free procedure (`#450`), one stated tension (`#451`).** The screen is the actionable one: the lab has judged its controls by `rho` to the *score* every time, and the literature says the *outcome-side* association is what licenses inclusion. Also discharged: the [2026-11-14] **ranked-second writing task** — `#445`'s i.i.d. caution is now annotated onto all three free screens (`#376`, `#381`, `#389`), each in the form the screen's own axis requires. **Nightly-variable detector: nothing to check** — the 2026-11-15 nightly spent 0 trials and measured no variable (halted at step 0 on two diverged remotes), so the detector returns empty rather than covered, and that is a null run, not a pass. **Anti-lookahead.** No financial data in any source: a synthesis argued on causal diagrams (a), two Monte Carlo simulation studies (a, b, c), analytic theorems (c); the only applied illustrations anywhere are an education effect and a class-size effect. Every magnitude carried is a **simulation variance ratio**, a **`c` statistic from a simulated conditioning set**, a **volume of a probability parameter space**, or a **citation count**. All three `validation_overlap: false`; `published_post_2018: true` for (a) only, which contains no data at all. **Citation counts**: 1466, 2006 and 70, all from Crossref `is-referenced-by-count`, which answered first try for all five DOIs looked up. **Channels**: `pmc.ncbi.nlm.nih.gov` is a new "looks like an answer" mode — **HTTP 200 with a 21 KB Material-design challenge shell, byte-identical across two different articles**, which is the cheap tell; Europe PMC's `fullTextXML` serves OA articles and returns **HTTP 500** for `inEPMC: Y / isOpenAccess: N`; NCBI `efetch` returns metadata plus a verbatim abstract with the explicit note *"The publisher of this article does not allow downloading of the full text in XML form"*. **One named source unobtained**: Myers et al. (2011, *Am J Epidemiol*, `10.1093/aje/kwr364`, 261 Crossref citations) — the applied simulation study for Z-bias — reachable by no channel tried; per the 2026-10-15 lesson the budget went to a **different source for the same mechanism**, and the substitution was an upgrade because (c) is the general theorem behind that simulation and re-reads its exact generative models. A **university course-page PDF directory** (`math.mcgill.ca/<prof>/<course>/Articles/`) served the typeset AJE article of (b) on the first try — the faculty-page lesson extended to **course reading lists**. | VanderWeele 2019 (*European Journal of Epidemiology*) (`2026-11-15-the-modified-disjunctive-cause-criterion.md`); Brookhart, Schneeweiss, Rothman, Glynn, Avorn & Stürmer 2006 (*American Journal of Epidemiology*) (`2026-11-15-covariate-selection-for-the-propensity-score.md`); Ding, VanderWeele & Robins 2017 (*Biometrika*) (`2026-11-15-instrumental-variables-as-bias-amplifiers.md`) — all three read in full text |
+
 ### Open questions for future sessions
+
+- **[2026-11-15] READ THIS BEFORE AIMING SESSION 94. The conditioning-set vein is OPEN on exactly one
+  side, and that side was named by one of tonight's own sources as its stated gap — which makes it
+  the strongest-aimed primary this file has carried in a while.** Tonight answered the
+  [2026-11-14] primary ("what the covariates should be") with a rule (`#447`), a price list
+  (`#448`), an over-determined refusal (`#449`), an anti-candidate plus a free procedure (`#450`)
+  and a stated tension (`#451`). **Do not reopen those four sides.** The criterion, its bias–variance
+  pricing and its adversarial bound have all been read, and `#447`'s three vetoes plus `#448`'s
+  screen are the output.
+  - **Primary aim for session 94: THE HYBRID DESIGN — variable selection when a covariate may enter
+    the TREATMENT model, the OUTCOME model, or BOTH, with valid inference afterwards. Tonight's
+    (b) names this as its own stated gap, and it is exactly the lab's construction.** The lab's
+    mandatory joint control is a **rank-space OLS residual of a score on log `P` and `vol126`** whose
+    output then feeds a **return reading** — i.e. the control variables sit on both sides, which is
+    the one case the 2006 simulation explicitly declines to cover ("the variable selection problem in
+    these situations is more complex, as variables can appear in the PS model, the outcome model, or
+    both"). `#447` compounds the need from the other end: it establishes that **a data-chosen control
+    set invalidates the interval that follows it**, and the lab's deflator cannot charge for it
+    because the deflator counts recorded trials and a control choice is not a trial. The named
+    primary is **Belloni, Chernozhukov & Hansen**, *Inference on Treatment Effects after Selection
+    among High-Dimensional Controls*, *Review of Economic Studies* 81(2), 608–650 (2014),
+    `10.1093/restud/rdt044` — **1279 Crossref citations, resolved and recorded tonight** — whose
+    **double-selection** rule (take the union of the covariates selected by the treatment equation and
+    those selected by the outcome equation) is a rule for precisely this configuration and comes with
+    a post-selection inference result rather than a warning. Reachable: **arXiv `1201.0224`**, and
+    tonight `arxiv.org/pdf/<id>` served a full typeset paper on the first try. **A grep before any
+    download**, per the standing rule, and **open the hits**: candidate patterns are
+    `double selection`, `post-double`, `immunized`, `orthogonal score`, `Neyman orthogonality`,
+    `debiased machine learning`, `union of selected`. Note that `post-selection` and
+    `regression to the mean` were covered in session 32 and `2026-09-15-inference-on-winners-post-selection-estimation.md`
+    exists, so the grep will return hits — **the question is whether any of them carries a RULE for a
+    conditioning set, which tonight's search established none of them does.**
+    **Acceptance criterion, stated before any download: admit a source only if it (i) gives a RULE
+    for which covariates enter when a variable may sit on both sides; (ii) states what inference is
+    valid AFTER that selection, with the condition under which it holds; and (iii) says what the rule
+    costs when the selection is wrong — in both directions.** Not another propensity-score simulation;
+    not a general sparse-regression paper whose object is prediction; not another matching paper
+    (that vein is closed on five sides). **Spend at most three requests.**
+  - **Ranked second, and it is the fallback [2026-11-14] already named, now with a sharper reason to
+    want it: ESTIMATION OF `Σ` AT COVARIATE WIDTH FROM A CORRELATED CROSS-SECTION.** `#445` fixes the
+    *null* by permutation and says nothing about whether `S_n` is a sensible estimate when the rows
+    are dependent. Tonight adds a second consumer of the same object: `#448`'s screen is a
+    **cross-sectional association per control**, and its standard error has the same problem. Still
+    uncovered as of tonight.
+  - **Retired tonight because it was DONE, not deferred: the [2026-11-14] ranked-second writing
+    task.** `#445`'s i.i.d. caution is now annotated onto all three free screens —
+    `2026-11-03-attainable-underweight-and-the-long-only-constraint.md` (`#376`),
+    `2026-11-04-generalized-fundamental-law-strategy-risk-and-the-transfer-coefficient.md` (`#381`)
+    and `2026-11-04-out-of-sample-prediction-failure-and-the-cumulative-sse-diagnostic.md` (`#389`) —
+    each written in the form that screen's own axis requires rather than copied: a within-date
+    permutation for the cross-sectional screen, **block** resampling of dates for the two that read
+    along the time axis. Each annotation makes the screen *usable* rather than weaker, and `#389`'s
+    is the one worth re-reading, because the dependence problem is the reason the curve should be read
+    as a **shape** and not as a `p`-value — which is how the lab's own 1997-2008 finding was read.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06] through [2026-11-14]) ran in full: the pre-download grep
+    returned **0** on seven patterns, `1` and `4` on two more, and **the hits were opened** — none was
+    about choosing a conditioning set, which is what licensed the downloads. The adversarial budget
+    was spent and it **bounded the vein's own recommendation** rather than endorsing it: `#447` says
+    to exclude a known instrument, and `#450` is the theorem for *why*, with the boundary that puts
+    this lab in the **near-instrument** regime where the clean theorems do not apply — so the
+    anti-candidate is carried and the monotonicity conditions are not. **Tonight's amendment concerns
+    the nightly-variable detector, which returned EMPTY for the first time.** The 2026-11-15 nightly
+    spent 0 trials and measured no variable at all (halted at step 0 on two diverged remotes). An
+    empty run is **not** the "covered" verdict of the three sessions before it — it is the detector
+    having no input — and the right handling is to **carry the detector forward unconsumed** and run
+    it against the next nightly that actually measures something, rather than recording a third
+    consecutive pass it did not earn. Caveats still not run through the detector, unchanged in order:
+    *publication decay*, and *"the cost model is lethal only to books that trade"*.
+  - **Carried unchanged and still live**: everything carried under [2026-11-14] — `#442`'s licence to
+    use Hotelling's `T²` with the `y = p/n` table as its boundary; `#444`'s sum-type/max-type
+    pre-registration rule; `#445` as the dependence anti-candidate, now annotated onto the three
+    screens; `#406`'s volatility-tercile conditioning, category-**neutral** per `#414`; `#413`'s
+    composed pre-trial rule; `#376`/`#389`/`#381` as the three free screens, with the preconditions
+    attached to them still not discharged; and the refusals `#415`, `#421`, `#423`,
+    `#427`/`#429`/`#434`/`#435`/`#436`/`#438` and `#440`. **Tonight adds one rule, one free screen,
+    one reinforced refusal, one anti-candidate and one tension.** New rule: `#447` — **the modified
+    disjunctive cause criterion, and pre-register the control set before the reading.** New screen,
+    free: `#448` — **judge a candidate control by its association with the forward return, not by its
+    correlation to the score.** Reinforced refusal: `#449` — the `c` statistic is refused a second
+    time on an independent ground, so **`#440` is over-determined.** New anti-candidate: `#450` —
+    **"add another control" is not a free robustness move, and a control that RAISES a reading is
+    unresolved rather than corroborating.** New tension: `#451` — **`#444` and `#448` point opposite
+    ways and the split is by object** (power of a test versus MSE of an estimator). The
+    high-dimensional two-sample vein stays closed on all three sides (`#442`–`#446`); the
+    classifier-accuracy vein stays closed (`#439`–`#441`); the matched-control vein stays closed on
+    all five sides (`#427`–`#438`); the nominal-price vein stays closed (`#420`–`#426`); the
+    index-rule vein stays closed (`#401`–`#419`); the detectability vein stays closed (`#393`–`#400`);
+    the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays closed
+    (`#373`–`#380`).
+  - **Unchanged and still live**: `#447`–`#451` from tonight; `#442`–`#446` from 2026-11-14;
+    `#439`–`#441` from 2026-11-13; `#436`–`#438` from 2026-11-12; `#433`–`#435` from 2026-11-11;
+    `#427`–`#432` from 2026-11-10; `#420`–`#426` from 2026-11-09; `#415`–`#419` from 2026-11-08;
+    `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05;
+    `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02;
+    `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31; and everything carried under those.
+  - **Retired and recorded as retired**: everything carried under [2026-11-14], plus **the
+    conditioning-set-selection vein on four of its five sides** (the rule, the pricing, the refusal
+    and the adversarial bound), and **the [2026-11-14] writing task, discharged rather than
+    deferred.** **Cochran (1968) remains permanently unobtained and must not be re-ranked.** **Myers
+    et al. (2011, `10.1093/aje/kwr364`) is a new named unobtained pointer** — wanted only for the
+    *magnitude* of bias amplification, which `#450`'s theorem explicitly does not supply; its three
+    dark channels are recorded in that note's `## Channels` section, so do not re-hunt them. Still at
+    **0** and still not nominated: `transfer entropy` (twenty-sixth nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-14], unchanged —
+    including the engine issues filed 2026-10-18 and 2026-10-22, `min_train_skill = 0.0`, the note
+    format's missing holdout-overlap flag, `#422`'s signed error in the volume-only liquidity tier,
+    `#432`'s two opposite-signed biases in the equal-weight pool, the still-unmeasured pre-screen
+    imbalance, and the **zero-trial-rate question raised to the human owner on 2026-11-13**. Tonight
+    bears on that question in one direction worth naming: `#448` is a free screen on an object the
+    lab uses **nine times without calibration**, and `#450` says the lab's habit of reading a
+    control-raised number as corroboration is wrong — so this session supplied one usable screen and
+    one correction to standing practice, not another gate audit. **The integrity check was CLEAN
+    tonight in the one respect that has failed for fifteen sessions and is unchanged in the other.**
+    The container was again on a per-run branch (`claude/tender-galileo-42x9t0`) at `origin/main`'s
+    commit, for the sixteenth consecutive session, and was reset to `main` before any work. But the
+    startup hook escalated **nothing**: both branches [2026-11-14] flagged are resolved on `main` —
+    the 2026-11-15 nightly merged `origin/claude/determined-darwin-brkls1` (the **2026-W46 weekly
+    report**, which is now on `main`) and recorded `origin/main-a5dglb`'s ancestry, so the
+    three-night false positive and the one genuine strand are both closed. **Deleting
+    `origin/main-a5dglb` is still a human's call** and is still the only way the flag stops
+    recurring.
 
 - **[2026-11-14] READ THIS BEFORE AIMING SESSION 93. The high-dimensional two-sample vein is CLOSED
   on all three of its sides, and its verdict is that the lab's instrument is the CLASSICAL one —

@@ -263,3 +263,18 @@ panel size**, the binding constraint on what such a test can detect.
 - `experiments/learnings.md` — the lab's own instances of the shape this note explains:
   "real, large, significant, and structurally unreachable" (2026-08-31, 2026-09-01), and the
   long-only market component that the five correlated family leads share.
+
+
+## Annotation [2026-11-15] — the i.i.d. caution from `#445`, which binds on the one-bit truncation test
+
+`#445` was written for the *balance* test and applies verbatim here, because the one-bit
+truncation test is computed **across a cross-section of names on one date** and the references it
+is read against assume independent observations somewhere. A cross-section correlated through
+region and through the common factor has an **effective sample size far below its name count**, so
+any analytic reference distribution attached to this screen is **anti-conservative** — it will
+reject too often, which for a screen means nominating objects that are not there. Two consequences,
+both free: read the screen as a **descriptive magnitude** rather than against a `p`-value unless
+the null is produced by **permuting the hold/not-hold labels within the date's cross-section**,
+which preserves the dependence exactly; and run it **one rebalance date at a time**, because
+name-dates are not exchangeable (`#439`). A non-rejection reads as *not detectably different at
+this `n`*, never as the constraint being non-binding (`#441`).
