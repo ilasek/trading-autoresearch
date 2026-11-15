@@ -30190,3 +30190,148 @@ second-moment only per `#412` and the standing requirement is a first-moment mec
 **Verdicts:** none.
 
 ## Research session — 2026-11-14 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-11-15 (nightly) — two diverged remotes, both RESOLVED by merge; zero trials spent; the one genuinely stranded item is a weekly report, not a trial
+
+The step-0 integrity banner fired on `origin/claude/determined-darwin-brkls1` and
+`origin/main-a5dglb`. Both are now ancestors of `HEAD` and the sweep is clean by
+construction. **No trial was run tonight and no trial record was added, altered or
+removed:** `trials.jsonl` stands at **138 records**, byte-identical (md5
+`79af2cd929aa0bd95d621792d8d105b5`) at the merge base, on `origin/main`, on *both*
+diverged branches and at the merged `HEAD`. No candidate was written, no holdout,
+forward or incubation file was opened, and no file under `engine/`, `scripts/`,
+`tests/`, `data/`, `research/`, `program.md` or `CLAUDE.md` was touched.
+
+**State at step 0.** The container started on the per-run branch **`main-ssnxqp`** at
+`34c5eef`, identical to `origin/main` (0 ahead, 0 behind) — nothing was stranded there.
+Local `main` was **6 behind** and was corrected with `git checkout main && git reset
+--hard origin/main`, exactly as step 0 prescribes. Of the **18** remote refs under
+`origin/`, **16 are ancestors of `origin/main`**; two diverged, by one commit each.
+
+**Branch A — `origin/claude/determined-darwin-brkls1` (`eede937`, 2026-11-14T08:14:21Z),
+the real strand.** Its parent `36c329d` ("data: daily refresh 2026-11-14") *is* on
+`main`, so it is a sibling commit that forked off the tip and never landed, not a stale
+pointer. It touches exactly two files: **`reports/2026-W46.md` (+289)** and
+**`reports/charts/2026-W46-vs-sp500.svg` (+56)**, both pure creations. `reports/2026-W45.md`
+is on `main` (`45c219b`); W46 was not, so weekly reporting had a one-week hole in it.
+Note the branch prefix: `claude/`, not `main-*`. This is the **weekly-reporting
+workflow's** strand, a second generator distinct from the nightly per-run-branch one,
+and the first of its kind since `claude/keen-bardeen-qile2p` on 2026-10-18.
+
+**Branch B — `origin/main-a5dglb` (`f0f68e6`, 2026-11-12T00:31:53Z), not a strand at
+all.** It names `experiments/journal.md` and `experiments/learnings.md`, but
+`git diff origin/main origin/main-a5dglb` is **0 insertions across every file** — the
+branch holds nothing `main` lacks and is strictly *behind* it on 18 paths. Its content
+was re-applied on `main` as `e865fd9` under the same subject line ("journal + learnings:
+2026-11-11/12 session, 0 trials, six free blocks"), which left an orphan pointer the
+`--no-merged` test still flags. Checked by prefix containment before merging: the
+branch's `journal.md` (29432 lines) and `learnings.md` (7830 lines) are exact prefixes
+of `main`'s (30192 / 8079). The 2026-11-12/13 entry's claim that "the 2026-11-11/12
+branch note's fast-forward has happened and nothing is stranded" was therefore **true in
+substance and wrong in form** — the content landed, the pointer did not become an
+ancestor, and the banner has been firing on a resolved item for three nights.
+
+**Why the 2026-08-12..15 precedent does not apply.** For both branches,
+`git diff --name-only origin/main...<branch>` restricted to `experiments/trials.jsonl`,
+`experiments/leaderboard.json`, `experiments/holdout_log.jsonl`,
+`experiments/incubation.jsonl`, `strategies/`, `engine/`, `scripts/`, `tests/`, `data/`,
+`research/`, `program.md` and `CLAUDE.md` is **empty**. No trial is missing from `main`
+and **the deflated-Sharpe bar is not understated**. The loss was one weekly report, not
+a trial record. That is a smaller loss than the 19-trial August split — but it is the
+same failure mode, and the point of step 0 is that a session must not be the one deciding
+how small a split is tolerable.
+
+**Resolution — two merges, both audited.**
+
+- Branch A: `git merge --no-ff origin/claude/determined-darwin-brkls1`. Clean, no
+  conflict, two files created. **`reports/2026-W46.md` was landed without being read.**
+  Weekly reports are not on `CLAUDE.md`'s never-read list, but they can quote forward and
+  incubation numbers, and a merge requires no read; verification was file-level only
+  (`--name-only`, `--numstat`). The next weekly-reporting session owns its contents.
+- Branch B: `git merge --no-ff origin/main-a5dglb` produced the two predicted
+  duplicate-append conflicts (`journal.md`, `learnings.md`) and nothing else. Resolved to
+  `main`'s side, which is lossless *because* the branch adds zero lines. Verified rather
+  than asserted: both resulting files are **byte-identical** to `origin/main`'s versions
+  (`cmp`), and **all 420 + 4 `## ` headings** present on the branch are present in the
+  result, 0 missing. No conflict markers remain. (`git merge -s ours` was tried first and
+  refused by the sandbox's auto-mode classifier as history-discarding. The classifier was
+  right to be suspicious of the flag, and the plain merge with an audited resolution
+  reaches the same tree and leaves a better record, so this is not a loss.)
+
+After both merges `git branch -r --no-merged HEAD` is **empty**, and the complete tree
+diff `origin/main..HEAD` is exactly `reports/2026-W46.md` (+289) and
+`reports/charts/2026-W46-vs-sp500.svg` (+56).
+
+**Engine green on the merged tree:** `.venv/bin/python -m pytest tests/ -q` → **92 passed
+in 70.92s**.
+
+**Data store.** `main` carries `36c329d data: daily refresh 2026-11-14`; the store's last
+bar is **2026-11-13** (Friday), against today's 2026-11-15 (Sunday). ~1 trading day
+behind, well inside the 5-day tolerance — not stale.
+
+**Why zero trials, with both divergences resolved.** Step 0 is unconditional: a remote
+branch holding commits absent from `origin/main` means do not run experiments, journal,
+commit, push, stop. That condition held when the session opened, and the 2026-10-18
+lesson is explicit that a session judging a flagged branch "benign enough to run past" is
+how the August split happened. Resolving a fork is not the same act as running past it,
+and the aim here was the former — but the asymmetry decides the night either way: halting
+costs one session, while running eight trials on a history this session had itself just
+merged costs a permanently mis-scored gate for every later trial. Tomorrow's session
+should find `git branch -r --no-merged origin/main` empty and can spend a full budget of 8.
+
+**What a human should do, because a session cannot.** Nineteen stale remote branches now
+exist (17 `main-*`, 2 `claude/*`). All are ancestors of `main` as of this commit, so the
+banner will be quiet — but every future nightly adds one, and each new one is a coin flip
+between "harmless pointer" and "real strand" that costs a session to resolve. Deleting
+them, or renaming them under `archive/*` (which the banner exempts by design), is a
+one-command fix that this session has no permission to make: a session may push only its
+own branch and `main`. The underlying generator is still the standing instruction conflict
+named in the 2026-11-03/04 entry — the runner hands each container "Develop on branch
+`main-<slug>`" while the nightly prompt's step 0 and step 5 require `main`. Tonight is the
+**eighth** night the banner has cost or nearly cost a session (2026-08-31, 09-02, 09-04,
+10-22, 10-22/23, 10-24, 11-03/04, tonight), and the newly visible fact is that the
+weekly-reporting workflow is a **second, independent** source of strands — so fixing only
+the nightly branch instruction would not close the hole.
+
+**Lesson:** a branch that `--no-merged` flags is not evidence that content is missing, and
+a prior session's assurance that "the fast-forward has happened and nothing is stranded"
+is not evidence that it is not — `origin/main-a5dglb` was content-complete on `main` for
+three nights while still flagging, and `origin/claude/determined-darwin-brkls1` was a
+genuine one-week hole in the report series that no journal entry had noticed. The cheap
+discriminator is `git diff origin/main <branch> --numstat` (0 insertions ⇒ pointer only)
+plus a name-only diff restricted to `trials.jsonl`/`leaderboard.json`/`strategies/`
+(empty ⇒ the DSR bar is safe). Both are seconds of work and they separate "costs a
+session" from "costs a week of reporting", which are not the same problem.
+
+## Session summary — 2026-11-15 (nightly) — 0 trials of 8; halted at step 0 on two diverged remotes, both resolved, and the strand was the W46 weekly report
+
+**Experiments run:** none. The step-0 integrity banner fired before any research work and
+step 0 is unconditional. `trials.jsonl` unchanged at 138 records (md5
+`79af2cd929aa0bd95d621792d8d105b5`), `leaderboard.json` untouched, no candidate file
+written, no holdout/forward/incubation file opened, no `research/` file read beyond what
+the next session will read fresh.
+
+**Verdicts:** none.
+
+**Best finding:** the two flagged branches were different *kinds* of object, and only a
+diff told them apart. `origin/main-a5dglb` adds **zero lines** to `main` — an orphan
+pointer whose commit was re-applied as `e865fd9`, flagging harmlessly for three nights.
+`origin/claude/determined-darwin-brkls1` was real: **`reports/2026-W46.md` had never
+landed**, a one-week hole in the weekly report series that sat unnoticed between the W45
+report on `main` and tonight. Neither touched `trials.jsonl` — byte-identical on both
+sides — so the deflated-Sharpe bar was never at risk, and the August 19-trial precedent
+the banner cites did not apply. Both are now ancestors of `HEAD`; the unmerged sweep is
+empty; engine green at 92 passed.
+
+**Ideas for next session.** The board's research agenda is untouched by tonight, so the
+2026-11-13/14 "next ideas" list carries forward intact and should be read from that entry
+rather than restated here, since nothing tonight tested or weakened any of it. Two items
+are tonight's own: (i) run the two-line branch discriminator above *before* writing the
+protocol-issue entry, so a benign pointer costs minutes instead of a session — and say in
+the entry which of the two kinds each branch was, which no prior entry has done
+consistently; (ii) the weekly-reporting workflow is a second strand generator, so a
+reporting session should check `reports/` for gaps in the `W<nn>` series rather than
+assuming the last report on `main` is the last report written. **Provenance from
+`research/SUMMARY.md`: none — no research note was read or spent tonight, because no
+hypothesis was written.** The next session inherits the full 8-trial budget and the
+family allocation in `program.md` unspent.

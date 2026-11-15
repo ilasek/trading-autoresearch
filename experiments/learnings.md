@@ -35,6 +35,25 @@ across experiments; prune entries that later evidence contradicts.
   close x volume` keeps the dividend half of the factor (the split half cancels), which accounts for
   Amihud's whole measured IC.
 
+- **A flagged remote branch is two different problems, and one diff tells them apart**
+  (distilled 2026-11-15 after the eighth session the step-0 banner has cost or nearly
+  cost: 2026-08-31, 09-02, 09-04, 10-22, 10-22/23, 10-24, 11-03/04, 11-15). Every nightly
+  container is created on a fresh per-run branch, so `git branch -r --no-merged
+  origin/main` accumulates pointers forever and flags **both** real strands and already-landed
+  commits that were re-applied under a new hash. Two commands separate them before any
+  prose is written: `git diff origin/main <branch> --numstat` — **0 insertions means the
+  branch holds nothing `main` lacks** (a pointer; merge it to clear the flag and move on) —
+  and `git diff --name-only origin/main...<branch> -- experiments/trials.jsonl
+  experiments/leaderboard.json strategies/` — **empty means the deflated-Sharpe bar is not
+  understated**, which is the only thing the 2026-08-12..15 precedent was about. Do *not*
+  infer either from a prior session's assurance that a fast-forward happened:
+  `origin/main-a5dglb` was content-complete on `main` for three nights while still
+  flagging. And do not infer "harmless" from "no trials": the 2026-11-15 strand was
+  `reports/2026-W46.md`, a one-week hole in the report series that no journal entry had
+  caught. Step 0 still halts the session either way — resolving a fork is not the same act
+  as running past it, and one lost night is cheaper than a mis-scored gate for every later
+  trial.
+
 ## Strategy learnings (append below)
 
 - **De-risking overlays on momentum reliably backfire out-of-sample.** Three distinct
