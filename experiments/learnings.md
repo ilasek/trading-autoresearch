@@ -8096,3 +8096,149 @@ across experiments; prune entries that later evidence contradicts.
   why this was caught at all: **the first thing an uncalibrated instrument needs calibrating against
   is its own harness** — the block's subject was that this screen had never had a null, which is
   exactly the frame in which one checks the plumbing.
+
+- **[Measured 2026-11-16, nightly — ZERO trials spent; THE HEADLINE, AND IT IS THE FIRST STATISTIC
+  IN THIS LAB THAT PRICES THE WHOLE SEARCH RATHER THAN ONE CANDIDATE] THE v3 BOARD'S NULL-GATE
+  PASSES ARE AT EXACTLY THE CHANCE RATE AT EVERY CLUSTERING THRESHOLD: 27 TRIALS ARE 7-12
+  INDEPENDENT BETS, 5 PASSES ARE 1, AND M3 SITS WHERE A 10% TEST'S SINGLE EXPECTED FALSE POSITIVE
+  SITS.** Every trial already stores `null_pctile` — its validation Sharpe's rank among 200
+  region/type-matched replicas of its own book — which under the global null of no selection skill
+  anywhere is a p-value. The set had never been read:
+
+      unclustered, 27 v3 trials
+        mean percentile        0.507   (U(0,1): 0.500, se 0.056)   z +0.13, p 0.90
+        variance               0.1383  (U(0,1): 0.0833)            over-dispersion 1.66x
+        KS vs U(0,1)           D 0.261, p 0.041
+        Fisher on MC p-values  chi2 74.5 / 54 df, p 0.034
+        pass the 10% gate      5 observed vs 2.7 expected
+
+  The 5 passers are **all the old-half lineage** (`#12`, `#14`, `#15`, `#16`, `#17`): pairwise
+  **active**-return rho 0.883-0.980, **total**-return rho 0.985-0.998, and **1 effective trial** by
+  `protocol.effective_n_trials`' own rule. Re-counted:
+
+      clustering                              clusters  passes  expected  clustered mean pctile (z)
+      total returns, single linkage rho .95        7        1      0.7        0.364 (-0.98)
+      ACTIVE returns, single linkage rho .95      25        3      2.5        0.468 (-0.44)
+      ACTIVE returns, single linkage rho .80      18        1      1.8        0.378 (-1.43)
+      ACTIVE returns, single linkage rho .50       8        1      0.8        0.406 (-0.73)
+      ACTIVE returns, COMPLETE linkage rho .50    12        1      1.2          --
+
+  **Every row gives the chance count, and the clustered mean is below 0.5 in every row.** The only
+  departure from uniformity is **over-dispersion**, which is what *designed* books produce whether
+  or not they work — five of the lab's objects were pre-signed in a published direction that lost
+  here, putting mass in both tails. **Scope, because it is easy to over-read: no recorded number,
+  verdict, DSR, board position or gate changes.** M3's validation skill is still **+0.124, 90% CI
+  [-0.11, +0.42], DSR 0.1635**, and it is still the board's lead. What is removed is the reading
+  that "5 of 27 cleared a 10% gate" is aggregate evidence of anything. **Standing rule: read the
+  set of `null_pctile` values, clustered on ACTIVE returns, after every session** — it is one block,
+  it costs no trial, and it is the only instrument here that charges for the search rather than for
+  the candidate. One post-hoc description, flagged as such because the split was chosen after seeing
+  that all five passers share a family: price-trend's 9 trials mean 0.797 and the other 18 mean 0.362
+  (z -2.02). It has at least one mechanical channel that is not absence of skill — **the null matches
+  type and region but NOT liquidity tier**, so a book selecting illiquid names pays a higher per-name
+  cost than its own replicas (`#3` at percentile 0.01 is the clearest case). That bias is signed, it
+  sits in the binding gate, and it is unmeasured.
+
+- **[Measured 2026-11-16, nightly — CORRECTS THIS FILE'S OWN PRE-TRIAL FIGURE FOR THE SEAT, IN THE
+  DIRECTION OF A FIRMER CLOSURE] THE REQUIRED-SKILL BAR IS SELF-REFERENTIAL, SO `benchmark + 1.645*se`
+  IS NOT THE SKILL A CANDIDATE MUST REACH — THE FIXED POINT IS 24% HIGHER AND THE SEAT NEEDS A PAIRED
+  t OF 4.4.** `metrics.deflated_skill` scales its benchmark by `var(trial_skills)` and
+  `run_experiment.py` passes **`skills + [this candidate's skill]`**, so a better candidate raises the
+  dispersion term it is judged against. Solving `r = bench(skills + [r], N_eff) + 1.645*se` on the
+  current board (27 v3 skills, sd 0.1233, `N_eff` 43, `bench` +0.2734):
+
+      se       naive bar   FIXED POINT    gap    required paired t
+      0.0745     +0.396      +0.470     +0.074        6.30
+      0.1234     +0.476      +0.581     +0.105        4.71
+      0.1410     +0.505      +0.623     +0.118        4.42    <- board median se
+      0.1647     +0.544      +0.679     +0.135        4.13    <- #16's se
+      0.1930     +0.591      +0.748     +0.157        3.88
+
+  The 2026-10-30/31 entry's **+0.552 at #16's `se` is the naive figure; the requirement is +0.679**.
+  At the board's median error bar the seat needs validation skill **+0.62** — a validation Sharpe near
+  **+0.96** against a pool at **+0.34**, net of v3 costs — against a board best of **+0.124 at t 0.88**.
+  **No recorded `dsr` is wrong**: the engine always evaluated the fixed point. What was wrong is the
+  number a session would pre-register against, and note the shape — **a wider error bar needs a higher
+  skill but a LOWER t**, so the bar cannot be reached by tightening tracking error either (`t` goes
+  from 4.1 to 6.3 as `se` falls from 0.165 to 0.075).
+
+- **[Measured 2026-11-16, nightly — FINISHES THE 2026-10-30/31 ENTRY] `N_eff` IS SATURATED AND
+  NON-MONOTONE, SO "EVERY TRIAL PERMANENTLY RAISES THE DEFLATED BAR" IS NOW FALSE IN BOTH OF THE
+  DEFLATOR'S CHANNELS.** Holding the board's dispersion fixed:
+
+      N_eff      10      20      30      43      44      50      60      80     120     200
+      bench  +0.1941 +0.2343 +0.2556 +0.2734 +0.2745 +0.2806 +0.2891 +0.3021 +0.3198 +0.3409
+
+  The 44th effective trial costs **+0.0011** of required skill (required `t` 3.58 -> 3.59); reaching
+  `N_eff` 200 costs +0.07. And the count is **path-dependent**, because `effective_n_trials` is
+  single-linkage clustering at rho 0.95 and a trial landing *between* two clusters merges them:
+
+      after record   119    126    127    131    133    134    135    136
+      N_eff           45     45     44     45     46     45     43     43
+
+  Seven of the last seventeen recorded trials added **+0**, three *lowered* `N_eff`, and
+  `sl_trend_span_masked` alone took it 45 -> 43. Net over seventeen trials **-2**. The dispersion
+  channel was already known to cut both ways (2026-10-30/31: a near-mean trial is free or better);
+  the count channel now does too. **Two riders. (i) NOT a design target** — a candidate may not be
+  aimed at bridging clusters, and none has been. **(ii) Stop quoting the deflator as the reason a
+  session declines a trial.** The honest reason is the absence of a screened object; the deflator now
+  prices a marginal scout trial at about a thousandth of a Sharpe.
+
+- **[Measured 2026-11-16, nightly] WHICH GATE BINDS, CENSUSED: 22 OF 24 v3 GATE_FAILS ARE THE
+  RANDOM-SELECTION NULL AND 12 ARE IT ALONE — AND ACROSS OBJECTS THE NULL GATE AND THE SKILL
+  STATISTIC ARE NEARLY THE SAME TEST.**
+
+      gate                    fails      combinations
+      random-selection null     22        12  null alone      5  null + train
+      train skill                9         3  drawdown + null + train
+      drawdown                   5         2  drawdown + null
+      causality                  1         1  train alone     1  causality
+      turnover / min positions   0
+
+      corr(validation skill, null percentile)   pearson +0.864   spearman +0.886   (n 27)
+      corr(train skill, validation skill)       pearson -0.081   spearman +0.016   OLS slope -0.179
+      corr(train skill, null percentile)        pearson -0.034   spearman -0.081
+
+  Three readings. (i) The two construction gates sessions worry about (turnover 50x, positions >= 4)
+  have **never fired** under v3, and drawdown fires only alongside the null. (ii) **+0.86 qualifies
+  2026-10-14/15's "the two gates pull in opposite directions in `k`"** — that holds *within* a blend
+  of one score, where `k` trades concentration against dilution; **across objects the null gate and
+  the skill statistic are the same test**, so there is no object-level trade between them to exploit.
+  (iii) The train/validation coefficient at **n = 27** supersedes the n=7 figure of -0.345 that the
+  2026-10-16/17 entry already retired as a qualification rule: against validation *skill* the right
+  number is **zero** (-0.08 pearson, +0.02 spearman), not negative. Four nights of "a clean train
+  screen is not evidence" now have a board-wide coefficient.
+
+- **[Measured 2026-11-16, nightly] THE BREADTH MANDATE COUNTS LABELS, NOT BETS: 7 OF 26 TRIALS ARE
+  ONE BET WITH THE BOARD LEAD ACROSS THREE FAMILIES, AND THE LEADERBOARD'S `distinct_mechanisms` IS
+  COMPUTED OVER LEADS ONLY.** Active-return rho to `pt_oldhalf_overlap6`: `pt_oldhalf_sync6` +0.980,
+  `pt_decade_old_half_depth_neutral` +0.937, `pt_old_half_ex_anniversary` +0.902,
+  `pt_old_half_ex_phase6_control` +0.883, `pt_decade_reversal_band_warm` +0.584,
+  **`rv_clv_momneutral_overlap6` +0.554** (`range-variance`), **`pl_decade_invvol_floored` +0.533**
+  (`portfolio-learning`). Across all 351 pairs, **61 exceed +0.5**; complete-linkage clustering
+  (every pair inside a cluster must clear the threshold, so no chaining) puts the board at **12**
+  independent bets at rho 0.5 and **7** at rho 0.2, against 27 trials and 8 family slugs. **So a
+  session can satisfy `program.md`'s family allocation to the letter and still spend its night on one
+  return stream** — the failure mode that section exists to prevent, measured over the whole board
+  rather than over the leads for the first time. **Standing rule: check a planned candidate's active-
+  return rho against the board lead and against its own family's lead before writing it, not after.**
+
+- **[Method, 2026-11-16] FOUR OBJECTS DECLINED BEFORE A SCREEN BY THE ANTI-CANDIDATE LISTS, WHICH IS
+  WHAT THEY ARE FOR — AND ONE STRUCTURAL HOLE IN THE NULL, RECORDED AND NOT USED.** Declined on the
+  record alone, at zero cost: the **overnight/intraday partition** of the trailing return
+  (2026-10-24/25); **information discreteness / frog-in-the-pan** (2026-11-01/02, where `ID` over a
+  window is 42% the mean return over the same window); **Novy-Marx's intermediate-horizon echo**,
+  declined by its own paired source — `notes/2026-08-17-momentum-horizon-echo.md` carries Goyal-Wahal
+  finding no echo in 37 non-US countries and diagnosing the US result as reversal contaminating the
+  recent leg, on a panel that is 48% non-US after 2009 and where plain 12-1 momentum is already a null
+  under the joint control; and **upside/downside return capture**, which is `rho_vol`-loaded by
+  construction and would be read against the de-risking-in-costume check that has converged three
+  times on "Sharpe is flat in beta on this panel". The **ETF / country-index unit** stays closed on the
+  2026-11-02/03 benchmark argument. One true structural note taken while reading
+  `benchmarks.random_null_v3` and deliberately **not** built on: the null matches **type and, for
+  stocks only, listing region**, so an **ETF book's replicas are drawn from all eligible ETFs and do
+  not inherit its asset-class mix** — an ETF book's null percentile would not be a selection statistic
+  at all. It is moot because the class is refused one gate earlier, and exploiting a gate's blind spot
+  is not a result. **Anti-candidates travelling with this entry: the intermediate-horizon (12-7) return
+  as a score on this panel; upside/downside capture or any up/down-participation ratio; and any
+  candidate whose case is that the null cannot imitate it.**

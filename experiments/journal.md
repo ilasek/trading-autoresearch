@@ -30336,3 +30336,310 @@ assuming the last report on `main` is the last report written. **Provenance from
 hypothesis was written.** The next session inherits the full 8-trial budget and the
 family allocation in `program.md` unspent.
 ## Research session — 2026-11-15 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Free measurements — 2026-11-16 (nightly), ZERO trials spent
+
+Step 0 clean for the first time in several sessions: `git fetch origin --prune`, then
+`git branch -r --no-merged origin/main` is **empty** — both branches the 2026-11-15 entry
+merged (`origin/claude/determined-darwin-brkls1`, `origin/main-a5dglb`) are ancestors of
+`origin/main`, and the nineteen stale `main-*` pointers are all behind it. The container
+again started on a per-run branch (`main-s1wvmk`) sitting at `origin/main`'s commit
+`9151644`; local `main` was 12 behind and was corrected with
+`git checkout main && git reset --hard origin/main` before any work — **fifteenth
+consecutive session** on that generator. Engine green: `.venv/bin/python -m pytest tests/ -q`
+→ **92 passed in 59.94s**. Store's last bar is **2026-11-13** against today's 2026-11-16, i.e.
+0–1 trading days behind — not stale. `trials.jsonl` **138 records / 28 v3 / 27 with a
+validation null percentile**; no trial record was added, altered or removed; no candidate file
+was written; **no holdout, forward or incubation file was opened** (the v3 records' `holdout*`
+fields are all `None` and were not read), and nothing under `engine/`, `scripts/`, `tests/`,
+`data/`, `research/`, `program.md` or `CLAUDE.md` was touched.
+
+Tonight is **meta-analysis of the board the lab has already paid for**, not a new object. Six
+blocks, all free, all on train/validation-side records only. The reason for taking that aim
+rather than screening a new score is in F0.
+
+### F0 — the object inventory, re-checked against the record before anything was built
+
+Four objects were considered and **declined before a screen**, each because the record already
+closes it by name, which is what the anti-candidate lists are for: the **overnight/intraday
+partition of the trailing return** (2026-10-24/25: "the two session legs at any horizon, signed
+or differenced" — the 21-day reversal is entirely intraday and the overnight leg is a pure
+null); **information discreteness / frog-in-the-pan** (2026-11-01/02: `ID` over a window is 42%
+the mean return over the same window, all three pre-registered clauses failed, and it is an
+anti-candidate as a conditioner *or* a substitute); **Novy-Marx's intermediate-horizon "echo"**
+(research `notes/2026-08-17-momentum-horizon-echo.md` pairs it with Goyal–Wahal, who find no
+echo in 37 non-US countries and diagnose the US result as reversal contaminating the recent
+leg — so on a panel that is 48% non-US after 2009 the prior is against it, and plain 12−1
+momentum is already a null here under the joint control, z +0.25 over 2009-2017); and
+**upside/downside return capture**, which is `rho_vol`-loaded by construction and would be
+read against the de-risking-in-costume check that has now converged three times on "Sharpe is
+flat in beta on this panel". The **ETF / country-index unit** was also re-checked and is closed
+by the 2026-11-02/03 benchmark argument (every equity sleeve is a −0.15 to −0.28 train-skill bet
+before any signal). One structural note from reading `benchmarks.random_null_v3` while doing so,
+recorded because it is true and not in the record: the null matches **type and, for stocks only,
+listing region**, so an ETF book's replicas are drawn from *all* eligible ETFs and do **not**
+inherit its asset-class mix — an ETF book's null percentile would therefore not have been a
+selection statistic at all. It is moot, since the class is refused one gate earlier, and no
+candidate was built to exploit it.
+
+So there was no object with a case, and the budget went to the board instead.
+
+### F1 — the required-skill instrument is SELF-REFERENTIAL, and the figure the record carries
+### is the naive one
+
+`metrics.deflated_skill(skill, se, trial_skills, n_eff)` scales its benchmark by
+`var(trial_skills)`, and `run_experiment.py` passes **`skills + [this candidate's skill]`**. So
+the bar is not a constant a candidate can be designed against: raising a candidate's skill
+raises the dispersion term it is judged against. The 2026-10-30/31 entry quotes
+`benchmark + 1.645·se` — correct as an identity, but it is the bar *at the board's current
+dispersion*, not the skill a candidate must reach. Solving the fixed point
+`r = bench(skills + [r], N_eff) + 1.645·se`:
+
+    se        naive bar   FIXED POINT    gap    required paired t
+    0.0745      +0.396      +0.470     +0.074        6.30
+    0.0836      +0.411      +0.490     +0.079        5.86
+    0.1234      +0.476      +0.581     +0.105        4.71
+    0.1410      +0.505      +0.623     +0.118        4.42   <- board median se
+    0.1647      +0.544      +0.679     +0.135        4.13   <- #16's se
+    0.1930      +0.591      +0.748     +0.157        3.88
+
+Board state: 27 v3 skills, sd **0.1233**; `N_eff` **43**; `bench` **+0.2734**. At #16's own
+error bar the seat needs **+0.679**, not the **+0.552** the record carries — the recorded figure
+understates the requirement by **24%**. At the board's median `se` the seat needs validation
+skill **+0.62**, i.e. a validation Sharpe near **+0.96** against a pool at **+0.34**, net of v3
+costs, at a **paired t of 4.4**. The board's best is **+0.124 at t 0.88**. Scope: this changes
+no recorded number and no verdict — every recorded `dsr` was computed by the engine with the
+candidate's own skill already included, so the engine was always evaluating the fixed point.
+What was wrong is the *pre-trial* figure a session would design against, and the correction runs
+in the direction of making the 2026-10-30/31 closure of the challenge track firmer.
+
+### F2 — `N_eff` IS SATURATED, AND IT IS NOT EVEN MONOTONE: THE LAST 17 RECORDED TRIALS MOVED
+### IT −2
+
+Holding the board's dispersion fixed, `bench` as a function of the effective trial count:
+
+    N_eff      10      20      30      43      44      50      60      80     120     200
+    bench  +0.1941 +0.2343 +0.2556 +0.2734 +0.2745 +0.2806 +0.2891 +0.3021 +0.3198 +0.3409
+
+The 44th effective trial costs **+0.0011** of required skill (required t 3.58 → 3.59); reaching
+`N_eff` 200 would cost **+0.07**. `sqrt(2 ln N)` has done its growing. And the count channel is
+**path-dependent and non-monotone**, because `effective_n_trials` is single-linkage clustering
+on validation-return correlation at rho 0.95, so a trial landing *between* two clusters merges
+them:
+
+    after record   119    126    127    131    133    134    135    136
+    N_eff           45     45     44     45     46     45     43     43
+
+Seven of the last seventeen recorded trials added **+0**, three *lowered* `N_eff`, and
+`sl_trend_span_masked` alone took it from 45 to 43 by bridging two clusters. Net over seventeen
+trials: **−2**. So `program.md`'s "every trial permanently raises the deflated-Sharpe bar" is
+now false in **both** of the deflator's channels under v3 — the dispersion channel (recorded
+2026-10-30/31: a near-mean trial is free or better) and, newly, the count channel. Stated with
+the rider that matters: **this is not a design target.** A candidate may not be aimed at
+bridging clusters, and none was. It is a reason to stop quoting the deflator as the reason a
+session declines a trial — the honest reason is the absence of an object, which is F0.
+
+### F3 — THE HEADLINE: A GLOBAL TEST OF THE WHOLE v3 BOARD AGAINST ITS OWN NULL, AND THE BOARD'S
+### ONE GATE PASS IS NUMERICALLY THE EXPECTED FALSE POSITIVE
+
+Each trial's `null_pctile` is its validation Sharpe's rank among 200 region/type-matched
+replicas of its own book. Under the global null of no selection skill anywhere, those 27
+numbers are ~U(0,1). This had never been looked at as a set.
+
+    unclustered, 27 trials
+      mean percentile        0.507   (U(0,1): 0.500, se 0.056)   z +0.13, p 0.90
+      variance               0.1383  (U(0,1): 0.0833)            over-dispersion 1.66x
+      KS vs U(0,1)           D 0.261, p 0.041
+      Fisher on MC p-values  chi2 74.5 / 54 df, p 0.034
+      pass the 10% gate      5 observed vs 2.7 expected
+
+Read alone that looks like a modest excess. It is not, because **all five passers are the one
+old-half lineage** — `pt_decade_old_half_depth_neutral`, `pt_old_half_ex_anniversary`,
+`pt_old_half_ex_phase6_control`, `pt_oldhalf_overlap6`, `pt_oldhalf_sync6` — whose pairwise
+**total**-return correlation is 0.985-0.998 and whose **active**-return correlation is
+0.883-0.980. By the protocol's own rule they are **1 effective trial**. Re-counted at every
+clustering threshold:
+
+    clustering                              clusters   gate passes   expected   mean pctile (z)
+    total returns, single linkage rho .95        7           1          0.7      0.364 (-0.98)
+    ACTIVE returns, single linkage rho .95      25           3          2.5      0.468 (-0.44)
+    ACTIVE returns, single linkage rho .80      18           1          1.8      0.378 (-1.43)
+    ACTIVE returns, single linkage rho .50       8           1          0.8      0.406 (-0.73)
+    ACTIVE returns, COMPLETE linkage rho .50    12           1          1.2        --
+
+**At every threshold the number of null-gate passes equals what a 10%-size gate produces by
+chance, and the clustered mean percentile is below 0.5 in every row.** Twenty-seven v3 trials
+have produced no board-level evidence of selection skill, and M3 — the board's only gate pass
+and its only positive skill with a usable margin — sits exactly where the single expected false
+positive of a 10% test over 7-12 independent bets sits. The *only* departure from uniformity is
+**over-dispersion** (1.66x, KS p 0.041), which is not evidence of skill: designed books either
+select well or badly, and five of the lab's objects were pre-signed in a published direction
+that lost here, which puts mass in both tails.
+
+**Stated as a post-hoc description, not a test** (the split was chosen after seeing that all
+five passers are one family, and the lab's own standing rule is "name the window before
+measuring it"): price-trend's 9 trials mean **0.797**; the other 18 mean **0.362** (z −2.02,
+max 0.86). The negative location of the non-price-trend group has at least one mechanical
+channel that is *not* lack of skill — the null matches region and type but **not liquidity
+tier**, so a book selecting illiquid names (e.g. `lv_illiq_peer_neutral_band`, percentile 0.01)
+pays a higher per-name cost than its replicas do. That asymmetry is worth a measurement some
+night; it is not claimed tonight.
+
+**Scope, because it is easy to over-read.** Nothing here retracts a recorded number, moves the
+board, the gate or the deflator. M3's validation skill is still +0.124, 90% CI [−0.11, +0.42],
+DSR 0.1635, and it remains the board's lead. What the block removes is the reading that "5 of 27
+cleared a 10% gate" is aggregate evidence of anything.
+
+### F4 — WHICH GATE ACTUALLY BINDS: A CENSUS, AND THE NULL GATE IS NEARLY THE SAME TEST AS THE
+### SKILL STATISTIC
+
+24 of the 28 v3 records are `GATE_FAIL`. Tagging their `reasons` (GATE_FAIL only — for
+`FAMILY_LEAD`/`SCOUT` the `reasons` field carries the verdict narrative, which contains the
+words "equal-weight pool" and mis-tags on a naive parse; that cost the first run of this block):
+
+    gate                      fails      combinations
+    random-selection null       22        12  null alone
+    train skill                  9         5  null + train
+    drawdown                     5         3  drawdown + null + train
+    causality                    1         2  drawdown + null
+    turnover                     0         1  train alone
+    min positions                0         1  causality
+
+**The null gate is the binding constraint in 22 of 24 failures and the sole cause in 12**, and
+the two construction gates the lab worries about (turnover 50x, positions ≥ 4) have never fired
+under v3. Three correlations over the 27 scored trials:
+
+    corr(validation skill, null percentile)   pearson +0.864   spearman +0.886
+    corr(train skill, validation skill)       pearson -0.081   spearman +0.016   OLS slope -0.179
+    corr(train skill, null percentile)        pearson -0.034   spearman -0.081
+
+The first **qualifies** 2026-10-14/15's "the two gates pull in opposite directions in `k`": that
+holds *within* a blend of one score, where `k` trades concentration against dilution; **across
+objects the null gate and the skill statistic are nearly the same test**, so a session should not
+expect to clear one by giving up the other. The second is the full-board version of the record's
+n=7 reading of −0.345: at n=27 against validation *skill* the right number is **zero**, not
+negative. Four nights of entries saying "a train screen carries no information about validation"
+now have a board-wide coefficient of −0.08 with a Spearman of +0.02.
+
+### F5 — THE BREADTH MANDATE COUNTS LABELS, NOT BETS
+
+`program.md` allocates the budget by family slug and the leaderboard reports
+`distinct_mechanisms: 6` — but that grouping is computed over **family leads only**, and there
+are 27 trials. Active-return correlation to the board lead (`pt_oldhalf_overlap6`):
+
+    +0.980 pt_oldhalf_sync6  +0.937 pt_decade_old_half_depth_neutral  +0.902 pt_old_half_ex_anniversary
+    +0.883 pt_old_half_ex_phase6_control  +0.584 pt_decade_reversal_band_warm
+    +0.554 rv_clv_momneutral_overlap6  +0.533 pl_decade_invvol_floored
+
+**7 of 26 trials are one bet with the lead at rho ≥ 0.5, spanning three families** —
+`price-trend`, `range-variance` and `portfolio-learning`. Across all 351 pairs, **61 exceed
++0.5** and 72 exceed ±0.5. Complete-linkage clustering (which, unlike single linkage, requires
+*every* pair inside a cluster to clear the threshold) puts the board at **12** independent bets
+at rho 0.5 and **7** at rho 0.2. So a session can satisfy the family allocation rule to the
+letter and still have spent its night on one return stream — which is the failure mode
+`program.md`'s breadth section was written to prevent, measured for the first time over the
+whole board rather than over the leads.
+
+### For the human owner — three structural items a session cannot act on
+
+1. **The `challenge` track is closed by arithmetic and `program.md` does not say so.** F1 puts
+   the seat at validation skill +0.62 (paired t 4.4) at the board's median error bar, against a
+   best-ever +0.124; the 2026-10-30/31 entry reached the same conclusion with a figure 24% too
+   low. Every v3 trial has been a `scout` for twenty-eight records running. Either the promotion
+   rule should state that it is unreachable on this window and the lab should be graded on
+   family leads, or the objective needs changing. A session may not reinterpret the rule.
+2. **Twenty-seven trials have produced gate passes at exactly the chance rate** (F3). The honest
+   next move is not another OHLCV characteristic — the inventory is empty on the record's own
+   accounting, five nights running — but one of `program.md`'s own "Future upgrades": fundamentals,
+   intraday bars, or price coverage before 2009. That needs human approval by the file's own terms.
+3. **The breadth rule should count mechanisms over all trials, not over leads** (F5), and the
+   deflator's dispersion term is still estimated from designed candidates including deliberate
+   controls (the tension raised on 2026-10-30/31 and not acted on).
+
+**Lesson:** the lab had never asked whether its *board* beats chance, only whether each candidate
+does, and the two questions have different answers once the trial count is deflated into
+independent bets — 27 trials are 7 to 12 bets, and 5 gate passes are 1. The cheap instrument is
+the one that was sitting in `trials.jsonl` all along: the set of `null_pctile` values is a set of
+p-values, and p-values have a known distribution under the null. Read them as a set after every
+session; it costs nothing and it is the only statistic here that prices the whole search.
+
+## Session summary — 2026-11-16 (nightly) — 0 trials of 8; the lab had never asked whether its BOARD beats chance, and it does not: 27 trials are 7-12 independent bets and 5 null-gate passes are 1
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 28 v3 records / 27 scored v3
+trials**, the v3 board is unchanged, the deflated bar is unchanged, no candidate file was
+written, no verdict was assigned. Six free blocks ran. **No holdout, forward or incubation file
+was opened**, and with no trial recorded there was no holdout gate to reach. Engine green
+(**92 passed in 59.94s**). Step 0 was **clean for the first time in several sessions** —
+`git branch -r --no-merged origin/main` empty, both of last night's merged branches now
+ancestors — though the container again started on a per-run branch (`main-s1wvmk`) and local
+`main` was 12 behind, corrected before any work; fifteenth consecutive session on that
+generator. Store's last bar 2026-11-13 against today's 2026-11-16: not stale.
+
+**Why zero.** Four new objects were declined *before* a screen because the record closes each by
+name — the overnight/intraday partition, information discreteness, Novy-Marx's intermediate-horizon
+echo (whose own paired source finds no echo outside the US), and upside/downside capture — and the
+ETF/country-index unit is closed one gate earlier by the 2026-11-02/03 benchmark argument. There was
+no object with a case, and the budget went to the board the lab has already paid for. **This is the
+eleventh zero-trial session of the last seventeen, and the sixth in a row.**
+
+**Best finding, and it is the first statistic here that prices the whole search.** Every trial
+already stores `null_pctile` — its Sharpe's rank among 200 region/type-matched replicas of its own
+book — which under the global null of no selection skill is a p-value. Read as a set, the 27 v3
+percentiles have mean **0.507** against U(0,1)'s 0.500 (z +0.13), and the 5 that clear the 10%-size
+gate against 2.7 expected are **all one lineage**: pairwise active-return rho 0.883-0.980, total-return
+rho 0.985-0.998, **1 effective trial** by the protocol's own clustering rule. Re-counted at five
+clustering thresholds the board gives 1/1/1/3/1 gate passes against 0.7/0.8/1.2/2.5/1.8 expected,
+and the clustered mean percentile is **below** 0.5 in every row. **So twenty-seven v3 trials contain
+no board-level evidence of selection skill, and M3 — the only gate pass and the only positive skill
+with a margin — sits exactly where a 10% test's single expected false positive over 7-12 independent
+bets sits.** The one real departure from uniformity is over-dispersion (variance 1.66x uniform's,
+KS p 0.041), which is what *designed* books produce whether or not they work. Nothing here retracts
+a recorded number: M3's skill is still +0.124, 90% CI [-0.11, +0.42], DSR 0.1635.
+
+**Second finding, and it is a correction to this file's own pre-trial instrument.** The required-skill
+figure the record carries (`benchmark + 1.645*se`, +0.552 at #16's `se`) is the bar at the board's
+*current* dispersion, but `run_experiment.py` passes the candidate's own skill into the variance term,
+so the bar rises with the candidate. The fixed point is **+0.679** at #16's `se` and **+0.623** at the
+board's median — **24% above** the recorded figure, a paired **t of 4.4**, against a board best of
++0.124 at t 0.88. No recorded `dsr` is affected (the engine always evaluated the fixed point); what was
+wrong is the number a session would design against, and the correction makes the challenge track's
+closure firmer.
+
+**Third, and it finishes an entry from 2026-10-30/31.** `N_eff` is saturated *and* non-monotone: the
+44th effective trial costs **+0.0011** of required skill, and the last seventeen recorded trials moved
+`N_eff` **45 → 43**, because single-linkage clustering lets a trial landing between two clusters merge
+them (`sl_trend_span_masked` alone cost −2). So "every trial permanently raises the deflated bar" is
+false in both of the deflator's channels under v3. Stated with its rider: **not a design target**, and
+the honest reason a session declines a trial is the absence of an object, never the deflator.
+
+**Also measured, free.** A gate census: **22 of 24 v3 GATE_FAILs are the random-selection null, 12 of
+them it alone**; train skill 9, drawdown 5, causality 1; the turnover and min-position gates have never
+fired under v3. `corr(validation skill, null percentile) = +0.86`, so across objects the null gate and
+the skill statistic are nearly the same test — which qualifies 2026-10-14/15's "opposite directions in
+`k`" to *within* a blend of one score. `corr(train skill, validation skill) = -0.081` (Spearman +0.02,
+OLS slope -0.18) at n=27, the board-wide version of the record's n=7 figure of -0.345: the right number
+is **zero**, not negative. And the breadth mandate counts labels, not bets: **7 of 26 trials are one
+bet with the board lead at rho >= 0.5, across three families**, 61 of 351 pairs exceed +0.5, and
+complete-linkage puts the board at 12 independent bets at rho 0.5 and 7 at rho 0.2.
+
+**Three structural items were raised for the human owner and not acted on** (full text in the F-block
+entry): the `challenge` track is closed by arithmetic and `program.md` does not say so; the board's
+gate passes are at the chance rate after twenty-seven trials, so the honest next move is one of
+`program.md`'s own "Future upgrades" (fundamentals, intraday, pre-2009 coverage) rather than another
+OHLCV characteristic; and the breadth rule should count mechanisms over all trials rather than over
+family leads.
+
+**Ideas for next session.** (i) Re-read the set of `null_pctile` values after every session — it is one
+line and it is the only statistic that prices the whole search; add the clustered count beside it.
+(ii) The null matches region and type but **not liquidity tier**, so a book selecting illiquid names
+pays a higher per-name cost than its own replicas: that asymmetry is a measurable, signed bias in the
+binding gate and is the one instrument question tonight raised and did not answer. (iii) The
+non-price-trend group's mean percentile of 0.362 is a post-hoc split and should be either pre-registered
+and re-read, or dropped. (iv) The 2026-11-13/14 "next ideas" list is otherwise untouched and carries
+forward. **Provenance from `research/SUMMARY.md`: nothing spent as a build.** The folder's current vein
+is methodological (`#447`-`#451`, conditioning-set selection, and the 2026-11-13/14 two-sample-test
+notes); `notes/2026-08-17-momentum-horizon-echo.md` was read in full and is what **declined** the
+intermediate-horizon object in F0 rather than licensing it, and `#389`'s cumulative-active-return
+discipline is the nearest neighbour to F3's board-level accounting without being the same instrument.
+
+**Verdicts:** none.
