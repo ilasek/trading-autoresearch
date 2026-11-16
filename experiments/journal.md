@@ -30643,3 +30643,4 @@ intermediate-horizon object in F0 rather than licensing it, and `#389`'s cumulat
 discipline is the nearest neighbour to F3's board-level accounting without being the same instrument.
 
 **Verdicts:** none.
+## Research session — 2026-11-16 (learning agent): 3 notes added, see research/SUMMARY.md

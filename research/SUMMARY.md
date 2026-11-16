@@ -9845,6 +9845,99 @@ figure appears in any of the three sources or is carried from them. Flags: overl
 three; `published_post_2018: true` for VanderWeele (2019) only, and since that source contains no
 data at all the flag carries no pre-fitting risk — it is recorded because the rubric requires it.
 
+### The HYBRID DESIGN — when a control sits on BOTH sides, the rule is the UNION of two selections, the interval afterwards is valid only under sparsity, and at this lab's own `p/n` the right move is not to select at all (cross-family, the gate's own statistic, the panel itself)
+
+This is the side the conditioning-set vein was left open on, and it was named as its own stated
+gap by `#448`'s source: variable selection when a covariate may enter the model of the **score**,
+the model of the **forward return**, or **both** — which is exactly what the lab's mandatory
+rank-space residual control feeding a return reading is. Three sources, read in full, answer it,
+and the third overturns the first two's applicability here.
+
+**The rule (Tier A, overlap `false`, `published_post_2018: false`).** In the partially linear model
+`y = dα₀ + g(z) + ζ`, `d = m(z) + v`, selecting controls from the **outcome equation alone** — the
+natural, forecasting-trained move — is **not robust**, because the model has no adaptivity: a
+control with a *small* coefficient in the outcome equation and a *large* one in the treatment
+equation is a genuine confounder that the outcome lasso drops at almost no cost to itself, and its
+omission is first-order bias in `α̌`. The repair is to give every confounder **two chances**: lasso
+the treatment equation, lasso the reduced-form outcome equation, take the **union**, and regress
+`y` on `d` and that union. Then ordinary heteroscedasticity-robust OLS inference from that single
+regression is **uniformly valid** over the class of data-generating processes satisfying the
+conditions — not merely pointwise, which is what rules out the Leeb–Pötscher failure mode — and
+attains the semiparametric efficiency bound under homoscedasticity. The conditions are the price:
+**approximate sparsity in both equations**, growth `s²·log²(p ∨ n)/n → 0`, bounded sparse
+eigenvalues of the empirical Gram matrix, `q > 4` moments, and independence across rows. The
+authors state plainly where the uniformity does **not** reach: *"our models do not cover models
+with many small coefficients."* The clause the lab needs most is the **amelioration set** — the
+final regression may include forced-in, theory-motivated controls beyond the union, for free, with
+the theorem intact, subject only to `ŝ₃ ≲ (1 ∨ ŝ₁ ∨ ŝ₂)`.
+→ `notes/2026-11-16-post-double-selection-inference-after-control-selection.md`
+
+**Why it works, and the generalisation (Tier A, overlap `false`, `published_post_2018: true`).**
+Two properties are sufficient, and they cure two different biases. **Neyman orthogonality** —
+`∂_η E ψ(W; θ₀, η₀)[η − η₀] = 0` — makes the moment condition locally insensitive to the nuisance,
+so the bias term becomes a **product** of the two nuisance estimation errors, bounded by
+`√n·n^{−(φ_m+φ_g)}` and vanishing whenever the two rates **sum** past `1/2`; in smooth problems
+this reduces to the crude requirement that each nuisance be estimated at `o(N^{−1/4})`. For the
+partially linear model the orthogonal score is `(Y − Dθ − g(X))·(D − m(X))`, i.e. **residualise the
+treatment too, not only the outcome** — Robinson's double-residual regression. **Sample splitting**
+cures the second, independent bias: a nuisance fitted on row `i` is correlated with row `i`'s own
+error, and the authors exhibit an estimator converging at `N^{−1/2+ε}` whose plug-in use still
+blows up. Fit out-of-fold and the term has mean zero by construction. **Cross-fitting** restores
+the efficiency that splitting costs; `K = 4` or `5` beats `K = 2`; repeat the partition and report
+the **median with the split-to-split spread folded into the variance**. The quantitative payoff
+over the predecessor is one square root of control-list width: the sparsity requirement falls from
+`s² ≪ n` to `s ≪ n`.
+→ `notes/2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md`
+
+**The adversarial bound, and it is what decides the lab's action (Tier B, overlap `false`,
+`published_post_2018: true`).** A **non-asymptotic lower bound** on the omitted-variable bias of
+the post-double-selection estimator, from the probability of **double under-selection** — a
+relevant control missed by both steps. The bound can exceed **twice** the standard deviation that
+the asymptotic distribution supplies, **with sparse coefficients and `n` far above `p`**: at one
+published application's configuration the ratio runs `0.27` at one relevant control and `2.4` at
+ten. It does not contradict the asymptotic theorem — the authors say so — it says the asymptotic
+zero-mean approximation can be inaccurate at the sample sizes people have, and that
+non-asymptotically the method "cannot avoid the post-selection inference issues" of
+Leeb–Pötscher. Three regimes, with a computable boundary: **absence of bias** holds under a
+**beta-min condition**, `|β*_j| ≥ aφ⁻¹σ_η√(2(1+τ)log p/n)` **or** `|γ*_j| ≥ bφ⁻¹σ_v√(·)` with
+`a, b > 3` — note the *either*, which is the union rule's two-chances property as an inequality;
+**negligible bias** holds when the omitted coefficients are small enough to be nearly irrelevant;
+and the harmful regime is the **interval between them**, where coefficients are too small to be
+selected reliably and large enough to bias, with nothing in the data announcing it. The diagnostic
+is a **stress test read in the counter-intuitive direction**: *increase* both penalties (the
+paper's simulation-calibrated rule of thumb is **+50%**), which aggravates under-selection — if the
+estimate barely moves, the design is in a safe regime; if it moves, no interval should be
+believed. *Lowering* the penalty to force controls in is explicitly refuted, and the authors state
+flatly that **no single regularisation choice works across designs.** Their fallback, for
+`p` comparable to but smaller than `n`: **OLS with every control included** plus a
+many-controls-robust variance estimator, which **needs no sparsity assumption at all** and creates
+no selection event, at the cost of wider intervals.
+→ `notes/2026-11-16-omitted-variable-bias-of-lasso-based-inference.md`
+
+**What this vein concludes for this lab, and it is deflationary in a useful direction.** The lab's
+candidate control list is of the order of ten variables against ~251 train month-ends — `p ≪ n`,
+and `n` must be counted in **dates, not name-months**, because the rows are dependent (`#445`).
+In that regime the vein's own recommendation is **not to select controls at all**: include them
+all in one joint regression. That is the cheapest available discharge of `#447`'s third veto — if
+nothing is chosen, no following interval is invalidated — and it is *simpler* than the lab's
+current practice of admitting controls one at a time on judgement. It also dissolves `#451`'s
+tension rather than resolving it: the question of which side a control is judged on only arises
+if something is being selected. What survives as transferable rules are three free items: the
+**union principle** (a control's claim can come from either side, and the beta-min inequality is
+its quantitative form), the **both-sides residualisation audit** (the lab residualises the score on
+its controls — if the forward return is not residualised on the same controls, the reading uses
+the *non*-orthogonal score, whose nuisance derivative does not vanish), and the **report-the-spread
+discipline** (vary the control set and report the range, never a direction — which is how this
+coexists with `#450`).
+
+**Anti-lookahead.** All three sources are methodological. The magnitudes carried above are
+**simulation ratios**, a **non-asymptotic bound-to-standard-deviation ratio**, **convergence rate
+exponents**, a **beta-min threshold formula**, a **fold count**, a **penalty multiplier** and
+**citation counts**. No return, Sharpe, or dated performance figure appears in any of the three or
+is carried from them. The empirical illustrations — a US state crime panel ending in the 1990s, a
+US household survey from the early 1990s, a US school-cohort study from the late 1990s — are not
+financial and are pre-validation; overlap `false` for all three.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -18599,6 +18692,120 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-11-15-covariate-selection-for-the-propensity-score.md`,
     `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md`
 
+452. **FREE RULE, and it is the one the lab's own construction has been running one-sidedly: WHEN A
+    CONTROL MAY SIT ON BOTH SIDES, ITS CLAIM TO INCLUSION CAN COME FROM EITHER — SO TAKE THE
+    UNION, NOT EITHER LIST.** The lab's mandatory control is a rank-space residual of a candidate
+    score on log `P` and `vol126` whose output feeds a forward-return reading: the controls sit in
+    the model of the score **and** the model of the return. Selecting from the return side alone —
+    the natural move, and what a forecasting instinct produces — is **not robust**, because a
+    control with a small coefficient in the return equation and a large one in the score equation
+    is a real confounder that the return-side selection drops at almost no cost to itself, and its
+    omission is **first-order bias**. Selecting from the score side alone is the lab's actual
+    practice (`rho_logP` per object, the 2026-11-13/14 calibration) and fails symmetrically. The
+    rule is the **union of both selections**, plus an **amelioration set** of forced-in,
+    theory-motivated controls — which is the formal licence for the lab's two mandatory controls
+    being unconditional, subject only to `ŝ₃ ≲ (1 ∨ ŝ₁ ∨ ŝ₂)`. Under approximate sparsity in both
+    equations, `s²log²(p ∨ n)/n → 0`, bounded sparse eigenvalues and independent rows, ordinary
+    robust OLS inference from the final regression is **uniformly valid** — so `#447`'s third veto
+    ("a data-chosen control set costs the validity of the interval that follows it") is **not
+    absolute**: it holds for every *other* way of choosing a set, including the lab's, and double
+    selection is the one exception. **This resolves `#451` by making it a split between two halves
+    of one rule rather than a choice between two rules.** Free — a change to which list is written
+    down, not a trial. Tier A, overlap `false`, `published_post_2018: false`.
+    → `notes/2026-11-16-post-double-selection-inference-after-control-selection.md`
+
+453. **FREE AUDIT, one line of code, on an instrument the lab has now used nine times: IS THE
+    FORWARD RETURN RESIDUALISED ON THE SAME CONTROLS AS THE SCORE, OR ONLY THE SCORE?** In the
+    partially linear model the score function `(Y − Dθ − g(X))·D` has a **non-vanishing** derivative
+    in the nuisance, so a first-order error in the estimated control function is a first-order
+    error in the reading; the **Neyman-orthogonal** score `(Y − Dθ − g(X))·(D − m(X))` has a
+    vanishing one, and it is Robinson's **double-residual** regression — *both* sides residualised
+    on the controls. The payoff of orthogonality is that the bias becomes a **product** of the two
+    nuisance errors, so both may be estimated at rates far slower than `√n` provided the rates
+    **sum** past `1/2` (in smooth problems: each nuisance at `o(N^{−1/4})`, which is also the bar
+    to quote when declining a learned nuisance on this panel — a statistical ground, stronger than
+    the breadth and runtime grounds the folder has used). If the lab's pipeline residualises only
+    the score, its readings are taken with the non-orthogonal score and the attenuations recorded
+    in `learnings.md` are not the quantity the theory describes. **Check it before the next
+    screen.** Free. Tier A, overlap `false`, `published_post_2018: true`.
+    → `notes/2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md`
+
+454. **THE ACTION ITEM, and it is to STOP SELECTING: at this lab's `p/n` the honest procedure is
+    OLS WITH EVERY CANDIDATE CONTROL INCLUDED, which assumes no sparsity and creates no selection
+    event.** The lab's control list is of the order of ten variables against **~251 train
+    month-ends** — and `n` must be counted in **dates, not name-months** (`#445`; counting rows
+    would overstate `n` by ~30×). That is `p ≪ n`, the regime in which the vein's own adversarial
+    source recommends full-control OLS with a many-controls-robust variance estimator rather than
+    any lasso-based selection, because the sparsity assumption is unneeded and no post-selection
+    problem arises. The cost is wider intervals — an explicit trade of length for coverage. Two
+    consequences: it is the **cheapest discharge of `#447`'s third veto** (nothing chosen, nothing
+    invalidated) and it makes `#452`'s which-side question moot in practice while leaving `#452`'s
+    union principle as the rule for *candidacy*. A third: at `n ≈ 251` the beta-min threshold
+    `aφ⁻¹σ√(2(1+τ)log p/n)` is of the order of several tenths of a standardised unit before
+    scaling, so **the lab could not reliably select controls at this `n` even if it wanted to** —
+    which is the positive argument for including them. Free. Tier B, overlap `false`,
+    `published_post_2018: true`.
+    → `notes/2026-11-16-omitted-variable-bias-of-lasso-based-inference.md`
+
+455. **MANDATORY CALIBRATION + FREE DISCIPLINE, and it is the finite-sample correction to `#452`:
+    AN ASYMPTOTIC LICENCE FOR A SELECTED CONTROL SET IS NOT A FINITE-SAMPLE LICENCE — VARY THE SET
+    AND REPORT THE SPREAD, NEVER A DIRECTION.** The non-asymptotic lower bound on the
+    omitted-variable bias from **double under-selection** can exceed **twice** the standard
+    deviation the asymptotic distribution supplies, **with sparse coefficients and `n` far above
+    `p`**. Three regimes: no bias above the beta-min threshold (needing only **one** of the two
+    coefficients to be large — the union rule as an inequality); negligible bias when the omitted
+    coefficients are nearly irrelevant; and a **harmful interval between them** that nothing in the
+    data announces. The diagnostic runs in the counter-intuitive direction — **increase** the
+    penalties (the source's own calibration: **+50%**), which aggravates under-selection; a reading
+    that barely moves is in a safe regime, one that moves cannot support an interval. *Lowering* a
+    penalty to force controls in is **explicitly refuted**, and no single regularisation choice
+    works across designs. The lab's transferable form, with no lasso involved: **read the
+    association under the full control set, under each control dropped, and under the set augmented
+    by the next-most-plausible candidate, and report the RANGE rather than the point.** The
+    2026-11-10/11 entry is this measurement taken once (`+0.0193` raw, `−24%`, `−34%`, `−83%`) and
+    it is why that object was declined; make it standing practice. **How this coexists with `#450`,
+    stated so no later session reads a contradiction:** `#450` refuses to attach a *sign* to a
+    control-induced change (a control that raises a reading is unresolved, not corroborating); this
+    item uses the *width* of the variation and attaches no sign at all. **The +50% figure and the
+    2.4 ratio are properties of the source's own simulation designs and are NOT calibrations for
+    this panel.** Tier B, overlap `false`, `published_post_2018: true`.
+    → `notes/2026-11-16-omitted-variable-bias-of-lasso-based-inference.md`
+
+456. **COMPOSITION, no new source — THE MEDIAN-OVER-PARTITIONS AGGREGATION, APPLIED TO THE LAB'S
+    OWN PARTITION-DEPENDENT NUMBERS.** Cross-fitting's bookkeeping includes a device the lab needs
+    for a problem it has already measured: when an estimate depends on an arbitrary partition,
+    repeat over many partitions, report the **median**, and fold the **partition-to-partition
+    spread into the reported variance** (`σ̂²_median = median{σ̂ₛ² + (θ̂ₛ − θ̃)(θ̂ₛ − θ̃)'}`, median by
+    operator norm so it stays non-negative; the source uses 100 splits). The 2026-11-16 nightly
+    measured exactly this failure: the effective-trial count moved **45 → 43** under single-linkage
+    clustering and is **non-monotone**, because a trial landing between two clusters merges them,
+    and re-counting at five thresholds gave gate passes 1/1/1/3/1. That is partition dependence,
+    and the standard remedy is to report the median over thresholds with the spread charged to the
+    variance rather than to pick one threshold. The same shape applies to any walk-forward fold
+    boundary. **And the fold rule itself, which is the one condition that blocks a naive transfer:
+    folds must be contiguous BLOCKS OF DATES with an embargo, never random rows** — a random-row
+    fold puts the same date on both sides of the split, so the auxiliary sample is not independent
+    of the main one, which is the exact thing splitting exists to buy. Free. Tier A, overlap
+    `false`.
+    → `notes/2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md`,
+    `notes/2026-11-14-sparse-alternatives-and-the-precision-transformed-test.md` (`#445`)
+
+457. **STATED TENSION, carried rather than resolved — THE WHOLE VEIN ASSUMES APPROXIMATE SPARSITY,
+    AND THIS FOLDER ALREADY HOLDS THE STRONGEST AVAILABLE EVIDENCE THAT A STOCK-RETURN
+    CROSS-SECTION MAY NOT BE SPARSE.** `#452`'s uniformity theorem is stated over a class that its
+    authors say explicitly does **not** cover "models with many small coefficients", and
+    `notes/2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md` finds that on the
+    cross-section of stock returns the data cannot distinguish a sparse model from a dense one at
+    all. If the lab's control structure is dense, `#452`'s theorem does not apply to it. Three
+    things follow and none of them is a fix: the source's own hedge is to add a cross-validated
+    **ridge fit** as one more candidate control, which moves size toward nominal but **raises
+    RMSE**; `#453`'s rate condition is **agnostic about sparsity** in a way lasso-specific results
+    are not, which is a point in its favour under this tension; and `#454`'s full-control OLS
+    **needs no sparsity assumption at all**, which is the third independent reason it is the right
+    procedure here. Tier A/B mixed, overlap `false`.
+    → `notes/2026-11-16-post-double-selection-inference-after-control-selection.md`,
+    `notes/2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`
+
 
 ## Coverage log
 
@@ -18705,7 +18912,124 @@ hypothesis fodder, then anti-candidates.
 
 | 2026-11-15 | **Confounder / conditioning-set selection — the primary aim [2026-11-14] named and could not supply ("WHAT THE COVARIATES SHOULD BE"), taken on the literature of variable selection for CONFOUNDING CONTROL rather than for prediction.** Pre-download grep per the standing rule: `confounder selection` **0**, `variable selection for confounding` **0**, `confounding` **0**, `M-bias` **0**, `collider` **0**, `backdoor` **0**, `instrumental variable` **0**, `bias-variance tradeoff covariate` **0**; `pre-treatment` **1** and `conditioning set` **4** — **hits opened**, and none is about *choosing* a set (the one `pre-treatment` hit is `2026-11-06-index-membership-is-not-an-information-free-selection.md` using the phrase for the lab's own selection-as-treatment framing; the four `conditioning set` hits use it for a Kalman state, a CVaR tail, and survival conditioning). `confound` as a loose word appears in 52 notes as prose and in none as an object. Vein genuinely untouched. **Acceptance criterion applied as stated**: all three sources give a RULE for including or excluding a covariate, state what the rule costs when wrong in each direction, and are about a conditioning set rather than forecasting. **Output: one rule (`#447`), one free screen never run (`#448`), one over-determined refusal (`#449`), one anti-candidate with a free procedure (`#450`), one stated tension (`#451`).** The screen is the actionable one: the lab has judged its controls by `rho` to the *score* every time, and the literature says the *outcome-side* association is what licenses inclusion. Also discharged: the [2026-11-14] **ranked-second writing task** — `#445`'s i.i.d. caution is now annotated onto all three free screens (`#376`, `#381`, `#389`), each in the form the screen's own axis requires. **Nightly-variable detector: nothing to check** — the 2026-11-15 nightly spent 0 trials and measured no variable (halted at step 0 on two diverged remotes), so the detector returns empty rather than covered, and that is a null run, not a pass. **Anti-lookahead.** No financial data in any source: a synthesis argued on causal diagrams (a), two Monte Carlo simulation studies (a, b, c), analytic theorems (c); the only applied illustrations anywhere are an education effect and a class-size effect. Every magnitude carried is a **simulation variance ratio**, a **`c` statistic from a simulated conditioning set**, a **volume of a probability parameter space**, or a **citation count**. All three `validation_overlap: false`; `published_post_2018: true` for (a) only, which contains no data at all. **Citation counts**: 1466, 2006 and 70, all from Crossref `is-referenced-by-count`, which answered first try for all five DOIs looked up. **Channels**: `pmc.ncbi.nlm.nih.gov` is a new "looks like an answer" mode — **HTTP 200 with a 21 KB Material-design challenge shell, byte-identical across two different articles**, which is the cheap tell; Europe PMC's `fullTextXML` serves OA articles and returns **HTTP 500** for `inEPMC: Y / isOpenAccess: N`; NCBI `efetch` returns metadata plus a verbatim abstract with the explicit note *"The publisher of this article does not allow downloading of the full text in XML form"*. **One named source unobtained**: Myers et al. (2011, *Am J Epidemiol*, `10.1093/aje/kwr364`, 261 Crossref citations) — the applied simulation study for Z-bias — reachable by no channel tried; per the 2026-10-15 lesson the budget went to a **different source for the same mechanism**, and the substitution was an upgrade because (c) is the general theorem behind that simulation and re-reads its exact generative models. A **university course-page PDF directory** (`math.mcgill.ca/<prof>/<course>/Articles/`) served the typeset AJE article of (b) on the first try — the faculty-page lesson extended to **course reading lists**. | VanderWeele 2019 (*European Journal of Epidemiology*) (`2026-11-15-the-modified-disjunctive-cause-criterion.md`); Brookhart, Schneeweiss, Rothman, Glynn, Avorn & Stürmer 2006 (*American Journal of Epidemiology*) (`2026-11-15-covariate-selection-for-the-propensity-score.md`); Ding, VanderWeele & Robins 2017 (*Biometrika*) (`2026-11-15-instrumental-variables-as-bias-amplifiers.md`) — all three read in full text |
 
+| 2026-11-16 (session 94) | **TOOK THE PRIMARY AIM VERBATIM, GOT THE NAMED PRIMARY ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY TELLING THE LAB NOT TO USE THE PROCEDURE THE AIM WAS ABOUT.** Aim from the [2026-11-15] entry: **the hybrid design** — admit a source only if it (i) gives a RULE for which covariates enter when a variable may sit on both sides, (ii) states what inference is valid AFTER that selection with its condition, and (iii) says what the rule costs when the selection is wrong, in both directions; not another propensity-score simulation, not a general sparse-regression paper whose object is prediction, not another matching paper; **at most three requests**. **The mandated pre-download grep ran first and the gap was total on the target vocabulary** across 294 prior notes: `double selection`, `double-selection`, `post-double`, `immunized`, `orthogonal score`, `Neyman orthogonality`, `debiased machine learning`, `union of selected`, `Belloni` all **0**; `Chernozhukov` **1**, `lasso` **13**, `post-selection` **17** — and the **hits were opened** per the standing rule: the one `Chernozhukov` hit is a conformal-prediction note's author line, the thirteen `lasso` hits are selection-for-*prediction* (illusion of sparsity, knockoffs, stability selection, SIS), and the seventeen `post-selection` hits are the 2026-09-15 inference-on-winners vein, i.e. selection of a *maximum*, a different selection event. **No note carried a rule for a conditioning set with valid inference after it.** **The nightly-variable detector also ran** — the 2026-11-16 nightly measured something for the first time in two sessions, so the [2026-11-15] carry-forward was consumed rather than re-deferred — on that nightly's headline (reading the board's 27 `null_pctile` values as a *sample of p-values* and testing it for uniformity and over-dispersion) and returned **covered**: `2026-08-24-multiple-testing-haircut.md` already holds the empirical-p-value-distribution instrument and the 2026-10-28/30 online-multiple-testing vein holds the rest, so the primary aim stood. (The one genuine residual is nominated below, not taken.) **All three criteria met, two requests spent of three, all three sources read in full from arXiv on the first attempt — a channel with no failures tonight.** **(a) ADMITTED, and it meets all three criteria alone.** Belloni, Chernozhukov & Hansen 2014 (Tier **A**, *Review of Economic Studies* 81(2), 608–650, **1279** Crossref, checked 2026-11-16): **post-double selection** — lasso the treatment equation, lasso the reduced-form outcome equation, regress on the **union**, and ordinary robust OLS inference from that regression is **uniformly** valid under approximate sparsity in both equations, `s²log²(p∨n)/n → 0`, bounded sparse eigenvalues and independent rows; the **amelioration set** lets theory-motivated controls be forced in for free. **(b) ADMITTED as the generalisation.** Chernozhukov, Chetverikov, Demirer, Duflo, Hansen, Newey & Robins 2018 (Tier **A**, *The Econometrics Journal* 21(1), C1–C68, **3111** Crossref, checked 2026-11-16): **Neyman orthogonality** makes the bias a *product* of two nuisance errors (`o(N^{−1/4})` each in smooth problems), **cross-fitting** removes the overfitting bias that orthogonality cannot, and splitting relaxes the sparsity requirement from `s² ≪ n` to `s ≪ n`. **(c) ADMITTED as the adversarial third, and it is the night's real finding.** Wüthrich & Zhu 2023 (Tier **B** — top venue and a theorem, but modest citations (**29** Crossref, checked 2026-11-16) and its own result unreplicated; *Review of Economics and Statistics* 105(4), 982–997): a **non-asymptotic lower bound** on the OVB of (a)'s estimator that can exceed **twice** the asymptotic standard deviation *with sparse coefficients and `n` far above `p`*, a **three-regime** characterisation with a computable **beta-min** boundary, a stress test that runs by **raising** the penalty (+50%), an explicit refutation of lowering it, and the recommendation that at `p < n` one should **not select at all** but run full-control OLS with a many-controls-robust variance estimator. **Output: one rule (`#452`), one free audit (`#453`), one action item that is a refusal to use the vein's own machinery (`#454`), one mandatory calibration plus discipline (`#455`), one composition aimed at the nightly's own `N_eff` finding (`#456`), one carried tension (`#457`).** The deflationary conclusion is the useful one: the lab's control list is ~10 variables against **~251 month-ends counted as dates** (`#445`: not name-months), so `p ≪ n` and the right procedure is to **include every candidate control** rather than select — the cheapest discharge yet of `#447`'s third veto, and it dissolves `#451` instead of resolving it. (`notes/2026-11-16-post-double-selection-inference-after-control-selection.md`; `notes/2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md`; `notes/2026-11-16-omitted-variable-bias-of-lasso-based-inference.md`) |
+
 ### Open questions for future sessions
+
+- **[2026-11-16] READ THIS BEFORE AIMING SESSION 95. The conditioning-set vein is now CLOSED on all
+  six sides, and the honest state of it is that the lab should stop selecting controls and start
+  including them. Do not reopen it.** Tonight answered the [2026-11-15] primary (the hybrid design)
+  with a rule (`#452`), a free audit (`#453`), an action item (`#454`), a mandatory calibration and
+  discipline (`#455`), a composition (`#456`) and a carried tension (`#457`). The union rule, its
+  uniformity theorem, its orthogonality generalisation and its finite-sample bound have all been
+  read in full. **Three things are now DONE and must not be re-aimed**: which covariates are
+  candidates (`#447`), which candidates enter (`#452`), and what the interval afterwards is worth
+  (`#455`). The vein's own recommendation at this lab's `p/n` is `#454`, which is a refusal to use
+  the machinery — so another source on selection would be spent on a procedure the folder has
+  already concluded this lab should not run.
+  - **Primary aim for session 95: ESTIMATION OF `Σ` AT COVARIATE WIDTH FROM A CORRELATED
+    CROSS-SECTION — ranked second for three consecutive sessions, named as the fallback by
+    [2026-11-14] and [2026-11-15], and tonight it acquired a THIRD independent consumer, which is
+    what promotes it.** The three consumers now are: `#445` fixes a two-sample null by permutation
+    and says nothing about whether `S_n` is a sensible estimate when the rows are dependent;
+    `#448`'s screen is a **cross-sectional association per control** whose standard error has the
+    same problem; and tonight `#454` tells the lab to run **OLS with every control included and a
+    many-controls-robust variance estimator** — an instruction the lab **cannot currently follow**,
+    because the named estimator is designed for independent rows and the lab's rows are dependent
+    within a date. That is now the binding gap in the folder: three recommendations converge on one
+    uncomputed object. **Acceptance criterion, stated before any download: admit a source only if
+    it (i) gives an estimator of the covariance matrix (or of a regression coefficient's variance)
+    that is **valid under cross-sectional dependence of unknown form**, (ii) states the condition
+    on the dependence (clustering, mixing, a factor structure, or a spatial/network bound) under
+    which it is valid, and (iii) says what it costs relative to the i.i.d. estimator — in width,
+    in degrees of freedom, or in required panel length.** Not another shrinkage estimator whose
+    object is a portfolio weight (the folder holds `2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`
+    and the Ledoit–Wolf vein already); not another high-dimensional two-sample test (closed,
+    `#442`–`#446`); not a general panel-econometrics textbook chapter. **A grep before any
+    download, per the standing rule, and open the hits**: candidate patterns are
+    `cluster-robust`, `two-way clustering`, `Driscoll-Kraay`, `spatial correlation`,
+    `cross-sectional dependence`, `common factor standard errors`, `Fama-MacBeth standard errors`,
+    `Newey-West`. Expect non-zero counts on the last two — the question is whether any note carries
+    a **rule for which dependence structure licenses which estimator**, which tonight's reading
+    suggests none does. **Spend at most three requests.** The named primary is not fixed; a
+    cluster-robust-inference survey in a tier-1 econometrics venue, or the many-controls-robust
+    variance literature `#454` cites (Cattaneo–Jansson–Newey and its successors) read for its
+    dependence assumptions, are both on criterion. Prefer the latter if one request can settle
+    whether `#454`'s instruction is usable here at all, since that is the live blocker.
+  - **Ranked second, and it is a NOMINATION from tonight's detector rather than a carry-forward:
+    READING A SET OF `p`-VALUES FROM ONE'S OWN SEARCH AS EVIDENCE ABOUT THE SEARCH.** The detector
+    returned **covered** on the 2026-11-16 nightly's headline and the primary aim stood, but it
+    left one genuine residual: `p-curve` **0**, `over-dispersion`/`overdispersion` **0**,
+    `p-value histogram` **0** across 294 notes. The nightly read its 27 recorded `null_pctile`
+    values as a sample from `U(0,1)` (mean **0.507**, KS `p` **0.041**, variance **1.66×**
+    uniform's) and concluded that the over-dispersion "is what *designed* books produce whether or
+    not they work" — a conclusion reached by reasoning, not from a source. The literature on
+    reading the *shape* of a `p`-value distribution (excess significance, caliper tests, the
+    right-skew diagnostics) would say whether that reading is sound and what the uniform null is
+    actually worth when the tests are **dependent** — which connects it to the primary aim. Worth
+    one session, not three; take it only if the primary fails on two channels.
+  - **Retired tonight because it was DONE, not deferred: the [2026-11-15] nightly-variable
+    detector carry-forward.** [2026-11-15] instructed carrying the detector forward unconsumed
+    because that night's nightly spent 0 trials and measured nothing. The 2026-11-16 nightly also
+    spent 0 trials but **measured a great deal** (board-level `null_pctile` uniformity, the
+    required-skill fixed point, `N_eff` non-monotonicity, a gate census), so the detector had input
+    and was run. **Verdict: covered**, with the one residual nominated above. The rule's handling
+    is therefore: an **empty** run is carried forward; a run on a **zero-trial but
+    measuring** nightly is a real run. Caveats still not run through the detector, unchanged in
+    order: *publication decay*, and *"the cost model is lethal only to books that trade"*.
+  - **Carried unchanged and still live**: everything carried under [2026-11-15] — `#447`'s three
+    vetoes (with its third now **conditioned** by `#452` rather than retired: it holds for every
+    way of choosing a control set *except* double selection); `#448`'s free screen, whose
+    which-side question `#454` makes moot in practice while `#452` keeps its union principle;
+    `#442`'s licence to use Hotelling's `T²` with the `y = p/n` table as its boundary; `#444`'s
+    sum-type/max-type pre-registration rule; `#445` as the dependence anti-candidate, now with a
+    **third** consumer and promoted into tonight's primary aim; `#406`'s volatility-tercile
+    conditioning, category-**neutral** per `#414`; `#413`'s composed pre-trial rule;
+    `#376`/`#389`/`#381` as the three free screens with their preconditions still undischarged; and
+    the refusals `#415`, `#421`, `#423`, `#427`/`#429`/`#434`/`#435`/`#436`/`#438`, `#440`, `#449`
+    and `#450`. **Tonight adds one rule, one audit, one action item, one calibration, one
+    composition and one tension** (`#452`–`#457`). The conditioning-set vein is now closed on all
+    six sides; the high-dimensional two-sample vein stays closed (`#442`–`#446`); the
+    classifier-accuracy vein stays closed (`#439`–`#441`); the matched-control vein stays closed
+    on all five sides (`#427`–`#438`); the nominal-price vein stays closed (`#420`–`#426`); the
+    index-rule vein stays closed (`#401`–`#419`); the detectability vein stays closed
+    (`#393`–`#400`); the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays
+    closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#452`–`#457` from tonight; `#447`–`#451` from 2026-11-15;
+    `#442`–`#446` from 2026-11-14; `#439`–`#441` from 2026-11-13; `#436`–`#438` from 2026-11-12;
+    `#433`–`#435` from 2026-11-11; `#427`–`#432` from 2026-11-10; `#420`–`#426` from 2026-11-09;
+    `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06;
+    `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03;
+    `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31;
+    and everything carried under those.
+  - **Retired and recorded as retired**: everything carried under [2026-11-15], plus **the
+    conditioning-set vein on its last two sides** (which candidates enter, and what the interval
+    afterwards is worth), and **the [2026-11-15] detector carry-forward, consumed rather than
+    deferred.** **Cochran (1968) remains permanently unobtained and must not be re-ranked.**
+    **Myers et al. (2011, `10.1093/aje/kwr364`) remains a named unobtained pointer with three dark
+    channels recorded in `#450`'s note — do not re-hunt them.** New channel note, and it is a
+    positive one: **`arxiv.org/pdf/<id>` served three full typeset papers on the first request
+    tonight, with no ASCII shift and clean `pdftotext -layout` extraction in all three cases** —
+    so for a method paper with an arXiv deposit, that is the first channel to try and nothing else
+    needed trying. Still at **0** and still not nominated: `transfer entropy` (twenty-seventh
+    nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-15], unchanged —
+    including the engine issues filed 2026-10-18 and 2026-10-22, `min_train_skill = 0.0`, the note
+    format's missing holdout-overlap flag, `#422`'s signed error in the volume-only liquidity tier,
+    `#432`'s two opposite-signed biases in the equal-weight pool, the still-unmeasured pre-screen
+    imbalance, and the **zero-trial-rate question raised to the human owner on 2026-11-13** (now
+    joined by the three structural items the 2026-11-16 nightly raised: the `challenge` track being
+    closed by arithmetic without `program.md` saying so, the board's gate passes sitting at the
+    chance rate after twenty-seven trials, and the breadth rule counting labels rather than bets).
+    Tonight bears on the zero-trial question in one direction worth naming: **`#454` tells the lab
+    to simplify its control procedure rather than add to it**, and `#453` is a one-line audit of an
+    instrument used nine times — so this session supplied one correction to standing practice and
+    one thing to check, not another gate audit. **The integrity check was CLEAN tonight in the one
+    respect that has failed for sixteen sessions and is unchanged in the other.** The container was
+    again on a per-run branch (`claude/tender-galileo-dq1xhg`) at `origin/main`'s commit, for the
+    **seventeenth** consecutive session, and was reset to `main` before any work; the startup hook
+    reported the integrity check as OK and escalated nothing. **Deleting `origin/main-a5dglb` is
+    still a human's call** and is still the only way that flag stops recurring.
 
 - **[2026-11-15] READ THIS BEFORE AIMING SESSION 94. The conditioning-set vein is OPEN on exactly one
   side, and that side was named by one of tonight's own sources as its stated gap — which makes it
