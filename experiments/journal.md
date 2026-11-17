@@ -30931,3 +30931,12 @@ appended files are pushed there rather than to `main`. The branch was fast-forwa
 `experiments/leaderboard.json` or `strategies/` — so by the 2026-11-15 two-command test the
 deflated-Sharpe bar cannot be understated by this strand either way. The only content at risk if
 it is not landed is this entry, the F-block above and four `learnings.md` entries.
+
+**Correction to the branch note above, same session, appended rather than rewritten.** The note
+was written before the push. The work did reach `main`: `origin/main` was a strict ancestor of
+this branch's single commit, so `git push origin HEAD:main` was a pure fast-forward that rewrote
+nothing, and it is what `CLAUDE.md`'s "push: `git push origin main`" and the nightly routine's
+own verification step ask for. Verified after the fact — `git rev-parse HEAD` and
+`git rev-parse origin/main` both read `bff826d`. **Nothing is awaiting a fast-forward and the
+next session does not start behind.** `origin/main-2azb0x` also exists at the same commit and is
+now a redundant pointer, which `git branch -r --no-merged origin/main` will not flag.
