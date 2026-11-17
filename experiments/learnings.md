@@ -8242,3 +8242,109 @@ across experiments; prune entries that later evidence contradicts.
   is not a result. **Anti-candidates travelling with this entry: the intermediate-horizon (12-7) return
   as a score on this panel; upside/downside capture or any up/down-participation ratio; and any
   candidate whose case is that the null cannot imitate it.**
+
+- **[Measured 2026-11-17, nightly — ZERO trials spent; THE HEADLINE, AND IT IDENTIFIES A TERM THIS
+  FILE HAS CARRIED AS *NOT IDENTIFIED* SINCE 2026-10-19/20] `null_p50 − pool` IS THE REPLICAS' OWN
+  COST BILL — 74% OF ITS VARIANCE AT THE MECHANICALLY PREDICTED SLOPE — SO THE NULL GATE'S IMPLIED
+  SKILL BAR FALLS MONOTONICALLY IN TURNOVER AND CROSSES ZERO AT 4.9x.** The 2026-10-19/20 entry
+  refuted two explanations of this term, bounded its region content at ~5% of book mass and ruled
+  it unidentified. The missing variable was never geography: each replica pays its own cost bill,
+  and a bps of replica cost is a bps of replica return, i.e. `1/vol` of replica Sharpe. Measuring
+  the replicas' realized cost and their own volatility together (`random_null_v3`'s draw loop
+  reproduced byte-identically, 6 draws; its mean Sharpe tracks the recorded 200-draw `null_p50` to
+  within 0.03–0.06 throughout, which is the harness check):
+
+      regression of (null_p50 - pool) on -(replica cost)/vol, n=27, PREDICTED slope +1.0
+        deflated by the CANDIDATE's vol    slope +1.185 +-0.154  int +0.019  R2 70.2%  t(=1) +1.20
+        deflated by the REPLICA's own vol  slope +1.249 +-0.149  int +0.023  R2 73.9%  t(=1) +1.67
+
+  Replica volatility is itself near constant — **0.159 ± 0.007** across 27 books whose own vol
+  spans 0.115–0.240 — because a region/type-matched random draw of 100–200 names is always about
+  as diversified. The residual is sd **0.025** against a raw sd of 0.048 and sits in the three
+  *lowest*-turnover books (`#3` +0.082, `#11` −0.059, `#1` −0.046), which is where the record's
+  ~5%-of-book-mass region bound can in fact live. **Because the term enters the gate's bar
+  one-for-one:**
+
+      turnover bucket      replica cost bill    implied skill bar (null_p90 - pool)
+      1.27- 1.80x (n=7)        38 bps/yr                 +0.057
+      1.81- 2.48x (n=7)        51 bps/yr                 +0.052
+      2.71- 4.41x (n=7)        79 bps/yr                 +0.027
+      4.43-10.59x (n=6)       159 bps/yr                 -0.022
+
+      bar = -0.0542 * ln(turnover) + 0.0862     corr(ln turnover, bar) = -0.744     zero at 4.91x
+
+  A 10x book may be **0.04 of skill worse than the pool** and still clear the gate that 22 of 24
+  v3 GATE_FAILs failed; a 1.3x book must beat the pool by **0.06**. The gate itself is correct — it
+  holds construction fixed and tests selection — but **relative to the lab's objective it is
+  easier the more a candidate churns, and the lab's favoured low-turnover constructions sit at its
+  strictest end.** **Two riders. (i) NOT a design route**: "exploiting a gate's blind spot is not a
+  result" and "any candidate whose case is that the null cannot imitate it" is already an
+  anti-candidate (2026-11-16); there is also no exploitable direction, since churn buys a lower
+  null bar at ~19.5 bps per unit and costs more against pool and seat than it buys at the gate.
+  **(ii) Its use is interpretive** — it is how to read 24 recorded GATE_FAILs — and structural, for
+  the human owner, since the fix lives in `engine/` and `program.md`.
+
+- **[Measured 2026-11-17, nightly] THE NULL GATE'S BAR IN THE UNITS CANDIDATES ARE WRITTEN IN IS
+  +0.03 OF SKILL — TWENTY TIMES BELOW THE SEAT'S — SO "THE GATE THAT REFUSES EVERYTHING" IS A
+  STATEMENT ABOUT THE OBJECTS, NOT THE GATE.** The gate asks `validation Sharpe > null_p90`; in
+  skill over the equal-weight pool, which is the lab's objective, that is `null_p90 − pool`:
+
+      implied skill bar, 27 v3 trials    mean +0.030   median +0.031   range [-0.094, +0.145]
+      recorded validation skill          mean -0.056   median -0.033   range [-0.340, +0.124]
+      DSR fixed point for the seat                                     +0.623  -> 20.1x the bar
+
+  **22 of 24 GATE_FAILs failed a +0.03 skill bar while the board's median skill is −0.033** — the
+  reading `corr(validation skill, null percentile) = +0.86` (2026-11-16) already implied, never put
+  in skill units. **Three standing riders. (i)** The bar is candidate-specific and sometimes
+  **negative** (−0.094 at `#2`, +0.145 at `#3`), so it cannot be pre-registered against; its
+  variance is 114% the composition term's and 7% the dispersion term's, and the composition term is
+  the cost bill of the entry above. **(ii) The gate and the pool comparison are different tests and
+  neither nests the other**: seven trials beat the pool and failed the gate (`#18`–`#23`, `#27`,
+  all low-turnover sleeve books) and `#14`/`#15` cleared the gate on *negative* bars — so "passed
+  the null gate" is not "has skill", and this file should stop using them interchangeably.
+  **(iii)** The bar is **flat in book size** (`corr(bar, ln positions) = +0.054` over 99–442
+  positions), which **reproduces the v2 2026-10-07 finding under v3** and in skill units, by the
+  same mechanism: the replica sd falls with size (`corr −0.73`) while the mean rises to match.
+
+- **[Measured 2026-11-17, nightly — CLOSES THE 2026-11-16 HANDOVER'S IDEA (ii), AND DISCHARGES A
+  RIDER OPEN SINCE 2026-10-07] EVERY COST CHANNEL THE NULL FAILS TO MATCH IS WORTH AT MOST 0.011
+  SHARPE AND FLIPS NO VERDICT, BECAUSE A POINT-IN-TIME INDEX-MEMBER PANEL HAS NO ILLIQUID NAMES.**
+  `random_null_v3` matches type and, for stocks, listing region — not the liquidity tier
+  `costs.py` prices a fill with (15/20/30/40 bps per side by trailing 63d median USD ADV). Measured
+  exactly, with the engine's own cost model wrapped so every fill is recorded and then re-priced at
+  the mean tier of the (type, region)-matched eligible pool on the same row:
+
+      tier channel only, 27 trials   mean +0.0007   median +0.0005   |max| 0.0028 sharpe   18/27 positive
+      ALL channels (tier+tax+drift)  mean +0.0004   sd 0.0048        range [-0.0061, +0.0105]
+
+  The maximum of the tier channel is **`#3 lv_illiq_peer_neutral_band`** — the case the record named
+  as clearest — at +4.56 bps/side, +6.0 bps/yr, **+0.0028 Sharpe**, explaining **1.4%** of its own
+  0.197 shortfall to its p90; board-wide the handicap covers a median **0.56%** and a maximum
+  **4.86%** of each trial's gap. Running the gate's **own** null (same seed, 12 draws) with the cost
+  model instrumented bounds every channel at once, including the **drift** the null cannot control,
+  at a median **4.9%** of each trial's gap, and **crediting every candidate its measured gap flips
+  none of the 27 verdicts.** **The structural reason outlives the bias:** the eligible pool's traded
+  tier mix is **47% / 37% / 16% / ~0%** at 15/20/30/40 bps, mean **19.5 bps/side**, and the most
+  illiquidity-tilted book this lab has built reaches only **23.6** (the 40-bps bucket is 0.4–1.6% of
+  traded weight typically and 5.4% even in `#3`). **So on this panel the v3 liquidity tier is nearly
+  a constant across designed books and per-name cost is not a design dimension at all** — the whole
+  cost dispersion between candidates is turnover and region tax. That also discharges, under v3 and
+  against the pool, the rider the 2026-10-07 v2 entry left open ("a bet that 15 bps a side is the
+  right cost model on names selected *for* high price impact — the one obvious way it could be an
+  artifact, and untested"). **Anti-candidate travelling with this entry: any book whose case is a
+  liquidity or price-impact tilt priced against this null.**
+
+- **[Method, 2026-11-17] A GATE SHOULD BE PRICED IN THE UNITS CANDIDATES ARE DESIGNED IN, AND THIS
+  LAB HAD TWO GATES QUOTED IN DIFFERENT SPACES FOR A MONTH.** The 2026-11-09/10 entry already
+  established that "a bar and a screen must be quoted in the same space"; tonight is the same error
+  one level up, between two *gates*. The deflated bar has always been quoted in skill (+0.62) and
+  the null gate in raw validation Sharpe ("0.392 ≤ p90 0.399"), so the record acquired the belief
+  that the null gate was the hard one — it is twenty times the easier — and the belief that its
+  failures were evidence of a demanding test rather than of negative-skill objects. **The general
+  form: whenever a gate is expressed as a comparison to a benchmark the candidate does not control,
+  subtract the lab's own benchmark from both sides before reading it.** Doing that is one line, it
+  is free, and here it changed the interpretation of 24 of 27 recorded verdicts. The corollary used
+  in F4: once a gate's bar is in skill units, its *components* are too, and a component that is
+  mechanically a cost divided by a volatility can be regressed against its predicted slope of 1.0
+  rather than argued about by sign — which is the discipline `research/SUMMARY.md` `#450` asks for
+  ("report the spread, never a direction") arriving from the other side.

@@ -30644,3 +30644,290 @@ discipline is the nearest neighbour to F3's board-level accounting without being
 
 **Verdicts:** none.
 ## Research session — 2026-11-16 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Free measurements — 2026-11-17 (nightly), ZERO trials spent
+
+Step 0: `git fetch origin --prune`, then `git branch -r --no-merged origin/main` is **empty** —
+no previous session's work is stranded. The container again started on a per-run branch
+(`main-2azb0x`) sitting at `origin/main`'s commit `bc25309`; **sixteenth consecutive session**
+on that generator. Mid-session `origin/main` advanced one commit to `ed908ae` (`data: daily
+refresh 2026-11-17`, store only) and the working branch was fast-forwarded onto it before any
+measurement, so every number below is on the refreshed store. Engine green:
+`.venv/bin/python -m pytest tests/ -q` → **92 passed in 66.70s**. Store's last bar is
+**2026-11-17** with 1098 priced names, i.e. today — not stale. `trials.jsonl` **138 records /
+28 v3 / 27 with a validation split**; no trial record was added, altered or removed; no
+candidate file was written; **no holdout, forward or incubation file was opened** — every
+harness below truncates `prices` at the validation end (`2023-12-31`) *before* `setup_v3` is
+built, so no 2024+ bar is in scope at all — and nothing under `engine/`, `scripts/`, `tests/`,
+`data/`, `research/`, `program.md` or `CLAUDE.md` was touched.
+
+Tonight's aim is **the binding gate itself**. The 2026-11-16 census put 22 of 24 v3 GATE_FAILs
+on the random-selection null and 12 on it alone, and named one unmeasured, signed bias in it as
+"the one instrument question tonight raised and did not answer". That question is answered here,
+and answering it turned up the identification of a term the record has carried as *not
+identified* since 2026-10-19/20. Four blocks, all free, all on train/validation-side records.
+
+### F0 — why no object was screened
+
+The 2026-11-16 entry declined four objects before a screen on the anti-candidate lists
+(overnight/intraday partition, information discreteness, Novy-Marx's intermediate-horizon echo,
+upside/downside capture) and the ETF/country-index unit on the 2026-11-02/03 benchmark argument.
+Nothing has been added to the idea supply since: `research/SUMMARY.md`'s current vein
+(`#447`–`#451` plus the 2026-11-16 hybrid-design notes) is **methodological throughout** —
+post-double selection, Neyman orthogonality and cross-fitting, and a finite-sample OVB bound
+whose own conclusion for this lab's `p ≪ n` regime is *not to select controls at all* — and it
+proposes no book. So the inventory is unchanged and empty, and the budget went to the instrument
+that decides every trial rather than to a trial without a case. **Eighth consecutive zero-trial
+session, twelfth of the last eighteen.**
+
+### F1 — the liquidity-tier mismatch in the null is REAL IN SIGN AND THREE ORDERS OF MAGNITUDE TOO SMALL, because this panel has no illiquid names
+
+`benchmarks.random_null_v3` replaces every name a candidate *enters* by a uniform draw from the
+eligible, unused names of the same **type** and, for stocks, the same **listing region**. It does
+not match the **liquidity tier** that `costs.py` prices a fill with (15/20/30/40 bps per side by
+trailing 63-day median USD ADV), so a book selecting illiquid names pays more per fill than its
+own replicas and the gate would read a cost artifact as absence of skill. Measured exactly, with
+the engine's own cost model wrapped so every fill it charges is recorded, then each fill re-priced
+at the **mean tier of the (type, region)-matched eligible pool on the same row** — which is the
+expectation of what the replacement pays:
+
+    all 27 v3 trials, validation      cand bps/side   pool bps/side   handicap bps/yr   handicap SHARPE
+    #3  lv_illiq_peer_neutral_band        23.58           19.02            +6.0            +0.0028
+    #13 pt_decade_recent_half_control     20.74           19.70            +4.0            +0.0020
+    #16 pt_oldhalf_overlap6 (board lead)   19.89           19.49            +0.7            +0.0004
+    #1  pt_lowvol_gk_quarterly            19.72           20.30            -0.8            -0.0007
+    mean / median / |max| over 27            --              --              --      +0.0007 / +0.0005 / 0.0028
+
+**Positive in 18 of 27, zero above 0.005 Sharpe, and the maximum is the lab's own illiquidity
+book** — the case the 2026-11-16 entry named as "the clearest". It explains **1.4%** of `#3`'s own
+0.197 shortfall to its null's p90; across the board the handicap covers a **median 0.56%** and a
+**maximum 4.86%** of each trial's distance to its own p90. **The structural reason is worth more
+than the bias.** The eligible pool's tier mix over validation is **47% at 15 bps / 37% at 20 /
+16% at 30 / ~0% at 40**, so the pool's mean per-side liquidity cost is **19.5 bps** and the most
+illiquidity-tilted book this lab has ever built reaches only **23.6**. A point-in-time
+index-member universe contains almost nothing in the bottom tier: the 40-bps bucket is 0.4–1.6%
+of traded weight in a typical book and 5.4% even in `#3`. **On this panel the v3 liquidity tier
+is nearly a constant (19.0–23.6 bps across 27 designed books), so per-name cost is not a design
+dimension and the whole cost dispersion between candidates is turnover and region tax.** That
+also discharges, under v3 and against the pool, the rider the v2 entry of 2026-10-07 left open —
+"the whole result is a bet that 15 bps a side is the right cost model on names selected *for*
+high price impact, the one obvious way it could be an artifact, and untested".
+
+### F2 — the TOTAL cost asymmetry between a candidate and its own replicas, every channel at once: bounded at 0.011 Sharpe, and ZERO verdicts move
+
+F1 priced the one channel the record suspected. Two the null does not control either remain:
+**drift** (the null preserves the decision rows and the weight vector, so turnover *in names*
+matches, but the replica holds different names, which drift differently between rebalances, and
+v3 charges the trades that undo drift) and **tax** (matched for stocks by construction, so a
+control on the measurement). Both were measured at once by running the gate's **own** null
+(`random_null_v3`, same seed `20260925`, 12 draws) with the cost model instrumented, and reading
+the realized cost bill of the candidate and of each replica:
+
+    TOTAL realized cost gap, candidate - replicas, validation    bps/yr      SHARPE
+    #9  ll_peer_delay_band      (turnover 10.50x vs 9.92x)        +15.0      +0.0105   <- max
+    #2  sa_resid_rev63_band     (turnover 10.59x vs 9.94x)        +14.4      +0.0085
+    #16 pt_oldhalf_overlap6     (turnover  1.64x vs 1.99x)         -7.4      -0.0047
+    #22 sc_overnight_drift_sleeves (turnover 1.80x vs 2.17x)       -8.7      -0.0061   <- min
+    mean / sd over 27                                              +0.9      +0.0004 / 0.0048
+
+**Every cost channel in the null together is worth at most 0.011 Sharpe** — one twenty-fifth of
+the board's typical skill error bar (±0.25) and a median **4.9%** of each trial's own distance to
+its p90. Credit every candidate its measured gap and **not one of the 27 verdicts flips**. The
+"gate biased by costs" hypothesis is closed. One by-product, free and signed: **the sign splits
+cleanly on turnover.** Books under 2.5x churn **0.22x/yr LESS** than their own replicas (mean over
+14), books at or above 2.5x churn **0.22x/yr MORE** (mean over 13); the overlapping-sleeve and
+retention-band constructions are all on the saving side (`#19` 1.27x vs 1.69x, `#16` 1.64x vs
+1.99x, `#22` 1.80x vs 2.17x). That is a property of the null's name-matching, not a claim about
+skill, and it is not a design target — see F4's rider.
+
+### F3 — the gate the record calls "the gate that refuses everything" has an implied SKILL BAR OF +0.03, twenty times below the seat's
+
+The null gate asks `validation Sharpe > p90 of the replicas`. Expressed in the units a candidate
+is designed in — skill over the equal-weight pool, which is the lab's objective — the bar is
+`null_p90 − pool`, and it had never been computed:
+
+    implied skill bar (null_p90 - pool), 27 v3 trials    mean +0.030   median +0.031   range [-0.094, +0.145]
+    recorded validation skill                            mean -0.056   median -0.033   range [-0.340, +0.124]
+    DSR fixed point for the seat (2026-11-16, median se)                        +0.623   -> 20.1x the gate's bar
+
+**The binding gate is by far the easiest bar in the protocol, and 22 of 24 GATE_FAILs failed a
++0.03 skill bar while the board's median skill is −0.033.** So "the gate refuses everything" is a
+statement about the objects, not about the gate — which is the reading `corr(validation skill,
+null percentile) = +0.86` (2026-11-16) already implied and nobody had put in skill units. Three
+riders. (i) **The bar is candidate-specific and sometimes negative** (−0.094 at `#2`, +0.145 at
+`#3`), so it is not a constant a session can pre-register against. (ii) **The gate and the pool
+comparison are different tests and neither nests the other**: seven trials beat the pool and
+failed the gate (`#18`, `#19`, `#20`, `#21`, `#22`, `#23`, `#27`), and `#14`/`#15` cleared the
+gate on *negative* bars, so "passed the null gate" is not "has skill". (iii) The bar is **flat in
+book size** — `corr(bar, ln positions) = +0.054` over 99–442 positions — which reproduces the v2
+finding of 2026-10-07 under v3 and in skill units, and by the same mechanism: the replica sd
+*does* fall with size (`corr = −0.73`) while the mean rises to match.
+
+### F4 — `null_p50 − pool` IS IDENTIFIED, AND IT IS THE REPLICAS' OWN COST BILL: 74% of its variance at a slope indistinguishable from the mechanical 1.0
+
+The 2026-10-19/20 entry refuted two explanations of this term, bounded its region content at ~5%
+of book mass, and ruled it **not identified** — "quote it as `null_p50 − pool` and stop calling it
+geography". The missing variable was never geography. Each replica pays its own cost bill, and a
+bps of replica cost is a bps of replica return, which is `1/vol` of replica Sharpe. Measuring the
+replicas' realized cost **and their own volatility** together (6 draws, the draw loop reproduced
+byte-identically from `random_null_v3` — its 6-draw mean Sharpe tracks the recorded 200-draw
+`null_p50` to within 0.03–0.06 throughout, which is the harness check):
+
+    regression of (null_p50 - pool) on -(replica cost bill)/vol, n=27, mechanical prediction slope +1.0
+      cost deflated by the CANDIDATE's vol   slope +1.185 +-0.154   intercept +0.019   R2 70.2%   t(slope=1) +1.20
+      cost deflated by the REPLICA's own vol slope +1.249 +-0.149   intercept +0.023   R2 73.9%   t(slope=1) +1.67
+
+Replica volatility is itself almost a constant — **0.159 ± 0.007** across 27 books whose own vol
+spans 0.115–0.240 — because a region/type-matched random draw of 100–200 names is always about
+as diversified. **So three quarters of the variance of the lab's one unidentified benchmark term
+is arithmetic, not composition**, and the residual is sd **0.025** against a raw sd of 0.048,
+concentrated in the three *lowest*-turnover books (`#3` +0.082, `#11` −0.059, `#1` −0.046) —
+which is where the record's ~5%-of-book-mass region bound can in fact live.
+
+**The consequence, and it is the night's headline.** Because the term enters the bar one-for-one,
+**the null gate's implied skill bar falls monotonically in turnover**:
+
+    turnover bucket      replica cost bill    implied skill bar (null_p90 - pool)
+    1.27- 1.80x (n=7)        38 bps/yr                 +0.057
+    1.81- 2.48x (n=7)        51 bps/yr                 +0.052
+    2.71- 4.41x (n=7)        79 bps/yr                 +0.027
+    4.43-10.59x (n=6)       159 bps/yr                 -0.022
+
+    bar = -0.0542 * ln(turnover) + 0.0862      corr(ln turnover, bar) = -0.744     bar = 0 at 4.91x
+
+A 10x-turnover book may be **0.04 of skill worse than the pool** and still clear the gate that 22
+of 24 GATE_FAILs failed; a 1.3x book must beat the pool by **0.06**. The gate is doing its own job
+correctly — it holds construction fixed and tests selection — but **relative to the lab's
+objective it is systematically easier the more a candidate churns, and the lab's own preferred
+constructions (overlapping sleeves, retention bands, which F2 shows save a further 0.2x of
+turnover against their replicas) sit at the hardest end of it.** That reconciles the pattern in
+F3's rider (ii) exactly: the seven trials that beat the pool and failed the gate are all
+low-turnover sleeve books.
+
+**Rider, and it is the whole of the action taken.** This is **not** a design route and no
+candidate was built on it. The record's standing rule is explicit — "exploiting a gate's blind
+spot is not a result", and "any candidate whose case is that the null cannot imitate it" is an
+anti-candidate (2026-11-16). There is in any case no exploitable direction: turnover buys a lower
+null bar at roughly 19.5 bps per unit of churn, which costs more skill against the pool and the
+seat than it buys at the gate. The finding's use is **interpretive** — it says how to read 24
+recorded GATE_FAILs — and **structural**, for the human owner, since the fix (comparing a
+candidate to replicas matched on cost, or scoring the gate on skill rather than Sharpe) is inside
+`engine/` and `program.md`, both frozen to this session.
+
+**Lesson.** The one signed bias the record suspected in its binding gate is real and worth 0.003
+Sharpe; every cost channel together is worth 0.011 and flips no verdict; the gate's bar in the
+lab's own units is +0.03, twenty times below the seat's +0.62, so 22 of 24 null-gate failures are
+objects with negative skill rather than a hard test; and the benchmark term the record carried as
+unidentified for a month is 74% the replicas' own cost bill at the mechanically predicted slope,
+which makes the gate's bar a falling function of turnover (`-0.054·ln(turnover) + 0.086`, zero at
+4.9x) and puts the lab's favoured low-turnover constructions at its strictest end.
+
+## Session summary — 2026-11-17 (nightly) — 0 trials of 8; the binding gate's one suspected bias is worth 0.003 Sharpe, its bar in the lab's own units is +0.03, and the benchmark term the record called unidentified is 74% the replicas' own cost bill
+
+**Experiments: 0.** `trials.jsonl` stays at **138 records / 28 v3 records / 27 scored v3
+trials**, the v3 board is unchanged, the deflated bar is unchanged, no candidate file was
+written, no verdict was assigned. Four free blocks ran. **No holdout, forward or incubation file
+was opened** — every harness truncated `prices` at `2023-12-31` before building `setup_v3`, so no
+2024+ bar was in scope — and with no trial recorded there was no holdout gate to reach. Engine
+green (**92 passed in 66.70s**). Step 0 clean: `git branch -r --no-merged origin/main` empty, no
+stranded work; container started on per-run branch `main-2azb0x` at `origin/main` (sixteenth
+consecutive session), and `origin/main`'s mid-session data-refresh commit `ed908ae` was
+fast-forwarded in before any measurement. Store's last bar is **2026-11-17**, today — not stale.
+**Standing rule from 2026-11-16 discharged:** with no trial recorded, the set of 27 `null_pctile`
+values is byte-identical to last night's reading (mean 0.507, 1–3 gate passes against 0.7–2.5
+expected at every clustering threshold), so there is nothing new to read there.
+
+**Why zero.** The idea inventory is the same empty one the 2026-11-16 entry documented — four
+objects declined by name on the anti-candidate lists, the ETF unit closed one gate earlier — and
+`research/SUMMARY.md` has added nothing since: its current vein (`#447`–`#451` and the three
+2026-11-16 hybrid-design notes) is methodological end to end and proposes no book, with its own
+recommendation for this lab's `p ≪ n` regime being *not to select controls at all*. So the budget
+went to the instrument that decides every trial. **Eighth consecutive zero-trial session, twelfth
+of the last eighteen.**
+
+**Best finding, and it closes an open instrument question and then overtakes it.** The
+2026-11-16 entry named one unmeasured, signed bias in the gate that produces 22 of 24 v3
+GATE_FAILs: the null matches type and listing region but **not liquidity tier**, so an
+illiquidity-selecting book pays more per fill than its own replicas. Measured exactly against the
+engine's own cost model: **mean +0.0007 Sharpe, maximum +0.0028** — and the maximum is `#3
+lv_illiq_peer_neutral_band`, the case the record named as clearest, where it explains **1.4%** of
+that trial's 0.197 shortfall to its own p90. The reason is that a point-in-time index-member panel
+has **no illiquid names**: the eligible pool is 47%/37%/16%/~0% across the 15/20/30/40-bps tiers,
+mean 19.5 bps, and the most illiquidity-tilted book this lab has built reaches 23.6. Running the
+gate's own null with the cost model instrumented then bounds **every** cost channel at once
+(tier, tax, and the drift the null does not control) at **[−0.0061, +0.0105] Sharpe**, a median
+4.9% of each trial's distance to its p90, and **crediting every candidate its measured gap flips
+none of the 27 verdicts.** The "gate biased by costs" hypothesis is closed.
+
+**Second finding, and it reframes the record's own language.** Expressed in the units candidates
+are designed in — skill over the equal-weight pool — the null gate's bar (`null_p90 − pool`) is
+**+0.030 mean, +0.031 median, range [−0.094, +0.145]**, against the seat's DSR fixed point of
+**+0.623**: the gate the record calls "the gate that refuses everything" is **twenty times the
+easiest bar in the protocol**, and the board's median recorded skill is **−0.033**. So 22 of 24
+null-gate failures are objects with negative skill, not a hard test. Two riders that matter: the
+bar is candidate-specific and sometimes **negative**, so it cannot be pre-registered against; and
+the gate and the pool comparison are **different tests that neither nests** — seven trials beat
+the pool and failed the gate, and two cleared the gate on negative bars.
+
+**Third, and it is the night's headline: a term the record has carried as *not identified* since
+2026-10-19/20 is identified, and it is arithmetic.** `null_p50 − pool` regressed on the
+**replicas' own realized cost bill** divided by the **replicas' own volatility** gives slope
+**+1.249 ± 0.149** against the mechanically predicted **+1.0** (t = +1.67), intercept +0.023,
+**R² 73.9%**, residual sd 0.025 against a raw sd of 0.048. Replica volatility is itself near
+constant (**0.159 ± 0.007** across books whose own vol spans 0.115–0.240). The 2026-10-19/20
+entry was right to refute geography and right to bound the region content at ~5% of book mass —
+the missing variable was cost. **The consequence: the gate's implied skill bar falls monotonically
+in turnover** — +0.057 at 1.3–1.8x, +0.052 at 1.8–2.5x, +0.027 at 2.7–4.4x, **−0.022** at
+4.4–10.6x; `bar = −0.0542·ln(turnover) + 0.0862`, zero at **4.91x**, `corr(ln turnover, bar) =
+−0.744`. A 10x book may be 0.04 of skill *worse* than the pool and clear the gate; a 1.3x book
+must beat it by 0.06. That reconciles rider two exactly: the seven trials that beat the pool and
+failed the gate are all low-turnover sleeve books. It is **not** a design route — "exploiting a
+gate's blind spot is not a result" — and in any case there is no exploitable direction, since
+churn buys a lower null bar at ~19.5 bps per unit and costs more against pool and seat than it
+buys at the gate.
+
+**Also measured, free.** The null's name-matching does not preserve turnover, and the sign splits
+on construction: books under 2.5x churn **0.22x/yr less** than their own replicas and books at or
+above 2.5x churn **0.22x/yr more**, with the overlapping-sleeve and retention-band constructions
+all on the saving side. And the gate's bar is **flat in book size** (`corr(bar, ln positions) =
++0.054` over 99–442 positions), reproducing the v2 2026-10-07 finding under v3 and in skill
+units, by the same mechanism — the replica sd falls with size (`corr −0.73`) while the mean rises
+to match.
+
+**Two structural items for the human owner, raised and not acted on** (both fixes are inside
+`engine/` and `program.md`, frozen to this session). (i) The null gate's bar is a falling function
+of a candidate's turnover, so the protocol's binding gate and its objective point in opposite
+directions on the one construction axis the lab actually varies; matching replicas on cost, or
+scoring the gate on skill rather than on raw Sharpe, would remove it. (ii) The 2026-11-16 item
+stands and tonight sharpens it: the `challenge` track is closed by arithmetic (+0.62 of skill
+needed against a board best of +0.124), the board's gate passes are at the chance rate, and the
+easiest gate in the protocol demands +0.03 of skill that 22 of 24 objects did not have — so the
+honest next move is one of `program.md`'s own "Future upgrades" (fundamentals, intraday, pre-2009
+coverage) rather than another OHLCV characteristic.
+
+**Ideas for next session.** (i) The residual of F4's regression is sd 0.025 and sits in the three
+*lowest*-turnover books (`#3` +0.082, `#11` −0.059, `#1` −0.046) — that is where the record's
+~5%-of-book-mass region bound can live, and it is now a three-point target rather than a
+whole-board mystery. (ii) The null's turnover asymmetry (F2) is signed and construction-dependent
+but was measured at 12 draws on realized cost only; its *mechanism* (do selected books drift less
+because their names comove more?) is one free correlation away. (iii) F3's rider (ii) — the gate
+and the pool comparison are different tests — means the seven "beat the pool, failed the gate"
+trials are a pre-registerable set for any future instrument that claims to order objects; name it
+before measuring. (iv) The 2026-11-13/14 and 2026-11-16 next-ideas lists are otherwise untouched
+and carry forward. **Provenance from `research/SUMMARY.md`: nothing spent as a build.** The
+folder's vein is methodological; `#450`'s "report the spread, never a direction" and `#451`'s
+both-sides residualisation audit were read and are the nearest neighbours to F4's discipline of
+quoting a mechanical slope against its predicted value rather than a sign, without being the same
+instrument.
+
+**Verdicts:** none.
+
+## Branch note — 2026-11-17 (nightly): this session's work is on `main-2azb0x`, awaiting the usual fast-forward
+
+The container was created on per-run branch `main-2azb0x` (sixteenth consecutive session on that
+generator) and this environment's branch policy permits pushing only to it, so tonight's two
+appended files are pushed there rather than to `main`. The branch was fast-forwarded onto
+`origin/main`'s `ed908ae` before any measurement and contains **no** change to `experiments/trials.jsonl`,
+`experiments/leaderboard.json` or `strategies/` — so by the 2026-11-15 two-command test the
+deflated-Sharpe bar cannot be understated by this strand either way. The only content at risk if
+it is not landed is this entry, the F-block above and four `learnings.md` entries.
