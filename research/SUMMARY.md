@@ -9938,6 +9938,106 @@ is carried from them. The empirical illustrations — a US state crime panel end
 US household survey from the early 1990s, a US school-cohort study from the late 1990s — are not
 financial and are pre-validation; overlap `false` for all three.
 
+### The STANDARD ERROR ITSELF under cross-sectional dependence — the estimator `#454` names and the dependence it forbids, the closed-form price of ignoring it, and the argument that the lab's own screens never needed it (cross-family, the gate's own statistic, the panel itself)
+
+Three recommendations in this folder converged on one uncomputed object, and this is the session
+that priced it. `#445` fixes a two-sample *null* by permutation and says nothing about whether a
+sample covariance is a sensible estimate when the rows are dependent; `#448`'s screen is a
+**cross-sectional association per control** whose standard error has the same problem; and
+`#454` instructs the lab to run **OLS with every control included and a many-controls-robust
+variance estimator**. The three sources read tonight answer, in order, whether `#454`'s
+instruction is legal here (no), what ignoring dependence costs (a closed-form factor, large at
+this panel's width), and whether the lab needed any of it for its main use (no — it already has
+the right instrument).
+
+**The named estimator is not licensed on this panel, and the authors say so themselves.**
+Cattaneo, Jansson & Newey (Tier **A**, *JASA* 113(523), 1350–1361, **94** Crossref, checked
+2026-11-17) is the source `#454` leans on. Its Assumption 1 (Sampling) requires
+`C[Uᵢ, Uⱼ | X, W] = 0` for `i ≠ j` with `max_i #Tᵢ = O(1)` — groups of **bounded** size,
+independent of one another — and the paper states the exclusion in as many words: the assumption
+"generalizes classical i.i.d. sampling by allowing for groups or 'clusters' of finite but
+possibly heterogeneous size with arbitrary intra-group dependence… **As currently stated, this
+assumption does not allow for dependence in the error terms across units, and therefore excludes
+clustered, spacial or time series dependence in the sample.**" Both clauses fail here: a date on
+this panel is a group of ~1,000 names (not `O(1)`), and date-groups are not independent of each
+other. So `#454` cannot be followed as written (`#458`). What *is* free and was not known: of
+the standard family, `HC0`, `HC1`, `HC2` and `HC4` are **inconsistent** once `K/n ↛ 0` — not
+merely imprecise — while **`HC3` is asymptotically conservative**, valid and wide, available in
+any library with no new code (`#459`). The paper's own consistent estimator is fully specified
+and cheap at this lab's scale — `κ^HC = (M ⊙ M)⁻¹`, the inverse Hadamard square of the
+annihilator matrix, defined whenever `max_i(1 − Mᵢᵢ) < 1/2` by Gershgorin — but it buys the
+wrong robustness: it fixes the many-covariates failure inside the same independence assumption,
+and the lab's control sets are `d ≈ 3–6` against `n ≈ 1,000`, so the lab was never in the
+many-covariates regime to begin with. **The two failures are independent and only one of them is
+addressed by anything in that paper.**
+
+**The price of ignoring cross-sectional dependence is a closed form, and at this panel's width it
+is not a rounding error.** Petersen (Tier **A**, *RFS* 22(1), 435–480, **9,873** Crossref,
+checked 2026-11-17) gives the true variance of an OLS slope under a cluster effect as
+`σ²_ε/(σ²_X n) × [1 + (m − 1) ρ_X ρ_ε]`, with `m` the cluster size, `ρ_X` the within-cluster
+correlation of the **regressor** and `ρ_ε` that of the **residual**. Three consequences, and the
+first is the one no note carried. **The bias is a product**: either correlation at zero makes the
+i.i.d. standard error unbiased no matter how strong the other is, so "the residuals look
+correlated" is not by itself a reason to correct anything. **The bias grows in the cluster size,
+not the sample size** — and the paper states that the cross-sectional case is the same algebra
+"once `N` and `T` are exchanged", so for this lab the cluster is a **date** and `m` is the
+~1,000 eligible names in it. That gives a free screen with a table attached: a within-date
+correlation product of 0.001 already makes the true standard error **1.41×** the i.i.d. one,
+0.01 makes it **3.32×**, 0.05 makes it **7.14×**, 0.25 makes it **15.8×** (`#460`). Daily equity
+returns within one date are correlated far above 0.01, and so is any market-driven score, so
+**every i.i.d. interval this folder has quoted on a cross-sectional association is too narrow by
+a factor of at least three.** Third, the correction has its own failure mode and it is tabulated:
+the cluster-robust estimator is consistent in the **number of clusters** and biased **downward**
+when they are few — 27% at 5 clusters, 3% at 40, 1% at 100, with "ten clusters is too small and
+five hundred is sufficient" (`#461`). The paper also supplies the mapping the open question asked
+for by description — which dependence structure leaves which estimator unbiased, with
+Fama–MacBeth correct under a pure time effect, clustering-by-time correct given enough clusters,
+and fixed effects correct only for a **permanent** effect — plus a free diagnostic: comparing
+standard errors across clusterings *identifies* which effect is present (`#463`).
+
+**Applied to the 2026-11-17 nightly's own headline, the correction runs in the lab's favour.**
+That session regressed `null_p50 − pool` on the replicas' cost bill over the **27 v3 trials** and
+reported `+1.249 ± 0.149` against a mechanically predicted `+1.0`, `t = +1.67`. The same
+session's board audit put those 27 rows at **7–12 independent bets**. Inflating the standard
+error by `√(27/12) = 1.50` to `√(27/7) = 1.96` gives `±0.22` to `±0.29` and `t = 0.85` to
+`1.11`: the deviation from the mechanical prediction is **not significant once dependence is
+charged**, which *strengthens* that session's reading rather than weakening it (`#462`). It also
+puts the board in Petersen's too-few-clusters regime, where neither the i.i.d. nor the clustered
+standard error is trustworthy — so board-level regressions belong with the folder's existing
+**block resampling of dates** (`#389`'s annotation), read as a shape and not as a `p`-value.
+
+**And the adversarial third says the lab's main use never needed a standard error at all.**
+Abadie, Athey, Imbens & Wooldridge (Tier **A**, *QJE* 138(1), 1–35, **1,577** Crossref, checked
+2026-11-17) argue that the clustering level is set by the **sampling process and the assignment
+mechanism**, not by cluster-level components in the outcome, once the estimand is an average
+effect for the *finite population at hand*. Two of their three named misconceptions are this
+folder's: that correlation implies the need to cluster (it neither implies it nor is implied by
+it), and that clustering is free when unnecessary (intervals become "unnecessarily conservative,
+possibly by a wide margin" — in their application the cluster standard error is **22–26×** the
+robust one while the honest answer sits at **2.9×**, much nearer robust) (`#466`). The refusal
+that binds hardest: **"the data are not informative about the need to adjust for clustering in
+the sampling process"** — no measurement settles that half, so it must be stated as a design
+judgement (`#464`). Applied here it splits the lab's questions in two, which they have never
+been. For a **balance or descriptive** claim about the panel the lab holds, every index member on
+every date is observed, the sampled fraction is 1, there is no clustered *sampling*, and the
+relevant variability is **which names the book held** — which is exactly what `#439`/`#445`'s
+within-date permutation randomizes. So that permutation is not a patch on a broken asymptotic
+reference; it **is** the correct finite-population instrument, and the conventional cluster
+standard error would be the over-conservative choice their Misconception 2 warns about. For a
+**forecast** claim about the process that will generate unseen dates, the sampled fraction of
+relevant dates is effectively zero and Petersen's inflation stands in full. The rule the lab
+should adopt is one line long and costs nothing: **say which of the two a claim is before quoting
+an error bar** (`#465`). Their own estimators are mostly outside the lab's regime on both sides —
+CCV is a convex combination `q̂ · V̂^CCV(1) + (1 − q̂) · V̂^cluster` whose gain is proportional to
+the sampled cluster fraction `q̂`, so it collapses to the conventional cluster variance at
+`q̂ ≈ 0` and is redundant against the permutation at `q̂ = 1` — but the **first stage of their
+two-stage cluster bootstrap** is a construction worth borrowing: resampling each date's
+*fraction treated* is a strictly stronger null than permuting labels at a fixed count.
+
+(`notes/2026-11-17-many-covariates-variance-estimation-and-its-independence-assumption.md`;
+`notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`;
+`notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`)
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -18806,6 +18906,135 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-11-16-post-double-selection-inference-after-control-selection.md`,
     `notes/2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`
 
+458. **REFUSAL, and it closes the folder's binding gap: the variance estimator `#454` instructs the
+    lab to use EXCLUDES the dependence this lab's rows have, by its authors' own statement.**
+    `#454` says to run full-control OLS with the Cattaneo–Jansson–Newey standard error. That
+    paper's Assumption 1 requires `C[Uᵢ, Uⱼ | X, W] = 0` for `i ≠ j` with `max_i #Tᵢ = O(1)` —
+    groups of **bounded** size, independent of one another — and states that it "does not allow
+    for dependence in the error terms across units, and therefore **excludes clustered, spacial
+    or time series dependence in the sample**", relegating the extension to future work. Both
+    clauses fail here: a date is a group of ~1,000 names, and dates are not independent of each
+    other. **Do not quote that estimator on this panel**, and do not treat `#454` as discharged
+    by it. Tier A, overlap `false`.
+    → `notes/2026-11-17-many-covariates-variance-estimation-and-its-independence-assumption.md`
+
+459. **FREE SUBSTITUTE, available today with no new code: under many covariates `HC0`/`HC1`/`HC2`/
+    `HC4` are INCONSISTENT, not merely imprecise, and `HC3` is asymptotically CONSERVATIVE.** The
+    same paper grades the whole family at `K/n ↛ 0`: the default robust standard error converges
+    to a *smeared* target (`Σ̂^EW → (1/n) ΣᵢΣⱼ M²ᵢⱼ v̂ᵢv̂ᵢ' E[u²ⱼ]`, against a target needing
+    `E[u²ᵢ]` paired with `i` alone), so it is wrong in the direction that **over-states
+    significance**; `HC3`'s bias term is positive-semidefinite, so it over-states the variance
+    instead. Report `HC3`, call it conservative. The paper's own consistent estimator is
+    `κ^HC = (M ⊙ M)⁻¹` (inverse Hadamard square of the annihilator matrix), defined whenever
+    `max_i(1 − Mᵢᵢ) < 1/2` — cheap at this lab's `n`, and the leverage check is worth running on
+    its own to flag a design a few names or dates carry. **But it fixes the many-covariates
+    failure only, inside the same independence assumption** (`#458`), and at `d ≈ 3–6` against
+    `n ≈ 1,000` the lab is not in that regime anyway. Tier A, overlap `false`.
+    → `notes/2026-11-17-many-covariates-variance-estimation-and-its-independence-assumption.md`
+
+460. **FREE SCREEN WITH A TABLE, never run, and it prices every cross-sectional interval this
+    folder has quoted: the i.i.d. standard error's bias is the PRODUCT `ρ_X ρ_ε`, inflated by the
+    CLUSTER SIZE.** True variance is `σ²_ε/(σ²_X n) × [1 + (m − 1) ρ_X ρ_ε]`, with `ρ_X` the
+    within-cluster correlation of the **regressor** and `ρ_ε` that of the **residual**. Because
+    it is a product, **either correlation at zero makes the i.i.d. standard error unbiased**
+    however strong the other — so "the residuals look correlated" is not on its own a reason to
+    correct anything. Because the inflation scales with the **cluster size** and the source
+    states the cross-sectional case is the same algebra "once `N` and `T` are exchanged", the
+    lab's cluster is a **date** and `m ≈ 1,000`: a within-date product of 0.001 gives a true
+    standard error **1.41×** the i.i.d. one, 0.01 → **3.32×**, 0.05 → **7.14×**, 0.25 →
+    **15.8×**. The screen is two correlations and one multiplication. **Compute the bracket and
+    report it beside any cross-sectional standard error, or do not report the standard error.**
+    Subject to `#464`: this is a magnitude, not by itself a decision rule. Tier A, overlap
+    `false`.
+    → `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`
+
+461. **THE CORRECTION'S OWN FAILURE MODE, tabulated: cluster-robust standard errors are biased
+    DOWNWARD when clusters are few, so the board cannot be clustered at all.** The cluster-robust
+    estimator is consistent in the **number of clusters**, not of observations; holding sample
+    size fixed, its downward bias runs **27% at 5 clusters, 3% at 40, 1% at 100**, with "ten
+    clusters is too small and five hundred is sufficient". The lab's 27 v3 trials are 7–12
+    independent bets, i.e. inside the too-few regime, so for board-level regressions the i.i.d.
+    standard error is too narrow **and so is the clustered one**. The honest instrument there is
+    the folder's existing **block resampling of dates** (`#389`'s annotation) or a permutation,
+    read as a shape rather than as a `p`-value — not a corrected standard error. Tier A, overlap
+    `false`.
+    → `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`
+
+462. **RETRO-FIT, no new source, and the news is GOOD: charging dependence on the 2026-11-17
+    nightly's headline STRENGTHENS its conclusion.** That session regressed `null_p50 − pool` on
+    the replicas' cost bill over 27 trials and reported `+1.249 ± 0.149` against a mechanically
+    predicted `+1.0`, `t = +1.67` — a deviation it was careful not to over-read. Inflating the
+    standard error by `√(27/12) = 1.50` to `√(27/7) = 1.96` for the 7–12 effective bets gives
+    `±0.22` to `±0.29` and **`t = 0.85` to `1.11`**: the slope is statistically indistinguishable
+    from the mechanical `+1.0`, so the arithmetic identification holds *more* comfortably, not
+    less. `R² = 73.9%` is a descriptive fit and is unaffected. Worth carrying as the standing
+    counterexample to the assumption that a dependence correction always costs the lab something.
+    Tier A (instrument), overlap `false`.
+    → `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`
+
+463. **THE MAPPING THE OPEN QUESTION ASKED FOR, plus a free diagnostic that identifies the
+    structure instead of assuming it.** Which dependence leaves which estimator unbiased: under a
+    **unit** effect, OLS, White, panel Newey–West and Fama–MacBeth (with or without an AR(1)
+    correction) are all biased, clustering by unit is unbiased whether the effect is permanent or
+    temporary, and fixed/random effects are unbiased **only if it is permanent**; under a
+    **time** effect, Fama–MacBeth is unbiased by design and clustering by time is unbiased
+    **given enough clusters**; under **both**, handle one parametrically (time dummies — which
+    work only for a *fixed* time effect) and cluster on the other, or cluster on both given
+    enough clusters in each. **The diagnostic**: SEs clustered by unit 3–4× White indicate a unit
+    effect; clustered by time 2–4× White indicate a time effect; clustered by both much larger
+    than either single dimension indicate both. Note the dimension counts invert on this panel
+    relative to the corporate-finance panel the source is written about — the lab has thousands
+    of **dates** and ~1,000 **names**, so clustering by date is the well-populated dimension.
+    Tier A, overlap `false`.
+    → `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`
+
+464. **ANTI-CANDIDATE against `#460` AS A DECISION RULE, and a refusal the lab cannot measure its
+    way out of: the data are NOT informative about whether to cluster in the sampling process.**
+    Abadie–Athey–Imbens–Wooldridge argue the clustering level is set by the **sampling process
+    and the assignment mechanism**, not by cluster-level components of the outcome, and name as
+    misconceptions both that within-cluster correlation implies the need to cluster ("the presence
+    of such correlation does not imply the need to use cluster adjustments, and the absence of
+    such correlation does not imply that clustering is not required") and that clustering is
+    harmless when unnecessary. Their framework is informative about the **assignment** half only;
+    the **sampling** half "is not", so it is a design judgement to be stated, not estimated. Also
+    carried: **heterogeneity in the effect across clusters adds variance components**, so a
+    specification implicitly assuming one constant per-date effect understates uncertainty.
+    `#460` survives as a magnitude and is demoted as a rule. Tier A, overlap `false`.
+    → `notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`
+
+465. **THE RULE THAT RESOLVES THE TENSION, free and one line: say whether a claim is ABOUT THIS
+    PANEL or ABOUT THE PROCESS THAT WILL GENERATE THE NEXT DATES, before quoting any error bar.**
+    The two frameworks answer different questions and the lab writes both kinds of claim in the
+    same units. **About this panel** (balance screens, `#448`'s association, `#453`'s audit, the
+    mandatory rank-space residualisation): every index member on every date is observed, the
+    sampled cluster fraction is 1, there is no clustered *sampling*, and the only variability is
+    **which names the book held** — which `#439`/`#445`'s **within-date permutation** randomizes
+    exactly. So that permutation is not a patch on a broken asymptotic reference; it **is** the
+    correct finite-population instrument, and a cluster-robust standard error there would be the
+    over-conservative choice `#464` warns about. **About the next dates** (any skill, gate or
+    forecast claim): the sampled fraction of relevant dates is ~0, clustering by date is required,
+    and `#460`'s inflation applies in full. This is the session's most actionable output and it
+    costs no trial. Tier A, overlap `false`.
+    → `notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`,
+    `notes/2026-11-14-hotelling-t2-under-high-dimension.md`
+
+466. **ANTI-CANDIDATE with a magnitude: reflexive clustering is NOT free, and the two estimators
+    the lab might reach for are both outside its regime.** In the source's own application the
+    cluster standard error is **22–26×** the robust one while the design-correct answer sits at
+    **2.9×** robust (and at `1.2×` under fixed effects) — so "cluster because it changes the
+    answer" can turn a usable interval into an unusable one. Their **CCV** is a convex combination
+    `q̂ · V̂^CCV(1) + (1 − q̂) · V̂^cluster` weighted by the sampled fraction of population
+    clusters, so it **collapses to the conventional cluster variance at `q̂ ≈ 0`** (the lab's
+    forecast claims) and is **redundant against the permutation at `q̂ = 1`** (the lab's balance
+    screens); it also requires within-cluster variation in assignment. Recorded as unusable rather
+    than as available. **One piece is worth borrowing**: the first stage of their
+    **two-stage cluster bootstrap** resamples each date's *fraction treated* from the empirical
+    distribution of per-date treated fractions, which is a strictly stronger null than permuting
+    labels at a fixed count — it belongs on the selection-space side of `#446`'s two-by-two. Tier
+    A, overlap `false`.
+    → `notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`,
+    `notes/2026-10-15-random-portfolios-as-the-null-of-no-skill.md`
+
 
 ## Coverage log
 
@@ -18913,8 +19142,163 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-15 | **Confounder / conditioning-set selection — the primary aim [2026-11-14] named and could not supply ("WHAT THE COVARIATES SHOULD BE"), taken on the literature of variable selection for CONFOUNDING CONTROL rather than for prediction.** Pre-download grep per the standing rule: `confounder selection` **0**, `variable selection for confounding` **0**, `confounding` **0**, `M-bias` **0**, `collider` **0**, `backdoor` **0**, `instrumental variable` **0**, `bias-variance tradeoff covariate` **0**; `pre-treatment` **1** and `conditioning set` **4** — **hits opened**, and none is about *choosing* a set (the one `pre-treatment` hit is `2026-11-06-index-membership-is-not-an-information-free-selection.md` using the phrase for the lab's own selection-as-treatment framing; the four `conditioning set` hits use it for a Kalman state, a CVaR tail, and survival conditioning). `confound` as a loose word appears in 52 notes as prose and in none as an object. Vein genuinely untouched. **Acceptance criterion applied as stated**: all three sources give a RULE for including or excluding a covariate, state what the rule costs when wrong in each direction, and are about a conditioning set rather than forecasting. **Output: one rule (`#447`), one free screen never run (`#448`), one over-determined refusal (`#449`), one anti-candidate with a free procedure (`#450`), one stated tension (`#451`).** The screen is the actionable one: the lab has judged its controls by `rho` to the *score* every time, and the literature says the *outcome-side* association is what licenses inclusion. Also discharged: the [2026-11-14] **ranked-second writing task** — `#445`'s i.i.d. caution is now annotated onto all three free screens (`#376`, `#381`, `#389`), each in the form the screen's own axis requires. **Nightly-variable detector: nothing to check** — the 2026-11-15 nightly spent 0 trials and measured no variable (halted at step 0 on two diverged remotes), so the detector returns empty rather than covered, and that is a null run, not a pass. **Anti-lookahead.** No financial data in any source: a synthesis argued on causal diagrams (a), two Monte Carlo simulation studies (a, b, c), analytic theorems (c); the only applied illustrations anywhere are an education effect and a class-size effect. Every magnitude carried is a **simulation variance ratio**, a **`c` statistic from a simulated conditioning set**, a **volume of a probability parameter space**, or a **citation count**. All three `validation_overlap: false`; `published_post_2018: true` for (a) only, which contains no data at all. **Citation counts**: 1466, 2006 and 70, all from Crossref `is-referenced-by-count`, which answered first try for all five DOIs looked up. **Channels**: `pmc.ncbi.nlm.nih.gov` is a new "looks like an answer" mode — **HTTP 200 with a 21 KB Material-design challenge shell, byte-identical across two different articles**, which is the cheap tell; Europe PMC's `fullTextXML` serves OA articles and returns **HTTP 500** for `inEPMC: Y / isOpenAccess: N`; NCBI `efetch` returns metadata plus a verbatim abstract with the explicit note *"The publisher of this article does not allow downloading of the full text in XML form"*. **One named source unobtained**: Myers et al. (2011, *Am J Epidemiol*, `10.1093/aje/kwr364`, 261 Crossref citations) — the applied simulation study for Z-bias — reachable by no channel tried; per the 2026-10-15 lesson the budget went to a **different source for the same mechanism**, and the substitution was an upgrade because (c) is the general theorem behind that simulation and re-reads its exact generative models. A **university course-page PDF directory** (`math.mcgill.ca/<prof>/<course>/Articles/`) served the typeset AJE article of (b) on the first try — the faculty-page lesson extended to **course reading lists**. | VanderWeele 2019 (*European Journal of Epidemiology*) (`2026-11-15-the-modified-disjunctive-cause-criterion.md`); Brookhart, Schneeweiss, Rothman, Glynn, Avorn & Stürmer 2006 (*American Journal of Epidemiology*) (`2026-11-15-covariate-selection-for-the-propensity-score.md`); Ding, VanderWeele & Robins 2017 (*Biometrika*) (`2026-11-15-instrumental-variables-as-bias-amplifiers.md`) — all three read in full text |
 
 | 2026-11-16 (session 94) | **TOOK THE PRIMARY AIM VERBATIM, GOT THE NAMED PRIMARY ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY TELLING THE LAB NOT TO USE THE PROCEDURE THE AIM WAS ABOUT.** Aim from the [2026-11-15] entry: **the hybrid design** — admit a source only if it (i) gives a RULE for which covariates enter when a variable may sit on both sides, (ii) states what inference is valid AFTER that selection with its condition, and (iii) says what the rule costs when the selection is wrong, in both directions; not another propensity-score simulation, not a general sparse-regression paper whose object is prediction, not another matching paper; **at most three requests**. **The mandated pre-download grep ran first and the gap was total on the target vocabulary** across 294 prior notes: `double selection`, `double-selection`, `post-double`, `immunized`, `orthogonal score`, `Neyman orthogonality`, `debiased machine learning`, `union of selected`, `Belloni` all **0**; `Chernozhukov` **1**, `lasso` **13**, `post-selection` **17** — and the **hits were opened** per the standing rule: the one `Chernozhukov` hit is a conformal-prediction note's author line, the thirteen `lasso` hits are selection-for-*prediction* (illusion of sparsity, knockoffs, stability selection, SIS), and the seventeen `post-selection` hits are the 2026-09-15 inference-on-winners vein, i.e. selection of a *maximum*, a different selection event. **No note carried a rule for a conditioning set with valid inference after it.** **The nightly-variable detector also ran** — the 2026-11-16 nightly measured something for the first time in two sessions, so the [2026-11-15] carry-forward was consumed rather than re-deferred — on that nightly's headline (reading the board's 27 `null_pctile` values as a *sample of p-values* and testing it for uniformity and over-dispersion) and returned **covered**: `2026-08-24-multiple-testing-haircut.md` already holds the empirical-p-value-distribution instrument and the 2026-10-28/30 online-multiple-testing vein holds the rest, so the primary aim stood. (The one genuine residual is nominated below, not taken.) **All three criteria met, two requests spent of three, all three sources read in full from arXiv on the first attempt — a channel with no failures tonight.** **(a) ADMITTED, and it meets all three criteria alone.** Belloni, Chernozhukov & Hansen 2014 (Tier **A**, *Review of Economic Studies* 81(2), 608–650, **1279** Crossref, checked 2026-11-16): **post-double selection** — lasso the treatment equation, lasso the reduced-form outcome equation, regress on the **union**, and ordinary robust OLS inference from that regression is **uniformly** valid under approximate sparsity in both equations, `s²log²(p∨n)/n → 0`, bounded sparse eigenvalues and independent rows; the **amelioration set** lets theory-motivated controls be forced in for free. **(b) ADMITTED as the generalisation.** Chernozhukov, Chetverikov, Demirer, Duflo, Hansen, Newey & Robins 2018 (Tier **A**, *The Econometrics Journal* 21(1), C1–C68, **3111** Crossref, checked 2026-11-16): **Neyman orthogonality** makes the bias a *product* of two nuisance errors (`o(N^{−1/4})` each in smooth problems), **cross-fitting** removes the overfitting bias that orthogonality cannot, and splitting relaxes the sparsity requirement from `s² ≪ n` to `s ≪ n`. **(c) ADMITTED as the adversarial third, and it is the night's real finding.** Wüthrich & Zhu 2023 (Tier **B** — top venue and a theorem, but modest citations (**29** Crossref, checked 2026-11-16) and its own result unreplicated; *Review of Economics and Statistics* 105(4), 982–997): a **non-asymptotic lower bound** on the OVB of (a)'s estimator that can exceed **twice** the asymptotic standard deviation *with sparse coefficients and `n` far above `p`*, a **three-regime** characterisation with a computable **beta-min** boundary, a stress test that runs by **raising** the penalty (+50%), an explicit refutation of lowering it, and the recommendation that at `p < n` one should **not select at all** but run full-control OLS with a many-controls-robust variance estimator. **Output: one rule (`#452`), one free audit (`#453`), one action item that is a refusal to use the vein's own machinery (`#454`), one mandatory calibration plus discipline (`#455`), one composition aimed at the nightly's own `N_eff` finding (`#456`), one carried tension (`#457`).** The deflationary conclusion is the useful one: the lab's control list is ~10 variables against **~251 month-ends counted as dates** (`#445`: not name-months), so `p ≪ n` and the right procedure is to **include every candidate control** rather than select — the cheapest discharge yet of `#447`'s third veto, and it dissolves `#451` instead of resolving it. (`notes/2026-11-16-post-double-selection-inference-after-control-selection.md`; `notes/2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md`; `notes/2026-11-16-omitted-variable-bias-of-lasso-based-inference.md`) |
+| 2026-11-17 (session 95) | **TOOK THE PRIMARY AIM VERBATIM — the aim that had been ranked second for three consecutive sessions and acquired a third consumer — AND THE ANSWER IS THAT THE NAMED INSTRUCTION IS ILLEGAL HERE AND THE LAB'S MAIN USE NEVER NEEDED IT.** Aim from the [2026-11-16] entry: **estimation of `Σ` at covariate width from a correlated cross-section** — admit a source only if it (i) gives an estimator of the covariance matrix or of a regression coefficient's variance **valid under cross-sectional dependence of unknown form**, (ii) states the **condition on the dependence** under which it is valid, and (iii) says **what it costs** relative to the i.i.d. estimator; not another shrinkage estimator whose object is a portfolio weight, not another high-dimensional two-sample test, not a general panel-econometrics textbook chapter; **at most three requests**, with a preference for the many-controls-robust variance literature `#454` cites "if one request can settle whether `#454`'s instruction is usable here at all". **It did, on the first request.** The mandated pre-download grep ran first across 297 prior notes and the gap held on the target vocabulary: `cluster-robust` **0**, `cluster robust` **0**, `two-way clustering` **0**, `Driscoll-Kraay` **0**, `Driscoll` **0**, `spatial correlation` **0**, `common factor standard errors` **0**, `Fama-MacBeth standard errors` **0**, `clustered standard` **0**; `cross-sectional dependence` **6**, `Newey` **14**, `Cattaneo` **3**, `Fama-MacBeth` **2**, `Newey-West` **2**, `many controls` **1** — and **the hits were opened** per the standing rule. All six `cross-sectional dependence` hits use the phrase to *motivate a resampling repair* (within-date permutation, block bootstrap over the time index, a K-fold objection), never to license a variance estimator; the `Cattaneo` hits are `#454`'s own recommendation, `#452`'s footnote repeating it, and an unrelated REStat portfolio-sorts paper; the `Newey` hits are author lines and HAR/Newey–West mentions in unrelated veins. **No note carried a rule for which dependence structure licenses which estimator** — exactly as the aim predicted. **The nightly-variable detector also ran**, on the 2026-11-17 nightly's headline (regressing `null_p50 − pool` on the replicas' cost bill over 27 trials, slope `+1.249 ± 0.149` against a mechanically predicted `+1.0`), and returned **NOT covered and converging on the primary aim**: that `±0.149` is an i.i.d. standard error on 27 rows the same session's own audit calls 7–12 independent bets, so the nightly supplied a **fourth** consumer of the aim's object on the night the aim was taken. Family-coverage rule satisfied vacuously — all eight `program.md` families now have notes (12–41 each). **The `learnings.md` check ran and found NO tension, which is itself informative**: every inference entry in that file is on the **time** axis — the paired stationary block bootstrap on stored daily series (explicitly chosen "so cross-candidate correlation is preserved"), the SE floor of a difference, the unestimable `eta(q)` — and the one closed-form screen there is already carried "as a *floor*, never as a significance test" because "it assumes i.i.d. bivariate normal returns and is liberal under fat tails and volatility clustering". So the lab's own practice had already reached tonight's discipline **along the axis it had looked at**, and `#460` is the same lesson on the **cross-sectional** axis, which no learning covers. Tonight reinforces that file rather than contradicting it. **All three criteria met by all three sources, all three read in full on the FIRST request — arXiv twice and a university course mirror once, no failed channels tonight.** **(a) ADMITTED, and it alone discharges the aim's stated preference.** Cattaneo, Jansson & Newey 2018 (Tier **A**, *JASA* 113(523), 1350–1361, **94** Crossref, checked 2026-11-17): Assumption 1 requires bounded group size (`max_i #Tᵢ = O(1)`) with independence across groups and the authors state it "**excludes clustered, spacial or time series dependence in the sample**" — so `#454`'s instruction **cannot be followed on this panel** (`#458`), a date being a group of ~1,000 non-independent-across-dates names; the free consolation is that `HC0`/`HC1`/`HC2`/`HC4` are **inconsistent** (not merely imprecise) once `K/n ↛ 0` while **`HC3` is asymptotically conservative** and needs no new code, with the paper's own `κ^HC = (M ⊙ M)⁻¹` estimator and its `max_i(1 − Mᵢᵢ) < 1/2` existence check fixing the many-covariates failure *inside* the same independence assumption (`#459`). **(b) ADMITTED as the price list.** Petersen 2009 (Tier **A**, *RFS* 22(1), 435–480, **9,873** Crossref, checked 2026-11-17): `1 + (m − 1) ρ_X ρ_ε` as the whole discrepancy, a **product** so either correlation at zero makes the i.i.d. estimator unbiased, inflated by **cluster size** — which for this lab is a date of ~1,000 names, giving **1.41× / 3.32× / 7.14× / 15.8×** at products of 0.001 / 0.01 / 0.05 / 0.25 (`#460`); the correction's own downward bias at few clusters (**27% at 5, 3% at 40, 1% at 100**), which puts the lab's 27-trial board in the regime where *neither* estimator works (`#461`); the mapping table and the compare-across-clusterings diagnostic the aim asked for by description (`#463`); and a retro-fit in which charging dependence on the nightly's headline moves `t` from `+1.67` to **0.85–1.11**, i.e. **strengthens** its mechanical identification (`#462`). **(c) ADMITTED as the adversarial third, and it paid for itself for the third session running by overturning the instrument the aim was about.** Abadie, Athey, Imbens & Wooldridge 2023 (Tier **A**, *QJE* 138(1), 1–35, **1,577** Crossref, checked 2026-11-17): clustering is set by **sampling and assignment**, not by outcome correlation; correlation neither implies nor is implied by the need to cluster; clustering when unnecessary is "unnecessarily conservative, possibly by a wide margin" (**22–26×** robust in their application against a design-correct **2.9×**) (`#466`); and **"the data are not informative about the need to adjust for clustering in the sampling process"** (`#464`), so no measurement settles it. Applied here it **vindicates the folder's existing repair**: for a claim about the panel the lab holds, the sampled cluster fraction is 1, there is no clustered sampling, and `#439`/`#445`'s within-date permutation **is** the correct finite-population instrument rather than a patch — while for a forecast claim the fraction is ~0 and (b)'s inflation applies in full (`#465`). **Output: one refusal that closes the folder's binding gap (`#458`), one free substitute (`#459`), one free screen with a table (`#460`), one anti-correction (`#461`), one retro-fit that is good news (`#462`), one mapping plus diagnostic (`#463`), one anti-candidate refusal (`#464`), one one-line rule that resolves the session's tension (`#465`), one anti-candidate with a borrowable construction (`#466`).** **Anti-lookahead.** No financial data in any source read for its results: (a) is theorems with a 1991 US wage illustration, (b) is algebra plus 5,000-replication Monte Carlo (its Compustat 1965–2003 illustrations were read for method only, and nothing from them is carried), (c) is theorems plus a 2000 US Census cross-section and simulations. Every magnitude carried is a **simulation bias or coverage ratio**, an **algebraic inflation factor**, a **citation count**, or the **lab's own train/validation-split numbers from `experiments/journal.md`**. All three `validation_overlap: false`; `published_post_2018: true` for (c) only. **Citation counts**: 94, 9873, 1577 — all Crossref `is-referenced-by-count`, which answered first try for all four DOIs looked up (the fourth, Driscoll–Kraay 1998, **6,225**, resolved for metadata only; see channels). **Channels**: `arxiv.org/pdf/<id>` served (a) and (c) complete and clean for the second consecutive session — 35 and 79 pages, 89 KB and 286 KB of text, 369 and 947 `" the "`, zero `( )` dropout, no ASCII shift. **Driscoll–Kraay 1998 (REStat 80(4), 549–560, `10.1162/003465398557825`) is the one source wanted and not obtained**: it is the literal answer to criterion (i) — "robust to very general forms of spatial and temporal dependence as the time dimension becomes large", with its cost in **required panel length** — but MIT Press is paywalled and a single search surfaced no author-hosted or repository copy, only a Stata Journal implementation (Hoechle, free at `ageconsearch.umn.edu`). It was **not pursued past one search** because the budget was three requests and (b) already supplied the mapping; it is nominated below rather than recorded as dark. Also noted without a request spent: `u.osu.edu/<faculty>/files/<year>/<month>/<file>.pdf` — a **course-mirror** path on a university WordPress multisite — served the complete typeset RFS article (537 KB → 173 KB of text, 1,457 `" the "`), which extends this file's flat-directory lesson from author and department sites to **instructors' course pages**. (`notes/2026-11-17-many-covariates-variance-estimation-and-its-independence-assumption.md`; `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`; `notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-17] READ THIS BEFORE AIMING SESSION 96. The dependence-robust-inference vein answered
+  its question in one night and the answer SPLITS the lab's practice in two rather than handing it
+  an estimator. Do not re-aim the estimator question.** Tonight discharged the primary aim that had
+  been ranked second for three sessions: `#458` is the refusal (the named estimator excludes this
+  panel's dependence, by its authors' own statement), `#459` the free substitute, `#460` the free
+  screen with a table, `#461` the anti-correction, `#462` a retro-fit that strengthens the
+  nightly's own headline, `#463` the mapping plus diagnostic, `#464` the anti-candidate refusal,
+  `#465` the one-line rule, `#466` an anti-candidate with one borrowable construction. **Three
+  things are now DONE and must not be re-aimed**: whether `#454`'s instruction is usable here
+  (it is not, `#458`), what ignoring cross-sectional dependence costs (`#460`), and which
+  instrument the lab's balance screens should use (the permutation it already has, `#465`).
+  **The three-consumer convergence that promoted this aim is now resolved in all three places**:
+  `#445`'s null is the right instrument after all, `#448`'s screen gets `#460`'s bracket, and
+  `#454` is withdrawn as unfollowable.
+  - **Primary aim for session 96: THE ONE SOURCE TONIGHT WANTED AND DID NOT GET — an estimator
+    valid under cross-sectional dependence of unknown form whose cost is in REQUIRED PANEL
+    LENGTH.** `#460` prices the i.i.d. estimator and `#461` closes the clustered one at few
+    clusters, but neither gives the lab an estimator for the case it actually has on the
+    *forecast* side of `#465`: dependence of unknown form across ~1,000 names within a date, with
+    **no cluster metric and no natural grouping**, and thousands of dates available to pay with.
+    Driscoll–Kraay (1998, *Review of Economics and Statistics* 80(4), 549–560,
+    `10.1162/003465398557825`, **6,225** Crossref, resolved tonight) is the literal answer to that
+    criterion — a nonparametric covariance estimator "robust to very general forms of spatial and
+    temporal dependence as the time dimension becomes large", i.e. one that trades the **panel
+    length the lab has** for the **cross-sectional structure the lab cannot specify**. It was not
+    obtained tonight: MIT Press is paywalled and one search surfaced no author-hosted or
+    repository copy. **Acceptance criterion, stated before any download: admit a source only if it
+    (i) gives a computable covariance or coefficient-variance estimator requiring NO
+    specification of the cross-sectional dependence (no cluster variable, no spatial weights
+    matrix, no assumed factor count), (ii) states the condition under which it is valid — in
+    particular what must hold of the cross-sectional averages of the moment conditions, and what
+    `T` must do relative to `N` — and (iii) gives its cost as a rate, a degrees-of-freedom
+    penalty, or a required `T`.** Not another shrinkage estimator for portfolio weights (the
+    folder holds `notes/2026-10-12-nodewise-precision-matrices-and-large-portfolio-sharpe-ratios.md`
+    and the Ledoit–Wolf vein); not a spatial-weights method that needs a distance metric the lab
+    does not have; not a re-grading of clustering (closed, `#460`–`#466`). **Channels to try in
+    this order, and the first is the one not yet attempted**: the authors' own sites (John C.
+    Driscoll is a Federal Reserve Board economist — try **FEDS**,
+    `federalreserve.gov/econres/feds/files/<year><number>pap.pdf`, which this file records as a
+    working channel and which would carry its own `10.17016/FEDS.*` DOI; Aart Kraay is at the
+    World Bank — try its **Open Knowledge Repository** and `documents.worldbank.org`); then
+    Brown University's working-paper series, since the paper's vintage puts Driscoll there and
+    `economics.brown.edu/sites/default/files/papers/` is a channel confirmed 2026-10-16; then
+    **Hoechle's Stata Journal implementation**, free at
+    `ageconsearch.umn.edu/record/119278/files/sjart_st0128.pdf`, which is Tier **B/C** on this
+    folder's rubric but carries the estimator's formula and Monte Carlo evidence on what
+    cross-sectional dependence does to conventional standard errors — **admit it as the
+    construction half and grade it honestly**, exactly as [2026-11-13] admitted a Tier-B
+    construction source alongside a Tier-A theory one. A reasonable Tier-A alternative primary if
+    Driscoll–Kraay stays dark: **Vogelsang's** fixed-`b` treatment of heteroskedasticity-,
+    autocorrelation- and spatial-correlation-robust inference in fixed-effects panels (*Journal of
+    Econometrics*), which supplies the small-`T` reference distribution Driscoll–Kraay's
+    large-`T` asymptotics lack — and that reference distribution is what `#461`'s few-cluster
+    problem is really asking for. **A grep before any download, per the standing rule, and open
+    the hits**: `Driscoll` and `spatial correlation` were both at **0** tonight and tonight's own
+    notes will not change that; expect non-zero on `cluster` and `panel`, and the question is
+    whether any note carries an estimator that needs **no** grouping variable. **Spend at most
+    three requests.**
+  - **Ranked second, and it is the carry-forward [2026-11-16] nominated and tonight did not take:
+    READING A SET OF `p`-VALUES FROM ONE'S OWN SEARCH AS EVIDENCE ABOUT THE SEARCH.** Still at
+    `p-curve` **0**, `over-dispersion`/`overdispersion` **0**, `p-value histogram` **0**. The
+    2026-11-16 nightly read its 27 recorded `null_pctile` values as a sample from `U(0,1)` (mean
+    0.507, KS `p` 0.041, variance 1.66× uniform's) and concluded by reasoning, not from a source,
+    that the over-dispersion "is what *designed* books produce whether or not they work".
+    **Tonight gives this a sharper reason to want it and a sharper warning**: `#464` says the data
+    are not informative about one half of a dependence decision, and `#461` says a dependence
+    correction can itself be biased — so the question "what is a uniform null worth when the
+    tests are dependent" is now the *same* question as the primary aim, one level up. Worth one
+    session, not three; take it only if the primary fails on two channels.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06] through [2026-11-16]) ran in full: the pre-download grep
+    returned **0** on nine patterns and non-zero on six, and **the hits were opened** — none
+    licensed a variance estimator, which is what authorised the downloads. **Tonight's amendment:
+    the nightly-variable detector returned NOT COVERED for the first time, and it returned
+    *converging on the primary aim*.** The 2026-11-17 nightly's headline is a regression slope
+    with an i.i.d. standard error on 27 rows that the same session's own audit calls 7–12
+    independent bets — i.e. the nightly independently walked into the object the aim was already
+    pointed at, becoming its fourth consumer on the night it was taken. The handling rule now has
+    three outcomes rather than two: **empty** (carry forward unconsumed), **covered** (the aim
+    stands), and **converging** (the aim stands *and* the nightly's own number should be re-quoted
+    under the session's finding — which `#462` does). Caveats still not run through the detector,
+    unchanged in order: *publication decay*, and *"the cost model is lethal only to books that
+    trade"*.
+  - **Carried unchanged and still live**: everything carried under [2026-11-16], with three
+    amendments. `#445` is **promoted rather than merely carried** — `#465` reclassifies its
+    within-date permutation from a patch into the correct finite-population instrument, so the
+    three free screens' annotations (`#376`, `#381`, `#389`) are now *licensed*, not merely
+    prudent. `#454` is **withdrawn as unfollowable** by `#458`, which leaves `#452`'s union rule
+    and `#453`'s audit standing and removes only the variance estimator they both recommend;
+    `#459` is the replacement to quote. `#448`'s free screen now carries `#460`'s bracket as a
+    precondition. Otherwise: `#447`'s three vetoes with its third still conditioned by `#452`;
+    `#442`'s licence to use Hotelling's `T²` with the `y = p/n` table as its boundary; `#444`'s
+    sum-type/max-type pre-registration rule; `#406`'s volatility-tercile conditioning,
+    category-**neutral** per `#414`; `#413`'s composed pre-trial rule; `#389`/`#381`/`#376` as the
+    three free screens; and the refusals `#415`, `#421`, `#423`, `#427`/`#429`/`#434`/`#435`/
+    `#436`/`#438`, `#440`, `#449`, `#450`, `#454` (now withdrawn), `#458`, `#461`, `#464` and
+    `#466`. **The dependence-robust-inference vein is now closed on three of four sides** — the
+    many-covariates estimator (`#458`–`#459`), the price of ignoring dependence (`#460`–`#463`)
+    and the design question (`#464`–`#466`) — with the fourth, an estimator needing no grouping
+    variable, nominated above as the primary aim. The conditioning-set vein stays closed on all
+    six sides (`#447`–`#457`); the high-dimensional two-sample vein stays closed (`#442`–`#446`);
+    the classifier-accuracy vein stays closed (`#439`–`#441`); the matched-control vein stays
+    closed on all five sides (`#427`–`#438`); the nominal-price vein stays closed (`#420`–`#426`);
+    the index-rule vein stays closed (`#401`–`#419`); the detectability vein stays closed
+    (`#393`–`#400`); the cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays
+    closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#458`–`#466` from tonight; `#452`–`#457` from 2026-11-16;
+    `#447`–`#451` from 2026-11-15; `#442`–`#446` from 2026-11-14; `#439`–`#441` from 2026-11-13;
+    `#436`–`#438` from 2026-11-12; `#433`–`#435` from 2026-11-11; `#427`–`#432` from 2026-11-10;
+    `#420`–`#426` from 2026-11-09; `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07;
+    `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04;
+    `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01;
+    `#343`–`#348` from 2026-10-31; and everything carried under those.
+  - **Retired and recorded as retired**: the [2026-11-16] primary aim, discharged in full; the
+    [2026-11-16] ranked-second nomination is **not** retired (carried above, re-motivated). **Cochran
+    (1968) remains permanently unobtained and must not be re-ranked. Myers et al. (2011,
+    `10.1093/aje/kwr364`) remains a named unobtained pointer with three dark channels recorded in
+    `#450`'s note — do not re-hunt them.** New this session: **Driscoll–Kraay (1998) is a named
+    unobtained pointer with exactly ONE search spent on it** — it is nominated as the primary aim
+    above precisely because it has *not* been exhausted, and the four channels listed there are
+    untried. New positive channel note: **a university course mirror**
+    (`u.osu.edu/<faculty>/files/<year>/<month>/<file>.pdf`, a WordPress multisite) served a
+    complete typeset *RFS* article on the first request, which extends this file's flat-directory
+    lesson from author sites and department series to **instructors' course pages** — for a
+    widely-taught methods paper, try who assigns it, not only who wrote it. Still at **0** and
+    still not nominated: `transfer entropy` (twenty-eighth nomination).
+  - **Standing, and not this folder's call.** Everything carried under [2026-11-16], unchanged —
+    including the engine issues filed 2026-10-18 and 2026-10-22, `min_train_skill = 0.0`, the note
+    format's missing holdout-overlap flag, `#422`'s signed error in the volume-only liquidity tier,
+    `#432`'s two opposite-signed biases in the equal-weight pool, the still-unmeasured pre-screen
+    imbalance, the **zero-trial-rate question raised to the human owner on 2026-11-13**, and the
+    three structural items the 2026-11-16 nightly raised, now joined by the 2026-11-17 nightly's
+    own: **the null gate's bar is a falling function of a candidate's turnover**, so the binding
+    gate and the objective point in opposite directions on the one axis the lab varies. Tonight
+    bears on the zero-trial question in one direction worth naming: for the **ninth** consecutive
+    zero-trial nightly, this folder's output is again methodological, and `#465` is the reason that
+    is not purely a failure — the lab has been quoting one kind of error bar for two kinds of
+    claim, and a session spent fixing that is a session that makes every future trial's number
+    mean something. But it remains true that **nothing in `#458`–`#466` proposes a book**, and the
+    2026-11-17 nightly's own conclusion — that the honest next move is one of `program.md`'s
+    "Future upgrades" rather than another OHLCV characteristic — is not something this folder can
+    discharge by reading more inference literature. **The integrity check was CLEAN tonight in the
+    one respect that has failed for seventeen sessions and is unchanged in the other.** The
+    container was again on a per-run branch (`claude/tender-galileo-67pb6a`) at `origin/main`'s
+    commit, for the **eighteenth** consecutive session, and was reset to `main` before any work;
+    the startup hook reported the integrity check as OK and escalated nothing. **Deleting
+    `origin/main-a5dglb` is still a human's call** and is still the only way that flag stops
+    recurring, and the population it sits in is growing: `git branch -r` now lists **eighteen**
+    `main-*` remotes plus one `claude/*`. The 2026-11-17 nightly's `main-2azb0x` did land by
+    fast-forward, as that session's corrected branch note says, and **`git branch -r --no-merged
+    origin/main` is empty**, so nothing is stranded on any of them and the clutter is cosmetic —
+    but it is the same cosmetic clutter that has made the branch flag fire eighteen times.
+
 
 - **[2026-11-16] READ THIS BEFORE AIMING SESSION 95. The conditioning-set vein is now CLOSED on all
   six sides, and the honest state of it is that the lab should stop selecting controls and start

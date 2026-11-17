@@ -30940,3 +30940,5 @@ own verification step ask for. Verified after the fact — `git rev-parse HEAD` 
 `git rev-parse origin/main` both read `bff826d`. **Nothing is awaiting a fast-forward and the
 next session does not start behind.** `origin/main-2azb0x` also exists at the same commit and is
 now a redundant pointer, which `git branch -r --no-merged origin/main` will not flag.
+
+## Research session — 2026-11-17 (learning agent): 3 notes added, see research/SUMMARY.md
