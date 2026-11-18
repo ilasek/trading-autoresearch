@@ -8348,3 +8348,120 @@ across experiments; prune entries that later evidence contradicts.
   mechanically a cost divided by a volatility can be regressed against its predicted slope of 1.0
   rather than argued about by sign — which is the discipline `research/SUMMARY.md` `#450` asks for
   ("report the spread, never a direction") arriving from the other side.
+
+- **[Measured 2026-11-18, nightly — ZERO trials spent; THE HEADLINE, AND IT IS THE FIRST STATEMENT
+  IN THIS FILE ABOUT WHETHER THE DESIGN COULD SEAT A STRATEGY AT ALL] THE SEAT'S BAR IS 4.34
+  STANDARD ERRORS, SO IT IS A STATEMENT ABOUT WINDOW LENGTH AND NOTHING ELSE — AND BECAUSE THE
+  DEFLATION BENCHMARK ALONE (+0.31 OF SKILL) IS 2.5x THE BEST SKILL EVER RECORDED HERE, THE SEAT IS
+  UNREACHABLE AT EVERY DSR THRESHOLD, NOT MERELY AT 0.95.** Solving the engine's own self-referential
+  fixed point (`r = E[max | var(skills+[r]), N_eff] + 1.645·se`, the 2026-11-16 correction) on the
+  27-trial board at `N_eff` 43, and then reading its *power* — `P(measured skill ≥ bar | true skill s)`:
+
+      se        bench      bar      bar/se = required paired t
+      0.0745   +0.3470   +0.4695            6.30
+      0.1391   +0.3896   +0.6184            4.45
+      0.1467   +0.3951   +0.6364            4.34   <- board median se
+      0.1930   +0.4306   +0.7481            3.88
+
+      true skill   +0.000   +0.124   +0.200   +0.300   +0.400   +0.620   +1.000
+      P(DSR>=.95)   0.001%   0.024%   0.147%   1.093%   5.357%  45.559%  99.341%
+                             ^ #16, the board's best MEASURED skill
+
+      DSR threshold   0.50     0.75     0.90     0.95     0.99
+      required skill +0.3087  +0.4376  +0.5603  +0.6364  +0.7836
+      of which bench +0.3087  +0.3387  +0.3723  +0.3951  +0.4424
+
+  **A threshold of 0.50 — a coin flip — still demands +0.31**, against a board best of +0.124 and
+  an equal-weight pool whose own Sharpe is +0.337. Priced against the undeflated alternative the
+  deflation costs **2.64x in `t`** (4.34 against 1.645), i.e. **6.96x the window**, and takes power
+  at a true skill of +0.30 from **65.6% to 1.1%**. **That reconciles two figures this file has
+  carried side by side without noticing they disagree**: the detectability aside quoted on
+  2026-11-07/08 and 2026-11-08/09 ("MDE of order 0.2–0.5 at 80% power") describes an *undeflated*
+  test and is correct — this design can **detect** about **+0.24** of skill — while the seat needs
+  **+0.64**. So the lab can measure a real effect of ordinary size and be structurally unable to act
+  on it, and `#16`'s +0.124 at `t` 0.88 is below even the detection threshold, which is the same
+  statement as its 90% CI `[-0.11, +0.42]`. **Three riders. (i) It removes the BENEFIT of a
+  `challenge` trial, not its cost** — 2026-11-16 priced the marginal trial at a thousandth of a
+  Sharpe and that stands; what is now arithmetic rather than inventory is that the gate cannot seat
+  anything this panel has produced. **(ii) Both fixes are in frozen files** (`engine/protocol.py`,
+  `program.md`) and were recorded for the human owner, not acted on. **(iii) It says nothing about
+  whether an object here has skill** — only that this design cannot resolve one.
+
+- **[Measured 2026-11-18, nightly — SECOND, INDEPENDENT ROUTE TO THE 2026-11-16 CHANCE-RATE FINDING,
+  AND IT TESTS THE DEFLATOR'S OWN STATED NULL ON THE BOARD IT IS COMPUTED FROM] THE DISPERSION
+  `metrics.deflated_skill` CHARGES FOR IS STATISTICALLY INDISTINGUISHABLE FROM PURE MEASUREMENT
+  NOISE: THE BOARD'S SKILL SPREAD IS *BELOW* THE NOISE FLOOR AND IMPLIED var(TRUE SKILL) IS
+  NEGATIVE.** The function's own docstring names the null that licenses its benchmark — *"under the
+  null of no skill the spread of independent trials' skill estimates is exactly their sampling
+  error"* — and every scored v3 trial stores both `skill` and its paired block-bootstrap `skill_se`,
+  so the test is two lines and had never been run:
+
+      n 27     sd(MEASURED skill) 0.1233   var 0.015195
+               rms(skill_se)      0.1391   mean var 0.019346      median se 0.1467
+               implied var(TRUE skill)    -0.004151  (NEGATIVE)
+               ratio var(measured)/mean var(se)   0.785
+
+      null of IDENTICAL true skill, 200k draws at each recorded se_i
+        errors independent               E[ratio] 0.999  5-95% [0.558, 1.557]  P(>=0.785) 0.740
+        errors at the board's active rho E[ratio] 0.918  5-95% [0.513, 1.433]  P(>=0.785) 0.647
+
+  **The second row is the honest one and it was computed because the first row's assumption is
+  false**: all 27 skills are differences against **one** pool over **one** window, so their errors
+  are positively correlated and the null's expected cross-sectional variance is *lower* than the
+  mean `se²`. The board's mean pairwise **active**-return rho is **+0.0888** (median +0.0293, range
+  −0.743 to +0.980), and modelling the errors at it moves the null's mean 0.999 → 0.918 — i.e. **the
+  correction makes the null easier to satisfy and so strengthens the reading.** Either way the
+  observed ratio sits below the null's mean and the best estimate of the cross-trial dispersion of
+  **true** skill is **zero**. Consequences: (i) this is 2026-11-16's result from the skills and their
+  error bars rather than from the 27 `null_pctile` values, and it says the board is consistent with
+  27 objects of **identical** true skill — the same thing `rank_trials.py` says as "27 of 27 trials
+  are in tier 1"; (ii) therefore `bench = c(N_eff)·sd(skills)` with `c(43) = 2.2179` is driven by
+  **window length**, not by how different the lab's strategies are, which is what makes the entry
+  above a window statement; (iii) **scope, repeating the warning the 2026-11-16 entry needed**: no
+  recorded number, verdict, DSR, board position or gate changes, and "cannot resolve the
+  differences" is not "there are none". **Standing rule: this test is free after any session that
+  records a trial — `sd(skill)` against `rms(skill_se)` — and it is the cheapest check on whether
+  the board has started to contain anything.**
+
+- **[Measured 2026-11-18, nightly] THE DEFLATOR'S TRIAL-COUNT CHANNEL IS WORTH ~14x IN POWER AND THE
+  ENGINE USES THE MOST PUNITIVE OF THE THREE COUNTS THE BOARD ITSELF SUPPORTS.** `c(N_eff) =
+  E[max]/sd` is flat in the count (2: 0.520; 7: 1.387; 12: 1.665; 20: 1.901; 43: 2.218; 100: 2.531),
+  which is the 2026-11-16 saturation result in its cleanest form. But flat is not free, because the
+  *level* decides the bar:
+
+      N_eff   required skill   required t   power @ +0.30   power @ +0.20
+         2        +0.3139         2.14         46.23%          21.88%
+         7        +0.4560         3.11         14.37%           4.05%
+        12        +0.5100         3.48          7.61%           1.73%
+        43        +0.6364         4.34          1.09%           0.15%
+
+      power @ true skill +0.30, window x N_eff
+        6 yr (now)  14.37% / 7.61% / 1.09%      25 yr  83.68% / 73.02% / 40.21%
+        12 yr       41.43% / 27.94% / 7.41%     50 yr  99.63% / 98.95% / 92.59%   (N_eff 7/12/43)
+
+  `N_eff` 43 is `protocol.effective_n_trials`' **single**-linkage count at rho 0.95; 2026-11-16
+  measured the same board at **12** (complete linkage, rho 0.5) and **7** (rho 0.2). So the
+  clustering choice is worth about **fourteen times** the gate's power at +0.30 — more than any
+  candidate this lab has ever built has been worth — and the engine's choice is the harshest of the
+  three. **Even at `N_eff` 7, a +0.30 strategy has one chance in seven on this window**; 80% power
+  needs ~25 yr at 7 or ~40 yr at 43. **Rider: NOT a design target and not a session's decision.**
+  `effective_n_trials` is in `engine/`, frozen, and a candidate may not be aimed at the count
+  (2026-11-16's rider (i) stands). Its use is interpretive and structural, for the human owner.
+
+- **[Method, 2026-11-18 — THE RULE NINE ZERO-TRIAL SESSIONS SHOULD HAVE BEEN FOLLOWING] ASK WHETHER
+  A DESIGN COULD DETECT WHAT IT IS LOOKING FOR *BEFORE* SPENDING ANOTHER NIGHT LOOKING — AND NOTE
+  THAT THIS LAB CARRIED THE ANSWER AS AN UNEVALUATED ASIDE FOR SIX SESSIONS.** The detectability
+  arithmetic entered the record on 2026-11-05 from `research/SUMMARY.md` `#393`–`#400` and was
+  quoted twice in journal prose ("MDE of order 0.2–0.5 at 80% power") without once being run against
+  the lab's own recorded board or its own gate's fixed point. Nine consecutive sessions then reported
+  "the idea inventory is empty", which is an inventory fact; the measurable fact was that the design
+  could not **certify** an object even if one were handed to it. **The general form, and it is a
+  sibling of 2026-11-17's "price a gate in the units candidates are designed in": a gate has a bar
+  AND a power curve, and a lab that has only ever computed the bar does not know its own miss
+  rate.** Doing it here cost four free blocks and no trial, used only stored records, and changed the
+  framing of every zero-trial night in the file. **Two corollaries worth carrying.** (a) When a bar
+  is proportional to a standard error — check this first, it is one division — the bar is a statement
+  about **sample size**, and arguing about the object is arguing about the wrong term. (b) A
+  threshold is only the binding constraint if the bar's *other* terms sit below the target; here the
+  benchmark alone exceeds any attainable skill, so "relax the threshold" was never a fix and the
+  record should stop implying it is one.
