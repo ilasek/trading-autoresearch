@@ -31290,3 +31290,4 @@ tonight's F2/F3 and is cited as the thing that was quoted twice without being ru
 source for any number above — every figure here comes from this repo's own records.
 
 **Verdicts:** none.
+## Research session — 2026-11-18 (learning agent): 3 notes added, see research/SUMMARY.md
