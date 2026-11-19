@@ -31291,3 +31291,321 @@ source for any number above — every figure here comes from this repo's own rec
 
 **Verdicts:** none.
 ## Research session — 2026-11-18 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Free measurements — 2026-11-19 (nightly), ZERO trials spent
+
+**Scope and hygiene.** No candidate file was written, no trial was recorded, no verdict was
+assigned; `experiments/trials.jsonl` stays at **138 records / 28 v3 records / 27 scored v3
+trials**, and the leaderboard, the deflated bar and `rank_trials.py`'s output are unchanged
+(27 of 27 in tier 1, M3 still the lead at skill +0.124). Engine green (**92 passed in 40.69s**).
+Step 0 clean: `git fetch origin --prune` then `git branch -r --no-merged origin/main` **empty**;
+the container's per-run branch `main-6vvd6y` sat exactly on `origin/main`'s `3c3e594` with no
+commits of its own, so by the 2026-11-15 two-command test there was nothing stranded, and the
+session moved to `main` before any measurement. Store's last bar is **2026-11-18**, one day
+back — not stale.
+
+**Split hygiene, stated precisely because three of tonight's four blocks compute forward
+returns.** Every panel measurement below runs on a frame truncated at **2017-12-31 before
+anything else happens** (`harness.train_slice`, then `>= 1997-01-01`), so a forward `h`-day
+return taken from a late-train date is **NaN rather than a read into validation**. The check is
+visible in the date counts, which fall with the horizon exactly as the truncation predicts:
+**166 dates at h21, 164 at h63, 155 at h252**. F4 reads stored `validation` blocks and stored
+validation return frames only, whose index bounds (`2018-01-01 .. 2023-12-29`, 1562 days) were
+printed and asserted `< 2024-01-01` before use. **No holdout, forward or incubation file was
+opened** — `holdout_log.jsonl`, `reports/incubation.md` and the `*_holdout.parquet` files were
+never touched, the `holdout` key of a trial record was never dereferenced, and with no trial
+recorded there was no holdout gate to reach. **Tenth consecutive zero-trial session.**
+
+**What the night was spent on, and why this rather than a trial.** The last two sessions turned
+their instruments on the lab's *gate* (its bar, its power, its deflator's dispersion). Tonight
+turns them on the lab's *screen* — the free, pre-trial, region-matched forward-excess measurement
+that has selected or declined every object in the record, and that has never had its own null.
+The aim came from two places. `research/SUMMARY.md`'s 2026-11-18 open question says the
+dependence vein "owes the lab a MEASUREMENT, not a source" (`#472`), that it is "not this
+folder's to run", and that its likely outcome dissolves the vein; and the same entry's
+transferable lesson is that the aim had been pointed at the wrong axis — "the *temporal*
+specification dominates the size distortion, with weak-versus-strong spatial dependence barely
+moving it". Both halves are testable here for free. They are, and the temporal half is where the
+error was.
+
+### F1 — the panel's cross-sectional dependence, measured: the lab's own benchmark subtraction removes all of it, so the vein dissolves exactly as `#473` predicted
+
+Pairwise-complete correlations of daily returns over **1997-01-02 .. 2017-12-29**, eligible
+stock-days only, 434k–436k usable pairs at a median overlap of ~2,000 days, with Pesaran's CD
+statistic and the design effect `1 + (N-1)·rho_bar` that a cross-sectional mean of `N` names pays:
+
+    residual definition                             mean rho   mean |rho|   Pesaran CD   design effect @ N=900
+    RAW daily returns (nothing removed)              +0.2082      0.2114      +5823.4          188.1
+    POOL-demeaned (vs the equal-weight eligible pool) -0.0083      0.1303       -176.6           <1
+    REGION-demeaned (the region-matched convention)   -0.0008      0.0633        -12.2           0.33
+
+Three readings, and the third is the one that matters. (i) **Raw, the panel's dependence is
+enormous** — mean pairwise rho +0.21, a design effect of 188 at `N` = 900, an SE inflation of
+13.7x. That is the market factor, and any statistic that averaged raw returns across names and
+treated them as independent would be wrong by an order of magnitude. (ii) **Subtracting the
+benchmark removes it all.** Demeaning within region takes the mean signed pairwise correlation
+to **-0.0008**; what survives is weak dependence that is signed both ways (mean |rho| 0.063,
+sd 0.095) and averages out of a cross-sectional mean. The design effect is **0.33 at N=900** —
+*below* one, i.e. a naive within-date i.i.d. standard error is **conservative**, not liberal.
+(iii) The mechanism is not luck and should be said plainly: **demeaning a cross-section forces
+its average residual to zero on every date, so it imposes `rho_bar ≈ -1/(N-1)`.** The lab has
+been measuring excesses over the benchmark it is graded against, and that act removes the strong
+dependence term by construction. CD is still formally outside ±1.96 at -12.2, but CD is a *sum*
+over 434k pairs and detects `rho_bar` of order 1e-4; the decision-relevant quantity is the
+design effect, and it is ≤ 1 in both demeaned rows.
+
+**So `#472` is discharged and the vein closes with a number**: `#460`'s bracket collapses,
+`#473`'s "either correlation at zero suffices" is the operative branch, and **no dependence
+correction is owed to any error bar in this repo**. Scope: this is about the *cross-sectional*
+axis only, which is what the folder asked about — and it is the axis the folder's own 2026-11-18
+lesson predicted would not be where the cost is.
+
+### F2 — the axis that does cost: the lab quotes its screens on an OVERLAPPING grid, and the inflation is a property of the grid, not of the score
+
+The screen's shape is fixed by the record: at each month-end take the top-`K` of a score, average
+its forward `h`-day return in excess of each name's own region mean over the whole eligible set,
+then `t` the per-date series. With `h` = 63 or 252 and a **monthly** step, consecutive
+observations share 2 or 11 months of their forward window, so the series is mechanically
+autocorrelated and the i.i.d. `t` is overstated. Measured on three unrelated scores, top-100,
+with a Bartlett/Newey-West SE at the lag the overlap implies (`ceil(h/step) - 1`):
+
+    score                       h      grid     n    bps    t iid   t NW   lag   ratio
+    M3 old-half reversal       63   monthly   164   +37.9   +2.47  +1.69    2    1.46
+    M3 old-half reversal       63 quarterly    55   +35.3   +1.20  +1.22    0    0.99
+    M3 old-half reversal      252   monthly   155  +138.9   +4.22  +1.93   11    2.19
+    M3 old-half reversal      252 quarterly    52  +151.2   +2.49  +1.89    3    1.32
+    12-1 momentum              63   monthly   249    +1.1   +0.05  +0.03    2    1.44
+    12-1 momentum              63 quarterly    83    -9.6   -0.23  -0.23    0    0.99
+    12-1 momentum             252   monthly   240   -61.5   -1.24  -0.53   11    2.33
+    12-1 momentum             252 quarterly    80   -74.8   -0.87  -0.63    3    1.40
+    21-day reversal            63   monthly   249   +45.6   +1.83  +1.67    2    1.10
+    21-day reversal            63 quarterly    83   +18.6   +0.53  +0.53    0    0.99
+    21-day reversal           252   monthly   240   +57.1   +1.16  +0.76   11    1.53
+    21-day reversal           252 quarterly    80   +50.3   +0.77  +0.62    3    1.23
+
+The levels differ from the record's because this is a simplified reproduction (plain top-100, no
+peer/depth quota); **the transferable quantity is the ratio, and it is a property of the cell.**
+Read the `h63 quarterly` rows first: there the step equals the horizon, the correction is inert,
+and it reads **0.99 on all three scores** — that is the plumbing check, and it passes. Everywhere
+the step is shorter than the horizon the ratio is above one, around **1.1-1.5 at h63 monthly** and
+**1.5-2.3 at h252 monthly**. **And it is larger for more persistent scores**: M3 (month-to-month
+rank persistence phi = 0.9803, the lab's most persistent object) and 12-1 momentum sit at
+2.19/2.33 at h252 while the 21-day reversal sits at 1.53, because a persistent score's slices
+overlap in *names* as well as in dates.
+
+**The record's non-overlapping cross-check does not cover h252, and the record did not notice.**
+The 2026-11-11/12 F6 table reports M3 on a quarterly grid as agreeing with the monthly one. A
+252-day horizon on a **quarterly** grid is still **four-fold overlapping**: its correction factor
+is 1.32 here, and its own lag is 3, not 0. Only `h63`-on-quarterly is genuinely non-overlapping.
+
+### F3 — the screen's own null, which it had never had: at h252 on a monthly grid a TRUE NULL clears |t| > 1.96 fifty-seven percent of the time
+
+60 AR(1) scores drawn at **M3's own measured monthly rank persistence** (phi = 0.9803, the figure
+in `pt_oldhalf_overlap6.py`'s F6), masked to M3's own scorable set, pushed through the identical
+screen. Under correct specification `sd(t)` is 1.00 and the rejection rate at |t| > 1.96 is 5%:
+
+    horizon     grid    draws   sd(t iid)    90% CI on sd    sd(t NW)   rej iid   rej NW
+       21    monthly      60       0.87      [0.75, 1.02]      0.87        5%        5%
+       63    monthly      60       1.44      [1.26, 1.71]      1.08       20%       12%
+      252    monthly      60       2.65      [2.31, 3.13]      1.24       57%       17%
+       63  quarterly      60       0.92      [0.80, 1.08]      0.92        7%        7%
+      252  quarterly      60       1.60      [1.40, 1.89]      1.23       35%       17%
+
+(Reproduced from an independent 24-draw run: 0.57 / 1.16 / 2.52 / 0.76 / 1.45, same ordering.)
+
+**The two non-overlapping cells are correctly sized** — `sd(t)` 0.87 and 0.92 with CIs containing
+1.0, rejection 5% and 7% — which is the harness check and it passes, so the over-rejection in the
+other three cells is the overlap and not the screen. **The h252-monthly cell, which produced the
+record's largest and most-quoted screen numbers, rejects a true null 57% of the time at a nominal
+5%**: an eleven-fold size distortion, `sd(t)` = 2.65. Newey-West halves it but does not fix it
+(17% at h252 either grid), which is expected — Bartlett at lag 11 on n = 155 is itself biased, so
+**NW is a mitigation, not a repair.**
+
+**The mechanism closes exactly.** The top-100 pick retains **90%** of its names month-to-month,
+80% at three months and 60% at twelve, so an h252 statistic reads nearly the same names over
+nearly the same window twelve times. The autocorrelation of the per-date series implies
+**~24 effectively independent observations against a nominal 155**, and `sqrt(155/24) = 2.54`
+against the null's measured `sd(t)` of **2.65** — agreement to 4% between a variance-inflation
+arithmetic and a simulation that share no step.
+
+### F4 — what a paired trial buys, measured for the first time: a 3.8x finer ruler, and still too coarse for what the lab points it at
+
+Last session's handover idea (i): run the `var(measured) vs mean var(se)` test *inside* a
+mechanism cluster. Stored records and stored validation frames only, on the five-trial old-half
+lineage (`#12`, `#14`, `#15`, `#16`, `#17`), all ten pairs, paired SEs from
+`metrics.sharpe_diff_se`:
+
+    within the M3 lineage (n=5)        sd(skill) 0.0395    rms(skill_se) 0.1521    ratio 0.067
+    whole v3 board (n=27)              sd(skill) 0.1233    rms(skill_se) 0.1391    ratio 0.785
+
+    pair                                                    rho   d skill  unpaired se  PAIRED se       t
+    depth_neutral / ex_anniversary                        0.990    +0.049       0.216      0.0567   +0.86
+    depth_neutral / ex_phase6_control                     0.989    -0.018       0.210      0.0587   -0.31
+    depth_neutral / oldhalf_overlap6                      0.993    -0.054       0.228      0.0463   -1.17
+    depth_neutral / oldhalf_sync6                         0.995    -0.036       0.218      0.0388   -0.93
+    ex_anniversary / ex_phase6_control                    0.985    -0.067       0.203      0.0689   -0.97
+    ex_anniversary / oldhalf_overlap6                     0.990    -0.103       0.221      0.0570   -1.81
+    ex_anniversary / oldhalf_sync6                        0.991    -0.085       0.211      0.0543   -1.56
+    ex_phase6_control / oldhalf_overlap6                  0.987    -0.036       0.216      0.0641   -0.56
+    ex_phase6_control / oldhalf_sync6                     0.990    -0.018       0.205      0.0558   -0.32
+    oldhalf_overlap6 / oldhalf_sync6                      0.998    +0.018       0.223      0.0268   +0.67
+
+    median: rho +0.990   |d skill| 0.043   unpaired se 0.216   paired se 0.0562   -> pairing buys 3.8x
+    pairs resolved |t| > 1.645:  1 of 10      |t| > 1.96:  0 of 10
+    board-wide (351 pairs):  median rho +0.910, paired se 0.170 vs unpaired 0.196 -> 1.1x; 11% / 4% resolved
+
+**Both halves are results.** The paired design is real and large: inside the cluster it shrinks
+the error bar **3.8x**, from 0.216 to 0.056, and `metrics.sharpe_diff_se`'s `(1 - rho)` term is
+why. But **the construction changes the lab points it at are smaller than that ruler**: median
+|d skill| 0.043 against a median paired SE of 0.056, so **not one of the ten pairs is resolved at
+|t| > 1.96 and only one clears 1.645** — including `#16` over `#12`, the comparison the overlap
+operator was built to make, at **+1.17**. Board-wide the pairing is worth only 1.1x, because
+distinct objects do not correlate. So the two facts the record has carried side by side are
+reconciled: "27 of 27 in tier 1" is a statement about *levels*, the paired claims are about
+*differences*, the paired instrument is ~4x sharper on those differences, and it is still not
+sharp enough for a 0.04 construction effect. **Within-cluster ratio 0.067** also says the F1-style
+level test is uninformative inside a cluster by construction, so it should only ever be run
+board-wide.
+
+### F5 — M3 re-read in the units F3 provides, which is the night's one consequence for a recorded object
+
+The record's four M3 screen readings (2026-11-11/12 F6), each divided by its own cell's measured
+null `sd(t)` from F3 — i.e. restated as sigma-multiples against the null the screen actually has:
+
+    cell                    record t (simple / log)   null sd(t)    sigma-multiple (simple / log)
+    h63   monthly              +2.36 / +2.29             1.44            +1.64 / +1.59
+    h252  monthly              +2.14 / +2.14             2.65            +0.81 / +0.81
+    h63   quarterly            +2.03 / +1.96             0.92            +2.21 / +2.13   <- the only clean cell
+    h252  quarterly            +2.84 / +3.04             1.60            +1.78 / +1.90
+
+    corr(per-date h63 excess, per-date h252 excess) = +0.574 (n=155)
+
+**This is a rescaling, not a demolition, and both directions should be stated.** Against it: the
+record reads these as four agreeing readings at `t` +2.1 to +3.0, and they are **+0.8 to +2.2
+sigma** with a median near **1.7** — and they are not four readings, since the two horizons' own
+per-date series correlate **+0.574** and the four cells are one object measured four overlapping
+ways. The h252-monthly cell, the biggest number in the table, carries the *least* information of
+the four. For it: the **strongest** cell at +2.21 sigma is also the **only correctly-sized** one,
+so the one piece of M3 evidence that needed no correction is the one that survives it, and M3
+remains the board's lead and the only object clearing the null gate. **One assumption, flagged:**
+F3's null is calibrated on a plain top-100 slice while the record's statistic is peer/depth-quota
+selected. The quota changes which names are in the slice, not the grid/horizon overlap that sets
+the null's width, so the rescaling should hold — but it is an argument, not a measured identity,
+and a quota-matched null is the obvious cheap follow-up.
+
+**The correction is ONE-SIDED with respect to the record, which is why no re-audit is owed.**
+Every declined object was declined for a `t` that was *small on the inflated scale*; dividing a
+small `t` by 1.4-2.7 leaves it smaller. So **the correction can only ever remove an admission,
+never resurrect a declination** — the ~14 objects on the anti-candidate lists stay declined, and
+the only recorded object it touches is the one admission, M3.
+
+**Why zero trials, stated as the measurement rather than as inventory.** The screen that would
+have to admit a new object has just been shown to over-reject by 1.4x-2.7x in the cells the lab
+quotes, and re-reading the record's one admitted object through its own null leaves a single clean
+reading at +2.2 sigma and three supporting ones worth 0.8-1.8. No object was in front of the
+session, and tonight's result raises the bar a new one would have to clear rather than lowering
+it. Combined with 2026-11-18's arithmetic — the seat needs +0.64 of skill against a board best of
++0.124, at every DSR threshold — there was nothing to spend a trial on. **Verdicts: none.**
+
+## Session summary — 2026-11-19 (nightly) — 0 trials of 8; the lab turned its instruments on its own PRE-TRIAL SCREEN for the first time, and the screen that selected every object in the record rejects a true null 57% of the time in its most-quoted cell
+
+**Experiments: 0 of 8.** `experiments/trials.jsonl` stays at **138 records / 28 v3 records / 27
+scored v3 trials**; the v3 board, `leaderboard.json`, the deflated bar and `rank_trials.py`'s
+output are unchanged (27 of 27 in tier 1; M3 `pt_oldhalf_overlap6` still the lead at skill
++0.124, DSR 0.1635); no candidate file was written and no verdict was assigned. Five free blocks
+ran. **No holdout, forward or incubation file was opened** — the `holdout` key of a trial record
+was never dereferenced, and with no trial recorded there was no holdout gate to reach. Panel
+blocks ran on a frame truncated at **2017-12-31 before anything else**, so forward windows run
+off the end as NaN rather than into validation; the date counts falling **166 / 164 / 155** with
+the horizon is that check. Engine green (**92 passed in 40.69s**). Step 0 clean: `git branch -r
+--no-merged origin/main` **empty**, per-run branch `main-6vvd6y` exactly on `origin/main`'s
+`3c3e594` with no commits of its own, session moved to `main` before measuring. Store's last bar
+**2026-11-18**, one day back — not stale. **Tenth consecutive zero-trial session.**
+
+**Best finding, and it is the night's headline.** The lab's free, pre-trial, region-matched
+forward-excess screen — the instrument behind every object in the record and every entry on the
+anti-candidate lists — **had never had a null**, and it is mis-specified. 60 AR(1) scores at M3's
+own persistence through the identical screen: at **h252 on a monthly grid a true null clears
+|t| > 1.96 fifty-seven percent of the time** at a nominal 5%, `sd(t)` = **2.65** against the 1.00
+correct specification demands. At h63 monthly it is 20%. The two cells where step >= horizon come
+in at `sd(t)` **0.87** and **0.92**, rejection 5% and 7% — the harness check, and it passes, which
+localises the fault to the **overlap** and not to the screen. The cause closes arithmetically: the
+top-100 pick retains **90%** of its names month-to-month, the per-date series' autocorrelation
+implies **~24 effectively independent observations against a nominal 155**, and
+`sqrt(155/24) = 2.54` matches the simulated 2.65 to **4%** — two routes sharing no step. Measured
+on three unrelated scores the inflation is a property of the cell (h63 monthly 1.46/1.44/1.10;
+h252 monthly 2.19/2.33/1.53; the inert cell **0.99/0.99/0.99**), larger for more persistent
+scores. Newey-West at the implied lag halves it and does not repair it (17% at h252).
+
+**Second finding — the one consequence for a recorded object, and it cuts both ways.** M3's four
+quoted screen readings, each divided by its own cell's null `sd(t)`, run **+0.81 / +1.64 / +1.78 /
++2.21 sigma** rather than the record's `t` +2.14 to +3.04, and they are not four corroborations:
+the two horizons' per-date series correlate **+0.574** and the slices are 90% the same names, so
+it is one object measured four overlapping ways, with the table's *largest* number (h252 monthly)
+carrying the *least* information. **But the strongest cell, +2.21 sigma, is the only
+correctly-sized one** — the reading that survives is the one that was never inflated. So this is a
+rescaling, not a demolition: M3 stays the board's lead and the only object clearing the null gate,
+and **no recorded number, verdict, DSR, board position or gate changes.** A related correction the
+record missed: its "the quarterly grid agrees" cross-check **never covered h252**, because a
+252-day horizon on a quarterly grid is still four-fold overlapping.
+
+**Third — research `#472` discharged, and the vein closes with a measurement.** The folder's
+2026-11-18 open question said the dependence vein owes the lab a measurement that is "not this
+folder's to run" and whose likely outcome dissolves it. It does. Pairwise-complete correlations
+over 434k pairs: **raw** daily returns mean rho **+0.2082** (CD +5823, design effect 188 at
+N=900, a 13.7x SE inflation — the market factor); **region-demeaned**, the lab's own convention,
+mean rho **-0.0008** (CD -12.2, design effect **0.33**, i.e. a naive i.i.d. SE is *conservative*).
+The mechanism is that demeaning a cross-section forces `rho_bar ~= -1/(N-1)`, so **the lab removed
+the strong-dependence term the day it started measuring excesses over its own benchmark**. No
+dependence correction is owed to any error bar here, and `#454`-`#478` can close. Note which axis
+that is: the **cross-sectional** one the folder asked about — while the **temporal** axis its own
+transferable lesson pointed at is exactly where this lab's error was.
+
+**Fourth — the 2026-11-18 handover's idea (i), answered.** A paired trial buys a **3.8x** finer
+error bar inside the M3 cluster (median paired SE **0.056** against unpaired 0.216, at rho 0.990)
+— and **0 of the lineage's 10 paired comparisons is resolved at |t| > 1.96**, 1 of 10 at 1.645,
+with `#16` over `#12` — the comparison the overlap operator exists to make — at **+1.17**. Median
+|d skill| is 0.043 against a 0.056 ruler. Board-wide the pairing is worth only 1.1x. That
+reconciles "27 of 27 tier 1" (a statement about levels) with "paired on validation" (a statement
+about differences): the paired instrument is ~4x sharper and still too coarse, and a paired design
+now needs a pre-registered effect **above ~0.06 of skill** to be worth a trial. Also: the
+`var(measured) vs mean var(se)` level test is uninformative *inside* a cluster by construction
+(ratio 0.067 against 0.785 board-wide), so it is a board-wide instrument only.
+
+**Why zero trials, stated as the measurement rather than as inventory.** The front end of the
+pipeline has just been shown to over-reject by 1.4x-2.7x in the cells it is quoted in, so tonight
+**raises** the bar a new object must clear rather than lowering it, and the correction is
+one-sided — it can only remove an admission, never resurrect a declination, so the ~14
+anti-candidate objects stay declined and no re-audit is owed. With 2026-11-18's arithmetic
+unchanged (the seat needs +0.64 of skill at every DSR threshold against a board best of +0.124),
+there was no screened object in front of the session and nothing to spend a trial on.
+
+**For the human owner — one item, and it is additive to the standing one rather than a
+replacement.** The standing item (2026-11-16 → 11-18) is that the `challenge` track is closed by
+arithmetic and the two levers — `effective_n_trials`' clustering and the validation window — are
+both in frozen files. Tonight adds a *front-end* item that is cheaper to act on and is **not**
+in `engine/`: the lab's free screens are session-written, so the fix is a convention, not a code
+change. **Convention proposed, and it is now in `learnings.md` as a standing rule:** quote a
+forward-excess screen as a **sigma-multiple against its own cell's simulated null**, never as a
+`t`, and treat only cells with step >= horizon as needing no calibration. Nothing was acted on in
+`engine/`, `scripts/`, `program.md` or `data/`.
+
+**Ideas for next session.** (i) **The quota-matched null**, which is the one flagged assumption in
+F5: recalibrate F3's null with the peer/depth-quota selection in place rather than a plain
+top-100, and read M3's +2.21 sigma against it. One block, no trial, and it either closes or
+sharpens the night's only consequence for a recorded object. (ii) **Re-read the record's declined
+objects in sigma units** — not to resurrect them (the correction is one-sided and cannot), but
+because the *ordering* of declined objects by sigma-multiple differs from their ordering by `t`
+whenever they sat in different cells, and the lab has never had a like-for-like ranking of its own
+rejections. (iii) **The paired-design threshold from F4 (~0.06 of skill) is a pre-registerable
+bar**, and it is the second bar in this file that can be stated before a trial (the first is
+2026-11-18's `bench ~= 2.22·sd(skills)`); the three carried-over items from 2026-11-17 remain
+untouched and still live. **Provenance from `research/SUMMARY.md`: one block spent as a build, and
+it is F1.** `#472`'s free measurement is the folder's own named request and F1 runs it to its
+stated acceptance criterion; the folder's 2026-11-18 transferable lesson ("the temporal
+specification dominates") is cited as the thing that **aimed** F2/F3, which is the first time a
+methodological note in that folder has pointed this lab at an error in its own instrument rather
+than at a candidate. `#460`/`#473` are cited for what F1's number closes. Every other figure
+tonight comes from this repo's own panel and records.
+
+**Verdicts:** none.

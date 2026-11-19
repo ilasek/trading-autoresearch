@@ -8465,3 +8465,145 @@ across experiments; prune entries that later evidence contradicts.
   threshold is only the binding constraint if the bar's *other* terms sit below the target; here the
   benchmark alone exceeds any attainable skill, so "relax the threshold" was never a fix and the
   record should stop implying it is one.
+
+- **[Measured 2026-11-19, nightly — ZERO trials spent; THE HEADLINE, AND IT IS THE FIRST NULL THIS
+  LAB'S PRE-TRIAL SCREEN HAS EVER HAD] THE FREE REGION-MATCHED FORWARD-EXCESS SCREEN — THE
+  INSTRUMENT THAT SELECTED OR DECLINED EVERY OBJECT IN THE RECORD — OVER-REJECTS BY 1.4x TO 2.7x
+  IN THE CELLS THE LAB QUOTES, AND AT h252 ON A MONTHLY GRID A TRUE NULL CLEARS |t| > 1.96 **57%**
+  OF THE TIME.** 60 AR(1) scores at M3's own measured monthly rank persistence (phi = 0.9803,
+  `pt_oldhalf_overlap6.py` F6), masked to M3's own scorable set, through the identical screen
+  (top-100, forward `h`-day return in excess of each name's region mean over the eligible set,
+  `t` on the per-date series), train 1997-2017:
+
+      horizon     grid    sd(t iid)   90% CI on sd   sd(t NW)   rej iid   rej NW
+         21    monthly      0.87      [0.75, 1.02]     0.87        5%       5%
+         63    monthly      1.44      [1.26, 1.71]     1.08       20%      12%
+        252    monthly      2.65      [2.31, 3.13]     1.24       57%      17%
+         63  quarterly      0.92      [0.80, 1.08]     0.92        7%       7%
+        252  quarterly      1.60      [1.40, 1.89]     1.23       35%      17%
+
+  **The two non-overlapping cells are correctly sized** (`sd(t)` 0.87/0.92, CIs covering 1.0,
+  rejection 5%/7%) — that is the harness check, it passes, and it localises the fault to the
+  overlap rather than to the screen. The cause is mechanical: with step < horizon consecutive
+  observations share their forward window, and the lab's slices also share their *names* — the
+  top-100 pick retains **90%** month-to-month, 80% at 3 months, 60% at 12. The per-date series'
+  autocorrelation implies **~24 effectively independent observations against a nominal 155** at
+  h252, and `sqrt(155/24) = 2.54` against the simulated `sd(t)` of **2.65**: two routes with no
+  shared step agreeing to 4%. **Newey-West at lag `ceil(h/step)-1` is a mitigation, not a repair**
+  (17% rejection at h252 on either grid; Bartlett at lag 11 on n=155 is itself biased).
+  **Measured on three unrelated scores the inflation is a property of the cell, not the score**
+  (h63 monthly 1.46/1.44/1.10; h252 monthly 2.19/2.33/1.53; h63 quarterly 0.99/0.99/0.99 — the
+  inert cell reading exactly 1.00 on all three), and it is **larger for more persistent scores**
+  because their slices overlap in names too. **Also: the record's own non-overlapping cross-check
+  never covered h252** — a 252-day horizon on a *quarterly* grid is still four-fold overlapping
+  (factor 1.32, lag 3), and the 2026-11-11/12 F6 table reads it as agreement. **Standing rule,
+  and it replaces every bare `t` this file quotes from a forward-excess screen: quote a screen as
+  a sigma-multiple against its own cell's simulated null, not as a `t`. The only cells needing no
+  calibration are those with step >= horizon.** The correction is **one-sided with respect to the
+  record**: every declined object was declined on a `t` that was already small, and dividing a
+  small `t` by 1.4-2.7 leaves it smaller — so **this can only remove an admission, never resurrect
+  a declination**, the ~14 anti-candidate objects stay declined, and no re-audit is owed.
+
+- **[Measured 2026-11-19, nightly — THE ONE CONSEQUENCE FOR A RECORDED OBJECT, AND IT IS A
+  RESCALING RATHER THAN A DEMOLITION] M3'S FOUR QUOTED SCREEN READINGS ARE NOT FOUR CORROBORATIONS
+  BUT ONE OBJECT MEASURED FOUR OVERLAPPING WAYS, AND IN SIGMA UNITS THEY RUN +0.8 TO +2.2 RATHER
+  THAN THE RECORD'S +2.1 TO +3.0 — WITH THE STRONGEST CELL BEING THE ONLY CORRECTLY-SIZED ONE.**
+  The 2026-11-11/12 F6 readings divided by their own cell's null `sd(t)` from the entry above:
+
+      cell                 record t (simple / log)   null sd(t)   sigma (simple / log)
+      h63   monthly           +2.36 / +2.29             1.44         +1.64 / +1.59
+      h252  monthly           +2.14 / +2.14             2.65         +0.81 / +0.81
+      h63   quarterly         +2.03 / +1.96             0.92         +2.21 / +2.13   <- the clean cell
+      h252  quarterly         +2.84 / +3.04             1.60         +1.78 / +1.90
+
+      corr(per-date h63 excess, per-date h252 excess) = +0.574 (n=155)
+
+  **Against M3:** the four cells are one reading (the two horizons' per-date series correlate
+  +0.574, the slices are 90% the same names), the median sigma-multiple is ~1.7, and the table's
+  *largest* number (h252 monthly, +299.9 bps at `t` +2.14) carries the *least* information of the
+  four. **For M3:** its best cell at **+2.21 sigma** is the one cell that needed no correction, so
+  the reading that survives is the one that was never inflated, and M3 is still the board's lead,
+  still the only object clearing the null gate, and its recorded validation skill **+0.124, 90% CI
+  [-0.11, +0.42], DSR 0.1635** is untouched — no recorded number, verdict, board position or gate
+  changes. **One flagged assumption:** the null is calibrated on a plain top-100 slice while the
+  record's statistic is peer/depth-quota selected; the quota changes which names are in the slice,
+  not the grid/horizon overlap that sets the null's width, so the rescaling should hold, but that
+  is an argument and a quota-matched null is the cheap follow-up.
+
+- **[Measured 2026-11-19, nightly — DISCHARGES RESEARCH `#472`, THE ONE MEASUREMENT THE FOLDER
+  SAYS IS "NOT THIS FOLDER'S TO RUN"] THIS PANEL'S CROSS-SECTIONAL DEPENDENCE IS ENORMOUS RAW AND
+  EXACTLY ZERO AFTER THE LAB'S OWN BENCHMARK SUBTRACTION, SO NO DEPENDENCE CORRECTION IS OWED TO
+  ANY ERROR BAR IN THIS REPO.** Pairwise-complete correlations of daily returns, eligible
+  stock-days, 1997-2017, 434k-436k usable pairs at a median overlap of ~2,000 days, with Pesaran's
+  CD and the design effect `1 + (N-1)·rho_bar` a cross-sectional mean of `N` names pays:
+
+      residual definition                                mean rho   mean |rho|      CD     design effect @ N=900
+      RAW daily returns                                   +0.2082     0.2114    +5823.4        188.1  (13.7x SE)
+      POOL-demeaned (vs the equal-weight eligible pool)   -0.0083     0.1303     -176.6          <1
+      REGION-demeaned (the region-matched convention)     -0.0008     0.0633      -12.2         0.33
+
+  Raw, a name-averaging statistic treated as independent would be wrong by **13.7x** in SE — that
+  is the market factor. Demeaned, the mean signed pairwise correlation is **-0.0008** and the
+  design effect is **0.33**, i.e. a naive within-date i.i.d. SE is **conservative**. The reason is
+  not luck and is worth carrying: **demeaning a cross-section forces its average residual to zero
+  on every date, so it imposes `rho_bar ~= -1/(N-1)`** — the lab has always measured excesses over
+  the benchmark it is graded against, and that act removes the strong-dependence term by
+  construction. What survives is weak dependence signed both ways (mean |rho| 0.063, sd 0.095)
+  that averages out. CD is still formally outside +-1.96 at -12.2, but CD is a *sum* over 434k
+  pairs and detects `rho_bar` of order 1e-4; the decision-relevant quantity is the design effect.
+  **So `#460`'s bracket collapses, `#473`'s "either correlation at zero suffices" is the operative
+  branch, and the whole dependence-robust-inference vein (`#454`-`#478`) is closed with a
+  measurement.** **And note which axis it closes:** the cross-sectional one, which is what the
+  folder asked about — while the *temporal* axis, which the folder's own 2026-11-18 lesson said
+  would be where the cost is, is where this lab's actual error was (entry above). **Anti-candidate
+  travelling with this entry: any cluster-robust, spatial or CD-corrected standard error for a
+  statistic already taken in excess of the pool or the region mean.**
+
+- **[Measured 2026-11-19, nightly — ANSWERS THE 2026-11-18 HANDOVER'S IDEA (i), AND IT IS THE
+  FIRST NUMBER ON AN INSTRUMENT THIS LAB HAS ASSERTED DOZENS OF TIMES] A PAIRED TRIAL BUYS A 3.8x
+  FINER RULER INSIDE A MECHANISM CLUSTER, AND EVERY ONE OF THE LAB'S OWN TEN PAIRED COMPARISONS IS
+  STILL UNRESOLVED AT |t| > 1.96.** Stored records and stored validation frames only, the
+  five-trial old-half lineage (`#12`, `#14`, `#15`, `#16`, `#17`), all ten pairs, paired SEs from
+  `metrics.sharpe_diff_se`:
+
+      within the M3 lineage (n=5)   sd(skill) 0.0395   rms(skill_se) 0.1521   ratio 0.067
+      whole v3 board (n=27)         sd(skill) 0.1233   rms(skill_se) 0.1391   ratio 0.785
+
+      median within-cluster:  rho +0.990   |d skill| 0.043   unpaired se 0.216   PAIRED se 0.0562  -> 3.8x
+      resolved |t| > 1.645:   1 of 10        |t| > 1.96:   0 of 10
+      board-wide (351 pairs): median rho +0.910, paired se 0.170 vs unpaired 0.196 -> 1.1x; 11% / 4%
+
+  **Both halves are the result.** The pairing is real and large — `sharpe_diff_se`'s `(1 - rho)`
+  term at rho 0.99 shrinks the bar from 0.216 to 0.056 — and **the construction effects the lab
+  aims it at are smaller than the ruler**: median |d skill| **0.043** against a paired SE of
+  0.056, so `#16` over `#12`, the comparison the overlap operator exists to make, reads **+1.17**,
+  and the largest of the ten is **-1.81**. Board-wide the pairing is worth only **1.1x** because
+  distinct objects do not correlate, which is why the board is 27-of-27 tier 1 while the paired
+  controls felt decisive. **Three standing consequences. (i)** Stop describing a paired validation
+  comparison as having settled anything at this effect size; quote its paired `t`. **(ii)** A
+  paired design needs a pre-registered effect **above ~0.06 of skill** to be worth the trial at
+  this cluster's rho, and no construction change in the record has produced one. **(iii)** The
+  `var(measured) vs mean var(se)` level test (2026-11-18) is **uninformative inside a cluster by
+  construction** — ratio 0.067 there against 0.785 board-wide — so it is a board-wide instrument
+  only.
+
+- **[Method, 2026-11-19 — THE SIBLING OF 2026-11-17's "PRICE A GATE IN THE UNITS CANDIDATES ARE
+  DESIGNED IN" AND 2026-11-18's "A GATE HAS A BAR AND A POWER CURVE"] A SCREEN HAS A NULL, AND A
+  LAB THAT HAS ONLY EVER COMPUTED ITS SCREEN'S POINT ESTIMATE DOES NOT KNOW ITS OWN FALSE-POSITIVE
+  RATE.** Two nights ago the lab priced its gate's bar in its own units; one night ago it computed
+  that gate's power curve. Both were about the *back* end. The front end — the free screen that
+  decides what gets built — had never had either, and it turned out to be mis-specified in a way
+  that is visible in one simulation costing one block: 57% rejection at a nominal 5% in its
+  most-quoted cell. **The general form: whenever a statistic is a mean over a grid whose step is
+  shorter than its own horizon, its null is wider than its formula says, and the only honest
+  width comes from simulating the null in that exact cell.** Three corollaries worth carrying.
+  **(a)** The harness check comes free and must be read first: run the same simulation in a cell
+  where the correction *must* be inert (step >= horizon) and confirm it is — here 0.99 on three
+  scores, which is what licenses reading the other cells. **(b)** The non-overlapping grid is the
+  honest instrument but it pays the phase lottery (2026-10-27/28, 2026-11-11/12) and throws away
+  two thirds of the dates; the resolution is not to pick a phase but to keep every date and take
+  the width from the null, which is the same "average over the region a knob can take" rule as
+  2026-10-28/29 applied to a *screen* rather than to a book. **(c)** Check the direction of a
+  newly-found bias against the record before re-auditing anything: a bias that inflates `t`
+  cannot rescue an object declined for a small `t`, so a one-sided correction costs one paragraph
+  and no re-measurement.
