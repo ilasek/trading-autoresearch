@@ -31520,7 +31520,10 @@ off the end as NaN rather than into validation; the date counts falling **166 / 
 the horizon is that check. Engine green (**92 passed in 40.69s**). Step 0 clean: `git branch -r
 --no-merged origin/main` **empty**, per-run branch `main-6vvd6y` exactly on `origin/main`'s
 `3c3e594` with no commits of its own, session moved to `main` before measuring. Store's last bar
-**2026-11-18**, one day back — not stale. **Tenth consecutive zero-trial session.**
+**2026-11-18**, one day back — not stale. **Standing rule from 2026-11-16 discharged:** with no
+trial recorded the set of 27 `null_pctile` values is byte-identical to the last three nights'
+(**mean 0.5070, var 0.1383, 5 of 27 at or above 0.90**), so there is nothing new to read there.
+**Tenth consecutive zero-trial session.**
 
 **Best finding, and it is the night's headline.** The lab's free, pre-trial, region-matched
 forward-excess screen — the instrument behind every object in the record and every entry on the
