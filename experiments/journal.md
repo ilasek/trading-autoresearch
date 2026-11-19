@@ -31612,3 +31612,5 @@ than at a candidate. `#460`/`#473` are cited for what F1's number closes. Every 
 tonight comes from this repo's own panel and records.
 
 **Verdicts:** none.
+
+## Research session — 2026-11-19 (learning agent): 3 notes added, see research/SUMMARY.md

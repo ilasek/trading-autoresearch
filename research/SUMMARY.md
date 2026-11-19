@@ -10138,6 +10138,163 @@ a measurement the lab has never made, not a new estimator.
 `notes/2026-11-18-the-unbalanced-panel-formula-and-when-not-to-use-it.md`;
 `notes/2026-11-18-inference-without-a-bandwidth-and-the-distortion-that-does-not-shrink.md`)
 
+### Reading a set of ONE'S OWN test statistics as evidence about the search that produced them — the exact null, the two restrictions that do not apply here, and the two literatures that both price the correction in clusters the lab does not have (cross-family, the gate's own statistic)
+
+Three sources, taking the primary aim [2026-11-18] nominated verbatim after it had been carried
+unconsumed for three sessions and had acquired a **second independent consumer** — the lab's own
+2026-11-16 nightly reading its 27 `null_pctile` values as a sample from `U(0,1)`, and its
+2026-11-18 nightly reading its 27 skills against their own error bars. The aim's three acceptance
+criteria were stated before any download: (i) a formal test whose data are a set of `p`-values,
+`t`-statistics or effect estimates from one investigator's own search, (ii) the set's distribution
+under a stated null, and whether the test reads **excess** or **deficient** dispersion, and
+(iii) **what dependence among the statistics does to it**. All three are discharged. **The vein
+closes in the NEGATIVE on both of the lab's own readings, and that is the night's finding: the
+instrument exists, it is well characterised, and this board is the wrong object to point it at —
+for three independent reasons, any one of which is sufficient.**
+
+**(a) The null set, exactly characterised.** Elliott, Kudrin & Wüthrich (Tier **A**,
+*Econometrica* 90(2), 887–906, `10.3982/ECTA18583`, **66** Crossref, checked 2026-11-19; read in
+full from arXiv:1906.06711, the **fourth** consecutive session arXiv has served) give the first
+general formal answer to "what shape does a set of honest `p`-values have?" — and the point of the
+paper is that the answer must hold for **every** distribution of true effects `Π`, because `Π` is
+never known. With power function `β(p,h) = Pr(T > cv(p) | h)`, the `p`-curve is
+`g(p) = ∫ ∂β(p,h)/∂p dΠ(h)`, and under a regularity condition plus the monotone-likelihood-ratio-type
+sufficient condition `f'_h(x)f(x) ≥ f'(x)f_h(x)`: the curve is **continuously differentiable and
+non-increasing** (Theorem 1, `#479`), verified for the similar one-sided t-test, the two-sided
+t-test and the Wald test. For t-tests specifically two stronger restrictions hold: the curve is
+**completely monotone** — `0 ≤ (−1)^k g^{(k)}` for all `k` — on `(0,½]` one-sided and `(0,1)`
+two-sided (Theorem 2), and the curve **and all its derivatives are bounded above**, with the clean
+explicit one-sided bound `g1(p) ≤ exp(cv1(p)²/2)` (Theorem 3, `#481`). Complete monotonicity can
+**fail** for `χ²` tests above two degrees of freedom, so it is t-test-specific. The implementable
+tests bin the `p`-values and test the implied moment inequalities with a Cox–Shi conditional
+chi-square statistic: **CS1** (monotonicity), **CSUB** (bounds), **CS2B** (both), **LCM**, a
+**Binomial** test on `[0.04,0.05]`, Fisher's test, and a density-discontinuity test at 0.05.
+
+**(b) The refusal that kills the lab's version, and it is about the NULL, not the data.** The same
+paper's own counterexample: Theorem 1 needs a **similar** test, `H0 = {0}`. For a **composite**
+one-sided null, `H0: h ≤ 0` against `H1: h > 0`, the sufficient condition holds for `h ≥ 0` and is
+**violated for `h < 0`**, so if `Π` puts enough weight on negative true effects the `p`-curve can
+be non-monotonic or outright **increasing with no p-hacking whatever** (illustrated with
+`Π = N(−2.5, 1)`). This lab's gate tests `skill ≤ 0` against `skill > 0` and the lab has
+**measured** real mass on negative skill — the v3 learnings record negative train skill in both
+subperiods for the residual-reversion lineage and −0.03 for the low-vol book. **So a monotonicity
+or hump-shape reading of this lab's own statistics is not licensed at all** (`#480`): had the
+2026-11-16 nightly found left-skew, that would not have been evidence of a gamed search. A second,
+independent invalidation applies to the same reading: **rounding destroys the restrictions.**
+Discrete `p`-values make the curve non-monotone and discontinuous absent any search, and the
+authors say it "invalidates the testable restrictions in Theorem 1"; they re-run everything on
+de-rounded data and **rejections turn into non-rejections in several disciplines**. The lab's
+`null_pctile` is recorded as integer percentiles *and* constructed by ranking against a finite set
+of random draws, so it is discrete by construction — the `U(0,1)` reading with its KS `p` 0.041
+inherits the problem, and the direction of the error depends on the grid (`#482`). **The free fix
+is this paper's own: add `U[−0.5, 0.5]·10^{−k}` noise at the reporting resolution and report both.**
+Also recorded: the restrictions are a null of "no p-hacking **and** no publication bias", so any
+rejection is a **joint** rejection and cannot say which (`#484`) — and this lab both searches and
+applies a recording rule (`FAMILY_LEAD`/`SCOUT`), so it is squarely in the joint case.
+
+**(c) The power, and the selection function this lab actually runs.** Elliott, Kudrin & Wüthrich's
+companion (Tier **A−**, *Review of Economics and Statistics*, `10.1162/rest.a.1688`, **1** Crossref
+at a December-2025 record date, checked 2026-11-19 — graded on venue, lineage and a public
+replication package, not on the count; read in full from arXiv:2205.07950) asks what power a test
+of (a)'s null has, and makes everything turn on the **selection function** `Pr = d(P1, P2, …)`
+applied to a set of candidate `p`-values the researcher does **not** freely choose. Two forms, two
+detectabilities. **Threshold** — `Pr = P1·1{P1≤α} + min{P1,P2,…}·1{P1>α}` — puts a discontinuity at
+`α`, violates the bounds, sometimes violates monotonicity, and is detectable. **Minimum** —
+`Pr = min{P1,P2,…}` — shifts the curve left while leaving it **non-increasing and continuous**, so
+monotonicity and discontinuity tests have **no power against it by construction, irrespective of
+the fraction of searchers**; only the bounds can be violated (`#485`). **This lab's seat decision is
+minimum-selection**: it does not stop when a candidate clears a bar and it has no single preferred
+candidate reported first. Combined with (b) this is belt and braces — the shape restriction is both
+invalid here and powerless here. The ordering among tests, from 5,000-draw simulations at nominal
+5% over covariate-selection, IV-selection and standard-error-selection designs: **CS2B highest
+overall**; **CS1 beats LCM** (whose statistic degenerates to zero in probability for strictly
+decreasing curves, giving non-monotonic power curves); discontinuity tests are a **complement**;
+and **the classical Binomial test — the original `p`-curve literature's — often has no or low
+power**, the authors' general diagnosis being that a test exploiting its restrictions only
+**locally** has power only against very specific searches. Under minimum selection CSUB and CS2B
+have nearly identical power, i.e. **all of CS2B's power there comes from the bounds** (`#486`).
+Power is **non-monotone in the true effect**: large effects push `p`-values toward zero where the
+bounds are hard to violate, and **no test has power at all** under minimum selection at their
+empirically calibrated effect distribution. More searchable specifications (`K`) means **more**
+power, holding the selection function fixed. And the conclusion the lab should quote: "failure to
+reject … does not really indicate the absence of p-hacking" (`#488`).
+
+**(d) The dispersion half, and it is a refusal rather than a correction.** Pustejovsky & Tipton
+(Tier **A−**, *Prevention Science*, `10.1007/s11121-021-01246-3`, **632** Crossref, checked
+2026-11-19; read in full from a university events server) carry the robust-variance-estimation
+(RVE) literature whose founding result is Hedges, Tipton & Johnson (2010, *Research Synthesis
+Methods*, `10.1002/jrsm.5`, **1,902** Crossref) — **recorded at second hand, not obtained.** The
+object is the lab's object: estimates `T_ij` with standard errors `s_ij`, modelled as
+`T_ij = x_ij β + u_ij + e_ij`, correlated within a cluster by an **unknown** amount. RVE "separates
+the choice of a set of weight matrices from the method of estimating standard errors, so that
+standard errors can be obtained without having to assume a known dependence structure": you supply
+a **working model** that need only approximate the dependence, and **even when it is misspecified**
+the coefficients are unbiased and their standard errors, tests and intervals are valid — a better
+working model buys **efficiency, not validity**. But the authors state the split in their own
+words: analysts choose between "RVE—which guards against model misspecification yet does **not**
+emphasize descriptions of heterogeneity—and multivariate meta-analysis—which can provide
+heterogeneity estimates but does **not** guard against misspecification", and under RVE the
+variance components are not "a parameter used for description or inference". **So
+dependence-robust inference on a set of estimates delivers the set's MEAN and declines to certify
+its SPREAD.** That is the direct answer to acceptance criterion (iii) on the dispersion side, and it
+lands on the 2026-11-18 nightly's headline: `sd(skill)` 0.1233 against `rms(skill_se)` 0.1391,
+ratio 0.785, implied `var(true skill)` **−0.0042** is an estimate of `τ²`, the one quantity the
+robust machinery does not answer for. **The finding survives as a description — the measured skills
+are no more spread out than their own error bars — and should NOT be quoted as a test that the 27
+objects have identical true skill** (`#489`). The four working models are worth having by name: **HE**
+(dependence from a shared lab, independent samples within), **CE** (same sample, with a constant
+sampling correlation `ρ`), **CHE** (both, with between-study `τ` and within-study `ω`; the authors'
+recommended default "when little information is available"), and their new **SCE**, which interacts
+covariates *and* the random effect with category indicators so that subgroup results can be
+**compared inside one model**. SCE exists for exactly this lab's reason: subgroup results computed
+on **overlapping samples are not independent** and so cannot be compared across subgroups — and
+every trial here is computed on the **same dates and the same panel**, which is total overlap. The
+correctly-shaped construction for a dependence-aware comparison of family leads is therefore one
+model over all trials, covariates and random effect interacted with **family** indicators, RVE
+standard errors on top, clustering on **mechanism** rather than family label (`#491`).
+
+**(e) What it costs, and the second literature in two sessions to price it in units the lab does
+not have.** RVE's validity rests on averaging residual products "across a **sufficiently large
+number of studies**", and these simulations go no lower than **30** primary studies, with
+confidence intervals holding near-nominal 95% coverage even under strong working-model
+misspecification at that size. The lab has **27** recorded trials and, by its own audit, **7–12
+independent bets**. Last session priced Driscoll–Kraay in required `T` (`#469`, `#475`–`#476`);
+this prices RVE in required `J`. **Two independent literatures now say the same thing: this board
+is too small to carry a dependence correction, whichever axis the dependence is on** (`#490`). The
+same arithmetic kills the `p`-curve route from the other end — the corpora in (a) and (c) run to
+**49,838** and **352,817** statistics against this board's **27**, and (c) warns that even real
+violations "may be small and can thus only be detected based on large samples of p-values", so the
+lab is three to four orders of magnitude short (`#486`). Note the one live lead: **Tipton (2015,
+*Psychological Methods*, `10.1037/met0000011`, 746 Crossref) is the small-sample correction to RVE
+and was not read** — it is the only reason to reopen `#490`.
+
+**(f) The favourable structural fact, which reframes the whole aim — and it is the most useful
+thing tonight produced.** The lab writes **every** trial to `experiments/trials.jsonl` and the
+protocol forbids rewriting that history. **There is no file drawer here.** The selection function
+applies to the **seat**, not to the **record**. The `p`-curve literature's object is inferring an
+unobserved search from a *selected* sample; this lab has the **whole** search, observed. So the
+right question about its board is not "was it gamed" but "what is the deflation benchmark built
+from it worth" — which is a different vein and one the folder already holds (the multiple-testing
+haircut, weak-identification, prior-odds and online-FWER notes). **Both nightly readings are better
+understood as descriptive statistics of a fully observed search than as tests of a selection
+hypothesis** (`#487`), and on that reading neither needs a `p`-value at all.
+
+**(g) The composed pre-trial rule, and it is free.** Pustejovsky & Tipton name their own method's
+risk — the extra working-model choices "expand[] the possibilities for analytic flexibility or
+'researcher degrees of freedom'—even **the meta-analytic equivalent of p-hacking**" — and prescribe
+the remedy: choose the working model "based upon a broad understanding of the data structure and
+data-generating process—**not by comparing how meta-regression results change (or do not) over
+different working models or assumptions**". Composed with (c)'s lesson that power is a property of
+the (test, selection function, effect distribution) triple: **state the selection function and the
+dependence working model BEFORE reading a set of your own statistics, and record both in the
+journal entry that reports the reading** (`#492`). Had that rule been in force, the 2026-11-16 and
+2026-11-18 readings would each have had to declare their dependence assumption up front, and both
+would have declared independence — which (e) says is the one assumption this board cannot support.
+
+(`notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`;
+`notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`;
+`notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`)
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -19308,6 +19465,195 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-11-18-inference-without-a-bandwidth-and-the-distortion-that-does-not-shrink.md`
 
 
+479. **THE EXACT NULL SHAPE OF A SET OF ONE'S OWN `p`-VALUES, and it holds for EVERY distribution
+    of true effects.** With power function `β(p,h) = Pr(T > cv(p) | h)` and true effects drawn from
+    an unknown `Π`, the density of the reported `p`-values is `g(p) = ∫ ∂β(p,h)/∂p dΠ(h)`. Under
+    regularity plus the monotone-likelihood-ratio-type condition `f'_h(x)f(x) ≥ f'(x)f_h(x)` on the
+    critical-value range, `g` is **continuously differentiable and non-increasing** — for any `Π`,
+    which is the whole point, since `Π` is never known and the prior literature's numerical examples
+    could not deliver size control. Verified for the similar one-sided t-test, the two-sided t-test
+    and the Wald test. This is the instrument the folder's aim asked for, and the first *general*
+    formal justification for the non-increasingness tests already in use. Tier A, overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`
+
+480. **REFUSAL, and it is the binding one: a COMPOSITE one-sided null breaks the restriction
+    itself, so no monotonicity reading of this lab's statistics is licensed.** The sufficient
+    condition in `#479` needs a **similar** test, `H0 = {0}`. For `H0: h ≤ 0` against `H1: h > 0`
+    the condition holds at `h ≥ 0` and is **violated at `h < 0`**; with enough weight on negative
+    true effects the `p`-curve can be non-monotonic or **increasing with no p-hacking at all**
+    (the authors' own example, `Π = N(−2.5,1)`). The lab's gate tests exactly `skill ≤ 0` against
+    `skill > 0`, and the lab has **measured** negative skill (negative train skill in both
+    subperiods for the residual-reversion lineage; −0.03 for the low-vol book). **So left-skew,
+    humps or any shape anomaly in the lab's board is not evidence about its search.** Three prior
+    sessions declined this aim on the grounds that applying a `p`-curve test to 27 statistics the
+    lab calls 7–12 independent bets would be a misuse; that judgement was right, and this is the
+    authority for it — for a reason stronger than the dependence they worried about. Tier A,
+    overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`
+
+481. **The two STRONGER restrictions that hold for t-tests, and the one of them worth keeping as a
+    free arithmetic yardstick.** Beyond non-increasingness, t-test `p`-curves are **completely
+    monotone** (`0 ≤ (−1)^k g^{(k)}` for all `k`) on `(0,½]` one-sided and `(0,1)` two-sided, and
+    the curve **and all its derivatives are bounded above**, with the clean explicit one-sided bound
+    `g1(p) ≤ exp(cv1(p)²/2)`. The bounds restrict the mass **near zero** as well as ruling out humps
+    at 0.01/0.05/0.10, which is what makes them the only restriction with power against pure
+    smallest-`p`-value selection (`#485`). Complete monotonicity can **fail** for `χ²` tests above
+    two degrees of freedom, so it is t-test-specific, not general. **Usable here only as an
+    order-of-magnitude check, not a test** — the bound is derived under `H0 = {0}` too, so `#480`
+    applies — but it costs one line: compare the empirical density of recorded `p`-values in a bin
+    to `exp(cv1(p)²/2)`. Tier A, overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`
+
+482. **ROUNDING invalidates the restrictions, and the lab's `null_pctile` is DISCRETE BY
+    CONSTRUCTION — with a free fix.** Mass points from rounded `p`-values make the curve
+    non-monotone and discontinuous absent any search, which "invalidates the testable restrictions";
+    the authors re-run their corpora on de-rounded data and **rejections become non-rejections in
+    several disciplines**. The lab's `null_pctile` is both reported as integer percentiles and
+    *constructed* by ranking against a finite set of random draws, so the 2026-11-16 nightly's
+    reading of 27 such values as `U(0,1)` (KS `p` 0.041) is a continuous-reference test applied on a
+    coarse grid: mis-sized, with the direction depending on the grid. **If the reading is kept,
+    de-round it the way this paper does — add `U[−0.5,0.5]·10^{−k}` noise at the reporting
+    resolution — and report both numbers.** Free, no holdout. Tier A, overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`
+
+483. **How dependence among the statistics is handled, and why the clean route is unaffordable
+    here.** Two devices, both stated explicitly: a **cluster-robust variance estimator of the
+    histogram proportions** feeding the Cox–Shi statistic (needs a cluster variable — the lab has
+    one in `distinct_mechanisms`), and **random subsamples with one statistic per cluster**, which
+    buys exactness under within-cluster correlation by spending the sample down to the cluster
+    count. On a corpus of **640** clusters the one-per-cluster route produced **no rejections**, and
+    the authors say it "suggest[s] that the tests may be underpowered in small samples". At the
+    lab's **7–12** clusters it is arithmetically hopeless. **The lab cannot buy exactness under
+    dependence at its board size** — a statement about the design, not the result. Tier A,
+    overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`
+
+484. **ANTI-CANDIDATE: any rejection would be a JOINT rejection and could not say which.** The
+    characterisation is of the curve under "no p-hacking **and** no publication bias", so these are
+    joint tests. This lab both searches *and* applies a recording rule (the `FAMILY_LEAD`/`SCOUT`
+    verdict structure), so it is squarely in the joint case and has no way to separate the two. Do
+    not design a diagnostic whose rejection the lab could not interpret. Tier A, overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`
+
+485. **REFUSAL, independent of `#480` and equally sufficient: this lab's seat decision is
+    MINIMUM-selection, against which the shape tests have ZERO power by construction.** Everything
+    turns on the selection function `Pr = d(P1,P2,…)` applied to candidates the searcher does not
+    freely choose. **Threshold** — `Pr = P1·1{P1≤α} + min{P1,P2,…}·1{P1>α}` — creates a
+    discontinuity at `α`, violates the bounds, sometimes violates monotonicity, and is detectable.
+    **Minimum** — `Pr = min{P1,P2,…}` — shifts the curve left while leaving it **non-increasing and
+    continuous**, so monotonicity and discontinuity tests have **no power irrespective of the
+    fraction of searchers**. The lab does not stop when a candidate clears a bar and has no single
+    preferred candidate reported first: it is minimum-selection. **With `#480` this is belt and
+    braces — the restriction is both invalid here and powerless here.** Tier A−, overlap `false`.
+    → `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`
+
+486. **The test ordering, and the ARITHMETIC that closes the route from the other end.** From
+    5,000-draw simulations at nominal 5%: **CS2B** (monotonicity **and** bounds) has the highest
+    power overall; **CS1 beats LCM**, whose statistic degenerates to zero in probability for
+    strictly decreasing curves and so has non-monotonic power curves; **discontinuity tests are a
+    complement**; and **the classical Binomial test on `[0.04,0.05]` — the original `p`-curve
+    literature's — often has no or low power**, the general diagnosis being that a test exploiting
+    its restrictions only **locally** has power only against very specific searches. Under minimum
+    selection CSUB and CS2B have near-identical power, i.e. **all of CS2B's power there comes from
+    the bounds**. Power is **non-monotone in the true effect** — large effects push `p` toward zero
+    where bounds are hard to violate, and **no test has power at all** at the authors' calibrated
+    effect distribution — while more searchable specifications means **more** power. **And the
+    killer: real violations "may be small and can thus only be detected based on large samples of
+    p-values."** The corpora here run to **49,838** and **352,817** statistics; this board holds
+    **27**. Three to four orders of magnitude short. Tier A−, overlap `false`.
+    → `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`
+
+487. **THE REFRAME, and the most useful thing in this vein: there is NO FILE DRAWER here, so the
+    `p`-curve literature does not describe this lab's problem at all.** Every trial is written to
+    `experiments/trials.jsonl` and the protocol forbids rewriting that history. The selection
+    function applies to the **seat**, not the **record**. The `p`-curve literature's object is
+    inferring an *unobserved* search from a *selected* sample; this lab has the **whole search,
+    observed**. So the right question about the board is not "was it gamed" but "what is the
+    deflation benchmark built from it worth" — a different vein the folder already holds. **Both
+    nightly readings are better understood as descriptive statistics of a fully observed search
+    than as tests of a selection hypothesis**, and on that reading neither needs a `p`-value.
+    Tier A−, overlap `false`.
+    → `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`,
+    `notes/2026-08-24-multiple-testing-haircut.md`,
+    `notes/2026-11-01-weak-identification-of-t-stat-hurdles.md`
+
+488. **The one line to quote whenever a diagnostic fails to fire: "failure to reject … does not
+    really indicate the absence of p-hacking."** Power is a property of the (test, selection
+    function, effect distribution) **triple**, not of a test. The portable discipline: **state the
+    selection function before reading a set of statistics.** Applied here, the board's
+    `rho = +0.0888` cross-trial active-return correlation puts the lab in the "fast" regime (nearly
+    independent candidates), where a search moves the reported number a lot per candidate tried and,
+    under minimum selection, is **least** detectable from the statistics. **The remedy is
+    pre-registering the candidate count, not a post-hoc diagnostic** — which is where the folder's
+    online-FWER vein already points, and this is the authority for preferring it. Tier A−,
+    overlap `false`.
+    → `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`
+
+489. **REFUSAL on the dispersion half: dependence-robust inference on a set of estimates delivers
+    the set's MEAN and declines to certify its SPREAD.** Robust variance estimation "separates the
+    choice of a set of weight matrices from the method of estimating standard errors, so that
+    standard errors can be obtained without having to assume a known dependence structure" — and
+    **even under a misspecified working model** the coefficients are unbiased and their standard
+    errors, tests and intervals valid; a better working model buys **efficiency, not validity**. But
+    its authors state the split: analysts choose between "RVE—which guards against model
+    misspecification yet does **not** emphasize descriptions of heterogeneity—and multivariate
+    meta-analysis—which can provide heterogeneity estimates but does **not** guard against
+    misspecification", and under RVE the variance components are not "a parameter used for
+    description or inference". The 2026-11-18 nightly's `sd(skill)` 0.1233 vs `rms(skill_se)` 0.1391,
+    ratio 0.785, implied `var(true skill)` **−0.0042** is an estimate of `τ²` — the one quantity the
+    robust machinery does not answer for. **Keep it as a description (the measured skills are no
+    more spread out than their own error bars); do NOT quote it as a test that the 27 objects have
+    identical true skill.** Tier A−, overlap `false`.
+    → `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`
+
+490. **The cost is the NUMBER OF CLUSTERS, and this is the second literature in two sessions to
+    price a dependence correction in units the lab does not have.** RVE is valid because it
+    **averages** residual products, "which will be accurate if calculated across a sufficiently
+    large number of studies"; the simulations go no lower than **30** primary studies (where
+    intervals hold near-nominal 95% coverage even under strong working-model misspecification). The
+    lab has **27** trials and **7–12 independent bets**. Last session priced Driscoll–Kraay in
+    required `T` (`#469`, `#475`–`#476`); this prices RVE in required `J`. **Two independent
+    literatures now agree: this board is too small to carry a dependence correction, whichever axis
+    the dependence is on.** One live lead and only one: **Tipton (2015, *Psychological Methods*,
+    `10.1037/met0000011`, 746 Crossref) is the small-sample correction and was not read.**
+    Tier A−, overlap `false`.
+    → `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`
+
+491. **The CORRECTLY-SHAPED construction for comparing family leads under dependence — written down
+    precisely BECAUSE the lab cannot presently afford it.** Four working models: **HE** (shared lab,
+    independent samples within), **CE** (same sample, constant sampling correlation `ρ`), **CHE**
+    (both, with between-study `τ` and within-study `ω`; the recommended default "when little
+    information is available"), and **SCE**, which interacts covariates *and* the random effect with
+    category indicators so subgroup results can be **compared inside one model**. SCE exists for
+    this lab's exact reason: subgroup results on **overlapping samples are not independent** and so
+    cannot be compared across subgroups — and every trial here runs on the **same dates and the
+    same panel**, which is total overlap, i.e. the CE/SCE structure, not the hierarchical one. The
+    construction: one model over all trials, covariates and random effect interacted with **family**
+    indicators, RVE standard errors on top, clustering on **mechanism** rather than family label.
+    Blocked by `#490`; recorded so a later session does not reinvent it at the same cluster count.
+    **Pitfall: the constant-`ρ` assumption is the soft spot** — sensitivity appears above `ρ ≈ 0.8`,
+    and the board's `+0.0888` is an *average* whose within-mechanism components are far higher, so
+    rely on the RVE layer, not the working model. Tier A−, overlap `false`.
+    → `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`
+
+492. **THE COMPOSED PRE-TRIAL RULE for reading a set of one's own statistics, free and in order.**
+    The RVE authors name their own method's risk — extra working-model choices "expand[] the
+    possibilities for analytic flexibility or 'researcher degrees of freedom'—even **the
+    meta-analytic equivalent of p-hacking**" — and prescribe the remedy: choose the working model
+    "based upon a broad understanding of the data structure and data-generating process—**not by
+    comparing how meta-regression results change (or do not) over different working models or
+    assumptions**". Composed with `#488`: **(i) state the selection function and (ii) the dependence
+    working model BEFORE reading a set of your own statistics, and (iii) record both in the journal
+    entry that reports the reading.** Then (iv) if the reading rests on a shape restriction, check
+    `#480` (is the null similar?) and `#482` (is the statistic discrete?) — both fail on this board.
+    And (v) if it rests on a dispersion statistic, check `#489` (spread is not certified) and `#490`
+    (cluster count). Had this been in force, the 2026-11-16 and 2026-11-18 readings would each have
+    declared independence up front — the one assumption `#490` says this board cannot support.
+    Tier A/A− composite, overlap `false`.
+    → `notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`,
+    `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`,
+    `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -19416,8 +19762,208 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-16 (session 94) | **TOOK THE PRIMARY AIM VERBATIM, GOT THE NAMED PRIMARY ON THE FIRST REQUEST, AND THE ADVERSARIAL BUDGET PAID FOR ITSELF BY TELLING THE LAB NOT TO USE THE PROCEDURE THE AIM WAS ABOUT.** Aim from the [2026-11-15] entry: **the hybrid design** — admit a source only if it (i) gives a RULE for which covariates enter when a variable may sit on both sides, (ii) states what inference is valid AFTER that selection with its condition, and (iii) says what the rule costs when the selection is wrong, in both directions; not another propensity-score simulation, not a general sparse-regression paper whose object is prediction, not another matching paper; **at most three requests**. **The mandated pre-download grep ran first and the gap was total on the target vocabulary** across 294 prior notes: `double selection`, `double-selection`, `post-double`, `immunized`, `orthogonal score`, `Neyman orthogonality`, `debiased machine learning`, `union of selected`, `Belloni` all **0**; `Chernozhukov` **1**, `lasso` **13**, `post-selection` **17** — and the **hits were opened** per the standing rule: the one `Chernozhukov` hit is a conformal-prediction note's author line, the thirteen `lasso` hits are selection-for-*prediction* (illusion of sparsity, knockoffs, stability selection, SIS), and the seventeen `post-selection` hits are the 2026-09-15 inference-on-winners vein, i.e. selection of a *maximum*, a different selection event. **No note carried a rule for a conditioning set with valid inference after it.** **The nightly-variable detector also ran** — the 2026-11-16 nightly measured something for the first time in two sessions, so the [2026-11-15] carry-forward was consumed rather than re-deferred — on that nightly's headline (reading the board's 27 `null_pctile` values as a *sample of p-values* and testing it for uniformity and over-dispersion) and returned **covered**: `2026-08-24-multiple-testing-haircut.md` already holds the empirical-p-value-distribution instrument and the 2026-10-28/30 online-multiple-testing vein holds the rest, so the primary aim stood. (The one genuine residual is nominated below, not taken.) **All three criteria met, two requests spent of three, all three sources read in full from arXiv on the first attempt — a channel with no failures tonight.** **(a) ADMITTED, and it meets all three criteria alone.** Belloni, Chernozhukov & Hansen 2014 (Tier **A**, *Review of Economic Studies* 81(2), 608–650, **1279** Crossref, checked 2026-11-16): **post-double selection** — lasso the treatment equation, lasso the reduced-form outcome equation, regress on the **union**, and ordinary robust OLS inference from that regression is **uniformly** valid under approximate sparsity in both equations, `s²log²(p∨n)/n → 0`, bounded sparse eigenvalues and independent rows; the **amelioration set** lets theory-motivated controls be forced in for free. **(b) ADMITTED as the generalisation.** Chernozhukov, Chetverikov, Demirer, Duflo, Hansen, Newey & Robins 2018 (Tier **A**, *The Econometrics Journal* 21(1), C1–C68, **3111** Crossref, checked 2026-11-16): **Neyman orthogonality** makes the bias a *product* of two nuisance errors (`o(N^{−1/4})` each in smooth problems), **cross-fitting** removes the overfitting bias that orthogonality cannot, and splitting relaxes the sparsity requirement from `s² ≪ n` to `s ≪ n`. **(c) ADMITTED as the adversarial third, and it is the night's real finding.** Wüthrich & Zhu 2023 (Tier **B** — top venue and a theorem, but modest citations (**29** Crossref, checked 2026-11-16) and its own result unreplicated; *Review of Economics and Statistics* 105(4), 982–997): a **non-asymptotic lower bound** on the OVB of (a)'s estimator that can exceed **twice** the asymptotic standard deviation *with sparse coefficients and `n` far above `p`*, a **three-regime** characterisation with a computable **beta-min** boundary, a stress test that runs by **raising** the penalty (+50%), an explicit refutation of lowering it, and the recommendation that at `p < n` one should **not select at all** but run full-control OLS with a many-controls-robust variance estimator. **Output: one rule (`#452`), one free audit (`#453`), one action item that is a refusal to use the vein's own machinery (`#454`), one mandatory calibration plus discipline (`#455`), one composition aimed at the nightly's own `N_eff` finding (`#456`), one carried tension (`#457`).** The deflationary conclusion is the useful one: the lab's control list is ~10 variables against **~251 month-ends counted as dates** (`#445`: not name-months), so `p ≪ n` and the right procedure is to **include every candidate control** rather than select — the cheapest discharge yet of `#447`'s third veto, and it dissolves `#451` instead of resolving it. (`notes/2026-11-16-post-double-selection-inference-after-control-selection.md`; `notes/2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md`; `notes/2026-11-16-omitted-variable-bias-of-lasso-based-inference.md`) |
 | 2026-11-17 (session 95) | **TOOK THE PRIMARY AIM VERBATIM — the aim that had been ranked second for three consecutive sessions and acquired a third consumer — AND THE ANSWER IS THAT THE NAMED INSTRUCTION IS ILLEGAL HERE AND THE LAB'S MAIN USE NEVER NEEDED IT.** Aim from the [2026-11-16] entry: **estimation of `Σ` at covariate width from a correlated cross-section** — admit a source only if it (i) gives an estimator of the covariance matrix or of a regression coefficient's variance **valid under cross-sectional dependence of unknown form**, (ii) states the **condition on the dependence** under which it is valid, and (iii) says **what it costs** relative to the i.i.d. estimator; not another shrinkage estimator whose object is a portfolio weight, not another high-dimensional two-sample test, not a general panel-econometrics textbook chapter; **at most three requests**, with a preference for the many-controls-robust variance literature `#454` cites "if one request can settle whether `#454`'s instruction is usable here at all". **It did, on the first request.** The mandated pre-download grep ran first across 297 prior notes and the gap held on the target vocabulary: `cluster-robust` **0**, `cluster robust` **0**, `two-way clustering` **0**, `Driscoll-Kraay` **0**, `Driscoll` **0**, `spatial correlation` **0**, `common factor standard errors` **0**, `Fama-MacBeth standard errors` **0**, `clustered standard` **0**; `cross-sectional dependence` **6**, `Newey` **14**, `Cattaneo` **3**, `Fama-MacBeth` **2**, `Newey-West` **2**, `many controls` **1** — and **the hits were opened** per the standing rule. All six `cross-sectional dependence` hits use the phrase to *motivate a resampling repair* (within-date permutation, block bootstrap over the time index, a K-fold objection), never to license a variance estimator; the `Cattaneo` hits are `#454`'s own recommendation, `#452`'s footnote repeating it, and an unrelated REStat portfolio-sorts paper; the `Newey` hits are author lines and HAR/Newey–West mentions in unrelated veins. **No note carried a rule for which dependence structure licenses which estimator** — exactly as the aim predicted. **The nightly-variable detector also ran**, on the 2026-11-17 nightly's headline (regressing `null_p50 − pool` on the replicas' cost bill over 27 trials, slope `+1.249 ± 0.149` against a mechanically predicted `+1.0`), and returned **NOT covered and converging on the primary aim**: that `±0.149` is an i.i.d. standard error on 27 rows the same session's own audit calls 7–12 independent bets, so the nightly supplied a **fourth** consumer of the aim's object on the night the aim was taken. Family-coverage rule satisfied vacuously — all eight `program.md` families now have notes (12–41 each). **The `learnings.md` check ran and found NO tension, which is itself informative**: every inference entry in that file is on the **time** axis — the paired stationary block bootstrap on stored daily series (explicitly chosen "so cross-candidate correlation is preserved"), the SE floor of a difference, the unestimable `eta(q)` — and the one closed-form screen there is already carried "as a *floor*, never as a significance test" because "it assumes i.i.d. bivariate normal returns and is liberal under fat tails and volatility clustering". So the lab's own practice had already reached tonight's discipline **along the axis it had looked at**, and `#460` is the same lesson on the **cross-sectional** axis, which no learning covers. Tonight reinforces that file rather than contradicting it. **All three criteria met by all three sources, all three read in full on the FIRST request — arXiv twice and a university course mirror once, no failed channels tonight.** **(a) ADMITTED, and it alone discharges the aim's stated preference.** Cattaneo, Jansson & Newey 2018 (Tier **A**, *JASA* 113(523), 1350–1361, **94** Crossref, checked 2026-11-17): Assumption 1 requires bounded group size (`max_i #Tᵢ = O(1)`) with independence across groups and the authors state it "**excludes clustered, spacial or time series dependence in the sample**" — so `#454`'s instruction **cannot be followed on this panel** (`#458`), a date being a group of ~1,000 non-independent-across-dates names; the free consolation is that `HC0`/`HC1`/`HC2`/`HC4` are **inconsistent** (not merely imprecise) once `K/n ↛ 0` while **`HC3` is asymptotically conservative** and needs no new code, with the paper's own `κ^HC = (M ⊙ M)⁻¹` estimator and its `max_i(1 − Mᵢᵢ) < 1/2` existence check fixing the many-covariates failure *inside* the same independence assumption (`#459`). **(b) ADMITTED as the price list.** Petersen 2009 (Tier **A**, *RFS* 22(1), 435–480, **9,873** Crossref, checked 2026-11-17): `1 + (m − 1) ρ_X ρ_ε` as the whole discrepancy, a **product** so either correlation at zero makes the i.i.d. estimator unbiased, inflated by **cluster size** — which for this lab is a date of ~1,000 names, giving **1.41× / 3.32× / 7.14× / 15.8×** at products of 0.001 / 0.01 / 0.05 / 0.25 (`#460`); the correction's own downward bias at few clusters (**27% at 5, 3% at 40, 1% at 100**), which puts the lab's 27-trial board in the regime where *neither* estimator works (`#461`); the mapping table and the compare-across-clusterings diagnostic the aim asked for by description (`#463`); and a retro-fit in which charging dependence on the nightly's headline moves `t` from `+1.67` to **0.85–1.11**, i.e. **strengthens** its mechanical identification (`#462`). **(c) ADMITTED as the adversarial third, and it paid for itself for the third session running by overturning the instrument the aim was about.** Abadie, Athey, Imbens & Wooldridge 2023 (Tier **A**, *QJE* 138(1), 1–35, **1,577** Crossref, checked 2026-11-17): clustering is set by **sampling and assignment**, not by outcome correlation; correlation neither implies nor is implied by the need to cluster; clustering when unnecessary is "unnecessarily conservative, possibly by a wide margin" (**22–26×** robust in their application against a design-correct **2.9×**) (`#466`); and **"the data are not informative about the need to adjust for clustering in the sampling process"** (`#464`), so no measurement settles it. Applied here it **vindicates the folder's existing repair**: for a claim about the panel the lab holds, the sampled cluster fraction is 1, there is no clustered sampling, and `#439`/`#445`'s within-date permutation **is** the correct finite-population instrument rather than a patch — while for a forecast claim the fraction is ~0 and (b)'s inflation applies in full (`#465`). **Output: one refusal that closes the folder's binding gap (`#458`), one free substitute (`#459`), one free screen with a table (`#460`), one anti-correction (`#461`), one retro-fit that is good news (`#462`), one mapping plus diagnostic (`#463`), one anti-candidate refusal (`#464`), one one-line rule that resolves the session's tension (`#465`), one anti-candidate with a borrowable construction (`#466`).** **Anti-lookahead.** No financial data in any source read for its results: (a) is theorems with a 1991 US wage illustration, (b) is algebra plus 5,000-replication Monte Carlo (its Compustat 1965–2003 illustrations were read for method only, and nothing from them is carried), (c) is theorems plus a 2000 US Census cross-section and simulations. Every magnitude carried is a **simulation bias or coverage ratio**, an **algebraic inflation factor**, a **citation count**, or the **lab's own train/validation-split numbers from `experiments/journal.md`**. All three `validation_overlap: false`; `published_post_2018: true` for (c) only. **Citation counts**: 94, 9873, 1577 — all Crossref `is-referenced-by-count`, which answered first try for all four DOIs looked up (the fourth, Driscoll–Kraay 1998, **6,225**, resolved for metadata only; see channels). **Channels**: `arxiv.org/pdf/<id>` served (a) and (c) complete and clean for the second consecutive session — 35 and 79 pages, 89 KB and 286 KB of text, 369 and 947 `" the "`, zero `( )` dropout, no ASCII shift. **Driscoll–Kraay 1998 (REStat 80(4), 549–560, `10.1162/003465398557825`) is the one source wanted and not obtained**: it is the literal answer to criterion (i) — "robust to very general forms of spatial and temporal dependence as the time dimension becomes large", with its cost in **required panel length** — but MIT Press is paywalled and a single search surfaced no author-hosted or repository copy, only a Stata Journal implementation (Hoechle, free at `ageconsearch.umn.edu`). It was **not pursued past one search** because the budget was three requests and (b) already supplied the mapping; it is nominated below rather than recorded as dark. Also noted without a request spent: `u.osu.edu/<faculty>/files/<year>/<month>/<file>.pdf` — a **course-mirror** path on a university WordPress multisite — served the complete typeset RFS article (537 KB → 173 KB of text, 1,457 `" the "`), which extends this file's flat-directory lesson from author and department sites to **instructors' course pages**. (`notes/2026-11-17-many-covariates-variance-estimation-and-its-independence-assumption.md`; `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`; `notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`) |
 | 2026-11-18 (session 96) | **TOOK THE PRIMARY AIM VERBATIM FOR THE SECOND CONSECUTIVE SESSION, GOT THE ONE SOURCE LAST NIGHT WANTED AND COULD NOT OBTAIN, AND THE ADVERSARIAL THIRD SHOWED THE AIM WAS POINTED AT THE WRONG AXIS.** Aim from the [2026-11-17] entry: an estimator valid under cross-sectional dependence of unknown form requiring **no cluster variable, no spatial weights matrix and no assumed factor count**, stating the condition under which it is valid and giving its cost as a required `T`; Driscoll–Kraay (1998) named as the literal answer and recorded unobtained; **at most three requests**. **All three criteria met, and the aim's own named source obtained in full.** The mandated pre-download grep ran across **300** prior notes and the gap held exactly as predicted: `Driscoll` **0**, `Driscoll-Kraay` **0**, `spatial correlation` **0**, `spatial weights` **0**, `spatial` **0**, `Vogelsang` **0**, `fixed-b` **0**, `large-T` **0**; non-zero on `HAC` **15**, `panel` **193**, `cluster` **111**, `serial correlation` **10**, `bandwidth` **7**, `Newey-West` **2**, `long-run variance` **2** — and **the hits were opened** per the standing rule. Thirteen of the fifteen `HAC` hits are *p*-**hacking** false positives; the two genuine ones (`2026-08-24-testing-differences-of-sharpe-ratios.md`, `2026-10-27-modified-rescaled-range-and-the-long-memory-null.md`) and both `Newey-West` hits are on the **time** axis — Bartlett long-run variance for overlapping returns, lag-equal-to-horizon corrections. **No note carried an estimator robust to cross-sectional dependence needing no grouping variable**, so the downloads were authorised. **The `learnings.md` check found no tension and reinforces [2026-11-17]'s reading**: every inference entry there is on the time or cross-trial axis (paired stationary block bootstrap on stored daily series, the SE floor of a difference, the cross-trial `rho` of **+0.0888**), none on the cross-name-within-date axis. **The nightly-variable detector returned `converging`, but on the SECOND-ranked aim rather than the primary** — a third outcome-pairing the rule had not seen. The 2026-11-18 nightly's second finding reads the dispersion of its own 27 measured skills against their noise floor (`sd(skill)` **0.1233** vs `rms(skill_se)` **0.1391**, ratio 0.785, implied `var(true skill)` **−0.0042**, `p` 0.740 independent / 0.647 at the board's own pairwise `rho`) — i.e. an **under**-dispersion diagnostic, which is the mirror of the `p`-curve/over-dispersion object ranked second since [2026-11-16] and still at `p-curve` **0**. The primary aim stands as taken; the second-ranked aim gains its **second** consumer and is re-nominated below. Family-coverage rule satisfied vacuously — all eight `program.md` families carry notes. **(a) ADMITTED as the primary, and it discharges the aim on all three criteria.** Driscoll & Kraay 1998 (Tier **A**, *Review of Economics and Statistics* 80(4), 549–560, **6,237** Crossref / **6,941** Semantic Scholar, checked 2026-11-18): **collapse the cross-section before estimating any variance** — sum the per-name moment conditions `h_it = x_it ε̂_it` within each date, Newey–West the resulting univariate `{h_t}` with `w(j,m) = 1 − j/(m(T)+1)` and `m(T) = O(T^{1/3})`, sandwich with `(X'X)⁻¹` (`#467`); an **asymmetric** mixing condition that requires decay in the **time** direction only, because "unlike in the time dimension, in most cases there is no natural ordering in the cross-sectional dimension", admitting arbitrary contemporaneous cross-sectional correlation and any `N` including `N → ∞`, with a **factor structure** proved sufficient and therefore checkable (`#468`); the cost as the authors' own floor **`T = 20`–25 minimum**, at which coverage runs **.818–.903** against time dummies' ≤ **.694** and SUR's ≤ **.679** (`#469`); and a **refusal** from their conclusion — for a single cross-section "it is not possible to construct the pure cross-sectional analogs of time-series HAC estimators", so a per-date regression has no nonparametric repair (`#470`). **(b) ADMITTED as the construction half, exactly as the aim instructed, and graded honestly.** Hoechle 2007 (Tier **B** — *The Stata Journal* 7(3), 281–312, a software venue with its own unreplicated Monte Carlo, but **2,773** Crossref, checked 2026-11-18): the **unbalanced-panel adjustment is one symbol**, `h_t = Σ_{i=1..N(t)} h_it`, which is this panel's exact case under point-in-time eligibility (`#471`); the operational bandwidth `m(T) = floor[4(T/100)^{2/9}]`, giving **7** lags at the lab's 1,562 daily dates, **4** at ~251 month-ends, **3** at 72; **Pesaran's CD test** as the pre-test, valid with `N` and `T` diverging in any order, the only one adequate for unbalanced panels, and returning free the **average absolute off-diagonal residual correlation** — the one unmeasured input to `#460`'s table (`#472`); an **independent corroboration of `#460`'s product on the cross-sectional axis** (raising the *regressor's* dependence at fixed residual dependence worsens the understatement), plus the finding that **fixed effects lower coverage relative to pooled OLS even when the true model has them** (`#473`); and — against its own advocacy — that with **no** cross-sectional dependence Driscoll–Kraay is *worse* calibrated than clustered standard errors, making the recommendation a conditional (`#474`). Its simulation runs at **`N = 1,000`, `T = 40`**, i.e. this panel's width. **(c) ADMITTED as the adversarial third, and it paid for itself for the fourth session running by overturning the instrument the aim was about.** Hidalgo & Schafgans 2021 (Tier **B** — *Journal of Econometrics* 223(1), 125–160, top venue and a genuine theorem but **2** Crossref / **5** Semantic Scholar, checked 2026-11-18, own results unreplicated): Driscoll–Kraay's asymptotic `t` is oversized at **every** simulated `(n,T)` — at `n = 100`, nominal 5%, **.249/.185/.132/.108/.088** for `T = 16/32/64/128/256` at AR(1) `ρ = 0.7` and **.414/.350/.249/.181/.132** at `ρ = 0.9`, with weak-versus-strong *spatial* dependence barely moving it (.249/.261 and .414/.400 at `T = 16`), so the **temporal** axis dominates (`#475`); fixed-`b` critical values — the fallback [2026-11-17] nominated — help substantially and partially (.414 → **.255**; .132 → **.096**); and **the decisive table**, under heterogeneous AR/MA coefficients with an AR(1) plug-in against a **Mixed AR(3)** truth, where size at `T = 64/128/256` is **.147/.146/.137** asymptotic, **.135/.137/.132** fixed-`b` and **.120/.122/.127** moving-block — **all flat in `T`** — against a bandwidth-free cluster estimator's converging **.064/.057/.053**, so **quadrupling the panel length buys nothing** and the binding constraint is the bandwidth, not the length (`#476`). Their replacement, a **frequency-domain cluster estimator** summing over names within each Fourier frequency, is implementable here at `O(nT log T)` via `numpy.fft` (its exact time-domain analogue is an `O(n²T)` all-pairs-all-lags sum and must not be attempted at `n ≈ 1,000`) but **precludes conditional heteroskedasticity** in its base form, covering cross-sectional-only heteroskedasticity free and per-name GARCH not at all; its power column is sobering (**.348–.453** against a true slope of 0.1 at `n = 100, T = 256` under strong spatial dependence) (`#477`). **Output: one instrument (`#467`), one assertion list with a checkable sufficient condition (`#468`), one cost schedule (`#469`), one refusal that rules out a class of moves (`#470`), one one-symbol adaptation to this panel (`#471`), one free measurement that may dissolve the whole vein (`#472`), one independent corroboration (`#473`), one anti-candidate against unconditional adoption (`#474`), one discount to quote (`#475`), one refusal that breaks the vein's own cost schedule (`#476`), one nominated instrument with a hard scope limit (`#477`), one composed pre-trial rule (`#478`).** The deflationary conclusion is again the useful one, and it matches [2026-11-16]'s and [2026-11-17]'s: **the cheapest discharge of this vein is a measurement the lab has never made (`#472`), not a new estimator** — if the within-date residual correlation is near zero, `#460`'s bracket collapses and the existing error bars stand. **Anti-lookahead.** No financial data in any source read for its results: (a) is theorems plus Monte Carlo whose dependence matrix was calibrated from annual macro output-growth panels (20 US states 1963–1986; 24 OECD economies), (b) is Monte Carlo at 1,000 replications per setting with one monthly European-equity bid–ask illustration over roughly 2001–2005 read for method only, (c) is theorems plus simulations with **no empirical application and no financial data anywhere**. Every magnitude carried is a **simulation coverage or empirical-size rate**, a **bandwidth arithmetic**, a **citation count**, or the **lab's own validation-split and board numbers from `experiments/journal.md`**. All three `validation_overlap: false`; `published_post_2018: true` for (c) only. **Citation counts**: 6237, 2773, 2 — all Crossref `is-referenced-by-count`, cross-checked on Semantic Scholar by DOI for (a) **6941** and (c) **5**; Crossref answered first try for every DOI looked up, including Vogelsang 2012 (`10.1016/j.jeconom.2011.10.001`, **176**), resolved for metadata only. **Channels**: the **World Bank documents API** is the night's reusable find — `search.worldbank.org/api/v2/wds?format=json&qterm=<title>&fl=docna,pdfurl,txturl,docdt,repnb` returns the curated `pdfurl` **and a `txturl` text rendition** of a Policy Research Working Paper, and the text rendition parses in one `curl` with no PDF step at all (58 KB, 299 `" the "`); it was needed because the RePEc-listed legacy path `www-wds.worldbank.org/external/default/WDSContentServer/...` **redirects to the documents landing page with HTTP 200 and a 48 KB HTML body**, a fourteenth "looks like an answer" mode and the second redirect-to-chooser case after Research Affiliates. `ageconsearch.umn.edu/record/<id>/files/<file>.pdf` served (b) first try, confirming the channel [2026-11-17] nominated. `arxiv.org/pdf/<id>` served (c) complete and clean for the **third** consecutive session. **Vogelsang 2012 (*Journal of Econometrics* 166(2), 303–319, `10.1016/j.jeconom.2011.10.001`, **176** Crossref) is the one source wanted and not obtained** — the alternative primary [2026-11-17] nominated for its small-`T` fixed-`b` reference distribution; one search surfaced no author-hosted, departmental or repository copy, only a related MSU doctoral dissertation (`d.lib.msu.edu/etd/1681`) and a separate Kim–Sun working paper. It was **not pursued past one search** because (c) evaluates fixed-`b` directly and found it partial (`#475`), which answered the question the source was wanted for; it is nominated below rather than recorded as dark. (`notes/2026-11-18-covariance-estimation-without-specifying-cross-sectional-dependence.md`; `notes/2026-11-18-the-unbalanced-panel-formula-and-when-not-to-use-it.md`; `notes/2026-11-18-inference-without-a-bandwidth-and-the-distortion-that-does-not-shrink.md`) |
+| 2026-11-19 (session 97) | **Reading a set of one's OWN test statistics as evidence about the search that produced them** — the primary aim [2026-11-18] promoted after three sessions carried and a SECOND independent consumer appeared (the 2026-11-16 nightly's `null_pctile`-as-`U(0,1)` reading and the 2026-11-18 nightly's `sd(skill)`-vs-`rms(skill_se)` reading). All three acceptance criteria discharged; **the vein closes in the NEGATIVE on both readings** (`#479`-`#492`). (a) `#479`-`#481` the exact null shape, holding for EVERY distribution of true effects (non-increasing; and for t-tests completely monotone plus bounded, `g1(p) <= exp(cv1(p)^2/2)`). (b) **Three independent, individually sufficient refusals of the lab's own version**: `#480` a COMPOSITE one-sided null breaks the restriction itself (the authors' own counterexample gives an *increasing* curve with no p-hacking, and the lab has MEASURED negative skill), `#482` the lab's `null_pctile` is discrete by construction and rounding "invalidates the testable restrictions", `#485` the lab's seat decision is MINIMUM-selection, against which monotonicity and discontinuity tests have zero power irrespective of the searcher fraction. (c) `#486` the test ordering (CS2B best; CS1 > LCM, whose statistic degenerates; the classical Binomial test often powerless) **and the arithmetic that closes the route from the other end** - the corpora run to 49,838 and 352,817 statistics against this board's 27. (d) `#489` the dispersion half is a REFUSAL not a correction: dependence-robust inference delivers a set's MEAN and declines to certify its SPREAD, so the nightly's implied `var(true skill)` = -0.0042 survives as a description and not as a test. (e) `#490` **the second literature in two sessions to price a dependence correction in units the lab does not have** - RVE's simulations stop at 30 studies, the board has 27 trials / 7-12 bets, exactly as Driscoll-Kraay priced itself in required `T`. (f) `#487` **the reframe and the night's most useful output**: there is NO FILE DRAWER here - every trial is recorded and the protocol forbids rewriting it - so the selection function applies to the SEAT, not the RECORD, and the `p`-curve literature's object (inferring an unobserved search from a selected sample) does not describe this lab at all. (g) `#491` the correctly-shaped SCE construction for comparing family leads, written down precisely because `#490` blocks it; `#492` the composed pre-trial rule. **Channels**: `arxiv.org/pdf/<id>` served both Elliott-Kudrin-Wuthrich papers complete and clean for the **fourth** consecutive session; **`events.brown.edu/live/files/<id>`** - a university events server - served the typeset version of record of a closed Springer article, and is nominated as a channel (note the path carries no `.pdf` extension, so a filename-shaped search misses it); **a title-plus-author `api.crossref.org/works?query.bibliographic=` query is the right call when a paper's journal version is newer than its preprint**, which is how the REStat venue was resolved from a preprint naming only its editor. Two negative results: `core.ac.uk/download/` returned the **HTTP 403 / 5,393-byte Cloudflare challenge** this file recorded on 2026-10-01 (confirmed, do not retry), and `ipr.northwestern.edu` served a genuine 980 KB PDF by the right author on the right topic that is a **SLIDE DECK** - the twelfth "looks like an answer" mode a second time, **and tonight supplies a new cheap tell for it: the `" the "` count was ZERO**, so the whitespace word count this file prescribes as the Caesar-shift detector doubles as a slide-deck detector. **Hedges-Tipton-Johnson (2010, `10.1002/jrsm.5`, 1,902 Crossref) is therefore recorded as a named unobtained source**, described at second hand and graded B on that basis; **Tipton (2015, `10.1037/met0000011`, 746 Crossref) is the one live lead left in the vein.** (`notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`; `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`; `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-19] READ THIS BEFORE AIMING SESSION 98. The "read your own statistics" vein is now
+  CLOSED in the negative, on three independent and individually sufficient grounds, and must not be
+  re-aimed. And the composition problem this folder flagged last session is now the most important
+  thing in this file: SEVEN consecutive sessions on inference, ELEVEN consecutive zero-trial
+  nightlies, and nothing in `#479`–`#492` proposes a book either. Session 98 should be aimed at a
+  MECHANISM.** Tonight discharged the [2026-11-18] primary aim on all three acceptance criteria:
+  `#479` is the exact null shape holding for every distribution of true effects, `#481` the two
+  stronger t-test restrictions with a usable closed-form bound, `#483` the dependence devices and
+  what they cost, `#486` the test ordering and the sample-size arithmetic, `#489` the dispersion
+  half's refusal, `#490` the cluster-count price, `#491` the correctly-shaped-but-unaffordable
+  construction, `#492` the composed pre-trial rule. **Four things are now DONE and must not be
+  re-aimed**: whether a formal test of one's own statistic set exists (it does, `#479`), whether it
+  applies to this board (**it does not**, `#480`/`#482`/`#485`), whether it would have power here if
+  it did apply (**no**, `#486`), and whether the dispersion reading can be made dependence-robust
+  (**no — the robust machinery certifies the mean, not the spread**, `#489`).
+  - **The one transferable lesson, and it is a lesson about aiming rather than about inference.**
+    The aim was promoted because two of the lab's own nightlies had reached for the same instrument
+    from opposite directions — one finding **over**-dispersion in `null_pctile`, one finding
+    **under**-dispersion in skill. Both readings turn out to rest on an assumption the board cannot
+    support, and `#487` says why in one line: **there is no file drawer here.** Every trial is
+    recorded and the protocol forbids rewriting that history, so the selection function applies to
+    the **seat**, not the **record**, and the entire `p`-curve literature — whose object is
+    inferring an *unobserved* search from a *selected* sample — does not describe this lab's
+    problem. **Two-consumer convergence promoted an aim that was mis-specified at its root, and
+    neither consumer noticed, because both were reasoning about their own statistics without first
+    asking what process generated them.** The detector rule should be read with that in mind: it
+    finds whether the folder is converging on a quantity, not whether the quantity is the right one.
+  - **PRIMARY AIM FOR SESSION 98: A MECHANISM PREDICTING A CROSS-SECTIONAL FIRST MOMENT, LOW-TURNOVER,
+    ON DAILY OHLCV. This is not a new idea — it is the standing demand from 2026-11-12/13 that has
+    now had nothing in front of it for six sessions — and it is ranked first here for the first
+    time, deliberately, over any inference question.** The arithmetic that makes this urgent is the
+    2026-11-18 nightly's, restated: the `challenge` seat is reported unreachable at every DSR
+    threshold because the **deflation benchmark alone (+0.3087) exceeds the best skill ever measured
+    here (+0.124)**, and tonight's contribution — like the last six sessions' — makes the error bars
+    *wider* rather than finding a book. **The folder cannot fix the seat arithmetic by reading more
+    literature, and it has been trying.** What it can do is put a first-moment mechanism in front of
+    the strategy agent. **Acceptance criterion, stated before any download: admit a source only if
+    it (i) defines a signal computable from DAILY OHLCV ALONE on LARGE-CAP NATIONAL-INDEX MEMBERS —
+    no fundamentals, no intraday, no short interest, no options, and nothing whose own literature
+    localises the effect to small, thinly traded or retail-held names, which this panel excludes by
+    construction; (ii) makes a claim about the cross-sectional FIRST MOMENT and reports the
+    LONG-LEG-ONLY or top-portfolio level (in bps, or as an alpha/mean return for the long side
+    alone) rather than only a long-short spread — the lab's own v3 learning is that "a rank IC
+    cannot screen a claim that it is", and the required screen is "the slice's excess in BPS, its
+    BETA, and its TURNOVER together"; and (iii) states, or makes derivable, the SIGNAL'S PERSISTENCE
+    — rebalance cadence, holding period, rank autocorrelation or implied turnover — so the lab can
+    price the book against v3's cost model BEFORE writing the candidate.** Criterion (ii) is the
+    binding one and is why six sessions of inference literature could not satisfy this aim: a
+    long-short spread is not a long-only claim, and the folder already holds the long-only vein
+    (`#373`–`#380`) saying the short side is where much of a residual's premium lives.
+    **Explicitly NOT wanted**: another de-risking or low-volatility construction (**closed by
+    measurement** — the low-vol anomaly is absent on this panel, Sharpe is flat in beta, and
+    risk-reduction is not a source of skill here); residual reversion in any formation window
+    (**closed by measurement** — gross alpha is the same size as its own v3 cost bill, and the
+    premium is absent in names cheap to trade); a timing or cash-raising construction (v3 measures
+    Sharpe in excess of T-bills against a fully-invested pool, so a cash position forfeits the
+    equity premium the benchmark keeps earning); anything in `price-trend`, which is capped;
+    and any further inference, multiple-testing, standard-error, matching or dependence source —
+    **those veins are closed on all sides and the shelf is overstocked.** **Where to look**:
+    `liquidity-volume` and `range-variance` have the thinnest v3-relevant coverage and are the two
+    families the daily-OHLCV panel opened most directly; `lead-lag-spillover` is the family the
+    universe's nine indices and 42 ETFs suit best and whose country-index object (`#410`s) the lab
+    has never ranked. Prefer a source whose construction is slow — a signal measured over months and
+    held for months — because v3's cost model is "lethal only to books that trade" and the
+    **low-turnover corner is open and nearly free** (a 100-name book at 1.3× annual turnover pays
+    about 14 bps/yr), while the one construction that has actually paid here is the **no-trade
+    retention band**, which should be assumed on top of whatever signal arrives. **Spend at most
+    three requests**, and prefer one deeply-read Tier-A source with a stated long-leg level over
+    three surveys.
+  - **Ranked second, and carried unchanged: the PRIMARY SOURCE for Pesaran's CD test.** `#472` rests
+    on it and the folder holds it only at second hand through Hoechle's one-paragraph description —
+    enough to compute, not enough to grade. Wanted for (i) its null and exact statistic, (ii) the
+    `N, T → ∞`-in-any-order asymptotics and what they require, and (iii) the **weak-versus-strong**
+    cross-sectional-dependence distinction, which decides whether `#477`'s estimator or `#468`'s
+    mixing route is the right instrument for this panel. Crossref resolves two SSRN records
+    (`10.2139/ssrn.2050312`, `10.2139/ssrn.2032000`); try `econ.cam.ac.uk`-hosted CWPE and the
+    author's own page before any publisher. **Still ranked second, and now explicitly ranked BELOW a
+    mechanism**: the lab can run the test from what is in hand, so the measurement need not wait on
+    the source. **Take it only if the primary aim fails on two channels.**
+  - **The one thing the inference shelf still owes the lab is a MEASUREMENT, not a source, and it is
+    not this folder's to run** — unchanged from [2026-11-18]. `#472` is free, needs no holdout, and
+    its most likely outcome dissolves the dependence vein entirely: if the average absolute
+    off-diagonal **within-date residual** correlation is near zero, `#460`'s bracket collapses,
+    `#473` says either correlation at zero suffices, and the lab's existing error bars stand. Note
+    the object: the board's `rho = +0.0888` is **cross-trial active-return** correlation and is a
+    different quantity. **Tonight adds a second free measurement in the same spirit**: `#482`'s
+    de-rounding of `null_pctile`, which costs one line and would tell the 2026-11-16 reading whether
+    its KS `p` of 0.041 survives the grid its own statistic sits on.
+  - **The detector's standing rule, with tonight's amendment.** The rule ([2026-11-04], amended
+    [2026-11-05], extended [2026-11-06] through [2026-11-18]) ran in full: the pre-download grep
+    returned **0** on six patterns (`p-curve`, `over-dispersion`, `overdispersion`, `p-value
+    histogram`, `excess significance`, `funnel plot`, `Q statistic`) and non-zero on six
+    (`p-hacking` 10, `heterogeneity` 13, `I²` 7, `Cochran` 7, `caliper` 7, `publication bias` 8),
+    and **the hits were opened** — every `heterogeneity` hit was treatment-effect or within-bin
+    heterogeneity, every `caliper` and `Cochran` hit was the matching literature (caliper matching;
+    Cochran 1968 on subclassification, not Cochran's `Q`), and the `publication bias` and
+    `p-hacking` hits were the one note the aim itself named as adjacent and excluded. Detector
+    verdict: **open**, and correctly so. **Tonight's amendment, and it is the important one: the
+    detector verified the folder did not already hold the instrument, and that was the wrong
+    question.** The instrument was genuinely absent and genuinely inapplicable (`#487`). **So the
+    rule gains a step: before spending a session on an aim promoted by nightly convergence, state
+    in one sentence what PROCESS generated the statistics the aim wants to read, and check that the
+    literature's own object matches it.** Had that step run, the file-drawer mismatch would have
+    been visible before any download. Caveats still not run through the detector, unchanged in
+    order: *publication decay*, and *"the cost model is lethal only to books that trade"* — and the
+    second is now directly relevant to the session-98 aim, so run it there.
+  - **Pre-download grep for the session-98 aim, run tonight so the next session can compare**:
+    `bps per month` **0**, `top decile return` **0**, `expected return spread` **0**,
+    `autocorrelation of the signal` **0**, `signal persistence` **1**, `rank autocorrelation` **2**,
+    `first moment` **5**, `long-leg` **6**, `long leg` **18**, `holding period` **30**, `decile`
+    **59**, `turnover` **136**. The high counts on `turnover` and `decile` are expected and are
+    **not** evidence the aim is covered — the question is whether any note states a **long-leg-only
+    level in basis points together with that leg's turnover**, which `0` on `bps per month` and
+    `top decile return` suggests is exactly the gap. Open the `long-leg` and `first moment` hits
+    first; they are the nearest thing the folder has.
+  - **Carried unchanged and still live**: everything carried under [2026-11-18], with one amendment.
+    `#489` now **conditions the 2026-11-18 nightly's headline**: the under-dispersion finding stands
+    as a description and not as a test, so the claim "the board is consistent with 27 objects of
+    identical true skill" should be quoted with that qualification or not at all. Otherwise: `#472`
+    stays the free measurement the vein owes; `#445`'s within-date permutation stays the correct
+    finite-population instrument; `#454` stays **withdrawn as unfollowable** with `#459` as the
+    replacement to quote; `#447`'s three vetoes with its third conditioned by `#452`; `#442`'s
+    licence to use Hotelling's `T²` with the `y = p/n` table as its boundary; `#444`'s
+    sum-type/max-type pre-registration rule; `#406`'s volatility-tercile conditioning,
+    category-**neutral** per `#414`; `#413`'s and `#478`'s composed pre-trial rules, now joined by
+    `#492`'s; `#389`/`#381`/`#376` as the three free screens; and the refusals `#415`, `#421`,
+    `#423`, `#427`/`#429`/`#434`/`#435`/`#436`/`#438`, `#440`, `#449`, `#450`, `#454` (withdrawn),
+    `#458`, `#461`, `#464`, `#466`, `#470`, `#474`, `#476`, and tonight's `#480`, `#482`, `#484`,
+    `#485`, `#489` and `#490`. **The "read your own statistics" vein is now closed on all four
+    sides** — the null's shape (`#479`–`#482`), the power (`#485`–`#488`), the dispersion half
+    (`#489`) and the cost (`#490`). The dependence-robust-inference vein stays closed on all four
+    sides (`#458`–`#478`); the conditioning-set vein stays closed on all six (`#447`–`#457`); the
+    high-dimensional two-sample vein stays closed (`#442`–`#446`); the classifier-accuracy vein
+    stays closed (`#439`–`#441`); the matched-control vein stays closed on all five (`#427`–`#438`);
+    the nominal-price vein stays closed (`#420`–`#426`); the index-rule vein stays closed
+    (`#401`–`#419`); the detectability vein stays closed (`#393`–`#400`); the cash/pool boundary
+    stays closed (`#386`–`#392`); the long-only vein stays closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#479`–`#492` from tonight; `#467`–`#478` from 2026-11-18;
+    `#458`–`#466` from 2026-11-17; `#452`–`#457` from 2026-11-16; `#447`–`#451` from 2026-11-15;
+    `#442`–`#446` from 2026-11-14; `#439`–`#441` from 2026-11-13; `#436`–`#438` from 2026-11-12;
+    `#433`–`#435` from 2026-11-11; `#427`–`#432` from 2026-11-10; `#420`–`#426` from 2026-11-09;
+    `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06;
+    `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03;
+    `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31;
+    and everything carried under those.
+  - **Retired and recorded as retired**: the [2026-11-18] primary aim, discharged in full. **New
+    named unobtained pointers, neither to be re-hunted without a reason**: Hedges, Tipton & Johnson
+    (2010, *Research Synthesis Methods* 1(1), `10.1002/jrsm.5`, **1,902** Crossref) — two dark
+    channels recorded (`core.ac.uk` Cloudflare 403; `ipr.northwestern.edu` served a slide deck), and
+    it is described at second hand through Pustejovsky–Tipton, which carried the result the folder
+    needed; **Tipton (2015, *Psychological Methods*, `10.1037/met0000011`, 746 Crossref), the
+    small-sample correction to RVE, which is the ONE live lead left in the inference shelf and the
+    only reason to reopen `#490`**; Kudrin (2024b) on newer, more powerful `p`-hacking tests;
+    Beare–Moon (2015) on the LCM statistic's degeneracy; Cattaneo–Jansson–Ma's density-discontinuity
+    test; Cox–Shi (2020)'s moment-inequality inference. **Carried as permanently unobtained and not
+    to be re-ranked**: Cochran (1968); Myers et al. (2011, `10.1093/aje/kwr364`); Vogelsang (2012,
+    `10.1016/j.jeconom.2011.10.001`). **Three positive channel notes.** `arxiv.org/pdf/<id>` served
+    complete, clean text for the **fourth** consecutive session. **`events.brown.edu/live/files/<id>`
+    — a university events server — served the typeset version of record of a closed Springer
+    article**, and is nominated: a methods talk's hosted paper copy is often the publisher's own
+    file, and the path carries **no `.pdf` extension**, so a filename-shaped search misses it.
+    **A title-plus-author `api.crossref.org/works?query.bibliographic=` query is the right call when
+    a paper's journal version is NEWER than its preprint**, because the preprint names its editor
+    but not its journal — that is how the *Review of Economics and Statistics* venue and
+    `10.1162/rest.a.1688` were resolved. **One new tell for an existing failure mode**: the twelfth
+    "looks like an answer" mode (a valid PDF of the right title that is a slide deck) fired a second
+    time, and **a `" the "` count of ZERO is the cheap detector** — slide decks set text with
+    non-breaking or figure spaces, so the whitespace word count this file already prescribes as the
+    Caesar-shift detector doubles as a slide-deck detector. Still at **0** and still not nominated:
+    `transfer entropy` (thirtieth nomination).
+  - **Standing, and not this folder's call. The composition item is now escalated to the top of this
+    list.** **Seven consecutive sessions on inference, eleven consecutive zero-trial nightlies, and
+    the standing demand from 2026-11-12/13 — a mechanism predicting a cross-sectional first moment —
+    still has nothing in front of it.** The nightly declines objects by name from the anti-candidate
+    lists while this folder keeps adding to the inference shelf, and tonight's contribution, like
+    the last six, makes the error bars **wider** rather than finding a book. The session-98 aim
+    above is this folder's own correction, and it is the only lever it holds. **Separately and
+    unchanged**: the engine issues filed 2026-10-18 and 2026-10-22, `min_train_skill = 0.0`, the
+    note format's missing holdout-overlap flag, `#422`'s signed error in the volume-only liquidity
+    tier, `#432`'s two opposite-signed biases in the equal-weight pool, the still-unmeasured
+    pre-screen imbalance, the **zero-trial-rate question raised to the human owner on 2026-11-13**,
+    and the 2026-11-18 framing of the seat arithmetic — the `challenge` seat unreachable at every
+    DSR threshold on a six-year window, the bar at 4.34 standard errors, its power against a true
+    skill of +0.30 at 1.09% (14.4% at the most generous defensible effective-trial count) — whose
+    three named remedies (re-specifying `effective_n_trials`' clustering, separating detection from
+    seating, or accepting that the protocol's honest output is a ranked error-barred board) are
+    **none of them things this folder can supply by reading literature.** `#489` adds one
+    qualification to that framing and no new remedy. **The integrity check was CLEAN tonight in the
+    one respect that has failed for nineteen sessions and is unchanged in the other.** The container
+    was again on a per-run branch (`claude/tender-galileo-qb6g7z`) at `origin/main`'s commit, for the
+    **twentieth** consecutive session, and was reset to `main` before any work; the startup hook
+    reported the integrity check as OK and escalated nothing — note that the hook's own report
+    disagreed with `git status -sb`, which named the per-run branch, so **the hook's integrity line
+    should not be trusted as the branch check**. **Deleting `origin/main-a5dglb` is still a human's
+    call** and is still the only way that flag stops recurring; `git branch -r` lists **eighteen**
+    `main-*` remotes plus one `claude/*`, and `git branch -r --no-merged origin/main` is empty, so
+    nothing is stranded and the clutter is cosmetic — the same cosmetic clutter that has now made
+    the branch flag fire twenty times.
 
 - **[2026-11-18] READ THIS BEFORE AIMING SESSION 97. The dependence-robust-inference vein is now
   CLOSED on all four sides, and the honest state of it is that the lab should MEASURE its
