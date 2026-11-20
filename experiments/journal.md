@@ -31614,3 +31614,307 @@ tonight comes from this repo's own panel and records.
 **Verdicts:** none.
 
 ## Research session — 2026-11-19 (learning agent): 3 notes added, see research/SUMMARY.md
+## Free measurements — 2026-11-20 (nightly), ZERO trials spent
+
+Step 0 clean. `git fetch origin --prune`; `git branch -r --no-merged origin/main` **empty**; the
+per-run branch `main-2okc32` sat exactly on `origin/main`'s `1cdaac8` with no commits of its own
+(local `main` was 4 behind and was fast-forwarded before anything ran). Engine green (**92 passed
+in 47.64s**). Store's last bar **2026-11-19**, one day back — not stale; the T-bill series runs to
+the same date. **No holdout, forward or incubation file was opened**, and with no trial recorded
+there was no holdout gate to reach. Every block below ran on a frame truncated at **2017-12-31
+before anything else** (1990-01-02 → 2017-12-29, 1017 columns ever-eligible, 904 eligible on the
+last row), so forward windows run off the end as NaN rather than into validation, and every
+decision date whose forward window passed the boundary was **dropped**, not truncated
+(2026-11-19's fix). **Twelfth consecutive zero-trial session**, and the reason this time is a
+measurement rather than an empty inventory: two new objects were built, screened against a rule
+fixed in writing before the screen ran, and refused.
+
+### F1 — harness validation, and the depth census the record requires of a slow proposal
+
+The five-year-block table of 2026-10-26/27 reproduces in shape and sign from an independent
+implementation (rank correlation across names of the market-demeaned log return over `[-2h,-h]`
+against `[-h,0]`, train month-ends; the record's figures in parentheses):
+
+      h (months)      1          3          6         12         24         36         60
+      mean rank corr -0.0225    -0.0249    +0.0074   +0.0073    +0.0175    -0.0245    -0.1156
+                    (-0.0199)  (-0.0155)  (+0.0141) (+0.0107)  (+0.0131)  (-0.0136)  (-0.0892)
+      t              -2.23      -2.49      +0.71     +0.53      +1.36      -2.11      -8.29
+
+Every sign agrees and the structural fact is the same: **the five-year scale carries 4–9x any
+other horizon** and 12/24/36 months are noise. Point estimates differ by 10–30% (this
+implementation demeans log returns inside the eligible set; the record's construction is not
+stated in enough detail to match exactly), so this is a **qualitative** reproduction and is
+offered as a plumbing check, not as a replication. The h=60 `t` is still an upper bound for the
+reason the record gives — adjacent monthly dates share 59 of 60 months.
+
+**Depth, which is where tonight's two objects beat the board's lead outright.** Scorable eligible
+stocks, train:
+
+      year   eligible   dvs252   vchurn252   mom12-1   m3_oldhalf
+      1997        159      158         158       158            0
+      2001        249      245         245       245           34
+      2005        307      306         305       305          255
+      2009        740      740         740       740          471
+      2013        818      814         814       813          748
+      2017        904      902         902       902          849
+
+Both new objects are scorable on **99.8% of eligible names from the train start**, against
+`m3_oldhalf`'s **zero before 1999 and 255 of 307 in 2005**. The record's "largest single confound
+on this panel is price-history depth" (2026-10-26/27) therefore does not apply to either, which is
+the one dimension on which they were better placed than the lead before any return was read.
+
+### F2 — novelty, and both objects turn out to be an old object in costume
+
+Within-region (`calendar_peers`), name-weighted Spearman, 251 train month-ends:
+
+      score              logP    vol126   amihud126   mom12_1   m3_oldhalf   vchurn252
+      dvs252            -0.087   +0.100     +0.033     -0.645     -0.041       +0.031
+      vchurn252         -0.105   +0.076     +0.548     -0.021     -0.002          --
+
+`dvs252` (= `RS-/(RS- + RS+)` over 252 daily log returns) is **12−1 momentum at rho −0.645** —
+mechanically obvious once seen, since a name that rose over the year had its variance delivered by
+up-days. `vchurn252` (= mean `|d log V|` over 252 days) is **`amihud126` at rho +0.548**. Neither
+loading was anticipated when the objects were chosen; both were caught **before** a trial, at the
+cost of one block. Note what each object *did* clear: both are ratios, so the as-of-fetch
+back-adjustment factor cancels by construction (the 2026-10-18 / 2026-10-22 engine issues), and
+`dvs252`'s rho to `vol126` of **+0.100** is the first thing checked, because "low volatility in
+costume" is what closed the lottery/MAX object.
+
+### F3 — the screen, under a rule fixed in writing first
+
+**Pre-registered before the screen ran** (verbatim, scratchpad `PREREG.md`): pre-signed directions
+from published mechanism — `dvs252` **+1** (skew preference: negatively-skewed names are cheap),
+`vchurn252` **−1** (Miller disagreement: high activity instability → lower returns); controls = the
+mandatory joint pair (`logP`, `vol126`) **plus** `mom12_1` for `dvs252` and **plus** `amihud126`
+for `vchurn252`, each added because F2 showed a loading on a closed object; cells **("ME", h21)**
+and **("QE", h63)** only; both signs priced so the negation invariant can be read; a trial bought
+only on ≥ **+1.50 sigma in both cells** with the pre-signed sign, volratio ≤ 1.15 and turnover
+≤ 2.5x.
+
+Region-matched forward excess (each name against its own calendar-peer group's eligible mean),
+top-100, bps, with sigma against the cell's **measured** null from F4:
+
+      object / treatment              ME/h21  bps      t    sigma  |  QE/h63  bps      t    sigma
+      dvs252  raw                 +1          +4.1   +0.40   +0.32 |         +12.9   +0.44   +0.35
+      dvs252  ctrl logP,vol       +1          -2.0   -0.25   -0.20 |         -12.6   -0.58   -0.47
+      dvs252  ctrl logP,vol,mom   +1          +8.1   +1.35   +1.07 |          +6.9   +0.40   +0.32
+      dvs252  ctrl logP,vol,mom   -1          -4.7   -0.83   -0.66 |          +3.9   +0.22   +0.18
+      vchurn252 raw               -1         -15.2   -2.43   -2.34 |         -43.3   -2.17   -3.10
+      vchurn252 raw               +1          +3.9   +0.71   +0.68 |          +3.6   +0.21   +0.30
+      vchurn252 ctrl logP,vol     -1          -3.7   -0.61   -0.58 |         -14.0   -0.75   -1.07
+      vchurn252 ctrl logP,vol,A   -1          -4.6   -0.83   -0.80 |          -3.4   -0.20   -0.29
+
+**Both objects are refused, and for different reasons.**
+
+`dvs252` fails clause (a) outright. Its single positive cell (+1.07 sigma) **appears only once the
+momentum control is added** — raw it is +0.32/+0.35 and under the mandatory pair alone it is
+*negative* in both cells. That is the "the control creates a reading" shape the record already
+holds a precedent for (2026-11-12/13, `rank_stability` US +212 → +483), and the correct reading of
+a positive that exists in exactly one treatment of one cell is noise. The negation invariant is
+also not clean: in QE/h63 the signed reading (+0.32) and its placebo (+0.18) are both positive and
+of the same size, the dispersion-artifact signature.
+
+`vchurn252` fails differently and more interestingly: **the pre-signed direction is refuted with
+the wrong sign at the only two readings tonight that exceed their cell's noise ceiling**
+(−2.34 and −3.10 sigma). The low-churn slice *underperforms* its own region by 15 bps/21d and
+43 bps/63d. The opposite side is not a finding either — buying high churn reads +0.68/+0.30 — so
+the two sides are not mirror images, and flipping the sign because the number came out that way is
+what the v2 inverted-seasonal entry already refused. And the whole reading is the control term:
+**−2.34 → −0.58 and −3.10 → −1.07 under `logP`+`vol126` alone**, before `amihud126` is even added.
+Given F2's rho +0.548 to `amihud126`, this is the **fifth independent reproduction of the
+back-adjustment level contaminant**, now in a cell with its own measured null.
+
+### F4 — the screen's own null in this implementation, which is also where I made an error
+
+Information-free scores through the **identical** screen — iid reseeded each date, and AR(1) rank
+scores at the two objects' own measured monthly persistences (`dvs252` phi **0.8775**,
+`vchurn252` phi **0.9836**) — masked to the same scorable set, 12 draws per row:
+
+      cell      score           phi      mean sigma   sd(t)   max |sigma|   turn
+      ME/h21    iid            0.000       +0.22      1.09       2.19       8.56
+      ME/h21    AR1            0.878       +0.31      1.26       2.85       3.06
+      ME/h21    AR1            0.984       +0.26      1.04       2.25       1.18
+      QE/h63    iid            0.000       +0.04      1.30       3.00       2.87
+      QE/h63    AR1            0.878       +0.12      1.24       2.33       1.06
+      QE/h63    AR1            0.984       -0.25      0.70       1.20       0.45
+
+**Read conservatively, this CORROBORATES 2026-11-19 rather than correcting it.** Both cells have
+step ≥ horizon and all six `sd(t)` point estimates sit in **[0.70, 1.30]**; at 12 draws
+`sd(sd) ≈ sd/sqrt(22) ≈ 0.2`, so every row's interval covers 1.0 and none shows the 1.4x–2.7x
+inflation last night measured in the overlapping cells. What tonight **adds** is the persistence
+dimension last night's two inert cells did not cover: at **phi 0.984**, where the top-100 slice
+retains nearly all its names month to month, a step ≥ horizon cell is *still* correctly sized —
+so the name overlap on its own does not inflate the statistic, and last night's localisation of
+the fault to the **forward-window** overlap survives a test it had not been given. My point
+estimates do run above last night's 0.87/0.92, but by about one `sd(sd)` and on a different
+implementation, so that is not a correction and is not quoted as one.
+
+**The error, mine, found inside the session.** The F3 bar of "+1.50 sigma" was fixed in writing
+*before* F4 measured the cells — and the measured noise ceiling of those same cells is
+**|sigma| 1.20 to 3.00 over only 12 draws**. So a `+1.50 sigma` pass would have been *inside* the
+null envelope and would have bought a trial on nothing. No conclusion turns on it (neither object
+came near the bar in both cells), but it is recorded because a suppressed one is worse than a
+disclosed one, and the general form is the fourth instance of one rule in this file: **calibrate
+the harness before setting the bar, not after.**
+
+### F5 — the lab's own objects in the same two calibrated cells, which is the night's headline
+
+This answers the 2026-11-19 handover's **idea (ii)** — "re-read the record's declined objects in
+sigma units ... the lab has never had a like-for-like ranking of its own rejections" — by
+measurement in one harness rather than by mining `t`s out of prose written in six different cells.
+Six objects, each sigma'd against F4's null at **its own** measured persistence, raw and under the
+mandatory joint control:
+
+      object        phi      | ME/h21  raw sigma   ctrl sigma | QE/h63  raw sigma   ctrl sigma
+      m3_oldhalf   0.9794    |          +1.39        +0.39    |          +1.68        +1.65
+      mom12_1      0.8849    |          +0.75        +0.88    |          -0.06        +0.39
+      vol126 (low) 0.9695    |          -0.75        -0.07    |          -2.05        +0.44
+      amihud126    0.9966    |          +1.17        -0.23    |          +1.76        -0.69
+      dvs252       0.8775    |          +0.32        -0.20    |          +0.35        -0.47
+      vchurn252    0.9836    |          -2.34        -0.58    |          -3.10        -1.07
+
+**Five of the six are nulls under the control, and the one that is not is M3 — in one cell.** Its
+QE/h63 reading is **+1.68 raw / +1.65 controlled**: the joint control costs it essentially nothing
+(0.03 sigma), against `amihud126` losing 2.45 sigma and `vol126` losing 2.49 sigma in the same
+cell. And it is the only object tonight to clear its cell's 12-draw noise ceiling in the
+pre-signed direction (+1.65 against max |sigma| 1.20 at phi 0.984 / QE/h63). **Two riders, both
+load-bearing.** (i) That ceiling rests on the *lowest* `sd(t)` in F4 (0.70, 12 draws); at
+`sd(t) = 1.0` the same `t` reads **+1.16 sigma** and clears nothing, so the margin is inside the
+null's own estimation error and this is corroboration, not a result. (ii) **M3's reading is
+horizon-dependent in a way the record did not have**: at ME/h21 the control takes it
+**+1.39 → +0.39**, i.e. 72% of the 21-day reading is the `logP`/`vol126` term, while at 63 days
+the control is free. So M3's screen evidence lives at the 63-day horizon and above, which is where
+the record always quoted it — the new content is that the *short* end of it was never real.
+
+Three closures re-read free, each from a direction the record did not have: **`amihud126` is a
+null under the control in both calibrated cells** (+1.17/+1.76 raw → −0.23/−0.69) — the fifth
+reproduction of the level contaminant; **`vol126`-low is a null** (−0.75/−2.05 raw → −0.07/+0.44),
+the fifth instrument to converge on "Sharpe is flat in beta on this panel", and note its *raw*
+QE sign is **negative** at −2.05 sigma; and **plain 12−1 momentum is a null in both correctly-sized
+cells** on both treatments (+0.75/+0.88, −0.06/+0.39), reproducing 2026-11-13/14's closure in a
+cell that needs no Newey-West apology.
+
+## Session summary — 2026-11-20 (nightly) — 0 trials of 8; two new objects built, screened and refused by a rule fixed in writing first, and the board's one live object gets its first reading in a cell with a measured null
+
+**Experiments: 0 of 8.** `experiments/trials.jsonl` stays at **138 records / 28 v3 records / 27
+scored v3 trials**; the v3 board, `leaderboard.json`, the deflated bar and `rank_trials.py`'s
+output are unchanged (**27 of 27 in tier 1**; M3 `pt_oldhalf_overlap6` still the lead at skill
+**+0.124**, DSR 0.1635; best non-`price-trend` still `#28 sl_micro_span_masked` at +0.055). No
+candidate file was written and no verdict was assigned. Five free blocks ran. **No holdout,
+forward or incubation file was opened** — `experiments/holdout_log.jsonl`, `reports/incubation.md`
+and the `*_holdout.parquet` files were never touched, the `holdout` key of a trial record was
+never dereferenced, and with no trial recorded there was no holdout gate to reach. Engine green
+(**92 passed in 47.64s**). Step 0 clean: `git branch -r --no-merged origin/main` **empty**,
+per-run branch `main-2okc32` exactly on `origin/main`'s `1cdaac8` with no commits of its own.
+Store's last bar **2026-11-19**, one day back — not stale. **Standing rule from 2026-11-16
+discharged:** with no trial recorded the set of 27 `null_pctile` values is byte-identical to the
+last four nights' (mean 0.5070, var 0.1383, 5 of 27 at or above 0.90), so there is nothing new to
+read there. **Twelfth consecutive zero-trial session** — but the first of the twelve whose stated
+reason is a screen that ran and said no, rather than an empty inventory.
+
+**Why this night is not the eleven before it.** Those sessions reported "the idea inventory is
+empty"; the 2026-11-18 method entry calls that an inventory fact and asks for a measurable one.
+Tonight two objects were *built* to the record's own three conditions for a next slow proposal —
+predicts a cross-sectional **first** moment, is a **ratio** so the back-adjustment level cancels,
+and is **slow** — screened against a rule fixed in writing before the screen ran, and refused.
+Both refusals are measurements, and both are now anti-candidates by name.
+
+**Best finding, and it is the headline.** F5 puts six objects through one harness in the two cells
+2026-11-19 identified as correctly sized, sigma'd against a null measured at **each object's own
+persistence**, raw and under the mandatory joint control. **Five of the six are nulls under the
+control. The one that is not is M3, in one cell**: QE/h63 reads **+1.68 raw / +1.65 controlled**,
+so the control costs it **0.03 sigma** while `amihud126` loses 2.45 and `vol126` loses 2.49 in the
+same cell. Two riders carry with it and both matter. (i) The 12-draw noise ceiling it clears rests
+on the *lowest* `sd(t)` in F4 (0.70); at `sd(t) = 1.0` the same `t` reads **+1.16 sigma** and
+clears nothing, so this is corroboration inside the null's own estimation error, not a result.
+(ii) **M3's screen evidence is horizon-dependent in a way the record did not have**: at ME/h21 the
+joint control takes it **+1.39 → +0.39**, so 72% of the 21-day reading was the `logP`/`vol126`
+term. The record always quoted M3 at 63 days and above, so nothing recorded changes — the new
+content is that the short end of it was never real.
+
+**Second finding — two new objects measured and declined, one of them informatively.** `dvs252`
+(downside share of 252-day realized variance; skew-preference sign) is **12−1 momentum at rho
+−0.645**, and its only positive cell (+1.07 sigma) exists *only* once a momentum control is added
+— raw +0.32/+0.35, negative under the mandatory pair alone — which is the "control creates a
+reading" shape of 2026-11-12/13's `rank_stability`. `vchurn252` (mean `|d log V|` over 252 days;
+Miller-disagreement sign) is **`amihud126` at rho +0.548**, and its pre-signed direction is
+**refuted with the wrong sign at the only two readings tonight that exceed their cell's noise
+ceiling** (−2.34 and −3.10 sigma: the low-churn slice loses 15 bps/21d and 43 bps/63d to its own
+region). Under `logP`+`vol126` alone it collapses to −0.58/−1.07 — the **fifth** independent
+reproduction of the as-of-fetch back-adjustment level contaminant, this time in a cell with its
+own measured null. The high-churn side is not a finding either (+0.68/+0.30), so there is no sign
+to flip even if flipping one were permitted, which it is not.
+
+**Third — the one dimension on which both new objects beat the board's lead, and it did not
+save them.** Depth: both are scorable on **99.8% of eligible names from the train start** (158 of
+159 in 1997, 902 of 904 in 2017) against `m3_oldhalf`'s **zero before 1999 and 255 of 307 in
+2005**. The record's "largest single confound on this panel is price-history depth" therefore does
+not apply to either. **Depth is a necessary condition that carries no signal** — the third object
+in four sessions to clear the own-history-depth pre-screen outright and fail on signal
+(`signed-volume imbalance` was the first).
+
+**Fourth — F4 corroborates last night's localisation rather than correcting it, on the test it
+had not been given.** All six measured `sd(t)` in the two step ≥ horizon cells sit in
+**[0.70, 1.30]**, every interval covering 1.0 at 12 draws, with none of the 1.4x–2.7x inflation
+last night found in the overlapping cells — **including at phi 0.984**, where the top-100 slice
+retains nearly all its names month to month. So **name overlap on its own does not inflate the
+statistic**, and last night's attribution of the fault to the *forward-window* overlap survives a
+persistence test its own two inert cells did not cover. My point estimates run above last night's
+0.87/0.92 by about one `sd(sd)` on a different implementation, which is not a correction and is
+not quoted as one.
+
+**An error of mine, found inside the session and quantified.** F3's bar of "+1.50 sigma" was fixed
+in writing *before* F4 measured the cells, whose noise ceiling is **|sigma| 1.20–3.00 over 12
+draws** — so a pass at the pre-registered bar would have been inside the null envelope and would
+have bought a trial on nothing. No conclusion turns on it; both objects missed the bar in at least
+one cell regardless. Recorded because the general form is the fourth instance of one rule in
+`learnings.md`: **calibrate the harness before setting the bar, not after.**
+
+**Why zero trials, stated as the decision rather than as inventory.** Nothing screened. Both
+objects built tonight were refused by a pre-written rule, `dvs252` for having no reading outside
+one treatment of one cell and `vchurn252` for being refuted in its pre-signed direction and for
+owing its raw reading to a control term. Spending a scout trial on either would be spending it on
+noise, and the 2026-11-17 census is the reason it would not pay off downstream: the binding gate
+demands **+0.03 of skill** and 22 of 24 v3 `GATE_FAIL`s did not have it. The deflator is **not**
+the reason and is not offered as one — 2026-11-16 prices a marginal scout trial at about a
+thousandth of a Sharpe. M3 is not a trial either: `price-trend` is capped at 2, M3 variants are
+construction knobs on an axis the record closes from five directions, and tonight's reading of it
+is corroboration inside its own null's error bar.
+
+**For the human owner — the standing item, unchanged, and one addition.** The standing item
+(2026-11-16 → 11-19) stands: the `challenge` track is closed by arithmetic (the seat needs +0.64
+of skill against a board best of +0.124, the deflation benchmark alone is +0.3087), and the two
+levers — `effective_n_trials`' clustering and the validation window — are both in frozen files.
+Nothing was acted on in `engine/`, `scripts/`, `program.md` or `data/`. **The addition is an
+inventory fact that is now measured rather than asserted**: tonight's two objects were chosen as
+the last two contaminant-immune, slow, first-moment constructions on the daily-OHLCV panel that
+the anti-candidate lists did not already name, and both are now on those lists. The sixteen-object
+list is the panel's OHLCV characteristic space at this lab's resolution. The honest next move
+remains one of `program.md`'s own "Future upgrades" — fundamentals, intraday, pre-2009 coverage —
+rather than a seventeenth characteristic.
+
+**Ideas for next session.** (i) **The quota-matched null** is still the one flagged assumption and
+is still un-run (carried from 2026-11-19 idea (i)): recalibrate F4's null with the peer/depth-quota
+selection in place rather than a plain top-100, and re-read M3's QE/h63 **+1.65** against it —
+tonight's rider (i) says the whole margin is inside `sd(t)`'s estimation error, so **more draws on
+one cell is worth more than another object**: 12 draws give `sd(sd) ≈ 0.2`, and 100 draws on the
+single (QE/h63, phi 0.98) cell would settle whether M3 clears anything, for one block and no
+trial. That is the highest-value free measurement available. (ii) **M3's horizon profile under the
+joint control**, now that h21 is known to be 72% contaminant and h63 free: the h126 and h252 cells
+are overlapping and need their own null, but the *shape* of (raw − controlled) across horizons is
+a free diagnostic and would say whether the contaminant is a short-horizon artifact throughout the
+record's quoted cells. (iii) The 2026-11-19 handover's idea (iii) — the paired-design threshold of
+~0.06 of skill as a pre-registerable bar — and the three carried-over items from 2026-11-17 remain
+untouched and still live. **Provenance from `research/SUMMARY.md`: the aim, not the objects.** The
+folder's [2026-11-19] **primary aim for session 98** is "a mechanism predicting a cross-sectional
+first moment, low-turnover, on daily OHLCV", with the explicit note that the folder has failed to
+supply one for six sessions and that `liquidity-volume` and `range-variance` have the thinnest
+v3-relevant coverage. Tonight's two objects were built to that aim's own three acceptance
+criteria, one in each of those two families, from mechanism rather than from any note — the folder
+contains no note on either `RS-/RV` or `|d log V|`, and no performance expectation was imported
+from it. The folder's country-index pointer (`#410`s, "the one object this panel holds and has
+never ranked") is **stale** and was not followed: `learnings.md` 2026-11-02/03 closed the ETF
+sleeve as a traded unit, country cross-section included.
+
+**Verdicts:** none.
+
