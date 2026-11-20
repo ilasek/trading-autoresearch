@@ -31918,3 +31918,5 @@ sleeve as a traded unit, country cross-section included.
 
 **Verdicts:** none.
 
+
+## Research session — 2026-11-20 (learning agent): 3 notes added, see research/SUMMARY.md

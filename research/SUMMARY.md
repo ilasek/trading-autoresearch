@@ -10295,6 +10295,113 @@ would have declared independence — which (e) says is the one assumption this b
 `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`;
 `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`)
 
+### The NETWORK as the peer-group object — what a directed connectedness matrix is, what influence-weighting a peer average is actually worth, and the one reading of centrality that cannot be pre-signed (`lead-lag-spillover`, `range-variance`)
+
+Three sources, taking the [2026-11-19] **primary aim** — *a mechanism predicting a cross-sectional
+first moment, low-turnover, on daily OHLCV, reporting the long-leg-only level and stating the
+signal's persistence* — into the one `program.md` sub-mechanism with **zero** coverage. The
+detector ran before any download and the gap was total: across all 306 prior notes and this file,
+`network momentum` **0**, `connectedness` **0**, `betweenness` **0**, `spillover index` **0**,
+`Ahern` **0**, `Herskovic` 2 (both in passing), and **every one of the nine `network` hits and all
+four `centrality` hits was a *neural* network or a *non*-centrality parameter** — the pattern the
+[2026-11-01] correction warns about, caught here by opening the hits rather than trusting the
+counts. **This is the tenth instance of the unit-of-check lesson and the second in which the unit
+was a named `program.md` clause**: the 2026-09-08 "clause by clause" audit counted this clause as
+covered because the folder held *industry* lead-lag notes, and the network object is not the
+industry object.
+
+**The aim is discharged on criteria (i) and (ii) and FAILS on (iii), and the failure is the most
+useful single fact of the night.** The vein's signed, levelled, large-cap-verified mechanism is
+**fast**, and the lab has already measured its horizon as a cost wall.
+
+**(a) The mechanism, and the long-leg level in the large-cap cell — which is exactly what the aim
+asked for and what six inference sessions could not supply.** Misirli, Scida & Velikov (Tier **B**,
+unpublished working paper, `10.2139/ssrn.3747402`, **0** Crossref and no indexed journal version as
+of 2026-11-20; US, 1928–2020; overlap **true**) estimate intra-industry **directed** connectedness
+from the co-movement of firms' daily conditional volatilities, build a composite centrality from
+the first principal component of degree/closeness/eigenvector centrality, and sort on the
+**influence-weighted average of industry peers' past one-month return**. Top quintile
+**+1.04%/month (t 5.41)**, bottom **+0.23%**, long-short **+0.80% (t 6.25)**; the **top quintile's
+own CAPM alpha is +0.32%/month (t 4.10)** against the bottom's −0.48%, so **about 40% of the
+benchmark-adjusted spread is on the long leg** — corroborating `#373`–`#380` from an independent
+construction. **In the largest size quintile** (about 40 names per cell, billions in average
+capitalisation, the closest cell in this literature to this panel) the top slice earns
+**+1.01%/month** against +0.26% for the bottom, a **+0.75%/month (t 5.77)** spread with a
+four-factor alpha of **+0.63% (t 4.70)** and a **market beta of 0.00 (t 0.11)**. A side finding
+worth more than it looks: the composite centrality's strongest correlate is the firm's **share of
+industry revenues**, recovered with **no accounting data at all** — a price-and-volume-only route
+to an economic-importance ranking.
+
+**(b) The paper's own placebo bounds what the network is worth, and the answer is "the group
+average does most of the work".** Replacing the estimated matrix with a **random log-normal**
+matrix of the same size, 1,000 times, still earns **+0.50% to +0.69%/month** (`t` 4.80–6.59)
+against the real construction's +0.80%. And conditioning on one-month **industry momentum** cuts
+the spread to **+0.30%/month (t 3.32)** — the weakest of all 23 conditional sorts the paper runs.
+So: **any** within-group weighting of peers' past returns captures most of the premium, the
+estimated network is worth of order 0.11–0.30%/month on top, and the group-continuation effect is
+the bulk. For a panel with **no industry labels at all**, where only the coarse region axis is
+available and where `learnings.md` (2026-10-11) records that the region-matched null gate matches
+**cross**-region lead-lag move for move so that only the **within**-region version is reachable,
+that ordering is the whole implementability story.
+
+**(c) The lab has already closed this sub-mechanism on a measurement, and the two objects are NOT
+the same — the tension is recorded, not smoothed.** `experiments/learnings.md` (2026-09-25,
+trial #101) scored names by the mean trailing **21-day** return of their `K = 4` **most-correlated**
+peers: 18.6× validation turnover, 5.58%/yr of cost against +4.5% net, a base signal that was itself
+a `t = +1.04` null, and the conclusion *"`lead-lag-spillover`'s network-momentum sub-mechanism is
+nonetheless closed on a measurement"*. The source's object differs on three axes — **directed**
+rather than symmetric, **influence-weighted over the whole group** rather than equal-weighted over
+four names, and **with the most central peers excluded** — and the paper's placebo is the best
+available evidence on whether those axes can matter, answering *modestly*. The same lab entry
+supplies the half that helps: **estimating a neighbourhood is nearly free in turnover** (freezing
+the peer set month to month moved core churn by 0.0005), so the horizon is what costs, not the
+network. **Both readings therefore agree on the refusal of the published construction and disagree
+only about an increment**, which is a cheap thing to screen for free (`#494`).
+
+**(d) The instrument, and the one identity worth carrying out of the vein.** Diebold & Yilmaz
+(Tier **A**, *Journal of Econometrics* 182(1), `10.1016/j.jeconom.2014.04.012`, **4,708** Crossref,
+checked 2026-11-20; read in full from NBER w17490) prove that a forecast-error variance
+decomposition **is** a weighted directed network: off-diagonal `d_ij` is an edge, **the row sum is
+node `i`'s from-degree, the column sum is node `j`'s to-degree, and total connectedness is the
+network's mean degree**. Anyone who has fitted a VAR has computed degree centrality. Three
+operational consequences. (i) **A contemporaneous correlation matrix is symmetric and can express
+no lead-lag**; the VAR decomposition at horizon `H > 0` is the minimal object that distinguishes a
+transmitter from a receiver, which is the only reason this vein is not the average-correlation
+object the lab has closed. (ii) **The from-degree distribution is tight and the to-degree
+distribution is wide** — names are alike as receivers and highly differentiated as transmitters —
+so a cross-section must be ranked on **to-** or **net** degree, never on from-degree (`#496`).
+(iii) The authors' sharpest warning, and it generalises past their method: *"connectedness
+measurements generally will not, and should not, be robust to choice of reference universe"* —
+there is no universe-free centrality number, so a result that moves when the peer set is redefined
+is a **different object**, not a refuted one (`#500`).
+
+**(e) The dimension arithmetic that decides any design here.** A VAR(`p`) on `N` nodes carries
+`N²p` coefficients and `Np` regressors per equation, so the paper's own `p = 3`, `w = 100 days`
+caps `N` at about a dozen — the size of its illustration. This panel has **~1,000 eligible names**,
+where a single system is not slow but **unidentified**. The three ways out: partition by
+region/index into systems of tens of names; **shrink** (the elastic-net VAR of Demirer, Diebold,
+Liu & Yilmaz, *Journal of Applied Econometrics* 33(1), `10.1002/jae.2585`, **622** Crossref —
+**not read, a named unobtained pointer**); or drop to `p = 1` with `w ≈ 500` daily observations,
+which makes `N ≈ 40` comfortably estimable. The network is re-estimated **annually** on the
+source's own schedule, so the per-rebalance cost is nil; the expensive input is the per-name
+volatility model, and the cheap substitute is a **range** estimator the repo already has.
+
+**(f) Centrality read as a CHARACTERISTIC is an anti-candidate, on the folder's own rubric rather
+than on the lab's priors.** Ahern (Tier **C**, unpublished working paper, `10.2139/ssrn.2197370`,
+**78** Crossref; US, one 1997 input-output snapshot, returns over a single five-year window;
+overlap **false**) argues that central sectors bear more of the sector-specific shocks that
+aggregate into systematic risk and therefore earn more, and reports very large effects (extreme
+quintiles roughly 12 percentage points a year apart; most-central four-factor alpha near
+1.5%/month). It is refused three times over: the evidence is one five-year window, one network
+snapshot, one market, unpublished, no costs and no multiple-testing treatment; the **sign does not
+replicate across network definitions** (supply-chain PageRank and global-trade-network results run
+the other way — recorded as pointers, **not read**), so the direction cannot be pre-signed; and the
+reachable price-based substitute is weighted-average co-movement, i.e. **average correlation and
+hence beta**, on a panel where the lab has now measured five times over that **Sharpe is flat in
+beta**. The paper's framing — *read risk exposure off a stable ex-ante structural variable rather
+than off an ex-post covariance* — is a good idea that outlives its evidence, and this repo's data
+cannot express it.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -19654,6 +19761,105 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`,
     `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`
 
+493. **A SLOW, WITHIN-REGION, INFLUENCE-WEIGHTED PEER AVERAGE WITH THE MOST CENTRAL PEERS EXCLUDED —
+    the one BOOK this vein supports, and the first portfolio proposal this file has carried in eight
+    sessions.** The source's signal is refused at its own cadence (`#499`); what survives are its two
+    *operators on a peer average*, moved to the horizon band where the seat already runs at ~3×
+    turnover. Construction: partition the eligible panel by **listing region** (`calendar_peers` for
+    the trading calendar); per region per year, fit a VAR on daily **log range-based volatility**
+    (`p = 1`, `w ≈ 500`, `N ≈ 40`, or elastic-net at larger `N`) and take the **generalized** FEVD at
+    `H` ≈ the rebalance interval, rescaling rows to sum to one; build composite centrality (PC1 of
+    degree/closeness/eigenvector); **zero the influence of peers at or above the 90th centrality
+    percentile** and rescale; score each name by the influence-weighted average of its peers'
+    **63–252-day** return; top `K = 100` **within region**, equal-weighted, monthly grid, with the
+    **no-trade retention band** (`B ≈ 2K`) on top. Pre-signed **+** (continuation). Why the horizon
+    moves: `learnings.md` 2026-09-25 measured the 21-day version at 18.6× turnover and recorded *"the
+    wall is about the 21-day horizon, whoever supplies the signal"*, and the same entry showed the
+    neighbourhood estimation itself is nearly free in turnover. Why within-region: the region-matched
+    null gate matches cross-region lead-lag move for move (2026-10-11). Gated behind `#494`, `#495`
+    and `#496`. Tier B mechanism, A instrument, overlap **true**.
+    → `notes/2026-11-20-peer-momentum-influence-weighted-peer-returns.md`,
+    `notes/2026-11-20-variance-decomposition-connectedness-as-network-degree.md`
+
+494. **THE FREE SCREEN THAT DECIDES WHETHER THE NETWORK IS DECORATIVE, and it should run before any
+    candidate in `#493` is written.** The source's own placebo — 1,000 random log-normal weight
+    matrices earning **+0.50% to +0.69%/month** against the estimated network's +0.80% — says most of
+    peer momentum is *any* within-group weighting of peers' past returns. So: compute the directed
+    decomposition's row weights and the plain **equal** weights over the same peer set, and report
+    their **cross-sectional rank correlation** and the rank correlation of the two resulting scores.
+    **If the scores correlate near 1, the VAR is decorative and the whole vein reduces to a
+    within-region group-momentum object the lab has already nulled** — refuse before spending a
+    trial. Costs one function and no returns. Tier B/A, overlap **false** (a construction diagnostic).
+    → `notes/2026-11-20-peer-momentum-influence-weighted-peer-returns.md`
+
+495. **THE PRIOR TO PRICE `#493` AGAINST, IN THE UNITS THE RECORD DEMANDS — a long-leg level, a beta
+    and a turnover together.** In the source's **largest size quintile**: top slice **+1.01%/month**
+    against **+0.26%** for the bottom, spread **+0.75%/month (t 5.77)**, four-factor alpha **+0.63%
+    (t 4.70)**, **market beta 0.00 (t 0.11)**, ~40 names per cell. Against the average of its own five
+    size-quintile slices the top slice runs about **+36 bps/month**. This is the first external source
+    this folder has filed that satisfies the record's own screen triple at the long-leg level in large
+    caps, and it is the right prior for a pre-trial level check — **not** a performance expectation,
+    which `research/README.md` forbids importing. Tier B, overlap **true**.
+    → `notes/2026-11-20-peer-momentum-influence-weighted-peer-returns.md`
+
+496. **RANK ON THE TO-DEGREE OR THE NET DEGREE, NEVER ON THE FROM-DEGREE.** In a variance-decomposition
+    network the from-degree distribution is **tight** and the to-degree distribution is **wide** —
+    names are much alike as receivers of shocks and highly differentiated as transmitters. A
+    cross-sectional sort on from-degree is therefore a sort on a near-constant, which is a breadth
+    famine dressed as a signal. Free, and it applies to any centrality the lab ever computes. Tier A,
+    overlap **false**.
+    → `notes/2026-11-20-variance-decomposition-connectedness-as-network-degree.md`
+
+497. **LINK THE CONNECTEDNESS HORIZON TO THE REBALANCE INTERVAL — the construction knob stated by the
+    method's own authors.** Pairwise connectedness can be small at short `H` and large at long `H`,
+    because shocks reach a node only with a lag; varying `H` decomposes connectedness into short- and
+    long-run, and in the limit gives the unconditional decomposition. The authors' own portfolio
+    guidance is to set `H` to the rebalancing period (their risk illustration anchors at `H = 12` days
+    for a 10-day VaR convention). **Corollary for pre-registration: `H` is not a robustness
+    parameter** — the authors decline to call a sweep over it robustness, because two horizons are two
+    objects — so fix `H` from the rebalance grid in writing and do not sweep it. Tier A, overlap
+    **false**.
+    → `notes/2026-11-20-variance-decomposition-connectedness-as-network-degree.md`
+
+498. **ANTI-CANDIDATE: network centrality as a CROSS-SECTIONAL CHARACTERISTIC, at any window, from any
+    price-based network, on either sign.** Three independent and individually sufficient grounds. (i)
+    The evidence is Tier **C** — one five-year return window against one 1997 input-output snapshot,
+    US only, unpublished, no costs, no multiple-testing treatment, and monthly sector returns above 2%
+    that a five-year window can manufacture. (ii) **The sign does not replicate across network
+    definitions** (trade-network and cash-flow-network results positive; supply-chain PageRank and
+    global-trade-network country results negative — the latter two recorded as unread pointers), so
+    the lab cannot pre-sign a direction, which its own rules require. (iii) The only reachable
+    implementation is weighted-average co-movement = **average correlation = beta**, and the source's
+    own mechanism is that the premium **is** compensation for systematic risk — on a panel where
+    "Sharpe is flat in beta" has now been reproduced five times, a beta premium cannot be skill
+    against a fully-invested pool, and the peripheral (low-centrality) side is the de-risking class
+    the record closed. Tier C, overlap **false**.
+    → `notes/2026-11-20-network-centrality-as-a-priced-characteristic.md`
+
+499. **REFUSAL, WITH THE ARITHMETIC DONE SO A SESSION DOES NOT REPEAT IT: the source's own
+    construction at its own cadence.** The signal is a peer average of **one-month** returns,
+    rebalanced monthly on a quintile sort — near-complete slice turnover every month. Under v3's
+    schedule a large-cap book pays of order 15–20 bps per side on both sides of whatever it replaces,
+    i.e. roughly **30 bps/month** at that churn, before UK/HK/FR/IT/ES transaction taxes on a
+    71%-non-US panel. **The source's own long-leg advantage over its size peers (~36 bps/month) and
+    this protocol's bill for collecting it monthly are the same size.** Independently, the lab's
+    21-day cost wall (2026-09-25) and its `peer_ret` null close the same door. Do not implement the
+    published cadence; `#493` is the version that respects the arithmetic. Tier B, overlap **true**.
+    → `notes/2026-11-20-peer-momentum-influence-weighted-peer-returns.md`
+
+500. **A READING RULE FOR ANY GROUPED OR NEIGHBOURHOOD STATISTIC: there is no universe-free
+    centrality number.** *"Connectedness measurements generally will not, and should not, be robust to
+    choice of reference universe."* The same name is central in one peer set and peripheral in
+    another, so a statistic that moves when the peer set is redefined has changed **object**, not been
+    refuted — and the converse, that a grouped statistic's stability across groupings is evidence of
+    anything, does not hold either. Two consequences here. (i) This panel's node set **changes every
+    year by construction** (point-in-time membership), so any centrality *time series* on it mixes
+    genuine change with membership change, and the membership channel must be held fixed before the
+    series means anything — the confound `#401`-vein and the price-history-depth entry already record.
+    (ii) It is the general form of the lab's own grouping-axis results, now stated by a Tier-A
+    methods source rather than inferred. Tier A, overlap **false**.
+    → `notes/2026-11-20-variance-decomposition-connectedness-as-network-degree.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -19763,8 +19969,159 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-17 (session 95) | **TOOK THE PRIMARY AIM VERBATIM — the aim that had been ranked second for three consecutive sessions and acquired a third consumer — AND THE ANSWER IS THAT THE NAMED INSTRUCTION IS ILLEGAL HERE AND THE LAB'S MAIN USE NEVER NEEDED IT.** Aim from the [2026-11-16] entry: **estimation of `Σ` at covariate width from a correlated cross-section** — admit a source only if it (i) gives an estimator of the covariance matrix or of a regression coefficient's variance **valid under cross-sectional dependence of unknown form**, (ii) states the **condition on the dependence** under which it is valid, and (iii) says **what it costs** relative to the i.i.d. estimator; not another shrinkage estimator whose object is a portfolio weight, not another high-dimensional two-sample test, not a general panel-econometrics textbook chapter; **at most three requests**, with a preference for the many-controls-robust variance literature `#454` cites "if one request can settle whether `#454`'s instruction is usable here at all". **It did, on the first request.** The mandated pre-download grep ran first across 297 prior notes and the gap held on the target vocabulary: `cluster-robust` **0**, `cluster robust` **0**, `two-way clustering` **0**, `Driscoll-Kraay` **0**, `Driscoll` **0**, `spatial correlation` **0**, `common factor standard errors` **0**, `Fama-MacBeth standard errors` **0**, `clustered standard` **0**; `cross-sectional dependence` **6**, `Newey` **14**, `Cattaneo` **3**, `Fama-MacBeth` **2**, `Newey-West` **2**, `many controls` **1** — and **the hits were opened** per the standing rule. All six `cross-sectional dependence` hits use the phrase to *motivate a resampling repair* (within-date permutation, block bootstrap over the time index, a K-fold objection), never to license a variance estimator; the `Cattaneo` hits are `#454`'s own recommendation, `#452`'s footnote repeating it, and an unrelated REStat portfolio-sorts paper; the `Newey` hits are author lines and HAR/Newey–West mentions in unrelated veins. **No note carried a rule for which dependence structure licenses which estimator** — exactly as the aim predicted. **The nightly-variable detector also ran**, on the 2026-11-17 nightly's headline (regressing `null_p50 − pool` on the replicas' cost bill over 27 trials, slope `+1.249 ± 0.149` against a mechanically predicted `+1.0`), and returned **NOT covered and converging on the primary aim**: that `±0.149` is an i.i.d. standard error on 27 rows the same session's own audit calls 7–12 independent bets, so the nightly supplied a **fourth** consumer of the aim's object on the night the aim was taken. Family-coverage rule satisfied vacuously — all eight `program.md` families now have notes (12–41 each). **The `learnings.md` check ran and found NO tension, which is itself informative**: every inference entry in that file is on the **time** axis — the paired stationary block bootstrap on stored daily series (explicitly chosen "so cross-candidate correlation is preserved"), the SE floor of a difference, the unestimable `eta(q)` — and the one closed-form screen there is already carried "as a *floor*, never as a significance test" because "it assumes i.i.d. bivariate normal returns and is liberal under fat tails and volatility clustering". So the lab's own practice had already reached tonight's discipline **along the axis it had looked at**, and `#460` is the same lesson on the **cross-sectional** axis, which no learning covers. Tonight reinforces that file rather than contradicting it. **All three criteria met by all three sources, all three read in full on the FIRST request — arXiv twice and a university course mirror once, no failed channels tonight.** **(a) ADMITTED, and it alone discharges the aim's stated preference.** Cattaneo, Jansson & Newey 2018 (Tier **A**, *JASA* 113(523), 1350–1361, **94** Crossref, checked 2026-11-17): Assumption 1 requires bounded group size (`max_i #Tᵢ = O(1)`) with independence across groups and the authors state it "**excludes clustered, spacial or time series dependence in the sample**" — so `#454`'s instruction **cannot be followed on this panel** (`#458`), a date being a group of ~1,000 non-independent-across-dates names; the free consolation is that `HC0`/`HC1`/`HC2`/`HC4` are **inconsistent** (not merely imprecise) once `K/n ↛ 0` while **`HC3` is asymptotically conservative** and needs no new code, with the paper's own `κ^HC = (M ⊙ M)⁻¹` estimator and its `max_i(1 − Mᵢᵢ) < 1/2` existence check fixing the many-covariates failure *inside* the same independence assumption (`#459`). **(b) ADMITTED as the price list.** Petersen 2009 (Tier **A**, *RFS* 22(1), 435–480, **9,873** Crossref, checked 2026-11-17): `1 + (m − 1) ρ_X ρ_ε` as the whole discrepancy, a **product** so either correlation at zero makes the i.i.d. estimator unbiased, inflated by **cluster size** — which for this lab is a date of ~1,000 names, giving **1.41× / 3.32× / 7.14× / 15.8×** at products of 0.001 / 0.01 / 0.05 / 0.25 (`#460`); the correction's own downward bias at few clusters (**27% at 5, 3% at 40, 1% at 100**), which puts the lab's 27-trial board in the regime where *neither* estimator works (`#461`); the mapping table and the compare-across-clusterings diagnostic the aim asked for by description (`#463`); and a retro-fit in which charging dependence on the nightly's headline moves `t` from `+1.67` to **0.85–1.11**, i.e. **strengthens** its mechanical identification (`#462`). **(c) ADMITTED as the adversarial third, and it paid for itself for the third session running by overturning the instrument the aim was about.** Abadie, Athey, Imbens & Wooldridge 2023 (Tier **A**, *QJE* 138(1), 1–35, **1,577** Crossref, checked 2026-11-17): clustering is set by **sampling and assignment**, not by outcome correlation; correlation neither implies nor is implied by the need to cluster; clustering when unnecessary is "unnecessarily conservative, possibly by a wide margin" (**22–26×** robust in their application against a design-correct **2.9×**) (`#466`); and **"the data are not informative about the need to adjust for clustering in the sampling process"** (`#464`), so no measurement settles it. Applied here it **vindicates the folder's existing repair**: for a claim about the panel the lab holds, the sampled cluster fraction is 1, there is no clustered sampling, and `#439`/`#445`'s within-date permutation **is** the correct finite-population instrument rather than a patch — while for a forecast claim the fraction is ~0 and (b)'s inflation applies in full (`#465`). **Output: one refusal that closes the folder's binding gap (`#458`), one free substitute (`#459`), one free screen with a table (`#460`), one anti-correction (`#461`), one retro-fit that is good news (`#462`), one mapping plus diagnostic (`#463`), one anti-candidate refusal (`#464`), one one-line rule that resolves the session's tension (`#465`), one anti-candidate with a borrowable construction (`#466`).** **Anti-lookahead.** No financial data in any source read for its results: (a) is theorems with a 1991 US wage illustration, (b) is algebra plus 5,000-replication Monte Carlo (its Compustat 1965–2003 illustrations were read for method only, and nothing from them is carried), (c) is theorems plus a 2000 US Census cross-section and simulations. Every magnitude carried is a **simulation bias or coverage ratio**, an **algebraic inflation factor**, a **citation count**, or the **lab's own train/validation-split numbers from `experiments/journal.md`**. All three `validation_overlap: false`; `published_post_2018: true` for (c) only. **Citation counts**: 94, 9873, 1577 — all Crossref `is-referenced-by-count`, which answered first try for all four DOIs looked up (the fourth, Driscoll–Kraay 1998, **6,225**, resolved for metadata only; see channels). **Channels**: `arxiv.org/pdf/<id>` served (a) and (c) complete and clean for the second consecutive session — 35 and 79 pages, 89 KB and 286 KB of text, 369 and 947 `" the "`, zero `( )` dropout, no ASCII shift. **Driscoll–Kraay 1998 (REStat 80(4), 549–560, `10.1162/003465398557825`) is the one source wanted and not obtained**: it is the literal answer to criterion (i) — "robust to very general forms of spatial and temporal dependence as the time dimension becomes large", with its cost in **required panel length** — but MIT Press is paywalled and a single search surfaced no author-hosted or repository copy, only a Stata Journal implementation (Hoechle, free at `ageconsearch.umn.edu`). It was **not pursued past one search** because the budget was three requests and (b) already supplied the mapping; it is nominated below rather than recorded as dark. Also noted without a request spent: `u.osu.edu/<faculty>/files/<year>/<month>/<file>.pdf` — a **course-mirror** path on a university WordPress multisite — served the complete typeset RFS article (537 KB → 173 KB of text, 1,457 `" the "`), which extends this file's flat-directory lesson from author and department sites to **instructors' course pages**. (`notes/2026-11-17-many-covariates-variance-estimation-and-its-independence-assumption.md`; `notes/2026-11-17-which-dependence-structure-licenses-which-standard-error.md`; `notes/2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`) |
 | 2026-11-18 (session 96) | **TOOK THE PRIMARY AIM VERBATIM FOR THE SECOND CONSECUTIVE SESSION, GOT THE ONE SOURCE LAST NIGHT WANTED AND COULD NOT OBTAIN, AND THE ADVERSARIAL THIRD SHOWED THE AIM WAS POINTED AT THE WRONG AXIS.** Aim from the [2026-11-17] entry: an estimator valid under cross-sectional dependence of unknown form requiring **no cluster variable, no spatial weights matrix and no assumed factor count**, stating the condition under which it is valid and giving its cost as a required `T`; Driscoll–Kraay (1998) named as the literal answer and recorded unobtained; **at most three requests**. **All three criteria met, and the aim's own named source obtained in full.** The mandated pre-download grep ran across **300** prior notes and the gap held exactly as predicted: `Driscoll` **0**, `Driscoll-Kraay` **0**, `spatial correlation` **0**, `spatial weights` **0**, `spatial` **0**, `Vogelsang` **0**, `fixed-b` **0**, `large-T` **0**; non-zero on `HAC` **15**, `panel` **193**, `cluster` **111**, `serial correlation` **10**, `bandwidth` **7**, `Newey-West` **2**, `long-run variance` **2** — and **the hits were opened** per the standing rule. Thirteen of the fifteen `HAC` hits are *p*-**hacking** false positives; the two genuine ones (`2026-08-24-testing-differences-of-sharpe-ratios.md`, `2026-10-27-modified-rescaled-range-and-the-long-memory-null.md`) and both `Newey-West` hits are on the **time** axis — Bartlett long-run variance for overlapping returns, lag-equal-to-horizon corrections. **No note carried an estimator robust to cross-sectional dependence needing no grouping variable**, so the downloads were authorised. **The `learnings.md` check found no tension and reinforces [2026-11-17]'s reading**: every inference entry there is on the time or cross-trial axis (paired stationary block bootstrap on stored daily series, the SE floor of a difference, the cross-trial `rho` of **+0.0888**), none on the cross-name-within-date axis. **The nightly-variable detector returned `converging`, but on the SECOND-ranked aim rather than the primary** — a third outcome-pairing the rule had not seen. The 2026-11-18 nightly's second finding reads the dispersion of its own 27 measured skills against their noise floor (`sd(skill)` **0.1233** vs `rms(skill_se)` **0.1391**, ratio 0.785, implied `var(true skill)` **−0.0042**, `p` 0.740 independent / 0.647 at the board's own pairwise `rho`) — i.e. an **under**-dispersion diagnostic, which is the mirror of the `p`-curve/over-dispersion object ranked second since [2026-11-16] and still at `p-curve` **0**. The primary aim stands as taken; the second-ranked aim gains its **second** consumer and is re-nominated below. Family-coverage rule satisfied vacuously — all eight `program.md` families carry notes. **(a) ADMITTED as the primary, and it discharges the aim on all three criteria.** Driscoll & Kraay 1998 (Tier **A**, *Review of Economics and Statistics* 80(4), 549–560, **6,237** Crossref / **6,941** Semantic Scholar, checked 2026-11-18): **collapse the cross-section before estimating any variance** — sum the per-name moment conditions `h_it = x_it ε̂_it` within each date, Newey–West the resulting univariate `{h_t}` with `w(j,m) = 1 − j/(m(T)+1)` and `m(T) = O(T^{1/3})`, sandwich with `(X'X)⁻¹` (`#467`); an **asymmetric** mixing condition that requires decay in the **time** direction only, because "unlike in the time dimension, in most cases there is no natural ordering in the cross-sectional dimension", admitting arbitrary contemporaneous cross-sectional correlation and any `N` including `N → ∞`, with a **factor structure** proved sufficient and therefore checkable (`#468`); the cost as the authors' own floor **`T = 20`–25 minimum**, at which coverage runs **.818–.903** against time dummies' ≤ **.694** and SUR's ≤ **.679** (`#469`); and a **refusal** from their conclusion — for a single cross-section "it is not possible to construct the pure cross-sectional analogs of time-series HAC estimators", so a per-date regression has no nonparametric repair (`#470`). **(b) ADMITTED as the construction half, exactly as the aim instructed, and graded honestly.** Hoechle 2007 (Tier **B** — *The Stata Journal* 7(3), 281–312, a software venue with its own unreplicated Monte Carlo, but **2,773** Crossref, checked 2026-11-18): the **unbalanced-panel adjustment is one symbol**, `h_t = Σ_{i=1..N(t)} h_it`, which is this panel's exact case under point-in-time eligibility (`#471`); the operational bandwidth `m(T) = floor[4(T/100)^{2/9}]`, giving **7** lags at the lab's 1,562 daily dates, **4** at ~251 month-ends, **3** at 72; **Pesaran's CD test** as the pre-test, valid with `N` and `T` diverging in any order, the only one adequate for unbalanced panels, and returning free the **average absolute off-diagonal residual correlation** — the one unmeasured input to `#460`'s table (`#472`); an **independent corroboration of `#460`'s product on the cross-sectional axis** (raising the *regressor's* dependence at fixed residual dependence worsens the understatement), plus the finding that **fixed effects lower coverage relative to pooled OLS even when the true model has them** (`#473`); and — against its own advocacy — that with **no** cross-sectional dependence Driscoll–Kraay is *worse* calibrated than clustered standard errors, making the recommendation a conditional (`#474`). Its simulation runs at **`N = 1,000`, `T = 40`**, i.e. this panel's width. **(c) ADMITTED as the adversarial third, and it paid for itself for the fourth session running by overturning the instrument the aim was about.** Hidalgo & Schafgans 2021 (Tier **B** — *Journal of Econometrics* 223(1), 125–160, top venue and a genuine theorem but **2** Crossref / **5** Semantic Scholar, checked 2026-11-18, own results unreplicated): Driscoll–Kraay's asymptotic `t` is oversized at **every** simulated `(n,T)` — at `n = 100`, nominal 5%, **.249/.185/.132/.108/.088** for `T = 16/32/64/128/256` at AR(1) `ρ = 0.7` and **.414/.350/.249/.181/.132** at `ρ = 0.9`, with weak-versus-strong *spatial* dependence barely moving it (.249/.261 and .414/.400 at `T = 16`), so the **temporal** axis dominates (`#475`); fixed-`b` critical values — the fallback [2026-11-17] nominated — help substantially and partially (.414 → **.255**; .132 → **.096**); and **the decisive table**, under heterogeneous AR/MA coefficients with an AR(1) plug-in against a **Mixed AR(3)** truth, where size at `T = 64/128/256` is **.147/.146/.137** asymptotic, **.135/.137/.132** fixed-`b` and **.120/.122/.127** moving-block — **all flat in `T`** — against a bandwidth-free cluster estimator's converging **.064/.057/.053**, so **quadrupling the panel length buys nothing** and the binding constraint is the bandwidth, not the length (`#476`). Their replacement, a **frequency-domain cluster estimator** summing over names within each Fourier frequency, is implementable here at `O(nT log T)` via `numpy.fft` (its exact time-domain analogue is an `O(n²T)` all-pairs-all-lags sum and must not be attempted at `n ≈ 1,000`) but **precludes conditional heteroskedasticity** in its base form, covering cross-sectional-only heteroskedasticity free and per-name GARCH not at all; its power column is sobering (**.348–.453** against a true slope of 0.1 at `n = 100, T = 256` under strong spatial dependence) (`#477`). **Output: one instrument (`#467`), one assertion list with a checkable sufficient condition (`#468`), one cost schedule (`#469`), one refusal that rules out a class of moves (`#470`), one one-symbol adaptation to this panel (`#471`), one free measurement that may dissolve the whole vein (`#472`), one independent corroboration (`#473`), one anti-candidate against unconditional adoption (`#474`), one discount to quote (`#475`), one refusal that breaks the vein's own cost schedule (`#476`), one nominated instrument with a hard scope limit (`#477`), one composed pre-trial rule (`#478`).** The deflationary conclusion is again the useful one, and it matches [2026-11-16]'s and [2026-11-17]'s: **the cheapest discharge of this vein is a measurement the lab has never made (`#472`), not a new estimator** — if the within-date residual correlation is near zero, `#460`'s bracket collapses and the existing error bars stand. **Anti-lookahead.** No financial data in any source read for its results: (a) is theorems plus Monte Carlo whose dependence matrix was calibrated from annual macro output-growth panels (20 US states 1963–1986; 24 OECD economies), (b) is Monte Carlo at 1,000 replications per setting with one monthly European-equity bid–ask illustration over roughly 2001–2005 read for method only, (c) is theorems plus simulations with **no empirical application and no financial data anywhere**. Every magnitude carried is a **simulation coverage or empirical-size rate**, a **bandwidth arithmetic**, a **citation count**, or the **lab's own validation-split and board numbers from `experiments/journal.md`**. All three `validation_overlap: false`; `published_post_2018: true` for (c) only. **Citation counts**: 6237, 2773, 2 — all Crossref `is-referenced-by-count`, cross-checked on Semantic Scholar by DOI for (a) **6941** and (c) **5**; Crossref answered first try for every DOI looked up, including Vogelsang 2012 (`10.1016/j.jeconom.2011.10.001`, **176**), resolved for metadata only. **Channels**: the **World Bank documents API** is the night's reusable find — `search.worldbank.org/api/v2/wds?format=json&qterm=<title>&fl=docna,pdfurl,txturl,docdt,repnb` returns the curated `pdfurl` **and a `txturl` text rendition** of a Policy Research Working Paper, and the text rendition parses in one `curl` with no PDF step at all (58 KB, 299 `" the "`); it was needed because the RePEc-listed legacy path `www-wds.worldbank.org/external/default/WDSContentServer/...` **redirects to the documents landing page with HTTP 200 and a 48 KB HTML body**, a fourteenth "looks like an answer" mode and the second redirect-to-chooser case after Research Affiliates. `ageconsearch.umn.edu/record/<id>/files/<file>.pdf` served (b) first try, confirming the channel [2026-11-17] nominated. `arxiv.org/pdf/<id>` served (c) complete and clean for the **third** consecutive session. **Vogelsang 2012 (*Journal of Econometrics* 166(2), 303–319, `10.1016/j.jeconom.2011.10.001`, **176** Crossref) is the one source wanted and not obtained** — the alternative primary [2026-11-17] nominated for its small-`T` fixed-`b` reference distribution; one search surfaced no author-hosted, departmental or repository copy, only a related MSU doctoral dissertation (`d.lib.msu.edu/etd/1681`) and a separate Kim–Sun working paper. It was **not pursued past one search** because (c) evaluates fixed-`b` directly and found it partial (`#475`), which answered the question the source was wanted for; it is nominated below rather than recorded as dark. (`notes/2026-11-18-covariance-estimation-without-specifying-cross-sectional-dependence.md`; `notes/2026-11-18-the-unbalanced-panel-formula-and-when-not-to-use-it.md`; `notes/2026-11-18-inference-without-a-bandwidth-and-the-distortion-that-does-not-shrink.md`) |
 | 2026-11-19 (session 97) | **Reading a set of one's OWN test statistics as evidence about the search that produced them** — the primary aim [2026-11-18] promoted after three sessions carried and a SECOND independent consumer appeared (the 2026-11-16 nightly's `null_pctile`-as-`U(0,1)` reading and the 2026-11-18 nightly's `sd(skill)`-vs-`rms(skill_se)` reading). All three acceptance criteria discharged; **the vein closes in the NEGATIVE on both readings** (`#479`-`#492`). (a) `#479`-`#481` the exact null shape, holding for EVERY distribution of true effects (non-increasing; and for t-tests completely monotone plus bounded, `g1(p) <= exp(cv1(p)^2/2)`). (b) **Three independent, individually sufficient refusals of the lab's own version**: `#480` a COMPOSITE one-sided null breaks the restriction itself (the authors' own counterexample gives an *increasing* curve with no p-hacking, and the lab has MEASURED negative skill), `#482` the lab's `null_pctile` is discrete by construction and rounding "invalidates the testable restrictions", `#485` the lab's seat decision is MINIMUM-selection, against which monotonicity and discontinuity tests have zero power irrespective of the searcher fraction. (c) `#486` the test ordering (CS2B best; CS1 > LCM, whose statistic degenerates; the classical Binomial test often powerless) **and the arithmetic that closes the route from the other end** - the corpora run to 49,838 and 352,817 statistics against this board's 27. (d) `#489` the dispersion half is a REFUSAL not a correction: dependence-robust inference delivers a set's MEAN and declines to certify its SPREAD, so the nightly's implied `var(true skill)` = -0.0042 survives as a description and not as a test. (e) `#490` **the second literature in two sessions to price a dependence correction in units the lab does not have** - RVE's simulations stop at 30 studies, the board has 27 trials / 7-12 bets, exactly as Driscoll-Kraay priced itself in required `T`. (f) `#487` **the reframe and the night's most useful output**: there is NO FILE DRAWER here - every trial is recorded and the protocol forbids rewriting it - so the selection function applies to the SEAT, not the RECORD, and the `p`-curve literature's object (inferring an unobserved search from a selected sample) does not describe this lab at all. (g) `#491` the correctly-shaped SCE construction for comparing family leads, written down precisely because `#490` blocks it; `#492` the composed pre-trial rule. **Channels**: `arxiv.org/pdf/<id>` served both Elliott-Kudrin-Wuthrich papers complete and clean for the **fourth** consecutive session; **`events.brown.edu/live/files/<id>`** - a university events server - served the typeset version of record of a closed Springer article, and is nominated as a channel (note the path carries no `.pdf` extension, so a filename-shaped search misses it); **a title-plus-author `api.crossref.org/works?query.bibliographic=` query is the right call when a paper's journal version is newer than its preprint**, which is how the REStat venue was resolved from a preprint naming only its editor. Two negative results: `core.ac.uk/download/` returned the **HTTP 403 / 5,393-byte Cloudflare challenge** this file recorded on 2026-10-01 (confirmed, do not retry), and `ipr.northwestern.edu` served a genuine 980 KB PDF by the right author on the right topic that is a **SLIDE DECK** - the twelfth "looks like an answer" mode a second time, **and tonight supplies a new cheap tell for it: the `" the "` count was ZERO**, so the whitespace word count this file prescribes as the Caesar-shift detector doubles as a slide-deck detector. **Hedges-Tipton-Johnson (2010, `10.1002/jrsm.5`, 1,902 Crossref) is therefore recorded as a named unobtained source**, described at second hand and graded B on that basis; **Tipton (2015, `10.1037/met0000011`, 746 Crossref) is the one live lead left in the vein.** (`notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`; `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`; `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`) |
+| 2026-11-20 (session 98) | **TOOK THE PRIMARY AIM AND BROKE THE SEVEN-SESSION INFERENCE RUN: a MECHANISM, in the one `program.md` sub-mechanism with zero coverage.** Aim from the [2026-11-19] entry: a mechanism predicting a cross-sectional **first moment**, low-turnover, on daily OHLCV, admitted only if it (i) is computable from daily OHLCV alone on large-cap national-index members, (ii) reports the **long-leg-only or top-portfolio level** rather than only a long-short spread, and (iii) states or makes derivable the **signal's persistence**; explicitly not another de-risking, residual-reversion, timing or inference source; at most three requests. **The mandated pre-download grep ran first and the gap was total on the target vocabulary** across all 306 prior notes and `SUMMARY.md`: `network momentum` **0**, `connectedness` **0**, `betweenness` **0**, `spillover index` **0**, `Ahern` **0**, `R-squared` **0**; `network` **9**, `centrality` **4**, `Herskovic` **2** — and the **hits were opened** per the standing rule: every `network` hit was a *neural* network or nodewise regression, every `centrality` hit was a *non*-centrality parameter, and both `Herskovic` hits were in passing. **`program.md`'s `lead-lag-spillover` clause names "network momentum" verbatim and the 2026-09-08 clause-by-clause audit had counted it as covered by the folder's *industry* lead-lag notes** — tenth instance of the unit-of-check lesson, second in which the unit was a named clause. **Three requests spent, three documents obtained, all three read in full.** Criteria (i) and (ii) discharged — the mechanism's **long-leg level is stated in the large-cap cell with its beta** (top slice +1.01%/month, spread +0.75% t 5.77, four-factor alpha +0.63%, market beta 0.00) — and **(iii) FAILS: the signal is a one-month peer return**, which is the horizon the lab measured as a cost wall in 2026-09-25 and whose `peer_ret` version it nulled. **The session's output is therefore a refusal of the published construction plus one book that respects the arithmetic** (`#493`), bounded by the source's own placebo (any random within-group weighting earns +0.50–0.69%/month against the network's +0.80%) and by its industry-momentum double sort (+0.80% → +0.30%). Centrality read as a *characteristic* is an anti-candidate on three grounds (`#498`). New cross-family section above; candidates `#493`–`#500`, three of them free screens, one a book, two refusals. | Misirli, Scida & Velikov 2021 (`2026-11-20-peer-momentum-influence-weighted-peer-returns.md`, Tier B, `10.2139/ssrn.3747402`, 0 Crossref); Ahern 2013 (`2026-11-20-network-centrality-as-a-priced-characteristic.md`, Tier C, `10.2139/ssrn.2197370`, 78 Crossref); Diebold & Yilmaz 2014 (`2026-11-20-variance-decomposition-connectedness-as-network-degree.md`, Tier A, `10.1016/j.jeconom.2014.04.012`, 4,708 Crossref) |
 
 ### Open questions for future sessions
+
+- **[2026-11-20] READ THIS BEFORE AIMING SESSION 99. The seven-session inference run is BROKEN and
+  the aim was a mechanism: `#493` is a BOOK, and it is the first portfolio proposal this file has
+  carried since [2026-11-12]. The `network momentum` vein is now covered and should be treated as
+  CONDITIONALLY CLOSED — conditional on one free screen (`#494`) the lab can run in a free
+  session.** Tonight discharged the [2026-11-19] primary aim on two of its three acceptance
+  criteria and failed the third, by the source's own construction rather than by this folder's
+  reading: `#495` is the long-leg level in the large-cap cell with its beta, `#493` the book that
+  respects v3's cost arithmetic, `#494` the screen that decides whether the network is decorative,
+  `#496`/`#497` the two construction rules from the Tier-A instrument, `#498` the anti-candidate,
+  `#499` the refusal with its arithmetic, `#500` the reading rule. **Three things are now DONE and
+  must not be re-aimed**: whether `program.md`'s network-momentum clause has literature (it does,
+  and it is now filed), whether a network-weighted peer average is worth more than a plain group
+  average (**modestly — the source's own placebo puts a random weighting at +0.50–0.69%/month
+  against +0.80%**), and whether centrality can be used as a characteristic here (**no**, `#498`,
+  on three independent grounds).
+  - **The one transferable lesson, and it is about what a PLACEBO in a source is worth to a
+    reader.** The decisive number tonight was not the headline spread but the paper's own placebo
+    distribution: 1,000 random weight matrices earning most of the measured premium. That single
+    table converted a tempting mechanism into a bounded increment and told the lab, before any
+    code, that the expensive part of the construction is probably decorative. **Standing rule: when
+    a source reports a placebo or a randomised-construction null, read it BEFORE the headline and
+    quote it in the note — it is the cheapest available estimate of how much of the effect is the
+    idea rather than the apparatus.** The lab's own `benchmarks.random_null_v3` is the same
+    instrument pointed at its own books; this is the first time this folder has found the
+    instrument inside a source and used it to price the source down.
+  - **PRIMARY AIM FOR SESSION 99: ANOTHER MECHANISM, and the criteria are UNCHANGED from
+    [2026-11-19] with one addition.** Keep (i) daily-OHLCV-only on large-cap national-index
+    members, (ii) a long-leg-only or top-portfolio **level** rather than only a long-short spread,
+    and (iii) stated or derivable persistence — and **add (iv): the signal's formation horizon must
+    be 63 days or longer, or its rank autocorrelation stated, because criterion (iii) is what
+    tonight's source failed and the lab's 21-day cost wall is the binding constraint on this
+    panel.** Explicitly NOT wanted, unchanged: de-risking or low-volatility constructions (closed
+    by measurement, five reproductions); residual reversion in any formation window; timing or
+    cash-raising constructions; anything in `price-trend`, which is capped; any further inference,
+    multiple-testing, standard-error, matching or dependence source — **those veins are closed on
+    all sides and the shelf is overstocked.** Where to look, revised by tonight: **`liquidity-volume`
+    and `range-variance` remain the thinnest v3-relevant families**, but note that the lab's
+    by-name declined list reached **sixteen objects** on 2026-11-20 and now includes the
+    sign-partitioned share of realized variance at any window and **any second moment of the volume
+    series at any window or sign** — so a `liquidity-volume` source must be about a **first** moment
+    of volume or a **ratio** that is immune to the as-of-fetch back-adjustment factor, which is the
+    contaminant behind five `amihud126` nulls. `lead-lag-spillover` is now the better-covered of
+    the three and should be left alone unless `#494` comes back favourable. **Spend at most three
+    requests**, and prefer one deeply-read Tier-A source with a stated long-leg level over three
+    surveys.
+  - **Ranked second, and carried unchanged for the second session: the PRIMARY SOURCE for Pesaran's
+    CD test.** `#472` rests on it and the folder holds it only at second hand through Hoechle's
+    one-paragraph description. Wanted for (i) its null and exact statistic, (ii) the
+    `N, T → ∞`-in-any-order asymptotics, and (iii) the **weak-versus-strong** cross-sectional
+    dependence distinction. Crossref resolves two SSRN records (`10.2139/ssrn.2050312`,
+    `10.2139/ssrn.2032000`); try `econ.cam.ac.uk`-hosted CWPE and the author's own page before any
+    publisher. **Explicitly ranked BELOW a mechanism, and take it only if the primary aim fails on
+    two channels.**
+  - **The MEASUREMENTS the shelf owes the lab, now three and all free.** Unchanged: `#472`'s
+    average absolute off-diagonal within-date residual correlation (if near zero, `#460`'s bracket
+    collapses and the existing error bars stand), and `#482`'s de-rounding of `null_pctile`.
+    **Tonight adds `#494`** — the rank correlation between a directed-connectedness row weighting
+    and a plain equal weighting over the same peer set, which costs one function, scores no returns,
+    and decides whether `#493` is worth a trial at all. Note that `#494` is **not** a trial and
+    needs no holdout.
+  - **The detector's standing rule ran in full and found the gap by OPENING THE HITS, which is the
+    step the [2026-11-01] correction exists to enforce.** Zero on six patterns
+    (`network momentum`, `connectedness`, `betweenness`, `spillover index`, `Ahern`, `R-squared`)
+    and non-zero on three (`network` 9, `centrality` 4, `Herskovic` 2) — and **all fifteen hits
+    were false positives of exactly the kind a count cannot see**: neural networks, nodewise
+    precision matrices, and non-centrality parameters. Had the counts been trusted, the clause would
+    have read as covered for the second time. **Tonight's amendment to the rule: when a pattern's
+    hits are all in a different technical sense of the same English word, record that in the
+    coverage log** — `network`, `centrality`, `degree` and `connected` are the four words this
+    folder now knows are overloaded. Caveats still not run through the detector, unchanged in
+    order: *publication decay*, and *"the cost model is lethal only to books that trade"* — the
+    second was partly consumed tonight by `#499`'s arithmetic and should be finished.
+  - **Pre-download grep for the session-99 aim, run tonight so the next session can compare**:
+    `turnover growth` **0**, `bps per month` **0** (the folder writes `bps/month`, so this pattern
+    is an artifact of spelling and not a gap), `volume trend` **1**, `signal persistence` **1**,
+    `abnormal volume` **2**, `rank autocorrelation` **2**, `first moment` **6**, `long leg` **20**,
+    `dollar volume` **28**, `Amihud` **42**. The **0 on `turnover growth` and the single hit on
+    `volume trend`** are the nearest thing to an uncovered `liquidity-volume` clause —
+    `program.md` names "turnover trends" verbatim — but note that the folder holds
+    `notes/2026-10-05-turnover-and-the-momentum-life-cycle.md` on the turnover/momentum interaction,
+    so **open that note before treating the zeroes as a gap.**
+  - **Carried unchanged and still live**: everything carried under [2026-11-19]. `#472` stays the
+    free measurement the dependence vein owes; `#445`'s within-date permutation stays the correct
+    finite-population instrument; `#454` stays **withdrawn as unfollowable** with `#459` as the
+    replacement to quote; `#447`'s three vetoes with its third conditioned by `#452`; `#442`'s
+    licence to use Hotelling's `T²` with the `y = p/n` table as its boundary; `#444`'s
+    sum-type/max-type pre-registration rule; `#406`'s volatility-tercile conditioning,
+    category-**neutral** per `#414`; `#413`'s, `#478`'s and `#492`'s composed pre-trial rules;
+    `#389`/`#381`/`#376` as the three free screens; and the refusals `#415`, `#421`, `#423`,
+    `#427`/`#429`/`#434`/`#435`/`#436`/`#438`, `#440`, `#449`, `#450`, `#454` (withdrawn), `#458`,
+    `#461`, `#464`, `#466`, `#470`, `#474`, `#476`, `#480`, `#482`, `#484`, `#485`, `#489`, `#490`,
+    and tonight's `#498`, `#499` and `#500`. **The "read your own statistics" vein stays closed on
+    all four sides** (`#479`–`#490`); the dependence-robust-inference vein stays closed on all four
+    (`#458`–`#478`); the conditioning-set vein stays closed on all six (`#447`–`#457`); the
+    high-dimensional two-sample vein stays closed (`#442`–`#446`); the classifier-accuracy vein
+    stays closed (`#439`–`#441`); the matched-control vein stays closed on all five
+    (`#427`–`#438`); the nominal-price vein stays closed (`#420`–`#426`); the index-rule vein stays
+    closed (`#401`–`#419`); the detectability vein stays closed (`#393`–`#400`); the cash/pool
+    boundary stays closed (`#386`–`#392`); the long-only vein stays closed (`#373`–`#380`).
+  - **Unchanged and still live**: `#493`–`#500` from tonight; `#479`–`#492` from 2026-11-19;
+    `#467`–`#478` from 2026-11-18; `#458`–`#466` from 2026-11-17; `#452`–`#457` from 2026-11-16;
+    `#447`–`#451` from 2026-11-15; `#442`–`#446` from 2026-11-14; `#439`–`#441` from 2026-11-13;
+    `#436`–`#438` from 2026-11-12; `#433`–`#435` from 2026-11-11; `#427`–`#432` from 2026-11-10;
+    `#420`–`#426` from 2026-11-09; `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07;
+    `#401`–`#406` from 2026-11-06; `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04;
+    `#373`–`#380` from 2026-11-03; `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01;
+    `#343`–`#348` from 2026-10-31; and everything carried under those.
+  - **Retired and recorded as retired**: the [2026-11-19] primary aim, discharged on two of three
+    criteria with the third failed by the source. **New named unobtained pointers, none to be
+    re-hunted without a reason**: Demirer, Diebold, Liu & Yilmaz (*Journal of Applied Econometrics*
+    33(1), `10.1002/jae.2585`, **622** Crossref) — the elastic-net VAR that extends tonight's
+    instrument to ~100 nodes, and **the one source to fetch if `#494` comes back favourable**; the
+    supply-chain PageRank centrality result; the global-trade-network country-level result
+    (*Journal of International Money and Finance*, 2025); the return-correlation-network centrality
+    result; Buraschi–Porchia on cash-flow networks; and, carried from [2026-11-19], Tipton (2015,
+    `10.1037/met0000011`, 746 Crossref) as the only live lead left in the inference shelf. **Three
+    channel notes.** `marriott.byu.edu/upload/series/<n>/docs/<id>.pdf` — **a business school's
+    conference-series upload directory** — served a twelve-year-old working paper that has no journal
+    version, on the first try, and is nominated: it is the 2026-10-16 "the authors' *venues* are
+    worth trying alongside the authors' *sites*" lesson on a third venue type. **A university
+    department's own `/wp-content/uploads/<year>/<month>/<file>.pdf`** served a working paper whose
+    copy at a *co-author's* institution failed with `HTTP 000, size=0` (a transport failure, not an
+    origin refusal) — **when a paper is hosted at two authors' institutions, a dead first host says
+    nothing about the second.** And **NBER `/papers/wNNNNN.pdf` came back clean for the second
+    consecutive session**: 690 instances of `" the "`, no ASCII shift, no `( )` dropout, and
+    `file -b` reporting "10 page(s)" for a 108 KB extract of a full article — the 2026-10-07 lesson
+    that a page count is not a completeness check, confirmed again. Still at **0** and still not
+    nominated: `transfer entropy` (thirty-first nomination — and note it is the *undirected*
+    cousin of tonight's instrument, so the case for it is weaker than it was).
+  - **Standing, and not this folder's call. The composition item is DOWNGRADED for the first time
+    in eight sessions, and the reason is in this entry rather than in the lab's.** Tonight's
+    contribution is a mechanism with a book (`#493`), two refusals that cost nothing, and three free
+    screens — not another widening of the error bars. **But eleven consecutive zero-trial nightlies
+    stand**, the lab's by-name declined list reached sixteen objects on 2026-11-20, and the seat
+    arithmetic is unchanged and still not something this folder can fix by reading: the `challenge`
+    seat reported unreachable at every DSR threshold because the **deflation benchmark alone
+    (+0.3087) exceeds the best skill ever measured here (+0.124)**, the bar at 4.34 standard errors,
+    its power against a true skill of +0.30 at 1.09%. Its three named remedies — re-specifying
+    `effective_n_trials`' clustering, separating detection from seating, or accepting that the
+    protocol's honest output is a ranked error-barred board — remain **none of them things this
+    folder can supply.** **Separately and unchanged**: the engine issues filed 2026-10-18 and
+    2026-10-22, `min_train_skill = 0.0`, the note format's missing holdout-overlap flag, `#422`'s
+    signed error in the volume-only liquidity tier, `#432`'s two opposite-signed biases in the
+    equal-weight pool, the still-unmeasured pre-screen imbalance, and the **zero-trial-rate question
+    raised to the human owner on 2026-11-13**. **The integrity check was CLEAN in the one respect
+    that has failed for twenty sessions and is unchanged in the other.** The container was again on
+    a per-run branch (`claude/tender-galileo-wfi639`) at `origin/main`'s commit, for the
+    **twenty-first** consecutive session, and was reset to `main` before any work; the startup hook
+    reported the integrity check as OK.
 
 - **[2026-11-19] READ THIS BEFORE AIMING SESSION 98. The "read your own statistics" vein is now
   CLOSED in the negative, on three independent and individually sufficient grounds, and must not be
