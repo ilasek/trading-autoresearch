@@ -8729,3 +8729,140 @@ across experiments; prune entries that later evidence contradicts.
   and it did not help. With `signed-volume imbalance` (2026-11-13/14) that is three such objects.
   **Stop quoting depth as a reason an object is promising**; it is a reason an object is
   *interpretable*, and the two are not the same claim.
+
+- **[Measured 2026-11-21, nightly — ZERO trials spent; THE HEADLINE, AND IT IS A STATEMENT ABOUT
+  THE LAB RATHER THAN ABOUT ANY OBJECT] EVERY OBJECT ON THE v3 BOARD IS A NULL ON ITS *LONG* LEG
+  UNDER THE MANDATORY JOINT CONTROL, AND THE STRUCTURAL REASON IS THAT THE LONG LEG CARRIES ONLY
+  ABOUT A THIRD OF ANY OBJECT'S CROSS-SECTIONAL SPREAD ON THIS PANEL.** Five objects through one
+  harness (region-quota top-100 book, region-matched forward excess, train, truncated at
+  2017-12-31) against a **quota-matched null at 100 draws**, `sigma` against that null:
+
+      object                  treat | ME/h21 bps      t  sigma | QE/h63 bps      t  sigma
+      m3_oldhalf  (+=high)    ctrl +1|      +10.5  +1.30  +1.01 |      +23.0  +0.85  +0.75
+      m3_oldhalf              ctrl -1|      -24.0  -2.63  -2.84 |      -37.1  -1.21  -1.21
+      mom12_1     (+=high)    ctrl +1|       +6.8  +0.66  +0.38 |       -4.1  -0.12  -0.17
+      vol126      (+=LOW )    ctrl +1|       -4.2  -0.37  -0.62 |       +6.5  +0.15  +0.09
+      amihud126   (+=high)    raw  +1|      +19.3  +2.08  +1.78 |      +54.3  +1.61  +1.49
+      amihud126   (+=high)    ctrl +1|       -1.3  -0.21  -0.47 |       -6.4  -0.30  -0.34
+      logP        (+=high)    raw  +1|      -46.5  -6.62  -6.76 |     -140.9  -5.97  -5.75
+      logP        (+=high)    ctrl +1|      -16.1  -1.35  -1.59 |      -11.2  -0.35  -0.39
+
+      fraction of the spread sitting on the LONG leg, quoting only |spread| > 25 bps
+        m3 ctrl ME +0.30 (+34.5)   m3 ctrl QE +0.38 (+60.2)   mom12_1 ctrl ME +0.26 (+26.4)
+        amihud raw ME +0.52 (+37.2)  amihud raw QE +0.46 (+117.0)
+        logP raw ME +0.47 (-98.6)   logP raw QE +0.45 (-314.7)  logP ctrl ME +0.44 (-36.4)
+
+  The largest |sigma| on any **reachable** row (`+1`, controlled) is **1.59** and it is `logP`,
+  negative; the best positive is M3's **+1.01**, against a null whose signed `p95 t` is +1.48 to
+  +1.84. **The long-leg share clusters at 0.26-0.52, and at 0.26-0.38 for the two signal objects
+  under the joint control.** Three consequences. **(i)** It is the lab's own measurement of the
+  quantity `research/SUMMARY.md` `#495` demands be reported, from this panel rather than from a US
+  industry cross-section, and it lands near the folder's "about 40% of the benchmark-adjusted
+  spread is on the long leg". **(ii) It is a property of the panel, not of an object, so it is a
+  standing discount: an external long-short result needs roughly 3x the spread before it is worth
+  a trial here**, and that is the cheapest available use of the folder's Tier-A sources. **(iii)
+  It reaches the seat's arithmetic from the other side** — the 2026-11-18 entry says the seat needs
+  +0.64 of skill; tonight says the long leg alone has to supply it. **Riders: train only, one
+  selection rule, and `#500` (Tier A) says a grouped statistic is specific to its reference set**
+  — this is the panel's number in this cell, not a universal constant. **Nothing recorded moves.**
+
+- **[Measured 2026-11-21, nightly — DISCHARGES THE #1 CARRIED FREE ITEM OF TWO HANDOVERS AND
+  CORRECTS THE 2026-11-20 HEADLINE] WITH THE NULL QUOTA-MATCHED AND AT 100 DRAWS, `sd(t)` IN THE
+  (QE/h63, HIGH-phi) CELL IS 0.940 RATHER THAN THE 0.70 THAT 12 DRAWS GAVE — SO M3'S "+1.65 SIGMA"
+  WAS A CORRECTLY-SIZED READING AGAINST AN UNDER-SAMPLED CEILING, AND M3'S LONG LEG IS A NULL IN
+  BOTH CORRECTLY-SIZED CELLS.**
+
+      quota-matched null, 100 draws, region-quota top-100, m3-scorable mask (375 names/row)
+      cell        phi      mean t   sd(t)   p95 t   max t   p95|t|
+      ME/h21     0.791     +0.268   1.019   +1.792  +2.526   1.901
+      ME/h21     0.980     +0.107   0.988   +1.843  +2.516   1.921
+      QE/h63     0.791     +0.055   1.048   +1.643  +2.457   1.895
+      QE/h63     0.980     +0.102   0.940   +1.479  +2.232   1.706
+
+      M3 in the same harness, sigma against the phi-0.791 row
+        raw  +1   ME/h21 +0.45    QE/h63 +0.16
+        ctrl +1   ME/h21 +1.01    QE/h63 +0.75
+
+  At 100 draws `sd(sd) = sd/14.1`, so the term is pinned to +/-0.07. **The 2026-11-20 entry's own
+  rider (i) — "at `sd(t) = 1.0` the same `t` reads +1.16 sigma and clears nothing" — was the
+  correct reading and is now measured rather than conjectured.** What is strictly refuted is the
+  *inference* that +1.65 cleared a ceiling of 1.20; **`#500` forbids calling it a refutation of
+  the object**, because the selection rule differs (region-quota top-100 on the m3-scorable mask
+  against a plain top-100) and a grouped statistic read on a new reference set is a new object.
+  **Nothing recorded moves**: M3's skill (+0.124), its 90% CI ([-0.11, +0.42]), its DSR (0.1635)
+  and its board position are untouched — and that interval always said this. **Standing rule
+  this closes: when a free screen's margin is inside its null's own estimation error, more draws
+  on the one cell beat another object. It cost one block and settled a claim two sessions carried.**
+
+- **[Measured 2026-11-21, nightly — ANSWERS RESEARCH `#494` AND CORRECTS ITS SPECIFICATION IN BOTH
+  HALVES] ON A PANEL WITH NO INDUSTRY LABELS THE ONLY GROUP IS THE REGION, SO AN EQUAL-WEIGHTED
+  PEER AVERAGE IS NEARLY ONE NUMBER PER REGION AND **THE WEIGHTING MATRIX IS THE WHOLE TRADEABLE
+  CONTENT OF A PEER AGGREGATE** — THE FOLDER'S "THE NETWORK IS DECORATIVE" PREDICTION INVERTED.**
+
+      score rank correlation, influence-weighted vs equal-weighted, 252 train month-ends
+        POOLED across regions      mean +0.2639   (pre-2009 -0.0834, 2009+ **+0.7271**)
+        WITHIN region (demeaned)   mean -0.0437   (pre-2009 -0.0834, 2009+ +0.0092)
+
+      score dispersion        within-region sd   total sd   within/total
+        influence-weighted         0.02657        0.04120      0.645
+        equal-weighted             0.00531        0.02363      0.225
+
+  **`#494`'s first statistic is not computable as written**: it asks for the rank correlation of
+  the directed row weights against *equal* weights, and equal weights are **constant**, so there
+  is no ordering to correlate (0 usable rows of ~5,800). **Its second, read pooled as the text
+  implies, says "decorative" at +0.73** — carried almost entirely by the region mean, the one
+  component the region-matched null gate neutralises (2026-10-11). Read **within region**, the two
+  constructions are **uncorrelated**. Confirmed on returns: the equal-weighted peer score screens
+  as a clean null in every treatment (|t| <= 1.02). **The general form, and it is the sibling of
+  2026-11-17's "subtract the lab's own benchmark from both sides": read a screen on a GROUPED
+  statistic inside the group the gate neutralises, or it measures the one component the lab cannot
+  trade.** Free, one line of demeaning, and here it flipped the answer to a Tier-A-sourced screen.
+
+- **[Measured 2026-11-21, nightly] THE FOLDER'S `#493` BOOK IS AN ANTI-CANDIDATE, REFUSED ON THREE
+  OF FOUR PRE-WRITTEN CLAUSES — AND IT IS THE FIRST OBJECT IN A LONG RUN TO CLEAR THE NOVELTY
+  BLOCK OUTRIGHT, WHICH LOCATES THE BOUNDARY OF THE EXHAUSTION CLAIM RATHER THAN REFUTING IT.**
+  Construction (fixed in writing first): per-region VAR(1) on daily log Parkinson range vol,
+  `w = 500`, annual refit, generalized FEVD at `H = 21`, composite centrality = PC1 of
+  (to-degree, closeness, eigenvector), top-decile-centrality peers' influence zeroed, score =
+  influence-weighted average of peers' 126-day return, top 30% within region.
+
+      treatment                  sgn | ME/h21   t   sigma | QE/h63   t   sigma
+      influence raw               +1 |        +0.57  +0.49 |        +0.98  +0.97
+      influence ctrl logP,vol     +1 |        +1.35  +1.28 |        +0.78  +0.77
+      influence ctrl +equal-peer  +1 |        +1.89  +1.82 |        +1.34  +1.35
+      influence ctrl logP,vol     -1 |        +0.19  +0.10 |        +0.74  +0.73
+      influence ctrl +equal-peer  -1 |        +0.56  +0.47 |        +1.05  +1.05
+
+  Bar (pre-written after the null was calibrated): `t >= +2.5` in **both** cells controlled; raw
+  `t >= +1.0` in both; placebo not above +1.0; survives the equal-peer control. **Clause 1 fails**
+  (+1.35/+0.78 against +2.5). **Clause 2 fails**, and the ME/h21 reading is **created by its
+  controls** (+0.49 -> +1.28 -> +1.82 sigma as they are added) — the `dvs252` shape of
+  2026-11-12/13. **Clause 3 fails in QE/h63**: signed +0.73 against placebo +0.73 controlled, and
+  +1.35 against +1.05 under the triple control — **both signs positive at the same magnitude, the
+  dispersion-artifact signature**, which also makes clause 4 worthless. The best reading sits at
+  the **95th percentile of the measured null**. **Novelty, and it is the interesting part:** max
+  |rho| to anything on the board is **+0.071** (`mom12_1`), an order of magnitude below the
+  loadings that closed `dvs252` (-0.645) and `vchurn252` (+0.548). **The 2026-11-20
+  "sixteen-object list is the panel's OHLCV characteristic space" entry is therefore not refuted —
+  its scope is the CHARACTERISTIC space, and an aggregate over *other* names sits outside it.
+  Carry that as the claim's boundary.** Persistence recorded free: **phi 0.738**, decomposing into
+  **0.783 within an estimated network** and **0.216 across the annual refit**.
+  **Anti-candidates travelling with this entry:** `#493` as specified; any peer aggregate weighted
+  by a **volatility**-VAR decomposition; and any reading of a grouped score taken pooled across
+  the groups the null gate matches on.
+
+- **[Method, 2026-11-21 — THE FIRST NIGHT IN THIS FILE WHERE THE ORDERING RULE WAS FOLLOWED RATHER
+  THAN REPAIRED, AND IT WAS TESTED] CALIBRATE, THEN WRITE THE BAR, THEN READ — AND THE TEST OF
+  WHETHER A LAB ACTUALLY HAS THIS DISCIPLINE IS WHAT IT DOES WHEN A LATER TREATMENT COMES IN
+  HIGH.** 2026-11-20 recorded the **fourth** instance of setting a bar before measuring the cell.
+  Tonight: the null was calibrated first (50 draws, all six `sd(t)` in **[0.960, 1.035]** at three
+  persistences including 0.90 — a **third independent corroboration** that a step >= horizon cell
+  is correctly sized), the four-clause bar was written into `PREREG.md`, and only then was the
+  screen read. When the triple-control cell then came in at **+1.82 sigma** — the highest reading
+  of the night and the kind of number a session wants — **no clause was flipped and no trial was
+  bought**, because clause 2 had already been written to catch exactly a control-created reading.
+  **Two corollaries worth carrying. (a)** A bar is only a bar if it is written where it can refuse
+  the result you are hoping for; a bar set after the reading is a description. **(b)** Write the
+  refusal *conditions* as well as the pass condition — tonight three of the four clauses that
+  fired were refusal clauses (control-created reading, placebo parity, inside-the-envelope), and
+  none of them is expressible as "the number must be big enough".
