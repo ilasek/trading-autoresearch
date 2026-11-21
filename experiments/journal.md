@@ -32301,3 +32301,4 @@ followed.
 
 **Verdicts:** none.
 
+## Research session — 2026-11-21 (learning agent): 3 notes added, see research/SUMMARY.md
