@@ -8866,3 +8866,137 @@ across experiments; prune entries that later evidence contradicts.
   refusal *conditions* as well as the pass condition — tonight three of the four clauses that
   fired were refusal clauses (control-created reading, placebo parity, inside-the-envelope), and
   none of them is expressible as "the number must be big enough".
+
+- **[Measured 2026-11-22, nightly — FOUR trials spent after twelve consecutive zero-trial nights;
+  THE HEADLINE, AND IT IS THE FIRST TIME THE GATE THAT REFUSES EVERYTHING HAS BEEN CLEARED] THE
+  HIGH-VOLUME RETURN PREMIUM BEATS ITS OWN REGION- AND TYPE-MATCHED NULL AT p = 0.010 WITH THE
+  LARGEST POSITIVE SELECTION TERM EVER RECORDED HERE — AND 86% OF ITS EDGE IS ITS OWN COST BILL.**
+  `lv_volume_shock_gkm_band` (trial #32): score = mean log share volume over the last 5 printing
+  days minus the median over the preceding 45, split-guarded, K = 100, (calendar peer x instrument
+  type) quota, monthly, 200-name band.
+
+      book                        pool  null med  cand   geography  selection  pctile  MC p
+      lv_volume_shock_gkm_band   +0.34    +0.23  +0.37     -0.11      +0.14      99%   0.010
+      previous board best (#2)   +0.34    +0.17  +0.22     -0.17      +0.049     80%   0.209
+
+  Validation skill **+0.031** (90% CI [-0.14, +0.159], the tightest on the board), **-0.149 at 2x
+  liquidity costs**: the bill is ~**0.18** of Sharpe and the GROSS skill ~**+0.21**. It is a
+  GATE_FAIL — it failed the **train**-skill gate at -0.124 — and that combination is new: the
+  random-selection null refused 22 of the previous 24, and this is the object that passed it.
+  **Three consequences that are not about this book.** (i) **The record's cost-per-turn constant is
+  a LOW-CHURN constant.** The ~11 bps/yr per 1x of one-way churn was measured at 1.3x; at 16.6x the
+  charged bill is ~320 bps/yr, i.e. **~19 bps per 1x**, because the liquidity tier and the
+  UK/HK/FR/IT/ES taxes bite harder on exactly the names a volume shock selects. Do not extrapolate
+  it. (ii) **`null_median - pool` has at least two sources and the candidate's turnover tells you
+  which.** The 2026-10-15/16 entry traced that term to a candidate's un-invested warm-up; this book
+  is never in cash and its term is still -0.11, because the replicas inherit the candidate's
+  SCHEDULE and so pay its 16.6x bill while earning nothing for it. Read the term as warm-up for a
+  slow book and as **the cost of your own schedule** for a fast one. (iii) **There is no cheaper
+  construction for this object, and that is arithmetic rather than untested.** Churn is the fraction
+  of the book replaced per period times the frequency; the premium's documented horizon is 1-4
+  weeks, so holding longer to trade less dilutes the signal proportionally and the net/gross ratio
+  does not improve. A blend does not fix it either (2026-10-14/15: cost and active return both
+  scale in `k`; 2026-10-15/16: combining legs ADDS 36% to churn). **Rider from `research/#506`: the
+  source localises the premium toward smaller names and this panel is nine countries' large caps,
+  so +0.21 gross is an upper bound on what a book here could ever have collected.**
+
+- **[Measured 2026-11-22, nightly — THE INSTRUMENT FOUR OF THIS LAB'S TURNOVER PRE-REGISTRATIONS
+  HAVE NEEDED] CHURN IS PREDICTABLE BEFORE A TRIAL FROM THE SCORE'S MONTH-TO-MONTH RANK
+  PERSISTENCE, AND A RETENTION BAND IS INERT UNLESS THAT PERSISTENCE IS ABOVE ~0.97.** 251 train
+  month-ends, K = 100, B = 200; `exit top-200` is the share of last month's top-100 that has fallen
+  outside the top 200, i.e. what the band cannot hold:
+
+      score                        phi    exit200  exit100   charged churn tr / val
+      oldhalf (board lead, M3)   +0.980     0.5%     9.7%        1.0x / 1.3x
+      -vol126                    +0.970     0.4%     9.9%        0.9x / 1.8x
+      vv demeaned                +0.920     3.0%    18.9%        2.6x / 4.5x
+      vol_shock_5_45             -0.022    27.4%    52.2%        9.0x / 16.6x
+
+  **`train one-way churn ~ 1.0 + 0.29 x (exit200 in %)` fits all four to within 0.8x, and
+  validation churn ran 1.30-2.00x the train figure on every one** — which widens the "29-49% above
+  train" band the previous four trials of one mechanism had set. **Pre-register turnover from this,
+  not from intuition**: tonight registered 0.6-1.8x against a charged 2.6x/4.5x and 2.0-6.0x
+  against 9.0x/16.6x, while the two slow books' ranges held. **The general form, and it is why a
+  band is not a cost fix: a band controls churn only against a score whose ORDERING is persistent,
+  and persistence of the STATISTIC is not persistence of its RANK.** `vv` is a 252-day standard
+  deviation — as slow a statistic as this panel has — and demeaning it within moving volatility
+  terciles took its rank persistence to 0.92 and tripled its churn. Caveats: four points, one
+  panel, one (K, B) cell.
+
+- **[Measured 2026-11-22, nightly — A CONSTRUCTION RULE THAT APPLIES TO EVERY FAMILY, AND THE
+  GENERAL VERSION OF IT IS REFUTED IN THE SAME BLOCK] QUOTA EVERY CHARACTERISTIC SORT ON INSTRUMENT
+  TYPE, NOT ONLY ON THE REGION PROXY — BUT THE CONFOUND IS SPECIFIC TO VOLATILITY-LEVEL SORTS AND IS
+  NOT A PROPERTY OF RISK-FLAVOURED SCORES IN GENERAL.** The panel carries 42 ETFs against ~1,400
+  stocks (**5.5%** of a median train month-end). `random_null_v3` matches type and, for stocks only,
+  listing region — so it matches **nothing inside the ETF type**, and a book overweight in ETFs has
+  a fifth of its replicas drawn as *random* (mostly equity) ETFs while it bought the quietest funds
+  on the panel. The one-operator pair:
+
+      book                            quota cells   cand   null med  geography  selection  pctile  ETF share
+      pt_lowvol126_quota_band         peer         +0.196   +0.346     +0.006     -0.150      0%      20.8%
+      pt_lowvol126_typequota_band     peer x type  +0.237   +0.331     -0.009     -0.094      6%     ~5.0%
+
+  Matching the asset class moved the selection term **+0.056** and took geography to -0.009 — the
+  cleanest benchmark alignment recorded under v3 — and it is inside the error bars, so one paired
+  instance puts the channel at about a third of that book's deficit rather than measuring it at
+  0.056. **What survives: an asset-class- and region-matched low-volatility book STILL loses,
+  selection -0.094 at the 6th percentile, so none of the six measurements behind "Sharpe is flat in
+  beta on this panel" is withdrawn — the rider is on their MAGNITUDE, because each was taken on a
+  book whose ETF share nobody had measured.** The free ETF census (holdings only, train) then
+  **refuted the general form of the claim within the session**, which is why it is stated narrowly:
+
+      book                            ETF share  97-08  09-17   v3 val skill
+      pt_lowvol_gk_quarterly (#1)       24.7%    19.2%  32.0%      -0.03
+      lv_illiq_peer_neutral_band (#3)   10.4%    15.3%   5.6%      -0.05
+      rv_coskew_low_overlap6 (#25)       6.8%     9.0%   3.7%      -0.19
+      pt_oldhalf_overlap6 (#16, lead)    6.7%     5.8%   7.6%      +0.12
+      sl_micro_span_masked (#28)         6.7%     8.7%   4.0%      +0.055
+      rv_dcorr_low_overlap6 (#24)        5.2%     4.5%   6.0%      -0.30
+      rv_arbrisk_peer_neutral (#4)       1.6%     2.3%   0.8%      -0.23
+
+  **The three worst range-variance books are panel-matched or UNDERweight**, so the hypothesis that
+  the bottom of the v3 board is an ETF artefact is dead. The mechanism is narrower and makes sense
+  of it: a fund's volatility and range are compressed, so a volatility-LEVEL sort buys funds, while
+  a fund's comovement is HIGH and its idiosyncratic share LOW, so arbitrage-risk, low-correlation
+  and co-skewness sorts push funds out. **Exactly two recorded objects carry the confound and both
+  are low-volatility books** (`#1` at 24.7% and tonight's `#30` at 20.8%). Type is static,
+  survivorship-free and the protocol's own matching axis, so reading it is not hindsight.
+
+- **[Method, 2026-11-22 — WHY TWELVE CONSECUTIVE NIGHTS RECORDED NOTHING, AND IT IS THIS FILE'S OWN
+  RULE BEING BROKEN IN THE ONE DIRECTION NOBODY CHECKED] "A TRAIN SCREEN MAY REFUTE BUT MAY NOT
+  QUALIFY" ALSO FORBIDS DECLINING AN OBJECT BECAUSE A TRAIN SIGMA FELL SHORT OF A BAR.** The
+  2026-10-16/17 rule was written against reading a strong train sheet as evidence of skill, and
+  every session since has honoured it in that direction. But the sessions of 2026-11-09 through
+  2026-11-21 each declined their one object on a *threshold* read off the same instrument — the
+  pre-signed sigma against a bar of +2.5, and so on — which is the same forbidden inference with
+  the sign flipped. The rule's own justification is explicit that refutations hold only because
+  "no validation luck overturns ARITHMETIC"; a sigma short of a bar is not arithmetic. Two
+  measurements in this file say the instrument cannot carry either inference: **corr(train skill,
+  validation skill) = -0.08 pearson / +0.02 spearman over 27 trials** (2026-11-16), and the free
+  region-matched forward-excess screen **rejects a true null 57% of the time in its most-quoted
+  cell** (2026-11-19). Tonight pre-registered a decision rule containing **no threshold on a train
+  signal statistic** — declining only on arithmetic grounds (not computable or contaminated;
+  relabelling at score-level |rho| >= 0.90; cost >= prize by construction; wrong panel; direction
+  not pre-signable) — and it declined three objects on those grounds, including one of the night's
+  own pre-registered candidates and one of its own fixes, while passing four to the engine.
+  **The result that settles it: the object the night's best train sheet would have rejected (train
+  skill -0.124) is the one that cleared the null gate at p = 0.010, and the object with the best
+  train sheet (+0.09) finished at the 6th percentile.** Marginal deflator cost of a scout trial
+  remains ~0.001 of Sharpe (2026-11-16), so the trials were close to free; what twelve nights of
+  unlimited free train-side screening cost instead was an uncounted search that enters no
+  multiple-testing ledger anywhere. **Corollary: a lab whose only instrument is one it has measured
+  to be uninformative should spend trials, not screens.**
+
+- **[Measured 2026-11-22, nightly] TONIGHT ADDED TWO GENUINELY INDEPENDENT BETS TO A BOARD THE
+  RECORD HAD PRICED AT 7-12 OF THEM, WHICH IS THE BREADTH MANDATE BEING SATISFIED IN BETS RATHER
+  THAN IN LABELS.** Active-return correlations over the 1,562 validation days against all 31 stored
+  v3 objects: `lv_volume_shock_gkm_band` max |rho| **+0.265** (to `sl_trend_span_masked`), to the
+  board lead **-0.012**, **zero** pairs at or above 0.5 — the most decorrelated object on the board,
+  and the one that cleared the null. `rv_volofvol_neutral_band` max |rho| **+0.389**, to the board
+  lead +0.238, zero pairs at or above 0.5. The engine's clustering assigns them **M10** and **M9**.
+  The two low-volatility books correlate **+0.984** with each other, which confirms at the return
+  level that the pair really was one operator apart, and each sits in the 7-object M1 cluster. **So
+  the 2026-11-16 finding that "the breadth mandate counts labels, not bets" is answerable: check
+  the ACTIVE-return rho of a planned object against the board, and a score whose rank persistence is
+  near zero is decorrelated from this board almost by construction, because everything on it is
+  slow.**

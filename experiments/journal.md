@@ -32387,3 +32387,145 @@ followed.
 - **Train -0.124 against validation +0.031 reverses the sign of the board's usual disagreement** (the earlier trials ran train-positive, validation-negative). Twenty-ninth and thirtieth instances tonight of a coefficient the record puts at -0.08 over 27 trials: the train sheet carries nothing either way, and this is the first object for which believing it would have cost the lab the night's best result.
 - **What this does NOT say.** The premium is not tradeable under this protocol and no part of this is a promotion case: the verdict is GATE_FAIL, the net skill's interval covers zero, and `research/#506`'s reading rule applies — the source localises the effect toward smaller names and this panel is nine countries' large caps, so the gross +0.21 is an upper bound on what a book here could ever have collected. The claim is narrower and stronger than a performance claim: **a cross-sectional score on this panel beat 200 of its own region- and type-matched replicas at p = 0.010, which nothing in 28 prior v3 trials had done.**
 
+
+## Session summary — 2026-11-22 (nightly) — 4 trials of 8, the first recorded since 2026-11-08; the gate that refused 22 of 24 candidates has been cleared at p = 0.010, and the object that cleared it is the most decorrelated one on the board
+
+**Experiments: 4 of 8.** Verdicts: **GATE_FAIL x 4** (`#29 rv_volofvol_neutral_band`,
+`#30 pt_lowvol126_quota_band`, `#31 pt_lowvol126_typequota_band`, `#32 lv_volume_shock_gkm_band`).
+No promotion, no family lead, no holdout gate reached. `trials.jsonl` goes from 138 to **142
+records / 32 v3 records / 31 scored v3 trials**; `rank_trials.py` reports **31 of 31 in tier 1**
+and M3 `pt_oldhalf_overlap6` still leads at skill +0.124. All four were `track: "scout"`, so the
+champion was never compared and **no holdout, forward or incubation file was opened** — the seat
+is still empty under v3. Engine green (**92 passed in 31.12s**). Store's last bar **2026-11-20**,
+not stale. Budget allocation respected: **2 in `price-trend` (exactly the cap)**, 1 in
+`range-variance`, 1 in `liquidity-volume`; `distinct_mechanisms` was already 6 so the per-family
+cap of 2 was lifted, and no family is without a trial so the cold-family clause is moot.
+
+**Step 0 — the integrity flag was a real strand and it was resolved rather than run past.**
+`origin/claude/determined-darwin-gova1x` held one commit absent from `origin/main`:
+`a9ecb5e report: week 47`, two new files in `reports/`, **no trial, journal, leaderboard or
+candidate content**, so by the 2026-11-15 two-command test the deflated-Sharpe bar was never
+understated. The strand was real all the same — `reports/2026-W47.md` was a second one-week hole in
+the report series, the same failure the 2026-11-15 entry caught for W46 — so the commit was
+cherry-picked onto `main` and pushed before any experiment ran. The branch still appears under
+`git branch -r --no-merged origin/main` because a cherry-pick makes a new hash; `git diff
+origin/main origin/claude/determined-darwin-gova1x` is now **deletions only**, i.e. the branch
+holds nothing `main` lacks. **For the human owner: that pointer will keep tripping the step-0
+banner until someone deletes the remote branch, which this session did not do.**
+
+**Why four trials after twelve nights of none — stated as the decision, because it is a break with
+the recent record.** `learnings.md`'s own rule is "a train screen may REFUTE but may not QUALIFY",
+justified on the ground that refutations hold only because no validation luck overturns
+*arithmetic*. Every session from 2026-11-09 to 2026-11-21 declined its one object on a **threshold**
+read off that instrument (a pre-signed sigma against a bar of +2.5, and so on), which is the same
+forbidden inference with the sign flipped — and the instrument is one this lab has measured twice
+to be uninformative: corr(train skill, validation skill) **-0.08** over 27 trials, and the free
+forward-excess screen rejecting a true null **57%** of the time in its most-quoted cell. So tonight
+pre-registered a decision rule with **no threshold on any train signal statistic** (scratchpad
+`PREREG.md`, written before the first screen was read): decline only on *not computable or
+contaminated*, *relabelling at score-level |rho| >= 0.90*, *cost >= prize by construction*, *wrong
+panel*, or *direction not pre-signable*. It declined three objects on those grounds and passed four
+to the engine. The deflator is not the reason and was not offered as one — 2026-11-16 prices a
+marginal scout trial at ~0.001 of Sharpe.
+
+**Best finding — F1. The high-volume return premium is the first score under v3 to beat its own
+region- and type-matched null decisively, it carries the largest positive selection term ever
+recorded here, and the whole of its edge is its own cost bill.**
+
+    book                        pool  null med  cand   geography  selection  pctile   MC p
+    lv_volume_shock_gkm_band   +0.34    +0.23  +0.37     -0.11      +0.14      99%    0.010
+    previous board best (#2)   +0.34    +0.17  +0.22     -0.17      +0.049     80%    0.209
+
+Validation skill **+0.031**, 90% CI [-0.14, +0.159] — the tightest interval on the board — and
+**-0.149 at 2x costs**, so the bill is ~0.18 of Sharpe and the gross skill ~**+0.21**. The verdict
+is GATE_FAIL on the **train**-skill gate (-0.124), which is a new combination: the
+random-selection null refused 22 of the previous 24 candidates and is the one gate this object
+passed. **There is no cheaper construction for it, and that is arithmetic rather than untested** —
+the premium's horizon is 1-4 weeks, so holding longer to trade less dilutes the signal
+proportionally, and a blend scales cost and active return together. `research/#506`'s reading rule
+caps the claim: the source localises the premium toward smaller names and this panel is nine
+countries' large caps, so +0.21 gross is an upper bound on what a book here could ever have taken.
+
+**Second — F2, and it is the instrument four of this lab's turnover pre-registrations have needed.**
+Churn is predictable before a trial from the score's month-to-month rank persistence, and a
+retention band is **inert** unless that persistence is above ~0.97: `phi` +0.980 / +0.970 / +0.920 /
+-0.022 against charged train churn 1.0x / 0.9x / 2.6x / 9.0x, with `train churn ~ 1.0 + 0.29 x
+(share of last month's top-100 now outside the top 200, in %)` fitting all four to within 0.8x and
+validation churn running **1.30-2.00x** train on every one. Tonight missed two of its four
+registered ranges (0.6-1.8x against 2.6x/4.5x; 2.0-6.0x against 9.0x/16.6x) and held the two slow
+ones. **Persistence of a STATISTIC is not persistence of its RANK** — `vv` is a 252-day standard
+deviation and demeaning it within moving volatility terciles tripled its churn.
+
+**Third — F3. A construction rule for every family, with its own general form refuted in the same
+block.** Quota on instrument **type**, not only on the region proxy: the panel is 5.5% ETFs, the
+null matches type but nothing *inside* the ETF type, and the peer-quota-only low-volatility book
+came out **20.8% ETFs** with selection **-0.150** at the 0th percentile. The one-operator control
+with (peer x type) cells moved selection to **-0.094** (+0.056), the percentile to 6% and geography
+to -0.009 — the cleanest benchmark alignment under v3. **What survives is that the matched book
+still loses**, so none of the six "Sharpe is flat in beta" measurements is withdrawn; the rider is
+on their magnitude. The free ETF census then **killed the general claim inside the session**: the
+three worst range-variance books are panel-matched or underweight (6.8%, 5.2%, **1.6%**), because a
+fund's comovement is high and its idiosyncratic share low, so arbitrage-risk, low-correlation and
+co-skewness sorts push funds *out* while a volatility-LEVEL sort buys them. Exactly two recorded
+objects carry the confound and both are low-volatility books (`#1` at 24.7%, `#30` at 20.8%).
+
+**Fourth — F4. Two genuinely independent bets were added to a board the record had priced at 7-12
+of them.** Active-return rho over 1,562 validation days against all 31 stored v3 objects:
+`lv_volume_shock_gkm_band` max |rho| **+0.265**, to the board lead **-0.012**, **zero** pairs >=
+0.5; `rv_volofvol_neutral_band` max **+0.389**, zero pairs >= 0.5. Engine clustering: **M10** and
+**M9**. The two low-volatility books correlate **+0.984**, confirming at the return level that the
+pair was one operator apart. So the 2026-11-16 "the mandate counts labels, not bets" finding has an
+answer, and part of it is mechanical: a score whose rank persistence is near zero is decorrelated
+from this board almost by construction, because everything on the board is slow.
+
+**Fifth — three objects declined on the pre-registered arithmetic grounds, two of them mine.**
+(i) The pre-registered paired control `rv_volofvol_raw_control` was refused on **D2** at score-level
+rho **+0.964** to the shipped version — the log construction of vol-of-vol is already nearly
+volatility-level-free (rho +0.132 to vol126), so removing the demeaning would have shipped an
+algebraically near-identical relative. (ii) **My own split fix was the contaminant**: winsorising
+daily log-volume changes at +/- log(1.5) and cumulating clips **7.16%** of eligible printing days
+(the median daily |log volume change| is 0.254) and, being a cumulative sum, drifts — correlation
+to the plain log-volume shock **+0.126**. Replaced by the literature's own ~50-day window, where a
+split step reaches ~0.6% of name-dates, plus an explicit guard. **The structural fact that falls
+out: on this panel the CLEAN corner of the volume panel and the CHEAP corner of the cost model do
+not overlap** — long-window within-name volume ratios carry the split step, short-window ones churn.
+(iii) The expected-announcement-month seasonal, as the one fully-invested cross-sectional route into
+`seasonality-calendar`, was declined on **D3** before being written: monthly cycle rotation at
+K = 100 churns ~4-8x/yr against a long-leg prize the source puts near the same size.
+
+**For the human owner — the standing item, unchanged, and one correction to it.** The `challenge`
+track is still closed by arithmetic: the seat needs **+0.64** of skill against a board best of
++0.124, the deflation benchmark alone is +0.3087, and both levers are in frozen files. Nothing in
+`engine/`, `scripts/`, `program.md` or `data/` was touched. **The correction is that this does not
+make the SCOUT track pointless, and twelve nights had been treating it as though it did**: tonight's
+four trials cost ~0.004 of Sharpe at the deflator and produced the first null-gate pass in 31 v3
+trials, two new independent bets, a churn predictor and a construction rule. The honest next move
+for the seat remains one of `program.md`'s own "Future upgrades".
+
+**Ideas for next session.** (i) **The volume-shock premium at matched tail depth in the cheapest
+cost tier** — the one cheapening axis the record has not confounded. It must be done at *matched
+depth*, because a liquidity split at fixed K is confounded with tail depth (2026-10-09/10 deleted
+91% of a gross excess that way), so the right form is the top decile of the cheap tier rather than
+the top 100 of it. (ii) **The volume shock's horizon profile**, free and train-only: the premium's
+documented life is 1-4 weeks and the book holds a month, so the h5 / h10 / h21 shape says whether
+the holding period is even matched to the signal. (iii) **Re-quota `#1 pt_lowvol_gk_quarterly` on
+type** — it is the other 24.7%-ETF book and the only other recorded object F3 touches; the
+re-measurement is one trial and would discharge the rider F3 leaves on the "flat in beta" series.
+(iv) **Apply F2's churn predictor to every object on the anti-candidate list** before any of them is
+reconsidered; several were declined on cost estimates that F1 shows were built on a low-churn
+constant. (v) Carried untouched from the 2026-11-21 handover: the return-VAR member of its F1 class,
+the long-leg-share discount as a pre-registerable multiplier, and M3's horizon profile.
+
+**Provenance from `research/SUMMARY.md`.** `#502` (measure how much of a volume score is a
+volatility sort before spending a trial — followed and discharged: the shock's rho to vol126 is
+-0.209) and `#504` (the volume RATE refused on four grounds, with the within-name volume **shock**
+named as the one object this panel computes cleanly — which is the whole provenance of F1's object)
+supplied tonight's liquidity-volume trial. `#506`'s reading rule caps F1's claim. `#505` (price
+delay) and `#498` (network centrality) were respected as anti-candidates and no such sort was
+built; `#501`'s band regression was not used, because tonight's rule declines only on arithmetic
+grounds and a band regression is a threshold instrument. **No performance expectation was imported
+from the folder**, and the vol-of-vol sign was taken from the mechanism, with its post-2018
+publication recorded as a novelty discount rather than as support.
+
+**Verdicts:** GATE_FAIL `rv_volofvol_neutral_band`; GATE_FAIL `pt_lowvol126_quota_band`; GATE_FAIL
+`pt_lowvol126_typequota_band`; GATE_FAIL `lv_volume_shock_gkm_band`.
