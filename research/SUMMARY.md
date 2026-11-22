@@ -10521,6 +10521,225 @@ as a within-name time-series rank** (`notes/2026-09-07-high-volume-return-premiu
 fast rather than slow. **The family is not under-covered; it is mis-specified for this panel**, and
 the next mechanism session should be aimed elsewhere.
 
+### THE NAMED-OBJECT COVERAGE AUDIT of `program.md`'s eight families — the [2026-11-21] primary aim, part (1), run at the level of the named object rather than the family (cross-family, the program itself)
+
+**Why this section exists, and the unit of check is the whole point.** The [2026-11-21] entry
+ordered this audit before any download, on the grounds that the **2026-09-08 audit was run at
+family level and was wrong** — it counted `network momentum` as covered by industry lead-lag notes,
+which cost session 98 its aim, and the same unit-of-check error nearly deleted two live veins on
+2026-11-21. What follows is every object named in every `program.md` family clause, marked
+**filed** / **refused for this panel** / **open**, each resolving to a note or to a candidate
+number. It needed no requests. It was built by grepping all 312 prior notes for each object's
+canonical terms and then **opening the hits** — the [2026-11-21] standing amendment — because a hit
+count alone cannot distinguish a dedicated treatment from a passing mention, and twice below it
+did not.
+
+**The headline, and a session should read it before aiming: of the roughly thirty-six named objects
+in `program.md`, exactly one was genuinely open and admissible, and it is a CONSTRUCTION corner
+rather than a signal.** Three objects that a family-level audit would have called open are not
+(`vol-of-vol`, `holiday windows`, `cross-asset into equities`); each is open only in a form the lab
+excludes, and the table says which. The one real gap — `statistical-arbitrage`'s long-only
+benchmark-relative construction — was filled tonight by three notes, and one of its three branches
+is refused on a measurement the lab already owns.
+
+#### 1. `statistical-learning`
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| penalised linear models | **filed** | `2026-08-29-machine-learning-cross-section-comparative.md`, `2026-10-21-illusion-of-sparsity-selection-versus-shrinkage.md`, `2026-09-03-machine-learning-economic-restrictions.md` |
+| trees / random forests | **filed** | ML-comparative (above), `2026-08-19-bagging-averaging-unstable-predictors.md` |
+| gradient boosting | **filed** | ML-comparative, `2026-10-19-learning-to-rank-cross-sectional-selection.md` |
+| small neural nets | **filed** | ML-comparative, `2026-10-19-no-arbitrage-criterion-as-the-learning-objective.md`, `2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md` |
+| walk-forward refit / leakage control | **filed** | `2026-10-13-k-fold-cross-validation-under-temporal-dependence.md`, `2026-11-16-double-debiased-ml-neyman-orthogonality-cross-fitting.md` |
+| "which feature groups carry signal once costs and the skip-month are respected" | **filed** | `2026-09-01-nonparametric-characteristic-selection-large-stocks.md`, `2026-10-21-sure-independence-screening-marginal-vs-joint.md`, `2026-10-21-knockoff-filter-fdr-control-vs-permutation.md` |
+
+#### 2. `liquidity-volume` — complete; three of four objects refused
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| Amihud illiquidity | **filed + refused** | `2026-08-29-amihud-illiquidity-measure-and-replication.md`, `2026-08-31-amihud-volume-component-decomposition.md`; refusal carried at `#422` (the signed error in the volume-only liquidity tier) and five `amihud126` nulls |
+| volume shocks | **filed + refused** | `2026-09-07-high-volume-return-premium.md`; on the lab's by-name declined list |
+| turnover trends | **refused, CLOSED on four grounds** | `#504`; `2026-11-21-turnover-persistence-and-the-concave-premium-tokyo.md`, `2026-11-21-turnover-effect-uncertainty-not-liquidity.md` |
+| dollar-volume | **filed** | `2026-09-04-global-liquidity-proxy-horserace.md`, `2026-11-06-illiquidity-premium-and-where-the-size-screen-sits.md` |
+
+#### 3. `range-variance` — complete in substance; the one nominal gap is a costume
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| Parkinson / Garman–Klass / Rogers–Satchell | **filed** | `2026-08-29-range-based-volatility-estimators.md` (all three estimators in one note) |
+| HAR-RV forecasting | **filed** | `2026-09-21-har-rv-volatility-cascade.md` |
+| vol-of-vol | **open in NAME only — do not aim at it** | four notes mention it in passing (`range-based-volatility-estimators`, `2026-09-17-coskewness-and-the-third-moment-estimation-window.md`, `2026-09-17-downside-beta-and-the-volatility-confound.md`, `2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`) and none treats it. It is a **second moment of a second moment**, i.e. on the lab's by-name declined list, and its first-moment version resolves on three independent searches to the low-volatility / idiosyncratic-volatility anomaly, **closed by the lab's own measurement in five reproductions** |
+| cross-sectional dispersion | **filed** | `2026-10-18-dispersion-beta-and-the-cross-section.md`, `2026-10-18-cross-sectional-variance-as-model-free-idiosyncratic-volatility.md`, `2026-10-18-return-dispersion-and-the-measurement-of-active-performance.md` |
+| correlation regimes | **filed** | `2026-10-06-betaless-variance-decomposition-and-average-correlation.md`, `2026-09-24-betting-against-correlation-decomposing-beta.md`, `2026-10-06-absorption-ratio-eigenvalue-concentration.md` |
+
+#### 4. `seasonality-calendar` — four of five filed; the fifth is open only as a timing construction
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| turn-of-month | **filed** | `2026-09-02-turn-of-month-payment-cycle.md`, `2026-10-31-quarter-end-marking-the-close.md`, `2026-10-31-quarter-ending-month-momentum-seasonality.md` |
+| month-of-year | **filed** | `2026-10-04-halloween-six-month-seasonal.md`, `2026-10-04-sad-daylight-seasonal-mechanism.md`, `2026-10-16-mood-beta-and-seasonal-recurrence.md`, plus the tax-year cluster (`2026-10-07-tax-year-end-alignment-and-the-australian-test.md` and two siblings) |
+| day-of-week | **filed** | `2026-10-16-day-of-week-and-the-cross-section.md` |
+| holiday windows | **OPEN, and the only genuinely unfiled object in the eight families besides tonight's** | no dedicated note. The word `holiday` returns 34 notes and **all of them are the overloaded sense** — foreign-exchange trading holidays producing NaN in the volume panel — except `2026-10-16-calendar-effects-data-mining-robust-test.md`, which treats the holiday rule only as one member of the enumerated universe its joint test is designed to deflate. **It is nonetheless not admissible under the aim's own exclusions**: a pre-holiday or holiday-window effect is a *timing* construction on a calendar indicator, and timing and cash-raising constructions are excluded. It would also face that same skeptical source as its first obstacle. Recorded as open so that it is not re-discovered, and as **not worth a session** unless the exclusion is lifted |
+| same-calendar-month seasonality | **filed** | `2026-08-29-same-calendar-month-seasonality.md`, `2026-09-02-return-seasonalities-common-factors.md`, `2026-10-07-past-return-consistency-and-the-seasonal-in-the-past-return-relation.md` (15 hits in all) |
+
+#### 5. `lead-lag-spillover` — conditionally closed, and its third object is refused rather than open
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| ETF versus constituent | **filed** | `2026-10-10-etf-arbitrage-shock-propagation.md`, `2026-10-10-etf-flows-and-the-premium-change-null.md`, `2026-10-10-etf-launch-as-a-return-chasing-boundary.md` |
+| region leading region | **filed** | `2026-10-04-us-leads-the-world-country-lead-lag.md`, `2026-11-02-country-index-momentum-and-the-currency-component.md`, `2026-11-02-winner-loser-reversals-in-national-indices.md` |
+| cross-asset (bonds / commodities / FX into equities) | **filed AS REFUSED — this is the audit's second correction** | zero notes carry any "X predicts equities" phrasing and no note is dedicated to the object, so a slug-level check reads it as open. It is not: the **family's own lead source is the cross-asset paper** (Hong–Torous–Valkanov, in the `lead-lag-spillover` section above), and it refuses the object on two of its own grounds — its identifying restriction is that a leader must carry information about *fundamentals*, verified against industrial production, **a macro series this repo does not have**; and the theory **does not sign** the cross-prediction, so a long-only "leader up ⇒ buy the laggard" book assumes a sign the source explicitly withholds. Add the third: the cross-asset leg would have to be an ETF, and the lab's ETF objects are filed above |
+| network momentum | **filed; conditionally closed pending `#494`** | `2026-11-20-variance-decomposition-connectedness-as-network-degree.md`, `2026-11-20-peer-momentum-influence-weighted-peer-returns.md`, `2026-11-20-network-centrality-as-a-priced-characteristic.md`; `#493` (the book), `#494` (the free screen that decides it), `#498` (centrality refused on three grounds) |
+
+#### 6. `statistical-arbitrage` — THE ONE REAL GAP WAS HERE, and it was in the clause's last sentence
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| PCA / factor residual reversion | **filed + refused** | `2026-08-30-pca-residual-statistical-arbitrage-long-only.md`, `2026-09-25-deep-learning-statistical-arbitrage-residual-construction.md`, `2026-09-25-short-term-residual-reversal.md`, `2026-09-12-residual-momentum-neutralizing-a-score-by-regression.md`; residual reversion is excluded **at any formation window** by the lab's standing list |
+| cointegration | **filed; the index-level version refused tonight** | `2026-09-07-cointegration-pairs-versus-distance-method.md`, `2026-09-25-mean-reversion-time-screening-statarb.md`; and now `2026-11-22-cointegration-tracking-and-its-price-level-tilt.md` with refusal `#509` |
+| pairs | **filed** | `2026-09-03-pairs-trading-distance-method.md` |
+| "say how the short leg's absence is handled" | **filed** | `2026-11-03-attainable-underweight-and-the-long-only-constraint.md`, `2026-11-03-which-leg-arbitrage-capital-trades.md`, `2026-11-03-no-short-constraint-cost-and-panel-breadth.md`, `2026-09-06-long-side-share-of-anomaly-profits.md`, `2026-08-22-long-only-as-l1-regularization.md` |
+| **the long-only BENCHMARK-RELATIVE CONSTRUCTION itself** | **WAS OPEN — filled tonight** | the pre-download detector returned `enhanced index` **0**, `Alexander`/`Dimitriu` **0**, `Beasley` **0**, `Palomar`/`Benidis` **0**, `index tracking` **2** (both passing, in index-comovement notes) against `Roll (1992)` **1** and `Jorion` **4** — i.e. the folder held the *geometry* of benchmark-relative optimisation and none of the *optimisation literature itself*. Filled by `2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`, `2026-11-22-stochastic-dominance-over-the-benchmark-and-the-shortfall-lp.md` and `2026-11-22-cointegration-tracking-and-its-price-level-tilt.md` |
+
+#### 7. `portfolio-learning`
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| hierarchical risk parity | **filed** | `2026-09-07-hierarchical-risk-parity-clustering-allocation.md` |
+| clustering-based allocation | **filed** | HRP (above), `2026-11-17-clustering-as-a-design-question-not-a-correlation-question.md`, `2026-10-06-absorption-ratio-eigenvalue-concentration.md` |
+| stacking / meta-labelling over family leads | **filed** | `2026-09-08-stacked-regressions-nonnegative-weights.md`, `2026-09-08-meta-labeling-and-the-value-of-a-filter.md` |
+| ensembles of decorrelated signals | **filed** | `2026-08-17-forecast-combination-why-averaging-beats-selecting.md`, `2026-08-31-signal-blending-vs-portfolio-blending.md`, `2026-08-20-trading-diversification-combining-signals.md`, `2026-08-19-bagging-averaging-unstable-predictors.md` |
+
+#### 8. `price-trend` — legacy and **capped**; filed throughout, and one object refused by the lab's own trial
+
+| Named object | Status | Resolves to |
+|---|---|---|
+| cross-sectional momentum | **filed** | `2026-08-17-jegadeesh-titman-overlapping-momentum.md`, `2026-08-17-momentum-horizon-echo.md`, `2026-08-28-international-momentum-country-neutral.md` |
+| time-series momentum / trend following | **filed** | `2026-08-17-time-series-momentum-evidence-and-replication.md`, `2026-08-17-moving-average-rules-anatomy.md` |
+| vol targeting / risk parity | **filed** | `2026-09-21-volatility-targeting-impact-and-the-momentum-overlay.md`, `2026-08-18-risk-parity-equal-risk-contribution.md`, `2026-09-21-panel-volatility-models-and-risk-targeting.md` |
+| short-term reversal | **filed** | `2026-08-17-short-term-reversal-as-liquidity-provision.md`, `2026-09-25-short-term-residual-reversal.md`, `2026-09-05-contrarian-profit-decomposition.md` |
+| low-vol / quality | **filed + closed by the lab's own measurement** | `2026-08-18-low-risk-investing-industry-neutral.md`, `2026-08-18-defensive-equity-replication-and-construction.md`, `2026-09-22-arbitrage-asymmetry-ivol-sign-flip.md` |
+| regime switching | **filed** | `2026-10-22-regime-switching-financial-markets.md`, `2026-10-22-breakdate-inference-unknown-timing.md`, `2026-10-22-multiple-changepoint-estimation-bai-perron-pelt.md` |
+| *(52-week-high proximity, an object the clause implies)* | **refused by the lab's own trial** | recorded inside `2026-09-19-dynamic-reference-point-composite-cgo.md`: "This lab has tried 52-week-high proximity and refuted it" |
+
+#### What the audit establishes, stated so the next three sessions do not re-derive it
+
+1. **`program.md`'s signal clauses are spent.** Thirty-five of about thirty-six named objects are
+   filed, refused for this panel, or closed by the lab's own measurement. The honest possibility the
+   [2026-11-21] entry invited this audit to establish — that **no family has an open first-moment
+   clause this panel can trade** — is now established rather than suspected. That is a finding about
+   the program, not a failure of a session, and it should change how aims are written: a mechanism
+   aim must now come with a reason why its object is not already one of the thirty-five.
+2. **Two "open" objects are closed by the panel and one by the exclusion list.** `vol-of-vol` is a
+   second moment of a second moment whose first-moment form is the closed low-volatility anomaly;
+   `cross-asset into equities` is refused by the family's own lead source for want of a macro series
+   and for want of a sign; `holiday windows` is genuinely unfiled but is a timing construction.
+   **None of the three is an aim.**
+3. **The remaining room in `program.md` is in the CONSTRUCTION clauses, not the signal clauses** —
+   `statistical-arbitrage`'s "say how the short leg's absence is handled" and
+   `portfolio-learning`'s "this is where scouted leads become a challenger". Tonight's three notes
+   are in the first of those. That is where a session with no admissible signal should look.
+4. **The detector's cheapest output is still deletion, and it needs the whole shortlist.** Tonight
+   it deleted `vol-of-vol` and `cross-asset` from the shortlist before a request was spent, and it
+   confirmed the one real gap with five independent zero-hit terms. Overloaded words to add to the
+   `network`/`centrality`/`degree`/`connected`/`Hou`/`age` list: **`holiday`** (34 hits, all but one
+   the foreign-trading-holiday sense), **`constituent`** (77), **`analyst`/`coverage`** (88, mostly
+   `coverage` in this folder's own audit sense), **`drawdown`** (26) and **`dollar volume`** (49,
+   mostly the v3 cost tier).
+
+### THE LONG-ONLY BENCHMARK-RELATIVE BOOK as the object — the optimisation literature this folder had none of, two LPs that fit the lab's own objective exactly, and the third construction refused on the lab's own measurement (`statistical-arbitrage`, `portfolio-learning`, the gate's own statistic)
+
+**Why this section exists.** It is the one real gap the named-object audit above found, and it is
+in `statistical-arbitrage`'s last clause — *"long-only is a real constraint: only the cheap side of
+a residual is tradeable here, so say how the short leg's absence is handled."* The folder held the
+**geometry** of benchmark-relative investing (Roll 1992 on the tracking-error frontier, Jorion's
+total-risk constraint, the active-return ceiling) and **none of the optimisation literature that
+actually builds such books**. The detector returned zero on `enhanced index`, `Beasley`,
+`Alexander`/`Dimitriu` and `Palomar`/`Benidis`. The gap matters more here than it would elsewhere,
+because **this lab's promotion statistic already is an enhanced-indexation objective**: skill is
+Sharpe minus the equal-weight eligible pool's on the same days, so a candidate is not a portfolio
+that should do well — it is a portfolio that should beat a specific long-only benchmark, which is
+the exact problem this literature names.
+
+**The central structural finding, and it is the reason to read any of this: both admissible
+constructions take NOTHING but a matrix of `asset return − benchmark return` over a trailing
+window, and both are linear programs.** No covariance matrix, no expected-return forecast, no tail
+parameter in one of the two cases. Long-only (`x ≥ 0`), fully-invested (`Σx = 1`) and a 25% cap are
+all linear constraints and go in as written rather than as adaptations. `scipy.optimize.linprog`
+solves both. That makes this the cheapest-to-try construction family the folder has filed, and it
+makes the reasons *not* to try it the interesting part.
+
+**(1) The one-sided LP, and it is parameter-free.** Bruni, Cesarone, Scozzari & Tardella (2017,
+*EJOR*, 75–88 citations, Tier B, overlap **false** — every dataset ends before 2018) ask for a
+portfolio that *stochastically dominates* the benchmark, relax exact dominance by a tolerance `ε`,
+and minimise `ε`. Their result is a **reduction**: requiring that every *subset* of in-sample
+periods have bounded cumulative shortfall against the benchmark — an exponential constraint set —
+is **identical** to minimising the expected shortfall of the book below the benchmark, because
+`min_{S⊆T} Σ_{t∈S} δ_t = −Σ_t max{0, −δ_t}`. The LP is `min Σ_t y_t` subject to
+`y_t + δ_t(x) ≥ 0`, `Σx = 1`, `x ≥ 0` — **n + T variables, T + 1 constraints**, no tail
+probability, no risk-aversion parameter, and `ε` comes out as an *output* rather than going in as a
+choice. Their evaluation is a rolling 52-week fit / 12-week hold, and for one of their five
+datasets **the benchmark is the equally-weighted portfolio**, which is this lab's benchmark.
+
+**(2) The two-sided ratio LP, and its one transferable empirical result is about REBALANCE SPEED.**
+Guastaroba, Mansini, Ogryczak & Speranza (2020, *Annals of OR*, 32–37 citations, Tier B, gold open
+access, overlap **false**) scalarise the same bi-objective problem as a *ratio* — a CVaR-based
+deviation of the excess-return series over its mean — and linearise it by the Charnes–Cooper
+transformation. The risk side is a **weighted combination of CVaRs at several tail levels**
+(WCVaR) rather than one, which buys a coarse risk-aversion profile at the cost of two tolerance
+parameters `ε₁, ε₂`. Three readings worth keeping. (i) Across their twelve instances **no model
+variant dominates**, so the objective-function axis is weak evidence — and their conclusion that
+"adding further CVaR measures tends to produce better performance" is **contradicted by their own
+ranking table**, in which the two-level variant beats the three-level one; the defensible claim is
+only that a single very deep tail level alone is the worst choice. (ii) Their instance design is the
+honest part: four instances were built to span the four combinations of benchmark direction
+in-sample × out-of-sample. (iii) **Rebalancing every 24 weeks beat every 12, which beat every 4 —
+and this is measured with no transaction costs charged anywhere in the paper.** A *gross* finding
+in favour of slow rebalancing is strictly stronger than a net one, because a cost model can only
+widen it; the mechanism is estimation noise being re-fitted on a largely-overlapping window. That
+lands directly on the lab's 21-day cost wall from the other side.
+
+**(3) The refusal, and it is free because the lab already owns the measurement.** Alexander &
+Dimitriu (ISMA discussion paper 2003, with a *JPM* 2005 companion at 111 citations; Tier C in use)
+give the complete recipe for **cointegration-based index tracking**: regress `ln(index)` on the
+constituents' `ln(P_k)` over a three-to-five-year rolling daily window, normalise the OLS
+coefficients to sum to one, rebalance every ten trading days, hold share counts between
+rebalances. Their claim is that such a tracker earns a positive excess return over the index it
+tracks. **Their own Section-2 algebra says what that excess return is**: in a regression of a log
+index on log prices, the higher-priced stock receives a weight above its index weight, and the gap
+grows with the cross-sectional dispersion of prices. So the construction is mechanically a tilt
+towards **high nominal price**, scaled by price dispersion. The lab measured the log price level as
+a score in its own right on 2026-11-08/09 and found its one-bit IC running
+**−0.030 → −0.051 → −0.073 → −0.109 → −0.150** from 21 to 504 days, with the standing rule that any
+screen beyond 63 days must partial out the log price level within region. The tilt is therefore
+**the wrong sign at every horizon the lab has measured**, worsening with horizon, while this
+construction's window is three to five years — and applying the lab's own correction removes the
+tilt that generates the reported edge. Four independent further grounds are in the note: OLS
+coefficients are not sign-constrained so the method is not natively long-only; a ten-day rebalance
+on a full-constituent basket sits inside the cost wall; nominal price conventions across this
+panel's markets differ by about three orders of magnitude, so a global log-price regression loads
+on a listing convention; and the paper's own `index dispersion` measure is computed after rebasing
+all prices to 100 at a chosen date, so **its level is a function of time elapsed since that
+arbitrary date** and any regression on it is partly a regression on a clock.
+
+**What the three sources share, and it is the honest headline.** None charges transaction costs —
+all three report turnover and none prices it. None acknowledges multiple testing, although each
+compares between four and six variants on the same instances. And every one of them computes
+through the regime that decides the question here: their widest panel is 2151 assets against **104**
+weekly scenarios, and they report solve times as negligible without asking whether the solution is
+*estimable*. On this panel — roughly a thousand eligible names against a trailing window of a few
+hundred days — `n ≫ T` is not a caveat, it is the whole experiment. Which is why the most valuable
+thing in this vein is not a book but **two free pre-trial measurements** (`#510`, `#511`) that
+decide, before any return is scored, whether an optimised long-only benchmark-relative book on this
+panel is measuring an edge or measuring the panel's width.
+
+**And one argument that generalises past this vein.** Bruni et al.'s no-arbitrage observation is the
+sharpest reading rule the night produced. A portfolio that **never** trails its benchmark in-sample
+is an arbitrage, so it cannot exist; therefore an in-sample fit in which the book always or almost
+always beats the pool is **evidence of fitting, not of edge** — and the fitted shortfall `ε` is
+readable as an overfitting gauge rather than as an achievement. That applies to every construction
+this lab fits against the equal-weight pool, not only to the LPs here.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -20068,6 +20287,101 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-11-21-price-delay-and-the-investor-recognition-friction.md`,
     `notes/2026-11-21-turnover-effect-uncertainty-not-liquidity.md`
 
+
+507. **THE COVERAGE AUDIT ITSELF, AND IT IS THE NIGHT'S PRIMARY PRODUCT: `program.md`'s signal
+    clauses are SPENT, and a mechanism aim must now justify why its object is not already one of
+    thirty-five filed-or-refused named objects.** The clause-by-clause table is in the
+    named-object audit section above, run at the level of the named object because the 2026-09-08
+    family-level audit was wrong and cost session 98 its aim. Of roughly thirty-six objects named
+    across the eight families, **thirty-five are filed, refused for this panel, or closed by the
+    lab's own measurement**; the one real gap was a *construction* corner and is now filled. Three
+    objects a slug-level check reads as open are not aims: **`vol-of-vol`** (a second moment of a
+    second moment, on the declined list; its first-moment form is the closed low-volatility
+    anomaly), **`cross-asset into equities`** (refused by the family's own lead source — its
+    identifying restriction needs industrial production, which this repo lacks, and the theory
+    does not sign the cross-prediction, so a long-only "leader up ⇒ buy laggard" book assumes a
+    sign the source withholds), and **`holiday windows`** (genuinely unfiled, but a *timing*
+    construction and therefore excluded). The transferable conclusion: **the remaining room in
+    `program.md` is in its CONSTRUCTION clauses, not its signal clauses.** Tier n/a (an audit of
+    this folder, not a source), overlap n/a.
+    → the named-object audit section of this file
+
+508. **CONSTRUCTION, AND THE CHEAPEST-TO-TRY ONE THIS FOLDER HOLDS: minimise the EXPECTED SHORTFALL
+    OF THE BOOK BELOW THE EQUAL-WEIGHT POOL, as a parameter-free linear program in n+T variables.**
+    `min Σ_t y_t` s.t. `y_t + δ_t(x) ≥ 0` for every in-sample date, `Σ_j x_j = 1`, `x_j ≥ 0`,
+    `x_j ≤ 0.25`, where `δ_t(x)` is the book's return minus the pool's on date `t`. At the optimum
+    `y_t = max{0, −δ_t}`, so the objective is the mean shortfall below the benchmark. The source
+    proves this is **equivalent** to bounding the cumulative underperformance over *every subset* of
+    in-sample dates, i.e. to an approximate-stochastic-dominance rule over the benchmark — so the
+    objective has a decision-theoretic justification rather than being one more scalarisation. It
+    takes **no covariance matrix, no return forecast and no tail parameter**; its only input is the
+    excess-return matrix, which is computable from `prices` and the pool's own series. Fit
+    walk-forward (one solve per emitted row, trailing window only), add an `ℓ₁` penalty on weight
+    changes against the previous row to keep it linear while charging turnover, and fix the
+    pre-screen that cuts the panel to a few hundred names **before** the first solve — choosing it
+    afterwards is the hindsight the rules forbid. Note the objective is **one-sided**: it penalises
+    trailing the pool and gives no credit for leading it, which is closer to minimising downside
+    tracking error than to maximising a Sharpe difference. Tier B, overlap **false**.
+    → `notes/2026-11-22-stochastic-dominance-over-the-benchmark-and-the-shortfall-lp.md`
+
+509. **REFUSAL, AND IT IS FREE BECAUSE THE LAB ALREADY OWNS THE MEASUREMENT: cointegration-based
+    index tracking is a NOMINAL-PRICE-LEVEL TILT, and the lab measured that characteristic with the
+    opposite sign at every horizon.** The construction (regress `ln(index)` on constituents'
+    `ln(P_k)` over a 3–5-year rolling window, normalise coefficients to sum to one, rebalance every
+    ten days) is fully specified and implementable. The source's **own algebra** shows that in such
+    a regression the higher-priced stock gets a weight above its index weight, with the gap growing
+    in the cross-sectional dispersion of prices — so the book is mechanically long high nominal
+    price. The lab's 2026-11-08/09 nightly measured the log price level's one-bit IC at
+    **−0.030 → −0.051 → −0.073 → −0.109 → −0.150** over 21 to 504 days and made partialling it out
+    mandatory beyond 63 days; this construction's window is years, and the mandated correction
+    **removes the very tilt that generates its reported excess return**. Four further sufficient
+    grounds: OLS weights are not sign-constrained, so a long-only version is a different estimator
+    with none of the cointegration argument behind it; a ten-day rebalance on a full-constituent
+    basket is inside the 21-day cost wall; nominal price conventions differ across this panel's
+    markets by ~three orders of magnitude, so a global log-price regression loads on a listing
+    convention; and the companion `index dispersion` measure is computed after rebasing prices to
+    100 at a chosen date, so **its level is a function of time since that arbitrary date** and any
+    regression on it is partly a regression on a clock. Tier C in use, overlap **false**.
+    → `notes/2026-11-22-cointegration-tracking-and-its-price-level-tilt.md`
+
+510. **FREE PRE-TRIAL SCREEN, AND IT COSTS TWO LP SOLVES: before any optimised long-only book,
+    solve it on the trailing window and again on the FIRST HALF of that window, and measure the
+    rank correlation of the two weight vectors.** If a benchmark-relative optimised book is not
+    stable to halving its own estimation window, the trial will be scoring estimation noise and can
+    be skipped before a single return is computed. This is the weight-space counterpart of
+    `#501`–`#503` and it is pointed at a construction rather than at a signal. The reason it bites
+    here harder than in the sources: their widest case is 2151 assets against **104** scenarios and
+    they report only that the solve is *fast*, never that the solution is *estimable* — on this
+    panel `n ≫ T` by a wide margin. Tier B, overlap **false**.
+    → `notes/2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`
+
+511. **FREE MEASUREMENT THAT DOUBLES AS AN OVERFITTING GAUGE, AND IT RESTS ON A NO-ARBITRAGE
+    ARGUMENT RATHER THAN ON A SIMULATION: solve `#508`'s LP and read the optimal `ε` — the mean
+    in-sample shortfall below the pool — as a function of how many names are admitted.** A portfolio
+    that **never** trails its benchmark in-sample would be an arbitrage and therefore cannot exist;
+    so `ε → 0` is the signature of *fitting*, not of edge, and the curve of `ε` against admitted
+    names **is** the overfitting, measurable before anything is scored. Together with `#510` this
+    is two solves that decide whether a trial in this vein is worth spending. **The reading rule
+    generalises past the LP**: for any construction fitted against the equal-weight pool, an
+    in-sample record of almost always beating the pool is evidence about the fit, not about the
+    signal. Tier B, overlap **false**.
+    → `notes/2026-11-22-stochastic-dominance-over-the-benchmark-and-the-shortfall-lp.md`
+
+512. **A CONSTRUCTION RULE WITH AN UNUSUAL WARRANT — IT IS MEASURED GROSS OF COSTS, SO COSTS CAN
+    ONLY STRENGTHEN IT: in a rolling-window optimised benchmark-relative book, SLOWER REBALANCING
+    BEAT FASTER, 24 weeks over 12 over 4, with no transaction costs charged anywhere in the
+    source.** Almost every slow-rebalancing argument this folder holds is a cost argument; this one
+    is an *estimation* argument, because re-solving on a largely-overlapping trailing window
+    reshuffles weights in response to noise and the reshuffle is harmful even when free. Two
+    consequences here. (i) For any walk-forward fitted construction, the rebalance grid is a
+    first-class design parameter and the prior should be **slow**, independently of the v3 cost
+    schedule — which pushes the same way. (ii) A session that finds a fitted book improving as it
+    rebalances faster should suspect its fit before believing its edge. Note the honest limit: the
+    source compares three cadences on twelve instances with no multiple-testing treatment, so this
+    is a direction, not a calibration — and the lab must **re-measure the cadence itself** rather
+    than import 24 weeks. Tier B, overlap **false**.
+    → `notes/2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -20179,8 +20493,177 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-19 (session 97) | **Reading a set of one's OWN test statistics as evidence about the search that produced them** — the primary aim [2026-11-18] promoted after three sessions carried and a SECOND independent consumer appeared (the 2026-11-16 nightly's `null_pctile`-as-`U(0,1)` reading and the 2026-11-18 nightly's `sd(skill)`-vs-`rms(skill_se)` reading). All three acceptance criteria discharged; **the vein closes in the NEGATIVE on both readings** (`#479`-`#492`). (a) `#479`-`#481` the exact null shape, holding for EVERY distribution of true effects (non-increasing; and for t-tests completely monotone plus bounded, `g1(p) <= exp(cv1(p)^2/2)`). (b) **Three independent, individually sufficient refusals of the lab's own version**: `#480` a COMPOSITE one-sided null breaks the restriction itself (the authors' own counterexample gives an *increasing* curve with no p-hacking, and the lab has MEASURED negative skill), `#482` the lab's `null_pctile` is discrete by construction and rounding "invalidates the testable restrictions", `#485` the lab's seat decision is MINIMUM-selection, against which monotonicity and discontinuity tests have zero power irrespective of the searcher fraction. (c) `#486` the test ordering (CS2B best; CS1 > LCM, whose statistic degenerates; the classical Binomial test often powerless) **and the arithmetic that closes the route from the other end** - the corpora run to 49,838 and 352,817 statistics against this board's 27. (d) `#489` the dispersion half is a REFUSAL not a correction: dependence-robust inference delivers a set's MEAN and declines to certify its SPREAD, so the nightly's implied `var(true skill)` = -0.0042 survives as a description and not as a test. (e) `#490` **the second literature in two sessions to price a dependence correction in units the lab does not have** - RVE's simulations stop at 30 studies, the board has 27 trials / 7-12 bets, exactly as Driscoll-Kraay priced itself in required `T`. (f) `#487` **the reframe and the night's most useful output**: there is NO FILE DRAWER here - every trial is recorded and the protocol forbids rewriting it - so the selection function applies to the SEAT, not the RECORD, and the `p`-curve literature's object (inferring an unobserved search from a selected sample) does not describe this lab at all. (g) `#491` the correctly-shaped SCE construction for comparing family leads, written down precisely because `#490` blocks it; `#492` the composed pre-trial rule. **Channels**: `arxiv.org/pdf/<id>` served both Elliott-Kudrin-Wuthrich papers complete and clean for the **fourth** consecutive session; **`events.brown.edu/live/files/<id>`** - a university events server - served the typeset version of record of a closed Springer article, and is nominated as a channel (note the path carries no `.pdf` extension, so a filename-shaped search misses it); **a title-plus-author `api.crossref.org/works?query.bibliographic=` query is the right call when a paper's journal version is newer than its preprint**, which is how the REStat venue was resolved from a preprint naming only its editor. Two negative results: `core.ac.uk/download/` returned the **HTTP 403 / 5,393-byte Cloudflare challenge** this file recorded on 2026-10-01 (confirmed, do not retry), and `ipr.northwestern.edu` served a genuine 980 KB PDF by the right author on the right topic that is a **SLIDE DECK** - the twelfth "looks like an answer" mode a second time, **and tonight supplies a new cheap tell for it: the `" the "` count was ZERO**, so the whitespace word count this file prescribes as the Caesar-shift detector doubles as a slide-deck detector. **Hedges-Tipton-Johnson (2010, `10.1002/jrsm.5`, 1,902 Crossref) is therefore recorded as a named unobtained source**, described at second hand and graded B on that basis; **Tipton (2015, `10.1037/met0000011`, 746 Crossref) is the one live lead left in the vein.** (`notes/2026-11-19-the-null-shape-of-a-set-of-ones-own-p-values.md`; `notes/2026-11-19-the-power-of-those-tests-and-the-selection-function-this-lab-runs.md`; `notes/2026-11-19-dependence-robust-inference-on-a-set-of-estimates.md`) |
 | 2026-11-20 (session 98) | **TOOK THE PRIMARY AIM AND BROKE THE SEVEN-SESSION INFERENCE RUN: a MECHANISM, in the one `program.md` sub-mechanism with zero coverage.** Aim from the [2026-11-19] entry: a mechanism predicting a cross-sectional **first moment**, low-turnover, on daily OHLCV, admitted only if it (i) is computable from daily OHLCV alone on large-cap national-index members, (ii) reports the **long-leg-only or top-portfolio level** rather than only a long-short spread, and (iii) states or makes derivable the **signal's persistence**; explicitly not another de-risking, residual-reversion, timing or inference source; at most three requests. **The mandated pre-download grep ran first and the gap was total on the target vocabulary** across all 306 prior notes and `SUMMARY.md`: `network momentum` **0**, `connectedness` **0**, `betweenness` **0**, `spillover index` **0**, `Ahern` **0**, `R-squared` **0**; `network` **9**, `centrality` **4**, `Herskovic` **2** — and the **hits were opened** per the standing rule: every `network` hit was a *neural* network or nodewise regression, every `centrality` hit was a *non*-centrality parameter, and both `Herskovic` hits were in passing. **`program.md`'s `lead-lag-spillover` clause names "network momentum" verbatim and the 2026-09-08 clause-by-clause audit had counted it as covered by the folder's *industry* lead-lag notes** — tenth instance of the unit-of-check lesson, second in which the unit was a named clause. **Three requests spent, three documents obtained, all three read in full.** Criteria (i) and (ii) discharged — the mechanism's **long-leg level is stated in the large-cap cell with its beta** (top slice +1.01%/month, spread +0.75% t 5.77, four-factor alpha +0.63%, market beta 0.00) — and **(iii) FAILS: the signal is a one-month peer return**, which is the horizon the lab measured as a cost wall in 2026-09-25 and whose `peer_ret` version it nulled. **The session's output is therefore a refusal of the published construction plus one book that respects the arithmetic** (`#493`), bounded by the source's own placebo (any random within-group weighting earns +0.50–0.69%/month against the network's +0.80%) and by its industry-momentum double sort (+0.80% → +0.30%). Centrality read as a *characteristic* is an anti-candidate on three grounds (`#498`). New cross-family section above; candidates `#493`–`#500`, three of them free screens, one a book, two refusals. | Misirli, Scida & Velikov 2021 (`2026-11-20-peer-momentum-influence-weighted-peer-returns.md`, Tier B, `10.2139/ssrn.3747402`, 0 Crossref); Ahern 2013 (`2026-11-20-network-centrality-as-a-priced-characteristic.md`, Tier C, `10.2139/ssrn.2197370`, 78 Crossref); Diebold & Yilmaz 2014 (`2026-11-20-variance-decomposition-connectedness-as-network-degree.md`, Tier A, `10.1016/j.jeconom.2014.04.012`, 4,708 Crossref) |
 | 2026-11-21 (session 99) | **TOOK THE PRIMARY AIM VERBATIM, AND IT PAID OUT AS A CLOSED CLAUSE RATHER THAN A BOOK: `program.md`'s last uncovered `liquidity-volume` object is refused on four independent grounds, and the night's transferable instrument is a FREE pre-trial screen that would have refused all three of tonight's constructions.** Aim from the [2026-11-20] entry, unchanged plus its new criterion: a mechanism predicting a cross-sectional **first moment**, computable from daily OHLCV alone on large-cap national-index members, reporting a **long-leg-only or top-portfolio level**, with **stated or derivable persistence**, and **(iv) formation ≥ 63 days or a stated rank autocorrelation**; explicitly not de-risking, residual reversion, timing, `price-trend`, or any further inference source; at most three requests. **The mandated pre-download grep ran first, and OPENING THE HITS killed the session's first two candidate veins before any download** — the step the [2026-11-01] correction exists to enforce, and the first session in which it paid twice. `high-volume return premium` **1**, `Gervais` **2**, `Mingelgrin` **2** resolved to `notes/2026-09-07-high-volume-return-premium.md`: the volume-**shock** corner is already filed, so the fast end of `liquidity-volume` was closed before it was aimed at. `Corwin` **9**, `Schultz` **9**, `Abdi` **2**, `Ranaldo` **2** resolved to existing notes: the daily-high–low **spread-estimator** corner is filed too. `Parkinson` **10**, `Garman` **13** resolved to `notes/2026-08-29-range-based-volatility-estimators.md`, so `range-variance`'s estimator clause is filed — **which corrects the [2026-11-20] premise that `liquidity-volume` and `range-variance` "remain the thinnest v3-relevant families"**; they are not thin, they are nearly complete. Genuine zeroes found and used: `turnover growth` **0**, `turnover trend` **1**, `price efficiency` **0**, `firm-specific return variation` **0**, `Durnev` **0**, `expected idiosyncratic skewness` **0**, `recency bias` **0**, `Haugen` **0**, `Liu 2006` **0**, `LM12` **0**; and `price delay` **2** / `delay measure` **2**, both one passing mention in a single note. Overloaded words recorded per the standing amendment: **`Hou` 302 hits are almost all the Hou–Xue–Zhang replication citation**, and `age` 302 is `average`/`page`/`percentage` — add both to the `network`/`centrality`/`degree`/`connected` list. **Four document requests spent, two obtained and read in full, one obtained at abstract-of-record level, one lost to a dark channel.** **Criterion (iv) FAILS on the clause's own measured evidence** — monthly turnover ARMA(1,1) across 1,577 names gives mean AR **0.63**, MA **0.23**, lag-1 autocorrelation **0.51**, and the source reports that substituting twelve-month for one-month turnover makes the result **weaker** — so the trend version of "turnover trends" is the weak version and the slow nearly-free corner of v3's schedule is not where the signal's content is. **Criterion (ii) FAILS in the same place in two markets two decades apart**: the spread is driven by the *negative* alpha of the highest-turnover quintile (US), and the price of turnover is indistinguishable from zero in the bottom 30% **and** the middle 40%, significant only in the top 30% (Tokyo). **Criterion (i) FAILS outright**: the object is a rate whose denominator is a fundamental. Plus a third of the effect is an idiosyncratic-volatility sort, an object closed by measurement here. The night's near-miss is **price delay**, which passes (i), (iii) and (iv) more cleanly than anything filed in weeks and fails because its own abstract localises the premium to firms holding **0.02% of market value** — the README's exclusion-by-construction rule, now with a quantified instance at two basis points. New cross-family section above; candidates `#501`–`#506`: three free screens or measurements, two refusals, one reading rule. **No lab measurement was taken and the holdout was not read.** | Barinov 2014 (`2026-11-21-turnover-effect-uncertainty-not-liquidity.md`, Tier A, *Management Science* 60(10), `10.1287/mnsc.2014.1913`, **82** Crossref, read in full from the author's faculty page); Hu 1997 (`2026-11-21-turnover-persistence-and-the-concave-premium-tokyo.md`, Tier C, SSRN `10.2139/ssrn.15133`, **35** Crossref, read in full from EconWPA); Hou & Moskowitz 2005 (`2026-11-21-price-delay-and-the-investor-recognition-friction.md`, Tier C in use, *RFS* 18(3), `10.1093/rfs/hhi023`, **943** Crossref / **1,203** OpenAlex, **abstract of record only — full text refused on four channels**) |
+| 2026-11-22 (session 100) | **TOOK BOTH PARTS OF THE PRIMARY AIM. Part (1) — the named-object coverage audit — is the night's main product and it establishes the honest possibility the aim invited: `program.md`'s SIGNAL clauses are spent, and the only real gap was a CONSTRUCTION corner.** Part (1): every object named in all eight family clauses marked filed / refused-for-this-panel / open, each resolving to a note or a candidate number (`#507`), built by grepping all 312 prior notes and **opening the hits**, per the [2026-11-21] standing amendment. Result: ~35 of ~36 objects filed, refused or closed by the lab's own measurement; three apparent gaps deleted before any request (`vol-of-vol` = a second moment of a second moment whose first-moment form is the closed low-vol anomaly; `cross-asset into equities` = refused by the family's own lead source for want of industrial production and for want of a sign; `holiday windows` = genuinely unfiled but a timing construction, hence excluded). Part (2): criteria (i)–(vi) found **no admissible open first-moment mechanism**, which is the reportable finding; the session instead filled the one real gap — `statistical-arbitrage`'s long-only benchmark-relative **construction** clause, on which the detector returned `enhanced index` 0, `Beasley` 0, `Alexander`/`Dimitriu` 0, `Palomar`/`Benidis` 0 against `Roll (1992)` 1 and `Jorion` 4, i.e. the folder held the geometry and none of the optimisation literature. Three sources, three notes. `#508` is the night's book: minimise the book's **expected shortfall below the equal-weight pool** as a parameter-free LP in n+T variables, proved equivalent to approximate stochastic dominance over the benchmark (Bruni–Cesarone–Scozzari–Tardella 2017, *EJOR*, 75–88 cites, Tier B, overlap **false**). `#512` is a construction rule with an unusual warrant — slower rebalancing beat faster, 24 weeks over 12 over 4, **measured gross of costs**, so it is an estimation argument rather than a cost argument (Guastaroba–Mansini–Ogryczak–Speranza 2020, *Annals of OR*, 32–37 cites, gold OA, Tier B, overlap **false**). `#509` is a free refusal: cointegration-based index tracking is, by the source's **own algebra**, a tilt towards high nominal price scaled by price dispersion — a characteristic the lab measured at one-bit IC −0.030 → −0.150 over 21–504 days, i.e. the wrong sign at every horizon, and the lab's own mandated correction removes the tilt that generates the edge (Alexander–Dimitriu 2003 ISMA WP + *JPM* 2005 companion at 111 cites, Tier C in use, overlap **false**). `#510`/`#511` are two free pre-trial LP solves that decide whether a trial in this vein measures an edge or the panel's width, the second resting on a no-arbitrage argument: a book that never trails its benchmark in-sample would be an arbitrage, so `ε → 0` is the signature of fitting. Channels: `iris.uniroma1.it` and `efmaefm.org/AcceptedPapers<YEAR>/` nominated as working; `palomar.home.ece.ust.hk`, `carolalexander.org`, `centaur.reading.ac.uk` (records without files) and `icmacentre.ac.uk` recorded as refusals. (`2026-11-22-stochastic-dominance-over-the-benchmark-and-the-shortfall-lp.md`; `2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`; `2026-11-22-cointegration-tracking-and-its-price-level-tilt.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-22] READ THIS BEFORE AIMING SESSION 101. The audit the last three sessions needed is
+  DONE, and its answer changes what an aim may be: `program.md`'s SIGNAL clauses are spent — about
+  thirty-five of thirty-six named objects are filed, refused for this panel, or closed by the lab's
+  own measurement — and the only real gap was a CONSTRUCTION corner, now filled. A mechanism aim is
+  no longer a legitimate default; it must name its object and say why that object is not already
+  one of the thirty-five.** Tonight took both parts of the [2026-11-21] primary aim. Part (1), the
+  named-object coverage audit, is in its own section of this file and is the night's main product
+  (`#507`): the unit of check is the object named in the clause, not the family slug, because the
+  2026-09-08 family-level audit was wrong and cost session 98 its aim. Part (2) applied criteria
+  (i)–(vi) and **found no admissible open first-moment mechanism**, which the [2026-11-21] entry
+  explicitly licensed as a finding about the program rather than a failure of the session; the
+  budget went instead to the one real gap, `statistical-arbitrage`'s long-only benchmark-relative
+  **construction** clause. `#508` is the book, `#509` the refusal, `#510`/`#511` two free pre-trial
+  solves, `#512` the construction rule, `#507` the audit.
+  - **Four things are now DONE and must not be re-aimed.** (a) Whether any `program.md` family has
+    an open, admissible first-moment clause this panel can trade — **no**, and the table says which
+    object is closed by what. (b) Whether `vol-of-vol` is a gap — **no**: a second moment of a
+    second moment, on the lab's declined list, whose first-moment form is the closed
+    low-volatility anomaly. (c) Whether `cross-asset (bonds/commodities/FX into equities)` is a gap
+    — **no**: refused by the family's own lead source, which needs industrial production to
+    identify a leader and explicitly declines to sign the cross-prediction, so a long-only
+    "leader up ⇒ buy the laggard" book assumes a sign the theory withholds. (d) Whether the
+    long-only benchmark-relative optimisation literature exists and is implementable — **yes to
+    both**, and it is now filed.
+  - **The one transferable lesson, and it is a reading rule with a no-arbitrage warrant rather than
+    a simulation behind it.** A portfolio that **never** trails its benchmark in-sample would be an
+    arbitrage and therefore cannot exist. So for any construction this lab fits against the
+    equal-weight pool, an in-sample record of almost always beating the pool is **evidence about
+    the fit, not about the signal**, and the fitted mean shortfall is readable as an overfitting
+    gauge (`#511`). This is the sharpest thing the night produced and it is not specific to the LPs
+    it came from. Its companion is `#512`'s unusual warrant: slower rebalancing beat faster in a
+    rolling-window optimised book **measured gross of costs**, so for the first time this folder
+    has a slow-rebalance argument that is about *estimation* rather than about cost — and it points
+    the same way the v3 cost schedule does.
+  - **PRIMARY AIM FOR SESSION 101, and it follows from the audit rather than from a vocabulary
+    gap.** *A source on the `portfolio-learning` clause that the audit leaves as the second
+    construction corner: "this is where scouted leads become a challenger."* Admit a source only if
+    it (i) combines a **small number of already-measured candidate signals or portfolios** into one
+    long-only book, (ii) states what the combination weights are estimated **from** and how they
+    are refit out of sample, (iii) reports the result against a **naive equal-weight combination of
+    the same components** — not against the components individually, because the equal-weight
+    combination is the benchmark this folder's own forecast-combination notes say is hard to beat —
+    and (iv) says what the combination costs in **turnover** relative to its components. That is
+    the one `program.md` clause with room that this lab actually needs, because the leaderboard
+    carries family leads and nothing has combined them. Explicitly NOT wanted, and the list is now
+    the audit: anything in `liquidity-volume` (complete, three of four refused), `range-variance`
+    (complete; `vol-of-vol` is a costume), `seasonality-calendar` (complete bar `holiday windows`,
+    which is a timing construction), `lead-lag-spillover` (conditionally closed pending `#494`;
+    cross-asset refused), `statistical-learning` (complete), `price-trend` (capped); de-risking or
+    low-volatility constructions; residual reversion at any window; timing or cash-raising
+    constructions; and any further inference, multiple-testing, standard-error, matching or
+    dependence source. **Spend at most three requests.** A plausible second target if the first
+    fails on two channels: the remaining optimisation sources in tonight's vein that this
+    environment could not reach — Canakgoz & Beasley (2009, *EJOR*, 255–274 cites) and
+    Beasley, Meade & Chang (2003, *EJOR*, 340 cites), both ScienceDirect-only with no OA location in
+    OpenAlex, and Benidis, Feng & Palomar (2018, *IEEE TSP*, 88–108 cites), whose author copy is
+    behind a TLS failure. All three are **named unobtained pointers**, worth one cheap attempt each
+    via an institutional repository and no more.
+  - **Ranked second, and now carried for the FOURTH consecutive session: the PRIMARY SOURCE for
+    Pesaran's CD test.** `#472` rests on it and the folder holds it only at second hand through
+    Hoechle's one-paragraph description. Wanted for (i) its null and exact statistic, (ii) the
+    `N, T → ∞`-in-any-order asymptotics, (iii) the **weak-versus-strong** cross-sectional
+    dependence distinction. Crossref resolves two SSRN records (`10.2139/ssrn.2050312`,
+    `10.2139/ssrn.2032000`); try `econ.cam.ac.uk`-hosted CWPE and the author's own page before any
+    publisher. **Still ranked BELOW the primary aim**, and the inference shelf remains overstocked;
+    take it only if the primary fails on two channels. If it is still unobtained after session 101,
+    consider retiring it rather than carrying it a fifth time.
+  - **The MEASUREMENTS the shelf owes the lab, now EIGHT and all free.** Carried: `#472`'s average
+    absolute off-diagonal within-date residual correlation; `#482`'s de-rounding of `null_pctile`;
+    `#494`'s rank correlation between a directed-connectedness row weighting and a plain equal
+    weighting; `#501`'s band regression on whatever score the lab next proposes; `#502`'s within-date
+    rank correlation between a candidate volume score and trailing volatility; `#503`'s regression
+    of the price-delay statistic on region dummies. **Tonight adds two, both LP solves**: `#510`'s
+    weight-vector rank correlation between a solve on the trailing window and a solve on its first
+    half, and `#511`'s curve of the fitted mean shortfall `ε` against the number of names admitted.
+    **None of the eight is a trial and none needs the holdout.**
+  - **Channel notes, five of them, two positive and one a partial reversal.**
+    **`iris.uniroma1.it` is nominated**: Sapienza's IRIS repository served the author preprint of a
+    closed *EJOR* article at HTTP 200 on the first request, found through **OpenAlex's own
+    `locations[]` list** rather than a guessed hostname — the [2026-10-04] procedure behaving as
+    recorded. IRIS is the standard Italian university platform, so it should reach the large Italian
+    OR-and-finance literature that is otherwise Elsevier-closed.
+    **`efmaefm.org/AcceptedPapers<YEAR>/<AuthorNames>/<AuthorNames>.pdf` is nominated, and this
+    PARTIALLY REVERSES a standing entry**: this folder carries the EFMA 2016 abnormal-turnover paper
+    as *permanently unobtained* on an HTTP 404 with a 13-byte body, and that verdict is about **one
+    paper, not the host** — the 2003 tree served a genuine 549 KB PDF first-try with no challenge.
+    It is the right route for an **ISMA/ICMA Centre discussion paper**, whose original home
+    (`icmacentre.ac.uk/pdf/discussion/<id>.pdf`) now returns a 404 HTML page.
+    **`palomar.home.ece.ust.hk` fails TLS verification even with `--cacert /root/.ccr/ca-bundle.crt`**
+    — a new instance of the `orbilu.uni.lu` class (the origin's own chain, not the proxy), confirmed
+    by a control fetch of `arxiv.org` succeeding in the same call. Report it as a transport failure.
+    **`centaur.reading.ac.uk` (EPrints) holds RECORDS WITHOUT FILES** for both Alexander–Dimitriu
+    *JPM* articles: HTTP 200 landing pages whose only PDF links are the repository's own end-user
+    agreement and citing guide. That is the [2026-10-04] Pure/DSpace mode, now observed on EPrints.
+    **`carolalexander.org` returns HTTP 403 with a 166-byte body**, so the [2026-09-18] author-page
+    lesson does not hold universally. One method note worth more than any of them: **four guessed
+    Elsevier DOIs failed and Crossref's `query.bibliographic` endpoint returned the right one first,
+    with its citation count attached** — that is the default route for a title, not DOI-pattern
+    guessing, exactly as [2026-10-07] warned.
+  - **Carried unchanged and still live**: everything carried under [2026-11-21]. `#493`'s book and
+    `#494`'s conditioning screen stay the live `lead-lag-spillover` pair; `#472` stays the free
+    measurement the dependence vein owes; `#445`'s within-date permutation stays the correct
+    finite-population instrument; `#454` stays **withdrawn as unfollowable** with `#459` as the
+    replacement to quote; `#447`'s three vetoes with its third conditioned by `#452`; `#442`'s
+    licence to use Hotelling's `T²` with the `y = p/n` table as its boundary; `#444`'s
+    sum-type/max-type pre-registration rule; `#406`'s volatility-tercile conditioning,
+    category-**neutral** per `#414`; the composed pre-trial rules `#413`, `#478`, `#492`, `#500`,
+    `#501`, `#502`, `#506`, now joined by `#510`, `#511` and `#512`; `#389`/`#381`/`#376` as the
+    three free screens; and the refusals `#415`, `#421`, `#423`,
+    `#427`/`#429`/`#434`/`#435`/`#436`/`#438`, `#440`, `#449`, `#450`, `#454` (withdrawn), `#458`,
+    `#461`, `#464`, `#466`, `#470`, `#474`, `#476`, `#480`, `#482`, `#484`, `#485`, `#489`, `#490`,
+    `#498`, `#499`, `#504`, `#505`, and tonight's `#509`. **The volume-rate vein stays closed on all
+    four sides** (`#504`); "read your own statistics" stays closed on all four (`#479`–`#490`);
+    dependence-robust inference stays closed on all four (`#458`–`#478`); the conditioning-set vein
+    stays closed on all six (`#447`–`#457`); the high-dimensional two-sample vein stays closed
+    (`#442`–`#446`); classifier accuracy stays closed (`#439`–`#441`); the matched-control vein
+    stays closed on all five (`#427`–`#438`); the nominal-price vein stays closed (`#420`–`#426`)
+    **and tonight it did work for the first time, refusing a construction for free** (`#509`); the
+    index-rule vein stays closed (`#401`–`#419`); detectability stays closed (`#393`–`#400`); the
+    cash/pool boundary stays closed (`#386`–`#392`); the long-only vein stays closed
+    (`#373`–`#380`).
+  - **Unchanged and still live**: `#507`–`#512` from tonight; `#501`–`#506` from 2026-11-21;
+    `#493`–`#500` from 2026-11-20; `#479`–`#492` from 2026-11-19; `#467`–`#478` from 2026-11-18;
+    `#458`–`#466` from 2026-11-17; `#452`–`#457` from 2026-11-16; `#447`–`#451` from 2026-11-15;
+    `#442`–`#446` from 2026-11-14; `#439`–`#441` from 2026-11-13; `#436`–`#438` from 2026-11-12;
+    `#433`–`#435` from 2026-11-11; `#427`–`#432` from 2026-11-10; `#420`–`#426` from 2026-11-09;
+    `#415`–`#419` from 2026-11-08; `#407`–`#414` from 2026-11-07; `#401`–`#406` from 2026-11-06;
+    `#393`–`#400` from 2026-11-05; `#381`–`#392` from 2026-11-04; `#373`–`#380` from 2026-11-03;
+    `#361`–`#372` from 2026-11-02; `#349`–`#360` from 2026-11-01; `#343`–`#348` from 2026-10-31;
+    and everything carried under those.
+  - **Retired and recorded as retired**: the [2026-11-21] primary aim, **both parts discharged** —
+    part (1) as the audit table, part (2) as a reported null on the existence of an admissible open
+    first-moment mechanism, with the budget redirected to the gap part (1) found. **New named
+    unobtained pointers, three, each worth one cheap repository attempt and no more**: Canakgoz &
+    Beasley (`10.1016/j.ejor.2008.03.015`, 255–274 cites), Beasley, Meade & Chang
+    (`10.1016/S0377-2217(02)00425-3`, 340 cites) and Benidis, Feng & Palomar
+    (`10.1109/TSP.2017.2762286`, 88–108 cites); plus the ISMA DP2002-08 *Cointegration Alpha*
+    discussion paper, which is **not worth re-hunting** given `#509`. **Carried as permanently
+    unobtained and not to be re-ranked**: Boyer, Mitton & Vorkink (blocked at bepress), the full
+    text of Hou & Moskowitz, the EFMA 2016 abnormal-turnover paper (the paper is gone, not refused
+    — and note that the *host* is now nominated, which does not change that verdict), and everything
+    carried as permanently unobtained under [2026-11-21], [2026-11-20] and [2026-11-19].
+  - **Standing, and not this folder's call. The composition item stays DOWNGRADED; tonight's
+    contribution is an audit, a book, a refusal, two free measurements and a construction rule
+    rather than a seat.** **Thirteen consecutive zero-trial nightlies now stand.** The seat
+    arithmetic is unchanged and still not something this folder can fix by reading: the `challenge`
+    seat reported unreachable at every DSR threshold because the **deflation benchmark alone
+    (+0.3087) exceeds the best skill ever measured here (+0.124)**, the bar at 4.34 standard errors,
+    its power against a true skill of +0.30 at 1.09%. Its three named remedies — re-specifying
+    `effective_n_trials`' clustering, separating detection from seating, or accepting that the
+    protocol's honest output is a ranked error-barred board — remain **none of them things this
+    folder can supply.** **Separately and unchanged**: the engine issues filed 2026-10-18 and
+    2026-10-22, `min_train_skill = 0.0`, the note format's missing holdout-overlap flag, `#422`'s
+    signed error in the volume-only liquidity tier, `#432`'s two opposite-signed biases in the
+    equal-weight pool, the still-unmeasured pre-screen imbalance, and the **zero-trial-rate question
+    raised to the human owner on 2026-11-13**.
+  - **The integrity check, and it has the same two parts as last night with one of them now
+    CONFIRMED RATHER THAN RE-DERIVED.** The container was again on a per-run branch
+    (`claude/tender-galileo-6hx0nb`) at `origin/main`'s commit — the **twenty-third** consecutive
+    session — and was reset to `main` before any work. **The startup hook again raised the RESEARCH
+    INTEGRITY WARNING** that `origin/claude/determined-darwin-gova1x` holds commits absent from
+    `origin/main`. Re-inspected and **unchanged from the [2026-11-21] reading: one commit, a weekly
+    report (`reports/2026-W47.md` plus one chart), touching `experiments/trials.jsonl` not at all.**
+    No trial history is split and the DSR bar is not understated by it. A second per-run branch,
+    `origin/claude/determined-darwin-brkls1`, holds **nothing** beyond `origin/main`. Landing that
+    report remains a strategy-session or owner action, not this folder's. It does not resemble the
+    2026-08-12..15 precedent and should not be reported as if it did.
 
 - **[2026-11-21] READ THIS BEFORE AIMING SESSION 100. Two premises this file has been carrying are
   now CORRECTED, and the correction matters more than tonight's notes: (a) `liquidity-volume` and

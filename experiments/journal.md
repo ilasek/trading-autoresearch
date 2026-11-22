@@ -32529,3 +32529,5 @@ publication recorded as a novelty discount rather than as support.
 
 **Verdicts:** GATE_FAIL `rv_volofvol_neutral_band`; GATE_FAIL `pt_lowvol126_quota_band`; GATE_FAIL
 `pt_lowvol126_typequota_band`; GATE_FAIL `lv_volume_shock_gkm_band`.
+
+## Research session — 2026-11-22 (learning agent): 3 notes added, see research/SUMMARY.md
