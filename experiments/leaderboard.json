@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-22T00:32:15+00:00",
+  "generated_at": "2026-11-22T00:38:19+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -56,29 +56,29 @@
       "mechanism": 5
     },
     "liquidity-volume": {
-      "name": "lv_vol_trend_overlap6",
-      "candidate": "strategies/candidates/lv_vol_trend_overlap6.py",
+      "name": "lv_volume_shock_gkm_band",
+      "candidate": "strategies/candidates/lv_volume_shock_gkm_band.py",
       "track": "scout",
       "verdict": "GATE_FAIL",
-      "ts": "2026-10-28T23:45:50+00:00",
-      "n_trials": 3,
+      "ts": "2026-11-22T00:36:32+00:00",
+      "n_trials": 4,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.356,
-        "ann_return": 0.0654,
-        "max_drawdown": -0.3868,
-        "ann_turnover": 1.27,
-        "avg_positions": 125.62,
-        "skill": 0.019,
-        "skill_cost2x": 0.014,
-        "skill_delist30": 0.019
+        "sharpe": 0.368,
+        "ann_return": 0.0675,
+        "max_drawdown": -0.349,
+        "ann_turnover": 16.57,
+        "avg_positions": 100.01,
+        "skill": 0.031,
+        "skill_cost2x": -0.149,
+        "skill_delist30": 0.031
       },
-      "train_sharpe": 0.565,
+      "train_sharpe": 0.4,
       "skill_ci90": [
-        -0.096,
-        0.141
+        -0.14,
+        0.159
       ],
-      "train_skill": 0.042,
+      "train_skill": -0.124,
       "mechanism": 3
     },
     "range-variance": {
