@@ -32674,3 +32674,5 @@ accordingly; the operational rule is now the single unambiguous command
   content**; a formulation keyed on trial-bearing content would have caught the August 19-trial
   split and the 2026-10-29 two-trial split while letting four of the last five nights run a full
   budget. `CLAUDE.md` and the routine are frozen to this agent, so this is recorded only.
+
+## Research session — 2026-11-23 (learning agent): 3 notes added, see research/SUMMARY.md

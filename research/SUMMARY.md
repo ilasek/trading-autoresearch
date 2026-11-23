@@ -3047,6 +3047,8 @@ lab's windows, so McLean–Pontiff applies at full strength.
 `notes/2026-10-17-follow-the-loser-online-portfolio-selection.md`
 
 
+**[Added 2026-11-23] The clause's last uncovered half — "this is where scouted leads become a challenger" — now has its own section, and it changes this family's standing conclusion in one place.** Three sources on how several *already-measured* leads become **one** long-only book say the composite score should decide **membership** and stay out of the **weights**; that the mix-versus-integrate ranking **crosses over in the level of active risk**, so this section's 2026-08-31 entry ("integration beats the mix under a long-only constraint") is **conditional and probably has the wrong sign at the active risk a v3 book actually runs**; and that the one combination operator left untried here — a per-lead selection *filtered by the other leads' composite*, then deconcentrated — sits outside both bounds that killed every previous ensemble in this family. Items `#513`–`#517`, three of them free. → the "Combining ALREADY-MEASURED LEADS into one long-only book" section below.
+
 ---
 
 ### Portfolio construction & rebalance mechanics (cross-family)
@@ -10739,6 +10741,130 @@ is an arbitrage, so it cannot exist; therefore an in-sample fit in which the boo
 always beats the pool is **evidence of fitting, not of edge** — and the fitted shortfall `ε` is
 readable as an overfitting gauge rather than as an achievement. That applies to every construction
 this lab fits against the equal-weight pool, not only to the LPs here.
+
+### Combining ALREADY-MEASURED LEADS into one long-only book — the construction corner the audit left open, and three sources that agree the composite score should decide MEMBERSHIP rather than WEIGHTS (`portfolio-learning`, the gate's own objective)
+
+**[2026-11-23] This is the [2026-11-22] primary aim taken verbatim: `program.md`'s
+`portfolio-learning` clause ends "this is where scouted leads become a challenger", and the
+coverage audit left it as the second of two open *construction* corners.** The folder already held
+the *weighting* half of the question from five directions — the forecast-combination puzzle,
+Breiman's simplex bound, Tu–Zhou's optimal mix of a naive and an estimated rule, Novy-Marx's
+linear-composite equivalence, and Fitzgibbons et al.'s long-only integration argument with its
+peer-reviewed rebuttal. What it had **no** source on is the *selection* half: what a composite
+score should be **used for** once several leads exist. Three sources tonight, one read in full and
+two at abstract level, and they converge on an answer the folder's existing material does not
+contain: **use the composite to decide which names are in the book, and keep it out of the
+weights.**
+
+**The ranking of the two constructions is NOT settled, and the honest statement of the literature
+is that it crosses over in the level of active risk.** The folder has carried Fitzgibbons et al.'s
+"integration beats mixing under a long-only constraint" since 2026-08-31, qualified only by
+Leippold–Rüegg's rebuttal. Ghayur–Heaney–Platt (2018, *FAJ*, Tier B−, peer-reviewed, **body not
+read** — abstract plus CFA Institute's own *In Practice* summary) run the comparison the other
+three sources do not: **exposure-matched** books, so the arms carry similar factor exposure and the
+tilt is not confounded with the construction, at a sequence of tracking-error targets. Portfolio
+blending (the mix) gives higher information ratios at **low-to-moderate** tracking error; signal
+blending (the composite) wins at **high** tracking error. The mechanism is about overlap: at low
+exposure the two books hold mostly the same names, and the residual names **only the mix holds** are
+those whose signal scores *offset* — which a composite screens out and which are reported to
+*reduce* active risk and *raise* active return. As the exposure target rises the overlap shrinks and
+the mix's stock-specific risk dominates, flipping the ranking. **For this lab the consequence is
+procedural: measure the candidate's active risk against the equal-weight pool first, because that
+number — not a preference — decides which construction the literature predicts.** A v3 candidate
+graded on skill against an equal-weight pool of ~1,000 names is very likely on the low side, i.e. on
+the side where the mix is predicted to win, which is the opposite of what this folder has carried
+for three months. → `notes/2026-11-23-exposure-matched-blend-comparison-and-the-active-risk-crossover.md`
+
+**The theory end supplies the ceiling, and it is a statement about paying the long-only constraint
+once per sleeve.** Clarke–de Silva–Thorley (2016, *FAJ*, Tier B−, **abstract only** — SSRN
+Cloudflare-challenged, `cdar.berkeley.edu` does not resolve from this environment): "combining
+long-only-constrained factor subportfolios is generally not a mean–variance-efficient way to capture
+expected factor returns." Each sleeve solves its own constrained problem and has no way to express
+"this name is also bad on the other signals", so a mix pays the constraint's distortion once per
+sleeve. Their simulated comparison on the largest 1,000 US names puts a four-sleeve long-only
+combination at **roughly 40%** of the attainable Sharpe-ratio improvement over the market against
+**roughly 80%** for a single optimised long-only book of individual names built from the *same* risk
+model and *same* forecasts. Recorded as a ratio of attainable improvement, not as performance, and
+with two discounts attached: the denominator is the authors' own optimum, and **the arm that
+captures 80% is an optimiser with a covariance matrix over ~1,000 names**, which is not a
+construction this lab can run — `learnings.md` has covariance-weighted books failing repeatedly
+here. So read it as the **ceiling on what a better combination operator could recover**, not as a
+forecast. → `notes/2026-11-23-long-only-sleeve-mix-and-how-much-of-the-efficient-book-it-captures.md`
+
+**The night's main product is the construction that sits between those two, and it is the one
+operator in this family the lab has never run.** Amenc, Ducoulombier, Esakia, Goltz &
+Sivasubramanian (2017, *JPM* special issue, Tier B−/C+ — **read in full**, and discounted hard
+because all five authors work for the index provider whose own indices are the favoured arm) draw
+the distinction the folder lacked a name for: inside either construction, weights come either from
+**diversification-based weighting**, which ignores the scores entirely, or from **score weighting**,
+which uses stock-level score differences to set weights and ignores diversification. Their finding
+is that this second axis matters more than mix-versus-integrate. Across both composite formulae and
+both selection breadths, score weighting raises factor *intensity* and is nevertheless **dominated
+by plain equal weighting of the same selection** on information ratio, on extreme tracking error
+(about a third higher at the narrow selection) and on extreme underperformance (about half again as
+large for the most concentrated construction), while delivering **lower excess return per unit of
+factor intensity** — verified with the right control, levering the diversified books up to the
+score-weighted book's intensity, after which the diversified books still rank higher. Their stated
+reason: a composite score is an implicit return forecast, reliable for broad groups and not name by
+name, so the score should make "broad distinctions between stocks that rank well and stocks that
+rank poorly" and nothing finer. → `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
+
+**Two results in that source matter more here than its horse race, and both are mechanisms rather
+than measurements.** First, **the long-only asymmetry**: "in a long-only context, it may be less
+important to identify factor champions than to avoid factor losers" — in their comparison the
+bottom-decile composite book's underperformance exceeds the top-decile book's outperformance in
+absolute value, so **elimination is the stronger lever than concentration**, and elimination is
+available to a mix. That is the literature arriving independently at this folder's own `#375`: on an
+equal-weighted pool every excluded name takes the identical `−1/N` active weight, so a score's
+information is expressible as *membership* and not as an ordering of the bad names. Second, **where
+score weighting's turnover comes from**: composite scores are only modestly autocorrelated between
+rescorings, and a *selection* converts that instability into turnover only when a score moves far
+enough to change membership, whereas a *weighting function of the score* converts every small score
+change into a trade. Their measured selection churn alone — annual turnover of order 90% for a
+cap-weighted top-decile composite selection, above 100% for the top 5% — is before any weighting
+effect, and under v3's cost schedule that is a real bill. The same section reports that in a
+six-sleeve blend the **cancellation of cross trades across sleeves more than offsets** the turnover
+of resetting the allocation, which is the practitioner form of this folder's trading-diversification
+note and should **not** be carried to a two- or three-leg blend.
+
+**The construction, stated so a candidate can be written from it: FILTER, then DECONCENTRATE.**
+Per lead, rank-score the eligible panel and keep a broad selection (their building block is the top
+half); then, *within each lead's selection*, drop the names with the worst **composite** score across
+the *other* leads (their filter shrinks 50% → 30% of the universe); then weight what survives by
+maximum deconcentration (equal weight, subject to the engine's cap); then blend the legs at equal
+allocation. One detail is worth copying verbatim: they **omit the size score from the filter's
+composite** "because any diversification-weighting scheme induces a tilt away from the largest
+capitalizations" — i.e. never filter on a characteristic the weighting rule already delivers for
+free, which on this panel means a size-like lead adds little to an equal-weighted book. **Why this
+is the next operator rather than one more ensemble**: the filter is a nonlinearity applied *inside
+each leg, before portfolio construction*, so it falls outside **both** of the bounds this folder uses
+to kill ensemble proposals — Breiman's simplex bound (which binds on any reweighting of finished
+long-only books) and Novy-Marx's linear-composite equivalence (which binds on untruncated linear
+composites). The folder's own standing rule — the value of an aggregation operator is the value of
+its nonlinearity — points straight at it.
+
+**One tension must be stated and not smoothed over, because it is with the lab's own measurement.**
+`experiments/learnings.md` records, on the v1 140-name panel inside the momentum family, that
+**magnitude weighting carries information beyond concentration** (≈0.116 of Sharpe net of the
+de-concentration price) and that de-concentration *costs* roughly 0.05 of Sharpe per 30% of HHI.
+Tonight's full-text source says score weighting is dominated by equal weighting of the same
+selection. Both can hold, and the three candidate reconciliations are testable and pre-registered
+here: **(i)** the lab measured **absolute Sharpe** while the dominance is clearest on **relative**
+statistics — information ratio and extreme *relative* risk — and v3 moved the lab's own objective
+onto the relative statistic; **(ii)** the lab's constants predate v3's drift-and-turnover charging,
+which is exactly where score weighting pays; **(iii)** a ~140-name survivor panel cannot exhibit the
+"concentrated in a few highly correlated names" failure the source diagnoses with the
+Goetzmann–Li–Rouwenhorst measure, whereas a ~1,400-name panel can. **Do not import the source's
+conclusion over the lab's measurement** — re-measure under v3 and report which of (i)–(iii) explains
+the gap. `CLAUDE.md` already forbids carrying v1 constants into v3; this is an independent reason.
+
+**And one diagnostic the folder should adopt regardless of what it builds.** Lower volatility is not
+evidence of diversification. The source's bottom-up books are materially less volatile than the
+cap-weighted universe while their **GLR measure** — portfolio return variance over the
+weighted-average variance of the constituents — is *comparable*, which identifies the volatility as
+coming from **selecting low-volatility names**, not from diversifying idiosyncratic risk. That is the
+exact confound `learnings.md` records as the refuted low-vol family and as a repeat offender in
+de-risking trials, and the GLR ratio separates the two for free from stored holdings.
 
 ## Candidate ideas for the strategy agent
 
@@ -20382,6 +20508,84 @@ hypothesis fodder, then anti-candidates.
     than import 24 weeks. Tier B, overlap **false**.
     → `notes/2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`
 
+513. **CONSTRUCTION, AND IT IS THE ONE COMBINATION OPERATOR IN THIS FAMILY THE LAB HAS NEVER RUN —
+    FILTER, THEN DECONCENTRATE: per lead, keep a broad selection on that lead's own rank score; then
+    inside each selection drop the names with the worst COMPOSITE rank across the OTHER leads; then
+    equal-weight the survivors and blend the legs at equal allocation.** The lab has measured the
+    **mean** operator (bounded by its legs), the **max**, the **intersection**, and equal-weight
+    ensembles of finished *return series* (monotone decreasing against the best member). It has never
+    measured a per-leg selection *filtered by the other leads* and then deconcentrated. The filter is
+    a nonlinearity applied **inside each leg, before portfolio construction**, so it falls outside
+    both bounds this folder uses to kill ensemble proposals — Breiman's simplex bound (`#88`, which
+    binds on any reweighting of finished long-only books) and Novy-Marx's linear-composite
+    equivalence (which binds on untruncated linear composites). Copy one detail verbatim: **omit from
+    the filter's composite any score the weighting rule already delivers** — the source omits size
+    because deconcentration weighting induces a size tilt by itself. Keep weights score-free
+    (maximum deconcentration = equal weight subject to the engine's 25% cap); the whole point is that
+    the composite decides membership and never touches a weight. Tier B−/C+ source, overlap
+    **false**. → `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
+
+514. **FREE PRE-TRIAL SCREEN, HOLDINGS ONLY, AND IT DECIDES WHICH SIDE OF THE MIX-VERSUS-COMPOSITE
+    CROSSOVER THE LAB IS ON: build both arms' holdings from stored lead scores at a handful of
+    rebalance dates and measure (a) the NAME OVERLAP between the mix and the composite book and (b)
+    the composite rank of the names the MIX holds and the composite does not.** The peer-reviewed
+    exposure-matched comparison says those two numbers *are* the mechanism: high overlap plus
+    offsetting-score exclusives means the two constructions are hard to separate and the mix carries
+    slightly less active risk (the low-active-risk regime, where the mix is predicted to win); low
+    overlap means the lab is past the crossover and the composite is the better bet. No returns, no
+    costs, no trial, and it predicts the sign of the comparison before anything is spent. Companion
+    measurement from the same vein: the **dilution pair** — for each pair of leads, the average
+    composite rank of the names one lead selects, scored on the other lead — which is the quantity
+    `#513`'s filter removes and therefore predicts the filter's effect size. Tier B−, overlap
+    **false**. → `notes/2026-11-23-exposure-matched-blend-comparison-and-the-active-risk-crossover.md`,
+    `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
+
+515. **FREE PRE-TRIAL SCREEN ON THE SCORES THEMSELVES, AND IT IS A TURNOVER FORECAST: measure the
+    within-date rank autocorrelation of each lead's score between consecutive rebalance dates, and
+    of the composite.** A *selection* converts score instability into turnover only when a score
+    moves far enough to change membership; a *weighting function of the score* converts every small
+    score change into a trade. So a modestly-persistent composite plus score weighting is a turnover
+    machine, and the persistence is readable off stored scores before any book is built. The source's
+    own measured churn of a selection alone — annual turnover of order 90% for a top-decile composite
+    selection, above 100% for the top 5%, before any weighting effect — is the scale of what v3's
+    15–40 bps per side plus statutory taxes would charge. Tier B−/C+, overlap **false**.
+    → `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
+
+516. **FREE DIAGNOSTIC THAT SEPARATES THE LAB'S MOST PERSISTENT CONFOUND: print the
+    GOETZMANN–LI–ROUWENHORST RATIO — the book's return variance over the weighted-average variance of
+    its holdings — next to every candidate's volatility.** Lower volatility is not evidence of
+    diversification. In the source's bottom-up books, volatility sits well below the cap-weighted
+    universe while the GLR measure is *comparable*, which identifies the volatility as coming from
+    **selecting low-volatility names** rather than from diversifying idiosyncratic risk. That is
+    exactly the confound `learnings.md` records as the refuted low-vol family and as a repeat
+    offender in de-risking trials, and the ratio is computable from stored holdings and returns.
+    Structural companion claim from the same source, worth carrying as a prior: names selected on a
+    composite of several scores are **more correlated with each other** than average names, so a
+    champion-concentrated composite book has less diversification potential available to it in the
+    first place. Tier B−/C+, overlap **false**.
+    → `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
+
+517. **READING RULE AND A DISCOUNT ON THIS FOLDER'S OWN THREE-MONTH-OLD ENTRY: the
+    mix-versus-integrate ranking is NOT settled in either direction — it crosses over in the level
+    of ACTIVE RISK — so neither direction may be imported into a hypothesis, and the lab's own
+    magnitude-weighting constants are in open tension with the literature.** Four sources now sit on
+    this question and they disagree by regime: integration wins at high active risk and the mix wins
+    at low, at matched exposure; the theory says a sleeve mix is far from the efficient long-only
+    book but the arm that closes the gap is an optimiser this panel cannot support; and a
+    provider-authored full-text study finds score weighting dominated by equal weighting of the same
+    selection on relative statistics and turnover. Against that, `learnings.md` measured magnitude
+    weighting as **information-bearing** (≈0.116 of Sharpe beyond concentration) and de-concentration
+    as **costly** (≈0.05 of Sharpe per 30% of HHI) — under v1, on 140 survivor names, inside one
+    family, on **absolute** Sharpe. The three pre-registered reconciliations: (i) absolute Sharpe
+    versus the relative statistic v3 now grades on; (ii) v1's cost treatment versus v3's charged
+    drift and turnover; (iii) a 140-name survivor panel cannot exhibit the correlated-champions
+    failure a ~1,400-name panel can. **Re-measure under v3 and report which one explains the gap;
+    do not resolve it by preferring either literature.** Tier B− across the cluster, overlap
+    **false**. → `notes/2026-11-23-exposure-matched-blend-comparison-and-the-active-risk-crossover.md`,
+    `notes/2026-11-23-long-only-sleeve-mix-and-how-much-of-the-efficient-book-it-captures.md`,
+    `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
+
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -20494,8 +20698,108 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-20 (session 98) | **TOOK THE PRIMARY AIM AND BROKE THE SEVEN-SESSION INFERENCE RUN: a MECHANISM, in the one `program.md` sub-mechanism with zero coverage.** Aim from the [2026-11-19] entry: a mechanism predicting a cross-sectional **first moment**, low-turnover, on daily OHLCV, admitted only if it (i) is computable from daily OHLCV alone on large-cap national-index members, (ii) reports the **long-leg-only or top-portfolio level** rather than only a long-short spread, and (iii) states or makes derivable the **signal's persistence**; explicitly not another de-risking, residual-reversion, timing or inference source; at most three requests. **The mandated pre-download grep ran first and the gap was total on the target vocabulary** across all 306 prior notes and `SUMMARY.md`: `network momentum` **0**, `connectedness` **0**, `betweenness` **0**, `spillover index` **0**, `Ahern` **0**, `R-squared` **0**; `network` **9**, `centrality` **4**, `Herskovic` **2** — and the **hits were opened** per the standing rule: every `network` hit was a *neural* network or nodewise regression, every `centrality` hit was a *non*-centrality parameter, and both `Herskovic` hits were in passing. **`program.md`'s `lead-lag-spillover` clause names "network momentum" verbatim and the 2026-09-08 clause-by-clause audit had counted it as covered by the folder's *industry* lead-lag notes** — tenth instance of the unit-of-check lesson, second in which the unit was a named clause. **Three requests spent, three documents obtained, all three read in full.** Criteria (i) and (ii) discharged — the mechanism's **long-leg level is stated in the large-cap cell with its beta** (top slice +1.01%/month, spread +0.75% t 5.77, four-factor alpha +0.63%, market beta 0.00) — and **(iii) FAILS: the signal is a one-month peer return**, which is the horizon the lab measured as a cost wall in 2026-09-25 and whose `peer_ret` version it nulled. **The session's output is therefore a refusal of the published construction plus one book that respects the arithmetic** (`#493`), bounded by the source's own placebo (any random within-group weighting earns +0.50–0.69%/month against the network's +0.80%) and by its industry-momentum double sort (+0.80% → +0.30%). Centrality read as a *characteristic* is an anti-candidate on three grounds (`#498`). New cross-family section above; candidates `#493`–`#500`, three of them free screens, one a book, two refusals. | Misirli, Scida & Velikov 2021 (`2026-11-20-peer-momentum-influence-weighted-peer-returns.md`, Tier B, `10.2139/ssrn.3747402`, 0 Crossref); Ahern 2013 (`2026-11-20-network-centrality-as-a-priced-characteristic.md`, Tier C, `10.2139/ssrn.2197370`, 78 Crossref); Diebold & Yilmaz 2014 (`2026-11-20-variance-decomposition-connectedness-as-network-degree.md`, Tier A, `10.1016/j.jeconom.2014.04.012`, 4,708 Crossref) |
 | 2026-11-21 (session 99) | **TOOK THE PRIMARY AIM VERBATIM, AND IT PAID OUT AS A CLOSED CLAUSE RATHER THAN A BOOK: `program.md`'s last uncovered `liquidity-volume` object is refused on four independent grounds, and the night's transferable instrument is a FREE pre-trial screen that would have refused all three of tonight's constructions.** Aim from the [2026-11-20] entry, unchanged plus its new criterion: a mechanism predicting a cross-sectional **first moment**, computable from daily OHLCV alone on large-cap national-index members, reporting a **long-leg-only or top-portfolio level**, with **stated or derivable persistence**, and **(iv) formation ≥ 63 days or a stated rank autocorrelation**; explicitly not de-risking, residual reversion, timing, `price-trend`, or any further inference source; at most three requests. **The mandated pre-download grep ran first, and OPENING THE HITS killed the session's first two candidate veins before any download** — the step the [2026-11-01] correction exists to enforce, and the first session in which it paid twice. `high-volume return premium` **1**, `Gervais` **2**, `Mingelgrin` **2** resolved to `notes/2026-09-07-high-volume-return-premium.md`: the volume-**shock** corner is already filed, so the fast end of `liquidity-volume` was closed before it was aimed at. `Corwin` **9**, `Schultz` **9**, `Abdi` **2**, `Ranaldo` **2** resolved to existing notes: the daily-high–low **spread-estimator** corner is filed too. `Parkinson` **10**, `Garman` **13** resolved to `notes/2026-08-29-range-based-volatility-estimators.md`, so `range-variance`'s estimator clause is filed — **which corrects the [2026-11-20] premise that `liquidity-volume` and `range-variance` "remain the thinnest v3-relevant families"**; they are not thin, they are nearly complete. Genuine zeroes found and used: `turnover growth` **0**, `turnover trend` **1**, `price efficiency` **0**, `firm-specific return variation` **0**, `Durnev` **0**, `expected idiosyncratic skewness` **0**, `recency bias` **0**, `Haugen` **0**, `Liu 2006` **0**, `LM12` **0**; and `price delay` **2** / `delay measure` **2**, both one passing mention in a single note. Overloaded words recorded per the standing amendment: **`Hou` 302 hits are almost all the Hou–Xue–Zhang replication citation**, and `age` 302 is `average`/`page`/`percentage` — add both to the `network`/`centrality`/`degree`/`connected` list. **Four document requests spent, two obtained and read in full, one obtained at abstract-of-record level, one lost to a dark channel.** **Criterion (iv) FAILS on the clause's own measured evidence** — monthly turnover ARMA(1,1) across 1,577 names gives mean AR **0.63**, MA **0.23**, lag-1 autocorrelation **0.51**, and the source reports that substituting twelve-month for one-month turnover makes the result **weaker** — so the trend version of "turnover trends" is the weak version and the slow nearly-free corner of v3's schedule is not where the signal's content is. **Criterion (ii) FAILS in the same place in two markets two decades apart**: the spread is driven by the *negative* alpha of the highest-turnover quintile (US), and the price of turnover is indistinguishable from zero in the bottom 30% **and** the middle 40%, significant only in the top 30% (Tokyo). **Criterion (i) FAILS outright**: the object is a rate whose denominator is a fundamental. Plus a third of the effect is an idiosyncratic-volatility sort, an object closed by measurement here. The night's near-miss is **price delay**, which passes (i), (iii) and (iv) more cleanly than anything filed in weeks and fails because its own abstract localises the premium to firms holding **0.02% of market value** — the README's exclusion-by-construction rule, now with a quantified instance at two basis points. New cross-family section above; candidates `#501`–`#506`: three free screens or measurements, two refusals, one reading rule. **No lab measurement was taken and the holdout was not read.** | Barinov 2014 (`2026-11-21-turnover-effect-uncertainty-not-liquidity.md`, Tier A, *Management Science* 60(10), `10.1287/mnsc.2014.1913`, **82** Crossref, read in full from the author's faculty page); Hu 1997 (`2026-11-21-turnover-persistence-and-the-concave-premium-tokyo.md`, Tier C, SSRN `10.2139/ssrn.15133`, **35** Crossref, read in full from EconWPA); Hou & Moskowitz 2005 (`2026-11-21-price-delay-and-the-investor-recognition-friction.md`, Tier C in use, *RFS* 18(3), `10.1093/rfs/hhi023`, **943** Crossref / **1,203** OpenAlex, **abstract of record only — full text refused on four channels**) |
 | 2026-11-22 (session 100) | **TOOK BOTH PARTS OF THE PRIMARY AIM. Part (1) — the named-object coverage audit — is the night's main product and it establishes the honest possibility the aim invited: `program.md`'s SIGNAL clauses are spent, and the only real gap was a CONSTRUCTION corner.** Part (1): every object named in all eight family clauses marked filed / refused-for-this-panel / open, each resolving to a note or a candidate number (`#507`), built by grepping all 312 prior notes and **opening the hits**, per the [2026-11-21] standing amendment. Result: ~35 of ~36 objects filed, refused or closed by the lab's own measurement; three apparent gaps deleted before any request (`vol-of-vol` = a second moment of a second moment whose first-moment form is the closed low-vol anomaly; `cross-asset into equities` = refused by the family's own lead source for want of industrial production and for want of a sign; `holiday windows` = genuinely unfiled but a timing construction, hence excluded). Part (2): criteria (i)–(vi) found **no admissible open first-moment mechanism**, which is the reportable finding; the session instead filled the one real gap — `statistical-arbitrage`'s long-only benchmark-relative **construction** clause, on which the detector returned `enhanced index` 0, `Beasley` 0, `Alexander`/`Dimitriu` 0, `Palomar`/`Benidis` 0 against `Roll (1992)` 1 and `Jorion` 4, i.e. the folder held the geometry and none of the optimisation literature. Three sources, three notes. `#508` is the night's book: minimise the book's **expected shortfall below the equal-weight pool** as a parameter-free LP in n+T variables, proved equivalent to approximate stochastic dominance over the benchmark (Bruni–Cesarone–Scozzari–Tardella 2017, *EJOR*, 75–88 cites, Tier B, overlap **false**). `#512` is a construction rule with an unusual warrant — slower rebalancing beat faster, 24 weeks over 12 over 4, **measured gross of costs**, so it is an estimation argument rather than a cost argument (Guastaroba–Mansini–Ogryczak–Speranza 2020, *Annals of OR*, 32–37 cites, gold OA, Tier B, overlap **false**). `#509` is a free refusal: cointegration-based index tracking is, by the source's **own algebra**, a tilt towards high nominal price scaled by price dispersion — a characteristic the lab measured at one-bit IC −0.030 → −0.150 over 21–504 days, i.e. the wrong sign at every horizon, and the lab's own mandated correction removes the tilt that generates the edge (Alexander–Dimitriu 2003 ISMA WP + *JPM* 2005 companion at 111 cites, Tier C in use, overlap **false**). `#510`/`#511` are two free pre-trial LP solves that decide whether a trial in this vein measures an edge or the panel's width, the second resting on a no-arbitrage argument: a book that never trails its benchmark in-sample would be an arbitrage, so `ε → 0` is the signature of fitting. Channels: `iris.uniroma1.it` and `efmaefm.org/AcceptedPapers<YEAR>/` nominated as working; `palomar.home.ece.ust.hk`, `carolalexander.org`, `centaur.reading.ac.uk` (records without files) and `icmacentre.ac.uk` recorded as refusals. (`2026-11-22-stochastic-dominance-over-the-benchmark-and-the-shortfall-lp.md`; `2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`; `2026-11-22-cointegration-tracking-and-its-price-level-tilt.md`) |
+| 2026-11-23 (session 101) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT AS A CONSTRUCTION THE LAB HAS NEVER RUN PLUS A DISCOUNT ON THIS FOLDER'S OWN THREE-MONTH-OLD ENTRY: the composite score over several leads should decide MEMBERSHIP, not weights — and the mix-versus-integrate ranking is not settled in either direction, it CROSSES OVER in the level of active risk.** Aim from the [2026-11-22] entry, which the coverage audit had reduced to the one open `portfolio-learning` construction corner ("this is where scouted leads become a challenger"). The aim's criteria (i)–(iv) were applied as written and **two of tonight's three sources fail (ii)** — none of this literature *estimates* combination weights; it fixes them and argues about where the score belongs — so the admission was made on the clause rather than on criterion (ii), and the note frontmatter says so. **Three sources, one read in full, two at abstract level, and they disagree with each other in a usable way.** *(a)* The **crossover** (Ghayur–Heaney–Platt, *FAJ*, Tier B−, abstract + CFA Institute's own *In Practice* summary, body member-gated): exposure-matched books — the control the folder's three earlier sources on this question all lack — give the **mix** higher information ratios at low-to-moderate tracking error and the **composite** better risk-adjusted performance at high, with the mechanism in the *overlap*: the names only the mix holds are those whose scores offset, and at low active risk they reduce active risk and raise active return. Procedural consequence: **measure the candidate's active risk against the pool first, because that number decides which construction the literature predicts**, and a v3 book graded against a ~1,000-name equal-weight pool is probably on the side where the mix wins — the opposite of what this file has carried since 2026-08-31 (**#517**). *(b)* The **ceiling** (Clarke–de Silva–Thorley, *FAJ*, Tier B−, **abstract only**; SSRN Cloudflare-challenged and `cdar.berkeley.edu` does not resolve from this environment): a mix of long-only sleeves pays the long-only distortion **once per sleeve**, and a four-sleeve combination captures ~40% of the attainable Sharpe improvement against ~80% for one optimised long-only book on the same inputs — recorded as a ratio of attainable improvement, not performance, and discounted because the 80% arm is a covariance optimiser this panel cannot support. *(c)* The night's main product (Amenc–Ducoulombier–Esakia–Goltz–Sivasubramanian, *JPM* special issue, Tier B−/C+, **read in full**, discounted hard because all five authors work for the index provider whose own indices are the favoured arm): the axis that matters is not mix-versus-integrate but **diversification-based weighting versus score weighting**, and score weighting is dominated by plain equal weighting of the same selection on information ratio, extreme tracking error, extreme underperformance and turnover while delivering lower excess return per unit of factor intensity — verified by levering the diversified books to matched intensity. Its two mechanisms are worth more than its horse race: **the long-only asymmetry** ("it may be less important to identify factor champions than to avoid factor losers" — the loser book's underperformance exceeds the champion book's outperformance, which is the literature arriving independently at this lab's own `#375` one-bit geometry) and **where score-weighting turnover comes from** (a selection churns only when a score crosses the membership threshold; a weighting function of the score trades on every small score change). New construction: **filter, then deconcentrate** — broad per-lead selection, drop the worst *composite* ranks across the other leads inside each selection, equal-weight the survivors, blend at equal allocation — which sits outside **both** bounds this folder uses to kill ensembles, Breiman's simplex and Novy-Marx's linear equivalence, because the filter is a nonlinearity applied inside each leg before construction (**#513**). **One tension recorded rather than smoothed over**: `learnings.md` measured magnitude weighting as information-bearing and de-concentration as costly, under v1, on 140 survivor names, on **absolute** Sharpe; three pre-registered reconciliations are in **#517** and the lab must re-measure rather than prefer either literature. New tonight: **#513–#517**, two of them free holdings-only screens (**#514** overlap/dilution, **#515** score persistence) and one free diagnostic (**#516** the GLR ratio, which separates "diversified" from "selected low-volatility names" — the folder's most persistent confound). Channel: `docs3.scientificbeta.com/Library/External_use/Academic_papers/<FILE>.pdf` serves typeset JPM reprints first-try and is nominated; `globenewswire.com` (403), `alphaarchitect.com` (403), `papers.ssrn.com` delivery (403 Cloudflare), `fisherpub.sjf.edu` (a Digital Commons **record without a file** — the [2026-10-04] Pure/DSpace mode, now on Digital Commons) and `cdar.berkeley.edu` (`connect_unreachable`, host-side) all refused. No lab measurement was taken and the holdout was not read. | Amenc, Ducoulombier, Esakia, Goltz & Sivasubramanian 2017 (*JPM* 43(5), typeset reprint read in full from `docs3.scientificbeta.com`) (`2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`); Ghayur, Heaney & Platt 2018 (*FAJ* 74(3), **abstract + CFA Institute *In Practice* summary only**) (`2026-11-23-exposure-matched-blend-comparison-and-the-active-risk-crossover.md`); Clarke, de Silva & Thorley 2016 (*FAJ* 72(6), **abstract only**) (`2026-11-23-long-only-sleeve-mix-and-how-much-of-the-efficient-book-it-captures.md`) |
 
 ### Open questions for future sessions
+
+- **[2026-11-23] READ THIS BEFORE AIMING SESSION 102. Both CONSTRUCTION corners the [2026-11-22] audit
+  named are now filed — `statistical-arbitrage`'s long-only benchmark-relative book (session 100) and
+  `portfolio-learning`'s "this is where scouted leads become a challenger" (tonight) — so the audit's
+  verdict stands with no exceptions left: a mechanism aim is not a legitimate default, and an aim must
+  now name an OBJECT INSIDE a construction the lab is about to build.** Tonight took the aim verbatim.
+  `#513` is the construction (filter, then deconcentrate), `#514`/`#515` two free holdings-only screens,
+  `#516` a free diagnostic, `#517` the reading rule plus the open tension with `learnings.md`.
+  - **A method lesson about the AIM ITSELF, and it is the night's most transferable product after
+    `#513`.** The [2026-11-22] criteria required a source that "states what the combination weights are
+    estimated **from** and how they are refit out of sample". **Two of tonight's three sources fail that
+    criterion, and so does essentially the whole long-only blending literature**: it does not estimate
+    combination weights at all — it fixes them (equal allocation across sleeves) and argues instead about
+    *where in the construction the score belongs*. The admission was therefore made on the `program.md`
+    clause rather than on criterion (ii), and every note frontmatter says so. **The lesson: an admission
+    criterion must not demand a property the target literature structurally lacks, or the session ends
+    either empty or quietly admitting on different grounds than it wrote down.** Write criteria about the
+    *question* a source must answer, not about the *method* it must use. (The folder's weight-estimation
+    half was already complete — the forecast-combination puzzle, Breiman's simplex, Tu–Zhou, Novy-Marx —
+    which is exactly why the surviving gap was a selection question.)
+  - **PRIMARY AIM FOR SESSION 102, and it is the missing half of `#513` rather than a new family.**
+    *The literature on AGGREGATING SEVERAL RANKINGS of the same items into one ranking or one selected
+    subset.* Tonight's three sources all end at "use the composite to decide membership" and **none of
+    them examines the composite**. The composite every one of them uses — the arithmetic mean of
+    normalised ranks — is a **positional scoring rule** (a Borda count), the oldest object in social
+    choice, and this folder has nothing on it: fixed-string greps across all 318 notes return **zero**
+    for `Borda` (the five `Bordalo` hits are the salience notes), `Kemeny`, `Condorcet`, `Copeland`
+    and `rank aggregation`, while `rank` appears everywhere and the two `scoring rule` hits are the
+    *proper-scoring-rule / elicitability* sense (grading a forecast), not the positional sense (aggregating
+    rankings) — a different object that happens to share the words. Admit a source only if it
+    (i) is about combining **several rankings (complete or partial) of the same items** into one ranking
+    or one chosen subset, (ii) says **when a positional scoring rule is and is not the right
+    aggregator** and names a concrete alternative (distance-based / Kemeny-type aggregation,
+    pairwise-majority rules, median-rank rules) with the property that distinguishes them, (iii) states
+    how it handles **ties and truncated or partial rankings** — which is what the lab actually has, since
+    a lead's score is informative at the top and quantised at the bottom (`#375`) — or says explicitly
+    that it does not, and (iv) is implementable as **rank arithmetic with nothing estimated**, which is
+    what makes this cheap enough to be worth a session. Peer-reviewed statistics, operations-research,
+    computer-science (metasearch / learning-to-rank aggregation) and economics venues all qualify; the
+    rubric is unchanged and a heavily-cited CS paper on rank aggregation is not Tier C merely for not
+    being a finance journal. **Spend at most three requests on the primary.** Explicitly NOT wanted, and
+    the list is the audit's plus tonight's: anything in `liquidity-volume`, `range-variance`,
+    `seasonality-calendar`, `lead-lag-spillover`, `statistical-learning` or `price-trend`; de-risking,
+    low-volatility, residual-reversion, timing or cash-raising constructions; any further inference,
+    multiple-testing, standard-error, matching or dependence source; **and any further mix-versus-integrate
+    source** — four of them now sit on that question and `#517` says the ranking is regime-dependent, so a
+    fifth would add nothing.
+  - **The one thing to carry FORWARD into that aim, so it does not become abstract.** The question is not
+    "which aggregation rule is best in general" but "**which aggregation rule survives being reduced to a
+    membership decision**". A long-only book on an equal-weighted pool expresses a ranking only through
+    which names it admits (`#375`, `#376`); so the relevant property of an aggregator is how stable its
+    **top-K set** is, not how well it orders the tail. A source that only compares full-ranking distances
+    is weaker here than one that reports top-K agreement.
+  - **RETIRED tonight, as the [2026-11-22] entry instructed: the PRIMARY SOURCE for Pesaran's CD test.**
+    It was carried four consecutive sessions, was not attempted tonight (the primary aim took the budget),
+    and that entry said to consider retiring it rather than carrying it a fifth time. It is retired from
+    the ranked targets. `#472` stays in the folder as a free screen recorded **second-hand** through
+    Hoechle's one-paragraph description, with that provenance stated wherever it is used; a future session
+    may pick the primary up opportunistically if it surfaces, but no session should spend an aim on it.
+    Also **still unobtained and still worth one cheap attempt each, no more**: Canakgoz & Beasley (2009,
+    *EJOR*), Beasley, Meade & Chang (2003, *EJOR*) and Benidis, Feng & Palomar (2018, *IEEE TSP*).
+  - **The MEASUREMENTS the shelf owes the lab, now ELEVEN and all free.** Carried: `#472`'s average
+    absolute off-diagonal within-date residual correlation; `#482`'s de-rounding of `null_pctile`;
+    `#494`'s rank correlation between a directed-connectedness row weighting and a plain equal weighting;
+    `#501`'s band regression on whatever score the lab next proposes; `#502`'s within-date rank correlation
+    between a candidate volume score and trailing volatility; `#503`'s regression of the price-delay
+    statistic on region dummies; `#510`'s weight-vector rank correlation between a solve on the trailing
+    window and a solve on its first half; `#511`'s curve of the fitted mean shortfall `ε` against names
+    admitted. **Tonight adds three, all holdings-only**: `#514`'s mix-versus-composite name overlap plus
+    the composite rank of the mix-only names (and the pairwise dilution measure beside it), `#515`'s
+    between-rebalance rank autocorrelation of each lead's score and of the composite, and `#516`'s
+    Goetzmann–Li–Rouwenhorst ratio printed next to every candidate's volatility. **None of the eleven is a
+    trial and none needs the holdout.** `#516` is the one to run first: it separates "this book is less
+    volatile because it diversified" from "this book is less volatile because it selected low-volatility
+    names", which is the confound `learnings.md` records most often.
+  - **Channel notes, one positive and five refusals.** **`docs3.scientificbeta.com/Library/External_use/Academic_papers/<FILE>.pdf`
+    is nominated**: it served the typeset *JPM* reprint of a closed special-issue article at HTTP 200 on
+    the first request, found by a **domain-restricted** web search rather than by guessing a hostname, and
+    it should reach the rest of this group's JPM/FAJ reprints. Refusals, all five of them modes this file
+    already records: `papers.ssrn.com` delivery endpoint 403 with a 5.7 KB Cloudflare body (the green copy
+    OpenAlex names for two of tonight's targets); `globenewswire.com` 403 with a 694-byte body, so a press
+    release that *says* it links the article is not a channel; `alphaarchitect.com` 403 to an automated
+    client, which removes a practitioner-summary route this folder has used before; **`fisherpub.sjf.edu`
+    (Digital Commons) holds a RECORD WITHOUT A FILE** for a Tier-A *RFS* article — HTTP 200 landing page
+    whose only links are the DOI and a repository account page, i.e. the [2026-10-04] Pure/DSpace mode now
+    observed on **Digital Commons**, so a US liberal-arts-college repository hit in OpenAlex's `locations[]`
+    is not evidence of full text; and **`cdar.berkeley.edu` does not resolve from this environment at all**
+    (`connect_unreachable`, HTTP 502 at the egress proxy — host-side, not a policy block, and not to be
+    reported as an egress restriction). One method note: **Crossref's `query.bibliographic` endpoint found
+    every one of tonight's four target articles first-try with its citation count attached**, including two
+    where the title in the index differs from the title in the search (a "corrected May 2017" suffix and a
+    hyphenation difference) — it remains the default route for a title, and Semantic Scholar's count for one
+    of them was off by a factor of twenty, which is the standing "disbelieve a lone count" rule again.
+  - **Carried unchanged and still live**: everything carried under [2026-11-22] except the retired Pesaran
+    target. `#493`'s book and `#494`'s conditioning screen stay the live `lead-lag-spillover` pair; `#508`'s
+    shortfall LP with `#510`/`#511` as its two free pre-trial solves stays the live `statistical-arbitrage`
+    construction; and `#511`'s no-arbitrage reading rule — an in-sample record of almost always beating the
+    pool is evidence about the fit, not the signal — now has a companion in `#517`'s instruction not to
+    resolve a literature-versus-lab tension by preferring the literature.
 
 - **[2026-11-22] READ THIS BEFORE AIMING SESSION 101. The audit the last three sessions needed is
   DONE, and its answer changes what an aim may be: `program.md`'s SIGNAL clauses are spent — about
