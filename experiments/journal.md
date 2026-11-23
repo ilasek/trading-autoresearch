@@ -32531,3 +32531,146 @@ publication recorded as a novelty discount rather than as support.
 `pt_lowvol126_typequota_band`; GATE_FAIL `lv_volume_shock_gkm_band`.
 
 ## Research session — 2026-11-22 (learning agent): 3 notes added, see research/SUMMARY.md
+
+## Protocol issue — 2026-11-23 (nightly) — `origin/claude/determined-darwin-gova1x` was an ORPHAN POINTER, not a strand: its content is byte-identical to what already landed on `main`; zero trials spent
+
+The step-0 integrity banner fired on `origin/claude/determined-darwin-gova1x`. **Nothing was
+stranded.** The branch's one commit holds the W47 weekly report, and that report had *already*
+landed on `main` under a separate commit with byte-identical content; only the branch pointer
+never became an ancestor. **No trial was run tonight and no trial record was added, altered or
+removed:** `trials.jsonl` stands at **142 records** (md5 `8514286a20250d8df15cf577fdeed00f`) on
+`origin/main` and at the merged `HEAD`, unchanged. No candidate was written, no holdout, forward
+or incubation file was opened, and no file under `engine/`, `scripts/`, `tests/`, `data/`,
+`research/`, `program.md` or `CLAUDE.md` was touched.
+
+**State at step 0.** The container started on the per-run branch **`main-61nkh1`** at `7843de9`,
+which is `origin/main` exactly (0 ahead, 0 behind) — nothing was stranded there. Local `main` was
+**17 behind** and was corrected with `git checkout main && git reset --hard origin/main`, exactly
+as step 0 prescribes. Of the **22** remote refs under `origin/`, **21 are ancestors of
+`origin/main`**; one diverged, by a single commit.
+
+**The flagged branch — `origin/claude/determined-darwin-gova1x` (`a9ecb5e`, 2026-11-21T08:15:54Z).**
+Its parent `7eb441e` *is* on `main`, so by the 2026-11-15 test it looks like a true sibling strand
+rather than a stale pointer. It names exactly two files, both pure creations against the merge
+base: **`reports/2026-W47.md` (+285)** and **`reports/charts/2026-W47-vs-sp500.svg` (+56)**. But
+both paths are *also* on `origin/main`, landed as `148d004` ("report: week 47"), and the content
+is the same object on both sides — `reports/2026-W47.md` md5 `d22d21e534b1088400b489022b2e6d69`
+(285 lines) and the chart md5 `3aca109056b19143baaa15f4c7317853` (56 lines), **identical on
+`origin/main`, on the branch and at the merged `HEAD`**. So the weekly-reporting workflow's output
+did reach `main`; what it also left behind was a second pointer to the same content. This is the
+**Branch B** case of 2026-11-15 (content landed, pointer did not), not the Branch A case — and
+unlike that night, there is no one-week reporting hole to repair: `reports/` carries W45, W46 and
+W47 on `main`.
+
+**Why the 2026-08-12..15 precedent does not apply.** `git diff --name-only origin/main...<branch>`
+restricted to `experiments/trials.jsonl`, `experiments/leaderboard.json`,
+`experiments/holdout_log.jsonl`, `experiments/incubation.jsonl`, `strategies/`, `engine/`,
+`scripts/`, `tests/`, `data/`, `research/`, `program.md`, `CLAUDE.md`, `experiments/journal.md`
+and `experiments/learnings.md` is **empty**. Stronger: the branch's own `trials.jsonl` is
+byte-identical to the **merge base's** (138 records, md5 `79af2cd929aa0bd95d621792d8d105b5`),
+while `main` has since added 4 records to reach 142 — the branch is strictly *behind* `main` on
+the trial history and adds nothing to it. **No trial is missing from `main` and the
+deflated-Sharpe bar is not understated.** The loss this time is zero.
+
+**Resolution — one merge, no content change.** `git merge --no-ff origin/claude/determined-darwin-gova1x`:
+clean, no conflict, and the complete tree diff `origin/main..HEAD` is **empty** — the merge commit
+is pure pointer reconciliation. **`reports/2026-W47.md` was landed without being read**, as on
+2026-11-15: weekly reports are not on `CLAUDE.md`'s never-read list, but they can quote forward and
+incubation numbers, and reconciling a pointer requires no read; verification was file-level only
+(`--name-only`, `--numstat`, `md5sum` via `git show`). No conflict markers anywhere.
+After the merge `git branch -r --no-merged HEAD` is **empty**.
+
+**Engine green on the merged tree:** `.venv/bin/python -m pytest tests/ -q` → **92 passed in
+51.07s**.
+
+**Data store.** `main` carries `ec05e82 data: daily refresh 2026-11-21`; the store's last bar is
+**2026-11-20** (Friday), against today's 2026-11-23 (Monday). ~0-1 trading days behind, well
+inside the 5-day tolerance — not stale. (Read as the `date` column of
+`data/store/2026/2026-11.parquet` alone, via `pyarrow.read_table(columns=['date'])`, so no 2024+
+price was loaded.)
+
+**Why zero trials, with the divergence resolved and the loss measured at zero.** Step 0 is
+unconditional, and deliberately so: a remote branch holding commits absent from `origin/main`
+means do not run experiments, journal, commit, push, stop. That condition held when the session
+opened. Tonight is the strongest possible case for running past it — the stranded object is a
+weekly report whose content was already on `main`, and the trial history is provably untouched —
+which is exactly why it must not be run past. The 2026-10-18 lesson is that a session judging a
+flagged branch benign enough to proceed is how the August split happened, and the asymmetry is
+unchanged: halting costs one session, while eight trials run on a history this session had itself
+just reconciled would cost a permanently mis-scored gate for every later trial. The audit's job is
+to tell the next session what it is inheriting, not to buy this session a budget.
+
+**Lesson.** The `--no-merged` test flags *pointers*, not *content*; this is the second orphan
+pointer in nine nights (`origin/main-a5dglb`, 2026-11-15) and the first where the orphan was a
+weekly report whose content had independently landed. The generator is now identified twice over:
+the **weekly-reporting workflow** (`claude/determined-darwin-*`) pushes a branch and its content
+reaches `main` by another route, leaving a ref that fires step 0 on a resolved item. Three of the
+last five halts have been pointer-only. The cheap audit that separates the two cases in one
+command is `git diff --numstat origin/main..HEAD` *after* the merge: **empty means the branch was
+an orphan pointer and nothing was ever lost.** That test, not the parent-on-main test, is the one
+that discriminates — tonight's branch passed the parent-on-main test and still turned out to hold
+nothing new.
+
+**For the human owner.** Step 0 has now cost five nights of research budget in seven weeks, and in
+at least three of them (2026-11-15 Branch B, tonight, and arguably 2026-10-22) nothing was ever
+lost — the branch pointer was stale, the content was on `main`. The halt rule is right to be
+unconditional at the session's discretion, but the *condition* it keys on is too loose: it tests
+ancestry of a ref rather than presence of content. A step-0 formulation that halted only when
+`git diff origin/main...<branch>` is non-empty **after** restriction to trial-bearing paths would
+have let four of the last five nights run a full budget while still catching the August split and
+the 2026-10-29 two-trial split. Only a human can change `CLAUDE.md`/the routine, so this is
+recorded, not acted on. Also still standing, unchanged from 2026-11-22: the `challenge` seat needs
+**+0.64** of skill against a board best of **+0.124**, with both levers in frozen files.
+
+**Verdicts:** none — 0 experiments run.
+
+**Addendum to the lesson — the learnings file's own "0 insertions" test is not clean, and
+tonight is the counterexample.** The 2026-11-15 learning prescribes the two-dot
+`git diff origin/main <branch> --numstat` and reads "0 insertions" as "the branch holds nothing
+`main` lacks". Run tonight, that command printed **19 insertions in
+`experiments/leaderboard.json`** — not because the branch holds anything, but because it is
+*behind* `main` by four trials and still carries the older board, and `main` has since rewritten
+that file. Any branch that lacks later trials will show insertions on every file those trials
+rewrote. The insertion column has to be read **per path, restricted to the paths the branch
+creates**, or replaced by the post-merge tree diff. `experiments/learnings.md` has been corrected
+accordingly; the operational rule is now the single unambiguous command
+`git diff --numstat origin/main..HEAD` after merging.
+
+## Session summary — 2026-11-23 (nightly)
+
+- **Experiments run: 0.** Halted at step 0 by the integrity banner, per `CLAUDE.md`'s
+  unconditional rule. No candidate written, no `run_experiment.py` invocation, no trial recorded;
+  `experiments/trials.jsonl` unchanged at **142 records**
+  (md5 `8514286a20250d8df15cf577fdeed00f`). The deflated-Sharpe bar is therefore exactly where
+  2026-11-22 left it.
+- **Verdicts:** none.
+- **Best finding:** `origin/claude/determined-darwin-gova1x` was an **orphan pointer, not a
+  strand** — its two files (`reports/2026-W47.md`, `reports/charts/2026-W47-vs-sp500.svg`) were
+  already on `main` byte-identical under `148d004`, and its own `trials.jsonl` is the merge base's
+  138 records against `main`'s 142. Nothing was lost; the trial history was never split. Resolved
+  by `git merge --no-ff`, after which the complete tree diff `origin/main..HEAD` is **empty** and
+  `git branch -r --no-merged HEAD` is **empty**. Engine green on the merged tree (92 passed).
+  Store last bar 2026-11-20, not stale.
+- **Method finding, distilled into `learnings.md`:** the three-dot diff over-reports (merge-base
+  blindness) and the two-dot "0 insertions" test over-reports in the other direction (a branch
+  behind `main` shows insertions on every file later trials rewrote). The one clean discriminator
+  is `git diff --numstat origin/main..HEAD` after the merge.
+- **Ideas for next session** — the 2026-11-22 handover carries forward untouched, and no idea
+  below was informed by any holdout or forward number: (i) the **volume-shock premium at matched
+  tail depth in the cheapest cost tier** (top decile *of* the cheap tier, not top 100 of it — a
+  liquidity split at fixed K is confounded with tail depth); (ii) the **volume shock's horizon
+  profile** (h5 / h10 / h21, train-only and free) to test whether a one-month hold is even matched
+  to a 1-4 week signal; (iii) **re-quota `#1 pt_lowvol_gk_quarterly` on type**, one trial, to
+  discharge the rider F3 leaves on the "flat in beta" series; (iv) **apply F2's churn predictor to
+  every anti-candidate** before any is reconsidered, since several were declined on cost estimates
+  built on a low-churn constant; (v) the return-VAR member of its F1 class, the long-leg-share
+  discount as a pre-registerable multiplier, and M3's horizon profile.
+- **Provenance:** `research/SUMMARY.md` was **not read this session** — step 0 halted the night
+  before step 1's reading list, so no new external-research provenance is recorded. Items (i),
+  (ii) and (iv) above trace to `#502`/`#504`/`#506` as recorded in the 2026-11-22 entry; that
+  attribution is carried over, not re-derived.
+- **For the human owner:** step 0 has now cost five nights in seven weeks, at least three of them
+  on branches where nothing was ever lost. The rule tests **ancestry of a ref**, not **presence of
+  content**; a formulation keyed on trial-bearing content would have caught the August 19-trial
+  split and the 2026-10-29 two-trial split while letting four of the last five nights run a full
+  budget. `CLAUDE.md` and the routine are frozen to this agent, so this is recorded only.

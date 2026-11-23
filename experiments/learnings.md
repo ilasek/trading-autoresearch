@@ -54,6 +54,28 @@ across experiments; prune entries that later evidence contradicts.
   as running past it, and one lost night is cheaper than a mis-scored gate for every later
   trial.
 
+  *Refined 2026-11-23 (ninth session): the decisive test is the post-merge tree diff, and
+  neither diff of the branch is clean enough to trust on its own.* Tonight's branch
+  `origin/claude/determined-darwin-gova1x` showed **+341 lines across two files** under the
+  **three-dot** `origin/main...<branch>`, which reads as a real strand; both files were in
+  fact already on `main`, byte-identical, landed under a different hash (`148d004`).
+  Three-dot diffs are taken against the *merge base*, so they cannot see what `main`
+  acquired after the fork and report every re-applied commit as new work. But the two-dot
+  form recommended above is not a clean "0 insertions" test either: here it printed
+  **19 insertions in `experiments/leaderboard.json`** purely because the branch is *behind*
+  `main` and still carries the older board — a branch that lacks four of `main`'s trials
+  will always show insertions on any file `main` has since rewritten. Read the insertion
+  column **per path, restricted to the paths the branch creates**, or skip both and use the
+  test that is unambiguous: **`git diff --numstat origin/main..HEAD` after the merge —
+  empty means the branch was an orphan pointer and nothing was ever lost.** That is one
+  command, it has no merge-base subtlety, and it is what settled tonight in seconds. Also
+  note the **parent-on-main test does not discriminate**: the 2026-11-15 entry used it to
+  call Branch A "a true sibling strand, not a stale pointer", and tonight's branch passes
+  that same test while holding nothing new. Running tally: of the last five halts, **three
+  were pointer-only** with zero content lost (2026-10-22, 2026-11-15 Branch B,
+  2026-11-23). The halt rule keys on ancestry of a ref, not presence of content; only a
+  human can retune it, and the ask is recorded in tonight's journal entry.
+
 ## Strategy learnings (append below)
 
 - **De-risking overlays on momentum reliably backfire out-of-sample.** Three distinct
