@@ -32791,3 +32791,56 @@ accordingly; the operational rule is now the single unambiguous command
   already cleared this same null at the 99th percentile alone. So the clearance is either the BLEND
   or the FAST LEG, and only swapping that leg out while holding the blend fixed separates them.
 
+## 2026-11-24T00:31:52+00:00 — pl_ownscore_deconcentrate_slow3 — **GATE_FAIL**
+- Candidate: `strategies/candidates/pl_ownscore_deconcentrate_slow3.py` (family: portfolio-learning, track: scout, trial #0)
+- Hypothesis: Trial #35's three-leg mix with its fast leg replaced by a slow one -- three legs (long-horizon reversal, 12-1 momentum, minus trailing 126-day volatility), each taking the 90 eligible names highest on its OWN rank, quota-allocated across (trailing-trading-calendar peer group x instrument type) cells, equal-weighted within a leg and blended at equal allocation -- still beats the 90% quantile of its own region- and type-matched random-selection null, because #35's clearance of that null at the 100th percentile was produced by assembling three mechanically unrelated selections into one book and not inherited from the volume-shock leg whose own parent book had already cleared the same null alone.
+- Verdict: GATE_FAIL — train skill -0.089 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.43, ann_ret +8.3%, maxDD -49.6%, turnover 2.7x, skill vs pool -0.09
+- Validation: sharpe +0.33, ann_ret +5.6%, maxDD -33.5%, turnover 5.0x, skill vs pool -0.00
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.00, 90% CI [-0.19, +0.21]; at 2x costs -0.06; with a 30% delisting haircut -0.00; train -0.09 (1997-2008 -0.05, 2009-2017 -0.07)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 92% percentile of 200 random-selection replicas (median +0.29, 90% +0.33); equal-weight eligible pool +0.34, information ratio vs it -0.14
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: THE (a)-OR-(b) QUESTION THE NIGHT'S PAIR COULD NOT ANSWER IS NOW ANSWERED, AND THE
+  ANSWER IS MOSTLY (b) WITH AN IMPORTANT REMAINDER. This is trial #35's three-leg mix with the
+  split-guarded volume-shock leg replaced by minus trailing 126-day volatility and nothing else
+  changed:
+
+      book                       val sharpe   skill    @2x cost   gross skill   train skill   null pctile   null med / p90   sel term   IR vs pool   turnover tr/val
+      #35  rev + mom + vshock       +0.40     +0.064    -0.071      ~+0.199       -0.140         100%        +0.28 / +0.33     +0.12       +0.19       4.7x / 11.8x
+      #36  rev + mom + lowvol       +0.33     -0.003    -0.062      ~+0.056       -0.089          92%        +0.29 / +0.33     +0.04       -0.14       2.7x / 5.0x
+
+  **(b) carries most of it: the fast leg was the source of #35's 100th-percentile clearance and of
+  all of its skill.** Swapping it out takes the null reading to the 92nd percentile — barely over
+  the gate's 90% bar, with the candidate's +0.33 equal to the quantile it must beat — the selection
+  term from +0.12 to +0.04, and the skill from +0.064 to -0.003.
+  **The remainder is not nothing, and it is the part that generalises.** #36 still PASSED the
+  null gate, on the gate that refused 22 of 24 single-score candidates outright, with three legs
+  every one of which is a measured null or near-null on its own. So assembling independent
+  selections into one book does move a book past that gate; what it does not do is produce skill.
+  **The honest statement is that the blend buys GATE CLEARANCE and the signal buys SKILL, and the
+  lab had been conflating them.**
+  **The cost decomposition is the night's cleanest number and it inverts the handover's premise.**
+  The bill (skill minus skill-at-2x-costs) fell from ~0.135 to ~0.059, almost exactly the halving
+  the 2026-11-22 churn predictor forecast from 4.7x to 2.7x train churn. But GROSS skill fell from
+  ~+0.199 to ~+0.056, i.e. by ~0.143. **The fast leg therefore paid for itself about two to one:
+  it contributed ~+0.14 of gross skill for ~+0.076 of bill.** Two handovers put "make the
+  volume-shock premium cheaper" first on the grounds that 86% of its edge was its own cost bill;
+  measured inside a blend, cheapening it by removing it is a net loss of ~0.067 of skill. **A cost
+  bill is only worth removing if the thing paying it is not also paying for itself, and this lab
+  had never run the subtraction.**
+  **A refinement of the 2026-11-22 turnover band, now on three books rather than four.** #36's
+  validation/train churn ratio is **1.85x**, inside the 1.30-2.00x band, while the two blends
+  carrying the fast leg came out at **2.58x and 2.51x**, outside it. So the >2x multiplier is a
+  property of books holding a near-zero-persistence leg, not of multi-leg books: 2018-2023 name
+  churn ran well above train's, and a leg whose ordering is already random amplifies that while a
+  slow leg does not. Registered 1.1-2.5x train against a charged 2.7x (a small miss, over the top
+  by 0.2x) and 1.5-5.5x validation against 5.0x (inside).
+  **One breadth consequence, measured free from stored returns and not assumed.** The engine
+  clusters #35 into **M10**, the volume-shock mechanism, on an active-return rho of **+0.559** to
+  `lv_volume_shock_gkm_band` (its next-largest ties are +0.44 to the M3 oldhalf lineage, and it has
+  2 of 32 pairs at or above 0.5). So under the breadth mandate the three-leg mix is **not a new
+  bet** — it is the fast leg's bet, diluted and re-labelled, which is the same conclusion the
+  (a)/(b) test reaches from the gate side. The two arms of tonight's pair correlate **+0.860** with
+  each other: one mechanism, two effective trials (below the 0.95 clustering threshold), consistent
+  with their per-leg holdings Jaccard of 0.425.
+
