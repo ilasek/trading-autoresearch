@@ -32844,3 +32844,64 @@ accordingly; the operational rule is now the single unambiguous command
   each other: one mechanism, two effective trials (below the 0.95 clustering threshold), consistent
   with their per-leg holdings Jaccard of 0.425.
 
+## 2026-11-24T00:34:59+00:00 — pt_aggregate_unit_stmom — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_aggregate_unit_stmom.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Holding the 8 eligible NON-STOCK instruments with the highest trailing 21-day return (lagged one day), equal-weighted and reformed monthly, with no peer quota so the region and asset-class bet is kept rather than neutralised, earns a validation Sharpe above the 90% quantile of 200 random selections built exactly like it from the same point-in-time pool, because at the AGGREGATE level the short-horizon cross-sectional signal is continuation while at the single-name level it is reversal -- a sign flip under change of aggregation unit, which makes it a different mechanism rather than the stock-level momentum this lab has already measured to null.
+- Verdict: GATE_FAIL — train skill -0.322 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.114 <= the random-selection null's 90% quantile 0.342 (median 0.178; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.20, ann_ret +4.0%, maxDD -51.3%, turnover 15.0x, skill vs pool -0.32
+- Validation: sharpe +0.11, ann_ret +2.5%, maxDD -29.0%, turnover 17.2x, skill vs pool -0.22
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.22, 90% CI [-0.83, +0.32]; at 2x costs -0.40; with a 30% delisting haircut -0.22; train -0.32 (1997-2008 -0.06, 2009-2017 -0.79)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 30% percentile of 200 random-selection replicas (median +0.18, 90% +0.34); equal-weight eligible pool +0.34, information ratio vs it -0.26
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: THE AGGREGATE INSTRUMENT IS REFUTED AS A TRADED UNIT ON THIS PANEL, AND IN THE
+  STRONGEST AVAILABLE FORM — THE SORT LANDED BELOW THE RANDOM MEDIAN OF ITS OWN MATCHED NULL.
+  Candidate validation Sharpe **+0.11** against a null median of **+0.18** and a 90% quantile of
+  **+0.34**: the 30th percentile of 200 replicas built with the same schedule, weights and
+  stock/fund mix. A coin-flip selection of eight funds, rotated on the same dates, beat the
+  previous-month sort. Both binding gates failed (train skill -0.322; the null gate outright), and
+  the 90% skill interval is [-0.834, +0.317] — by far the widest on the board, which is what an
+  8-name book buys.
+  **The skill number decomposes, and most of it is not the sort.** The random 8-fund replicas earn
+  +0.18 against the ~1,000-name equal-weight pool's +0.34, so **about -0.16 of the candidate's
+  -0.223 skill is the fund sleeve itself** (asset class plus the schedule's own cost) and only
+  about **-0.07** is the sort. That split was pre-registered in the candidate docstring as the
+  reason an all-fund book's skill-versus-pool is mostly an asset-class term and the NULL PERCENTILE
+  is the statistic that tests the claim. The null percentile is what refused it, so the refusal is
+  about the sort and not about the sleeve.
+  **What is refuted and what is not.** Refuted: short-horizon cross-sectional CONTINUATION at the
+  aggregate level, one-month formation, on the panel's 42-fund sleeve, long-only, net of v3 costs.
+  NOT refuted: the country-index claim as the sources state it. The panel's non-stock sleeve is a
+  superset of country and region funds — it also holds sector, bond and commodity funds — and no
+  fund-to-country mapping exists anywhere a candidate may read, so the unit tested is "aggregate
+  instrument" and not "country". That limit was written into the file before the run.
+  **Three source-side discounts were carried in and all three now look like the explanation rather
+  than a hedge.** (i) No source in this vein models transaction costs: the multiverse paper's
+  full-text grep returns zero mentions, Chan-Hameed-Tong's measure is explicitly frictionless, and
+  Richards' portfolio is zero-net-investment — so every magnitude in the vein is GROSS, including
+  its near-zero developed-market result. (ii) Representing an aggregate by a FUND rather than a
+  full-market aggregate cuts spread payoffs two- to three-fold in the paper's own design sweep,
+  because funds hold the large liquid names while the aggregates hold the small and micro-caps the
+  authors call the primary source of predictability. (iii) Developed-market-only spreads are
+  statistically indistinguishable from zero. The pre-trial reasoning used `#370` to decline a D4
+  refusal — a spread can be near zero while its LONG half is not, and Chan-Hameed-Tong put the
+  effect almost entirely in the long leg. **That reasoning was correct as logic and wrong as a
+  forecast: the long leg here is not merely weak, it is below its own matched random median.** So
+  `#370`'s "the discount refuses the spread, not the long-only construction" is now measured once
+  on this panel and the long-only construction failed anyway.
+  **One cost prediction that DID hold, and it is a reusable constant.** The file predicted the
+  ~19 bps-per-1x-churn constant measured on volume-shock books would NOT apply to funds, because
+  funds sit in the cheapest liquidity tier and carry no UK/HK/FR/IT/ES purchase tax if US-listed,
+  and that the ~11 bps slow-book constant was the better prior. Measured: the bill (skill minus
+  skill-at-2x) is ~**0.174** of Sharpe on 17.2x validation churn, i.e. ~**10 bps per 1x** —
+  the slow-book constant, on the fastest book recorded here. **So the cost-per-turn constant is set
+  by WHAT a book holds, not by how fast it trades: ~10-11 bps/1x for funds and liquid names,
+  ~19 bps/1x for the names a volume shock selects.**
+  **And one pre-registration that missed badly, recorded as a miss.** Registered train 4.0-9.0x and
+  validation 5.0-14.0x; charged **15.0x and 17.2x**. The error was arithmetic and avoidable: a
+  monthly reform of an 8-name book drawn from ~40 units can replace the whole book every month,
+  which is ~12x one-way by itself before any drift-undoing, so the floor of the registered range
+  should have been 12x. The 2026-11-22 churn predictor was not applicable here (it is calibrated on
+  K=100 books from ~1,000 names) and nothing replaced it. **For a small-K book from a small pool,
+  compute the mechanical rotation ceiling (K replacements x frequency / K = frequency) instead of
+  reaching for the predictor.**
+
