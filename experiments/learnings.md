@@ -9022,3 +9022,153 @@ across experiments; prune entries that later evidence contradicts.
   the ACTIVE-return rho of a planned object against the board, and a score whose rank persistence is
   near zero is decorrelated from this board almost by construction, because everything on it is
   slow.**
+
+- **[Measured 2026-11-24, nightly — FOUR scored trials; THE HEADLINE, AND IT IS THE FIRST TIME THIS
+  LAB HAS PRICED A COMBINATION OPERATOR IN A TRUE ONE-OPERATOR PAIR] RESEARCH `#513`'s
+  FILTER-THEN-DECONCENTRATE — THE ONE COMBINATION OPERATOR IN `portfolio-learning` THE LAB HAD NEVER
+  RUN — IS WORTH MINUS 0.090 OF VALIDATION SKILL, AND THE FREE SCREEN THAT WAS SUPPOSED TO PREDICT
+  ITS SIGN GOT IT BACKWARDS.** Three legs (long-horizon reversal, 12-1 momentum, split-guarded 5/45
+  volume shock), 90 names per leg, (peer x type) quota, equal weights within a leg, equal allocation
+  across legs, monthly, identical dates. The only difference between the arms is whether a leg's
+  final 90 are the deepest on its OWN score or the best on the OTHER two legs' composite:
+
+      arm                     val sharpe   skill    90% CI             @2x cost   train skill   null pctile   IR vs pool   churn tr/val   avg_pos
+      #34  filtered (#513)       +0.31     -0.026   [-0.246, +0.142]    -0.197      -0.133          99%          -0.16     5.3x / 13.7x      168
+      #35  own-score control     +0.40     +0.064   [-0.118, +0.218]    -0.071      -0.140         100%          +0.19     4.7x / 11.8x      220
+
+  The filter costs **-0.090** of skill, **-0.126** at 2x costs and **+1.9x** of validation churn
+  (membership moves when ANY of three legs moves, not when one does), and does not touch train skill
+  (-0.133 against -0.140). **`#513`'s nonlinearity argument is right as mathematics and worthless as
+  a construction: the filter genuinely falls outside both Breiman's simplex bound and Novy-Marx's
+  linear-composite equivalence, but escaping a bound that caps your upside is not the same as having
+  upside.** The folder's standing rule — *the value of an aggregation operator is the value of its
+  nonlinearity* — is confirmed in form and refuted in sign.
+  **The screen result is the more reusable half.** Research `#514` prescribes a free holdings-only
+  pre-trial screen that claims to predict the sign of the mix-versus-composite comparison before
+  anything is spent. Run on 252 train month-ends before either file was written, it returned a
+  per-leg Jaccard of **0.425** between the two arms' selections — its own "low overlap, past the
+  crossover, the composite is the better bet" reading. **The mix won.** Its companion dilution
+  statistic also failed a pre-registered expectation: the mean rank of one leg's selection on
+  another leg came out at the **median** (+0.500 to +0.529, never below 0.5), i.e. long-horizon
+  reversal and 12-1 momentum are nearly **orthogonal** in rank on this panel at these windows, not
+  offsetting as both the source and the hypothesis assumed. **`#514` therefore joins the list of
+  screens that may refuse on arithmetic and may not qualify; it has been tested once here and
+  predicted the wrong sign.** Its one clause that did work is the D2 refusal test — a Jaccard at or
+  above 0.90 would correctly have identified the two arms as one object, and 0.425 correctly said
+  they were two.
+  **One property of the operator that must travel with any future use of it: the filter makes the
+  legs CONVERGE.** At an identical 90 names per leg the filtered book holds 142 distinct names on
+  train month-ends against the control's 202 (168 against 220 on validation), because selecting each
+  leg by the other legs' composite pushes all three toward the same names. That is the source's own
+  structural warning — composite-selected names are more correlated with each other than average
+  names — observed directly, and it means a composite arm has strictly less diversification
+  available than its mix. The two arms are consequently NOT size-matched, and size-matching would
+  require a second operator change, so this is a property to report rather than a flaw to fix.
+
+- **[Measured 2026-11-24, nightly — THE MOST TRANSFERABLE NUMBER OF THE NIGHT, AND IT SEPARATES TWO
+  THINGS THIS LAB HAD BEEN TREATING AS ONE] THE BLEND BUYS GATE CLEARANCE; THE SIGNAL BUYS SKILL.**
+  A plain equal-allocation mix of three mechanically unrelated 90-name selections
+  (`pl_ownscore_deconcentrate_3leg`, #35) cleared the region- and type-matched random-selection null
+  at the **100th percentile of 200 replicas** — candidate +0.40 against a null median +0.28 and a
+  90% quantile +0.33 — the strongest reading of that gate in 35 v3 trials, on the gate that refused
+  **22 of the previous 24** candidates, with a selection term of **+0.12** and an information ratio
+  against the pool of **+0.19** (the first positive IR on this board outside the volume-shock
+  lineage). Swapping the one fast leg for a slow one and holding everything else fixed:
+
+      book                       val sharpe   skill    @2x cost   gross skill   train skill   null pctile   sel term   IR vs pool   churn tr/val
+      #35  rev + mom + vshock       +0.40     +0.064    -0.071      ~+0.199       -0.140         100%        +0.12       +0.19      4.7x / 11.8x
+      #36  rev + mom + lowvol       +0.33     -0.003    -0.062      ~+0.056       -0.089          92%        +0.04       -0.14      2.7x / 5.0x
+
+  So the 100th-percentile clearance and all of the skill came from the **fast leg**. But the
+  remainder is real and is the part that generalises: `#36` **still passed** the null gate, with
+  three legs every one of which is a measured null or near-null on its own. **Assembling independent
+  selections into one book moves a book past the gate that refuses single-score books; it does not
+  produce skill.** Two consequences. (i) A 100th-percentile null reading is no longer evidence of a
+  signal — it is partly evidence of a construction, and the two must be reported apart. (ii) The
+  mix's hypothesis as written (Breiman: skill no higher than the average of its legs) was
+  **confirmed to inside any error bar**: its legs' recorded v3 skills are +0.124, a null and +0.031,
+  averaging ~+0.05 against a measured +0.064. **That second half corrects this file's own standing
+  reading.** "Naive dilution is already priced and already loses" has been carried since v1; on a
+  three-leg mix of independently-selected 90-name sleeves under v3, dilution did **not** lose — it
+  paid the average of its legs, neither above nor below, and bought a 100th-percentile null reading
+  with it. The v1 claim was measured on blends of finished return series inside one family; it does
+  not reach a mix of independent selections at matched size.
+
+- **[Measured 2026-11-24, nightly — INVERTS THE PREMISE THE 2026-11-22 AND 2026-11-23 HANDOVERS BOTH
+  LED WITH] A COST BILL IS ONLY WORTH REMOVING IF THE THING PAYING IT IS NOT ALSO PAYING FOR ITSELF,
+  AND THIS LAB HAD NEVER RUN THAT SUBTRACTION.** Both handovers put "the volume-shock premium at
+  matched tail depth in the cheapest cost tier" first, on the ground that 86% of that object's edge
+  was its own cost bill. Two things happened to it.
+  **(a) The axis as specified is closed by this file's own contamination rule.** A liquidity tier is
+  a cross-sectional comparison of `dollar_volume` LEVELS, and the standing operating rule since
+  2026-10-21/22 is that a candidate may use ratios, returns and trends of the stored panels but not
+  their levels, because `dollar_volume` carries the dividend half of the as-of-fetch back-adjustment
+  factor — the factor that accounted for Amihud's entire measured IC here. **Declined on those
+  grounds; do not re-propose a cost-tier, liquidity-decile or ADV-threshold universe cut.**
+  **(b) The reachable form — change the LEG, not the universe — was run, and cheapening lost money.**
+  From #35 to #36 the bill (skill minus skill-at-2x) fell from ~**0.135** to ~**0.059**, almost
+  exactly the halving the 2026-11-22 churn predictor forecast from 4.7x to 2.7x train churn. But
+  GROSS skill fell from ~**+0.199** to ~**+0.056**. **The fast leg paid for itself about two to one:
+  ~+0.14 of gross skill for ~+0.076 of bill.** The operative change: before proposing any cheapening
+  of a recorded object, write down the gross skill the cheapening removes alongside the bill it
+  saves, and refuse the proposal if the ratio is above one. The lab has eight recorded objects whose
+  2x-cost stress is already stored, so that subtraction is free in every case.
+
+- **[Measured 2026-11-24, nightly] THE COST-PER-TURN CONSTANT IS SET BY WHAT A BOOK HOLDS, NOT BY HOW
+  FAST IT TRADES — ~10-11 bps PER 1x OF CHURN FOR FUNDS AND LIQUID NAMES, ~19 bps FOR THE NAMES A
+  VOLUME SHOCK SELECTS.** `pt_aggregate_unit_stmom` (#37) is the fastest book ever recorded here —
+  15.0x train / 17.2x validation one-way churn — and its bill is ~**0.174** of Sharpe, i.e. ~**10 bps
+  per 1x**, the slow-book constant, because the panel's funds sit in the cheapest liquidity tier and
+  carry no UK/HK/FR/IT/ES purchase tax. The 2026-11-22 entry measured ~**19 bps per 1x** on the
+  volume-shock book at a nearly identical 16.6x. **Same churn, nearly double the bill, and the
+  difference is entirely the holdings.** This was pre-registered in #37's docstring and confirmed,
+  which makes it a forecast rather than a fit. It replaces the undifferentiated "~11 bps/yr per 1x"
+  the record carried: the constant is a property of the liquidity tier and tax jurisdiction a score
+  selects into, so it must be predicted from the score's selection and not from its speed.
+
+- **[Measured 2026-11-24, nightly] THE AGGREGATE INSTRUMENT IS REFUTED AS A TRADED UNIT ON THIS
+  PANEL — AND REFUTED BELOW THE RANDOM MEDIAN OF ITS OWN MATCHED NULL, WHICH IS THE STRONGEST FORM
+  AVAILABLE.** `pt_aggregate_unit_stmom` (#37) sorted the eligible non-stock sleeve on its previous
+  month's return and held the top eight, equal-weighted, monthly, with **no peer quota** (the quota
+  is what deletes this object, so its absence was the design, not an omission). Validation Sharpe
+  **+0.11** against a null median **+0.18** and 90% quantile **+0.34** — the **30th percentile**: a
+  coin-flip selection of eight funds rotated on the same dates beat the sort. Train skill -0.322;
+  both binding gates failed; the 90% skill interval [-0.834, +0.317] is by far the widest on the
+  board, which is what an 8-name book buys.
+  **The skill decomposes and most of it is not the sort**: the random replicas earn +0.18 against the
+  ~1,000-name pool's +0.34, so about **-0.16** of the -0.223 skill is the fund sleeve itself (asset
+  class plus the schedule's own cost) and only about **-0.07** is the sort. **For any all-fund or
+  mostly-fund book the null PERCENTILE is the statistic that tests the claim and skill-versus-pool is
+  mostly an asset-class term** — pre-registered in the docstring and confirmed.
+  **Scope of the refutation, stated narrowly.** Refuted: short-horizon cross-sectional CONTINUATION
+  at the aggregate level, one-month formation, on this panel's 42-fund sleeve, long-only, net of v3
+  costs. NOT refuted: the country-index claim as the literature states it — the non-stock sleeve is a
+  superset of country and region funds (it also holds sector, bond and commodity funds) and no
+  fund-to-country mapping exists anywhere a candidate may read, so the unit tested is "aggregate
+  instrument", not "country". **And one research reading rule is now measured once**: research
+  `#370` holds that a near-zero developed-market long-SHORT spread cannot by itself refuse a
+  long-only construction, because the effect lives in the long leg. That was used to decline a D4
+  refusal before the run. It is correct as logic and was wrong as a forecast here — the long leg is
+  not merely weak, it is below its own matched random median.
+
+- **[Method, 2026-11-24 — TWO FREE RULES, BOTH LEARNED FROM A MISS] NAME A LEG WITH THREE OR MORE
+  LETTERS AND RUN `static_check` BEFORE SPENDING A RUN; AND FOR A SMALL-K BOOK FROM A SMALL POOL,
+  COMPUTE THE MECHANICAL ROTATION CEILING INSTEAD OF REACHING FOR THE CHURN PREDICTOR.**
+  **(a)** Trial #33 was refused by the hindsight guard before anything ran because its three legs
+  were keyed `"R"`, `"M"` and `"V"` in a dict and a module-level tuple — all three are real ticker
+  ids on this panel, and `protocol._stock_ids()` also confirms `A` and `C`. The guard cannot tell a
+  dict key from a hard-coded holding and behaved exactly as designed; the cost is a recorded trial
+  that scored nothing, stored no returns, and raised the deflated-Sharpe bar for every later
+  candidate. `protocol.static_check(path)` is free, runs in under a second, and catches this.
+  **(b)** #37 registered train churn at 4.0-9.0x and was charged **15.0x**. The error was arithmetic:
+  a monthly reform of an 8-name book drawn from ~40 units can replace the whole book every month,
+  which is ~12x one-way before any drift-undoing, so 12x was the floor. The 2026-11-22 predictor
+  (`train churn ~ 1.0 + 0.29 x exit200%`) is calibrated on K=100 books from ~1,000 names and does not
+  transfer to small K. **Where K/N is large, the rotation ceiling is the rebalance frequency itself
+  and the predictor is the wrong instrument.**
+  **(c) A refinement of the 2026-11-22 validation multiplier, now on three more books.** That entry
+  set validation churn at 1.30-2.00x the train figure. #36 ran at **1.85x** (inside) while the two
+  blends carrying a near-zero-persistence leg ran at **2.58x and 2.51x** (outside). **The >2x
+  multiplier is a property of books holding a fast leg, not of multi-leg books**: 2018-2023 name
+  churn ran well above train's, and a leg whose ordering is already random amplifies that while a
+  slow leg does not.

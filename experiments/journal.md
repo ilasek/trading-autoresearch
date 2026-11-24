@@ -32905,3 +32905,211 @@ accordingly; the operational rule is now the single unambiguous command
   compute the mechanical rotation ceiling (K replacements x frequency / K = frequency) instead of
   reaching for the predictor.**
 
+
+## Session summary — 2026-11-24 (nightly) — 4 scored trials of 8 (plus one refused by the hindsight guard); research `#513`'s never-run combination operator is REFUTED in the one design that can price it, and the night's cost subtraction inverts the premise two handovers had carried first
+
+**Experiments: 4 scored of 8, plus 1 guard refusal.** Verdicts: **GATE_FAIL x 5** —
+`#33 pl_filter_deconcentrate_3leg` (hindsight guard, nothing scored),
+`#34 pl_filter_deconcentrate_3leg`, `#35 pl_ownscore_deconcentrate_3leg`,
+`#36 pl_ownscore_deconcentrate_slow3`, `#37 pt_aggregate_unit_stmom`. No promotion, no family
+lead, no holdout gate reached. `trials.jsonl` goes from 142 to **147 records / 37 v3 records / 35
+scored v3 trials**; `rank_trials.py` reports **35 of 35 in tier 1** and M3 `pt_oldhalf_overlap6`
+still leads at skill +0.124. All five were `track: "scout"`, so the champion was never compared and
+**no holdout, forward or incubation file was opened** — the v3 seat is still empty and the stored
+card is still the v1 champion's, which holds no seat. Engine green (**92 passed in 43.72s**).
+Store's last bar **2026-11-20**, not stale. Budget allocation respected: **3 scored in
+`portfolio-learning`** (a family with 1 prior trial), **1 in `price-trend`** (cap 2, one used);
+`distinct_mechanisms` was already 6 so the per-family cap of 2 is lifted by `program.md`'s own
+wording, and no family is without a trial so the cold-family clause is moot.
+
+**Step 0 was clean for the first time in three nights.** `git branch -r --no-merged origin/main`
+returned **empty**, HEAD was already exactly `origin/main`, and the only anomaly was that the
+container started on a per-run branch name (`main-y5n98b`) pointing at the same commit; corrected
+with `git checkout main && git reset --hard origin/main` before any work, per the routine's own
+instruction never to run trials from a per-run branch. The 2026-11-23 entry's ask to the human
+owner stands: the halt rule keys on ancestry of a ref, not presence of content.
+
+**The method this session followed, and it is the 2026-11-22 rule applied a second time.** A
+decision rule was pre-registered in the scratchpad **before the first screen was read**, containing
+**no threshold on any train signal statistic** in either direction — declining only on arithmetic
+grounds (D1 not computable or contaminated; D2 relabelling at score- or holdings-level |rho| or
+Jaccard >= 0.90; D3 cost >= prize by construction; D4 wrong panel; D5 direction not pre-signable).
+**No train skill, IC or signal statistic was computed for any of the five objects.** The rule
+declined two objects and passed five to the engine; an addendum recording both declines was written
+after the first pair's verdicts and before the next two trials, so the ordering is auditable.
+
+**Best finding — F1. Research `#513`'s filter-then-deconcentrate operator — the one combination
+operator in this family the lab had never run — is worth about MINUS 0.09 of validation skill, and
+the design that measures it is a true one-operator pair.** Same three legs (long-horizon reversal,
+12-1 momentum, split-guarded 5/45 volume shock), same 90 names per leg, same (peer x type) quota,
+same equal weights, same equal allocation, same dates. The only difference is whether a leg's final
+90 are the deepest on its OWN score or the best on the OTHER two legs' composite:
+
+    arm                     val sharpe   skill    90% CI             @2x cost   train skill   null pctile   IR vs pool   turnover tr/val   avg_pos
+    #34  filtered (#513)       +0.31     -0.026   [-0.246, +0.142]    -0.197      -0.133          99%          -0.16      5.3x / 13.7x       168
+    #35  own-score control     +0.40     +0.064   [-0.118, +0.218]    -0.071      -0.140         100%          +0.19      4.7x / 11.8x       220
+
+The filter costs **-0.090** of skill, **-0.126** at 2x costs and **+1.9x** of validation churn, and
+moves train skill not at all (-0.133 against -0.140). **`#513`'s nonlinearity argument is correct as
+mathematics and worthless as a construction here**: the filter does fall outside both Breiman's
+simplex bound and Novy-Marx's linear-composite equivalence, but escaping a bound that caps your
+upside is not the same as having upside. The folder's standing rule — *the value of an aggregation
+operator is the value of its nonlinearity* — is confirmed in form and refuted in sign.
+**Two riders that travel with it.** (i) Research `#514`'s free holdings screen, run before either
+file was written, called the sign **wrong**: per-leg Jaccard 0.425 is its own "low overlap, past the
+crossover, the composite is the better bet" reading, and the mix won. Its dilution pairs came out at
+the median (+0.500 to +0.529) rather than below it, so long-horizon reversal and 12-1 momentum are
+nearly **orthogonal** in rank on this panel, not offsetting — a pre-registered expectation that
+failed. (ii) The filter makes the legs **converge**: at an identical 90 per leg the filtered book
+holds 142 distinct names on train month-ends against the control's 202, which is the source's own
+structural warning (composite-selected names are more correlated with each other) observed directly.
+Both riders were in the candidate docstrings before the runs.
+
+**Second — F2, and it is the night's most transferable number. THE BLEND BUYS GATE CLEARANCE; THE
+SIGNAL BUYS SKILL, AND THE LAB HAD BEEN CONFLATING THEM.** `#35`'s plain equal-allocation mix of
+three mechanically unrelated 90-name selections cleared the region- and type-matched
+random-selection null at the **100th percentile of 200 replicas** (candidate +0.40 against a null
+median +0.28 and a 90% quantile +0.33) — the strongest reading of that gate in 35 v3 trials, on the
+gate that refused **22 of the previous 24** candidates — with a selection term of **+0.12** and the
+first positive information ratio on this board outside the volume-shock lineage (**+0.19**).
+`#36` then swapped the fast leg for a slow one and held everything else fixed:
+
+    book                       val sharpe   skill    @2x cost   gross skill   train skill   null pctile   sel term   IR vs pool   turnover tr/val
+    #35  rev + mom + vshock       +0.40     +0.064    -0.071      ~+0.199       -0.140         100%        +0.12       +0.19       4.7x / 11.8x
+    #36  rev + mom + lowvol       +0.33     -0.003    -0.062      ~+0.056       -0.089          92%        +0.04       -0.14       2.7x / 5.0x
+
+So the clearance was **mostly the fast leg**, not the blend. But the remainder is real and is the
+part that generalises: `#36` **still passed** the null gate, with three legs every one of which is a
+measured null or near-null alone. Assembling independent selections into one book moves a book past
+the gate that refuses single-score books; it does not produce skill.
+
+**Third — F3, and it inverts the premise the 2026-11-22 and 2026-11-23 handovers both led with.**
+Those handovers put "the volume-shock premium at matched tail depth in the cheapest cost tier" first,
+on the ground that 86% of that object's edge was its own cost bill. Two things happened to it.
+**(a) The axis as specified is closed by the lab's own contamination rule and was declined on D1**: a
+liquidity tier is a cross-sectional comparison of `dollar_volume` LEVELS, and the standing operating
+rule since 2026-10-21/22 is that a candidate may use ratios, returns and trends of the stored panels
+but not their levels, because `dollar_volume` carries the dividend half of the as-of-fetch
+back-adjustment factor and that factor accounted for Amihud's entire measured IC here.
+**(b) The reachable form of the idea — change the LEG, not the universe — was run as `#36`, and
+cheapening lost money.** The bill fell from ~0.135 to ~0.059 of Sharpe, almost exactly the halving
+the churn predictor forecast from 4.7x to 2.7x train churn; but GROSS skill fell from ~+0.199 to
+~+0.056. **The fast leg paid for itself about two to one: ~+0.14 of gross skill for ~+0.076 of
+bill.** A cost bill is only worth removing if the thing paying it is not also paying for itself, and
+this lab had never run that subtraction on anything.
+
+**Fourth — F4. The aggregate instrument is refuted as a traded unit, below the random median of its
+own matched null.** `#37` sorted the eligible non-stock sleeve on its previous month's return and
+held the top eight, equal-weighted, monthly, with **no peer quota** (the quota is what deletes this
+object, so its absence was the design). Validation Sharpe **+0.11** against a null median **+0.18**
+and 90% quantile **+0.34** — the **30th percentile**: a coin-flip selection of eight funds rotated on
+the same dates beat the sort. Both binding gates failed (train skill -0.322). The skill decomposes:
+of the -0.223, about **-0.16 is the fund sleeve itself** (the random replicas earn +0.18 against the
+pool's +0.34) and only about **-0.07 is the sort** — a split pre-registered in the docstring as the
+reason the null percentile, not skill-versus-pool, is the statistic that tests an all-fund book.
+**What is refuted is short-horizon cross-sectional continuation at the aggregate level on this
+panel's fund sleeve; what is NOT refuted is the country-index claim as the sources state it**,
+because no fund-to-country mapping exists anywhere a candidate may read, so the unit tested is
+"aggregate instrument" and not "country". That limit was written in before the run. Research
+`#370`'s rule — *the developed-market discount refuses the long-SHORT spread, it cannot by itself
+refuse a long-only construction, because the effect lives in the long leg* — was used to decline a
+D4 refusal, and is now measured once here: the long leg is not merely weak, it is below its own
+matched random median.
+
+**Fifth — a cost constant that is set by WHAT a book holds, not by how fast it trades.** `#37` is
+the fastest book ever recorded here (15.0x train / 17.2x validation one-way churn) and its bill is
+~0.174 of Sharpe, i.e. ~**10 bps per 1x of churn** — the slow-book constant, because funds sit in
+the cheapest liquidity tier and carry no UK/HK/FR/IT/ES purchase tax. The 2026-11-22 entry measured
+~19 bps per 1x on the volume-shock book at 16.6x. **Same churn, nearly double the bill, and the
+difference is the holdings.** Pre-registered in `#37`'s docstring and confirmed.
+
+**Sixth — two turnover pre-registrations held, two missed, and both misses are informative.** The
+2026-11-22 predictor (`train one-way churn ~ 1.0 + 0.29 x exit200%`) gave 1.1x / 1.9x / 14.7x for
+the three legs; charged churn came in at 5.3x, 4.7x and 2.7x train against registered 2.5-7.0x,
+2.0-6.0x and 1.1-2.5x (the last a small miss, over the top by 0.2x). **The validation multiplier is
+where the structure is**: `#36` ran at **1.85x** train, inside the 1.30-2.00x band, while the two
+blends carrying the fast leg ran at **2.58x and 2.51x**, outside it. So the >2x multiplier is a
+property of books holding a near-zero-persistence leg, not of multi-leg books. `#37` missed its
+range badly (registered 4.0-9.0x, charged 15.0x) for an avoidable arithmetic reason: **for a
+small-K book drawn from a small pool the mechanical rotation ceiling is the rebalance frequency
+itself** (8 replacements a month out of 8 held is 12x/yr before any drift-undoing), and the
+K=100-from-1,000 predictor does not apply.
+
+**Seventh — one recorded cost that was entirely avoidable.** `#33` was the filtered arm refused by
+the hindsight guard before anything ran, because its three legs were keyed `"R"`, `"M"` and `"V"` —
+all three are real ticker ids on this panel (`protocol._stock_ids()` also confirms `A` and `C`).
+The guard cannot tell a dict key from a hard-coded holding and behaved exactly as designed, but the
+trial is recorded, scored nothing, stored no returns, and raises the deflated-Sharpe bar for every
+later candidate. **Operative rule: name legs, sleeves and cells with three or more letters, and run
+`protocol.static_check(path)` before spending a run — it is free and takes under a second.**
+
+**Breadth, measured from stored returns rather than assumed.** Active-return rho over the 1,562
+validation days against all stored v3 objects: `#35` max |rho| **+0.860** (to its own filtered twin),
+then **+0.559** to `lv_volume_shock_gkm_band` and +0.44 to the M3 oldhalf lineage, with 2 of 32 pairs
+at or above 0.5; the engine clusters it into the **volume-shock mechanism**. So the three-leg mix is
+**not a new bet** under the breadth mandate — it is the fast leg's bet, diluted — which is the same
+conclusion F2 reaches from the gate side. `distinct_mechanisms` stays at **6**. The two arms'
+rho of +0.860 is below the 0.95 trial-clustering threshold, so they count as two effective trials,
+consistent with their per-leg holdings Jaccard of 0.425.
+
+**Why the session stopped at 4 scored trials with 4 of the budget left, stated as the decision.**
+Every remaining idea on the table was either a knob on tonight's live object (re-weight the legs,
+re-run the refuted filter against the slow leg set — a file that was written and then **deleted
+unrun** for exactly this reason) or a score with no source behind it. `program.md`'s budget rule is
+explicit that wasteful trials have a real cost and that few well-motivated hypotheses beat parameter
+sweeps. This is **not** the twelve-night failure mode the 2026-11-22 entry diagnosed: that was
+declining objects on train-side thresholds, and no object was declined on a train statistic tonight.
+
+**For the human owner — the standing item, unchanged.** The `challenge` track is still closed by
+arithmetic: the seat needs **+0.64** of skill against a board best of +0.124, and the deflation
+benchmark alone is +0.3087. Nothing in `engine/`, `scripts/`, `tests/`, `data/`, `program.md` or
+`CLAUDE.md` was touched. One new library file was added (`strategies/lib/lead_scores.py`, the three
+leg scores, imported byte-identically by three candidates); no existing library file was edited.
+
+**Ideas for next session** — none informed by any holdout or forward number, and none of these files
+was opened:
+ (i) **The fast-leg subtraction, run the other way.** F3 measured that the volume-shock leg pays for
+   itself 2:1 inside a three-leg mix. The unmeasured half is a **two**-leg mix of the board lead
+   (`pt_oldhalf_overlap6`'s score, the only object passing both binding gates) and the volume shock,
+   dropping the momentum leg that F1 showed is orthogonal to both and contributed nothing. Predicted
+   churn ~7.9x, bill ~0.10, gross ~+0.17. It is one trial and it is the direct application of
+   tonight's measurement rather than a knob on tonight's book.
+ (ii) **A second FAST mechanism, because the board has exactly one.** F2 says the blend buys gate
+   clearance and the signal buys skill, and 2026-11-22 says a near-zero-persistence score is
+   decorrelated from this board almost by construction because everything on it is slow. The lab's
+   only fast clean object is the 5/45 volume shock. Any second one would be worth more than a third
+   slow leg, and the constraint is that it must be a ratio or a difference of logs (D1).
+ (iii) **Re-quota `#1 pt_lowvol_gk_quarterly` on type** — carried untouched from two handovers. It is
+   the other 24.7%-ETF book and the only other recorded object the 2026-11-22 F3 finding touches;
+   one trial discharges the rider that finding leaves on the "Sharpe is flat in beta" series.
+ (iv) **The train-skill gate is now the binding one for this construction family** — all four of
+   tonight's scored books failed it (-0.089 to -0.322) while two of four passed the null gate. The
+   M3 oldhalf lineage passes both. Worth a free diagnostic session: what distinguishes the objects
+   with positive train skill from the rest, given that corr(train skill, validation skill) is -0.08
+   over 27 trials and a train screen may refute but may not qualify.
+ (v) **Research `#516`'s GLR diagnostic** (book return variance over the weighted-average variance
+   of its holdings) printed beside every candidate's volatility — free from stored holdings, and it
+   separates "selected low-volatility names" from "diversified idiosyncratic risk", which
+   `learnings.md` records as this lab's most persistent confound.
+ (vi) Carried untouched: apply the churn predictor to every anti-candidate before any is
+   reconsidered; the return-VAR member of the F1 class; the long-leg-share discount as a
+   pre-registerable multiplier; M3's horizon profile.
+
+**Provenance from `research/SUMMARY.md`.** `#513` supplied the filter-then-deconcentrate operator
+and is the whole provenance of trials `#33`/`#34`; `#514` supplied the free holdings screen (run,
+and it called the sign wrong); `#515` supplied the rank-persistence screen that set the turnover
+registrations and the no-band decision; `#517` supplied the reading rule that the
+mix-versus-composite ranking is unsettled and crosses over in active risk, which is why no direction
+was imported from the literature into either arm's hypothesis. The `#8133` country-index note
+supplied `#37` entirely, including its one-month horizon, its three source-side discounts and
+`#370`'s rule that the developed-market discount cannot refuse a long-only construction. `#516`'s
+GLR diagnostic was NOT run and is carried forward. `#512`'s slow-rebalancing rule was read and found
+not to apply (it is an estimation argument about fitted books; nothing tonight was fitted). The
+quarter-boundary vein was read and is **closed on evidence** in the folder itself (every source's
+cross-sectional signal is holdings data this repo does not have), so no `seasonality-calendar` trial
+was attempted. **No performance expectation was imported from the folder into any hypothesis or
+lesson**, and every sign was taken from a mechanism.
+
+**Verdicts:** GATE_FAIL `pl_filter_deconcentrate_3leg` (guard, nothing scored); GATE_FAIL
+`pl_filter_deconcentrate_3leg`; GATE_FAIL `pl_ownscore_deconcentrate_3leg`; GATE_FAIL
+`pl_ownscore_deconcentrate_slow3`; GATE_FAIL `pt_aggregate_unit_stmom`.
