@@ -33113,3 +33113,5 @@ lesson**, and every sign was taken from a mechanism.
 **Verdicts:** GATE_FAIL `pl_filter_deconcentrate_3leg` (guard, nothing scored); GATE_FAIL
 `pl_filter_deconcentrate_3leg`; GATE_FAIL `pl_ownscore_deconcentrate_3leg`; GATE_FAIL
 `pl_ownscore_deconcentrate_slow3`; GATE_FAIL `pt_aggregate_unit_stmom`.
+
+## Research session — 2026-11-24 (learning agent): 3 notes added, see research/SUMMARY.md

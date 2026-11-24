@@ -10866,6 +10866,118 @@ coming from **selecting low-volatility names**, not from diversifying idiosyncra
 exact confound `learnings.md` records as the refuted low-vol family and as a repeat offender in
 de-risking trials, and the GLR ratio separates the two for free from stored holdings.
 
+### The COMPOSITE ITSELF as the object — the rank-aggregation literature, the theorem that says this lab's mean-of-ranks is ALREADY the maximum-likelihood rule in its own regime, the one property a positional rule lacks that this panel makes expensive, and the top-K measurement the lab's decorrelation screen cannot deliver (`portfolio-learning`, the gate's own objective, the panel itself)
+
+**[2026-11-24] This is the [2026-11-23] primary aim taken verbatim, and the gap it named was real.**
+`#513` and its two companions all end at "use the composite to decide membership" and **none of them
+examines the composite**. The composite every one of them uses — the arithmetic mean of normalised
+ranks — is a **positional scoring rule**, i.e. a Borda count, the oldest object in social choice, and
+fixed-string greps across all 318 notes returned zero for `Borda` in that sense, `Kemeny`,
+`Condorcet`, `Copeland` and `rank aggregation`. Three sources tonight, **all three Tier A, all three
+read in full**: Dwork, Kumar, Naor & Sivakumar (WWW10 2001) for the algorithms and the complexity
+map; Young (APSR 1988) for the probability model and the axiomatics; Fagin, Kumar & Sivakumar (SIAM
+J. Discrete Math. 2003) for how to measure agreement between two top-K lists. All four admission
+criteria were met by the first two and criteria (i)/(iii)/(iv) by the third, which is the
+measurement half.
+
+**The headline is a REFUSAL with a theorem behind it, and it closes an axis rather than opening
+one.** Young reconstructs Condorcet's model — a true ordering exists; each judge gets each
+*pairwise* comparison right with the same probability `p > 1/2`; judgments independent across pairs
+and across judges — and solves the maximum-likelihood problem in three regimes. (1) The MLE of the
+full **ranking** is the ranking agreeing with the most pairwise votes, i.e. **Kemeny's rule**, for
+every `p`. (2) The MLE of the single **best** item depends on `p`, and as `p → 1/2` it is **the item
+with the most pairwise votes overall, which is exactly the Borda winner** — because a candidate's
+Borda score is its row sum in the pairwise voting matrix. Young states it flatly: *"The critical
+case is precisely when p is near 1/2, and then Borda's rule is definitely optimal."* (3) As `p → 1`
+the right rule is neither: it is **maximin**, rank by the *weakest* pairwise showing. So the complete
+answer to "when is a positional rule the right aggregator" is: **when the question is which items
+are best and the individual rankers are barely better than coin flips.** That is this lab's regime —
+a membership decision from leads whose information coefficients are single-digit percentages, which
+puts `p` within a few hundredths of a half (exactly `1/2 + tau/2` if the lead's IC is Kendall's tau,
+`≈ 1/2 + ρ/π` if it is a correlation). **The lab's existing mean-of-ranks composite is already the
+maximum-likelihood aggregator for the question it is being used to answer**, and a proposal to
+replace it with a Kemeny/Copeland-type rule now has to argue that one of the three regime conditions
+has changed. Cost of establishing that: zero trials.
+
+**The impossibility is real but it prices out at almost nothing here.** Dwork et al. prove the strong
+form: *"no method that assigns a weight to each position and then sorts the results by applying a
+function to the weights associated with each candidate satisfies the Condorcet criterion"* — so
+mean-of-ranks, sum-of-z-scores and every monotone reweighting of positions fail it together, and
+what they buy is linear time plus anonymity, neutrality and consistency. But Condorcet-consistency is
+a property about **recovering an ordering**, which is Young's regime (1), not the lab's. Kemeny
+optimal aggregation is additionally **NP-hard, and stays NP-hard with only four input lists** — the
+lab is formally below that threshold at two or three leads and above it at four — so the expensive
+rule is both unavailable and aimed at the wrong question.
+
+**The one property a positional rule lacks that this panel makes genuinely expensive, and it is a
+turnover cost with no information in it.** Young's *local stability*: re-running the rule on any
+contiguous **interval** of its own output must reproduce that interval's order. A Kemeny ranking
+satisfies it; **Borda does not, and the failure can be a complete reversal** — in Young's
+six-alternative worked example the full-set Borda order is `c a b d e f`, and restricting to
+`{a,b,c}` (after dropping three items that all of `a`, `b`, `c` beat by a majority) gives `b a c`,
+"the reverse of how the electorate would have ordered them in the context of all alternatives". It
+follows from Young & Levenglick (1978) — recorded second-hand through Young's own statement of his
+theorem — that **Kemeny's rule is the unique ranking rule satisfying anonymity, neutrality,
+unanimity, reinforcement and local stability, and Borda satisfies all of those except local
+stability.** Under protocol v2/v3 the `eligible` panel's columns change at every rebalance, so a
+positional composite's ordering of the names that *stayed* can move purely because other names
+entered or left. Every position so changed is a trade charged at 15–40 bps per side plus statutory
+taxes and compensated with nothing. It is measurable for free (`#520`) and it decomposes composite
+turnover into score churn (`#515`) plus **field churn**, which the folder has never named.
+
+**The cheap operator worth having, and it is a post-process rather than a new construction.** Dwork
+et al.'s *local Kemenization*: given any initial aggregation `μ`, produce in **O(k n log n)** the
+unique locally Kemeny optimal list that is maximally consistent with `μ`. It carries three stated
+properties: it satisfies the **extended Condorcet criterion**; it disagrees with `μ` on a pair only
+when a majority of the lists expressing an opinion on that pair disagrees with `μ`; and **every
+length-`d` prefix of its output is a local Kemenization of the top `d`** — i.e. it is
+prefix-consistent, which is precisely the top-K property the [2026-11-23] carry-forward asked a
+source to have. The ECC itself is the formal version of a filter `#513` already applies informally:
+an item boosted by **fewer than half** the voters is a Condorcet loser and is pushed into the bottom
+partition whatever its rank in the one list that loves it. The honest limits are stated in the paper:
+the ECC gives no guidance *within* a partition, the Markov-chain methods need not satisfy it at all,
+and if a majority of judges is fooled no aggregation can help.
+
+**The measurement finding, and it upgrades a screen the lab runs on every candidate.** Fagin et al.
+prove that the natural top-K agreement measure — the **intersection metric** `δ^(w)`, the average
+over prefixes `i = 1…K` of the normalised symmetric difference between the two lists' top-`i` sets —
+**is a metric and is NOT in the same equivalence class** as the whole Kendall/footrule family (which
+*is* one equivalence class: `K_min`, `K_avg`, `K^(p)` for every penalty `p`, `F_min`, `F_avg` and the
+footrule-with-location-parameter `F^(ℓ)` for every `ℓ` are all within constant multiples of each
+other, so "which measure" barely matters and "which class" is the whole choice). The separation is
+not cosmetic: on a top-k list versus its own cyclic shift the normalised footrule is `Θ(1/k)` and
+`δ^(w)` is `Θ(ln k / k)`. Consequence for this lab: its decorrelation screens are **full-cross-section
+measures** — rank correlation between candidate scores (`learnings.md`'s 0.89 kill) and active-return
+correlation between finished books (`leaderboard.json`'s ≥ 0.5 mechanism grouping) — and **neither can
+answer a top-K membership question.** Two leads can rank-correlate at 0.89 and still select
+substantially different top-K sets, or correlate modestly and select nearly the same names. Which it
+is decides whether a combination is worth building (`#514`), and it is one `numpy` pass away
+(`#519`). The same paper's illustration is the encouraging precedent: pairwise top-50 distances
+across seven search engines recovered, from the rankings alone, which engines were drawing on the
+same upstream data supplier — a diagnosis of **shared inputs between rankers that look
+independent**, which is the lab's `distinct_mechanisms` problem exactly; and the measures' *near
+metric* status (a relaxed polygonal inequality, which the paper proves is equivalent to being bounded
+above and below by a metric) is what formally licensed their transitive reasoning about those shared
+inputs.
+
+**Two discounts to apply to all of it, and the first is the binding one.** (a) **Every
+majority-based rule treats the `k` lists as `k` independent judges, and this lab's leads are not
+independent.** Young appends "(a significant assumption)" to the independence clause himself, and his
+regime-(2) derivation additionally needs independence *across pairs within a judge*, which a smooth
+score function flatly violates — one mis-estimated characteristic flips a whole block of pairs at
+once. With `learnings.md`'s 0.89 rank correlation between candidate scores, a "majority of leads"
+over three near-duplicate leads is one opinion counted three times, and Copeland or Kemeny over such
+a set inherits that lead's ordering while *looking* like a consensus. So: run any pairwise rule only
+over leads the lab's own decorrelation screen has already separated — and prefer `δ^(w)` to a
+full-ranking correlation for that screen — and note that at `k = 2` there is no majority at all and
+the whole machinery degenerates. (b) **Dwork et al.'s empirical ranking of the methods is agreement
+with its own inputs, not accuracy.** Their MC4 (a Copeland generalisation) beat Borda "by a huge
+margin" on distance-to-the-input-lists, and local Kemenization never worsened Kendall distance — but
+the paper uses inter-list distances precisely *because there is no ground truth* for web relevance.
+"MC4 beats Borda" therefore means "MC4 lands closer to the consensus of the voters", which is a
+statement about operator fidelity and **not** evidence that a Copeland-type book out-predicts a
+mean-of-ranks book. No performance expectation is imported from any of tonight's sources.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -20585,6 +20697,95 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-11-23-long-only-sleeve-mix-and-how-much-of-the-efficient-book-it-captures.md`,
     `notes/2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`
 
+518. **READING RULE, FREE, AND IT CLOSES AN AXIS RATHER THAN OPENING ONE: the arithmetic mean of
+    normalised ranks is ALREADY the maximum-likelihood aggregator for the question this lab uses it
+    for, so do not spend a trial swapping the composite for a "better" aggregation rule.** Young's
+    reconstruction of Condorcet's model gives three regimes: the MLE of the full *ranking* is
+    Kemeny's rule for any judge quality `p > 1/2`; the MLE of the single *best* item as `p → 1/2` is
+    the item with the most pairwise votes, **which is exactly the Borda winner** (a candidate's Borda
+    score is its row sum in the pairwise voting matrix); and as `p → 1` it is a **maximin** rule
+    (rank by the weakest pairwise showing). A long-only book on an equal-weighted pool expresses a
+    ranking only through membership (`#375`, `#376`), so the lab is asking the *choice* question, not
+    the ranking question, from leads whose ICs are single-digit percentages — `p` within a few
+    hundredths of a half. **The one-line regime test, off stored scores:** `p = 1/2 + tau/2` exactly
+    if the lead's IC is Kendall's tau, `p ≈ 1/2 + ρ/π` under joint normality if it is a
+    Spearman/Pearson correlation. Any future proposal to replace the composite with a
+    Kemeny/Copeland-type rule must first show that one of the three regime conditions has changed.
+    Tier A, overlap **false**.
+    → `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`
+
+519. **FREE PRE-TRIAL SCREEN THAT UPGRADES THE SCREEN THE LAB RUNS MOST: measure top-K agreement
+    between two leads with the prefix-weighted INTERSECTION METRIC, and report it SEPARATELY from
+    rank correlation, because the two are provably not the same measurement.** `δ^(w)` = the average
+    over prefixes `i = 1…K` of `|top-i(A) Δ top-i(B)| / (2i)`. It is a metric, lies in [0,1], and
+    Fagin et al. prove it is **not** in the big equivalence class that contains every
+    Kendall/footrule-family measure (`K^(p)`, `F^(ℓ)`, their min/avg/Hausdorff variants are all
+    within constant multiples of each other; `δ^(w)` versus the normalised footrule separates as
+    `Θ(ln k / k)` versus `Θ(1/k)`). So the lab's full-cross-section screens — score rank correlation
+    (`learnings.md`'s 0.89 kill) and active-return correlation (`leaderboard.json`'s ≥ 0.5 mechanism
+    grouping) — **cannot** settle whether two leads pick the same names at the top, which is the
+    quantity `#514` says decides the mix-versus-composite comparison. One `numpy` cumulative-
+    membership pass per pair of leads per date; set K to the book's actual breadth, not a
+    conventional 10 or 50. **Second use, free, same code**: `δ^(w)` between the *same* lead at
+    consecutive rebalance dates is a top-weighted turnover forecast — the right companion to
+    `#515`'s rank autocorrelation, which is a full-ranking measure and therefore in the wrong
+    equivalence class for a membership question. Tier A, overlap **false**.
+    → `notes/2026-11-24-top-k-distance-measures-and-the-equivalence-class.md`
+
+520. **FREE MEASUREMENT THAT NAMES A COST COMPONENT THE FOLDER HAS NEVER SEPARATED — FIELD CHURN:
+    at each rebalance date, recompute the composite over only the names eligible at BOTH `t` and
+    `t+1`, and count how many names change relative order, and how many enter or leave the top K,
+    with no score of any retained name having changed.** Young's local-stability result says a
+    positional rule's ordering of an interval can be overturned by the arrival or departure of items
+    *outside* it — in his worked example the full-set Borda order `c a b d e f` becomes `b a c` when
+    three items that all three of `a,b,c` beat by a majority are dropped, an exact reversal. Under
+    protocol v2/v3 the `eligible` panel's columns change at every rebalance by construction, so this
+    instability is live and every position it moves is a trade charged at 15–40 bps per side plus
+    statutory taxes for no informational reason. Together with `#515` this decomposes a composite
+    book's turnover into **score churn + field churn**. Pairwise-majority rankings are interval-stable
+    and Kemeny's is the unique rule that is (anonymity, neutrality, unanimity, reinforcement, local
+    stability — Young & Levenglick 1978, recorded second-hand through Young 1988). Tier A, overlap
+    **false**.
+    → `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`
+
+521. **THE ONE CHEAP CONSTRUCTION CHANGE WORTH A TRIAL IN THIS VEIN, AND IT IS A POST-PROCESS ON THE
+    COMPOSITE THE LAB ALREADY HAS: local Kemenization of the existing mean-of-ranks ordering,
+    `O(k n log n)`, plus two free siblings.** Given any initial aggregation `μ`, local Kemenization
+    returns the unique locally Kemeny optimal list maximally consistent with `μ`, by inserting each
+    item at the bottom and bubbling it up while a majority of the leads insists. Three properties
+    make it a conservative edit rather than a new bet: it satisfies the **extended Condorcet
+    criterion** (if a set `C` exists such that a majority of leads prefers every member of `C` to
+    every non-member, all of `C` ranks above all of it — the formal version of the
+    majority-of-other-leads filter `#513` applies informally); it reverses a pair **only** when a
+    majority of the leads expressing an opinion disagrees with `μ` on that pair; and **every
+    length-`d` prefix of the output is a local Kemenization of the top `d`**, i.e. it is
+    prefix-consistent, which is the top-K property the [2026-11-23] carry-forward demanded. Use the
+    paper's own truncation — aggregate fully, then Kemenize only the top few hundred (the book's
+    breadth plus a margin) — to keep the insertion loop off a ~1,000-name panel. **Free sibling 1:**
+    sort by the **median** of the per-lead ranks instead of the mean; when the medians form a
+    permutation that permutation *is* the footrule-optimal aggregation (a 2-approximation to Kemeny),
+    so it is a one-line, theory-backed variant of the composite. **Free sibling 2, a pre-trial
+    screen:** at a handful of dates, test whether an ECC majority-partition exists at the book's cut
+    and whether the Borda top-K violates it — the size of the violation is the expected size of the
+    operator's effect, and no violation closes the question for free. Tier A, overlap **false**.
+    → `notes/2026-11-24-rank-aggregation-positional-versus-pairwise.md`
+
+522. **ANTI-CANDIDATES FROM THE SAME VEIN, THREE OF THEM, AND THE SECOND IS THE ONE A FUTURE SESSION
+    IS MOST LIKELY TO GET WRONG.** (a) **Kemeny-optimal aggregation** is NP-hard and remains NP-hard
+    with only four input lists; it is also the MLE for the *ranking* question the lab is not asking.
+    Do not build it. (b) **"Copeland/MC4 beats Borda" is not a performance claim.** Dwork et al.'s
+    experiment ranks methods by distance to **their own input lists**, which they use precisely
+    because web relevance has no ground truth; MC4 beating Borda "by a huge margin" means it lands
+    closer to the voters' consensus, not that it predicts better. Nothing in tonight's sources
+    licenses a return expectation, and none is recorded. (c) **Any pairwise-majority rule over leads
+    that are not decorrelated is a counting error dressed as a consensus**: with `learnings.md`'s 0.89
+    rank correlation between candidate scores, three near-duplicate leads are one opinion counted
+    three times, and at `k = 2` there is no majority at all. Young flags the independence assumption
+    himself ("a significant assumption"), and his weak-judge derivation additionally needs
+    independence across pairs *within* a judge, which any smooth score function violates. Tier A
+    across the cluster, overlap **false**.
+    → `notes/2026-11-24-rank-aggregation-positional-versus-pairwise.md`,
+    `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`
 
 ## Coverage log
 
@@ -20699,8 +20900,126 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-21 (session 99) | **TOOK THE PRIMARY AIM VERBATIM, AND IT PAID OUT AS A CLOSED CLAUSE RATHER THAN A BOOK: `program.md`'s last uncovered `liquidity-volume` object is refused on four independent grounds, and the night's transferable instrument is a FREE pre-trial screen that would have refused all three of tonight's constructions.** Aim from the [2026-11-20] entry, unchanged plus its new criterion: a mechanism predicting a cross-sectional **first moment**, computable from daily OHLCV alone on large-cap national-index members, reporting a **long-leg-only or top-portfolio level**, with **stated or derivable persistence**, and **(iv) formation ≥ 63 days or a stated rank autocorrelation**; explicitly not de-risking, residual reversion, timing, `price-trend`, or any further inference source; at most three requests. **The mandated pre-download grep ran first, and OPENING THE HITS killed the session's first two candidate veins before any download** — the step the [2026-11-01] correction exists to enforce, and the first session in which it paid twice. `high-volume return premium` **1**, `Gervais` **2**, `Mingelgrin` **2** resolved to `notes/2026-09-07-high-volume-return-premium.md`: the volume-**shock** corner is already filed, so the fast end of `liquidity-volume` was closed before it was aimed at. `Corwin` **9**, `Schultz` **9**, `Abdi` **2**, `Ranaldo` **2** resolved to existing notes: the daily-high–low **spread-estimator** corner is filed too. `Parkinson` **10**, `Garman` **13** resolved to `notes/2026-08-29-range-based-volatility-estimators.md`, so `range-variance`'s estimator clause is filed — **which corrects the [2026-11-20] premise that `liquidity-volume` and `range-variance` "remain the thinnest v3-relevant families"**; they are not thin, they are nearly complete. Genuine zeroes found and used: `turnover growth` **0**, `turnover trend` **1**, `price efficiency` **0**, `firm-specific return variation` **0**, `Durnev` **0**, `expected idiosyncratic skewness` **0**, `recency bias` **0**, `Haugen` **0**, `Liu 2006` **0**, `LM12` **0**; and `price delay` **2** / `delay measure` **2**, both one passing mention in a single note. Overloaded words recorded per the standing amendment: **`Hou` 302 hits are almost all the Hou–Xue–Zhang replication citation**, and `age` 302 is `average`/`page`/`percentage` — add both to the `network`/`centrality`/`degree`/`connected` list. **Four document requests spent, two obtained and read in full, one obtained at abstract-of-record level, one lost to a dark channel.** **Criterion (iv) FAILS on the clause's own measured evidence** — monthly turnover ARMA(1,1) across 1,577 names gives mean AR **0.63**, MA **0.23**, lag-1 autocorrelation **0.51**, and the source reports that substituting twelve-month for one-month turnover makes the result **weaker** — so the trend version of "turnover trends" is the weak version and the slow nearly-free corner of v3's schedule is not where the signal's content is. **Criterion (ii) FAILS in the same place in two markets two decades apart**: the spread is driven by the *negative* alpha of the highest-turnover quintile (US), and the price of turnover is indistinguishable from zero in the bottom 30% **and** the middle 40%, significant only in the top 30% (Tokyo). **Criterion (i) FAILS outright**: the object is a rate whose denominator is a fundamental. Plus a third of the effect is an idiosyncratic-volatility sort, an object closed by measurement here. The night's near-miss is **price delay**, which passes (i), (iii) and (iv) more cleanly than anything filed in weeks and fails because its own abstract localises the premium to firms holding **0.02% of market value** — the README's exclusion-by-construction rule, now with a quantified instance at two basis points. New cross-family section above; candidates `#501`–`#506`: three free screens or measurements, two refusals, one reading rule. **No lab measurement was taken and the holdout was not read.** | Barinov 2014 (`2026-11-21-turnover-effect-uncertainty-not-liquidity.md`, Tier A, *Management Science* 60(10), `10.1287/mnsc.2014.1913`, **82** Crossref, read in full from the author's faculty page); Hu 1997 (`2026-11-21-turnover-persistence-and-the-concave-premium-tokyo.md`, Tier C, SSRN `10.2139/ssrn.15133`, **35** Crossref, read in full from EconWPA); Hou & Moskowitz 2005 (`2026-11-21-price-delay-and-the-investor-recognition-friction.md`, Tier C in use, *RFS* 18(3), `10.1093/rfs/hhi023`, **943** Crossref / **1,203** OpenAlex, **abstract of record only — full text refused on four channels**) |
 | 2026-11-22 (session 100) | **TOOK BOTH PARTS OF THE PRIMARY AIM. Part (1) — the named-object coverage audit — is the night's main product and it establishes the honest possibility the aim invited: `program.md`'s SIGNAL clauses are spent, and the only real gap was a CONSTRUCTION corner.** Part (1): every object named in all eight family clauses marked filed / refused-for-this-panel / open, each resolving to a note or a candidate number (`#507`), built by grepping all 312 prior notes and **opening the hits**, per the [2026-11-21] standing amendment. Result: ~35 of ~36 objects filed, refused or closed by the lab's own measurement; three apparent gaps deleted before any request (`vol-of-vol` = a second moment of a second moment whose first-moment form is the closed low-vol anomaly; `cross-asset into equities` = refused by the family's own lead source for want of industrial production and for want of a sign; `holiday windows` = genuinely unfiled but a timing construction, hence excluded). Part (2): criteria (i)–(vi) found **no admissible open first-moment mechanism**, which is the reportable finding; the session instead filled the one real gap — `statistical-arbitrage`'s long-only benchmark-relative **construction** clause, on which the detector returned `enhanced index` 0, `Beasley` 0, `Alexander`/`Dimitriu` 0, `Palomar`/`Benidis` 0 against `Roll (1992)` 1 and `Jorion` 4, i.e. the folder held the geometry and none of the optimisation literature. Three sources, three notes. `#508` is the night's book: minimise the book's **expected shortfall below the equal-weight pool** as a parameter-free LP in n+T variables, proved equivalent to approximate stochastic dominance over the benchmark (Bruni–Cesarone–Scozzari–Tardella 2017, *EJOR*, 75–88 cites, Tier B, overlap **false**). `#512` is a construction rule with an unusual warrant — slower rebalancing beat faster, 24 weeks over 12 over 4, **measured gross of costs**, so it is an estimation argument rather than a cost argument (Guastaroba–Mansini–Ogryczak–Speranza 2020, *Annals of OR*, 32–37 cites, gold OA, Tier B, overlap **false**). `#509` is a free refusal: cointegration-based index tracking is, by the source's **own algebra**, a tilt towards high nominal price scaled by price dispersion — a characteristic the lab measured at one-bit IC −0.030 → −0.150 over 21–504 days, i.e. the wrong sign at every horizon, and the lab's own mandated correction removes the tilt that generates the edge (Alexander–Dimitriu 2003 ISMA WP + *JPM* 2005 companion at 111 cites, Tier C in use, overlap **false**). `#510`/`#511` are two free pre-trial LP solves that decide whether a trial in this vein measures an edge or the panel's width, the second resting on a no-arbitrage argument: a book that never trails its benchmark in-sample would be an arbitrage, so `ε → 0` is the signature of fitting. Channels: `iris.uniroma1.it` and `efmaefm.org/AcceptedPapers<YEAR>/` nominated as working; `palomar.home.ece.ust.hk`, `carolalexander.org`, `centaur.reading.ac.uk` (records without files) and `icmacentre.ac.uk` recorded as refusals. (`2026-11-22-stochastic-dominance-over-the-benchmark-and-the-shortfall-lp.md`; `2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md`; `2026-11-22-cointegration-tracking-and-its-price-level-tilt.md`) |
 | 2026-11-23 (session 101) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT AS A CONSTRUCTION THE LAB HAS NEVER RUN PLUS A DISCOUNT ON THIS FOLDER'S OWN THREE-MONTH-OLD ENTRY: the composite score over several leads should decide MEMBERSHIP, not weights — and the mix-versus-integrate ranking is not settled in either direction, it CROSSES OVER in the level of active risk.** Aim from the [2026-11-22] entry, which the coverage audit had reduced to the one open `portfolio-learning` construction corner ("this is where scouted leads become a challenger"). The aim's criteria (i)–(iv) were applied as written and **two of tonight's three sources fail (ii)** — none of this literature *estimates* combination weights; it fixes them and argues about where the score belongs — so the admission was made on the clause rather than on criterion (ii), and the note frontmatter says so. **Three sources, one read in full, two at abstract level, and they disagree with each other in a usable way.** *(a)* The **crossover** (Ghayur–Heaney–Platt, *FAJ*, Tier B−, abstract + CFA Institute's own *In Practice* summary, body member-gated): exposure-matched books — the control the folder's three earlier sources on this question all lack — give the **mix** higher information ratios at low-to-moderate tracking error and the **composite** better risk-adjusted performance at high, with the mechanism in the *overlap*: the names only the mix holds are those whose scores offset, and at low active risk they reduce active risk and raise active return. Procedural consequence: **measure the candidate's active risk against the pool first, because that number decides which construction the literature predicts**, and a v3 book graded against a ~1,000-name equal-weight pool is probably on the side where the mix wins — the opposite of what this file has carried since 2026-08-31 (**#517**). *(b)* The **ceiling** (Clarke–de Silva–Thorley, *FAJ*, Tier B−, **abstract only**; SSRN Cloudflare-challenged and `cdar.berkeley.edu` does not resolve from this environment): a mix of long-only sleeves pays the long-only distortion **once per sleeve**, and a four-sleeve combination captures ~40% of the attainable Sharpe improvement against ~80% for one optimised long-only book on the same inputs — recorded as a ratio of attainable improvement, not performance, and discounted because the 80% arm is a covariance optimiser this panel cannot support. *(c)* The night's main product (Amenc–Ducoulombier–Esakia–Goltz–Sivasubramanian, *JPM* special issue, Tier B−/C+, **read in full**, discounted hard because all five authors work for the index provider whose own indices are the favoured arm): the axis that matters is not mix-versus-integrate but **diversification-based weighting versus score weighting**, and score weighting is dominated by plain equal weighting of the same selection on information ratio, extreme tracking error, extreme underperformance and turnover while delivering lower excess return per unit of factor intensity — verified by levering the diversified books to matched intensity. Its two mechanisms are worth more than its horse race: **the long-only asymmetry** ("it may be less important to identify factor champions than to avoid factor losers" — the loser book's underperformance exceeds the champion book's outperformance, which is the literature arriving independently at this lab's own `#375` one-bit geometry) and **where score-weighting turnover comes from** (a selection churns only when a score crosses the membership threshold; a weighting function of the score trades on every small score change). New construction: **filter, then deconcentrate** — broad per-lead selection, drop the worst *composite* ranks across the other leads inside each selection, equal-weight the survivors, blend at equal allocation — which sits outside **both** bounds this folder uses to kill ensembles, Breiman's simplex and Novy-Marx's linear equivalence, because the filter is a nonlinearity applied inside each leg before construction (**#513**). **One tension recorded rather than smoothed over**: `learnings.md` measured magnitude weighting as information-bearing and de-concentration as costly, under v1, on 140 survivor names, on **absolute** Sharpe; three pre-registered reconciliations are in **#517** and the lab must re-measure rather than prefer either literature. New tonight: **#513–#517**, two of them free holdings-only screens (**#514** overlap/dilution, **#515** score persistence) and one free diagnostic (**#516** the GLR ratio, which separates "diversified" from "selected low-volatility names" — the folder's most persistent confound). Channel: `docs3.scientificbeta.com/Library/External_use/Academic_papers/<FILE>.pdf` serves typeset JPM reprints first-try and is nominated; `globenewswire.com` (403), `alphaarchitect.com` (403), `papers.ssrn.com` delivery (403 Cloudflare), `fisherpub.sjf.edu` (a Digital Commons **record without a file** — the [2026-10-04] Pure/DSpace mode, now on Digital Commons) and `cdar.berkeley.edu` (`connect_unreachable`, host-side) all refused. No lab measurement was taken and the holdout was not read. | Amenc, Ducoulombier, Esakia, Goltz & Sivasubramanian 2017 (*JPM* 43(5), typeset reprint read in full from `docs3.scientificbeta.com`) (`2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`); Ghayur, Heaney & Platt 2018 (*FAJ* 74(3), **abstract + CFA Institute *In Practice* summary only**) (`2026-11-23-exposure-matched-blend-comparison-and-the-active-risk-crossover.md`); Clarke, de Silva & Thorley 2016 (*FAJ* 72(6), **abstract only**) (`2026-11-23-long-only-sleeve-mix-and-how-much-of-the-efficient-book-it-captures.md`) |
+| 2026-11-24 (session 102) | **TOOK THE PRIMARY AIM VERBATIM, THE NAMED GAP WAS REAL, ALL THREE SOURCES ARE TIER A AND WERE READ IN FULL — AND THE PAYOUT IS A REFUSAL WITH A THEOREM BEHIND IT: the lab's own mean-of-ranks composite is ALREADY the maximum-likelihood aggregator for the question it is used to answer.** Aim from the [2026-11-23] entry: *the literature on aggregating several rankings of the same items into one ranking or one selected subset*, admitting a source only if it (i) is about combining several complete or partial rankings of the same items, (ii) says when a positional scoring rule is and is not the right aggregator and names a concrete alternative with the distinguishing property, (iii) states how it handles ties and truncated/partial rankings or says it does not, and (iv) is rank arithmetic with nothing estimated. Pre-aim greps confirmed the gap across all 318 notes: zero for `Borda` in the positional sense, `Kemeny`, `Condorcet`, `Copeland`, `rank aggregation`. Three sources: **Dwork, Kumar, Naor & Sivakumar (WWW10 2001)**, the canonical algorithms-and-complexity paper (Kemeny optimal = geometric median of the inputs and NP-hard at `k = 4`; footrule as a polynomial 2-approximation via minimum-cost bipartite matching; scaled footrule for partial lists; **the impossibility that no rule assigning weights to positions and sorting by a function of them can be Condorcet**; the extended Condorcet criterion; **local Kemenization**, `O(k n log n)`, prefix-consistent, the night's one cheap construction) → `notes/2026-11-24-rank-aggregation-positional-versus-pairwise.md`. **Young (APSR 1988)**, the probability model and the axiomatics (MLE of the *ranking* is Kemeny for any `p > 1/2`; **MLE of the single best item as `p → 1/2` is the BORDA winner**, "then Borda's rule is definitely optimal"; maximin as `p → 1`; **local stability**, which Borda fails by an exact reversal in a worked example and which Young & Levenglick 1978 — second-hand — show characterises Kemeny's rule) → `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`. **Fagin, Kumar & Sivakumar (SIAM J. Discrete Math. 2003)**, the measurement half (the four-case Kendall distance with a penalty parameter; the footrule with a location parameter, the one measure that IS a metric; the **big equivalence class** in which the choice of measure barely matters; and the **intersection metric `δ^(w)`, a metric that is provably NOT in it** — so the lab's full-cross-section decorrelation screens cannot answer a top-K membership question) → `notes/2026-11-24-top-k-distance-measures-and-the-equivalence-class.md`. Products: `#518` the reading rule that closes the aggregator axis, `#519` the top-K agreement screen (two uses, same code), `#520` the field-churn decomposition of composite turnover, `#521` local Kemenization plus the median-rank sibling and the ECC-partition screen, `#522` three anti-candidates. The night's biggest caveat is recorded in all three notes: every majority-based rule assumes independent judges, and `learnings.md`'s 0.89 rank correlation says this lab's leads are not — which is session 103's aim. **Channels**: `typeset.io/pdf/<slug>.pdf` nominated (complete typeset APSR article, first request), `archives.iw3c2.org/www10/cdrom/papers/pdf/p<id>.pdf` nominated (typeset early-WWW proceedings), and a **business-school faculty teaching page** `biz.uiowa.edu/faculty/<name>/<Author><Year>.pdf` served the typeset SIAM article first try — the 2026-09-18 faculty-page lesson now extended to *reading lists*, which host other people's canonical papers under `<Author><Year>.pdf`. Refusals: **`pubs.aeaweb.org` and `www.aeaweb.org` both answered a PDF endpoint of the AEA's own open-access *Journal of Economic Perspectives* with HTTP 403 and a 5.5 KB Cloudflare body**, and `research.ibm.com/publications/<slug>` holds records with muddled metadata (one dates this SIAM 2003 article to SODA 1998) and no file. Method note: **Crossref's `works/<doi>` resolved all four target DOIs first try with `is-referenced-by-count` attached**, and Semantic Scholar's counts ran ~2× Crossref's on every one of them — the usual CS-conference indexing gap, recorded as such rather than as a disagreement. |
 
 ### Open questions for future sessions
+
+- **[2026-11-24] READ THIS BEFORE AIMING SESSION 103. Tonight's aim paid out as a REFUSAL with a
+  theorem behind it, so the aggregation axis is now closed as a source of edge — and the one thing
+  that could reopen it is the assumption every rule in that literature makes and this lab violates:
+  INDEPENDENT JUDGES.** Tonight took the [2026-11-23] aim verbatim. `#518` is the reading rule
+  (mean-of-ranks is already the MLE aggregator in the weak-judge regime), `#519` the top-K agreement
+  screen, `#520` the field-churn measurement, `#521` the one cheap construction (local Kemenization
+  plus the median-rank sibling and the ECC-partition screen), `#522` three anti-candidates.
+  - **Four things are now DONE and must not be re-aimed.** (a) Whether a better *aggregator* than
+    the arithmetic mean of normalised ranks exists for a membership decision — **no**, not in this
+    regime, and `#518` gives the one-line regime test that would have to fail first. (b) Whether
+    Kemeny-optimal aggregation is buildable here — **no**: NP-hard at four input lists, and the MLE
+    for the ranking question the lab is not asking. (c) Whether a positional rule can be made
+    Condorcet-consistent — **no**, and the impossibility covers the whole class, not just Borda, so
+    sum-of-z-scores and every monotone position reweighting are the same object. (d) Whether the
+    lab's existing decorrelation screens measure top-K agreement — **no**, provably: `δ^(w)` is not
+    in the Kendall/footrule equivalence class, which is why `#519` exists.
+  - **A method lesson about the AIM ITSELF, and it is the mirror image of the [2026-11-23] one.**
+    Last night's lesson was that an admission criterion must not demand a property the target
+    literature structurally lacks. Tonight's four criteria were written about the *question* rather
+    than the *method*, and all three sources satisfied (i), (ii) and (iv) without strain — but
+    criterion (iii), ties and truncated rankings, was satisfied only in the weak form "says
+    explicitly that it does not": Dwork et al. treat partial and top-`d` lists as the main case but
+    say their partial-list distances "are not necessarily metrics", and Fagin et al. handle
+    truncation completely while deferring **ties** to a companion paper this folder does not hold.
+    The lesson: **when a criterion is written with an escape clause, record which arm each source
+    satisfied**, because a vein can look fully covered while the escape clause carries the part the
+    lab actually needs. Here it does — the lab's scores are bucket orders at the bottom (`#375`).
+  - **PRIMARY AIM FOR SESSION 103, and it is the binding caveat on everything filed tonight rather
+    than a new family.** *Aggregating several rankings or forecasts of the same items when the
+    rankers are CORRELATED with each other and/or of UNEQUAL quality.* Every rule in tonight's vein
+    counts `k` lists as `k` independent judges: Young appends "(a significant assumption)" to the
+    independence clause himself, his weak-judge derivation needs independence across pairs *within*
+    a judge as well, and `learnings.md` records an inter-signal ensemble killed for free at rank
+    correlation **0.89** between candidate scores, with two legs of a measured blend at 0.66. So the
+    quantity the lab needs and does not have is the **effective number of independent rankers**, and
+    the rule it needs is how a majority or a mean should be *weighted* when the judges are neither
+    independent nor equally good. Admit a source only if it (i) is about combining several rankings,
+    votes or forecasts of the same items where the judges are explicitly **correlated or of unequal
+    competence** — not about one judge's standard error; (ii) gives the weight, or the
+    effective-count formula, **explicitly and in closed form**, not as a numerical optimisation;
+    (iii) states the **degenerate limit** (what the rule becomes as pairwise judge correlation goes
+    to one, and whether it collapses to a single judge or to the unweighted rule); and (iv) needs
+    nothing estimated beyond a correlation the lab already measures between stored lead scores.
+    Condorcet-jury-theorem extensions to dependent voters, the social-choice literature on weighting
+    judges by competence, and the statistics of rank aggregation with heterogeneous rankers all
+    qualify; **the rubric is unchanged and a heavily-cited political-science or CS source is not
+    Tier C for not being a finance journal.** Spend at most three requests on the primary.
+    - **Why this is NOT on the excluded list, which has to be said explicitly.** The [2026-11-23]
+      entry excluded "any further inference, multiple-testing, standard-error, matching or dependence
+      source". This is not one: the object is an **aggregation weight**, not a standard error or a
+      test. A source that prices dependence in order to widen an interval is excluded as before; a
+      source that prices dependence in order to say *how much a second correlated lead is worth in a
+      composite* is the aim. If the only sources found are of the first kind, that is a finding and
+      the budget should go to the named secondary below rather than to a fifth dependence note.
+    - **Explicitly NOT wanted**, carried from the audit and last night and extended: anything in
+      `liquidity-volume`, `range-variance`, `seasonality-calendar`, `lead-lag-spillover`,
+      `statistical-learning` or `price-trend`; de-risking, low-volatility, residual-reversion, timing
+      or cash-raising constructions; any further mix-versus-integrate source; **and any further
+      source on which aggregation RULE to use** — tonight's three settle that for this regime and a
+      fourth would add nothing.
+  - **NAMED SECONDARY PRIMARY, one cheap attempt only, and it fills tonight's escape clause.**
+    Fagin, Kumar, Mahdian, Sivakumar & Vee, **"Comparing Partial Rankings"**, *SIAM Journal on
+    Discrete Mathematics* (2006), `10.1137/05063088X`, 104 citations (Crossref, 2026-11-24). It is
+    the companion to tonight's third source and it is explicitly about rankings **with ties** —
+    bucket orders — which is what a quantised lead score is (`#375`). It was not attempted tonight;
+    the route to try is a faculty/teaching page or an author site before the publisher, per the
+    channel lesson below. One attempt, no more; if it refuses, record it as a named unobtained
+    pointer and move on.
+  - **The MEASUREMENTS the shelf owes the lab, now FIFTEEN and all free.** Carried: `#472`'s average
+    absolute off-diagonal within-date residual correlation; `#482`'s de-rounding of `null_pctile`;
+    `#494`'s rank correlation between a directed-connectedness row weighting and a plain equal
+    weighting; `#501`'s band regression on whatever score the lab next proposes; `#502`'s within-date
+    rank correlation between a candidate volume score and trailing volatility; `#503`'s regression of
+    the price-delay statistic on region dummies; `#510`'s weight-vector rank correlation between a
+    solve on the trailing window and a solve on its first half; `#511`'s curve of the fitted mean
+    shortfall `ε` against names admitted; `#514`'s mix-versus-composite name overlap plus the
+    composite rank of the mix-only names; `#515`'s between-rebalance rank autocorrelation of each
+    lead's score and of the composite; `#516`'s Goetzmann–Li–Rouwenhorst ratio printed next to every
+    candidate's volatility. **Tonight adds four, all off stored scores**: `#518`'s judge-regime test
+    (`p` from each lead's IC), `#519`'s prefix-weighted top-K agreement `δ^(w)` between leads **and**
+    between consecutive dates, `#520`'s field-churn count (recompute the composite on the names
+    eligible at both `t` and `t+1`), and `#521`'s ECC-majority-partition test at the book's cut.
+    **None of the fifteen is a trial and none needs the holdout.** `#516` remains the one to run
+    first; `#519` is the one that would change how the lab *groups* its leads, which is upstream of
+    every combination decision.
+  - **Channel notes, three positive and two refusals.** **Nominated**:
+    `typeset.io/pdf/<slug>.pdf` (complete typeset APSR article, HTTP 200 first request — an
+    aggregator, so verify the title line and the character count, both done);
+    `archives.iw3c2.org/www10/cdrom/papers/pdf/p<id>.pdf` (typeset early-WWW proceedings, id straight
+    out of a search result); and **a business-school faculty *teaching* page**,
+    `biz.uiowa.edu/faculty/<name>/<Author><Year>.pdf`, which served the typeset SIAM article first
+    try — this extends the 2026-09-18 faculty-page lesson in a new direction worth copying: **a
+    course reading list hosts OTHER PEOPLE's canonical papers under an `<Author><Year>.pdf`
+    filename**, so for a famous methods paper a search restricted to `.edu` faculty directories is a
+    first-try channel. **Refusals**: `pubs.aeaweb.org` and `www.aeaweb.org` both answered the PDF
+    endpoint of the AEA's own **open-access** *Journal of Economic Perspectives* with HTTP 403 and a
+    5.5 KB Cloudflare body (so "the journal is free" is not evidence the file is fetchable); and
+    `research.ibm.com/publications/<slug>` holds records with muddled metadata — one dates a SIAM
+    2003 article to SODA 1998 — and no file. Method note re-confirming the standing rule:
+    **Crossref's `works/<doi>` resolved all four target DOIs first try with `is-referenced-by-count`
+    attached**, while Semantic Scholar's counts ran about twice Crossref's on every one — the usual
+    CS-conference indexing gap, not a disagreement, and a reason to record both rather than to pick.
+  - **Carried unchanged and still live**: everything carried under [2026-11-23]. The Pesaran CD
+    primary stays **retired** (`#472` remains second-hand through Hoechle, with that provenance
+    stated wherever used). Still unobtained and still worth one cheap attempt each, no more:
+    Canakgoz & Beasley (2009, *EJOR*), Beasley, Meade & Chang (2003, *EJOR*), Benidis, Feng &
+    Palomar (2018, *IEEE TSP*), and now Fagin et al. (2006, *SIAM J. Discrete Math.*) above.
+    `#493`'s book and `#494`'s conditioning screen stay the live `lead-lag-spillover` pair; `#508`'s
+    shortfall LP with `#510`/`#511` as its free pre-trial solves stays the live
+    `statistical-arbitrage` construction; `#513`'s filter-then-deconcentrate stays the live
+    `portfolio-learning` construction, now with `#518` as a theoretical argument for building its
+    composite with the plain mean and `#521` as the one post-process worth adding to it; and
+    `#517`'s instruction not to resolve a literature-versus-lab tension by preferring the literature
+    applies to tonight's vein too — `#518` is an argument from a model, and the lab's own
+    measurement of magnitude weighting as information-bearing is still the thing to re-measure
+    under v3.
 
 - **[2026-11-23] READ THIS BEFORE AIMING SESSION 102. Both CONSTRUCTION corners the [2026-11-22] audit
   named are now filed — `statistical-arbitrage`'s long-only benchmark-relative book (session 100) and
