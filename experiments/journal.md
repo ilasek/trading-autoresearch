@@ -32676,3 +32676,118 @@ accordingly; the operational rule is now the single unambiguous command
   budget. `CLAUDE.md` and the routine are frozen to this agent, so this is recorded only.
 
 ## Research session — 2026-11-23 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-11-24T00:17:39+00:00 — pl_filter_deconcentrate_3leg — **GATE_FAIL**
+- Candidate: `strategies/candidates/pl_filter_deconcentrate_3leg.py` (family: portfolio-learning, track: scout, trial #0)
+- Hypothesis: Blending three legs at equal allocation, where each leg takes the 150 eligible names with the highest rank on its own score (long-horizon reversal, 12-1 momentum, split-guarded 5/45 volume shock) and then keeps the 90 of those with the BEST composite rank across the OTHER two legs, quota-allocated across (trailing-trading-calendar peer group x instrument type) cells and equal-weighted within each leg, earns higher validation skill over the equal-weight eligible pool than the identical book whose final 90 are the 90 deepest on the leg's own score, because on an equal-weighted long-only pool a score's information enters as MEMBERSHIP rather than as a weight, and a per-leg selection filtered by the other leads is a nonlinearity applied inside the leg before portfolio construction -- the one combination operator that falls outside both Breiman's simplex bound and Novy-Marx's linear-composite equivalence, the two bounds that kill every ensemble operator this lab has already measured.
+- Verdict: GATE_FAIL — causality: hindsight: candidate source names stock(s) R, V. A v2 candidate may not hard-code instruments; select from the `eligible` panel instead
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: A LEG LABEL IS A STRING CONSTANT, AND SINGLE LETTERS COLLIDE WITH INSTRUMENT IDS. The
+  file was refused before anything ran because its three legs were keyed `"R"`, `"M"` and `"V"` in
+  a dict and in a module-level tuple, and all three are real ticker ids on this panel
+  (`protocol._stock_ids()` confirms it for `R`, `M`, `V`, and also for `A` and `C`). The guard
+  behaved exactly as designed — it cannot tell a dict key from a hard-coded holding — and the cost
+  is real: this is a recorded trial that scored nothing and stored no returns, so it raises the
+  deflated-Sharpe bar for every later candidate while contributing no evidence. **Operative rule
+  for every future candidate: name a leg, sleeve or cell with three or more letters (`rev`, `mom`,
+  `vshock`), and run `protocol.static_check(path)` directly before spending a run.** That check is
+  free, takes under a second, and would have caught this.
+
+## 2026-11-24T00:19:26+00:00 — pl_filter_deconcentrate_3leg — **GATE_FAIL**
+- Candidate: `strategies/candidates/pl_filter_deconcentrate_3leg.py` (family: portfolio-learning, track: scout, trial #0)
+- Hypothesis: Blending three legs at equal allocation, where each leg takes the 150 eligible names with the highest rank on its own score (long-horizon reversal, 12-1 momentum, split-guarded 5/45 volume shock) and then keeps the 90 of those with the BEST composite rank across the OTHER two legs, quota-allocated across (trailing-trading-calendar peer group x instrument type) cells and equal-weighted within each leg, earns higher validation skill over the equal-weight eligible pool than the identical book whose final 90 are the 90 deepest on the leg's own score, because on an equal-weighted long-only pool a score's information enters as MEMBERSHIP rather than as a weight, and a per-leg selection filtered by the other leads is a nonlinearity applied inside the leg before portfolio construction -- the one combination operator that falls outside both Breiman's simplex bound and Novy-Marx's linear-composite equivalence, the two bounds that kill every ensemble operator this lab has already measured.
+- Verdict: GATE_FAIL — train skill -0.133 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.39, ann_ret +7.7%, maxDD -51.9%, turnover 5.3x, skill vs pool -0.13
+- Validation: sharpe +0.31, ann_ret +5.4%, maxDD -32.5%, turnover 13.7x, skill vs pool -0.03
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.03, 90% CI [-0.25, +0.14]; at 2x costs -0.20; with a 30% delisting haircut -0.03; train -0.13 (1997-2008 -0.07, 2009-2017 -0.24)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 99% percentile of 200 random-selection replicas (median +0.21, 90% +0.28); equal-weight eligible pool +0.34, information ratio vs it -0.16
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: THE FILTERED ARM OF RESEARCH `#513`, AND THE PAIR IT BELONGS TO IS THE RESULT RATHER
+  THAN THIS ROW. Read against its one-operator-apart control `pl_ownscore_deconcentrate_3leg`
+  (same legs, same 90 names per leg, same quota, same weights, same dates; the only difference is
+  whether the final 90 are the deepest on the leg's OWN score or the best on the other two legs'
+  COMPOSITE):
+
+      arm                 val sharpe   skill   90% CI            @2x cost   train skill   null pctile   IR vs pool   turnover tr/val   avg_pos
+      filtered (#513)        +0.31     -0.026  [-0.246, +0.142]   -0.197      -0.133          99%          -0.16        5.3x / 13.7x      168
+      own-score control      +0.40     +0.064  [-0.118, +0.218]   -0.071      -0.140         100%          +0.19        4.7x / 11.8x      220
+
+  **The filter nonlinearity is worth about -0.090 of validation skill and -0.126 at 2x costs, i.e.
+  it is negative on this panel, measured in the one design that can price it.** It also costs
+  turnover (+0.6x train, +1.9x validation) because membership moves when ANY of the three legs
+  moves rather than when one does, and it does not move train skill at all (-0.133 against -0.140,
+  inside any error bar). So `#513`'s nonlinearity argument — that a per-leg selection filtered by
+  the other leads escapes both Breiman's simplex bound and Novy-Marx's linear-composite
+  equivalence — is correct as mathematics and worthless as a construction here: escaping a bound
+  that caps your upside is not the same as having upside. **The folder's own standing rule ("the
+  value of an aggregation operator is the value of its nonlinearity") is confirmed in form and
+  refuted in sign.**
+  **Second, and it is the more transferable half: research `#514`'s free pre-trial screen called
+  the sign WRONG.** The screen was run before either file was written (252 train month-ends,
+  holdings only) and returned a per-leg Jaccard between the two arms' selections of **0.425**,
+  which its own reading rule classifies as the LOW-overlap side — "past the crossover, the
+  composite is the better bet". The mix won. The dilution pairs it prescribes came out at the
+  median (+0.500 to +0.529 rather than below 0.5), which was itself a failed pre-registered
+  expectation: long-horizon reversal and 12-1 momentum are nearly ORTHOGONAL in rank on this
+  panel at these windows, not offsetting. **A free holdings screen that predicts the sign of a
+  construction comparison has now been tested once here and got it backwards, so `#514` joins the
+  list of screens that may refuse on arithmetic and may not qualify.**
+  **Third, a property of the operator that is not a flaw in the pairing and must travel with any
+  future use of it: the filter makes the legs CONVERGE.** At an identical 90 names per leg the
+  filtered book holds 142 distinct names on train month-ends against the control's 202 (168
+  against 220 on validation), because selecting each leg by the other legs' composite pushes all
+  three legs toward the same names. That is the source's own structural warning — composite-selected
+  names are more correlated with each other than average names — observed directly, and it means
+  the composite arm has strictly less diversification available to it. It was stated in the
+  candidate docstring before the trial rather than discovered afterwards.
+  **Fourth, on the pre-registered turnover.** Train 5.3x landed inside the registered 2.5-7.0x;
+  validation 13.7x landed OUTSIDE the registered 3.5-12.0x, and the validation/train ratio of
+  **2.58x** is above the 1.30-2.00x band the 2026-11-22 entry set on four books. Recorded as a
+  miss of that band, not of the forecast's spirit — both arms missed it in the same direction
+  (2.58x and 2.51x), which is evidence the band is too narrow for multi-leg books rather than
+  evidence about this book.
+
+## 2026-11-24T00:23:12+00:00 — pl_ownscore_deconcentrate_3leg — **GATE_FAIL**
+- Candidate: `strategies/candidates/pl_ownscore_deconcentrate_3leg.py` (family: portfolio-learning, track: scout, trial #0)
+- Hypothesis: Blending three legs at equal allocation, where each leg takes the 90 eligible names with the highest rank on its OWN score (long-horizon reversal, 12-1 momentum, split-guarded 5/45 volume shock), quota-allocated across (trailing-trading-calendar peer group x instrument type) cells and equal-weighted within each leg, earns validation skill over the equal-weight eligible pool no higher than the average of its three legs' individually recorded skills, because an equal-allocation mix of finished long-only sleeves is a reweighting of long-only books and Breiman's simplex bound binds on exactly that -- which makes this arm the control that prices the filter nonlinearity in `pl_filter_deconcentrate_3leg`.
+- Verdict: GATE_FAIL — train skill -0.14 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.38, ann_ret +7.6%, maxDD -54.4%, turnover 4.7x, skill vs pool -0.14
+- Validation: sharpe +0.40, ann_ret +7.1%, maxDD -34.2%, turnover 11.8x, skill vs pool +0.06
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.06, 90% CI [-0.12, +0.22]; at 2x costs -0.07; with a 30% delisting haircut +0.06; train -0.14 (1997-2008 -0.08, 2009-2017 -0.24)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 100% percentile of 200 random-selection replicas (median +0.28, 90% +0.33); equal-weight eligible pool +0.34, information ratio vs it +0.19
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: THE NIGHT'S HEADLINE, AND IT IS A GATE RESULT BEFORE IT IS A SKILL RESULT. A plain
+  equal-allocation mix of three mechanically unrelated 90-name selections cleared the
+  random-selection null at the **100th percentile of 200 replicas** — candidate +0.40 against a
+  null median +0.28 and a 90% quantile +0.33 — which is the strongest reading of that gate in 34
+  recorded v3 trials, on the gate that refused **22 of the previous 24** candidates. Its selection
+  term (candidate minus null median) is **+0.12** and its information ratio against the pool is
+  **+0.19**, the first positive IR on this board outside the volume-shock lineage. Validation skill
+  **+0.064** [90% CI -0.118, +0.218] puts it second on the board behind M3's +0.124 and ahead of
+  every other object. **It is still a GATE_FAIL, on train skill (-0.140), and the honest reading is
+  that the board's two binding gates have now been cleared by different objects and never by the
+  same one.**
+  **The hypothesis as written was CONFIRMED, and that is the part worth keeping.** The file
+  predicted skill "no higher than the average of its three legs' individually recorded skills",
+  from Breiman's simplex bound. The legs' recorded v3 skills are +0.124 (`pt_oldhalf_overlap6`),
+  a measured null for 12-1 momentum, and +0.031 (`lv_volume_shock_gkm_band`) — an average of
+  roughly **+0.05** against a measured **+0.064**, inside any error bar. **So the bound held almost
+  exactly, and the lab now has a direct measurement of it rather than an analogy: a mix of finished
+  long-only sleeves lands at the average of its legs, neither above (no free lunch) nor below (no
+  dilution penalty beyond cost).** That second half is new and it corrects the lab's own standing
+  reading — `learnings.md` has carried "naive dilution is already priced and already loses" since
+  v1, and on a three-leg mix under v3 dilution did not lose: it paid the average and bought a
+  100th-percentile null reading with it.
+  **What the mix bought that its legs did not, and it is the breadth statistic the 2026-11-16 entry
+  asked for.** The cost bill is ~**0.135** of Sharpe (+0.064 to -0.071 at 2x), on 4.7x train /
+  11.8x validation churn — i.e. the blend ran slightly BELOW its legs' average predicted churn
+  (5.9x), so the 2026-10-15/16 finding that "combining legs ADDS 36% to churn" does not reproduce
+  on three legs selected independently at matched size. Train skill is unmoved (-0.140) and splits
+  -0.08 / -0.24 across the two train sub-periods, so the object is a 2018-2023 reading and nothing
+  in 21 years of train supports it. Turnover: train 4.7x inside the registered 2.0-6.0x, validation
+  11.8x outside the registered 3.0-10.0x at a 2.51x train multiplier — the same miss as the
+  filtered arm, in the same direction.
+  **The one question this pair cannot answer, and it gets the next trial:** both arms carry the
+  split-guarded volume-shock leg, whose own parent book (`lv_volume_shock_gkm_band`, #32) had
+  already cleared this same null at the 99th percentile alone. So the clearance is either the BLEND
+  or the FAST LEG, and only swapping that leg out while holding the blend fixed separates them.
+

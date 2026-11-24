@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-22T00:38:19+00:00",
+  "generated_at": "2026-11-24T00:26:11+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -28,6 +28,32 @@
       ],
       "train_skill": 0.058,
       "mechanism": 1
+    },
+    "portfolio-learning": {
+      "name": "pl_ownscore_deconcentrate_3leg",
+      "candidate": "strategies/candidates/pl_ownscore_deconcentrate_3leg.py",
+      "track": "scout",
+      "verdict": "GATE_FAIL",
+      "ts": "2026-11-24T00:23:12+00:00",
+      "n_trials": 3,
+      "rho_to_champion": null,
+      "validation": {
+        "sharpe": 0.401,
+        "ann_return": 0.0707,
+        "max_drawdown": -0.3421,
+        "ann_turnover": 11.79,
+        "avg_positions": 219.75,
+        "skill": 0.064,
+        "skill_cost2x": -0.071,
+        "skill_delist30": 0.064
+      },
+      "train_sharpe": 0.383,
+      "skill_ci90": [
+        -0.118,
+        0.218
+      ],
+      "train_skill": -0.14,
+      "mechanism": 3
     },
     "statistical-learning": {
       "name": "sl_micro_span_masked",
@@ -132,32 +158,6 @@
       ],
       "train_skill": 0.025,
       "mechanism": 4
-    },
-    "portfolio-learning": {
-      "name": "pl_decade_invvol_floored",
-      "candidate": "strategies/candidates/pl_decade_invvol_floored.py",
-      "track": "scout",
-      "verdict": "GATE_FAIL",
-      "ts": "2026-10-16T00:09:10+00:00",
-      "n_trials": 1,
-      "rho_to_champion": null,
-      "validation": {
-        "sharpe": 0.298,
-        "ann_return": 0.0535,
-        "max_drawdown": -0.3839,
-        "ann_turnover": 2.78,
-        "avg_positions": 100.04,
-        "skill": -0.039,
-        "skill_cost2x": -0.067,
-        "skill_delist30": -0.039
-      },
-      "train_sharpe": 0.644,
-      "skill_ci90": [
-        -0.31,
-        0.234
-      ],
-      "train_skill": 0.12,
-      "mechanism": 1
     },
     "statistical-arbitrage": {
       "name": "sa_resid_rev63_band",
