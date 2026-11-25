@@ -9172,3 +9172,150 @@ across experiments; prune entries that later evidence contradicts.
   multiplier is a property of books holding a fast leg, not of multi-leg books**: 2018-2023 name
   churn ran well above train's, and a leg whose ordering is already random amplifies that while a
   slow leg does not.
+
+- **[Measured 2026-11-25, nightly — SIX scored trials; THE HEADLINE, AND IT RE-ATTRIBUTES THE LAB'S
+  MOST-QUOTED v3 RESULT WITHOUT WITHDRAWING IT] A SHOCK SCORE'S BASELINE WINDOW MUST NOT CONTAIN A
+  JUMP: EXCLUDING THE NAMES WHERE IT DOES IS WORTH ~+0.11 OF GROSS VALIDATION SKILL, REPLICATED ON
+  TWO INDEPENDENT PANELS AT THE SAME MAGNITUDE, AND IT IS THE NODE #32's OWN FILE DOCUMENTS AS
+  HYGIENE.** `lv_volume_shock_gkm_band` (#32) was the only object in 36 prior v3 trials to clear the
+  region- and type-matched random-selection null (p = 0.010). One of its nodes drops any name whose
+  daily |log share volume change| exceeds log(3) anywhere in the 50-day scoring window. Six books
+  matched on K = 100, band = 200, (peer x type) quota, monthly schedule and equal weighting; bill =
+  net skill minus skill-at-2x-liquidity-costs, gross = net + bill:
+
+      panel   arm                               val sharpe  net skill   bill   GROSS   null pctile  churn tr/val
+      volume  guard IN window (#32)                +0.368     +0.031   0.180  +0.211      99%       9.0 / 16.6
+      volume  guard DISPLACED to -100..-51 (#41)   +0.250     -0.085   0.186  +0.101      97%       9.2 / 16.9
+      volume  NO guard (#40)                       +0.200     -0.138   0.204  +0.066      95%      11.2 / 19.0
+      range   purity filter IN window (#42)        +0.250     -0.084   0.203  +0.119      95%       9.1 / 16.4
+      range   NO filter (#38)                      +0.183     -0.154   0.164  +0.010      79%      11.0 / 18.2
+      range   purity filter DISPLACED (#43)        +0.146     -0.190   0.181  -0.009      58%       9.2 / 16.2
+
+  **In-window position: +0.110 of gross skill on the volume panel, +0.109 on the range panel.
+  Displaced: +0.035 and -0.019.** So the volume term splits **76/24** between purity and a
+  cross-sectional stability characteristic and the range term is **100/0**. The bill is flat across
+  the volume arms (0.180/0.186/0.204), so none of it is cost. **Mechanism: a "last 5 days minus the
+  preceding 45" score whose 45-day BASELINE itself contains an explosion is measuring a decaying
+  baseline rather than a fresh event.** The displaced arms are the controls that make this a
+  mechanism rather than a shrinkage effect: matched on exclusion rate (45.6% vs 44.7%; 49.8% vs
+  50.0%), on persistence (phi -0.028 vs -0.022; -0.012 vs -0.007) and on charged churn (9.2x vs
+  9.0x; 9.2x vs 9.1x), keeping substantially different names (Jaccard 0.344 and 0.434), and
+  differing **only in which window the exclusion reads**.
+  **What this does to the record's reading of #32.** Both volume arms clear the null gate, so **the
+  GATE CLEARANCE belongs to the volume shock and only the SKILL belongs to the guard**: the
+  high-volume return premium's own gross contribution on this panel is **~+0.07, not +0.21**. The
+  2026-11-22 entry is re-attributed, not refuted.
+  **Four arithmetic corrections to #32's file, all free.** (i) The guard's exceedance rate at log(3)
+  over 2,545,241 eligible printing day-names is **2.34%**, not the 0.57% quoted — that is the rate
+  at log(5), and log(10) gives 0.15%. (ii) It is a rolling 50-day **maximum**, so the per-day rate
+  compounds: 1-(1-0.0234)^50 = 69% if independent. (iii) Measured, it removes **55.3% of the
+  eligible panel** (34.1% / 47.1% / 50.1% scorable by era against 99.7% raw) and changes **73% of
+  the holdings** (top-100 Jaccard 0.274). (iv) **It cannot catch the split it was written for**:
+  stored volume carries the split half of `D_i(t)`, so a window spanning a **2:1 split — the modal
+  split — steps by log(2) = 0.693, BELOW log(3) = 1.099.**
+  **Operative rules.** (a) Every "recent window minus baseline window" score in this lab is exposed
+  and should carry an in-window purity filter; state its exclusion rate, because a filter at a 55%
+  rate is a first-order construction operator, not hygiene. (b) **Price a candidate's own
+  exclusions before reading its selection term**: `random_null_v3` draws replicas from the full
+  region- and type-matched eligible pool and never from a candidate's own sub-panel, so any
+  exclusion a candidate performs is scored as its selection. (c) Prefer the parameter-free form —
+  drop names above the date's **cross-sectional median** in-window jump — which fixes the exclusion
+  rate without a threshold; a literal log(3) transplant onto the range panel was **inert** (0.00% of
+  day-names exceed it; top-100 Jaccard **1.000**) and was refused on D2 before it was run.
+
+- **[Measured 2026-11-25, nightly] THE PURITY FILTER DOES NOT TRIM A BOOK, IT REPLACES ITS RETURN
+  STREAM — AND THE TWO BARE SHOCK SCORES ARE ONE BET.** Active-return rho over the 1,562 validation
+  days against all 41 stored v3 objects: the unfiltered 5/45 **range** shock and the unguarded 5/45
+  **volume** shock correlate **+0.638** — two different panels, same bet — while the
+  purity-filtered range arm correlates **-0.004** with the unguarded volume arm and **+0.018** with
+  its own unfiltered twin. Half the names removed on an in-window jump criterion leaves a book
+  essentially uncorrelated with the book it came from. `lv_volume_shock_displaced_guard` is the most
+  decorrelated of the six (**0 pairs at or above 0.5**, max |rho| +0.460, engine cluster M10).
+  **Consequence for the breadth mandate: a new SCORE is not a new bet (the two bare shocks prove
+  that), and a new EXCLUSION can be. Check the active-return rho of the construction, not of the
+  score.**
+
+- **[Measured 2026-11-25, nightly — A NEW SCORE CLASS, PRICED AND NULL ON ITS OWN] THE 5/45
+  LOG-RANGE SHOCK IS THE CLEANEST AND BEST-COVERED SCORE THIS LAB HAS AND IT CARRIES NOTHING BARE.**
+  Mean `log(high/low)` over the last 5 printing days minus the median over the preceding 45, taken
+  only on days with a volume print (high/low are forward-filled on the same 10-day cap as the close,
+  so a holiday would otherwise repeat yesterday's range). It is a **within-day ratio**, so BOTH
+  halves of the as-of-fetch back-adjustment factor cancel exactly — splits included — and so does
+  the day's FX rate; no guard of any kind is needed. Scorable on **99.7% of eligible names in every
+  era** against the split-guarded volume shock's **44.7%**. phi **-0.009** (the lab's second fast
+  object), rank rho **-0.019** to trailing 126-day volatility, **+0.025** to 12-1 momentum, **+0.010**
+  to the board lead, **+0.395** to the volume shock. Bare it is a **null**: gross skill **+0.010** at
+  the **79th** percentile, net -0.154, three gates failed. **So the Merton-recognition /
+  Barber-Odean attention channel read on the range panel is refuted as a bare sort** — and the
+  score's value is as the second panel on which the purity rule was replicated. **Anti-candidate
+  travelling with this entry: the bare 5/45 log-range shock as a traded sort, at any K or band.**
+
+- **[Measured 2026-11-25, nightly] THE RANDOM-SELECTION NULL'S PERCENTILE IS MONOTONE IN GROSS
+  SKILL, WHICH IS THE FIRST READABLE EXCHANGE RATE FOR THE GATE THAT REFUSED 22 OF THE FIRST 24
+  CANDIDATES.** Across the six matched books above: gross +0.211 -> 99%, +0.119 -> 95%, +0.101 ->
+  97%, +0.066 -> 95%, +0.010 -> 79%, -0.009 -> 58%. Six points, two panels, one construction family
+  (K = 100, band, peer x type quota, monthly), so it is a calibration to re-measure and not a
+  constant — but it is the first time the null gate can be read in a quantity a candidate is
+  designed in, and it says the 90% bar sits near **gross skill +0.03 to +0.05** for a book of this
+  shape. Note what it does NOT say: the gate is insensitive to NET skill (two books at +0.119 and
+  +0.066 gross both read 95% while their net skills are -0.084 and -0.138), so it prices the
+  selection and not the bill. Sibling of 2026-11-17's "price a gate in the units candidates are
+  designed in".
+
+- **[Measured 2026-11-25, nightly — REFUTES A PREDICTION WRITTEN BEFORE THE RUN, AND IT WAS MINE]
+  A MIX'S SKILL IS NOT THE AVERAGE OF ITS LEGS' RECORDED SKILLS, AND A NULL LEG IS CHEAP BALLAST
+  RATHER THAN DEAD WEIGHT.** The 2026-11-24 handover's idea (i) run as `#39`: `#35`'s three-leg mix
+  with the measured-null 12-1 momentum leg removed and everything else identical. Pre-registered at
+  **+0.078** (the mean of the two surviving legs' recorded skills, +0.124 and +0.031); measured
+  **+0.061** against #35's **+0.064**.
+
+      book                        fast-leg share   net skill   bill    GROSS skill
+      #36 rev + mom + lowvol            0            -0.003   0.059      +0.056
+      #35 rev + mom + vshock           1/3           +0.064   0.135      +0.199
+      #39 rev + vshock                 1/2           +0.061   0.153      +0.214
+
+  Dropping the null leg raised gross by **+0.015** and the bill by **+0.018**, almost exactly
+  cancelling: **marginal gross per unit of bill is 1.9 from zero to a third of the book in the fast
+  leg and 0.83 from a third to a half**, so there is an **interior optimum near a third** and the
+  2026-11-24 cost subtraction has now been run on its own margin. **Two consequences.** (i) The
+  2026-11-24 reading that a mix "pays the average of its legs" is refuted in the family it was
+  measured in — #35's landing on that average was a coincidence, and a mix's expected skill is NOT
+  computable from its legs' records. (ii) A slow leg in a fast mix is doing cost work: it dilutes
+  churn, so removing it returns the saving to gross and the cost to the bill together. The null
+  percentile stayed at **100%**, replicating "the blend buys gate clearance, the signal buys skill".
+
+- **[Measured 2026-11-25, nightly — TWO CORRECTIONS TO STANDING TURNOVER RULES, BOTH ON SIX FRESH
+  BOOKS] THE >2x VALIDATION MULTIPLIER BELONGS TO MIXING A FAST LEG WITH SLOW ONES, NOT TO HOLDING
+  ONE; AND A FAST BOOK'S BILL CAN MOVE OPPOSITE TO ITS CHURN.** (a) The 2026-11-24 entry put the
+  >2x validation/train churn multiplier on "books holding a near-zero-persistence leg". Tonight's
+  two **pure** fast books ran at **1.65x** (#38, 11.0 -> 18.2) and **1.70x** (#40, 11.2 -> 19.0) —
+  inside the 1.30-2.00x band — while the **multi-leg** mix carrying a fast leg ran at **2.57x**
+  (#39, 5.3 -> 13.6), as #34/#35 did at 2.51x/2.58x. Restated: a fast book alone sits in the
+  ordinary band; a fast leg mixed with slow legs amplifies the multiplier, because the slow legs'
+  low train churn is the denominator. (b) `#42` **cut** churn (11.0x -> 9.1x train, 18.2x -> 16.4x
+  validation) and its bill **rose** 0.164 -> 0.203, i.e. **9.0 -> 12.4 bps per 1x**, because the
+  purity filter moves the book into a more expensive liquidity tier. Fourth instance of
+  2026-11-24's "the cost-per-turn constant is set by what a book holds, not by how fast it trades"
+  and the first where churn and bill move in **opposite** directions — so never pre-register a bill
+  from a churn forecast alone. All six turnover pre-registrations landed inside their ranges.
+
+- **[Method, 2026-11-25 — RESEARCH `#519` RUN FOR THE FIRST TIME, AND IT EARNED ITS KEEP AS A
+  REFUSAL INSTRUMENT RATHER THAN AS A SCREEN] THE TOP-K AGREEMENT MEASURE ANSWERS A QUESTION THIS
+  LAB'S RANK CORRELATIONS CANNOT, AND IT REFUSED A CANDIDATE BEFORE IT WAS WRITTEN.** Fagin, Kumar
+  & Sivakumar's prefix-weighted intersection metric `delta^(w)` — the average over prefixes
+  `i = 1..K` of the normalised symmetric difference of the two lists' top-`i` sets — is provably
+  **not** in the Kendall/footrule equivalence class, so a full-cross-section rank correlation and a
+  top-K membership measure are different objects. Measured here on 252 train month-ends at K = 100:
+  the range and volume shocks rank-correlate **+0.395** and their top-100 sets overlap at Jaccard
+  **0.202** (`delta^(w)` **0.763**); the board lead against the volume shock is Jaccard 0.110.
+  **Where it paid: as the D2 refusal instrument.** A literal transplant of #32's log(3) guard onto
+  the range panel returned Jaccard **1.000** against the unfiltered arm — the threshold is inert in
+  range units — and the object was declined before it cost a trial, which is what produced the
+  parameter-free median restatement that then carried the night's result. **Keep `delta^(w)` as a
+  refusal instrument and a grouping statistic; it is not a qualifier** (same standing as every other
+  column of the pre-trial sheet). **And `#518` closed an axis for zero trials:** mean-of-ranks is
+  already the maximum-likelihood aggregator in the weak-judge regime, the source's own empirical
+  ranking of alternatives measures agreement with its inputs rather than accuracy, and the
+  independence-of-judges assumption fails on this lab's leads — so a Kemeny / Copeland /
+  local-Kemenization candidate has no pre-signable direction and is a **D5** decline. **Do not
+  re-open the aggregator axis by analogy.**
