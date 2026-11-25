@@ -33411,3 +33411,5 @@ docstring as a discount on the attainable size.
 **Verdicts:** GATE_FAIL `rv_range_shock_band`; GATE_FAIL `pl_fastslow_2leg`; GATE_FAIL
 `lv_volume_shock_unguarded`; GATE_FAIL `lv_volume_shock_displaced_guard`; GATE_FAIL
 `rv_range_shock_pure`; GATE_FAIL `rv_range_shock_displaced`.
+
+## Research session — 2026-11-25 (learning agent): 3 notes added, see research/SUMMARY.md

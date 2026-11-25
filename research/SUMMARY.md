@@ -10978,6 +10978,117 @@ the paper uses inter-list distances precisely *because there is no ground truth*
 statement about operator fidelity and **not** evidence that a Copeland-type book out-predicts a
 mean-of-ranks book. No performance expectation is imported from any of tonight's sources.
 
+### Judges who are CORRELATED and of UNEQUAL quality — the closed-form price of a second correlated lead, the collapse threshold at which a panel stops being a panel, and the identification result that says a measured correlation cannot supply an effective count (`portfolio-learning`, the gate's own objective)
+
+The [2026-11-24] aim was the binding caveat on the whole aggregation vein: every rule in `#518`–`#521`
+counts `k` lists as `k` **independent** judges, Young flags that assumption himself, and
+`learnings.md` records an inter-signal ensemble killed for free at rank correlation **0.89** with two
+legs of a promoted blend at **0.66**. So the quantity the lab needed was the *effective number of
+independent rankers*, and the rule it needed was how a mean should be **weighted** when the judges are
+neither independent nor equally good. Three sources, all read in full, answer it — and the answer
+splits cleanly into a usable instrument and a refusal.
+
+**(1) The unequal-competence half is closed and exact, and the weight ignores every other judge.**
+Shapley & Grofman (1984, *Public Choice*, Theorem II; independently Nitzan–Paroush 1982, and in
+pattern recognition Pierce 1961 / Minsky–Papert 1971 / Duda–Hart 1973) — with **independent** judges
+and even priors, the rule maximising the panel's probability of being right is weighted majority with
+`w_i ∝ log(p_i/(1−p_i))`. Once a log base is fixed the weight is a function **purely of that judge's
+own competence**, independent of the other judges' competences and of the panel size: a judge carries
+the same weight into any panel, and only their *power* (the share of configurations they decide)
+changes. Two cautions that matter more here than the theorem: optimal weights are **almost never
+unique** — the paper writes out the seven inequalities that define the same winning coalitions for its
+five-judge example and notes two different weight vectors satisfying them, so **the object is the set
+of winning coalitions, not the weight vector**, and a session tuning weights without checking
+coalitions is distinguishing identical rules — and the authors' own closing remark is that "especially
+for large `N`, simple majority rule may turn out to be 'near' optimal", which bounds what the whole
+apparatus can buy. (Tier A, overlap false. `#523`, `#527`, `#528`.)
+
+**(2) The correlated half has a closed form too, and it is the one thing the aim asked for that was
+actually delivered.** Grofman, Owen & Feld (1983, *Theory and Decision*, Theorem XII and its
+corollary, attributed to Owen's unpublished 1980 manuscript and therefore held **second-hand**) model
+dependence as a **common factor**: each judge votes independently with competence `p`, or, with
+probability `α`, copies a single opinion leader. Then the weight to attach to a bloc of `n` judges
+casting identical votes, which would be `n·log(p/q)` if independent, is approximately
+**`log(p/q) + (n−1)·log[(α+βp)/(α+βq)]`** with `β = 1−α`. The first member of a correlated bloc is
+worth a full log-odds vote and every later one strictly less, and the per-member factor
+`(α+βp)/(α+βq)` is decreasing in `α` and **→ 1 as `α → 1`**, i.e. extra bloc members are eventually
+worth exactly nothing and the bloc *is* one judge. That is the formal version of `#522`(c) and the
+first *price* this folder has for a correlated lead, as opposed to a threshold that merely refuses
+one. Kaniovski supplies the exact endpoint independently: `M_n(p, 1) = p` — a perfectly correlated
+panel has the competence of a single judge. (Tier A / B+, overlap false. `#524`.)
+
+**(3) The collapse threshold, and it is the sharpest free screen in the vein.** The same review's
+worked example (`α = 0.2`, `p = 0.6` ⇒ panel competence `= 0.6` for **every** `N`, "the Condorcet
+Jury Theorem effect … is lost entirely") turns into a threshold by elementary arithmetic, derived in
+the note and not stated in the text: the majority tracks the leader whenever `α + βq > 1/2`, i.e.
+whenever **`α > (p − 1/2)/p`**. The weaker the judges, the lower the common-factor loading at which
+the panel stops being a panel — at `p = 0.52` the threshold is `α > 0.077`. Since the lab's leads
+have single-digit ICs, every `p_i` sits within a few hundredths of a half and the threshold is tiny,
+so a panel of leads all reading the same price panel is very likely above it. That is a cheap,
+falsifiable, pre-trial reason to spend the next trial on a different mechanism rather than on
+composite construction. (`#525`.)
+
+**(4) Competence itself is measurable with no answer key, which makes all of the above free.**
+Theorem VII of the same review (Feld, unpublished): if `r_i` is the rate at which judge `i` agrees
+with the panel's majority verdict, then `(r_i − 0.5) ∝ (p_i − 0.5)`, and over `0.55 < p_i < 0.76`
+the log-odds is approximately linear in `(p − 0.5)`; the corollary to Theorem XIII composes the two
+into **`w_i ∝ (r_i − 0.5)`**. No ground truth enters anywhere. This is the only competence estimator
+in the folder that does not consume an evaluation, so it is the one a session can run *before*
+proposing a composite. (`#526`.)
+
+**(5) And the refusal, which is the night's most important product because it closes the aim's own
+headline question.** Kaniovski (2010, *Theory and Decision*) asks what a **correlation matrix**
+tells you about a correlated panel's competence, and the answer is: by itself, not enough to weight
+on. Marginal probabilities plus pairwise correlations **do not determine a joint distribution** over
+the `2^n` voting profiles — the admissible distributions form a convex set, and the missing
+information is third- and higher-order dependence, which nobody can estimate at these sample sizes.
+Under one admissible choice (the Bahadur pairwise-only representation) competence is
+`M_n^B(p,c) = M_n(p,0) + c·n(n−1)(0.5−p)·C(n−2,(n−2)/2)·p^((n−1)/2)·q^((n−1)/2)` — **linear in `c`**,
+and positive correlation subtracts for a competent panel. Under another equally admissible choice
+(quadratic regularisation) **`M_n^Q(p,c) = M_n(p,0)` for every `c`: correlation has no effect at
+all**, because under simple majority the extra probability of broad right coalitions and broad wrong
+ones cancels exactly. The author's own summary: a correlation matrix "conveys little information
+about the sensitivity of the Condorcet probability to correlation. The possibilities range from
+completely insensitive, to very sensitive." The honest construction is his **bounds** approach: two
+linear programs giving the min and max competence consistent with `(p, c)`. **So a measured
+correlation between leads licenses a refusal and an interval, not a calibrated weight** — where the
+lab wants a weight it must come from the structural loading `α` of (2), which is a model with a
+stated limit. (Tier B+, overlap false. `#523`.)
+
+**(6) A feasibility ceiling that reads directly on the lab's own numbers.** For the pairwise-only
+representation to be a distribution at all, Bahadur's bounds require `c ≤ 2pq/((n−1)pq + 0.25 − γ)`,
+whose simple consequence is **`c ≤ 2/(n − 1)`** for positive `c`; negative `c` is bounded at
+`O(n⁻²)`, positive at `O(n⁻¹)`, and `|c| → 0` as `n → ∞`. **In a large homogeneous panel each pair
+can only be weakly dependent.** Substituting the lab's measured correlations (a substitution, since
+those are rank/return correlations rather than binarised-vote ones) the ceiling admits `k ≤ 3` at
+`0.89` and `k ≤ 4` at `0.66` — so a five-lead panel correlating at `0.66` is **outside the model's
+feasible set**, which is to say its dependence is dominated by exactly the higher-order structure
+that (5) says is unidentified. Two corollaries worth carrying: enlarging a positively correlated
+panel can **reduce** its competence up to a certain size (Corollary 1.4), and **perfect negative
+correlation is impossible for `n ≥ 3`** — "three jurors cannot be mutually contrarian" — so
+"construct three mutually contrarian leads" is not an available design. (`#523`, `#528`.)
+
+**(7) The test that comes before any weighting at all.** Shapley–Grofman's Theorem III: for any
+distribution symmetric in the judges, dependent or not, weighted voting is optimal **iff
+`p(k) > p(N−k)` for all `k > N/2`**, where `p(k)` is the probability exactly `k` judges are right;
+the posterior for a `k`-vote plurality is `p(k)/(p(k)+p(N−k))`. If unanimity is *less* reliable than
+a bare majority, **no** weighted rule — not simple majority, not log-odds, not any reweighting — can
+be optimal, and the right operator is non-monotonic (discount unanimity). Their negative-dependence
+example makes the point starkly: three judges of whom exactly one is certainly wrong produce a panel
+that, **when unanimous, is certainly wrong**. And their constructive answer for dependent judges is
+not a weight at all but a **partition**: cluster judges into blocs correlated within and independent
+across, find each bloc's internal rule and bloc competence, then apply the log-odds weight **to the
+blocs** — with their own caveat that inter-bloc correlations must be *small*, stated as an
+approximation with no error bound, which the lab's single-equity-panel leads do not satisfy. (`#527`.)
+
+**Where this leaves the vein.** The aggregation axis closed as a source of edge on 2026-11-24
+(`#518`); tonight closes its caveat in the same direction. There is a closed-form price for a
+correlated lead and a free threshold that says when a composite cannot help, but there is **no
+identified effective-count formula** to be had from a correlation, and the one dependence-adjusted
+weight that exists is held second-hand from an unpublished manuscript and needs a structural
+parameter rather than a measured one. The transferable products are all screens and refusals — which
+is what `#513`'s composite actually needed, and none of them costs a trial.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -20787,6 +20898,119 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-11-24-rank-aggregation-positional-versus-pairwise.md`,
     `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`
 
+523. **READING RULE, FREE, AND IT CLOSES THE QUESTION THE [2026-11-24] AIM WAS BUILT ON: an
+    "effective number of independent leads" computed from a measured CORRELATION is NOT IDENTIFIED,
+    so a correlation between leads licenses a refusal and an interval but never a calibrated
+    weight.** Marginal hit rates plus pairwise correlations do not determine a joint distribution
+    over the `2^k` agree/disagree profiles — the admissible set is convex and the missing information
+    is third- and higher-order dependence. Kaniovski exhibits two equally admissible choices with the
+    same `(p, c)`: under the Bahadur pairwise-only representation competence is
+    `M_k(p,0) + c·k(k−1)(0.5−p)·C(k−2,(k−2)/2)·p^((k−1)/2)·q^((k−1)/2)`, **linear in `c`** and
+    decreasing in it for a competent panel; under quadratic regularisation it is
+    **`M_k(p,0)` for every `c` — correlation has no effect at all**, because under simple majority the
+    extra probability of broad-right and broad-wrong coalitions cancels exactly. His own words: a
+    correlation matrix "conveys little information about the sensitivity of the Condorcet probability
+    to correlation." **The honest computation is the bracket**: `M_k(p,0)` (free, a binomial tail) at
+    one end and the B-solution value at the other; if a decision flips inside it, the correlation is
+    not enough information to make that decision. Also carried, and it reads directly on the lab's
+    numbers: the representation **does not exist** unless `c ≤ 2/(k−1)` (the exact bound is tighter),
+    so a five-lead panel correlating at `0.66` is outside the feasible set entirely, and enlarging a
+    positively correlated panel can *reduce* its competence up to a certain size. Tier B+, overlap
+    **false**.
+    → `notes/2026-11-25-what-a-pairwise-correlation-does-not-pin-down.md`
+
+524. **THE CLOSED-FORM PRICE OF A SECOND CORRELATED LEAD — the one thing the aim asked for that was
+    delivered, and the first *price* this folder has for a correlated lead rather than a threshold
+    that refuses one.** Model dependence as a common factor: each judge votes independently with
+    competence `p`, or with probability `α` copies one shared opinion. Then the weight for a bloc of
+    `n` judges that habitually agree, which would be `n·log(p/q)` if independent, is
+    **`log(p/q) + (n−1)·log[(α+βp)/(α+βq)]`**, `β = 1−α`, `q = 1−p`. The first member of the bloc is
+    worth a full log-odds vote; each later one is worth strictly less; the per-member factor is
+    decreasing in `α` and **→ 1 as `α → 1`**, at which point extra members are worth exactly zero and
+    the bloc *is* one judge. The exact endpoint is confirmed independently: a perfectly correlated
+    panel has `M_k(p, 1) = p`, the competence of a single judge. Use it to replace "this lead
+    correlates 0.7 with that one, so drop it" with "this lead is worth `log[(α+βp)/(α+βq)]` of a
+    vote". **Two limits to state wherever it is used**: the result is held second-hand from an
+    unpublished 1980 manuscript (no proof and no independent published statement found), and `α` is a
+    *structural* loading — estimate it from the leads' first principal-component share, not by
+    plugging in a rank correlation, which `#523` says is not the right input. Tier A on the venue and
+    the review's citation count, with that provenance; overlap **false**.
+    → `notes/2026-11-25-the-opinion-leader-model-and-the-bloc-weight-discount.md`
+
+525. **FREE PRE-TRIAL REFUSAL SCREEN, AND IT IS THE SHARPEST THING IN THIS VEIN: the common-factor
+    COLLAPSE THRESHOLD `α > (p − 1/2)/p`. Above it, a panel's competence equals one judge's for
+    every panel size, so a composite over those leads cannot beat the best single lead and the trial
+    should not be spent.** The review's worked example is `α = 0.2`, `p = 0.6` ⇒ panel competence
+    `= 0.6` for **every** `N`, with the Condorcet effect "lost entirely"; the threshold is the
+    elementary arithmetic behind it (the majority tracks the shared opinion as soon as
+    `α + βq > 1/2`), derived in the note and not stated in the text. **The consequence for this lab
+    is severe and is the point: the weaker the judges, the lower the loading at which the panel stops
+    being a panel.** At `p = 0.52` — which is where a single-digit IC puts a lead via `#518`'s regime
+    map (`p = 1/2 + τ/2`) — the threshold is `α > 0.077`. Four leads computed from the same daily
+    price panel will very plausibly share more than 8% of their score variance on a first principal
+    component. The screen is three lines of `numpy` on stored scores: map each lead's IC to `p`, take
+    the first PC's share of the lead-score covariance as `α`, compare. A pass is not a licence, but a
+    **fail closes the composite question for free**. Tier A (second-hand on the theorem, arithmetic
+    checked against the paper's own number), overlap **false**.
+    → `notes/2026-11-25-the-opinion-leader-model-and-the-bloc-weight-discount.md`
+
+526. **FREE COMPETENCE ESTIMATOR THAT CONSUMES NO EVALUATION — the only one in this folder: score
+    each lead by how often it AGREES WITH THE PANEL MAJORITY, with no answer key and no returns
+    anywhere in the chain, and use `w_i ∝ (r_i − 0.5)` as the weight.** Let `r_i` be the rate at
+    which lead `i` agrees with the majority of the leads on a name's membership. Then
+    `(r_i − 0.5) ∝ (p_i − 0.5)` ("Correcting a True-False Exam Without an Answer Key"), and over the
+    band `0.55 < p_i < 0.76` the log-odds weight is approximately linear in `(p − 0.5)`, so
+    `w_i ∝ (r_i − 0.5)` approximates the optimal log-odds weights. Every input is already on disk:
+    the stored lead scores and the book's cut. **Why it matters procedurally**: every other competence
+    or skill number the lab has costs an evaluation, which is why composite design has always had to
+    happen after measurement; this one can be computed before proposing anything, which makes it the
+    natural companion to `#525`'s refusal and `#519`'s top-K agreement screen. **Limit to state**:
+    the lab's leads very likely sit *below* the stated competence band (`p` near a half, not 0.55+),
+    where the linearity claim is untested, so treat `r_i` as a monotone ranking of lead competence
+    rather than as a calibrated weight. Tier A, overlap **false**.
+    → `notes/2026-11-25-the-opinion-leader-model-and-the-bloc-weight-discount.md`
+
+527. **THE ADMISSIBILITY TEST THAT COMES BEFORE ANY WEIGHTING AT ALL, FREE, AND IT CAN KILL THE WHOLE
+    FAMILY OF WEIGHTING PROPOSALS IN ONE TABLE: tabulate `p(k)` — how often exactly `k` of the `k`
+    leads are right — and compare it to `p(N−k)`.** For any distribution symmetric in the judges,
+    dependent or not, **weighted voting is optimal if and only if `p(k) > p(N−k)` for all `k > N/2`**,
+    and the posterior for a `k`-vote plurality is `p(k)/(p(k)+p(N−k))`. Any weighted rule is forced to
+    be *more* confident in a larger plurality, so if unanimity among the leads is **not** more
+    reliable than a bare majority, no weighted rule — not simple majority, not log-odds, not `#521`'s
+    local Kemenization, which is majority-based and monotone — can be optimal, and the correct
+    operator is **non-monotonic**: discount unanimous agreement. The authors' negative-dependence
+    example is the extreme case: three judges of whom exactly one is certainly wrong give a panel
+    that, when unanimous, is **certainly wrong**, and the rule "follow a 2–1 majority, oppose a 3–0
+    unanimity" strictly beats majority rule. **The constructive half of the same source is a
+    partition, not a weight**: cluster leads into blocs that correlate within and are independent
+    across, find each bloc's internal rule and its bloc competence, then apply the log-odds weight to
+    the **blocs** — with the authors' own caveat, stated as an approximation with **no error bound**,
+    that inter-bloc correlations must be small, which long-only books on one equity panel do not
+    satisfy. Tier A, overlap **false**.
+    → `notes/2026-11-25-optimal-weights-for-judges-of-unequal-competence.md`
+
+528. **ANTI-CANDIDATES FROM TONIGHT'S VEIN, FOUR OF THEM, AND THE FIRST IS THE ONE A FUTURE SESSION IS
+    MOST LIKELY TO WASTE A TRIAL ON.** (a) **Do not tune a weight vector over leads.** Optimal weights
+    are almost never unique — the source writes out the inequalities under which numerically different
+    vectors induce the same winning coalitions — so the object is the **set of winning coalitions**,
+    and two "different" weightings are usually the same rule; at `k = 2` leads there are no
+    non-trivial coalitions at all and "weighting" degenerates to picking one lead. (b) **Do not expect
+    optimal weighting to buy much even when it is legal**: the same authors conclude that especially
+    for large panels "optimal weights do not improve substantially on simple majority rule", and the
+    review's own worked example moves panel competence from `0.87` (equal weight) to `0.93` (optimal)
+    for competences as spread as `(0.9, 0.9, 0.6, 0.6, 0.6)` — a spread the lab's leads do not have.
+    (c) **"Build three mutually contrarian leads" is not an available design**: perfect negative
+    correlation among three or more binary judges admits **no** joint distribution — "three jurors
+    cannot be mutually contrarian" — and the feasible negative correlation shrinks as `O(k⁻²)`, so the
+    beneficial-negative-dependence result is real but unreachable at any width. (d) **Average
+    competence is not a sufficient statistic for a panel**: with total competence fixed, a panel
+    averaging *below* a half can be right more often than not (`(0.72, 0.72, 0)`) and one averaging
+    above it can be wrong more often than not (`(1, 0.28, 0.28)`), so "the leads average an IC of `x`"
+    says nothing about the composite without the whole distribution. Tier A across the cluster,
+    overlap **false**.
+    → `notes/2026-11-25-optimal-weights-for-judges-of-unequal-competence.md`,
+    `notes/2026-11-25-what-a-pairwise-correlation-does-not-pin-down.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -20902,7 +21126,120 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-23 (session 101) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT AS A CONSTRUCTION THE LAB HAS NEVER RUN PLUS A DISCOUNT ON THIS FOLDER'S OWN THREE-MONTH-OLD ENTRY: the composite score over several leads should decide MEMBERSHIP, not weights — and the mix-versus-integrate ranking is not settled in either direction, it CROSSES OVER in the level of active risk.** Aim from the [2026-11-22] entry, which the coverage audit had reduced to the one open `portfolio-learning` construction corner ("this is where scouted leads become a challenger"). The aim's criteria (i)–(iv) were applied as written and **two of tonight's three sources fail (ii)** — none of this literature *estimates* combination weights; it fixes them and argues about where the score belongs — so the admission was made on the clause rather than on criterion (ii), and the note frontmatter says so. **Three sources, one read in full, two at abstract level, and they disagree with each other in a usable way.** *(a)* The **crossover** (Ghayur–Heaney–Platt, *FAJ*, Tier B−, abstract + CFA Institute's own *In Practice* summary, body member-gated): exposure-matched books — the control the folder's three earlier sources on this question all lack — give the **mix** higher information ratios at low-to-moderate tracking error and the **composite** better risk-adjusted performance at high, with the mechanism in the *overlap*: the names only the mix holds are those whose scores offset, and at low active risk they reduce active risk and raise active return. Procedural consequence: **measure the candidate's active risk against the pool first, because that number decides which construction the literature predicts**, and a v3 book graded against a ~1,000-name equal-weight pool is probably on the side where the mix wins — the opposite of what this file has carried since 2026-08-31 (**#517**). *(b)* The **ceiling** (Clarke–de Silva–Thorley, *FAJ*, Tier B−, **abstract only**; SSRN Cloudflare-challenged and `cdar.berkeley.edu` does not resolve from this environment): a mix of long-only sleeves pays the long-only distortion **once per sleeve**, and a four-sleeve combination captures ~40% of the attainable Sharpe improvement against ~80% for one optimised long-only book on the same inputs — recorded as a ratio of attainable improvement, not performance, and discounted because the 80% arm is a covariance optimiser this panel cannot support. *(c)* The night's main product (Amenc–Ducoulombier–Esakia–Goltz–Sivasubramanian, *JPM* special issue, Tier B−/C+, **read in full**, discounted hard because all five authors work for the index provider whose own indices are the favoured arm): the axis that matters is not mix-versus-integrate but **diversification-based weighting versus score weighting**, and score weighting is dominated by plain equal weighting of the same selection on information ratio, extreme tracking error, extreme underperformance and turnover while delivering lower excess return per unit of factor intensity — verified by levering the diversified books to matched intensity. Its two mechanisms are worth more than its horse race: **the long-only asymmetry** ("it may be less important to identify factor champions than to avoid factor losers" — the loser book's underperformance exceeds the champion book's outperformance, which is the literature arriving independently at this lab's own `#375` one-bit geometry) and **where score-weighting turnover comes from** (a selection churns only when a score crosses the membership threshold; a weighting function of the score trades on every small score change). New construction: **filter, then deconcentrate** — broad per-lead selection, drop the worst *composite* ranks across the other leads inside each selection, equal-weight the survivors, blend at equal allocation — which sits outside **both** bounds this folder uses to kill ensembles, Breiman's simplex and Novy-Marx's linear equivalence, because the filter is a nonlinearity applied inside each leg before construction (**#513**). **One tension recorded rather than smoothed over**: `learnings.md` measured magnitude weighting as information-bearing and de-concentration as costly, under v1, on 140 survivor names, on **absolute** Sharpe; three pre-registered reconciliations are in **#517** and the lab must re-measure rather than prefer either literature. New tonight: **#513–#517**, two of them free holdings-only screens (**#514** overlap/dilution, **#515** score persistence) and one free diagnostic (**#516** the GLR ratio, which separates "diversified" from "selected low-volatility names" — the folder's most persistent confound). Channel: `docs3.scientificbeta.com/Library/External_use/Academic_papers/<FILE>.pdf` serves typeset JPM reprints first-try and is nominated; `globenewswire.com` (403), `alphaarchitect.com` (403), `papers.ssrn.com` delivery (403 Cloudflare), `fisherpub.sjf.edu` (a Digital Commons **record without a file** — the [2026-10-04] Pure/DSpace mode, now on Digital Commons) and `cdar.berkeley.edu` (`connect_unreachable`, host-side) all refused. No lab measurement was taken and the holdout was not read. | Amenc, Ducoulombier, Esakia, Goltz & Sivasubramanian 2017 (*JPM* 43(5), typeset reprint read in full from `docs3.scientificbeta.com`) (`2026-11-23-filter-then-deconcentrate-instead-of-score-weighting.md`); Ghayur, Heaney & Platt 2018 (*FAJ* 74(3), **abstract + CFA Institute *In Practice* summary only**) (`2026-11-23-exposure-matched-blend-comparison-and-the-active-risk-crossover.md`); Clarke, de Silva & Thorley 2016 (*FAJ* 72(6), **abstract only**) (`2026-11-23-long-only-sleeve-mix-and-how-much-of-the-efficient-book-it-captures.md`) |
 | 2026-11-24 (session 102) | **TOOK THE PRIMARY AIM VERBATIM, THE NAMED GAP WAS REAL, ALL THREE SOURCES ARE TIER A AND WERE READ IN FULL — AND THE PAYOUT IS A REFUSAL WITH A THEOREM BEHIND IT: the lab's own mean-of-ranks composite is ALREADY the maximum-likelihood aggregator for the question it is used to answer.** Aim from the [2026-11-23] entry: *the literature on aggregating several rankings of the same items into one ranking or one selected subset*, admitting a source only if it (i) is about combining several complete or partial rankings of the same items, (ii) says when a positional scoring rule is and is not the right aggregator and names a concrete alternative with the distinguishing property, (iii) states how it handles ties and truncated/partial rankings or says it does not, and (iv) is rank arithmetic with nothing estimated. Pre-aim greps confirmed the gap across all 318 notes: zero for `Borda` in the positional sense, `Kemeny`, `Condorcet`, `Copeland`, `rank aggregation`. Three sources: **Dwork, Kumar, Naor & Sivakumar (WWW10 2001)**, the canonical algorithms-and-complexity paper (Kemeny optimal = geometric median of the inputs and NP-hard at `k = 4`; footrule as a polynomial 2-approximation via minimum-cost bipartite matching; scaled footrule for partial lists; **the impossibility that no rule assigning weights to positions and sorting by a function of them can be Condorcet**; the extended Condorcet criterion; **local Kemenization**, `O(k n log n)`, prefix-consistent, the night's one cheap construction) → `notes/2026-11-24-rank-aggregation-positional-versus-pairwise.md`. **Young (APSR 1988)**, the probability model and the axiomatics (MLE of the *ranking* is Kemeny for any `p > 1/2`; **MLE of the single best item as `p → 1/2` is the BORDA winner**, "then Borda's rule is definitely optimal"; maximin as `p → 1`; **local stability**, which Borda fails by an exact reversal in a worked example and which Young & Levenglick 1978 — second-hand — show characterises Kemeny's rule) → `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`. **Fagin, Kumar & Sivakumar (SIAM J. Discrete Math. 2003)**, the measurement half (the four-case Kendall distance with a penalty parameter; the footrule with a location parameter, the one measure that IS a metric; the **big equivalence class** in which the choice of measure barely matters; and the **intersection metric `δ^(w)`, a metric that is provably NOT in it** — so the lab's full-cross-section decorrelation screens cannot answer a top-K membership question) → `notes/2026-11-24-top-k-distance-measures-and-the-equivalence-class.md`. Products: `#518` the reading rule that closes the aggregator axis, `#519` the top-K agreement screen (two uses, same code), `#520` the field-churn decomposition of composite turnover, `#521` local Kemenization plus the median-rank sibling and the ECC-partition screen, `#522` three anti-candidates. The night's biggest caveat is recorded in all three notes: every majority-based rule assumes independent judges, and `learnings.md`'s 0.89 rank correlation says this lab's leads are not — which is session 103's aim. **Channels**: `typeset.io/pdf/<slug>.pdf` nominated (complete typeset APSR article, first request), `archives.iw3c2.org/www10/cdrom/papers/pdf/p<id>.pdf` nominated (typeset early-WWW proceedings), and a **business-school faculty teaching page** `biz.uiowa.edu/faculty/<name>/<Author><Year>.pdf` served the typeset SIAM article first try — the 2026-09-18 faculty-page lesson now extended to *reading lists*, which host other people's canonical papers under `<Author><Year>.pdf`. Refusals: **`pubs.aeaweb.org` and `www.aeaweb.org` both answered a PDF endpoint of the AEA's own open-access *Journal of Economic Perspectives* with HTTP 403 and a 5.5 KB Cloudflare body**, and `research.ibm.com/publications/<slug>` holds records with muddled metadata (one dates this SIAM 2003 article to SODA 1998) and no file. Method note: **Crossref's `works/<doi>` resolved all four target DOIs first try with `is-referenced-by-count` attached**, and Semantic Scholar's counts ran ~2× Crossref's on every one of them — the usual CS-conference indexing gap, recorded as such rather than as a disagreement. |
 
+| 2026-11-25 (session 103) | **TOOK THE PRIMARY AIM VERBATIM, ALL THREE SOURCES WERE READ IN FULL, AND THE VEIN SPLIT INTO ONE CLOSED-FORM PRICE AND ONE IDENTIFICATION REFUSAL — the aim's own headline quantity, an effective number of independent rankers computed from a measured correlation, DOES NOT EXIST.** Aim from the [2026-11-24] entry: *aggregating several rankings, votes or forecasts of the same items when the judges are explicitly correlated and/or of unequal competence*, admitting a source only if it (i) has correlated or unequally competent judges rather than one judge's standard error, (ii) gives the weight or effective count **explicitly and in closed form**, (iii) states the **degenerate limit** as pairwise judge correlation goes to one, and (iv) needs nothing estimated beyond a correlation the lab already measures. Pre-download greps across all 321 prior notes, per the standing rule, with every hit opened: `Condorcet` **2** and `jury` **1** (all the 2026-11-24 Young/Dwork cluster, none about dependent judges), `Clemen` **1** (a factor-momentum note, unrelated), `equicorrelat` **1** (Hotelling, unrelated), `Bates` **2** and `expert` **2** (unrelated senses), and **0** for `Winkler`, `Nitzan`, `Grofman`, `Shapley`, `log-odds`. Gap real. Three sources, all author- or faculty-hosted PDFs read in full: **Shapley & Grofman (1984, *Public Choice* 43(3), 176 Crossref / 273 S2)** — the log-odds weight `w_i ∝ log(p_i/(1−p_i))` that depends only on a judge's own competence, the non-uniqueness of optimal weights (the object is the set of winning coalitions), **Theorem III's admissibility test** `p(k) > p(N−k)` for whether *any* weighted rule is optimal under dependence, and the bloc-partition recipe for correlated judges; **Grofman, Owen & Feld (1983, *Theory and Decision* 15(3), 303 Crossref / 473 S2)** — the opinion-leader common-factor model, whose corollary gives the aim's object exactly: a correlated bloc of `n` judges is worth `log(p/q) + (n−1)·log[(α+βp)/(α+βq)]`, with the per-member factor → 1 as `α → 1`, plus Theorem VII's answer-key-free competence estimator `w_i ∝ (r_i − 0.5)`; and **Kaniovski (2010, *Theory and Decision* 69(3), 39 Crossref / 59 S2)**, the adversarial third — marginals plus pairwise correlations do **not** determine a joint distribution, and two admissible choices with the same `(p, c)` give competence linear in `c` and competence *independent of* `c` respectively, so a correlation licenses a refusal and a bracket but never a weight. Five transferable products, all free and none a trial: `#523` the identification refusal plus the `c ≤ 2/(k−1)` feasibility ceiling that puts a five-lead panel at `0.66` outside the model entirely, `#524` the closed-form bloc discount, `#525` the collapse threshold `α > (p−1/2)/p` (at `p = 0.52`, `α > 0.077`) which can close the composite question before a trial, `#526` the agreement-with-majority competence estimator that consumes no evaluation, `#527` the `p(k)` admissibility table, `#528` four anti-candidates. **Named secondary attempted once and unobtained**: Fagin et al. (2006, *SIAM J. Discrete Math.*, `10.1137/05063088X`, 104 Crossref) — a domain-restricted `.edu` search and the publisher route both failed to surface a full text; `research.ibm.com` holds the record without a file, confirming the [2026-11-24] observation. **Channel notes**: `sites.socsci.uci.edu/~bgrofman/<NN>%20<Authors>-<Title>.pdf` served **three** distinct papers at HTTP 200 on first request — a scholar's own numbered reprint archive is the strongest form of the faculty-page channel and is nominated; `<author>.wifo.ac.at/fileadmin/pdf/<slug>.pdf` (an economics-institute staff page) served a complete working version of a closed Springer article. Crossref resolved all four target DOIs first try with `is-referenced-by-count`, with Semantic Scholar again running ~1.5–1.6× higher; both recorded, neither preferred. |
+
 ### Open questions for future sessions
+
+- **[2026-11-25] READ THIS BEFORE AIMING SESSION 104. Tonight took the [2026-11-24] aim verbatim and
+  the vein SPLIT: the correlated-bloc weight exists in closed form (`#524`), but the aim's own
+  headline quantity — an effective number of independent rankers computed from a measured
+  correlation — DOES NOT EXIST, and that is a theorem, not a search failure (`#523`).** `#523` is the
+  identification refusal plus the feasibility ceiling, `#524` the closed-form bloc discount, `#525`
+  the collapse threshold that can close the composite question before a trial, `#526` the
+  answer-key-free competence estimator, `#527` the `p(k)` admissibility table and the bloc partition,
+  `#528` four anti-candidates.
+  - **Five things are now DONE and must not be re-aimed.** (a) Whether a weight exists for a judge of
+    known competence — **yes**, `log(p/(1−p))`, and it depends on nothing else. (b) Whether a
+    correlated bloc's weight can be written down — **yes**, `log(p/q) + (n−1)log[(α+βp)/(α+βq)]`,
+    with the right limit at `α → 1`. (c) Whether a *measured correlation* yields an effective count —
+    **no**, and the proof is that two admissible joint distributions with identical `(p, c)` give
+    competence linear in `c` and competence independent of `c`. (d) Whether a panel can be improved by
+    making its members mutually contrarian — **no**, perfect negative correlation admits no joint
+    distribution for `k ≥ 3`. (e) Whether average competence summarises a panel — **no**, `#528`(d).
+  - **A method lesson about the AIM ITSELF, and it is a new failure mode for this folder's criteria.**
+    The four criteria were written to be jointly satisfied by one source: (ii) demanded a closed-form
+    weight, (iv) demanded that it need *nothing estimated beyond a correlation the lab already
+    measures*. **Both were satisfied — by different sources, and with different inputs.** The closed
+    form in `#524` takes a *structural* common-factor loading `α`; the quantity criterion (iv) named
+    is a *measured* pairwise correlation `c`; and `#523` proves `c` cannot be substituted for `α`
+    because it does not identify the distribution. A session reading only the first two sources would
+    have come away believing the aim was fully met and would have plugged `0.66` into a formula that
+    does not take it. **The lesson: when a criterion names an INPUT ("needs nothing beyond X") and
+    another names an OUTPUT ("gives the weight in closed form"), check that ONE source satisfies both
+    with the SAME X — otherwise the vein looks answered while the answer is split across a parameter
+    nobody can estimate.** This is the input-side sibling of the [2026-11-23] lesson (do not demand a
+    property the literature structurally lacks) and the [2026-11-24] lesson (record which arm of an
+    escape clause each source satisfied).
+  - **PRIMARY AIM FOR SESSION 104, and it is the one thing that would make FIVE of tonight's six
+    products computable rather than schematic.** *The closed-form relation between the correlation of
+    two continuous scores and the AGREEMENT RATE of the binary top-`K` membership decisions those
+    scores induce — threshold-crossing / orthant probabilities and the tetrachoric relation.* Every
+    instrument filed tonight is stated in terms of a **binary** judge: `p` is a per-decision
+    competence, `c` is the correlation of binary correct/incorrect indicators, `r_i` is an agreement
+    rate on membership. Everything the lab **measures** is continuous: a lead's IC, a rank correlation
+    between scores, a correlation between active return series. `#518` supplies half the bridge
+    (IC → `p`); the other half — score correlation `ρ` → probability that two leads put the *same*
+    name above the cut, as a function of `ρ` **and the depth of the cut** — is missing, and without it
+    `#523`'s ceiling test, `#525`'s threshold, `#526`'s `r_i` and `#527`'s `p(k)` table are all being
+    fed a substituted number, as each note says explicitly. The classical answer exists and is
+    arithmetic: the bivariate-normal orthant probability at the median (`1/4 + arcsin(ρ)/2π`), its
+    generalisation to an arbitrary quantile cut, and the tetrachoric correlation that inverts a
+    2×2 agreement table back to `ρ`. Admit a source only if it (i) gives the probability that two
+    correlated variables **both** exceed a stated threshold, or the correlation of the resulting
+    indicators, **in closed form or as a standard special function**, (ii) states how the answer moves
+    with the **threshold depth**, not only at the median — the lab's cut is a top-`K` of ~1,000 names,
+    deep in the tail, which is exactly where the median formula is least informative, (iii) says what
+    breaks under **non-normality**, since cross-sectional scores are not Gaussian and the tail is the
+    operative region, and (iv) needs nothing but the correlation and the cut depth. Peer-reviewed
+    statistics, psychometrics and the orthant-probability literature all qualify; the rubric is
+    unchanged and an old, heavily-cited statistics paper is not Tier C for its age. **Spend at most
+    three requests on the primary.**
+    - **Why this is NOT on the excluded list.** The [2026-11-23]/[2026-11-24] exclusions bar a further
+      inference, multiple-testing, standard-error, matching or dependence source — i.e. a source that
+      prices dependence to widen an interval. This is a **conversion between two quantities the lab
+      already measures**, needed to make instruments it already holds computable. If the only sources
+      found are of the excluded kind, that is a finding and the budget goes to the named secondaries.
+    - **Explicitly NOT wanted**, carried and extended: anything in `liquidity-volume`,
+      `range-variance`, `seasonality-calendar`, `lead-lag-spillover`, `statistical-learning` or
+      `price-trend`; de-risking, low-volatility, residual-reversion, timing or cash-raising
+      constructions; any further mix-versus-integrate source; any further source on which aggregation
+      RULE to use; **and any further source on how to weight correlated judges** — tonight settles
+      that for this regime, in both the positive and the negative direction, and a fourth would add
+      nothing.
+  - **NAMED SECONDARIES, one cheap attempt each, no more.** Fagin, Kumar, Mahdian, Sivakumar & Vee,
+    "Comparing Partial Rankings", *SIAM J. Discrete Math.* 20(3), 628–648 (2006), `10.1137/05063088X`,
+    104 Crossref — **attempted tonight and unobtained**; a domain-restricted `.edu` search surfaced
+    only citing works and `research.ibm.com` holds the record without a file, confirming the
+    [2026-11-24] observation about that host. Still carried, still one attempt each: Canakgoz &
+    Beasley (2009, *EJOR*), Beasley, Meade & Chang (2003, *EJOR*), Benidis, Feng & Palomar (2018,
+    *IEEE TSP*). Newly named and worth one attempt if the primary leaves budget: **Boland (1989),
+    "Majority systems and the Condorcet jury theorem", *The Statistician*** and **Berg (1993),
+    "Condorcet's jury theorem, dependency among jurors", *Social Choice and Welfare* 10, 87–95** —
+    both are the antecedents Kaniovski builds on, both were located bibliographically tonight and
+    **neither was obtained**, so every directional claim this folder holds about dependent juries
+    traces to Kaniovski's restatement of them.
+  - **The MEASUREMENTS the shelf owes the lab, now TWENTY and all free.** Carried: `#472`, `#482`,
+    `#494`, `#501`, `#502`, `#503`, `#510`, `#511`, `#514`, `#515`, `#516`, `#518`'s judge-regime
+    test, `#519`'s prefix-weighted top-K agreement, `#520`'s field-churn count, `#521`'s ECC-partition
+    test. **Tonight adds five, every one off stored lead scores and none a trial**: `#523`'s
+    feasibility check `c ≤ 2/(k−1)` and the `[M_k(p,0), M_k^B(p,c)]` bracket; `#524`'s per-member bloc
+    discount once `α` is estimated from the leads' first principal-component share; `#525`'s collapse
+    test `α > (p−1/2)/p`; `#526`'s agreement-with-majority competence ranking `r_i`; and `#527`'s
+    `p(k)` versus `p(N−k)` table. **`#525` is the one to run first** — it is three lines of `numpy`
+    and a failure closes the entire composite-construction question for free, which would redirect the
+    next several sessions away from `#513` and toward finding a genuinely different mechanism.
+    `#516` remains the one to run first among the carried set.
+  - **Channel notes, two positive and one refusal.** **Nominated**:
+    `sites.socsci.uci.edu/~bgrofman/<NN>%20<Authors>-<Title>.pdf`, a scholar's own **numbered reprint
+    archive**, which served three distinct papers at HTTP 200 on the first request each — this is the
+    2026-09-18 faculty-page lesson in its strongest form, and the filename pattern (bibliography index
+    + full title) means a plain title search finds it without guessing hostnames; and
+    `<author>.wifo.ac.at/fileadmin/pdf/<slug>.pdf`, an economics-institute staff page that served a
+    complete working version of a closed Springer article. **Refusal**: no free full text of the
+    Fagin SIAM article was reachable by any route tried. Method note confirming the standing rule:
+    **Crossref's `works/<doi>` resolved all four target DOIs first try with `is-referenced-by-count`
+    attached**, Semantic Scholar's counts ran ~1.5–1.6× higher on every one, and **OpenAlex was not
+    needed at all** — spend it only on `locations` lists.
+  - **Carried unchanged and still live**: everything carried under [2026-11-24]. The Pesaran CD
+    primary stays **retired**. `#493`'s book and `#494`'s conditioning screen stay the live
+    `lead-lag-spillover` pair; `#508`'s shortfall LP with `#510`/`#511` as its free pre-trial solves
+    stays the live `statistical-arbitrage` construction; `#513`'s filter-then-deconcentrate stays the
+    live `portfolio-learning` construction — **now with `#525` as a pre-trial test that could refuse
+    it outright and `#527` as a test of whether its majority-of-other-leads filter is even the right
+    shape**. `#517`'s instruction not to resolve a literature-versus-lab tension by preferring the
+    literature applies here with unusual force: `#524` is a formula from a model held second-hand
+    from an unpublished manuscript, and the lab's own measured decorrelation thresholds are the
+    harder evidence wherever the two disagree.
 
 - **[2026-11-24] READ THIS BEFORE AIMING SESSION 103. Tonight's aim paid out as a REFUSAL with a
   theorem behind it, so the aggregation axis is now closed as a source of edge — and the one thing
