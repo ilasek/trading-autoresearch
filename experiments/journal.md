@@ -33493,3 +33493,57 @@ docstring as a discount on the attainable size.
   (train -66.0% -> -49.2%), so the operator is a real drawdown instrument on this channel even
   while it is a skill null. Churn landed inside its pre-registered 9-15x / 13-28x ranges.
 
+## 2026-11-26T00:25:00+00:00 — rv_retvol_shock_displaced — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_retvol_shock_displaced.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: Displacing the 5/45 close-to-close return shock's median-jump exclusion from the 50-row scoring window to the 50 rows immediately before it -- a rate-matched (50.1% vs 50.1% of scorable names kept), persistence-matched (phi -0.010 vs -0.014), churn-matched (12.1x vs 12.2x predicted) and ETF-matched (14.2% vs 14.5%) control that keeps substantially different names (top-100 Jaccard 0.436) -- recovers at most +0.05 of GROSS validation skill over the unfiltered arm, i.e. far less than the in-window arm, reproducing on a third data channel the purity-over-characteristic split the volume channel gave at 76/24 and the range channel at 100/0; a reading at or above the in-window arm's would instead say this channel's whole term is a jump-stability characteristic and that the three channels are not one mechanism.
+- Verdict: GATE_FAIL — train skill -0.081 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.077 <= the random-selection null's 90% quantile 0.217 (median 0.157; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.44, ann_ret +8.0%, maxDD -45.0%, turnover 9.0x, skill vs pool -0.08
+- Validation: sharpe +0.08, ann_ret +1.7%, maxDD -41.9%, turnover 16.4x, skill vs pool -0.26
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.26, 90% CI [-0.43, -0.07]; at 2x costs -0.44; with a 30% delisting haircut -0.26; train -0.08 (1997-2008 +0.01, 2009-2017 -0.27)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 9% percentile of 200 random-selection replicas (median +0.16, 90% +0.22); equal-weight eligible pool +0.34, information ratio vs it -0.78
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE TRIPLE IS COMPLETE AND THE FILTER IS INERT ON THE RETURN CHANNEL IN BOTH
+  POSITIONS — and the pre-registered prediction for THIS arm was correct.** GROSS skill = net
+  skill + the skill-minus-2x-cost bill, the same arithmetic the other two channels used:
+
+        arm                   val sharpe  net skill  bill   GROSS   null med  null pctile  maxDD tr/val
+        bare (#44)              +0.092     -0.245   0.159  -0.086    +0.112      36%      -66.0/-47.1
+        in-window (#45)         +0.063     -0.274   0.197  -0.077    +0.123      19%      -49.2/-39.3
+        displaced (#46)         +0.077     -0.259   0.178  -0.081    +0.157       9%      -45.0/-41.9
+
+        in-window - bare      +0.009      (registered +0.08..+0.14  -> REFUTED)
+        displaced - bare      +0.005      (registered +0.00..+0.05  -> inside, CORRECT)
+        in-window - displaced +0.004      (registered |.| < 0.035   -> inside, CORRECT)
+
+  The ETF-matched contrast (14.5% vs 14.2%, the only one clean of the type tilt) is **+0.004**.
+  So the median-jump exclusion does nothing at all on the close-to-close return channel, in
+  either position, and the A2-vs-A1 near-zero was not an artefact of the ETF confound. **The
+  purity rule is CLOSED as channel-specific, by the refusal written before the runs.** The
+  three-channel statement, which is the night's headline and is a NECESSARY CONDITION the two
+  positive channels satisfy and this one does not: **baseline purity pays only where the scored
+  quantity is PERSISTENT IN LEVEL.** Share volume and the intraday log range are persistent
+  levels, so a jump inside the 45-day baseline corrupts the baseline; `|r|` has no level
+  persistence (phi -0.014), so `max |d|r||` over the window is just the largest absolute return
+  in it and the operator degenerates from baseline-cleaning to event-exclusion.
+- Lesson (second — **what the filter DOES buy on this channel, and it is the characteristic, not
+  the position**): both filtered arms cut the drawdown hard and by the same amount — train
+  -66.0% -> -49.2% / -45.0%, validation -47.1% -> -39.3% / -41.9% — and the bare arm is the only
+  one of the three to breach the -45% validation drawdown gate. A position-independent effect is
+  by construction a CHARACTERISTIC effect: jumpy names crash, wherever you look for the jump.
+  **So on a non-persistent channel the median-jump filter is a pure risk instrument with zero
+  skill content**, which is the cleanest separation of the two readings in the three-channel
+  series and sits exactly where the record's 'the whole risk axis is worth nothing under this
+  protocol' entry (2026-10-17/18) predicts: the drawdown improves and the skill does not.
+- Lesson (third — **the 2026-11-25 F4 null-percentile calibration gets its resolution limit, and
+  it is large**): across these three books GROSS skill is flat within **0.009** while the null
+  percentile falls **36% -> 19% -> 9%**, strictly tracking the null MEDIAN (+0.112 -> +0.123 ->
+  +0.157), which each book's own replicas set from its own schedule and mix. F4's six points
+  spanned 0.22 of gross and were monotone; tonight's three span 0.009 and are anti-monotone. So
+  F4 stands as a coarse calibration and acquires a stated **resolution limit of roughly 0.02-0.05
+  in gross skill**, below which the percentile is driven by the replica benchmark rather than by
+  the candidate. **Operational consequence: the null percentile is a within-book test and NOT a
+  cross-book ranking statistic — rank with gross skill and report the percentile as a gate, which
+  is a rider on every cross-book percentile comparison in this record, #32's 99% included.**
+  Churn landed inside its registered 9-15x / 13-28x ranges (9.0x / 16.4x), matching the
+  in-window arm to 0.1x as the free screen predicted.
+
