@@ -9235,7 +9235,9 @@ across experiments; prune entries that later evidence contradicts.
   that), and a new EXCLUSION can be. Check the active-return rho of the construction, not of the
   score.**
 
-- **[Measured 2026-11-25, nightly — A NEW SCORE CLASS, PRICED AND NULL ON ITS OWN] THE 5/45
+- **[Measured 2026-11-25, nightly — A NEW SCORE CLASS, PRICED AND NULL ON ITS OWN; the purity rule
+  this score hosted was CLOSED as channel-specific on 2026-11-26 — it needs a scored quantity that
+  is persistent in LEVEL, and both qualifying channels are now exhausted] THE 5/45
   LOG-RANGE SHOCK IS THE CLEANEST AND BEST-COVERED SCORE THIS LAB HAS AND IT CARRIES NOTHING BARE.**
   Mean `log(high/low)` over the last 5 printing days minus the median over the preceding 45, taken
   only on days with a volume print (high/low are forward-filled on the same 10-day cap as the close,
@@ -9250,8 +9252,11 @@ across experiments; prune entries that later evidence contradicts.
   score's value is as the second panel on which the purity rule was replicated. **Anti-candidate
   travelling with this entry: the bare 5/45 log-range shock as a traded sort, at any K or band.**
 
-- **[Measured 2026-11-25, nightly] THE RANDOM-SELECTION NULL'S PERCENTILE IS MONOTONE IN GROSS
-  SKILL, WHICH IS THE FIRST READABLE EXCHANGE RATE FOR THE GATE THAT REFUSED 22 OF THE FIRST 24
+- **[Measured 2026-11-25, nightly — RESOLUTION LIMIT ADDED 2026-11-26: monotone only COARSELY; the
+  percentile is near-exactly a monotone transform of the SELECTION term (spearman +0.991 over 46
+  trials), ranks gross skill at +0.946 and NET skill at only +0.788, and three books whose gross is
+  flat within 0.009 ran 36%/19%/9%. See the 2026-11-26 entry before quoting this.] THE
+  RANDOM-SELECTION NULL'S PERCENTILE IS MONOTONE IN GROSS SKILL, WHICH IS THE FIRST READABLE EXCHANGE RATE FOR THE GATE THAT REFUSED 22 OF THE FIRST 24
   CANDIDATES.** Across the six matched books above: gross +0.211 -> 99%, +0.119 -> 95%, +0.101 ->
   97%, +0.066 -> 95%, +0.010 -> 79%, -0.009 -> 58%. Six points, two panels, one construction family
   (K = 100, band, peer x type quota, monthly), so it is a calibration to re-measure and not a
