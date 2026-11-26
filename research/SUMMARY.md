@@ -11089,6 +11089,76 @@ weight that exists is held second-hand from an unpublished manuscript and needs 
 parameter rather than a measured one. The transferable products are all screens and refusals — which
 is what `#513`'s composite actually needed, and none of them costs a trial.
 
+### The BRIDGE from a score correlation to a top-K AGREEMENT RATE — the median-only arcsine identity, the general threshold map and its unique inverse, what the CUT itself costs in signal, and the tail theorem that makes a Gaussian panel's deep-cut agreement vanish (`portfolio-learning`, the gate's own objective, the panel itself)
+
+Covered 2026-11-26 (session 104), taking the [2026-11-25] primary aim verbatim. Three sources, all
+read in full. The aim's object — the closed-form relation between the correlation of two continuous
+scores and the agreement rate of the binary top-`K` membership decisions those scores induce —
+**exists, and the aim's own guess about it was right in both directions**: the elementary arcsine
+form holds **only at a median cut**, and the lab's cut is deep enough that the difference matters.
+
+**The map, in both directions.** The correlation of two top-`q` membership indicators is
+`φ = [Φ₂(z_q, z_q; ρ) − q²] / (q(1−q))` for equal cuts, and the general unequal-cut form replaces
+`z_q` by each judge's own threshold (Wong & Ben Chaouch 2026, eq. 8, Tier C; the same expression is
+the classical tetrachoric relation, attributed there to Emrich & Piedmonte 1991 and Qaqish 2003,
+neither obtained). At `q = 1/2` it collapses to `φ = 2·arcsin(ρ)/π`, which is the identity
+MacCallum–Zhang–Preacher–Rucker (2002, *Psychological Methods*, Tier A, 2,765 Crossref) quote from
+Lord & Novick (1968) — and which is the same statement as the median orthant probability
+`1/4 + arcsin(ρ)/2π`. The two independent sources agree to four decimals under numerical check,
+which is what licenses using the Tier-C preprint for the general case at all. The map is **strictly
+increasing** (its derivative is the bivariate normal density over a positive constant), so a
+measured agreement rate pins down a **unique** latent score correlation by a one-dimensional
+root-find; there is no closed-form inverse.
+
+**The numbers the lab needs, and they are not the identity.** Two leads whose scores correlate at
+**0.89** — the lab's own measured figure — share **67%** of a top-decile selection and their
+membership flags correlate **0.637**; at **0.66** they share **44%** (`φ = 0.372`). Both overlap and
+`φ` fall monotonically as the cut deepens (at `ρ = 0.89`, overlap runs 0.849 / 0.737 / 0.674 /
+0.620 / 0.561 for `q` = 0.5 / 0.2 / 0.1 / 0.05 / 0.02). **So substituting a measured score
+correlation for a binary agreement rate overstates agreement**, by 5–22 points at a decile cut, and
+every instrument on this shelf that takes a binary input (`#519`, `#523`, `#525`, `#526`, `#527`)
+has been fed an over-stated dependence — conservative for a refusal, wrong for an admission.
+
+**A second, separate price: the cut itself.** MacCallum et al.'s Equation 3 gives the attenuation a
+dichotomization applies to a correlation with anything else, `d = h/√(p(1−p))` with `h` the normal
+density at the cut: **0.798 at the median, 0.585 at a top-decile cut, 0.473 at top-5%, 0.346 at
+top-2%**, squared when both variables are cut. Read against this lab's constructions, **a
+top-decile membership flag carries 59% of the correlation its underlying score had with the forward
+return** — which is what `#513`'s selection step pays, and which must be bought back in turnover,
+robustness or de-concentration. The paper's own recommendation is not a better conversion but not
+cutting ("retain information about individual differences"), and it reports (reviewing Maxwell &
+Delaney) that cutting *two correlated* predictors manufactures spurious main effects when one has a
+near-zero partial association — i.e. do not build a 2×2 double sort on two correlated leads and read
+a main effect off it.
+
+**What breaks it, and the tension that must not be smoothed over.** MacCallum et al. report Cohen's
+(1983) position that non-normality alters these consequences "only marginally". Embrechts, McNeil &
+Straumann (2002, Cambridge chapter / 1998 ETH working paper, Tier A, 951 Crossref) prove that in the
+**deep tail** the Gaussian case is not approximately anything: the coefficient of upper tail
+dependence of a Gaussian copula is **zero for every `ρ < 1`** — *"regardless of how high a
+correlation we choose, if we go far enough into the tail, extreme events appear to occur
+independently in each margin"* — while a Student-t copula is asymptotically **dependent even at zero
+or negative correlation** (their table: `ν = 4` gives `λ` = 0.08 at `ρ = 0`, 0.25 at 0.5, 0.63 at
+0.9). Both statements are right about their own regime: Cohen is describing a median-ish split,
+where the bulk does the work, and the limit result is about the tail. The lab's cut is in between, so
+**neither can be quoted as covering it**, and the folder now holds the two endpoints and **not the
+rate between them** — the sub-asymptotic Ledford–Tawn / Coles–Heffernan–Tawn literature was located
+bibliographically tonight and not obtained. The same source supplies two general statements that
+reinforce `#523` from the continuous side: marginals plus a correlation do **not** determine a joint
+law outside the elliptical world (and *do* inside it — joint normality is exactly what buys the
+identification Kaniovski's binary-margin theorem denies), and the attainable correlation range
+itself depends on the marginals, so "low correlation" is not "near independence".
+
+**Where this leaves the vein.** The bridge the last two sessions were missing is closed, with a
+model attached: every conversion on this shelf is a **Gaussian-copula instrument**, and whether it
+understates or overstates the lab's deep-cut agreement is decided by one free diagnostic — the
+agreement-versus-depth ladder (`#531`), which also decides the sign of the whole composite question.
+Together with the two-stage feasibility/representability test (`#532`), which can show that the five
+leads' agreement structure has **no** latent-Gaussian representation at all, the composite vein now
+has everything it can get from literature. **What it does not have is a measurement**; twenty-five
+free ones are owed, and the next session should not add a seventh consecutive methodology source to
+the pile.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -21011,6 +21081,122 @@ hypothesis fodder, then anti-candidates.
     → `notes/2026-11-25-optimal-weights-for-judges-of-unequal-competence.md`,
     `notes/2026-11-25-what-a-pairwise-correlation-does-not-pin-down.md`
 
+529. **FREE CONVERSION TABLE, AND IT CLOSES THE GAP EVERY BINARY-INPUT INSTRUMENT ON THIS SHELF HAS
+    BEEN PAPERING OVER: a score correlation is NOT a top-K agreement rate, and the exact map is
+    `φ = [Φ₂(z_q, z_q; ρ) − q²] / (q(1−q))`.** For equal cuts at tail fraction `q`; the general form
+    takes each judge's own threshold, so leads selecting different numbers of names are handled. At
+    `q = 1/2` it collapses to `φ = 2·arcsin(ρ)/π` (checked numerically against an independent Tier-A
+    statement of that identity, agreement to four decimals). The map is strictly increasing — its
+    derivative is the bivariate normal density over a positive constant — so a measured agreement
+    rate pins down a **unique** score correlation by a monotone root-find, with no closed-form
+    inverse. **The table, for the lab's own measured figures** (`φ` / overlap, where overlap is
+    `P(both selected | one selected)`): at `ρ = 0.89`, `q = 0.1` → **0.637 / 0.674**; at `ρ = 0.66`,
+    `q = 0.1` → **0.372 / 0.435**; and overlap at `ρ = 0.89` runs 0.849 / 0.737 / 0.674 / 0.620 /
+    0.561 across `q` = 0.5 / 0.2 / 0.1 / 0.05 / 0.02. **Use it to re-read `#519`, `#523`, `#525`,
+    `#526` and `#527`, every one of which was being fed an over-stated dependence**, and never quote
+    an agreement number without the cut depth attached. Tier A on the median identity, Tier C on the
+    general form (an arXiv preprint restating a classical result, used only because its algebra is
+    self-checking); overlap **false**.
+    → `notes/2026-11-26-the-threshold-map-between-score-correlation-and-membership-agreement.md`,
+    `notes/2026-11-26-what-a-top-k-cut-costs-the-dichotomization-attenuation.md`
+
+530. **FREE, AND IT PUTS A PRICE ON THE SELECTION STEP `#513` IS BUILT ON: dichotomizing a score
+    attenuates its correlation with the forward return by `d = h/√(p(1−p))` — 0.798 at the median,
+    0.585 at a top-decile cut, 0.473 at top-5%, 0.346 at top-2%.** `h` is the normal density at the
+    cut; the factor applies once per variable cut and squares when both are. Read it as: **a
+    top-decile membership flag carries 59% of the correlation its underlying score had with the
+    target, and a top-20-of-a-thousand book carries ~27%.** Two consequences. (a) `#513`'s
+    filter-then-deconcentrate must buy back that loss in turnover, robustness or de-concentration
+    terms, and the arithmetic says cut **shallowly**: `d` falls slowly from the median to the top 30%
+    (0.798 → 0.759) and steeply thereafter. (b) **A free diagnostic that is also a test of the
+    normal-theory model**: for each lead, compute the IC of the continuous score and the IC of its own
+    top-`K` indicator on the same dates, and compare the ratio with `d`. Above `d` ⇒ the score's
+    information lives in its tail and the cut is cheaper than the table says; below ⇒ its content is
+    in the middle of the cross-section and selecting is worse than the table says. Either answer is a
+    fact about this panel the lab does not have. Limit: `d` is a *linear* attenuation under bivariate
+    normality, so a rank IC will not attenuate by exactly `d`, and a convex score→return relation
+    would overturn the conclusion — which the cut itself would hide. Tier A, overlap **false**.
+    → `notes/2026-11-26-what-a-top-k-cut-costs-the-dichotomization-attenuation.md`
+
+531. **FREE, AND IT IS THE ONE MEASUREMENT THAT DECIDES THE SIGN OF THE WHOLE COMPOSITE QUESTION:
+    the AGREEMENT-VERSUS-DEPTH LADDER. Count each lead pair's actual top-K overlap at `q` = 0.5,
+    0.2, 0.1, 0.05, 0.02 and see whether it keeps falling or flattens.** A Gaussian dependence
+    structure has **zero** coefficient of upper tail dependence for every `ρ < 1` — "regardless of
+    how high a correlation we choose, if we go far enough into the tail, extreme events appear to
+    occur independently in each margin" — whereas a heavy-tailed (t) dependence structure is
+    asymptotically dependent **even at zero or negative correlation** (`λ` = 0.08 at `ρ = 0`, `ν = 4`).
+    So: **a ladder that keeps falling toward zero is the Gaussian signature**, `#529`'s table is the
+    right reading instrument, and a deep cut *manufactures* diversification the 0.89 correlation does
+    not show — a top-`K` composite over leads is then a better bet than that figure suggests. **A
+    ladder that flattens at a strictly positive level is tail dependence**: the leads agree on exactly
+    the names a book holds, every normal-theory conversion understates it by the level of the plateau,
+    and `#525`'s collapse condition is nearer to binding than the measured `α` implies. Compare the
+    counted overlap with `#529`'s prediction at the same `ρ` and `q` to read the direction directly.
+    Convert ranks through `Φ⁻¹` first, use each date's own `q`, read the ladder rather than its last
+    rung (the deepest cuts have the fewest names), and remember `λ` is a limit no finite `K` reaches.
+    Tier A, overlap **false**.
+    → `notes/2026-11-26-correlation-is-not-the-dependence-and-the-tail-where-it-vanishes.md`
+
+532. **FREE TWO-STAGE PRE-TRIAL TEST THAT CAN INVALIDATE EVERY NORMAL-THEORY INSTRUMENT ON THIS
+    SHELF AT ONCE: check the leads' measured pairwise overlaps against the Bernoulli feasibility
+    bounds, then invert each to a latent correlation and test the assembled matrix for positive
+    semidefiniteness.** Stage 1: for marginals `p_i`, `p_j` the attainable indicator correlation is
+    `[max(0, p_i+p_j−1) − p_i p_j] / √(p_i(1−p_i)p_j(1−p_j))` to
+    `[min(p_i,p_j) − p_i p_j] / √(·)`; at equal cuts `q ≤ 1/2` this is `[−q/(1−q), 1]`, so **negative
+    agreement is capped by the depth of the cut** (`φ ≥ −0.111` at `q = 0.1`, `≥ −0.053` at `q =
+    0.05`) while positive agreement is not. Stage 2: root-find each `r*_ij` through `#529`'s map and
+    test `[r*_ij]` for PSD. **If it is not PSD, no joint Gaussian latent vector reproduces those
+    pairwise agreements, so the five leads' agreement structure has no latent-Gaussian representation
+    at all** — and any repair "must change at least one latent pair, and therefore changes at least
+    one induced Bernoulli correlation as well." That outcome means `#529`, `#531`'s prediction arm and
+    every other Gaussian-copula conversion are being applied outside their model, and the composite
+    question must be settled by direct measurement instead. The stages test different things: stage 1
+    is Bernoulli feasibility (does *any* joint law exist), stage 2 is Gaussian-threshold
+    representability. **Run this before `#525`.** Tier C on the source, but both stages are
+    elementary; overlap **false**.
+    → `notes/2026-11-26-the-threshold-map-between-score-correlation-and-membership-agreement.md`
+
+533. **READING RULE, FREE, AND IT RECONCILES TONIGHT'S UNIQUENESS RESULT WITH `#523`'s REFUSAL
+    RATHER THAN LETTING A LATER SESSION PICK ONE: every conversion between a correlation and an
+    agreement rate on this shelf is a GAUSSIAN-COPULA instrument, and joint normality is exactly
+    what buys the identification Kaniovski's theorem denies.** `#523` proves that binary marginals
+    plus pairwise correlations do not determine a joint distribution, so a measured `c` cannot yield
+    a weight. Tonight's map is uniquely invertible. There is no contradiction: the difference is the
+    *added assumption* that the latent scores are jointly normal, and that assumption is
+    unverifiable from an agreement table alone. **Procedure: convert under normality, report the
+    Kaniovski bracket as well, and if the two disagree about a decision, the decision is not
+    supported.** Label every such conversion as model-dependent when quoting it — it is a fact about
+    a model the lab has not tested, not a fact about the lab's scores. The same source supplies the
+    continuous-margin sibling of `#523` (marginals plus a correlation do not pin down a joint law
+    outside the elliptical world, and the attainable correlation range itself depends on the
+    marginals, so a near-zero correlation can be the *maximum* dependence available for a pair) and
+    one practical corollary: **use a rank measure, not Pearson, wherever a correlation feeds a
+    dependence conclusion**, since rank measures are copula-invariant and Pearson is not. Tier A,
+    overlap **false**.
+    → `notes/2026-11-26-correlation-is-not-the-dependence-and-the-tail-where-it-vanishes.md`,
+    `notes/2026-11-25-what-a-pairwise-correlation-does-not-pin-down.md`
+
+534. **ANTI-CANDIDATES FROM TONIGHT'S VEIN, FOUR, AND THE SECOND IS A HABIT THIS LAB ALREADY HAS.**
+    (a) **"These two signals are uncorrelated, so combining them diversifies" is not an available
+    argument** — a near-zero correlation is consistent with strong structured dependence and can even
+    be the pair's attainable maximum, and the dependence that matters for a *selection* construction
+    lives in the tail, where a correlation does not look. A sharper form of `#517`'s warning.
+    (b) **Do not cut two correlated leads and read a main effect off the 2×2.** Dichotomizing two
+    correlated predictors produces spurious main effects precisely when one predictor's partial
+    association with the target is near zero, and spurious interactions when the true effects are
+    nonlinear; these are estimation bias, "not attributable to sampling error". With leads at 0.89
+    rank correlation this is the lab's exact configuration — use the continuous composite and keep the
+    scores. (c) **A deliberately contrarian panel is refused a second time, on new grounds**: beyond
+    `#528`(c)'s no-joint-distribution argument for `k ≥ 3`, the feasibility bound in `#532` forbids it
+    at `k = 2` as well, because two top-decile selections of the same thousand names cannot be more
+    than 11% anti-correlated. (d) **Do not read `λ = 0` as "a Gaussian panel's leads are independent
+    where it counts"** and build on it: `λ` is a limit no finite top-`K` attains, and the finite-`K`
+    rate at which a Gaussian pair's agreement decays toward it is **not** in this folder — only the
+    two endpoints are. Tier A across the cluster, overlap **false**.
+    → `notes/2026-11-26-what-a-top-k-cut-costs-the-dichotomization-attenuation.md`,
+    `notes/2026-11-26-correlation-is-not-the-dependence-and-the-tail-where-it-vanishes.md`,
+    `notes/2026-11-26-the-threshold-map-between-score-correlation-and-membership-agreement.md`
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -21127,8 +21313,97 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-24 (session 102) | **TOOK THE PRIMARY AIM VERBATIM, THE NAMED GAP WAS REAL, ALL THREE SOURCES ARE TIER A AND WERE READ IN FULL — AND THE PAYOUT IS A REFUSAL WITH A THEOREM BEHIND IT: the lab's own mean-of-ranks composite is ALREADY the maximum-likelihood aggregator for the question it is used to answer.** Aim from the [2026-11-23] entry: *the literature on aggregating several rankings of the same items into one ranking or one selected subset*, admitting a source only if it (i) is about combining several complete or partial rankings of the same items, (ii) says when a positional scoring rule is and is not the right aggregator and names a concrete alternative with the distinguishing property, (iii) states how it handles ties and truncated/partial rankings or says it does not, and (iv) is rank arithmetic with nothing estimated. Pre-aim greps confirmed the gap across all 318 notes: zero for `Borda` in the positional sense, `Kemeny`, `Condorcet`, `Copeland`, `rank aggregation`. Three sources: **Dwork, Kumar, Naor & Sivakumar (WWW10 2001)**, the canonical algorithms-and-complexity paper (Kemeny optimal = geometric median of the inputs and NP-hard at `k = 4`; footrule as a polynomial 2-approximation via minimum-cost bipartite matching; scaled footrule for partial lists; **the impossibility that no rule assigning weights to positions and sorting by a function of them can be Condorcet**; the extended Condorcet criterion; **local Kemenization**, `O(k n log n)`, prefix-consistent, the night's one cheap construction) → `notes/2026-11-24-rank-aggregation-positional-versus-pairwise.md`. **Young (APSR 1988)**, the probability model and the axiomatics (MLE of the *ranking* is Kemeny for any `p > 1/2`; **MLE of the single best item as `p → 1/2` is the BORDA winner**, "then Borda's rule is definitely optimal"; maximin as `p → 1`; **local stability**, which Borda fails by an exact reversal in a worked example and which Young & Levenglick 1978 — second-hand — show characterises Kemeny's rule) → `notes/2026-11-24-when-a-positional-rule-is-the-right-aggregator.md`. **Fagin, Kumar & Sivakumar (SIAM J. Discrete Math. 2003)**, the measurement half (the four-case Kendall distance with a penalty parameter; the footrule with a location parameter, the one measure that IS a metric; the **big equivalence class** in which the choice of measure barely matters; and the **intersection metric `δ^(w)`, a metric that is provably NOT in it** — so the lab's full-cross-section decorrelation screens cannot answer a top-K membership question) → `notes/2026-11-24-top-k-distance-measures-and-the-equivalence-class.md`. Products: `#518` the reading rule that closes the aggregator axis, `#519` the top-K agreement screen (two uses, same code), `#520` the field-churn decomposition of composite turnover, `#521` local Kemenization plus the median-rank sibling and the ECC-partition screen, `#522` three anti-candidates. The night's biggest caveat is recorded in all three notes: every majority-based rule assumes independent judges, and `learnings.md`'s 0.89 rank correlation says this lab's leads are not — which is session 103's aim. **Channels**: `typeset.io/pdf/<slug>.pdf` nominated (complete typeset APSR article, first request), `archives.iw3c2.org/www10/cdrom/papers/pdf/p<id>.pdf` nominated (typeset early-WWW proceedings), and a **business-school faculty teaching page** `biz.uiowa.edu/faculty/<name>/<Author><Year>.pdf` served the typeset SIAM article first try — the 2026-09-18 faculty-page lesson now extended to *reading lists*, which host other people's canonical papers under `<Author><Year>.pdf`. Refusals: **`pubs.aeaweb.org` and `www.aeaweb.org` both answered a PDF endpoint of the AEA's own open-access *Journal of Economic Perspectives* with HTTP 403 and a 5.5 KB Cloudflare body**, and `research.ibm.com/publications/<slug>` holds records with muddled metadata (one dates this SIAM 2003 article to SODA 1998) and no file. Method note: **Crossref's `works/<doi>` resolved all four target DOIs first try with `is-referenced-by-count` attached**, and Semantic Scholar's counts ran ~2× Crossref's on every one of them — the usual CS-conference indexing gap, recorded as such rather than as a disagreement. |
 
 | 2026-11-25 (session 103) | **TOOK THE PRIMARY AIM VERBATIM, ALL THREE SOURCES WERE READ IN FULL, AND THE VEIN SPLIT INTO ONE CLOSED-FORM PRICE AND ONE IDENTIFICATION REFUSAL — the aim's own headline quantity, an effective number of independent rankers computed from a measured correlation, DOES NOT EXIST.** Aim from the [2026-11-24] entry: *aggregating several rankings, votes or forecasts of the same items when the judges are explicitly correlated and/or of unequal competence*, admitting a source only if it (i) has correlated or unequally competent judges rather than one judge's standard error, (ii) gives the weight or effective count **explicitly and in closed form**, (iii) states the **degenerate limit** as pairwise judge correlation goes to one, and (iv) needs nothing estimated beyond a correlation the lab already measures. Pre-download greps across all 321 prior notes, per the standing rule, with every hit opened: `Condorcet` **2** and `jury` **1** (all the 2026-11-24 Young/Dwork cluster, none about dependent judges), `Clemen` **1** (a factor-momentum note, unrelated), `equicorrelat` **1** (Hotelling, unrelated), `Bates` **2** and `expert` **2** (unrelated senses), and **0** for `Winkler`, `Nitzan`, `Grofman`, `Shapley`, `log-odds`. Gap real. Three sources, all author- or faculty-hosted PDFs read in full: **Shapley & Grofman (1984, *Public Choice* 43(3), 176 Crossref / 273 S2)** — the log-odds weight `w_i ∝ log(p_i/(1−p_i))` that depends only on a judge's own competence, the non-uniqueness of optimal weights (the object is the set of winning coalitions), **Theorem III's admissibility test** `p(k) > p(N−k)` for whether *any* weighted rule is optimal under dependence, and the bloc-partition recipe for correlated judges; **Grofman, Owen & Feld (1983, *Theory and Decision* 15(3), 303 Crossref / 473 S2)** — the opinion-leader common-factor model, whose corollary gives the aim's object exactly: a correlated bloc of `n` judges is worth `log(p/q) + (n−1)·log[(α+βp)/(α+βq)]`, with the per-member factor → 1 as `α → 1`, plus Theorem VII's answer-key-free competence estimator `w_i ∝ (r_i − 0.5)`; and **Kaniovski (2010, *Theory and Decision* 69(3), 39 Crossref / 59 S2)**, the adversarial third — marginals plus pairwise correlations do **not** determine a joint distribution, and two admissible choices with the same `(p, c)` give competence linear in `c` and competence *independent of* `c` respectively, so a correlation licenses a refusal and a bracket but never a weight. Five transferable products, all free and none a trial: `#523` the identification refusal plus the `c ≤ 2/(k−1)` feasibility ceiling that puts a five-lead panel at `0.66` outside the model entirely, `#524` the closed-form bloc discount, `#525` the collapse threshold `α > (p−1/2)/p` (at `p = 0.52`, `α > 0.077`) which can close the composite question before a trial, `#526` the agreement-with-majority competence estimator that consumes no evaluation, `#527` the `p(k)` admissibility table, `#528` four anti-candidates. **Named secondary attempted once and unobtained**: Fagin et al. (2006, *SIAM J. Discrete Math.*, `10.1137/05063088X`, 104 Crossref) — a domain-restricted `.edu` search and the publisher route both failed to surface a full text; `research.ibm.com` holds the record without a file, confirming the [2026-11-24] observation. **Channel notes**: `sites.socsci.uci.edu/~bgrofman/<NN>%20<Authors>-<Title>.pdf` served **three** distinct papers at HTTP 200 on first request — a scholar's own numbered reprint archive is the strongest form of the faculty-page channel and is nominated; `<author>.wifo.ac.at/fileadmin/pdf/<slug>.pdf` (an economics-institute staff page) served a complete working version of a closed Springer article. Crossref resolved all four target DOIs first try with `is-referenced-by-count`, with Semantic Scholar again running ~1.5–1.6× higher; both recorded, neither preferred. |
+| 2026-11-26 (session 104) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT IN FULL: the bridge between a score correlation and a top-K agreement rate EXISTS, the aim's suspicion about it was right in both directions, and the night's by-product is a PRICE on the selection step `#513` is built on.** Aim from the [2026-11-25] entry: the closed-form relation between the correlation of two continuous scores and the agreement rate of the binary top-`K` membership decisions they induce, admitted only if a source (i) gives the probability that two correlated variables both exceed a stated threshold, or the correlation of the resulting indicators, in closed form or as a standard special function, (ii) states how the answer moves with **threshold depth**, not only at the median, (iii) says what breaks under **non-normality**, and (iv) needs nothing but the correlation and the cut depth; at most three requests on the primary. **The mandated pre-download grep ran first, over all 324 prior notes, and the gap was total on the target vocabulary**: `tetrachoric` **0**, `polychoric` **0**, `quadrant probab` **0**, `Greiner` **0**, `exceedance correlation` **0**, `tail dependence` **0**, `concordance probab` **0**, `point-biserial` **0**; and **every** nonzero hit was opened per the standing rule and resolved to an unrelated sense — `orthant` **1** (a multivariate-normal integration remark in the `meff` note), `threshold crossing` **1** (index membership), `Sheppard` **1** (Patton–Sheppard on QLIKE), `bivariate normal` **2** (Sharpe-difference i.i.d. assumption; a propensity-score simulation), `arcsin` **1** (the 2026-11-24 *pairwise-concordance* arcsine, a different object with the same functional form). **Twelve document requests across six hosts, three obtained, all three read in full.** All four criteria discharged. **(i) and (ii)**: the indicator correlation is `φ = [Φ₂(z_q,z_q;ρ) − q²]/(q(1−q))`, collapsing to `φ = 2·arcsin(ρ)/π` **only** at a median cut, strictly increasing in `ρ` and therefore uniquely invertible by root-find; and the published statement that "as the point of dichotomization moves away from the mean, the relationship between the phi coefficient and tetrachoric correlation becomes much more complex, and the difference between the two coefficients becomes greater". The lab's own figures convert to **0.637 / 0.674** (`φ` / overlap) at `ρ = 0.89`, `q = 0.1` and **0.372 / 0.435** at `ρ = 0.66`, so **the five binary-input instruments filed on 2026-11-24/25 were all being fed an over-stated dependence** (`#529`). **(iii)**: a Gaussian copula has coefficient of upper tail dependence **zero** for every `ρ < 1` while a t-copula is asymptotically dependent even at zero correlation — so the deep-tail answer is not a perturbation of the normal one, and the folder now holds the two endpoints and **not the rate between them** (`#531`, with the honest hole recorded in `#534`(d)). **One tension recorded rather than smoothed over**: MacCallum et al. report Cohen's "non-normality alters this only marginally", which is true of a median-ish split and false of the limit; neither statement covers the lab's cut and `#531` is the free measurement that settles which end it is nearer. **The unasked-for product is the better one**: the dichotomization attenuation `d = h/√(p(1−p))` prices the *cut itself* at 0.585 of the score's correlation with the target at a top-decile cut and 0.346 at top-2% (`#530`), which is what `#513`'s selection step pays. Products `#529`–`#534`: four free screens or measurements, one reading rule that reconciles tonight's uniqueness result with `#523`'s refusal (joint normality is what buys the identification), four anti-candidates. **Named secondaries NOT attempted** — the primary consumed the document budget against four dark channels; Fagin (2006), Canakgoz–Beasley, Beasley–Meade–Chang, Benidis, Boland (1989) and Berg (1993) all stay carried. **Access: four channels went dark in one session, three of them new.** `math.wsu.edu/faculty/genz/` is **gone** (403 without a user-agent, a 60 KB WordPress 404 with one — the department site no longer serves the faculty directory, and the canonical author-hosted source for bivariate-normal computation is lost); **`projecteuclid.org` is Incapsula-challenged** on both its `/download/pdf_1/euclid.<series>/<id>` and `/journalArticle/Download?urlId=` forms, returning **HTTP 200 with a ~1 KB `_Incapsula_Resource` body** — which matters out of proportion to one host because Euclid is the standard open route to pre-1970 *Annals of Mathematical Statistics*, i.e. to the classical orthant-probability literature; `royalsocietypublishing.org/doi/pdf/` **403s** a 1900 *Phil. Trans. A* paper with a 5.7 KB body. **Nominated**: `people.math.ethz.ch/~embrecht/ftp/<slug>.pdf` (a senior author's flat FTP directory, first request) and `psychology.psy.sunysb.edu/attachment/measures/content/<author>_on_<topic>.pdf` — a university department's own *teaching-materials* archive serving a typeset APA article with its copyright header intact, which extends the 2026-11-24 faculty-reading-list lesson to department-level archives with *topic*-derived filenames. **Method note worth copying**: when four named classical channels are dark, a keyword query against the **arXiv API over https** (`export.arxiv.org/api/query?search_query=all:tetrachoric`) found a modern restatement whose algebra is self-checking, and the self-check — reproducing the independently-sourced median identity to four decimals — is what made a Tier-C preprint usable for the general case. Crossref resolved both target DOIs first try with `is-referenced-by-count`; Semantic Scholar ran 1.3× higher on the one checked; OpenAlex was not needed. **No lab measurement was taken and the holdout was not read.** | MacCallum, Zhang, Preacher & Rucker 2002 (`2026-11-26-what-a-top-k-cut-costs-the-dichotomization-attenuation.md`, Tier A, *Psychological Methods* 7(1), `10.1037/1082-989X.7.1.19`, **2,765** Crossref / 3,580 S2, read in full from a department teaching archive); Wong & Ben Chaouch 2026 (`2026-11-26-the-threshold-map-between-score-correlation-and-membership-agreement.md`, Tier C, arXiv 2607.16801v1, 0 citations, read in full, used only for the self-checking algebra); Embrechts, McNeil & Straumann 2002 (`2026-11-26-correlation-is-not-the-dependence-and-the-tail-where-it-vanishes.md`, Tier A, Cambridge chapter `10.1017/CBO9780511615337.008`, **951** Crossref, 1998 ETH working-paper version read in full) |
 
 ### Open questions for future sessions
+
+- **[2026-11-26] READ THIS BEFORE AIMING SESSION 105. Tonight took the [2026-11-25] aim verbatim and
+  it paid out in full — the score-correlation → top-K-agreement bridge EXISTS, is uniquely
+  invertible, and the conversion is NOT the identity — so the composite vein has now received
+  everything literature can give it. What it has not received is a MEASUREMENT, and there are
+  twenty-five owed.** `#529` is the conversion table, `#530` the price of the cut itself, `#531` the
+  agreement-versus-depth ladder that decides the sign of the composite question, `#532` the
+  two-stage feasibility/representability test, `#533` the reading rule reconciling tonight's
+  uniqueness result with `#523`'s refusal, `#534` four anti-candidates.
+  - **Four things are now DONE and must not be re-aimed.** (a) Whether the binary↔continuous bridge
+    exists — **yes**, `φ = [Φ₂(z_q,z_q;ρ) − q²]/(q(1−q))`, with `2·arcsin(ρ)/π` as its median special
+    case. (b) Whether a measured agreement rate identifies a score correlation — **yes under joint
+    normality**, uniquely, by monotone root-find, and that assumption is precisely what `#523` says
+    cannot be had from the agreement table alone. (c) How the answer moves with cut depth —
+    **monotonically down, in both `φ` and the overlap**, with the table in `#529`. (d) What breaks
+    under non-normality — **the Gaussian deep-tail limit is zero and the heavy-tailed one is not**,
+    so the tail is a different regime rather than a perturbation.
+  - **One hole is left OPEN and it is named here so a later session does not mistake it for
+    covered**: the folder holds the median point and the asymptotic limit, and **not the rate between
+    them**. The sub-asymptotic literature — Ledford & Tawn (1996, *Biometrika* 83(1), 169–187,
+    `10.1093/biomet/83.1.169`, the coefficient of tail dependence `η`), Coles, Heffernan & Tawn (1999,
+    *Extremes* 2, 339–365, the `χ`/`χ̄` pair) and Heffernan (2000, *Extremes* 3, 279–290, the directory
+    of coefficients) — was located bibliographically tonight and **not obtained**; Biometrika and
+    Springer *Extremes* were not attempted for want of budget, and `lancaster.ac.uk/~jonathan/` is
+    nominated as the one channel worth trying (it surfaced in a search as a flat PDF directory and
+    was not fetched). **This is a SECONDARY, not the primary**: `#529`'s numerical table already
+    stands in for the rate at the depths the lab uses, so the marginal value is a tighter instrument
+    for an instrument, which is exactly the trap below.
+  - **PRIMARY AIM FOR SESSION 105 — and it is a deliberate break, because six consecutive sessions
+    (99–104) have ended in free diagnostics rather than a book, and the 2026-09-17 escalation lesson
+    says that is the failure mode this folder falls into.** Aim at **a mechanism or construction that
+    ends in a PORTFOLIO**, and apply the 2026-11-22 audit (`#507`) as the gate: *a mechanism aim must
+    justify why its object is not already one of the thirty-five filed-or-refused named objects, and
+    the audit's own conclusion is that the remaining room is in `program.md`'s **construction**
+    clauses, not its signal clauses.* Admit a source only if it (i) ends in a weight vector or a
+    selection rule — not in a screen, a standard error, a conversion or a reading rule, (ii) is
+    computable from daily OHLCV on large-cap national-index members with no fundamentals and no
+    intraday data, (iii) states or makes derivable the **turnover** its construction implies, because
+    v3 charges drift and per-name costs of 15–40 bps plus statutory taxes, and (iv) reports a
+    **long-only, long-leg-only** level rather than only a long–short spread. **Spend at most three
+    requests.** If no admissible source is found, **report that as the finding** — a seventh
+    methodology session is worse than an empty one, and `#507`'s audit plus tonight's closure means
+    an empty result is now genuinely informative.
+    - **Explicitly NOT wanted**, carried and extended: any further source on aggregating rankings,
+      weighting correlated or unequally competent judges, mix-versus-integrate, or converting between
+      dependence measures — tonight closes that axis in both directions and a fourth session on it
+      would add nothing; any further inference, multiple-testing, standard-error, matching or
+      dependence-robustness source; de-risking, low-volatility, residual-reversion, timing or
+      cash-raising constructions; and anything whose own literature localises its effect to small,
+      thinly traded or retail-held names, which this panel excludes **by construction**.
+  - **A method lesson about SOURCE TIER, and it is new for this folder.** The general form of
+    tonight's map came from a **Tier-C arXiv preprint by independent researchers with zero
+    citations**, and it was used anyway — because its central object is an *identity* whose median
+    special case an independent Tier-A source states, and the two agreed to four decimals under a
+    numerical check run here. **The rule that generalises: for an analytic claim, a self-check
+    against an independently-sourced special case can substitute for venue and citations; for an
+    empirical claim, nothing can.** The converse discipline was applied in the same note — the
+    preprint's own contribution (its linear-programming feasibility machinery) is unreplicated and is
+    **not** used, and its unread classical antecedents (Emrich & Piedmonte 1991, *The American
+    Statistician* 45(4); Qaqish 2003; Prentice 1988; Chaganty & Joe 2006) are recorded as
+    attributions rather than as sources. A session wanting a Tier-A citation for the general map
+    should chase Emrich & Piedmonte.
+  - **The MEASUREMENTS the shelf owes the lab, now TWENTY-FIVE and all free.** Carried: `#472`,
+    `#482`, `#494`, `#501`, `#502`, `#503`, `#510`, `#511`, `#514`, `#515`, `#516`, `#518`'s
+    judge-regime test, `#519`'s prefix-weighted top-K agreement, `#520`'s field-churn count, `#521`'s
+    ECC-partition test, `#523`'s feasibility ceiling and bracket, `#524`'s bloc discount, `#525`'s
+    collapse test, `#526`'s agreement-with-majority ranking, `#527`'s `p(k)` table. **Tonight adds
+    five, every one off stored lead scores and none a trial**: `#529`'s conversion of the lab's own
+    rank correlations to top-`K` agreement at the book's own cut; `#530`'s score-IC versus
+    indicator-IC ratio against `d`; `#531`'s agreement-versus-depth ladder; `#532`'s Bernoulli-bounds
+    and PSD stages; and the direct comparison of counted overlap against `#529`'s prediction.
+    **`#531` is now the one to run first** — it costs one pass over stored scores, it decides whether
+    every Gaussian-copula instrument on this shelf understates or overstates the lab's agreement, and
+    its two outcomes point the composite question in opposite directions. `#532` is the one to run
+    second, because a non-PSD outcome invalidates the instruments rather than informing them, and
+    `#525` should now be run **after** `#529`'s conversion rather than on a raw rank correlation.
+  - **Carried unchanged and still live**: everything carried under [2026-11-25], with one amendment.
+    The Pesaran CD primary stays **retired**. `#493`'s book and `#494`'s conditioning screen stay the
+    live `lead-lag-spillover` pair; `#508`'s shortfall LP with `#510`/`#511` as its free pre-trial
+    solves stays the live `statistical-arbitrage` construction; `#513`'s filter-then-deconcentrate
+    stays the live `portfolio-learning` construction — **now with `#530` pricing its selection step
+    at 0.585 of the score's correlation at a decile cut, which is a cost it must be shown to buy
+    back.** The amendment: `#523`'s instruction that a correlation licenses "a refusal and a bracket
+    but never a weight" stands for *binary* judges, and `#533` states the exact extra assumption
+    under which it is escapable, so the two should always be quoted together. `#517`'s instruction
+    not to resolve a literature-versus-lab tension by preferring the literature applies to tonight's
+    whole table: **it is a Gaussian-copula model, not a measurement of this panel**, and `#531` is how
+    the lab finds out which it should have believed.
 
 - **[2026-11-25] READ THIS BEFORE AIMING SESSION 104. Tonight took the [2026-11-24] aim verbatim and
   the vein SPLIT: the correlated-bloc weight exists in closed form (`#524`), but the aim's own

@@ -34017,3 +34017,5 @@ bare on the range channel).
 **Verdicts:** GATE_FAIL `rv_retvol_shock_band`; GATE_FAIL `rv_retvol_shock_pure`; GATE_FAIL
 `rv_retvol_shock_displaced`; GATE_FAIL `lv_volume_shock_median_guard`; GATE_FAIL
 `pt_lowvol_gk_typequota`; GATE_FAIL `pl_third_fast_2leg`.
+
+## Research session — 2026-11-26 (learning agent): 3 notes added, see research/SUMMARY.md
