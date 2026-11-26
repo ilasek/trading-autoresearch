@@ -33654,3 +33654,69 @@ docstring as a discount on the attainable size.
   2026-11-24/25 cost rule showing up in the churn predictor itself. The bill is still trivial
   (0.018 of Sharpe), so nothing in the reading depends on it.
 
+
+## Correction — 2026-11-26 (nightly), ZERO trials spent: my own lesson lines on trials #46 and #48 overstated the case, and the board-wide version is sharper
+
+Two of tonight's lesson lines claimed the random-selection null's percentile "is a within-book
+test and NOT a cross-book ranking statistic". That was inferred from three books and is **too
+strong**. Checked free on all **46** recorded v3 trials with a stored null (no trial spent, only
+`trials.jsonl` and stored returns read):
+
+    the null percentile, ranked against ...        pearson   spearman
+      the SELECTION term (cand - own null median)   +0.944     +0.991
+      GROSS skill (net + the 2x-cost bill)          +0.901     +0.946
+      NET skill over the pool                       +0.754     +0.788
+      the null MEDIAN alone                         -0.190     -0.190
+
+**The correct statement: the percentile is very nearly a monotone transform of the SELECTION
+term, and selection is not skill.** The identity is `skill = selection + geography`, with
+`geography = null median - pool`; board-wide `sd(selection) = 0.109` against
+`sd(geography) = 0.076`, and the two correlate only -0.229, so geography is an independent
+half-sized term and that is the whole reason the percentile ranks skill at +0.788 rather than
+at +0.99. The null median itself ranges **+0.100 to +0.424** across the board against a pool of
++0.337.
+
+**What survives of the two lessons, with the arithmetic that makes it precise.** Tonight's five
+books, decomposed:
+
+    book                          cand    null med  selection  geography  skill   pctile
+    rv_retvol_shock_band (#44)   +0.092    +0.112     -0.020     -0.225   -0.245   36%
+    rv_retvol_shock_pure (#45)   +0.063    +0.123     -0.060     -0.214   -0.274   19%
+    rv_retvol_shock_displaced(#46)+0.077   +0.157     -0.080     -0.180   -0.259    9%
+    lv_volume_shock_median (#47) +0.361    +0.226     +0.135     -0.111   +0.024   99%
+    pt_lowvol_gk_typequota (#48) +0.301    +0.215     +0.086     -0.122   -0.036   94%
+
+ 1. **The #46 lesson's target was F4's monotonicity in GROSS skill, and that part stands.** The
+    return triple's gross skills are flat within 0.009 while its selection terms fall 0.060, so
+    the percentile tracked selection faithfully and GROSS was the misleading statistic — the
+    in-window filter raised the book's own null median (+0.112 -> +0.123 -> +0.157) more than it
+    raised the book's Sharpe. F4's six points spanned 0.22 of gross and were monotone; the
+    resolution limit of roughly 0.02-0.05 in gross stands as written. **What was wrong was the
+    generalisation to "not a cross-book ranking statistic": it ranks selection almost exactly
+    and gross skill well.**
+ 2. **The #48 lesson's mechanism is confirmed and is mechanical, not conjectural.** Selection is
+    `cand - own null median`, so a construction change that LOWERS a book's own replica
+    benchmark raises its percentile with the book unchanged. `#1 -> #48` is that instance: null
+    median +0.286 -> +0.215 with the candidate's Sharpe flat at +0.30, selection +0.018 ->
+    +0.086, percentile 63.5% -> 94%, skill flat at -0.036. **A book can therefore clear the null
+    gate while losing to the pool, and #48 is the first object in the record to do it.** The
+    required selection term for positive skill is exactly `-geography`; #48 needed +0.122 and
+    produced +0.086.
+
+**Operational rule, replacing both lesson lines where they conflict with this entry.** The null
+gate is a sound test of *selection against a matched benchmark* and is not a test of skill over
+the pool; the two can and did disagree in sign. Quote a percentile only beside the book's own
+geography term. Rank books with skill and its interval (`scripts/rank_trials.py`), never with
+percentiles.
+
+**Breadth, from active returns over the 1,562 validation days (pool subtracted — total-return
+correlations on this board are all above +0.95 and say nothing).** None of tonight's five is a
+new bet: `lv_volume_shock_median_guard` ~ `#32` at **+0.877** (which is what a replication should
+look like), `pt_lowvol_gk_typequota` ~ `#1` at **+0.939**, and the three return-channel arms sit
+at **+0.829 / +0.699 / +0.723** against their range-channel twins. `distinct_mechanisms` stays
+at **6**. **And that last number is the sharpest thing in this entry:** the bare return shock and
+the bare range shock are nearly the same bet (+0.829) yet their gross skills are -0.086 and
++0.010 and the identical in-window filter adds +0.009 to one and +0.109 to the other. **Two
+near-identical return streams respond completely differently to the same construction operator,
+which is as direct as this panel can be about the operator rather than the signal being the
+object of study.**
