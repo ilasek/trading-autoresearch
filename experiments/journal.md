@@ -33413,3 +33413,32 @@ docstring as a discount on the attainable size.
 `rv_range_shock_pure`; GATE_FAIL `rv_range_shock_displaced`.
 
 ## Research session — 2026-11-25 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-11-26T00:16:42+00:00 — rv_retvol_shock_band — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_retvol_shock_band.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: Holding the 100 eligible names with the HIGHEST close-to-close return shock -- mean |log return| over the last 5 printing days minus the median over the preceding 45, taken only where both days of the return printed a volume, quota-allocated across (trailing-trading-calendar peer group x instrument type) cells, monthly with a 200-name retention band -- earns GROSS validation skill within noise of zero and a null percentile below 85%, i.e. it is a NULL bare, because the Merton-recognition / Barber-Odean attention channel was already measured null as a bare sort on the intraday-range channel and the close-to-close channel adds no new mechanism; this arm exists as the unfiltered control against which the in-window and displaced baseline-purity filters are differenced on a third data channel.
+- Verdict: GATE_FAIL — train skill -0.129 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation drawdown -0.4715 worse than -0.45; validation sharpe 0.092 <= the random-selection null's 90% quantile 0.183 (median 0.112; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.39, ann_ret +8.4%, maxDD -66.0%, turnover 10.8x, skill vs pool -0.13
+- Validation: sharpe +0.09, ann_ret +1.6%, maxDD -47.1%, turnover 18.3x, skill vs pool -0.24
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.24, 90% CI [-0.41, -0.09]; at 2x costs -0.40; with a 30% delisting haircut -0.24; train -0.13 (1997-2008 -0.06, 2009-2017 -0.30)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 36% percentile of 200 random-selection replicas (median +0.11, 90% +0.18); equal-weight eligible pool +0.34, information ratio vs it -0.47
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **The bare 5/45 close-to-close return shock is not a null — it is NEGATIVE, and that
+  extends the record's own null-percentile calibration downward.** GROSS skill (net + the
+  skill-minus-2x-cost bill, 0.159) is **-0.086** at the **36th** percentile of its region- and
+  type-matched null, against a pre-registration of gross in [-0.03, +0.05] at the 50-85th
+  percentile: **my registered range missed low** and is recorded as missed. Added to the
+  2026-11-25 monotone series (gross +0.211 -> 99%, +0.119 -> 95%, +0.101 -> 97%, +0.066 -> 95%,
+  +0.010 -> 79%, -0.009 -> 58%) the new point **-0.086 -> 36%** keeps the monotonicity over a
+  seventh book and a third channel, and is the first negative-gross reading in the series.
+  **Three gates failed, which is itself the finding about the channel:** train skill -0.129, the
+  validation drawdown **-47.1%** against a -45% bar (the first object in this three-channel
+  series to breach it — `|r|` selects the panel's crash names, where the intraday range did not,
+  at train maxDD -66.0%), and the null gate at the 36th percentile. The sub-period split is
+  -0.06 / -0.30, so the deterioration is in the 2009-2017 half where the non-US indices join.
+  Turnover came in at train **10.8x** / validation **18.3x** against the predictor's 14.1x and a
+  pre-registered train range of 11-17x: **the validation figure landed inside its range and the
+  train figure 0.2x below the bottom of its**, the first miss of the 2026-11-22 churn predictor
+  in eleven pre-registrations, and the validation/train multiplier of **1.69x** replicates the
+  1.65x/1.70x the two other pure fast books gave. Its purpose is served either way: it is the
+  unfiltered control the purity term is differenced against.
+
