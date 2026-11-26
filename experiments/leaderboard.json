@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T00:36:30+00:00",
+  "generated_at": "2026-11-26T00:45:09+00:00",
   "protocol_version": 3,
   "champion": null,
   "families": {
@@ -30,30 +30,30 @@
       "mechanism": 1
     },
     "portfolio-learning": {
-      "name": "pl_ownscore_deconcentrate_3leg",
-      "candidate": "strategies/candidates/pl_ownscore_deconcentrate_3leg.py",
+      "name": "pl_third_fast_2leg",
+      "candidate": "strategies/candidates/pl_third_fast_2leg.py",
       "track": "scout",
       "verdict": "GATE_FAIL",
-      "ts": "2026-11-24T00:23:12+00:00",
-      "n_trials": 5,
+      "ts": "2026-11-26T00:42:23+00:00",
+      "n_trials": 6,
       "rho_to_champion": null,
       "validation": {
-        "sharpe": 0.401,
-        "ann_return": 0.0707,
-        "max_drawdown": -0.3421,
-        "ann_turnover": 11.79,
-        "avg_positions": 219.75,
-        "skill": 0.064,
-        "skill_cost2x": -0.071,
-        "skill_delist30": 0.064
+        "sharpe": 0.406,
+        "ann_return": 0.073,
+        "max_drawdown": -0.3643,
+        "ann_turnover": 11.69,
+        "avg_positions": 161.98,
+        "skill": 0.069,
+        "skill_cost2x": -0.061,
+        "skill_delist30": 0.069
       },
-      "train_sharpe": 0.383,
+      "train_sharpe": 0.396,
       "skill_ci90": [
-        -0.118,
-        0.218
+        -0.123,
+        0.242
       ],
-      "train_skill": -0.14,
-      "mechanism": 3
+      "train_skill": -0.128,
+      "mechanism": 1
     },
     "statistical-learning": {
       "name": "sl_micro_span_masked",
@@ -79,7 +79,7 @@
         0.199
       ],
       "train_skill": -0.057,
-      "mechanism": 5
+      "mechanism": 4
     },
     "liquidity-volume": {
       "name": "lv_volume_shock_gkm_band",
@@ -105,7 +105,7 @@
         0.159
       ],
       "train_skill": -0.124,
-      "mechanism": 3
+      "mechanism": 1
     },
     "range-variance": {
       "name": "rv_clv_momneutral_overlap6",
@@ -157,7 +157,7 @@
         0.18
       ],
       "train_skill": 0.025,
-      "mechanism": 4
+      "mechanism": 3
     },
     "statistical-arbitrage": {
       "name": "sa_resid_rev63_band",
@@ -209,9 +209,9 @@
         -0.185
       ],
       "train_skill": 0.008,
-      "mechanism": 6
+      "mechanism": 5
     }
   },
-  "distinct_mechanisms": 6,
+  "distinct_mechanisms": 5,
   "mechanism_rho": 0.5
 }

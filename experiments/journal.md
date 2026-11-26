@@ -33720,3 +33720,54 @@ the bare range shock are nearly the same bet (+0.829) yet their gross skills are
 near-identical return streams respond completely differently to the same construction operator,
 which is as direct as this panel can be about the operator rather than the signal being the
 object of study.**
+## 2026-11-26T00:42:23+00:00 — pl_third_fast_2leg — **GATE_FAIL**
+- Candidate: `strategies/candidates/pl_third_fast_2leg.py` (family: portfolio-learning, track: scout, trial #0)
+- Hypothesis: Giving the fast leg one third of a TWO-leg mix rather than one half -- the 90 eligible names deepest on the board lead's long-horizon reversal score at 2/3 of the book and the 90 deepest on the split-guarded 5/45 volume shock at 1/3, quota-allocated across (trailing-trading-calendar peer group x instrument type) cells, equal-weighted within each leg, monthly, every other node byte-identical to pl_fastslow_2leg -- earns validation skill above both the 1/2-fast two-leg book's +0.061 and the 1/3-fast THREE-leg book's +0.064, because 2026-11-25 measured marginal gross per unit of cost bill at 1.9 below a third and 0.83 above it and this is the one cell that separates that ALLOCATION reading from the alternative that three legs simply dilute a fast leg's churn better than two; a reading at or below both instead attributes the apparent optimum to the leg count, and all three cells within 0.02 says the surface is flat and the marginal ratio was noise in the bill.
+- Verdict: GATE_FAIL — train skill -0.128 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.40, ann_ret +7.9%, maxDD -55.0%, turnover 4.6x, skill vs pool -0.13
+- Validation: sharpe +0.41, ann_ret +7.3%, maxDD -36.4%, turnover 11.7x, skill vs pool +0.07
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.07, 90% CI [-0.12, +0.24]; at 2x costs -0.06; with a 30% delisting haircut +0.07; train -0.13 (1997-2008 -0.08, 2009-2017 -0.21)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 100% percentile of 200 random-selection replicas (median +0.27, 90% +0.34); equal-weight eligible pool +0.34, information ratio vs it +0.24
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE LEG COUNT IS INERT AND THE ALLOCATION CARRIES EVERYTHING — but the whole
+  effect is 0.008 of skill, so the outcome is the FLAT-SURFACE reading I named as the third
+  possibility, not the interior optimum I named as the first.** The grid is now complete:
+
+        book                      legs  fast  net skill  bill   GROSS   pctile  churn tr/val
+        #36 rev+mom+lowvol          3     0     -0.003   0.059  +0.056   100%        --
+        #35 rev+mom+vshock          3    1/3    +0.064   0.135  +0.199   100%   5.3 / 13.6
+        #39 rev+vshock              2    1/2    +0.061   0.153  +0.214   100%   5.3 / 13.6
+        #49 rev+vshock (THIS FILE)  2    1/3    +0.069   0.130  +0.199   100%   4.6 / 11.7
+
+  **Two clean one-node reads, which is what this cell was built for.**
+  (a) **ALLOCATION, at a fixed leg set (#39 -> #49, 1/2 -> 1/3 fast):** gross -0.015, bill
+  -0.023, net **+0.008**. Marginal gross per unit of bill on this margin is **0.65**, against
+  the 0.83 that 2026-11-25's F5 estimated for the same margin ACROSS two different leg sets.
+  **So F5's marginal ratio is confirmed within one leg set for the first time**, and it is below
+  1, which is the whole content of 'there is an interior optimum at or below a third'.
+  (b) **LEG COUNT, at a fixed fast share (#35 -> #49, three legs -> two):** gross **0.000**,
+  bill -0.005, net +0.005. **Dropping the measured-null momentum leg changed the gross skill by
+  nothing at all.** So mechanism (b) — 'three legs dilute a fast leg's churn better than two' —
+  is **REFUTED**, and the 2026-11-25 reading that a null leg is 'cheap ballast' is sharpened:
+  at a fixed fast share it is not even ballast, it is free. The fast share is the only variable
+  that moves this construction.
+- Lesson (second, and it is the honest headline): **all three mixes sit within 0.008 of each
+  other in net skill against skill intervals about +-0.18 wide, so the allocation surface
+  between a third and a half is FLAT and F5's 1.9-versus-0.83 marginal ratio was reading
+  mostly the bill.** That was pre-registered as the most likely of the three outcomes and it
+  is the one that happened; the directional call (above both recorded cells) also landed, at
+  +0.069 against +0.061 and +0.064, but +0.008 is not a result and is not reported as one.
+  **The axis is closed by the pre-committed refusal: no third allocation is tried.** What the
+  cell does buy is cheapness — the lowest bill (0.130) and the lowest churn (4.6x / 11.7x) of
+  the three mixes — and `portfolio-learning`'s new family best at +0.069, which displaces
+  `pl_ownscore_deconcentrate_3leg`'s +0.064 by a margin the data cannot see.
+- Lesson (third, minor confirmations): every quantitative pre-registration landed inside its
+  range — bill 0.10-0.14 -> **0.130**, gross +0.15..+0.21 -> **+0.199**, net +0.05..+0.10 ->
+  **+0.069**, churn train 4-8x / val 9-18x -> **4.6x / 11.7x**, percentile 100% -> **100%**,
+  train skill negative -> **-0.128** and the single gate it failed. The validation/train churn
+  multiplier is **2.54x**, a fourth instance of 2026-11-25's rule that a fast leg MIXED with
+  slow ones amplifies the multiplier above 2x (#35 2.51x, #39 2.58x, #34 2.51x) while a pure
+  fast book sits in the ordinary 1.30-2.00x band — and note the fast share fell from 1/2 to 1/3
+  here without the multiplier falling, so the amplification is about the PRESENCE of the slow
+  leg in the denominator rather than about the mix's weights.
+
