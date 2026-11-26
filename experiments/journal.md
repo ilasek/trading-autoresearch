@@ -33547,3 +33547,55 @@ docstring as a discount on the attainable size.
   Churn landed inside its registered 9-15x / 13-28x ranges (9.0x / 16.4x), matching the
   in-window arm to 0.1x as the free screen predicted.
 
+## 2026-11-26T00:31:34+00:00 — lv_volume_shock_median_guard — **GATE_FAIL**
+- Candidate: `strategies/candidates/lv_volume_shock_median_guard.py` (family: liquidity-volume, track: scout, trial #0)
+- Hypothesis: Replacing the fixed log(3) threshold in the board's only null-gate-clearing object with the cross-sectional MEDIAN of the same in-window maximum |log volume change| -- a parameter-free restatement that keeps 50.1% of scorable names against log(3)'s 44.8%, carries the same 4% ETF share, scores all 252 train month-ends against 215, and yet shares only 69% of its holdings because a fixed cut of a time-varying distribution is not a cut of its rank -- reproduces that object's GROSS validation skill of +0.211 to within noise (+0.15 to +0.25) and its null percentile of 95-99%, because the term belongs to the baseline-purity OPERATOR and not to the particular number; a reading near the unguarded arm's +0.066 instead makes the board's one positive result a property of one tuned threshold.
+- Verdict: GATE_FAIL — train skill -0.1 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.42, ann_ret +8.6%, maxDD -52.8%, turnover 9.6x, skill vs pool -0.10
+- Validation: sharpe +0.36, ann_ret +6.7%, maxDD -35.5%, turnover 16.8x, skill vs pool +0.02
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.02, 90% CI [-0.13, +0.15]; at 2x costs -0.16; with a 30% delisting haircut +0.02; train -0.10 (1997-2008 -0.03, 2009-2017 -0.25)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 99% percentile of 200 random-selection replicas (median +0.23, 90% +0.30); equal-weight eligible pool +0.34, information ratio vs it +0.15
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE BOARD'S ONLY POSITIVE RESULT REPLICATES WITH ITS ONLY TUNED NUMBER REMOVED —
+  the first replication of anything in this lab's v3 record, and every one of the five
+  pre-registered predictions landed.** Same book, one node changed (the fixed log(3) cut becomes
+  the cross-sectional median of the identical in-window max |d log volume|):
+
+        book                          val sharpe  net skill  bill   GROSS   null med  pctile  gates failed
+        #32 lv_volume_shock_gkm_band    +0.368     +0.031   0.180  +0.211    +0.23      99%        1
+        #47 THIS FILE, median guard     +0.360     +0.024   0.181  +0.205    +0.23      99%        1
+
+  Gross skill differs by **0.006** and the bill by **0.001**, with **31% of the holdings
+  different** (top-100 Jaccard 0.687, measured free before the run) and the threshold's only
+  free parameter deleted. The benchmark decomposition is identical too: pool +0.34, null median
+  +0.23, so geography **-0.11** and selection **+0.13** against #32's -0.11 / +0.14. Registered
+  gross +0.15..+0.25 -> **+0.205**; registered percentile 95-99% -> **99%**; registered net
+  +0.00..+0.06 -> **+0.024**; registered churn train 7-12x / val 11-22x -> **9.6x / 16.8x**;
+  registered 'train skill stays negative so this gate-fails whatever happens' -> **-0.100, the
+  single gate it failed.** It passed the null gate and the drawdown gate (val maxDD -35.5%).
+  **So the term belongs to the OPERATOR, not to log(3), and the lab now has two independent
+  constructions of its one non-null selection.** This is the second object in 46 recorded v3
+  trials to clear the region- and type-matched null, and the first to do it with no tuned
+  number anywhere in it.
+- Lesson (second — **a free correction to what the record has been calling a split guard**):
+  measured over 252 train month-ends on the eligible panel, **log(3) = 1.099 sits at the 44.8th
+  percentile of the cross-sectional distribution of the in-window maximum |d log volume|**, and
+  the median cut keeps 50.1%. So the two rules agree on the threshold's LOCATION to 5 percentage
+  points while disagreeing about a third of the book — a fixed cut of a time-varying
+  distribution is not a cut of its rank. Combined with the 2026-11-25 finding that log(3)
+  **cannot** catch the split it was written for (a 2:1 split, the modal split, steps log volume
+  by log(2) = 0.693), the whole corporate-action story is now closed: **#32's guard was always a
+  cross-sectional median selection wearing a corporate-action label, and tonight's file is that
+  rule stated honestly.** The fixed cut also leaves 37 of 252 train month-ends unscorable (215
+  against 252) because early thin months have too few survivors to fill a quota; the rank cut
+  scores all of them, which is a second reason to prefer it.
+- Lesson (third — **what this does NOT buy, stated so the result is not over-read**): net skill
+  is **+0.024 with a 90% CI of [-0.131, +0.153]**, i.e. indistinguishable from zero, train skill
+  is -0.100, and skill at 2x liquidity costs is **-0.157** — so **86-88% of the gross is the
+  book's own cost bill** and the 2026-11-22 arithmetic still applies: a 1-4 week premium cannot
+  be held longer without diluting proportionally, so there is no cheaper construction of this
+  object. `research/#506`'s rider also stands: the source localises the high-volume premium
+  toward smaller names and this panel is nine countries' large caps, so ~+0.21 gross is an upper
+  bound on what any book here could have collected. **The replication is of a selection effect,
+  not of a tradeable edge.**
+
