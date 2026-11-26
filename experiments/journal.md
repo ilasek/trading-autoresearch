@@ -33599,3 +33599,58 @@ docstring as a discount on the attainable size.
   bound on what any book here could have collected. **The replication is of a selection effect,
   not of a tradeable edge.**
 
+## 2026-11-26T00:35:36+00:00 — pt_lowvol_gk_typequota — **GATE_FAIL**
+- Candidate: `strategies/candidates/pt_lowvol_gk_typequota.py` (family: price-trend, track: scout, trial #0)
+- Hypothesis: Allotting pt_lowvol_gk_quarterly's 100 slots across INSTRUMENT TYPE cells in proportion to each type's share of the scorable set -- the one node that takes its ETF share from 24.7%, the highest in the record, to 6.8% against the panel's own 5.5%, while leaving the Garman-Klass estimator, the 252-day window, the quarterly grid, K and the equal weighting byte-identical and the turnover within 2 percentage points of replacement per quarter -- moves that book's SELECTION term (its Sharpe minus its own null median) by 0 to +0.08, because `random_null_v3` matches type but matches nothing inside the ETF type, so a book holding a quarter of its weight in the quietest funds on the panel is compared against replicas drawn as random equity ETFs; and the book nevertheless still loses, with validation skill negative and a null percentile below the 90% gate, so that none of the six measurements behind 'Sharpe is flat in beta on this panel' is withdrawn and only their magnitude carries the rider.
+- Verdict: GATE_FAIL — train skill -0.059 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.46, ann_ret +7.7%, maxDD -40.6%, turnover 1.3x, skill vs pool -0.06
+- Validation: sharpe +0.30, ann_ret +4.8%, maxDD -27.2%, turnover 1.6x, skill vs pool -0.04
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.04, 90% CI [-0.36, +0.28]; at 2x costs -0.05; with a 30% delisting haircut -0.04; train -0.06 (1997-2008 -0.11, 2009-2017 +0.02)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 94% percentile of 200 random-selection replicas (median +0.21, 90% +0.29); equal-weight eligible pool +0.34, information ratio vs it -0.19
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE ETF RIDER IS DISCHARGED, AND IT SPLITS: CONFIRMED IN THE SELECTION TERM AT
+  +0.068 — LARGER THAN THE ONE RECORDED INSTANCE — AND REFUTED AS A ROUTE TO SKILL, BECAUSE THE
+  GAIN IS ENTIRELY IN THE BENCHMARK.** One node changed (no quota -> instrument-type quota),
+  ETF share 24.7% -> 6.8%, 29% of the book displaced, turnover 1.32x -> 1.60x:
+
+        book                         cand sharpe  null med  pool   selection  geography  skill   pctile
+        #1  pt_lowvol_gk_quarterly     +0.304      +0.286   +0.337   +0.018     -0.051  -0.033   63.5%
+        #48 pt_lowvol_gk_typequota     +0.301      +0.215   +0.337   +0.086     -0.122  -0.036   94.0%
+        (2026-11-22's one instance: #30 -> #31 moved selection +0.056)
+
+  **The candidate's own Sharpe did not move (-0.003) and its skill did not move (-0.003), while
+  selection and geography moved +0.068 and -0.071 — equal and opposite to within 0.003.** The
+  mechanism is exact and it is about the replicas, not the book: matching the asset class means
+  the replicas hold ~7% random (mostly equity) ETFs instead of ~25%, which drops the replica
+  benchmark 0.286 -> 0.215; the quiet stocks that replaced the quiet funds in the BOOK happened
+  to earn the same Sharpe over validation. **Transferable rule: an instrument-type quota buys
+  BENCHMARK ALIGNMENT, measured here at +0.07 of selection term, and buys ZERO skill. Read it as
+  a correction to the fairness of a comparison, never as an improvement to a book.** So `#1`'s
+  -0.03 is NOT an ETF artefact, the rider carried on four consecutive handovers is discharged
+  with a NO, and none of the six measurements behind 'Sharpe is flat in beta on this panel' is
+  withdrawn — their magnitude is confirmed rather than merely un-withdrawn.
+- Lesson (second — **and it is the night's most consequential methodological finding; MY OWN
+  PRE-REGISTRATION WAS WRONG ABOUT IT**): I registered that this book 'still loses, with
+  validation skill negative AND a null percentile below the 90% gate'. The skill half is right
+  (-0.036). **The percentile half is WRONG: it cleared the gate at 94%.** So this is the THIRD
+  object in 47 recorded v3 trials to clear the region- and type-matched null — after #32 and
+  tonight's #47 — and **the first to clear it with NEGATIVE skill over the pool, and the only
+  `price-trend` object ever to clear it.** The consequence is general and it is a rider on every
+  null-clearance claim in this record: **the null gate compares a book to ITS OWN replicas, so a
+  book can be made to clear it by lowering its own replica benchmark — type-matching its holdings
+  is exactly such a move — with no change whatever to the book or to its skill.** Clearing the
+  null gate is therefore NOT evidence of skill over the pool; the two statistics disagreed in
+  sign here. Tonight's return-channel triple found the same thing from the other direction: gross
+  skill flat within 0.009 while the percentile ran 36% -> 19% -> 9% on the null median alone.
+  **Two independent demonstrations in one session that the percentile is a within-book test.**
+  The record's framing of the null gate as 'the gate that refused 22 of 24' should be read as a
+  statement about those 24 constructions, not as a bar that measures selection skill.
+- Lesson (third, minor): turnover came in at train 1.3x / validation 1.6x against a registered
+  0.3-0.9x / 0.4-1.3x — **both above their ranges**, because the type quota forces the book to
+  reach deeper into the stock cross-section where the volatility ordering is less persistent
+  (the free screen's 12.5% -> 14.3% replacement per quarter understated it). Second churn
+  pre-registration miss tonight, both in the same direction, and both on books where a
+  construction node changed WHAT the book holds rather than how often it trades — which is the
+  2026-11-24/25 cost rule showing up in the churn predictor itself. The bill is still trivial
+  (0.018 of Sharpe), so nothing in the reading depends on it.
+
