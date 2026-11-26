@@ -33442,3 +33442,54 @@ docstring as a discount on the attainable size.
   1.65x/1.70x the two other pure fast books gave. Its purpose is served either way: it is the
   unfiltered control the purity term is differenced against.
 
+## 2026-11-26T00:20:26+00:00 — rv_retvol_shock_pure — **GATE_FAIL**
+- Candidate: `strategies/candidates/rv_retvol_shock_pure.py` (family: range-variance, track: scout, trial #0)
+- Hypothesis: Adding a parameter-free baseline-purity filter to the 5/45 close-to-close return shock -- drop any name whose largest daily change in |log return| inside the 50-row scoring window exceeds the cross-sectional median of that quantity on the date, which keeps 50.1% of scorable names and so lands on the 44.7% and 50.0% the volume and range channels' filters were measured to keep -- raises that score's GROSS validation skill by +0.08 to +0.14 over both the unfiltered arm and the rate-, persistence-, churn- and ETF-matched arm that reads the same criterion over days -100..-51, because a shock score whose baseline window itself contains a discontinuity is measuring a decaying baseline rather than a fresh event and that defect is a property of shock scores rather than of share volume or the intraday range; an in-window term below +0.035 instead confines the rule to those two channels and closes it.
+- Verdict: GATE_FAIL — train skill -0.108 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.063 <= the random-selection null's 90% quantile 0.195 (median 0.123; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.42, ann_ret +7.3%, maxDD -49.2%, turnover 8.9x, skill vs pool -0.11
+- Validation: sharpe +0.06, ann_ret +1.6%, maxDD -39.3%, turnover 16.3x, skill vs pool -0.27
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.27, 90% CI [-0.43, -0.08]; at 2x costs -0.47; with a 30% delisting haircut -0.27; train -0.11 (1997-2008 -0.05, 2009-2017 -0.24)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 19% percentile of 200 random-selection replicas (median +0.12, 90% +0.20); equal-weight eligible pool +0.34, information ratio vs it -0.90
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE BASELINE-PURITY RULE DOES NOT GENERALISE TO THE RETURN CHANNEL, AND MY
+  PRE-REGISTERED PREDICTION IS REFUTED.** The in-window term, measured exactly as the two
+  recorded channels measured theirs (GROSS skill = net skill + the skill-minus-2x-cost bill,
+  differenced against the unfiltered arm of the same channel):
+
+        channel  bare    in-window   in-window term   null pctile bare -> in-window
+        volume   +0.066   +0.211        +0.145              95% -> 99%
+        range    +0.010   +0.119        +0.109              79% -> 95%
+        RETURN   -0.086   -0.077        **+0.009**          36% -> **19%**
+
+  Pre-registered at +0.08 to +0.14 with a pre-committed refusal at +0.035; measured **+0.009**,
+  so the refusal fires as written: **the purity rule is channel-specific and is CLOSED.** No
+  third threshold is tried, no knob is turned and no fourth channel is sought. The honest
+  mechanism for the failure was written into the file before the run as objection (ii): `|r|`
+  has no persistence (phi -0.014), so `max |d|r||` over 50 rows is driven by the single largest
+  absolute return in the window rather than by a discontinuity in a persistent level — the
+  filter is an event-exclusion here and a baseline-cleaning operator on the other two channels,
+  and only the latter pays. **Restated rule: baseline purity requires the scored quantity to be
+  PERSISTENT in level (share volume phi, intraday range phi) so that a jump inside the baseline
+  is a corruption of it; on a quantity with no level persistence the same operator is inert.**
+- Lesson (second, and it REPLICATES across channels where the skill effect did not): **the
+  purity filter's COST effect transfers even though its SKILL effect does not.** The filter cut
+  churn (train 10.8x -> 8.9x, validation 18.3x -> 16.3x) and the bill still ROSE, 0.159 ->
+  0.197, i.e. **8.7 -> 12.1 bps per 1x of validation churn**. The range channel gave 9.0 -> 12.4
+  on the same operator (2026-11-25). Second instance, third channel, near-identical magnitudes:
+  a median-jump exclusion moves a book into a more expensive liquidity tier, and that is a
+  property of the operator rather than of the channel. Fifth instance of 2026-11-24's
+  'cost-per-turn is set by what a book holds, not by how fast it trades', and the second where
+  churn and bill move in opposite directions.
+- Lesson (third — **a counterexample to the 2026-11-25 F4 monotone calibration, found one night
+  later**): the null percentile is NOT monotone in gross skill. These two books are one node
+  apart; gross skill rose **+0.009** and the percentile fell **36% -> 19%**. So the calibration
+  cannot resolve gross differences below about 0.02, and it has a second input: each book's null
+  is built like that book, and the in-window arm's null MEDIAN is higher (+0.123 vs +0.112)
+  because the filter doubles its ETF share (14.5% vs 7.1%, measured free before the run) — which
+  is precisely the type-mismatch channel the 2026-11-22 entry identified. **The percentile
+  prices the selection RELATIVE TO A BOOK-SPECIFIC NULL, so it is not a cross-book ranking
+  statistic; read gross skill for that.** Two gates still fail (train skill -0.108, null 19%),
+  but the filter did fix the one the bare arm broke: validation drawdown -47.1% -> **-39.3%**
+  (train -66.0% -> -49.2%), so the operator is a real drawdown instrument on this channel even
+  while it is a skill null. Churn landed inside its pre-registered 9-15x / 13-28x ranges.
+
