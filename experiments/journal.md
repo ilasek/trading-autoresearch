@@ -34326,3 +34326,5 @@ tonight's design but was not used, since both arms take the same cut depth and t
 differenced.
 
 **Verdicts:** GATE_FAIL `lv_volume_quiet_alone`; GATE_FAIL `lv_volume_quiet_displaced`.
+
+## Research session — 2026-11-27 (learning agent): 3 notes added, see research/SUMMARY.md

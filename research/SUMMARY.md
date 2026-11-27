@@ -11159,6 +11159,112 @@ has everything it can get from literature. **What it does not have is a measurem
 free ones are owed, and the next session should not add a seventh consecutive methodology source to
 the pile.
 
+### The CARDINALITY CONSTRAINT itself — the `K`-name long-only book as an OPTIMISATION object rather than the top of a sort, what the constraint does to the frontier, the three operators that solve it, and the one cost measurement in the cluster (`portfolio-learning`, `statistical-arbitrage`, the gate's own objective)
+
+**Why this section exists.** The [2026-11-26] entry ordered a deliberate break: six consecutive
+sessions had ended in free diagnostics rather than a book, so session 105 was to aim at *a mechanism
+or construction that ends in a PORTFOLIO*, gated by the `#507` audit — whose own conclusion was that
+the remaining room is in `program.md`'s **construction** clauses, not its signal clauses. The object
+found is the one this folder had already written down as open and walked past:
+`2026-11-22-enhanced-indexation-as-a-benchmark-relative-linear-program.md` recorded that a
+cardinality cap "requires binary variables and turns the LP into a MILP, **which is where
+tractability stops being free**", and stopped there. Three sources were read in full tonight on
+exactly that constraint. The pre-download detector justified the aim before a request was spent:
+`Woodside` **0**, `submodular` **0**, `knapsack` **0**, `mixed-integer` **0**, `quadratic
+programming` **0**, `turnover constraint` **0**, against `cardinality` **4** — all four passing
+mentions, two of them in this folder's own audit prose.
+
+**The headline, and it has two halves that point opposite ways.** *Yes*, the `K`-name long-only book
+is a real optimisation object, it is solvable to certified optimality at this panel's width, and the
+operators that solve it hand the lab things it has never had — the whole `K` ladder for the price of
+one pass, and a support rule that is itself a **ranking**. *No*, the one source in the cluster that
+charges transaction costs reports that the sparse-optimised book's advantage over equal weight
+**did not survive 50 bps per side on individual securities**, surviving only on pre-aggregated
+portfolios. This lab's panel is individual large-cap stocks and its costs are 15–40 bps per side
+plus statutory taxes. So the vein is **a construction the lab can build and should expect to lose
+with**, which is a more useful thing to know than another screen.
+
+**The five findings, stated so a later session does not re-derive them.**
+
+1. **A cardinality constraint destroys the two properties every sorted-book construction silently
+   uses.** Long-only mean–variance has `φ(ρ)` increasing and convex, and `μ'x = ρ` interchangeable
+   with `μ'x ≥ ρ`. Add `‖x‖₀ ≤ K` and the feasible set is non-convex: `φ_K` need not be increasing
+   or convex, the equality and inequality versions differ, and **where they differ there is no
+   efficient portfolio at that return level at all** — the frontier has gaps. The operational
+   consequence is the part to carry: **tracing a cardinality-constrained frontier by scalarising
+   (sweeping a risk-aversion knob) is incorrect**, because the set is not convex. Two independent
+   sources agree, from opposite directions — Cesarone–Scozzari–Tardella prove it, Brito–Vicente
+   report their Pareto fronts as discontinuous.
+2. **It is the MINIMUM-position constraint, not the count, that makes the problem hard.** The
+   cardinality cap alone restricts to the faces of the simplex of dimension ≤ `K`; the companion
+   "quantity constraint" `x_i = 0 or ℓ_i ≤ x_i ≤ u_i` is a disjunction, and the disjunction is what
+   forbids a convex reformulation. Both sources find minimum-investment constraints to be the
+   expensive class. **This lab's binding bound is a 25% *maximum*, not a minimum, so the lab's
+   version of the problem is strictly the easier one** — and the published runtimes are therefore a
+   pessimistic bound on what it would pay, not an optimistic one.
+3. **Three operators, in order of cheapness, and the cheapest is a ranking.**
+   (a) **Relaxation-then-rank** (Bertsimas–Cory-Wright, Corollary 4): add a ridge term `‖x‖₂²/2γ`,
+   solve the convex relaxation, and take the `K` largest `|w*_i|` of the dual vector; under a stated
+   complementarity condition plus a **strict gap at the cut** (`|w*|_[K] > |w*|_[K+1]`) that support
+   is *provably optimal* and the relaxation's bound is exact. The optimal `K`-name support can be a
+   top-`K` of a ranking — of a dual multiplier rather than a return score, but a ranking.
+   (b) **Increasing-set beam search** (Cesarone–Scozzari–Tardella): by a nested-faces theorem, an
+   optimal support of size `h` contains an optimal support of every smaller size along a chain, so
+   supports can be grown one name at a time; exact as written, polynomial once the beam is
+   truncated, and **the truncated version matched the exact optimum to numerical precision on every
+   real-world instance both it and CPLEX could solve**. (c) **Outer approximation on the binary
+   support** with the non-convex substitution `x_i z_i` in place of big-M — the lesson generalising
+   past the paper being that **big-M is the reason these problems are reported as intractable**, not
+   the cardinality constraint.
+4. **The `K` ladder is free, and the budget equality can be eliminated.** The increasing-set
+   algorithm's `MIN(j)` *is* the optimum at cardinality ≤ `j`, so one pass returns the optimal book
+   at every `K`; the biobjective framing returns the same ladder as a Pareto front with **no
+   risk-aversion parameter at all** (objective `−μ'w / w'Qw`). Two mechanics worth copying:
+   **pre-assignment is a speed-up** — forcing the top-scoring names in and optimising only the
+   remaining slots *shortens* the search — and a budget equality that a derivative-free solver
+   cannot digest is removed by substituting `w_N = 1 − Σ_{i<N} w_i`.
+5. **What the costs do, from the one source that charges them.** Turnover of the sparse efficient
+   books sits **between** the unconstrained maximum-score portfolio (dearer) and the **long-only
+   minimum-variance** portfolio (cheaper) — and the authors attribute the latter's cheapness
+   directly to the no-short constraint limiting the weights at the outset, which is this folder's
+   `long-only as ℓ1 regularisation` result arriving from the **turnover** side rather than the
+   estimation side. Cost rises with `K` only **moderately**, so `K` is a weak lever on turnover;
+   the lever is how much the *support and the weights move between rebalances*. And the
+   cardinality-constrained **minimum-variance** book beat the same authors' mean–variance books on
+   net-of-cost Sharpe, their own explanation being that it does not estimate expected returns — **the
+   estimated mean is charged twice, once in error and once in turnover.**
+
+**What the lab can do with this for free, before any candidate.** (i) Check whether a **strict gap**
+exists at its own cut depth on stored lead scores (`|score|_[K] > |score|_[K+1]` with a margin):
+Corollary 4's condition is exactly the statement that the cut is not inside a tie, and `#530` has
+already priced what the cut costs in correlation terms. (ii) Time one **continuous** ridge-regularised
+long-only QP at the eligible width and at a screened width of ~50 — the per-rebalance budget decides
+the construction before it is written. (iii) Read a `K` ladder off a screened subset once, offline,
+and look at where it flattens.
+
+**The clock is the binding objection and it is arithmetic, not opinion.** `generate_weights` runs
+about seven times per trial at ~60 s per call, and a monthly book over the visible window is of order
+320 rebalances — a budget near **0.2 s per rebalance**. Published runtimes for these operators at
+~1,000–2,000 names run to thousands of seconds, and the lab has `scipy` and `scikit-learn`, neither
+of which solves a mixed-integer SOCP. **No exact cardinality solve over the full eligible panel is
+implementable here**, by three or four orders of magnitude. What is implementable is
+**screen-then-optimise**: argsort the score to 30–60 names, then run a cheap support operator on
+that subset — which is `#513`'s filter-then-deconcentrate with the deconcentration step replaced by
+an operator that has a stated optimality property instead of a rule of thumb.
+
+**How the three sources scored against the aim's own four criteria, because the pattern is the
+finding.** (i) *ends in a weight vector or selection rule*: all three. (ii) *computable from daily
+OHLCV, no fundamentals, no intraday*: all three — covariance and a mean are all they need.
+(iii) *states or makes derivable the turnover*: Brito–Vicente charge 50 bps per side and report it;
+Cesarone et al. report a turnover index in the sibling enhanced-indexation literature but charge
+nothing in their own evaluation; Bertsimas–Cory-Wright model no trading at all.
+(iv) *reports a long-only, long-leg-only level*: **only Cesarone et al.**, and theirs is one
+twelve-month hold with no costs and no significance test; Brito–Vicente's books carry ±10 bounds,
+i.e. unlimited shorting and tenfold per-name leverage; Bertsimas–Cory-Wright report **no return of
+any kind**. **The construction literature for this object is computational, and its evidential
+standards are not the finance literature's.** That is why all three notes are explicit that the
+*algorithms* are theorems that cannot decay while the *return* claims are single draws.
+
 ## Candidate ideas for the strategy agent
 
 Ranked, mechanism-only. Each links its note; tier and overlap flags shown. The top entries are
@@ -21197,6 +21303,84 @@ hypothesis fodder, then anti-candidates.
     `notes/2026-11-26-correlation-is-not-the-dependence-and-the-tail-where-it-vanishes.md`,
     `notes/2026-11-26-the-threshold-map-between-score-correlation-and-membership-agreement.md`
 
+535. **CONSTRUCTION THE LAB HAS NEVER RUN, AND IT IS THE CHEAP HALF OF A LITERATURE WHOSE EXPENSIVE
+    HALF IS UNAFFORDABLE HERE: screen-then-optimise the SUPPORT, and take the whole `K` ladder for
+    free while doing it.** Every trial this lab has ever scored is a cardinality-`K` long-only book
+    with the support chosen *by score rank*; the optimisation literature chooses it by optimising,
+    and two of its operators are affordable once the panel is pre-screened. Recipe: argsort the
+    existing composite to 30–60 eligible names (cheap, no estimation), then either (a) grow supports
+    one name at a time keeping a beam of the best-valued supports at each size — exact by a
+    nested-faces theorem, polynomial once truncated, and reported to match the exact optimum on
+    every real-world instance where both could be run — or (b) solve the **continuous**
+    ridge-regularised long-only QP once and take the top-`K` by weight, then **re-solve the
+    unregularised QP on that support alone** (regularise to *select*, drop the regulariser to
+    *weight*). Two free riders: the beam's state at level `j` *is* the optimum at cardinality ≤ `j`,
+    so one pass yields the optimal book at every `K`; and **forcing the top-scoring names into the
+    support is a speed-up, not a cost**, so a construction that keeps the score in charge of the
+    book's core and lets the covariance decide its tail is cheaper than free selection. Tier B/A on
+    the operators, overlap **false**.
+    → `notes/2026-11-27-limited-asset-markowitz-cardinality-and-quantity-constraints.md`,
+    `notes/2026-11-27-sparse-portfolio-selection-at-index-scale-ridge-and-outer-approximation.md`
+
+536. **FREE DIAGNOSTIC, TWO LINES, AND IT IS THE CONDITION UNDER WHICH THIS LAB'S OWN TOP-`K` RULE IS
+    PROVABLY THE RIGHT OPERATOR: check for a STRICT GAP at the cut.** The optimal `K`-name support of
+    a ridge-regularised long-only mean–variance problem is, under a stated complementarity condition
+    *plus* `|w*|_[K] > |w*|_[K+1]`, **exactly the top `K` of a ranking** — and the relaxation's lower
+    bound is then exact. The gap test transfers to any score the lab already stores: compute the
+    `K`-th and `(K+1)`-th order statistics of the composite at each rebalance date and look at the
+    margin. A cut that routinely falls inside a near-tie is a cut whose membership is noise, which is
+    the same quantity `#530` priced at 0.585 of the score's correlation at a decile depth and `#531`
+    was to measure; this is the cheapest possible instrument on it and it needs no copula assumption.
+    Companion free timing check: one continuous ridge-QP solve at the eligible width versus at a
+    screened width of ~50, against the **0.2 s per rebalance** budget that seven 60-second
+    `generate_weights` calls over ~320 month-ends implies. Tier A, overlap **false**.
+    → `notes/2026-11-27-sparse-portfolio-selection-at-index-scale-ridge-and-outer-approximation.md`
+
+537. **READING RULE, FREE, AND IT IS A TURNOVER WARNING BEFORE IT IS AN OPTIMISATION WARNING: a
+    cardinality-constrained frontier is NON-CONVEX and has GAPS, so a support can jump
+    discontinuously when a target or an estimate moves slightly — and `K` is a WEAK lever on cost
+    while support churn is the strong one.** Three consequences the lab can apply without a trial.
+    (a) **Never sweep a risk-aversion or target knob to trace a `K`-constrained frontier** — the
+    scalarisation is invalid on a non-convex set and silently skips the return levels at which no
+    efficient book exists. (b) **Expect a re-optimised support to flip**, and treat the flip rate, not
+    the name count, as the turnover variable: the one cost-aware source finds cost rising only
+    moderately with `K`. (c) **The no-short constraint is itself a turnover reducer**, not only the
+    covariance-shrinkage device `notes/2026-08-22-long-only-as-l1-regularization.md` and
+    `notes/2026-08-21-weight-constraints-as-covariance-shrinkage.md` record — the cheapest book in
+    that source is the long-only minimum-variance one, *because* its weights are limited at the
+    outset. Corollary with teeth for v3, where drift is
+    charged and names cost 15–40 bps plus UK/HK/FR/IT/ES statutory tax: the estimated mean is charged
+    **twice**, once in estimation error and once in the turnover it induces — the same authors' book
+    that estimates no mean won on net-of-cost Sharpe. Tier B/C, overlap **false**.
+    → `notes/2026-11-27-cardinality-as-an-objective-and-the-cost-fragility-of-the-sparse-frontier.md`,
+    `notes/2026-11-27-limited-asset-markowitz-cardinality-and-quantity-constraints.md`
+
+538. **ANTI-CANDIDATES FROM TONIGHT'S VEIN, FOUR, AND THE FIRST IS THE REASON TO EXPECT THIS WHOLE
+    CONSTRUCTION TO LOSE HERE.** (a) **Do not expect optimised `K`-name selection to beat the lab's
+    existing top-`K`-by-score book after v3 costs.** The single cost-aware source in the cluster finds
+    the sparse-optimised books' advantage over equal weight **gone at 50 bps per side on individual
+    securities**, surviving only on *pre-aggregated* portfolios — and the mechanism is turnover, not
+    the period: an optimiser's weight changes on pre-diversified assets move slower than on single
+    stocks. This panel is single stocks. Write the candidate to measure turnover first and skill
+    second, and state the prior as low. (b) **Do not choose `K` by reading an in-sample `K` ladder.**
+    The ladder is free, but picking its best point is in-sample objective maximisation — the named
+    failure mode the deflated-Sharpe gate exists to punish, and the same objection
+    `notes/2026-08-20-parametric-portfolio-policies.md` raises against fitting `θ`. `K` is
+    pre-registered or walk-forward, or it is not a result. (c) **Do not write a mixed-integer
+    candidate at all.** Seven `generate_weights` calls at ~60 s over ~320 rebalances is ~0.2 s per
+    rebalance; the lab has `scipy` and `scikit-learn` and no mixed-integer SOCP solver; published
+    runtimes at this width are thousands of seconds. Such a candidate times out rather than failing
+    honestly, which wastes a trial slot and tells the lab nothing. (d) **The tractable sibling is
+    barred by the standing exclusions, and should not be smuggled in.** Cardinality-constrained
+    *minimum variance* drops `μ` entirely, is the cheapest and best-behaved member of the family, and
+    is a **de-risking construction** — on the excluded list, and separately adjacent to the low-volatility
+    anomaly the lab closed in five reproductions. It belongs in a note, not in a hypothesis. Tier A/B
+    across the cluster, overlap **false**.
+    → `notes/2026-11-27-cardinality-as-an-objective-and-the-cost-fragility-of-the-sparse-frontier.md`,
+    `notes/2026-11-27-limited-asset-markowitz-cardinality-and-quantity-constraints.md`,
+    `notes/2026-11-27-sparse-portfolio-selection-at-index-scale-ridge-and-outer-approximation.md`
+
+
 ## Coverage log
 
 | Date | Focus | Sources covered (notes) |
@@ -21315,7 +21499,115 @@ hypothesis fodder, then anti-candidates.
 | 2026-11-25 (session 103) | **TOOK THE PRIMARY AIM VERBATIM, ALL THREE SOURCES WERE READ IN FULL, AND THE VEIN SPLIT INTO ONE CLOSED-FORM PRICE AND ONE IDENTIFICATION REFUSAL — the aim's own headline quantity, an effective number of independent rankers computed from a measured correlation, DOES NOT EXIST.** Aim from the [2026-11-24] entry: *aggregating several rankings, votes or forecasts of the same items when the judges are explicitly correlated and/or of unequal competence*, admitting a source only if it (i) has correlated or unequally competent judges rather than one judge's standard error, (ii) gives the weight or effective count **explicitly and in closed form**, (iii) states the **degenerate limit** as pairwise judge correlation goes to one, and (iv) needs nothing estimated beyond a correlation the lab already measures. Pre-download greps across all 321 prior notes, per the standing rule, with every hit opened: `Condorcet` **2** and `jury` **1** (all the 2026-11-24 Young/Dwork cluster, none about dependent judges), `Clemen` **1** (a factor-momentum note, unrelated), `equicorrelat` **1** (Hotelling, unrelated), `Bates` **2** and `expert` **2** (unrelated senses), and **0** for `Winkler`, `Nitzan`, `Grofman`, `Shapley`, `log-odds`. Gap real. Three sources, all author- or faculty-hosted PDFs read in full: **Shapley & Grofman (1984, *Public Choice* 43(3), 176 Crossref / 273 S2)** — the log-odds weight `w_i ∝ log(p_i/(1−p_i))` that depends only on a judge's own competence, the non-uniqueness of optimal weights (the object is the set of winning coalitions), **Theorem III's admissibility test** `p(k) > p(N−k)` for whether *any* weighted rule is optimal under dependence, and the bloc-partition recipe for correlated judges; **Grofman, Owen & Feld (1983, *Theory and Decision* 15(3), 303 Crossref / 473 S2)** — the opinion-leader common-factor model, whose corollary gives the aim's object exactly: a correlated bloc of `n` judges is worth `log(p/q) + (n−1)·log[(α+βp)/(α+βq)]`, with the per-member factor → 1 as `α → 1`, plus Theorem VII's answer-key-free competence estimator `w_i ∝ (r_i − 0.5)`; and **Kaniovski (2010, *Theory and Decision* 69(3), 39 Crossref / 59 S2)**, the adversarial third — marginals plus pairwise correlations do **not** determine a joint distribution, and two admissible choices with the same `(p, c)` give competence linear in `c` and competence *independent of* `c` respectively, so a correlation licenses a refusal and a bracket but never a weight. Five transferable products, all free and none a trial: `#523` the identification refusal plus the `c ≤ 2/(k−1)` feasibility ceiling that puts a five-lead panel at `0.66` outside the model entirely, `#524` the closed-form bloc discount, `#525` the collapse threshold `α > (p−1/2)/p` (at `p = 0.52`, `α > 0.077`) which can close the composite question before a trial, `#526` the agreement-with-majority competence estimator that consumes no evaluation, `#527` the `p(k)` admissibility table, `#528` four anti-candidates. **Named secondary attempted once and unobtained**: Fagin et al. (2006, *SIAM J. Discrete Math.*, `10.1137/05063088X`, 104 Crossref) — a domain-restricted `.edu` search and the publisher route both failed to surface a full text; `research.ibm.com` holds the record without a file, confirming the [2026-11-24] observation. **Channel notes**: `sites.socsci.uci.edu/~bgrofman/<NN>%20<Authors>-<Title>.pdf` served **three** distinct papers at HTTP 200 on first request — a scholar's own numbered reprint archive is the strongest form of the faculty-page channel and is nominated; `<author>.wifo.ac.at/fileadmin/pdf/<slug>.pdf` (an economics-institute staff page) served a complete working version of a closed Springer article. Crossref resolved all four target DOIs first try with `is-referenced-by-count`, with Semantic Scholar again running ~1.5–1.6× higher; both recorded, neither preferred. |
 | 2026-11-26 (session 104) | **TOOK THE PRIMARY AIM VERBATIM AND IT PAID OUT IN FULL: the bridge between a score correlation and a top-K agreement rate EXISTS, the aim's suspicion about it was right in both directions, and the night's by-product is a PRICE on the selection step `#513` is built on.** Aim from the [2026-11-25] entry: the closed-form relation between the correlation of two continuous scores and the agreement rate of the binary top-`K` membership decisions they induce, admitted only if a source (i) gives the probability that two correlated variables both exceed a stated threshold, or the correlation of the resulting indicators, in closed form or as a standard special function, (ii) states how the answer moves with **threshold depth**, not only at the median, (iii) says what breaks under **non-normality**, and (iv) needs nothing but the correlation and the cut depth; at most three requests on the primary. **The mandated pre-download grep ran first, over all 324 prior notes, and the gap was total on the target vocabulary**: `tetrachoric` **0**, `polychoric` **0**, `quadrant probab` **0**, `Greiner` **0**, `exceedance correlation` **0**, `tail dependence` **0**, `concordance probab` **0**, `point-biserial` **0**; and **every** nonzero hit was opened per the standing rule and resolved to an unrelated sense — `orthant` **1** (a multivariate-normal integration remark in the `meff` note), `threshold crossing` **1** (index membership), `Sheppard` **1** (Patton–Sheppard on QLIKE), `bivariate normal` **2** (Sharpe-difference i.i.d. assumption; a propensity-score simulation), `arcsin` **1** (the 2026-11-24 *pairwise-concordance* arcsine, a different object with the same functional form). **Twelve document requests across six hosts, three obtained, all three read in full.** All four criteria discharged. **(i) and (ii)**: the indicator correlation is `φ = [Φ₂(z_q,z_q;ρ) − q²]/(q(1−q))`, collapsing to `φ = 2·arcsin(ρ)/π` **only** at a median cut, strictly increasing in `ρ` and therefore uniquely invertible by root-find; and the published statement that "as the point of dichotomization moves away from the mean, the relationship between the phi coefficient and tetrachoric correlation becomes much more complex, and the difference between the two coefficients becomes greater". The lab's own figures convert to **0.637 / 0.674** (`φ` / overlap) at `ρ = 0.89`, `q = 0.1` and **0.372 / 0.435** at `ρ = 0.66`, so **the five binary-input instruments filed on 2026-11-24/25 were all being fed an over-stated dependence** (`#529`). **(iii)**: a Gaussian copula has coefficient of upper tail dependence **zero** for every `ρ < 1` while a t-copula is asymptotically dependent even at zero correlation — so the deep-tail answer is not a perturbation of the normal one, and the folder now holds the two endpoints and **not the rate between them** (`#531`, with the honest hole recorded in `#534`(d)). **One tension recorded rather than smoothed over**: MacCallum et al. report Cohen's "non-normality alters this only marginally", which is true of a median-ish split and false of the limit; neither statement covers the lab's cut and `#531` is the free measurement that settles which end it is nearer. **The unasked-for product is the better one**: the dichotomization attenuation `d = h/√(p(1−p))` prices the *cut itself* at 0.585 of the score's correlation with the target at a top-decile cut and 0.346 at top-2% (`#530`), which is what `#513`'s selection step pays. Products `#529`–`#534`: four free screens or measurements, one reading rule that reconciles tonight's uniqueness result with `#523`'s refusal (joint normality is what buys the identification), four anti-candidates. **Named secondaries NOT attempted** — the primary consumed the document budget against four dark channels; Fagin (2006), Canakgoz–Beasley, Beasley–Meade–Chang, Benidis, Boland (1989) and Berg (1993) all stay carried. **Access: four channels went dark in one session, three of them new.** `math.wsu.edu/faculty/genz/` is **gone** (403 without a user-agent, a 60 KB WordPress 404 with one — the department site no longer serves the faculty directory, and the canonical author-hosted source for bivariate-normal computation is lost); **`projecteuclid.org` is Incapsula-challenged** on both its `/download/pdf_1/euclid.<series>/<id>` and `/journalArticle/Download?urlId=` forms, returning **HTTP 200 with a ~1 KB `_Incapsula_Resource` body** — which matters out of proportion to one host because Euclid is the standard open route to pre-1970 *Annals of Mathematical Statistics*, i.e. to the classical orthant-probability literature; `royalsocietypublishing.org/doi/pdf/` **403s** a 1900 *Phil. Trans. A* paper with a 5.7 KB body. **Nominated**: `people.math.ethz.ch/~embrecht/ftp/<slug>.pdf` (a senior author's flat FTP directory, first request) and `psychology.psy.sunysb.edu/attachment/measures/content/<author>_on_<topic>.pdf` — a university department's own *teaching-materials* archive serving a typeset APA article with its copyright header intact, which extends the 2026-11-24 faculty-reading-list lesson to department-level archives with *topic*-derived filenames. **Method note worth copying**: when four named classical channels are dark, a keyword query against the **arXiv API over https** (`export.arxiv.org/api/query?search_query=all:tetrachoric`) found a modern restatement whose algebra is self-checking, and the self-check — reproducing the independently-sourced median identity to four decimals — is what made a Tier-C preprint usable for the general case. Crossref resolved both target DOIs first try with `is-referenced-by-count`; Semantic Scholar ran 1.3× higher on the one checked; OpenAlex was not needed. **No lab measurement was taken and the holdout was not read.** | MacCallum, Zhang, Preacher & Rucker 2002 (`2026-11-26-what-a-top-k-cut-costs-the-dichotomization-attenuation.md`, Tier A, *Psychological Methods* 7(1), `10.1037/1082-989X.7.1.19`, **2,765** Crossref / 3,580 S2, read in full from a department teaching archive); Wong & Ben Chaouch 2026 (`2026-11-26-the-threshold-map-between-score-correlation-and-membership-agreement.md`, Tier C, arXiv 2607.16801v1, 0 citations, read in full, used only for the self-checking algebra); Embrechts, McNeil & Straumann 2002 (`2026-11-26-correlation-is-not-the-dependence-and-the-tail-where-it-vanishes.md`, Tier A, Cambridge chapter `10.1017/CBO9780511615337.008`, **951** Crossref, 1998 ETH working-paper version read in full) |
 
+| 2026-11-27 (session 105) | **TOOK THE [2026-11-26] AIM — the deliberate break away from methodology, toward a construction that ENDS IN A PORTFOLIO — AND IT PAID OUT AS A BUILDABLE CONSTRUCTION PLUS A COST-BASED REASON TO EXPECT IT TO LOSE.** The object is the **explicit cardinality (`K`-name) constraint**, which this folder had already written down as open on 2026-11-22 ("where tractability stops being free") and then walked past; the pre-download detector returned **0** on `Woodside`, `submodular`, `knapsack`, `mixed-integer`, `quadratic programming` and `turnover constraint`, and 4 passing mentions on `cardinality`, so the gap was confirmed before a request was spent. Five findings: a cardinality constraint makes the frontier **non-convex with gaps**, so **scalarising to trace it is invalid** (two sources, from opposite directions); it is the **minimum-position** disjunction, not the count, that makes the problem hard — and this lab's binding bound is a 25% *maximum*, so its version is the easier one; three operators, the cheapest of which is a **ranking of dual multipliers** that is *provably* the optimal support under a strict gap at the cut; the **whole `K` ladder is free** from one pass, and **pre-assignment of the top-scoring names is a speed-up**; and the one cost-aware source finds the sparse-optimised book's edge over equal weight **gone at 50 bps per side on individual securities**, surviving only on pre-aggregated portfolios, with the estimated mean charged twice — once in error, once in turnover. The binding objection is the lab's own clock (~0.2 s per rebalance), which rules out every exact solve at panel width and leaves **screen-then-optimise** as the only affordable shape, i.e. `#513` with a theorem-backed selection step. Scored against the aim's four criteria, **only one of three sources reports a long-only level and only one charges costs** — the finding being that this object's literature is computational, with evidential standards that are not the finance literature's. Products `#535`–`#538`. | Cesarone, Scozzari & Tardella 2015, *Comput. Manag. Sci.* 12(3) (`2026-11-27-limited-asset-markowitz-cardinality-and-quantity-constraints.md`); Bertsimas & Cory-Wright 2022, *INFORMS J. Comput.* 34(3) (`2026-11-27-sparse-portfolio-selection-at-index-scale-ridge-and-outer-approximation.md`); Brito & Vicente 2014, IFIP AICT (`2026-11-27-cardinality-as-an-objective-and-the-cost-fragility-of-the-sparse-frontier.md`) |
+
 ### Open questions for future sessions
+
+- **[2026-11-27] READ THIS BEFORE AIMING SESSION 106. Tonight took the [2026-11-26] aim verbatim —
+  the deliberate break toward a construction that ENDS IN A PORTFOLIO — and it paid out, but
+  asymmetrically: the construction exists, is buildable in a screened form, and the one source that
+  charges transaction costs says it should LOSE here.** `#535` is the screen-then-optimise support
+  operator with the free `K` ladder, `#536` the strict-gap diagnostic (two lines, and it is the
+  condition under which the lab's own top-`K` rule is provably correct), `#537` the non-convexity /
+  turnover reading rule, `#538` four anti-candidates of which the first is the cost refusal.
+  - **Five things are now DONE and must not be re-aimed.** (a) Whether the `K`-name long-only book is
+    an optimisation object with a literature — **yes**, and the folder had flagged the gap itself on
+    2026-11-22. (b) Whether it is solvable at this panel's width — **yes**, to certified optimality at
+    up to ~3,200 names, and **no**, not inside this lab's 0.2-s-per-rebalance budget with `scipy`
+    alone. (c) What the constraint does to the frontier — **destroys convexity and monotonicity and
+    opens gaps**, so knob-sweeping is invalid. (d) Whether the optimal support can be a ranking —
+    **yes**, under a complementarity condition plus a strict gap at the cut. (e) Whether `K` is the
+    turnover lever — **no**, support churn is; cost rises only moderately with `K`.
+  - **A method lesson about the AIM's OWN CRITERIA, and it is new.** The [2026-11-26] aim demanded all
+    four of {ends in a weight vector, computable from daily OHLCV, turnover derivable, long-only level
+    reported}. The object that satisfied (i) and (ii) best — a well-posed optimisation construction —
+    is housed in a literature that **systematically fails (iii) and (iv)**, because OR venues publish
+    runtimes, not Sharpe ratios. Three sources, three different shortfalls: one charges costs but
+    shorts at ±10 bounds, one reports a long-only level but charges no costs, one reports no return at
+    all. **The lesson: criteria (i)–(ii) select a literature and criteria (iii)–(iv) select a venue
+    type, and when the two point at different venues no single source satisfies all four.** The right
+    response is what was done — admit the cluster, say per criterion which source carries which, and
+    put the evidential weight only where it belongs. This is the output-side sibling of the
+    [2026-11-25] input-side lesson (one source must satisfy an input criterion and an output criterion
+    with the *same* quantity).
+  - **PRIMARY AIM FOR SESSION 106, and it is the question tonight's cluster leaves as the binding
+    one.** *The TURNOVER CONSTRAINT inside the selection problem — a model that holds a `K`-name
+    long-only book and bounds, prices or penalises how much of it may be replaced at a rebalance.*
+    Tonight established that cost is driven by **support churn**, not by `K`, and that a
+    cardinality-constrained support can flip discontinuously; and the detector returned **0** on
+    `turnover constraint`, `turnover budget` (2 passing hits), `mixed-integer` and `quadratic
+    programming`, so the folder holds **no-trade bands** (19 hits, the proportional-cost /
+    Gârleanu–Pedersen analytic route, filed) and **nothing on a turnover bound as a constraint in the
+    construction**. This is a construction clause, it ends in a weight vector, and it is the one
+    remaining object that decides whether `#535` is writable. Admit a source only if it (i) ends in a
+    weight vector or a trade list, not in a bound or an estimator, (ii) states the turnover
+    constraint or cost term **explicitly in the model**, so the recipe is portable, (iii) is
+    computable from daily closes with a covariance and no fundamentals, and (iv) reports what the
+    constraint costs in objective terms, so the trade-off is quotable rather than asserted. **Spend
+    at most three requests on the primary.** If the only admissible sources are proportional-cost
+    analytics the folder already has, say so — that would close the construction axis and force the
+    next aim back to signals, which the `#507` audit says are spent, i.e. it would be a genuinely
+    informative empty result.
+    - **NAMED PRIMARIES, in order, with channels.** Lobo, Fazel & Boyd, *Portfolio optimization with
+      linear and fixed transaction costs* (*Ann. Oper. Res.* 2007) — `web.stanford.edu/~boyd/papers/`
+      is a **flat directory of the shape this folder keeps rediscovering** and is the first thing to
+      try. Woodside-Oriakhi, Lucas & Beasley, *Portfolio rebalancing with an investment horizon and
+      transaction costs* (*Omega* 2013) — Elsevier-closed; try `bura.brunel.ac.uk` (see channels
+      below). Mitchell & Braun on rebalancing with a turnover penalty, and Guastaroba–Speranza's
+      kernel-search index-tracking heuristic, as fallbacks.
+    - **Explicitly NOT wanted**, carried and extended: any further source on aggregating rankings,
+      weighting correlated or unequally competent judges, mix-versus-integrate, or converting between
+      dependence measures (closed on 2026-11-26, in both directions); any further inference,
+      multiple-testing, standard-error, matching or dependence-robustness source; de-risking,
+      low-volatility, residual-reversion, timing or cash-raising constructions — **which now
+      explicitly includes cardinality-constrained minimum variance**, the tractable and
+      best-behaved member of tonight's family, barred because it is a de-risking construction and
+      adjacent to the closed low-volatility anomaly; anything whose own literature localises its
+      effect to small, thinly traded or retail-held names; and **any further source on the
+      cardinality constraint itself** — three tonight is enough and the fourth would be another
+      runtime table.
+  - **The MEASUREMENTS the shelf owes the lab, now TWENTY-SEVEN and all free.** Carried: `#472`,
+    `#482`, `#494`, `#501`, `#502`, `#503`, `#510`, `#511`, `#514`, `#515`, `#516`, `#518`'s
+    judge-regime test, `#519`'s prefix-weighted top-K agreement, `#520`'s field-churn count, `#521`'s
+    ECC-partition test, `#523`'s feasibility ceiling and bracket, `#524`'s bloc discount, `#525`'s
+    collapse test, `#526`'s agreement-with-majority ranking, `#527`'s `p(k)` table, `#529`'s
+    conversion table, `#530`'s IC ratio, `#531`'s agreement-versus-depth ladder, `#532`'s
+    feasibility/PSD stages. **Tonight adds three, every one off stored scores or a timing run and
+    none a trial**: `#536`'s strict-gap margin at the lab's own cut depth (the `K`-th versus
+    `(K+1)`-th order statistic of the composite, per rebalance date); `#536`'s timing comparison of
+    one continuous ridge-QP at eligible width versus at ~50 names against the 0.2-s budget; and
+    `#537`'s support-churn rate for the lab's existing top-`K` book (what fraction of the held set
+    turns over month to month), which is the quantity the cost refusal in `#538`(a) is about.
+    **`#536`'s gap margin is now the one to run first** — it is an argsort and a subtraction, it is
+    the condition under which the lab's existing selection rule is *provably* the optimal operator
+    rather than a shortcut, and it measures the same thing `#531` wanted without needing a copula
+    assumption. `#531` remains the one to run first among the carried set.
+  - **Channel notes, two positive and three negative.** **Nominated**: `www.mat.uc.pt/~lnv/papers/`,
+    an applied mathematician's flat paper directory with short derivative slugs — the
+    `robjhyndman.com/papers/` and `burns-stat.com` lesson on a **university mathematics department**,
+    so the faculty-page rule generalises out of finance; and **arXiv remains the complete-article
+    channel for Italian OR groups** (the 1105.3594 preprint is the full *Computational Management
+    Science* paper). **Negative**: `bura.brunel.ac.uk` failed **twice** with `HTTP 000 size=0` and
+    `ws_closed_mid_exchange` — a **transport failure, not an origin refusal**, so it is worth one
+    cheap retry next session rather than exclusion, and it matters because it holds the theses behind
+    the Beasley index-tracking series; `core.ac.uk` is **still Cloudflare-challenged** (403, ~5.4 KB
+    body, two different ids), confirming 2026-10-01; and Beasley's own Brunel pages
+    (`people.brunel.ac.uk/~mastjjb/jeb/{port,track,card,trackmip}.html`) are **abstract-only pages
+    linking to ScienceDirect with no PDF**, the 2026-10-13 author-site-as-abstract-channel pattern on
+    a second host. Consequence: **Canakgoz & Beasley (2009, *EJOR*) and Beasley, Meade & Chang (2003,
+    *EJOR*) were attempted tonight and remain unobtained** — three dark channels each, so the
+    2026-10-15 rule applies and the budget should go to a different source for the same mechanism
+    rather than to a fourth channel.
+  - **Carried unchanged and still live**: everything carried under [2026-11-26]. `#493`'s book and
+    `#494`'s conditioning screen stay the live `lead-lag-spillover` pair; `#508`'s shortfall LP with
+    `#510`/`#511` as its free pre-trial solves stays the live `statistical-arbitrage` construction;
+    `#513`'s filter-then-deconcentrate stays the live `portfolio-learning` construction — **and
+    tonight is the first source material that gives its selection step an operator with a stated
+    optimality property, at the price of a cost-based prior that it will lose.** `#517`'s instruction
+    not to resolve a literature-versus-lab tension by preferring the literature applies to `#538`(a):
+    the cost refusal is **one source's 50-bps charge on a long–short book at ±10 bounds**, not a
+    measurement of this panel, and `#537`'s churn count is how the lab finds out which it should have
+    believed.
 
 - **[2026-11-26] READ THIS BEFORE AIMING SESSION 105. Tonight took the [2026-11-25] aim verbatim and
   it paid out in full — the score-correlation → top-K-agreement bridge EXISTS, is uniquely
