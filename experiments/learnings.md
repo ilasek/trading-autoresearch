@@ -9174,7 +9174,10 @@ across experiments; prune entries that later evidence contradicts.
   slow leg does not.
 
 - **[Measured 2026-11-25, nightly — SIX scored trials; THE HEADLINE, AND IT RE-ATTRIBUTES THE LAB'S
-  MOST-QUOTED v3 RESULT WITHOUT WITHDRAWING IT] A SHOCK SCORE'S BASELINE WINDOW MUST NOT CONTAIN A
+  MOST-QUOTED v3 RESULT WITHOUT WITHDRAWING IT. **MECHANISM SUPERSEDED 2026-11-27**: the numbers
+  below stand, but "baseline purity" is NOT what the in-window term is — trial #50 traded the
+  cut's own quantity with the shock sort removed and measured gross +0.118, which a
+  baseline-cleaning interaction cannot produce. Read this entry with the 2026-11-27 state entry.] A SHOCK SCORE'S BASELINE WINDOW MUST NOT CONTAIN A
   JUMP: EXCLUDING THE NAMES WHERE IT DOES IS WORTH ~+0.11 OF GROSS VALIDATION SKILL, REPLICATED ON
   TWO INDEPENDENT PANELS AT THE SAME MAGNITUDE, AND IT IS THE NODE #32's OWN FILE DOCUMENTS AS
   HYGIENE.** `lv_volume_shock_gkm_band` (#32) was the only object in 36 prior v3 trials to clear the
@@ -9326,7 +9329,9 @@ across experiments; prune entries that later evidence contradicts.
   re-open the aggregator axis by analogy.**
 
 - **[Measured 2026-11-26, nightly — SIX scored trials; THE HEADLINE, AND IT CLOSES A TWO-CHANNEL
-  RULE BY ITS OWN PRE-COMMITTED REFUSAL] BASELINE PURITY PAYS ONLY WHERE THE SCORED QUANTITY IS
+  RULE BY ITS OWN PRE-COMMITTED REFUSAL. **MECHANISM RE-ATTRIBUTED 2026-11-27**: the necessary
+  condition and every number below stand; what level persistence buys is not a cleanable baseline
+  but a measurable short-lived STATE. See the 2026-11-27 entry.] BASELINE PURITY PAYS ONLY WHERE THE SCORED QUANTITY IS
   PERSISTENT IN LEVEL — A NECESSARY CONDITION, MEASURED ON THREE CHANNELS AND FAILED ON THE
   THIRD.** The 2026-11-25 claim was that excluding names whose scoring window contains the largest
   jumps is worth ~+0.11 of gross skill for any "recent window minus baseline window" score. Run on
@@ -9385,7 +9390,9 @@ across experiments; prune entries that later evidence contradicts.
   replication instrument this lab has found.**
 
 - **[Measured 2026-11-26, nightly — CORRECTS A LESSON LINE WRITTEN EARLIER IN THE SAME SESSION,
-  AND CHECKED FREE ON ALL 46 RECORDED v3 TRIALS] THE RANDOM-SELECTION NULL'S PERCENTILE IS NEARLY
+  AND CHECKED FREE ON ALL 46 RECORDED v3 TRIALS; **SHARPENED 2026-11-27** — `selection` IS GROSS
+  SKILL, because `geography` is the schedule's own cost bill, so the gate is a test of PRE-COST
+  skill rather than merely "not skill"] THE RANDOM-SELECTION NULL'S PERCENTILE IS NEARLY
   AN IDENTITY ON THE SELECTION TERM, AND SELECTION IS NOT SKILL.**
 
       the null percentile, ranked against ...        pearson   spearman
