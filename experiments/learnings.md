@@ -9482,3 +9482,123 @@ across experiments; prune entries that later evidence contradicts.
   is a property of the leads, not of the trials, so improving a lead can destroy breadth; and
   total-return correlations cannot see any of this (every pair on this board exceeds +0.95 — always
   subtract the pool before quoting a rho).**
+
+- **[Measured 2026-11-27, nightly — ZERO trials spent; THE HEADLINE, AND IT RENAMES A STATISTIC
+  THIS FILE AND THE LAST HANDOVER BOTH LEAD WITH] THE `geography` TERM IS THE SCHEDULE'S OWN COST
+  BILL CHARGED TO THE BENCHMARK, SO `selection` IS GROSS SKILL AND THE NULL GATE IS A TEST OF
+  PRE-COST SKILL.** The 2026-11-26 handover's idea (i) asked what predicts
+  `geography = null_median - pool` (it named K, rebalance frequency, type mix, cash share) so that
+  a book could be designed with geography near zero instead of -0.11 to -0.23. Fitted on all 47
+  recorded v3 trials with a stored null:
+
+      geography = -0.0034 - 0.0102 * ann_turnover      R2 0.738   resid sd 0.038
+      cost bill = -0.0047 + 0.0111 * ann_turnover      R2 0.974   resid sd 0.011
+                                   ^^^ the two slopes sum to +0.0009
+
+  (`bill` is the recorded `skill - skill_cost2x`.) K is inert (spearman +0.146, +0.011 of R2) and
+  cash share cannot be it — `active_days` is 1562 for all 47 books. **The mechanism:
+  `random_null_v3` gives each replica the candidate's own SCHEDULE, so a random book churned 17x a
+  year pays 17x of costs and earns nothing, and falls below the fully-invested pool by exactly that
+  bill.** Three consequences. (i) **The handover's idea is arithmetically empty and no candidate
+  should be written for it**: moving geography to zero means trading at ~1x, and the candidate pays
+  the bill it saves its replicas, so selection falls by the same amount. (ii) **`selection` is
+  gross skill** — pearson +0.942, spearman +0.943, mean difference +0.0014 (sd 0.040) — which is
+  the mechanical derivation of 2026-11-26's F4 (the percentile ranks gross at +0.946, net at
+  +0.788) and upgrades "selection is not skill" to **the null gate is a test of PRE-COST skill and
+  is blind to the bill precisely because it charges the bill to the benchmark too.** A book can
+  clear it at the 99th percentile while being unaffordable, and three of the four objects that have
+  cleared it are. (iii) **The per-1x constant is board-wide**: the linear form (R2 0.974) beats the
+  log form (R2 0.922) at **+111 bps of Sharpe per 1x of charged annual turnover**, i.e.
+  2026-11-24's "~10-11 bps per 1x" measured on 49 books rather than one, with the 0.011 residual sd
+  holding the holdings-dependent part. **Confirmed out of sample the same night**: the fit predated
+  both candidates and forecast `#50` at 10.2x churn to geography -0.107 (measured -0.10) and bill
+  +0.108 (measured 0.104). **Stop calling the term geography; quote it as the schedule's bill.**
+
+- **[Measured 2026-11-27, nightly — trials #50/#51, A ONE-OPERATOR PAIR; RE-MECHANISES THE BOARD'S
+  ONLY POSITIVE RESULT WITHOUT WITHDRAWING ITS NUMBER] RECENT SHARE-VOLUME QUIETNESS IS A
+  SHORT-LIVED STATE WORTH +0.135 OF GROSS SKILL IN THE WINDOW AND NOTHING ONE WINDOW EARLIER — SO
+  #32's "HYGIENE" NODE IS NEITHER BASELINE CLEANING NOR A NAME CHARACTERISTIC.** 2026-11-25 ran
+  three arms of a 2x2 and never ran the fourth: the cut's own quantity as the score with the 5/45
+  shock sort removed. One node changed from `#47`:
+
+      arm                                        gross skill  null pctile  churn tr/val  engine M
+      #40 bare 5/45 volume shock, no cut            +0.066        95%       11.2 / 19.0      M1
+      #32 shock + cut read IN the window            +0.211        99%        9.0 / 16.6      M1
+      #41 shock + cut DISPLACED to -100..-51        +0.101        97%        9.2 / 16.9      M1
+      #50 THE CUT'S QUANTITY ALONE, no shock sort   +0.118        98%        5.1 / 10.2     M10
+      #51 the same, window displaced                -0.017        62%        5.2 / 10.1     M11
+
+  `#50` was pre-registered at **[-0.05, +0.05]** for the interaction (baseline-cleaning) reading
+  and **above +0.08** for the main-effect reading; `#51` at **+0.05..+0.12** if the premium belongs
+  to the NAME and **-0.03..+0.04** if it belongs to the window before the rebalance. Both landed
+  (+0.118, -0.017), and nine of nine pre-registrations across the pair landed. **In-window term
+  +0.135 on this construction against +0.110 on the shock construction — two constructions, one
+  displacement, matching to 0.025.** So removing the shock sort did not delete the term (refuting
+  baseline purity as stated) and displacing the window did (refuting a quiet-name characteristic
+  premium). **The 2026-11-26 necessary condition survives with a new mechanism attached: a quantity
+  persistent in LEVEL is what makes "quiet recently" a measurable STATE at all, which is why `|r|`
+  — phi -0.014, no level — hosted nothing in either position.**
+  **The pair is the best-matched control this lab has built, and the matching is the result.**
+  Score phi +0.627 both, scored-level phi +0.705/+0.709, coverage 99.9%/99.7%, exit200
+  22.1%/21.8%, ETF share 6.9%/6.8%, US share 77.2%/77.3%, and the three slow confounds the score
+  does carry loaded identically: **amihud126 -0.294/-0.306, seasoning +0.264/+0.266, log mean
+  dollar_volume +0.287/+0.296** — all within 0.012, while the two books share 27% of their
+  holdings. **A matched-loading design excludes the size, liquidity and price-history-depth axes
+  without orthogonalising against a contaminated level, which the 2026-10-21/22 engine issue
+  forbids. Prefer it to orthogonalisation wherever a displacement or a lag can be matched.**
+  `#50` is the **fourth** object ever to clear the null gate, the first near-orthogonal to every
+  reference object (|rank rho| <= 0.060 to the volume shock, 12-1 momentum, the board lead's
+  reversal score, 126-day volatility; and -0.002 to +0.059 against ret5/ret21/ret63/|ret21|/range50
+  on the post-hoc check), and the first with **zero** active-return pairs at |rho| >= 0.50 on the
+  whole board. **Standing rider: net skill +0.014, 90% CI [-0.108, +0.141], train skill -0.116,
+  -0.09 at 2x costs — 88% of the gross is the book's own bill. An attribution result, not an edge.**
+
+- **[Measured 2026-11-27, nightly — free, from stored returns] THE SHOCK BOOKS' RESEMBLANCE TO THE
+  QUIET BOOK RUNS ENTIRELY THROUGH THE CUT, WHICH IS THE ABOVE ENTRY CONFIRMED FROM REALISED
+  RETURNS RATHER THAN FROM GROSS-SKILL ARITHMETIC.** Active-return rho over the 1,562 validation
+  days: `#50` vs `#40` (shock, **unguarded**) **+0.062**; vs `#41` (displaced cut) +0.236; vs `#32`
+  **+0.414**; vs `#47` **+0.472**; vs the board lead `#16` +0.145; max over all 48 objects +0.487.
+  **Adding the cut is what makes #32/#47 resemble a book that has no shock sort in it.** Total
+  returns say nothing as always (`#50` ~ `#32` +0.957, `#50` ~ `#16` +0.934) — always subtract the
+  pool. **And a rider on the breadth statistic in the opposite direction to 2026-11-26's:** the
+  engine opened two new clusters (M10, M11) where #32/#40/#41/#47 are all M1, yet
+  `distinct_mechanisms` stayed at **5**, because neither new cluster is a FAMILY LEAD
+  (`liquidity-volume`'s lead is still `#32` at +0.031 against `#50`'s +0.014). **A board can gain
+  two mechanisms and measure no extra breadth, just as it can lose one by gaining a family best.**
+
+- **[Measured 2026-11-27, nightly — THE NIGHT'S STATEMENT FOR THE HUMAN OWNER, AND IT IS A
+  STRUCTURAL CEILING RATHER THAN A SEARCH FAILURE] AN IN-WINDOW STATE NEEDS A FRESH WINDOW, A FRESH
+  WINDOW NEEDS FAST TRADING, AND F1 PRICES FAST TRADING AT 111 bps OF SHARPE PER 1x.** Combining
+  the two findings above: `net = gross - 0.0111 x turnover`, so beating the board lead's +0.124
+  requires `gross > 0.124 + 0.0111 x turnover` — **gross +0.235 at 10x churn, which exceeds every
+  gross skill ever recorded here.** Now list the board's objects with gross above the slow corner's
+  +0.124 ceiling: `#32` +0.211, `#39` +0.214, `#35` +0.199, `#49` +0.199, `#50` +0.118 — **every
+  one of them is an in-window state or a mix containing one, and none can be traded slowly**,
+  because the payoff dies when the window goes stale (`#51` is the direct measurement of that, and
+  the shock's own phi of -0.009 to -0.028 is the same statement for #32). **So the only route to a
+  new board lead is a SLOW score with gross skill above +0.124, and every slow score the lab has
+  found is a null. Any future hypothesis should state its gross-and-turnover pair against that line
+  before it is written.** This generalises 2026-11-24's one-off cost subtraction into a standing
+  refusal: **do not propose cheapening an in-window state; the bill IS the price of the signal's
+  freshness.**
+
+- **[Method, 2026-11-27 — TWO CORRECTIONS, ONE TO AN INSTRUMENT AND ONE TO THE DECISION RULE
+  ITSELF] FOR A PERSISTENT SCORE WITH A RETENTION BAND, `24 x exit200%` BEATS THE CALIBRATED CHURN
+  PREDICTOR BY AN ORDER OF MAGNITUDE; AND D2's ABSOLUTE VALUE CONFLATES A RELABELLING WITH A
+  COMPLEMENT.**
+  **(a)** The 2026-11-22 predictor (`train churn ~ 1.0 + 0.29 x exit200%`) forecast **7.4x** and
+  **7.3x** for tonight's two arms; they were charged **5.1x** and **5.2x**. The arithmetic — a
+  banded K-book replaces `exit200%` of its holdings a month, so one-way annual churn is
+  `12 x exit200%` and the charged figure counts **both sides**, giving `24 x exit200%` — forecasts
+  **5.30x** and **5.23x**, both within 0.2x. The regression is calibrated on near-zero-persistence
+  books and should not be used where the score's phi is high; **and this resolves a standing
+  confusion in this file, where several churn pre-registrations compared a ONE-WAY name-overlap
+  screen against a TWO-SIDED charged figure and were then recorded as "lower bounds".**
+  **(b)** The pre-trial rule refuses a relabelling at **|rank rho| >= 0.90**. That is right for
+  +1 (the same ordering) and wrong for -1: a **complement** holds disjoint names and is a different
+  book. Tonight's jumpy-half book was declined to honour a pre-registration written with the
+  absolute value, and it is the one object a corrected rule would admit. **The rule should be
+  `rho >= +0.90` plus a separate top-K Jaccard test.** The jumpy half is worth one trial because it
+  is not a mechanical mirror: a symmetric state predicts about -0.118 of gross, a tail-only
+  (option-like) effect predicts near zero, and 2026-11-04/05 measured five of eight scores on this
+  panel as carrying as much in the bottom as the top. Pre-signable in both branches.
