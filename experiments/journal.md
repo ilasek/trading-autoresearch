@@ -34019,3 +34019,35 @@ bare on the range channel).
 `pt_lowvol_gk_typequota`; GATE_FAIL `pl_third_fast_2leg`.
 
 ## Research session — 2026-11-26 (learning agent): 3 notes added, see research/SUMMARY.md
+## 2026-11-27T00:18:48+00:00 — lv_volume_quiet_alone — **GATE_FAIL**
+- Candidate: `strategies/candidates/lv_volume_quiet_alone.py` (family: liquidity-volume, track: scout, trial #0)
+- Hypothesis: Trading the purity filter's own quantity as the score -- the 100 eligible names with the SMALLEST maximum one-day |d log share volume| anywhere in the 50-day window, quota-allocated across (trailing-trading-calendar peer group x instrument type), equal-weighted, monthly, with a top-200 retention band, every other node byte-identical to lv_volume_shock_median_guard and the shock sort removed -- earns GROSS validation skill above +0.08, because the 2026-11-25 session's +0.145 in-window term would then be a main-effect quiet-volume characteristic premium rather than the baseline-cleaning INTERACTION that session attributed it to; a gross reading inside [-0.05, +0.05] instead confirms baseline purity as the mechanism, since with the shock sort removed there is no baseline left to clean, and closes the quietness characteristic as a tradeable object.
+- Verdict: GATE_FAIL — train skill -0.116 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days
+- Train: sharpe +0.41, ann_ret +8.2%, maxDD -54.4%, turnover 5.1x, skill vs pool -0.12
+- Validation: sharpe +0.35, ann_ret +6.5%, maxDD -38.1%, turnover 10.2x, skill vs pool +0.01
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation +0.01, 90% CI [-0.11, +0.14]; at 2x costs -0.09; with a 30% delisting haircut +0.01; train -0.12 (1997-2008 -0.03, 2009-2017 -0.27)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 98% percentile of 200 random-selection replicas (median +0.24, 90% +0.32); equal-weight eligible pool +0.34, information ratio vs it +0.14
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **THE MISSING CELL OF THE 2026-11-25 2x2 FIRES IN THE MAIN-EFFECT BRANCH, AND IT REFUTES
+  BASELINE PURITY AS THE EXPLANATION OF #32's HEADLINE.** Pre-registered at gross skill
+  [-0.05, +0.05] if the in-window cut is an INTERACTION that cleans the shock score's baseline,
+  above +0.08 if it is a MAIN EFFECT; measured **gross +0.118** (net +0.014 plus a 0.104 bill),
+  at the **98th percentile** of 200 region- and type-matched replicas. So the quantity #32's own
+  file documents as hygiene carries a tradeable-sized selection term with the shock sort entirely
+  removed, and the 2026-11-25 reading of its +0.145 as baseline-cleaning cannot be right as
+  stated. This is the **fourth** object ever to clear the null gate and the first that is both a
+  SLOW persistent characteristic (score phi +0.627, scored-level phi +0.705, against the shock
+  score's -0.009) and near-ORTHOGONAL to every reference object the lab holds (|rank rho| <= 0.060
+  to the volume shock, 12-1 momentum, the board lead's reversal score and 126-day volatility;
+  top-100 Jaccard 0.411 to #47). Four of five pre-registrations landed: gross above +0.08 ->
+  +0.118; percentile above 90% on that branch -> 98%; churn train 2.5-9.0x -> 5.1x and validation
+  4.0-18.0x -> 10.2x; train skill negative -> -0.116, the single gate failed. **Tonight's free F1
+  fit predicted this book out of sample to within 0.007**: geography forecast
+  -0.0034 - 0.0102*10.2 = -0.107 against a measured -0.10, bill forecast -0.0047 + 0.0111*10.2 =
+  +0.108 against a measured 0.104, and selection (+0.11) equals gross (+0.118) to 0.008. The
+  standing rider: net is only +0.014 with a 90% CI of [-0.108, +0.141] and **88% of the gross is
+  the book's own bill**, so this is a selection effect, not a tradeable edge; and the score
+  carries a +0.264 rank rho to price-history depth, reported rather than controlled. The one
+  permitted follow-up under tonight's pre-registration is the displaced control, which is the
+  next entry.
+
