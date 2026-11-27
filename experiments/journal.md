@@ -34084,3 +34084,245 @@ bare on the range channel).
   refusal fires as written: **no third window position and no quietness knob -- not K, not the
   band, not the window length.**
 
+
+## Session summary — 2026-11-27 (nightly) — 2 scored trials of 8; the board's one positive result is RE-MECHANISED by the missing cell of its own 2x2 and a near-perfectly matched control, and the #1 carried free idea is answered NO board-wide for zero trials
+
+**Experiments: 2 scored of 8, no guard refusals, no library file added or edited.** Verdicts:
+**GATE_FAIL x 2** — `#50 lv_volume_quiet_alone` (liquidity-volume), `#51 lv_volume_quiet_displaced`
+(liquidity-volume). Both `track: "scout"`, so the champion was never compared and **no holdout,
+forward or incubation file was opened** — the v3 seat is still empty and the stored card is still
+the v1 champion's, which holds no seat (`protocol_version` 1). `trials.jsonl` goes 159 ->
+**161 records / 51 v3 records / 49 scored v3 trials**; `rank_trials.py` reports **49 of 49 in
+tier 1** and M1 `pt_oldhalf_overlap6` still leads at skill +0.124. Engine green (**92 passed in
+64.6s**). Store's last bar **2026-11-26**, not stale. Budget allocation: **2 in
+`liquidity-volume`, 0 in `price-trend`** (cap 2); `distinct_mechanisms` was **5** before the
+session, above `program.md`'s threshold of four, so the per-family cap of 2 was lifted by its own
+wording, and no family is without a trial so the cold-family clause is moot.
+
+**Step 0.** `git fetch origin --prune` clean, `git branch -r --no-merged origin/main` **empty**,
+no stray strand. The container again started on a per-run branch (`main-qgfp9m`) pointing at **the
+same commit as `origin/main`** (`afb7734`), so nothing was corrected and nothing was at risk.
+**Fourth consecutive clean step 0**, and the 2026-11-23 ask to the human owner still stands: the
+halt rule keys on ancestry of a ref, not on presence of content.
+
+**Method.** A decision rule was pre-registered in the scratchpad **before any candidate was
+written** (`PREREG.md`), in the 2026-11-22/25/26 form: decline only on arithmetic grounds (D1
+not computable or level-contaminated; D2 relabelling at score-level |rho| >= 0.90 or top-100
+Jaccard >= 0.90; D3 cost >= prize by construction; D4 wrong panel; D5 direction not pre-signable;
+D6 on the by-name anti-candidate list), with **no threshold on any train signal statistic in
+either direction**. **No train skill, IC or Sharpe was computed for either candidate before its
+run.** Trial 2 was written as a CONDITIONAL arm in the same pre-registration, to be run only if
+trial 1's gross skill exceeded +0.08; it did, and the condition is what licensed the second run.
+Four objects were declined on arithmetic (listed at the foot of this entry). Every candidate's
+coverage, both persistence figures, churn range, holdings overlap, ETF share and US share were
+written into its docstring before its run; **nine of nine pre-registrations landed.**
+
+**Best finding — F1 (FREE, zero trials). THE `geography` TERM IS THE SCHEDULE'S OWN COST BILL,
+AND THE #1 CARRIED IDEA OF THE LAST HANDOVER IS ANSWERED NO.** The 2026-11-26 handover led with
+`skill = selection + geography`, `geography = null_median - pool`, and asked for the free step of
+finding what predicts geography (it named K, rebalance frequency, type mix, cash share) in order
+to "design a book whose geography is near zero rather than -0.11 to -0.23". Measured on all 47
+recorded v3 trials with a stored null, the answer is **turnover, and nothing else**:
+
+    geography = -0.0034 - 0.0102 * ann_turnover          R2 0.738   resid sd 0.038
+    cost bill = -0.0047 + 0.0111 * ann_turnover          R2 0.974   resid sd 0.011
+                                 ^ the two slopes sum to +0.0009
+
+`bill` is the recorded `skill - skill_cost2x`, i.e. the Sharpe cost of one unit of the liquidity
+tier. **The two are the same quantity with opposite signs.** The mechanism is immediate once
+stated: `random_null_v3` gives each replica the candidate's own SCHEDULE, so a random book churned
+17x a year pays 17x of costs and earns nothing, and its Sharpe falls below the fully-invested
+pool's by exactly that bill. **So "geography" contains no geography at leading order** — it is the
+charge the candidate's trading speed imposes on its own benchmark. Three consequences, each
+checkable:
+ (i) **The handover's idea is arithmetically empty.** Moving geography to zero means trading at
+   ~1x a year, and the candidate pays the same bill it saves its replicas, so selection falls by
+   the same amount. No candidate was written to exploit it, which was pre-committed in `PREREG.md`
+   before the measurement was read.
+ (ii) **`selection` IS gross skill.** Since `geography = -bill` and `skill = gross - bill`,
+   `selection = skill - geography = gross`. Measured directly: pearson **+0.942**, spearman
+   **+0.943**, mean difference **+0.0014** (sd 0.040) across the 47 books. That is the mechanical
+   derivation of the 2026-11-26 F4 result — the percentile ranks gross skill at +0.946 and net at
+   only +0.788 — and it upgrades that session's "selection is not skill" to the sharper statement:
+   **the random-selection null gate is a test of PRE-COST skill, and it is blind to the bill
+   precisely because it charges the bill to the benchmark too.** A book can clear it at the 99th
+   percentile while being unaffordable, and three of the four objects that have cleared it are.
+ (iii) **The per-1x constant is board-wide, not per-book.** The linear form (R2 0.974) beats the
+   log form (R2 0.922) and gives **+111 bps of Sharpe per 1x of charged annual turnover**, which
+   is the 2026-11-24 "~10-11 bps per 1x" constant now measured on 49 books rather than one. The
+   0.011 residual sd is where the holdings-dependent part lives (the volume shock's ~19 bps/1x).
+**Out-of-sample confirmation, unplanned and free**: the fit was made before either candidate ran
+and predicted both. `#50` at 10.2x validation churn: geography forecast -0.107 against a measured
+**-0.10**, bill forecast +0.108 against a measured **0.104**, and selection (+0.11) equals gross
+(+0.118) to 0.008.
+
+**Second — F2, and it is the night's headline. THE MISSING CELL OF THE 2026-11-25 2x2 FIRES IN THE
+MAIN-EFFECT BRANCH: THE NODE #32's FILE CALLS HYGIENE IS A TRADEABLE-SIZED SELECTION ALL BY
+ITSELF.** `lv_volume_shock_gkm_band` (#32) and its replication `#47` are the only objects in 47
+prior v3 trials to clear the region- and type-matched null, and 2026-11-25 measured that two
+thirds of #32's gross skill lives in a cut on the largest one-day |d log share volume| anywhere in
+the 50-day scoring window. That session ran three arms — bare shock, shock + in-window cut, shock
++ displaced cut — and **never ran the cut's own quantity as the score with the shock sort
+removed.** `#50` is that cell, one node changed from `#47`:
+
+    arm                                        gross skill   null pctile   churn tr/val
+    bare 5/45 volume shock (#40)                  +0.066         95%        11.2 / 19.0
+    shock + cut read IN the window (#32)          +0.211         99%         9.0 / 16.6
+    shock + cut DISPLACED to -100..-51 (#41)      +0.101         97%         9.2 / 16.9
+    #50 THE CUT'S QUANTITY ALONE, no shock sort   +0.118         98%         5.1 / 10.2
+    #51 the same, window displaced                -0.017         62%         5.2 / 10.1
+
+Pre-registered at **[-0.05, +0.05]** if the cut is an INTERACTION that cleans the shock score's
+baseline and **above +0.08** if it is a MAIN EFFECT; measured **+0.118**. So removing the shock
+sort entirely did not delete the term — and the 2026-11-25/26 attribution of it to baseline purity
+cannot be right as stated. `#50` is the **fourth** object ever to clear the null gate, and the
+first that is near-ORTHOGONAL to every reference object the lab holds: |rank rho| <= 0.060 against
+the volume shock score (-0.042), 12-1 momentum (+0.060), the board lead's reversal score (+0.002)
+and 126-day volatility (-0.048); top-100 Jaccard 0.411 to `#47`'s book.
+
+**Third — F3, the control that settles it, and it is the best-matched pair this lab has built.**
+`#51` is `#50` with `.shift(50)` before the rolling maximum — the identical displacement `#41`
+used — and nothing else. Pre-registered in two disjoint branches: **+0.05..+0.12** if the premium
+belongs to the NAME (a 50-day-stale reading of a quantity with level persistence +0.709 still
+selects the same kind of name), **-0.03..+0.04** if it belongs to the window immediately before the
+rebalance. Measured **-0.017**, at the 62nd percentile, inside branch (B). The pair:
+
+    screen                          #50 in-window   #51 displaced   difference
+    score rank phi, month to month      +0.627          +0.627         0.000
+    scored-quantity LEVEL phi           +0.705          +0.709        -0.004
+    coverage of eligible names           99.9%           99.7%        +0.2pp
+    exit200                              22.1%           21.8%        +0.3pp
+    ETF share of the book                 6.9%            6.8%        +0.1pp
+    US share of the book                 77.2%           77.3%        -0.1pp
+    rank rho to amihud126                -0.294          -0.306       +0.012
+    rank rho to seasoning                +0.264          +0.266       -0.003
+    rank rho to log mean dollar_volume   +0.287          +0.296       -0.009
+    top-100 Jaccard, the two books                0.274
+    GROSS SKILL                         +0.118          -0.017       **+0.135**
+
+**Every screen matches to within 0.012 and the books share 27% of their holdings; the only
+difference is which 50 days the statistic reads.** So the in-window term of the quietness pair is
+**+0.135**, against **+0.110** for the same displacement on the SHOCK construction — two
+constructions, one displacement, in-window terms matching to 0.025. **What the pair excludes is
+the valuable half.** The three slow confounds the score does carry — it loads -0.29 on Amihud,
++0.26 on price-history depth and +0.29 on dollar-volume level, so quiet names are larger, more
+liquid and longer-listed — are loaded IDENTICALLY by the displaced arm, which earns nothing. A
+matched-loading design excludes the size, liquidity and seasoning axes without orthogonalising
+against a contaminated level, which the 2026-10-21/22 engine issue forbids. **The mechanism that
+survives: recent share-volume quietness is a short-lived STATE, not baseline hygiene and not a
+name characteristic.** This re-mechanises the 2026-11-26 necessary condition without withdrawing
+it — a quantity persistent in LEVEL is what makes "quiet recently" a measurable state at all,
+which is why `|r|` (phi -0.014, no level) hosted nothing in either position.
+
+**Fourth — F4, from stored returns and free. THE SHOCK BOOKS' RESEMBLANCE TO THE QUIET BOOK RUNS
+ENTIRELY THROUGH THE CUT, WHICH CONFIRMS F2 FROM A SECOND DIRECTION.** Active-return rho over the
+1,562 validation days, `#50` against all 48 other stored v3 objects:
+
+    vs #40 lv_volume_shock_UNGUARDED            +0.062
+    vs #41 shock + displaced cut                +0.236
+    vs #32 shock + in-window cut                +0.414
+    vs #47 shock + in-window cut (median)       +0.472
+    vs #16 pt_oldhalf_overlap6 (board lead)     +0.145
+    max |rho| over all 48                       +0.487  (pl_fastslow_2leg)
+    pairs at |rho| >= 0.50                           0
+
+**+0.062 to the unguarded shock and +0.41/+0.47 to the guarded ones**: adding the cut is what makes
+#32/#47 resemble the quiet book, measured from realised returns rather than from gross-skill
+arithmetic. And `#50` has **zero pairs at |rho| >= 0.50** against the whole board, so it is a new
+bet by the engine's own `mechanism_rho` criterion — the engine clusters it **M10** and `#51`
+**M11**, two new clusters, where `#32`, `#40`, `#41` and `#47` are all **M1**. Total-return
+correlations say nothing as usual (`#50` ~ `#32` at +0.957, `#50` ~ `#16` at +0.934): always
+subtract the pool. **Note the breadth statistic did not move:** `distinct_mechanisms` stays at 5
+because neither new cluster is a FAMILY LEAD (`liquidity-volume`'s lead is still `#32` at skill
++0.031 against `#50`'s +0.014), which is the 2026-11-26 method entry's point in the other
+direction — the count is a property of the leads, so a board can gain two mechanisms and measure
+no extra breadth.
+
+**Fifth — a free churn-instrument correction, two for two.** The 2026-11-22 predictor
+(`train churn ~ 1.0 + 0.29 x exit200%`) forecast **7.4x** and **7.3x** for the two arms; they were
+charged **5.1x** and **5.2x**. The mechanical two-sided estimate — a banded K-book replaces
+`exit200%` of its holdings a month, so one-way annual churn is `12 x exit200%` and the charged
+figure counts both sides, giving `24 x exit200%` — forecasts **5.30x** and **5.23x**. **Both
+within 0.2x, where the calibrated regression was out by 2.2x.** The predictor is calibrated on
+near-zero-persistence books; for a persistent score with a retention band the arithmetic is the
+better instrument. This also explains a standing confusion in this file: several churn
+pre-registrations have compared a one-way name-overlap screen against a two-sided charged figure.
+
+**Why the session stopped at 2 of 8, and the four objects declined on arithmetic.** The
+pre-registration's refusal clause fired as written — **no third window position and no quietness
+knob: not K, not the band, not the window length.** The remaining objects were declined before
+being written:
+ - **The jumpy half (the complement book).** D2 as I wrote it: the score is -1 x the quiet score,
+   so |rank rho| = 1.000 against a 0.90 bar. **But see the handover item below — D2's absolute
+   value conflates a relabelling (+1) with a COMPLEMENT (-1), and a complement holds disjoint
+   names and is a different book.** Declined to honour the pre-registration, and flagged as the
+   one object a corrected D2 would admit.
+ - **Quietness on the log-range channel.** D6, and now on a measured object rather than by
+   analogy: the max one-day jump in log(high/low) is vol-of-vol, which `#29
+   rv_volofvol_neutral_band` already measured at skill -0.19 (M8). The volume channel's -0.048 rho
+   to 126-day volatility is why only it can host this test.
+ - **Slowing #32/#47's volume shock onto a coarser grid to delete its 0.18 bill.** D3 by the
+   2026-11-24 subtraction: the shock's own rank phi is -0.009 to -0.028, so a slower grid holds a
+   score with no persistence; gross collapses toward zero against 0.18 of bill saved, a ratio
+   above one. **Tonight generalises that refusal and it is the night's statement for the human
+   owner: an in-window STATE requires a fresh window, a fresh window requires fast trading, and
+   F1 prices fast trading at 111 bps of Sharpe per 1x. Every object this lab has found with gross
+   skill above the slow corner's +0.124 ceiling is an in-window state (#32 +0.211, #39 +0.214, #35
+   +0.199, #49 +0.199, #50 +0.118), and none of them can be traded slowly. The board's net-skill
+   ceiling of about +0.12 is therefore structural rather than a search failure.**
+ - **A quiet + unguarded-shock two-leg mix.** The two scores are near-orthogonal (rank rho -0.042,
+   active-return rho +0.062), so it is a genuinely new leg set rather than the closed rev+vshock
+   curve. Declined anyway: four recorded mixes now sit within 0.008 of each other in net skill
+   against intervals +-0.18 wide, the legs' nets are +0.014 and -0.138, and 2026-11-24/26
+   establish that a mix buys gate clearance rather than skill. The magnitude is known
+   uninformative in advance.
+
+**For the human owner — the standing item, unchanged.** The `challenge` track is still closed by
+arithmetic: the seat needs about **+0.64** of skill against a board best of **+0.124**, and 49 of
+49 trials are in tier 1. Nothing in `engine/`, `scripts/`, `tests/`, `data/`, `program.md` or
+`CLAUDE.md` was touched, and no file in `strategies/lib/` was added or edited — both candidates
+import only `engine.data` and `strategies/lib/calendar_peers.py`, byte-identically.
+
+**Ideas for next session** — none informed by any holdout or forward number, and none of those
+files was opened:
+ (i) **A corrected D2, and the one object it admits.** D2 refuses at |rho| >= 0.90, which is right
+   for +1 (a relabelling) and wrong for -1 (a complement, which holds disjoint names). The rule
+   should be `rho >= +0.90` plus a separate top-K Jaccard test. The object this unblocks is the
+   **jumpy half** of tonight's score, and it is worth one trial because it is not a mechanical
+   mirror: a symmetric state predicts about -0.118 of gross, while a tail-only (option-like)
+   effect predicts near zero, and the 2026-11-04/05 `|b|/|t|` instrument says five of eight scores
+   on this panel carry as much in the bottom as the top. Pre-signable in both branches.
+ (ii) **F1 restated as a design constraint, and it is the sharpest thing on the board.**
+   `net = gross - 0.0111 x turnover`. To beat the board lead's +0.124 a book needs
+   `gross > 0.124 + 0.0111 x turnover`. At 10x churn that is gross +0.235, which exceeds every
+   gross skill ever recorded here. **So the only route to a new board lead is a SLOW score with
+   gross above +0.124, and the only slow scores the lab has found are nulls.** Any future
+   hypothesis should state its gross-and-turnover pair against that line before it is written.
+ (iii) **The one untested property of tonight's state.** Its payoff decays somewhere between a
+   50-day displacement (dead) and zero (+0.118). The shape of that decay is a free train
+   measurement off stored scores and it is the only thing that would say whether the state is
+   worth harvesting at a weekly grid, where F1 prices the bill at ~0.5 of Sharpe and therefore
+   refuses it — so run the free measurement and expect it to close the object rather than open it.
+ (iv) Carried from 2026-11-26 and still unrun: research `#531`'s agreement-versus-depth ladder
+   (named by the folder as the one to run first), `#532`'s feasibility/representability stages,
+   `#520`'s field-churn decomposition, `#516`'s GLR diagnostic, M3's horizon profile. The folder
+   now owes the lab **twenty-five** free measurements and no new hypothesis.
+ (v) **A caution.** `distinct_mechanisms` is still 5, two above the threshold that re-imposes the
+   per-family cap of 2, and tonight added two mechanism clusters without moving it. A session that
+   promotes a family best correlated with M1 can still take it down.
+
+**Provenance from `research/SUMMARY.md`.** The folder's newest notes (`#529`-`#534`, the
+score-correlation to top-K-agreement bridge) were read and **supplied no hypothesis tonight, by
+their own conclusion**: the folder's own [2026-11-26] open question states that the composite vein
+"has now received everything literature can give it. What it has not received is a MEASUREMENT,
+and there are twenty-five owed", and its own primary aim for its next session is a deliberate
+break toward "a mechanism or construction that ends in a PORTFOLIO" because six consecutive
+research sessions ended in free diagnostics. **No performance expectation was imported from the
+folder into either hypothesis or lesson**, and no source-side mechanism supplied even the sign of
+tonight's scores: `#50`/`#51` are the lab's own 2x2, and their direction came from the record's
+own measurement of #32's guard, not from a published claim. `#530`'s price-of-a-cut figure (a
+top-decile membership flag carries 0.585 of its score's correlation) is noted as consistent with
+tonight's design but was not used, since both arms take the same cut depth and the comparison is
+differenced.
+
+**Verdicts:** GATE_FAIL `lv_volume_quiet_alone`; GATE_FAIL `lv_volume_quiet_displaced`.
