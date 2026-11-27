@@ -34051,3 +34051,36 @@ bare on the range channel).
   permitted follow-up under tonight's pre-registration is the displaced control, which is the
   next entry.
 
+## 2026-11-27T00:25:05+00:00 — lv_volume_quiet_displaced — **GATE_FAIL**
+- Candidate: `strategies/candidates/lv_volume_quiet_displaced.py` (family: liquidity-volume, track: scout, trial #0)
+- Hypothesis: Reading the quietness statistic over days -100..-51 instead of the 50 days before the rebalance -- one node changed from lv_volume_quiet_alone, a pair matched to within a few tenths of a point on score persistence (+0.627 both), scored-level persistence (+0.709 vs +0.705), coverage, exit200, ETF share and US share while sharing only 27% of its holdings -- reproduces that arm's GROSS validation skill of +0.118 to within +0.05 to +0.12, because a quiet-volume premium that is a property of the NAME survives a 50-day-stale reading of the same quantity; a reading of -0.03 to +0.04 instead says the term belongs to the window immediately before the rebalance rather than to the name, and reconciles tonight's main effect with the 2026-11-25 displaced FILTER arm's +0.035.
+- Verdict: GATE_FAIL — train skill -0.055 <= 0.0: over 1997-2017 the book's Sharpe did not beat the equal-weight eligible pool's (0.524) on the same days; validation sharpe 0.219 <= the random-selection null's 90% quantile 0.265 (median 0.2; 200 draws built like this candidate from the same point-in-time pool)
+- Train: sharpe +0.47, ann_ret +9.5%, maxDD -52.3%, turnover 5.2x, skill vs pool -0.06
+- Validation: sharpe +0.22, ann_ret +4.2%, maxDD -39.4%, turnover 10.1x, skill vs pool -0.12
+- Skill (Sharpe minus the equal-weight pool's, excess of T-bills): validation -0.12, 90% CI [-0.28, +0.00]; at 2x costs -0.22; with a 30% delisting haircut -0.12; train -0.06 (1997-2008 -0.00, 2009-2017 -0.14)
+- Survivorship-matched benchmarks (protocol v3): validation sharpe at the 62% percentile of 200 random-selection replicas (median +0.20, 90% +0.27); equal-weight eligible pool +0.34, information ratio vs it -0.46
+- Scout track: family best before this trial none recorded; the champion was not compared and the holdout was not read
+- Lesson: **BRANCH (B), INSIDE ITS PRE-REGISTERED INTERVAL, AND THE PAIR REPLACES THE RECORD'S
+  MECHANISM FOR THIS TERM TWICE OVER.** Pre-registered at gross skill +0.05..+0.12 if the quietness
+  premium is a property of the NAME and -0.03..+0.04 if it belongs to the window immediately before
+  the rebalance; measured **gross -0.017** (net -0.118 plus a 0.101 bill) at the **62nd percentile**
+  (branch (B) predicted 50-85%). Churn train 5.2x (registered 3.5-8.0x) and validation 10.1x
+  (registered 7.0-15.0x) both landed. **So the in-window term of the quietness-alone pair is
+  +0.118 - (-0.017) = +0.135, against +0.211 - +0.101 = +0.110 for the same displacement on the
+  SHOCK construction — two constructions, one displacement, in-window terms matching to 0.025.**
+  The two readings this settles: the term is **not** the cut cleaning the shock score's baseline
+  (removing the shock sort entirely did not delete it — it grew), and it is **not** a quiet-name
+  characteristic premium (displacing the window by one window length deleted it). What is left is
+  that **recent share-volume quietness is a short-lived STATE**: the names quiet over the 50 days
+  ending at the rebalance are paid, the names quiet over the preceding 50 are not, and the two
+  books share only 27% of their holdings while matching on score persistence (+0.627 both),
+  scored-level persistence (+0.709 vs +0.705), coverage, exit200 (21.8% vs 22.1%), ETF share (6.8%
+  vs 6.9%) and US share (77.3% vs 77.2%). This also re-mechanises the 2026-11-26 necessary
+  condition without withdrawing it: a quantity persistent in LEVEL is what makes "quiet recently" a
+  measurable state at all, which is why `|r|` -- phi -0.014, no level -- hosted nothing in either
+  position. **Standing rider unchanged:** both arms fail the train-skill gate (-0.116, -0.055),
+  88-100% of the in-window arm's gross is its own bill, and its net skill is +0.014 with a 90% CI
+  of [-0.108, +0.141]; this is an attribution result, not a tradeable edge. The pre-committed
+  refusal fires as written: **no third window position and no quietness knob -- not K, not the
+  band, not the window length.**
+
