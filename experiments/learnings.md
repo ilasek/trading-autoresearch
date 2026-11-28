@@ -9613,9 +9613,10 @@ across experiments; prune entries that later evidence contradicts.
 - **[Measured 2026-11-28, nightly — ZERO trials spent; THE HEADLINE, AND IT IDENTIFIES THE TERM
   THAT MAKES THE TRAIN GATE REFUSE EXACTLY THE BOOKS VALIDATION LIKES] TRAIN AND VALIDATION PRICE
   ANNUAL TURNOVER AT -188 AND -54 bps OF SHARPE PER 1x, A RATIO OF 3.5x, AND THE WHOLE EXCESS SITS
-  IN 2009-2017 AT -435 bps PER 1x.** Measured on all 50 recorded v3 trials, slopes of skill on the
+  IN 2009-2017 AT -435 bps PER 1x.** Measured on the 49 v3 trials recorded before
+  tonight's pair (the window-by-window table below adds `#52`, n = 50), slopes of skill on the
   **same split's** charged annual turnover, bootstrapped over the engine's own 11 mechanism
-  clusters (so the 50 non-independent objects are not counted as 50):
+  clusters, so the non-independent objects are not counted as independent:
 
       slope of skill on that split's annual turnover   point       90% CI            P(sign)
       TRAIN  GROSS skill ~ train turnover            -67.8 bps/1x [-135.8,  -19.0]    0.961
