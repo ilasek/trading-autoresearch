@@ -9609,3 +9609,169 @@ across experiments; prune entries that later evidence contradicts.
   is not a mechanical mirror: a symmetric state predicts about -0.118 of gross, a tail-only
   (option-like) effect predicts near zero, and 2026-11-04/05 measured five of eight scores on this
   panel as carrying as much in the bottom as the top. Pre-signable in both branches.
+
+- **[Measured 2026-11-28, nightly — ZERO trials spent; THE HEADLINE, AND IT IDENTIFIES THE TERM
+  THAT MAKES THE TRAIN GATE REFUSE EXACTLY THE BOOKS VALIDATION LIKES] TRAIN AND VALIDATION PRICE
+  ANNUAL TURNOVER AT -188 AND -54 bps OF SHARPE PER 1x, A RATIO OF 3.5x, AND THE WHOLE EXCESS SITS
+  IN 2009-2017 AT -435 bps PER 1x.** Measured on all 50 recorded v3 trials, slopes of skill on the
+  **same split's** charged annual turnover, bootstrapped over the engine's own 11 mechanism
+  clusters (so the 50 non-independent objects are not counted as 50):
+
+      slope of skill on that split's annual turnover   point       90% CI            P(sign)
+      TRAIN  GROSS skill ~ train turnover            -67.8 bps/1x [-135.8,  -19.0]    0.961
+      VALID. GROSS skill ~ val   turnover            +56.9 bps/1x [ -21.5, +104.8]    0.905
+      TRAIN  NET   skill ~ train turnover           -187.5 bps/1x [-270.1, -128.5]    0.998
+      VALID. NET   skill ~ val   turnover            -54.2 bps/1x [-136.2,   +4.4]    0.946
+      the BILL's own slope                     train +119.7       validation +111.1
+
+  and the same slope computed window by window, which is where the mechanism is:
+
+      window                              net skill ~ turnover       t       r
+      1997-2008 (thin panel, 96% US)         -50.8 bps/1x         -2.23   -0.307
+      2009-2017 (SAME panel as validation)  -435.2 bps/1x        -10.35   -0.831
+      1997-2017 (what the gate reads)       -187.5 bps/1x         -7.81   -0.748
+      2018-2023 (what the objective reads)   -54.2 bps/1x         -2.03   -0.281
+
+  **Five consequences.** (i) 2026-11-27's F1 (+111 bps of Sharpe per 1x of charged turnover)
+  **replicates on a split it was not fitted on**, at +119.7 — the bill is the one term that is
+  stable across windows. (ii) **The `min_train_skill = 0.0` gate charges speed at 3.46x the rate
+  the objective does.** That is the arithmetic behind 2026-11-16's census (9 of 24 GATE_FAILs are
+  train skill, 44 of 47 trials fail that gate) and behind the board's best validation objects being
+  its fastest: a fast book must clear a benchmark in the window where trading was most expensive
+  relative to opportunity. (iii) **The excess penalty is a 2009-2017 REGIME quantity, not a panel
+  quantity**: 1997-2008 prices turnover at -51 bps/1x, almost exactly validation's -54, while
+  2009-2017 — the *same* ~800-name, 48%-US panel validation runs on — prices it at **-435**, eight
+  times validation. The post-GFC years are the most hostile regime to trading in the whole record
+  (mean trial net skill -0.0872 there against -0.0080 in 1997-2008, pool train Sharpe +0.524
+  against validation's +0.337): a benchmark compounding at a high Sharpe without trading, and
+  little cross-sectional dispersion to earn a turn back. (iv) **CORRECTS 2026-11-27's structural
+  ceiling arithmetic.** That entry wrote `net = gross - 0.0111 x turnover` and concluded "the only
+  route to a new board lead is a SLOW score with gross above +0.124". The missing term is that
+  **gross itself rises with turnover on validation** (+57 bps/1x), so the net price of speed on
+  validation is about **-54** bps/1x, not -111 — fast trading costs about half what that statement
+  implies, and the gross threshold at 10x churn is about **+0.17**, not +0.235. The ceiling claim
+  is not refuted; its arithmetic is, and the honest version quotes the resolved quantity: the net
+  slope, -54 [-136, +4]. (v) **By validation-turnover tercile the ordering inverts completely**:
+  train gross +0.035 / +0.023 / -0.028 and validation gross -0.019 / -0.031 / **+0.073** from slow
+  to fast. **Standing consequence: quote a candidate's gross-and-turnover pair against the -54
+  bps/1x validation line, and never against the train line, which is a different regime's price.**
+
+- **[Measured 2026-11-28, nightly — free; SHARPENS 2026-10-16/17 AND 2026-11-16 ONTO THE STATISTIC
+  THE LAB ACTUALLY DESIGNS IN] "TRAIN SKILL CARRIES NO INFORMATION" IS TRUE OF NET SKILL AND FALSE
+  OF GROSS SKILL, WHERE TRAIN ANTI-PREDICTS VALIDATION AT -0.44 — AND THE BILL IS WHAT HID IT.**
+
+      corr(train, validation)                    pearson   spearman
+      NET   skill (the standing figure)           +0.042    -0.041
+      GROSS skill                                 -0.437    -0.369
+        mechanism-cluster bootstrap: median -0.447, 90% CI [-0.687, -0.184], P(<0) 0.984
+        one representative per mechanism (n 11):  -0.598    -0.582
+
+  The net statistic reads zero **because the bill is subtracted from both splits and the bill is
+  the term that behaves the same in both** (+120 and +111 bps/1x), so it cancels the signal in the
+  correlation. Since 2026-11-27 established `selection = gross`, this is a statement about the
+  quantity every candidate is designed in. **Two explanations were written down before measuring
+  and BOTH ARE REFUTED, which is the useful part.** (a) *Panel composition.* The train split is two
+  panels glued together — 1997-2008 runs 150-344 eligible names at **95-98% US**, 2009-2017 runs
+  733-891 at **47-49% US**, validation 909-1034 at 49-50% — so the natural reading is that train
+  averages a panel that no longer exists. But the **same-panel** sub-period anti-predicts just as
+  strongly (-0.389, 90% CI [-0.692, -0.117]) as the full window (-0.382) and the dead-panel
+  sub-period is the **weaker** anti-predictor (-0.249). Refuted. (b) *One calendar year.*
+  Leave-one-year-out keeps corr(val gross, remaining active return) inside **[+0.65, +0.81]**
+  against a full +0.78, and 2020 explains least of all (+0.276 against non-2020's +0.651).
+  Refuted — though 8 of the top 12 objects do earn **more than 100%** of their cumulative active
+  return in a single year, the years simply differ across objects (2018, 2022, 2023). What survives
+  is the turnover axis of the entry above, and it is partial: the inversion holds **within** each
+  turnover tercile at -0.27 / -0.33 / -0.39. **Standing rule, a tightening and not a relaxation:
+  do not quote a train statistic as support for a candidate — and do not quote its negative
+  either.** Trading the measured sign would be fitting the screen, and tonight's two trials were
+  pre-registered with no train statistic in either direction.
+
+- **[Measured 2026-11-28, nightly — trials #52/#53, THE COMPLEMENT PAIR THAT COMPLETES THE
+  QUIETNESS (SIDE x WINDOW) DESIGN] THE SHARE-VOLUME QUIETNESS SORT IS ANTISYMMETRIC ON VALIDATION,
+  WHICH REFUTES BOTH THE TAIL-ONLY AND THE WINDOW-LEVEL READINGS OF THE 2026-11-27 IN-WINDOW
+  TERM.** The 2026-11-27 session declined its own score's complement to honour a relabelling clause
+  it had written with an absolute value, and flagged the clause as wrong in the same entry. The
+  corrected rule (`rho >= +0.90` **plus** a top-K Jaccard test) admits it: rho **-1.000** to #50's
+  score but top-100 Jaccard **0.022** to #50's book. Four cells, each one node apart, everything
+  else byte-identical:
+
+      cell                              side    window      val GROSS   net     null %ile   churn tr/val
+      #50 lv_volume_quiet_alone         quiet   in-window     +0.118   +0.014      98%       5.1 / 10.2
+      #51 lv_volume_quiet_displaced     quiet   shift(50)     -0.017   -0.118      62%       5.2 / 10.1
+      #52 lv_volume_jumpy_half          jumpy   in-window     -0.135   -0.233       8%       5.1 /  8.9
+      #53 lv_volume_jumpy_displaced     jumpy   shift(50)      -0.118  -0.218      4%     5.0 /  8.9
+
+  **#52 landed inside the SYMMETRIC-STATE branch of three disjoint pre-registered branches**
+  (-0.16 to -0.08 symmetric, [-0.05,+0.05] tail-only, above +0.05 window-regime), at -0.135, and
+  **six of six of its pre-registrations landed**: gross -0.135, null percentile 8% (< 40%), train
+  churn 5.1x (in 3.0-5.5), validation churn 8.9x (in 6.0-11.0), bill 11.0 bps/1x (above #50's 10.2,
+  forecast from holdings: 17.8% vs 37.5% in the >=$100M tier, 13.5% vs 4.5% taxed), train skill not
+  predicted. **The quiet and jumpy sides are near-exact mirrors (+0.118 and -0.135, mean -0.009),
+  so the sort carries no level term.** Two readings die. The **tail-only** reading dies because the
+  jumpy side is the most negative object on the whole board and sits at the 8th percentile of its
+  own matched null — the lowest percentile in 50 trials. The **window-level** reading dies because
+  a 2018-2023 level effect would have lifted BOTH sides of the sort. **So the in-window term is a
+  genuine cross-sectional sort on validation**, and 2026-11-27's "state" language survives this
+  pair. **The 8th percentile is itself the result worth keeping: the region- and type-matched null
+  gate has now been failed from below as decisively as #32/#47/#50 cleared it from above, by the
+  complement of one of them, which is the first two-sided reading that gate has had.**
+  **AND THE FOURTH CELL CORRECTS THE SIZE OF THE CLAIM.** `#53` was pre-registered in two disjoint
+  branches — within 0.05 of zero if jumpiness is a short-lived STATE, within 0.05 of `#52`'s -0.135
+  if it is a persistent NAME CHARACTERISTIC — and landed at **-0.118**, inside the characteristic
+  branch, with five of five pre-registrations landing. Read the design as a **sort** rather than as
+  one side of one:
+
+      position      spread between sides   common level (mean of the two sides)
+      in-window           +0.253                      -0.009
+      shift(50)           +0.101                      -0.068
+
+  **So 2026-11-27's +0.135 "in-window term", measured on the quiet side alone, is two things added
+  together: a real 60% decay in the sort's cross-sectional content (+0.152 on the spread, +0.076 a
+  side) and a -0.059 COMMON LEVEL SHIFT that has nothing to do with the sort.** The per-side
+  displacement term is +0.135 on the quiet side and only **-0.017** on the jumpy side — the design
+  is antisymmetric in the SIDE dimension and not in the WINDOW dimension, which a one-sided
+  displacement cannot see. **General rule: a displacement control on one side of a sort measures
+  that side's level, not the sort's content; run both sides or quote the spread, never one arm's
+  delta.** The common level is reported and not explained — churn (5.0x vs 5.2x train, 8.9x vs
+  10.1x validation), bill (11.2 vs 11.0 bps/1x), coverage and composition are matched across the
+  two displaced arms, so it is a return-level effect of selecting on stale volume information
+  rather than a cost or composition artifact, and it is the night's one open item.
+
+- **[Measured 2026-11-28, nightly — free, from stored records; A SIGN FLIP IN THE LAB'S ONLY
+  POSITIVE v3 RESULT, VISIBLE ON A SPLIT THAT WAS ALREADY PAID FOR] THE IN-WINDOW TERM IS -0.062
+  ON TRAIN IN BOTH CONSTRUCTIONS, AGAINST +0.110 AND +0.135 ON VALIDATION.** The displacement pairs
+  were only ever read on validation; their train arms were in `trials.jsonl` all along:
+
+      pair (gross skill)                       validation in-window term   train in-window term
+      quiet:  #50 - #51                               +0.135                    -0.062
+      shock:  #32 - #41                               +0.110                    -0.062
+
+  **Two independent constructions, one displacement, train terms identical to three decimals and
+  opposite in sign to validation.** Corroborated at the score level by a free screen that scores no
+  returns: the top-100 quiet slice's forward excess over the whole eligible pool runs
+  **+1.6 / +0.6 / -8.0 bps** at h = 21 / 63 / 126 for the in-window arm against **+5.4 / +6.7 /
+  +1.3** for the displaced arm — the displaced arm higher at every horizon, and the two arms'
+  forward-window volatility ratios identical (1.063-1.068). Read with #52/#53 above, which exclude
+  a window LEVEL effect, the statement is: **the quietness ordering's SIGN is split-dependent — a
+  real cross-sectional sort whose sign flips between 1997-2017 and 2018-2023.** This is the
+  cleanest single instance of the board-wide gross inversion two entries up, now measured on both
+  sides of the sort and at both window positions, and it is the reason the lab's one positive
+  result should be quoted with its split attached.
+
+- **[Method, 2026-11-28 — THE HANDOVER'S #3 FREE ITEM, AND IT CLOSES THE OBJECT AS THE HANDOVER
+  PREDICTED] A SCORE'S RANK PERSISTENCE AND ITS DECAY AGAINST ITS OWN FRESH READING ARE DIFFERENT
+  QUANTITIES, AND ONLY THE SECOND PRICES THE SLEEVE OPERATOR'S PRECONDITION.**
+
+      displacement (trading days)      1       5      10      21      50
+      rank rho to the in-window self +0.979  +0.897  +0.803  +0.635  +0.269
+      the arm's OWN month-to-month phi +0.625 +0.629 +0.620  +0.624  +0.625
+
+  **The phi column is flat: it is a property of the scored quantity's level and is invariant to the
+  displacement, so it says nothing about staleness.** The rho column is the one that matters, and
+  it decays to +0.269 by 50 days. The 2026-10-27/28 sleeve operator requires the score's content to
+  be older than the holding period; a six-month sleeve on this score would hold picks read five
+  months past a decay that is already halfway gone at 21 days, so **the precondition fails by
+  measurement rather than by analogy** and the operator was declined before a candidate file was
+  written. Generally: **when checking the operator's precondition, measure rho(score, score shifted
+  by the holding period), never the score's own phi** — #50 would have passed on phi (+0.627) and
+  fails on rho.
